@@ -1,0 +1,42 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+devDependencies:
+  nano-staged:
+    specifier: ^0.8.0
+    version: 0.8.0
+  prettier:
+    specifier: ^3.2.4
+    version: 3.2.5
+  simple-git-hooks:
+    specifier: ^2.10.0
+    version: 2.10.0
+
+packages:
+
+  /nano-staged@0.8.0:
+    resolution: {integrity: sha512-QSEqPGTCJbkHU2yLvfY6huqYPjdBrOaTMKatO1F8nCSrkQGXeKwtCiCnsdxnuMhbg3DTVywKaeWLGCE5oJpq0g==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    hasBin: true
+    dependencies:
+      picocolors: 1.0.0
+    dev: true
+
+  /picocolors@1.0.0:
+    resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
+    dev: true
+
+  /prettier@3.2.5:
+    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
+  /simple-git-hooks@2.10.0:
+    resolution: {integrity: sha512-TtCytVYfV77pILCkzVxpOSgYKHQyaO7fBI/iwG5bLGb0dIo/v/K1Y1IZ5DN40RQu6WNNJiN0gkuRvSYjxOhFog==}
+    hasBin: true
+    requiresBuild: true
+    dev: true
