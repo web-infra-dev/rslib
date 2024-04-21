@@ -1,0 +1,8 @@
+{
+  "extends": "@rslib/tsconfig/base",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["cases", "playwright.config.ts", "cases/**/*.test.ts", "scripts"],
+  "exclude": ["**/node_modules", "**/.*/"]
+}
