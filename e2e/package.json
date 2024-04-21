@@ -1,0 +1,21 @@
+{
+  "name": "@rslib/e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "imports": {
+    "#helper": "./scripts/helper.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.43.1",
+    "@rslib/core": "workspace:*",
+    "@rslib/tsconfig": "workspace:*",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "16.x",
+    "fast-glob": "^3.3.2",
+    "fs-extra": "^11.2.0",
+    "typescript": "^5.4.5"
+  }
+}
