@@ -1,13 +1,13 @@
 import {
   type CreateRsbuildOptions,
   defineConfig as defineRsbuildConfig,
-} from '@rsbuild/core'
-import type { RslibConfig } from './types'
+} from '@rsbuild/core';
+import type { RslibConfig } from './types';
 
 export function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
 ): CreateRsbuildOptions {
-  const { root, entry, outDir } = rslibConfig
+  const { root, entry, outDir } = rslibConfig;
 
   const rsbuildConfig = defineRsbuildConfig({
     source: {
@@ -40,10 +40,10 @@ export function composeCreateRsbuildConfig(
         js: './',
       },
     },
-  })
+  });
 
   return {
     cwd: root ?? process.cwd(),
     rsbuildConfig,
-  }
+  };
 }

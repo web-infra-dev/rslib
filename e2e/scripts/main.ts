@@ -1,1 +1,1 @@
-import {} from '@rslib/core'
+import {} from '@rslib/core';

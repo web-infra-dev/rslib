@@ -1,11 +1,11 @@
-import { defineWorkspace } from 'vitest/config'
+import { defineWorkspace } from 'vitest/config';
 
 const shared = {
   globals: true,
   environment: 'node',
   testTimeout: 30000,
   restoreMocks: true,
-}
+};
 
 export default defineWorkspace([
   {
@@ -24,4 +24,4 @@ export default defineWorkspace([
       exclude: ['e2e/cases/**/*.pw.test.ts', '**/node_modules/**'],
     },
   },
-])
+]);
