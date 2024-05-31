@@ -1,1 +1,1 @@
-console.info(VERSION)
+console.info(VERSION);

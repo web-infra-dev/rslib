@@ -3,4 +3,4 @@
  * Only to setup the basic infrastructure workflow.
  */
 
-export { build } from './build'
+export { build } from './build';
