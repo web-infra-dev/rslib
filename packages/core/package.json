@@ -1,16 +1,16 @@
 {
   "name": "@rslib/core",
   "type": "commonjs",
-  "bin": {
-    "rslib": "./bin/rslib.js"
-  },
-  "main": "./dist/main.js",
-  "types": "./dist/main.d.ts",
   "exports": {
     ".": {
       "types": "./dist/main.d.ts",
       "default": "./dist/main.js"
     }
+  },
+  "main": "./dist/main.js",
+  "types": "./dist/main.d.ts",
+  "bin": {
+    "rslib": "./bin/rslib.js"
   },
   "scripts": {
     "build": "modern build",
