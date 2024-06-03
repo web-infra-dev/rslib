@@ -1,17 +1,34 @@
 {
   "name": "@rslib/core",
+  "version": "0.0.0",
+  "description": "The Rspack-based library build tool.",
+  "homepage": "https://rslib.dev",
+  "bugs": {
+    "url": "https://github.com/web-infra-dev/rslib/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rslib",
+    "directory": "packages/core"
+  },
+  "license": "MIT",
   "type": "commonjs",
   "exports": {
     ".": {
       "types": "./dist/main.d.ts",
       "default": "./dist/main.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
   "bin": {
     "rslib": "./bin/rslib.js"
   },
+  "files": [
+    "bin",
+    "dist"
+  ],
   "scripts": {
     "build": "modern build",
     "dev": "modern build --watch"
@@ -24,5 +41,13 @@
   "devDependencies": {
     "@rslib/tsconfig": "workspace:*",
     "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
   }
 }
