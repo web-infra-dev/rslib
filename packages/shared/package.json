@@ -1,7 +1,7 @@
 {
-  "name": "@rslib/core",
+  "name": "@rslib/shared",
   "version": "0.0.0",
-  "description": "The Rspack-based library build tool.",
+  "description": "The internal shared modules and dependencies of Rslib.",
   "homepage": "https://rslib.dev",
   "bugs": {
     "url": "https://github.com/web-infra-dev/rslib/issues"
@@ -9,40 +9,31 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rslib",
-    "directory": "packages/core"
+    "directory": "packages/shared"
   },
   "license": "MIT",
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/types/main.d.ts",
-      "import": "./dist/es/main.js",
-      "require": "./dist/lib/main.cjs"
-    },
-    "./package.json": "./package.json"
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/es/index.js",
+      "require": "./dist/lib/index.js"
+    }
   },
-  "main": "./dist/lib/main.cjs",
-  "module": "./dist/es/main.js",
-  "types": "./dist/lib/main.d.ts",
-  "bin": {
-    "rslib": "./bin/rslib.js"
-  },
+  "main": "./dist/lib/index.js",
+  "module": "./dist/es/index.js",
+  "types": "./dist/types/index.d.ts",
   "files": [
-    "bin",
     "dist"
   ],
   "scripts": {
     "build": "modern build",
     "dev": "modern build --watch"
   },
-  "dependencies": {
-    "@rsbuild/core": "0.6.2",
-    "@rsbuild/shared": "0.6.2",
-    "commander": "^12.0.0"
-  },
   "devDependencies": {
-    "@rslib/shared": "workspace:*",
     "@rslib/tsconfig": "workspace:*",
+    "@types/node": "18.x",
+    "rslog": "^1.2.2",
     "typescript": "^5.4.5"
   },
   "engines": {

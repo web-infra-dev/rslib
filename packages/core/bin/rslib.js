@@ -1,8 +1,13 @@
 #!/usr/bin/env node
+import { logger } from '@rslib/shared';
+import { runCli } from '../dist/es/cli.js';
 
 async function main() {
-  const { runCli } = require('../dist/cli');
-  runCli();
+  try {
+    runCli();
+  } catch (err) {
+    logger.error(err);
+  }
 }
 
 main();
