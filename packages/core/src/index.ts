@@ -4,3 +4,5 @@
  */
 
 export { build } from './build';
+export { runCli } from './cli';
+export type { RslibConfig } from './types';

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
+import { runCli } from '../dist/index.js';
 
 async function main() {
-  const { runCli } = require('../dist/cli');
   runCli();
 }
 

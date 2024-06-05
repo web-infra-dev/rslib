@@ -12,22 +12,25 @@
     "directory": "packages/core"
   },
   "license": "MIT",
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/main.d.ts",
-      "default": "./dist/main.js"
+      "types": "./dist-types/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./package.json": "./package.json"
   },
-  "main": "./dist/main.js",
-  "types": "./dist/main.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist-types/index.d.ts",
   "bin": {
     "rslib": "./bin/rslib.js"
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "dist-types"
   ],
   "scripts": {
     "build": "modern build",

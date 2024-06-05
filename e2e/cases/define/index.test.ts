@@ -3,7 +3,6 @@ import { expect, test } from 'vitest';
 import { globContentJSON } from '#helper';
 
 test.fails('define', async () => {
-  // @ts-expect-error follow conventional
   delete process.env.NODE_ENV;
 
   const rslibConfig = {
