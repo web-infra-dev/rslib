@@ -13,7 +13,7 @@ importers:
         version: 1.7.0
       '@modern-js/module-tools':
         specifier: ^2.48.6
-        version: 2.48.6
+        version: 2.48.6(typescript@5.4.5)
       check-dependency-version-consistency:
         specifier: ^4.1.0
         version: 4.1.0
@@ -31,7 +31,7 @@ importers:
         version: 2.10.0
       vitest:
         specifier: ^1.5.0
-        version: 1.5.0
+        version: 1.5.0(@types/node@18.19.34)(terser@5.19.2)
 
   e2e:
     devDependencies:
@@ -48,8 +48,8 @@ importers:
         specifier: ^11.0.4
         version: 11.0.4
       '@types/node':
-        specifier: 16.x
-        version: 16.18.96
+        specifier: 18.x
+        version: 18.19.34
       fast-glob:
         specifier: ^3.3.2
         version: 3.3.2
@@ -1085,8 +1085,8 @@ packages:
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
 
-  '@types/node@16.18.96':
-    resolution: {integrity: sha512-84iSqGXoO+Ha16j8pRZ/L90vDMKX04QTYMTfYeE1WrjWaZXuchBehGUZEpNgx7JnmlrIHdnABmpjrQjhCnNldQ==}
+  '@types/node@18.19.34':
+    resolution: {integrity: sha512-eXF4pfBNV5DAMKGbI02NnDtWrQ40hAN558/2vvS4gMpMIxaf6JmD7YjnZbq0Q9TDSSkKBamime8ewRoomHdt4g==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -2621,6 +2621,9 @@ packages:
   unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
 
+  undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+
   universalify@0.1.2:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
@@ -3441,7 +3444,7 @@ snapshots:
       '@modern-js/utils': 2.48.6
       '@swc/helpers': 0.5.3
 
-  '@modern-js/module-tools@2.48.6':
+  '@modern-js/module-tools@2.48.6(typescript@5.4.5)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@ast-grep/napi': 0.16.0
@@ -3470,6 +3473,8 @@ snapshots:
       tapable: 2.2.1
       terser: 5.19.2
       tsconfig-paths-webpack-plugin: 4.1.0
+    optionalDependencies:
+      typescript: 5.4.5
     transitivePeerDependencies:
       - debug
       - eslint
@@ -3651,7 +3656,7 @@ snapshots:
       '@rspack/core': 0.6.1(@swc/helpers@0.5.3)
       '@swc/helpers': 0.5.3
       core-js: 3.36.1
-      html-webpack-plugin: html-rspack-plugin@5.6.2(@rspack/core@0.6.1)
+      html-webpack-plugin: html-rspack-plugin@5.6.2(@rspack/core@0.6.1(@swc/helpers@0.5.3))
       postcss: 8.4.38
 
   '@rsbuild/shared@0.6.2(@swc/helpers@0.5.3)':
@@ -3705,7 +3710,6 @@ snapshots:
     dependencies:
       '@module-federation/runtime-tools': 0.0.8
       '@rspack/binding': 0.6.1
-      '@swc/helpers': 0.5.3
       browserslist: 4.23.0
       enhanced-resolve: 5.12.0
       events: 3.3.0
@@ -3717,6 +3721,8 @@ snapshots:
       webpack-sources: 3.2.3
       zod: 3.22.4
       zod-validation-error: 1.3.1(zod@3.22.4)
+    optionalDependencies:
+      '@swc/helpers': 0.5.3
 
   '@sinclair/typebox@0.27.8': {}
 
@@ -3731,19 +3737,21 @@ snapshots:
   '@types/fs-extra@11.0.4':
     dependencies:
       '@types/jsonfile': 6.1.4
-      '@types/node': 16.18.96
+      '@types/node': 18.19.34
 
   '@types/js-yaml@4.0.9': {}
 
   '@types/jsonfile@6.1.4':
     dependencies:
-      '@types/node': 16.18.96
+      '@types/node': 18.19.34
 
   '@types/minimist@1.2.5': {}
 
   '@types/node@12.20.55': {}
 
-  '@types/node@16.18.96': {}
+  '@types/node@18.19.34':
+    dependencies:
+      undici-types: 5.26.5
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -4480,11 +4488,12 @@ snapshots:
 
   hosted-git-info@2.8.9: {}
 
-  html-rspack-plugin@5.6.2(@rspack/core@0.6.1):
+  html-rspack-plugin@5.6.2(@rspack/core@0.6.1(@swc/helpers@0.5.3)):
     dependencies:
-      '@rspack/core': 0.6.1(@swc/helpers@0.5.3)
       lodash: 4.17.21
       tapable: 2.2.1
+    optionalDependencies:
+      '@rspack/core': 0.6.1(@swc/helpers@0.5.3)
 
   human-id@1.0.2: {}
 
@@ -5382,6 +5391,8 @@ snapshots:
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
 
+  undici-types@5.26.5: {}
+
   universalify@0.1.2: {}
 
   universalify@2.0.1: {}
@@ -5403,13 +5414,13 @@ snapshots:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
 
-  vite-node@1.5.0:
+  vite-node@1.5.0(@types/node@18.19.34)(terser@5.19.2):
     dependencies:
       cac: 6.7.14
       debug: 4.3.4
       pathe: 1.1.2
       picocolors: 1.0.0
-      vite: 5.2.9
+      vite: 5.2.9(@types/node@18.19.34)(terser@5.19.2)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -5420,15 +5431,17 @@ snapshots:
       - supports-color
       - terser
 
-  vite@5.2.9:
+  vite@5.2.9(@types/node@18.19.34)(terser@5.19.2):
     dependencies:
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.14.3
     optionalDependencies:
+      '@types/node': 18.19.34
       fsevents: 2.3.3
+      terser: 5.19.2
 
-  vitest@1.5.0:
+  vitest@1.5.0(@types/node@18.19.34)(terser@5.19.2):
     dependencies:
       '@vitest/expect': 1.5.0
       '@vitest/runner': 1.5.0
@@ -5447,9 +5460,11 @@ snapshots:
       strip-literal: 2.1.0
       tinybench: 2.7.0
       tinypool: 0.8.4
-      vite: 5.2.9
-      vite-node: 1.5.0
+      vite: 5.2.9(@types/node@18.19.34)(terser@5.19.2)
+      vite-node: 1.5.0(@types/node@18.19.34)(terser@5.19.2)
       why-is-node-running: 2.2.2
+    optionalDependencies:
+      '@types/node': 18.19.34
     transitivePeerDependencies:
       - less
       - lightningcss
