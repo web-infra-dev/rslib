@@ -1,8 +1,10 @@
-/**
- * The project structure and implementation of Rslib is a placeholder.
- * Only to setup the basic infrastructure workflow.
- */
-
 export { build } from './build';
-export { runCli } from './cli';
+export { runCli } from './cli/commands';
+export { prepareCli } from './cli/prepare';
+
 export type { RslibConfig } from './types';
+
+export * from './shared/logger';
+export * from './shared/utils';
+
+export const version = RSLIB_VERSION;
