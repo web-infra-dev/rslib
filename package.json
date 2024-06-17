@@ -2,7 +2,7 @@
   "name": "rslib-monorepo",
   "private": true,
   "scripts": {
-    "build": "cross-env NX_DAEMON=false nx run-many -t build --exclude @e2e/* --parallel=10",
+    "build": "cross-env NX_DAEMON=false nx run-many -t build --parallel=10",
     "check-dependency-version": "check-dependency-version-consistency .",
     "lint": "biome check . --diagnostic-level=warn",
     "prebundle": "nx run-many -t prebundle",
