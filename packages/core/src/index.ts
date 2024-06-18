@@ -2,9 +2,9 @@ export { build } from './build';
 export { runCli } from './cli/commands';
 export { prepareCli } from './cli/prepare';
 
-export type { RslibConfig } from './types';
+export * from './utils/logger';
+export * from './utils/helper';
 
-export * from './shared/logger';
-export * from './shared/utils';
+export type { RslibConfig } from './types';
 
 export const version = RSLIB_VERSION;

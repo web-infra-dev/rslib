@@ -1,4 +1,4 @@
-import { logger } from '../shared/logger';
+import { logger } from '../utils/logger';
 
 function initNodeEnv() {
   if (!process.env.NODE_ENV) {

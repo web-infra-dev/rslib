@@ -1,5 +1,5 @@
 import { type Logger, logger } from 'rslog';
-import { color } from './utils';
+import { color } from './helper';
 
 // setup the logger level
 if (process.env.DEBUG) {
