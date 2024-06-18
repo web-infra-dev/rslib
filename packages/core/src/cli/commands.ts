@@ -1,8 +1,10 @@
 import { program } from 'commander';
-import { build } from './build';
-import type { RslibConfig } from './types';
+import { build } from '../build';
+import type { RslibConfig } from '../types';
 
 export function runCli() {
+  program.name('rslib').usage('<command> [options]').version(RSLIB_VERSION);
+
   const buildCommand = program.command('build');
 
   buildCommand

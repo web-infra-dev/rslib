@@ -7,7 +7,11 @@
     "declaration": true,
     "declarationDir": "./dist-types",
     "module": "ESNext",
-    "moduleResolution": "Bundler"
+    "moduleResolution": "Bundler",
+    "paths": {
+      "commander": ["./compiled/commander"],
+      "picocolors": ["./compiled/picocolors"]
+    }
   },
   "include": ["src"],
   "exclude": ["**/node_modules"]
