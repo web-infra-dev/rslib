@@ -2,7 +2,7 @@
   "name": "rslib-monorepo",
   "private": true,
   "scripts": {
-    "build": "cross-env NX_DAEMON=false nx run-many -t build --parallel=10",
+    "build": "cross-env NX_DAEMON=false nx run-many -t build --exclude @examples/* --parallel=10",
     "check-dependency-version": "check-dependency-version-consistency .",
     "lint": "biome check . --diagnostic-level=warn",
     "prebundle": "nx run-many -t prebundle",
@@ -24,16 +24,16 @@
     "package.json": "pnpm run check-dependency-version"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.7.0",
-    "@modern-js/module-tools": "^2.48.6",
+    "@biomejs/biome": "^1.8.1",
+    "@modern-js/module-tools": "^2.53.0",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "nano-staged": "^0.8.0",
     "nx": "^19.3.0",
-    "prettier": "^3.2.4",
+    "prettier": "^3.3.2",
     "prettier-plugin-packagejson": "^2.5.0",
-    "simple-git-hooks": "^2.10.0",
-    "vitest": "^1.5.0"
+    "simple-git-hooks": "^2.11.1",
+    "vitest": "^1.6.0"
   },
   "packageManager": "pnpm@9.1.4",
   "engines": {
