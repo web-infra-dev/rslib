@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "cross-env NX_DAEMON=false nx run-many -t build --exclude @examples/* --parallel=10",
+    "build:examples": "cross-env NX_DAEMON=false nx run-many -t build --projects @examples/* --parallel=10",
     "check-dependency-version": "check-dependency-version-consistency .",
     "lint": "biome check . --diagnostic-level=warn",
     "prebundle": "nx run-many -t prebundle",

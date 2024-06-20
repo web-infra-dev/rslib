@@ -7,7 +7,7 @@ export interface LibConfig extends RsbuildConfig {
 }
 
 export interface RslibConfig extends RsbuildConfig {
-  lib?: LibConfig[];
+  lib: LibConfig[];
 }
 
 export type ConfigParams = {

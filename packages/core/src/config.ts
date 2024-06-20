@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import { dirname, isAbsolute, join } from 'node:path';
 import {
   type RsbuildConfig,
+  createRsbuild,
   defineConfig as defineRsbuildConfig,
   mergeRsbuildConfig,
 } from '@rsbuild/core';
@@ -138,7 +139,6 @@ export function convertLibConfigtoRsbuildConfig(
 export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
 ): Promise<RsbuildConfig[]> {
-  const { mergeRsbuildConfig } = await import('@rsbuild/core');
   const internalRsbuildConfig = await createInternalRsbuildConfig();
 
   const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
@@ -164,12 +164,11 @@ export async function composeCreateRsbuildConfig(
 }
 
 export async function initRsbuild(rslibConfig: RslibConfig) {
-  const { createRsbuild } = await import('@rsbuild/core');
   // TODO: use environment API instead
   const rsbuildConfigArray = await composeCreateRsbuildConfig(rslibConfig);
 
   const rsbuildPromises = rsbuildConfigArray.map(
-    async (rsbuildConfig: RslibConfig) => {
+    async (rsbuildConfig: RsbuildConfig) => {
       return createRsbuild({ rsbuildConfig });
     },
   );
