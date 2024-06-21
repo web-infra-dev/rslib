@@ -100,3 +100,8 @@ jobs:
         run: |
           pnpm run test:artifact
           pnpm run test:e2e
+
+      - name: Examples Test
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          pnpm run build:examples

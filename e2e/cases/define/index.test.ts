@@ -1,18 +1,40 @@
-import { build } from '@rslib/core';
+import { join } from 'node:path';
+import { type RslibConfig, build } from '@rslib/core';
 import { expect, test } from 'vitest';
 import { globContentJSON } from '#helper';
 
 test.fails('define', async () => {
   delete process.env.NODE_ENV;
 
-  const rslibConfig = {
-    root: __dirname,
-    entry: './js/src/index.js',
-    outDir: 'dist',
+  const rslibConfig: RslibConfig = {
+    lib: [
+      {
+        format: 'esm',
+        output: {
+          distPath: {
+            root: join(__dirname, './dist/esm'),
+          },
+        },
+      },
+      {
+        format: 'cjs',
+        output: {
+          distPath: {
+            root: join(__dirname, './dist/cjs'),
+          },
+        },
+      },
+    ],
+    source: {
+      entry: {
+        main: join(__dirname, './js/src/index.js'),
+      },
+    },
   };
 
   const instance = await build(rslibConfig);
-  const results = await globContentJSON(instance.context.distPath, {
+
+  const results = await globContentJSON(instance[0]!.context.distPath, {
     absolute: true,
     ignore: ['/**/*.map'],
   });

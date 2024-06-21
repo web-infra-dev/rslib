@@ -1,12 +1,21 @@
-import { createRsbuild } from '@rsbuild/core';
-import { composeCreateRsbuildConfig } from './config';
-import type { RslibConfig } from './types';
+import type { RsbuildInstance } from '@rsbuild/core';
+import type { BuildOptions } from './cli/commands';
+import { initRsbuild } from './config';
+import type { RslibConfig } from './types/config';
 
-export async function build(config: RslibConfig) {
-  const createRsbuildConfig = composeCreateRsbuildConfig(config);
-  const rsbuildInstance = await createRsbuild(createRsbuildConfig);
-  await rsbuildInstance.build({
-    mode: 'production',
-  });
-  return rsbuildInstance;
+export async function build(config: RslibConfig, options?: BuildOptions) {
+  const rsbuildInstances = await initRsbuild(config);
+
+  const buildPromises = rsbuildInstances.map(
+    async (rsbuildInstance: RsbuildInstance) => {
+      return await rsbuildInstance.build({
+        mode: 'production',
+        watch: options?.watch,
+      });
+    },
+  );
+
+  await Promise.all(buildPromises);
+
+  return rsbuildInstances;
 }
