@@ -1,4 +1,4 @@
-export const DEFAULT_CONFIG_NAME = 'rslib.config' as const;
+export const DEFAULT_CONFIG_NAME = 'rslib.config';
 
 export const DEFAULT_EXTENSIONS = [
   '.js',
