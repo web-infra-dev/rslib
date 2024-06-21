@@ -1,0 +1,109 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1`] = `
+[
+  {
+    "output": {
+      "distPath": {
+        "js": "./",
+      },
+      "filenameHash": false,
+      "minify": false,
+    },
+    "source": {
+      "alias": {
+        "bar": "bar",
+        "foo": "foo/esm",
+      },
+      "preEntry": "./b.js",
+    },
+    "tools": {
+      "htmlPlugin": false,
+      "rspack": {
+        "experiments": {
+          "outputModule": true,
+        },
+        "optimization": {
+          "concatenateModules": true,
+        },
+        "output": {
+          "library": {
+            "type": "module",
+          },
+          "module": true,
+        },
+      },
+    },
+  },
+  {
+    "output": {
+      "distPath": {
+        "js": "./",
+      },
+      "filenameHash": false,
+      "minify": false,
+    },
+    "source": {
+      "alias": {
+        "bar": "bar/cjs",
+        "foo": "foo",
+      },
+      "preEntry": [
+        "./a.js",
+        "./c.js",
+        "./d.js",
+      ],
+    },
+    "tools": {
+      "htmlPlugin": false,
+      "rspack": {
+        "experiments": {
+          "outputModule": true,
+        },
+        "optimization": {
+          "concatenateModules": true,
+        },
+        "output": {
+          "library": {
+            "type": "module",
+          },
+          "module": true,
+        },
+      },
+    },
+  },
+  {
+    "output": {
+      "distPath": {
+        "js": "./",
+      },
+      "filenameHash": false,
+      "minify": false,
+    },
+    "source": {
+      "alias": {
+        "bar": "bar",
+        "foo": "foo",
+      },
+      "preEntry": "./a.js",
+    },
+    "tools": {
+      "htmlPlugin": false,
+      "rspack": {
+        "experiments": {
+          "outputModule": true,
+        },
+        "optimization": {
+          "concatenateModules": true,
+        },
+        "output": {
+          "library": {
+            "type": "module",
+          },
+          "module": true,
+        },
+      },
+    },
+  },
+]
+`;
