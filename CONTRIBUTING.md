@@ -12,4 +12,4 @@ Current unstable versions are:
 
 | Package      | Version                             | Link                                                    |
 | ------------ | ----------------------------------- | ------------------------------------------------------- |
-| @rspack/core | 0.7.5-canary-b89dbb3-20240620182932 | [PR](https://github.com/web-infra-dev/rspack/pull/6877) |
+| @rspack/core | 0.7.5-canary-0d03907-20240624125011 | [PR](https://github.com/web-infra-dev/rspack/pull/6877) |
