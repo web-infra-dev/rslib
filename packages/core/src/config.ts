@@ -100,7 +100,7 @@ export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
   });
 }
 
-export function convertLibConfigtoRsbuildConfig(
+export function convertLibConfigToRsbuildConfig(
   libConfig: LibConfig,
   rsbuildConfig: RsbuildConfig,
 ): RsbuildConfig {
@@ -157,7 +157,7 @@ export async function composeCreateRsbuildConfig(
       internalRsbuildConfig,
     );
 
-    return convertLibConfigtoRsbuildConfig(libConfig, mergedRsbuildConfig);
+    return convertLibConfigToRsbuildConfig(libConfig, mergedRsbuildConfig);
   });
 
   return composedRsbuildConfig;
