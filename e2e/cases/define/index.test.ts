@@ -3,7 +3,7 @@ import { type RslibConfig, build } from '@rslib/core';
 import { expect, test } from 'vitest';
 import { globContentJSON } from '#helper';
 
-test.fails('define', async () => {
+test('define', async () => {
   delete process.env.NODE_ENV;
 
   const rslibConfig: RslibConfig = {
@@ -28,6 +28,9 @@ test.fails('define', async () => {
     source: {
       entry: {
         main: join(__dirname, './js/src/index.js'),
+      },
+      define: {
+        VERSION: JSON.stringify('1.0.0'),
       },
     },
   };

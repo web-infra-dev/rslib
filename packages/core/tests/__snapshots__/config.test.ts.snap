@@ -27,8 +27,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "concatenateModules": true,
         },
         "output": {
+          "iife": false,
           "library": {
-            "type": "module",
+            "type": "modern-module",
           },
           "module": true,
         },
@@ -57,17 +58,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
     "tools": {
       "htmlPlugin": false,
       "rspack": {
-        "experiments": {
-          "outputModule": true,
-        },
-        "optimization": {
-          "concatenateModules": true,
-        },
         "output": {
           "library": {
-            "type": "module",
+            "type": "commonjs",
           },
-          "module": true,
         },
       },
     },
@@ -90,17 +84,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
     "tools": {
       "htmlPlugin": false,
       "rspack": {
-        "experiments": {
-          "outputModule": true,
-        },
-        "optimization": {
-          "concatenateModules": true,
-        },
         "output": {
           "library": {
-            "type": "module",
+            "type": "umd",
           },
-          "module": true,
         },
       },
     },
