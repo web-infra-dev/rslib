@@ -75,23 +75,10 @@ export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
   return defineRsbuildConfig({
     tools: {
       htmlPlugin: false,
-      rspack: {
-        output: {
-          module: true,
-          library: {
-            type: 'module',
-          },
-        },
-        optimization: {
-          concatenateModules: true,
-        },
-        experiments: {
-          outputModule: true,
-        },
-      },
     },
     output: {
       filenameHash: false,
+      // TODO: easy to development at the moment
       minify: false,
       distPath: {
         js: './',
@@ -104,36 +91,54 @@ export function convertLibConfigToRsbuildConfig(
   libConfig: LibConfig,
   rsbuildConfig: RsbuildConfig,
 ): RsbuildConfig {
-  // TODO: Configuration mapping needs to be implemented according to features added in the future
-  if (libConfig.format === 'cjs') {
-    mergeRsbuildConfig(rsbuildConfig, {
-      tools: {
-        rspack: {
-          output: {
-            library: {
-              type: 'commonjs',
+  switch (libConfig.format) {
+    case 'esm':
+      return mergeRsbuildConfig(rsbuildConfig, {
+        tools: {
+          rspack: {
+            output: {
+              module: true,
+              iife: false,
+              library: {
+                type: 'modern-module',
+              },
+            },
+            optimization: {
+              concatenateModules: true,
+            },
+            experiments: {
+              outputModule: true,
             },
           },
         },
-      },
-    });
-  }
-
-  if (libConfig.format === 'esm') {
-    mergeRsbuildConfig(rsbuildConfig, {
-      tools: {
-        rspack: {
-          output: {
-            library: {
-              type: 'module',
+      });
+    case 'cjs':
+      return mergeRsbuildConfig(rsbuildConfig, {
+        tools: {
+          rspack: {
+            output: {
+              library: {
+                type: 'commonjs',
+              },
             },
           },
         },
-      },
-    });
+      });
+    case 'umd':
+      return mergeRsbuildConfig(rsbuildConfig, {
+        tools: {
+          rspack: {
+            output: {
+              library: {
+                type: 'umd',
+              },
+            },
+          },
+        },
+      });
+    default:
+      return rsbuildConfig;
   }
-
-  return rsbuildConfig;
 }
 
 export async function composeCreateRsbuildConfig(
@@ -151,6 +156,8 @@ export async function composeCreateRsbuildConfig(
   const composedRsbuildConfig = libConfigsArray.map((libConfig: LibConfig) => {
     const { format, ...overrideRsbuildConfig } = libConfig;
 
+    // Merge order matters, keep `internalRsbuildConfig` at the last position
+    // to ensure that the internal config is not overridden by the user's config.
     const mergedRsbuildConfig = mergeRsbuildConfig(
       sharedRsbuildConfig,
       overrideRsbuildConfig,

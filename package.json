@@ -12,7 +12,8 @@
     "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
     "test:artifact": "vitest run  --project artifact",
     "test:e2e": "cd e2e && pnpm run test",
-    "test:unit": "vitest run  --project unit"
+    "test:unit": "vitest run  --project unit",
+    "watch": "pnpm build --watch"
   },
   "simple-git-hooks": {
     "pre-commit": "npx nano-staged"
@@ -42,5 +43,10 @@
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=9.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@rspack/core": "0.7.5-canary-b89dbb3-20240620182932"
+    }
   }
 }
