@@ -6,7 +6,8 @@
     "#helper": "./scripts/helper.ts"
   },
   "scripts": {
-    "test": "playwright test"
+    "test:playwright": "playwright test",
+    "test:vitest": "cd ../ && pnpm run test:artifact"
   },
   "devDependencies": {
     "@playwright/test": "1.43.1",
