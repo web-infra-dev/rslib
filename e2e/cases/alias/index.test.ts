@@ -4,7 +4,7 @@ import { expect, test } from 'vitest';
 import { getEntryJsResults } from '#shared';
 import { loadConfig } from '../../../packages/core/src/config';
 
-test('define in js', async () => {
+test('alias in js', async () => {
   delete process.env.NODE_ENV;
 
   const fixturePath = join(__dirname, 'js');
@@ -12,13 +12,11 @@ test('define in js', async () => {
   const instance = await build(rslibConfig);
   const results = await getEntryJsResults(instance);
 
-  expect(results.esm).not.toContain('console.info(VERSION)');
-  expect(results.esm).toContain('1.0.0');
-  expect(results.cjs).not.toContain('console.info(VERSION)');
-  expect(results.cjs).toContain('1.0.0');
+  expect(results.esm).toContain('hello world');
+  expect(results.cjs).toContain('hello world');
 });
 
-test('define in ts', async () => {
+test('alias in ts', async () => {
   delete process.env.NODE_ENV;
 
   const fixturePath = join(__dirname, 'ts');
@@ -26,8 +24,6 @@ test('define in ts', async () => {
   const instance = await build(rslibConfig);
   const results = await getEntryJsResults(instance);
 
-  expect(results.esm).not.toContain('console.info(VERSION)');
-  expect(results.esm).toContain('1.0.0');
-  expect(results.cjs).not.toContain('console.info(VERSION)');
-  expect(results.cjs).toContain('1.0.0');
+  expect(results.esm).toContain('hello world');
+  expect(results.cjs).toContain('hello world');
 });
