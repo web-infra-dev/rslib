@@ -8,6 +8,7 @@ import {
 } from '@rsbuild/core';
 import { DEFAULT_CONFIG_NAME, DEFAULT_EXTENSIONS } from './constant';
 import type {
+  Format,
   LibConfig,
   RslibConfig,
   RslibConfigAsyncFn,
@@ -73,6 +74,9 @@ export async function loadConfig(
 
 export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
   return defineRsbuildConfig({
+    dev: {
+      progressBar: false,
+    },
     tools: {
       htmlPlugin: false,
     },
@@ -141,19 +145,20 @@ export function convertLibConfigToRsbuildConfig(
   }
 }
 
-export async function composeCreateRsbuildConfig(
-  rslibConfig: RslibConfig,
-): Promise<RsbuildConfig[]> {
+export async function composeCreateRsbuildConfig(rslibConfig: RslibConfig) {
   const internalRsbuildConfig = await createInternalRsbuildConfig();
 
   const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
 
   if (!libConfigsArray) {
-    logger.error('You must specify lib field in config file.');
-    return [];
+    throw new Error(
+      `Expect lib field to be an array, but got ${libConfigsArray}.`,
+    );
   }
 
-  const composedRsbuildConfig = libConfigsArray.map((libConfig: LibConfig) => {
+  const composedRsbuildConfig: Partial<Record<Format, RsbuildConfig>> = {};
+
+  for (const libConfig of libConfigsArray) {
     const { format, ...overrideRsbuildConfig } = libConfig;
 
     // Merge order matters, keep `internalRsbuildConfig` at the last position
@@ -164,23 +169,21 @@ export async function composeCreateRsbuildConfig(
       internalRsbuildConfig,
     );
 
-    return convertLibConfigToRsbuildConfig(libConfig, mergedRsbuildConfig);
-  });
+    composedRsbuildConfig[format!] = convertLibConfigToRsbuildConfig(
+      libConfig,
+      mergedRsbuildConfig,
+    );
+  }
 
   return composedRsbuildConfig;
 }
 
 export async function initRsbuild(rslibConfig: RslibConfig) {
-  // TODO: use environment API instead
-  const rsbuildConfigArray = await composeCreateRsbuildConfig(rslibConfig);
+  const rsbuildConfigObject = await composeCreateRsbuildConfig(rslibConfig);
 
-  const rsbuildPromises = rsbuildConfigArray.map(
-    async (rsbuildConfig: RsbuildConfig) => {
-      return createRsbuild({ rsbuildConfig });
+  return createRsbuild({
+    rsbuildConfig: {
+      environments: rsbuildConfigObject,
     },
-  );
-
-  const rsbuildInstances = await Promise.all(rsbuildPromises);
-
-  return rsbuildInstances;
+  });
 }
