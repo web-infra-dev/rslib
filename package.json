@@ -10,9 +10,9 @@
     "prebundle": "nx run-many -t prebundle",
     "prepare": "pnpm run build && simple-git-hooks",
     "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
-    "test:artifact": "vitest run  --project artifact",
+    "test:artifact": "vitest run --project artifact",
     "test:e2e": "cd e2e && pnpm run test",
-    "test:unit": "vitest run  --project unit",
+    "test:unit": "vitest run --project unit",
     "watch": "pnpm build --watch"
   },
   "simple-git-hooks": {

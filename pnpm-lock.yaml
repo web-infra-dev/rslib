@@ -84,8 +84,8 @@ importers:
   packages/core:
     dependencies:
       '@rsbuild/core':
-        specifier: 0.7.9
-        version: 0.7.9
+        specifier: 0.7.10
+        version: 0.7.10
     devDependencies:
       '@rslib/tsconfig':
         specifier: workspace:*
@@ -1094,13 +1094,13 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rsbuild/core@0.7.9':
-    resolution: {integrity: sha512-g29A68ZtrydLbWJgGlKUywyYi5ELnmuCM8CJWTxKa9itoIxAZG5h9NZ+P3VVBCaSfsY7DtFKMJ4D5cxvwJtVuw==}
+  '@rsbuild/core@0.7.10':
+    resolution: {integrity: sha512-m+JbPpuMFuVsMRcsjMxvVk6yc//OW+h72kV2DAD4neoiM0YhkEAN4TXBz3RSOomXHODhhxqhpCqz9nIw6PtvBA==}
     engines: {node: '>=16.0.0'}
     hasBin: true
 
-  '@rsbuild/shared@0.7.9':
-    resolution: {integrity: sha512-g/xQoa1PJR5305EXqXW5v+gFaYjzlwFvOzv0hOrmF0n2tEO1gO5PD/dwdWw1F3I9I79OshCZk0ru0XLshg/waQ==}
+  '@rsbuild/shared@0.7.10':
+    resolution: {integrity: sha512-FwTm11DP7KxQKT2mWLvwe80O5KpikgMSlqnw9CQhBaIHSYEypdJU9ZotbNsXsHdML3xcqg+S9ae3bpovC7KlwQ==}
 
   '@rspack/binding-darwin-arm64@0.7.5-canary-0d03907-20240624125011':
     resolution: {integrity: sha512-9e2dMR8BFB0rlfAKIVPmGCb9oaS86EWRbetWzKcqVTw46tHmi30De1eN5ElAfo3q0AtEruCfX7DDa0Shdja1xQ==}
@@ -3994,16 +3994,16 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.18.0':
     optional: true
 
-  '@rsbuild/core@0.7.9':
+  '@rsbuild/core@0.7.10':
     dependencies:
-      '@rsbuild/shared': 0.7.9(@swc/helpers@0.5.3)
+      '@rsbuild/shared': 0.7.10(@swc/helpers@0.5.3)
       '@rspack/core': 0.7.5-canary-0d03907-20240624125011(@swc/helpers@0.5.3)
       '@swc/helpers': 0.5.3
       core-js: 3.36.1
       html-webpack-plugin: html-rspack-plugin@5.7.2(@rspack/core@0.7.5-canary-0d03907-20240624125011(@swc/helpers@0.5.3))
       postcss: 8.4.38
 
-  '@rsbuild/shared@0.7.9(@swc/helpers@0.5.3)':
+  '@rsbuild/shared@0.7.10(@swc/helpers@0.5.3)':
     dependencies:
       '@rspack/core': 0.7.5-canary-0d03907-20240624125011(@swc/helpers@0.5.3)
       caniuse-lite: 1.0.30001636
