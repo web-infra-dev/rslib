@@ -9,8 +9,8 @@ test('define in js', async () => {
 
   const fixturePath = join(__dirname, 'js');
   const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
-  const instance = await build(rslibConfig);
-  const results = await getEntryJsResults(instance);
+  await build(rslibConfig);
+  const results = await getEntryJsResults(rslibConfig);
 
   expect(results.esm).not.toContain('console.info(VERSION)');
   expect(results.esm).toContain('1.0.0');
@@ -23,8 +23,8 @@ test('define in ts', async () => {
 
   const fixturePath = join(__dirname, 'ts');
   const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
-  const instance = await build(rslibConfig);
-  const results = await getEntryJsResults(instance);
+  await build(rslibConfig);
+  const results = await getEntryJsResults(rslibConfig);
 
   expect(results.esm).not.toContain('console.info(VERSION)');
   expect(results.esm).toContain('1.0.0');

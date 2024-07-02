@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { LibConfig, RsbuildInstance } from '@rslib/core';
+import type { LibConfig, RslibConfig } from '@rslib/core';
 import { globContentJSON } from '#helper';
 
 export function generateBundleEsmConfig(cwd: string): LibConfig {
@@ -24,20 +24,19 @@ export function generateBundleCjsConfig(cwd: string): LibConfig {
   };
 }
 
-export async function getEntryJsResults(instance: RsbuildInstance[]) {
+export async function getEntryJsResults(rslibConfig: RslibConfig) {
   const results: Record<string, string> = {};
 
-  for (let i = 0; i < instance.length; i++) {
-    const result = await globContentJSON(instance[i]!.context.distPath, {
+  for (const libConfig of rslibConfig.lib) {
+    const result = await globContentJSON(libConfig?.output?.distPath?.root!, {
       absolute: true,
       ignore: ['/**/*.map'],
     });
 
     const entryJs = Object.keys(result).find((file) => file.endsWith('.js'));
-    const format = instance[i]!.context.distPath.split('/').pop();
 
     if (entryJs) {
-      results[format!] = result[entryJs]!;
+      results[libConfig.format!] = result[entryJs]!;
     }
   }
 

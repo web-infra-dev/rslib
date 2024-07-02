@@ -9,5 +9,3 @@ export * from './utils/helper';
 export * from './types/config';
 
 export const version = RSLIB_VERSION;
-
-export type { RsbuildInstance } from '@rsbuild/core';

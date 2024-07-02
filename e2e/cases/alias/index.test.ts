@@ -9,8 +9,8 @@ test('alias in js', async () => {
 
   const fixturePath = join(__dirname, 'js');
   const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
-  const instance = await build(rslibConfig);
-  const results = await getEntryJsResults(instance);
+  await build(rslibConfig);
+  const results = await getEntryJsResults(rslibConfig);
 
   expect(results.esm).toContain('hello world');
   expect(results.cjs).toContain('hello world');
@@ -21,8 +21,8 @@ test('alias in ts', async () => {
 
   const fixturePath = join(__dirname, 'ts');
   const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
-  const instance = await build(rslibConfig);
-  const results = await getEntryJsResults(instance);
+  await build(rslibConfig);
+  const results = await getEntryJsResults(rslibConfig);
 
   expect(results.esm).toContain('hello world');
   expect(results.cjs).toContain('hello world');
