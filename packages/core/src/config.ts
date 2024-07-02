@@ -145,7 +145,9 @@ export function convertLibConfigToRsbuildConfig(
   }
 }
 
-export async function composeCreateRsbuildConfig(rslibConfig: RslibConfig) {
+export async function composeCreateRsbuildConfig(
+  rslibConfig: RslibConfig,
+): Promise<Partial<Record<Format, RsbuildConfig>>> {
   const internalRsbuildConfig = await createInternalRsbuildConfig();
 
   const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
