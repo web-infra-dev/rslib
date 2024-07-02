@@ -1,9 +1,13 @@
 import { join } from 'node:path';
+import { mergeRsbuildConfig as mergeConfig } from '@rsbuild/core';
 import type { LibConfig, RslibConfig } from '@rslib/core';
 import { globContentJSON } from '#helper';
 
-export function generateBundleEsmConfig(cwd: string): LibConfig {
-  return {
+export function generateBundleEsmConfig(
+  cwd: string,
+  config: LibConfig = {},
+): LibConfig {
+  const esmBasicConfig: LibConfig = {
     format: 'esm',
     output: {
       distPath: {
@@ -11,10 +15,15 @@ export function generateBundleEsmConfig(cwd: string): LibConfig {
       },
     },
   };
+
+  return mergeConfig(esmBasicConfig, config);
 }
 
-export function generateBundleCjsConfig(cwd: string): LibConfig {
-  return {
+export function generateBundleCjsConfig(
+  cwd: string,
+  config: LibConfig = {},
+): LibConfig {
+  const cjsBasicConfig: LibConfig = {
     format: 'cjs',
     output: {
       distPath: {
@@ -22,6 +31,8 @@ export function generateBundleCjsConfig(cwd: string): LibConfig {
       },
     },
   };
+
+  return mergeConfig(cjsBasicConfig, config);
 }
 
 export async function getEntryJsResults(rslibConfig: RslibConfig) {

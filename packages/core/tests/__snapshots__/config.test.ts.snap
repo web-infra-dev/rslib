@@ -1,8 +1,44 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1`] = `
-[
-  {
+{
+  "cjs": {
+    "dev": {
+      "progressBar": false,
+    },
+    "output": {
+      "distPath": {
+        "js": "./",
+      },
+      "filenameHash": false,
+      "minify": false,
+    },
+    "source": {
+      "alias": {
+        "bar": "bar/cjs",
+        "foo": "foo",
+      },
+      "preEntry": [
+        "./a.js",
+        "./c.js",
+        "./d.js",
+      ],
+    },
+    "tools": {
+      "htmlPlugin": false,
+      "rspack": {
+        "output": {
+          "library": {
+            "type": "commonjs",
+          },
+        },
+      },
+    },
+  },
+  "esm": {
+    "dev": {
+      "progressBar": false,
+    },
     "output": {
       "distPath": {
         "js": "./",
@@ -36,37 +72,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
       },
     },
   },
-  {
-    "output": {
-      "distPath": {
-        "js": "./",
-      },
-      "filenameHash": false,
-      "minify": false,
+  "umd": {
+    "dev": {
+      "progressBar": false,
     },
-    "source": {
-      "alias": {
-        "bar": "bar/cjs",
-        "foo": "foo",
-      },
-      "preEntry": [
-        "./a.js",
-        "./c.js",
-        "./d.js",
-      ],
-    },
-    "tools": {
-      "htmlPlugin": false,
-      "rspack": {
-        "output": {
-          "library": {
-            "type": "commonjs",
-          },
-        },
-      },
-    },
-  },
-  {
     "output": {
       "distPath": {
         "js": "./",
@@ -92,5 +101,5 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
       },
     },
   },
-]
+}
 `;
