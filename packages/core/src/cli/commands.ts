@@ -1,6 +1,7 @@
+import type { RsbuildMode } from '@rsbuild/core';
 import { type Command, program } from 'commander';
 import { build } from '../build';
-import { loadConfig } from '../config';
+import { initRsbuild, loadConfig } from '../config';
 import { logger } from '../utils/logger';
 
 export type CommonOptions = {
@@ -10,6 +11,12 @@ export type CommonOptions = {
 
 export type BuildOptions = CommonOptions & {
   watch?: boolean;
+};
+
+export type InspectOptions = CommonOptions & {
+  env: RsbuildMode;
+  output: string;
+  verbose?: boolean;
 };
 
 const applyCommonOptions = (command: Command) => {
@@ -28,8 +35,9 @@ export function runCli() {
   program.name('rslib').usage('<command> [options]').version(RSLIB_VERSION);
 
   const buildCommand = program.command('build');
+  const inspectCommand = program.command('inspect');
 
-  [buildCommand].forEach(applyCommonOptions);
+  [buildCommand, inspectCommand].forEach(applyCommonOptions);
 
   buildCommand
     .option('-w --watch', 'turn on watch mode, watch for changes and rebuild')
@@ -40,6 +48,29 @@ export function runCli() {
         await build(rslibConfig, options);
       } catch (err) {
         logger.error('Failed to build.');
+        logger.error(err);
+        process.exit(1);
+      }
+    });
+
+  inspectCommand
+    .description('inspect the Rslib / Rsbuild / Rspack configs')
+    .option('--env <env>', 'specify env mode', 'development')
+    .option('--output <output>', 'specify inspect content output path', '/')
+    .option('--verbose', 'show full function definitions in output')
+    .action(async (options: InspectOptions) => {
+      try {
+        // TODO: inspect should output Rslib's config
+        const rslibConfig = await loadConfig(options.config, options.envMode);
+        const rsbuildInstance = await initRsbuild(rslibConfig);
+        await rsbuildInstance.inspectConfig({
+          env: options.env,
+          verbose: options.verbose,
+          outputPath: options.output,
+          writeToDisk: true,
+        });
+      } catch (err) {
+        logger.error('Failed to inspect config.');
         logger.error(err);
         process.exit(1);
       }

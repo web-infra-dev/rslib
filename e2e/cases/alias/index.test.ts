@@ -26,4 +26,8 @@ test('alias in ts', async () => {
 
   expect(results.esm).toContain('hello world');
   expect(results.cjs).toContain('hello world');
+
+  // simple artifacts check
+  expect(results.esm).toMatchSnapshot();
+  expect(results.cjs).toMatchSnapshot();
 });
