@@ -1,7 +1,7 @@
 export { build } from './build';
 export { runCli } from './cli/commands';
 export { prepareCli } from './cli/prepare';
-export { defineConfig } from './config';
+export { defineConfig, loadConfig } from './config';
 
 export * from './utils/logger';
 export * from './utils/helper';

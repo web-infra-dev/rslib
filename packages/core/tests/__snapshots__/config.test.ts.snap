@@ -27,6 +27,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
     "tools": {
       "htmlPlugin": false,
       "rspack": {
+        "externalsType": "commonjs",
         "output": {
           "library": {
             "type": "commonjs",
@@ -59,11 +60,12 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
         "experiments": {
           "outputModule": true,
         },
+        "externalsType": "module",
         "optimization": {
           "concatenateModules": true,
         },
         "output": {
-          "iife": false,
+          "chunkFormat": "module",
           "library": {
             "type": "modern-module",
           },
@@ -93,6 +95,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
     "tools": {
       "htmlPlugin": false,
       "rspack": {
+        "externalsType": "umd",
         "output": {
           "library": {
             "type": "umd",
