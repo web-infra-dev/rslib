@@ -16,6 +16,7 @@ import type {
   RslibConfigSyncFn,
 } from './types/config';
 import { color } from './utils/helper';
+import { nodeBuiltInModules } from './utils/helper';
 import { logger } from './utils/logger';
 
 /**
@@ -91,13 +92,44 @@ export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
   });
 }
 
+const composeNodeBuiltInExternals = (format: Format) => {
+  const externalTypeMap = {
+    esm: 'module',
+    cjs: 'commonjs',
+    umd: 'umd',
+  };
+
+  const commonExternals = nodeBuiltInModules.reduce<Record<string, string>>(
+    (acc, key) => {
+      acc[key] = `${externalTypeMap[format]} ${key}`;
+      acc[`node:${key}`] = `${externalTypeMap[format]} node:${key}`;
+      return acc;
+    },
+    {},
+  );
+
+  return commonExternals;
+};
+
 export function convertLibConfigToRsbuildConfig(
   libConfig: LibConfig,
   rsbuildConfig: RsbuildConfig,
 ): RsbuildConfig {
+  //   const outputLibraryType = libConfig.format
+  //     ? outputLibraryMap[libConfig.format]
+  //     : undefined;
+
+  const sharedConfig: RsbuildConfig = {
+    tools: {
+      rspack: {
+        externals: composeNodeBuiltInExternals(libConfig.format),
+      },
+    },
+  };
+
   switch (libConfig.format) {
     case 'esm':
-      return mergeRsbuildConfig(rsbuildConfig, {
+      return mergeRsbuildConfig(sharedConfig, rsbuildConfig, {
         tools: {
           rspack: {
             output: {
@@ -117,7 +149,7 @@ export function convertLibConfigToRsbuildConfig(
         },
       });
     case 'cjs':
-      return mergeRsbuildConfig(rsbuildConfig, {
+      return mergeRsbuildConfig(sharedConfig, rsbuildConfig, {
         tools: {
           rspack: {
             output: {
@@ -129,7 +161,7 @@ export function convertLibConfigToRsbuildConfig(
         },
       });
     case 'umd':
-      return mergeRsbuildConfig(rsbuildConfig, {
+      return mergeRsbuildConfig(sharedConfig, rsbuildConfig, {
         tools: {
           rspack: {
             output: {

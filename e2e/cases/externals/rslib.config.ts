@@ -12,4 +12,7 @@ export default defineConfig({
       VERSION: JSON.stringify('1.0.0'),
     },
   },
+  output: {
+    externals: { react: 'react' },
+  },
 });
