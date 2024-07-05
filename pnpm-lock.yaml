@@ -17,6 +17,9 @@ importers:
       '@modern-js/module-tools':
         specifier: ^2.53.0
         version: 2.53.0(typescript@5.4.5)
+      '@types/fs-extra':
+        specifier: ^11.0.4
+        version: 11.0.4
       check-dependency-version-consistency:
         specifier: ^4.1.0
         version: 4.1.0
@@ -26,6 +29,9 @@ importers:
       cspell-ban-words:
         specifier: ^0.0.3
         version: 0.0.3
+      fs-extra:
+        specifier: ^11.2.0
+        version: 11.2.0
       nano-staged:
         specifier: ^0.8.0
         version: 0.8.0
@@ -41,6 +47,9 @@ importers:
       simple-git-hooks:
         specifier: ^2.11.1
         version: 2.11.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
       vitest:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@18.19.34)(terser@5.19.2)
@@ -51,8 +60,8 @@ importers:
         specifier: 1.43.1
         version: 1.43.1
       '@rsbuild/core':
-        specifier: 1.0.0-alpha.0
-        version: 1.0.0-alpha.0
+        specifier: 1.0.0-alpha.3
+        version: 1.0.0-alpha.3
       '@rslib/core':
         specifier: workspace:*
         version: link:../packages/core
@@ -71,24 +80,18 @@ importers:
       fs-extra:
         specifier: ^11.2.0
         version: 11.2.0
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
 
   examples/basic:
     devDependencies:
       '@rslib/core':
         specifier: workspace:*
         version: link:../../packages/core
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
 
   packages/core:
     dependencies:
       '@rsbuild/core':
-        specifier: 1.0.0-alpha.0
-        version: 1.0.0-alpha.0
+        specifier: 1.0.0-alpha.3
+        version: 1.0.0-alpha.3
     devDependencies:
       '@rslib/tsconfig':
         specifier: workspace:*
@@ -1097,13 +1100,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rsbuild/core@1.0.0-alpha.0':
-    resolution: {integrity: sha512-GVfPf7Vi2XigAxz/X0ayoeCvTqvAZ6VltH4Xxqmcxd3tscu/MW1m2uXqsK58L27m47Y7iKpPlA1EahOs3cnKGg==}
+  '@rsbuild/core@1.0.0-alpha.3':
+    resolution: {integrity: sha512-RmuxJkxRTfq5BoQWIOm/hR8wl0cCWDFgvn/AxV2jVBf1psTeUEqTn05xtKwLuHJnaqD1hZHagEaHUn+ps3EJRw==}
     engines: {node: '>=16.7.0'}
     hasBin: true
-
-  '@rsbuild/shared@1.0.0-alpha.0':
-    resolution: {integrity: sha512-pv+OaUzazvIpNdZylpjP39KUOMWku7AdyWN8kiSKEJchUO0HjpoxKg3ym2FMDODpOZS0j0ytpDzi3aF3d/lc8g==}
 
   '@rspack/binding-darwin-arm64@0.7.5-canary-0d03907-20240624125011':
     resolution: {integrity: sha512-9e2dMR8BFB0rlfAKIVPmGCb9oaS86EWRbetWzKcqVTw46tHmi30De1eN5ElAfo3q0AtEruCfX7DDa0Shdja1xQ==}
@@ -1365,8 +1365,8 @@ packages:
   caniuse-lite@1.0.30001636:
     resolution: {integrity: sha512-bMg2vmr8XBsbL6Lr0UHXy/21m84FTxDLWn2FSqMd5PrlbMxwJlQnC2YWYxVgp66PZE+BBNF2jYQUBKCo1FDeZg==}
 
-  caniuse-lite@1.0.30001639:
-    resolution: {integrity: sha512-eFHflNTBIlFwP2AIKaYuBQN/apnUoKNhBdza8ZnW/h2di4LCZ4xFqYlxUxo+LQ76KFI1PGcC1QDxMbxTZpSCAg==}
+  caniuse-lite@1.0.30001640:
+    resolution: {integrity: sha512-lA4VMpW0PSUrFnkmVuEKBUovSWKhj7puyCg8StBChgu298N1AtuF1sKWEvfDuimSEDbhlb/KqPKC3fs1HbuQUA==}
 
   chai@4.4.1:
     resolution: {integrity: sha512-13sOfMv2+DWduEU+/xbun3LScLoqN17nBeTLUsmDfKdoiC1fr0n9PU4guu4AhRcOVFk/sW8LyZWHuhWtQZiF+g==}
@@ -4007,25 +4007,16 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.18.0':
     optional: true
 
-  '@rsbuild/core@1.0.0-alpha.0':
+  '@rsbuild/core@1.0.0-alpha.3':
     dependencies:
-      '@rsbuild/shared': 1.0.0-alpha.0(@swc/helpers@0.5.11)
       '@rspack/core': 0.7.5-canary-0d03907-20240624125011(@swc/helpers@0.5.11)
       '@swc/helpers': 0.5.11
+      caniuse-lite: 1.0.30001640
       core-js: 3.37.1
-      html-webpack-plugin: html-rspack-plugin@5.7.2(@rspack/core@0.7.5-canary-0d03907-20240624125011(@swc/helpers@0.5.11))
-      postcss: 8.4.39
-
-  '@rsbuild/shared@1.0.0-alpha.0(@swc/helpers@0.5.11)':
-    dependencies:
-      '@rspack/core': 0.7.5-canary-0d03907-20240624125011(@swc/helpers@0.5.11)
-      caniuse-lite: 1.0.30001639
       html-webpack-plugin: html-rspack-plugin@5.7.2(@rspack/core@0.7.5-canary-0d03907-20240624125011(@swc/helpers@0.5.11))
       postcss: 8.4.39
     optionalDependencies:
       fsevents: 2.3.3
-    transitivePeerDependencies:
-      - '@swc/helpers'
 
   '@rspack/binding-darwin-arm64@0.7.5-canary-0d03907-20240624125011':
     optional: true
@@ -4070,7 +4061,7 @@ snapshots:
     dependencies:
       '@module-federation/runtime-tools': 0.1.6
       '@rspack/binding': 0.7.5-canary-0d03907-20240624125011
-      caniuse-lite: 1.0.30001639
+      caniuse-lite: 1.0.30001640
       tapable: 2.2.1
       webpack-sources: 3.2.3
     optionalDependencies:
@@ -4298,7 +4289,7 @@ snapshots:
 
   caniuse-lite@1.0.30001636: {}
 
-  caniuse-lite@1.0.30001639: {}
+  caniuse-lite@1.0.30001640: {}
 
   chai@4.4.1:
     dependencies:
