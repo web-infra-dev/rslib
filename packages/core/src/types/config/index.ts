@@ -1,12 +1,38 @@
 import type { RsbuildConfig } from '@rsbuild/core';
 
 export type Format = 'esm' | 'cjs' | 'umd';
-export type Platform = 'node' | 'browser' | 'neutral';
+
+export type EcmaScriptVersion =
+  | 'esnext'
+  | 'es5'
+  | 'es6'
+  | 'es2015'
+  | 'es2016'
+  | 'es2017'
+  | 'es2018'
+  | 'es2019'
+  | 'es2020'
+  | 'es2021'
+  | 'es2022'
+  | 'es2023'
+  | 'es2024';
+
+export type Syntax =
+  // Use browserslist config file
+  | 'browserslist'
+  // ECMAScript versions as an common used addition to browserslist query
+  | EcmaScriptVersion
+  | EcmaScriptVersion[]
+  // Support inline browserslist query, like defined in package.json
+  | string[];
 
 export interface LibConfig extends RsbuildConfig {
   format?: Format;
-  platform?: Platform;
   autoExtension?: boolean;
+  output?: RsbuildConfig['output'] & {
+    /** Support esX and browserslist query */
+    syntax?: Syntax;
+  };
 }
 
 export interface RslibConfig extends RsbuildConfig {

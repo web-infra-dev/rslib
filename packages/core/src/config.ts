@@ -10,11 +10,11 @@ import { DEFAULT_CONFIG_NAME, DEFAULT_EXTENSIONS } from './constant';
 import type {
   Format,
   LibConfig,
-  Platform,
   RslibConfig,
   RslibConfigAsyncFn,
   RslibConfigExport,
   RslibConfigSyncFn,
+  Syntax,
 } from './types/config';
 import { getDefaultExtension } from './utils/extension';
 import { color } from './utils/helper';
@@ -155,27 +155,6 @@ const getDefaultFormatConfig = (format: Format): RsbuildConfig => {
   }
 };
 
-const getDefaultPlatformConfig = (platform: Platform): RsbuildConfig => {
-  switch (platform) {
-    case 'browser':
-      return {};
-    case 'node':
-      return {
-        output: {
-          // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
-          // Simply override the built-in modules to make them external.
-          // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
-          externals: nodeBuiltInModules,
-          target: 'node',
-        },
-      };
-    case 'neutral':
-      return {};
-    default:
-      throw new Error(`Unsupported platform: ${platform}`);
-  }
-};
-
 const getDefaultAutoExtensionConfig = (
   format: Format,
   root: string,
@@ -196,33 +175,61 @@ const getDefaultAutoExtensionConfig = (
   };
 };
 
+const getDefaultSyntax = (_syntax?: Syntax): RsbuildConfig => {
+  return {};
+};
+
 export function convertLibConfigToRsbuildConfig(
   libConfig: LibConfig,
-  rsbuildConfig: RsbuildConfig,
+  configPath: string,
 ): RsbuildConfig {
-  const { format, platform = 'browser', autoExtension = false } = libConfig;
+  const { format, autoExtension = false } = libConfig;
 
   const formatConfig = getDefaultFormatConfig(format!);
-  const platformConfig = getDefaultPlatformConfig(platform);
   const autoExtensionConfig = getDefaultAutoExtensionConfig(
     format!,
-    dirname(rsbuildConfig._privateMeta?.configFilePath ?? process.cwd()),
+    dirname(configPath),
     autoExtension,
   );
+  const syntaxConfig = getDefaultSyntax(libConfig.output?.syntax);
 
-  return mergeRsbuildConfig(
-    rsbuildConfig,
-    formatConfig,
-    platformConfig,
-    autoExtensionConfig,
-  );
+  return mergeRsbuildConfig(formatConfig, autoExtensionConfig, syntaxConfig);
 }
+
+function postUpdateRsbuildConfig(rsbuildConfig: RsbuildConfig) {
+  const defaultTargetConfig = getDefaultTargetConfig(
+    rsbuildConfig.output?.target ?? 'web',
+  );
+
+  return mergeRsbuildConfig(defaultTargetConfig);
+}
+
+const getDefaultTargetConfig = (target: string): RsbuildConfig => {
+  switch (target) {
+    case 'web':
+      return {};
+    case 'node':
+      return {
+        output: {
+          // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
+          // Simply override the built-in modules to make them external.
+          // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
+          externals: nodeBuiltInModules,
+          target: 'node',
+        },
+      };
+    case 'neutral':
+      return {};
+    default:
+      throw new Error(`Unsupported platform: ${target}`);
+  }
+};
 
 export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
 ): Promise<Partial<Record<Format, RsbuildConfig>>> {
   const internalRsbuildConfig = await createInternalRsbuildConfig();
-
+  const configPath = rslibConfig._privateMeta?.configFilePath ?? process.cwd();
   const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
 
   if (!libConfigsArray) {
@@ -234,19 +241,29 @@ export async function composeCreateRsbuildConfig(
   const composedRsbuildConfig: Partial<Record<Format, RsbuildConfig>> = {};
 
   for (const libConfig of libConfigsArray) {
-    const { format, platform, ...overrideRsbuildConfig } = libConfig;
+    const { format, ...overrideRsbuildConfig } = libConfig;
 
-    // Merge order matters, keep `internalRsbuildConfig` at the last position
-    // to ensure that the internal config is not overridden by the user's config.
+    const libConvertedRsbuildConfig = convertLibConfigToRsbuildConfig(
+      libConfig,
+      configPath,
+    );
+
     const mergedRsbuildConfig = mergeRsbuildConfig(
       sharedRsbuildConfig,
       overrideRsbuildConfig,
-      internalRsbuildConfig,
+      libConvertedRsbuildConfig,
     );
 
-    composedRsbuildConfig[format!] = convertLibConfigToRsbuildConfig(
-      libConfig,
+    // Some configurations can be defined both in the shared config and the lib config.
+    // So we need to do the post process after lib config is converted and merged.
+    const postUpdatedConfig = postUpdateRsbuildConfig(mergedRsbuildConfig);
+
+    composedRsbuildConfig[format!] = mergeRsbuildConfig(
       mergedRsbuildConfig,
+      postUpdatedConfig,
+      // Merge order matters, keep `internalRsbuildConfig` at the last position
+      // to ensure that the internal config is not overridden by user's config.
+      internalRsbuildConfig,
     );
   }
 
