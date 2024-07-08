@@ -12,7 +12,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | --------------- | ------ | ----------------------------------------------------------------------------------------------------------------------- |
 | alias           | 🟢     |                                                                                                                         |
 | asset           | ⚪️     |                                                                                                                         |
-| autoExtension   | ⚪️     |                                                                                                                         |
+| autoExtension   | 🟡     | Support js extension, dts extension need to be supported in the future                                                  |
 | autoExternal    | ⚪️     |                                                                                                                         |
 | banner-footer   | ⚪️     |                                                                                                                         |
 | buildType       | ⚪️     |                                                                                                                         |

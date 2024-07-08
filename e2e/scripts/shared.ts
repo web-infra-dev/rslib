@@ -38,7 +38,8 @@ export function generateBundleCjsConfig(
 }
 
 export async function getEntryJsResults(rslibConfig: RslibConfig) {
-  const results: Record<string, string> = {};
+  const files: Record<string, string> = {};
+  const contents: Record<string, string> = {};
 
   for (const libConfig of rslibConfig.lib) {
     const result = await globContentJSON(libConfig?.output?.distPath?.root!, {
@@ -46,19 +47,28 @@ export async function getEntryJsResults(rslibConfig: RslibConfig) {
       ignore: ['/**/*.map'],
     });
 
-    const entryJs = Object.keys(result).find((file) => file.endsWith('.js'));
+    const entryJs = Object.keys(result).find((file) =>
+      /\.(js|cjs|mjs)$/.test(file),
+    );
 
     if (entryJs) {
-      results[libConfig.format!] = result[entryJs]!;
+      files[libConfig.format!] = entryJs;
+      contents[libConfig.format!] = result[entryJs]!;
     }
   }
 
-  return results;
+  return {
+    files,
+    contents,
+  };
 }
 
-export const buildAndGetResults = async (fixturePath: string) => {
+export const buildAndGetEntryJsResults = async (fixturePath: string) => {
   const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
   await build(rslibConfig);
-  const entries = await getEntryJsResults(rslibConfig);
-  return { entries };
+  const results = await getEntryJsResults(rslibConfig);
+  return {
+    contents: results.contents,
+    files: results.files,
+  };
 };
