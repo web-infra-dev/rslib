@@ -67,15 +67,8 @@ export const buildAndGetEntryJsResults = async (fixturePath: string) => {
   const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
   await build(rslibConfig);
   const results = await getEntryJsResults(rslibConfig);
-  return results;
-};
-
-export const buildAndGetJsContents = async (fixturePath: string) => {
-  const results = await buildAndGetEntryJsResults(fixturePath);
-  return { entries: results.contents };
-};
-
-export const buildAndGetJsFiles = async (fixturePath: string) => {
-  const results = await buildAndGetEntryJsResults(fixturePath);
-  return { files: results.files };
+  return {
+    contents: results.contents,
+    files: results.files,
+  };
 };

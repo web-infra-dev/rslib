@@ -1,14 +1,14 @@
 import { expect, test } from 'vitest';
-import { buildAndGetJsContents } from '#shared';
+import { buildAndGetEntryJsResults } from '#shared';
 
 test('alias should work', async () => {
   const fixturePath = __dirname;
-  const { entries } = await buildAndGetJsContents(fixturePath);
+  const { contents } = await buildAndGetEntryJsResults(fixturePath);
 
-  expect(entries.esm).toContain('hello world');
-  expect(entries.cjs).toContain('hello world');
+  expect(contents.esm).toContain('hello world');
+  expect(contents.cjs).toContain('hello world');
 
   // simple artifacts check
-  expect(entries.esm).toMatchSnapshot();
-  expect(entries.cjs).toMatchSnapshot();
+  expect(contents.esm).toMatchSnapshot();
+  expect(contents.cjs).toMatchSnapshot();
 });
