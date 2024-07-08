@@ -3,8 +3,6 @@ import { expect, test } from 'vitest';
 import { buildAndGetResults } from '#shared';
 
 test('auto externalize Node.js built-in modules when platform is "node"', async () => {
-  delete process.env.NODE_ENV;
-
   const fixturePath = join(__dirname);
   const { entries } = await buildAndGetResults(fixturePath);
 
