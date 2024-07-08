@@ -10,11 +10,13 @@ import { DEFAULT_CONFIG_NAME, DEFAULT_EXTENSIONS } from './constant';
 import type {
   Format,
   LibConfig,
+  Platform,
   RslibConfig,
   RslibConfigAsyncFn,
   RslibConfigExport,
   RslibConfigSyncFn,
 } from './types/config';
+import { getDefaultExtension } from './utils/extension';
 import { color } from './utils/helper';
 import { nodeBuiltInModules } from './utils/helper';
 import { logger } from './utils/logger';
@@ -90,15 +92,10 @@ export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
   });
 }
 
-export function convertLibConfigToRsbuildConfig(
-  libConfig: LibConfig,
-  rsbuildConfig: RsbuildConfig,
-): RsbuildConfig {
-  const { format, platform = 'browser' } = libConfig;
-  let formatConfig: RsbuildConfig = {};
+const getDefaultFormatConfig = (format: Format): RsbuildConfig => {
   switch (format) {
     case 'esm':
-      formatConfig = {
+      return {
         tools: {
           rspack: {
             externalsType: 'module',
@@ -118,9 +115,8 @@ export function convertLibConfigToRsbuildConfig(
           },
         },
       };
-      break;
     case 'cjs':
-      formatConfig = {
+      return {
         tools: {
           rspack: {
             externalsType: 'commonjs',
@@ -132,9 +128,8 @@ export function convertLibConfigToRsbuildConfig(
           },
         },
       };
-      break;
     case 'umd':
-      formatConfig = {
+      return {
         tools: {
           rspack: {
             externalsType: 'umd',
@@ -146,18 +141,17 @@ export function convertLibConfigToRsbuildConfig(
           },
         },
       };
-      break;
     default:
-      throw new Error(`Unsupported format: ${libConfig.format}`);
+      throw new Error(`Unsupported format: ${format}`);
   }
+};
 
-  let platformConfig: RsbuildConfig = {};
+const getDefaultPlatformConfig = (platform: Platform): RsbuildConfig => {
   switch (platform) {
     case 'browser':
-      platformConfig = {};
-      break;
+      return {};
     case 'node':
-      platformConfig = {
+      return {
         output: {
           // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
           // Simply override the built-in modules to make them external.
@@ -166,15 +160,53 @@ export function convertLibConfigToRsbuildConfig(
           target: 'node',
         },
       };
-      break;
     case 'neutral':
-      platformConfig = {};
-      break;
+      return {};
     default:
-      throw new Error(`Unsupported platform: ${libConfig.platform}`);
+      throw new Error(`Unsupported platform: ${platform}`);
   }
+};
 
-  return mergeRsbuildConfig(rsbuildConfig, formatConfig, platformConfig);
+const getDefaultAutoExtensionConfig = (
+  format: Format,
+  root: string,
+  autoExtension: boolean,
+): RsbuildConfig => {
+  const { jsExtension } = getDefaultExtension({
+    format,
+    root,
+    autoExtension,
+  });
+
+  return {
+    output: {
+      filename: {
+        js: `[name]${jsExtension}`,
+      },
+    },
+  };
+};
+
+export function convertLibConfigToRsbuildConfig(
+  libConfig: LibConfig,
+  rsbuildConfig: RsbuildConfig,
+): RsbuildConfig {
+  const { format, platform = 'browser', autoExtension = false } = libConfig;
+
+  const formatConfig = getDefaultFormatConfig(format!);
+  const platformConfig = getDefaultPlatformConfig(platform);
+  const autoExtensionConfig = getDefaultAutoExtensionConfig(
+    format!,
+    dirname(rsbuildConfig._privateMeta?.configFilePath ?? process.cwd()),
+    autoExtension,
+  );
+
+  return mergeRsbuildConfig(
+    rsbuildConfig,
+    formatConfig,
+    platformConfig,
+    autoExtensionConfig,
+  );
 }
 
 export async function composeCreateRsbuildConfig(
