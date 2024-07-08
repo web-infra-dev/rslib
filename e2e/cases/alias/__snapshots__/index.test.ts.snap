@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`alias in ts 1`] = `
+exports[`alias should work 1`] = `
 "var __webpack_modules__ = ({});
 /************************************************************************/
 // The module cache
@@ -42,10 +42,10 @@ __webpack_require__.ruid = "bundler=rspack@1.0.0-canary-0b368b6-20240704171208";
 /************************************************************************/
 var __webpack_exports__ = {};
 
-;// CONCATENATED MODULE: ./e2e/cases/alias/ts/src/a.ts
+;// CONCATENATED MODULE: ./e2e/cases/alias/src/a.ts
 const a = 'hello world';
 
-;// CONCATENATED MODULE: ./e2e/cases/alias/ts/src/index.ts
+;// CONCATENATED MODULE: ./e2e/cases/alias/src/index.ts
 
 console.info(a);
 
@@ -53,7 +53,7 @@ export { a };
 "
 `;
 
-exports[`alias in ts 2`] = `
+exports[`alias should work 2`] = `
 "(() => { // webpackBootstrap
 "use strict";
 var __webpack_modules__ = ({});
@@ -97,10 +97,10 @@ __webpack_require__.ruid = "bundler=rspack@1.0.0-canary-0b368b6-20240704171208";
 /************************************************************************/
 var __webpack_exports__ = {};
 
-;// CONCATENATED MODULE: ./e2e/cases/alias/ts/src/a.ts
+;// CONCATENATED MODULE: ./e2e/cases/alias/src/a.ts
 const a = 'hello world';
 
-;// CONCATENATED MODULE: ./e2e/cases/alias/ts/src/index.ts
+;// CONCATENATED MODULE: ./e2e/cases/alias/src/index.ts
 
 console.info(a);
 
