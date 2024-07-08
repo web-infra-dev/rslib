@@ -1,33 +1,27 @@
 import { join } from 'node:path';
-import { build } from '@rslib/core';
 import { expect, test } from 'vitest';
-import { getEntryJsResults } from '#shared';
-import { loadConfig } from '../../../packages/core/src/config';
+import { buildAndGetResults } from '#shared';
 
 test('define in js', async () => {
-  delete process.env.NODE_ENV;
-
   const fixturePath = join(__dirname, 'js');
-  const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
-  await build(rslibConfig);
-  const results = await getEntryJsResults(rslibConfig);
+  const { entries } = await buildAndGetResults(fixturePath);
 
-  expect(results.esm).not.toContain('console.info(VERSION)');
-  expect(results.esm).toContain('1.0.0');
-  expect(results.cjs).not.toContain('console.info(VERSION)');
-  expect(results.cjs).toContain('1.0.0');
+  // TODO: remove js/ts dir in cases `define` and `alias`
+  // supersede with a complex js/ts combined case
+  expect(entries.esm).not.toContain('console.info(VERSION)');
+  expect(entries.esm).toContain('1.0.0');
+
+  expect(entries.cjs).not.toContain('console.info(VERSION)');
+  expect(entries.cjs).toContain('1.0.0');
 });
 
 test('define in ts', async () => {
-  delete process.env.NODE_ENV;
-
   const fixturePath = join(__dirname, 'ts');
-  const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
-  await build(rslibConfig);
-  const results = await getEntryJsResults(rslibConfig);
+  const { entries } = await buildAndGetResults(fixturePath);
 
-  expect(results.esm).not.toContain('console.info(VERSION)');
-  expect(results.esm).toContain('1.0.0');
-  expect(results.cjs).not.toContain('console.info(VERSION)');
-  expect(results.cjs).toContain('1.0.0');
+  expect(entries.esm).not.toContain('console.info(VERSION)');
+  expect(entries.esm).toContain('1.0.0');
+
+  expect(entries.cjs).not.toContain('console.info(VERSION)');
+  expect(entries.cjs).toContain('1.0.0');
 });

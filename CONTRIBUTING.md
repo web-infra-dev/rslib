@@ -10,6 +10,6 @@ The project is still under development, so it possible dependents on unstable Rs
 
 Current unstable versions are:
 
-| Package      | Version                             | Link                                                    |
-| ------------ | ----------------------------------- | ------------------------------------------------------- |
-| @rspack/core | 0.7.5-canary-0d03907-20240624125011 | [PR](https://github.com/web-infra-dev/rspack/pull/6877) |
+| Package      | Version                                                 | Link                                                      |
+| ------------ | ------------------------------------------------------- | --------------------------------------------------------- |
+| @rspack/core | @rspack/core-canary@1.0.0-canary-0b368b6-20240704171208 | [PR](https://github.com/webpack/webpack/pull/11751/files) |

@@ -1,9 +1,10 @@
 import type { RsbuildConfig } from '@rsbuild/core';
 
-export type Format = 'esm' | 'cjs' | 'umd' | 'iife';
+export type Format = 'esm' | 'cjs' | 'umd';
 
 export interface LibConfig extends RsbuildConfig {
   format?: Format;
+  platform?: 'node' | 'browser' | 'neutral';
 }
 
 export interface RslibConfig extends RsbuildConfig {

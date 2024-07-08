@@ -16,6 +16,7 @@ import type {
   RslibConfigSyncFn,
 } from './types/config';
 import { color } from './utils/helper';
+import { nodeBuiltInModules } from './utils/helper';
 import { logger } from './utils/logger';
 
 /**
@@ -60,9 +61,7 @@ export async function loadConfig(
 ): Promise<RslibConfig> {
   const root = process.cwd();
   const configFilePath = resolveConfigPath(root, customConfig)!;
-
   const { loadConfig } = await import('@rsbuild/core');
-
   const { content } = await loadConfig({
     cwd: dirname(configFilePath),
     path: configFilePath,
@@ -95,14 +94,17 @@ export function convertLibConfigToRsbuildConfig(
   libConfig: LibConfig,
   rsbuildConfig: RsbuildConfig,
 ): RsbuildConfig {
-  switch (libConfig.format) {
+  const { format, platform = 'browser' } = libConfig;
+  let formatConfig: RsbuildConfig = {};
+  switch (format) {
     case 'esm':
-      return mergeRsbuildConfig(rsbuildConfig, {
+      formatConfig = {
         tools: {
           rspack: {
+            externalsType: 'module',
             output: {
               module: true,
-              iife: false,
+              chunkFormat: 'module',
               library: {
                 type: 'modern-module',
               },
@@ -115,11 +117,13 @@ export function convertLibConfigToRsbuildConfig(
             },
           },
         },
-      });
+      };
+      break;
     case 'cjs':
-      return mergeRsbuildConfig(rsbuildConfig, {
+      formatConfig = {
         tools: {
           rspack: {
+            externalsType: 'commonjs',
             output: {
               library: {
                 type: 'commonjs',
@@ -127,11 +131,13 @@ export function convertLibConfigToRsbuildConfig(
             },
           },
         },
-      });
+      };
+      break;
     case 'umd':
-      return mergeRsbuildConfig(rsbuildConfig, {
+      formatConfig = {
         tools: {
           rspack: {
+            externalsType: 'umd',
             output: {
               library: {
                 type: 'umd',
@@ -139,10 +145,36 @@ export function convertLibConfigToRsbuildConfig(
             },
           },
         },
-      });
+      };
+      break;
     default:
-      return rsbuildConfig;
+      throw new Error(`Unsupported format: ${libConfig.format}`);
   }
+
+  let platformConfig: RsbuildConfig = {};
+  switch (platform) {
+    case 'browser':
+      platformConfig = {};
+      break;
+    case 'node':
+      platformConfig = {
+        output: {
+          // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
+          // Simply override the built-in modules to make them external.
+          // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
+          externals: nodeBuiltInModules,
+          target: 'node',
+        },
+      };
+      break;
+    case 'neutral':
+      platformConfig = {};
+      break;
+    default:
+      throw new Error(`Unsupported platform: ${libConfig.platform}`);
+  }
+
+  return mergeRsbuildConfig(rsbuildConfig, formatConfig, platformConfig);
 }
 
 export async function composeCreateRsbuildConfig(
@@ -161,7 +193,7 @@ export async function composeCreateRsbuildConfig(
   const composedRsbuildConfig: Partial<Record<Format, RsbuildConfig>> = {};
 
   for (const libConfig of libConfigsArray) {
-    const { format, ...overrideRsbuildConfig } = libConfig;
+    const { format, platform, ...overrideRsbuildConfig } = libConfig;
 
     // Merge order matters, keep `internalRsbuildConfig` at the last position
     // to ensure that the internal config is not overridden by the user's config.

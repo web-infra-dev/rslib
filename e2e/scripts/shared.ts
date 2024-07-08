@@ -2,6 +2,8 @@ import { join } from 'node:path';
 import { mergeRsbuildConfig as mergeConfig } from '@rsbuild/core';
 import type { LibConfig, RslibConfig } from '@rslib/core';
 import { globContentJSON } from '#helper';
+import { build } from '../../packages/core/src/build';
+import { loadConfig } from '../../packages/core/src/config';
 
 export function generateBundleEsmConfig(
   cwd: string,
@@ -16,7 +18,7 @@ export function generateBundleEsmConfig(
     },
   };
 
-  return mergeConfig(esmBasicConfig, config);
+  return mergeConfig(esmBasicConfig, config)!;
 }
 
 export function generateBundleCjsConfig(
@@ -32,7 +34,7 @@ export function generateBundleCjsConfig(
     },
   };
 
-  return mergeConfig(cjsBasicConfig, config);
+  return mergeConfig(cjsBasicConfig, config)!;
 }
 
 export async function getEntryJsResults(rslibConfig: RslibConfig) {
@@ -53,3 +55,10 @@ export async function getEntryJsResults(rslibConfig: RslibConfig) {
 
   return results;
 }
+
+export const buildAndGetResults = async (fixturePath: string) => {
+  const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
+  await build(rslibConfig);
+  const entries = await getEntryJsResults(rslibConfig);
+  return { entries };
+};

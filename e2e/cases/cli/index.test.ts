@@ -7,8 +7,6 @@ import { globContentJSON } from '#helper';
 test.todo('build command', async () => {});
 
 test('inspect command', async () => {
-  delete process.env.NODE_ENV;
-
   await fse.remove(path.join(__dirname, 'dist'));
   execSync('npx rslib inspect', {
     cwd: __dirname,

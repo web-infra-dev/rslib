@@ -1,33 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`alias in ts 1`] = `
-"var __webpack_exports__ = {};
-
-;// CONCATENATED MODULE: ./e2e/cases/alias/ts/src/a.ts
-const a = 'hello world';
-
-;// CONCATENATED MODULE: ./e2e/cases/alias/ts/src/index.ts
-
-console.info(a);
-
-export { a };
-"
-`;
-
-exports[`alias in ts 2`] = `
-"(() => { // webpackBootstrap
-"use strict";
-var __webpack_modules__ = ({
-"522": (function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-__webpack_require__.d(__webpack_exports__, {
-  a: function() { return a; }
-});
-const a = 'hello world';
-
-
-}),
-
-});
+"var __webpack_modules__ = ({});
 /************************************************************************/
 // The module cache
 var __webpack_module_cache__ = {};
@@ -53,40 +27,82 @@ return module.exports;
 }
 
 /************************************************************************/
-// webpack/runtime/define_property_getters
+// webpack/runtime/rspack_version
 (() => {
-__webpack_require__.d = function(exports, definition) {
-	for(var key in definition) {
-        if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-            Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-        }
-    }
-};
-})();
-// webpack/runtime/has_own_property
-(() => {
-__webpack_require__.o = function (obj, prop) {
-	return Object.prototype.hasOwnProperty.call(obj, prop);
+__webpack_require__.rv = function () {
+	return "1.0.0-canary-0b368b6-20240704171208";
 };
 
 })();
-// webpack/runtime/make_namespace_object
+// webpack/runtime/rspack_unique_id
 (() => {
-// define __esModule on exports
-__webpack_require__.r = function(exports) {
-	if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-		Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-	}
-	Object.defineProperty(exports, '__esModule', { value: true });
-};
+__webpack_require__.ruid = "bundler=rspack@1.0.0-canary-0b368b6-20240704171208";
 
 })();
 /************************************************************************/
 var __webpack_exports__ = {};
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */var _src_a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(522);
 
-console.info(_src_a__WEBPACK_IMPORTED_MODULE_0__.a);
+;// CONCATENATED MODULE: ./e2e/cases/alias/ts/src/a.ts
+const a = 'hello world';
+
+;// CONCATENATED MODULE: ./e2e/cases/alias/ts/src/index.ts
+
+console.info(a);
+
+export { a };
+"
+`;
+
+exports[`alias in ts 2`] = `
+"(() => { // webpackBootstrap
+"use strict";
+var __webpack_modules__ = ({});
+/************************************************************************/
+// The module cache
+var __webpack_module_cache__ = {};
+
+// The require function
+function __webpack_require__(moduleId) {
+
+// Check if module is in cache
+var cachedModule = __webpack_module_cache__[moduleId];
+if (cachedModule !== undefined) {
+return cachedModule.exports;
+}
+// Create a new module (and put it into the cache)
+var module = (__webpack_module_cache__[moduleId] = {
+exports: {}
+});
+// Execute the module function
+__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+
+// Return the exports of the module
+return module.exports;
+
+}
+
+/************************************************************************/
+// webpack/runtime/rspack_version
+(() => {
+__webpack_require__.rv = function () {
+	return "1.0.0-canary-0b368b6-20240704171208";
+};
+
+})();
+// webpack/runtime/rspack_unique_id
+(() => {
+__webpack_require__.ruid = "bundler=rspack@1.0.0-canary-0b368b6-20240704171208";
+
+})();
+/************************************************************************/
+var __webpack_exports__ = {};
+
+;// CONCATENATED MODULE: ./e2e/cases/alias/ts/src/a.ts
+const a = 'hello world';
+
+;// CONCATENATED MODULE: ./e2e/cases/alias/ts/src/index.ts
+
+console.info(a);
 
 var __webpack_export_target__ = exports;
 for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
