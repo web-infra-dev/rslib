@@ -80,6 +80,15 @@ export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
     },
     tools: {
       htmlPlugin: false,
+      rspack: {
+        experiments: {
+          rspackFuture: {
+            bundlerInfo: {
+              force: false,
+            },
+          },
+        },
+      },
     },
     output: {
       filenameHash: false,
