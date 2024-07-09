@@ -4,8 +4,8 @@ import { generateBundleCjsConfig, generateBundleEsmConfig } from '#shared';
 
 export default defineConfig({
   lib: [
-    generateBundleEsmConfig(__dirname, { platform: 'node' }),
-    generateBundleCjsConfig(__dirname, { platform: 'node' }),
+    generateBundleEsmConfig(__dirname, { output: { target: 'node' } }),
+    generateBundleCjsConfig(__dirname, { output: { target: 'node' } }),
   ],
   source: {
     entry: {
