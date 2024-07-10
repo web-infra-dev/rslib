@@ -2,7 +2,7 @@ import { join } from 'node:path';
 import { expect, test } from 'vitest';
 import { buildAndGetEntryJsResults } from '#shared';
 
-test('auto externalize Node.js built-in modules when platform is "node"', async () => {
+test('auto externalize Node.js built-in modules when `output.target` is "node"', async () => {
   const fixturePath = join(__dirname);
   const { contents } = await buildAndGetEntryJsResults(fixturePath);
 

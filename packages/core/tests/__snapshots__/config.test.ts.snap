@@ -39,11 +39,14 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
         },
         "externalsType": "commonjs",
         "output": {
+          "chunkFormat": "commonjs",
           "library": {
             "type": "commonjs",
           },
         },
+        "target": "es2022",
       },
+      "swc": [Function],
     },
   },
   "esm": {
@@ -89,7 +92,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           },
           "module": true,
         },
+        "target": "es2022",
       },
+      "swc": [Function],
     },
   },
   "umd": {
@@ -129,7 +134,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "type": "umd",
           },
         },
+        "target": "es2022",
       },
+      "swc": [Function],
     },
   },
 }
