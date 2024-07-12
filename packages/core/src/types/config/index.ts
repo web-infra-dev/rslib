@@ -18,11 +18,8 @@ export type EcmaScriptVersion =
   | 'es2024';
 
 export type Syntax =
-  // Use browserslist config file
-  | 'browserslist'
   // ECMAScript versions as an common used addition to browserslist query
   | EcmaScriptVersion
-  | EcmaScriptVersion[]
   // Support inline browserslist query, like defined in package.json
   | string[];
 

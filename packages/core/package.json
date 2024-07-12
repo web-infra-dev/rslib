@@ -26,19 +26,14 @@
   "bin": {
     "rslib": "./bin/rslib.js"
   },
-  "files": [
-    "bin",
-    "dist",
-    "dist-types",
-    "compiled"
-  ],
+  "files": ["bin", "dist", "dist-types", "compiled"],
   "scripts": {
     "build": "modern build",
     "dev": "modern build --watch",
     "prebundle": "prebundle"
   },
   "dependencies": {
-    "@rsbuild/core": "1.0.0-alpha.3"
+    "@rsbuild/core": "1.0.0-alpha.9"
   },
   "devDependencies": {
     "@rslib/tsconfig": "workspace:*",
@@ -48,7 +43,7 @@
     "picocolors": "1.0.1",
     "prebundle": "1.1.0",
     "rslog": "^1.2.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.3"
   },
   "engines": {
     "node": ">=16.0.0"

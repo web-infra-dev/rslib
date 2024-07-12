@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import { buildAndGetEntryJsResults } from '#shared';
 
-test('define should work', async () => {
+test('source.define', async () => {
   const fixturePath = __dirname;
   const { contents } = await buildAndGetEntryJsResults(fixturePath);
 

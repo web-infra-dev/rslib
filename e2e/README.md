@@ -28,7 +28,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | jsx             | ⚪️     |                                                                                                                         |
 | metafile        | ⚪️     |                                                                                                                         |
 | minify          | ⚪️     |                                                                                                                         |
-| platform        | ⚪️     |                                                                                                                         |
+| platform        | 🟢     |                                                                                                                         |
 | redirect        | ⚪️     |                                                                                                                         |
 | resolve         | ⚪️     |                                                                                                                         |
 | shims           | ⚪️     |                                                                                                                         |
@@ -37,7 +37,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | sourceMap       | ⚪️     |                                                                                                                         |
 | splitting       | ⚪️     |                                                                                                                         |
 | style           | ⚪️     |                                                                                                                         |
-| target          | ⚪️     |                                                                                                                         |
+| target          | 🟢     |                                                                                                                         |
 | transformImport | ⚪️     |                                                                                                                         |
 | transformLodash | ⚪️     |                                                                                                                         |
 | tsconfig        | ⚪️     |                                                                                                                         |

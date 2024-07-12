@@ -20,6 +20,7 @@ import { getDefaultExtension } from './utils/extension';
 import { color } from './utils/helper';
 import { nodeBuiltInModules } from './utils/helper';
 import { logger } from './utils/logger';
+import { transformSyntaxToBrowserslist } from './utils/syntax';
 
 /**
  * This function helps you to autocomplete configuration types.
@@ -130,6 +131,7 @@ const getDefaultFormatConfig = (format: Format): RsbuildConfig => {
           rspack: {
             externalsType: 'commonjs',
             output: {
+              chunkFormat: 'commonjs',
               library: {
                 type: 'commonjs',
               },
@@ -175,8 +177,28 @@ const getDefaultAutoExtensionConfig = (
   };
 };
 
-const getDefaultSyntax = (_syntax?: Syntax): RsbuildConfig => {
-  return {};
+const getDefaultSyntax = (syntax?: Syntax): RsbuildConfig => {
+  // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
+  return syntax === undefined
+    ? {
+        tools: {
+          rspack: {
+            // The highest is 2022 in Rspack
+            target: 'es2022',
+          },
+          swc(config) {
+            config.jsc ??= {};
+            config.jsc.target = 'esnext';
+            delete config.env;
+            return config;
+          },
+        },
+      }
+    : {
+        output: {
+          overrideBrowserslist: transformSyntaxToBrowserslist(syntax),
+        },
+      };
 };
 
 export function convertLibConfigToRsbuildConfig(
