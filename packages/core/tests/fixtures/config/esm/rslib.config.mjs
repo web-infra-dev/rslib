@@ -1,4 +1,4 @@
-import { defineConfig } from '../../../../core/src/config';
+import { defineConfig } from '../../../../../core/src/config';
 
 export default defineConfig((args) => ({
   lib: [],
