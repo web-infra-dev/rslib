@@ -1,4 +1,4 @@
-const { defineConfig } = require('../../../../core/src/config');
+const { defineConfig } = require('../../../../../core/src/config');
 
 module.exports = defineConfig((args) => ({
   lib: [],
