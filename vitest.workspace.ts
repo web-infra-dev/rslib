@@ -20,7 +20,7 @@ export default defineWorkspace([
     test: {
       ...shared,
       name: 'artifact',
-      setupFiles: ['./setupVitestTests.js'],
+      setupFiles: ['./setupVitestTests.ts'],
       include: ['e2e/cases/**/*.test.ts'],
       exclude: ['e2e/cases/**/*.pw.test.ts', '**/node_modules/**'],
     },
