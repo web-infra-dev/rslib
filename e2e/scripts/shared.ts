@@ -65,6 +65,7 @@ export async function getEntryJsResults(rslibConfig: RslibConfig) {
 
 export const buildAndGetEntryJsResults = async (fixturePath: string) => {
   const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
+  process.chdir(fixturePath);
   await build(rslibConfig);
   const results = await getEntryJsResults(rslibConfig);
   return {
