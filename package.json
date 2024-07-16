@@ -28,6 +28,7 @@
     "@biomejs/biome": "^1.8.3",
     "@modern-js/module-tools": "^2.55.0",
     "@types/fs-extra": "^11.0.4",
+    "@types/node": "~18.19.39",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "cspell-ban-words": "^0.0.3",
@@ -47,7 +48,7 @@
   },
   "pnpm": {
     "overrides": {
-      "@rspack/core": "1.0.0-alpha.3"
+      "@rspack/core": "npm:@rspack/core-canary@1.0.0-canary-d77b591-20240718094414"
     }
   }
 }

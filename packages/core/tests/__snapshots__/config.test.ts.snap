@@ -21,6 +21,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
         "bar": "bar/cjs",
         "foo": "foo",
       },
+      "entry": {},
       "preEntry": [
         "./a.js",
         "./c.js",
@@ -40,6 +41,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
         "externalsType": "commonjs",
         "output": {
           "chunkFormat": "commonjs",
+          "iife": false,
           "library": {
             "type": "commonjs",
           },
@@ -68,6 +70,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
         "bar": "bar",
         "foo": "foo/esm",
       },
+      "entry": {},
       "preEntry": "./b.js",
     },
     "tools": {
@@ -116,6 +119,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
         "bar": "bar",
         "foo": "foo",
       },
+      "entry": {},
       "preEntry": "./a.js",
     },
     "tools": {
