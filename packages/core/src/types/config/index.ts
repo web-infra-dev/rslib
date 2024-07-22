@@ -24,6 +24,7 @@ export type Syntax =
   | string[];
 
 export interface LibConfig extends RsbuildConfig {
+  bundle?: boolean;
   format?: Format;
   autoExtension?: boolean;
   output?: RsbuildConfig['output'] & {

@@ -13,6 +13,7 @@ export default {
   },
   dependencies: [
     'commander',
+    'fast-glob',
     {
       name: 'picocolors',
       beforeBundle({ depPath }) {

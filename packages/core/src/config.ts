@@ -1,11 +1,13 @@
 import fs from 'node:fs';
-import { dirname, isAbsolute, join } from 'node:path';
+
+import path, { dirname, isAbsolute, join } from 'node:path';
 import {
   type RsbuildConfig,
   createRsbuild,
   defineConfig as defineRsbuildConfig,
   mergeRsbuildConfig,
 } from '@rsbuild/core';
+import glob from 'fast-glob';
 import { DEFAULT_CONFIG_NAME, DEFAULT_EXTENSIONS } from './constant';
 import type {
   Format,
@@ -17,6 +19,7 @@ import type {
   Syntax,
 } from './types/config';
 import { getDefaultExtension } from './utils/extension';
+import { calcLongestCommonPath } from './utils/helper';
 import { color } from './utils/helper';
 import { nodeBuiltInModules } from './utils/helper';
 import { logger } from './utils/logger';
@@ -131,6 +134,7 @@ const getDefaultFormatConfig = (format: Format): RsbuildConfig => {
           rspack: {
             externalsType: 'commonjs',
             output: {
+              iife: false,
               chunkFormat: 'commonjs',
               library: {
                 type: 'commonjs',
@@ -177,7 +181,7 @@ const getDefaultAutoExtensionConfig = (
   };
 };
 
-const getDefaultSyntax = (syntax?: Syntax): RsbuildConfig => {
+const getDefaultSyntaxConfig = (syntax?: Syntax): RsbuildConfig => {
   // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
   return syntax === undefined
     ? {
@@ -201,6 +205,92 @@ const getDefaultSyntax = (syntax?: Syntax): RsbuildConfig => {
       };
 };
 
+const getDefaultEntryConfig = async (
+  entries: NonNullable<RsbuildConfig['source']>['entry'],
+  libConfig: LibConfig,
+  root: string,
+): Promise<RsbuildConfig> => {
+  if (!entries) {
+    return {};
+  }
+
+  if (libConfig.bundle !== false) {
+    return {
+      source: {
+        entry: entries,
+      },
+    };
+  }
+
+  // In bundleless mode, resolve glob patterns and convert them to entry object.
+  const resolvedEntries: Record<string, string> = {};
+  for (const key of Object.keys(entries)) {
+    const entry = entries[key];
+
+    // Entries in bundleless mode could be:
+    // 1. A string of glob pattern: { entry: { main: 'src/*.ts' } }
+    // 2. An array of glob patterns: { entry: { main: ['src/*.ts', 'src/*.tsx'] } }
+    // Not supported for now: entry description object
+    const entryFiles = Array.isArray(entry)
+      ? entry
+      : typeof entry === 'string'
+        ? [entry]
+        : null;
+
+    if (!entryFiles) {
+      throw new Error(
+        'Entry can only be a string or an array of strings for now',
+      );
+    }
+
+    // Turn entries in array into each separate entry.
+    const resolvedEntryFiles = await glob(entryFiles, {
+      cwd: root,
+    });
+
+    if (resolvedEntryFiles.length === 0) {
+      throw new Error(`Cannot find ${resolvedEntryFiles}`);
+    }
+
+    // Similar to `rootDir` in tsconfig and `outbase` in esbuild.
+    const lcp = calcLongestCommonPath(resolvedEntryFiles);
+    // Using the longest common path of all non-declaration input files by default.
+    const outBase = lcp === null ? root : lcp;
+
+    for (const file of resolvedEntryFiles) {
+      const { dir, name } = path.parse(path.relative(outBase, file));
+      // Entry filename contains nested path to preserve source directory structure.
+      const entryFileName = path.join(dir, name);
+      resolvedEntries[entryFileName] = file;
+    }
+  }
+
+  return {
+    source: {
+      entry: resolvedEntries,
+    },
+  };
+};
+
+const getBundleConfig = (bundle = true): RsbuildConfig => {
+  if (bundle) return {};
+
+  return {
+    output: {
+      externals: [
+        (data: any, callback: any) => {
+          // Issuer is not empty string when the module is imported by another module.
+          // Prevent from externalizing entry modules here.
+          if (data.contextInfo.issuer) {
+            return callback(null, data.request);
+          }
+          callback();
+        },
+      ],
+    },
+  };
+};
+
 export function convertLibConfigToRsbuildConfig(
   libConfig: LibConfig,
   configPath: string,
@@ -213,17 +303,33 @@ export function convertLibConfigToRsbuildConfig(
     dirname(configPath),
     autoExtension,
   );
-  const syntaxConfig = getDefaultSyntax(libConfig.output?.syntax);
+  const syntaxConfig = getDefaultSyntaxConfig(libConfig.output?.syntax);
+  const bundleConfig = getBundleConfig(libConfig.bundle);
 
-  return mergeRsbuildConfig(formatConfig, autoExtensionConfig, syntaxConfig);
+  return mergeRsbuildConfig(
+    formatConfig,
+    autoExtensionConfig,
+    syntaxConfig,
+    bundleConfig,
+  );
 }
 
-function postUpdateRsbuildConfig(rsbuildConfig: RsbuildConfig) {
+async function postUpdateRsbuildConfig(
+  libConfig: LibConfig,
+  rsbuildConfig: RsbuildConfig,
+  configPath: string,
+) {
   const defaultTargetConfig = getDefaultTargetConfig(
     rsbuildConfig.output?.target ?? 'web',
   );
 
-  return mergeRsbuildConfig(defaultTargetConfig);
+  const defaultEntryConfig = await getDefaultEntryConfig(
+    rsbuildConfig.source?.entry,
+    libConfig,
+    dirname(configPath),
+  );
+
+  return mergeRsbuildConfig(defaultTargetConfig, defaultEntryConfig);
 }
 
 const getDefaultTargetConfig = (target: string): RsbuildConfig => {
@@ -278,7 +384,16 @@ export async function composeCreateRsbuildConfig(
 
     // Some configurations can be defined both in the shared config and the lib config.
     // So we need to do the post process after lib config is converted and merged.
-    const postUpdatedConfig = postUpdateRsbuildConfig(mergedRsbuildConfig);
+    const postUpdatedConfig = await postUpdateRsbuildConfig(
+      libConfig,
+      mergedRsbuildConfig,
+      configPath,
+    );
+
+    // Reset some fields as they will be totally overridden by the following merge
+    // and we don't want to keep them in the final config.
+    mergedRsbuildConfig.source ??= {};
+    mergedRsbuildConfig.source.entry = {};
 
     composedRsbuildConfig[format!] = mergeRsbuildConfig(
       mergedRsbuildConfig,
