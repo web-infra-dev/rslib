@@ -85,6 +85,9 @@ export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
     tools: {
       htmlPlugin: false,
       rspack: {
+        optimization: {
+          moduleIds: 'named',
+        },
         experiments: {
           rspackFuture: {
             bundlerInfo: {
