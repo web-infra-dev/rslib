@@ -39,6 +39,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           },
         },
         "externalsType": "commonjs",
+        "optimization": {
+          "moduleIds": "named",
+        },
         "output": {
           "chunkFormat": "commonjs",
           "iife": false,
@@ -87,6 +90,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
         "externalsType": "module",
         "optimization": {
           "concatenateModules": true,
+          "moduleIds": "named",
         },
         "output": {
           "chunkFormat": "module",
@@ -133,6 +137,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           },
         },
         "externalsType": "umd",
+        "optimization": {
+          "moduleIds": "named",
+        },
         "output": {
           "library": {
             "type": "umd",
