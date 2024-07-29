@@ -20,8 +20,10 @@
     "pre-commit": "npx nano-staged"
   },
   "nano-staged": {
-    "*.{md,mdx,css,less,scss}": "prettier --write",
-    "*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc,json5}": ["biome check --write"],
+    "*.{md,mdx,css,less,scss,json,jsonc,json5}": "prettier --write",
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "biome check --write"
+    ],
     "package.json": "pnpm run check-dependency-version"
   },
   "devDependencies": {
