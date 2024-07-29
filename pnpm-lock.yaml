@@ -67,8 +67,8 @@ importers:
         specifier: 1.43.1
         version: 1.43.1
       '@rsbuild/core':
-        specifier: 1.0.0-alpha.9
-        version: 1.0.0-alpha.9
+        specifier: 1.0.1-beta.6
+        version: 1.0.1-beta.6
       '@rslib/core':
         specifier: workspace:*
         version: link:../packages/core
@@ -104,8 +104,8 @@ importers:
   packages/core:
     dependencies:
       '@rsbuild/core':
-        specifier: 1.0.0-alpha.9
-        version: 1.0.0-alpha.9
+        specifier: 1.0.1-beta.6
+        version: 1.0.1-beta.6
     devDependencies:
       '@rslib/tsconfig':
         specifier: workspace:*
@@ -1120,8 +1120,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rsbuild/core@1.0.0-alpha.9':
-    resolution: {integrity: sha512-NiwBqW6sxoacX6MLy45aeNKjHtKW7wZR3hy0X1Eg/IpUTNSJJkKX9TG92SVcj6RyR8CO+76AXfdEs585Iw4FWg==}
+  '@rsbuild/core@1.0.1-beta.6':
+    resolution: {integrity: sha512-854VVEnOpfit4ZRUS/2aJrsa2h+crZ+MPucYLTDh1Z4H85cnk1DjNiSwRGXERD6MzfnejJALy9/+MW01LFVsQw==}
     engines: {node: '>=16.7.0'}
     hasBin: true
 
@@ -1186,8 +1186,8 @@ packages:
     resolution: {integrity: sha512-rTGAkDCbq7pyVV2BhkYx0xgK65XEhv4VAkZB5HBhbs2HeB2qkP0yT8NZEgkAtMg5R6Q54dndeZGLFboqYtlF5w==}
     engines: {node: '>=16.0.0'}
 
-  '@rspack/lite-tapable@1.0.0-alpha.3':
-    resolution: {integrity: sha512-oQJ1iYxfBHcuutAva2HP1dqi9Aka/70PB3Vbq4nI+iAhHErtzaRslI/OcqhEbbmBgYf+Xu6g5vvN6Gxfq69gag==}
+  '@rspack/lite-tapable@1.0.0-beta.0':
+    resolution: {integrity: sha512-EpCgqeLMk2TGahj+UbK5R/2gmPQqR6j6VKRqV0NDIRK5vHeSbVebOIMtDd0Zak0imO9ajbZjbYAg7ZvWVEUnYw==}
     engines: {node: '>=16.0.0'}
 
   '@sinclair/typebox@0.27.8':
@@ -1357,6 +1357,9 @@ packages:
 
   caniuse-lite@1.0.30001641:
     resolution: {integrity: sha512-Phv5thgl67bHYo1TtMY/MurjkHhV4EDaCosezRXgZ8jzA/Ub+wjxAvbGvjoFENStinwi5kCyOYV3mi5tOGykwA==}
+
+  caniuse-lite@1.0.30001643:
+    resolution: {integrity: sha512-ERgWGNleEilSrHM6iUz/zJNSQTP8Mr21wDWpdgvRwcTXGAq6jMtOUPP4dqFPTdKqZ2wKTdtB+uucZ3MRpAUSmg==}
 
   chai@5.1.1:
     resolution: {integrity: sha512-pT1ZgP8rPNqUgieVaEY+ryQr6Q4HXNg8Ei9UnLUrjN4IA7dvQC5JB+/kxVcPNDHyBcc/26CXPkbNzq3qwrOEKA==}
@@ -3545,12 +3548,12 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.18.1':
     optional: true
 
-  '@rsbuild/core@1.0.0-alpha.9':
+  '@rsbuild/core@1.0.1-beta.6':
     dependencies:
       '@rspack/core': '@rspack/core-canary@1.0.0-canary-d77b591-20240718094414(@swc/helpers@0.5.11)'
-      '@rspack/lite-tapable': 1.0.0-alpha.3
+      '@rspack/lite-tapable': 1.0.0-beta.0
       '@swc/helpers': 0.5.11
-      caniuse-lite: 1.0.30001641
+      caniuse-lite: 1.0.30001643
       core-js: 3.37.1
       postcss: 8.4.39
     optionalDependencies:
@@ -3600,13 +3603,13 @@ snapshots:
       '@module-federation/runtime-tools': 0.2.3
       '@rspack/binding': '@rspack/binding-canary@1.0.0-canary-d77b591-20240718094414'
       '@rspack/lite-tapable': '@rspack/lite-tapable-canary@1.0.0-canary-d77b591-20240718094414'
-      caniuse-lite: 1.0.30001641
+      caniuse-lite: 1.0.30001643
     optionalDependencies:
       '@swc/helpers': 0.5.11
 
   '@rspack/lite-tapable-canary@1.0.0-canary-d77b591-20240718094414': {}
 
-  '@rspack/lite-tapable@1.0.0-alpha.3': {}
+  '@rspack/lite-tapable@1.0.0-beta.0': {}
 
   '@sinclair/typebox@0.27.8': {}
 
@@ -3785,6 +3788,8 @@ snapshots:
   cac@6.7.14: {}
 
   caniuse-lite@1.0.30001641: {}
+
+  caniuse-lite@1.0.30001643: {}
 
   chai@5.1.1:
     dependencies:
