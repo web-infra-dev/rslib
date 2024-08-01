@@ -1,0 +1,44 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`dts when bundle: false 1`] = `
+{
+  "./dist/esm/index.d.ts": "export * from './utils/numbers';
+export * from './utils/strings';
+export * from './sum';
+",
+  "./dist/esm/sum.d.ts": "export declare const numSum: number;
+export declare const strSum: string;
+",
+  "./dist/esm/utils/numbers.d.ts": "export declare const num1 = 1;
+export declare const num2 = 2;
+export declare const num3 = 3;
+",
+  "./dist/esm/utils/strings.d.ts": "export declare const str1 = "str1";
+export declare const str2 = "str2";
+export declare const str3 = "str3";
+",
+}
+`;
+
+exports[`dts when bundle: true 1`] = `
+{
+  "esm": "export declare const num1 = 1;
+
+export declare const num2 = 2;
+
+export declare const num3 = 3;
+
+export declare const numSum: number;
+
+export declare const str1 = "str1";
+
+export declare const str2 = "str2";
+
+export declare const str3 = "str3";
+
+export declare const strSum: string;
+
+export { }
+",
+}
+`;

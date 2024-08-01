@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
-import { buildAndGetJsResults } from '#shared';
+import { buildAndGetResults } from '#shared';
 
 test('source.define', async () => {
   const fixturePath = __dirname;
-  const { entries } = await buildAndGetJsResults(fixturePath);
+  const { entries } = await buildAndGetResults(fixturePath);
 
   expect(entries.esm).not.toContain('console.info(VERSION)');
   expect(entries.esm).toContain('1.0.0');

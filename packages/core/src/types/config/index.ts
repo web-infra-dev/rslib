@@ -23,6 +23,14 @@ export type Syntax =
   // Support inline browserslist query, like defined in package.json
   | string[];
 
+export type Dts =
+  | {
+      bundle: boolean;
+      distPath?: string;
+      tsconfigPath?: string;
+    }
+  | false;
+
 export interface LibConfig extends RsbuildConfig {
   bundle?: boolean;
   format?: Format;
@@ -31,6 +39,7 @@ export interface LibConfig extends RsbuildConfig {
     /** Support esX and browserslist query */
     syntax?: Syntax;
   };
+  dts?: Dts;
 }
 
 export interface RslibConfig extends RsbuildConfig {

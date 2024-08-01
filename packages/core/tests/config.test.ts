@@ -179,7 +179,10 @@ describe('Should compose create Rsbuild config correctly', () => {
         minify: true,
       },
     };
-    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(
+      rslibConfig,
+      process.cwd(),
+    );
     expect(composedRsbuildConfig).toMatchSnapshot();
   });
 });

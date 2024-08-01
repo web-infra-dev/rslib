@@ -1,7 +1,7 @@
 {
-  "name": "@rslib/core",
+  "name": "rsbuild-plugin-dts",
   "version": "0.0.0",
-  "description": "The Rspack-based library build tool.",
+  "description": "Dts plugin for Rsbuild",
   "homepage": "https://rslib.dev",
   "bugs": {
     "url": "https://github.com/web-infra-dev/rslib/issues"
@@ -9,51 +9,35 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rslib",
-    "directory": "packages/core"
+    "directory": "packages/plugin-dts"
   },
   "license": "MIT",
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist-types/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    },
-    "./package.json": "./package.json"
+    }
   },
   "main": "./dist/index.cjs",
-  "types": "./dist-types/index.d.ts",
-  "bin": {
-    "rslib": "./bin/rslib.js"
-  },
+  "types": "./dist/index.d.ts",
   "files": [
-    "bin",
-    "dist",
-    "dist-types",
-    "compiled"
+    "dist"
   ],
   "scripts": {
     "build": "modern build",
-    "dev": "modern build --watch",
-    "prebundle": "prebundle"
-  },
-  "dependencies": {
-    "@rsbuild/core": "1.0.1-beta.8",
-    "rsbuild-plugin-dts": "workspace:*"
+    "dev": "modern build --watch"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.47.4",
+    "@rsbuild/core": "1.0.1-beta.8",
     "@rslib/tsconfig": "workspace:*",
-    "@types/fs-extra": "^11.0.4",
-    "commander": "^12.1.0",
-    "fast-glob": "^3.3.2",
-    "fs-extra": "^11.2.0",
-    "picocolors": "1.0.1",
-    "prebundle": "1.1.0",
-    "rslog": "^1.2.2",
     "typescript": "^5.5.3"
   },
   "peerDependencies": {
     "@microsoft/api-extractor": "^7",
+    "@rsbuild/core": "1.x",
     "typescript": "^5"
   },
   "peerDependenciesMeta": {
