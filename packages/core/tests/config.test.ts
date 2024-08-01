@@ -186,3 +186,123 @@ describe('Should compose create Rsbuild config correctly', () => {
     expect(composedRsbuildConfig).toMatchSnapshot();
   });
 });
+
+describe('syntax', () => {
+  test('`syntax` default value', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+        },
+      ],
+    };
+
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(
+      rslibConfig,
+      process.cwd(),
+    );
+
+    expect(
+      composedRsbuildConfig[0].config.output?.overrideBrowserslist,
+    ).toMatchInlineSnapshot(`
+      [
+        "last 1 node versions",
+        "last 1 Chrome versions",
+        "last 1 Firefox versions",
+        "last 1 Edge versions",
+        "last 1 Safari versions",
+        "last 1 ios_saf versions",
+        "not dead",
+      ]
+    `);
+  });
+
+  test('`syntax` default value should determined by target `web`', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+        },
+      ],
+      output: {
+        target: 'web',
+      },
+    };
+
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(
+      rslibConfig,
+      process.cwd(),
+    );
+
+    expect(
+      composedRsbuildConfig[0].config.output?.overrideBrowserslist,
+    ).toMatchInlineSnapshot(`
+      [
+        "last 1 Chrome versions",
+        "last 1 Firefox versions",
+        "last 1 Edge versions",
+        "last 1 Safari versions",
+        "last 1 ios_saf versions",
+        "not dead",
+      ]
+    `);
+  });
+
+  test('`syntax` default value should determined by target `node`', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+        },
+      ],
+      output: {
+        target: 'node',
+      },
+    };
+
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(
+      rslibConfig,
+      process.cwd(),
+    );
+
+    expect(
+      composedRsbuildConfig[0].config.output?.overrideBrowserslist,
+    ).toMatchInlineSnapshot(`
+      [
+        "last 1 node versions",
+      ]
+    `);
+  });
+
+  test('`syntax` could accept `esX` and transform to browserslist', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          output: {
+            syntax: 'es2015',
+          },
+          format: 'esm',
+        },
+      ],
+    };
+
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(
+      rslibConfig,
+      process.cwd(),
+    );
+
+    expect(
+      composedRsbuildConfig[0].config.output?.overrideBrowserslist,
+    ).toMatchInlineSnapshot(`
+      [
+        "Chrome >= 63.0.0",
+        "Edge >= 79.0.0",
+        "Firefox >= 67.0.0",
+        "iOS >= 13.0.0",
+        "Node >= 10.0.0",
+        "Opera >= 50.0.0",
+        "Safari >= 13.0.0",
+      ]
+    `);
+  });
+});

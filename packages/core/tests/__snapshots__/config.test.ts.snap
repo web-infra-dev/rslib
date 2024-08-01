@@ -1,154 +1,218 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1`] = `
-{
-  "cjs": {
-    "dev": {
-      "progressBar": false,
-    },
-    "output": {
-      "distPath": {
-        "js": "./",
+[
+  {
+    "config": {
+      "dev": {
+        "progressBar": false,
       },
-      "filename": {
-        "js": "[name].js",
+      "output": {
+        "distPath": {
+          "js": "./",
+        },
+        "filename": {
+          "js": "[name].js",
+        },
+        "filenameHash": false,
+        "minify": false,
+        "overrideBrowserslist": [
+          "last 1 node versions",
+          "last 1 Chrome versions",
+          "last 1 Firefox versions",
+          "last 1 Edge versions",
+          "last 1 Safari versions",
+          "last 1 ios_saf versions",
+          "not dead",
+        ],
       },
-      "filenameHash": false,
-      "minify": false,
-    },
-    "source": {
-      "alias": {
-        "bar": "bar/cjs",
-        "foo": "foo",
+      "source": {
+        "alias": {
+          "bar": "bar",
+          "foo": "foo/esm",
+        },
+        "entry": {},
+        "preEntry": "./b.js",
       },
-      "entry": {},
-      "preEntry": [
-        "./a.js",
-        "./c.js",
-        "./d.js",
-      ],
-    },
-    "tools": {
-      "htmlPlugin": false,
-      "rspack": {
-        "experiments": {
-          "rspackFuture": {
-            "bundlerInfo": {
-              "force": false,
+      "tools": {
+        "htmlPlugin": false,
+        "rspack": [
+          {
+            "experiments": {
+              "outputModule": true,
+            },
+            "externalsType": "module",
+            "optimization": {
+              "concatenateModules": true,
+            },
+            "output": {
+              "chunkFormat": "module",
+              "library": {
+                "type": "modern-module",
+              },
+              "module": true,
             },
           },
-        },
-        "externalsType": "commonjs",
-        "optimization": {
-          "moduleIds": "named",
-        },
-        "output": {
-          "chunkFormat": "commonjs",
-          "iife": false,
-          "library": {
-            "type": "commonjs",
+          [Function],
+          {
+            "target": [
+              "web",
+            ],
           },
-        },
-        "target": "es2022",
-      },
-      "swc": [Function],
-    },
-  },
-  "esm": {
-    "dev": {
-      "progressBar": false,
-    },
-    "output": {
-      "distPath": {
-        "js": "./",
-      },
-      "filename": {
-        "js": "[name].js",
-      },
-      "filenameHash": false,
-      "minify": false,
-    },
-    "source": {
-      "alias": {
-        "bar": "bar",
-        "foo": "foo/esm",
-      },
-      "entry": {},
-      "preEntry": "./b.js",
-    },
-    "tools": {
-      "htmlPlugin": false,
-      "rspack": {
-        "experiments": {
-          "outputModule": true,
-          "rspackFuture": {
-            "bundlerInfo": {
-              "force": false,
+          {
+            "experiments": {
+              "rspackFuture": {
+                "bundlerInfo": {
+                  "force": false,
+                },
+              },
+            },
+            "optimization": {
+              "moduleIds": "named",
             },
           },
-        },
-        "externalsType": "module",
-        "optimization": {
-          "concatenateModules": true,
-          "moduleIds": "named",
-        },
-        "output": {
-          "chunkFormat": "module",
-          "library": {
-            "type": "modern-module",
-          },
-          "module": true,
-        },
-        "target": "es2022",
+        ],
       },
-      "swc": [Function],
     },
+    "format": "esm",
   },
-  "umd": {
-    "dev": {
-      "progressBar": false,
-    },
-    "output": {
-      "distPath": {
-        "js": "./",
+  {
+    "config": {
+      "dev": {
+        "progressBar": false,
       },
-      "filename": {
-        "js": "[name].js",
+      "output": {
+        "distPath": {
+          "js": "./",
+        },
+        "filename": {
+          "js": "[name].js",
+        },
+        "filenameHash": false,
+        "minify": false,
+        "overrideBrowserslist": [
+          "last 1 node versions",
+          "last 1 Chrome versions",
+          "last 1 Firefox versions",
+          "last 1 Edge versions",
+          "last 1 Safari versions",
+          "last 1 ios_saf versions",
+          "not dead",
+        ],
       },
-      "filenameHash": false,
-      "minify": false,
-    },
-    "source": {
-      "alias": {
-        "bar": "bar",
-        "foo": "foo",
+      "source": {
+        "alias": {
+          "bar": "bar/cjs",
+          "foo": "foo",
+        },
+        "entry": {},
+        "preEntry": [
+          "./a.js",
+          "./c.js",
+          "./d.js",
+        ],
       },
-      "entry": {},
-      "preEntry": "./a.js",
-    },
-    "tools": {
-      "htmlPlugin": false,
-      "rspack": {
-        "experiments": {
-          "rspackFuture": {
-            "bundlerInfo": {
-              "force": false,
+      "tools": {
+        "htmlPlugin": false,
+        "rspack": [
+          {
+            "externalsType": "commonjs",
+            "output": {
+              "chunkFormat": "commonjs",
+              "iife": false,
+              "library": {
+                "type": "commonjs",
+              },
             },
           },
-        },
-        "externalsType": "umd",
-        "optimization": {
-          "moduleIds": "named",
-        },
-        "output": {
-          "library": {
-            "type": "umd",
+          [Function],
+          {
+            "target": [
+              "web",
+            ],
           },
-        },
-        "target": "es2022",
+          {
+            "experiments": {
+              "rspackFuture": {
+                "bundlerInfo": {
+                  "force": false,
+                },
+              },
+            },
+            "optimization": {
+              "moduleIds": "named",
+            },
+          },
+        ],
       },
-      "swc": [Function],
     },
+    "format": "cjs",
   },
-}
+  {
+    "config": {
+      "dev": {
+        "progressBar": false,
+      },
+      "output": {
+        "distPath": {
+          "js": "./",
+        },
+        "filename": {
+          "js": "[name].js",
+        },
+        "filenameHash": false,
+        "minify": false,
+        "overrideBrowserslist": [
+          "last 1 node versions",
+          "last 1 Chrome versions",
+          "last 1 Firefox versions",
+          "last 1 Edge versions",
+          "last 1 Safari versions",
+          "last 1 ios_saf versions",
+          "not dead",
+        ],
+      },
+      "source": {
+        "alias": {
+          "bar": "bar",
+          "foo": "foo",
+        },
+        "entry": {},
+        "preEntry": "./a.js",
+      },
+      "tools": {
+        "htmlPlugin": false,
+        "rspack": [
+          {
+            "externalsType": "umd",
+            "output": {
+              "library": {
+                "type": "umd",
+              },
+            },
+          },
+          [Function],
+          {
+            "target": [
+              "web",
+            ],
+          },
+          {
+            "experiments": {
+              "rspackFuture": {
+                "bundlerInfo": {
+                  "force": false,
+                },
+              },
+            },
+            "optimization": {
+              "moduleIds": "named",
+            },
+          },
+        ],
+      },
+    },
+    "format": "umd",
+  },
+]
 `;

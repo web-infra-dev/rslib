@@ -12,4 +12,4 @@ Current unstable versions are:
 
 | Package      | Link                                                    |
 | ------------ | ------------------------------------------------------- |
-| @rspack/core | [PR](https://github.com/web-infra-dev/rspack/pull/7210) |
+| @rspack/core | [PR](https://github.com/web-infra-dev/rspack/pull/7394) |
