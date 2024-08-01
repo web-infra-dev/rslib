@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
-import { buildAndGetJsResults } from '#shared';
+import { buildAndGetResults } from '#shared';
 
 test('should downgrade class private method by default', async () => {
   const fixturePath = __dirname;
-  const { entries } = await buildAndGetJsResults(fixturePath);
+  const { entries } = await buildAndGetResults(fixturePath);
 
   expect(entries.esm).toMatchSnapshot();
   expect(entries.esm).not.toContain('#bar');

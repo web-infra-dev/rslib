@@ -37,31 +37,58 @@ export function generateBundleCjsConfig(
   return mergeConfig(cjsBasicConfig, config)!;
 }
 
-export async function getJsResults(rslibConfig: RslibConfig) {
+export async function getResults(
+  rslibConfig: RslibConfig,
+  fixturePath: string,
+  type: 'js' | 'dts',
+) {
   const files: Record<string, string[]> = {};
   const contents: Record<string, Record<string, string>> = {};
   const entries: Record<string, string> = {};
   const entryFiles: Record<string, string> = {};
 
   for (const libConfig of rslibConfig.lib) {
-    const content = await globContentJSON(libConfig?.output?.distPath?.root!, {
+    let globFolder = '';
+    if (type === 'js') {
+      globFolder = libConfig?.output?.distPath?.root!;
+    } else if (type === 'dts' && libConfig.dts !== false) {
+      globFolder =
+        libConfig.dts?.distPath! ?? libConfig?.output?.distPath?.root!;
+    }
+
+    if (!globFolder) continue;
+
+    const regex = type === 'dts' ? /\.d.(ts|cts|mts)$/ : /\.(js|cjs|mjs)$/;
+
+    const rawContent = await globContentJSON(globFolder, {
       absolute: true,
       ignore: ['/**/*.map'],
     });
 
-    const jsFiles = Object.keys(content).filter((file) =>
-      /\.(js|cjs|mjs)$/.test(file),
-    );
+    const content: Record<string, string> = {};
 
-    if (jsFiles.length) {
-      files[libConfig.format!] = jsFiles;
-      contents[libConfig.format!] = content;
+    for (const key of Object.keys(rawContent)) {
+      const newKey = key.replace(fixturePath, '.');
+      content[newKey] = rawContent[key]!;
+    }
+
+    const fileSet = Object.keys(content).filter((file) => regex.test(file));
+    const filterContent: Record<string, string> = {};
+    for (const key of fileSet) {
+      if (content[key]) {
+        filterContent[key] = content[key];
+      }
+    }
+
+    if (fileSet.length) {
+      files[libConfig.format!] = fileSet;
+      contents[libConfig.format!] = filterContent;
     }
 
     // Only applied in bundle mode, a shortcut to get single entry result
-    if (libConfig.bundle !== false && jsFiles.length === 1) {
-      entries[libConfig.format!] = Object.values(content)[0]!;
-      entryFiles[libConfig.format!] = jsFiles[0]!;
+    if (libConfig.bundle !== false && fileSet.length === 1) {
+      entries[libConfig.format!] = content[fileSet[0]!]!;
+      entryFiles[libConfig.format!] = fileSet[0]!;
     }
   }
 
@@ -73,11 +100,14 @@ export async function getJsResults(rslibConfig: RslibConfig) {
   };
 }
 
-export const buildAndGetJsResults = async (fixturePath: string) => {
+export const buildAndGetResults = async (
+  fixturePath: string,
+  type: 'js' | 'dts' = 'js',
+) => {
   const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
   process.chdir(fixturePath);
   await build(rslibConfig);
-  const results = await getJsResults(rslibConfig);
+  const results = await getResults(rslibConfig, fixturePath, type);
   return {
     contents: results.contents,
     files: results.files,

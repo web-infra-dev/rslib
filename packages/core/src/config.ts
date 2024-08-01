@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-
 import path, { dirname, isAbsolute, join } from 'node:path';
 import {
   type RsbuildConfig,
@@ -294,6 +293,28 @@ const getBundleConfig = (bundle = true): RsbuildConfig => {
   };
 };
 
+const getDefaultDtsConfig = async (
+  libConfig: LibConfig,
+  entryConfig: RsbuildConfig,
+): Promise<RsbuildConfig> => {
+  const { dts, bundle, output } = libConfig;
+
+  if (dts === false || dts === undefined) return {};
+
+  const { pluginDts } = await import('rsbuild-plugin-dts');
+  return {
+    plugins: [
+      pluginDts({
+        bundle: dts?.bundle ?? bundle,
+        distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
+        tsconfigPath: dts?.tsconfigPath,
+        // TODO: temporarily use main as dts entry
+        entryPath: entryConfig.source?.entry?.main as string,
+      }),
+    ],
+  };
+};
+
 export function convertLibConfigToRsbuildConfig(
   libConfig: LibConfig,
   configPath: string,
@@ -332,7 +353,16 @@ async function postUpdateRsbuildConfig(
     dirname(configPath),
   );
 
-  return mergeRsbuildConfig(defaultTargetConfig, defaultEntryConfig);
+  const defaultDtsConfig = await getDefaultDtsConfig(
+    libConfig,
+    defaultEntryConfig,
+  );
+
+  return mergeRsbuildConfig(
+    defaultTargetConfig,
+    defaultEntryConfig,
+    defaultDtsConfig,
+  );
 }
 
 const getDefaultTargetConfig = (target: string): RsbuildConfig => {
@@ -358,9 +388,10 @@ const getDefaultTargetConfig = (target: string): RsbuildConfig => {
 
 export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
+  path?: string,
 ): Promise<Partial<Record<Format, RsbuildConfig>>> {
   const internalRsbuildConfig = await createInternalRsbuildConfig();
-  const configPath = rslibConfig._privateMeta?.configFilePath ?? process.cwd();
+  const configPath = path ?? rslibConfig._privateMeta?.configFilePath!;
   const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
 
   if (!libConfigsArray) {

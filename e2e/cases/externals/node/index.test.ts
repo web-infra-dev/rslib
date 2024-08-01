@@ -1,10 +1,10 @@
 import { join } from 'node:path';
 import { expect, test } from 'vitest';
-import { buildAndGetJsResults } from '#shared';
+import { buildAndGetResults } from '#shared';
 
 test('auto externalize Node.js built-in modules when `output.target` is "node"', async () => {
   const fixturePath = join(__dirname);
-  const { entries } = await buildAndGetJsResults(fixturePath);
+  const { entries } = await buildAndGetResults(fixturePath);
 
   for (const external of [
     'import * as __WEBPACK_EXTERNAL_MODULE_fs__ from "fs"',

@@ -1,7 +1,12 @@
 import { defineConfig, moduleTools } from '@modern-js/module-tools';
 import prebundleConfig from './prebundle.config.mjs';
 
-const externals = ['@rsbuild/core', /[\\/]compiled[\\/]/, /node:/];
+const externals = [
+  '@rsbuild/core',
+  /[\\/]compiled[\\/]/,
+  /node:/,
+  'typescript',
+];
 const define = {
   RSLIB_VERSION: require('./package.json').version,
 };

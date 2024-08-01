@@ -1,10 +1,10 @@
 import { join } from 'node:path';
 import { expect, test } from 'vitest';
-import { buildAndGetJsResults } from '#shared';
+import { buildAndGetResults } from '#shared';
 
 test('bundle: false', async () => {
   const fixturePath = join(__dirname, 'basic');
-  const { files } = await buildAndGetJsResults(fixturePath);
+  const { files } = await buildAndGetResults(fixturePath);
 
   // TODO: record file paths with inline snapshot
   // need to add path serialization
