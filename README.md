@@ -47,7 +47,7 @@ This repo has adopted the ByteDance Open Source Code of Conduct. Please check [C
 
 ## 🧑‍💻 Community
 
-Come and chat with us on [Discord](https://discord.gg/XsaKEEk4mW)! The Rstack team and users are active there, and we're always looking for contributions.
+Come and chat with us on [Discord](https://discord.gg/FQfm7VqU)! The Rstack team and users are active there, and we're always looking for contributions.
 
 ## 🙏 Credits
 
