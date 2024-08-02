@@ -1,8 +1,16 @@
 import { defineConfig } from '@rslib/core';
 
+const shared = {
+  autoExtension: true,
+  dts: {
+    bundle: false,
+  },
+};
+
 export default defineConfig({
   lib: [
     {
+      ...shared,
       format: 'esm',
       output: {
         distPath: {
@@ -11,6 +19,7 @@ export default defineConfig({
       },
     },
     {
+      ...shared,
       format: 'cjs',
       output: {
         distPath: {
@@ -23,5 +32,11 @@ export default defineConfig({
     entry: {
       main: './src/index.ts',
     },
+  },
+  output: {
+    externals: {
+      express: 'express',
+    },
+    target: 'node',
   },
 });
