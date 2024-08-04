@@ -23,7 +23,7 @@ In the past, we typically did not use webpack or Rspack to build ESM packages be
 
 ## 📍 Roadmap
 
-We have roadmaps for the [features track](https://github.com/web-infra-dev/rslib/issues/46) and the [bundler support track](https://github.com/web-infra-dev/rslib/issues/45). You can view the project's progress there. These roadmaps may change as we move forward.
+We have roadmap for [features track](https://github.com/web-infra-dev/rslib/issues/46) and [bundler support track](https://github.com/web-infra-dev/rslib/issues/45). You can view the project's progress there. The roadmap may change as we move forward.
 
 ## 🦀 Links
 
