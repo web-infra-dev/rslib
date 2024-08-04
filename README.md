@@ -19,7 +19,7 @@ Rslib provides out-of-the-box configurations for library development, including 
 
 ## ✨ Why Rslib?
 
-In the past, we typically did not use webpack or Rspack to build ESM package artifacts because they often included excessive runtime code, making them less user-friendly for package consumers. However, we have developed a vast ecosystem around webpack and Rspack, which offer powerful features like tree shaking, code splitting, and module federation. Therefore, we decided to create Rslib. This tool enhances the quality of ESM artifacts from Rspack and webpack, leverages their extensive ecosystem, and utilizes Rsbuild's excellent out-of-the-box configuration. Rslib aims to provide a superior developer experience and explore new possibilities based on the Rspack architecture.
+In the past, we typically did not use webpack or Rspack to build ESM packages because they often included excessive runtime code, making them less friendly to package consumers. However, we have developed a vast ecosystem around webpack and Rspack, which provides powerful features like tree shaking, code splitting, and module federation. So we decided to create Rslib. This tool improves the quality of ESM output from Rspack and webpack, leverages their extensive ecosystem, and utilizes Rsbuild's excellent out-of-the-box configuration. Rslib aims to provide a superior developer experience and explore new possibilities based on the Rspack architecture.
 
 ## 📍 Roadmap
 
