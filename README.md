@@ -5,22 +5,25 @@
 # Rslib
 
 <p>
-  <a href="https://discord.gg/FQfm7VqU"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat-square&logo=discord&colorA=564341&colorB=EDED91" alt="discord channel" /></a>
-  <a href="https://github.com/web-infra-dev/rslib/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="license" /></a>
+  <a href="https://discord.gg/FQfm7VqU"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat-square&logo=discord&colorA=564341&colorB=F8F5FF" alt="Discord channel" /></a>
+  <a href="https://github.com/web-infra-dev/rslib/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=F8F5FF" alt="license" /></a>
 </p>
 
-Rslib is a Rsbuild-based library build tool that offers tree-shaking friendly ESM output, minimizes additional runtime code, and supports CommonJS and dts output.
+Rslib is a library build tool powered by [Rsbuild](https://rsbuild.dev). It allows package developers to leverage Rspack knowledge and its ecosystem. Rslib is built on top of Rsbuild's excellent configurations and plugins, ensuring optimal ESM output quality.
 
-When you use Rslib to build a library, you can reuse any webpack loader, as well as webpack plugins, Rspack plugins, and Rsbuild plugins.
+Rslib provides out-of-the-box configurations for library development, including compilation of TypeScript, JSX, Sass, Less, CSS Modules, and Wasm, supporting Module Federation, image compression, type checking, PostCSS, and Lightning CSS.
 
-This means that the build infrastructure for building web applications and libraries is consistent, and the ecosystem can be reused.
-
-> Rslib is still in its early stages and under active development. It will be available in October 2024.
+> !NOTE
+> 🚧 Rslib is still in its early stages and under active development. It will be available in October 2024.
 > You can check some available [examples](https://github.com/web-infra-dev/rslib/tree/main/examples) in the repository.
 
-## 🔥 Features
+## ✨ Why Rslib?
 
-WIP
+In the past, we typically did not use webpack or Rspack to build ESM packages because they often included excessive runtime code, making them less friendly to package consumers. However, we have developed a vast ecosystem around webpack and Rspack, which provides powerful features like tree shaking, code splitting, and module federation. So we decided to create Rslib. This tool improves the quality of ESM output from Rspack and webpack, leverages their extensive ecosystem, and utilizes Rsbuild's excellent out-of-the-box configuration. Rslib aims to provide a superior developer experience and explore new possibilities based on the Rspack architecture.
+
+## 📍 Roadmap
+
+We have roadmap for [features track](https://github.com/web-infra-dev/rslib/issues/46) and [bundler support track](https://github.com/web-infra-dev/rslib/issues/45). You can view the project's progress there. The roadmap may change as we move forward.
 
 ## 🦀 Links
 
@@ -53,8 +56,8 @@ Come and chat with us on [Discord](https://discord.gg/FQfm7VqU)! The Rstack team
 
 Some of the implementations of Rslib have drawn inspiration from outstanding projects in the community. We would like to express our gratitude to them:
 
-- [esbuild](https://github.com/evanw/esbuild), created by [Evan Wallace](https://github.com/evanw)
-- [tsup](https://github.com/egoist/tsup), created by [EGOIST](https://github.com/egoist)
+- [esbuild](https://github.com/evanw/esbuild), created by [Evan Wallace](https://github.com/evanw).
+- [tsup](https://github.com/egoist/tsup), created by [EGOIST](https://github.com/egoist).
 
 ## 📖 License
 
