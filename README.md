@@ -23,24 +23,7 @@ In the past, we typically did not use webpack or Rspack to build ESM packages be
 
 ## 📍 Roadmap
 
-The roadmap shows the overview mainly features progress on user side, but it subject to change. You could check [features track](https://github.com/web-infra-dev/rslib/issues/46) and [bundler support track](https://github.com/web-infra-dev/rslib/issues/45) for more details.
-
-- [ ] templates and create command
-- [ ] config preset
-- [x] bundleless
-- [x] platform
-- [x] alias
-- [ ] redirect
-- [x] auto extension
-- [x] externals
-- [ ] stylesheet
-- [ ] assets
-- [ ] .d.ts emitting
-- [ ] Rsbuild plugin integration
-- [ ] Bundler support
-  - [x] ESM tree shaking
-  - [ ] external module runtime
-  - [ ] code splitting
+We have roadmaps for the [features track](https://github.com/web-infra-dev/rslib/issues/46) and the [bundler support track](https://github.com/web-infra-dev/rslib/issues/45). You can view the project's progress there. These roadmaps may change as we move forward.
 
 ## 🦀 Links
 
