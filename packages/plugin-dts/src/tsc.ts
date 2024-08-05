@@ -14,6 +14,10 @@ export function emitDts(
   onComplete: (isSuccess: boolean) => void,
   isWatch = false,
 ) {
+  const start = Date.now();
+  const getTimeCost = () => {
+    return `${Math.floor(Date.now() - start)}ms`;
+  };
   const { configPath, declarationDir } = options;
   const { options: rawCompilerOptions, fileNames } = loadTsconfig(configPath);
 
@@ -58,10 +62,10 @@ export function emitDts(
         logger.error(message);
       }
 
-      throw new Error('TypeScript compilation failed');
+      throw new Error('DTS generation failed');
     }
 
-    logger.info('TypeScript compilation succeeded\n');
+    logger.info(`DTS generation succeeded in ${getTimeCost()}`);
   } else {
     const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
     const formatHost: ts.FormatDiagnosticsHost = {

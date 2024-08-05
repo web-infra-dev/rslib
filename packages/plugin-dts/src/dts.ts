@@ -6,7 +6,7 @@ import { emitDts } from './tsc';
 import { ensureTempDeclarationDir, loadTsconfig } from './utils';
 
 export async function generateDts(data: DtsGenOptions) {
-  logger.info('Generating DTS...');
+  logger.ready('Generating DTS...');
   const { options: pluginOptions, cwd, isWatch } = data;
   const { tsconfigPath, distPath, bundle, entryPath } = pluginOptions;
   const configPath = ts.findConfigFile(cwd, ts.sys.fileExists, tsconfigPath);
