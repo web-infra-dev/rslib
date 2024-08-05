@@ -2,10 +2,6 @@
   "name": "@rslib/e2e",
   "private": true,
   "type": "module",
-  "imports": {
-    "#helper": "./scripts/helper.ts",
-    "#shared": "./scripts/shared.ts"
-  },
   "scripts": {
     "test": "playwright test --pass-with-no-tests"
   },
@@ -13,6 +9,7 @@
     "react": "^18.3.1"
   },
   "devDependencies": {
+    "@e2e/helper": "workspace:*",
     "@playwright/test": "1.43.1",
     "@rsbuild/core": "1.0.1-beta.8",
     "@rslib/core": "workspace:*",

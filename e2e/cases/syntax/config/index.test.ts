@@ -1,5 +1,5 @@
+import { buildAndGetResults } from '@e2e/helper';
 import { expect, test } from 'vitest';
-import { buildAndGetResults } from '#shared';
 
 test('should downgrade class private method by default', async () => {
   const fixturePath = __dirname;

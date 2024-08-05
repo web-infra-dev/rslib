@@ -1,16 +1,12 @@
 import { join } from 'node:path';
 import {
   type InspectConfigResult,
-  type Rspack,
   mergeRsbuildConfig as mergeConfig,
 } from '@rsbuild/core';
 import type { LibConfig, RslibConfig } from '@rslib/core';
-import { globContentJSON } from '#helper';
 import { build } from '../../packages/core/src/build';
-import {
-  composeCreateRsbuildConfig,
-  loadConfig,
-} from '../../packages/core/src/config';
+import { loadConfig } from '../../packages/core/src/config';
+import { globContentJSON } from './helper';
 
 export function generateBundleEsmConfig(
   cwd: string,

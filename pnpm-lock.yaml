@@ -63,6 +63,9 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1
     devDependencies:
+      '@e2e/helper':
+        specifier: workspace:*
+        version: link:scripts
       '@playwright/test':
         specifier: 1.43.1
         version: 1.43.1
@@ -96,6 +99,8 @@ importers:
   e2e/cases/autoExtension/type-module: {}
 
   e2e/cases/dts/bundle: {}
+
+  e2e/scripts: {}
 
   examples/express-plugin:
     devDependencies:

@@ -1,5 +1,5 @@
+import { buildAndGetResults } from '@e2e/helper';
 import { expect, test } from 'vitest';
-import { buildAndGetResults } from '#shared';
 
 test('source.define', async () => {
   const fixturePath = __dirname;
