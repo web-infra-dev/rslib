@@ -1,6 +1,6 @@
 import { join } from 'node:path';
+import { buildAndGetResults } from '@e2e/helper';
 import { expect, test } from 'vitest';
-import { buildAndGetResults } from '#shared';
 
 test('should fail to build when `output.target` is not "node"', async () => {
   const fixturePath = join(__dirname);

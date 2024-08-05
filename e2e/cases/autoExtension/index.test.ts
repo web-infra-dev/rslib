@@ -1,6 +1,6 @@
 import { extname, join } from 'node:path';
+import { buildAndGetResults } from '@e2e/helper';
 import { expect, test } from 'vitest';
-import { buildAndGetResults } from '#shared';
 
 test('autoExtension generate .mjs in build artifacts with esm format when type is commonjs', async () => {
   const fixturePath = join(__dirname, 'type-commonjs');

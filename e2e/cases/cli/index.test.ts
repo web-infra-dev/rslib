@@ -1,8 +1,8 @@
 import { execSync } from 'node:child_process';
 import path from 'node:path';
+import { globContentJSON } from '@e2e/helper';
 import fse from 'fs-extra';
 import { expect, test } from 'vitest';
-import { globContentJSON } from '#helper';
 
 test.todo('build command', async () => {});
 

@@ -1,6 +1,6 @@
 import { join } from 'node:path';
+import { buildAndGetResults } from '@e2e/helper';
 import { expect, test } from 'vitest';
-import { buildAndGetResults } from '#shared';
 
 test('dts when bundle: false', async () => {
   const fixturePath = join(__dirname, 'bundle-false');

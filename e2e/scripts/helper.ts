@@ -6,7 +6,7 @@ import fg, {
 } from 'fast-glob';
 import fse from 'fs-extra';
 
-export const getFiles = async (pattern: string) => {};
+export const getFiles = async (_pattern: string) => {};
 
 // fast-glob only accepts posix path
 // https://github.com/mrmlnc/fast-glob#convertpathtopatternpath
