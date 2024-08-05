@@ -11,7 +11,7 @@
 
 Rslib is a library build tool powered by [Rsbuild](https://rsbuild.dev). It allows library developers to leverage the knowledge and ecosystem of webpack and Rspack. Rslib is built on top of Rsbuild's excellent configurations and plugins, providing optimal ESM and CJS output.
 
-Rslib provides out-of-the-box configurations for library development, including compilation of TypeScript, JSX, Sass, Less, CSS Modules, and Wasm. It supports bundleless output, DTS generation, Module Federation, assets compression, type checking, PostCSS, and Lightning CSS.
+Rslib provides out-of-the-box configurations for library development, including compilation of TypeScript, JSX, Sass, Less, CSS Modules, and Wasm. It supports bundleless output, DTS generation (including isolated declarations), Module Federation, assets compression, type checking, PostCSS, and Lightning CSS.
 
 ## ✨ Why Rslib?
 
