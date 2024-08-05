@@ -4,8 +4,7 @@ import {
   mergeRsbuildConfig as mergeConfig,
 } from '@rsbuild/core';
 import type { LibConfig, RslibConfig } from '@rslib/core';
-import { build } from '../../packages/core/src/build';
-import { loadConfig } from '../../packages/core/src/config';
+import { build, loadConfig } from '@rslib/core';
 import { globContentJSON } from './helper';
 
 export function generateBundleEsmConfig(

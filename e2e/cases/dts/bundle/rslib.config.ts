@@ -1,8 +1,5 @@
+import { generateBundleCjsConfig, generateBundleEsmConfig } from '@e2e/helper';
 import { defineConfig } from '@rslib/core';
-import {
-  generateBundleCjsConfig,
-  generateBundleEsmConfig,
-} from '../../../scripts/shared';
 
 export default defineConfig({
   lib: [
