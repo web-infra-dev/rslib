@@ -44,8 +44,8 @@ You can also clone the repository and run the examples in the [examples](https:/
 - [awesome-rspack](https://github.com/web-infra-dev/awesome-rspack): A curated list of awesome things related to Rspack and Rsbuild.
 - [rspack-examples](https://github.com/rspack-contrib/rspack-examples): Examples for Rspack, Rsbuild, Rspress and Rsdoctor.
 - [storybook-rsbuild](https://github.com/rspack-contrib/storybook-rsbuild): Storybook builder powered by Rsbuild.
-- [rsbuild-plugin-template](https://github.com/rspack-contrib/rsbuild-plugin-template)：Use this template to create your own Rsbuild plugin.
-- [rstack-design-resources](https://github.com/rspack-contrib/rstack-design-resources)：Design resources for Rspack, Rsbuild, Rspress and Rsdoctor.
+- [rsbuild-plugin-template](https://github.com/rspack-contrib/rsbuild-plugin-template): Use this template to create your own Rsbuild plugin.
+- [rstack-design-resources](https://github.com/rspack-contrib/rstack-design-resources): Design resources for Rspack, Rsbuild, Rspress and Rsdoctor.
 
 ## 🤝 Contribution
 
