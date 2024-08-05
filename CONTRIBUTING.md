@@ -123,4 +123,4 @@ The project is still in its early stages and under active development, so it pos
 
 | Package      | Link                                                    |
 | ------------ | ------------------------------------------------------- |
-| @rspack/core | [PR](https://github.com/web-infra-dev/rspack/pull/7210) |
+| @rspack/core | [PR](https://github.com/web-infra-dev/rspack/pull/7394) |

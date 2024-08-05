@@ -4,6 +4,7 @@ import {
   type RsbuildConfig,
   createRsbuild,
   defineConfig as defineRsbuildConfig,
+  loadConfig as loadRsbuildConfig,
   mergeRsbuildConfig,
 } from '@rsbuild/core';
 import glob from 'fast-glob';
@@ -66,8 +67,7 @@ export async function loadConfig(
 ): Promise<RslibConfig> {
   const root = process.cwd();
   const configFilePath = resolveConfigPath(root, customConfig)!;
-  const { loadConfig } = await import('@rsbuild/core');
-  const { content } = await loadConfig({
+  const { content } = await loadRsbuildConfig({
     cwd: dirname(configFilePath),
     path: configFilePath,
     envMode,
@@ -107,7 +107,7 @@ export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
   });
 }
 
-const getDefaultFormatConfig = (format: Format): RsbuildConfig => {
+const composeFormatConfig = (format: Format): RsbuildConfig => {
   switch (format) {
     case 'esm':
       return {
@@ -163,7 +163,7 @@ const getDefaultFormatConfig = (format: Format): RsbuildConfig => {
   }
 };
 
-const getDefaultAutoExtensionConfig = (
+const composeAutoExtensionConfig = (
   format: Format,
   root: string,
   autoExtension: boolean,
@@ -183,40 +183,69 @@ const getDefaultAutoExtensionConfig = (
   };
 };
 
-const getDefaultSyntaxConfig = (syntax?: Syntax): RsbuildConfig => {
+const composeSyntaxConfig = (
+  syntax?: Syntax,
+  target?: string,
+): RsbuildConfig => {
   // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
-  return syntax === undefined
-    ? {
-        tools: {
-          rspack: {
-            // The highest is 2022 in Rspack
-            target: 'es2022',
-          },
-          swc(config) {
-            config.jsc ??= {};
-            config.jsc.target = 'esnext';
-            delete config.env;
-            return config;
-          },
+  if (syntax) {
+    return {
+      tools: {
+        rspack: (config) => {
+          // TODO: Rspack should could resolve `browserslist:{query}` like webpack.
+          // https://webpack.js.org/configuration/target/#browserslist
+          // Using 'es5' as a temporary solution for compatibility.
+          config.target = ['es5'];
+          return config;
         },
-      }
-    : {
-        output: {
-          overrideBrowserslist: transformSyntaxToBrowserslist(syntax),
-        },
-      };
+      },
+      output: {
+        overrideBrowserslist: transformSyntaxToBrowserslist(syntax),
+      },
+    };
+  }
+
+  // If `syntax` is not defined, Rslib will try to determine by the `target`, with the last version of the target.
+  const lastTargetVersions = {
+    node: ['last 1 node versions'],
+    web: [
+      'last 1 Chrome versions',
+      'last 1 Firefox versions',
+      'last 1 Edge versions',
+      'last 1 Safari versions',
+      'last 1 ios_saf versions',
+      'not dead',
+    ],
+  };
+
+  return {
+    tools: {
+      rspack: (config) => {
+        config.target = ['es2022'];
+        return config;
+      },
+    },
+    output: {
+      overrideBrowserslist:
+        target === 'web'
+          ? lastTargetVersions.web
+          : target === 'node'
+            ? lastTargetVersions.node
+            : [...lastTargetVersions.node, ...lastTargetVersions.web],
+    },
+  };
 };
 
-const getDefaultEntryConfig = async (
+const composeEntryConfig = async (
   entries: NonNullable<RsbuildConfig['source']>['entry'],
-  libConfig: LibConfig,
+  bundle: LibConfig['bundle'],
   root: string,
 ): Promise<RsbuildConfig> => {
   if (!entries) {
     return {};
   }
 
-  if (libConfig.bundle !== false) {
+  if (bundle !== false) {
     return {
       source: {
         entry: entries,
@@ -274,7 +303,7 @@ const getDefaultEntryConfig = async (
   };
 };
 
-const getBundleConfig = (bundle = true): RsbuildConfig => {
+const composeBundleConfig = (bundle = true): RsbuildConfig => {
   if (bundle) return {};
 
   return {
@@ -293,7 +322,7 @@ const getBundleConfig = (bundle = true): RsbuildConfig => {
   };
 };
 
-const getDefaultDtsConfig = async (
+const composeDtsConfig = async (
   libConfig: LibConfig,
   entryConfig: RsbuildConfig,
 ): Promise<RsbuildConfig> => {
@@ -315,62 +344,23 @@ const getDefaultDtsConfig = async (
   };
 };
 
-export function convertLibConfigToRsbuildConfig(
-  libConfig: LibConfig,
-  configPath: string,
-): RsbuildConfig {
-  const { format, autoExtension = false } = libConfig;
-
-  const formatConfig = getDefaultFormatConfig(format!);
-  const autoExtensionConfig = getDefaultAutoExtensionConfig(
-    format!,
-    dirname(configPath),
-    autoExtension,
-  );
-  const syntaxConfig = getDefaultSyntaxConfig(libConfig.output?.syntax);
-  const bundleConfig = getBundleConfig(libConfig.bundle);
-
-  return mergeRsbuildConfig(
-    formatConfig,
-    autoExtensionConfig,
-    syntaxConfig,
-    bundleConfig,
-  );
-}
-
-async function postUpdateRsbuildConfig(
-  libConfig: LibConfig,
-  rsbuildConfig: RsbuildConfig,
-  configPath: string,
-) {
-  const defaultTargetConfig = getDefaultTargetConfig(
-    rsbuildConfig.output?.target ?? 'web',
-  );
-
-  const defaultEntryConfig = await getDefaultEntryConfig(
-    rsbuildConfig.source?.entry,
-    libConfig,
-    dirname(configPath),
-  );
-
-  const defaultDtsConfig = await getDefaultDtsConfig(
-    libConfig,
-    defaultEntryConfig,
-  );
-
-  return mergeRsbuildConfig(
-    defaultTargetConfig,
-    defaultEntryConfig,
-    defaultDtsConfig,
-  );
-}
-
-const getDefaultTargetConfig = (target: string): RsbuildConfig => {
+const composeTargetConfig = (target = 'web'): RsbuildConfig => {
   switch (target) {
     case 'web':
-      return {};
+      return {
+        tools: {
+          rspack: {
+            target: ['web'],
+          },
+        },
+      };
     case 'node':
       return {
+        tools: {
+          rspack: {
+            target: ['node'],
+          },
+        },
         output: {
           // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
           // Simply override the built-in modules to make them external.
@@ -380,16 +370,61 @@ const getDefaultTargetConfig = (target: string): RsbuildConfig => {
         },
       };
     case 'neutral':
-      return {};
+      return {
+        tools: {
+          rspack: {
+            target: ['web', 'node'],
+          },
+        },
+      };
     default:
       throw new Error(`Unsupported platform: ${target}`);
   }
 };
 
+async function composeLibRsbuildConfig(
+  libConfig: LibConfig,
+  rsbuildConfig: RsbuildConfig,
+  configPath: string,
+) {
+  const config = mergeRsbuildConfig<LibConfig>(rsbuildConfig, libConfig);
+
+  const { format, autoExtension = false } = config;
+  const formatConfig = composeFormatConfig(format!);
+  const autoExtensionConfig = composeAutoExtensionConfig(
+    format!,
+    dirname(configPath),
+    autoExtension,
+  );
+  const bundleConfig = composeBundleConfig(config.bundle);
+  const targetConfig = composeTargetConfig(config.output?.target);
+  const syntaxConfig = composeSyntaxConfig(
+    config.output?.syntax,
+    config.output?.target,
+  );
+  const entryConfig = await composeEntryConfig(
+    config.source?.entry,
+    config.bundle,
+    dirname(configPath),
+  );
+
+  const dtsConfig = await composeDtsConfig(config, entryConfig);
+
+  return mergeRsbuildConfig(
+    formatConfig,
+    autoExtensionConfig,
+    syntaxConfig,
+    bundleConfig,
+    targetConfig,
+    entryConfig,
+    dtsConfig,
+  );
+}
+
 export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
   path?: string,
-): Promise<Partial<Record<Format, RsbuildConfig>>> {
+): Promise<{ format: Format; config: RsbuildConfig }[]> {
   const internalRsbuildConfig = await createInternalRsbuildConfig();
   const configPath = path ?? rslibConfig._privateMeta?.configFilePath!;
   const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
@@ -400,53 +435,73 @@ export async function composeCreateRsbuildConfig(
     );
   }
 
-  const composedRsbuildConfig: Partial<Record<Format, RsbuildConfig>> = {};
-
-  for (const libConfig of libConfigsArray) {
+  const libConfigPromises = libConfigsArray.map(async (libConfig) => {
     const { format, ...overrideRsbuildConfig } = libConfig;
 
-    const libConvertedRsbuildConfig = convertLibConfigToRsbuildConfig(
-      libConfig,
-      configPath,
-    );
-
-    const mergedRsbuildConfig = mergeRsbuildConfig(
+    const baseRsbuildConfig = mergeRsbuildConfig(
       sharedRsbuildConfig,
       overrideRsbuildConfig,
-      libConvertedRsbuildConfig,
     );
 
-    // Some configurations can be defined both in the shared config and the lib config.
-    // So we need to do the post process after lib config is converted and merged.
-    const postUpdatedConfig = await postUpdateRsbuildConfig(
+    // Merge the configuration of each environment based on the shared Rsbuild
+    // configuration and Lib configuration in the settings.
+    const libRsbuildConfig = await composeLibRsbuildConfig(
       libConfig,
-      mergedRsbuildConfig,
+      baseRsbuildConfig,
       configPath,
     );
 
-    // Reset some fields as they will be totally overridden by the following merge
-    // and we don't want to keep them in the final config.
-    mergedRsbuildConfig.source ??= {};
-    mergedRsbuildConfig.source.entry = {};
+    // Reset certain fields because they will be completely overridden by the upcoming merge.
+    // We don't want to retain them in the final configuration.
+    // The reset process should occur after merging the library configuration.
+    baseRsbuildConfig.source ??= {};
+    baseRsbuildConfig.source.entry = {};
 
-    composedRsbuildConfig[format!] = mergeRsbuildConfig(
-      mergedRsbuildConfig,
-      postUpdatedConfig,
-      // Merge order matters, keep `internalRsbuildConfig` at the last position
-      // to ensure that the internal config is not overridden by user's config.
-      internalRsbuildConfig,
-    );
-  }
+    return {
+      format: format!,
+      config: mergeRsbuildConfig(
+        baseRsbuildConfig,
+        libRsbuildConfig,
+        // Merge order matters, keep `internalRsbuildConfig` at the last position
+        // to ensure that the internal config is not overridden by user's config.
+        internalRsbuildConfig,
+      ),
+    };
+  });
 
+  const composedRsbuildConfig = await Promise.all(libConfigPromises);
   return composedRsbuildConfig;
 }
 
 export async function initRsbuild(rslibConfig: RslibConfig) {
   const rsbuildConfigObject = await composeCreateRsbuildConfig(rslibConfig);
+  const environments: RsbuildConfig['environments'] = {};
+  const formatCount: Record<Format, number> = rsbuildConfigObject.reduce(
+    (acc, { format }) => {
+      acc[format] = (acc[format] ?? 0) + 1;
+      return acc;
+    },
+    {} as Record<Format, number>,
+  );
+
+  const formatIndex: Record<Format, number> = {
+    esm: 0,
+    cjs: 0,
+    umd: 0,
+  };
+
+  for (const { format, config } of rsbuildConfigObject) {
+    const currentFormatCount = formatCount[format];
+    const currentFormatIndex = formatIndex[format]++;
+
+    environments[
+      currentFormatCount === 1 ? format : `${format}${currentFormatIndex}`
+    ] = config;
+  }
 
   return createRsbuild({
     rsbuildConfig: {
-      environments: rsbuildConfigObject,
+      environments,
     },
   });
 }

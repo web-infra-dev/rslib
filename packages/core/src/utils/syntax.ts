@@ -122,7 +122,9 @@ const ESX_TO_BROWSERSLIST: Record<
 
 export const transformSyntaxToBrowserslist = (
   syntax: Syntax,
-): NonNullable<RsbuildConfig['output']>['overrideBrowserslist'] => {
+): NonNullable<
+  NonNullable<RsbuildConfig['output']>['overrideBrowserslist']
+> => {
   // only single esX is allowed
   if (typeof syntax === 'string' && syntax.toLowerCase().startsWith('es')) {
     if (syntax.toLowerCase() in ESX_TO_BROWSERSLIST) {
@@ -132,7 +134,7 @@ export const transformSyntaxToBrowserslist = (
             return version;
           }
 
-          return `${engine} ${version}`;
+          return `${engine} >= ${version}`;
         },
       );
     }

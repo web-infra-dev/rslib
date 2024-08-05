@@ -1,9 +1,16 @@
 import { join } from 'node:path';
-import { mergeRsbuildConfig as mergeConfig } from '@rsbuild/core';
+import {
+  type InspectConfigResult,
+  type Rspack,
+  mergeRsbuildConfig as mergeConfig,
+} from '@rsbuild/core';
 import type { LibConfig, RslibConfig } from '@rslib/core';
 import { globContentJSON } from '#helper';
 import { build } from '../../packages/core/src/build';
-import { loadConfig } from '../../packages/core/src/config';
+import {
+  composeCreateRsbuildConfig,
+  loadConfig,
+} from '../../packages/core/src/config';
 
 export function generateBundleEsmConfig(
   cwd: string,
@@ -103,15 +110,28 @@ export async function getResults(
 export const buildAndGetResults = async (
   fixturePath: string,
   type: 'js' | 'dts' = 'js',
-) => {
+): Promise<{
+  contents: Record<string, Record<string, string>>;
+  files: Record<string, string[]>;
+  entries: Record<string, string>;
+  entryFiles: Record<string, string>;
+  rspackConfig: InspectConfigResult['origin']['bundlerConfigs'];
+  rsbuildConfig: InspectConfigResult['origin']['rsbuildConfig'];
+}> => {
   const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
   process.chdir(fixturePath);
-  await build(rslibConfig);
+  const rsbuildInstance = await build(rslibConfig);
+  const {
+    origin: { bundlerConfigs, rsbuildConfig },
+  } = await rsbuildInstance.inspectConfig({ verbose: true });
+
   const results = await getResults(rslibConfig, fixturePath, type);
   return {
     contents: results.contents,
     files: results.files,
     entries: results.entries,
     entryFiles: results.entryFiles,
+    rspackConfig: bundlerConfigs,
+    rsbuildConfig: rsbuildConfig,
   };
 };
