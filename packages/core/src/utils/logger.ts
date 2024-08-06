@@ -6,7 +6,7 @@ if (process.env.DEBUG) {
   logger.level = 'verbose';
 }
 
-export const isDebug = () => {
+export const isDebug = (): boolean => {
   if (!process.env.DEBUG) {
     return false;
   }
@@ -27,7 +27,7 @@ function getTime() {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-export const debug = (message: string | (() => string)) => {
+export const debug = (message: string | (() => string)): void => {
   if (isDebug()) {
     const result = typeof message === 'string' ? message : message();
     const time = color.gray(`${getTime()}`);

@@ -13,7 +13,7 @@ export function emitDts(
   options: emitDtsOptions,
   onComplete: (isSuccess: boolean) => void,
   isWatch = false,
-) {
+): void {
   const start = Date.now();
   const getTimeCost = () => {
     return `${Math.floor(Date.now() - start)}ms`;

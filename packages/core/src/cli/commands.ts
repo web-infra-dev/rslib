@@ -31,7 +31,7 @@ const applyCommonOptions = (command: Command) => {
     );
 };
 
-export function runCli() {
+export function runCli(): void {
   program.name('rslib').usage('<command> [options]').version(RSLIB_VERSION);
 
   const buildCommand = program.command('build');

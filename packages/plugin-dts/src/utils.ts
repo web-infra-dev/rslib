@@ -14,7 +14,7 @@ export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
 }
 
 export const TEMP_FOLDER = '.rslib';
-export const TEMP_DTS_DIR = `${TEMP_FOLDER}/declarations`;
+export const TEMP_DTS_DIR: string = `${TEMP_FOLDER}/declarations`;
 
 export function ensureTempDeclarationDir(cwd: string): string {
   const dirPath = path.join(cwd, TEMP_DTS_DIR);
