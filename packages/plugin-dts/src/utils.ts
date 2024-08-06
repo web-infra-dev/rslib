@@ -1,5 +1,6 @@
 import fs, { writeFileSync } from 'node:fs';
 import path from 'node:path';
+import color from 'picocolors';
 import * as ts from 'typescript';
 
 export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
@@ -37,7 +38,7 @@ export function getFileLoc(diagnostic: ts.Diagnostic): string {
       diagnostic.file,
       diagnostic.start!,
     );
-    return `${diagnostic.file.fileName}:${line + 1}:${character + 1} - `;
+    return `${color.cyan(diagnostic.file.fileName)}:${color.yellow(line + 1)}:${color.yellow(character + 1)}`;
   }
 
   return '';
