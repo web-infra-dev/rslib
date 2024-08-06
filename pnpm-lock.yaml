@@ -70,8 +70,8 @@ importers:
         specifier: 1.43.1
         version: 1.43.1
       '@rsbuild/core':
-        specifier: 1.0.1-beta.8
-        version: 1.0.1-beta.8
+        specifier: 1.0.1-beta.10
+        version: 1.0.1-beta.10
       '@rslib/core':
         specifier: workspace:*
         version: link:../packages/core
@@ -121,7 +121,7 @@ importers:
     devDependencies:
       '@rsbuild/plugin-react':
         specifier: 1.0.1-beta.9
-        version: 1.0.1-beta.9(@rsbuild/core@1.0.1-beta.8)
+        version: 1.0.1-beta.9(@rsbuild/core@1.0.1-beta.10)
       '@rslib/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -138,8 +138,8 @@ importers:
         specifier: ^7
         version: 7.47.2(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-beta.8
-        version: 1.0.1-beta.8
+        specifier: 1.0.1-beta.10
+        version: 1.0.1-beta.10
       rsbuild-plugin-dts:
         specifier: workspace:*
         version: link:../plugin-dts
@@ -173,13 +173,17 @@ importers:
         version: 5.5.3
 
   packages/plugin-dts:
+    dependencies:
+      picocolors:
+        specifier: ^1.0.1
+        version: 1.0.1
     devDependencies:
       '@microsoft/api-extractor':
         specifier: ^7.47.4
         version: 7.47.4(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-beta.8
-        version: 1.0.1-beta.8
+        specifier: 1.0.1-beta.10
+        version: 1.0.1-beta.10
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
@@ -1192,8 +1196,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rsbuild/core@1.0.1-beta.8':
-    resolution: {integrity: sha512-SERxv+2eyS6ihZZ+QqhFaMXVkf3cTNdn2H58AyHLxrx9+T/1DZP2LRLWAcbfgjr8lNTkv9nWcxk0d97pPThLGg==}
+  '@rsbuild/core@1.0.1-beta.10':
+    resolution: {integrity: sha512-F2xVOiUXmv9PhtgXnxtelE2Ay6gwsU2MjLur+PNF63QJB4VhV1KMWedt0cEw6m3KR6/n6laWY3PXv8TxGA99iA==}
     engines: {node: '>=16.7.0'}
     hasBin: true
 
@@ -1263,8 +1267,8 @@ packages:
     resolution: {integrity: sha512-emikuiIbELsdO28IxMgjkcw8sovk9/BF+L7V3Ix75NLFc2+5MZ8LGteUFrhxfuXr/7eFY1eje858ZmeRPNr4fw==}
     engines: {node: '>=16.0.0'}
 
-  '@rspack/lite-tapable@1.0.0-beta.1':
-    resolution: {integrity: sha512-r4xtbJp6QhW6A1twkgTP0UQkPC9cOT3sFjjjlx22j/q669HJRz+CVTlVcNxPomK7Q3Kg6dVsyv16MjGRl/fl5g==}
+  '@rspack/lite-tapable@1.0.0-beta.2':
+    resolution: {integrity: sha512-pDcrOH7tejguIxzcMUnCb5FCrz9GWtAnS3dVG6O/P4l7OWtcOBI3F1TQUsEy1u2WpMpH9ruPHRCSIliBfUymLg==}
     engines: {node: '>=16.0.0'}
 
   '@rspack/plugin-react-refresh@1.0.0-beta.1':
@@ -1561,8 +1565,8 @@ packages:
   caniuse-lite@1.0.30001641:
     resolution: {integrity: sha512-Phv5thgl67bHYo1TtMY/MurjkHhV4EDaCosezRXgZ8jzA/Ub+wjxAvbGvjoFENStinwi5kCyOYV3mi5tOGykwA==}
 
-  caniuse-lite@1.0.30001643:
-    resolution: {integrity: sha512-ERgWGNleEilSrHM6iUz/zJNSQTP8Mr21wDWpdgvRwcTXGAq6jMtOUPP4dqFPTdKqZ2wKTdtB+uucZ3MRpAUSmg==}
+  caniuse-lite@1.0.30001649:
+    resolution: {integrity: sha512-fJegqZZ0ZX8HOWr6rcafGr72+xcgJKI9oWfDW5DrD7ExUtgZC7a7R7ZYmZqplh7XDocFdGeIFn7roAxhOeYrPQ==}
 
   chai@5.1.1:
     resolution: {integrity: sha512-pT1ZgP8rPNqUgieVaEY+ryQr6Q4HXNg8Ei9UnLUrjN4IA7dvQC5JB+/kxVcPNDHyBcc/26CXPkbNzq3qwrOEKA==}
@@ -4085,19 +4089,19 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.18.1':
     optional: true
 
-  '@rsbuild/core@1.0.1-beta.8':
+  '@rsbuild/core@1.0.1-beta.10':
     dependencies:
       '@rspack/core': '@rspack/core-canary@1.0.0-canary-338cfbe-20240731183605(@swc/helpers@0.5.11)'
-      '@rspack/lite-tapable': 1.0.0-beta.1
+      '@rspack/lite-tapable': 1.0.0-beta.2
       '@swc/helpers': 0.5.11
-      caniuse-lite: 1.0.30001643
+      caniuse-lite: 1.0.30001649
       core-js: 3.37.1
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@rsbuild/plugin-react@1.0.1-beta.9(@rsbuild/core@1.0.1-beta.8)':
+  '@rsbuild/plugin-react@1.0.1-beta.9(@rsbuild/core@1.0.1-beta.10)':
     dependencies:
-      '@rsbuild/core': 1.0.1-beta.8
+      '@rsbuild/core': 1.0.1-beta.10
       '@rspack/plugin-react-refresh': 1.0.0-beta.1(react-refresh@0.14.2)
       react-refresh: 0.14.2
 
@@ -4145,13 +4149,13 @@ snapshots:
       '@module-federation/runtime-tools': 0.2.3
       '@rspack/binding': '@rspack/binding-canary@1.0.0-canary-338cfbe-20240731183605'
       '@rspack/lite-tapable': '@rspack/lite-tapable-canary@1.0.0-canary-338cfbe-20240731183605'
-      caniuse-lite: 1.0.30001643
+      caniuse-lite: 1.0.30001649
     optionalDependencies:
       '@swc/helpers': 0.5.11
 
   '@rspack/lite-tapable-canary@1.0.0-canary-338cfbe-20240731183605': {}
 
-  '@rspack/lite-tapable@1.0.0-beta.1': {}
+  '@rspack/lite-tapable@1.0.0-beta.2': {}
 
   '@rspack/plugin-react-refresh@1.0.0-beta.1(react-refresh@0.14.2)':
     dependencies:
@@ -4506,7 +4510,7 @@ snapshots:
 
   caniuse-lite@1.0.30001641: {}
 
-  caniuse-lite@1.0.30001643: {}
+  caniuse-lite@1.0.30001649: {}
 
   chai@5.1.1:
     dependencies:

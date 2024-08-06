@@ -10,6 +10,7 @@ export type pluginDtsOptions = {
 };
 
 export type DtsGenOptions = {
+  name: string;
   options: pluginDtsOptions;
   cwd: string;
   isWatch: boolean;
@@ -32,37 +33,50 @@ export const pluginDts = (options: pluginDtsOptions): RsbuildPlugin => ({
     options.distPath =
       options.distPath ?? config.output?.distPath?.root ?? 'dist';
 
-    const dtsPromises: Promise<void>[] = [];
+    let dtsPromise: Promise<void>;
 
-    api.onBeforeBuild(({ isWatch }) => {
-      const jsExtension = extname(__filename);
-      const childProcess = fork(join(__dirname, `./dts${jsExtension}`), [], {
-        stdio: 'inherit',
-      });
+    api.onBeforeEnvironmentCompile(
+      ({ isWatch, isFirstCompile, environment }) => {
+        if (!isFirstCompile) {
+          return;
+        }
 
-      const dtsGenOptions = {
-        options,
-        cwd: api.context.rootPath,
-        isWatch,
-      };
+        const jsExtension = extname(__filename);
+        const childProcess = fork(join(__dirname, `./dts${jsExtension}`), [], {
+          stdio: 'inherit',
+        });
 
-      childProcess.send(dtsGenOptions);
+        const dtsGenOptions = {
+          name: environment.name,
+          options,
+          cwd: api.context.rootPath,
+          isWatch,
+        };
 
-      dtsPromises.push(
-        new Promise((resolve, reject) => {
+        childProcess.send(dtsGenOptions);
+
+        dtsPromise = new Promise((resolve, reject) => {
           childProcess.on('message', (message) => {
             if (message === 'success') {
               resolve();
             } else if (message === 'error') {
-              reject(new Error('Error occurred in dts generation'));
+              reject(
+                new Error(
+                  `Error occurred in ${environment.name} dts generation`,
+                ),
+              );
             }
           });
-        }),
-      );
-    });
+        });
+      },
+    );
 
-    api.onAfterBuild(async () => {
-      await Promise.all(dtsPromises);
+    api.onAfterBuild(async ({ isFirstCompile }) => {
+      if (!isFirstCompile) {
+        return;
+      }
+
+      await dtsPromise;
     });
   },
 });

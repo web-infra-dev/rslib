@@ -1,8 +1,10 @@
 import { logger } from '@rsbuild/core';
+import color from 'picocolors';
 import * as ts from 'typescript';
 import { getFileLoc, loadTsconfig } from './utils';
 
 export type emitDtsOptions = {
+  name: string;
   cwd: string;
   configPath: string;
   rootDir: string;
@@ -18,7 +20,7 @@ export function emitDts(
   const getTimeCost = () => {
     return `${Math.floor(Date.now() - start)}ms`;
   };
-  const { configPath, declarationDir } = options;
+  const { configPath, declarationDir, name } = options;
   const { options: rawCompilerOptions, fileNames } = loadTsconfig(configPath);
 
   const compilerOptions = {
@@ -48,7 +50,7 @@ export function emitDts(
 
     for (const diagnostic of allDiagnostics) {
       const fileLoc = getFileLoc(diagnostic);
-      const message = `${fileLoc} error TS${diagnostic.code}: ${ts.flattenDiagnosticMessageText(
+      const message = `${fileLoc} \nerror TS${diagnostic.code}: ${ts.flattenDiagnosticMessageText(
         diagnostic.messageText,
         host.getNewLine(),
       )}`;
@@ -56,7 +58,9 @@ export function emitDts(
     }
 
     if (diagnosticMessages.length) {
-      logger.error('Failed to emit declaration files.');
+      logger.error(
+        `Failed to emit declaration files. ${color.gray(`(${name})`)}`,
+      );
 
       for (const message of diagnosticMessages) {
         logger.error(message);
@@ -65,7 +69,9 @@ export function emitDts(
       throw new Error('DTS generation failed');
     }
 
-    logger.info(`DTS generation succeeded in ${getTimeCost()}`);
+    logger.info(
+      `DTS generation succeeded in ${getTimeCost()} ${color.gray(`(${name})`)}`,
+    );
   } else {
     const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
     const formatHost: ts.FormatDiagnosticsHost = {
@@ -78,7 +84,7 @@ export function emitDts(
       const fileLoc = getFileLoc(diagnostic);
 
       logger.error(
-        `${fileLoc} error TS${diagnostic.code}:`,
+        `${fileLoc} \nerror TS${diagnostic.code}:`,
         ts.flattenDiagnosticMessageText(
           diagnostic.messageText,
           formatHost.getNewLine(),
@@ -92,10 +98,10 @@ export function emitDts(
       _options: ts.CompilerOptions,
       errorCount?: number,
     ) => {
-      const message = ts.flattenDiagnosticMessageText(
+      const message = `${ts.flattenDiagnosticMessageText(
         diagnostic.messageText,
         formatHost.getNewLine(),
-      );
+      )} ${color.gray(`(${name})`)}`;
 
       // 6031: File change detected. Starting incremental compilation...
       // 6032: Starting compilation in watch mode...

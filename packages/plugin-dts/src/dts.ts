@@ -1,13 +1,14 @@
 import { basename, dirname, join, relative } from 'node:path';
 import { logger } from '@rsbuild/core';
+import color from 'picocolors';
 import type { DtsGenOptions } from 'src';
 import * as ts from 'typescript';
 import { emitDts } from './tsc';
 import { ensureTempDeclarationDir, loadTsconfig } from './utils';
 
 export async function generateDts(data: DtsGenOptions) {
-  logger.start('Generating DTS...');
-  const { options: pluginOptions, cwd, isWatch } = data;
+  const { options: pluginOptions, cwd, isWatch, name } = data;
+  logger.start(`Generating DTS... ${color.gray(`(${name})`)}`);
   const { tsconfigPath, distPath, bundle, entryPath } = pluginOptions;
   const configPath = ts.findConfigFile(cwd, ts.sys.fileExists, tsconfigPath);
   if (!configPath) {
@@ -60,6 +61,7 @@ export async function generateDts(data: DtsGenOptions) {
 
   emitDts(
     {
+      name,
       cwd,
       configPath,
       rootDir,
