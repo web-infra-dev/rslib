@@ -7,9 +7,9 @@ import { emitDts } from './tsc';
 import { ensureTempDeclarationDir, loadTsconfig } from './utils';
 
 export async function generateDts(data: DtsGenOptions): Promise<void> {
-  const { options: pluginOptions, cwd, isWatch, name } = data;
+  const { tsconfigPath, distPath, bundle, entryPath, cwd, isWatch, name } =
+    data;
   logger.start(`Generating DTS... ${color.gray(`(${name})`)}`);
-  const { tsconfigPath, distPath, bundle, entryPath } = pluginOptions;
   const configPath = ts.findConfigFile(cwd, ts.sys.fileExists, tsconfigPath);
   if (!configPath) {
     logger.error(`tsconfig.json not found in ${cwd}`);
@@ -38,7 +38,10 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       declarationDir!,
       relativePath,
       basename(entrySourcePath),
-    ).replace(/\.(m?js|jsx?|m?ts|tsx?|c?js)$/, '.d.ts');
+    ).replace(
+      /\.(js|mjs|jsx|ts|mts|tsx|cjs|cts|cjsx|ctsx|mjsx|mtsx)$/,
+      '.d.ts',
+    );
   }
 
   const bundleDtsIfNeeded = async () => {
@@ -77,7 +80,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
 }
 
 process.on('message', async (data: DtsGenOptions) => {
-  if (!data.options) {
+  if (!data.cwd) {
     return;
   }
 

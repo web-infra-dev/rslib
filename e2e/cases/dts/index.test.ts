@@ -3,7 +3,7 @@ import { buildAndGetResults } from '@e2e/helper';
 import { describe, expect, test } from 'vitest';
 
 describe('dts when bundle: false', () => {
-  test('basic - bundleless dts', async () => {
+  test('basic', async () => {
     const fixturePath = join(__dirname, 'bundle-false');
     const { files, contents } = await buildAndGetResults(
       fixturePath,
@@ -16,22 +16,22 @@ describe('dts when bundle: false', () => {
     expect(contents.esm).toMatchSnapshot();
   });
 
-  test('dts false - bundleless dts', async () => {
+  test('dts false', async () => {
     const fixturePath = join(__dirname, 'bundle-false');
     const { files } = await buildAndGetResults(
       fixturePath,
-      'rslib.false.config.ts',
+      'dtsFalse.config.ts',
       'dts',
     );
 
     expect(files.esm).toBe(undefined);
   });
 
-  test('distPath - bundleless dts', async () => {
+  test('distPath', async () => {
     const fixturePath = join(__dirname, 'bundle-false');
     const { files } = await buildAndGetResults(
       fixturePath,
-      'rslib.distpath.config.ts',
+      'distPath.config.ts',
       'dts',
     );
     expect(files.esm?.length).toBe(4);
@@ -40,7 +40,7 @@ describe('dts when bundle: false', () => {
 });
 
 describe('dts when bundle: true', () => {
-  test('basic - bundle dts', async () => {
+  test('basic', async () => {
     const fixturePath = join(__dirname, 'bundle');
     const { entryFiles, entries } = await buildAndGetResults(
       fixturePath,
@@ -52,22 +52,22 @@ describe('dts when bundle: true', () => {
     expect(entries).toMatchSnapshot();
   });
 
-  test('dts false - bundle dts', async () => {
+  test('dts false', async () => {
     const fixturePath = join(__dirname, 'bundle');
     const { entryFiles } = await buildAndGetResults(
       fixturePath,
-      'rslib.false.config.ts',
+      'dtsFalse.config.ts',
       'dts',
     );
 
     expect(entryFiles.esm).toEqual(undefined);
   });
 
-  test('distPath - bundle dts', async () => {
+  test('distPath', async () => {
     const fixturePath = join(__dirname, 'bundle');
     const { entryFiles } = await buildAndGetResults(
       fixturePath,
-      'rslib.distpath.config.ts',
+      'distPath.config.ts',
       'dts',
     );
 

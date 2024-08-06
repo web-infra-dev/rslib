@@ -20,36 +20,43 @@ export function bundleDts(options: BundleOptions): void {
     entry = 'index.d.ts',
     tsconfigPath = 'tsconfig.json',
   } = options;
-  const untrimmedFilePath = join(cwd, relative(cwd, outDir), 'index.d.ts');
-  const internalConfig = {
-    mainEntryPointFilePath: entry,
-    // TODO: use !externals
-    // bundledPackages: [],
-    dtsRollup: {
-      enabled: true,
-      untrimmedFilePath,
-    },
-    compiler: {
-      tsconfigFilePath: join(cwd, tsconfigPath),
-    },
-    projectFolder: cwd,
-  };
+  try {
+    const untrimmedFilePath = join(cwd, relative(cwd, outDir), 'index.d.ts');
+    const internalConfig = {
+      mainEntryPointFilePath: entry,
+      // TODO: use !externals
+      // bundledPackages: [],
+      dtsRollup: {
+        enabled: true,
+        untrimmedFilePath,
+      },
+      compiler: {
+        tsconfigFilePath: tsconfigPath.includes(cwd)
+          ? tsconfigPath
+          : join(cwd, tsconfigPath),
+      },
+      projectFolder: cwd,
+    };
 
-  const extractorConfig = ExtractorConfig.prepare({
-    configObject: internalConfig,
-    configObjectFullPath: undefined,
-    packageJsonFullPath: join(cwd, 'package.json'),
-  });
+    const extractorConfig = ExtractorConfig.prepare({
+      configObject: internalConfig,
+      configObjectFullPath: undefined,
+      packageJsonFullPath: join(cwd, 'package.json'),
+    });
 
-  const extractorResult: ExtractorResult = Extractor.invoke(extractorConfig, {
-    localBuild: true,
-  });
+    const extractorResult: ExtractorResult = Extractor.invoke(extractorConfig, {
+      localBuild: true,
+    });
 
-  if (!extractorResult.succeeded) {
+    if (!extractorResult.succeeded) {
+      throw new Error('API Extractor rollup error');
+    }
+
+    logger.info(
+      `API Extractor writing package typings succeeded: ${untrimmedFilePath}`,
+    );
+  } catch (e) {
+    logger.error('API Extractor', e);
     throw new Error('API Extractor rollup error');
   }
-
-  logger.info(
-    `API Extractor writing package typings succeeded: ${untrimmedFilePath}`,
-  );
 }

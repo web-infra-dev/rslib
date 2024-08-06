@@ -2,18 +2,17 @@ import { fork } from 'node:child_process';
 import { extname, join } from 'node:path';
 import type { RsbuildPlugin } from '@rsbuild/core';
 
-export type pluginDtsOptions = {
+export type PluginDtsOptions = {
   bundle?: boolean;
   distPath?: string;
-  tsconfigPath?: string;
-  entryPath?: string;
 };
 
-export type DtsGenOptions = {
+export type DtsGenOptions = PluginDtsOptions & {
   name: string;
-  options: pluginDtsOptions;
   cwd: string;
   isWatch: boolean;
+  entryPath?: string;
+  tsconfigPath?: string;
 };
 
 export const PLUGIN_DTS_NAME = 'rsbuild:dts';
@@ -23,16 +22,10 @@ export const PLUGIN_DTS_NAME = 'rsbuild:dts';
 // TODO: support incremental build, to build one or more projects and their dependencies
 // TODO: support autoExtension for dts files
 // TODO: deal alias in dts
-export const pluginDts = (options: pluginDtsOptions): RsbuildPlugin => ({
+export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
   name: PLUGIN_DTS_NAME,
 
   setup(api) {
-    const config = api.getRsbuildConfig();
-
-    options.bundle = options.bundle ?? false;
-    options.distPath =
-      options.distPath ?? config.output?.distPath?.root ?? 'dist';
-
     const dtsPromises: Promise<void>[] = [];
 
     api.onBeforeEnvironmentCompile(
@@ -41,14 +34,22 @@ export const pluginDts = (options: pluginDtsOptions): RsbuildPlugin => ({
           return;
         }
 
+        const { config } = environment;
+
+        options.bundle = options.bundle ?? false;
+        options.distPath = options.distPath ?? config.output?.distPath?.root;
+
         const jsExtension = extname(__filename);
         const childProcess = fork(join(__dirname, `./dts${jsExtension}`), [], {
           stdio: 'inherit',
         });
 
-        const dtsGenOptions = {
+        const dtsGenOptions: DtsGenOptions = {
+          ...options,
+          // TODO: temporarily use main as dts entry, only accept single entry
+          entryPath: config.source?.entry?.main as string,
+          tsconfigPath: config.source.tsconfigPath,
           name: environment.name,
-          options,
           cwd: api.context.rootPath,
           isWatch,
         };
