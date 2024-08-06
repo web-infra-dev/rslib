@@ -33,7 +33,7 @@ export const pluginDts = (options: pluginDtsOptions): RsbuildPlugin => ({
     options.distPath =
       options.distPath ?? config.output?.distPath?.root ?? 'dist';
 
-    let dtsPromise: Promise<void>;
+    const dtsPromises: Promise<void>[] = [];
 
     api.onBeforeEnvironmentCompile(
       ({ isWatch, isFirstCompile, environment }) => {
@@ -55,19 +55,21 @@ export const pluginDts = (options: pluginDtsOptions): RsbuildPlugin => ({
 
         childProcess.send(dtsGenOptions);
 
-        dtsPromise = new Promise((resolve, reject) => {
-          childProcess.on('message', (message) => {
-            if (message === 'success') {
-              resolve();
-            } else if (message === 'error') {
-              reject(
-                new Error(
-                  `Error occurred in ${environment.name} dts generation`,
-                ),
-              );
-            }
-          });
-        });
+        dtsPromises.push(
+          new Promise((resolve, reject) => {
+            childProcess.on('message', (message) => {
+              if (message === 'success') {
+                resolve();
+              } else if (message === 'error') {
+                reject(
+                  new Error(
+                    `Error occurred in ${environment.name} dts generation`,
+                  ),
+                );
+              }
+            });
+          }),
+        );
       },
     );
 
@@ -76,7 +78,7 @@ export const pluginDts = (options: pluginDtsOptions): RsbuildPlugin => ({
         return;
       }
 
-      await dtsPromise;
+      await Promise.all(dtsPromises);
     });
   },
 });
