@@ -27,7 +27,6 @@ export type Dts =
   | {
       bundle: boolean;
       distPath?: string;
-      tsconfigPath?: string;
     }
   | false;
 

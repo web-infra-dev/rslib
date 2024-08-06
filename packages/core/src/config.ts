@@ -325,7 +325,6 @@ const composeBundleConfig = (bundle = true): RsbuildConfig => {
 
 const composeDtsConfig = async (
   libConfig: LibConfig,
-  entryConfig: RsbuildConfig,
 ): Promise<RsbuildConfig> => {
   const { dts, bundle, output } = libConfig;
 
@@ -337,9 +336,6 @@ const composeDtsConfig = async (
       pluginDts({
         bundle: dts?.bundle ?? bundle,
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
-        tsconfigPath: dts?.tsconfigPath,
-        // TODO: temporarily use main as dts entry
-        entryPath: entryConfig.source?.entry?.main as string,
       }),
     ],
   };
@@ -408,8 +404,7 @@ async function composeLibRsbuildConfig(
     config.bundle,
     dirname(configPath),
   );
-
-  const dtsConfig = await composeDtsConfig(config, entryConfig);
+  const dtsConfig = await composeDtsConfig(config);
 
   return mergeRsbuildConfig(
     formatConfig,
