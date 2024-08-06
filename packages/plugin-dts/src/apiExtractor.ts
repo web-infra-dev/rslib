@@ -13,7 +13,7 @@ export type BundleOptions = {
   tsconfigPath?: string;
 };
 
-export function bundleDts(options: BundleOptions) {
+export function bundleDts(options: BundleOptions): void {
   const {
     cwd,
     outDir,

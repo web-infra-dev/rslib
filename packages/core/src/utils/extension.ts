@@ -7,7 +7,11 @@ export const getDefaultExtension = (options: {
   format: Format;
   root: string;
   autoExtension: boolean;
-}) => {
+}): {
+  jsExtension: string;
+  dtsExtension: string;
+  isModule?: boolean;
+} => {
   const { format, root, autoExtension } = options;
 
   let jsExtension = '.js';

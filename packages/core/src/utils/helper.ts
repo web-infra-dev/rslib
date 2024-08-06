@@ -5,7 +5,7 @@ import color from 'picocolors';
  * Node.js built-in modules.
  * Copied from https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L12-L72
  */
-export const nodeBuiltInModules = [
+export const nodeBuiltInModules: Array<string | RegExp> = [
   'assert',
   'assert/strict',
   'async_hooks',

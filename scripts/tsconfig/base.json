@@ -2,9 +2,10 @@
   "extends": "@tsconfig/strictest/tsconfig",
   "compilerOptions": {
     "exactOptionalPropertyTypes": false,
-    "target": "ES2019",
+    "target": "ES2021",
     "lib": ["DOM", "ESNext"],
-    "allowJs": true,
+    "allowJs": false,
+    "checkJs": false,
     "module": "ES2020",
     "strict": true,
     "isolatedModules": true,
