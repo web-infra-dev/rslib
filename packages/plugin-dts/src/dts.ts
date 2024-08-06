@@ -6,7 +6,7 @@ import * as ts from 'typescript';
 import { emitDts } from './tsc';
 import { ensureTempDeclarationDir, loadTsconfig } from './utils';
 
-export async function generateDts(data: DtsGenOptions) {
+export async function generateDts(data: DtsGenOptions): Promise<void> {
   const { options: pluginOptions, cwd, isWatch, name } = data;
   logger.start(`Generating DTS... ${color.gray(`(${name})`)}`);
   const { tsconfigPath, distPath, bundle, entryPath } = pluginOptions;

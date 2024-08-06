@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path, { dirname, isAbsolute, join } from 'node:path';
 import {
   type RsbuildConfig,
+  type RsbuildInstance,
   createRsbuild,
   defineConfig as defineRsbuildConfig,
   loadConfig as loadRsbuildConfig,
@@ -473,7 +474,9 @@ export async function composeCreateRsbuildConfig(
   return composedRsbuildConfig;
 }
 
-export async function initRsbuild(rslibConfig: RslibConfig) {
+export async function initRsbuild(
+  rslibConfig: RslibConfig,
+): Promise<RsbuildInstance> {
   const rsbuildConfigObject = await composeCreateRsbuildConfig(rslibConfig);
   const environments: RsbuildConfig['environments'] = {};
   const formatCount: Record<Format, number> = rsbuildConfigObject.reduce(
