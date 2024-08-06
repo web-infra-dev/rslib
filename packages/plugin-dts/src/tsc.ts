@@ -50,7 +50,7 @@ export function emitDts(
 
     for (const diagnostic of allDiagnostics) {
       const fileLoc = getFileLoc(diagnostic);
-      const message = `${fileLoc} \nerror TS${diagnostic.code}: ${ts.flattenDiagnosticMessageText(
+      const message = `${fileLoc} error TS${diagnostic.code}: ${ts.flattenDiagnosticMessageText(
         diagnostic.messageText,
         host.getNewLine(),
       )}`;
@@ -84,7 +84,7 @@ export function emitDts(
       const fileLoc = getFileLoc(diagnostic);
 
       logger.error(
-        `${fileLoc} \nerror TS${diagnostic.code}:`,
+        `${fileLoc} error TS${diagnostic.code}:`,
         ts.flattenDiagnosticMessageText(
           diagnostic.messageText,
           formatHost.getNewLine(),
