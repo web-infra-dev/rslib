@@ -16,6 +16,11 @@ export type DtsGenOptions = PluginDtsOptions & {
   tsconfigPath?: string;
 };
 
+interface TaskResult {
+  status: 'success' | 'error';
+  errorMessage?: string;
+}
+
 export const PLUGIN_DTS_NAME = 'rsbuild:dts';
 
 // use ts compiler API to generate bundleless dts
@@ -30,8 +35,8 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
     options.bundle = options.bundle ?? false;
     options.abortOnError = options.abortOnError ?? true;
 
-    const dtsPromises: Promise<string>[] = [];
-    let promisesResult: string[] = [];
+    const dtsPromises: Promise<TaskResult>[] = [];
+    let promisesResult: TaskResult[] = [];
 
     api.onBeforeEnvironmentCompile(
       ({ isWatch, isFirstCompile, environment }) => {
@@ -61,12 +66,17 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
         childProcess.send(dtsGenOptions);
 
         dtsPromises.push(
-          new Promise<string>((resolve) => {
+          new Promise<TaskResult>((resolve) => {
             childProcess.on('message', (message) => {
               if (message === 'success') {
-                resolve('Success');
+                resolve({
+                  status: 'success',
+                });
               } else if (message === 'error') {
-                resolve(`Error occurred in ${environment.name} DTS generation`);
+                resolve({
+                  status: 'error',
+                  errorMessage: `Error occurred in ${environment.name} DTS generation`,
+                });
               }
             });
           }),
@@ -89,11 +99,11 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
         }
 
         for (const result of promisesResult) {
-          if (result.startsWith('Error')) {
+          if (result.status === 'error') {
             if (options.abortOnError) {
-              throw new Error(result);
+              throw new Error(result.errorMessage);
             }
-            logger.error(result);
+            result.errorMessage && logger.error(result.errorMessage);
             logger.warn(
               'With the `abortOnError` configuration currently turned off, type errors do not cause build failures, but they do not guarantee proper type file output.',
             );
