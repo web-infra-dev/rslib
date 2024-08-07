@@ -387,7 +387,7 @@ async function composeLibRsbuildConfig(
 ) {
   const config = mergeRsbuildConfig<LibConfig>(rsbuildConfig, libConfig);
 
-  const { format, autoExtension = false } = config;
+  const { format, autoExtension = true } = config;
   const formatConfig = composeFormatConfig(format!);
   const autoExtensionConfig = composeAutoExtensionConfig(
     format!,
