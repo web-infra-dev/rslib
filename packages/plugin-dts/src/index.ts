@@ -1,10 +1,11 @@
 import { fork } from 'node:child_process';
 import { extname, join } from 'node:path';
-import type { RsbuildPlugin } from '@rsbuild/core';
+import { type RsbuildPlugin, logger } from '@rsbuild/core';
 
 export type PluginDtsOptions = {
   bundle?: boolean;
   distPath?: string;
+  abortOnError?: boolean;
 };
 
 export type DtsGenOptions = PluginDtsOptions & {
@@ -14,6 +15,11 @@ export type DtsGenOptions = PluginDtsOptions & {
   entryPath?: string;
   tsconfigPath?: string;
 };
+
+interface TaskResult {
+  status: 'success' | 'error';
+  errorMessage?: string;
+}
 
 export const PLUGIN_DTS_NAME = 'rsbuild:dts';
 
@@ -26,7 +32,11 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
   name: PLUGIN_DTS_NAME,
 
   setup(api) {
-    const dtsPromises: Promise<void>[] = [];
+    options.bundle = options.bundle ?? false;
+    options.abortOnError = options.abortOnError ?? true;
+
+    const dtsPromises: Promise<TaskResult>[] = [];
+    let promisesResult: TaskResult[] = [];
 
     api.onBeforeEnvironmentCompile(
       ({ isWatch, isFirstCompile, environment }) => {
@@ -36,7 +46,6 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
 
         const { config } = environment;
 
-        options.bundle = options.bundle ?? false;
         options.distPath = options.distPath ?? config.output?.distPath?.root;
 
         const jsExtension = extname(__filename);
@@ -57,16 +66,17 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
         childProcess.send(dtsGenOptions);
 
         dtsPromises.push(
-          new Promise((resolve, reject) => {
+          new Promise<TaskResult>((resolve) => {
             childProcess.on('message', (message) => {
               if (message === 'success') {
-                resolve();
+                resolve({
+                  status: 'success',
+                });
               } else if (message === 'error') {
-                reject(
-                  new Error(
-                    `Error occurred in ${environment.name} dts generation`,
-                  ),
-                );
+                resolve({
+                  status: 'error',
+                  errorMessage: `Error occurred in ${environment.name} DTS generation`,
+                });
               }
             });
           }),
@@ -79,7 +89,28 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
         return;
       }
 
-      await Promise.all(dtsPromises);
+      promisesResult = await Promise.all(dtsPromises);
+    });
+
+    api.onAfterBuild({
+      handler: ({ isFirstCompile }) => {
+        if (!isFirstCompile) {
+          return;
+        }
+
+        for (const result of promisesResult) {
+          if (result.status === 'error') {
+            if (options.abortOnError) {
+              throw new Error(result.errorMessage);
+            }
+            result.errorMessage && logger.error(result.errorMessage);
+            logger.warn(
+              'With the `abortOnError` configuration currently turned off, type errors do not cause build failures, but they do not guarantee proper type file output.',
+            );
+          }
+        }
+      },
+      order: 'post',
     });
   },
 });
