@@ -24,6 +24,17 @@ export const getDefaultExtension = (options: {
     };
   }
 
+  const pkgJsonPath = resolve(root, './package.json');
+  if (!fs.existsSync(pkgJsonPath)) {
+    logger.warn(
+      `package.json does not exist in ${pkgJsonPath}, autoExtension will not be applied.`,
+    );
+    return {
+      jsExtension,
+      dtsExtension,
+    };
+  }
+
   let isModule = false;
 
   try {
@@ -32,7 +43,9 @@ export const getDefaultExtension = (options: {
     );
     isModule = json.type === 'module';
   } catch (e) {
-    logger.warn(`package.json is broken in ${root}`);
+    logger.warn(
+      `Failed to parse ${pkgJsonPath}, it might not be valid JSON, autoExtension will not be applied.`,
+    );
     return {
       jsExtension,
       dtsExtension,
