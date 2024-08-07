@@ -37,6 +37,17 @@ describe('dts when bundle: false', () => {
     expect(files.esm?.length).toBe(4);
     expect(files.esm?.[0]!.startsWith('./dist/custom')).toEqual(true);
   });
+
+  test('abortOnError: false', async () => {
+    const fixturePath = join(__dirname, 'bundle-false');
+    const { isSuccess } = await buildAndGetResults(
+      fixturePath,
+      'abortOnError.config.ts',
+      'dts',
+    );
+
+    expect(isSuccess).toBe(true);
+  });
 });
 
 describe('dts when bundle: true', () => {
@@ -72,5 +83,16 @@ describe('dts when bundle: true', () => {
     );
 
     expect(entryFiles.esm!.startsWith('./dist/custom')).toEqual(true);
+  });
+
+  test('abortOnError: false', async () => {
+    const fixturePath = join(__dirname, 'bundle');
+    const { isSuccess } = await buildAndGetResults(
+      fixturePath,
+      'abortOnError.config.ts',
+      'dts',
+    );
+
+    expect(isSuccess).toBe(true);
   });
 });

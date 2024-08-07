@@ -27,6 +27,7 @@ export type Dts =
   | {
       bundle: boolean;
       distPath?: string;
+      abortOnError?: boolean;
     }
   | false;
 

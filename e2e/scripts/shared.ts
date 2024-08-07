@@ -113,6 +113,7 @@ export const buildAndGetResults = async (
   entryFiles: Record<string, string>;
   rspackConfig: InspectConfigResult['origin']['bundlerConfigs'];
   rsbuildConfig: InspectConfigResult['origin']['rsbuildConfig'];
+  isSuccess: boolean;
 }> => {
   const rslibConfig = await loadConfig(join(fixturePath, configFile));
   process.chdir(fixturePath);
@@ -129,5 +130,6 @@ export const buildAndGetResults = async (
     entryFiles: results.entryFiles,
     rspackConfig: bundlerConfigs,
     rsbuildConfig: rsbuildConfig,
+    isSuccess: Boolean(rsbuildInstance),
   };
 };

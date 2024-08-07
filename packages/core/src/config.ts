@@ -336,6 +336,7 @@ const composeDtsConfig = async (
       pluginDts({
         bundle: dts?.bundle ?? bundle,
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
+        abortOnError: dts?.abortOnError ?? true,
       }),
     ],
   };
