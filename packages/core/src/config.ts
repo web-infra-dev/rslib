@@ -114,7 +114,7 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
       return {
         tools: {
           rspack: {
-            externalsType: 'module',
+            externalsType: 'module-import',
             output: {
               module: true,
               chunkFormat: 'module',
