@@ -1,15 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
-import { applyAutoExternal } from '../src/utils/external';
+import { composeAutoExternal } from '../src/utils/external';
 
 vi.mock('rslog');
 
-describe('should applyAutoExternal correctly', () => {
+describe('should composeAutoExternal correctly', () => {
   it('autoExternal is true', () => {
-    const result = applyAutoExternal({
+    const result = composeAutoExternal({
       autoExternal: true,
       pkgJson: {
         dependencies: {
           foo: '1.0.0',
+          foo1: '1.0.0',
         },
         devDependencies: {
           bar: '1.0.0',
@@ -22,13 +23,13 @@ describe('should applyAutoExternal correctly', () => {
 
     expect(result).toEqual({
       output: {
-        externals: ['foo', 'baz'],
+        externals: ['foo', 'foo1', 'baz'],
       },
     });
   });
 
   it('autoExternal is object', () => {
-    const result = applyAutoExternal({
+    const result = composeAutoExternal({
       autoExternal: {
         peerDependencies: false,
         devDependencies: true,
@@ -54,7 +55,7 @@ describe('should applyAutoExternal correctly', () => {
   });
 
   it('autoExternal is false', () => {
-    const result = applyAutoExternal({
+    const result = composeAutoExternal({
       autoExternal: false,
       pkgJson: {
         dependencies: {
@@ -66,8 +67,29 @@ describe('should applyAutoExternal correctly', () => {
     expect(result).toEqual({});
   });
 
+  it('autoExternal with user externals object', () => {
+    const result = composeAutoExternal({
+      autoExternal: true,
+      pkgJson: {
+        dependencies: {
+          foo: '1.0.0',
+          bar: '1.0.0',
+        },
+      },
+      userExternals: {
+        foo: 'foo-1',
+      },
+    });
+
+    expect(result).toEqual({
+      output: {
+        externals: ['bar'],
+      },
+    });
+  });
+
   it('read package.json failed', () => {
-    const result = applyAutoExternal({
+    const result = composeAutoExternal({
       autoExternal: true,
     });
 
