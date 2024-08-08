@@ -14,7 +14,7 @@ export type BundleOptions = {
   cwd: string;
   outDir: string;
   dtsExtension: string;
-  dtsEntry: DtsEntry;
+  dtsEntry: Required<DtsEntry>;
   tsconfigPath?: string;
 };
 
@@ -24,7 +24,10 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     cwd,
     outDir,
     dtsExtension,
-    dtsEntry,
+    dtsEntry = {
+      name: 'index',
+      path: 'index.d.ts',
+    },
     tsconfigPath = 'tsconfig.json',
   } = options;
   try {
@@ -32,9 +35,9 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     const untrimmedFilePath = join(
       cwd,
       relative(cwd, outDir),
-      `${dtsEntry.name ?? 'index'}${dtsExtension}`,
+      `${dtsEntry.name}${dtsExtension}`,
     );
-    const mainEntryPointFilePath = dtsEntry.path ?? 'index.d.ts';
+    const mainEntryPointFilePath = dtsEntry.path;
     const internalConfig = {
       mainEntryPointFilePath,
       // TODO: use !externals
