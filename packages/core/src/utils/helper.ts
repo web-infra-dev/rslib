@@ -1,3 +1,4 @@
+import fsP from 'node:fs/promises';
 import path from 'node:path';
 import color from 'picocolors';
 
@@ -67,26 +68,35 @@ export const nodeBuiltInModules: Array<string | RegExp> = [
   'pnpapi',
 ];
 
-function calcLongestCommonPath(absPaths: string[]): string | null {
+async function calcLongestCommonPath(
+  absPaths: string[],
+): Promise<string | null> {
   if (absPaths.length === 0) {
     return null;
   }
 
   const splitPaths = absPaths.map((p) => p.split(path.sep));
-  let lca = splitPaths[0]!;
+  let lcaFragments = splitPaths[0]!;
   for (let i = 1; i < splitPaths.length; i++) {
     const currentPath = splitPaths[i]!;
-    const minLength = Math.min(lca.length, currentPath.length);
+    const minLength = Math.min(lcaFragments.length, currentPath.length);
 
     let j = 0;
-    while (j < minLength && lca[j] === currentPath[j]) {
+    while (j < minLength && lcaFragments[j] === currentPath[j]) {
       j++;
     }
 
-    lca = lca.slice(0, j);
+    lcaFragments = lcaFragments.slice(0, j);
   }
 
-  return lca.length > 0 ? lca.join(path.sep) : '/';
+  let lca = lcaFragments.length > 0 ? lcaFragments.join(path.sep) : '/';
+
+  const stats = await fsP.stat(lca);
+  if (stats?.isFile()) {
+    lca = path.dirname(lca);
+  }
+
+  return lca;
 }
 
 export { color, calcLongestCommonPath };

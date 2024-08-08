@@ -286,7 +286,7 @@ const composeEntryConfig = async (
     }
 
     // Similar to `rootDir` in tsconfig and `outbase` in esbuild.
-    const lcp = calcLongestCommonPath(resolvedEntryFiles);
+    const lcp = await calcLongestCommonPath(resolvedEntryFiles);
     // Using the longest common path of all non-declaration input files by default.
     const outBase = lcp === null ? root : lcp;
 

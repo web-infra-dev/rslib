@@ -83,7 +83,7 @@ export async function getResults(
     }
 
     if (fileSet.length) {
-      files[libConfig.format!] = fileSet;
+      files[libConfig.format!] = fileSet.sort();
       contents[libConfig.format!] = filterContent;
     }
 
