@@ -20,6 +20,7 @@ import type {
   Syntax,
 } from './types/config';
 import { getDefaultExtension } from './utils/extension';
+import { getAutoExternal } from './utils/external';
 import { calcLongestCommonPath } from './utils/helper';
 import { color } from './utils/helper';
 import { nodeBuiltInModules } from './utils/helper';
@@ -386,20 +387,26 @@ async function composeLibRsbuildConfig(
   configPath: string,
 ) {
   const config = mergeRsbuildConfig<LibConfig>(rsbuildConfig, libConfig);
+  const rootPath = dirname(configPath);
 
-  const { format, autoExtension = true } = config;
+  const { format, autoExtension = true, autoExternal = true } = config;
   const formatConfig = composeFormatConfig(format!);
   const autoExtensionConfig = composeAutoExtensionConfig(
     format!,
-    dirname(configPath),
+    rootPath,
     autoExtension,
   );
+
   const bundleConfig = composeBundleConfig(config.bundle);
   const targetConfig = composeTargetConfig(config.output?.target);
   const syntaxConfig = composeSyntaxConfig(
     config.output?.syntax,
     config.output?.target,
   );
+  const autoExternalConfig = getAutoExternal({
+    autoExternal,
+    pkgJson: {},
+  });
   const entryConfig = await composeEntryConfig(
     config.source?.entry,
     config.bundle,
@@ -410,6 +417,7 @@ async function composeLibRsbuildConfig(
   return mergeRsbuildConfig(
     formatConfig,
     autoExtensionConfig,
+    autoExternalConfig,
     syntaxConfig,
     bundleConfig,
     targetConfig,
