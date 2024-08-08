@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { composeAutoExternalConfig } from '../src/utils/external';
+import { composeAutoExternalConfig } from '../src/config';
 
 vi.mock('rslog');
 
@@ -17,6 +17,32 @@ describe('should composeAutoExternalConfig correctly', () => {
         },
         peerDependencies: {
           baz: '1.0.0',
+        },
+      },
+    });
+
+    expect(result).toEqual({
+      output: {
+        externals: ['foo', 'foo1', 'baz'],
+      },
+    });
+  });
+
+  it('autoExternal will deduplication ', () => {
+    const result = composeAutoExternalConfig({
+      autoExternal: true,
+      pkgJson: {
+        dependencies: {
+          foo: '1.0.0',
+          foo1: '1.0.0',
+        },
+        devDependencies: {
+          bar: '1.0.0',
+        },
+        peerDependencies: {
+          baz: '1.0.0',
+          foo: '1.0.0',
+          foo1: '1.0.0',
         },
       },
     });
