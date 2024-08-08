@@ -6,6 +6,7 @@ import {
 } from '@microsoft/api-extractor';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
+import type { DtsEntry } from 'src';
 import { getTimeCost } from './utils';
 
 export type BundleOptions = {
@@ -13,7 +14,7 @@ export type BundleOptions = {
   cwd: string;
   outDir: string;
   dtsExtension: string;
-  entry?: string;
+  dtsEntry: DtsEntry;
   tsconfigPath?: string;
 };
 
@@ -23,7 +24,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     cwd,
     outDir,
     dtsExtension,
-    entry = 'index.d.ts',
+    dtsEntry,
     tsconfigPath = 'tsconfig.json',
   } = options;
   try {
@@ -31,10 +32,11 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     const untrimmedFilePath = join(
       cwd,
       relative(cwd, outDir),
-      `index${dtsExtension}`,
+      `${dtsEntry.name ?? 'index'}${dtsExtension}`,
     );
+    const mainEntryPointFilePath = dtsEntry.path ?? 'index.d.ts';
     const internalConfig = {
-      mainEntryPointFilePath: entry,
+      mainEntryPointFilePath,
       // TODO: use !externals
       // bundledPackages: [],
       dtsRollup: {

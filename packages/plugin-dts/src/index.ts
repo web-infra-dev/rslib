@@ -1,6 +1,7 @@
 import { fork } from 'node:child_process';
 import { extname, join } from 'node:path';
 import { type RsbuildPlugin, logger } from '@rsbuild/core';
+import { processSourceEntry } from './utils';
 
 export type PluginDtsOptions = {
   bundle?: boolean;
@@ -9,11 +10,16 @@ export type PluginDtsOptions = {
   dtsExtension?: string;
 };
 
+export type DtsEntry = {
+  name?: string;
+  path?: string;
+};
+
 export type DtsGenOptions = PluginDtsOptions & {
   name: string;
   cwd: string;
   isWatch: boolean;
-  entryPath?: string;
+  dtsEntry: DtsEntry;
   tsconfigPath?: string;
 };
 
@@ -54,10 +60,19 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
           stdio: 'inherit',
         });
 
+        let dtsEntry: DtsEntry = {
+          name: undefined,
+          path: undefined,
+        };
+
+        if (options.bundle) {
+          // TODO: temporarily use first element of Record<string, string>
+          dtsEntry = processSourceEntry(config.source?.entry);
+        }
+
         const dtsGenOptions: DtsGenOptions = {
           ...options,
-          // TODO: temporarily use main as dts entry, only accept single entry
-          entryPath: config.source?.entry?.main as string,
+          dtsEntry,
           tsconfigPath: config.source.tsconfigPath,
           name: environment.name,
           cwd: api.context.rootPath,

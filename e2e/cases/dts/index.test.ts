@@ -137,4 +137,15 @@ describe('dts when bundle: true', () => {
 
     expect(entryFiles.cjs).toEqual('./dist/cjs/index.d.cts');
   });
+
+  test('bundleName -- set source.entry', async () => {
+    const fixturePath = join(__dirname, 'bundle');
+    const { entryFiles } = await buildAndGetResults(
+      fixturePath,
+      'bundleName.config.ts',
+      'dts',
+    );
+
+    expect(entryFiles.esm).toEqual('./dist/esm/bundleName.d.ts');
+  });
 });

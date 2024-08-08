@@ -1,8 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { logger } from '@rsbuild/core';
+import { type RsbuildConfig, logger } from '@rsbuild/core';
 import fg from 'fast-glob';
 import color from 'picocolors';
+import type { DtsEntry } from 'src';
 import * as ts from 'typescript';
 
 export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
@@ -69,4 +70,27 @@ export async function processDtsFiles(
       logger.error(`Error renaming DTS file ${file}: ${error}`);
     }
   }
+}
+
+export function processSourceEntry(
+  entryConfig: NonNullable<RsbuildConfig['source']>['entry'],
+): DtsEntry {
+  if (
+    entryConfig &&
+    Object.values(entryConfig).every((val) => typeof val === 'string')
+  ) {
+    return {
+      name: Object.keys(entryConfig)[0] as string,
+      path: Object.values(entryConfig)[0] as string,
+    };
+  }
+
+  logger.warn(
+    '@microsoft/api-extractor only support single entry of Record<string, string> type to bundle DTS.',
+  );
+
+  return {
+    name: undefined,
+    path: undefined,
+  };
 }
