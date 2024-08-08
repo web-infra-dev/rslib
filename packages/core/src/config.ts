@@ -168,19 +168,25 @@ const composeAutoExtensionConfig = (
   format: Format,
   root: string,
   autoExtension: boolean,
-): RsbuildConfig => {
-  const { jsExtension } = getDefaultExtension({
+): {
+  config: RsbuildConfig;
+  dtsExtension: string;
+} => {
+  const { jsExtension, dtsExtension } = getDefaultExtension({
     format,
     root,
     autoExtension,
   });
 
   return {
-    output: {
-      filename: {
-        js: `[name]${jsExtension}`,
+    config: {
+      output: {
+        filename: {
+          js: `[name]${jsExtension}`,
+        },
       },
     },
+    dtsExtension,
   };
 };
 
@@ -325,6 +331,7 @@ const composeBundleConfig = (bundle = true): RsbuildConfig => {
 
 const composeDtsConfig = async (
   libConfig: LibConfig,
+  dtsExtension: string,
 ): Promise<RsbuildConfig> => {
   const { dts, bundle, output } = libConfig;
 
@@ -337,6 +344,7 @@ const composeDtsConfig = async (
         bundle: dts?.bundle ?? bundle,
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
         abortOnError: dts?.abortOnError ?? true,
+        dtsExtension,
       }),
     ],
   };
@@ -389,11 +397,8 @@ async function composeLibRsbuildConfig(
 
   const { format, autoExtension = true } = config;
   const formatConfig = composeFormatConfig(format!);
-  const autoExtensionConfig = composeAutoExtensionConfig(
-    format!,
-    dirname(configPath),
-    autoExtension,
-  );
+  const { config: autoExtensionConfig, dtsExtension } =
+    composeAutoExtensionConfig(format!, dirname(configPath), autoExtension);
   const bundleConfig = composeBundleConfig(config.bundle);
   const targetConfig = composeTargetConfig(config.output?.target);
   const syntaxConfig = composeSyntaxConfig(
@@ -405,7 +410,7 @@ async function composeLibRsbuildConfig(
     config.bundle,
     dirname(configPath),
   );
-  const dtsConfig = await composeDtsConfig(config);
+  const dtsConfig = await composeDtsConfig(config, dtsExtension);
 
   return mergeRsbuildConfig(
     formatConfig,

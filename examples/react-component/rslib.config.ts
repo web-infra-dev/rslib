@@ -2,7 +2,6 @@ import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
 const shared = {
-  autoExtension: true,
   dts: {
     bundle: false,
   },

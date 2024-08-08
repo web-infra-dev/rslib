@@ -100,6 +100,8 @@ importers:
 
   e2e/cases/dts/bundle: {}
 
+  e2e/cases/dts/bundle-false: {}
+
   e2e/scripts: {}
 
   examples/express-plugin:
@@ -177,6 +179,9 @@ importers:
 
   packages/plugin-dts:
     dependencies:
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.2
       picocolors:
         specifier: 1.0.1
         version: 1.0.1
