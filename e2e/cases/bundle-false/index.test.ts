@@ -28,12 +28,12 @@ test('single file', async () => {
   const fixturePath = join(__dirname, 'single-file');
   const { files } = await buildAndGetResults(fixturePath);
 
-  expect(files.esm?.sort()).toMatchInlineSnapshot(`
+  expect(files.esm).toMatchInlineSnapshot(`
     [
       "./dist/esm/index.js",
     ]
   `);
-  expect(files.cjs?.sort()).toMatchInlineSnapshot(`
+  expect(files.cjs).toMatchInlineSnapshot(`
     [
       "./dist/cjs/index.js",
     ]
