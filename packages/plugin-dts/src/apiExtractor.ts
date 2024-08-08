@@ -14,7 +14,7 @@ export type BundleOptions = {
   cwd: string;
   outDir: string;
   dtsExtension: string;
-  dtsEntry: Required<DtsEntry>;
+  dtsEntry: DtsEntry;
   tsconfigPath?: string;
 };
 
@@ -37,7 +37,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
       relative(cwd, outDir),
       `${dtsEntry.name}${dtsExtension}`,
     );
-    const mainEntryPointFilePath = dtsEntry.path;
+    const mainEntryPointFilePath = dtsEntry.path!;
     const internalConfig = {
       mainEntryPointFilePath,
       // TODO: use !externals
