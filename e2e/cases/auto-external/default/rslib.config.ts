@@ -5,7 +5,7 @@ export default defineConfig({
   lib: [generateBundleEsmConfig(__dirname), generateBundleCjsConfig(__dirname)],
   source: {
     entry: {
-      main: './src/index.ts',
+      main: '../fixtures/src/index.ts',
     },
   },
 });

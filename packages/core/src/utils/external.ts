@@ -3,7 +3,7 @@ import type { PkgJson } from '../types';
 import type { AutoExternal } from '../types/config';
 import { logger } from './logger';
 
-export const composeAutoExternal = (options: {
+export const composeAutoExternalConfig = (options: {
   autoExternal: AutoExternal;
   pkgJson?: PkgJson;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];

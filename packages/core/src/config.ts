@@ -21,7 +21,7 @@ import type {
   Syntax,
 } from './types';
 import { getDefaultExtension } from './utils/extension';
-import { composeAutoExternal } from './utils/external';
+import { composeAutoExternalConfig } from './utils/external';
 import {
   calcLongestCommonPath,
   color,
@@ -412,7 +412,7 @@ async function composeLibRsbuildConfig(
     config.output?.syntax,
     config.output?.target,
   );
-  const autoExternalConfig = composeAutoExternal({
+  const autoExternalConfig = composeAutoExternalConfig({
     autoExternal,
     pkgJson,
     userExternals: rsbuildConfig.output?.externals,
