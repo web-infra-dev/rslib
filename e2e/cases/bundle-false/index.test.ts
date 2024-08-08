@@ -6,7 +6,7 @@ test('basic', async () => {
   const fixturePath = join(__dirname, 'basic');
   const { files } = await buildAndGetResults(fixturePath);
 
-  expect(files.esm?.sort()).toMatchInlineSnapshot(`
+  expect(files.esm).toMatchInlineSnapshot(`
     [
       "./dist/esm/index.js",
       "./dist/esm/sum.js",
@@ -14,7 +14,7 @@ test('basic', async () => {
       "./dist/esm/utils/strings.js",
     ]
   `);
-  expect(files.cjs?.sort()).toMatchInlineSnapshot(`
+  expect(files.cjs).toMatchInlineSnapshot(`
     [
       "./dist/cjs/index.js",
       "./dist/cjs/sum.js",

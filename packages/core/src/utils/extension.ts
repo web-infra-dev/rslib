@@ -38,9 +38,7 @@ export const getDefaultExtension = (options: {
   let isModule = false;
 
   try {
-    const json = JSON.parse(
-      fs.readFileSync(resolve(root, './package.json'), 'utf8'),
-    );
+    const json = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
     isModule = json.type === 'module';
   } catch (e) {
     logger.warn(
