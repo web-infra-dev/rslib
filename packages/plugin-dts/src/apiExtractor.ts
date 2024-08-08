@@ -5,23 +5,34 @@ import {
   type ExtractorResult,
 } from '@microsoft/api-extractor';
 import { logger } from '@rsbuild/core';
+import color from 'picocolors';
+import { getTimeCost } from './utils';
 
 export type BundleOptions = {
+  name: string;
   cwd: string;
   outDir: string;
+  dtsExtension: string;
   entry?: string;
   tsconfigPath?: string;
 };
 
-export function bundleDts(options: BundleOptions): void {
+export async function bundleDts(options: BundleOptions): Promise<void> {
   const {
+    name,
     cwd,
     outDir,
+    dtsExtension,
     entry = 'index.d.ts',
     tsconfigPath = 'tsconfig.json',
   } = options;
   try {
-    const untrimmedFilePath = join(cwd, relative(cwd, outDir), 'index.d.ts');
+    const start = Date.now();
+    const untrimmedFilePath = join(
+      cwd,
+      relative(cwd, outDir),
+      `index${dtsExtension}`,
+    );
     const internalConfig = {
       mainEntryPointFilePath: entry,
       // TODO: use !externals
@@ -49,11 +60,11 @@ export function bundleDts(options: BundleOptions): void {
     });
 
     if (!extractorResult.succeeded) {
-      throw new Error('API Extractor rollup error');
+      throw new Error(`API Extractor error. ${color.gray(`(${name})`)}`);
     }
 
     logger.info(
-      `API Extractor writing package typings succeeded: ${untrimmedFilePath}`,
+      `API Extractor bundle DTS succeeded: ${color.cyan(untrimmedFilePath)} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
     );
   } catch (e) {
     logger.error('API Extractor', e);

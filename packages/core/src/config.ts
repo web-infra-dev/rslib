@@ -119,7 +119,7 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
       return {
         tools: {
           rspack: {
-            externalsType: 'module',
+            externalsType: 'module-import',
             output: {
               module: true,
               chunkFormat: 'module',
@@ -173,19 +173,25 @@ const composeAutoExtensionConfig = (
   format: Format,
   autoExtension: boolean,
   pkgJson?: PkgJson,
-): RsbuildConfig => {
-  const { jsExtension } = getDefaultExtension({
+): {
+  config: RsbuildConfig;
+  dtsExtension: string;
+} => {
+  const { jsExtension, dtsExtension } = getDefaultExtension({
     format,
     pkgJson,
     autoExtension,
   });
 
   return {
-    output: {
-      filename: {
-        js: `[name]${jsExtension}`,
+    config: {
+      output: {
+        filename: {
+          js: `[name]${jsExtension}`,
+        },
       },
     },
+    dtsExtension,
   };
 };
 
@@ -330,6 +336,7 @@ const composeBundleConfig = (bundle = true): RsbuildConfig => {
 
 const composeDtsConfig = async (
   libConfig: LibConfig,
+  dtsExtension: string,
 ): Promise<RsbuildConfig> => {
   const { dts, bundle, output } = libConfig;
 
@@ -342,6 +349,7 @@ const composeDtsConfig = async (
         bundle: dts?.bundle ?? bundle,
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
         abortOnError: dts?.abortOnError ?? true,
+        dtsExtension,
       }),
     ],
   };
@@ -396,12 +404,8 @@ async function composeLibRsbuildConfig(
 
   const { format, autoExtension = true, autoExternal = true } = config;
   const formatConfig = composeFormatConfig(format!);
-  const autoExtensionConfig = composeAutoExtensionConfig(
-    format!,
-    autoExtension,
-    pkgJson,
-  );
-
+  const { config: autoExtensionConfig, dtsExtension } =
+    composeAutoExtensionConfig(format!, autoExtension, pkgJson);
   const bundleConfig = composeBundleConfig(config.bundle);
   const targetConfig = composeTargetConfig(config.output?.target);
   const syntaxConfig = composeSyntaxConfig(
@@ -417,7 +421,7 @@ async function composeLibRsbuildConfig(
     config.bundle,
     dirname(configPath),
   );
-  const dtsConfig = await composeDtsConfig(config);
+  const dtsConfig = await composeDtsConfig(config, dtsExtension);
 
   return mergeRsbuildConfig(
     formatConfig,

@@ -7,8 +7,16 @@ import { emitDts } from './tsc';
 import { ensureTempDeclarationDir, loadTsconfig } from './utils';
 
 export async function generateDts(data: DtsGenOptions): Promise<void> {
-  const { tsconfigPath, distPath, bundle, entryPath, cwd, isWatch, name } =
-    data;
+  const {
+    bundle,
+    distPath,
+    entryPath,
+    tsconfigPath,
+    name,
+    cwd,
+    isWatch,
+    dtsExtension = '.d.ts',
+  } = data;
   logger.start(`Generating DTS... ${color.gray(`(${name})`)}`);
   const configPath = ts.findConfigFile(cwd, ts.sys.fileExists, tsconfigPath);
   if (!configPath) {
@@ -47,11 +55,13 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   const bundleDtsIfNeeded = async () => {
     if (bundle === true) {
       const { bundleDts } = await import('./apiExtractor');
-      bundleDts({
+      await bundleDts({
+        name,
         cwd,
         outDir,
         entry,
         tsconfigPath,
+        dtsExtension,
       });
     }
   };
@@ -62,15 +72,17 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     }
   };
 
-  emitDts(
+  await emitDts(
     {
       name,
       cwd,
       configPath,
       rootDir,
       declarationDir,
+      dtsExtension,
     },
     onComplete,
+    bundle,
     isWatch,
   );
 

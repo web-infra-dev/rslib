@@ -1,7 +1,12 @@
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import * as ts from 'typescript';
-import { getFileLoc, loadTsconfig } from './utils';
+import {
+  getFileLoc,
+  getTimeCost,
+  loadTsconfig,
+  processDtsFiles,
+} from './utils';
 
 export type emitDtsOptions = {
   name: string;
@@ -9,18 +14,17 @@ export type emitDtsOptions = {
   configPath: string;
   rootDir: string;
   declarationDir: string;
+  dtsExtension: string;
 };
 
-export function emitDts(
+export async function emitDts(
   options: emitDtsOptions,
   onComplete: (isSuccess: boolean) => void,
+  bundle = false,
   isWatch = false,
-): void {
+): Promise<void> {
   const start = Date.now();
-  const getTimeCost = () => {
-    return `${Math.floor(Date.now() - start)}ms`;
-  };
-  const { configPath, declarationDir, name } = options;
+  const { configPath, declarationDir, name, dtsExtension } = options;
   const { options: rawCompilerOptions, fileNames } = loadTsconfig(configPath);
 
   const compilerOptions = {
@@ -57,6 +61,8 @@ export function emitDts(
       diagnosticMessages.push(message);
     }
 
+    await processDtsFiles(bundle, declarationDir, dtsExtension);
+
     if (diagnosticMessages.length) {
       logger.error(
         `Failed to emit declaration files. ${color.gray(`(${name})`)}`,
@@ -70,7 +76,7 @@ export function emitDts(
     }
 
     logger.info(
-      `DTS generation succeeded in ${getTimeCost()} ${color.gray(`(${name})`)}`,
+      `DTS generation succeeded in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
     );
   } else {
     const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
@@ -92,7 +98,7 @@ export function emitDts(
       );
     };
 
-    const reportWatchStatusChanged: ts.WatchStatusReporter = (
+    const reportWatchStatusChanged: ts.WatchStatusReporter = async (
       diagnostic: ts.Diagnostic,
       _newLine: string,
       _options: ts.CompilerOptions,
@@ -117,11 +123,13 @@ export function emitDts(
         } else {
           logger.error(message);
         }
+        await processDtsFiles(bundle, declarationDir, dtsExtension);
       }
 
       // 6193: 1 error
       if (diagnostic.code === 6193) {
         logger.error(message);
+        await processDtsFiles(bundle, declarationDir, dtsExtension);
       }
     };
 

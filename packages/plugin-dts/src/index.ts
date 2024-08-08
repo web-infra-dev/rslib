@@ -6,6 +6,7 @@ export type PluginDtsOptions = {
   bundle?: boolean;
   distPath?: string;
   abortOnError?: boolean;
+  dtsExtension?: string;
 };
 
 export type DtsGenOptions = PluginDtsOptions & {
