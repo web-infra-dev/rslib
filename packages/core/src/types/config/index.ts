@@ -34,9 +34,9 @@ export type Dts =
 export type AutoExternal =
   | boolean
   | {
-      dependencies: boolean;
-      devDependencies: boolean;
-      peerDependencies: boolean;
+      dependencies?: boolean;
+      devDependencies?: boolean;
+      peerDependencies?: boolean;
     };
 
 export interface LibConfig extends RsbuildConfig {

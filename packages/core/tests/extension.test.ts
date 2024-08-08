@@ -1,12 +1,13 @@
-import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { getDefaultExtension } from '../src/utils/extension';
+
+vi.mock('rslog');
 
 describe('should get extension correctly', () => {
   it('autoExtension is false', () => {
     const options = {
       format: 'cjs',
-      root: '/path/to/root',
+      pkgJson: {},
       autoExtension: false,
     };
 
@@ -21,7 +22,6 @@ describe('should get extension correctly', () => {
   it('package.json is broken', () => {
     const options = {
       format: 'cjs',
-      root: '/path/to/root',
       autoExtension: true,
     };
 
@@ -36,7 +36,9 @@ describe('should get extension correctly', () => {
   it('format is cjs and type is module in package.json', () => {
     const options = {
       format: 'cjs',
-      root: join(__dirname, 'fixtures/extension/type-module'),
+      pkgJson: {
+        type: 'module',
+      },
       autoExtension: true,
     };
 
@@ -52,7 +54,9 @@ describe('should get extension correctly', () => {
   it('format is cjs and type is commonjs in package.json', () => {
     const options = {
       format: 'cjs',
-      root: join(__dirname, 'fixtures/extension/type-commonjs'),
+      pkgJson: {
+        type: 'commonjs',
+      },
       autoExtension: true,
     };
 
@@ -68,7 +72,9 @@ describe('should get extension correctly', () => {
   it('format is esm and type is commonjs in package.json', () => {
     const options = {
       format: 'esm',
-      root: join(__dirname, 'fixtures/extension/type-commonjs'),
+      pkgJson: {
+        type: 'commonjs',
+      },
       autoExtension: true,
     };
 
@@ -84,7 +90,9 @@ describe('should get extension correctly', () => {
   it('format is esm and type is module in package.json', () => {
     const options = {
       format: 'esm',
-      root: join(__dirname, 'fixtures/extension/type-module'),
+      pkgJson: {
+        type: 'module',
+      },
       autoExtension: true,
     };
 

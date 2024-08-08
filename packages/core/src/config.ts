@@ -13,17 +13,21 @@ import { DEFAULT_CONFIG_NAME, DEFAULT_EXTENSIONS } from './constant';
 import type {
   Format,
   LibConfig,
+  PkgJson,
   RslibConfig,
   RslibConfigAsyncFn,
   RslibConfigExport,
   RslibConfigSyncFn,
   Syntax,
-} from './types/config';
+} from './types';
 import { getDefaultExtension } from './utils/extension';
-import { getAutoExternal } from './utils/external';
-import { calcLongestCommonPath } from './utils/helper';
-import { color } from './utils/helper';
-import { nodeBuiltInModules } from './utils/helper';
+import { applyAutoExternal } from './utils/external';
+import {
+  calcLongestCommonPath,
+  color,
+  nodeBuiltInModules,
+  readPackageJson,
+} from './utils/helper';
 import { logger } from './utils/logger';
 import { transformSyntaxToBrowserslist } from './utils/syntax';
 
@@ -167,12 +171,12 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
 
 const composeAutoExtensionConfig = (
   format: Format,
-  root: string,
   autoExtension: boolean,
+  pkgJson?: PkgJson,
 ): RsbuildConfig => {
   const { jsExtension } = getDefaultExtension({
     format,
-    root,
+    pkgJson,
     autoExtension,
   });
 
@@ -388,13 +392,14 @@ async function composeLibRsbuildConfig(
 ) {
   const config = mergeRsbuildConfig<LibConfig>(rsbuildConfig, libConfig);
   const rootPath = dirname(configPath);
+  const pkgJson = readPackageJson(rootPath);
 
   const { format, autoExtension = true, autoExternal = true } = config;
   const formatConfig = composeFormatConfig(format!);
   const autoExtensionConfig = composeAutoExtensionConfig(
     format!,
-    rootPath,
     autoExtension,
+    pkgJson,
   );
 
   const bundleConfig = composeBundleConfig(config.bundle);
@@ -403,9 +408,9 @@ async function composeLibRsbuildConfig(
     config.output?.syntax,
     config.output?.target,
   );
-  const autoExternalConfig = getAutoExternal({
+  const autoExternalConfig = applyAutoExternal({
     autoExternal,
-    pkgJson: {},
+    pkgJson,
   });
   const entryConfig = await composeEntryConfig(
     config.source?.entry,

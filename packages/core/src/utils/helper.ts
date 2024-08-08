@@ -1,6 +1,9 @@
+import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import path from 'node:path';
 import color from 'picocolors';
+import type { PkgJson } from '../types';
+import { logger } from './logger';
 
 /**
  * Node.js built-in modules.
@@ -98,5 +101,21 @@ async function calcLongestCommonPath(
 
   return lca;
 }
+
+export const readPackageJson = (rootPath: string): undefined | PkgJson => {
+  const pkgJsonPath = path.resolve(rootPath, './package.json');
+
+  if (!fs.existsSync(pkgJsonPath)) {
+    logger.warn(`package.json does not exist in the ${rootPath} directory`);
+    return;
+  }
+
+  try {
+    return JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
+  } catch (err) {
+    logger.warn(`Failed to parse ${pkgJsonPath}, it might not be valid JSON`);
+    return;
+  }
+};
 
 export { color, calcLongestCommonPath };
