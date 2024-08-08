@@ -1,5 +1,7 @@
-import fs, { writeFileSync } from 'node:fs';
+import fs from 'node:fs';
 import path from 'node:path';
+import { logger } from '@rsbuild/core';
+import fg from 'fast-glob';
 import color from 'picocolors';
 import * as ts from 'typescript';
 
@@ -27,7 +29,7 @@ export function ensureTempDeclarationDir(cwd: string): string {
   fs.mkdirSync(dirPath, { recursive: true });
 
   const gitIgnorePath = path.join(cwd, `${TEMP_FOLDER}/.gitignore`);
-  writeFileSync(gitIgnorePath, '**/*\n');
+  fs.writeFileSync(gitIgnorePath, '**/*\n');
 
   return dirPath;
 }
@@ -42,4 +44,29 @@ export function getFileLoc(diagnostic: ts.Diagnostic): string {
   }
 
   return '';
+}
+
+export function getTimeCost(start: number): string {
+  return `${Math.floor(Date.now() - start)}ms`;
+}
+
+export async function processDtsFiles(
+  bundle: boolean,
+  dir: string,
+  dtsExtension: string,
+): Promise<void> {
+  if (bundle) {
+    return;
+  }
+
+  const dtsFiles = await fg(`${dir}/**/*.d.ts`);
+
+  for (const file of dtsFiles) {
+    try {
+      const newFile = file.replace('.d.ts', dtsExtension);
+      fs.renameSync(file, newFile);
+    } catch (error) {
+      logger.error(`Error renaming DTS file ${file}: ${error}`);
+    }
+  }
 }
