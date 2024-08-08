@@ -1,28 +1,12 @@
 import { defineWorkspace } from 'vitest/config';
+import type { ProjectConfig } from 'vitest/node';
 
-const shared = {
+export const shared: ProjectConfig = {
   globals: true,
   environment: 'node',
   testTimeout: 30000,
   restoreMocks: true,
+  exclude: ['**/node_modules/**'],
 };
 
-export default defineWorkspace([
-  {
-    test: {
-      ...shared,
-      name: 'unit',
-      include: ['packages/**/*.test.ts'],
-      exclude: ['**/node_modules/**'],
-    },
-  },
-  {
-    test: {
-      ...shared,
-      name: 'artifact',
-      setupFiles: ['./setupVitestTests.ts'],
-      include: ['e2e/cases/**/*.test.ts'],
-      exclude: ['e2e/cases/**/*.pw.test.ts', '**/node_modules/**'],
-    },
-  },
-]);
+export default defineWorkspace(['packages/*', 'e2e']);

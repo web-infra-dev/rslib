@@ -24,15 +24,26 @@ export const getDefaultExtension = (options: {
     };
   }
 
+  const pkgJsonPath = resolve(root, './package.json');
+  if (!fs.existsSync(pkgJsonPath)) {
+    logger.warn(
+      `package.json does not exist in ${pkgJsonPath}, autoExtension will not be applied.`,
+    );
+    return {
+      jsExtension,
+      dtsExtension,
+    };
+  }
+
   let isModule = false;
 
   try {
-    const json = JSON.parse(
-      fs.readFileSync(resolve(root, './package.json'), 'utf8'),
-    );
+    const json = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
     isModule = json.type === 'module';
   } catch (e) {
-    logger.warn(`package.json is broken in ${root}`);
+    logger.warn(
+      `Failed to parse ${pkgJsonPath}, it might not be valid JSON, autoExtension will not be applied.`,
+    );
     return {
       jsExtension,
       dtsExtension,
