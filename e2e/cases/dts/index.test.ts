@@ -90,7 +90,7 @@ describe('dts when bundle: true', () => {
       'dts',
     );
 
-    expect(entryFiles.esm).toEqual('./dist/esm/index.d.ts');
+    expect(entryFiles.esm).toEqual('./dist/esm/main.d.ts');
     expect(entries).toMatchSnapshot();
   });
 
@@ -113,7 +113,7 @@ describe('dts when bundle: true', () => {
       'dts',
     );
 
-    expect(entryFiles.esm).toEqual('./dist/custom/index.d.ts');
+    expect(entryFiles.esm).toEqual('./dist/custom/main.d.ts');
   });
 
   test('abortOnError: false', async () => {
@@ -135,6 +135,17 @@ describe('dts when bundle: true', () => {
       'dts',
     );
 
-    expect(entryFiles.cjs).toEqual('./dist/cjs/index.d.cts');
+    expect(entryFiles.cjs).toEqual('./dist/cjs/main.d.cts');
+  });
+
+  test('bundleName -- set source.entry', async () => {
+    const fixturePath = join(__dirname, 'bundle');
+    const { entryFiles } = await buildAndGetResults(
+      fixturePath,
+      'bundleName.config.ts',
+      'dts',
+    );
+
+    expect(entryFiles.esm).toEqual('./dist/esm/bundleName.d.ts');
   });
 });
