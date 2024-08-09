@@ -118,4 +118,7 @@ export const readPackageJson = (rootPath: string): undefined | PkgJson => {
   }
 };
 
+export const isObject = (obj: unknown): obj is Record<string, any> =>
+  Object.prototype.toString.call(obj) === '[object Object]';
+
 export { color, calcLongestCommonPath };

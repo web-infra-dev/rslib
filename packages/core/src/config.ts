@@ -25,6 +25,7 @@ import { getDefaultExtension } from './utils/extension';
 import {
   calcLongestCommonPath,
   color,
+  isObject,
   nodeBuiltInModules,
   readPackageJson,
 } from './utils/helper';
@@ -111,10 +112,7 @@ export const composeAutoExternalConfig = (options: {
   // eg: autoExternal: ['react'], user: output: { externals: { react: 'react-1' } }
   // Only handle the case where the externals type is object, string / string[] does not need to be processed, other types are too complex.
   const userExternalKeys =
-    userExternals &&
-    Object.prototype.toString.call(userExternals) === '[object Object]'
-      ? Object.keys(userExternals)
-      : [];
+    userExternals && isObject(userExternals) ? Object.keys(userExternals) : [];
 
   const externals = (
     ['dependencies', 'peerDependencies', 'devDependencies'] as const
