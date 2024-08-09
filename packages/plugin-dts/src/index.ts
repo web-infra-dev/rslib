@@ -60,15 +60,12 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
           stdio: 'inherit',
         });
 
-        let dtsEntry: DtsEntry = {
-          name: undefined,
-          path: undefined,
-        };
-
-        if (options.bundle) {
-          // TODO: temporarily use first element of Record<string, string>
-          dtsEntry = processSourceEntry(config.source?.entry);
-        }
+        // TODO: @microsoft/api-extractor only support single entry to bundle DTS
+        // use first element of Record<string, string> type entry config
+        const dtsEntry = processSourceEntry(
+          options.bundle!,
+          config.source?.entry,
+        );
 
         const dtsGenOptions: DtsGenOptions = {
           ...options,

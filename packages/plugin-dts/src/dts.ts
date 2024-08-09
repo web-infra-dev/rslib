@@ -103,6 +103,7 @@ process.on('message', async (data: DtsGenOptions) => {
   try {
     await generateDts(data);
   } catch (e) {
+    logger.error(e);
     process.send!('error');
     process.exit(1);
   }

@@ -73,8 +73,16 @@ export async function processDtsFiles(
 }
 
 export function processSourceEntry(
+  bundle: boolean,
   entryConfig: NonNullable<RsbuildConfig['source']>['entry'],
 ): DtsEntry {
+  if (!bundle) {
+    return {
+      name: undefined,
+      path: undefined,
+    };
+  }
+
   if (
     entryConfig &&
     Object.values(entryConfig).every((val) => typeof val === 'string')
@@ -85,12 +93,7 @@ export function processSourceEntry(
     };
   }
 
-  logger.warn(
-    '@microsoft/api-extractor only support single entry of Record<string, string> type to bundle DTS.',
+  throw new Error(
+    '@microsoft/api-extractor only support single entry of Record<string, string> type to bundle DTS, please check your entry config.',
   );
-
-  return {
-    name: undefined,
-    path: undefined,
-  };
 }
