@@ -396,7 +396,7 @@ const composeDtsConfig = async (
   libConfig: LibConfig,
   dtsExtension: string,
 ): Promise<RsbuildConfig> => {
-  const { dts, bundle, output } = libConfig;
+  const { dts, bundle, output, autoExternal } = libConfig;
 
   if (dts === false || dts === undefined) return {};
 
@@ -408,6 +408,7 @@ const composeDtsConfig = async (
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
         abortOnError: dts?.abortOnError ?? true,
         dtsExtension,
+        autoExternal,
       }),
     ],
   };

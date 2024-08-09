@@ -15,6 +15,7 @@ export type BundleOptions = {
   dtsExtension: string;
   entry?: string;
   tsconfigPath?: string;
+  bundledPackages?: string[];
 };
 
 export async function bundleDts(options: BundleOptions): Promise<void> {
@@ -25,6 +26,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     dtsExtension,
     entry = 'index.d.ts',
     tsconfigPath = 'tsconfig.json',
+    bundledPackages = [],
   } = options;
   try {
     const start = Date.now();
@@ -35,8 +37,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     );
     const internalConfig = {
       mainEntryPointFilePath: entry,
-      // TODO: use !externals
-      // bundledPackages: [],
+      bundledPackages,
       dtsRollup: {
         enabled: true,
         untrimmedFilePath,

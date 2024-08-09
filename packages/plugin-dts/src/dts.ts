@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
@@ -5,6 +6,95 @@ import type { DtsGenOptions } from 'src';
 import * as ts from 'typescript';
 import { emitDts } from './tsc';
 import { ensureTempDeclarationDir, loadTsconfig } from './utils';
+
+const isObject = (obj: unknown): obj is Record<string, any> =>
+  Object.prototype.toString.call(obj) === '[object Object]';
+
+// use !externals
+export const calcBundledPackages = (options: {
+  autoExternal: DtsGenOptions['autoExternal'];
+  cwd: string;
+  userExternals?: DtsGenOptions['userExternals'];
+}): string[] => {
+  const { autoExternal, cwd, userExternals } = options;
+
+  let pkgJson: {
+    dependencies?: Record<string, string>;
+    peerDependencies?: Record<string, string>;
+    devDependencies?: Record<string, string>;
+  };
+
+  try {
+    const content = fs.readFileSync(join(cwd, 'package.json'), 'utf-8');
+    pkgJson = JSON.parse(content);
+  } catch (err) {
+    logger.warn(
+      'The type of third-party packages will not be bundled due to read package.json failed',
+    );
+    return [];
+  }
+
+  const externalOptions = autoExternal
+    ? {
+        dependencies: true,
+        peerDependencies: true,
+        devDependencies: false,
+        ...(autoExternal === true ? {} : autoExternal),
+      }
+    : {
+        dependencies: false,
+        peerDependencies: false,
+        devDependencies: false,
+      };
+
+  // User externals should not bundled
+  // Only handle the case where the externals type is string / (string | RegExp)[] / plain object, function type is too complex.
+  const getUserExternalsKeys = (
+    value: typeof userExternals,
+  ): (string | RegExp)[] => {
+    if (!value) {
+      return [];
+    }
+
+    if (typeof value === 'string' || value instanceof RegExp) {
+      return [value];
+    }
+
+    if (Array.isArray(value)) {
+      return value.flatMap((v) => getUserExternalsKeys(v));
+    }
+
+    if (isObject(userExternals)) {
+      return Object.keys(userExternals);
+    }
+    return [];
+  };
+
+  const externals: (string | RegExp)[] = getUserExternalsKeys(userExternals);
+
+  const allDeps: string[] = [];
+
+  for (const type of [
+    'dependencies',
+    'peerDependencies',
+    'devDependencies',
+  ] as const) {
+    const deps = pkgJson[type] && Object.keys(pkgJson[type]);
+    if (deps) {
+      if (externalOptions[type]) {
+        externals.push(...deps);
+      }
+      allDeps.push(...deps);
+    }
+  }
+
+  const bundledPackages = allDeps.filter(
+    (d) =>
+      !externals.some((e) => (typeof e === 'string' ? d === e : e.test(d))),
+  );
+
+  return Array.from(new Set(bundledPackages));
+};
 
 export async function generateDts(data: DtsGenOptions): Promise<void> {
   const {
@@ -16,6 +106,8 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     cwd,
     isWatch,
     dtsExtension = '.d.ts',
+    autoExternal = true,
+    userExternals,
   } = data;
   logger.start(`Generating DTS... ${color.gray(`(${name})`)}`);
   const configPath = ts.findConfigFile(cwd, ts.sys.fileExists, tsconfigPath);
@@ -62,6 +154,11 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
         entry,
         tsconfigPath,
         dtsExtension,
+        bundledPackages: calcBundledPackages({
+          autoExternal,
+          cwd,
+          userExternals,
+        }),
       });
     }
   };

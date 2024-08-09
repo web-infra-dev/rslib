@@ -1,12 +1,19 @@
 import { fork } from 'node:child_process';
 import { extname, join } from 'node:path';
-import { type RsbuildPlugin, logger } from '@rsbuild/core';
+import { type RsbuildConfig, type RsbuildPlugin, logger } from '@rsbuild/core';
 
 export type PluginDtsOptions = {
   bundle?: boolean;
   distPath?: string;
   abortOnError?: boolean;
   dtsExtension?: string;
+  autoExternal?:
+    | boolean
+    | {
+        dependencies?: boolean;
+        devDependencies?: boolean;
+        peerDependencies?: boolean;
+      };
 };
 
 export type DtsGenOptions = PluginDtsOptions & {
@@ -15,6 +22,7 @@ export type DtsGenOptions = PluginDtsOptions & {
   isWatch: boolean;
   entryPath?: string;
   tsconfigPath?: string;
+  userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 };
 
 interface TaskResult {
@@ -27,7 +35,6 @@ export const PLUGIN_DTS_NAME = 'rsbuild:dts';
 // use ts compiler API to generate bundleless dts
 // use ts compiler API and api-extractor to generate dts bundle
 // TODO: support incremental build, to build one or more projects and their dependencies
-// TODO: support autoExtension for dts files
 // TODO: deal alias in dts
 export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
   name: PLUGIN_DTS_NAME,
@@ -56,6 +63,7 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
 
         const dtsGenOptions: DtsGenOptions = {
           ...options,
+          userExternals: config.output.externals,
           // TODO: temporarily use main as dts entry, only accept single entry
           entryPath: config.source?.entry?.main as string,
           tsconfigPath: config.source.tsconfigPath,
