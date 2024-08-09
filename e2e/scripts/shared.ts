@@ -104,7 +104,6 @@ export async function getResults(
 
 export const buildAndGetResults = async (
   fixturePath: string,
-  configFile = 'rslib.config.ts',
   type: 'js' | 'dts' = 'js',
 ): Promise<{
   contents: Record<string, Record<string, string>>;
@@ -115,7 +114,7 @@ export const buildAndGetResults = async (
   rsbuildConfig: InspectConfigResult['origin']['rsbuildConfig'];
   isSuccess: boolean;
 }> => {
-  const rslibConfig = await loadConfig(join(fixturePath, configFile));
+  const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
   process.chdir(fixturePath);
   const rsbuildInstance = await build(rslibConfig);
   const {

@@ -4,19 +4,16 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     generateBundleEsmConfig(__dirname, {
-      output: {
-        syntax: 'es2015',
+      dts: {
+        bundle: true,
       },
     }),
-    generateBundleCjsConfig(__dirname, {
-      output: {
-        syntax: ['node 20'],
-      },
-    }),
+    generateBundleCjsConfig(__dirname),
   ],
   source: {
     entry: {
-      main: '../__fixtures__/src/index.ts',
+      bundleName: '../__fixtures__/src/index.ts',
     },
+    tsconfigPath: '../__fixtures__/tsconfig.json',
   },
 });

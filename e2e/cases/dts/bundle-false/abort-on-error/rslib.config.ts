@@ -4,19 +4,19 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     generateBundleEsmConfig(__dirname, {
-      output: {
-        syntax: 'es2015',
+      bundle: false,
+      dts: {
+        bundle: false,
+        abortOnError: false,
       },
     }),
     generateBundleCjsConfig(__dirname, {
-      output: {
-        syntax: ['node 20'],
-      },
+      bundle: false,
     }),
   ],
   source: {
     entry: {
-      main: '../__fixtures__/src/index.ts',
+      main: ['./src/**'],
     },
   },
 });
