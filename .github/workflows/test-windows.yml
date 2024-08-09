@@ -1,4 +1,4 @@
-name: Test (Ubuntu)
+name: Test (Windows)
 
 # Controls when the action will run.
 on:
@@ -17,15 +17,19 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # ======== ut ========
-  ut-mac:
-    # run ut in MacOS, as SWC cases will fail in Ubuntu CI
-    runs-on: macos-14
+  ut-windows:
+    runs-on: windows-latest
     strategy:
       matrix:
         node-version: [18.x]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Git config
+        shell: bash
+        run: |
+          git config --system core.longpaths true
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -60,15 +64,20 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:unit
 
-  # ======== e2e ========
-  e2e-ubuntu:
-    runs-on: ubuntu-latest
+  # # ======== e2e ========
+  e2e-windows:
+    runs-on: windows-latest
     strategy:
       matrix:
         node-version: [18.x]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Git config
+        shell: bash
+        run: |
+          git config --system core.longpaths true
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -97,7 +106,7 @@ jobs:
 
       - name: Install Dependencies
         if: steps.changes.outputs.changed == 'true'
-        run: pnpm install && cd ./e2e && pnpx playwright install
+        run: pnpm install && cd ./e2e && npx playwright install
 
       - name: E2E Test
         if: steps.changes.outputs.changed == 'true'
