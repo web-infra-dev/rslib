@@ -1,4 +1,4 @@
-import path from 'node:path';
+import os from 'node:os';
 import { vol } from 'memfs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { calcLongestCommonPath } from '../src/utils/helper';
@@ -20,7 +20,7 @@ describe('LCP calculate correctly', () => {
   it('correct 1', async () => {
     vol.fromJSON({ '/Users/Someone/project-a/src': null });
 
-    if (path.sep === '/') {
+    if (os.platform() !== 'win32') {
       const result = await calcLongestCommonPath([
         '/Users/Someone/project-a/src/helpers',
         '/Users/Someone/project-a/src',
@@ -40,7 +40,7 @@ describe('LCP calculate correctly', () => {
   it('correct 2', async () => {
     vol.fromJSON({ '/Users/Someone/project-monorepo': null });
 
-    if (path.sep === '/') {
+    if (os.platform() !== 'win32') {
       const result = await calcLongestCommonPath([
         '/Users/Someone/project-monorepo/packages-a/src/index.ts',
         '/Users/Someone/project-monorepo/packages-util/src/index.js',
@@ -61,7 +61,7 @@ describe('LCP calculate correctly', () => {
     vol.fromJSON({
       '/Users/Someone/project/src/index.js': '',
     });
-    if (path.sep === '/') {
+    if (os.platform() !== 'win32') {
       const result = await calcLongestCommonPath([
         '/Users/Someone/project/src/index.js',
       ]);
