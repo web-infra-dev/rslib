@@ -116,7 +116,8 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     throw new Error();
   }
   const { options: rawCompilerOptions } = loadTsconfig(configPath);
-  const rootDir = rawCompilerOptions.rootDir ?? 'src';
+  const rootDir =
+    rawCompilerOptions.rootDir ?? join(dirname(configPath), 'src');
   const outDir = distPath
     ? distPath
     : rawCompilerOptions.declarationDir || './dist';
@@ -178,7 +179,6 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       name,
       cwd,
       configPath,
-      rootDir,
       declarationDir,
       dtsExtension,
     },

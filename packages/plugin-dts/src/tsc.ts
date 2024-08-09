@@ -12,7 +12,6 @@ export type EmitDtsOptions = {
   name: string;
   cwd: string;
   configPath: string;
-  rootDir: string;
   declarationDir: string;
   dtsExtension: string;
 };
