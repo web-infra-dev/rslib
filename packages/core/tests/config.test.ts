@@ -1,7 +1,9 @@
 import { join } from 'node:path';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { composeCreateRsbuildConfig, loadConfig } from '../src/config';
 import type { RslibConfig } from '../src/types/config';
+
+vi.mock('rslog');
 
 describe('Should load config file correctly', () => {
   test('Load config.js in cjs project', async () => {

@@ -31,10 +31,19 @@ export type Dts =
     }
   | false;
 
+export type AutoExternal =
+  | boolean
+  | {
+      dependencies?: boolean;
+      devDependencies?: boolean;
+      peerDependencies?: boolean;
+    };
+
 export interface LibConfig extends RsbuildConfig {
   bundle?: boolean;
   format?: Format;
   autoExtension?: boolean;
+  autoExternal?: AutoExternal;
   output?: RsbuildConfig['output'] & {
     /** Support esX and browserslist query */
     syntax?: Syntax;

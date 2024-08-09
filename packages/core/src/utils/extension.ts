@@ -1,18 +1,16 @@
-import fs from 'node:fs';
-import { resolve } from 'node:path';
-import type { Format } from 'src/types/config';
+import type { Format, PkgJson } from 'src/types';
 import { logger } from './logger';
 
 export const getDefaultExtension = (options: {
   format: Format;
-  root: string;
+  pkgJson?: PkgJson;
   autoExtension: boolean;
 }): {
   jsExtension: string;
   dtsExtension: string;
   isModule?: boolean;
 } => {
-  const { format, root, autoExtension } = options;
+  const { format, pkgJson, autoExtension } = options;
 
   let jsExtension = '.js';
   let dtsExtension = '.d.ts';
@@ -24,10 +22,9 @@ export const getDefaultExtension = (options: {
     };
   }
 
-  const pkgJsonPath = resolve(root, './package.json');
-  if (!fs.existsSync(pkgJsonPath)) {
+  if (!pkgJson) {
     logger.warn(
-      `package.json does not exist in ${pkgJsonPath}, autoExtension will not be applied.`,
+      'autoExtension configuration will not be applied due to read package.json failed',
     );
     return {
       jsExtension,
@@ -35,20 +32,7 @@ export const getDefaultExtension = (options: {
     };
   }
 
-  let isModule = false;
-
-  try {
-    const json = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
-    isModule = json.type === 'module';
-  } catch (e) {
-    logger.warn(
-      `Failed to parse ${pkgJsonPath}, it might not be valid JSON, autoExtension will not be applied.`,
-    );
-    return {
-      jsExtension,
-      dtsExtension,
-    };
-  }
+  const isModule = pkgJson.type === 'module';
 
   if (isModule && format === 'cjs') {
     jsExtension = '.cjs';

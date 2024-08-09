@@ -11,18 +11,24 @@ import {
 import glob from 'fast-glob';
 import { DEFAULT_CONFIG_NAME, DEFAULT_EXTENSIONS } from './constant';
 import type {
+  AutoExternal,
   Format,
   LibConfig,
+  PkgJson,
   RslibConfig,
   RslibConfigAsyncFn,
   RslibConfigExport,
   RslibConfigSyncFn,
   Syntax,
-} from './types/config';
+} from './types';
 import { getDefaultExtension } from './utils/extension';
-import { calcLongestCommonPath } from './utils/helper';
-import { color } from './utils/helper';
-import { nodeBuiltInModules } from './utils/helper';
+import {
+  calcLongestCommonPath,
+  color,
+  isObject,
+  nodeBuiltInModules,
+  readPackageJson,
+} from './utils/helper';
 import { logger } from './utils/logger';
 import { transformSyntaxToBrowserslist } from './utils/syntax';
 
@@ -76,6 +82,63 @@ export async function loadConfig(
 
   return content as RslibConfig;
 }
+
+export const composeAutoExternalConfig = (options: {
+  autoExternal: AutoExternal;
+  pkgJson?: PkgJson;
+  userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
+}): RsbuildConfig => {
+  const { autoExternal, pkgJson, userExternals } = options;
+
+  if (!autoExternal) {
+    return {};
+  }
+
+  if (!pkgJson) {
+    logger.warn(
+      'autoExternal configuration will not be applied due to read package.json failed',
+    );
+    return {};
+  }
+
+  const externalOptions = {
+    dependencies: true,
+    peerDependencies: true,
+    devDependencies: false,
+    ...(autoExternal === true ? {} : autoExternal),
+  };
+
+  // User externals configuration has higher priority than autoExternal
+  // eg: autoExternal: ['react'], user: output: { externals: { react: 'react-1' } }
+  // Only handle the case where the externals type is object, string / string[] does not need to be processed, other types are too complex.
+  const userExternalKeys =
+    userExternals && isObject(userExternals) ? Object.keys(userExternals) : [];
+
+  const externals = (
+    ['dependencies', 'peerDependencies', 'devDependencies'] as const
+  )
+    .reduce<string[]>((prev, type) => {
+      if (externalOptions[type]) {
+        return pkgJson[type] ? prev.concat(Object.keys(pkgJson[type]!)) : prev;
+      }
+      return prev;
+    }, [])
+    .filter((name) => !userExternalKeys.includes(name));
+
+  const uniqueExternals = Array.from(new Set(externals));
+
+  return externals.length
+    ? {
+        output: {
+          externals: [
+            // Exclude dependencies, e.g. `react`, `react/jsx-runtime`
+            ...uniqueExternals.map((dep) => new RegExp(`^${dep}($|\\/|\\\\)`)),
+            ...uniqueExternals,
+          ],
+        },
+      }
+    : {};
+};
 
 export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
   return defineRsbuildConfig({
@@ -166,15 +229,15 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
 
 const composeAutoExtensionConfig = (
   format: Format,
-  root: string,
   autoExtension: boolean,
+  pkgJson?: PkgJson,
 ): {
   config: RsbuildConfig;
   dtsExtension: string;
 } => {
   const { jsExtension, dtsExtension } = getDefaultExtension({
     format,
-    root,
+    pkgJson,
     autoExtension,
   });
 
@@ -394,17 +457,24 @@ async function composeLibRsbuildConfig(
   configPath: string,
 ) {
   const config = mergeRsbuildConfig<LibConfig>(rsbuildConfig, libConfig);
+  const rootPath = dirname(configPath);
+  const pkgJson = readPackageJson(rootPath);
 
-  const { format, autoExtension = true } = config;
+  const { format, autoExtension = true, autoExternal = true } = config;
   const formatConfig = composeFormatConfig(format!);
   const { config: autoExtensionConfig, dtsExtension } =
-    composeAutoExtensionConfig(format!, dirname(configPath), autoExtension);
+    composeAutoExtensionConfig(format!, autoExtension, pkgJson);
   const bundleConfig = composeBundleConfig(config.bundle);
   const targetConfig = composeTargetConfig(config.output?.target);
   const syntaxConfig = composeSyntaxConfig(
     config.output?.syntax,
     config.output?.target,
   );
+  const autoExternalConfig = composeAutoExternalConfig({
+    autoExternal,
+    pkgJson,
+    userExternals: rsbuildConfig.output?.externals,
+  });
   const entryConfig = await composeEntryConfig(
     config.source?.entry,
     config.bundle,
@@ -415,6 +485,7 @@ async function composeLibRsbuildConfig(
   return mergeRsbuildConfig(
     formatConfig,
     autoExtensionConfig,
+    autoExternalConfig,
     syntaxConfig,
     bundleConfig,
     targetConfig,
