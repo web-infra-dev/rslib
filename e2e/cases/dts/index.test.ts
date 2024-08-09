@@ -4,12 +4,8 @@ import { describe, expect, test } from 'vitest';
 
 describe('dts when bundle: false', () => {
   test('basic', async () => {
-    const fixturePath = join(__dirname, 'bundle-false');
-    const { files, contents } = await buildAndGetResults(
-      fixturePath,
-      'rslib.config.ts',
-      'dts',
-    );
+    const fixturePath = join(__dirname, 'bundle-false', 'basic');
+    const { files, contents } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(files.esm).toMatchInlineSnapshot(`
       [
@@ -23,23 +19,15 @@ describe('dts when bundle: false', () => {
   });
 
   test('dts false', async () => {
-    const fixturePath = join(__dirname, 'bundle-false');
-    const { files } = await buildAndGetResults(
-      fixturePath,
-      'dtsFalse.config.ts',
-      'dts',
-    );
+    const fixturePath = join(__dirname, 'bundle-false', 'false');
+    const { files } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(files.esm).toBe(undefined);
   });
 
   test('distPath', async () => {
-    const fixturePath = join(__dirname, 'bundle-false');
-    const { files } = await buildAndGetResults(
-      fixturePath,
-      'distPath.config.ts',
-      'dts',
-    );
+    const fixturePath = join(__dirname, 'bundle-false', 'dist-path');
+    const { files } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(files.esm).toMatchInlineSnapshot(`
       [
@@ -52,23 +40,15 @@ describe('dts when bundle: false', () => {
   });
 
   test('abortOnError: false', async () => {
-    const fixturePath = join(__dirname, 'bundle-false');
-    const { isSuccess } = await buildAndGetResults(
-      fixturePath,
-      'abortOnError.config.ts',
-      'dts',
-    );
+    const fixturePath = join(__dirname, 'bundle-false', 'abort-on-error');
+    const { isSuccess } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(isSuccess).toBe(true);
   });
 
   test('autoExtension: true', async () => {
-    const fixturePath = join(__dirname, 'bundle-false');
-    const { files } = await buildAndGetResults(
-      fixturePath,
-      'autoExtension.config.ts',
-      'dts',
-    );
+    const fixturePath = join(__dirname, 'bundle-false', 'auto-extension');
+    const { files } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(files.cjs).toMatchInlineSnapshot(`
       [
@@ -83,58 +63,48 @@ describe('dts when bundle: false', () => {
 
 describe('dts when bundle: true', () => {
   test('basic', async () => {
-    const fixturePath = join(__dirname, 'bundle');
+    const fixturePath = join(__dirname, 'bundle', 'basic');
     const { entryFiles, entries } = await buildAndGetResults(
       fixturePath,
-      'rslib.config.ts',
       'dts',
     );
 
-    expect(entryFiles.esm).toEqual('./dist/esm/index.d.ts');
+    expect(entryFiles.esm).toEqual('./dist/esm/main.d.ts');
     expect(entries).toMatchSnapshot();
   });
 
   test('dts false', async () => {
-    const fixturePath = join(__dirname, 'bundle');
-    const { entryFiles } = await buildAndGetResults(
-      fixturePath,
-      'dtsFalse.config.ts',
-      'dts',
-    );
+    const fixturePath = join(__dirname, 'bundle', 'false');
+    const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(entryFiles.esm).toEqual(undefined);
   });
 
   test('distPath', async () => {
-    const fixturePath = join(__dirname, 'bundle');
-    const { entryFiles } = await buildAndGetResults(
-      fixturePath,
-      'distPath.config.ts',
-      'dts',
-    );
+    const fixturePath = join(__dirname, 'bundle', 'dist-path');
+    const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
-    expect(entryFiles.esm).toEqual('./dist/custom/index.d.ts');
+    expect(entryFiles.esm).toEqual('./dist/custom/main.d.ts');
   });
 
   test('abortOnError: false', async () => {
-    const fixturePath = join(__dirname, 'bundle');
-    const { isSuccess } = await buildAndGetResults(
-      fixturePath,
-      'abortOnError.config.ts',
-      'dts',
-    );
+    const fixturePath = join(__dirname, 'bundle', 'abort-on-error');
+    const { isSuccess } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(isSuccess).toBe(true);
   });
 
   test('autoExtension: true', async () => {
-    const fixturePath = join(__dirname, 'bundle');
-    const { entryFiles } = await buildAndGetResults(
-      fixturePath,
-      'autoExtension.config.ts',
-      'dts',
-    );
+    const fixturePath = join(__dirname, 'bundle', 'auto-extension');
+    const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
-    expect(entryFiles.cjs).toEqual('./dist/cjs/index.d.cts');
+    expect(entryFiles.cjs).toEqual('./dist/cjs/main.d.cts');
+  });
+
+  test('bundleName -- set source.entry', async () => {
+    const fixturePath = join(__dirname, 'bundle', 'bundle-name');
+    const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
+
+    expect(entryFiles.esm).toEqual('./dist/esm/bundleName.d.ts');
   });
 });

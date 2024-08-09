@@ -1,6 +1,7 @@
 import { fork } from 'node:child_process';
 import { extname, join } from 'node:path';
 import { type RsbuildConfig, type RsbuildPlugin, logger } from '@rsbuild/core';
+import { processSourceEntry } from './utils';
 
 export type PluginDtsOptions = {
   bundle?: boolean;
@@ -16,11 +17,16 @@ export type PluginDtsOptions = {
       };
 };
 
+export type DtsEntry = {
+  name?: string;
+  path?: string;
+};
+
 export type DtsGenOptions = PluginDtsOptions & {
   name: string;
   cwd: string;
   isWatch: boolean;
-  entryPath?: string;
+  dtsEntry: DtsEntry;
   tsconfigPath?: string;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 };
@@ -61,11 +67,17 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
           stdio: 'inherit',
         });
 
+        // TODO: @microsoft/api-extractor only support single entry to bundle DTS
+        // use first element of Record<string, string> type entry config
+        const dtsEntry = processSourceEntry(
+          options.bundle!,
+          config.source?.entry,
+        );
+
         const dtsGenOptions: DtsGenOptions = {
           ...options,
+          dtsEntry,
           userExternals: config.output.externals,
-          // TODO: temporarily use main as dts entry, only accept single entry
-          entryPath: config.source?.entry?.main as string,
           tsconfigPath: config.source.tsconfigPath,
           name: environment.name,
           cwd: api.context.rootPath,

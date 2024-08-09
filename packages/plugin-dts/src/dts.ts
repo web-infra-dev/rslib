@@ -100,7 +100,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   const {
     bundle,
     distPath,
-    entryPath,
+    dtsEntry,
     tsconfigPath,
     name,
     cwd,
@@ -129,6 +129,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   };
 
   const declarationDir = getDeclarationDir(bundle!, distPath);
+  const { name: entryName, path: entryPath } = dtsEntry;
   let entry = '';
 
   if (bundle === true && entryPath) {
@@ -151,7 +152,10 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
         name,
         cwd,
         outDir,
-        entry,
+        dtsEntry: {
+          name: entryName,
+          path: entry,
+        },
         tsconfigPath,
         dtsExtension,
         bundledPackages: calcBundledPackages({
@@ -196,6 +200,7 @@ process.on('message', async (data: DtsGenOptions) => {
   try {
     await generateDts(data);
   } catch (e) {
+    logger.error(e);
     process.send!('error');
     process.exit(1);
   }
