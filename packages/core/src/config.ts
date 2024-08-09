@@ -125,10 +125,16 @@ export const composeAutoExternalConfig = (options: {
     }, [])
     .filter((name) => !userExternalKeys.includes(name));
 
+  const uniqueExternals = Array.from(new Set(externals));
+
   return externals.length
     ? {
         output: {
-          externals: Array.from(new Set(externals)),
+          externals: [
+            // Exclude dependencies, e.g. `react`, `react/jsx-runtime`
+            ...uniqueExternals.map((dep) => new RegExp(`^${dep}($|\\/|\\\\)`)),
+            ...uniqueExternals,
+          ],
         },
       }
     : {};

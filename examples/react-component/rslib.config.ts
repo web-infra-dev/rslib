@@ -33,11 +33,5 @@ export default defineConfig({
       main: './src/index.tsx',
     },
   },
-  output: {
-    externals: {
-      react: 'react',
-      'react/jsx-runtime': 'react/jsx-runtime',
-    },
-  },
   plugins: [pluginReact()],
 });

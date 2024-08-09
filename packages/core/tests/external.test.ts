@@ -23,7 +23,14 @@ describe('should composeAutoExternalConfig correctly', () => {
 
     expect(result).toEqual({
       output: {
-        externals: ['foo', 'foo1', 'baz'],
+        externals: [
+          /^foo($|\/|\\)/,
+          /^foo1($|\/|\\)/,
+          /^baz($|\/|\\)/,
+          'foo',
+          'foo1',
+          'baz',
+        ],
       },
     });
   });
@@ -49,7 +56,14 @@ describe('should composeAutoExternalConfig correctly', () => {
 
     expect(result).toEqual({
       output: {
-        externals: ['foo', 'foo1', 'baz'],
+        externals: [
+          /^foo($|\/|\\)/,
+          /^foo1($|\/|\\)/,
+          /^baz($|\/|\\)/,
+          'foo',
+          'foo1',
+          'baz',
+        ],
       },
     });
   });
@@ -75,7 +89,7 @@ describe('should composeAutoExternalConfig correctly', () => {
 
     expect(result).toEqual({
       output: {
-        externals: ['foo', 'bar'],
+        externals: [/^foo($|\/|\\)/, /^bar($|\/|\\)/, 'foo', 'bar'],
       },
     });
   });
@@ -109,7 +123,7 @@ describe('should composeAutoExternalConfig correctly', () => {
 
     expect(result).toEqual({
       output: {
-        externals: ['bar'],
+        externals: [/^bar($|\/|\\)/, 'bar'],
       },
     });
   });
