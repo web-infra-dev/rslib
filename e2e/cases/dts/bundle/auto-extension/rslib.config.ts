@@ -3,18 +3,17 @@ import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   lib: [
-    {
-      ...generateBundleEsmConfig(__dirname),
-      autoExternal: false,
-    },
-    {
-      ...generateBundleCjsConfig(__dirname),
-      autoExternal: false,
-    },
+    generateBundleEsmConfig(__dirname),
+    generateBundleCjsConfig(__dirname, {
+      dts: {
+        bundle: true,
+      },
+    }),
   ],
   source: {
     entry: {
       main: '../__fixtures__/src/index.ts',
     },
+    tsconfigPath: '../__fixtures__/tsconfig.json',
   },
 });

@@ -8,7 +8,7 @@ import {
   processDtsFiles,
 } from './utils';
 
-export type emitDtsOptions = {
+export type EmitDtsOptions = {
   name: string;
   cwd: string;
   configPath: string;
@@ -18,7 +18,7 @@ export type emitDtsOptions = {
 };
 
 export async function emitDts(
-  options: emitDtsOptions,
+  options: EmitDtsOptions,
   onComplete: (isSuccess: boolean) => void,
   bundle = false,
   isWatch = false,

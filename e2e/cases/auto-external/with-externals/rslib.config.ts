@@ -10,7 +10,7 @@ export default defineConfig({
   },
   source: {
     entry: {
-      main: '../fixtures/src/index.ts',
+      main: '../__fixtures__/src/index.ts',
     },
   },
 });
