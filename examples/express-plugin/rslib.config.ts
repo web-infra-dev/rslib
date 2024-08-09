@@ -33,9 +33,6 @@ export default defineConfig({
     },
   },
   output: {
-    externals: {
-      express: 'express',
-    },
     target: 'node',
   },
 });
