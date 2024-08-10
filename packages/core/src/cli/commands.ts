@@ -14,7 +14,7 @@ export type BuildOptions = CommonOptions & {
 };
 
 export type InspectOptions = CommonOptions & {
-  env: RsbuildMode;
+  mode: RsbuildMode;
   output: string;
   verbose?: boolean;
 };
@@ -64,7 +64,7 @@ export function runCli(): void {
         const rslibConfig = await loadConfig(options.config, options.envMode);
         const rsbuildInstance = await initRsbuild(rslibConfig);
         await rsbuildInstance.inspectConfig({
-          env: options.env,
+          mode: options.mode,
           verbose: options.verbose,
           outputPath: options.output,
           writeToDisk: true,
