@@ -10,7 +10,6 @@ export async function build(
   const rsbuildInstance = await initRsbuild(config);
 
   await rsbuildInstance.build({
-    mode: 'production',
     watch: options?.watch,
   });
 

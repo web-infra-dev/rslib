@@ -142,6 +142,7 @@ export const composeAutoExternalConfig = (options: {
 
 export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
   return defineRsbuildConfig({
+    mode: 'production',
     dev: {
       progressBar: false,
     },
