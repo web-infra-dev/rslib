@@ -73,6 +73,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
       `API Extractor bundle DTS succeeded: ${color.cyan(untrimmedFilePath)} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
     );
   } catch (e) {
-    throw new Error(`API Extractor ${e}`);
+    logger.error('API Extractor Error');
+    throw new Error(`${e}`);
   }
 }
