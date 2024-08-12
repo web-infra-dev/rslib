@@ -1,10 +1,10 @@
 import { join } from 'node:path';
-import { buildAndGetAllResults, buildAndGetResults } from '@e2e/helper';
+import { buildAndGetResults } from '@e2e/helper';
 import { expect, test } from 'vitest';
 
 test('auto external default should works', async () => {
   const fixturePath = join(__dirname, 'default');
-  const { js, dts } = await buildAndGetAllResults(fixturePath);
+  const { js, dts } = await buildAndGetResults(fixturePath, 'all');
 
   expect(js.entries.esm).toContain(
     'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
@@ -40,7 +40,7 @@ test('auto external sub path should works', async () => {
 
 test('auto external false should works', async () => {
   const fixturePath = join(__dirname, 'false');
-  const { js, dts } = await buildAndGetAllResults(fixturePath);
+  const { js, dts } = await buildAndGetResults(fixturePath, 'all');
 
   expect(js.entries.esm).not.toContain(
     'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',

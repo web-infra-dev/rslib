@@ -112,16 +112,51 @@ type BuildResult = {
   isSuccess: boolean;
 };
 
-export const buildAndGetResults = async (
+export async function buildAndGetResults(
   fixturePath: string,
-  type: 'js' | 'dts' = 'js',
-): Promise<BuildResult> => {
+  type: 'all',
+): Promise<{
+  js: BuildResult;
+  dts: BuildResult;
+}>;
+export async function buildAndGetResults(
+  fixturePath: string,
+  type?: 'js' | 'dts',
+): Promise<BuildResult>;
+export async function buildAndGetResults(
+  fixturePath: string,
+  type: 'js' | 'dts' | 'all' = 'js',
+) {
   const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
   process.chdir(fixturePath);
   const rsbuildInstance = await build(rslibConfig);
   const {
     origin: { bundlerConfigs, rsbuildConfig },
   } = await rsbuildInstance.inspectConfig({ verbose: true });
+  if (type === 'all') {
+    const jsResults = await getResults(rslibConfig, fixturePath, 'js');
+    const dtsResults = await getResults(rslibConfig, fixturePath, 'dts');
+    return {
+      js: {
+        contents: jsResults.contents,
+        files: jsResults.files,
+        entries: jsResults.entries,
+        entryFiles: jsResults.entryFiles,
+        rspackConfig: bundlerConfigs,
+        rsbuildConfig: rsbuildConfig,
+        isSuccess: Boolean(rsbuildInstance),
+      },
+      dts: {
+        contents: dtsResults.contents,
+        files: dtsResults.files,
+        entries: dtsResults.entries,
+        entryFiles: dtsResults.entryFiles,
+        rspackConfig: bundlerConfigs,
+        rsbuildConfig: rsbuildConfig,
+        isSuccess: Boolean(rsbuildInstance),
+      },
+    };
+  }
 
   const results = await getResults(rslibConfig, fixturePath, type);
   return {
@@ -133,41 +168,4 @@ export const buildAndGetResults = async (
     rsbuildConfig: rsbuildConfig,
     isSuccess: Boolean(rsbuildInstance),
   };
-};
-
-export const buildAndGetAllResults = async (
-  fixturePath: string,
-): Promise<{
-  js: BuildResult;
-  dts: BuildResult;
-}> => {
-  const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
-  process.chdir(fixturePath);
-  const rsbuildInstance = await build(rslibConfig);
-  const {
-    origin: { bundlerConfigs, rsbuildConfig },
-  } = await rsbuildInstance.inspectConfig({ verbose: true });
-
-  const jsResults = await getResults(rslibConfig, fixturePath, 'js');
-  const dtsResults = await getResults(rslibConfig, fixturePath, 'dts');
-  return {
-    js: {
-      contents: jsResults.contents,
-      files: jsResults.files,
-      entries: jsResults.entries,
-      entryFiles: jsResults.entryFiles,
-      rspackConfig: bundlerConfigs,
-      rsbuildConfig: rsbuildConfig,
-      isSuccess: Boolean(rsbuildInstance),
-    },
-    dts: {
-      contents: dtsResults.contents,
-      files: dtsResults.files,
-      entries: dtsResults.entries,
-      entryFiles: dtsResults.entryFiles,
-      rspackConfig: bundlerConfigs,
-      rsbuildConfig: rsbuildConfig,
-      isSuccess: Boolean(rsbuildInstance),
-    },
-  };
-};
+}
