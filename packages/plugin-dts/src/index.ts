@@ -1,6 +1,6 @@
 import { fork } from 'node:child_process';
 import { extname, join } from 'node:path';
-import { type RsbuildPlugin, logger } from '@rsbuild/core';
+import { type RsbuildConfig, type RsbuildPlugin, logger } from '@rsbuild/core';
 import { processSourceEntry } from './utils';
 
 export type PluginDtsOptions = {
@@ -8,6 +8,13 @@ export type PluginDtsOptions = {
   distPath?: string;
   abortOnError?: boolean;
   dtsExtension?: string;
+  autoExternal?:
+    | boolean
+    | {
+        dependencies?: boolean;
+        devDependencies?: boolean;
+        peerDependencies?: boolean;
+      };
 };
 
 export type DtsEntry = {
@@ -21,6 +28,7 @@ export type DtsGenOptions = PluginDtsOptions & {
   isWatch: boolean;
   dtsEntry: DtsEntry;
   tsconfigPath?: string;
+  userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 };
 
 interface TaskResult {
@@ -70,6 +78,7 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
         const dtsGenOptions: DtsGenOptions = {
           ...options,
           dtsEntry,
+          userExternals: config.output.externals,
           tsconfigPath: config.source.tsconfigPath,
           name: environment.name,
           cwd: api.context.rootPath,
