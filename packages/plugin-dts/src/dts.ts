@@ -5,7 +5,11 @@ import color from 'picocolors';
 import type { DtsGenOptions } from 'src';
 import * as ts from 'typescript';
 import { emitDts } from './tsc';
-import { ensureTempDeclarationDir, loadTsconfig } from './utils';
+import {
+  calcLongestCommonPath,
+  ensureTempDeclarationDir,
+  loadTsconfig,
+} from './utils';
 
 const isObject = (obj: unknown): obj is Record<string, any> =>
   Object.prototype.toString.call(obj) === '[object Object]';
@@ -115,9 +119,12 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     logger.error(`tsconfig.json not found in ${cwd}`);
     throw new Error();
   }
-  const { options: rawCompilerOptions } = loadTsconfig(configPath);
+  const { options: rawCompilerOptions, fileNames } = loadTsconfig(configPath);
   const rootDir =
-    rawCompilerOptions.rootDir ?? join(dirname(configPath), 'src');
+    rawCompilerOptions.rootDir ??
+    (await calcLongestCommonPath(fileNames)) ??
+    dirname(configPath);
+
   const outDir = distPath
     ? distPath
     : rawCompilerOptions.declarationDir || './dist';
