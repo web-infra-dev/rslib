@@ -43,6 +43,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
               "outputModule": true,
             },
             "externalsType": "module-import",
+            "module": {
+              "parser": {
+                "javascript": {
+                  "importMeta": false,
+                },
+              },
+            },
             "optimization": {
               "concatenateModules": true,
             },

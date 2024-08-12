@@ -186,6 +186,13 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
                 type: 'modern-module',
               },
             },
+            module: {
+              parser: {
+                javascript: {
+                  importMeta: false,
+                },
+              },
+            },
             optimization: {
               concatenateModules: true,
             },
@@ -430,6 +437,9 @@ const composeTargetConfig = (target = 'web'): RsbuildConfig => {
         tools: {
           rspack: {
             target: ['node'],
+            // "__dirname" and "__filename" shims will automatically be enabled when `output.module` is `true`,
+            // and leave them as-is in the rest of the cases.
+            // { node: { __dirname: ..., __filename: ... } }
           },
         },
         output: {
