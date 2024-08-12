@@ -102,10 +102,7 @@ export async function getResults(
   };
 }
 
-export const buildAndGetResults = async (
-  fixturePath: string,
-  type: 'js' | 'dts' = 'js',
-): Promise<{
+type BuildResult = {
   contents: Record<string, Record<string, string>>;
   files: Record<string, string[]>;
   entries: Record<string, string>;
@@ -113,7 +110,12 @@ export const buildAndGetResults = async (
   rspackConfig: InspectConfigResult['origin']['bundlerConfigs'];
   rsbuildConfig: InspectConfigResult['origin']['rsbuildConfig'];
   isSuccess: boolean;
-}> => {
+};
+
+export const buildAndGetResults = async (
+  fixturePath: string,
+  type: 'js' | 'dts' = 'js',
+): Promise<BuildResult> => {
   const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
   process.chdir(fixturePath);
   const rsbuildInstance = await build(rslibConfig);
@@ -130,5 +132,42 @@ export const buildAndGetResults = async (
     rspackConfig: bundlerConfigs,
     rsbuildConfig: rsbuildConfig,
     isSuccess: Boolean(rsbuildInstance),
+  };
+};
+
+export const buildAndGetAllResults = async (
+  fixturePath: string,
+): Promise<{
+  js: BuildResult;
+  dts: BuildResult;
+}> => {
+  const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
+  process.chdir(fixturePath);
+  const rsbuildInstance = await build(rslibConfig);
+  const {
+    origin: { bundlerConfigs, rsbuildConfig },
+  } = await rsbuildInstance.inspectConfig({ verbose: true });
+
+  const jsResults = await getResults(rslibConfig, fixturePath, 'js');
+  const dtsResults = await getResults(rslibConfig, fixturePath, 'dts');
+  return {
+    js: {
+      contents: jsResults.contents,
+      files: jsResults.files,
+      entries: jsResults.entries,
+      entryFiles: jsResults.entryFiles,
+      rspackConfig: bundlerConfigs,
+      rsbuildConfig: rsbuildConfig,
+      isSuccess: Boolean(rsbuildInstance),
+    },
+    dts: {
+      contents: dtsResults.contents,
+      files: dtsResults.files,
+      entries: dtsResults.entries,
+      entryFiles: dtsResults.entryFiles,
+      rspackConfig: bundlerConfigs,
+      rsbuildConfig: rsbuildConfig,
+      isSuccess: Boolean(rsbuildInstance),
+    },
   };
 };

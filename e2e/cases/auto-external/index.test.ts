@@ -1,18 +1,22 @@
 import { join } from 'node:path';
-import { buildAndGetResults } from '@e2e/helper';
+import { buildAndGetAllResults, buildAndGetResults } from '@e2e/helper';
 import { expect, test } from 'vitest';
 
 test('auto external default should works', async () => {
   const fixturePath = join(__dirname, 'default');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { js, dts } = await buildAndGetAllResults(fixturePath);
 
-  expect(entries.esm).toContain(
+  expect(js.entries.esm).toContain(
     'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
   );
 
-  expect(entries.cjs).toContain(
+  expect(js!.entries.cjs).toContain(
     'var external_react_namespaceObject = require("react");',
   );
+
+  // dts should externalized
+  expect(dts.entries.esm).toContain("import type { oraPromise } from 'ora';");
+  expect(dts.entries.cjs).toContain("import type { oraPromise } from 'ora';");
 });
 
 test('auto external sub path should works', async () => {
@@ -36,15 +40,20 @@ test('auto external sub path should works', async () => {
 
 test('auto external false should works', async () => {
   const fixturePath = join(__dirname, 'false');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { js, dts } = await buildAndGetAllResults(fixturePath);
 
-  expect(entries.esm).not.toContain(
+  expect(js.entries.esm).not.toContain(
     'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
   );
 
-  expect(entries.cjs).not.toContain(
+  expect(js.entries.cjs).not.toContain(
     'var external_react_namespaceObject = require("react");',
   );
+
+  // dts should bundled
+  expect(dts.entries.esm).toContain('export declare function oraPromise');
+
+  expect(dts.entries.cjs).toContain('export declare function oraPromise');
 });
 
 test('externals should overrides auto external', async () => {

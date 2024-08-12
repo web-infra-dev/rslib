@@ -6,15 +6,21 @@ export default defineConfig({
     {
       ...generateBundleEsmConfig(__dirname),
       autoExternal: false,
+      dts: {
+        bundle: true,
+      },
     },
     {
       ...generateBundleCjsConfig(__dirname),
       autoExternal: false,
+      dts: {
+        bundle: true,
+      },
     },
   ],
   source: {
     entry: {
-      main: '../__fixtures__/src/index.ts',
+      main: './src/index.ts',
     },
   },
 });
