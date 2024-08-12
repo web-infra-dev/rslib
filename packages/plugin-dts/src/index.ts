@@ -41,6 +41,7 @@ export const PLUGIN_DTS_NAME = 'rsbuild:dts';
 // use ts compiler API to generate bundleless dts
 // use ts compiler API and api-extractor to generate dts bundle
 // TODO: support incremental build, to build one or more projects and their dependencies
+// TODO: deal alias in dts
 export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
   name: PLUGIN_DTS_NAME,
 

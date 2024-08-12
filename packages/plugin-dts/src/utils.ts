@@ -99,7 +99,7 @@ export function processSourceEntry(
   );
 }
 
-// same as @rsbuild/core, we should extract into a single published package to share
+// same as @rslib/core, we should extract into a single published package to share
 export async function calcLongestCommonPath(
   absPaths: string[],
 ): Promise<string | null> {
