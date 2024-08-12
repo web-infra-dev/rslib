@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import fsP from 'node:fs/promises';
 import path from 'node:path';
 import { type RsbuildConfig, logger } from '@rsbuild/core';
 import fg from 'fast-glob';
@@ -96,4 +97,36 @@ export function processSourceEntry(
   throw new Error(
     '@microsoft/api-extractor only support single entry of Record<string, string> type to bundle DTS, please check your entry config.',
   );
+}
+
+// same as @rslib/core, we should extract into a single published package to share
+export async function calcLongestCommonPath(
+  absPaths: string[],
+): Promise<string | null> {
+  if (absPaths.length === 0) {
+    return null;
+  }
+
+  const splitPaths = absPaths.map((p) => p.split(path.sep));
+  let lcaFragments = splitPaths[0]!;
+  for (let i = 1; i < splitPaths.length; i++) {
+    const currentPath = splitPaths[i]!;
+    const minLength = Math.min(lcaFragments.length, currentPath.length);
+
+    let j = 0;
+    while (j < minLength && lcaFragments[j] === currentPath[j]) {
+      j++;
+    }
+
+    lcaFragments = lcaFragments.slice(0, j);
+  }
+
+  let lca = lcaFragments.length > 0 ? lcaFragments.join(path.sep) : '/';
+
+  const stats = await fsP.stat(lca);
+  if (stats?.isFile()) {
+    lca = path.dirname(lca);
+  }
+
+  return lca;
 }
