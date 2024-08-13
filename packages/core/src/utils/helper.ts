@@ -78,7 +78,12 @@ async function calcLongestCommonPath(
     return null;
   }
 
-  const splitPaths = absPaths.map((p) => p.split(path.sep));
+  // we support two cases
+  // 1. /packages-a/src/index.ts
+  // 2. D:/packages-a/src/index.ts
+  const sep = path.posix.sep as '/';
+
+  const splitPaths = absPaths.map((p) => p.split(sep));
   let lcaFragments = splitPaths[0]!;
   for (let i = 1; i < splitPaths.length; i++) {
     const currentPath = splitPaths[i]!;
@@ -92,7 +97,7 @@ async function calcLongestCommonPath(
     lcaFragments = lcaFragments.slice(0, j);
   }
 
-  let lca = lcaFragments.length > 0 ? lcaFragments.join(path.sep) : '/';
+  let lca = lcaFragments.length > 0 ? lcaFragments.join(sep) : sep;
 
   const stats = await fsP.stat(lca);
   if (stats?.isFile()) {

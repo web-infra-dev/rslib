@@ -99,11 +99,13 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: pnpm install && cd ./e2e && pnpx playwright install
 
-      - name: E2E Test
+      - name: E2E Artifact Test (Vitest)
         if: steps.changes.outputs.changed == 'true'
-        run: |
-          pnpm run test:artifact
-          pnpm run test:e2e
+        run: pnpm run test:artifact
+
+      - name: E2E Test (Playwright)
+        if: steps.changes.outputs.changed == 'true'
+        run: pnpm run test:e2e
 
       - name: Examples Test
         if: steps.changes.outputs.changed == 'true'

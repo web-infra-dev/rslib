@@ -9,10 +9,10 @@ describe('dts when bundle: false', () => {
 
     expect(files.esm).toMatchInlineSnapshot(`
       [
-        "./dist/esm/index.d.ts",
-        "./dist/esm/sum.d.ts",
-        "./dist/esm/utils/numbers.d.ts",
-        "./dist/esm/utils/strings.d.ts",
+        "<ROOT>/e2e/cases/dts/bundle-false/basic/dist/esm/index.d.ts",
+        "<ROOT>/e2e/cases/dts/bundle-false/basic/dist/esm/sum.d.ts",
+        "<ROOT>/e2e/cases/dts/bundle-false/basic/dist/esm/utils/numbers.d.ts",
+        "<ROOT>/e2e/cases/dts/bundle-false/basic/dist/esm/utils/strings.d.ts",
       ]
     `);
     expect(contents.esm).toMatchSnapshot();
@@ -22,7 +22,7 @@ describe('dts when bundle: false', () => {
     const fixturePath = join(__dirname, 'bundle-false', 'false');
     const { files } = await buildAndGetResults(fixturePath, 'dts');
 
-    expect(files.esm).toBe(undefined);
+    expect(files.esm).toMatchInlineSnapshot('undefined');
   });
 
   test('distPath', async () => {
@@ -31,10 +31,10 @@ describe('dts when bundle: false', () => {
 
     expect(files.esm).toMatchInlineSnapshot(`
       [
-        "./dist/custom/index.d.ts",
-        "./dist/custom/sum.d.ts",
-        "./dist/custom/utils/numbers.d.ts",
-        "./dist/custom/utils/strings.d.ts",
+        "<ROOT>/e2e/cases/dts/bundle-false/dist-path/dist/custom/index.d.ts",
+        "<ROOT>/e2e/cases/dts/bundle-false/dist-path/dist/custom/sum.d.ts",
+        "<ROOT>/e2e/cases/dts/bundle-false/dist-path/dist/custom/utils/numbers.d.ts",
+        "<ROOT>/e2e/cases/dts/bundle-false/dist-path/dist/custom/utils/strings.d.ts",
       ]
     `);
   });
@@ -52,10 +52,10 @@ describe('dts when bundle: false', () => {
 
     expect(files.cjs).toMatchInlineSnapshot(`
       [
-        "./dist/cjs/index.d.cts",
-        "./dist/cjs/sum.d.cts",
-        "./dist/cjs/utils/numbers.d.cts",
-        "./dist/cjs/utils/strings.d.cts",
+        "<ROOT>/e2e/cases/dts/bundle-false/auto-extension/dist/cjs/index.d.cts",
+        "<ROOT>/e2e/cases/dts/bundle-false/auto-extension/dist/cjs/sum.d.cts",
+        "<ROOT>/e2e/cases/dts/bundle-false/auto-extension/dist/cjs/utils/numbers.d.cts",
+        "<ROOT>/e2e/cases/dts/bundle-false/auto-extension/dist/cjs/utils/strings.d.cts",
       ]
     `);
   });
@@ -69,7 +69,9 @@ describe('dts when bundle: true', () => {
       'dts',
     );
 
-    expect(entryFiles.esm).toEqual('./dist/esm/main.d.ts');
+    expect(entryFiles.esm).toMatchInlineSnapshot(
+      `"<ROOT>/e2e/cases/dts/bundle/basic/dist/esm/main.d.ts"`,
+    );
     expect(entries).toMatchSnapshot();
   });
 
@@ -77,14 +79,16 @@ describe('dts when bundle: true', () => {
     const fixturePath = join(__dirname, 'bundle', 'false');
     const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
-    expect(entryFiles.esm).toEqual(undefined);
+    expect(entryFiles.esm).toMatchInlineSnapshot('undefined');
   });
 
   test('distPath', async () => {
     const fixturePath = join(__dirname, 'bundle', 'dist-path');
     const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
-    expect(entryFiles.esm).toEqual('./dist/custom/main.d.ts');
+    expect(entryFiles.esm).toMatchInlineSnapshot(
+      `"<ROOT>/e2e/cases/dts/bundle/dist-path/dist/custom/main.d.ts"`,
+    );
   });
 
   test('abortOnError: false', async () => {
@@ -98,13 +102,17 @@ describe('dts when bundle: true', () => {
     const fixturePath = join(__dirname, 'bundle', 'auto-extension');
     const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
-    expect(entryFiles.cjs).toEqual('./dist/cjs/main.d.cts');
+    expect(entryFiles.cjs).toMatchInlineSnapshot(
+      `"<ROOT>/e2e/cases/dts/bundle/auto-extension/dist/cjs/main.d.cts"`,
+    );
   });
 
   test('bundleName -- set source.entry', async () => {
     const fixturePath = join(__dirname, 'bundle', 'bundle-name');
     const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
-    expect(entryFiles.esm).toEqual('./dist/esm/bundleName.d.ts');
+    expect(entryFiles.esm).toMatchInlineSnapshot(
+      `"<ROOT>/e2e/cases/dts/bundle/bundle-name/dist/esm/bundleName.d.ts"`,
+    );
   });
 });
