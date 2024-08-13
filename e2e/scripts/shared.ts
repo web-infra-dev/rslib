@@ -85,7 +85,6 @@ export async function getResults(
     });
 
     const fileSet = Object.keys(content).filter((file) => regex.test(file));
-    console.log('globFolder', globFolder, 'fileSet', fileSet);
     const filterContent: Record<string, string> = {};
     for (const key of fileSet) {
       if (content[key]) {

@@ -92,8 +92,6 @@ export async function processDtsFiles(
 
   const dtsFiles = await fg(convertPath(join(dir, '/**/*.d.ts')));
 
-  console.log('11111 fg', dir, 'dtsFiles', dtsFiles);
-
   for (const file of dtsFiles) {
     try {
       const newFile = file.replace('.d.ts', dtsExtension);
