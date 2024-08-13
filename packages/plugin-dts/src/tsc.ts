@@ -74,8 +74,8 @@ export async function emitDts(
       throw new Error('DTS generation failed');
     }
 
-    logger.info(
-      `DTS generation succeeded in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+    logger.ready(
+      `DTS generated in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
     );
   } else {
     const createProgram = ts.createSemanticDiagnosticsBuilderProgram;

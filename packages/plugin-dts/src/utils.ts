@@ -48,8 +48,25 @@ export function getFileLoc(diagnostic: ts.Diagnostic): string {
   return '';
 }
 
+export const prettyTime = (seconds: number): string => {
+  const format = (time: string) => color.bold(time);
+
+  if (seconds < 10) {
+    const digits = seconds >= 0.01 ? 2 : 3;
+    return `${format(seconds.toFixed(digits))} s`;
+  }
+
+  if (seconds < 60) {
+    return `${format(seconds.toFixed(1))} s`;
+  }
+
+  const minutes = seconds / 60;
+  return `${format(minutes.toFixed(2))} m`;
+};
+
 export function getTimeCost(start: number): string {
-  return `${Math.floor(Date.now() - start)}ms`;
+  const second = (Date.now() - start) / 1000;
+  return prettyTime(second);
 }
 
 export async function processDtsFiles(
