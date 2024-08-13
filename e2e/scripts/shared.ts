@@ -73,9 +73,6 @@ export async function getResults(
     }
 
     if (!globFolder) continue;
-    if (!isAbsolute(globFolder)) {
-      globFolder = join(fixturePath, globFolder);
-    }
 
     const regex = type === 'dts' ? /\.d.(ts|cts|mts)$/ : /\.(js|cjs|mjs)$/;
 
