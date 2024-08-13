@@ -3,10 +3,12 @@ import fsP from 'node:fs/promises';
 import { platform } from 'node:os';
 import path, { join } from 'node:path';
 import { type RsbuildConfig, logger } from '@rsbuild/core';
-import fg, { convertPathToPattern } from 'fast-glob';
+import fg from 'fast-glob';
 import color from 'picocolors';
 import type { DtsEntry } from 'src';
 import * as ts from 'typescript';
+
+const { convertPathToPattern } = fg;
 
 export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
   const configFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
@@ -31,7 +33,7 @@ export function ensureTempDeclarationDir(cwd: string): string {
 
   fs.mkdirSync(dirPath, { recursive: true });
 
-  const gitIgnorePath = path.join(cwd, `${TEMP_FOLDER}/.gitignore`);
+  const gitIgnorePath = path.join(cwd, TEMP_FOLDER, '.gitignore');
   fs.writeFileSync(gitIgnorePath, '**/*\n');
 
   return dirPath;
