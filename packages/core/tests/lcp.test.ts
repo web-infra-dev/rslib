@@ -29,11 +29,11 @@ describe('LCP calculate correctly', () => {
       expect(result).toEqual('/Users/Someone/project-a/src');
     } else {
       const result = await calcLongestCommonPath([
-        'D:\\Users\\Someone\\project-a\\src\\helpers',
-        'D:\\Users\\Someone\\project-a\\src',
-        'D:\\Users\\Someone\\project-a\\src\\utils',
+        'D:/Users/Someone/project-a/src/helpers',
+        'D:/Users/Someone/project-a/src',
+        'D:/Users/Someone/project-a/src/utils',
       ]);
-      expect(result).toEqual('D:\\Users\\Someone\\project-a\\src');
+      expect(result).toEqual('D:/Users/Someone/project-a/src');
     }
   });
 
@@ -49,11 +49,11 @@ describe('LCP calculate correctly', () => {
       expect(result).toEqual('/Users/Someone/project-monorepo');
     } else {
       const result = await calcLongestCommonPath([
-        'D:\\Users\\Someone\\project-monorepo\\packages-a\\src\\index.ts',
-        'D:\\Users\\Someone\\project-monorepo\\packages-util\\src\\index.js',
-        'D:\\Users\\Someone\\project-monorepo\\script.js',
+        'D:/Users/Someone/project-monorepo/packages-a/src/index.ts',
+        'D:/Users/Someone/project-monorepo/packages-util/src/index.js',
+        'D:/Users/Someone/project-monorepo/script.js',
       ]);
-      expect(result).toEqual('D:\\Users\\Someone\\project-monorepo');
+      expect(result).toEqual('D:/Users/Someone/project-monorepo');
     }
   });
 
@@ -68,9 +68,9 @@ describe('LCP calculate correctly', () => {
       expect(result).toEqual('/Users/Someone/project/src');
     } else {
       const result = await calcLongestCommonPath([
-        'D:\\Users\\Someone\\project\\src\\index.js',
+        'D:/Users/Someone/project/src/index.js',
       ]);
-      expect(result).toEqual('D:\\Users\\Someone\\project\\src');
+      expect(result).toEqual('D:/Users/Someone/project/src');
     }
   });
 });

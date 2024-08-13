@@ -1,4 +1,4 @@
-import { join } from 'node:path';
+import { isAbsolute, join } from 'node:path';
 import {
   type InspectConfigResult,
   mergeRsbuildConfig as mergeConfig,
@@ -39,11 +39,25 @@ export function generateBundleCjsConfig(
   return mergeConfig(cjsBasicConfig, config)!;
 }
 
+type FormatType = 'esm' | 'cjs';
+type FilePath = string;
+
+type BuildResult = {
+  files: Record<FormatType, FilePath[]>;
+  contents: Record<FormatType, Record<FilePath, string>>;
+  entries: Record<FormatType, string>;
+  entryFiles: Record<FormatType, FilePath>;
+
+  rspackConfig: InspectConfigResult['origin']['bundlerConfigs'];
+  rsbuildConfig: InspectConfigResult['origin']['rsbuildConfig'];
+  isSuccess: boolean;
+};
+
 export async function getResults(
   rslibConfig: RslibConfig,
   fixturePath: string,
   type: 'js' | 'dts',
-) {
+): Promise<Omit<BuildResult, 'rspackConfig' | 'rsbuildConfig' | 'isSuccess'>> {
   const files: Record<string, string[]> = {};
   const contents: Record<string, Record<string, string>> = {};
   const entries: Record<string, string> = {};
@@ -59,22 +73,19 @@ export async function getResults(
     }
 
     if (!globFolder) continue;
+    if (!isAbsolute(globFolder)) {
+      globFolder = join(fixturePath, globFolder);
+    }
 
     const regex = type === 'dts' ? /\.d.(ts|cts|mts)$/ : /\.(js|cjs|mjs)$/;
 
-    const rawContent = await globContentJSON(globFolder, {
+    const content: Record<string, string> = await globContentJSON(globFolder, {
       absolute: true,
-      ignore: ['/**/*.map'],
+      ignore: ['**/*.map'],
     });
 
-    const content: Record<string, string> = {};
-
-    for (const key of Object.keys(rawContent)) {
-      const newKey = key.replace(fixturePath, '.');
-      content[newKey] = rawContent[key]!;
-    }
-
     const fileSet = Object.keys(content).filter((file) => regex.test(file));
+    console.log('globFolder', globFolder, 'fileSet', fileSet);
     const filterContent: Record<string, string> = {};
     for (const key of fileSet) {
       if (content[key]) {
@@ -101,16 +112,6 @@ export async function getResults(
     entryFiles,
   };
 }
-
-type BuildResult = {
-  contents: Record<string, Record<string, string>>;
-  files: Record<string, string[]>;
-  entries: Record<string, string>;
-  entryFiles: Record<string, string>;
-  rspackConfig: InspectConfigResult['origin']['bundlerConfigs'];
-  rsbuildConfig: InspectConfigResult['origin']['rsbuildConfig'];
-  isSuccess: boolean;
-};
 
 export async function buildAndGetResults(
   fixturePath: string,

@@ -1,8 +1,9 @@
 import fs from 'node:fs';
 import fsP from 'node:fs/promises';
-import path from 'node:path';
+import { platform } from 'node:os';
+import path, { join } from 'node:path';
 import { type RsbuildConfig, logger } from '@rsbuild/core';
-import fg from 'fast-glob';
+import fg, { convertPathToPattern } from 'fast-glob';
 import color from 'picocolors';
 import type { DtsEntry } from 'src';
 import * as ts from 'typescript';
@@ -64,6 +65,15 @@ export const prettyTime = (seconds: number): string => {
   return `${format(minutes.toFixed(2))} m`;
 };
 
+// fast-glob only accepts posix path
+// https://github.com/mrmlnc/fast-glob#convertpathtopatternpath
+const convertPath = (path: string) => {
+  if (platform() === 'win32') {
+    return convertPathToPattern(path);
+  }
+  return path;
+};
+
 export function getTimeCost(start: number): string {
   const second = (Date.now() - start) / 1000;
   return prettyTime(second);
@@ -78,7 +88,9 @@ export async function processDtsFiles(
     return;
   }
 
-  const dtsFiles = await fg(`${dir}/**/*.d.ts`);
+  const dtsFiles = await fg(convertPath(join(dir, '/**/*.d.ts')));
+
+  console.log('11111 fg', dir, 'dtsFiles', dtsFiles);
 
   for (const file of dtsFiles) {
     try {
@@ -124,7 +136,12 @@ export async function calcLongestCommonPath(
     return null;
   }
 
-  const splitPaths = absPaths.map((p) => p.split(path.sep));
+  // we support two cases
+  // 1. /packages-a/src/index.ts
+  // 2. D:/packages-a/src/index.ts
+  const sep = path.posix.sep as '/';
+
+  const splitPaths = absPaths.map((p) => p.split(sep));
   let lcaFragments = splitPaths[0]!;
   for (let i = 1; i < splitPaths.length; i++) {
     const currentPath = splitPaths[i]!;
@@ -138,7 +155,7 @@ export async function calcLongestCommonPath(
     lcaFragments = lcaFragments.slice(0, j);
   }
 
-  let lca = lcaFragments.length > 0 ? lcaFragments.join(path.sep) : '/';
+  let lca = lcaFragments.length > 0 ? lcaFragments.join(sep) : sep;
 
   const stats = await fsP.stat(lca);
   if (stats?.isFile()) {

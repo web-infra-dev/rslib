@@ -8,18 +8,18 @@ test('basic', async () => {
 
   expect(files.esm).toMatchInlineSnapshot(`
     [
-      "./dist/esm/index.js",
-      "./dist/esm/sum.js",
-      "./dist/esm/utils/numbers.js",
-      "./dist/esm/utils/strings.js",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/esm/index.js",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/esm/sum.js",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/esm/utils/numbers.js",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/esm/utils/strings.js",
     ]
   `);
   expect(files.cjs).toMatchInlineSnapshot(`
     [
-      "./dist/cjs/index.js",
-      "./dist/cjs/sum.js",
-      "./dist/cjs/utils/numbers.js",
-      "./dist/cjs/utils/strings.js",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/index.js",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/sum.js",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/utils/numbers.js",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/utils/strings.js",
     ]
   `);
 });
@@ -30,12 +30,12 @@ test('single file', async () => {
 
   expect(files.esm).toMatchInlineSnapshot(`
     [
-      "./dist/esm/index.js",
+      "<ROOT>/e2e/cases/bundle-false/single-file/dist/esm/index.js",
     ]
   `);
   expect(files.cjs).toMatchInlineSnapshot(`
     [
-      "./dist/cjs/index.js",
+      "<ROOT>/e2e/cases/bundle-false/single-file/dist/cjs/index.js",
     ]
   `);
 });

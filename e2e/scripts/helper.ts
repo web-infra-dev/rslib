@@ -6,8 +6,6 @@ import fg, {
 } from 'fast-glob';
 import fse from 'fs-extra';
 
-export const getFiles = async (_pattern: string) => {};
-
 // fast-glob only accepts posix path
 // https://github.com/mrmlnc/fast-glob#convertpathtopatternpath
 const convertPath = (path: string) => {
@@ -17,7 +15,10 @@ const convertPath = (path: string) => {
   return path;
 };
 
-export const globContentJSON = async (path: string, options?: GlobOptions) => {
+export const globContentJSON = async (
+  path: string,
+  options?: GlobOptions,
+): Promise<Record<string, string>> => {
   const files = await fg(convertPath(join(path, '**/*')), options);
   const ret: Record<string, string> = {};
 
