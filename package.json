@@ -1,9 +1,15 @@
 {
   "name": "rslib-monorepo",
   "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
   "scripts": {
     "build": "cross-env NX_DAEMON=false nx run-many -t build --exclude @examples/* --parallel=10",
     "build:examples": "cross-env NX_DAEMON=false nx run-many -t build --projects @examples/* --parallel=10",
+    "change": "changeset",
     "check-dependency-version": "check-dependency-version-consistency .",
     "check-spell": "npx cspell",
     "lint": "biome check . --diagnostic-level=warn &&  pnpm run check-spell",
@@ -29,6 +35,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
+    "@changesets/cli": "^2.27.7",
     "@modern-js/module-tools": "^2.55.0",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "~18.19.39",
