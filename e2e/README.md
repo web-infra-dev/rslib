@@ -8,39 +8,39 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | --------- | ----------------- | ------------ | ---------------- |
 | 🟢        | 🟡                | ⚪️           | ⚫️              |
 
-| Feature         | Status | Note                                                                                                                    |
-| --------------- | ------ | ----------------------------------------------------------------------------------------------------------------------- |
-| alias           | 🟢     |                                                                                                                         |
-| asset           | ⚪️     |                                                                                                                         |
-| autoExtension   | 🟡     | Support js extension, dts extension need to be supported in the future                                                  |
-| autoExternal    | ⚪️     |                                                                                                                         |
-| banner-footer   | ⚪️     |                                                                                                                         |
-| buildType       | ⚪️     |                                                                                                                         |
-| copy            | ⚪️     |                                                                                                                         |
-| decorator       | ⚪️     |                                                                                                                         |
-| define          | 🟢     |                                                                                                                         |
-| dts             | ⚪️     |                                                                                                                         |
-| dts-composite   | ⚪️     |                                                                                                                         |
-| esbuildOptions  | ⚪️     |                                                                                                                         |
-| externals       | 🟡     | Support auto externalize Node.js built-in modules.<br />Should also support auto externalize `devDep && !peerDep` deps. |
-| format          | ⚪️     |                                                                                                                         |
-| input           | ⚪️     |                                                                                                                         |
-| jsx             | ⚪️     |                                                                                                                         |
-| metafile        | ⚪️     |                                                                                                                         |
-| minify          | ⚪️     |                                                                                                                         |
-| platform        | 🟢     |                                                                                                                         |
-| redirect        | ⚪️     |                                                                                                                         |
-| resolve         | ⚪️     |                                                                                                                         |
-| shims           | ⚪️     |                                                                                                                         |
-| sideEffects     | ⚪️     |                                                                                                                         |
-| sourceDir       | ⚪️     |                                                                                                                         |
-| sourceMap       | ⚪️     |                                                                                                                         |
-| splitting       | ⚪️     |                                                                                                                         |
-| style           | ⚪️     |                                                                                                                         |
-| target          | 🟢     |                                                                                                                         |
-| transformImport | ⚪️     |                                                                                                                         |
-| transformLodash | ⚪️     |                                                                                                                         |
-| tsconfig        | ⚪️     |                                                                                                                         |
-| tsconfigExtends | ⚪️     |                                                                                                                         |
-| umdGlobals      | ⚪️     |                                                                                                                         |
-| umdModuleName   | ⚪️     |                                                                                                                         |
+| Feature         | Status | Note                                                                                                 |
+| --------------- | ------ | ---------------------------------------------------------------------------------------------------- |
+| alias           | 🟢     |                                                                                                      |
+| asset           | ⚪️     |                                                                                                      |
+| autoExtension   | 🟢     |                                                                                                      |
+| autoExternal    | 🟢     |                                                                                                      |
+| banner-footer   | ⚪️     |                                                                                                      |
+| buildType       | 🟢     |                                                                                                      |
+| copy            | ⚪️     |                                                                                                      |
+| decorator       | ⚪️     |                                                                                                      |
+| define          | 🟢     |                                                                                                      |
+| dts             | 🟢     |                                                                                                      |
+| dts-composite   | ⚪️     |                                                                                                      |
+| esbuildOptions  | ⚫️    |                                                                                                      |
+| externals       | 🟢     |                                                                                                      |
+| format          | 🟡     | Support `cjs` and `esm`, `umd` still need to be tested                                               |
+| input           | ⚪️     |                                                                                                      |
+| jsx             | ⚪️     |                                                                                                      |
+| metafile        | ⚪️     |                                                                                                      |
+| minify          | ⚪️     |                                                                                                      |
+| platform        | 🟢     |                                                                                                      |
+| redirect        | ⚪️     |                                                                                                      |
+| resolve         | ⚪️     |                                                                                                      |
+| shims           | 🟡     | Support shims `__filename` and `__dirname` in esm</br> `import.meta.url` in cjs need to be supported |
+| sideEffects     | ⚪️     |                                                                                                      |
+| sourceDir       | ⚪️     |                                                                                                      |
+| sourceMap       | ⚪️     |                                                                                                      |
+| splitting       | ⚪️     |                                                                                                      |
+| style           | ⚪️     |                                                                                                      |
+| target          | 🟢     |                                                                                                      |
+| transformImport | ⚪️     |                                                                                                      |
+| transformLodash | ⚪️     |                                                                                                      |
+| tsconfig        | ⚪️     |                                                                                                      |
+| tsconfigExtends | ⚪️     |                                                                                                      |
+| umdGlobals      | ⚪️     |                                                                                                      |
+| umdModuleName   | ⚪️     |                                                                                                      |
