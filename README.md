@@ -56,6 +56,19 @@ You can also clone the repository and run the examples in the [examples](https:/
 
 Please read the [Contributing Guide](https://github.com/web-infra-dev/rslib/blob/main/CONTRIBUTING.md).
 
+### Contributors
+
+<a href="https://github.com/web-infra-dev/rslib/graphs/contributors" target="_blank">
+  <table>
+    <tr>
+      <th colspan="2">
+        <br/>
+        <img src="https://contrib.rocks/image?repo=web-infra-dev/rslib&columns=16&max=96"><br/><br/>
+      </th>
+    </tr>
+  </table>
+</a>
+
 ### Code of Conduct
 
 This repo has adopted the ByteDance Open Source Code of Conduct. Please check [Code of Conduct](./CODE_OF_CONDUCT.md) for more details.
