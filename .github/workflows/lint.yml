@@ -44,3 +44,6 @@ jobs:
 
       - name: Check Dependency Version
         run: pnpm run check-dependency-version
+
+      - name: Check Pnpm Dedupe
+        run: pnpm dedupe --check
