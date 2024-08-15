@@ -10,6 +10,7 @@
     "build": "cross-env NX_DAEMON=false nx run-many -t build --exclude @examples/* --parallel=10",
     "build:examples": "cross-env NX_DAEMON=false nx run-many -t build --projects @examples/* --parallel=10",
     "change": "changeset",
+    "changeset": "changeset",
     "check-dependency-version": "check-dependency-version-consistency .",
     "check-spell": "npx cspell",
     "lint": "biome check . --diagnostic-level=warn &&  pnpm run check-spell",
