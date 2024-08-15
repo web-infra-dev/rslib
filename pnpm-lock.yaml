@@ -222,6 +222,9 @@ importers:
       prebundle:
         specifier: 1.1.0
         version: 1.1.0(typescript@5.5.4)
+      rslib:
+        specifier: npm:@rslib/core@0.0.0
+        version: '@rslib/core@0.0.0(@microsoft/api-extractor@7.47.2(@types/node@18.19.39))(typescript@5.5.4)'
       rslog:
         specifier: ^1.2.2
         version: 1.2.2
@@ -247,6 +250,9 @@ importers:
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
+      rslib:
+        specifier: npm:@rslib/core@0.0.0
+        version: '@rslib/core@0.0.0(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(typescript@5.5.4)'
       typescript:
         specifier: ^5.5.4
         version: 5.5.4
@@ -1283,6 +1289,19 @@ packages:
     resolution: {integrity: sha512-9WtgSIv4s3w5ExPQeEcRDNkVyom7mYHU8KcM3tqPYoJdp4YH4U3bmwHZaWT9ySGGjOH0Rd0emFvQKCy0K3pmQA==}
     peerDependencies:
       '@rsbuild/core': ^1.0.1-beta.11
+
+  '@rslib/core@0.0.0':
+    resolution: {integrity: sha512-P08Hz+tacY6sN7S6C8JL5tLcXzdbYQX7SECi3d9lj2g4IA5mIDQpPpZURNVScO/c0JFfZgBuPefaebj29tJ8fw==}
+    engines: {node: '>=16.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@microsoft/api-extractor': ^7
+      typescript: ^5
+    peerDependenciesMeta:
+      '@microsoft/api-extractor':
+        optional: true
+      typescript:
+        optional: true
 
   '@rspack/binding-canary@1.0.0-canary-f6e73ba-20240809060047':
     resolution: {integrity: sha512-PKTcshCQzT0qHyzP5TY+U0zILfCQySjnATnTjTOfeNtCT9ZzgM+xB8o0hgvl6vKbA6UMcT24Jje3uwZtYB1L/g==}
@@ -2809,6 +2828,19 @@ packages:
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
+  rsbuild-plugin-dts@0.0.0:
+    resolution: {integrity: sha512-3wVYA6NIN5271n5sIJabQMJSVqNq6ROyIQFUWHxP/BuiKN2DULkNAgOWORHJSrcZi4D8TaldCIY+aoKvg3pGUw==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      '@microsoft/api-extractor': ^7
+      '@rsbuild/core': 1.x
+      typescript: ^5
+    peerDependenciesMeta:
+      '@microsoft/api-extractor':
+        optional: true
+      typescript:
+        optional: true
+
   rslog@1.2.2:
     resolution: {integrity: sha512-tZP8KjrI1nz6qOYCrFxAV7cfmfS2GV94jotU2zOmF/6ByO1zNvGR6/+0inylpjqyBjAdnnutTUW0m4th06bSTw==}
     engines: {node: '>=14.17.6'}
@@ -4273,6 +4305,22 @@ snapshots:
       '@rsbuild/core': 1.0.1-beta.11
       '@rspack/plugin-react-refresh': 1.0.0-beta.3(react-refresh@0.14.2)
       react-refresh: 0.14.2
+
+  '@rslib/core@0.0.0(@microsoft/api-extractor@7.47.2(@types/node@18.19.39))(typescript@5.5.4)':
+    dependencies:
+      '@rsbuild/core': 1.0.1-beta.11
+      rsbuild-plugin-dts: 0.0.0(@microsoft/api-extractor@7.47.2(@types/node@18.19.39))(@rsbuild/core@1.0.1-beta.11)(typescript@5.5.4)
+    optionalDependencies:
+      '@microsoft/api-extractor': 7.47.2(@types/node@18.19.39)
+      typescript: 5.5.4
+
+  '@rslib/core@0.0.0(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(typescript@5.5.4)':
+    dependencies:
+      '@rsbuild/core': 1.0.1-beta.11
+      rsbuild-plugin-dts: 0.0.0(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(@rsbuild/core@1.0.1-beta.11)(typescript@5.5.4)
+    optionalDependencies:
+      '@microsoft/api-extractor': 7.47.5(@types/node@18.19.39)
+      typescript: 5.5.4
 
   '@rspack/binding-canary@1.0.0-canary-f6e73ba-20240809060047':
     optionalDependencies:
@@ -5865,6 +5913,24 @@ snapshots:
       '@rollup/rollup-win32-ia32-msvc': 4.18.1
       '@rollup/rollup-win32-x64-msvc': 4.18.1
       fsevents: 2.3.3
+
+  rsbuild-plugin-dts@0.0.0(@microsoft/api-extractor@7.47.2(@types/node@18.19.39))(@rsbuild/core@1.0.1-beta.11)(typescript@5.5.4):
+    dependencies:
+      '@rsbuild/core': 1.0.1-beta.11
+      fast-glob: 3.3.2
+      picocolors: 1.0.1
+    optionalDependencies:
+      '@microsoft/api-extractor': 7.47.2(@types/node@18.19.39)
+      typescript: 5.5.4
+
+  rsbuild-plugin-dts@0.0.0(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(@rsbuild/core@1.0.1-beta.11)(typescript@5.5.4):
+    dependencies:
+      '@rsbuild/core': 1.0.1-beta.11
+      fast-glob: 3.3.2
+      picocolors: 1.0.1
+    optionalDependencies:
+      '@microsoft/api-extractor': 7.47.5(@types/node@18.19.39)
+      typescript: 5.5.4
 
   rslog@1.2.2: {}
 

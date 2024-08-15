@@ -16,12 +16,11 @@
   "exports": {
     ".": {
       "types": "./dist-types/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/main.js"
     },
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/main.js",
   "types": "./dist-types/index.d.ts",
   "bin": {
     "rslib": "./bin/rslib.js"
@@ -33,8 +32,8 @@
     "compiled"
   ],
   "scripts": {
-    "build": "modern build",
-    "dev": "modern build --watch",
+    "build": "rslib build",
+    "dev": "rslib build --watch",
     "prebundle": "prebundle"
   },
   "dependencies": {
@@ -50,6 +49,7 @@
     "memfs": "^4.11.1",
     "picocolors": "1.0.1",
     "prebundle": "1.1.0",
+    "rslib": "npm:@rslib/core@0.0.0",
     "rslog": "^1.2.2",
     "typescript": "^5.5.4"
   },
