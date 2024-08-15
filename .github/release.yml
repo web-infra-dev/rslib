@@ -1,0 +1,26 @@
+# .github/release.yml
+
+changelog:
+  exclude:
+    authors:
+      # Ignore the release PR created by github-actions
+      - github-actions
+  categories:
+    - title: Breaking Changes 🍭
+      labels:
+        - 'release: breaking change'
+    - title: New Features 🎉
+      labels:
+        - 'release: feature'
+    - title: Performance 🚀
+      labels:
+        - 'release: performance'
+    - title: Bug Fixes 🐞
+      labels:
+        - 'release: bug fix'
+    - title: Document 📖
+      labels:
+        - 'release: document'
+    - title: Other Changes
+      labels:
+        - '*'
