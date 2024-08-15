@@ -138,6 +138,6 @@ Here are the steps to publish (we generally use CI for releases and avoid publis
 
 The project is still in its early stages and under active development, so it possible dependents on Rsbuild or Rspack canary versions to test the latest features. The current canary versions are:
 
-| Package      | Link                                                                   |
-| ------------ | ---------------------------------------------------------------------- |
-| @rspack/core | [HEAD](https://github.com/fi3ework/rspack/tree/module-import-fallback) |
+| Package      | Link                                                    |
+| ------------ | ------------------------------------------------------- |
+| @rspack/core | [PR](https://github.com/web-infra-dev/rspack/pull/7587) |
