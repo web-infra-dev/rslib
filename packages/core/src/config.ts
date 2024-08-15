@@ -26,7 +26,6 @@ import {
   calcLongestCommonPath,
   color,
   isObject,
-  isRelativePath,
   nodeBuiltInModules,
   readPackageJson,
 } from './utils/helper';
