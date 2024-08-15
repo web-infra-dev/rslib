@@ -48,6 +48,6 @@ test('auto add extension for relative import', async () => {
     'import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "./bar.js";',
   );
   expect(Object.values(contents.cjs)[1]).toContain(
-    'var external_bar_js_namespaceObject = require("./bar.js");',
+    'var external_bar_cjs_namespaceObject = require("./bar.cjs");',
   );
 });
