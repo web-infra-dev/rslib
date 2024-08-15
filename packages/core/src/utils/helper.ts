@@ -71,7 +71,7 @@ export const nodeBuiltInModules: Array<string | RegExp> = [
   'pnpapi',
 ];
 
-async function calcLongestCommonPath(
+export async function calcLongestCommonPath(
   absPaths: string[],
 ): Promise<string | null> {
   if (absPaths.length === 0) {
@@ -126,4 +126,6 @@ export const readPackageJson = (rootPath: string): undefined | PkgJson => {
 export const isObject = (obj: unknown): obj is Record<string, any> =>
   Object.prototype.toString.call(obj) === '[object Object]';
 
-export { color, calcLongestCommonPath };
+export const isRelativePath = (p: string): boolean => /^\.\.?($|[\\/])/.test(p);
+
+export { color };

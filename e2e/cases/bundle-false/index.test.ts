@@ -39,3 +39,15 @@ test('single file', async () => {
     ]
   `);
 });
+
+test('auto add extension for relative import', async () => {
+  const fixturePath = join(__dirname, 'relative-import');
+  const { contents } = await buildAndGetResults(fixturePath);
+
+  expect(Object.values(contents.esm)[1]).toContain(
+    'import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "./bar.js";',
+  );
+  expect(Object.values(contents.cjs)[1]).toContain(
+    'var external_bar_js_namespaceObject = require("./bar.js");',
+  );
+});
