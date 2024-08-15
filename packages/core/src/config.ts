@@ -241,6 +241,7 @@ const composeAutoExtensionConfig = (
   pkgJson?: PkgJson,
 ): {
   config: RsbuildConfig;
+  jsExtension: string;
   dtsExtension: string;
 } => {
   const { jsExtension, dtsExtension } = getDefaultExtension({
@@ -257,6 +258,7 @@ const composeAutoExtensionConfig = (
         },
       },
     },
+    jsExtension,
     dtsExtension,
   };
 };
@@ -381,7 +383,10 @@ const composeEntryConfig = async (
   };
 };
 
-const composeBundleConfig = (bundle = true): RsbuildConfig => {
+const composeBundleConfig = (
+  jsExtension: string,
+  bundle = true,
+): RsbuildConfig => {
   if (bundle) return {};
 
   return {
@@ -391,7 +396,14 @@ const composeBundleConfig = (bundle = true): RsbuildConfig => {
           // Issuer is not empty string when the module is imported by another module.
           // Prevent from externalizing entry modules here.
           if (data.contextInfo.issuer) {
-            return callback(null, data.request);
+            // Node.js ECMAScript module loader does no extension searching.
+            // So we add a file extension here when data.request is a relative path
+            return callback(
+              null,
+              data.request[0] === '.'
+                ? `${data.request}${jsExtension}`
+                : data.request,
+            );
           }
           callback();
         },
@@ -474,9 +486,12 @@ async function composeLibRsbuildConfig(
 
   const { format, autoExtension = true, autoExternal = true } = config;
   const formatConfig = composeFormatConfig(format!);
-  const { config: autoExtensionConfig, dtsExtension } =
-    composeAutoExtensionConfig(format!, autoExtension, pkgJson);
-  const bundleConfig = composeBundleConfig(config.bundle);
+  const {
+    config: autoExtensionConfig,
+    jsExtension,
+    dtsExtension,
+  } = composeAutoExtensionConfig(format!, autoExtension, pkgJson);
+  const bundleConfig = composeBundleConfig(jsExtension, config.bundle);
   const targetConfig = composeTargetConfig(config.output?.target);
   const syntaxConfig = composeSyntaxConfig(
     config.output?.syntax,

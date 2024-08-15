@@ -55,7 +55,6 @@ type BuildResult = {
 
 export async function getResults(
   rslibConfig: RslibConfig,
-  fixturePath: string,
   type: 'js' | 'dts',
 ): Promise<Omit<BuildResult, 'rspackConfig' | 'rsbuildConfig' | 'isSuccess'>> {
   const files: Record<string, string[]> = {};
@@ -81,7 +80,9 @@ export async function getResults(
       ignore: ['**/*.map'],
     });
 
-    const fileSet = Object.keys(content).filter((file) => regex.test(file));
+    const fileSet = Object.keys(content)
+      .filter((file) => regex.test(file))
+      .sort();
     const filterContent: Record<string, string> = {};
     for (const key of fileSet) {
       if (content[key]) {
@@ -90,7 +91,7 @@ export async function getResults(
     }
 
     if (fileSet.length) {
-      files[libConfig.format!] = fileSet.sort();
+      files[libConfig.format!] = fileSet;
       contents[libConfig.format!] = filterContent;
     }
 
@@ -131,8 +132,8 @@ export async function buildAndGetResults(
     origin: { bundlerConfigs, rsbuildConfig },
   } = await rsbuildInstance.inspectConfig({ verbose: true });
   if (type === 'all') {
-    const jsResults = await getResults(rslibConfig, fixturePath, 'js');
-    const dtsResults = await getResults(rslibConfig, fixturePath, 'dts');
+    const jsResults = await getResults(rslibConfig, 'js');
+    const dtsResults = await getResults(rslibConfig, 'dts');
     return {
       js: {
         contents: jsResults.contents,
@@ -155,7 +156,7 @@ export async function buildAndGetResults(
     };
   }
 
-  const results = await getResults(rslibConfig, fixturePath, type);
+  const results = await getResults(rslibConfig, type);
   return {
     contents: results.contents,
     files: results.files,
