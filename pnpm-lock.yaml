@@ -220,8 +220,8 @@ importers:
         specifier: 1.1.0
         version: 1.1.0(typescript@5.5.4)
       rslib:
-        specifier: npm:@rslib/core@0.0.0
-        version: '@rslib/core@0.0.0(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(typescript@5.5.4)'
+        specifier: npm:@rslib/core@0.0.2
+        version: '@rslib/core@0.0.2(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(typescript@5.5.4)'
       rslog:
         specifier: ^1.2.2
         version: 1.2.2
@@ -248,8 +248,8 @@ importers:
         specifier: workspace:*
         version: link:../../scripts/tsconfig
       rslib:
-        specifier: npm:@rslib/core@0.0.0
-        version: '@rslib/core@0.0.0(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(typescript@5.5.4)'
+        specifier: npm:@rslib/core@0.0.2
+        version: '@rslib/core@0.0.2(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(typescript@5.5.4)'
       typescript:
         specifier: ^5.5.4
         version: 5.5.4
@@ -777,8 +777,8 @@ packages:
     peerDependencies:
       '@rsbuild/core': ^1.0.1-beta.11
 
-  '@rslib/core@0.0.0':
-    resolution: {integrity: sha512-P08Hz+tacY6sN7S6C8JL5tLcXzdbYQX7SECi3d9lj2g4IA5mIDQpPpZURNVScO/c0JFfZgBuPefaebj29tJ8fw==}
+  '@rslib/core@0.0.2':
+    resolution: {integrity: sha512-sLdetf5fNWidyhnmc1YIMWcxQ/1TBjyh9zLM9r8zbtFuXKk0mIUebtV3DPEqcIE1tA9GwlrWSYd/kLRKEAu6IA==}
     engines: {node: '>=16.0.0'}
     hasBin: true
     peerDependencies:
@@ -2132,8 +2132,8 @@ packages:
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
-  rsbuild-plugin-dts@0.0.0:
-    resolution: {integrity: sha512-3wVYA6NIN5271n5sIJabQMJSVqNq6ROyIQFUWHxP/BuiKN2DULkNAgOWORHJSrcZi4D8TaldCIY+aoKvg3pGUw==}
+  rsbuild-plugin-dts@0.0.2:
+    resolution: {integrity: sha512-q2isRY9rsKdlSISfmmCjI1jrU1Lm3bDz0dXkfTbE20gKOnX+LFDRTXHZp3SaxGvYTg2/xxcCm8jYN+22cmWkqw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@microsoft/api-extractor': ^7
@@ -3081,10 +3081,10 @@ snapshots:
       '@rspack/plugin-react-refresh': 1.0.0-beta.3(react-refresh@0.14.2)
       react-refresh: 0.14.2
 
-  '@rslib/core@0.0.0(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(typescript@5.5.4)':
+  '@rslib/core@0.0.2(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(typescript@5.5.4)':
     dependencies:
       '@rsbuild/core': 1.0.1-beta.11
-      rsbuild-plugin-dts: 0.0.0(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(@rsbuild/core@1.0.1-beta.11)(typescript@5.5.4)
+      rsbuild-plugin-dts: 0.0.2(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(@rsbuild/core@1.0.1-beta.11)(typescript@5.5.4)
     optionalDependencies:
       '@microsoft/api-extractor': 7.47.5(@types/node@18.19.39)
       typescript: 5.5.4
@@ -4462,7 +4462,7 @@ snapshots:
       '@rollup/rollup-win32-x64-msvc': 4.18.1
       fsevents: 2.3.3
 
-  rsbuild-plugin-dts@0.0.0(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(@rsbuild/core@1.0.1-beta.11)(typescript@5.5.4):
+  rsbuild-plugin-dts@0.0.2(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(@rsbuild/core@1.0.1-beta.11)(typescript@5.5.4):
     dependencies:
       '@rsbuild/core': 1.0.1-beta.11
       fast-glob: 3.3.2
