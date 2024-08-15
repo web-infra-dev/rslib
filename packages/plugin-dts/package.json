@@ -16,18 +16,17 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     }
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "modern build",
-    "dev": "modern build --watch"
+    "build": "rslib build",
+    "dev": "rslib build --watch"
   },
   "dependencies": {
     "fast-glob": "^3.3.2",
@@ -37,6 +36,7 @@
     "@microsoft/api-extractor": "^7.47.5",
     "@rsbuild/core": "1.0.1-beta.11",
     "@rslib/tsconfig": "workspace:*",
+    "rslib": "npm:@rslib/core@0.0.0",
     "typescript": "^5.5.4"
   },
   "peerDependencies": {
