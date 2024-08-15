@@ -32,7 +32,8 @@
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
       "biome check --write"
     ],
-    "package.json": "pnpm run check-dependency-version"
+    "package.json": "pnpm run check-dependency-version",
+    "pnpm-lock.yaml": "pnpm dedupe --check"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
