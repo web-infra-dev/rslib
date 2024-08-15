@@ -401,7 +401,7 @@ const composeBundleConfig = (
             // So we add a file extension here when data.request is a relative path
             return callback(
               null,
-              isRelativePath(data.request)
+              data.request[0] === '.'
                 ? `${data.request}${jsExtension}`
                 : data.request,
             );
