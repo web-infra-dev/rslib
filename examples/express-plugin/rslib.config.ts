@@ -27,7 +27,7 @@ export default defineConfig({
       },
     },
   ],
-  // TODO: We can remove this after https://github.com/web-infra-dev/rsbuild/pull/3225 being merged
+  // TODO: We can remove this after https://github.com/web-infra-dev/rsbuild/pull/3225 being released
   source: {
     entry: {
       index: './src/index.ts',
