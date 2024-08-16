@@ -12,7 +12,7 @@ export default defineConfig({
   ],
   source: {
     entry: {
-      main: ['./src/**'],
+      index: ['./src/**'],
     },
   },
 });

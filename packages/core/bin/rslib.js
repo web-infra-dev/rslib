@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { logger, prepareCli, runCli } from '../dist/main.js';
+import { logger, prepareCli, runCli } from '../dist/index.js';
 
 async function main() {
   prepareCli();

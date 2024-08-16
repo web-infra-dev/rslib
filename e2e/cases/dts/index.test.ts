@@ -70,7 +70,7 @@ describe('dts when bundle: true', () => {
     );
 
     expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/e2e/cases/dts/bundle/basic/dist/esm/main.d.ts"`,
+      `"<ROOT>/e2e/cases/dts/bundle/basic/dist/esm/index.d.ts"`,
     );
     expect(entries).toMatchSnapshot();
   });
@@ -87,7 +87,7 @@ describe('dts when bundle: true', () => {
     const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/e2e/cases/dts/bundle/dist-path/dist/custom/main.d.ts"`,
+      `"<ROOT>/e2e/cases/dts/bundle/dist-path/dist/custom/index.d.ts"`,
     );
   });
 
@@ -103,7 +103,7 @@ describe('dts when bundle: true', () => {
     const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(entryFiles.cjs).toMatchInlineSnapshot(
-      `"<ROOT>/e2e/cases/dts/bundle/auto-extension/dist/cjs/main.d.cts"`,
+      `"<ROOT>/e2e/cases/dts/bundle/auto-extension/dist/cjs/index.d.cts"`,
     );
   });
 

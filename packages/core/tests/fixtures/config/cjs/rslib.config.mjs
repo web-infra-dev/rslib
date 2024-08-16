@@ -2,7 +2,7 @@ export default {
   lib: [],
   source: {
     entry: {
-      main: './foo/index.js',
+      index: './foo/index.js',
     },
   },
 };
