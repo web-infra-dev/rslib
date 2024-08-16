@@ -70,8 +70,8 @@ importers:
         specifier: 1.43.1
         version: 1.43.1
       '@rsbuild/core':
-        specifier: 1.0.1-beta.11
-        version: 1.0.1-beta.11
+        specifier: 1.0.1-beta.14
+        version: 1.0.1-beta.14
       '@rslib/core':
         specifier: workspace:*
         version: link:../packages/core
@@ -171,8 +171,8 @@ importers:
   examples/react-component:
     devDependencies:
       '@rsbuild/plugin-react':
-        specifier: 1.0.1-beta.11
-        version: 1.0.1-beta.11(@rsbuild/core@1.0.1-beta.11)
+        specifier: 1.0.1-beta.14
+        version: 1.0.1-beta.14(@rsbuild/core@1.0.1-beta.14)
       '@rslib/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -189,8 +189,8 @@ importers:
         specifier: ^7
         version: 7.47.5(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-beta.11
-        version: 1.0.1-beta.11
+        specifier: 1.0.1-beta.14
+        version: 1.0.1-beta.14
       rsbuild-plugin-dts:
         specifier: workspace:*
         version: link:../plugin-dts
@@ -242,8 +242,8 @@ importers:
         specifier: ^7.47.5
         version: 7.47.5(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-beta.11
-        version: 1.0.1-beta.11
+        specifier: 1.0.1-beta.14
+        version: 1.0.1-beta.14
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
@@ -772,10 +772,15 @@ packages:
     engines: {node: '>=16.7.0'}
     hasBin: true
 
-  '@rsbuild/plugin-react@1.0.1-beta.11':
-    resolution: {integrity: sha512-9WtgSIv4s3w5ExPQeEcRDNkVyom7mYHU8KcM3tqPYoJdp4YH4U3bmwHZaWT9ySGGjOH0Rd0emFvQKCy0K3pmQA==}
+  '@rsbuild/core@1.0.1-beta.14':
+    resolution: {integrity: sha512-dUeEao3/QClKUqUltPFNfBCyLKyK3v/GBu3CKii8IZi61Aky4Sua/lKGX+vz9OesBXFKvbSpWg2B+33Il4n/eA==}
+    engines: {node: '>=16.7.0'}
+    hasBin: true
+
+  '@rsbuild/plugin-react@1.0.1-beta.14':
+    resolution: {integrity: sha512-cH8MfdoK3QgbgquvE1YmNPspDXf+22Kq59MQm+fYk6t9zmcYMqHmUdcvf8/iepLw+u8WtPBecMAejxoHhbl+dQ==}
     peerDependencies:
-      '@rsbuild/core': ^1.0.1-beta.11
+      '@rsbuild/core': ^1.0.1-beta.14
 
   '@rslib/core@0.0.2':
     resolution: {integrity: sha512-sLdetf5fNWidyhnmc1YIMWcxQ/1TBjyh9zLM9r8zbtFuXKk0mIUebtV3DPEqcIE1tA9GwlrWSYd/kLRKEAu6IA==}
@@ -855,8 +860,8 @@ packages:
     resolution: {integrity: sha512-K/OwOFX4SsILeSAJtmVCoBZUPaXLNFGeIXerK0SY09in8+0i21c+luZAhjlD0mH9+cD2A/zBGL+GIEPKkW6IwQ==}
     engines: {node: '>=16.0.0'}
 
-  '@rspack/plugin-react-refresh@1.0.0-beta.3':
-    resolution: {integrity: sha512-Gq/pdkmaklw6ZlvFL/YXWkXatDQQkFx8HobrRTKnqysfx00Ly2WZ8x+gJCc0PMiB7aL6SdI0EsgIchG+sLUSnQ==}
+  '@rspack/plugin-react-refresh@1.0.0':
+    resolution: {integrity: sha512-WvXkLewW5G0Mlo5H1b251yDh5FFiH4NDAbYlFpvFjcuXX2AchZRf9zdw57BDE/ADyWsJgA8kixN/zZWBTN3iYA==}
     peerDependencies:
       react-refresh: '>=0.10.0 <1.0.0'
     peerDependenciesMeta:
@@ -1117,8 +1122,8 @@ packages:
     resolution: {integrity: sha512-GHTSNSYICQ7scH7sZ+M2rFopRoLh8t2bLSW6BbgrtLsahOIB5iyAVJf9GjWK3cYTDaMj4XdBpM1cA6pIS0Kv2w==}
     engines: {node: '>= 0.4'}
 
-  caniuse-lite@1.0.30001649:
-    resolution: {integrity: sha512-fJegqZZ0ZX8HOWr6rcafGr72+xcgJKI9oWfDW5DrD7ExUtgZC7a7R7ZYmZqplh7XDocFdGeIFn7roAxhOeYrPQ==}
+  caniuse-lite@1.0.30001651:
+    resolution: {integrity: sha512-9Cf+Xv1jJNe1xPZLGuUXLNkE1BoDkqRqYyFJ9TDYSqhduqA4hu4oR9HluGoWYQC/aj8WHjsGVV+bwkh0+tegRg==}
 
   chai@5.1.1:
     resolution: {integrity: sha512-pT1ZgP8rPNqUgieVaEY+ryQr6Q4HXNg8Ei9UnLUrjN4IA7dvQC5JB+/kxVcPNDHyBcc/26CXPkbNzq3qwrOEKA==}
@@ -1224,6 +1229,9 @@ packages:
 
   core-js@3.37.1:
     resolution: {integrity: sha512-Xn6qmxrQZyB0FFY8E3bgRXei3lWDJHhvI+u0q9TKIYM49G8pAr0FgnnrFRAmsbptZL1yxRADVXn+x5AGsbBfyw==}
+
+  core-js@3.38.0:
+    resolution: {integrity: sha512-XPpwqEodRljce9KswjZShh95qJ1URisBeKCjUdq27YdenkslVe7OO0ZJhlYXAChW7OhXaRLl8AAba7IBfoIHug==}
 
   cross-env@7.0.3:
     resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
@@ -3070,15 +3078,25 @@ snapshots:
       '@rspack/core': '@rspack/core-canary@1.0.0-canary-84d893d-20240815120610(@swc/helpers@0.5.11)'
       '@rspack/lite-tapable': 1.0.0-beta.3
       '@swc/helpers': 0.5.11
-      caniuse-lite: 1.0.30001649
+      caniuse-lite: 1.0.30001651
       core-js: 3.37.1
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@rsbuild/plugin-react@1.0.1-beta.11(@rsbuild/core@1.0.1-beta.11)':
+  '@rsbuild/core@1.0.1-beta.14':
     dependencies:
-      '@rsbuild/core': 1.0.1-beta.11
-      '@rspack/plugin-react-refresh': 1.0.0-beta.3(react-refresh@0.14.2)
+      '@rspack/core': '@rspack/core-canary@1.0.0-canary-84d893d-20240815120610(@swc/helpers@0.5.11)'
+      '@rspack/lite-tapable': 1.0.0
+      '@swc/helpers': 0.5.11
+      caniuse-lite: 1.0.30001651
+      core-js: 3.38.0
+    optionalDependencies:
+      fsevents: 2.3.3
+
+  '@rsbuild/plugin-react@1.0.1-beta.14(@rsbuild/core@1.0.1-beta.14)':
+    dependencies:
+      '@rsbuild/core': 1.0.1-beta.14
+      '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.14.2)
       react-refresh: 0.14.2
 
   '@rslib/core@0.0.2(@microsoft/api-extractor@7.47.5(@types/node@18.19.39))(typescript@5.5.4)':
@@ -3133,7 +3151,7 @@ snapshots:
       '@module-federation/runtime-tools': 0.2.3
       '@rspack/binding': '@rspack/binding-canary@1.0.0-canary-84d893d-20240815120610'
       '@rspack/lite-tapable': 1.0.0
-      caniuse-lite: 1.0.30001649
+      caniuse-lite: 1.0.30001651
     optionalDependencies:
       '@swc/helpers': 0.5.11
 
@@ -3141,7 +3159,7 @@ snapshots:
 
   '@rspack/lite-tapable@1.0.0-beta.3': {}
 
-  '@rspack/plugin-react-refresh@1.0.0-beta.3(react-refresh@0.14.2)':
+  '@rspack/plugin-react-refresh@1.0.0(react-refresh@0.14.2)':
     dependencies:
       error-stack-parser: 2.1.4
       html-entities: 2.5.2
@@ -3449,7 +3467,7 @@ snapshots:
       get-intrinsic: 1.2.4
       set-function-length: 1.2.2
 
-  caniuse-lite@1.0.30001649: {}
+  caniuse-lite@1.0.30001651: {}
 
   chai@5.1.1:
     dependencies:
@@ -3546,6 +3564,8 @@ snapshots:
   cookie@0.6.0: {}
 
   core-js@3.37.1: {}
+
+  core-js@3.38.0: {}
 
   cross-env@7.0.3:
     dependencies:
