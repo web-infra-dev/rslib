@@ -16,7 +16,7 @@ export default defineConfig({
   ],
   source: {
     entry: {
-      main: '../__fixtures__/src/index.ts',
+      index: '../__fixtures__/src/index.ts',
     },
   },
 });

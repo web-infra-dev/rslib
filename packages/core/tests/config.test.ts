@@ -14,7 +14,7 @@ describe('Should load config file correctly', () => {
       lib: [],
       source: {
         entry: {
-          main: './foo/index.js',
+          index: './foo/index.js',
         },
       },
       _privateMeta: {
@@ -31,7 +31,7 @@ describe('Should load config file correctly', () => {
       lib: [],
       source: {
         entry: {
-          main: './foo/index.js',
+          index: './foo/index.js',
         },
       },
       _privateMeta: {
@@ -48,7 +48,7 @@ describe('Should load config file correctly', () => {
       lib: [],
       source: {
         entry: {
-          main: './foo/index.ts',
+          index: './foo/index.ts',
         },
       },
       _privateMeta: {
@@ -65,7 +65,7 @@ describe('Should load config file correctly', () => {
       lib: [],
       source: {
         entry: {
-          main: './foo/index.js',
+          index: './foo/index.js',
         },
       },
       _privateMeta: {
@@ -82,7 +82,7 @@ describe('Should load config file correctly', () => {
       lib: [],
       source: {
         entry: {
-          main: './foo/index.js',
+          index: './foo/index.js',
         },
       },
       _privateMeta: {
@@ -99,7 +99,7 @@ describe('Should load config file correctly', () => {
       lib: [],
       source: {
         entry: {
-          main: './foo/index.js',
+          index: './foo/index.js',
         },
       },
       _privateMeta: {
@@ -116,7 +116,7 @@ describe('Should load config file correctly', () => {
       lib: [],
       source: {
         entry: {
-          main: './foo/index.ts',
+          index: './foo/index.ts',
         },
       },
       _privateMeta: {
@@ -133,7 +133,7 @@ describe('Should load config file correctly', () => {
       lib: [],
       source: {
         entry: {
-          main: './foo/index.js',
+          index: './foo/index.js',
         },
       },
       _privateMeta: {

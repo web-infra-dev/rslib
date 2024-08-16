@@ -18,7 +18,7 @@ export default defineConfig({
       RSLIB_VERSION: JSON.stringify(require('./package.json').version),
     },
     entry: {
-      main: './src/index.ts',
+      index: './src/index.ts',
     },
   },
   output: {

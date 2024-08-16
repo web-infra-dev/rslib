@@ -4,7 +4,7 @@ module.exports = defineConfig((args) => ({
   lib: [],
   source: {
     entry: {
-      main: './foo/index.js',
+      index: './foo/index.js',
     },
   },
 }));

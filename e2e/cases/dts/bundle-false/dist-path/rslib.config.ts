@@ -16,7 +16,7 @@ export default defineConfig({
   ],
   source: {
     entry: {
-      main: ['../__fixtures__/src/**'],
+      index: ['../__fixtures__/src/**'],
     },
     tsconfigPath: '../__fixtures__/tsconfig.json',
   },

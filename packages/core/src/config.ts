@@ -339,8 +339,8 @@ const composeEntryConfig = async (
     const entry = entries[key];
 
     // Entries in bundleless mode could be:
-    // 1. A string of glob pattern: { entry: { main: 'src/*.ts' } }
-    // 2. An array of glob patterns: { entry: { main: ['src/*.ts', 'src/*.tsx'] } }
+    // 1. A string of glob pattern: { entry: { index: 'src/*.ts' } }
+    // 2. An array of glob patterns: { entry: { index: ['src/*.ts', 'src/*.tsx'] } }
     // Not supported for now: entry description object
     const entryFiles = Array.isArray(entry)
       ? entry
