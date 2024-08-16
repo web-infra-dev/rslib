@@ -1,6 +1,6 @@
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
-import * as ts from 'typescript';
+import ts from 'typescript';
 import {
   getFileLoc,
   getTimeCost,
