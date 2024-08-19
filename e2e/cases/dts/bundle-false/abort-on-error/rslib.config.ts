@@ -3,14 +3,14 @@ import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   lib: [
-    generateBundleEsmConfig(__dirname, {
+    generateBundleEsmConfig({
       bundle: false,
       dts: {
         bundle: false,
         abortOnError: false,
       },
     }),
-    generateBundleCjsConfig(__dirname, {
+    generateBundleCjsConfig({
       bundle: false,
     }),
   ],

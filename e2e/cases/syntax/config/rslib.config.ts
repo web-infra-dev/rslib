@@ -3,12 +3,12 @@ import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   lib: [
-    generateBundleEsmConfig(__dirname, {
+    generateBundleEsmConfig({
       output: {
         syntax: 'es2015',
       },
     }),
-    generateBundleCjsConfig(__dirname, {
+    generateBundleCjsConfig({
       output: {
         syntax: ['node 20'],
       },

@@ -1,4 +1,3 @@
-import { isAbsolute, join } from 'node:path';
 import {
   type InspectConfigResult,
   mergeRsbuildConfig as mergeConfig,
@@ -7,15 +6,12 @@ import type { LibConfig, RslibConfig } from '@rslib/core';
 import { build, loadConfig } from '@rslib/core';
 import { globContentJSON } from './helper';
 
-export function generateBundleEsmConfig(
-  cwd: string,
-  config: LibConfig = {},
-): LibConfig {
+export function generateBundleEsmConfig(config: LibConfig = {}): LibConfig {
   const esmBasicConfig: LibConfig = {
     format: 'esm',
     output: {
       distPath: {
-        root: join(cwd, './dist/esm'),
+        root: './dist/esm',
       },
     },
   };
@@ -23,15 +19,12 @@ export function generateBundleEsmConfig(
   return mergeConfig(esmBasicConfig, config)!;
 }
 
-export function generateBundleCjsConfig(
-  cwd: string,
-  config: LibConfig = {},
-): LibConfig {
+export function generateBundleCjsConfig(config: LibConfig = {}): LibConfig {
   const cjsBasicConfig: LibConfig = {
     format: 'cjs',
     output: {
       distPath: {
-        root: join(cwd, './dist/cjs'),
+        root: './dist/cjs',
       },
     },
   };
@@ -125,7 +118,9 @@ export async function buildAndGetResults(
   fixturePath: string,
   type: 'js' | 'dts' | 'all' = 'js',
 ) {
-  const rslibConfig = await loadConfig(join(fixturePath, 'rslib.config.ts'));
+  const rslibConfig = await loadConfig({
+    cwd: fixturePath,
+  });
   process.chdir(fixturePath);
   const rsbuildInstance = await build(rslibConfig);
   const {

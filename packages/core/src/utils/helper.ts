@@ -108,7 +108,7 @@ export async function calcLongestCommonPath(
 }
 
 export const readPackageJson = (rootPath: string): undefined | PkgJson => {
-  const pkgJsonPath = path.resolve(rootPath, './package.json');
+  const pkgJsonPath = path.join(rootPath, './package.json');
 
   if (!fs.existsSync(pkgJsonPath)) {
     logger.warn(`package.json does not exist in the ${rootPath} directory`);

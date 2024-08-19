@@ -2,7 +2,7 @@ import { generateBundleCjsConfig, generateBundleEsmConfig } from '@e2e/helper';
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  lib: [generateBundleEsmConfig(__dirname), generateBundleCjsConfig(__dirname)],
+  lib: [generateBundleEsmConfig(), generateBundleCjsConfig()],
   output: {
     externals: {
       react: 'react1',
