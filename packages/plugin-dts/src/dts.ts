@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
-import type { DtsGenOptions } from 'src';
 import ts from 'typescript';
+import type { DtsGenOptions } from './index';
 import { emitDts } from './tsc';
 import {
   calcLongestCommonPath,

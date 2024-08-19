@@ -6,7 +6,7 @@ import {
 } from '@microsoft/api-extractor';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
-import type { DtsEntry } from 'src';
+import type { DtsEntry } from './index';
 import { getTimeCost } from './utils';
 
 export type BundleOptions = {
