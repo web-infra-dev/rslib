@@ -1,4 +1,4 @@
-import type { Format, PkgJson } from 'src/types';
+import type { Format, PkgJson } from '../types';
 import { logger } from './logger';
 
 export const getDefaultExtension = (options: {
