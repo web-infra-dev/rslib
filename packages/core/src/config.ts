@@ -65,7 +65,7 @@ const resolveConfigPath = (root: string, customConfig?: string): string => {
     return configFilePath;
   }
 
-  throw new Error(`${DEFAULT_CONFIG_NAME} not found`);
+  throw new Error(`${DEFAULT_CONFIG_NAME} not found in ${root}`);
 };
 
 export async function loadConfig({
