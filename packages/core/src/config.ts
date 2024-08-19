@@ -240,7 +240,7 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
 };
 
 const composeAutoExtensionConfig = (
-  format: Format,
+  config: LibConfig,
   autoExtension: boolean,
   pkgJson?: PkgJson,
 ): {
@@ -249,7 +249,7 @@ const composeAutoExtensionConfig = (
   dtsExtension: string;
 } => {
   const { jsExtension, dtsExtension } = getDefaultExtension({
-    format,
+    format: config.format!,
     pkgJson,
     autoExtension,
   });
@@ -259,6 +259,7 @@ const composeAutoExtensionConfig = (
       output: {
         filename: {
           js: `[name]${jsExtension}`,
+          ...config.output?.filename,
         },
       },
     },
@@ -494,7 +495,7 @@ async function composeLibRsbuildConfig(
     config: autoExtensionConfig,
     jsExtension,
     dtsExtension,
-  } = composeAutoExtensionConfig(format!, autoExtension, pkgJson);
+  } = composeAutoExtensionConfig(config, autoExtension, pkgJson);
   const bundleConfig = composeBundleConfig(jsExtension, config.bundle);
   const targetConfig = composeTargetConfig(config.output?.target);
   const syntaxConfig = composeSyntaxConfig(
