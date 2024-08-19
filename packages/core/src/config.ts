@@ -48,7 +48,7 @@ const findConfig = (basePath: string): string | undefined => {
   return DEFAULT_EXTENSIONS.map((ext) => basePath + ext).find(fs.existsSync);
 };
 
-const resolveConfigPath = (root: string, customConfig?: string) => {
+const resolveConfigPath = (root: string, customConfig?: string): string => {
   if (customConfig) {
     const customConfigPath = isAbsolute(customConfig)
       ? customConfig
@@ -65,15 +65,19 @@ const resolveConfigPath = (root: string, customConfig?: string) => {
     return configFilePath;
   }
 
-  return undefined;
+  throw new Error(`${DEFAULT_CONFIG_NAME} not found`);
 };
 
-export async function loadConfig(
-  customConfig?: string,
-  envMode?: string,
-): Promise<RslibConfig> {
-  const root = process.cwd();
-  const configFilePath = resolveConfigPath(root, customConfig)!;
+export async function loadConfig({
+  cwd = process.cwd(),
+  path,
+  envMode,
+}: {
+  cwd?: string;
+  path?: string;
+  envMode?: string;
+}): Promise<RslibConfig> {
+  const configFilePath = resolveConfigPath(cwd, path);
   const { content } = await loadRsbuildConfig({
     cwd: dirname(configFilePath),
     path: configFilePath,

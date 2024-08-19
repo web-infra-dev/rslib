@@ -3,8 +3,8 @@ import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   lib: [
-    generateBundleEsmConfig(__dirname, { output: { target: 'node' } }),
-    generateBundleCjsConfig(__dirname, { output: { target: 'node' } }),
+    generateBundleEsmConfig({ output: { target: 'node' } }),
+    generateBundleCjsConfig({ output: { target: 'node' } }),
   ],
   source: {
     entry: {

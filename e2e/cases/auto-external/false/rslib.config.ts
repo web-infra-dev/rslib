@@ -3,13 +3,13 @@ import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   lib: [
-    generateBundleEsmConfig(__dirname, {
+    generateBundleEsmConfig({
       autoExternal: false,
       dts: {
         bundle: true,
       },
     }),
-    generateBundleCjsConfig(__dirname, {
+    generateBundleCjsConfig({
       autoExternal: false,
       dts: {
         bundle: true,

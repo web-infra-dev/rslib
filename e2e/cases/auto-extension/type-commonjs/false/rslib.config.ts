@@ -3,10 +3,10 @@ import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   lib: [
-    generateBundleEsmConfig(__dirname, {
+    generateBundleEsmConfig({
       autoExtension: false,
     }),
-    generateBundleCjsConfig(__dirname, {
+    generateBundleCjsConfig({
       autoExtension: false,
     }),
   ],
