@@ -22,6 +22,8 @@ In the past, we typically did not use webpack or Rspack to build ESM packages be
 
 So we decided to create Rslib. It improves the quality of ESM output from Rspack and webpack, leverages their extensive ecosystem, and utilizes Rsbuild's excellent out-of-the-box configuration. Rslib aims to provide a superior developer experience and explore new possibilities based on the Rspack architecture.
 
+![](https://assets.rspack.dev/rsbuild/assets/rspack-stack-layers.png)
+
 ## 📍 Roadmap
 
 🚧 Rslib is still in its early stages and under active development. We are building Rslib by working in two main parts:
