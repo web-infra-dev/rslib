@@ -5,7 +5,7 @@ import path, { join } from 'node:path';
 import { type RsbuildConfig, logger } from '@rsbuild/core';
 import fg from 'fast-glob';
 import color from 'picocolors';
-import type { DtsEntry } from 'src';
+import type { DtsEntry } from './index';
 import ts from 'typescript';
 
 const { convertPathToPattern } = fg;

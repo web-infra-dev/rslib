@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
-import type { DtsGenOptions } from 'src';
+import type { DtsGenOptions } from './index';
 import ts from 'typescript';
 import { emitDts } from './tsc';
 import {
