@@ -70,8 +70,8 @@ importers:
         specifier: 1.43.1
         version: 1.43.1
       '@rsbuild/core':
-        specifier: 1.0.1-beta.14
-        version: 1.0.1-beta.14
+        specifier: 1.0.1-beta.15
+        version: 1.0.1-beta.15
       '@rslib/core':
         specifier: workspace:*
         version: link:../packages/core
@@ -97,9 +97,13 @@ importers:
         specifier: 0.0.6
         version: 0.0.6
 
+  e2e/cases/auto-extension/type-commonjs/config-override: {}
+
   e2e/cases/auto-extension/type-commonjs/default: {}
 
   e2e/cases/auto-extension/type-commonjs/false: {}
+
+  e2e/cases/auto-extension/type-module/config-override: {}
 
   e2e/cases/auto-extension/type-module/default: {}
 
@@ -172,7 +176,7 @@ importers:
     devDependencies:
       '@rsbuild/plugin-react':
         specifier: 1.0.1-beta.14
-        version: 1.0.1-beta.14(@rsbuild/core@1.0.1-beta.14)
+        version: 1.0.1-beta.14(@rsbuild/core@1.0.1-beta.15)
       '@rslib/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -189,8 +193,8 @@ importers:
         specifier: ^7
         version: 7.47.5(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-beta.14
-        version: 1.0.1-beta.14
+        specifier: 1.0.1-beta.15
+        version: 1.0.1-beta.15
       rsbuild-plugin-dts:
         specifier: workspace:*
         version: link:../plugin-dts
@@ -242,8 +246,8 @@ importers:
         specifier: ^7.47.5
         version: 7.47.5(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-beta.14
-        version: 1.0.1-beta.14
+        specifier: 1.0.1-beta.15
+        version: 1.0.1-beta.15
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
@@ -772,8 +776,8 @@ packages:
     engines: {node: '>=16.7.0'}
     hasBin: true
 
-  '@rsbuild/core@1.0.1-beta.14':
-    resolution: {integrity: sha512-dUeEao3/QClKUqUltPFNfBCyLKyK3v/GBu3CKii8IZi61Aky4Sua/lKGX+vz9OesBXFKvbSpWg2B+33Il4n/eA==}
+  '@rsbuild/core@1.0.1-beta.15':
+    resolution: {integrity: sha512-Y9N5GvGhorbP5RCOJDYZ+gUJGSBbDAUlntLeXFOF4bSQU7Pa+tzt/tuL44wxuPjjEMj87wQz4K6wYOUVov9gZw==}
     engines: {node: '>=16.7.0'}
     hasBin: true
 
@@ -3083,7 +3087,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@rsbuild/core@1.0.1-beta.14':
+  '@rsbuild/core@1.0.1-beta.15':
     dependencies:
       '@rspack/core': '@rspack/core-canary@1.0.0-canary-84d893d-20240815120610(@swc/helpers@0.5.11)'
       '@rspack/lite-tapable': 1.0.0
@@ -3093,9 +3097,9 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@rsbuild/plugin-react@1.0.1-beta.14(@rsbuild/core@1.0.1-beta.14)':
+  '@rsbuild/plugin-react@1.0.1-beta.14(@rsbuild/core@1.0.1-beta.15)':
     dependencies:
-      '@rsbuild/core': 1.0.1-beta.14
+      '@rsbuild/core': 1.0.1-beta.15
       '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.14.2)
       react-refresh: 0.14.2
 

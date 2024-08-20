@@ -17,7 +17,7 @@ export default defineConfig({
     define: {
       RSLIB_VERSION: JSON.stringify(require('./package.json').version),
     },
-    // TODO: We can remove this after https://github.com/web-infra-dev/rsbuild/pull/3225 being released
+    // TODO: We can remove this after Rslib 0.0.3 being released
     entry: {
       index: './src/index.ts',
     },
