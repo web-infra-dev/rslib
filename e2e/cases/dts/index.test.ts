@@ -115,4 +115,13 @@ describe('dts when bundle: true', () => {
       `"<ROOT>/e2e/cases/dts/bundle/bundle-name/dist/esm/bundleName.d.ts"`,
     );
   });
+
+  test('entry is an absolute path', async () => {
+    const fixturePath = join(__dirname, 'bundle', 'absolute-entry');
+    const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
+
+    expect(entryFiles.esm).toMatchInlineSnapshot(
+      `"<ROOT>/e2e/cases/dts/bundle/absolute-entry/dist/esm/index.d.ts"`,
+    );
+  });
 });
