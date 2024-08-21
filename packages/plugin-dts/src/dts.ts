@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { basename, dirname, join, relative } from 'node:path';
+import { basename, dirname, isAbsolute, join, relative } from 'node:path';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import ts from 'typescript';
@@ -141,7 +141,9 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   let entry = '';
 
   if (bundle === true && entryPath) {
-    const entrySourcePath = join(cwd, entryPath);
+    const entrySourcePath = isAbsolute(entryPath)
+      ? entryPath
+      : join(cwd, entryPath);
     const relativePath = relative(rootDir, dirname(entrySourcePath));
     entry = join(
       declarationDir!,
