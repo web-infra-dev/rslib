@@ -14,7 +14,7 @@ import type {
   AutoExternal,
   Format,
   LibConfig,
-  PkgJson,
+  PackageJson,
   RslibConfig,
   RslibConfigAsyncFn,
   RslibConfigExport,
@@ -89,7 +89,7 @@ export async function loadConfig({
 
 export const composeAutoExternalConfig = (options: {
   autoExternal: AutoExternal;
-  pkgJson?: PkgJson;
+  pkgJson?: PackageJson;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 }): RsbuildConfig => {
   const { autoExternal, pkgJson, userExternals } = options;
@@ -242,7 +242,7 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
 const composeAutoExtensionConfig = (
   config: LibConfig,
   autoExtension: boolean,
-  pkgJson?: PkgJson,
+  pkgJson?: PackageJson,
 ): {
   config: RsbuildConfig;
   jsExtension: string;

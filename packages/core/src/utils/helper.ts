@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import path from 'node:path';
 import color from 'picocolors';
-import type { PkgJson } from '../types';
+import type { PackageJson } from '../types';
 import { logger } from './logger';
 
 /**
@@ -107,7 +107,7 @@ export async function calcLongestCommonPath(
   return lca;
 }
 
-export const readPackageJson = (rootPath: string): undefined | PkgJson => {
+export const readPackageJson = (rootPath: string): undefined | PackageJson => {
   const pkgJsonPath = path.join(rootPath, './package.json');
 
   if (!fs.existsSync(pkgJsonPath)) {
