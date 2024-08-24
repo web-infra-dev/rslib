@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import path from 'node:path';
 import color from 'picocolors';
-import type { PackageJson } from '../types';
+import type { ExportEntry, PackageJson, PackageType } from '../types';
 import { logger } from './logger';
 
 /**
@@ -121,6 +121,56 @@ export const readPackageJson = (rootPath: string): undefined | PackageJson => {
     logger.warn(`Failed to parse ${pkgJsonPath}, it might not be valid JSON`);
     return;
   }
+};
+
+export const getExportEntries = (pkgJson: PackageJson): ExportEntry[] => {
+  const exportEntriesMap: Record<string, ExportEntry> = {};
+  const packageType = pkgJson.type ?? 'commonjs';
+
+  const getFileType = (filePath: string): PackageType => {
+    if (filePath.endsWith('.mjs')) {
+      return 'module';
+    }
+
+    if (filePath.endsWith('.cjs')) {
+      return 'commonjs';
+    }
+
+    return packageType;
+  };
+
+  const addExportPath = (
+    exportPathsMap: Record<string, ExportEntry>,
+    exportEntry: any,
+  ) => {
+    exportEntry.outputPath = path.normalize(exportEntry.outputPath);
+
+    const { outputPath: exportPath, type } = exportEntry;
+
+    const existingExportPath = exportPathsMap[exportPath];
+    if (existingExportPath) {
+      if (existingExportPath.type !== type) {
+        throw new Error(
+          `Conflicting export types "${existingExportPath.type}" & "${type}" found for ${exportPath}`,
+        );
+      }
+
+      Object.assign(existingExportPath, exportEntry);
+    } else {
+      exportPathsMap[exportPath] = exportEntry;
+    }
+  };
+
+  if (pkgJson.main) {
+    const mainPath = pkgJson.main;
+    addExportPath(exportEntriesMap, {
+      outputPath: mainPath,
+      type: getFileType(mainPath),
+      from: 'main',
+    });
+  }
+
+  return Object.values(exportEntriesMap);
 };
 
 export const isObject = (obj: unknown): obj is Record<string, any> =>

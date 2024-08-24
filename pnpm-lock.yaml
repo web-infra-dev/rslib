@@ -145,6 +145,8 @@ importers:
 
   e2e/cases/dts/bundle/abort-on-error: {}
 
+  e2e/cases/dts/bundle/absolute-entry: {}
+
   e2e/cases/dts/bundle/auto-extension: {}
 
   e2e/cases/dts/bundle/basic: {}
@@ -186,6 +188,15 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
+
+  examples/zero-configuration:
+    devDependencies:
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      typescript:
+        specifier: ^5.5.4
+        version: 5.5.4
 
   packages/core:
     dependencies:
