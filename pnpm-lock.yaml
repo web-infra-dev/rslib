@@ -93,6 +93,9 @@ importers:
       path-serializer:
         specifier: 0.0.6
         version: 0.0.6
+      strip-ansi:
+        specifier: ^7.1.0
+        version: 7.1.0
 
   e2e/cases/auto-extension/type-commonjs/config-override: {}
 
@@ -126,6 +129,12 @@ importers:
       ora:
         specifier: 8.0.1
         version: 8.0.1
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+
+  e2e/cases/auto-external/module-import-warn:
+    dependencies:
       react:
         specifier: ^18.3.1
         version: 18.3.1

@@ -1,6 +1,8 @@
 import { join } from 'node:path';
-import { buildAndGetResults } from '@e2e/helper';
+import { buildAndGetResults, proxyConsole } from '@e2e/helper';
+import stripAnsi from 'strip-ansi';
 import { expect, test } from 'vitest';
+import { composeModuleImportWarn } from '../../../packages/core/src/config';
 
 test('auto external default should works', async () => {
   const fixturePath = join(__dirname, 'default');
@@ -67,4 +69,23 @@ test('externals should overrides auto external', async () => {
   expect(entries.cjs).toContain(
     'var external_react1_namespaceObject = require("react1");',
   );
+});
+
+test('should get warn when use require in ESM', async () => {
+  const { logs, restore } = proxyConsole();
+  const fixturePath = join(__dirname, 'module-import-warn');
+  const { entries } = await buildAndGetResults(fixturePath);
+  const logStrings = logs.map((log) => stripAnsi(log));
+
+  expect(entries.esm).toContain(
+    'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
+  );
+
+  expect(
+    logStrings.some((l) =>
+      l.includes(stripAnsi(composeModuleImportWarn('react'))),
+    ),
+  ).toBe(true);
+
+  restore();
 });

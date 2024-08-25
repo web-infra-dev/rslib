@@ -3,8 +3,15 @@ import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   lib: [
-    generateBundleEsmConfig({ output: { target: 'node' } }),
-    generateBundleCjsConfig({ output: { target: 'node' } }),
+    generateBundleEsmConfig({
+      output: {
+        target: 'node',
+        externals: { foo: 'node-commonjs foo' },
+      },
+    }),
+    generateBundleCjsConfig({
+      output: { target: 'node', externals: { foo: 'foo' } },
+    }),
   ],
   source: {
     entry: {
@@ -12,6 +19,6 @@ export default defineConfig({
     },
   },
   output: {
-    externals: { react: 'react' },
+    externals: { react: 'react', bar: 'bar' },
   },
 });
