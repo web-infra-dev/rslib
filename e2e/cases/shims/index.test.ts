@@ -6,7 +6,7 @@ test('shims for __dirname and __filename in ESM', async () => {
   const fixturePath = join(__dirname, 'esm');
   const { entries } = await buildAndGetResults(fixturePath);
   for (const shim of [
-    'import {fileURLToPath as __webpack_fileURLToPath__} from "url";',
+    'import { fileURLToPath as __webpack_fileURLToPath__ } from "url";',
     'var src_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));',
     'var src_filename = __webpack_fileURLToPath__(import.meta.url);',
     // import.meta.url should not be substituted

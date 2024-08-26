@@ -40,7 +40,7 @@ describe('should respect output.filename.js to override builtin logic', () => {
     const { entryFiles } = await buildAndGetResults(fixturePath);
     expect(extname(entryFiles.esm!)).toEqual('.mjs');
     expect(entryFiles.cjs).toMatchInlineSnapshot(
-      `"<ROOT>/e2e/cases/auto-extension/type-commonjs/config-override/dist/cjs/index.babf05f8.js"`,
+      `"<ROOT>/e2e/cases/auto-extension/type-commonjs/config-override/dist/cjs/index.19d057b3.js"`,
     );
   });
 
@@ -48,7 +48,7 @@ describe('should respect output.filename.js to override builtin logic', () => {
     const fixturePath = join(__dirname, 'type-module', 'config-override');
     const { entryFiles } = await buildAndGetResults(fixturePath);
     expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/e2e/cases/auto-extension/type-module/config-override/dist/esm/index.4ca64135.js"`,
+      `"<ROOT>/e2e/cases/auto-extension/type-module/config-override/dist/esm/index.40528364.js"`,
     );
     expect(extname(entryFiles.cjs!)).toEqual('.cjs');
   });
