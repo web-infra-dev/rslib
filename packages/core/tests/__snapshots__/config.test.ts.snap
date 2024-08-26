@@ -81,6 +81,28 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "optimization": {
               "moduleIds": "named",
             },
+            "resolve": {
+              "extensionAlias": {
+                ".cjs": [
+                  ".cts",
+                  ".cjs",
+                ],
+                ".js": [
+                  ".ts",
+                  ".tsx",
+                  ".js",
+                  ".jsx",
+                ],
+                ".jsx": [
+                  ".tsx",
+                  ".jsx",
+                ],
+                ".mjs": [
+                  ".mts",
+                  ".mjs",
+                ],
+              },
+            },
           },
         ],
       },
@@ -154,6 +176,28 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "optimization": {
               "moduleIds": "named",
             },
+            "resolve": {
+              "extensionAlias": {
+                ".cjs": [
+                  ".cts",
+                  ".cjs",
+                ],
+                ".js": [
+                  ".ts",
+                  ".tsx",
+                  ".js",
+                  ".jsx",
+                ],
+                ".jsx": [
+                  ".tsx",
+                  ".jsx",
+                ],
+                ".mjs": [
+                  ".mts",
+                  ".mjs",
+                ],
+              },
+            },
           },
         ],
       },
@@ -220,6 +264,28 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             },
             "optimization": {
               "moduleIds": "named",
+            },
+            "resolve": {
+              "extensionAlias": {
+                ".cjs": [
+                  ".cts",
+                  ".cjs",
+                ],
+                ".js": [
+                  ".ts",
+                  ".tsx",
+                  ".js",
+                  ".jsx",
+                ],
+                ".jsx": [
+                  ".tsx",
+                  ".jsx",
+                ],
+                ".mjs": [
+                  ".mts",
+                  ".mjs",
+                ],
+              },
             },
           },
         ],
