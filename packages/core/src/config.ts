@@ -675,7 +675,6 @@ export async function initRsbuild(
     environments[
       currentFormatCount === 1 ? format : `${format}${currentFormatIndex}`
     ] = config;
-    console.log('config: ', config);
   }
 
   return createRsbuild({
