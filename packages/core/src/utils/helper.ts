@@ -126,4 +126,36 @@ export const readPackageJson = (rootPath: string): undefined | PkgJson => {
 export const isObject = (obj: unknown): obj is Record<string, any> =>
   Object.prototype.toString.call(obj) === '[object Object]';
 
+type OmitDeep<T, K extends string[]> = T extends (infer U)[]
+  ? OmitDeep<U, K>[]
+  : T extends Record<any, any>
+    ? { [P in keyof T as P extends K[number] ? never : P]: OmitDeep<T[P], K> }
+    : T;
+
+export function omitDeep<T extends object, K extends string[]>(
+  obj: T,
+  keys: K,
+): OmitDeep<T, K> {
+  if (typeof obj === 'string' || typeof obj !== 'object' || obj === null)
+    return obj as any;
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => omitDeep(item, keys)) as any;
+  }
+
+  const clone: any = {};
+  for (const property in obj) {
+    if (keys.includes(property as string)) {
+      continue;
+    }
+    const value = obj[property];
+    if (value && typeof value === 'object') {
+      clone[property] = omitDeep(value, keys);
+    } else {
+      clone[property] = value;
+    }
+  }
+  return clone;
+}
+
 export { color };
