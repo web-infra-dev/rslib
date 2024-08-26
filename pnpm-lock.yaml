@@ -70,8 +70,8 @@ importers:
         specifier: 1.43.1
         version: 1.43.1
       '@rsbuild/core':
-        specifier: 1.0.1-beta.15
-        version: 1.0.1-beta.15
+        specifier: 1.0.1-beta.16
+        version: 1.0.1-beta.16
       '@rslib/core':
         specifier: workspace:*
         version: link:../packages/core
@@ -145,6 +145,8 @@ importers:
 
   e2e/cases/dts/bundle/abort-on-error: {}
 
+  e2e/cases/dts/bundle/absolute-entry: {}
+
   e2e/cases/dts/bundle/auto-extension: {}
 
   e2e/cases/dts/bundle/basic: {}
@@ -176,7 +178,7 @@ importers:
     devDependencies:
       '@rsbuild/plugin-react':
         specifier: 1.0.1-beta.14
-        version: 1.0.1-beta.14(@rsbuild/core@1.0.1-beta.15)
+        version: 1.0.1-beta.14(@rsbuild/core@1.0.1-beta.16)
       '@rslib/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -193,8 +195,8 @@ importers:
         specifier: ^7
         version: 7.47.5(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-beta.15
-        version: 1.0.1-beta.15
+        specifier: 1.0.1-beta.16
+        version: 1.0.1-beta.16
       rsbuild-plugin-dts:
         specifier: workspace:*
         version: link:../plugin-dts
@@ -246,8 +248,8 @@ importers:
         specifier: ^7.47.5
         version: 7.47.5(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-beta.15
-        version: 1.0.1-beta.15
+        specifier: 1.0.1-beta.16
+        version: 1.0.1-beta.16
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
@@ -776,8 +778,8 @@ packages:
     engines: {node: '>=16.7.0'}
     hasBin: true
 
-  '@rsbuild/core@1.0.1-beta.15':
-    resolution: {integrity: sha512-Y9N5GvGhorbP5RCOJDYZ+gUJGSBbDAUlntLeXFOF4bSQU7Pa+tzt/tuL44wxuPjjEMj87wQz4K6wYOUVov9gZw==}
+  '@rsbuild/core@1.0.1-beta.16':
+    resolution: {integrity: sha512-/0s6E3bKqyxUby2X4H11xQppuXpPWqZzPWkynUX19o9T2K7FuPw5cyuE0iL3f2XlGucmgftSn06Am5HsQV+A+w==}
     engines: {node: '>=16.7.0'}
     hasBin: true
 
@@ -3087,7 +3089,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@rsbuild/core@1.0.1-beta.15':
+  '@rsbuild/core@1.0.1-beta.16':
     dependencies:
       '@rspack/core': '@rspack/core-canary@1.0.0-canary-84d893d-20240815120610(@swc/helpers@0.5.11)'
       '@rspack/lite-tapable': 1.0.0
@@ -3097,9 +3099,9 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@rsbuild/plugin-react@1.0.1-beta.14(@rsbuild/core@1.0.1-beta.15)':
+  '@rsbuild/plugin-react@1.0.1-beta.14(@rsbuild/core@1.0.1-beta.16)':
     dependencies:
-      '@rsbuild/core': 1.0.1-beta.15
+      '@rsbuild/core': 1.0.1-beta.16
       '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.14.2)
       react-refresh: 0.14.2
 
