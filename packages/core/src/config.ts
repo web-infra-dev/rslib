@@ -542,12 +542,7 @@ const composeTargetConfig = (target = 'web'): RsbuildConfig => {
   }
 };
 
-async function composeLibRsbuildConfig(
-  libConfig: LibConfig,
-  rsbuildConfig: RsbuildConfig,
-  configPath: string,
-) {
-  const config = mergeRsbuildConfig<LibConfig>(rsbuildConfig, libConfig);
+async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   const rootPath = dirname(configPath);
   const pkgJson = readPackageJson(rootPath);
 
@@ -571,7 +566,7 @@ async function composeLibRsbuildConfig(
   const autoExternalConfig = composeAutoExternalConfig({
     autoExternal,
     pkgJson,
-    userExternals: rsbuildConfig.output?.externals,
+    userExternals: config.output?.externals,
   });
   const entryConfig = await composeEntryConfig(
     config.source?.entry,
@@ -608,35 +603,32 @@ export async function composeCreateRsbuildConfig(
   }
 
   const libConfigPromises = libConfigsArray.map(async (libConfig) => {
-    const { format, ...overrideRsbuildConfig } = libConfig;
-
-    const userRsbuildConfig = mergeRsbuildConfig(
+    const userConfig = mergeRsbuildConfig<LibConfig>(
       sharedRsbuildConfig,
-      overrideRsbuildConfig,
+      libConfig,
     );
 
     // Merge the configuration of each environment based on the shared Rsbuild
     // configuration and Lib configuration in the settings.
     const libRsbuildConfig = await composeLibRsbuildConfig(
-      libConfig,
-      userRsbuildConfig,
+      userConfig,
       configPath,
     );
 
     // Reset certain fields because they will be completely overridden by the upcoming merge.
     // We don't want to retain them in the final configuration.
     // The reset process should occur after merging the library configuration.
-    userRsbuildConfig.source ??= {};
-    userRsbuildConfig.source.entry = {};
+    userConfig.source ??= {};
+    userConfig.source.entry = {};
 
     // Already manually sort and merge the externals configuration.
-    userRsbuildConfig.output ??= {};
-    delete userRsbuildConfig.output.externals;
+    userConfig.output ??= {};
+    delete userConfig.output.externals;
 
     return {
-      format: format!,
+      format: libConfig.format!,
       config: mergeRsbuildConfig(
-        userRsbuildConfig,
+        userConfig,
         libRsbuildConfig,
         // Merge order matters, keep `internalRsbuildConfig` at the last position
         // to ensure that the internal config is not overridden by user's config.
