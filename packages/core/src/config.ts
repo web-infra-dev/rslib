@@ -164,6 +164,16 @@ export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
             },
           },
         },
+        // TypeScript-specific behavior: if the extension is ".js" or ".jsx", try replacing it with ".ts" or ".tsx"
+        // see https://github.com/web-infra-dev/rslib/issues/41
+        resolve: {
+          extensionAlias: {
+            '.js': ['.ts', '.tsx', '.js', '.jsx'],
+            '.jsx': ['.tsx', '.jsx'],
+            '.mjs': ['.mts', '.mjs'],
+            '.cjs': ['.cts', '.cjs'],
+          },
+        },
       },
     },
     output: {
