@@ -27,6 +27,7 @@ import {
   color,
   isObject,
   nodeBuiltInModules,
+  omitDeep,
   readPackageJson,
 } from './utils/helper';
 import { logger } from './utils/logger';
@@ -628,7 +629,14 @@ export async function composeCreateRsbuildConfig(
     return {
       format: libConfig.format!,
       config: mergeRsbuildConfig(
-        userConfig,
+        omitDeep(userConfig, [
+          'bundle',
+          'format',
+          'autoExtension',
+          'autoExternal',
+          'syntax',
+          'dts',
+        ]),
         libRsbuildConfig,
         // Merge order matters, keep `internalRsbuildConfig` at the last position
         // to ensure that the internal config is not overridden by user's config.
