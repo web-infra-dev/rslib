@@ -166,8 +166,8 @@ export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
       },
     },
     output: {
-      filenameHash: false,
       // TODO: easy to development at the moment
+      filenameHash: false,
       minify: false,
       distPath: {
         js: './',
@@ -182,7 +182,6 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
       return {
         tools: {
           rspack: {
-            externalsType: 'module-import',
             output: {
               module: true,
               chunkFormat: 'module',
@@ -210,7 +209,6 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
       return {
         tools: {
           rspack: {
-            externalsType: 'commonjs',
             output: {
               iife: false,
               chunkFormat: 'commonjs',
@@ -225,12 +223,76 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
       return {
         tools: {
           rspack: {
-            externalsType: 'umd',
             output: {
               library: {
                 type: 'umd',
               },
             },
+          },
+        },
+      };
+    default:
+      throw new Error(`Unsupported format: ${format}`);
+  }
+};
+
+export const composeModuleImportWarn = (request: string): string => {
+  return `The externalized commonjs request ${color.green(`"${request}"`)} will use ${color.blue('"module"')} external type in ESM format. If you want to specify other external type, considering set the request and type with ${color.blue('"output.externals"')}.`;
+};
+
+const composeExternalsConfig = (
+  format: Format,
+  externals: NonNullable<RsbuildConfig['output']>['externals'],
+): RsbuildConfig => {
+  switch (format) {
+    case 'esm': {
+      const userExternals = Array.isArray(externals) ? externals : [externals];
+      return {
+        output: {
+          // TODO: Define the internal externals config in Rsbuild's externals instead
+          // Rspack's externals as they will not be merged from different fields. All externals
+          // should to be unified and merged together in the future.
+          // @ts-ignore
+          externals: [
+            ({ request, dependencyType }: any, callback: any) => {
+              if (dependencyType === 'commonjs') {
+                logger.warn(composeModuleImportWarn(request));
+              }
+              callback();
+            },
+            ...userExternals,
+          ].filter(Boolean),
+        },
+        tools: {
+          rspack: {
+            externalsType: 'module-import',
+          },
+        },
+      };
+    }
+    case 'cjs':
+      return {
+        output: externals
+          ? {
+              externals,
+            }
+          : {},
+        tools: {
+          rspack: {
+            externalsType: 'commonjs',
+          },
+        },
+      };
+    case 'umd':
+      return {
+        output: externals
+          ? {
+              externals,
+            }
+          : {},
+        tools: {
+          rspack: {
+            externalsType: 'umd',
           },
         },
       };
@@ -491,6 +553,10 @@ async function composeLibRsbuildConfig(
 
   const { format, autoExtension = true, autoExternal = true } = config;
   const formatConfig = composeFormatConfig(format!);
+  const externalsConfig = composeExternalsConfig(
+    format!,
+    config.output?.externals,
+  );
   const {
     config: autoExtensionConfig,
     jsExtension,
@@ -516,6 +582,7 @@ async function composeLibRsbuildConfig(
 
   return mergeRsbuildConfig(
     formatConfig,
+    externalsConfig,
     autoExtensionConfig,
     autoExternalConfig,
     syntaxConfig,
@@ -543,7 +610,7 @@ export async function composeCreateRsbuildConfig(
   const libConfigPromises = libConfigsArray.map(async (libConfig) => {
     const { format, ...overrideRsbuildConfig } = libConfig;
 
-    const baseRsbuildConfig = mergeRsbuildConfig(
+    const userRsbuildConfig = mergeRsbuildConfig(
       sharedRsbuildConfig,
       overrideRsbuildConfig,
     );
@@ -552,20 +619,24 @@ export async function composeCreateRsbuildConfig(
     // configuration and Lib configuration in the settings.
     const libRsbuildConfig = await composeLibRsbuildConfig(
       libConfig,
-      baseRsbuildConfig,
+      userRsbuildConfig,
       configPath,
     );
 
     // Reset certain fields because they will be completely overridden by the upcoming merge.
     // We don't want to retain them in the final configuration.
     // The reset process should occur after merging the library configuration.
-    baseRsbuildConfig.source ??= {};
-    baseRsbuildConfig.source.entry = {};
+    userRsbuildConfig.source ??= {};
+    userRsbuildConfig.source.entry = {};
+
+    // Already manually sort and merge the externals configuration.
+    userRsbuildConfig.output ??= {};
+    delete userRsbuildConfig.output.externals;
 
     return {
       format: format!,
       config: mergeRsbuildConfig(
-        baseRsbuildConfig,
+        userRsbuildConfig,
         libRsbuildConfig,
         // Merge order matters, keep `internalRsbuildConfig` at the last position
         // to ensure that the internal config is not overridden by user's config.
