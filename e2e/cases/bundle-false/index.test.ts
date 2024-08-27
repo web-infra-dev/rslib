@@ -16,10 +16,10 @@ test('basic', async () => {
   `);
   expect(files.cjs).toMatchInlineSnapshot(`
     [
-      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/index.js",
-      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/sum.js",
-      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/utils/numbers.js",
-      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/utils/strings.js",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/index.cjs",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/sum.cjs",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/utils/numbers.cjs",
+      "<ROOT>/e2e/cases/bundle-false/basic/dist/cjs/utils/strings.cjs",
     ]
   `);
 });
@@ -35,7 +35,7 @@ test('single file', async () => {
   `);
   expect(files.cjs).toMatchInlineSnapshot(`
     [
-      "<ROOT>/e2e/cases/bundle-false/single-file/dist/cjs/index.js",
+      "<ROOT>/e2e/cases/bundle-false/single-file/dist/cjs/index.cjs",
     ]
   `);
 });
