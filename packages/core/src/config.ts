@@ -666,6 +666,8 @@ export async function composeCreateRsbuildConfig(
       // 2 - libRsbuildConfig: the configuration that we compose from Rslib unique config and userConfig from 1
       // 3 - internalRsbuildConfig: the built-in best practice Rsbuild configuration we provide in Rslib
       // We should state in the document that the built-in configuration should not be changed optionally
+      // In compose process of 2, we may read some config from 1, and reassemble the related config,
+      // so before final mergeRsbuildConfig, we reset some specified fields
       config: mergeRsbuildConfig(
         internalRsbuildConfig,
         libRsbuildConfig,
