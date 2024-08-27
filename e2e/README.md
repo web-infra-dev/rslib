@@ -24,10 +24,10 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | esbuildOptions  | ⚫️    |                                                                                                      |
 | externals       | 🟢     |                                                                                                      |
 | format          | 🟡     | Support `cjs` and `esm`, `umd` still need to be tested                                               |
-| input           | ⚪️     |                                                                                                      |
+| input           | 🟢     |                                                                                                      |
 | jsx             | ⚪️     |                                                                                                      |
 | metafile        | ⚪️     |                                                                                                      |
-| minify          | ⚪️     |                                                                                                      |
+| minify          | 🟢     |                                                                                                      |
 | platform        | 🟢     |                                                                                                      |
 | redirect        | ⚪️     |                                                                                                      |
 | resolve         | ⚪️     |                                                                                                      |
