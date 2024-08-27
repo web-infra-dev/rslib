@@ -179,6 +179,15 @@ describe('Should compose create Rsbuild config correctly', () => {
       output: {
         filenameHash: false,
       },
+      tools: {
+        rspack: {
+          resolve: {
+            extensionAlias: {
+              '.js': ['.ts', '.tsx'],
+            },
+          },
+        },
+      },
     };
     const composedRsbuildConfig = await composeCreateRsbuildConfig(
       rslibConfig,
