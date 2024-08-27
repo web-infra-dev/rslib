@@ -660,7 +660,15 @@ export async function composeCreateRsbuildConfig(
 
     return {
       format: libConfig.format!,
+      // The merge order represents the priority of the configuration
+      // The priorities from high to low are as follows:
+      // 1 - userConfig: users can configure any Rsbuild and Rspack config
+      // 2 - libRsbuildConfig: the configuration that we compose from Rslib unique config and userConfig from 1
+      // 3 - internalRsbuildConfig: the built-in best practice Rsbuild configuration we provide in Rslib
+      // We should state in the document that the built-in configuration should not be changed optionally
       config: mergeRsbuildConfig(
+        internalRsbuildConfig,
+        libRsbuildConfig,
         omitDeep(userConfig, [
           'bundle',
           'format',
@@ -669,10 +677,6 @@ export async function composeCreateRsbuildConfig(
           'syntax',
           'dts',
         ]),
-        libRsbuildConfig,
-        // Merge order matters, keep `internalRsbuildConfig` at the last position
-        // to ensure that the internal config is not overridden by user's config.
-        internalRsbuildConfig,
       ),
     };
   });

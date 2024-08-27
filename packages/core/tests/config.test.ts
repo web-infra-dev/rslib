@@ -178,7 +178,6 @@ describe('Should compose create Rsbuild config correctly', () => {
       },
       output: {
         filenameHash: false,
-        minify: true,
       },
     };
     const composedRsbuildConfig = await composeCreateRsbuildConfig(
