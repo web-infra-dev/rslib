@@ -1,5 +1,4 @@
 {
-  "extends": "@tsconfig/strictest/tsconfig",
   "compilerOptions": {
     "exactOptionalPropertyTypes": false,
     "target": "ES2021",
@@ -17,7 +16,13 @@
     "resolveJsonModule": true,
     "moduleResolution": "Bundler",
     "useDefineForClassFields": true,
-    "noPropertyAccessFromIndexSignature": false
+    "noPropertyAccessFromIndexSignature": false,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true
   },
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Base"
