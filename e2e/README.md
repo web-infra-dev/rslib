@@ -27,7 +27,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | input           | 🟢     |                                                                                                      |
 | jsx             | ⚪️     |                                                                                                      |
 | metafile        | ⚪️     |                                                                                                      |
-| minify          | ⚪️     |                                                                                                      |
+| minify          | 🟢     |                                                                                                      |
 | platform        | 🟢     |                                                                                                      |
 | redirect        | ⚪️     |                                                                                                      |
 | resolve         | ⚪️     |                                                                                                      |
