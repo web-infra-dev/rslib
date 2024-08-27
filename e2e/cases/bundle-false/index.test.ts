@@ -44,10 +44,21 @@ test('auto add extension for relative import', async () => {
   const fixturePath = join(__dirname, 'relative-import');
   const { contents } = await buildAndGetResults(fixturePath);
 
-  expect(Object.values(contents.esm)[1]).toContain(
+  for (const importer of [
     'import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "./bar.js";',
-  );
-  expect(Object.values(contents.cjs)[1]).toContain(
+    'import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__qux_js__ from "./qux.js";',
+  ]) {
+    expect(Object.values(contents.esm)[3]).toContain(importer);
+  }
+
+  for (const requirer of [
     'var external_bar_cjs_namespaceObject = require("./bar.cjs");',
-  );
+    'var external_baz_cjs_namespaceObject = require("./baz.cjs");',
+    'var external_foo_cjs_namespaceObject = require("./foo.cjs");',
+    'var external_qux_cjs_namespaceObject = require("./qux.cjs");',
+  ]) {
+    expect(Object.values(contents.cjs)[3]).toContain(requirer);
+  }
 });

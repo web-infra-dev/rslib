@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import path, { dirname, isAbsolute, join } from 'node:path';
+import path, { dirname, extname, isAbsolute, join } from 'node:path';
 import {
   type RsbuildConfig,
   type RsbuildInstance,
@@ -475,13 +475,18 @@ const composeBundleConfig = (
           // Prevent from externalizing entry modules here.
           if (data.contextInfo.issuer) {
             // Node.js ECMAScript module loader does no extension searching.
-            // So we add a file extension here when data.request is a relative path
-            return callback(
-              null,
-              data.request[0] === '.'
-                ? `${data.request}${jsExtension}`
-                : data.request,
-            );
+            // Add a file extension according to autoExtension config
+            // when data.request is a relative path and do not have an extension.
+            // If data.request already have an extension, we replace it with new extension
+            // This may result in a change in semantics,
+            // user should use copy to keep origin file or use another separate entry to deal this
+            let request = data.request;
+            if (request[0] === '.') {
+              request = extname(request)
+                ? request.replace(/\.[^.]+$/, jsExtension)
+                : `${request}${jsExtension}`;
+            }
+            return callback(null, request);
           }
           callback();
         },
