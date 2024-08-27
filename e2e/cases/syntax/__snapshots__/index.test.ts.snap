@@ -1,53 +1,33 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should downgrade class private method by default 1`] = `
-"
-;// CONCATENATED MODULE: ../__fixtures__/src/foo.ts
+"// CONCATENATED MODULE: ../__fixtures__/src/foo.ts
 class Foo {
     constructor(){
         this.#bar();
     }
     #bar() {}
 }
-
-
-;// CONCATENATED MODULE: ../__fixtures__/src/index.ts
-
-
 export { Foo };
 "
 `;
 
 exports[`should downgrade class private method with output.syntax config 1`] = `
-"
-;// CONCATENATED MODULE: ../../../../node_modules/<PNPM_INNER>/@swc/helpers/esm/_class_private_method_get.js
+"// CONCATENATED MODULE: ../../../../node_modules/<PNPM_INNER>/@swc/helpers/esm/_class_private_method_get.js
 function _class_private_method_get(receiver, privateSet, fn) {
     if (!privateSet.has(receiver)) throw new TypeError(\\"attempted to get private field on non-instance\\");
-
     return fn;
 }
-
-
-;// CONCATENATED MODULE: ../../../../node_modules/<PNPM_INNER>/@swc/helpers/esm/_check_private_redeclaration.js
+// CONCATENATED MODULE: ../../../../node_modules/<PNPM_INNER>/@swc/helpers/esm/_check_private_redeclaration.js
 function _check_private_redeclaration(obj, privateCollection) {
-    if (privateCollection.has(obj)) {
-        throw new TypeError(\\"Cannot initialize the same private elements twice on an object\\");
-    }
+    if (privateCollection.has(obj)) throw new TypeError(\\"Cannot initialize the same private elements twice on an object\\");
 }
-
-
-;// CONCATENATED MODULE: ../../../../node_modules/<PNPM_INNER>/@swc/helpers/esm/_class_private_method_init.js
-
-
+// CONCATENATED MODULE: ../../../../node_modules/<PNPM_INNER>/@swc/helpers/esm/_class_private_method_init.js
 function _class_private_method_init(obj, privateSet) {
     _check_private_redeclaration(obj, privateSet);
     privateSet.add(obj);
 }
-
-
-;// CONCATENATED MODULE: ../__fixtures__/src/foo.ts
-
-
+// CONCATENATED MODULE: ../__fixtures__/src/foo.ts
 var _bar = new WeakSet();
 class Foo {
     constructor(){
@@ -56,11 +36,6 @@ class Foo {
     }
 }
 function bar() {}
- /*#__PURE__*/ 
-
-;// CONCATENATED MODULE: ../__fixtures__/src/index.ts
-
-
 export { Foo };
 "
 `;

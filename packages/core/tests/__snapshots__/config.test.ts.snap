@@ -19,7 +19,25 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "js": "[name].js",
         },
         "filenameHash": false,
-        "minify": false,
+        "minify": {
+          "css": false,
+          "js": true,
+          "jsOptions": {
+            "minimizerOptions": {
+              "compress": {
+                "dead_code": true,
+                "defaults": false,
+                "toplevel": true,
+                "unused": true,
+              },
+              "format": {
+                "comments": "all",
+              },
+              "mangle": false,
+              "minify": false,
+            },
+          },
+        },
         "overrideBrowserslist": [
           "last 1 node versions",
           "last 1 Chrome versions",
@@ -123,7 +141,25 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "js": "[name].js",
         },
         "filenameHash": false,
-        "minify": false,
+        "minify": {
+          "css": false,
+          "js": true,
+          "jsOptions": {
+            "minimizerOptions": {
+              "compress": {
+                "dead_code": true,
+                "defaults": false,
+                "toplevel": true,
+                "unused": true,
+              },
+              "format": {
+                "comments": "all",
+              },
+              "mangle": false,
+              "minify": false,
+            },
+          },
+        },
         "overrideBrowserslist": [
           "last 1 node versions",
           "last 1 Chrome versions",
@@ -218,7 +254,25 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "js": "[name].js",
         },
         "filenameHash": false,
-        "minify": false,
+        "minify": {
+          "css": false,
+          "js": true,
+          "jsOptions": {
+            "minimizerOptions": {
+              "compress": {
+                "dead_code": true,
+                "defaults": false,
+                "toplevel": true,
+                "unused": true,
+              },
+              "format": {
+                "comments": "all",
+              },
+              "mangle": false,
+              "minify": false,
+            },
+          },
+        },
         "overrideBrowserslist": [
           "last 1 node versions",
           "last 1 Chrome versions",

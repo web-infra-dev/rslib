@@ -4,4 +4,6 @@ export const foo = () => {
   const f1 = __filename;
   const f2 = __filename;
   const importMetaUrl = import.meta.url;
+
+  return { d1, d2, f1, f2, importMetaUrl };
 };

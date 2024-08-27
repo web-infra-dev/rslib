@@ -177,9 +177,26 @@ export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
       },
     },
     output: {
-      // TODO: easy to development at the moment
       filenameHash: false,
-      minify: false,
+      minify: {
+        js: true,
+        css: false,
+        jsOptions: {
+          minimizerOptions: {
+            mangle: false,
+            minify: false,
+            compress: {
+              defaults: false,
+              unused: true,
+              dead_code: true,
+              toplevel: true,
+            },
+            format: {
+              comments: 'all',
+            },
+          },
+        },
+      },
       distPath: {
         js: './',
       },
