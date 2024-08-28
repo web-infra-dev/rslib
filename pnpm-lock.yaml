@@ -70,8 +70,8 @@ importers:
         specifier: 1.43.1
         version: 1.43.1
       '@rsbuild/core':
-        specifier: 1.0.1-beta.16
-        version: 1.0.1-beta.16
+        specifier: 1.0.1-rc.0
+        version: 1.0.1-rc.0
       '@rslib/core':
         specifier: workspace:*
         version: link:../packages/core
@@ -224,8 +224,8 @@ importers:
   examples/react-component:
     devDependencies:
       '@rsbuild/plugin-react':
-        specifier: 1.0.1-beta.14
-        version: 1.0.1-beta.14(@rsbuild/core@1.0.1-beta.16)
+        specifier: 1.0.1-rc.0
+        version: 1.0.1-rc.0(@rsbuild/core@1.0.1-rc.0)
       '@rslib/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -242,8 +242,8 @@ importers:
         specifier: ^7
         version: 7.47.7(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-beta.16
-        version: 1.0.1-beta.16
+        specifier: 1.0.1-rc.0
+        version: 1.0.1-rc.0
       rsbuild-plugin-dts:
         specifier: workspace:*
         version: link:../plugin-dts
@@ -295,8 +295,8 @@ importers:
         specifier: ^7.47.7
         version: 7.47.7(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-beta.16
-        version: 1.0.1-beta.16
+        specifier: 1.0.1-rc.0
+        version: 1.0.1-rc.0
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
@@ -821,10 +821,15 @@ packages:
     engines: {node: '>=16.7.0'}
     hasBin: true
 
-  '@rsbuild/plugin-react@1.0.1-beta.14':
-    resolution: {integrity: sha512-cH8MfdoK3QgbgquvE1YmNPspDXf+22Kq59MQm+fYk6t9zmcYMqHmUdcvf8/iepLw+u8WtPBecMAejxoHhbl+dQ==}
+  '@rsbuild/core@1.0.1-rc.0':
+    resolution: {integrity: sha512-tSszHL2sp/iNZkYMOOorgBonh4XAIfJODlt6JBTg5PMAywm+XXdFoEglaKeAM6WiQ/0rQYOataKrHbMkfxmh/A==}
+    engines: {node: '>=16.7.0'}
+    hasBin: true
+
+  '@rsbuild/plugin-react@1.0.1-rc.0':
+    resolution: {integrity: sha512-bjKRNdihb3LoWW74Ri2lBQqrTaksIpGx9/mp/RiRpVUGzX+9/SDlXWvrnWdndKPm7UYfY3VBCZNT2zJRi0CCKg==}
     peerDependencies:
-      '@rsbuild/core': ^1.0.1-beta.14
+      '@rsbuild/core': ^1.0.1-rc.0
 
   '@rslib/core@0.0.3':
     resolution: {integrity: sha512-QtLhmqBn64VvRo8/7L+Xm001XhUVgEE6PMX6KupzD4A499gBjVvk5aUgShuXOou2yLL4/tGaHNBP9x8f70zhzg==}
@@ -933,8 +938,8 @@ packages:
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
-  '@swc/helpers@0.5.11':
-    resolution: {integrity: sha512-YNlnKRWF2sVojTpIyzwou9XoTNbzbzONwRhOoniEioF1AtaitTvVZblaQRrAzChWQ1bLYyYSWzM18y4WwgzJ+A==}
+  '@swc/helpers@0.5.12':
+    resolution: {integrity: sha512-KMZNXiGibsW9kvZAO1Pam2JPTDBm+KSHMMHWdsyI/1DbIZjT2A6Gy3hblVXUMEDvUAKq+e0vL0X0o54owWji7g==}
 
   '@types/argparse@1.0.38':
     resolution: {integrity: sha512-ebDJ9b0e702Yr7pWgB0jzm+CX4Srzz8RcXtLJDJB+BSccqMa36uyH/zUsSYao5+BD1ytv3k3rPYCq4mAE1hsXA==}
@@ -1159,8 +1164,8 @@ packages:
     resolution: {integrity: sha512-GHTSNSYICQ7scH7sZ+M2rFopRoLh8t2bLSW6BbgrtLsahOIB5iyAVJf9GjWK3cYTDaMj4XdBpM1cA6pIS0Kv2w==}
     engines: {node: '>= 0.4'}
 
-  caniuse-lite@1.0.30001651:
-    resolution: {integrity: sha512-9Cf+Xv1jJNe1xPZLGuUXLNkE1BoDkqRqYyFJ9TDYSqhduqA4hu4oR9HluGoWYQC/aj8WHjsGVV+bwkh0+tegRg==}
+  caniuse-lite@1.0.30001653:
+    resolution: {integrity: sha512-XGWQVB8wFQ2+9NZwZ10GxTYC5hk0Fa+q8cSkr0tgvMhYhMHP/QC+WTgrePMDBWiWc/pV+1ik82Al20XOK25Gcw==}
 
   chai@5.1.1:
     resolution: {integrity: sha512-pT1ZgP8rPNqUgieVaEY+ryQr6Q4HXNg8Ei9UnLUrjN4IA7dvQC5JB+/kxVcPNDHyBcc/26CXPkbNzq3qwrOEKA==}
@@ -1264,8 +1269,8 @@ packages:
     resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
     engines: {node: '>= 0.6'}
 
-  core-js@3.38.0:
-    resolution: {integrity: sha512-XPpwqEodRljce9KswjZShh95qJ1URisBeKCjUdq27YdenkslVe7OO0ZJhlYXAChW7OhXaRLl8AAba7IBfoIHug==}
+  core-js@3.38.1:
+    resolution: {integrity: sha512-OP35aUorbU3Zvlx7pjsFdu1rGNnD4pgw/CWoYzRY3t2EzoVT7shKHY1dlAy3f41cGIO7ZDPQimhGFTlEYkG/Hw==}
 
   cross-env@7.0.3:
     resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
@@ -3109,17 +3114,27 @@ snapshots:
 
   '@rsbuild/core@1.0.1-beta.16':
     dependencies:
-      '@rspack/core': '@rspack/core-canary@1.0.0-canary-876f80b-20240827032943(@swc/helpers@0.5.11)'
+      '@rspack/core': '@rspack/core-canary@1.0.0-canary-876f80b-20240827032943(@swc/helpers@0.5.12)'
       '@rspack/lite-tapable': 1.0.0
-      '@swc/helpers': 0.5.11
-      caniuse-lite: 1.0.30001651
-      core-js: 3.38.0
+      '@swc/helpers': 0.5.12
+      caniuse-lite: 1.0.30001653
+      core-js: 3.38.1
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@rsbuild/plugin-react@1.0.1-beta.14(@rsbuild/core@1.0.1-beta.16)':
+  '@rsbuild/core@1.0.1-rc.0':
     dependencies:
-      '@rsbuild/core': 1.0.1-beta.16
+      '@rspack/core': '@rspack/core-canary@1.0.0-canary-876f80b-20240827032943(@swc/helpers@0.5.12)'
+      '@rspack/lite-tapable': 1.0.0
+      '@swc/helpers': 0.5.12
+      caniuse-lite: 1.0.30001653
+      core-js: 3.38.1
+    optionalDependencies:
+      fsevents: 2.3.3
+
+  '@rsbuild/plugin-react@1.0.1-rc.0(@rsbuild/core@1.0.1-rc.0)':
+    dependencies:
+      '@rsbuild/core': 1.0.1-rc.0
       '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.14.2)
       react-refresh: 0.14.2
 
@@ -3170,14 +3185,14 @@ snapshots:
   '@rspack/binding-win32-x64-msvc-canary@1.0.0-canary-876f80b-20240827032943':
     optional: true
 
-  '@rspack/core-canary@1.0.0-canary-876f80b-20240827032943(@swc/helpers@0.5.11)':
+  '@rspack/core-canary@1.0.0-canary-876f80b-20240827032943(@swc/helpers@0.5.12)':
     dependencies:
       '@module-federation/runtime-tools': 0.5.1
       '@rspack/binding': '@rspack/binding-canary@1.0.0-canary-876f80b-20240827032943'
       '@rspack/lite-tapable': 1.0.0
-      caniuse-lite: 1.0.30001651
+      caniuse-lite: 1.0.30001653
     optionalDependencies:
-      '@swc/helpers': 0.5.11
+      '@swc/helpers': 0.5.12
 
   '@rspack/lite-tapable@1.0.0': {}
 
@@ -3224,7 +3239,7 @@ snapshots:
 
   '@sinclair/typebox@0.27.8': {}
 
-  '@swc/helpers@0.5.11':
+  '@swc/helpers@0.5.12':
     dependencies:
       tslib: 2.6.3
 
@@ -3487,7 +3502,7 @@ snapshots:
       get-intrinsic: 1.2.4
       set-function-length: 1.2.2
 
-  caniuse-lite@1.0.30001651: {}
+  caniuse-lite@1.0.30001653: {}
 
   chai@5.1.1:
     dependencies:
@@ -3583,7 +3598,7 @@ snapshots:
 
   cookie@0.6.0: {}
 
-  core-js@3.38.0: {}
+  core-js@3.38.1: {}
 
   cross-env@7.0.3:
     dependencies:
