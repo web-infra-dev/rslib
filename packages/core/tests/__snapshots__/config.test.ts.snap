@@ -61,35 +61,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
         "rspack": [
           {
             "experiments": {
-              "outputModule": true,
-            },
-            "externalsType": "module-import",
-            "module": {
-              "parser": {
-                "javascript": {
-                  "importMeta": false,
-                },
-              },
-            },
-            "optimization": {
-              "concatenateModules": true,
-            },
-            "output": {
-              "chunkFormat": "module",
-              "library": {
-                "type": "modern-module",
-              },
-              "module": true,
-            },
-          },
-          [Function],
-          {
-            "target": [
-              "web",
-            ],
-          },
-          {
-            "experiments": {
               "rspackFuture": {
                 "bundlerInfo": {
                   "force": false,
@@ -118,6 +89,45 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
                 ".mjs": [
                   ".mts",
                   ".mjs",
+                ],
+              },
+            },
+          },
+          {
+            "experiments": {
+              "outputModule": true,
+            },
+            "externalsType": "module-import",
+            "module": {
+              "parser": {
+                "javascript": {
+                  "importMeta": false,
+                },
+              },
+            },
+            "optimization": {
+              "concatenateModules": true,
+            },
+            "output": {
+              "chunkFormat": "module",
+              "library": {
+                "type": "modern-module",
+              },
+              "module": true,
+            },
+          },
+          [Function],
+          {
+            "target": [
+              "web",
+            ],
+          },
+          {
+            "resolve": {
+              "extensionAlias": {
+                ".js": [
+                  ".ts",
+                  ".tsx",
                 ],
               },
             },
@@ -186,22 +196,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
         "htmlPlugin": false,
         "rspack": [
           {
-            "externalsType": "commonjs",
-            "output": {
-              "chunkFormat": "commonjs",
-              "iife": false,
-              "library": {
-                "type": "commonjs",
-              },
-            },
-          },
-          [Function],
-          {
-            "target": [
-              "web",
-            ],
-          },
-          {
             "experiments": {
               "rspackFuture": {
                 "bundlerInfo": {
@@ -231,6 +225,32 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
                 ".mjs": [
                   ".mts",
                   ".mjs",
+                ],
+              },
+            },
+          },
+          {
+            "externalsType": "commonjs",
+            "output": {
+              "chunkFormat": "commonjs",
+              "iife": false,
+              "library": {
+                "type": "commonjs",
+              },
+            },
+          },
+          [Function],
+          {
+            "target": [
+              "web",
+            ],
+          },
+          {
+            "resolve": {
+              "extensionAlias": {
+                ".js": [
+                  ".ts",
+                  ".tsx",
                 ],
               },
             },
@@ -295,20 +315,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
         "htmlPlugin": false,
         "rspack": [
           {
-            "externalsType": "umd",
-            "output": {
-              "library": {
-                "type": "umd",
-              },
-            },
-          },
-          [Function],
-          {
-            "target": [
-              "web",
-            ],
-          },
-          {
             "experiments": {
               "rspackFuture": {
                 "bundlerInfo": {
@@ -338,6 +344,30 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
                 ".mjs": [
                   ".mts",
                   ".mjs",
+                ],
+              },
+            },
+          },
+          {
+            "externalsType": "umd",
+            "output": {
+              "library": {
+                "type": "umd",
+              },
+            },
+          },
+          [Function],
+          {
+            "target": [
+              "web",
+            ],
+          },
+          {
+            "resolve": {
+              "extensionAlias": {
+                ".js": [
+                  ".ts",
+                  ".tsx",
                 ],
               },
             },
