@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import { join } from 'node:path';
 import {
   type InspectConfigResult,
   mergeRsbuildConfig as mergeConfig,
@@ -161,4 +163,26 @@ export async function buildAndGetResults(
     rsbuildConfig: rsbuildConfig,
     isSuccess: Boolean(rsbuildInstance),
   };
+}
+
+interface FileTree {
+  [key: string]: string | FileTree;
+}
+
+export function generateFileTree(dir: string) {
+  const files = fs.readdirSync(dir);
+  const fileTree: FileTree = {};
+
+  for (const file of files) {
+    const filePath = join(dir, file);
+    const stats = fs.statSync(filePath);
+
+    if (stats.isDirectory()) {
+      fileTree[file] = generateFileTree(filePath);
+    } else {
+      fileTree[file] = filePath;
+    }
+  }
+
+  return fileTree;
 }

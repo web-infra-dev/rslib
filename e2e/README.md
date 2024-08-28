@@ -16,7 +16,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | autoExternal    | 🟢     |                                                                                                      |
 | banner-footer   | ⚪️     |                                                                                                      |
 | buildType       | 🟢     |                                                                                                      |
-| copy            | ⚪️     |                                                                                                      |
+| copy            | 🟢     |                                                                                                      |
 | decorator       | ⚪️     |                                                                                                      |
 | define          | 🟢     |                                                                                                      |
 | dts             | 🟢     |                                                                                                      |
