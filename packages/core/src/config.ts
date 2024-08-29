@@ -88,6 +88,108 @@ export async function loadConfig({
   return content as RslibConfig;
 }
 
+const composeExternalsWarnConfig = (
+  format: Format,
+  ...externalsArray: NonNullable<RsbuildConfig['output']>['externals'][]
+): RsbuildConfig => {
+  if (format !== 'esm') {
+    return {};
+  }
+
+  const externals: NonNullable<RsbuildConfig['output']>['externals'] = [];
+  for (const e of externalsArray.filter(Boolean)) {
+    if (Array.isArray(e)) {
+      externals.push(...e);
+    } else {
+      // @ts-ignore
+      externals.push(e);
+    }
+  }
+
+  // Match logic is derived from https://github.com/webpack/webpack/blob/94aba382eccf3de1004d235045d4462918dfdbb7/lib/ExternalModuleFactoryPlugin.js#L166-L293.
+  const matchUserExternals = (
+    externals: NonNullable<RsbuildConfig['output']>['externals'],
+    request: string,
+    callback: (matched?: true) => void,
+  ) => {
+    if (typeof externals === 'string') {
+      if (externals === request) {
+        callback(true);
+        return;
+      }
+    } else if (Array.isArray(externals)) {
+      let i = 0;
+      const next = () => {
+        let asyncFlag: boolean;
+        const handleExternalsAndCallback = (matched?: true) => {
+          if (!matched) {
+            if (asyncFlag) {
+              asyncFlag = false;
+              return;
+            }
+            return next();
+          }
+
+          callback(matched);
+        };
+
+        do {
+          asyncFlag = true;
+          if (i >= externals.length) {
+            return callback();
+          }
+          matchUserExternals(
+            externals[i++],
+            request,
+            handleExternalsAndCallback,
+          );
+        } while (!asyncFlag);
+        asyncFlag = false;
+      };
+
+      next();
+      return;
+    } else if (externals instanceof RegExp) {
+      if (externals.test(request)) {
+        callback(true);
+        return;
+      }
+    } else if (typeof externals === 'function') {
+      // TODO: Support function
+    } else if (typeof externals === 'object') {
+      if (Object.prototype.hasOwnProperty.call(externals, request)) {
+        callback(true);
+        return;
+      }
+    }
+
+    callback();
+  };
+
+  return {
+    output: {
+      externals: [
+        ({ request, dependencyType, contextInfo }: any, callback: any) => {
+          let externalized = false;
+          const _callback = (matched?: true) => {
+            if (matched) {
+              externalized = true;
+            }
+          };
+
+          if (contextInfo.issuer && dependencyType === 'commonjs') {
+            matchUserExternals(externals, request, _callback);
+            if (externalized) {
+              logger.warn(composeModuleImportWarn(request));
+            }
+          }
+          callback();
+        },
+      ],
+    },
+  };
+};
+
 export const composeAutoExternalConfig = (options: {
   autoExternal: AutoExternal;
   pkgJson?: PkgJson;
@@ -145,7 +247,7 @@ export const composeAutoExternalConfig = (options: {
     : {};
 };
 
-export async function createInternalRsbuildConfig(): Promise<RsbuildConfig> {
+export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
   return defineRsbuildConfig({
     mode: 'production',
     dev: {
@@ -272,45 +374,19 @@ const composeExternalsConfig = (
   format: Format,
   externals: NonNullable<RsbuildConfig['output']>['externals'],
 ): RsbuildConfig => {
+  // TODO: Define the internal externals config in Rsbuild's externals instead
+  // Rspack's externals as they will not be merged from different fields. All externals
+  // should to be unified and merged together in the future.
+
+  const externalsTypeMap = {
+    esm: 'module-import',
+    cjs: 'commonjs',
+    umd: 'umd',
+  } as const;
+
   switch (format) {
-    case 'esm': {
-      const userExternals = Array.isArray(externals) ? externals : [externals];
-      return {
-        output: {
-          // TODO: Define the internal externals config in Rsbuild's externals instead
-          // Rspack's externals as they will not be merged from different fields. All externals
-          // should to be unified and merged together in the future.
-          // @ts-ignore
-          externals: [
-            ({ request, dependencyType }: any, callback: any) => {
-              if (dependencyType === 'commonjs') {
-                logger.warn(composeModuleImportWarn(request));
-              }
-              callback();
-            },
-            ...userExternals,
-          ].filter(Boolean),
-        },
-        tools: {
-          rspack: {
-            externalsType: 'module-import',
-          },
-        },
-      };
-    }
+    case 'esm':
     case 'cjs':
-      return {
-        output: externals
-          ? {
-              externals,
-            }
-          : {},
-        tools: {
-          rspack: {
-            externalsType: 'commonjs',
-          },
-        },
-      };
     case 'umd':
       return {
         output: externals
@@ -320,7 +396,7 @@ const composeExternalsConfig = (
           : {},
         tools: {
           rspack: {
-            externalsType: 'umd',
+            externalsType: externalsTypeMap[format],
           },
         },
       };
@@ -607,12 +683,19 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     dirname(configPath),
   );
   const dtsConfig = await composeDtsConfig(config, dtsExtension);
+  const externalsWarnConfig = composeExternalsWarnConfig(
+    format!,
+    autoExternalConfig?.output?.externals,
+    externalsConfig?.output?.externals,
+  );
 
   return mergeRsbuildConfig(
     formatConfig,
+    // externalsWarnConfig should before other externals config
+    externalsWarnConfig,
     externalsConfig,
-    autoExtensionConfig,
     autoExternalConfig,
+    autoExtensionConfig,
     syntaxConfig,
     bundleConfig,
     targetConfig,
@@ -625,7 +708,7 @@ export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
   path?: string,
 ): Promise<{ format: Format; config: RsbuildConfig }[]> {
-  const internalRsbuildConfig = await createInternalRsbuildConfig();
+  const constantRsbuildConfig = await createConstantRsbuildConfig();
   const configPath = path ?? rslibConfig._privateMeta?.configFilePath!;
   const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
 
@@ -664,12 +747,12 @@ export async function composeCreateRsbuildConfig(
       // The priorities from high to low are as follows:
       // 1 - userConfig: users can configure any Rsbuild and Rspack config
       // 2 - libRsbuildConfig: the configuration that we compose from Rslib unique config and userConfig from 1
-      // 3 - internalRsbuildConfig: the built-in best practice Rsbuild configuration we provide in Rslib
+      // 3 - constantRsbuildConfig: the built-in best practice Rsbuild configuration we provide in Rslib
       // We should state in the document that the built-in configuration should not be changed optionally
       // In compose process of 2, we may read some config from 1, and reassemble the related config,
       // so before final mergeRsbuildConfig, we reset some specified fields
       config: mergeRsbuildConfig(
-        internalRsbuildConfig,
+        constantRsbuildConfig,
         libRsbuildConfig,
         omitDeep(userConfig, [
           'bundle',
