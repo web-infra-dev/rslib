@@ -51,22 +51,13 @@ function __webpack_require__(moduleId) {
         return Object.prototype.hasOwnProperty.call(obj, prop);
     };
 })();
-// webpack/runtime/make_namespace_object
-(()=>{
-    // define __esModule on exports
-    __webpack_require__.r = function(exports) {
-        if ('undefined' != typeof Symbol && Symbol.toStringTag) Object.defineProperty(exports, Symbol.toStringTag, {
-            value: 'Module'
-        });
-        Object.defineProperty(exports, '__esModule', {
-            value: true
-        });
-    };
-})();
-/************************************************************************/ var __webpack_exports__ = {};
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _browser_false_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(\\"?69d8\\");
-/* harmony import */ var _browser_false_util__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(_browser_false_util__WEBPACK_IMPORTED_MODULE_0__);
-console.log('foo:', _browser_false_util__WEBPACK_IMPORTED_MODULE_0___default()); // the value of \`foo\` should \`{}\`
+/************************************************************************/ // CONCATENATED MODULE: ./bar.ts
+const bar = 'bar';
+// EXTERNAL MODULE: <ROOT>/e2e/cases/resolve/false/./browser-false/util (ignored)
+var util_ignored_ = __webpack_require__(\\"?69d8\\");
+var util_ignored_default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
+console.log('foo:', util_ignored_default());
+// the value of \`foo\` should \`{}\`
+console.log('bar: ', bar);
 "
 `;
