@@ -4,7 +4,7 @@ import {
   type InspectConfigResult,
   mergeRsbuildConfig as mergeConfig,
 } from '@rsbuild/core';
-import type { LibConfig, RslibConfig } from '@rslib/core';
+import type { Format, LibConfig, RslibConfig } from '@rslib/core';
 import { build, loadConfig } from '@rslib/core';
 import { globContentJSON } from './helper';
 
@@ -34,7 +34,7 @@ export function generateBundleCjsConfig(config: LibConfig = {}): LibConfig {
   return mergeConfig(cjsBasicConfig, config)!;
 }
 
-type FormatType = 'esm' | 'cjs';
+type FormatType = Format | `${Format}${number}`;
 type FilePath = string;
 
 type BuildResult = {
@@ -56,8 +56,28 @@ export async function getResults(
   const contents: Record<string, Record<string, string>> = {};
   const entries: Record<string, string> = {};
   const entryFiles: Record<string, string> = {};
+  const formatIndex: Record<Format, number> = {
+    esm: 0,
+    cjs: 0,
+    umd: 0,
+  };
+  let key = '';
+
+  const formatCount: Record<Format, number> = rslibConfig.lib.reduce(
+    (acc, { format }) => {
+      acc[format!] = (acc[format!] ?? 0) + 1;
+      return acc;
+    },
+    {} as Record<Format, number>,
+  );
 
   for (const libConfig of rslibConfig.lib) {
+    const { format } = libConfig;
+    const currentFormatCount = formatCount[format!];
+    const currentFormatIndex = formatIndex[format!]++;
+
+    key = currentFormatCount === 1 ? format! : `${format}${currentFormatIndex}`;
+
     let globFolder = '';
     if (type === 'js') {
       globFolder = libConfig?.output?.distPath?.root!;
@@ -86,14 +106,14 @@ export async function getResults(
     }
 
     if (fileSet.length) {
-      files[libConfig.format!] = fileSet;
-      contents[libConfig.format!] = filterContent;
+      files[key] = fileSet;
+      contents[key] = filterContent;
     }
 
     // Only applied in bundle mode, a shortcut to get single entry result
     if (libConfig.bundle !== false && fileSet.length === 1) {
-      entries[libConfig.format!] = content[fileSet[0]!]!;
-      entryFiles[libConfig.format!] = fileSet[0]!;
+      entries[key] = content[fileSet[0]!]!;
+      entryFiles[key] = fileSet[0]!;
     }
   }
 
