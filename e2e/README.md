@@ -30,7 +30,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | minify          | 🟢     |                                                                                                      |
 | platform        | 🟢     |                                                                                                      |
 | redirect        | ⚪️     |                                                                                                      |
-| resolve         | ⚪️     |                                                                                                      |
+| resolve         | 🟢     |                                                                                                      |
 | shims           | 🟡     | Support shims `__filename` and `__dirname` in esm</br> `import.meta.url` in cjs need to be supported |
 | sideEffects     | ⚪️     |                                                                                                      |
 | sourceDir       | ⚪️     |                                                                                                      |
