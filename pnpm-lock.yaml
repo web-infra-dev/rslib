@@ -291,9 +291,15 @@ importers:
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
+      '@types/fs-extra':
+        specifier: ^11.0.4
+        version: 11.0.4
       '@types/node':
         specifier: ~18.19.39
         version: 18.19.39
+      fs-extra:
+        specifier: ^11.2.0
+        version: 11.2.0
       rslib:
         specifier: npm:@rslib/core@0.0.3
         version: '@rslib/core@0.0.3(@microsoft/api-extractor@7.47.7(@types/node@18.19.39))(typescript@5.5.4)'
