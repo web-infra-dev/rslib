@@ -8,9 +8,7 @@ test('resolve data url', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
-    "// CONCATENATED MODULE: data:text/javascript,export default 42
-    const javascript_export_default_42 = 42;
-    // CONCATENATED MODULE: ./index.ts
+    "/* harmony default export */ const javascript_export_default_42 = 42;
     console.log('x:', javascript_export_default_42);
     "
   `);
@@ -32,11 +30,9 @@ test('resolve node protocol', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE_node_path__ from \\"node:path\\";
-    // CONCATENATED MODULE: external \\"node:path\\"
+    "import * as __WEBPACK_EXTERNAL_MODULE_node_path__ from "node:path";
     var external_node_path_namespaceObject = __WEBPACK_EXTERNAL_MODULE_node_path__;
-    // CONCATENATED MODULE: ./index.ts
-    const { join } = external_node_path_namespaceObject[\\"default\\"];
+    const { join } = external_node_path_namespaceObject["default"];
     export { join };
     "
   `);
@@ -68,9 +64,7 @@ test('resolve with js extensions', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
-    "// CONCATENATED MODULE: ./example.mts
-    const value = 1;
-    // CONCATENATED MODULE: ./index.ts
+    "const value = 1;
     console.log(value);
     "
   `);
@@ -83,9 +77,7 @@ test('resolve with main fields', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(Object.values(results[0]!)[0]).toMatchInlineSnapshot(`
-    "// CONCATENATED MODULE: ./node_modules/lib1/src/index.ts
-    const value = 1;
-    // CONCATENATED MODULE: ./entry1.ts
+    "const value = 1;
     console.log(value);
     "
   `);
