@@ -34,3 +34,14 @@ function bar() {} /*#__PURE__*/
 export { Foo };
 "
 `;
+
+exports[`should downgrade class private method with output.syntax config 2`] = `
+"class Foo {
+    constructor(){
+        this.#bar();
+    }
+    #bar() {}
+}
+export { Foo };
+"
+`;

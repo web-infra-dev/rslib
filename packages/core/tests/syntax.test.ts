@@ -49,4 +49,26 @@ describe('Correctly resolve syntax', () => {
       ]
     `);
   });
+
+  test('combined', async () => {
+    expect(
+      transformSyntaxToBrowserslist(['Chrome 123', 'es5']),
+    ).toMatchInlineSnapshot(`
+      [
+        "Chrome 123",
+        "Chrome >= 5.0.0",
+        "Edge >= 12.0.0",
+        "Firefox >= 2.0.0",
+        "ie >= 9.0.0",
+        "iOS >= 6.0.0",
+        "Node >= 0.4.0",
+        "Opera >= 10.10.0",
+        "Safari >= 3.1.0",
+      ]
+    `);
+
+    expect(transformSyntaxToBrowserslist(['es5'])).toEqual(
+      transformSyntaxToBrowserslist('es5'),
+    );
+  });
 });

@@ -125,27 +125,34 @@ export const transformSyntaxToBrowserslist = (
 ): NonNullable<
   NonNullable<RsbuildConfig['output']>['overrideBrowserslist']
 > => {
-  // only single esX is allowed
-  if (typeof syntax === 'string' && syntax.toLowerCase().startsWith('es')) {
-    if (syntax.toLowerCase() in ESX_TO_BROWSERSLIST) {
-      return Object.entries(ESX_TO_BROWSERSLIST[syntax]).flatMap(
-        ([engine, version]) => {
+  const handleSyntaxItem = (
+    syntaxItem: EcmaScriptVersion | string,
+  ): string[] => {
+    if (
+      typeof syntaxItem === 'string' &&
+      syntaxItem.toLowerCase().startsWith('es')
+    ) {
+      if (syntaxItem.toLowerCase() in ESX_TO_BROWSERSLIST) {
+        return Object.entries(
+          ESX_TO_BROWSERSLIST[syntaxItem as EcmaScriptVersion],
+        ).flatMap(([engine, version]) => {
           if (Array.isArray(version)) {
             return version;
           }
 
           return `${engine} >= ${version}`;
-        },
-      );
+        });
+      }
+
+      throw new Error(`Unsupported ES version: ${syntaxItem}`);
     }
 
-    throw new Error(`Unsupported ES version: ${syntax}`);
-  }
+    return [syntaxItem];
+  };
 
-  // inline browserslist query
   if (Array.isArray(syntax)) {
-    return syntax;
+    return syntax.flatMap(handleSyntaxItem);
   }
 
-  throw new Error(`Unsupported syntax: ${syntax}`);
+  return handleSyntaxItem(syntax);
 };
