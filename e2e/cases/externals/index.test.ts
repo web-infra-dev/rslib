@@ -48,12 +48,20 @@ test('should get warn when use require in ESM', async () => {
     expect(entries.esm).toContain(external);
   }
 
-  for (const external of ['foo', 'bar']) {
+  for (const external of ['foo', 'bar', 'qux']) {
     expect(
       logStrings.some((l) =>
         l.includes(stripAnsi(composeModuleImportWarn(external))),
       ),
     ).toBe(true);
+  }
+
+  for (const external of ['./baz', 'quxx']) {
+    expect(
+      logStrings.some((l) =>
+        l.includes(stripAnsi(composeModuleImportWarn(external))),
+      ),
+    ).toBe(false);
   }
 
   restore();

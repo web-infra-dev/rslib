@@ -15,6 +15,6 @@ export default defineConfig({
     },
   },
   output: {
-    externals: ['bar'],
+    externals: ['bar', /^qux$/, 'quxx'],
   },
 });
