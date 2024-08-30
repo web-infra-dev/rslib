@@ -282,6 +282,25 @@ importers:
         specifier: ^5.5.4
         version: 5.5.4
 
+  packages/create-rslib:
+    dependencies:
+      create-rstack:
+        specifier: 1.0.0
+        version: 1.0.0
+    devDependencies:
+      '@rslib/tsconfig':
+        specifier: workspace:*
+        version: link:../../scripts/tsconfig
+      '@types/node':
+        specifier: ~18.19.39
+        version: 18.19.39
+      rslib:
+        specifier: npm:@rslib/core@0.0.3
+        version: '@rslib/core@0.0.3(@microsoft/api-extractor@7.47.7(@types/node@18.19.39))(typescript@5.5.4)'
+      typescript:
+        specifier: ^5.5.4
+        version: 5.5.4
+
   packages/plugin-dts:
     dependencies:
       fast-glob:
@@ -1271,6 +1290,9 @@ packages:
 
   core-js@3.38.1:
     resolution: {integrity: sha512-OP35aUorbU3Zvlx7pjsFdu1rGNnD4pgw/CWoYzRY3t2EzoVT7shKHY1dlAy3f41cGIO7ZDPQimhGFTlEYkG/Hw==}
+
+  create-rstack@1.0.0:
+    resolution: {integrity: sha512-U2DLfJD1cJSnNGrCJ8mf3/0xa14hS8g0HbeSrd0DVIR/jwSB+jahjorLtDcRiMZd+lIc7Oc3rHYKWjSaeTMzzw==}
 
   cross-env@7.0.3:
     resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
@@ -3599,6 +3621,8 @@ snapshots:
   cookie@0.6.0: {}
 
   core-js@3.38.1: {}
+
+  create-rstack@1.0.0: {}
 
   cross-env@7.0.3:
     dependencies:

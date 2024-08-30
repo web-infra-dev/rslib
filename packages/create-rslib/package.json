@@ -1,0 +1,46 @@
+{
+  "name": "create-rslib",
+  "version": "0.0.3",
+  "description": "Create a new Rslib project",
+  "homepage": "https://rslib.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rslib",
+    "directory": "packages/create-rslib"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "bin": {
+    "create-rslib": "./dist/index.js"
+  },
+  "files": [
+    "template-*",
+    "dist"
+  ],
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch",
+    "start": "node ./dist/index.js"
+  },
+  "dependencies": {
+    "create-rstack": "1.0.0"
+  },
+  "devDependencies": {
+    "@rslib/tsconfig": "workspace:*",
+    "@types/node": "~18.19.39",
+    "rslib": "npm:@rslib/core@0.0.3",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=16.7.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  }
+}
