@@ -17,7 +17,7 @@ test('resolve data url', async () => {
 });
 
 // TODO: false module path is different from linux and windows
-// EXTERNAL MODULE: /Users/bytedance/code/rslib/e2e/cases/resolve/false/./browser-false/util (ignored)
+// EXTERNAL MODULE: <ROOT>/rslib/e2e/cases/resolve/false/./browser-false/util (ignored)
 test.todo('resolve false', async () => {
   const fixturePath = join(__dirname, 'false');
   const { entries, isSuccess } = await buildAndGetResults(fixturePath);
