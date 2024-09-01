@@ -247,6 +247,41 @@ export const composeAutoExternalConfig = (options: {
     : {};
 };
 
+export function composeMinifyConfig(
+  minify: NonNullable<RsbuildConfig['output']>['minify'],
+): RsbuildConfig {
+  if (minify !== undefined) {
+    // User's minify configuration will be merged afterwards.
+    return {};
+  }
+
+  // When minify is not specified, Rslib will use a sane default for minify options.
+  // The default options will only perform dead code elimination and unused code elimination.
+  return {
+    output: {
+      minify: {
+        js: true,
+        css: false,
+        jsOptions: {
+          minimizerOptions: {
+            mangle: false,
+            minify: false,
+            compress: {
+              defaults: false,
+              unused: true,
+              dead_code: true,
+              toplevel: true,
+            },
+            format: {
+              comments: 'all',
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
 export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
   return defineRsbuildConfig({
     mode: 'production',
@@ -280,25 +315,6 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
     },
     output: {
       filenameHash: false,
-      minify: {
-        js: true,
-        css: false,
-        jsOptions: {
-          minimizerOptions: {
-            mangle: false,
-            minify: false,
-            compress: {
-              defaults: false,
-              unused: true,
-              dead_code: true,
-              toplevel: true,
-            },
-            format: {
-              comments: 'all',
-            },
-          },
-        },
-      },
       distPath: {
         js: './',
       },
@@ -689,6 +705,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     autoExternalConfig?.output?.externals,
     externalsConfig?.output?.externals,
   );
+  const minifyConfig = composeMinifyConfig(config.output?.minify);
 
   return mergeRsbuildConfig(
     formatConfig,
@@ -701,6 +718,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     bundleConfig,
     targetConfig,
     entryConfig,
+    minifyConfig,
     dtsConfig,
   );
 }

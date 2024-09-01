@@ -316,3 +316,97 @@ describe('syntax', () => {
     `);
   });
 });
+
+describe('minify', () => {
+  test('`minify` default value', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+        },
+      ],
+    };
+
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(
+      rslibConfig,
+      process.cwd(),
+    );
+
+    expect(
+      composedRsbuildConfig[0].config.output?.minify,
+    ).toMatchInlineSnapshot(`
+      {
+        "css": false,
+        "js": true,
+        "jsOptions": {
+          "minimizerOptions": {
+            "compress": {
+              "dead_code": true,
+              "defaults": false,
+              "toplevel": true,
+              "unused": true,
+            },
+            "format": {
+              "comments": "all",
+            },
+            "mangle": false,
+            "minify": false,
+          },
+        },
+      }
+    `);
+  });
+
+  test('`minify` is configured by user', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+          output: {
+            minify: false,
+          },
+        },
+        {
+          format: 'esm',
+          output: {
+            minify: true,
+          },
+        },
+        {
+          format: 'esm',
+          output: {
+            minify: {
+              js: false,
+              css: true,
+            },
+          },
+        },
+      ],
+      output: {
+        target: 'web',
+      },
+    };
+
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(
+      rslibConfig,
+      process.cwd(),
+    );
+
+    expect(
+      composedRsbuildConfig[0].config.output?.minify,
+    ).toMatchInlineSnapshot('false');
+
+    expect(
+      composedRsbuildConfig[1].config.output?.minify,
+    ).toMatchInlineSnapshot('true');
+
+    expect(
+      composedRsbuildConfig[2].config.output?.minify,
+    ).toMatchInlineSnapshot(`
+      {
+        "css": true,
+        "js": false,
+      }
+    `);
+  });
+});
