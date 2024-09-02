@@ -16,8 +16,12 @@ test('should downgrade class private method with output.syntax config', async ()
   const fixturePath = join(__dirname, 'config');
   const { entries } = await buildAndGetResults(fixturePath);
 
-  expect(entries.esm).toMatchSnapshot();
-  expect(entries.esm).not.toContain('#bar');
+  expect(entries.esm0).toMatchSnapshot();
+  expect(entries.esm0).not.toContain('#bar');
 
-  expect(entries.cjs).toContain('#bar');
+  expect(entries.esm1).toMatchSnapshot();
+  expect(entries.esm1).toContain('#bar');
+
+  expect(entries.cjs0).toContain('#bar');
+  expect(entries.cjs1).not.toContain('#bar');
 });

@@ -439,6 +439,7 @@ const composeSyntaxConfig = (
   target?: string,
 ): RsbuildConfig => {
   // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
+
   if (syntax) {
     return {
       tools: {
