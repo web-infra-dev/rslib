@@ -288,9 +288,7 @@ describe('syntax', () => {
     const rslibConfig: RslibConfig = {
       lib: [
         {
-          output: {
-            syntax: 'es2015',
-          },
+          syntax: 'es2015',
           format: 'esm',
         },
       ],

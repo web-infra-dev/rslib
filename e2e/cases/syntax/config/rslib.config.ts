@@ -4,27 +4,27 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     generateBundleEsmConfig({
+      syntax: 'es2015',
       output: {
         distPath: { root: 'dist/esm/0' },
-        syntax: 'es2015',
       },
     }),
     generateBundleEsmConfig({
+      syntax: ['es2022'],
       output: {
         distPath: { root: 'dist/esm/1' },
-        syntax: ['es2022'],
       },
     }),
     generateBundleCjsConfig({
+      syntax: ['node 20'],
       output: {
         distPath: { root: 'dist/cjs/0' },
-        syntax: ['node 20'],
       },
     }),
     generateBundleCjsConfig({
+      syntax: ['node 20', 'es5'],
       output: {
         distPath: { root: 'dist/cjs/1' },
-        syntax: ['node 20', 'es5'],
       },
     }),
   ],

@@ -686,7 +686,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   const bundleConfig = composeBundleConfig(jsExtension, config.bundle);
   const targetConfig = composeTargetConfig(config.output?.target);
   const syntaxConfig = composeSyntaxConfig(
-    config.output?.syntax,
+    config?.syntax,
     config.output?.target,
   );
   const autoExternalConfig = composeAutoExternalConfig({

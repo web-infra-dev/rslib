@@ -4,9 +4,7 @@ export default defineConfig({
   lib: [
     {
       format: 'esm',
-      output: {
-        syntax: ['node 16'],
-      },
+      syntax: ['node 16'],
       dts: {
         bundle: false,
         distPath: './dist-types',
