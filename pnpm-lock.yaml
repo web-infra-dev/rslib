@@ -191,6 +191,22 @@ importers:
 
   e2e/cases/extension-alias: {}
 
+  e2e/cases/external-helpers/config-override:
+    dependencies:
+      '@swc/helpers':
+        specifier: 0.5.13
+        version: 0.5.13
+
+  e2e/cases/external-helpers/default: {}
+
+  e2e/cases/external-helpers/no-deps: {}
+
+  e2e/cases/external-helpers/true:
+    dependencies:
+      '@swc/helpers':
+        specifier: 0.5.13
+        version: 0.5.13
+
   e2e/cases/externals/browser: {}
 
   e2e/cases/externals/module-import-warn: {}
@@ -992,8 +1008,8 @@ packages:
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
-  '@swc/helpers@0.5.12':
-    resolution: {integrity: sha512-KMZNXiGibsW9kvZAO1Pam2JPTDBm+KSHMMHWdsyI/1DbIZjT2A6Gy3hblVXUMEDvUAKq+e0vL0X0o54owWji7g==}
+  '@swc/helpers@0.5.13':
+    resolution: {integrity: sha512-UoKGxQ3r5kYI9dALKJapMmuK+1zWM/H17Z1+iwnNmzcJRnfFuevZs375TA5rW31pu4BS4NoSy1fRsexDXfWn5w==}
 
   '@tybys/wasm-util@0.9.0':
     resolution: {integrity: sha512-6+7nlbMVX/PVDCwaIQ8nTOPveOcFLSt8GcXdx8hD0bt39uWxYT88uXzqTd4fTvqta7oeUJqudepapKNt2DYJFw==}
@@ -3200,9 +3216,9 @@ snapshots:
 
   '@rsbuild/core@1.0.1-rc.0':
     dependencies:
-      '@rspack/core': 1.0.0(@swc/helpers@0.5.12)
+      '@rspack/core': 1.0.0(@swc/helpers@0.5.13)
       '@rspack/lite-tapable': 1.0.0
-      '@swc/helpers': 0.5.12
+      '@swc/helpers': 0.5.13
       caniuse-lite: 1.0.30001655
       core-js: 3.38.1
     optionalDependencies:
@@ -3210,9 +3226,9 @@ snapshots:
 
   '@rsbuild/core@1.0.1-rc.2':
     dependencies:
-      '@rspack/core': 1.0.0(@swc/helpers@0.5.12)
+      '@rspack/core': 1.0.0(@swc/helpers@0.5.13)
       '@rspack/lite-tapable': 1.0.0
-      '@swc/helpers': 0.5.12
+      '@swc/helpers': 0.5.13
       caniuse-lite: 1.0.30001655
       core-js: 3.38.1
     optionalDependencies:
@@ -3271,14 +3287,14 @@ snapshots:
       '@rspack/binding-win32-ia32-msvc': 1.0.0
       '@rspack/binding-win32-x64-msvc': 1.0.0
 
-  '@rspack/core@1.0.0(@swc/helpers@0.5.12)':
+  '@rspack/core@1.0.0(@swc/helpers@0.5.13)':
     dependencies:
       '@module-federation/runtime-tools': 0.5.1
       '@rspack/binding': 1.0.0
       '@rspack/lite-tapable': 1.0.0
       caniuse-lite: 1.0.30001655
     optionalDependencies:
-      '@swc/helpers': 0.5.12
+      '@swc/helpers': 0.5.13
 
   '@rspack/lite-tapable@1.0.0': {}
 
@@ -3325,7 +3341,7 @@ snapshots:
 
   '@sinclair/typebox@0.27.8': {}
 
-  '@swc/helpers@0.5.12':
+  '@swc/helpers@0.5.13':
     dependencies:
       tslib: 2.6.3
 

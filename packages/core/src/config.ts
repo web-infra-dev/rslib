@@ -9,7 +9,11 @@ import {
   mergeRsbuildConfig,
 } from '@rsbuild/core';
 import glob from 'fast-glob';
-import { DEFAULT_CONFIG_NAME, DEFAULT_EXTENSIONS } from './constant';
+import {
+  DEFAULT_CONFIG_NAME,
+  DEFAULT_EXTENSIONS,
+  SWC_HELPERS,
+} from './constant';
 import type {
   AutoExternal,
   Format,
@@ -668,12 +672,59 @@ const composeTargetConfig = (target = 'web'): RsbuildConfig => {
   }
 };
 
+const composeExternalHelpersConfig = (
+  externalHelpers: boolean,
+  pkgJson?: PkgJson,
+): RsbuildConfig => {
+  let defaultConfig = {
+    tools: {
+      swc: {
+        jsc: {
+          externalHelpers: false,
+        },
+      },
+    },
+  };
+
+  if (externalHelpers) {
+    const deps = [
+      ...Object.keys(pkgJson?.dependencies ?? []),
+      ...Object.keys(pkgJson?.devDependencies ?? []),
+    ];
+
+    if (!deps.includes(SWC_HELPERS)) {
+      logger.error(
+        `${color.green('externalHelpers')} is enabled, but the ${color.blue(SWC_HELPERS)} dependency declaration was not found in package.json.`,
+      );
+      process.exit(1);
+    }
+
+    defaultConfig = Object.assign(defaultConfig, {
+      output: {
+        externals: new RegExp(`^${SWC_HELPERS}($|\\/|\\\\)`),
+      },
+    });
+    defaultConfig.tools.swc.jsc.externalHelpers = true;
+  }
+
+  return defaultConfig;
+};
+
 async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   const rootPath = dirname(configPath);
   const pkgJson = readPackageJson(rootPath);
 
-  const { format, autoExtension = true, autoExternal = true } = config;
+  const {
+    format,
+    autoExtension = true,
+    autoExternal = true,
+    externalHelpers = false,
+  } = config;
   const formatConfig = composeFormatConfig(format!);
+  const externalHelpersConfig = composeExternalHelpersConfig(
+    externalHelpers,
+    pkgJson,
+  );
   const externalsConfig = composeExternalsConfig(
     format!,
     config.output?.externals,
@@ -709,6 +760,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
 
   return mergeRsbuildConfig(
     formatConfig,
+    externalHelpersConfig,
     // externalsWarnConfig should before other externals config
     externalsWarnConfig,
     externalsConfig,

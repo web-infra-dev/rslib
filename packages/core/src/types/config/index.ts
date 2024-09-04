@@ -46,6 +46,7 @@ export interface LibConfig extends RsbuildConfig {
   autoExternal?: AutoExternal;
   /** Support esX and browserslist query */
   syntax?: Syntax;
+  externalHelpers?: boolean;
   dts?: Dts;
 }
 
