@@ -31,7 +31,7 @@ import {
   color,
   isObject,
   nodeBuiltInModules,
-  omitDeep,
+  omit,
   readPackageJson,
 } from './utils/helper';
 import { logger } from './utils/logger';
@@ -825,12 +825,13 @@ export async function composeCreateRsbuildConfig(
       config: mergeRsbuildConfig(
         constantRsbuildConfig,
         libRsbuildConfig,
-        omitDeep(userConfig, [
+        omit(userConfig, [
           'bundle',
           'format',
           'autoExtension',
           'autoExternal',
           'syntax',
+          'externalHelpers',
           'dts',
         ]),
       ),
