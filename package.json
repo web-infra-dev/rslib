@@ -22,6 +22,7 @@
     "test:e2e": "cd e2e && pnpm run test",
     "test:unit": "vitest run --project unit*",
     "test:unit:watch": "vitest --project unit*",
+    "update:rsbuild": "npx taze minor --include /rsbuild/ -w -r -l",
     "watch": "pnpm build --watch"
   },
   "simple-git-hooks": {
