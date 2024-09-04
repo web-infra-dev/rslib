@@ -1,0 +1,137 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`should external @swc/helpers when externalHelpers is true 1`] = `
+"import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__ from \\"@swc/helpers/_/_class_call_check\\";
+import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__ from \\"@swc/helpers/_/_create_class\\";
+var _class_call_check_namespaceObject = __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__;
+var _create_class_namespaceObject = __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__;
+var src_FOO = /*#__PURE__*/ function() {
+    \\"use strict\\";
+    function FOO() {
+        (0, _class_call_check_namespaceObject._)(this, FOO);
+    }
+    (0, _create_class_namespaceObject._)(FOO, [
+        {
+            key: \\"bar\\",
+            get: function() {}
+        }
+    ]);
+    return FOO;
+}();
+export { src_FOO as default };
+"
+`;
+
+exports[`should external @swc/helpers when externalHelpers is true 2`] = `
+"import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__ from \\"@swc/helpers/_/_class_call_check\\";
+import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__ from \\"@swc/helpers/_/_create_class\\";
+var _class_call_check_namespaceObject = __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__;
+var _create_class_namespaceObject = __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__;
+var src_FOO = /*#__PURE__*/ function() {
+    \\"use strict\\";
+    function FOO() {
+        (0, _class_call_check_namespaceObject._)(this, FOO);
+    }
+    (0, _create_class_namespaceObject._)(FOO, [
+        {
+            key: \\"bar\\",
+            get: function() {}
+        }
+    ]);
+    return FOO;
+}();
+export { src_FOO as default };
+"
+`;
+
+exports[`should not external @swc/helpers by default 1`] = `
+"function _class_call_check(instance, Constructor) {
+    if (!(instance instanceof Constructor)) throw new TypeError(\\"Cannot call a class as a function\\");
+}
+function _defineProperties(target, props) {
+    for(var i = 0; i < props.length; i++){
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if (\\"value\\" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+    }
+}
+function _create_class(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+}
+var src_FOO = /*#__PURE__*/ function() {
+    \\"use strict\\";
+    function FOO() {
+        _class_call_check(this, FOO);
+    }
+    _create_class(FOO, [
+        {
+            key: \\"bar\\",
+            get: function() {}
+        }
+    ]);
+    return FOO;
+}();
+export { src_FOO as default };
+"
+`;
+
+exports[`should respect user override externalHelpers config 1`] = `
+"function _class_call_check(instance, Constructor) {
+    if (!(instance instanceof Constructor)) throw new TypeError(\\"Cannot call a class as a function\\");
+}
+function _defineProperties(target, props) {
+    for(var i = 0; i < props.length; i++){
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if (\\"value\\" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+    }
+}
+function _create_class(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+}
+var src_FOO = /*#__PURE__*/ function() {
+    \\"use strict\\";
+    function FOO() {
+        _class_call_check(this, FOO);
+    }
+    _create_class(FOO, [
+        {
+            key: \\"bar\\",
+            get: function() {}
+        }
+    ]);
+    return FOO;
+}();
+export { src_FOO as default };
+"
+`;
+
+exports[`should respect user override externalHelpers config 2`] = `
+"import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__ from \\"@swc/helpers/_/_class_call_check\\";
+import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__ from \\"@swc/helpers/_/_create_class\\";
+var _class_call_check_namespaceObject = __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__;
+var _create_class_namespaceObject = __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__;
+var src_FOO = /*#__PURE__*/ function() {
+    \\"use strict\\";
+    function FOO() {
+        (0, _class_call_check_namespaceObject._)(this, FOO);
+    }
+    (0, _create_class_namespaceObject._)(FOO, [
+        {
+            key: \\"bar\\",
+            get: function() {}
+        }
+    ]);
+    return FOO;
+}();
+export { src_FOO as default };
+"
+`;
