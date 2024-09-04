@@ -2,13 +2,48 @@ import { generateBundleCjsConfig, generateBundleEsmConfig } from '@e2e/helper';
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  lib: [generateBundleEsmConfig(), generateBundleCjsConfig()],
+  lib: [
+    generateBundleEsmConfig({
+      source: {
+        define: {
+          VERSION: JSON.stringify('1.0.0'),
+        },
+      },
+      output: {
+        distPath: {
+          root: './dist/esm/0',
+        },
+      },
+    }),
+    generateBundleEsmConfig({
+      source: {
+        define: {
+          VERSION: JSON.stringify('1.0.0'),
+          'process.env.NODE_ENV': 'process.ENV.MY_CUSTOM_ENV',
+        },
+      },
+      output: {
+        distPath: {
+          root: './dist/esm/1',
+        },
+      },
+    }),
+    generateBundleCjsConfig({
+      source: {
+        define: {
+          VERSION: JSON.stringify('1.0.0'),
+        },
+      },
+      output: {
+        distPath: {
+          root: './dist/cjs/0',
+        },
+      },
+    }),
+  ],
   source: {
     entry: {
       index: './src/index.ts',
-    },
-    define: {
-      VERSION: JSON.stringify('1.0.0'),
     },
   },
 });

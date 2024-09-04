@@ -297,6 +297,7 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
       rspack: {
         optimization: {
           moduleIds: 'named',
+          nodeEnv: false,
         },
         experiments: {
           rspackFuture: {

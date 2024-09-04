@@ -54,7 +54,6 @@ test('auto external false should works', async () => {
 
   // dts should bundled
   expect(dts.entries.esm).toContain('export declare function oraPromise');
-
   expect(dts.entries.cjs).toContain('export declare function oraPromise');
 });
 
