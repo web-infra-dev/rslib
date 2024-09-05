@@ -50,7 +50,7 @@ type BuildResult = {
 
 export async function getResults(
   rslibConfig: RslibConfig,
-  type: 'js' | 'dts',
+  type: 'js' | 'dts' | 'css',
 ): Promise<Omit<BuildResult, 'rspackConfig' | 'rsbuildConfig' | 'isSuccess'>> {
   const files: Record<string, string[]> = {};
   const contents: Record<string, Record<string, string>> = {};
@@ -79,7 +79,7 @@ export async function getResults(
     key = currentFormatCount === 1 ? format! : `${format}${currentFormatIndex}`;
 
     let globFolder = '';
-    if (type === 'js') {
+    if (type === 'js' || type === 'css') {
       globFolder = libConfig?.output?.distPath?.root!;
     } else if (type === 'dts' && libConfig.dts !== false) {
       globFolder =
@@ -88,7 +88,12 @@ export async function getResults(
 
     if (!globFolder) continue;
 
-    const regex = type === 'dts' ? /\.d.(ts|cts|mts)$/ : /\.(js|cjs|mjs)$/;
+    const regex =
+      type === 'dts'
+        ? /\.d.(ts|cts|mts)$/
+        : type === 'css'
+          ? /\.css$/
+          : /\.(js|cjs|mjs)$/;
 
     const content: Record<string, string> = await globContentJSON(globFolder, {
       absolute: true,
@@ -138,14 +143,15 @@ export async function buildAndGetResults(
 ): Promise<{
   js: BuildResult;
   dts: BuildResult;
+  css: BuildResult;
 }>;
 export async function buildAndGetResults(
   fixturePath: string,
-  type?: 'js' | 'dts',
+  type?: 'js' | 'dts' | 'css',
 ): Promise<BuildResult>;
 export async function buildAndGetResults(
   fixturePath: string,
-  type: 'js' | 'dts' | 'all' = 'js',
+  type: 'js' | 'dts' | 'css' | 'all' = 'js',
 ) {
   const rslibConfig = await loadConfig({
     cwd: fixturePath,
@@ -158,6 +164,7 @@ export async function buildAndGetResults(
   if (type === 'all') {
     const jsResults = await getResults(rslibConfig, 'js');
     const dtsResults = await getResults(rslibConfig, 'dts');
+    const cssResults = await getResults(rslibConfig, 'css');
     return {
       js: {
         contents: jsResults.contents,
@@ -173,6 +180,15 @@ export async function buildAndGetResults(
         files: dtsResults.files,
         entries: dtsResults.entries,
         entryFiles: dtsResults.entryFiles,
+        rspackConfig: bundlerConfigs,
+        rsbuildConfig: rsbuildConfig,
+        isSuccess: Boolean(rsbuildInstance),
+      },
+      css: {
+        contents: cssResults.contents,
+        files: cssResults.files,
+        entries: cssResults.entries,
+        entryFiles: cssResults.entryFiles,
         rspackConfig: bundlerConfigs,
         rsbuildConfig: rsbuildConfig,
         isSuccess: Boolean(rsbuildInstance),

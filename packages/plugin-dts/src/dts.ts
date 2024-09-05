@@ -112,6 +112,8 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     dtsExtension = '.d.ts',
     autoExternal = true,
     userExternals,
+    banner,
+    footer,
   } = data;
   logger.start(`Generating DTS... ${color.gray(`(${name})`)}`);
   const configPath = ts.findConfigFile(cwd, ts.sys.fileExists, tsconfigPath);
@@ -168,6 +170,8 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
         },
         tsconfigPath,
         dtsExtension,
+        banner,
+        footer,
         bundledPackages: calcBundledPackages({
           autoExternal,
           cwd,
@@ -190,6 +194,8 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       configPath,
       declarationDir,
       dtsExtension,
+      banner,
+      footer,
     },
     onComplete,
     bundle,

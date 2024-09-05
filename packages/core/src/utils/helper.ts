@@ -126,6 +126,25 @@ export const readPackageJson = (rootPath: string): undefined | PkgJson => {
 export const isObject = (obj: unknown): obj is Record<string, any> =>
   Object.prototype.toString.call(obj) === '[object Object]';
 
+export const isEmptyObject = (obj: object): boolean => {
+  return Object.keys(obj).length === 0;
+};
+
+export function pick<T, U extends keyof T>(
+  obj: T,
+  keys: ReadonlyArray<U>,
+): Pick<T, U> {
+  return keys.reduce(
+    (ret, key) => {
+      if (obj[key] !== undefined) {
+        ret[key] = obj[key];
+      }
+      return ret;
+    },
+    {} as Pick<T, U>,
+  );
+}
+
 export function omit<T extends object, U extends keyof T>(
   obj: T,
   keys: ReadonlyArray<U>,
