@@ -7,6 +7,7 @@ import {
   defineConfig as defineRsbuildConfig,
   loadConfig as loadRsbuildConfig,
   mergeRsbuildConfig,
+  rspack,
 } from '@rsbuild/core';
 import glob from 'fast-glob';
 import {
@@ -16,6 +17,7 @@ import {
 } from './constant';
 import type {
   AutoExternal,
+  BannerAndFooter,
   Format,
   LibConfig,
   PkgJson,
@@ -29,9 +31,11 @@ import { getDefaultExtension } from './utils/extension';
 import {
   calcLongestCommonPath,
   color,
+  isEmptyObject,
   isObject,
   nodeBuiltInModules,
   omit,
+  pick,
   readPackageJson,
 } from './utils/helper';
 import { logger } from './utils/logger';
@@ -281,6 +285,72 @@ export function composeMinifyConfig(
             },
           },
         },
+      },
+    },
+  };
+}
+
+export function composeBannerFooterConfig(
+  banner: BannerAndFooter,
+  footer: BannerAndFooter,
+): RsbuildConfig {
+  const bannerConfig = pick(banner, ['js', 'css']);
+  const footerConfig = pick(footer, ['js', 'css']);
+
+  if (isEmptyObject(bannerConfig) && isEmptyObject(footerConfig)) {
+    return {};
+  }
+
+  const plugins = [];
+
+  if (!isEmptyObject(bannerConfig)) {
+    if (bannerConfig.js) {
+      plugins.push(
+        new rspack.BannerPlugin({
+          banner: bannerConfig.js,
+          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_REPORT,
+          include: /\.(js|mjs|cjs)$/,
+        }),
+      );
+    }
+    if (bannerConfig.css) {
+      plugins.push(
+        new rspack.BannerPlugin({
+          banner: bannerConfig.css,
+          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_REPORT,
+          include: /\.(css)$/,
+        }),
+      );
+    }
+  }
+
+  if (!isEmptyObject(footerConfig)) {
+    if (footerConfig.js) {
+      plugins.push(
+        new rspack.BannerPlugin({
+          banner: footerConfig.js,
+          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_REPORT,
+          footer: true,
+          include: /\.(js|mjs|cjs)$/,
+        }),
+      );
+    }
+    if (footerConfig.css) {
+      plugins.push(
+        new rspack.BannerPlugin({
+          banner: footerConfig.css,
+          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_REPORT,
+          footer: true,
+          include: /\.(css)$/,
+        }),
+      );
+    }
+  }
+
+  return {
+    tools: {
+      rspack: {
+        plugins,
       },
     },
   };
@@ -614,7 +684,7 @@ const composeDtsConfig = async (
   libConfig: LibConfig,
   dtsExtension: string,
 ): Promise<RsbuildConfig> => {
-  const { dts, bundle, output, autoExternal } = libConfig;
+  const { dts, bundle, output, autoExternal, banner, footer } = libConfig;
 
   if (dts === false || dts === undefined) return {};
 
@@ -627,6 +697,8 @@ const composeDtsConfig = async (
         abortOnError: dts?.abortOnError ?? true,
         dtsExtension,
         autoExternal,
+        banner: banner?.dts,
+        footer: footer?.dts,
       }),
     ],
   };
@@ -717,6 +789,8 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
 
   const {
     format,
+    banner = {},
+    footer = {},
     autoExtension = true,
     autoExternal = true,
     externalHelpers = false,
@@ -758,6 +832,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     externalsConfig?.output?.externals,
   );
   const minifyConfig = composeMinifyConfig(config.output?.minify);
+  const bannerFooterConfig = composeBannerFooterConfig(banner, footer);
 
   return mergeRsbuildConfig(
     formatConfig,
@@ -773,6 +848,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     entryConfig,
     minifyConfig,
     dtsConfig,
+    bannerFooterConfig,
   );
 }
 
@@ -833,6 +909,8 @@ export async function composeCreateRsbuildConfig(
           'autoExternal',
           'syntax',
           'externalHelpers',
+          'banner',
+          'footer',
           'dts',
         ]),
       ),

@@ -14,6 +14,8 @@ export type EmitDtsOptions = {
   configPath: string;
   declarationDir: string;
   dtsExtension: string;
+  banner?: string;
+  footer?: string;
 };
 
 export async function emitDts(
@@ -23,7 +25,8 @@ export async function emitDts(
   isWatch = false,
 ): Promise<void> {
   const start = Date.now();
-  const { configPath, declarationDir, name, dtsExtension } = options;
+  const { configPath, declarationDir, name, dtsExtension, banner, footer } =
+    options;
   const { options: rawCompilerOptions, fileNames } = loadTsconfig(configPath);
 
   const compilerOptions = {
@@ -60,7 +63,7 @@ export async function emitDts(
       diagnosticMessages.push(message);
     }
 
-    await processDtsFiles(bundle, declarationDir, dtsExtension);
+    await processDtsFiles(bundle, declarationDir, dtsExtension, banner, footer);
 
     if (diagnosticMessages.length) {
       logger.error(
@@ -122,13 +125,25 @@ export async function emitDts(
         } else {
           logger.error(message);
         }
-        await processDtsFiles(bundle, declarationDir, dtsExtension);
+        await processDtsFiles(
+          bundle,
+          declarationDir,
+          dtsExtension,
+          banner,
+          footer,
+        );
       }
 
       // 6193: 1 error
       if (diagnostic.code === 6193) {
         logger.error(message);
-        await processDtsFiles(bundle, declarationDir, dtsExtension);
+        await processDtsFiles(
+          bundle,
+          declarationDir,
+          dtsExtension,
+          banner,
+          footer,
+        );
       }
     };
 

@@ -4,6 +4,7 @@ import { platform } from 'node:os';
 import path, { join } from 'node:path';
 import { type RsbuildConfig, logger } from '@rsbuild/core';
 import fg from 'fast-glob';
+import MagicString from 'magic-string';
 import color from 'picocolors';
 import ts from 'typescript';
 import type { DtsEntry } from './index';
@@ -81,10 +82,30 @@ export function getTimeCost(start: number): string {
   return prettyTime(second);
 }
 
+export async function addBannerAndFooter(
+  file: string,
+  banner?: string,
+  footer?: string,
+): Promise<void> {
+  if (!banner && !footer) {
+    return;
+  }
+
+  const content = await fsP.readFile(file, 'utf-8');
+  const code = new MagicString(content);
+
+  banner && code.prepend(`/*! ${banner} */\n`);
+  footer && code.append(`\n/*! ${footer} */`);
+
+  await fsP.writeFile(file, code.toString());
+}
+
 export async function processDtsFiles(
   bundle: boolean,
   dir: string,
   dtsExtension: string,
+  banner?: string,
+  footer?: string,
 ): Promise<void> {
   if (bundle) {
     return;
@@ -94,6 +115,7 @@ export async function processDtsFiles(
 
   for (const file of dtsFiles) {
     try {
+      await addBannerAndFooter(file, banner, footer);
       const newFile = file.replace('.d.ts', dtsExtension);
       fs.renameSync(file, newFile);
     } catch (error) {

@@ -39,6 +39,12 @@ export type AutoExternal =
       peerDependencies?: boolean;
     };
 
+export type BannerAndFooter = {
+  js?: string;
+  css?: string;
+  dts?: string;
+};
+
 export interface LibConfig extends RsbuildConfig {
   bundle?: boolean;
   format?: Format;
@@ -47,6 +53,8 @@ export interface LibConfig extends RsbuildConfig {
   /** Support esX and browserslist query */
   syntax?: Syntax;
   externalHelpers?: boolean;
+  banner?: BannerAndFooter;
+  footer?: BannerAndFooter;
   dts?: Dts;
 }
 

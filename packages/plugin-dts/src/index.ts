@@ -15,6 +15,8 @@ export type PluginDtsOptions = {
         devDependencies?: boolean;
         peerDependencies?: boolean;
       };
+  banner?: string;
+  footer?: string;
 };
 
 export type DtsEntry = {

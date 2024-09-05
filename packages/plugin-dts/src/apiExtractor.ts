@@ -7,13 +7,15 @@ import {
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import type { DtsEntry } from './index';
-import { getTimeCost } from './utils';
+import { addBannerAndFooter, getTimeCost } from './utils';
 
 export type BundleOptions = {
   name: string;
   cwd: string;
   outDir: string;
   dtsExtension: string;
+  banner?: string;
+  footer?: string;
   dtsEntry: DtsEntry;
   tsconfigPath?: string;
   bundledPackages?: string[];
@@ -25,6 +27,8 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     cwd,
     outDir,
     dtsExtension,
+    banner,
+    footer,
     dtsEntry = {
       name: 'index',
       path: 'index.d.ts',
@@ -68,6 +72,8 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     if (!extractorResult.succeeded) {
       throw new Error(`API Extractor error. ${color.gray(`(${name})`)}`);
     }
+
+    await addBannerAndFooter(untrimmedFilePath, banner, footer);
 
     logger.info(
       `API Extractor bundle DTS succeeded: ${color.cyan(untrimmedFilePath)} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
