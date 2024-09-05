@@ -94,8 +94,8 @@ export async function addBannerAndFooter(
   const content = await fsP.readFile(file, 'utf-8');
   const code = new MagicString(content);
 
-  banner && code.prepend(`/*! ${banner} */\n`);
-  footer && code.append(`\n/*! ${footer} */`);
+  banner && code.prepend(`${banner}\n`);
+  footer && code.append(`\n${footer}\n`);
 
   await fsP.writeFile(file, code.toString());
 }

@@ -3,14 +3,14 @@ import { type LibConfig, defineConfig } from '@rslib/core';
 
 const bannerFooterConfig: LibConfig = {
   banner: {
-    js: 'hello banner js',
-    css: 'hello banner css',
-    dts: 'hello banner dts',
+    js: '/*! hello banner js */',
+    css: '/*! hello banner css */',
+    dts: '/*! hello banner dts */',
   },
   footer: {
-    js: 'hello footer js',
-    css: 'hello footer css',
-    dts: 'hello footer dts',
+    js: '/*! hello footer js */',
+    css: '/*! hello footer css */',
+    dts: '/*! hello footer dts */',
   },
 };
 
