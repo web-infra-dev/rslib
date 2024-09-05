@@ -308,7 +308,7 @@ export function composeBannerFooterConfig(
       plugins.push(
         new rspack.BannerPlugin({
           banner: bannerConfig.js,
-          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_REPORT,
+          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
           raw: true,
           include: /\.(js|mjs|cjs)$/,
         }),
@@ -318,7 +318,7 @@ export function composeBannerFooterConfig(
       plugins.push(
         new rspack.BannerPlugin({
           banner: bannerConfig.css,
-          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_REPORT,
+          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
           raw: true,
           include: /\.(css)$/,
         }),
@@ -331,7 +331,7 @@ export function composeBannerFooterConfig(
       plugins.push(
         new rspack.BannerPlugin({
           banner: footerConfig.js,
-          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_REPORT,
+          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
           raw: true,
           footer: true,
           include: /\.(js|mjs|cjs)$/,
@@ -342,7 +342,7 @@ export function composeBannerFooterConfig(
       plugins.push(
         new rspack.BannerPlugin({
           banner: footerConfig.css,
-          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_REPORT,
+          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
           raw: true,
           footer: true,
           include: /\.(css)$/,
