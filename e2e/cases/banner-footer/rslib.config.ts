@@ -84,6 +84,7 @@ export default defineConfig({
         distPath: {
           root: './dist/esm/bundle-minify',
         },
+        minify: true,
       },
       dts: {
         bundle: true,
