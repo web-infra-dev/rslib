@@ -2,6 +2,14 @@ import type { RsbuildConfig } from '@rsbuild/core';
 
 export type Format = 'esm' | 'cjs' | 'umd';
 
+export type PackageType = 'module' | 'commonjs';
+
+export type ExportEntry = {
+  outputPath: string;
+  type: PackageType | 'types';
+  from: string;
+};
+
 export type EcmaScriptVersion =
   | 'esnext'
   | 'es5'

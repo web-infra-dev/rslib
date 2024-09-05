@@ -18,6 +18,7 @@ module.exports = {
     'node_modules',
     'pnpm-lock.yaml',
   ],
+  words: ['parseable', 'opencollective'],
   flagWords: banWords,
   dictionaries: ['dictionary'],
   dictionaryDefinitions: [

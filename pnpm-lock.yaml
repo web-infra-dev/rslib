@@ -269,6 +269,15 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1
 
+  examples/zero-configuration:
+    devDependencies:
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      typescript:
+        specifier: ^5.5.4
+        version: 5.5.4
+
   packages/core:
     dependencies:
       '@microsoft/api-extractor':

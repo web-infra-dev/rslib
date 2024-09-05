@@ -18,7 +18,7 @@ import type {
   AutoExternal,
   Format,
   LibConfig,
-  PkgJson,
+  PackageJson,
   RslibConfig,
   RslibConfigAsyncFn,
   RslibConfigExport,
@@ -29,6 +29,7 @@ import { getDefaultExtension } from './utils/extension';
 import {
   calcLongestCommonPath,
   color,
+  getExportEntries,
   isObject,
   nodeBuiltInModules,
   omit,
@@ -53,7 +54,10 @@ const findConfig = (basePath: string): string | undefined => {
   return DEFAULT_EXTENSIONS.map((ext) => basePath + ext).find(fs.existsSync);
 };
 
-const resolveConfigPath = (root: string, customConfig?: string): string => {
+const resolveConfigPath = (
+  root: string,
+  customConfig?: string,
+): string | null => {
   if (customConfig) {
     const customConfigPath = isAbsolute(customConfig)
       ? customConfig
@@ -70,7 +74,7 @@ const resolveConfigPath = (root: string, customConfig?: string): string => {
     return configFilePath;
   }
 
-  throw new Error(`${DEFAULT_CONFIG_NAME} not found in ${root}`);
+  return null;
 };
 
 export async function loadConfig({
@@ -83,13 +87,22 @@ export async function loadConfig({
   envMode?: string;
 }): Promise<RslibConfig> {
   const configFilePath = resolveConfigPath(cwd, path);
-  const { content } = await loadRsbuildConfig({
-    cwd: dirname(configFilePath),
-    path: configFilePath,
-    envMode,
-  });
+  if (configFilePath) {
+    const { content } = await loadRsbuildConfig({
+      cwd: dirname(configFilePath),
+      path: configFilePath,
+      envMode,
+    });
 
-  return content as RslibConfig;
+    return content as RslibConfig;
+  }
+
+  const pkgJson = readPackageJson(cwd);
+  if (pkgJson) {
+    const exportEntries = getExportEntries(pkgJson);
+  }
+
+  return {} as RslibConfig;
 }
 
 const composeExternalsWarnConfig = (
@@ -196,7 +209,7 @@ const composeExternalsWarnConfig = (
 
 export const composeAutoExternalConfig = (options: {
   autoExternal: AutoExternal;
-  pkgJson?: PkgJson;
+  pkgJson?: PackageJson;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 }): RsbuildConfig => {
   const { autoExternal, pkgJson, userExternals } = options;
@@ -429,7 +442,7 @@ const composeExternalsConfig = (
 const composeAutoExtensionConfig = (
   config: LibConfig,
   autoExtension: boolean,
-  pkgJson?: PkgJson,
+  pkgJson?: PackageJson,
 ): {
   config: RsbuildConfig;
   jsExtension: string;
