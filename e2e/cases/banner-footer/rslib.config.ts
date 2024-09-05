@@ -16,6 +16,7 @@ const bannerFooterConfig: LibConfig = {
 
 export default defineConfig({
   lib: [
+    // bundle esm
     generateBundleEsmConfig({
       output: {
         distPath: {
@@ -27,6 +28,7 @@ export default defineConfig({
       },
       ...bannerFooterConfig,
     }),
+    // bundle cjs
     generateBundleCjsConfig({
       output: {
         distPath: {
@@ -38,6 +40,7 @@ export default defineConfig({
       },
       ...bannerFooterConfig,
     }),
+    // bundleless esm
     generateBundleEsmConfig({
       output: {
         distPath: {
@@ -56,6 +59,7 @@ export default defineConfig({
       },
       ...bannerFooterConfig,
     }),
+    // bundleless cjs
     generateBundleCjsConfig({
       output: {
         distPath: {
@@ -71,6 +75,18 @@ export default defineConfig({
         entry: {
           index: ['./src/**/*.ts'],
         },
+      },
+      ...bannerFooterConfig,
+    }),
+    // bundle esm with minify enabled
+    generateBundleEsmConfig({
+      output: {
+        distPath: {
+          root: './dist/esm/bundle-minify',
+        },
+      },
+      dts: {
+        bundle: true,
       },
       ...bannerFooterConfig,
     }),
