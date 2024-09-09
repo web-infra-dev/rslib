@@ -34,7 +34,7 @@ export function generateBundleCjsConfig(config: LibConfig = {}): LibConfig {
   return mergeConfig(cjsBasicConfig, config)!;
 }
 
-type FormatType = Format | `${Format}${number}`;
+export type FormatType = Format | `${Format}${number}`;
 type FilePath = string;
 
 type BuildResult = {
