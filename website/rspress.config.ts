@@ -84,20 +84,5 @@ export default defineConfig({
         '@zh': path.join(__dirname, 'docs/zh'),
       },
     },
-    html: {
-      appIcon: {
-        name: 'Rslib',
-        icons: [
-          {
-            src: 'https://assets.rspack.dev/rslib/rslib-logo-192x192.png',
-            size: 192,
-          },
-          {
-            src: 'https://assets.rspack.dev/rslib/rslib-logo-512x512.png',
-            size: 512,
-          },
-        ],
-      },
-    },
   },
 });
