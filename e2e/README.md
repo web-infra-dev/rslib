@@ -14,7 +14,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | asset           | ⚪️     |                                                                                                      |
 | autoExtension   | 🟢     |                                                                                                      |
 | autoExternal    | 🟢     |                                                                                                      |
-| banner-footer   | ⚪️     |                                                                                                      |
+| banner-footer   | 🟢     |                                                                                                      |
 | buildType       | 🟢     |                                                                                                      |
 | copy            | 🟢     |                                                                                                      |
 | decorator       | ⚪️     |                                                                                                      |
@@ -38,8 +38,8 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | splitting       | ⚪️     |                                                                                                      |
 | style           | ⚪️     |                                                                                                      |
 | target          | 🟢     |                                                                                                      |
-| transformImport | ⚪️     |                                                                                                      |
-| transformLodash | ⚪️     |                                                                                                      |
+| transformImport | 🟢     |                                                                                                      |
+| transformLodash | 🟢     |                                                                                                      |
 | tsconfig        | ⚪️     |                                                                                                      |
 | tsconfigExtends | ⚪️     |                                                                                                      |
 | umdGlobals      | ⚪️     |                                                                                                      |
