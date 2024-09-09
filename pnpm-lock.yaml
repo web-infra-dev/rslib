@@ -67,8 +67,8 @@ importers:
         specifier: 1.47.0
         version: 1.47.0
       '@rsbuild/core':
-        specifier: 1.0.1-rc.4
-        version: 1.0.1-rc.4
+        specifier: 1.0.1-rc.5
+        version: 1.0.1-rc.5
       '@rslib/core':
         specifier: workspace:*
         version: link:../packages/core
@@ -259,8 +259,8 @@ importers:
   examples/react-component:
     devDependencies:
       '@rsbuild/plugin-react':
-        specifier: 1.0.1-rc.4
-        version: 1.0.1-rc.4(@rsbuild/core@1.0.1-rc.4)
+        specifier: 1.0.1-rc.5
+        version: 1.0.1-rc.5(@rsbuild/core@1.0.1-rc.5)
       '@rslib/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -277,8 +277,8 @@ importers:
         specifier: ^7
         version: 7.47.7(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-rc.4
-        version: 1.0.1-rc.4
+        specifier: 1.0.1-rc.5
+        version: 1.0.1-rc.5
       rsbuild-plugin-dts:
         specifier: workspace:*
         version: link:../plugin-dts
@@ -358,8 +358,8 @@ importers:
         specifier: ^7.47.7
         version: 7.47.7(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: 1.0.1-rc.4
-        version: 1.0.1-rc.4
+        specifier: 1.0.1-rc.5
+        version: 1.0.1-rc.5
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
@@ -896,8 +896,13 @@ packages:
     engines: {node: '>=16.7.0'}
     hasBin: true
 
-  '@rsbuild/plugin-react@1.0.1-rc.4':
-    resolution: {integrity: sha512-1EPBjVgBPd9eQk0rDgm78q/vQDKabTP24+vUKz02iYZDZZPfCRyZrfF3GvKLVJXRW44JqT51ykK9t9oxw/tDtA==}
+  '@rsbuild/core@1.0.1-rc.5':
+    resolution: {integrity: sha512-0+LiFrzvEEhHsizHRXMnbxtvxVvWyGFl33VfLSlOnBwUwgbblq3ehUc4QYK+mla4Zh3DbWRNr9oCdyJa+Qv2MA==}
+    engines: {node: '>=16.7.0'}
+    hasBin: true
+
+  '@rsbuild/plugin-react@1.0.1-rc.5':
+    resolution: {integrity: sha512-8W/PK8l//CsGXxfo8psDttyYimdehZ6n5mm8rz5QwNnyKtuxvjUS30P7meQjJxTrZTlZU3LN6yB63tOcD9xtdQ==}
     peerDependencies:
       '@rsbuild/core': ^1.0.1-rc.4
 
@@ -3176,9 +3181,19 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@rsbuild/plugin-react@1.0.1-rc.4(@rsbuild/core@1.0.1-rc.4)':
+  '@rsbuild/core@1.0.1-rc.5':
     dependencies:
-      '@rsbuild/core': 1.0.1-rc.4
+      '@rspack/core': 1.0.3(@swc/helpers@0.5.13)
+      '@rspack/lite-tapable': 1.0.0
+      '@swc/helpers': 0.5.13
+      caniuse-lite: 1.0.30001655
+      core-js: 3.38.1
+    optionalDependencies:
+      fsevents: 2.3.3
+
+  '@rsbuild/plugin-react@1.0.1-rc.5(@rsbuild/core@1.0.1-rc.5)':
+    dependencies:
+      '@rsbuild/core': 1.0.1-rc.5
       '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.14.2)
       react-refresh: 0.14.2
 
