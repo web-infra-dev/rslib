@@ -90,14 +90,13 @@ export async function getResults(
 
     const regex =
       type === 'dts'
-        ? /\.d.(ts|cts|mts)$/
+        ? /\.d.(ts|cts|mts)(\.map)?$/
         : type === 'css'
-          ? /\.css$/
-          : /\.(js|cjs|mjs)$/;
+          ? /\.css(\.map)?$/
+          : /\.(js|cjs|mjs)(\.map)?$/;
 
     const content: Record<string, string> = await globContentJSON(globFolder, {
       absolute: true,
-      ignore: ['**/*.map'],
     });
 
     const fileSet = Object.keys(content)

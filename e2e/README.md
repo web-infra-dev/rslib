@@ -34,7 +34,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | shims           | 🟡     | Support shims `__filename` and `__dirname` in esm</br> `import.meta.url` in cjs need to be supported |
 | sideEffects     | ⚪️     |                                                                                                      |
 | sourceDir       | ⚪️     |                                                                                                      |
-| sourceMap       | ⚪️     |                                                                                                      |
+| sourceMap       | 🟢     |                                                                                                      |
 | splitting       | ⚪️     |                                                                                                      |
 | style           | ⚪️     |                                                                                                      |
 | target          | 🟢     |                                                                                                      |
