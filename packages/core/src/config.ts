@@ -815,7 +815,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   const tsconfigPath = ts.findConfigFile(
     rootPath,
     ts.sys.fileExists,
-    config.source?.tsconfigPath ?? 'tsconfig.json',
+    config.source?.tsconfigPath,
   );
   if (tsconfigPath) {
     compilerOptions = getTsconfigCompilerOptions(tsconfigPath);

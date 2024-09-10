@@ -7,5 +7,6 @@ export default defineConfig({
     entry: {
       index: '../__fixtures__/src/index.ts',
     },
+    tsconfigPath: '../__fixtures__/tsconfig.json',
   },
 });
