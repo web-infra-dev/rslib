@@ -22,6 +22,7 @@ export default defineConfig({
       picocolors: '../compiled/picocolors/index.js',
       'fast-glob': '../compiled/fast-glob/index.js',
       commander: '../compiled/commander/index.js',
+      rslog: '../compiled/rslog/index.js',
     },
   },
 });
