@@ -17,7 +17,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | banner-footer   | 🟢     |                                                                                                      |
 | buildType       | 🟢     |                                                                                                      |
 | copy            | 🟢     |                                                                                                      |
-| decorator       | ⚪️     |                                                                                                      |
+| decorator       | 🟢     |                                                                                                      |
 | define          | 🟢     |                                                                                                      |
 | dts             | 🟢     |                                                                                                      |
 | dts-composite   | ⚪️     |                                                                                                      |
@@ -26,21 +26,21 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | format          | 🟡     | Support `cjs` and `esm`, `umd` still need to be tested                                               |
 | input           | 🟢     |                                                                                                      |
 | jsx             | ⚪️     |                                                                                                      |
-| metafile        | ⚪️     |                                                                                                      |
+| metafile        | ⚫️    |                                                                                                      |
 | minify          | 🟢     |                                                                                                      |
 | platform        | 🟢     |                                                                                                      |
 | redirect        | ⚪️     |                                                                                                      |
 | resolve         | 🟢     |                                                                                                      |
 | shims           | 🟡     | Support shims `__filename` and `__dirname` in esm</br> `import.meta.url` in cjs need to be supported |
 | sideEffects     | ⚪️     |                                                                                                      |
-| sourceDir       | ⚪️     |                                                                                                      |
+| sourceDir       | 🟢     |                                                                                                      |
 | sourceMap       | 🟢     |                                                                                                      |
 | splitting       | ⚪️     |                                                                                                      |
 | style           | ⚪️     |                                                                                                      |
 | target          | 🟢     |                                                                                                      |
 | transformImport | 🟢     |                                                                                                      |
 | transformLodash | 🟢     |                                                                                                      |
-| tsconfig        | ⚪️     |                                                                                                      |
-| tsconfigExtends | ⚪️     |                                                                                                      |
+| tsconfig        | 🟢     |                                                                                                      |
+| tsconfigExtends | 🟢     |                                                                                                      |
 | umdGlobals      | ⚪️     |                                                                                                      |
 | umdModuleName   | ⚪️     |                                                                                                      |
