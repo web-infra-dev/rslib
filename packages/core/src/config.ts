@@ -10,7 +10,6 @@ import {
   rspack,
 } from '@rsbuild/core';
 import glob from 'fast-glob';
-import ts from 'typescript';
 import {
   DEFAULT_CONFIG_NAME,
   DEFAULT_EXTENSIONS,
@@ -41,7 +40,7 @@ import {
 } from './utils/helper';
 import { logger } from './utils/logger';
 import { transformSyntaxToBrowserslist } from './utils/syntax';
-import { getTsconfigCompilerOptions } from './utils/tsconfig';
+import { loadTsconfig } from './utils/tsconfig';
 
 /**
  * This function helps you to autocomplete configuration types.
@@ -363,12 +362,12 @@ export function composeBannerFooterConfig(
 }
 
 export function composeDecoratorsConfig(
-  options: ts.CompilerOptions,
+  compilerOptions?: Record<string, any>,
   version?: NonNullable<
     NonNullable<RsbuildConfig['source']>['decorators']
   >['version'],
 ): RsbuildConfig {
-  if (version || !options.experimentalDecorators) {
+  if (version || !compilerOptions?.experimentalDecorators) {
     return {};
   }
 
@@ -811,15 +810,10 @@ const composeExternalHelpersConfig = (
 async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   const rootPath = dirname(configPath);
   const pkgJson = readPackageJson(rootPath);
-  let compilerOptions: ts.CompilerOptions = {};
-  const tsconfigPath = ts.findConfigFile(
+  const { compilerOptions } = await loadTsconfig(
     rootPath,
-    ts.sys.fileExists,
     config.source?.tsconfigPath,
   );
-  if (tsconfigPath) {
-    compilerOptions = getTsconfigCompilerOptions(tsconfigPath);
-  }
 
   const {
     format,

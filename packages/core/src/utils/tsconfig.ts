@@ -1,21 +1,21 @@
-import path from 'node:path';
-import ts from 'typescript';
+import { basename, join } from 'node:path';
+import { find, parse } from 'tsconfck';
 
-export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
-  const configFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
-  const configFileContent = ts.parseJsonConfigFileContent(
-    configFile.config,
-    ts.sys,
-    path.dirname(tsconfigPath),
-  );
+export async function loadTsconfig(
+  root: string,
+  tsconfigPath = 'tsconfig.json',
+): Promise<{
+  compilerOptions?: Record<string, any>;
+}> {
+  const tsconfigFileName = await find(join(root, tsconfigPath), {
+    root,
+    configName: basename(tsconfigPath),
+  });
 
-  return configFileContent;
-}
+  if (tsconfigFileName) {
+    const { tsconfig } = await parse(tsconfigFileName);
+    return tsconfig;
+  }
 
-export function getTsconfigCompilerOptions(
-  tsconfigPath: string,
-): ts.CompilerOptions {
-  const { options } = loadTsconfig(tsconfigPath);
-
-  return options;
+  return {};
 }

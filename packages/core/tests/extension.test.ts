@@ -1,11 +1,18 @@
 import { describe, expect, it, vi } from 'vitest';
+import type { Format, PkgJson } from '../src/types';
 import { getDefaultExtension } from '../src/utils/extension';
+
+type Options = {
+  format: Format;
+  pkgJson?: PkgJson;
+  autoExtension: boolean;
+};
 
 vi.mock('rslog');
 
 describe('should get extension correctly', () => {
   it('autoExtension is false', () => {
-    const options = {
+    const options: Options = {
       format: 'cjs',
       pkgJson: {},
       autoExtension: false,
@@ -20,7 +27,7 @@ describe('should get extension correctly', () => {
   });
 
   it('package.json is broken', () => {
-    const options = {
+    const options: Options = {
       format: 'cjs',
       autoExtension: true,
     };
@@ -34,7 +41,7 @@ describe('should get extension correctly', () => {
   });
 
   it('format is cjs and type is module in package.json', () => {
-    const options = {
+    const options: Options = {
       format: 'cjs',
       pkgJson: {
         type: 'module',
@@ -52,7 +59,7 @@ describe('should get extension correctly', () => {
   });
 
   it('format is cjs and type is commonjs in package.json', () => {
-    const options = {
+    const options: Options = {
       format: 'cjs',
       pkgJson: {
         type: 'commonjs',
@@ -70,7 +77,7 @@ describe('should get extension correctly', () => {
   });
 
   it('format is esm and type is commonjs in package.json', () => {
-    const options = {
+    const options: Options = {
       format: 'esm',
       pkgJson: {
         type: 'commonjs',
@@ -88,7 +95,7 @@ describe('should get extension correctly', () => {
   });
 
   it('format is esm and type is module in package.json', () => {
-    const options = {
+    const options: Options = {
       format: 'esm',
       pkgJson: {
         type: 'module',
