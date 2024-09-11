@@ -29,6 +29,31 @@ describe('Correctly resolve syntax', () => {
         "Safari >= 16.4.0",
       ]
     `);
+
+    const web = transformSyntaxToBrowserslist('esnext', 'web');
+    const webWorker = transformSyntaxToBrowserslist('esnext', 'web-worker');
+    expect(web).toStrictEqual(webWorker);
+    expect(web).toMatchInlineSnapshot(`
+      [
+        "last 1 Chrome versions",
+        "last 1 Firefox versions",
+        "last 1 Edge versions",
+        "last 1 Safari versions",
+        "last 1 ios_saf versions",
+        "not dead",
+      ]
+    `);
+
+    expect(
+      transformSyntaxToBrowserslist('esnext', 'node'),
+    ).toMatchInlineSnapshot(`
+      [
+        "last 1 node versions",
+      ]
+    `);
+    expect(transformSyntaxToBrowserslist('esnext', 'node')).toStrictEqual(
+      transformSyntaxToBrowserslist('es2024', 'node'),
+    );
   });
 
   test('browserslist', async () => {

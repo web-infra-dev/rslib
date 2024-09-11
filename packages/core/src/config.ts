@@ -21,6 +21,7 @@ import type {
   Format,
   LibConfig,
   PkgJson,
+  RsbuildConfigOutputTarget,
   RslibConfig,
   RslibConfigAsyncFn,
   RslibConfigExport,
@@ -39,7 +40,10 @@ import {
   readPackageJson,
 } from './utils/helper';
 import { logger } from './utils/logger';
-import { transformSyntaxToBrowserslist } from './utils/syntax';
+import {
+  ESX_TO_BROWSERSLIST,
+  transformSyntaxToBrowserslist,
+} from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
 
 /**
@@ -551,7 +555,7 @@ const composeAutoExtensionConfig = (
 
 const composeSyntaxConfig = (
   syntax?: Syntax,
-  target?: string,
+  target?: RsbuildConfigOutputTarget,
 ): RsbuildConfig => {
   // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
 
@@ -567,23 +571,10 @@ const composeSyntaxConfig = (
         },
       },
       output: {
-        overrideBrowserslist: transformSyntaxToBrowserslist(syntax),
+        overrideBrowserslist: transformSyntaxToBrowserslist(syntax, target),
       },
     };
   }
-
-  // If `syntax` is not defined, Rslib will try to determine by the `target`, with the last version of the target.
-  const lastTargetVersions = {
-    node: ['last 1 node versions'],
-    web: [
-      'last 1 Chrome versions',
-      'last 1 Firefox versions',
-      'last 1 Edge versions',
-      'last 1 Safari versions',
-      'last 1 ios_saf versions',
-      'not dead',
-    ],
-  };
 
   return {
     tools: {
@@ -593,12 +584,8 @@ const composeSyntaxConfig = (
       },
     },
     output: {
-      overrideBrowserslist:
-        target === 'web'
-          ? lastTargetVersions.web
-          : target === 'node'
-            ? lastTargetVersions.node
-            : [...lastTargetVersions.node, ...lastTargetVersions.web],
+      // If `syntax` is not defined, Rslib will try to determine by the `target`, with the last version of the target.
+      overrideBrowserslist: ESX_TO_BROWSERSLIST.esnext(target),
     },
   };
 };
@@ -695,6 +682,7 @@ const composeBundleConfig = (
                 ? request.replace(/\.[^.]+$/, jsExtension)
                 : `${request}${jsExtension}`;
             }
+
             return callback(null, request);
           }
           callback();
@@ -728,7 +716,9 @@ const composeDtsConfig = async (
   };
 };
 
-const composeTargetConfig = (target = 'web'): RsbuildConfig => {
+const composeTargetConfig = (
+  target: RsbuildConfigOutputTarget = 'web',
+): RsbuildConfig => {
   switch (target) {
     case 'web':
       return {
@@ -756,14 +746,15 @@ const composeTargetConfig = (target = 'web'): RsbuildConfig => {
           target: 'node',
         },
       };
-    case 'neutral':
-      return {
-        tools: {
-          rspack: {
-            target: ['web', 'node'],
-          },
-        },
-      };
+    // TODO: Support `neutral` target, however Rsbuild don't list it as an option in the target field.
+    // case 'neutral':
+    //   return {
+    //     tools: {
+    //       rspack: {
+    //         target: ['web', 'node'],
+    //       },
+    //     },
+    //   };
     default:
       throw new Error(`Unsupported platform: ${target}`);
   }

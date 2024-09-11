@@ -2,8 +2,7 @@ import type { RsbuildConfig } from '@rsbuild/core';
 
 export type Format = 'esm' | 'cjs' | 'umd';
 
-export type EcmaScriptVersion =
-  | 'esnext'
+export type FixedEcmaVersions =
   | 'es5'
   | 'es6'
   | 'es2015'
@@ -14,8 +13,13 @@ export type EcmaScriptVersion =
   | 'es2020'
   | 'es2021'
   | 'es2022'
-  | 'es2023'
-  | 'es2024';
+  | 'es2023';
+export type LatestEcmaVersions = 'es2024' | 'esnext';
+export type EcmaScriptVersion = FixedEcmaVersions | LatestEcmaVersions;
+
+export type RsbuildConfigOutputTarget = NonNullable<
+  RsbuildConfig['output']
+>['target'];
 
 export type Syntax =
   // ECMAScript versions as an common used addition to browserslist query
