@@ -25,9 +25,9 @@ test('auto externalize Node.js built-in modules when `output.target` is "node"',
   }
 
   for (const external of [
-    'var external_fs_namespaceObject = require("fs");',
-    'var external_node_assert_namespaceObject = require("node:assert");',
-    'var external_react_namespaceObject = require("react");',
+    'const external_fs_namespaceObject = require("fs");',
+    'const external_node_assert_namespaceObject = require("node:assert");',
+    'const external_react_namespaceObject = require("react");',
     'module.exports = require("bar");',
     'module.exports = require("foo");',
   ]) {
