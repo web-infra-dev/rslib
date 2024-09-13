@@ -11,7 +11,7 @@ test('transformImport with arco-design', async () => {
     expect(Object.values(contents[format]!)[0]).toContain(
       format.startsWith('esm')
         ? 'import * as __WEBPACK_EXTERNAL_MODULE__arco_design_web_react_es_button__ from "@arco-design/web-react/es/button"'
-        : 'var button_namespaceObject = require("@arco-design/web-react/es/button")',
+        : 'const button_namespaceObject = require("@arco-design/web-react/es/button")',
     );
     expect(Object.values(contents[format]!)[0]).toContain(
       format.startsWith('esm')
@@ -30,12 +30,12 @@ test('transformImport with lodash', async () => {
     expect(Object.values(contents[format]!)[0]).toContain(
       format.startsWith('esm')
         ? 'import * as __WEBPACK_EXTERNAL_MODULE_lodash_get__ from "lodash/get"'
-        : 'var get_namespaceObject = require("lodash/get")',
+        : 'const get_namespaceObject = require("lodash/get")',
     );
     expect(Object.values(contents[format]!)[0]).toContain(
       format.startsWith('esm')
         ? 'import * as __WEBPACK_EXTERNAL_MODULE_lodash_fp_add__ from "lodash/fp/add"'
-        : 'var add_namespaceObject = require("lodash/fp/add")',
+        : 'const add_namespaceObject = require("lodash/fp/add")',
     );
   }
 });

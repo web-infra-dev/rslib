@@ -54,10 +54,10 @@ test('auto add extension for relative import', async () => {
   }
 
   for (const requirer of [
-    'var external_bar_cjs_namespaceObject = require("./bar.cjs");',
-    'var external_baz_cjs_namespaceObject = require("./baz.cjs");',
-    'var external_foo_cjs_namespaceObject = require("./foo.cjs");',
-    'var external_qux_cjs_namespaceObject = require("./qux.cjs");',
+    'const external_bar_cjs_namespaceObject = require("./bar.cjs");',
+    'const external_baz_cjs_namespaceObject = require("./baz.cjs");',
+    'const external_foo_cjs_namespaceObject = require("./foo.cjs");',
+    'const external_qux_cjs_namespaceObject = require("./qux.cjs");',
   ]) {
     expect(Object.values(contents.cjs)[3]).toContain(requirer);
   }

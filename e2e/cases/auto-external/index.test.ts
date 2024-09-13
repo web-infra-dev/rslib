@@ -13,7 +13,7 @@ test('auto external default should works', async () => {
   );
 
   expect(js!.entries.cjs).toContain(
-    'var external_react_namespaceObject = require("react");',
+    'const external_react_namespaceObject = require("react");',
   );
 
   // dts should externalized
@@ -33,10 +33,10 @@ test('auto external sub path should works', async () => {
   );
 
   expect(entries.cjs).toContain(
-    'var external_react_namespaceObject = require("react");',
+    'const external_react_namespaceObject = require("react");',
   );
   expect(entries.cjs).toContain(
-    'var jsx_runtime_namespaceObject = require("react/jsx-runtime");',
+    'const jsx_runtime_namespaceObject = require("react/jsx-runtime");',
   );
 });
 
@@ -66,7 +66,7 @@ test('externals should overrides auto external', async () => {
   );
 
   expect(entries.cjs).toContain(
-    'var external_react1_namespaceObject = require("react1");',
+    'const external_react1_namespaceObject = require("react1");',
   );
 });
 
