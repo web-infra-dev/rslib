@@ -140,4 +140,4 @@ The project is still in its early stages and under active development, so it pos
 
 | Package      | Link                                                                 |
 | ------------ | -------------------------------------------------------------------- |
-| @rspack/core | [1.0.3](https://github.com/web-infra-dev/rspack/releases/tag/v1.0.3) |
+| @rspack/core | [1.0.5](https://github.com/web-infra-dev/rspack/releases/tag/v1.0.5) |
