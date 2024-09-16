@@ -135,7 +135,9 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     if (bundle) {
       return ensureTempDeclarationDir(cwd);
     }
-    return distPath ? distPath : rawCompilerOptions.declarationDir ?? './dist';
+    return distPath
+      ? distPath
+      : (rawCompilerOptions.declarationDir ?? './dist');
   };
 
   const declarationDir = getDeclarationDir(bundle!, distPath);
