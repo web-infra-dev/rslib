@@ -191,6 +191,12 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "not dead",
         ],
       },
+      "plugins": [
+        {
+          "name": "rsbuild-plugin-cjs-shim",
+          "setup": [Function],
+        },
+      ],
       "source": {
         "alias": {
           "bar": "bar/cjs",
@@ -243,6 +249,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           },
           {
             "externalsType": "commonjs",
+            "module": {
+              "parser": {
+                "javascript": {
+                  "importMeta": false,
+                },
+              },
+            },
             "output": {
               "chunkFormat": "commonjs",
               "iife": false,
@@ -373,6 +386,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           },
           {
             "externalsType": "umd",
+            "module": {
+              "parser": {
+                "javascript": {
+                  "importMeta": false,
+                },
+              },
+            },
             "output": {
               "library": {
                 "type": "umd",

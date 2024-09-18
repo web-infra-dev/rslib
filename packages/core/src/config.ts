@@ -15,6 +15,7 @@ import {
   DEFAULT_EXTENSIONS,
   SWC_HELPERS,
 } from './constant';
+import { pluginCjsShim } from './plugins/cjsShim';
 import type {
   AutoExternal,
   BannerAndFooter,
@@ -456,8 +457,16 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
       };
     case 'cjs':
       return {
+        plugins: [pluginCjsShim()],
         tools: {
           rspack: {
+            module: {
+              parser: {
+                javascript: {
+                  importMeta: false,
+                },
+              },
+            },
             output: {
               iife: false,
               chunkFormat: 'commonjs',
@@ -472,6 +481,13 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
       return {
         tools: {
           rspack: {
+            module: {
+              parser: {
+                javascript: {
+                  importMeta: false,
+                },
+              },
+            },
             output: {
               library: {
                 type: 'umd',
