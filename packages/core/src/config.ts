@@ -560,18 +560,17 @@ const composeSyntaxConfig = (
   // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
 
   if (syntax) {
+    const resolvedBrowserslist = transformSyntaxToBrowserslist(syntax, target);
     return {
       tools: {
         rspack: (config) => {
-          // TODO: Rspack should could resolve `browserslist:{query}` like webpack.
-          // https://webpack.js.org/configuration/target/#browserslist
-          // Using 'es5' as a temporary solution for compatibility.
-          config.target = ['es5'];
-          return config;
+          config.target = resolvedBrowserslist.map(
+            (item) => `browserslist:${item}` as const,
+          );
         },
       },
       output: {
-        overrideBrowserslist: transformSyntaxToBrowserslist(syntax, target),
+        overrideBrowserslist: resolvedBrowserslist,
       },
     };
   }
@@ -725,6 +724,11 @@ const composeTargetConfig = (
         tools: {
           rspack: {
             target: ['web'],
+            output: {
+              chunkLoading: 'import',
+              workerChunkLoading: 'import',
+              wasmLoading: 'fetch',
+            },
           },
         },
       };
@@ -736,6 +740,11 @@ const composeTargetConfig = (
             // "__dirname" and "__filename" shims will automatically be enabled when `output.module` is `true`,
             // and leave them as-is in the rest of the cases.
             // { node: { __dirname: ..., __filename: ... } }
+            output: {
+              chunkLoading: 'require',
+              workerChunkLoading: 'async-node',
+              wasmLoading: 'async-node',
+            },
           },
         },
         output: {
