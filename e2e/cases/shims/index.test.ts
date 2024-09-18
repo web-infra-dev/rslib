@@ -16,4 +16,15 @@ test('shims for __dirname and __filename in ESM', async () => {
   }
 });
 
-test.todo('shims for import.meta.url in CJS', async () => {});
+test('shims for import.meta.url in CJS', async () => {
+  const fixturePath = join(__dirname, 'cjs');
+  const { entries } = await buildAndGetResults(fixturePath);
+  for (const shim of [
+    `var __rslib_import_meta_url__ = /*#__PURE__*/ function() {
+    'undefined' == typeof document ? new (require('url'.replace('', ''))).URL('file:' + __filename).href : document.currentScript && document.currentScript.src || new URL('main.js', document.baseURI).href;
+}();`,
+    'console.log(__rslib_import_meta_url__);',
+  ]) {
+    expect(entries.cjs).toContain(shim);
+  }
+});
