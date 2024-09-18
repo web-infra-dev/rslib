@@ -23,5 +23,7 @@ test('should downgrade class private method with output.syntax config', async ()
   expect(entries.esm1).toContain('#bar');
 
   expect(entries.cjs0).toContain('#bar');
+  expect(entries.cjs0).toContain('()=>{'); // test webpack runtime arrow function
   expect(entries.cjs1).not.toContain('#bar');
+  expect(entries.cjs1).not.toContain('()=>{'); // test webpack runtime arrow function
 });
