@@ -138,6 +138,6 @@ Here are the steps to publish (we generally use CI for releases and avoid publis
 
 The project is still in its early stages and under active development, so it possible dependents on Rsbuild or Rspack canary versions to test the latest features. The current versions are:
 
-| Package      | Link                                                                 |
-| ------------ | -------------------------------------------------------------------- |
-| @rspack/core | [1.0.5](https://github.com/web-infra-dev/rspack/releases/tag/v1.0.5) |
+| Package      | Link                                                                                    |
+| ------------ | --------------------------------------------------------------------------------------- |
+| @rspack/core | https://github.com/web-infra-dev/rspack/commit/bb0219fd3eaee45d9957b4c29a176f2ac67a84ee |
