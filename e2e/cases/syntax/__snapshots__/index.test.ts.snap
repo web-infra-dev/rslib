@@ -23,14 +23,14 @@ function _class_private_method_init(obj, privateSet) {
     _check_private_redeclaration(obj, privateSet);
     privateSet.add(obj);
 }
-var _bar = new WeakSet();
+var _bar = /*#__PURE__*/ new WeakSet();
 class Foo {
     constructor(){
         _class_private_method_init(this, _bar);
         _class_private_method_get(this, _bar, bar).call(this);
     }
 }
-function bar() {} /*#__PURE__*/ 
+function bar() {}
 export { Foo };
 "
 `;
