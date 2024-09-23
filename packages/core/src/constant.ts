@@ -33,12 +33,9 @@ export const CSS_EXTENSIONS: string[] = [
   'less',
 ] as const;
 
-export const JSON_EXTENSIONS: string[] = ['json'] as const;
-
 export const ENTRY_EXTENSIONS: string[] = [
   ...JS_EXTENSIONS,
   ...CSS_EXTENSIONS,
-  ...JSON_EXTENSIONS,
 ] as const;
 
 export const JS_EXTENSIONS_PATTERN: RegExp = new RegExp(
