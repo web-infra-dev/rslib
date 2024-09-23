@@ -2,13 +2,16 @@
   "name": "@examples/react-component",
   "private": true,
   "scripts": {
-    "build": "rslib build"
+    "build": "rslib build",
+    "serve": "pnpm build && npx http-server -p 3001 ./dist/ --cors"
   },
   "devDependencies": {
+    "@module-federation/enhanced": "0.6.6",
     "@rsbuild/plugin-react": "1.0.2",
     "@rslib/core": "workspace:*",
     "@types/react": "^18.3.5",
-    "react": "^18.3.1"
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
   },
   "peerDependencies": {
     "react": "*"

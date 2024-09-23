@@ -246,15 +246,15 @@ export const composeAutoExternalConfig = (options: {
     }, [])
     .filter((name) => !userExternalKeys.includes(name));
 
-  const uniqueExternals = Array.from(new Set(externals));
+  // const uniqueExternals = Array.from(new Set(externals));
 
   return externals.length
     ? {
         output: {
           externals: [
             // Exclude dependencies, e.g. `react`, `react/jsx-runtime`
-            ...uniqueExternals.map((dep) => new RegExp(`^${dep}($|\\/|\\\\)`)),
-            ...uniqueExternals,
+            // ...uniqueExternals.map((dep) => new RegExp(`^${dep}($|\\/|\\\\)`)),
+            // ...uniqueExternals,
           ],
         },
       }
@@ -426,7 +426,10 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
   });
 }
 
-const composeFormatConfig = (format: Format): RsbuildConfig => {
+const composeFormatConfig = (
+  format: Format,
+  pkgJson: PkgJson,
+): RsbuildConfig => {
   switch (format) {
     case 'esm':
       return {
@@ -496,6 +499,23 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
           },
         },
       };
+    case 'mf':
+      return {
+        tools: {
+          rspack: {
+            module: {
+              parser: {
+                javascript: {
+                  importMeta: false,
+                },
+              },
+            },
+            output: {
+              uniqueName: pkgJson.name as string,
+            },
+          },
+        },
+      };
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
@@ -532,6 +552,19 @@ const composeExternalsConfig = (
         tools: {
           rspack: {
             externalsType: externalsTypeMap[format],
+          },
+        },
+      };
+    case 'mf':
+      return {
+        output: externals
+          ? {
+              externals,
+            }
+          : {},
+        tools: {
+          rspack: {
+            externalsType: 'var',
           },
         },
       };
@@ -741,7 +774,7 @@ const composeTargetConfig = (
           rspack: {
             target: ['web'],
             output: {
-              chunkLoading: 'import',
+              // chunkLoading: 'import',
               workerChunkLoading: 'import',
               wasmLoading: 'fetch',
             },
@@ -839,7 +872,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     autoExternal = true,
     externalHelpers = false,
   } = config;
-  const formatConfig = composeFormatConfig(format!);
+  const formatConfig = composeFormatConfig(format!, pkgJson!);
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,
     pkgJson,
@@ -987,6 +1020,7 @@ export async function initRsbuild(
     esm: 0,
     cjs: 0,
     umd: 0,
+    mf: 0,
   };
 
   for (const { format, config } of rsbuildConfigObject) {

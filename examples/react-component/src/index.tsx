@@ -6,7 +6,7 @@ export const Counter: React.FC = () => {
 
   return (
     <div>
-      <h2>Counter: {count}</h2>
+      <h2>Counter From Rslib MF Format: {count}</h2>
       <CounterButton onClick={decrement} label="-" />
       <CounterButton onClick={increment} label="+" />
     </div>

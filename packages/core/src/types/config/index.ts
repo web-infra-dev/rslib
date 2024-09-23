@@ -1,6 +1,6 @@
 import type { RsbuildConfig } from '@rsbuild/core';
 
-export type Format = 'esm' | 'cjs' | 'umd';
+export type Format = 'esm' | 'cjs' | 'umd' | 'mf';
 
 export type FixedEcmaVersions =
   | 'es5'
