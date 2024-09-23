@@ -40,8 +40,8 @@ test('single file', async () => {
   `);
 });
 
-test('auto add extension for relative import', async () => {
-  const fixturePath = join(__dirname, 'relative-import');
+test('auto add js extension for relative import', async () => {
+  const fixturePath = join(__dirname, 'js-extension');
   const { contents } = await buildAndGetResults(fixturePath);
 
   for (const importer of [
@@ -61,4 +61,28 @@ test('auto add extension for relative import', async () => {
   ]) {
     expect(Object.values(contents.cjs)[3]).toContain(requirer);
   }
+});
+
+test('asset in bundleless', async () => {
+  const fixturePath = join(__dirname, 'asset');
+  const { contents } = await buildAndGetResults(fixturePath);
+
+  const assets = [
+    'const image_namespaceObject = __webpack_require__.p + "static/image/image.png";',
+    'const logo_namespaceObject = __webpack_require__.p + "static/svg/logo.svg";',
+  ];
+
+  for (const asset of assets) {
+    expect(Object.values(contents.esm)[0]).toContain(asset);
+    expect(Object.values(contents.cjs)[0]).toContain(asset);
+  }
+});
+
+test('svgr in bundleless', async () => {
+  const fixturePath = join(__dirname, 'svgr');
+  const { contents } = await buildAndGetResults(fixturePath);
+
+  // TODO: import "react"; in output now, we should shake this
+  expect(Object.values(contents.esm)[0]).toMatchSnapshot();
+  expect(Object.values(contents.cjs)[0]).toMatchSnapshot();
 });
