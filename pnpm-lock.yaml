@@ -102,6 +102,35 @@ importers:
 
   e2e/cases/alias: {}
 
+  e2e/cases/asset/limit: {}
+
+  e2e/cases/asset/name:
+    dependencies:
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+    devDependencies:
+      '@rsbuild/plugin-react':
+        specifier: ^1.0.2
+        version: 1.0.2(@rsbuild/core@1.0.7)
+
+  e2e/cases/asset/path: {}
+
+  e2e/cases/asset/public-path: {}
+
+  e2e/cases/asset/svgr:
+    dependencies:
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+    devDependencies:
+      '@rsbuild/plugin-react':
+        specifier: ^1.0.2
+        version: 1.0.2(@rsbuild/core@1.0.7)
+      '@rsbuild/plugin-svgr':
+        specifier: 1.0.2
+        version: 1.0.2(@rsbuild/core@1.0.7)(typescript@5.6.2)
+
   e2e/cases/auto-extension/type-commonjs/config-override: {}
 
   e2e/cases/auto-extension/type-commonjs/default: {}
