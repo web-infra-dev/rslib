@@ -46,6 +46,7 @@ import { logger } from './utils/logger';
 import {
   ESX_TO_BROWSERSLIST,
   transformSyntaxToBrowserslist,
+  transformSyntaxToRspackTarget,
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
 
@@ -578,19 +579,15 @@ const composeSyntaxConfig = (
   target?: RsbuildConfigOutputTarget,
 ): RsbuildConfig => {
   // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
-
   if (syntax) {
-    const resolvedBrowserslist = transformSyntaxToBrowserslist(syntax, target);
     return {
       tools: {
         rspack: (config) => {
-          config.target = resolvedBrowserslist.map(
-            (item) => `browserslist:${item}` as const,
-          );
+          config.target = transformSyntaxToRspackTarget(syntax);
         },
       },
       output: {
-        overrideBrowserslist: resolvedBrowserslist,
+        overrideBrowserslist: transformSyntaxToBrowserslist(syntax, target),
       },
     };
   }

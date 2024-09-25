@@ -2,7 +2,12 @@ import { generateBundleEsmConfig } from '@e2e/helper';
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  lib: [generateBundleEsmConfig()],
+  lib: [
+    generateBundleEsmConfig(),
+    generateBundleEsmConfig({
+      syntax: 'esnext',
+    }),
+  ],
   output: {
     target: 'node',
   },

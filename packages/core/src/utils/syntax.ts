@@ -1,4 +1,4 @@
-import type { RsbuildConfig } from '@rsbuild/core';
+import type { RsbuildConfig, Rspack } from '@rsbuild/core';
 import type {
   EcmaScriptVersion,
   FixedEcmaVersions,
@@ -36,6 +36,12 @@ const calcEsnextBrowserslistByTarget = (target: RsbuildConfigOutputTarget) => {
 
   return LATEST_TARGET_VERSIONS.web;
 };
+
+const RSPACK_TARGET_UNLISTED_MODERN_ECMA_VERSIONS: EcmaScriptVersion[] = [
+  'es2023',
+  'es2024',
+  'esnext',
+] satisfies EcmaScriptVersion[];
 
 /**
  * The esX to browserslist mapping is transformed from esbuild:
@@ -158,6 +164,41 @@ export const ESX_TO_BROWSERSLIST: Record<
     },
   } as const;
 
+export function transformSyntaxToRspackTarget(
+  syntax: Syntax,
+  // target?: NonNullable<RsbuildConfig['output']>['target'],
+): Rspack.Configuration['target'] {
+  const handleSyntaxItem = (syntaxItem: EcmaScriptVersion | string): string => {
+    const normalizedSyntaxItem = syntaxItem.toLowerCase();
+
+    if (normalizedSyntaxItem.startsWith('es')) {
+      if (normalizedSyntaxItem in ESX_TO_BROWSERSLIST) {
+        // The latest EcmaScript version supported by Rspack's `target` is es2022.
+        // Higher versions are treated as es2022.
+        if (
+          RSPACK_TARGET_UNLISTED_MODERN_ECMA_VERSIONS.includes(
+            normalizedSyntaxItem as EcmaScriptVersion,
+          )
+        ) {
+          return 'es2022';
+        }
+
+        return normalizedSyntaxItem;
+      }
+
+      throw new Error(`Unsupported ES version: ${syntaxItem}`);
+    }
+
+    return `browserslist:${syntaxItem}`;
+  };
+
+  if (Array.isArray(syntax)) {
+    return syntax.map(handleSyntaxItem) as Rspack.Configuration['target'];
+  }
+
+  return [handleSyntaxItem(syntax)] as Rspack.Configuration['target'];
+}
+
 export function transformSyntaxToBrowserslist(
   syntax: Syntax,
   target?: NonNullable<RsbuildConfig['output']>['target'],
@@ -166,6 +207,7 @@ export function transformSyntaxToBrowserslist(
     syntaxItem: EcmaScriptVersion | string,
   ): string[] => {
     const normalizedSyntaxItem = syntaxItem.toLowerCase();
+
     if (normalizedSyntaxItem.startsWith('es')) {
       if (normalizedSyntaxItem in ESX_TO_BROWSERSLIST) {
         const browserslistItem =
