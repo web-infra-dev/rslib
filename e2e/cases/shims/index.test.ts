@@ -1,7 +1,6 @@
 import { join } from 'node:path';
-import { describe } from 'node:test';
 import { buildAndGetResults } from '@e2e/helper';
-import { expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
 test('shims for __dirname and __filename in ESM', async () => {
   const fixturePath = join(__dirname, 'esm');
