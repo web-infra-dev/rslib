@@ -1,4 +1,4 @@
-import { Counter } from '@examples/react-component';
+import { Counter } from '@examples/react-component-bundle-false';
 
 const App = () => (
   <div>

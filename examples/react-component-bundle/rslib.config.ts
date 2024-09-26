@@ -1,4 +1,5 @@
 import { pluginReact } from '@rsbuild/plugin-react';
+import { pluginSass } from '@rsbuild/plugin-sass';
 import { defineConfig } from '@rslib/core';
 
 const shared = {
@@ -28,5 +29,5 @@ export default defineConfig({
       },
     },
   ],
-  plugins: [pluginReact()],
+  plugins: [pluginReact(), pluginSass()],
 });
