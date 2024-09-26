@@ -166,7 +166,6 @@ export const ESX_TO_BROWSERSLIST: Record<
 
 export function transformSyntaxToRspackTarget(
   syntax: Syntax,
-  // target?: NonNullable<RsbuildConfig['output']>['target'],
 ): Rspack.Configuration['target'] {
   const handleSyntaxItem = (syntaxItem: EcmaScriptVersion | string): string => {
     const normalizedSyntaxItem = syntaxItem.toLowerCase();

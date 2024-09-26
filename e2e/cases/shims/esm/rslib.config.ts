@@ -3,9 +3,20 @@ import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   lib: [
-    generateBundleEsmConfig(),
+    generateBundleEsmConfig({
+      output: {
+        distPath: {
+          root: './dist/normal',
+        },
+      },
+    }),
     generateBundleEsmConfig({
       syntax: 'esnext',
+      output: {
+        distPath: {
+          root: './dist/with-syntax',
+        },
+      },
     }),
   ],
   output: {
