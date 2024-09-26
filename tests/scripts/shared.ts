@@ -136,6 +136,15 @@ export async function getResults(
   };
 }
 
+export async function rslibBuild(fixturePath: string) {
+  const rslibConfig = await loadConfig({
+    cwd: fixturePath,
+  });
+  process.chdir(fixturePath);
+  const rsbuildInstance = await build(rslibConfig);
+  return { rsbuildInstance, rslibConfig };
+}
+
 export async function buildAndGetResults(
   fixturePath: string,
   type: 'all',
@@ -152,11 +161,7 @@ export async function buildAndGetResults(
   fixturePath: string,
   type: 'js' | 'dts' | 'css' | 'all' = 'js',
 ) {
-  const rslibConfig = await loadConfig({
-    cwd: fixturePath,
-  });
-  process.chdir(fixturePath);
-  const rsbuildInstance = await build(rslibConfig);
+  const { rsbuildInstance, rslibConfig } = await rslibBuild(fixturePath);
   const {
     origin: { bundlerConfigs, rsbuildConfig },
   } = await rsbuildInstance.inspectConfig({ verbose: true });
