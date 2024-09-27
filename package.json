@@ -22,6 +22,7 @@
     "test:e2e": "cd e2e && pnpm run test",
     "test:unit": "vitest run --project unit*",
     "test:unit:watch": "vitest --project unit*",
+    "testu": "pnpm run test:unit -u && pnpm run test:artifact -u",
     "update:rsbuild": "npx taze minor --include /rsbuild/ -w -r -l",
     "watch": "pnpm build --watch"
   },
@@ -37,7 +38,7 @@
     "pnpm-lock.yaml": "pnpm dedupe --check"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.1",
+    "@biomejs/biome": "^1.9.2",
     "@changesets/cli": "^2.27.8",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "~18.19.39",
@@ -46,16 +47,21 @@
     "cspell-ban-words": "^0.0.3",
     "fs-extra": "^11.2.0",
     "nano-staged": "^0.8.0",
-    "nx": "^19.7.3",
+    "nx": "^19.8.1",
     "prettier": "^3.3.3",
     "prettier-plugin-packagejson": "^2.5.2",
     "simple-git-hooks": "^2.11.1",
     "typescript": "^5.6.2",
-    "vitest": "^2.0.5"
+    "vitest": "^2.1.1"
   },
   "packageManager": "pnpm@9.9.0",
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=9.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@rspack/core": "npm:@rspack/core-canary@1.0.6-canary-bb0219fd-20240920080859"
+    }
   }
 }

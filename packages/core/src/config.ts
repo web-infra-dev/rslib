@@ -11,8 +11,10 @@ import {
 } from '@rsbuild/core';
 import glob from 'fast-glob';
 import {
+  DEFAULT_CONFIG_EXTENSIONS,
   DEFAULT_CONFIG_NAME,
-  DEFAULT_EXTENSIONS,
+  ENTRY_EXTENSIONS_PATTERN,
+  JS_EXTENSIONS_PATTERN,
   SWC_HELPERS,
 } from './constant';
 import { pluginCjsShim } from './plugins/cjsShim';
@@ -44,6 +46,7 @@ import { logger } from './utils/logger';
 import {
   ESX_TO_BROWSERSLIST,
   transformSyntaxToBrowserslist,
+  transformSyntaxToRspackTarget,
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
 
@@ -60,7 +63,9 @@ export function defineConfig(config: RslibConfigExport) {
 }
 
 const findConfig = (basePath: string): string | undefined => {
-  return DEFAULT_EXTENSIONS.map((ext) => basePath + ext).find(fs.existsSync);
+  return DEFAULT_CONFIG_EXTENSIONS.map((ext) => basePath + ext).find(
+    fs.existsSync,
+  );
 };
 
 const resolveConfigPath = (root: string, customConfig?: string): string => {
@@ -595,19 +600,15 @@ const composeSyntaxConfig = (
   target?: RsbuildConfigOutputTarget,
 ): RsbuildConfig => {
   // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
-
   if (syntax) {
-    const resolvedBrowserslist = transformSyntaxToBrowserslist(syntax, target);
     return {
       tools: {
         rspack: (config) => {
-          config.target = resolvedBrowserslist.map(
-            (item) => `browserslist:${item}` as const,
-          );
+          config.target = transformSyntaxToRspackTarget(syntax);
         },
       },
       output: {
-        overrideBrowserslist: resolvedBrowserslist,
+        overrideBrowserslist: transformSyntaxToBrowserslist(syntax, target),
       },
     };
   }
@@ -665,9 +666,14 @@ const composeEntryConfig = async (
     }
 
     // Turn entries in array into each separate entry.
-    const resolvedEntryFiles = await glob(entryFiles, {
+    const globEntryFiles = await glob(entryFiles, {
       cwd: root,
     });
+
+    // Filter the glob resolved entry files based on the allowed extensions
+    const resolvedEntryFiles = globEntryFiles.filter((file) =>
+      ENTRY_EXTENSIONS_PATTERN.test(file),
+    );
 
     if (resolvedEntryFiles.length === 0) {
       throw new Error(`Cannot find ${resolvedEntryFiles}`);
@@ -714,9 +720,16 @@ const composeBundleConfig = (
             // user should use copy to keep origin file or use another separate entry to deal this
             let request = data.request;
             if (request[0] === '.') {
-              request = extname(request)
-                ? request.replace(/\.[^.]+$/, jsExtension)
-                : `${request}${jsExtension}`;
+              if (extname(request)) {
+                if (JS_EXTENSIONS_PATTERN.test(request)) {
+                  request = request.replace(/\.[^.]+$/, jsExtension);
+                } else {
+                  // If it does not match jsExtensionsPattern, we should do nothing, eg: ./foo.png
+                  return callback();
+                }
+              } else {
+                request = `${request}${jsExtension}`;
+              }
             }
 
             return callback(null, request);

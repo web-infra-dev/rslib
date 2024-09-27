@@ -1,8 +1,11 @@
 import { describe, expect, test } from 'vitest';
-import { transformSyntaxToBrowserslist } from '../src/utils/syntax';
+import {
+  transformSyntaxToBrowserslist,
+  transformSyntaxToRspackTarget,
+} from '../src/utils/syntax';
 
-describe('Correctly resolve syntax', () => {
-  test('esX', async () => {
+describe('transformSyntaxToBrowserslist', () => {
+  test('esX', () => {
     expect(transformSyntaxToBrowserslist('es6')).toMatchInlineSnapshot(`
       [
         "Chrome >= 63.0.0",
@@ -56,7 +59,7 @@ describe('Correctly resolve syntax', () => {
     );
   });
 
-  test('browserslist', async () => {
+  test('browserslist', () => {
     expect(
       transformSyntaxToBrowserslist(['fully supports es6-module']),
     ).toMatchInlineSnapshot(`
@@ -75,7 +78,7 @@ describe('Correctly resolve syntax', () => {
     `);
   });
 
-  test('combined', async () => {
+  test('combined', () => {
     expect(
       transformSyntaxToBrowserslist(['Chrome 123', 'es5']),
     ).toMatchInlineSnapshot(`
@@ -95,5 +98,43 @@ describe('Correctly resolve syntax', () => {
     expect(transformSyntaxToBrowserslist(['es5'])).toEqual(
       transformSyntaxToBrowserslist('es5'),
     );
+  });
+});
+
+describe('transformSyntaxToRspackTarget', () => {
+  test('esX', () => {
+    const es2023 = transformSyntaxToRspackTarget('es2023');
+    const es2024 = transformSyntaxToRspackTarget('es2024');
+    const esnext = transformSyntaxToRspackTarget('esnext');
+
+    expect(es2023).toEqual(es2024);
+    expect(es2023).toEqual(esnext);
+
+    expect(es2023).toMatchInlineSnapshot(
+      `
+      [
+        "es2022",
+      ]
+    `,
+    );
+
+    expect(transformSyntaxToRspackTarget('es2015')).toMatchInlineSnapshot(
+      `
+      [
+        "es2015",
+      ]
+    `,
+    );
+  });
+
+  test('combined', () => {
+    expect(
+      transformSyntaxToRspackTarget(['Chrome 123', 'es2023']),
+    ).toMatchInlineSnapshot(`
+      [
+        "browserslist:Chrome 123",
+        "es2022",
+      ]
+    `);
   });
 });

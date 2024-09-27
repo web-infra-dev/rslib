@@ -16,8 +16,7 @@ export const pluginCjsShim = (): RsbuildPlugin => ({
   name: 'rsbuild-plugin-cjs-shim',
 
   setup(api) {
-    api.modifyRsbuildConfig((config) => {
-      config.source ||= {};
+    api.modifyEnvironmentConfig((config) => {
       config.source.define = {
         ...config.source.define,
         'import.meta.url': '__rslib_import_meta_url__',
