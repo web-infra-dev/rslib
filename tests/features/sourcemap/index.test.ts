@@ -35,7 +35,8 @@ test('should generate js inline sourcemap: inline-cheap-module-source-map', asyn
 
   expect(files).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/features/sourcemap/inline/dist/esm/index.js",
+      "<ROOT>/tests/features/sourcemap/external/dist/esm/index.js",
+      "<ROOT>/tests/features/sourcemap/external/dist/esm/index.js.map",
     ]
   `);
 
