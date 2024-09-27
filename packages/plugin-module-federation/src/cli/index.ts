@@ -12,7 +12,7 @@ import type { RsbuildPlugin } from '@rsbuild/core';
 type ModuleFederationOptions =
   moduleFederationPlugin.ModuleFederationPluginOptions;
 
-const PLUGIN_MODULE_FEDERATION_NAME = 'rsbuild:module-federation';
+const PLUGIN_MODULE_FEDERATION_NAME = 'rsbuild:module-federation-enhanced';
 const pkgName = '@rsbuild/plugin-module-federation';
 export const pluginModuleFederation = (
   moduleFederationOptions: ModuleFederationOptions,
@@ -42,11 +42,7 @@ export const pluginModuleFederation = (
     const shared = sharedOptions.map((shared) =>
       shared[0].endsWith('/') ? shared[0].slice(0, -1) : shared[0],
     );
-    api.modifyEnvironmentConfig((config, { name }) => {
-      if (name !== 'mf') {
-        return config;
-      }
-
+    api.modifyEnvironmentConfig((config) => {
       const externals = config.output.externals;
       if (Array.isArray(externals)) {
         config.output.externals = externals.filter((ext) => {
