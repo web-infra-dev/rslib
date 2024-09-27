@@ -1,0 +1,44 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`dts when bundle: false > basic 2`] = `
+{
+  "<ROOT>/tests/features/dts/bundle-false/basic/dist/esm/index.d.ts": "export * from './utils/numbers';
+export * from './utils/strings';
+export * from './sum';
+",
+  "<ROOT>/tests/features/dts/bundle-false/basic/dist/esm/sum.d.ts": "export declare const numSum: number;
+export declare const strSum: string;
+",
+  "<ROOT>/tests/features/dts/bundle-false/basic/dist/esm/utils/numbers.d.ts": "export declare const num1 = 1;
+export declare const num2 = 2;
+export declare const num3 = 3;
+",
+  "<ROOT>/tests/features/dts/bundle-false/basic/dist/esm/utils/strings.d.ts": "export declare const str1 = "str1";
+export declare const str2 = "str2";
+export declare const str3 = "str3";
+",
+}
+`;
+
+exports[`dts when bundle: true > basic 2`] = `
+{
+  "esm": "export declare const num1 = 1;
+
+export declare const num2 = 2;
+
+export declare const num3 = 3;
+
+export declare const numSum: number;
+
+export declare const str1 = "str1";
+
+export declare const str2 = "str2";
+
+export declare const str3 = "str3";
+
+export declare const strSum: string;
+
+export { }
+",
+}
+`;

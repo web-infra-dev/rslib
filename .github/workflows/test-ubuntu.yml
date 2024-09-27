@@ -17,9 +17,8 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # ======== ut ========
-  ut-mac:
-    # run ut in MacOS, as SWC cases will fail in Ubuntu CI
-    runs-on: macos-14
+  ut-ubuntu:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x]
@@ -60,8 +59,8 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:unit
 
-  # ======== e2e ========
-  e2e-ubuntu:
+  # ======== integration && e2e ========
+  integration-e2e-ubuntu:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -97,18 +96,12 @@ jobs:
 
       - name: Install Dependencies
         if: steps.changes.outputs.changed == 'true'
-        run: pnpm install && cd ./e2e && pnpx playwright install
+        run: pnpm install && cd ./tests && npx playwright install
 
-      - name: E2E Artifact Test (Vitest)
+      - name: Features Integration Test (Vitest)
         if: steps.changes.outputs.changed == 'true'
-        run: pnpm run test:artifact
+        run: pnpm run test:features
 
-      - name: Examples Test
-        if: steps.changes.outputs.changed == 'true'
-        run: |
-          pnpm run build:examples
-
-      - name: E2E Test (Playwright)
+      - name: Examples E2E Test (Playwright)
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:e2e
-
