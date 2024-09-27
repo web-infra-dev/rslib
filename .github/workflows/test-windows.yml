@@ -112,10 +112,10 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:artifact
 
-      - name: E2E Test (Playwright)
-        if: steps.changes.outputs.changed == 'true'
-        run: pnpm run test:e2e
-
       - name: Examples Test
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run build:examples
+        
+      - name: E2E Test (Playwright)
+        if: steps.changes.outputs.changed == 'true'
+        run: pnpm run test:e2e
