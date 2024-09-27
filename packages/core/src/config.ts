@@ -246,15 +246,15 @@ export const composeAutoExternalConfig = (options: {
     }, [])
     .filter((name) => !userExternalKeys.includes(name));
 
-  // const uniqueExternals = Array.from(new Set(externals));
+  const uniqueExternals = Array.from(new Set(externals));
 
   return externals.length
     ? {
         output: {
           externals: [
             // Exclude dependencies, e.g. `react`, `react/jsx-runtime`
-            // ...uniqueExternals.map((dep) => new RegExp(`^${dep}($|\\/|\\\\)`)),
-            // ...uniqueExternals,
+            ...uniqueExternals.map((dep) => new RegExp(`^${dep}($|\\/|\\\\)`)),
+            ...uniqueExternals,
           ],
         },
       }
@@ -503,13 +503,6 @@ const composeFormatConfig = (
       return {
         tools: {
           rspack: {
-            module: {
-              parser: {
-                javascript: {
-                  importMeta: false,
-                },
-              },
-            },
             output: {
               uniqueName: pkgJson.name as string,
             },
@@ -562,11 +555,6 @@ const composeExternalsConfig = (
               externals,
             }
           : {},
-        tools: {
-          rspack: {
-            externalsType: 'var',
-          },
-        },
       };
     default:
       throw new Error(`Unsupported format: ${format}`);
@@ -774,7 +762,7 @@ const composeTargetConfig = (
           rspack: {
             target: ['web'],
             output: {
-              // chunkLoading: 'import',
+              chunkLoading: 'import',
               workerChunkLoading: 'import',
               wasmLoading: 'fetch',
             },

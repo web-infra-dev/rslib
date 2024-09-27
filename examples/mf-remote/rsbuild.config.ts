@@ -5,15 +5,18 @@ import { pluginReact } from '@rsbuild/plugin-react';
 export default defineConfig({
   plugins: [pluginReact()],
   server: {
-    port: 3000,
+    port: 3002,
+  },
+  dev: {
+    assetPrefix: true,
   },
   tools: {
     rspack: {
       plugins: [
         new ModuleFederationPlugin({
-          name: 'rsbuild_host',
-          remotes: {
-            rslib: 'rslib@http://localhost:3001/mf/mf-manifest.json',
+          name: 'rsbuild_remote',
+          exposes: {
+            '.': './src/App.tsx',
           },
           shared: {
             react: {
@@ -23,7 +26,6 @@ export default defineConfig({
               singleton: true,
             },
           },
-          shareStrategy: 'loaded-first',
         }),
       ],
     },

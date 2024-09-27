@@ -1,0 +1,66 @@
+{
+  "name": "@rsbuild/plugin-module-federation",
+  "version": "0.0.1",
+  "description": "Module Federation plugin for Rsbuild",
+  "homepage": "https://lib.rsbuild.dev",
+  "bugs": {
+    "url": "https://github.com/web-infra-dev/rslib/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rslib",
+    "directory": "packages/plugin-federation"
+  },
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/cli/index.mjs",
+      "require": "./dist/cjs/cli/index.js",
+      "types": "./dist/cjs/cli/index.d.ts"
+    },
+    "./runtime": {
+      "import": "./dist/esm/runtime/index.mjs",
+      "require": "./dist/cjs/runtime/index.js",
+      "types": "./dist/cjs/runtime/index.d.ts"
+    }
+  },
+  "main": "./dist/cjs/cli/index.js",
+  "module": "./dist/esm/cli/index.mjs",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/cjs/cli/index.d.ts"
+      ],
+      "runtime": [
+        "./dist/cjs/runtime/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch"
+  },
+  "dependencies": {
+    "@module-federation/enhanced": "^0.6.6",
+    "@module-federation/sdk": "^0.6.6"
+  },
+  "devDependencies": {
+    "@rsbuild/core": "1.0.4",
+    "@rslib/tsconfig": "workspace:*",
+    "rslib": "npm:@rslib/core@0.0.6"
+  },
+  "peerDependencies": {
+    "@rsbuild/core": "1.x"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  }
+}

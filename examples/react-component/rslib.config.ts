@@ -1,4 +1,4 @@
-import { ModuleFederationPlugin } from '@module-federation/enhanced/rspack';
+import { pluginModuleFederation } from '@rsbuild/plugin-module-federation';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
@@ -43,34 +43,26 @@ export default defineConfig({
           'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         },
       },
-      tools: {
-        rspack: {
-          plugins: [
-            new ModuleFederationPlugin({
-              name: 'rslib_provider',
-              exposes: {
-                '.': './src/index.tsx',
-              },
-              shared: {
-                react: {
-                  singleton: true,
-                },
-                'react-dom': {
-                  singleton: true,
-                },
-              },
-              // getPublicPath: `return 'http://localhost:3001/mf/'`,
-            }),
-          ],
-          externals: undefined,
-        },
-      },
     },
   ],
   plugins: [
     pluginReact({
       splitChunks: {
         react: false,
+      },
+    }),
+    pluginModuleFederation({
+      name: 'rslib_provider',
+      exposes: {
+        '.': './src/index.tsx',
+      },
+      shared: {
+        react: {
+          singleton: true,
+        },
+        'react-dom': {
+          singleton: true,
+        },
       },
     }),
   ],

@@ -1,12 +1,23 @@
 {
   "name": "@examples/react-component",
   "private": true,
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/cjs/index.d.ts"
+    }
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.mjs",
   "scripts": {
     "build": "rslib build",
     "serve": "pnpm build && npx http-server -p 3001 ./dist/ --cors"
   },
+  "dependencies": {
+    "@rsbuild/plugin-module-federation": "workspace:*"
+  },
   "devDependencies": {
-    "@module-federation/enhanced": "0.6.6",
     "@rsbuild/plugin-react": "1.0.2",
     "@rslib/core": "workspace:*",
     "@types/react": "^18.3.5",
