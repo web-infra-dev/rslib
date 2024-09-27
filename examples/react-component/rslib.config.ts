@@ -43,26 +43,28 @@ export default defineConfig({
           'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         },
       },
+      plugins: [
+        pluginModuleFederation({
+          name: 'rslib_provider',
+          exposes: {
+            '.': './src/index.tsx',
+          },
+          shared: {
+            react: {
+              singleton: true,
+            },
+            'react-dom': {
+              singleton: true,
+            },
+          },
+        }),
+      ],
     },
   ],
   plugins: [
     pluginReact({
       splitChunks: {
         react: false,
-      },
-    }),
-    pluginModuleFederation({
-      name: 'rslib_provider',
-      exposes: {
-        '.': './src/index.tsx',
-      },
-      shared: {
-        react: {
-          singleton: true,
-        },
-        'react-dom': {
-          singleton: true,
-        },
       },
     }),
   ],
