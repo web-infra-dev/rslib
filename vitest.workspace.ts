@@ -9,4 +9,4 @@ export const shared: ProjectConfig = {
   exclude: ['**/node_modules/**'],
 };
 
-export default defineWorkspace(['packages/*', 'e2e']);
+export default defineWorkspace(['packages/*', 'tests']);

@@ -64,7 +64,7 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:unit
 
-  # # ======== e2e ========
+  # # ======== integration && e2e ========
   e2e-windows:
     runs-on: windows-latest
     strategy:
@@ -106,16 +106,12 @@ jobs:
 
       - name: Install Dependencies
         if: steps.changes.outputs.changed == 'true'
-        run: pnpm install && cd ./e2e && npx playwright install
+        run: pnpm install && cd ./tests && npx playwright install
 
-      - name: E2E Artifact Test (Vitest)
+      - name: Features Integration Test (Vitest)
         if: steps.changes.outputs.changed == 'true'
-        run: pnpm run test:artifact
+        run: pnpm run test:features
 
-      - name: Examples Test
-        if: steps.changes.outputs.changed == 'true'
-        run: pnpm run build:examples
-        
-      - name: E2E Test (Playwright)
+      - name: Examples E2E Test (Playwright)
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:e2e
