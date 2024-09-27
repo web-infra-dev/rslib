@@ -59,9 +59,15 @@ importers:
 
   e2e:
     dependencies:
+      '@examples/react-component':
+        specifier: workspace:*
+        version: link:../examples/react-component
       react:
         specifier: ^18.3.1
         version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
     devDependencies:
       '@e2e/helper':
         specifier: workspace:*
@@ -72,6 +78,9 @@ importers:
       '@rsbuild/core':
         specifier: 1.0.7
         version: 1.0.7
+      '@rsbuild/plugin-react':
+        specifier: 1.0.2
+        version: 1.0.2(@rsbuild/core@1.0.7)
       '@rslib/core':
         specifier: workspace:*
         version: link:../packages/core
@@ -87,6 +96,9 @@ importers:
       '@types/react':
         specifier: ^18.3.9
         version: 18.3.9
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.0
       fast-glob:
         specifier: ^3.3.2
         version: 3.3.2
@@ -241,6 +253,8 @@ importers:
   e2e/cases/entry/multiple: {}
 
   e2e/cases/entry/single: {}
+
+  e2e/cases/examples-e2e/react-component: {}
 
   e2e/cases/extension-alias: {}
 
