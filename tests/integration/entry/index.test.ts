@@ -9,10 +9,10 @@ test('single entry bundle', async () => {
   expect(files).toMatchInlineSnapshot(`
     {
       "cjs": [
-        "<ROOT>/tests/features/entry/single/dist/cjs/index.cjs",
+        "<ROOT>/tests/integration/entry/single/dist/cjs/index.cjs",
       ],
       "esm": [
-        "<ROOT>/tests/features/entry/single/dist/esm/index.js",
+        "<ROOT>/tests/integration/entry/single/dist/esm/index.js",
       ],
     }
   `);
@@ -25,12 +25,12 @@ test('multiple entry bundle', async () => {
   expect(files).toMatchInlineSnapshot(`
     {
       "cjs": [
-        "<ROOT>/tests/features/entry/multiple/dist/cjs/bar.cjs",
-        "<ROOT>/tests/features/entry/multiple/dist/cjs/index.cjs",
+        "<ROOT>/tests/integration/entry/multiple/dist/cjs/bar.cjs",
+        "<ROOT>/tests/integration/entry/multiple/dist/cjs/index.cjs",
       ],
       "esm": [
-        "<ROOT>/tests/features/entry/multiple/dist/esm/bar.js",
-        "<ROOT>/tests/features/entry/multiple/dist/esm/index.js",
+        "<ROOT>/tests/integration/entry/multiple/dist/esm/bar.js",
+        "<ROOT>/tests/integration/entry/multiple/dist/esm/index.js",
       ],
     }
   `);
@@ -43,14 +43,14 @@ test('glob entry bundleless', async () => {
   expect(files).toMatchInlineSnapshot(`
     {
       "cjs": [
-        "<ROOT>/tests/features/entry/glob/dist/cjs/bar.cjs",
-        "<ROOT>/tests/features/entry/glob/dist/cjs/foo.cjs",
-        "<ROOT>/tests/features/entry/glob/dist/cjs/index.cjs",
+        "<ROOT>/tests/integration/entry/glob/dist/cjs/bar.cjs",
+        "<ROOT>/tests/integration/entry/glob/dist/cjs/foo.cjs",
+        "<ROOT>/tests/integration/entry/glob/dist/cjs/index.cjs",
       ],
       "esm": [
-        "<ROOT>/tests/features/entry/glob/dist/esm/bar.js",
-        "<ROOT>/tests/features/entry/glob/dist/esm/foo.js",
-        "<ROOT>/tests/features/entry/glob/dist/esm/index.js",
+        "<ROOT>/tests/integration/entry/glob/dist/esm/bar.js",
+        "<ROOT>/tests/integration/entry/glob/dist/esm/foo.js",
+        "<ROOT>/tests/integration/entry/glob/dist/esm/index.js",
       ],
     }
   `);
