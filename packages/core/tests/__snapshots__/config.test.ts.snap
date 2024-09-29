@@ -102,12 +102,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "module": {
               "parser": {
                 "javascript": {
+                  "importDynamic": false,
                   "importMeta": false,
+                  "requireAsExpression": false,
+                  "requireDynamic": false,
+                  "requireResolve": false,
                 },
               },
             },
             "optimization": {
               "concatenateModules": true,
+              "sideEffects": "flag",
             },
             "output": {
               "chunkFormat": "module",
@@ -252,7 +257,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "module": {
               "parser": {
                 "javascript": {
+                  "importDynamic": false,
                   "importMeta": false,
+                  "requireAsExpression": false,
+                  "requireDynamic": false,
+                  "requireResolve": false,
                 },
               },
             },
