@@ -4,9 +4,9 @@ import { shared } from '../vitest.workspace';
 export default defineConfig({
   test: {
     ...shared,
-    name: 'features',
+    name: 'integration',
     setupFiles: ['./setupVitestTests.ts'],
-    include: ['./features/**/*.test.ts'],
+    include: ['./integration/**/*.test.ts'],
     exclude: ['**/node_modules/**'],
   },
 });

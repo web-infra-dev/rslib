@@ -10,7 +10,7 @@ test('should not generate js sourcemap by default', async () => {
 
   expect(files).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/features/sourcemap/default/dist/esm/index.js",
+      "<ROOT>/tests/integration/sourcemap/default/dist/esm/index.js",
     ]
   `);
 });
@@ -22,8 +22,8 @@ test('should generate js external sourcemap: cheap-module-source-map', async () 
 
   expect(files).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/features/sourcemap/external/dist/esm/index.js",
-      "<ROOT>/tests/features/sourcemap/external/dist/esm/index.js.map",
+      "<ROOT>/tests/integration/sourcemap/external/dist/esm/index.js",
+      "<ROOT>/tests/integration/sourcemap/external/dist/esm/index.js.map",
     ]
   `);
 });
@@ -36,7 +36,7 @@ test('should generate js inline sourcemap: inline-cheap-module-source-map', asyn
 
   expect(files).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/features/sourcemap/inline/dist/esm/index.js",
+      "<ROOT>/tests/integration/sourcemap/inline/dist/esm/index.js",
     ]
   `);
 

@@ -9,10 +9,10 @@ describe('dts when bundle: false', () => {
 
     expect(files.esm).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/features/dts/bundle-false/basic/dist/esm/index.d.ts",
-        "<ROOT>/tests/features/dts/bundle-false/basic/dist/esm/sum.d.ts",
-        "<ROOT>/tests/features/dts/bundle-false/basic/dist/esm/utils/numbers.d.ts",
-        "<ROOT>/tests/features/dts/bundle-false/basic/dist/esm/utils/strings.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/utils/strings.d.ts",
       ]
     `);
     expect(contents.esm).toMatchSnapshot();
@@ -31,10 +31,10 @@ describe('dts when bundle: false', () => {
 
     expect(files.esm).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/features/dts/bundle-false/dist-path/dist/custom/index.d.ts",
-        "<ROOT>/tests/features/dts/bundle-false/dist-path/dist/custom/sum.d.ts",
-        "<ROOT>/tests/features/dts/bundle-false/dist-path/dist/custom/utils/numbers.d.ts",
-        "<ROOT>/tests/features/dts/bundle-false/dist-path/dist/custom/utils/strings.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/dist-path/dist/custom/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/dist-path/dist/custom/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/dist-path/dist/custom/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/dist-path/dist/custom/utils/strings.d.ts",
       ]
     `);
   });
@@ -52,10 +52,10 @@ describe('dts when bundle: false', () => {
 
     expect(files.cjs).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/features/dts/bundle-false/auto-extension/dist/cjs/index.d.cts",
-        "<ROOT>/tests/features/dts/bundle-false/auto-extension/dist/cjs/sum.d.cts",
-        "<ROOT>/tests/features/dts/bundle-false/auto-extension/dist/cjs/utils/numbers.d.cts",
-        "<ROOT>/tests/features/dts/bundle-false/auto-extension/dist/cjs/utils/strings.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/index.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/sum.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/utils/numbers.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/utils/strings.d.cts",
       ]
     `);
   });
@@ -70,7 +70,7 @@ describe('dts when bundle: true', () => {
     );
 
     expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/tests/features/dts/bundle/basic/dist/esm/index.d.ts"`,
+      `"<ROOT>/tests/integration/dts/bundle/basic/dist/esm/index.d.ts"`,
     );
     expect(entries).toMatchSnapshot();
   });
@@ -87,7 +87,7 @@ describe('dts when bundle: true', () => {
     const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/tests/features/dts/bundle/dist-path/dist/custom/index.d.ts"`,
+      `"<ROOT>/tests/integration/dts/bundle/dist-path/dist/custom/index.d.ts"`,
     );
   });
 
@@ -103,7 +103,7 @@ describe('dts when bundle: true', () => {
     const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(entryFiles.cjs).toMatchInlineSnapshot(
-      `"<ROOT>/tests/features/dts/bundle/auto-extension/dist/cjs/index.d.cts"`,
+      `"<ROOT>/tests/integration/dts/bundle/auto-extension/dist/cjs/index.d.cts"`,
     );
   });
 
@@ -112,7 +112,7 @@ describe('dts when bundle: true', () => {
     const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/tests/features/dts/bundle/bundle-name/dist/esm/bundleName.d.ts"`,
+      `"<ROOT>/tests/integration/dts/bundle/bundle-name/dist/esm/bundleName.d.ts"`,
     );
   });
 
@@ -121,7 +121,7 @@ describe('dts when bundle: true', () => {
     const { entryFiles } = await buildAndGetResults(fixturePath, 'dts');
 
     expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/tests/features/dts/bundle/absolute-entry/dist/esm/index.d.ts"`,
+      `"<ROOT>/tests/integration/dts/bundle/absolute-entry/dist/esm/index.d.ts"`,
     );
   });
 });

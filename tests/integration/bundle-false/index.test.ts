@@ -8,18 +8,18 @@ test('basic', async () => {
 
   expect(files.esm).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/features/bundle-false/basic/dist/esm/index.js",
-      "<ROOT>/tests/features/bundle-false/basic/dist/esm/sum.js",
-      "<ROOT>/tests/features/bundle-false/basic/dist/esm/utils/numbers.js",
-      "<ROOT>/tests/features/bundle-false/basic/dist/esm/utils/strings.js",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/esm/index.js",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/esm/sum.js",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/esm/utils/numbers.js",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/esm/utils/strings.js",
     ]
   `);
   expect(files.cjs).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/features/bundle-false/basic/dist/cjs/index.cjs",
-      "<ROOT>/tests/features/bundle-false/basic/dist/cjs/sum.cjs",
-      "<ROOT>/tests/features/bundle-false/basic/dist/cjs/utils/numbers.cjs",
-      "<ROOT>/tests/features/bundle-false/basic/dist/cjs/utils/strings.cjs",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/index.cjs",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/sum.cjs",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/utils/numbers.cjs",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/utils/strings.cjs",
     ]
   `);
 });
@@ -30,12 +30,12 @@ test('single file', async () => {
 
   expect(files.esm).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/features/bundle-false/single-file/dist/esm/index.js",
+      "<ROOT>/tests/integration/bundle-false/single-file/dist/esm/index.js",
     ]
   `);
   expect(files.cjs).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/features/bundle-false/single-file/dist/cjs/index.cjs",
+      "<ROOT>/tests/integration/bundle-false/single-file/dist/cjs/index.cjs",
     ]
   `);
 });

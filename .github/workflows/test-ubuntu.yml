@@ -100,7 +100,7 @@ jobs:
 
       - name: Features Integration Test (Vitest)
         if: steps.changes.outputs.changed == 'true'
-        run: pnpm run test:features
+        run: pnpm run test:integration
 
       - name: Examples E2E Test (Playwright)
         if: steps.changes.outputs.changed == 'true'

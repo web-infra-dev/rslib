@@ -248,11 +248,11 @@ importers:
 
   tests/e2e/react-component: {}
 
-  tests/features/alias: {}
+  tests/integration/alias: {}
 
-  tests/features/asset/limit: {}
+  tests/integration/asset/limit: {}
 
-  tests/features/asset/name:
+  tests/integration/asset/name:
     dependencies:
       react:
         specifier: ^18.3.1
@@ -262,11 +262,11 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(@rsbuild/core@1.0.7)
 
-  tests/features/asset/path: {}
+  tests/integration/asset/path: {}
 
-  tests/features/asset/public-path: {}
+  tests/integration/asset/public-path: {}
 
-  tests/features/asset/svgr:
+  tests/integration/asset/svgr:
     dependencies:
       react:
         specifier: ^18
@@ -279,19 +279,19 @@ importers:
         specifier: 1.0.2
         version: 1.0.2(@rsbuild/core@1.0.7)(typescript@5.6.2)
 
-  tests/features/auto-extension/type-commonjs/config-override: {}
+  tests/integration/auto-extension/type-commonjs/config-override: {}
 
-  tests/features/auto-extension/type-commonjs/default: {}
+  tests/integration/auto-extension/type-commonjs/default: {}
 
-  tests/features/auto-extension/type-commonjs/false: {}
+  tests/integration/auto-extension/type-commonjs/false: {}
 
-  tests/features/auto-extension/type-module/config-override: {}
+  tests/integration/auto-extension/type-module/config-override: {}
 
-  tests/features/auto-extension/type-module/default: {}
+  tests/integration/auto-extension/type-module/default: {}
 
-  tests/features/auto-extension/type-module/false: {}
+  tests/integration/auto-extension/type-module/false: {}
 
-  tests/features/auto-external/default:
+  tests/integration/auto-external/default:
     dependencies:
       ora:
         specifier: 8.1.0
@@ -300,13 +300,13 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1
 
-  tests/features/auto-external/external-sub-path:
+  tests/integration/auto-external/external-sub-path:
     dependencies:
       react:
         specifier: ^18.3.1
         version: 18.3.1
 
-  tests/features/auto-external/false:
+  tests/integration/auto-external/false:
     dependencies:
       ora:
         specifier: 8.1.0
@@ -315,29 +315,29 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1
 
-  tests/features/auto-external/module-import-warn:
+  tests/integration/auto-external/module-import-warn:
     dependencies:
       react:
         specifier: ^18.3.1
         version: 18.3.1
 
-  tests/features/auto-external/with-externals:
+  tests/integration/auto-external/with-externals:
     dependencies:
       react:
         specifier: ^18.3.1
         version: 18.3.1
 
-  tests/features/banner-footer: {}
+  tests/integration/banner-footer: {}
 
-  tests/features/bundle-false/asset: {}
+  tests/integration/bundle-false/asset: {}
 
-  tests/features/bundle-false/basic: {}
+  tests/integration/bundle-false/basic: {}
 
-  tests/features/bundle-false/js-extension: {}
+  tests/integration/bundle-false/js-extension: {}
 
-  tests/features/bundle-false/single-file: {}
+  tests/integration/bundle-false/single-file: {}
 
-  tests/features/bundle-false/svgr:
+  tests/integration/bundle-false/svgr:
     dependencies:
       react:
         specifier: ^18.3.1
@@ -350,109 +350,109 @@ importers:
         specifier: 1.0.2
         version: 1.0.2(@rsbuild/core@1.0.7)(typescript@5.6.2)
 
-  tests/features/cli: {}
+  tests/integration/cli: {}
 
-  tests/features/copy: {}
+  tests/integration/copy: {}
 
-  tests/features/decorators/default: {}
+  tests/integration/decorators/default: {}
 
-  tests/features/decorators/tsconfig: {}
+  tests/integration/decorators/tsconfig: {}
 
-  tests/features/define: {}
+  tests/integration/define: {}
 
-  tests/features/dts/bundle-false/abort-on-error: {}
+  tests/integration/dts/bundle-false/abort-on-error: {}
 
-  tests/features/dts/bundle-false/auto-extension: {}
+  tests/integration/dts/bundle-false/auto-extension: {}
 
-  tests/features/dts/bundle-false/basic: {}
+  tests/integration/dts/bundle-false/basic: {}
 
-  tests/features/dts/bundle-false/dist-path: {}
+  tests/integration/dts/bundle-false/dist-path: {}
 
-  tests/features/dts/bundle-false/false: {}
+  tests/integration/dts/bundle-false/false: {}
 
-  tests/features/dts/bundle/abort-on-error: {}
+  tests/integration/dts/bundle/abort-on-error: {}
 
-  tests/features/dts/bundle/absolute-entry: {}
+  tests/integration/dts/bundle/absolute-entry: {}
 
-  tests/features/dts/bundle/auto-extension: {}
+  tests/integration/dts/bundle/auto-extension: {}
 
-  tests/features/dts/bundle/basic: {}
+  tests/integration/dts/bundle/basic: {}
 
-  tests/features/dts/bundle/bundle-name: {}
+  tests/integration/dts/bundle/bundle-name: {}
 
-  tests/features/dts/bundle/dist-path: {}
+  tests/integration/dts/bundle/dist-path: {}
 
-  tests/features/dts/bundle/false: {}
+  tests/integration/dts/bundle/false: {}
 
-  tests/features/entry/glob: {}
+  tests/integration/entry/glob: {}
 
-  tests/features/entry/multiple: {}
+  tests/integration/entry/multiple: {}
 
-  tests/features/entry/single: {}
+  tests/integration/entry/single: {}
 
-  tests/features/extension-alias: {}
+  tests/integration/extension-alias: {}
 
-  tests/features/external-helpers/config-override:
+  tests/integration/external-helpers/config-override:
     dependencies:
       '@swc/helpers':
         specifier: 0.5.13
         version: 0.5.13
 
-  tests/features/external-helpers/default: {}
+  tests/integration/external-helpers/default: {}
 
-  tests/features/external-helpers/no-deps: {}
+  tests/integration/external-helpers/no-deps: {}
 
-  tests/features/external-helpers/true:
+  tests/integration/external-helpers/true:
     dependencies:
       '@swc/helpers':
         specifier: 0.5.13
         version: 0.5.13
 
-  tests/features/externals/browser: {}
+  tests/integration/externals/browser: {}
 
-  tests/features/externals/module-import-warn: {}
+  tests/integration/externals/module-import-warn: {}
 
-  tests/features/externals/node: {}
+  tests/integration/externals/node: {}
 
-  tests/features/minify/config: {}
+  tests/integration/minify/config: {}
 
-  tests/features/minify/default: {}
+  tests/integration/minify/default: {}
 
-  tests/features/resolve/data-url: {}
+  tests/integration/resolve/data-url: {}
 
-  tests/features/resolve/false: {}
+  tests/integration/resolve/false: {}
 
-  tests/features/resolve/false/browser-false: {}
+  tests/integration/resolve/false/browser-false: {}
 
-  tests/features/resolve/node-protocol: {}
+  tests/integration/resolve/node-protocol: {}
 
-  tests/features/resolve/with-condition-exports: {}
+  tests/integration/resolve/with-condition-exports: {}
 
-  tests/features/resolve/with-js-extensions: {}
+  tests/integration/resolve/with-js-extensions: {}
 
-  tests/features/resolve/with-main-fields: {}
+  tests/integration/resolve/with-main-fields: {}
 
-  tests/features/shims/cjs: {}
+  tests/integration/shims/cjs: {}
 
-  tests/features/shims/esm: {}
+  tests/integration/shims/esm: {}
 
-  tests/features/sourcemap/default: {}
+  tests/integration/sourcemap/default: {}
 
-  tests/features/sourcemap/external: {}
+  tests/integration/sourcemap/external: {}
 
-  tests/features/sourcemap/inline: {}
+  tests/integration/sourcemap/inline: {}
 
-  tests/features/syntax/config: {}
+  tests/integration/syntax/config: {}
 
-  tests/features/syntax/default: {}
+  tests/integration/syntax/default: {}
 
-  tests/features/transform-import/arco-design:
+  tests/integration/transform-import/arco-design:
     dependencies:
       '@arco-design/web-react':
         specifier: ^2.64.0
         version: 2.64.0(@types/react@18.3.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-  tests/features/transform-import/lodash:
+  tests/integration/transform-import/lodash:
     dependencies:
       lodash:
         specifier: ^4.17.21
@@ -462,7 +462,7 @@ importers:
         specifier: ^4.17.7
         version: 4.17.9
 
-  tests/features/tsconfig: {}
+  tests/integration/tsconfig: {}
 
   tests/scripts: {}
 
