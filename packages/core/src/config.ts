@@ -432,6 +432,14 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
 }
 
 const composeFormatConfig = (format: Format): RsbuildConfig => {
+  const jsParserOptions = {
+    importMeta: false,
+    requireResolve: false,
+    requireDynamic: false,
+    requireAsExpression: false,
+    importDynamic: false,
+  };
+
   switch (format) {
     case 'esm':
       return {
@@ -446,13 +454,12 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
             },
             module: {
               parser: {
-                javascript: {
-                  importMeta: false,
-                },
+                javascript: jsParserOptions,
               },
             },
             optimization: {
               concatenateModules: true,
+              sideEffects: 'flag',
             },
             experiments: {
               outputModule: true,
@@ -467,9 +474,7 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
           rspack: {
             module: {
               parser: {
-                javascript: {
-                  importMeta: false,
-                },
+                javascript: jsParserOptions,
               },
             },
             output: {

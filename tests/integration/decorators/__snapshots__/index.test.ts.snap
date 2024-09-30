@@ -1,43 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`decorators default to 2022-03 1`] = `
-"// The require scope
-var __webpack_require__ = {};
-/************************************************************************/ // webpack/runtime/define_property_getters
-(()=>{
-    __webpack_require__.d = function(exports, definition) {
-        for(var key in definition)if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) Object.defineProperty(exports, key, {
-            enumerable: true,
-            get: definition[key]
-        });
-    };
-})();
-// webpack/runtime/has_own_property
-(()=>{
-    __webpack_require__.o = function(obj, prop) {
-        return Object.prototype.hasOwnProperty.call(obj, prop);
-    };
-})();
-// webpack/runtime/make_namespace_object
-(()=>{
-    // define __esModule on exports
-    __webpack_require__.r = function(exports) {
-        if ('undefined' != typeof Symbol && Symbol.toStringTag) Object.defineProperty(exports, Symbol.toStringTag, {
-            value: 'Module'
-        });
-        Object.defineProperty(exports, '__esModule', {
-            value: true
-        });
-    };
-})();
-/************************************************************************/ var __webpack_exports__ = {};
-__webpack_require__.r(__webpack_exports__);
-__webpack_require__.d(__webpack_exports__, {
-    Person: function() {
-        return _Person;
-    }
-});
-function applyDecs2203RFactory() {
+"function applyDecs2203RFactory() {
     function createAddInitializerMethod(initializers, decoratorFinishedRef) {
         return function(initializer) {
             assertNotFinished(decoratorFinishedRef, \\"addInitializer\\");
@@ -336,13 +300,13 @@ function _apply_decs_2203_r(targetClass, memberDecs, classDecs, parentClass) {
     return (_apply_decs_2203_r = applyDecs2203RFactory())(targetClass, memberDecs, classDecs, parentClass);
 }
 var _dec, _initClass;
-function enhancer(name) {
+function src_enhancer(name) {
     return function(target) {
         target.prototype.name = name;
     };
 }
 let _Person;
-_dec = enhancer('rslib');
+_dec = src_enhancer('rslib');
 class Person {
     static{
         ({ c: [_Person, _initClass] } = _apply_decs_2203_r(this, [], [
@@ -357,56 +321,21 @@ class Person {
         _initClass();
     }
 }
+export { _Person as Person };
 "
 `;
 
 exports[`decorators with experimentalDecorators in tsconfig 1`] = `
-"// The require scope
-var __webpack_require__ = {};
-/************************************************************************/ // webpack/runtime/define_property_getters
-(()=>{
-    __webpack_require__.d = function(exports, definition) {
-        for(var key in definition)if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) Object.defineProperty(exports, key, {
-            enumerable: true,
-            get: definition[key]
-        });
-    };
-})();
-// webpack/runtime/has_own_property
-(()=>{
-    __webpack_require__.o = function(obj, prop) {
-        return Object.prototype.hasOwnProperty.call(obj, prop);
-    };
-})();
-// webpack/runtime/make_namespace_object
-(()=>{
-    // define __esModule on exports
-    __webpack_require__.r = function(exports) {
-        if ('undefined' != typeof Symbol && Symbol.toStringTag) Object.defineProperty(exports, Symbol.toStringTag, {
-            value: 'Module'
-        });
-        Object.defineProperty(exports, '__esModule', {
-            value: true
-        });
-    };
-})();
-/************************************************************************/ var __webpack_exports__ = {};
-__webpack_require__.r(__webpack_exports__);
-__webpack_require__.d(__webpack_exports__, {
-    Person: function() {
-        return Person;
-    }
-});
-function _ts_decorate(decorators, target, key, desc) {
+"function _ts_decorate(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : null === desc ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (\\"object\\" == typeof Reflect && \\"function\\" == typeof Reflect.decorate) r = Reflect.decorate(decorators, target, key, desc);
+    if ("object" == typeof Reflect && "function" == typeof Reflect.decorate) r = Reflect.decorate(decorators, target, key, desc);
     else for(var i = decorators.length - 1; i >= 0; i--)if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
 function _ts_metadata(k, v) {
-    if (\\"object\\" == typeof Reflect && \\"function\\" == typeof Reflect.metadata) return Reflect.metadata(k, v);
+    if ("object" == typeof Reflect && "function" == typeof Reflect.metadata) return Reflect.metadata(k, v);
 }
-function enhancer(name) {
+function src_enhancer(name) {
     return function(target) {
         target.prototype.name = name;
     };
@@ -417,51 +346,16 @@ class Person {
     }
 }
 Person = _ts_decorate([
-    enhancer('rslib'),
-    _ts_metadata(\\"design:type\\", Function),
-    _ts_metadata(\\"design:paramtypes\\", [])
+    src_enhancer('rslib'),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [])
 ], Person);
+export { Person };
 "
 `;
 
 exports[`decorators with experimentalDecorators in tsconfig 2`] = `
-"// The require scope
-var __webpack_require__ = {};
-/************************************************************************/ // webpack/runtime/define_property_getters
-(()=>{
-    __webpack_require__.d = function(exports, definition) {
-        for(var key in definition)if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) Object.defineProperty(exports, key, {
-            enumerable: true,
-            get: definition[key]
-        });
-    };
-})();
-// webpack/runtime/has_own_property
-(()=>{
-    __webpack_require__.o = function(obj, prop) {
-        return Object.prototype.hasOwnProperty.call(obj, prop);
-    };
-})();
-// webpack/runtime/make_namespace_object
-(()=>{
-    // define __esModule on exports
-    __webpack_require__.r = function(exports) {
-        if ('undefined' != typeof Symbol && Symbol.toStringTag) Object.defineProperty(exports, Symbol.toStringTag, {
-            value: 'Module'
-        });
-        Object.defineProperty(exports, '__esModule', {
-            value: true
-        });
-    };
-})();
-/************************************************************************/ var __webpack_exports__ = {};
-__webpack_require__.r(__webpack_exports__);
-__webpack_require__.d(__webpack_exports__, {
-    Person: function() {
-        return _Person;
-    }
-});
-function applyDecs2203RFactory() {
+"function applyDecs2203RFactory() {
     function createAddInitializerMethod(initializers, decoratorFinishedRef) {
         return function(initializer) {
             assertNotFinished(decoratorFinishedRef, \\"addInitializer\\");
@@ -760,13 +654,13 @@ function _apply_decs_2203_r(targetClass, memberDecs, classDecs, parentClass) {
     return (_apply_decs_2203_r = applyDecs2203RFactory())(targetClass, memberDecs, classDecs, parentClass);
 }
 var _dec, _initClass;
-function enhancer(name) {
+function src_enhancer(name) {
     return function(target) {
         target.prototype.name = name;
     };
 }
 let _Person;
-_dec = enhancer('rslib');
+_dec = src_enhancer('rslib');
 class Person {
     static{
         ({ c: [_Person, _initClass] } = _apply_decs_2203_r(this, [], [
@@ -781,5 +675,6 @@ class Person {
         _initClass();
     }
 }
+export { _Person as Person };
 "
 `;
