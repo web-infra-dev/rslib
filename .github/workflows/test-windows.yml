@@ -103,7 +103,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-  
       - name: Install Dependencies
         if: steps.changes.outputs.changed == 'true'
         run: pnpm install && cd ./tests && npx playwright install
