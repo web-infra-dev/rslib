@@ -74,7 +74,6 @@ export default defineConfig({
       },
     ],
   },
-  builderPlugins: [pluginGoogleAnalytics({ id: 'G-Q66CEHQ6JR' })],
   builderConfig: {
     dev: {
       lazyCompilation: true,
@@ -86,5 +85,6 @@ export default defineConfig({
         '@zh': path.join(__dirname, 'docs/zh'),
       },
     },
+    plugins: [pluginGoogleAnalytics({ id: 'G-Q66CEHQ6JR' })],
   },
 });
