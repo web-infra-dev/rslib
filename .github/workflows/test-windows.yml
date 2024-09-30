@@ -103,15 +103,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-
       - name: Install Dependencies
         if: steps.changes.outputs.changed == 'true'
         run: pnpm install && cd ./tests && npx playwright install
 
-      - name: Features Integration Test (Vitest)
+      - name: Integration Test (Vitest)
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:integration
 
-      - name: Examples E2E Test (Playwright)
+      - name: E2E Test (Playwright)
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:e2e

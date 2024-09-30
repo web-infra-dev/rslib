@@ -98,10 +98,18 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: pnpm install && cd ./tests && npx playwright install
 
-      - name: Features Integration Test (Vitest)
+      - name: Integration Test (Vitest)
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:integration
 
-      - name: Examples E2E Test (Playwright)
+      - name: E2E Test (Playwright)
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:e2e
+
+      # only run benchmark in Ubuntu 
+      - name: Benchmarks (Vitest)
+        uses: CodSpeedHQ/action@v3
+        with:
+          run: pnpm run test:benchmark
+          # token retrieved from the CodSpeed app at the previous step
+          token: ${{ secrets.CODSPEED_TOKEN }}

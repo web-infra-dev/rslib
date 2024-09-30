@@ -1,5 +1,6 @@
 import fs from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   type InspectConfigResult,
   mergeRsbuildConfig as mergeConfig,
@@ -7,6 +8,13 @@ import {
 import type { Format, LibConfig, RslibConfig } from '@rslib/core';
 import { build, loadConfig } from '@rslib/core';
 import { globContentJSON } from './helper';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export function getCwdByExample(exampleName: string) {
+  return join(__dirname, '../../examples', exampleName);
+}
 
 export function generateBundleEsmConfig(config: LibConfig = {}): LibConfig {
   const esmBasicConfig: LibConfig = {
@@ -136,6 +144,15 @@ export async function getResults(
   };
 }
 
+export async function rslibBuild(fixturePath: string) {
+  const rslibConfig = await loadConfig({
+    cwd: fixturePath,
+  });
+  process.chdir(fixturePath);
+  const rsbuildInstance = await build(rslibConfig);
+  return { rsbuildInstance, rslibConfig };
+}
+
 export async function buildAndGetResults(
   fixturePath: string,
   type: 'all',
@@ -152,11 +169,7 @@ export async function buildAndGetResults(
   fixturePath: string,
   type: 'js' | 'dts' | 'css' | 'all' = 'js',
 ) {
-  const rslibConfig = await loadConfig({
-    cwd: fixturePath,
-  });
-  process.chdir(fixturePath);
-  const rsbuildInstance = await build(rslibConfig);
+  const { rsbuildInstance, rslibConfig } = await rslibBuild(fixturePath);
   const {
     origin: { bundlerConfigs, rsbuildConfig },
   } = await rsbuildInstance.inspectConfig({ verbose: true });
