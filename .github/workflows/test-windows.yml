@@ -115,10 +115,3 @@ jobs:
       - name: E2E Test (Playwright)
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:e2e
-
-      - name: Benchmarks (Vitest)
-        uses: CodSpeedHQ/action@v3
-        with:
-          run: pnpm run test:benchmark
-          # token retrieved from the CodSpeed app at the previous step
-          token: ${{ secrets.CODSPEED_TOKEN }}

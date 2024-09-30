@@ -106,6 +106,7 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:e2e
 
+      # only run benchmark in Ubuntu 
       - name: Benchmarks (Vitest)
         uses: CodSpeedHQ/action@v3
         with:
