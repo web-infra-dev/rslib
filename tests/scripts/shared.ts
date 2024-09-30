@@ -1,5 +1,6 @@
 import fs from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   type InspectConfigResult,
   mergeRsbuildConfig as mergeConfig,
@@ -7,6 +8,13 @@ import {
 import type { Format, LibConfig, RslibConfig } from '@rslib/core';
 import { build, loadConfig } from '@rslib/core';
 import { globContentJSON } from './helper';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export function getCwdByExample(exampleName: string) {
+  return join(__dirname, '../../examples', exampleName);
+}
 
 export function generateBundleEsmConfig(config: LibConfig = {}): LibConfig {
   const esmBasicConfig: LibConfig = {

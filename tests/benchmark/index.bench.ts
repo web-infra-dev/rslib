@@ -1,5 +1,5 @@
+import { getCwdByExample, rslibBuild } from 'test-helper';
 import { bench, describe } from 'vitest';
-import { getCwdByExample, rslibBuild } from './utils';
 
 describe('run rslib in examples', () => {
   bench(
