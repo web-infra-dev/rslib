@@ -495,6 +495,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      rsbuild-plugin-google-analytics:
+        specifier: 1.0.3
+        version: 1.0.3(@rsbuild/core@1.0.8)
       rspress:
         specifier: 1.31.1
         version: 1.31.1(webpack@5.94.0)
@@ -3689,6 +3692,14 @@ packages:
       '@microsoft/api-extractor':
         optional: true
       typescript:
+        optional: true
+
+  rsbuild-plugin-google-analytics@1.0.3:
+    resolution: {integrity: sha512-9AaubhqxiJ46yuBDkXtIjUnhMLUjGtMtRUeU9vkTrC4CfbJkHsHASwRJIRIxV7XMbr5Mwn/Ithh6lNh79RqehQ==}
+    peerDependencies:
+      '@rsbuild/core': 0.x || 1.x || ^1.0.1-beta.0
+    peerDependenciesMeta:
+      '@rsbuild/core':
         optional: true
 
   rslog@1.2.3:
@@ -8271,6 +8282,10 @@ snapshots:
     optionalDependencies:
       '@microsoft/api-extractor': 7.47.9(@types/node@18.19.39)
       typescript: 5.6.2
+
+  rsbuild-plugin-google-analytics@1.0.3(@rsbuild/core@1.0.8):
+    optionalDependencies:
+      '@rsbuild/core': 1.0.8
 
   rslog@1.2.3: {}
 
