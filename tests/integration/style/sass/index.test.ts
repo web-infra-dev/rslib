@@ -2,7 +2,7 @@ import { join } from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 import { expect, test } from 'vitest';
 
-test('should extract css with pluginSass when set bundle: true', async () => {
+test('should extract css with pluginSass in bundle', async () => {
   const fixturePath = join(__dirname, 'bundle');
   const { contents } = await buildAndGetResults(fixturePath, 'css');
   const esmFiles = Object.keys(contents.esm);
@@ -20,7 +20,7 @@ test('should extract css with pluginSass when set bundle: true', async () => {
   `);
 });
 
-test('should extract css with pluginSass when set bundle: false', async () => {
+test('should extract css with pluginSass in bundle-false', async () => {
   const fixturePath = join(__dirname, 'bundle-false');
   const { contents } = await buildAndGetResults(fixturePath, 'css');
   const esmFiles = Object.keys(contents.esm);

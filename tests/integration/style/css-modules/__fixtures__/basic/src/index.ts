@@ -1,5 +1,4 @@
 import button from './button/index';
-// @ts-ignore
-import stylesAuto from './reset.scss';
+import './reset.scss';
 
-export { stylesAuto, button };
+export { button };
