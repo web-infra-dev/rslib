@@ -116,19 +116,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             },
             "output": {
               "chunkFormat": "module",
+              "chunkLoading": "import",
               "library": {
                 "type": "modern-module",
               },
               "module": true,
+              "wasmLoading": "fetch",
+              "workerChunkLoading": "import",
             },
           },
           [Function],
           {
-            "output": {
-              "chunkLoading": "import",
-              "wasmLoading": "fetch",
-              "workerChunkLoading": "import",
-            },
             "target": [
               "web",
             ],
@@ -267,19 +265,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             },
             "output": {
               "chunkFormat": "commonjs",
+              "chunkLoading": "require",
               "iife": false,
               "library": {
                 "type": "commonjs",
               },
+              "wasmLoading": "async-node",
+              "workerChunkLoading": "async-node",
             },
           },
           [Function],
           {
-            "output": {
-              "chunkLoading": "import",
-              "wasmLoading": "fetch",
-              "workerChunkLoading": "import",
-            },
             "target": [
               "web",
             ],
@@ -410,11 +406,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           },
           [Function],
           {
-            "output": {
-              "chunkLoading": "import",
-              "wasmLoading": "fetch",
-              "workerChunkLoading": "import",
-            },
             "target": [
               "web",
             ],

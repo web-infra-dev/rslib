@@ -445,13 +445,6 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
       return {
         tools: {
           rspack: {
-            output: {
-              module: true,
-              chunkFormat: 'module',
-              library: {
-                type: 'modern-module',
-              },
-            },
             module: {
               parser: {
                 javascript: jsParserOptions,
@@ -460,6 +453,16 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
             optimization: {
               concatenateModules: true,
               sideEffects: 'flag',
+            },
+            output: {
+              module: true,
+              chunkFormat: 'module',
+              library: {
+                type: 'modern-module',
+              },
+              chunkLoading: 'import',
+              workerChunkLoading: 'import',
+              wasmLoading: 'fetch',
             },
             experiments: {
               outputModule: true,
@@ -483,6 +486,9 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
               library: {
                 type: 'commonjs',
               },
+              chunkLoading: 'require',
+              workerChunkLoading: 'async-node',
+              wasmLoading: 'async-node',
             },
           },
         },
@@ -758,11 +764,6 @@ const composeTargetConfig = (
         tools: {
           rspack: {
             target: ['web'],
-            output: {
-              chunkLoading: 'import',
-              workerChunkLoading: 'import',
-              wasmLoading: 'fetch',
-            },
           },
         },
       };
@@ -772,13 +773,8 @@ const composeTargetConfig = (
           rspack: {
             target: ['node'],
             // "__dirname" and "__filename" shims will automatically be enabled when `output.module` is `true`,
-            // and leave them as-is in the rest of the cases.
+            // and leave them as-is in the rest of the cases. Leave the comments here to explain the behavior.
             // { node: { __dirname: ..., __filename: ... } }
-            output: {
-              chunkLoading: 'require',
-              workerChunkLoading: 'async-node',
-              wasmLoading: 'async-node',
-            },
           },
         },
         output: {
