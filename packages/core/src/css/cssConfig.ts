@@ -1,10 +1,7 @@
-import { createRequire } from 'node:module';
 import path from 'node:path';
 import type { RsbuildConfig, RsbuildPlugin } from '@rsbuild/core';
 import { CSS_EXTENSIONS_PATTERN } from '../constant';
 import { RemoveCssExtractAssetPlugin } from './RemoveCssExtractAssetPlugin';
-
-const require = createRequire(import.meta.url);
 
 export const RSLIB_TEMP_CSS_DIR = '__rslib_css__';
 
