@@ -1,6 +1,9 @@
 /**
  * The following code is modified based on
  * https://github.com/web-infra-dev/rspack/blob/0a89e433a9f8596a7c6c4326542f168b5982d2da/packages/rspack/src/builtin-plugin/css-extract/loader.ts
+ * 1. remove hmr/webpack runtime
+ * 2. add `this.emitFile` to emit css files
+ * 3. add `import './[name].css';`
  */
 import path, { extname } from 'node:path';
 import type { LoaderDefinition } from '@rspack/core';

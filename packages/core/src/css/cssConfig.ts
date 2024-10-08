@@ -1,19 +1,22 @@
+import { createRequire } from 'node:module';
 import path from 'node:path';
-import type { RsbuildConfig, RsbuildPlugin } from '@rsbuild/core';
+import type {
+  CSSLoaderOptions,
+  RsbuildConfig,
+  RsbuildPlugin,
+} from '@rsbuild/core';
 import { CSS_EXTENSIONS_PATTERN } from '../constant';
 import { RemoveCssExtractAssetPlugin } from './RemoveCssExtractAssetPlugin';
+const require = createRequire(import.meta.url);
 
 export const RSLIB_TEMP_CSS_DIR = '__rslib_css__';
 
-// https://rsbuild.dev/zh/config/output/css-modules#cssmodulesauto
-export type CssLoaderOptionsAuto =
-  | boolean
-  | RegExp
-  | ((
-      resourcePath: string,
-      resourceQuery: string,
-      resourceFragment: string,
-    ) => boolean);
+// https://rsbuild.dev/config/output/css-modules#cssmodulesauto
+export type CssLoaderOptionsAuto = CSSLoaderOptions['modules'] extends infer T
+  ? T extends { auto?: any }
+    ? T['auto']
+    : never
+  : never;
 
 export function isCssFile(filepath: string): boolean {
   return CSS_EXTENSIONS_PATTERN.test(filepath);
