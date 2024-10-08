@@ -50,7 +50,7 @@ export type BannerAndFooter = {
 };
 
 export type Redirect = {
-  // TODO: others
+  // TODO: support other redirects
   // alias?: boolean;
   style?: boolean;
   // asset?: boolean;

@@ -737,12 +737,6 @@ const composeBundleConfig = (
             // user should use copy to keep origin file or use another separate entry to deal this
             let request: string = data.request;
 
-            // WARN: escape hatch, we preserve the import start with "!"
-            // import '!./foo' -> import './foo'
-            if (request[0] === '!') {
-              return callback(null, request.slice(1));
-            }
-
             const cssExternal = cssExternalHandler(
               request,
               callback,
@@ -762,7 +756,7 @@ const composeBundleConfig = (
                 if (JS_EXTENSIONS_PATTERN.test(request)) {
                   request = request.replace(/\.[^.]+$/, jsExtension);
                 } else {
-                  // If it does not match jsExtensionsPattern or cssExtensionsPattern, we should do nothing, eg: ./foo.png
+                  // If it does not match jsExtensionsPattern, we should do nothing, eg: ./foo.png
                   return callback();
                 }
               } else {

@@ -5,7 +5,6 @@ import { CSS_EXTENSIONS_PATTERN } from '../constant';
 import { RemoveCssExtractAssetPlugin } from './RemoveCssExtractAssetPlugin';
 
 const require = createRequire(import.meta.url);
-const CSS_MODULE_REG = /\.module\.\w+$/i;
 
 export const RSLIB_TEMP_CSS_DIR = '__rslib_css__';
 
@@ -23,6 +22,7 @@ export function isCssFile(filepath: string): boolean {
   return CSS_EXTENSIONS_PATTERN.test(filepath);
 }
 
+const CSS_MODULE_REG = /\.module\.\w+$/i;
 export function isCssModulesFile(
   filepath: string,
   auto: CssLoaderOptionsAuto,
