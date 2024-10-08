@@ -72,16 +72,37 @@ importers:
         specifier: ^5.6.2
         version: 5.6.2
 
-  examples/react-component:
+  examples/react-component-bundle:
     devDependencies:
       '@rsbuild/plugin-react':
         specifier: 1.0.3
         version: 1.0.3(@rsbuild/core@1.0.10)
+      '@rsbuild/plugin-sass':
+        specifier: ^1.0.1
+        version: 1.0.2(@rsbuild/core@1.0.10)
       '@rslib/core':
         specifier: workspace:*
         version: link:../../packages/core
       '@types/react':
         specifier: ^18.3.11
+        version: 18.3.11
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+
+  examples/react-component-bundle-false:
+    devDependencies:
+      '@rsbuild/plugin-react':
+        specifier: ^1.0.2
+        version: 1.0.3(@rsbuild/core@1.0.10)
+      '@rsbuild/plugin-sass':
+        specifier: ^1.0.1
+        version: 1.0.2(@rsbuild/core@1.0.10)
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@types/react':
+        specifier: ^18.3.5
         version: 18.3.11
       react:
         specifier: ^18.3.1
@@ -102,6 +123,9 @@ importers:
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
+      '@rspack/core':
+        specifier: npm:@rspack/core-canary@1.0.9-canary-0cad17d5-20240929151646
+        version: '@rspack/core-canary@1.0.9-canary-0cad17d5-20240929151646(@swc/helpers@0.5.13)'
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4
@@ -193,9 +217,6 @@ importers:
 
   tests:
     dependencies:
-      '@examples/react-component':
-        specifier: workspace:*
-        version: link:../examples/react-component
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -212,8 +233,14 @@ importers:
       '@rsbuild/core':
         specifier: 1.0.7
         version: 1.0.7
+      '@rsbuild/plugin-less':
+        specifier: ^1.0.1
+        version: 1.0.1(@rsbuild/core@1.0.7)
       '@rsbuild/plugin-react':
-        specifier: 1.0.2
+        specifier: ^1.0.2
+        version: 1.0.3(@rsbuild/core@1.0.7)
+      '@rsbuild/plugin-sass':
+        specifier: ^1.0.1
         version: 1.0.2(@rsbuild/core@1.0.7)
       '@rslib/core':
         specifier: workspace:*
@@ -249,7 +276,14 @@ importers:
         specifier: workspace:*
         version: link:scripts
 
-  tests/e2e/react-component: {}
+  tests/e2e/react-component:
+    dependencies:
+      '@examples/react-component-bundle':
+        specifier: workspace:*
+        version: link:../../../examples/react-component-bundle
+      '@examples/react-component-bundle-false':
+        specifier: workspace:*
+        version: link:../../../examples/react-component-bundle-false
 
   tests/integration/alias: {}
 
@@ -349,10 +383,10 @@ importers:
         version: 18.3.1
     devDependencies:
       '@rsbuild/plugin-react':
-        specifier: 1.0.2
-        version: 1.0.2(@rsbuild/core@1.0.10)
+        specifier: ^1.0.2
+        version: 1.0.3(@rsbuild/core@1.0.10)
       '@rsbuild/plugin-svgr':
-        specifier: 1.0.2
+        specifier: ^1.0.2
         version: 1.0.2(@rsbuild/core@1.0.10)(typescript@5.6.2)
 
   tests/integration/cli: {}
@@ -454,6 +488,26 @@ importers:
   tests/integration/sourcemap/external: {}
 
   tests/integration/sourcemap/inline: {}
+
+  tests/integration/style/css-modules/bundle: {}
+
+  tests/integration/style/css-modules/bundle-false: {}
+
+  tests/integration/style/css-modules/bundle-false-auto: {}
+
+  tests/integration/style/css/bundle: {}
+
+  tests/integration/style/css/bundle-false: {}
+
+  tests/integration/style/less/bundle: {}
+
+  tests/integration/style/less/bundle-false: {}
+
+  tests/integration/style/less/bundle-import: {}
+
+  tests/integration/style/sass/bundle: {}
+
+  tests/integration/style/sass/bundle-false: {}
 
   tests/integration/syntax/config: {}
 
@@ -5192,15 +5246,15 @@ snapshots:
       deepmerge: 4.3.1
       reduce-configs: 1.0.0
 
+  '@rsbuild/plugin-less@1.0.1(@rsbuild/core@1.0.7)':
+    dependencies:
+      '@rsbuild/core': 1.0.7
+      deepmerge: 4.3.1
+      reduce-configs: 1.0.0
+
   '@rsbuild/plugin-react@1.0.2(@rsbuild/core@1.0.10)':
     dependencies:
       '@rsbuild/core': 1.0.10
-      '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.14.2)
-      react-refresh: 0.14.2
-
-  '@rsbuild/plugin-react@1.0.2(@rsbuild/core@1.0.7)':
-    dependencies:
-      '@rsbuild/core': 1.0.7
       '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.14.2)
       react-refresh: 0.14.2
 
@@ -5210,9 +5264,24 @@ snapshots:
       '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.14.2)
       react-refresh: 0.14.2
 
+  '@rsbuild/plugin-react@1.0.3(@rsbuild/core@1.0.7)':
+    dependencies:
+      '@rsbuild/core': 1.0.7
+      '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.14.2)
+      react-refresh: 0.14.2
+
   '@rsbuild/plugin-sass@1.0.2(@rsbuild/core@1.0.10)':
     dependencies:
       '@rsbuild/core': 1.0.10
+      deepmerge: 4.3.1
+      loader-utils: 2.0.4
+      postcss: 8.4.47
+      reduce-configs: 1.0.0
+      sass-embedded: 1.79.4
+
+  '@rsbuild/plugin-sass@1.0.2(@rsbuild/core@1.0.7)':
+    dependencies:
+      '@rsbuild/core': 1.0.7
       deepmerge: 4.3.1
       loader-utils: 2.0.4
       postcss: 8.4.47
