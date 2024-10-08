@@ -74,7 +74,7 @@ export function cssExternalHandler(
 
   // 1. css modules: import './CounterButton.module.scss' -> import './CounterButton.module.mjs'
   // 2. css global: import './CounterButton.scss' -> import './CounterButton.css'
-  if (request[0] === '.' && CSS_EXTENSIONS_PATTERN.test(request)) {
+  if (request[0] === '.' && isCssFile(request)) {
     // preserve import './CounterButton.module.scss'
     if (!isStyleRedirect) {
       return callback(null, request);

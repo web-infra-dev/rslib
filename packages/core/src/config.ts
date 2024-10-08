@@ -1022,6 +1022,7 @@ export async function composeCreateRsbuildConfig(
           'format',
           'autoExtension',
           'autoExternal',
+          'redirect',
           'syntax',
           'externalHelpers',
           'banner',
