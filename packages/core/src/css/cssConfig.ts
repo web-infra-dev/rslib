@@ -2,7 +2,7 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import type { RsbuildConfig, RsbuildPlugin } from '@rsbuild/core';
 import { CSS_EXTENSIONS_PATTERN } from '../constant';
-import { RemoveCssExtractAssetPlugin } from './removeCssExtractAssetPlugin';
+import { RemoveCssExtractAssetPlugin } from './RemoveCssExtractAssetPlugin';
 
 const require = createRequire(import.meta.url);
 const CSS_MODULE_REG = /\.module\.\w+$/i;
@@ -114,7 +114,7 @@ const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
         if (rule.uses.has(CHAIN_ID.USE.MINI_CSS_EXTRACT)) {
           rule
             .use(CHAIN_ID.USE.MINI_CSS_EXTRACT)
-            .loader(require.resolve('./libCssExtractLoader.js'))
+            .loader(require.resolve('./LibCssExtractLoader.js'))
             .options({
               rootDir,
             });
