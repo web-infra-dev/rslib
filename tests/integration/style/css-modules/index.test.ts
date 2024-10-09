@@ -1,15 +1,7 @@
 import { join } from 'node:path';
-import { buildAndGetResults, getFileBySuffix } from 'test-helper';
+import { buildAndGetResults } from 'test-helper';
+import { expectFileContainContent } from 'test-helper/vitest';
 import { expect, test } from 'vitest';
-
-function expectFileContainContent(
-  files: Record<string, string>,
-  suffix: string,
-  content: string,
-) {
-  const fileContent = getFileBySuffix(files, suffix);
-  expect(fileContent).toContain(content);
-}
 
 test('should extract css-modules successfully in bundle', async () => {
   const fixturePath = join(__dirname, 'bundle');

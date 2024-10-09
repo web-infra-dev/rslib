@@ -11,4 +11,12 @@ export default defineConfig({
       index: ['../__fixtures__/basic/src/**/*.css'],
     },
   },
+  tools: {
+    lightningcssLoader: false,
+    postcss: {
+      postcssOptions: {
+        plugins: [require('postcss-alias')],
+      },
+    },
+  },
 });
