@@ -19,7 +19,7 @@ import {
 } from './constant';
 import {
   type CssLoaderOptionsAuto,
-  RSLIB_TEMP_CSS_DIR,
+  RSLIB_CSS_ENTRY_FLAG,
   composeCssConfig,
   cssExternalHandler,
   isCssGlobalFile,
@@ -686,16 +686,28 @@ const composeEntryConfig = async (
     // Using the longest common path of all non-declaration input files by default.
     const outBase = lcp === null ? root : lcp;
 
-    for (const file of resolvedEntryFiles) {
+    function getEntryName(file: string) {
       const { dir, name } = path.parse(path.relative(outBase, file));
       // Entry filename contains nested path to preserve source directory structure.
       const entryFileName = path.join(dir, name);
 
+      // 1. we mark the global css files (which will generate empty js chunk in cssExtract), and deleteAsset in RemoveCssExtractAssetPlugin
+      // 2. avoid the same name e.g: `index.ts` and `index.css`
       if (isCssGlobalFile(file, cssModulesAuto)) {
-        resolvedEntries[`${RSLIB_TEMP_CSS_DIR}/${entryFileName}`] = file;
-      } else {
-        resolvedEntries[entryFileName] = file;
+        return `${RSLIB_CSS_ENTRY_FLAG}/${entryFileName}`;
       }
+
+      return entryFileName;
+    }
+
+    for (const file of resolvedEntryFiles) {
+      const entryName = getEntryName(file);
+      if (resolvedEntries[entryName]) {
+        logger.warn(
+          `duplicate entry: ${entryName}, this may lead to the incorrect output, please rename the file`,
+        );
+      }
+      resolvedEntries[entryName] = file;
     }
   }
 

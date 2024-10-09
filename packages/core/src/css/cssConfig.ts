@@ -9,7 +9,7 @@ import { CSS_EXTENSIONS_PATTERN } from '../constant';
 import { RemoveCssExtractAssetPlugin } from './RemoveCssExtractAssetPlugin';
 const require = createRequire(import.meta.url);
 
-export const RSLIB_TEMP_CSS_DIR = '__rslib_css__';
+export const RSLIB_CSS_ENTRY_FLAG = '__rslib_css__';
 
 // https://rsbuild.dev/config/output/css-modules#cssmodulesauto
 export type CssLoaderOptionsAuto = CSSLoaderOptions['modules'] extends infer T
@@ -122,7 +122,7 @@ const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
         .plugin(RemoveCssExtractAssetPlugin.name)
         .use(RemoveCssExtractAssetPlugin, [
           {
-            include: new RegExp(`^${RSLIB_TEMP_CSS_DIR}`),
+            include: new RegExp(`^${RSLIB_CSS_ENTRY_FLAG}`),
           },
         ]);
 
