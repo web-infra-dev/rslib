@@ -136,7 +136,7 @@ const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
         if (rule.uses.has(CHAIN_ID.USE.MINI_CSS_EXTRACT)) {
           rule
             .use(CHAIN_ID.USE.MINI_CSS_EXTRACT)
-            .loader(require.resolve('./LibCssExtractLoader.js'))
+            .loader(require.resolve('./libCssExtractLoader.js'))
             .options({
               rootDir,
             });
