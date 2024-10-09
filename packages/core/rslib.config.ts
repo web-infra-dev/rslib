@@ -9,10 +9,6 @@ export default defineConfig({
         bundle: false,
         distPath: './dist-types',
       },
-      banner: {
-        js: `import { createRequire } from 'module';
-        var require = createRequire(import.meta.url);\n`,
-      },
     },
   ],
   source: {
