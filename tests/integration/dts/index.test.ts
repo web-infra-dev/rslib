@@ -15,6 +15,16 @@ describe('dts when bundle: false', () => {
         "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/utils/strings.d.ts",
       ]
     `);
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle-false/basic/dist/cjs/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/basic/dist/cjs/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/basic/dist/cjs/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/basic/dist/cjs/utils/strings.d.ts",
+      ]
+    `);
+
     expect(contents.esm).toMatchSnapshot();
   });
 
@@ -72,6 +82,11 @@ describe('dts when bundle: true', () => {
     expect(entryFiles.esm).toMatchInlineSnapshot(
       `"<ROOT>/tests/integration/dts/bundle/basic/dist/esm/index.d.ts"`,
     );
+
+    expect(entryFiles.cjs).toMatchInlineSnapshot(
+      `"<ROOT>/tests/integration/dts/bundle/basic/dist/cjs/index.d.ts"`,
+    );
+
     expect(entries).toMatchSnapshot();
   });
 

@@ -746,7 +746,7 @@ const composeDtsConfig = async (
         bundle: dts?.bundle ?? bundle,
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
         abortOnError: dts?.abortOnError ?? true,
-        dtsExtension,
+        dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
         autoExternal,
         banner: banner?.dts,
         footer: footer?.dts,
