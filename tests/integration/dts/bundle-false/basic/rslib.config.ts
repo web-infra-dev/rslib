@@ -11,6 +11,9 @@ export default defineConfig({
     }),
     generateBundleCjsConfig({
       bundle: false,
+      dts: {
+        bundle: false,
+      },
     }),
   ],
   source: {

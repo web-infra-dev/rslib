@@ -9,6 +9,7 @@ export default defineConfig({
     generateBundleCjsConfig({
       bundle: false,
       dts: {
+        autoExtension: true,
         bundle: false,
       },
     }),

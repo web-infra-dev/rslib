@@ -8,7 +8,11 @@ export default defineConfig({
         bundle: true,
       },
     }),
-    generateBundleCjsConfig(),
+    generateBundleCjsConfig({
+      dts: {
+        bundle: true,
+      },
+    }),
   ],
   source: {
     entry: {
