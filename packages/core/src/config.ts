@@ -437,7 +437,10 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
   });
 }
 
-const composeFormatConfig = (format: Format): RsbuildConfig => {
+const composeFormatConfig = (
+  format: Format,
+  pkgJson: PkgJson,
+): RsbuildConfig => {
   const jsParserOptions = {
     importMeta: false,
     requireResolve: false,
@@ -518,6 +521,16 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
           },
         },
       };
+    case 'mf':
+      return {
+        tools: {
+          rspack: {
+            output: {
+              uniqueName: pkgJson.name as string,
+            },
+          },
+        },
+      };
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
@@ -556,6 +569,14 @@ const composeExternalsConfig = (
             externalsType: externalsTypeMap[format],
           },
         },
+      };
+    case 'mf':
+      return {
+        output: externals
+          ? {
+              externals,
+            }
+          : {},
       };
     default:
       throw new Error(`Unsupported format: ${format}`);
@@ -859,7 +880,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     autoExternal = true,
     externalHelpers = false,
   } = config;
-  const formatConfig = composeFormatConfig(format!);
+  const formatConfig = composeFormatConfig(format!, pkgJson!);
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,
     pkgJson,
@@ -1007,6 +1028,7 @@ export async function initRsbuild(
     esm: 0,
     cjs: 0,
     umd: 0,
+    mf: 0,
   };
 
   for (const { format, config } of rsbuildConfigObject) {

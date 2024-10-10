@@ -1,3 +1,4 @@
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
@@ -27,6 +28,44 @@ export default defineConfig({
         },
       },
     },
+    {
+      ...shared,
+      format: 'mf',
+      output: {
+        distPath: {
+          root: './dist/mf',
+        },
+        assetPrefix: 'http://localhost:3001/mf',
+        minify: false,
+      },
+      source: {
+        define: {
+          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        },
+      },
+      plugins: [
+        pluginModuleFederation({
+          name: 'rslib_provider',
+          exposes: {
+            '.': './src/index.tsx',
+          },
+          shared: {
+            react: {
+              singleton: true,
+            },
+            'react-dom': {
+              singleton: true,
+            },
+          },
+        }),
+      ],
+    },
   ],
-  plugins: [pluginReact()],
+  plugins: [
+    pluginReact({
+      splitChunks: {
+        react: false,
+      },
+    }),
+  ],
 });
