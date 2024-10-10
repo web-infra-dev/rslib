@@ -21,6 +21,12 @@
       groupSlug: 'rsbuild',
     },
     {
+      groupName: 'rslib',
+      matchPackageNames: ['rslib'],
+      groupSlug: 'rslib',
+      extends: ['schedule:daily'],
+    },
+    {
       groupName: 'rspress',
       matchPackageNames: ['@rspress/**'],
       groupSlug: 'rspress',
