@@ -116,16 +116,7 @@ const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
   name: pluginName,
   setup(api) {
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
-      const cssExtract = CHAIN_ID.PLUGIN.MINI_CSS_EXTRACT;
-      config.plugins.delete(cssExtract);
-      config
-        .plugin(RemoveCssExtractAssetPlugin.name)
-        .use(RemoveCssExtractAssetPlugin, [
-          {
-            include: new RegExp(`^${RSLIB_CSS_ENTRY_FLAG}`),
-          },
-        ]);
-
+      let isUsingCssExtract = false;
       for (const ruleId of [
         CHAIN_ID.RULE.CSS,
         CHAIN_ID.RULE.SASS,
@@ -134,6 +125,7 @@ const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
       ]) {
         const rule = config.module.rule(ruleId);
         if (rule.uses.has(CHAIN_ID.USE.MINI_CSS_EXTRACT)) {
+          isUsingCssExtract = true;
           rule
             .use(CHAIN_ID.USE.MINI_CSS_EXTRACT)
             .loader(require.resolve('./libCssExtractLoader.js'))
@@ -141,6 +133,18 @@ const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
               rootDir,
             });
         }
+      }
+
+      if (isUsingCssExtract) {
+        const cssExtract = CHAIN_ID.PLUGIN.MINI_CSS_EXTRACT;
+        config.plugins.delete(cssExtract);
+        config
+          .plugin(RemoveCssExtractAssetPlugin.name)
+          .use(RemoveCssExtractAssetPlugin, [
+            {
+              include: new RegExp(`^${RSLIB_CSS_ENTRY_FLAG}`),
+            },
+          ]);
       }
     });
   },
