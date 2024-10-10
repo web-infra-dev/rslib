@@ -12,7 +12,7 @@
     "change": "changeset",
     "changeset": "changeset",
     "check-dependency-version": "check-dependency-version-consistency .",
-    "check-spell": "npx cspell",
+    "check-spell": "pnpx cspell",
     "lint": "biome check . --diagnostic-level=warn && pnpm run check-spell",
     "prebundle": "nx run-many -t prebundle",
     "prepare": "pnpm run build && simple-git-hooks",
