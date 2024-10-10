@@ -17,6 +17,13 @@ import {
   JS_EXTENSIONS_PATTERN,
   SWC_HELPERS,
 } from './constant';
+import {
+  type CssLoaderOptionsAuto,
+  RSLIB_CSS_ENTRY_FLAG,
+  composeCssConfig,
+  cssExternalHandler,
+  isCssGlobalFile,
+} from './css/cssConfig';
 import { pluginCjsShim } from './plugins/cjsShim';
 import type {
   AutoExternal,
@@ -24,6 +31,7 @@ import type {
   Format,
   LibConfig,
   PkgJson,
+  Redirect,
   RsbuildConfigOutputTarget,
   RslibConfig,
   RslibConfigAsyncFn,
@@ -627,16 +635,20 @@ const composeEntryConfig = async (
   entries: NonNullable<RsbuildConfig['source']>['entry'],
   bundle: LibConfig['bundle'],
   root: string,
-): Promise<RsbuildConfig> => {
+  cssModulesAuto: CssLoaderOptionsAuto,
+): Promise<{ entryConfig: RsbuildConfig; lcp: string | null }> => {
   if (!entries) {
-    return {};
+    return { entryConfig: {}, lcp: null };
   }
 
   if (bundle !== false) {
     return {
-      source: {
-        entry: entries,
+      entryConfig: {
+        source: {
+          entry: entries,
+        },
       },
+      lcp: null,
     };
   }
 
@@ -680,26 +692,53 @@ const composeEntryConfig = async (
     // Using the longest common path of all non-declaration input files by default.
     const outBase = lcp === null ? root : lcp;
 
-    for (const file of resolvedEntryFiles) {
+    function getEntryName(file: string) {
       const { dir, name } = path.parse(path.relative(outBase, file));
       // Entry filename contains nested path to preserve source directory structure.
       const entryFileName = path.join(dir, name);
-      resolvedEntries[entryFileName] = file;
+
+      // 1. we mark the global css files (which will generate empty js chunk in cssExtract), and deleteAsset in RemoveCssExtractAssetPlugin
+      // 2. avoid the same name e.g: `index.ts` and `index.css`
+      if (isCssGlobalFile(file, cssModulesAuto)) {
+        return `${RSLIB_CSS_ENTRY_FLAG}/${entryFileName}`;
+      }
+
+      return entryFileName;
+    }
+
+    for (const file of resolvedEntryFiles) {
+      const entryName = getEntryName(file);
+      if (resolvedEntries[entryName]) {
+        logger.warn(
+          `duplicate entry: ${entryName}, this may lead to the incorrect output, please rename the file`,
+        );
+      }
+      resolvedEntries[entryName] = file;
     }
   }
 
-  return {
+  const lcp = await calcLongestCommonPath(Object.values(resolvedEntries));
+  const entryConfig: RsbuildConfig = {
     source: {
       entry: resolvedEntries,
     },
+  };
+
+  return {
+    entryConfig,
+    lcp,
   };
 };
 
 const composeBundleConfig = (
   jsExtension: string,
+  redirect: Redirect,
+  cssModulesAuto: CssLoaderOptionsAuto,
   bundle = true,
 ): RsbuildConfig => {
   if (bundle) return {};
+
+  const isStyleRedirect = redirect.style ?? true;
 
   return {
     output: {
@@ -714,9 +753,24 @@ const composeBundleConfig = (
             // If data.request already have an extension, we replace it with new extension
             // This may result in a change in semantics,
             // user should use copy to keep origin file or use another separate entry to deal this
-            let request = data.request;
+            let request: string = data.request;
+
+            const cssExternal = cssExternalHandler(
+              request,
+              callback,
+              jsExtension,
+              cssModulesAuto,
+              isStyleRedirect,
+            );
+
+            if (cssExternal !== false) {
+              return cssExternal;
+            }
+
             if (request[0] === '.') {
-              if (extname(request)) {
+              const ext = extname(request);
+
+              if (ext) {
                 if (JS_EXTENSIONS_PATTERN.test(request)) {
                   request = request.replace(/\.[^.]+$/, jsExtension);
                 } else {
@@ -850,6 +904,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     rootPath,
     config.source?.tsconfigPath,
   );
+  const cssModulesAuto = config.output?.cssModules?.auto ?? true;
 
   const {
     format,
@@ -858,6 +913,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     autoExtension = true,
     autoExternal = true,
     externalHelpers = false,
+    redirect = {},
   } = config;
   const formatConfig = composeFormatConfig(format!);
   const externalHelpersConfig = composeExternalHelpersConfig(
@@ -873,7 +929,12 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     jsExtension,
     dtsExtension,
   } = composeAutoExtensionConfig(config, autoExtension, pkgJson);
-  const bundleConfig = composeBundleConfig(jsExtension, config.bundle);
+  const bundleConfig = composeBundleConfig(
+    jsExtension,
+    redirect,
+    cssModulesAuto,
+    config.bundle,
+  );
   const targetConfig = composeTargetConfig(config.output?.target);
   const syntaxConfig = composeSyntaxConfig(
     config?.syntax,
@@ -884,11 +945,13 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     pkgJson,
     userExternals: config.output?.externals,
   });
-  const entryConfig = await composeEntryConfig(
+  const { entryConfig, lcp } = await composeEntryConfig(
     config.source?.entry,
     config.bundle,
     dirname(configPath),
+    cssModulesAuto,
   );
+  const cssConfig = composeCssConfig(lcp, config.bundle);
   const dtsConfig = await composeDtsConfig(config, dtsExtension);
   const externalsWarnConfig = composeExternalsWarnConfig(
     format!,
@@ -914,6 +977,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     bundleConfig,
     targetConfig,
     entryConfig,
+    cssConfig,
     minifyConfig,
     dtsConfig,
     bannerFooterConfig,
@@ -976,6 +1040,7 @@ export async function composeCreateRsbuildConfig(
           'format',
           'autoExtension',
           'autoExternal',
+          'redirect',
           'syntax',
           'externalHelpers',
           'banner',

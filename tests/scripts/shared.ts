@@ -1,3 +1,4 @@
+import assert from 'node:assert';
 import fs from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -240,4 +241,15 @@ export function generateFileTree(dir: string) {
   }
 
   return fileTree;
+}
+
+export function getFileBySuffix(
+  files: Record<string, string>,
+  suffix: string,
+): string {
+  const fileName = Object.keys(files).find((file) => file.endsWith(suffix));
+  assert(fileName);
+  const content = files[fileName];
+  assert(content);
+  return content;
 }

@@ -12,6 +12,10 @@ export default defineConfig({
     },
   ],
   source: {
+    entry: {
+      index: './src/index.ts',
+      libCssExtractLoader: './src/css/libCssExtractLoader.ts',
+    },
     define: {
       RSLIB_VERSION: JSON.stringify(require('./package.json').version),
     },

@@ -42,6 +42,10 @@ export const JS_EXTENSIONS_PATTERN: RegExp = new RegExp(
   `\\.(${JS_EXTENSIONS.join('|')})$`,
 );
 
+export const CSS_EXTENSIONS_PATTERN: RegExp = new RegExp(
+  `\\.(${CSS_EXTENSIONS.join('|')})$`,
+);
+
 export const ENTRY_EXTENSIONS_PATTERN: RegExp = new RegExp(
   `\\.(${ENTRY_EXTENSIONS.join('|')})$`,
 );

@@ -1,0 +1,16 @@
+@import 'foundation/code', 'foundation/lists';
+// TODO: Error: Sass variables aren't allowed in plain CSS.
+// @import '~lib1/index.css';
+@import './foundation/index.scss';
+
+// TODO: asset support
+// $url: './foundation/logo.svg';
+$border-dark: rgba($base-color, 0.88);
+
+// .url-variable {
+//   background: url($url);
+// }
+
+.alert {
+  border: 1px solid $border-dark;
+}
