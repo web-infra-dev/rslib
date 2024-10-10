@@ -4,7 +4,7 @@ Thanks for that you are interested in contributing to Rslib. Before starting you
 
 ## Install Node.js
 
-Use [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm) to run the command below. This will switch to the Node.js version (currently 20) specified in the project's `.nvmrc` file.
+Use [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm) to run the command below. This will switch to the Node.js version (currently 18) specified in the project's `.nvmrc` file.
 
 ```bash
 # with fnm
