@@ -1,4 +1,5 @@
 import type { RsbuildConfig } from '@rsbuild/core';
+import type { PluginDtsOptions } from 'rsbuild-plugin-dts';
 
 export type Format = 'esm' | 'cjs' | 'umd' | 'mf';
 
@@ -28,11 +29,9 @@ export type Syntax =
   | string[];
 
 export type Dts =
-  | {
-      bundle: boolean;
-      distPath?: string;
-      abortOnError?: boolean;
-    }
+  | (Pick<PluginDtsOptions, 'bundle' | 'distPath' | 'abortOnError'> & {
+      autoExtension?: boolean;
+    })
   | false;
 
 export type AutoExternal =

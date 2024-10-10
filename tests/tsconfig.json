@@ -1,0 +1,19 @@
+{
+  "extends": "@rslib/tsconfig/base",
+  "compilerOptions": {
+    "noEmit": true,
+    "composite": true
+  },
+  "include": [
+    "e2e/cases/**/*.ts",
+    "benchmark/**/*.ts",
+    "playwright.config.ts",
+    "scripts"
+  ],
+  "exclude": ["**/node_modules", "**/.*/"],
+  "references": [
+    {
+      "path": "../packages/core"
+    }
+  ]
+}

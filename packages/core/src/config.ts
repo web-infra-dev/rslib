@@ -227,21 +227,27 @@ export const composeAutoExternalConfig = (options: {
     return {};
   }
 
-  const externalOptions = {
-    dependencies: true,
-    peerDependencies: true,
-    devDependencies: false,
-    ...(autoExternal === true ? {} : autoExternal),
-  };
-
   // User externals configuration has higher priority than autoExternal
   // eg: autoExternal: ['react'], user: output: { externals: { react: 'react-1' } }
   // Only handle the case where the externals type is object, string / string[] does not need to be processed, other types are too complex.
   const userExternalKeys =
     userExternals && isObject(userExternals) ? Object.keys(userExternals) : [];
 
+  const externalOptions = {
+    dependencies: true,
+    optionalDependencies: true,
+    peerDependencies: true,
+    devDependencies: false,
+    ...(autoExternal === true ? {} : autoExternal),
+  };
+
   const externals = (
-    ['dependencies', 'peerDependencies', 'devDependencies'] as const
+    [
+      'dependencies',
+      'peerDependencies',
+      'devDependencies',
+      'optionalDependencies',
+    ] as const
   )
     .reduce<string[]>((prev, type) => {
       if (externalOptions[type]) {
@@ -435,27 +441,37 @@ const composeFormatConfig = (
   format: Format,
   pkgJson: PkgJson,
 ): RsbuildConfig => {
+  const jsParserOptions = {
+    importMeta: false,
+    requireResolve: false,
+    requireDynamic: false,
+    requireAsExpression: false,
+    importDynamic: false,
+  };
+
   switch (format) {
     case 'esm':
       return {
         tools: {
           rspack: {
+            module: {
+              parser: {
+                javascript: jsParserOptions,
+              },
+            },
+            optimization: {
+              concatenateModules: true,
+              sideEffects: 'flag',
+            },
             output: {
               module: true,
               chunkFormat: 'module',
               library: {
                 type: 'modern-module',
               },
-            },
-            module: {
-              parser: {
-                javascript: {
-                  importMeta: false,
-                },
-              },
-            },
-            optimization: {
-              concatenateModules: true,
+              chunkLoading: 'import',
+              workerChunkLoading: 'import',
+              wasmLoading: 'fetch',
             },
             experiments: {
               outputModule: true,
@@ -470,9 +486,7 @@ const composeFormatConfig = (
           rspack: {
             module: {
               parser: {
-                javascript: {
-                  importMeta: false,
-                },
+                javascript: jsParserOptions,
               },
             },
             output: {
@@ -481,6 +495,9 @@ const composeFormatConfig = (
               library: {
                 type: 'commonjs',
               },
+              chunkLoading: 'require',
+              workerChunkLoading: 'async-node',
+              wasmLoading: 'async-node',
             },
           },
         },
@@ -756,7 +773,7 @@ const composeDtsConfig = async (
         bundle: dts?.bundle ?? bundle,
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
         abortOnError: dts?.abortOnError ?? true,
-        dtsExtension,
+        dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
         autoExternal,
         banner: banner?.dts,
         footer: footer?.dts,
@@ -774,11 +791,6 @@ const composeTargetConfig = (
         tools: {
           rspack: {
             target: ['web'],
-            output: {
-              chunkLoading: 'import',
-              workerChunkLoading: 'import',
-              wasmLoading: 'fetch',
-            },
           },
         },
       };
@@ -788,13 +800,8 @@ const composeTargetConfig = (
           rspack: {
             target: ['node'],
             // "__dirname" and "__filename" shims will automatically be enabled when `output.module` is `true`,
-            // and leave them as-is in the rest of the cases.
+            // and leave them as-is in the rest of the cases. Leave the comments here to explain the behavior.
             // { node: { __dirname: ..., __filename: ... } }
-            output: {
-              chunkLoading: 'require',
-              workerChunkLoading: 'async-node',
-              wasmLoading: 'async-node',
-            },
           },
         },
         output: {
