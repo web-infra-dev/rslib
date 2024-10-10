@@ -23,7 +23,7 @@ test('require.resolve', async () => {
   ];
 
   const cjsStatements = [
-    'const _require = (0, external_node_module_namespaceObject.createRequire)(__rslib_import_meta_url__)',
+    'const _require = (0, external_node_module_namespaceObject.createRequire)(',
   ];
 
   for (const statement of [...statements, ...esmStatements]) {
@@ -52,7 +52,7 @@ test('require dynamic', async () => {
   ];
 
   const cjsStatements = [
-    'const _require = (0, external_node_module_namespaceObject.createRequire)(__rslib_import_meta_url__)',
+    'const _require = (0, external_node_module_namespaceObject.createRequire)(',
   ];
 
   for (const statement of [...statements, ...esmStatements]) {

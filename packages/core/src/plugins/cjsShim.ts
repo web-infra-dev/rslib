@@ -1,12 +1,11 @@
-import { type RsbuildPlugin, rspack } from '@rsbuild/core';
+import type { RsbuildPlugin } from '@rsbuild/core';
 
-const importMetaUrlShim = `var __rslib_import_meta_url__ = /*#__PURE__*/ (function () {
+const importMetaUrlShim = `/*#__PURE__*/ (function () {
   return typeof document === 'undefined'
     ? new (require('url'.replace('', '')).URL)('file:' + __filename).href
     : (document.currentScript && document.currentScript.src) ||
       new URL('main.js', document.baseURI).href;
-})();
-`;
+})()`;
 
 // This Rsbuild plugin will shim `import.meta.url` for CommonJS modules.
 // - Replace `import.meta.url` with `importMetaUrl`.
@@ -19,22 +18,8 @@ export const pluginCjsShim = (): RsbuildPlugin => ({
     api.modifyEnvironmentConfig((config) => {
       config.source.define = {
         ...config.source.define,
-        'import.meta.url': '__rslib_import_meta_url__',
+        'import.meta.url': importMetaUrlShim,
       };
-    });
-
-    api.modifyRspackConfig((config) => {
-      config.plugins ??= [];
-      config.plugins.push(
-        new rspack.BannerPlugin({
-          banner: importMetaUrlShim,
-          // Just before minify stage, to perform tree shaking.
-          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE - 1,
-          raw: true,
-          footer: true,
-          include: /\.(js|cjs)$/,
-        }),
-      );
     });
   },
 });
