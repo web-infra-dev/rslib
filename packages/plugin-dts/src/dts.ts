@@ -26,6 +26,7 @@ export const calcBundledPackages = (options: {
     dependencies?: Record<string, string>;
     peerDependencies?: Record<string, string>;
     devDependencies?: Record<string, string>;
+    optionalDependencies?: Record<string, string>;
   };
 
   try {
@@ -42,6 +43,7 @@ export const calcBundledPackages = (options: {
     ? {
         dependencies: true,
         peerDependencies: true,
+        optionalDependencies: true,
         devDependencies: false,
         ...(autoExternal === true ? {} : autoExternal),
       }

@@ -16,12 +16,44 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # ======== caculate changes ========
+  changes:
+    runs-on: windows-latest
+    outputs:
+      changed: ${{ steps.changes.outputs.changed }}
+    strategy:
+      matrix:
+        node-version: [18]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+
+      - name: Install Pnpm
+        run: corepack enable
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          predicate-quantifier: 'every'
+          filters: |
+            changed:
+              - "!**/*.md"
+              - "!**/*.mdx"
+              - "!**/_meta.json"
+              - "!**/dictionary.txt"
+
   # ======== ut ========
   ut-windows:
     runs-on: windows-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.changed == 'true' }}
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [18]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -38,38 +70,26 @@ jobs:
       - name: Install Pnpm
         run: corepack enable
 
-      - uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          predicate-quantifier: 'every'
-          filters: |
-            changed:
-              - "!**/*.md"
-              - "!**/*.mdx"
-              - "!**/_meta.json"
-              - "!**/dictionary.txt"
-
       - name: Setup Node.js ${{ matrix.node-version }}
-        if: steps.changes.outputs.changed == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
       - name: Install Dependencies
-        if: steps.changes.outputs.changed == 'true'
         run: pnpm install
 
       - name: Unit Test
-        if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:unit
 
-  # # ======== integration && e2e ========
+  # ======== integration && e2e ========
   integration-e2e-windows:
     runs-on: windows-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.changed == 'true' }}
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [18]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -86,31 +106,17 @@ jobs:
       - name: Install Pnpm
         run: corepack enable
 
-      - uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          predicate-quantifier: 'every'
-          filters: |
-            changed:
-              - "!**/*.md"
-              - "!**/*.mdx"
-              - "!**/_meta.json"
-              - "!**/dictionary.txt"
-
       - name: Setup Node.js ${{ matrix.node-version }}
-        if: steps.changes.outputs.changed == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
+
       - name: Install Dependencies
-        if: steps.changes.outputs.changed == 'true'
         run: pnpm install && cd ./tests && npx playwright install
 
       - name: Integration Test (Vitest)
-        if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:integration
 
       - name: E2E Test (Playwright)
-        if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:e2e

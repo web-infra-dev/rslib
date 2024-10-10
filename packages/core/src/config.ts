@@ -235,21 +235,27 @@ export const composeAutoExternalConfig = (options: {
     return {};
   }
 
-  const externalOptions = {
-    dependencies: true,
-    peerDependencies: true,
-    devDependencies: false,
-    ...(autoExternal === true ? {} : autoExternal),
-  };
-
   // User externals configuration has higher priority than autoExternal
   // eg: autoExternal: ['react'], user: output: { externals: { react: 'react-1' } }
   // Only handle the case where the externals type is object, string / string[] does not need to be processed, other types are too complex.
   const userExternalKeys =
     userExternals && isObject(userExternals) ? Object.keys(userExternals) : [];
 
+  const externalOptions = {
+    dependencies: true,
+    optionalDependencies: true,
+    peerDependencies: true,
+    devDependencies: false,
+    ...(autoExternal === true ? {} : autoExternal),
+  };
+
   const externals = (
-    ['dependencies', 'peerDependencies', 'devDependencies'] as const
+    [
+      'dependencies',
+      'peerDependencies',
+      'devDependencies',
+      'optionalDependencies',
+    ] as const
   )
     .reduce<string[]>((prev, type) => {
       if (externalOptions[type]) {
@@ -800,7 +806,7 @@ const composeDtsConfig = async (
         bundle: dts?.bundle ?? bundle,
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
         abortOnError: dts?.abortOnError ?? true,
-        dtsExtension,
+        dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
         autoExternal,
         banner: banner?.dts,
         footer: footer?.dts,
