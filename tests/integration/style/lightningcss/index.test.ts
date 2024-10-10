@@ -42,7 +42,7 @@ test('should extract css with lightningcss-loader successfully in bundle-false',
     ]
   `);
   expectFileContainContent(
-    contents.cjs,
+    contents.esm,
     'prefix.css',
     '-webkit-user-select: none;',
   );
