@@ -1,4 +1,4 @@
-import { pluginModuleFederation } from '@rsbuild/plugin-module-federation';
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 

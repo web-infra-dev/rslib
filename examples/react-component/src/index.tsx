@@ -1,4 +1,4 @@
-import { init, loadRemote } from '@rsbuild/plugin-module-federation/runtime';
+import { init, loadRemote } from '@module-federation/rsbuild-plugin/runtime';
 import { Suspense, createElement, lazy } from 'react';
 
 import { CounterButton } from './CounterButton';
