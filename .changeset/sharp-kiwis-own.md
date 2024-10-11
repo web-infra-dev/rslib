@@ -1,5 +1,4 @@
 ---
-'@rsbuild/plugin-module-federation': patch
 '@rslib/core': patch
 ---
 

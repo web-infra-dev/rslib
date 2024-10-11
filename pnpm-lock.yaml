@@ -72,7 +72,9 @@ importers:
         specifier: ^5.6.2
         version: 5.6.2
 
-  examples/mf-host:
+  examples/mf-example: {}
+
+  examples/mf-example/mf-host:
     dependencies:
       '@module-federation/rsbuild-plugin':
         specifier: 0.0.0-next-20241010063233
@@ -100,7 +102,7 @@ importers:
         specifier: ^5.5.2
         version: 5.6.2
 
-  examples/mf-remote:
+  examples/mf-example/mf-remote:
     dependencies:
       '@module-federation/rsbuild-plugin':
         specifier: 0.0.0-next-20241010063233
@@ -128,7 +130,7 @@ importers:
         specifier: ^5.5.2
         version: 5.6.2
 
-  examples/react-component:
+  examples/mf-example/react-component:
     dependencies:
       '@module-federation/rsbuild-plugin':
         specifier: 0.0.0-next-20241010063233
@@ -139,7 +141,7 @@ importers:
         version: 1.0.3(@rsbuild/core@1.0.10)
       '@rslib/core':
         specifier: workspace:*
-        version: link:../../packages/core
+        version: link:../../../packages/core
       '@types/react':
         specifier: ^18.3.11
         version: 18.3.11
@@ -258,7 +260,7 @@ importers:
     dependencies:
       '@examples/react-component':
         specifier: workspace:*
-        version: link:../examples/react-component
+        version: link:../examples/mf-example/react-component
       react:
         specifier: ^18.3.1
         version: 18.3.1
