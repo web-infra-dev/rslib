@@ -1,7 +1,7 @@
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: ['config:recommended', 'schedule:weekly'],
-  ignorePaths: ['**/tests/**', '**/node_modules/**', '**/e2e/cases/**'],
+  ignorePaths: ['**/node_modules/**'],
   packageRules: [
     // Use chore as semantic commit type for commit messages
     {
@@ -19,6 +19,12 @@
       groupName: 'rsbuild',
       matchPackageNames: ['@rsbuild/**'],
       groupSlug: 'rsbuild',
+    },
+    {
+      groupName: 'rslib',
+      matchPackageNames: ['rslib'],
+      groupSlug: 'rslib',
+      extends: ['schedule:daily'],
     },
     {
       groupName: 'rspress',
