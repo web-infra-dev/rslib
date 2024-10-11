@@ -48,11 +48,20 @@ export type BannerAndFooter = {
   dts?: string;
 };
 
+export type Redirect = {
+  // TODO: support other redirects
+  // alias?: boolean;
+  style?: boolean;
+  // asset?: boolean;
+  // autoExtension?: boolean;
+};
+
 export interface LibConfig extends RsbuildConfig {
   bundle?: boolean;
   format?: Format;
   autoExtension?: boolean;
   autoExternal?: AutoExternal;
+  redirect?: Redirect;
   /** Support esX and browserslist query */
   syntax?: Syntax;
   externalHelpers?: boolean;

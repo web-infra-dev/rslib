@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { buildAndGetResults } from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
@@ -21,25 +22,20 @@ test('shims for __dirname and __filename in ESM', async () => {
 describe('shims for `import.meta.url` in CJS', () => {
   test('CJS should apply shims', async () => {
     const fixturePath = join(__dirname, 'cjs');
-    const { entries } = await buildAndGetResults(fixturePath);
-    for (const shim of [
-      `var __rslib_import_meta_url__ = /*#__PURE__*/ function() {
-    return 'undefined' == typeof document ? new (require('url'.replace('', ''))).URL('file:' + __filename).href : document.currentScript && document.currentScript.src || new URL('main.js', document.baseURI).href;
-}();`,
-      'console.log(__rslib_import_meta_url__);',
-    ]) {
-      expect(entries.cjs).toContain(shim);
-    }
+    const { entryFiles } = await buildAndGetResults(fixturePath);
+    const exported = await import(entryFiles.cjs);
+    const fileUrl = pathToFileURL(entryFiles.cjs).href;
+    expect(exported.default).toBe(fileUrl);
   });
 
   test('ESM should not be affected by CJS shims configuration', async () => {
     const fixturePath = join(__dirname, 'cjs');
     const { entries } = await buildAndGetResults(fixturePath);
     expect(entries.esm).toMatchInlineSnapshot(`
-      "const foo = ()=>{
-          console.log(import.meta.url);
-      };
-      export { foo };
+      "const url = import.meta.url;
+      const readUrl = url;
+      /* harmony default export */ const src = readUrl;
+      export { src as default };
       "
     `);
   });

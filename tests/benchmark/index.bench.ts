@@ -11,9 +11,17 @@ describe('run rslib in examples', () => {
     { time: 5 },
   );
   bench(
-    'examples/react-component',
+    'examples/react-component-bundle',
     async () => {
-      const cwd = getCwdByExample('react-component');
+      const cwd = getCwdByExample('react-component-bundle');
+      await rslibBuild(cwd);
+    },
+    { time: 5 },
+  );
+  bench(
+    'examples/react-component-bundle-false',
+    async () => {
+      const cwd = getCwdByExample('react-component-bundle-false');
       await rslibBuild(cwd);
     },
     { time: 5 },

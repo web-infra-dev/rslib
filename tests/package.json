@@ -7,15 +7,16 @@
     "test:e2e": "playwright test --pass-with-no-tests"
   },
   "dependencies": {
-    "@examples/react-component": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@codspeed/vitest-plugin": "^3.1.1",
     "@playwright/test": "1.47.2",
-    "@rsbuild/core": "1.0.7",
-    "@rsbuild/plugin-react": "1.0.2",
+    "@rsbuild/core": "1.0.12",
+    "@rsbuild/plugin-less": "^1.0.1",
+    "@rsbuild/plugin-react": "^1.0.2",
+    "@rsbuild/plugin-sass": "^1.0.1",
     "@rslib/core": "workspace:*",
     "@rslib/tsconfig": "workspace:*",
     "@types/fs-extra": "^11.0.4",
