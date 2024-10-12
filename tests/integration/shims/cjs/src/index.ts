@@ -1,4 +1,6 @@
-const url = import.meta.url;
-const readUrl = url;
+import { createRequire } from 'node:module';
+const importMetaUrl = import.meta.url;
+const require = createRequire(import.meta.url);
+const requiredModule = require('./ok.cjs');
 
-export default readUrl;
+export { importMetaUrl, requiredModule };

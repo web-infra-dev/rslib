@@ -1,5 +1,6 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import vm from 'node:vm';
 import { buildAndGetResults } from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
@@ -22,20 +23,31 @@ test('shims for __dirname and __filename in ESM', async () => {
 describe('shims for `import.meta.url` in CJS', () => {
   test('CJS should apply shims', async () => {
     const fixturePath = join(__dirname, 'cjs');
-    const { entryFiles } = await buildAndGetResults(fixturePath);
-    const exported = await import(entryFiles.cjs);
+    const { entryFiles, entries } = await buildAndGetResults(fixturePath);
+    // `module.require` is not available in Vitest runner context. Manually create a context to run the CJS code.
+    // As a temporary solution, we use `module.require` to avoid potential collision with module scope variable `require`.
+    const cjsCode = entries.cjs;
+    const context = vm.createContext({
+      require,
+      exports,
+      module: { require },
+      __filename: entryFiles.cjs,
+    });
+    const { importMetaUrl, requiredModule } = vm.runInContext(cjsCode, context);
     const fileUrl = pathToFileURL(entryFiles.cjs).href;
-    expect(exported.default).toBe(fileUrl);
+    expect(importMetaUrl).toBe(fileUrl);
+    expect(requiredModule).toBe('ok');
   });
 
   test('ESM should not be affected by CJS shims configuration', async () => {
     const fixturePath = join(__dirname, 'cjs');
     const { entries } = await buildAndGetResults(fixturePath);
     expect(entries.esm).toMatchInlineSnapshot(`
-      "const url = import.meta.url;
-      const readUrl = url;
-      /* harmony default export */ const src = readUrl;
-      export { src as default };
+      "import * as __WEBPACK_EXTERNAL_MODULE_node_module__ from \\"node:module\\";
+      const importMetaUrl = import.meta.url;
+      const src_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url);
+      const requiredModule = src_require('./ok.cjs');
+      export { importMetaUrl, requiredModule };
       "
     `);
   });
