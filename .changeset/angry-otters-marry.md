@@ -1,5 +1,0 @@
----
-'@rslib/core': patch
----
-
-release
