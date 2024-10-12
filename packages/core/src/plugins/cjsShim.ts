@@ -2,7 +2,7 @@ import type { RsbuildPlugin } from '@rsbuild/core';
 
 const importMetaUrlShim = `/*#__PURE__*/ (function () {
   return typeof document === 'undefined'
-    ? new (require('url'.replace('', '')).URL)('file:' + __filename).href
+    ? new (module.require('url'.replace('', '')).URL)('file:' + __filename).href
     : (document.currentScript && document.currentScript.src) ||
       new URL('main.js', document.baseURI).href;
 })()`;
