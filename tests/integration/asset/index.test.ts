@@ -4,7 +4,7 @@ import { expect, test } from 'vitest';
 
 test('set the size threshold to inline static assets', async () => {
   const fixturePath = join(__dirname, 'limit');
-  const { contents } = await buildAndGetResults(fixturePath);
+  const { contents } = await buildAndGetResults({ fixturePath });
 
   // inline when bundle
   expect(Object.values(contents.esm0!)[0]).toContain(
@@ -29,7 +29,7 @@ test('set the size threshold to inline static assets', async () => {
 
 test('set the assets name', async () => {
   const fixturePath = join(__dirname, 'name');
-  const { contents } = await buildAndGetResults(fixturePath);
+  const { contents } = await buildAndGetResults({ fixturePath });
 
   // bundle
   expect(Object.values(contents.esm0!)[0]).toContain(
@@ -44,7 +44,7 @@ test('set the assets name', async () => {
 
 test('set the assets output path', async () => {
   const fixturePath = join(__dirname, 'path');
-  const { contents } = await buildAndGetResults(fixturePath);
+  const { contents } = await buildAndGetResults({ fixturePath });
 
   // bundle
   expect(Object.values(contents.esm0!)[0]).toContain(
@@ -59,7 +59,7 @@ test('set the assets output path', async () => {
 
 test('set the assets public path', async () => {
   const fixturePath = join(__dirname, 'public-path');
-  const { contents } = await buildAndGetResults(fixturePath);
+  const { contents } = await buildAndGetResults({ fixturePath });
 
   // bundle
   expect(Object.values(contents.esm0!)[0]).toContain(
@@ -74,7 +74,7 @@ test('set the assets public path', async () => {
 
 test('use svgr', async () => {
   const fixturePath = join(__dirname, 'svgr');
-  const { contents } = await buildAndGetResults(fixturePath);
+  const { contents } = await buildAndGetResults({ fixturePath });
 
   // bundle -- default export with react query
   expect(Object.values(contents.esm0!)[0]).toMatchSnapshot();

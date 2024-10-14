@@ -24,7 +24,10 @@ import {
   cssExternalHandler,
   isCssGlobalFile,
 } from './css/cssConfig';
-import { pluginCjsShim } from './plugins/cjsShim';
+import {
+  pluginCjsImportMetaUrlShim,
+  pluginEsmRequireShim,
+} from './plugins/shims';
 import type {
   AutoExternal,
   BannerAndFooter,
@@ -32,11 +35,13 @@ import type {
   LibConfig,
   PkgJson,
   Redirect,
+  ResolvedShims,
   RsbuildConfigOutputTarget,
   RslibConfig,
   RslibConfigAsyncFn,
   RslibConfigExport,
   RslibConfigSyncFn,
+  Shims,
   Syntax,
 } from './types';
 import { getDefaultExtension } from './utils/extension';
@@ -447,12 +452,16 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
 
 const composeFormatConfig = (format: Format): RsbuildConfig => {
   const jsParserOptions = {
-    importMeta: false,
-    requireResolve: false,
-    requireDynamic: false,
-    requireAsExpression: false,
-    importDynamic: false,
-  };
+    cjs: {
+      requireResolve: false,
+      requireDynamic: false,
+      requireAsExpression: false,
+    },
+    esm: {
+      importMeta: false,
+      importDynamic: false,
+    },
+  } as const;
 
   switch (format) {
     case 'esm':
@@ -461,7 +470,10 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
           rspack: {
             module: {
               parser: {
-                javascript: jsParserOptions,
+                javascript: {
+                  ...jsParserOptions.esm,
+                  ...jsParserOptions.cjs,
+                },
               },
             },
             optimization: {
@@ -486,12 +498,11 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
       };
     case 'cjs':
       return {
-        plugins: [pluginCjsShim()],
         tools: {
           rspack: {
             module: {
               parser: {
-                javascript: jsParserOptions,
+                javascript: { ...jsParserOptions.esm, ...jsParserOptions.cjs },
               },
             },
             output: {
@@ -526,6 +537,85 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
           },
         },
       };
+    default:
+      throw new Error(`Unsupported format: ${format}`);
+  }
+};
+
+const resolveShims = (shims?: Shims) => {
+  const resolvedShims = {
+    cjs: {
+      'import.meta.url': true,
+    },
+    esm: {
+      __filename: true,
+      __dirname: true,
+      require: false,
+    },
+  };
+
+  if (!shims) {
+    return resolvedShims;
+  }
+
+  if (shims.cjs) {
+    if (typeof shims.cjs === 'boolean') {
+      if (shims.cjs === true) {
+        resolvedShims.cjs['import.meta.url'] = true;
+      } else {
+        resolvedShims.cjs['import.meta.url'] = false;
+      }
+    } else {
+      resolvedShims.cjs['import.meta.url'] =
+        shims.cjs['import.meta.url'] ?? false;
+    }
+  }
+
+  if (shims.esm) {
+    if (typeof shims.esm === 'boolean') {
+      if (shims.esm === true) {
+        resolvedShims.esm.__filename = true;
+        resolvedShims.esm.__dirname = true;
+        resolvedShims.esm.require = true;
+      }
+    } else {
+      resolvedShims.esm.__filename = shims.esm.__filename ?? false;
+      resolvedShims.esm.__dirname = shims.esm.__dirname ?? false;
+      resolvedShims.esm.require = shims.esm.require ?? false;
+    }
+  }
+
+  return resolvedShims;
+};
+
+const composeShimsConfig = (
+  format: Format,
+  resolvedShims: ResolvedShims,
+): RsbuildConfig => {
+  switch (format) {
+    case 'esm':
+      return {
+        tools: {
+          rspack: {
+            node: {
+              // "__dirname" and "__filename" shims will automatically be enabled when `output.module` is `true`
+              __dirname: resolvedShims.esm.__dirname ? 'node-module' : false,
+              __filename: resolvedShims.esm.__filename ? 'node-module' : false,
+            },
+          },
+        },
+        plugins: [resolvedShims.esm.require && pluginEsmRequireShim()].filter(
+          Boolean,
+        ),
+      };
+    case 'cjs':
+      return {
+        plugins: [
+          resolvedShims.cjs['import.meta.url'] && pluginCjsImportMetaUrlShim(),
+        ].filter(Boolean),
+      };
+    case 'umd':
+      return {};
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
@@ -832,9 +922,6 @@ const composeTargetConfig = (
         tools: {
           rspack: {
             target: ['node'],
-            // "__dirname" and "__filename" shims will automatically be enabled when `output.module` is `true`,
-            // and leave them as-is in the rest of the cases. Leave the comments here to explain the behavior.
-            // { node: { __dirname: ..., __filename: ... } }
           },
         },
         output: {
@@ -915,6 +1002,8 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     externalHelpers = false,
     redirect = {},
   } = config;
+  const resolvedShims = resolveShims(config.shims);
+  const shimsConfig = composeShimsConfig(format!, resolvedShims);
   const formatConfig = composeFormatConfig(format!);
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,
@@ -967,6 +1056,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
 
   return mergeRsbuildConfig(
     formatConfig,
+    shimsConfig,
     externalHelpersConfig,
     // externalsWarnConfig should before other externals config
     externalsWarnConfig,
@@ -1046,6 +1136,7 @@ export async function composeCreateRsbuildConfig(
           'banner',
           'footer',
           'dts',
+          'shims',
         ]),
       ),
     };

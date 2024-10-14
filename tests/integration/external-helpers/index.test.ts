@@ -5,7 +5,7 @@ import { expect, test } from 'vitest';
 
 test('should not external @swc/helpers by default', async () => {
   const fixturePath = join(__dirname, 'default');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { entries } = await buildAndGetResults({ fixturePath });
 
   expect(entries.esm).toMatchSnapshot();
 });
@@ -15,7 +15,7 @@ test('should throw error when @swc/helpers is not be installed when externalHelp
 
   const fixturePath = join(__dirname, 'no-deps');
   try {
-    await buildAndGetResults(fixturePath);
+    await buildAndGetResults({ fixturePath });
   } catch {}
 
   const logStrings = logs.map((log) => stripAnsi(log));
@@ -31,7 +31,7 @@ test('should throw error when @swc/helpers is not be installed when externalHelp
 
 test('should external @swc/helpers when externalHelpers is true', async () => {
   const fixturePath = join(__dirname, 'true');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { entries } = await buildAndGetResults({ fixturePath });
 
   // autoExternal is true
   expect(entries.esm0).toMatchSnapshot();
@@ -41,7 +41,7 @@ test('should external @swc/helpers when externalHelpers is true', async () => {
 
 test('should respect user override externalHelpers config', async () => {
   const fixturePath = join(__dirname, 'config-override');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { entries } = await buildAndGetResults({ fixturePath });
 
   // override externalHelpers false
   expect(entries.esm0).toMatchSnapshot();

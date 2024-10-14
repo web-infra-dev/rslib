@@ -1,29 +1,84 @@
-import { join } from 'node:path';
+import path, { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import vm from 'node:vm';
 import { buildAndGetResults } from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
-test('shims for __dirname and __filename in ESM', async () => {
+describe('ESM shims', async () => {
   const fixturePath = join(__dirname, 'esm');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { entries, entryFiles } = await buildAndGetResults({ fixturePath });
+  const entry0Result = (await import(entryFiles.esm0!)).default();
 
-  for (const shim of [
-    'import { fileURLToPath as __webpack_fileURLToPath__ } from "url";',
-    'var src_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));',
-    'var src_filename = __webpack_fileURLToPath__(import.meta.url);',
-    // import.meta.url should not be substituted
-    'const importMetaUrl = import.meta.url;',
-  ]) {
-    expect(entries.esm0).toContain(shim);
-  }
-  expect(entries.esm0).toBe(entries.esm1);
+  test('__dirname', async () => {
+    for (const shim of [
+      'import { fileURLToPath as __webpack_fileURLToPath__ } from "url";',
+      'var src_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));',
+    ]) {
+      expect(entries.esm0).toContain(shim);
+    }
+    expect(entry0Result.d1).toBe(path.dirname(entryFiles.esm0!));
+    expect(entry0Result.d1).toBe(entry0Result.d2);
+
+    expect(entries.esm0).toBe(entries.esm1);
+  });
+
+  test('__filename', async () => {
+    for (const shim of [
+      'import { fileURLToPath as __webpack_fileURLToPath__ } from "url";',
+      'var src_filename = __webpack_fileURLToPath__(import.meta.url);',
+    ]) {
+      expect(entries.esm0).toContain(shim);
+    }
+    expect(entry0Result.f1).toBe(entryFiles.esm0);
+    expect(entry0Result.f1).toBe(entry0Result.f2);
+
+    expect(entries.esm0).toBe(entries.esm1);
+  });
+
+  test('import.meta.url', async () => {
+    for (const shouldPreserve of [
+      // import.meta.url should not be substituted
+      'const importMetaUrl = import.meta.url;',
+    ]) {
+      expect(entries.esm0).toContain(shouldPreserve);
+    }
+    expect(entry0Result.importMetaUrl).toBe(
+      pathToFileURL(entryFiles.esm0!).href,
+    );
+  });
+
+  test('require', async () => {
+    const { ok, okPath } = await import(entryFiles.esm2!);
+    expect(ok).toBe('ok');
+    expect(okPath).toBe(path.resolve(path.dirname(entryFiles.esm2!), 'ok.cjs'));
+  });
 });
 
-describe('shims for `import.meta.url` in CJS', () => {
-  test('CJS should apply shims', async () => {
+describe('ESM shims disabled', async () => {
+  test('using require in ESM without shim will cause runtime error', async () => {
+    const fixturePath = join(__dirname, 'esm');
+    const { entries } = await buildAndGetResults({
+      fixturePath,
+      configPath: './rslibShimsDisabled.config.ts',
+    });
+    const context = vm.createContext({});
+    const module = new vm.SourceTextModule(entries.esm, {
+      context,
+    });
+
+    const linker: vm.ModuleLinker = async (specifier) => {
+      throw new Error(`Unable to resolve dependency: ${specifier}`);
+    };
+
+    await module.link(linker);
+    await expect(module.evaluate()).rejects.toThrow('require is not defined');
+  });
+});
+
+describe('CJS shims', () => {
+  test('import.meta.url', async () => {
     const fixturePath = join(__dirname, 'cjs');
-    const { entryFiles, entries } = await buildAndGetResults(fixturePath);
+    const { entryFiles, entries } = await buildAndGetResults({ fixturePath });
     // `module.require` is not available in Vitest runner context. Manually create a context to run the CJS code.
     // As a temporary solution, we use `module.require` to avoid potential collision with module scope variable `require`.
     const cjsCode = entries.cjs;
@@ -41,9 +96,10 @@ describe('shims for `import.meta.url` in CJS', () => {
 
   test('ESM should not be affected by CJS shims configuration', async () => {
     const fixturePath = join(__dirname, 'cjs');
-    const { entries } = await buildAndGetResults(fixturePath);
+    const { entries } = await buildAndGetResults({ fixturePath });
     expect(entries.esm).toMatchInlineSnapshot(`
       "import * as __WEBPACK_EXTERNAL_MODULE_node_module__ from \\"node:module\\";
+      // import.meta.url
       const importMetaUrl = import.meta.url;
       const src_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url);
       const requiredModule = src_require('./ok.cjs');

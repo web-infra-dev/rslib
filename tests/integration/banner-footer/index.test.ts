@@ -12,7 +12,10 @@ enum BannerFooter {
 
 test('banner and footer should work in js, css and dts', async () => {
   const fixturePath = __dirname;
-  const { js, css, dts } = await buildAndGetResults(fixturePath, 'all');
+  const { js, css, dts } = await buildAndGetResults({
+    fixturePath,
+    type: 'all',
+  });
 
   const jsContents = Object.values(js.contents);
   const cssContents = Object.values(css.contents);

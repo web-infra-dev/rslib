@@ -48,6 +48,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "not dead",
         ],
       },
+      "plugins": [],
       "source": {
         "alias": {
           "bar": "bar",
@@ -109,6 +110,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
                   "requireResolve": false,
                 },
               },
+            },
+            "node": {
+              "__dirname": "node-module",
+              "__filename": "node-module",
             },
             "optimization": {
               "concatenateModules": true,
