@@ -13,6 +13,7 @@
     "changeset": "changeset",
     "check-dependency-version": "check-dependency-version-consistency .",
     "check-spell": "pnpx cspell",
+    "generate-release-pr": "npx zx scripts/generateReleasePr.mjs",
     "lint": "biome check . --diagnostic-level=warn && pnpm run check-spell",
     "prebundle": "nx run-many -t prebundle",
     "prepare": "pnpm run build && simple-git-hooks",
