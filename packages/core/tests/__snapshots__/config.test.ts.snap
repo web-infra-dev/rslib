@@ -48,6 +48,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "not dead",
         ],
       },
+      "plugins": [],
       "source": {
         "alias": {
           "bar": "bar",
@@ -109,6 +110,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
                   "requireResolve": false,
                 },
               },
+            },
+            "node": {
+              "__dirname": false,
+              "__filename": false,
             },
             "optimization": {
               "concatenateModules": true,
@@ -196,7 +201,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
       },
       "plugins": [
         {
-          "name": "rsbuild-plugin-cjs-shim",
+          "name": "rsbuild:cjs-import-meta-url-shim",
           "setup": [Function],
         },
       ],

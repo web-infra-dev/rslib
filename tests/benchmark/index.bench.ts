@@ -6,7 +6,7 @@ describe('run rslib in examples', () => {
     'examples/express-plugin',
     async () => {
       const cwd = getCwdByExample('express-plugin');
-      await rslibBuild(cwd);
+      await rslibBuild({ cwd });
     },
     { time: 5 },
   );
@@ -14,7 +14,7 @@ describe('run rslib in examples', () => {
     'examples/react-component-bundle',
     async () => {
       const cwd = getCwdByExample('react-component-bundle');
-      await rslibBuild(cwd);
+      await rslibBuild({ cwd });
     },
     { time: 5 },
   );
@@ -22,7 +22,7 @@ describe('run rslib in examples', () => {
     'examples/react-component-bundle-false',
     async () => {
       const cwd = getCwdByExample('react-component-bundle-false');
-      await rslibBuild(cwd);
+      await rslibBuild({ cwd });
     },
     { time: 5 },
   );

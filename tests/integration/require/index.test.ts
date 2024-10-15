@@ -4,7 +4,7 @@ import { expect, test } from 'vitest';
 
 test('require.resolve', async () => {
   const fixturePath = join(__dirname, 'require-resolve');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { entries } = await buildAndGetResults({ fixturePath });
 
   const statements = [
     "const cjs1 = require.resolve('./other')",
@@ -37,7 +37,7 @@ test('require.resolve', async () => {
 
 test('require dynamic', async () => {
   const fixturePath = join(__dirname, 'require-dynamic');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { entries } = await buildAndGetResults({ fixturePath });
 
   const statements = [
     'const cjs1 = require(`${process.env.DIR}./other`)',
@@ -66,7 +66,7 @@ test('require dynamic', async () => {
 
 test('import dynamic', async () => {
   const fixturePath = join(__dirname, 'import-dynamic');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { entries } = await buildAndGetResults({ fixturePath });
 
   const statements = [
     'const i1 = import(`${process.env.DIR}./other`)',
@@ -85,7 +85,7 @@ test('import dynamic', async () => {
 
 test('require as expression', async () => {
   const fixturePath = join(__dirname, 'require-as-expression');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { entries } = await buildAndGetResults({ fixturePath });
 
   const statements = [
     'const lazyFn = (module, requireFn)=>{}',

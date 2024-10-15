@@ -4,7 +4,7 @@ import { expect, test } from 'vitest';
 
 test('single entry bundle', async () => {
   const fixturePath = join(__dirname, 'single');
-  const { files } = await buildAndGetResults(fixturePath);
+  const { files } = await buildAndGetResults({ fixturePath });
 
   expect(files).toMatchInlineSnapshot(`
     {
@@ -20,7 +20,7 @@ test('single entry bundle', async () => {
 
 test('multiple entry bundle', async () => {
   const fixturePath = join(__dirname, 'multiple');
-  const { files } = await buildAndGetResults(fixturePath);
+  const { files } = await buildAndGetResults({ fixturePath });
 
   expect(files).toMatchInlineSnapshot(`
     {
@@ -38,7 +38,7 @@ test('multiple entry bundle', async () => {
 
 test('glob entry bundleless', async () => {
   const fixturePath = join(__dirname, 'glob');
-  const { files } = await buildAndGetResults(fixturePath);
+  const { files } = await buildAndGetResults({ fixturePath });
 
   expect(files).toMatchInlineSnapshot(`
     {

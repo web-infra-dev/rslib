@@ -4,7 +4,7 @@ import { expect, test } from 'vitest';
 
 test('transformImport with arco-design', async () => {
   const fixturePath = join(__dirname, 'arco-design');
-  const { contents } = await buildAndGetResults(fixturePath);
+  const { contents } = await buildAndGetResults({ fixturePath });
   const formats: FormatType[] = ['esm0', 'esm1', 'cjs0', 'cjs1'];
 
   for (const format of formats) {
@@ -23,7 +23,7 @@ test('transformImport with arco-design', async () => {
 
 test('transformImport with lodash', async () => {
   const fixturePath = join(__dirname, 'lodash');
-  const { contents } = await buildAndGetResults(fixturePath);
+  const { contents } = await buildAndGetResults({ fixturePath });
   const formats: FormatType[] = ['esm0', 'esm1', 'cjs0', 'cjs1'];
 
   for (const format of formats) {

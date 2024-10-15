@@ -1,11 +1,10 @@
-import os from 'node:os';
 import { join } from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 import { expect, test } from 'vitest';
 
 test('should not generate js sourcemap by default', async () => {
   const fixturePath = join(__dirname, 'default');
-  const { contents } = await buildAndGetResults(fixturePath, 'js');
+  const { contents } = await buildAndGetResults({ fixturePath });
   const files = Object.keys(contents.esm);
 
   expect(files).toMatchInlineSnapshot(`
@@ -17,7 +16,7 @@ test('should not generate js sourcemap by default', async () => {
 
 test('should generate js external sourcemap: cheap-module-source-map', async () => {
   const fixturePath = join(__dirname, 'external');
-  const { contents } = await buildAndGetResults(fixturePath, 'js');
+  const { contents } = await buildAndGetResults({ fixturePath });
   const files = Object.keys(contents.esm);
 
   expect(files).toMatchInlineSnapshot(`
@@ -30,7 +29,7 @@ test('should generate js external sourcemap: cheap-module-source-map', async () 
 
 test('should generate js inline sourcemap: inline-cheap-module-source-map', async () => {
   const fixturePath = join(__dirname, 'inline');
-  const { contents } = await buildAndGetResults(fixturePath, 'js');
+  const { contents } = await buildAndGetResults({ fixturePath });
   const files = Object.keys(contents.esm);
   const code = Object.values(contents.esm);
 

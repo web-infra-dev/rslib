@@ -48,6 +48,17 @@ export type BannerAndFooter = {
   dts?: string;
 };
 
+export type Shims = {
+  cjs?: {
+    'import.meta.url'?: boolean;
+  };
+  esm?: {
+    __filename?: boolean;
+    __dirname?: boolean;
+    require?: boolean;
+  };
+};
+
 export type Redirect = {
   // TODO: support other redirects
   // alias?: boolean;
@@ -67,6 +78,7 @@ export interface LibConfig extends RsbuildConfig {
   externalHelpers?: boolean;
   banner?: BannerAndFooter;
   footer?: BannerAndFooter;
+  shims?: Shims;
   dts?: Dts;
 }
 

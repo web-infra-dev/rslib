@@ -24,7 +24,10 @@ import {
   cssExternalHandler,
   isCssGlobalFile,
 } from './css/cssConfig';
-import { pluginCjsShim } from './plugins/cjsShim';
+import {
+  pluginCjsImportMetaUrlShim,
+  pluginEsmRequireShim,
+} from './plugins/shims';
 import type {
   AutoExternal,
   BannerAndFooter,
@@ -37,6 +40,7 @@ import type {
   RslibConfigAsyncFn,
   RslibConfigExport,
   RslibConfigSyncFn,
+  Shims,
   Syntax,
 } from './types';
 import { getDefaultExtension } from './utils/extension';
@@ -447,12 +451,16 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
 
 const composeFormatConfig = (format: Format): RsbuildConfig => {
   const jsParserOptions = {
-    importMeta: false,
-    requireResolve: false,
-    requireDynamic: false,
-    requireAsExpression: false,
-    importDynamic: false,
-  };
+    cjs: {
+      requireResolve: false,
+      requireDynamic: false,
+      requireAsExpression: false,
+    },
+    esm: {
+      importMeta: false,
+      importDynamic: false,
+    },
+  } as const;
 
   switch (format) {
     case 'esm':
@@ -461,7 +469,10 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
           rspack: {
             module: {
               parser: {
-                javascript: jsParserOptions,
+                javascript: {
+                  ...jsParserOptions.esm,
+                  ...jsParserOptions.cjs,
+                },
               },
             },
             optimization: {
@@ -486,12 +497,11 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
       };
     case 'cjs':
       return {
-        plugins: [pluginCjsShim()],
         tools: {
           rspack: {
             module: {
               parser: {
-                javascript: jsParserOptions,
+                javascript: { ...jsParserOptions.esm, ...jsParserOptions.cjs },
               },
             },
             output: {
@@ -526,6 +536,47 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
           },
         },
       };
+    default:
+      throw new Error(`Unsupported format: ${format}`);
+  }
+};
+
+const composeShimsConfig = (format: Format, shims?: Shims): RsbuildConfig => {
+  const resolvedShims = {
+    cjs: {
+      'import.meta.url': shims?.cjs?.['import.meta.url'] ?? true,
+    },
+    esm: {
+      __filename: shims?.esm?.__filename ?? false,
+      __dirname: shims?.esm?.__dirname ?? false,
+      require: shims?.esm?.require ?? false,
+    },
+  };
+
+  switch (format) {
+    case 'esm':
+      return {
+        tools: {
+          rspack: {
+            node: {
+              // "__dirname" and "__filename" shims will automatically be enabled when `output.module` is `true`
+              __dirname: resolvedShims.esm.__dirname ? 'node-module' : false,
+              __filename: resolvedShims.esm.__filename ? 'node-module' : false,
+            },
+          },
+        },
+        plugins: [resolvedShims.esm.require && pluginEsmRequireShim()].filter(
+          Boolean,
+        ),
+      };
+    case 'cjs':
+      return {
+        plugins: [
+          resolvedShims.cjs['import.meta.url'] && pluginCjsImportMetaUrlShim(),
+        ].filter(Boolean),
+      };
+    case 'umd':
+      return {};
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
@@ -832,9 +883,6 @@ const composeTargetConfig = (
         tools: {
           rspack: {
             target: ['node'],
-            // "__dirname" and "__filename" shims will automatically be enabled when `output.module` is `true`,
-            // and leave them as-is in the rest of the cases. Leave the comments here to explain the behavior.
-            // { node: { __dirname: ..., __filename: ... } }
           },
         },
         output: {
@@ -908,6 +956,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
 
   const {
     format,
+    shims,
     banner = {},
     footer = {},
     autoExtension = true,
@@ -915,6 +964,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     externalHelpers = false,
     redirect = {},
   } = config;
+  const shimsConfig = composeShimsConfig(format!, shims);
   const formatConfig = composeFormatConfig(format!);
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,
@@ -967,6 +1017,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
 
   return mergeRsbuildConfig(
     formatConfig,
+    shimsConfig,
     externalHelpersConfig,
     // externalsWarnConfig should before other externals config
     externalsWarnConfig,
@@ -1046,6 +1097,7 @@ export async function composeCreateRsbuildConfig(
           'banner',
           'footer',
           'dts',
+          'shims',
         ]),
       ),
     };
