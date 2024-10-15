@@ -90,12 +90,13 @@ const findConfig = async (basePath: string): Promise<string | undefined> => {
         return i === false;
       });
 
-      if (allResolved) {
-        if (isExist) {
-          resolve(configPath);
-        } else {
-          resolve(undefined);
-        }
+      if (allResolved && isExist) {
+        resolve(configPath);
+        return;
+      }
+
+      if (index === DEFAULT_CONFIG_EXTENSIONS.length - 1) {
+        resolve(undefined);
       }
     });
   });
