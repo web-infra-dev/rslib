@@ -69,9 +69,9 @@ importers:
         specifier: ^5.6.3
         version: 5.6.3
 
-  examples/mf-example: {}
+  examples/module-federation: {}
 
-  examples/mf-example/mf-host:
+  examples/module-federation/mf-host:
     dependencies:
       '@module-federation/rsbuild-plugin':
         specifier: 0.0.0-next-20241010063233
@@ -99,35 +99,7 @@ importers:
         specifier: ^5.5.2
         version: 5.6.3
 
-  examples/mf-example/mf-remote:
-    dependencies:
-      '@module-federation/rsbuild-plugin':
-        specifier: 0.0.0-next-20241010063233
-        version: 0.0.0-next-20241010063233(@rsbuild/core@1.0.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0)
-      react:
-        specifier: ^18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
-    devDependencies:
-      '@rsbuild/core':
-        specifier: ^1.0.1
-        version: 1.0.12
-      '@rsbuild/plugin-react':
-        specifier: ^1.0.1
-        version: 1.0.3(@rsbuild/core@1.0.12)
-      '@types/react':
-        specifier: ^18.3.5
-        version: 18.3.11
-      '@types/react-dom':
-        specifier: ^18.3.0
-        version: 18.3.0
-      typescript:
-        specifier: ^5.5.2
-        version: 5.6.3
-
-  examples/mf-example/react-component:
+  examples/module-federation/mf-react-component:
     dependencies:
       '@module-federation/rsbuild-plugin':
         specifier: 0.0.0-next-20241010063233
@@ -148,6 +120,34 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+
+  examples/module-federation/mf-remote:
+    dependencies:
+      '@module-federation/rsbuild-plugin':
+        specifier: 0.0.0-next-20241010063233
+        version: 0.0.0-next-20241010063233(@rsbuild/core@1.0.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@rsbuild/core':
+        specifier: ^1.0.1
+        version: 1.0.12
+      '@rsbuild/plugin-react':
+        specifier: ^1.0.1
+        version: 1.0.3(@rsbuild/core@1.0.12)
+      '@types/react':
+        specifier: ^18.3.5
+        version: 18.3.11
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.0
+      typescript:
+        specifier: ^5.5.2
+        version: 5.6.3
 
   examples/react-component-bundle:
     devDependencies:
