@@ -7,4 +7,18 @@ export default defineConfig({
   retries: process.env.CI ? 3 : 0,
   // Print line for each test being run in CI
   reporter: 'list',
+  webServer: [
+    {
+      command: 'cd ../examples/mf-example && npm run dev:host',
+      url: 'http://127.0.0.1:3000',
+    },
+    {
+      command: 'cd ../examples/mf-example && npm run dev:lib',
+      url: 'http://127.0.0.1:3001',
+    },
+    {
+      command: 'cd ../examples/mf-example && npm run dev:remote',
+      url: 'http://127.0.0.1:3002',
+    },
+  ],
 });
