@@ -125,15 +125,17 @@ export async function getResults(
 
     // Only applied in bundle mode, a shortcut to get single entry result
     if (libConfig.bundle !== false && fileSet.length) {
-      let entryFile = '';
+      let entryFile: string | undefined;
       if (fileSet.length === 1) {
-        entryFile = fileSet[0]!;
+        entryFile = fileSet[0];
       } else {
-        entryFile = fileSet.find((file) => file.includes('index'))!;
+        entryFile = fileSet.find((file) => file.includes('index'));
       }
 
-      entries[key] = content[entryFile]!;
-      entryFiles[key] = normalize(entryFile);
+      if (typeof entryFile === 'string') {
+        entries[key] = content[entryFile]!;
+        entryFiles[key] = normalize(entryFile);
+      }
     }
   }
 
