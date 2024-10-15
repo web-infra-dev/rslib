@@ -42,6 +42,7 @@ import type {
 import { getDefaultExtension } from './utils/extension';
 import {
   calcLongestCommonPath,
+  checkMFPlugin,
   color,
   isEmptyObject,
   isObject,
@@ -919,6 +920,7 @@ const composeExternalHelpersConfig = (
 };
 
 async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
+  checkMFPlugin(config);
   const rootPath = dirname(configPath);
   const pkgJson = readPackageJson(rootPath);
   const { compilerOptions } = await loadTsconfig(
