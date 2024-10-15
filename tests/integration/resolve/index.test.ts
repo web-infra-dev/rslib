@@ -4,7 +4,7 @@ import { expect, test } from 'vitest';
 
 test('resolve data url', async () => {
   const fixturePath = join(__dirname, 'data-url');
-  const { entries, isSuccess } = await buildAndGetResults(fixturePath);
+  const { entries, isSuccess } = await buildAndGetResults({ fixturePath });
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
@@ -18,7 +18,7 @@ test('resolve data url', async () => {
 // EXTERNAL MODULE: <ROOT>/rslib/e2e/cases/resolve/false/./browser-false/util (ignored)
 test.todo('resolve false', async () => {
   const fixturePath = join(__dirname, 'false');
-  const { entries, isSuccess } = await buildAndGetResults(fixturePath);
+  const { entries, isSuccess } = await buildAndGetResults({ fixturePath });
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchSnapshot();
@@ -26,7 +26,7 @@ test.todo('resolve false', async () => {
 
 test('resolve node protocol', async () => {
   const fixturePath = join(__dirname, 'node-protocol');
-  const { entries, isSuccess } = await buildAndGetResults(fixturePath);
+  const { entries, isSuccess } = await buildAndGetResults({ fixturePath });
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
@@ -39,7 +39,7 @@ test('resolve node protocol', async () => {
 
 test('resolve with condition exports', async () => {
   const fixturePath = join(__dirname, 'with-condition-exports');
-  const { contents, isSuccess } = await buildAndGetResults(fixturePath);
+  const { contents, isSuccess } = await buildAndGetResults({ fixturePath });
 
   const nodeResults = Object.values(contents.esm0!);
   const browserResults = Object.values(contents.esm1!);
@@ -59,7 +59,7 @@ test('resolve with condition exports', async () => {
 
 test('resolve with js extensions', async () => {
   const fixturePath = join(__dirname, 'with-js-extensions');
-  const { entries, isSuccess } = await buildAndGetResults(fixturePath);
+  const { entries, isSuccess } = await buildAndGetResults({ fixturePath });
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
@@ -71,7 +71,7 @@ test('resolve with js extensions', async () => {
 
 test('resolve with main fields', async () => {
   const fixturePath = join(__dirname, 'with-main-fields');
-  const { contents, isSuccess } = await buildAndGetResults(fixturePath);
+  const { contents, isSuccess } = await buildAndGetResults({ fixturePath });
   const results = Object.values(contents);
 
   expect(isSuccess).toBeTruthy();

@@ -4,7 +4,7 @@ import { expect, test } from 'vitest';
 
 test('basic', async () => {
   const fixturePath = join(__dirname, 'basic');
-  const { files } = await buildAndGetResults(fixturePath);
+  const { files } = await buildAndGetResults({ fixturePath });
 
   expect(files.esm).toMatchInlineSnapshot(`
     [
@@ -26,7 +26,7 @@ test('basic', async () => {
 
 test('single file', async () => {
   const fixturePath = join(__dirname, 'single-file');
-  const { files } = await buildAndGetResults(fixturePath);
+  const { files } = await buildAndGetResults({ fixturePath });
 
   expect(files.esm).toMatchInlineSnapshot(`
     [
@@ -42,7 +42,7 @@ test('single file', async () => {
 
 test('auto add js extension for relative import', async () => {
   const fixturePath = join(__dirname, 'js-extension');
-  const { contents } = await buildAndGetResults(fixturePath);
+  const { contents } = await buildAndGetResults({ fixturePath });
 
   for (const importer of [
     'import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "./bar.js";',
@@ -65,7 +65,7 @@ test('auto add js extension for relative import', async () => {
 
 test('asset in bundleless', async () => {
   const fixturePath = join(__dirname, 'asset');
-  const { contents } = await buildAndGetResults(fixturePath);
+  const { contents } = await buildAndGetResults({ fixturePath });
 
   const assets = [
     'const image_namespaceObject = __webpack_require__.p + "static/image/image.png";',
@@ -80,7 +80,7 @@ test('asset in bundleless', async () => {
 
 test('svgr in bundleless', async () => {
   const fixturePath = join(__dirname, 'svgr');
-  const { contents } = await buildAndGetResults(fixturePath);
+  const { contents } = await buildAndGetResults({ fixturePath });
 
   // TODO: import "react"; in output now, we should shake this
   expect(Object.values(contents.esm)[0]).toMatchSnapshot();

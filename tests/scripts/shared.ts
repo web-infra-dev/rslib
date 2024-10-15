@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import fs from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   type InspectConfigResult,
@@ -125,15 +125,17 @@ export async function getResults(
 
     // Only applied in bundle mode, a shortcut to get single entry result
     if (libConfig.bundle !== false && fileSet.length) {
-      let entryFile = '';
+      let entryFile: string | undefined;
       if (fileSet.length === 1) {
-        entryFile = fileSet[0]!;
+        entryFile = fileSet[0];
       } else {
-        entryFile = fileSet.find((file) => file.includes('index'))!;
+        entryFile = fileSet.find((file) => file.includes('index'));
       }
 
-      entries[key] = content[entryFile]!;
-      entryFiles[key] = entryFile;
+      if (typeof entryFile === 'string') {
+        entries[key] = content[entryFile]!;
+        entryFiles[key] = normalize(entryFile);
+      }
     }
   }
 
@@ -145,32 +147,46 @@ export async function getResults(
   };
 }
 
-export async function rslibBuild(fixturePath: string) {
+export async function rslibBuild({
+  cwd,
+  path,
+}: { cwd: string; path?: string }) {
   const rslibConfig = await loadConfig({
-    cwd: fixturePath,
+    cwd,
+    path,
   });
-  process.chdir(fixturePath);
+  process.chdir(cwd);
   const rsbuildInstance = await build(rslibConfig);
   return { rsbuildInstance, rslibConfig };
 }
 
-export async function buildAndGetResults(
-  fixturePath: string,
-  type: 'all',
-): Promise<{
+export async function buildAndGetResults(options: {
+  fixturePath: string;
+  configPath?: string;
+  type: 'all';
+}): Promise<{
   js: BuildResult;
   dts: BuildResult;
   css: BuildResult;
 }>;
-export async function buildAndGetResults(
-  fixturePath: string,
-  type?: 'js' | 'dts' | 'css',
-): Promise<BuildResult>;
-export async function buildAndGetResults(
-  fixturePath: string,
-  type: 'js' | 'dts' | 'css' | 'all' = 'js',
-) {
-  const { rsbuildInstance, rslibConfig } = await rslibBuild(fixturePath);
+export async function buildAndGetResults(options: {
+  fixturePath: string;
+  configPath?: string;
+  type?: 'js' | 'dts' | 'css';
+}): Promise<BuildResult>;
+export async function buildAndGetResults({
+  fixturePath,
+  configPath,
+  type = 'js',
+}: {
+  fixturePath: string;
+  configPath?: string;
+  type?: 'js' | 'dts' | 'css' | 'all';
+}) {
+  const { rsbuildInstance, rslibConfig } = await rslibBuild({
+    cwd: fixturePath,
+    path: configPath,
+  });
   const {
     origin: { bundlerConfigs, rsbuildConfig },
   } = await rsbuildInstance.inspectConfig({ verbose: true });

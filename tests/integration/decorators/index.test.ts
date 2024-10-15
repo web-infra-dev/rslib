@@ -4,7 +4,7 @@ import { expect, test } from 'vitest';
 
 test('decorators default to 2022-03', async () => {
   const fixturePath = join(__dirname, 'default');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { entries } = await buildAndGetResults({ fixturePath });
 
   // use 2022-03 decorator by default
   expect(entries.esm).toMatchSnapshot();
@@ -12,7 +12,7 @@ test('decorators default to 2022-03', async () => {
 
 test('decorators with experimentalDecorators in tsconfig', async () => {
   const fixturePath = join(__dirname, 'tsconfig');
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { entries } = await buildAndGetResults({ fixturePath });
 
   // use legacy decorator when experimentalDecorators in tsconfig
   expect(entries.esm0).toMatchSnapshot();

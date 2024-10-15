@@ -4,7 +4,7 @@ import { expect, test } from 'vitest';
 
 test('copy', async () => {
   const fixturePath = __dirname;
-  await buildAndGetResults(fixturePath);
+  await buildAndGetResults({ fixturePath });
 
   const fileTree = generateFileTree(join(fixturePath, './dist/esm'));
   expect(fileTree).toMatchInlineSnapshot(`

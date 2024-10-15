@@ -3,7 +3,7 @@ import { expect, test } from 'vitest';
 
 test('source.define', async () => {
   const fixturePath = __dirname;
-  const { entries } = await buildAndGetResults(fixturePath);
+  const { entries } = await buildAndGetResults({ fixturePath });
 
   expect(entries.esm0).not.toContain('console.info(VERSION)');
   expect(entries.esm0).toContain('console.info("1.0.0")');
