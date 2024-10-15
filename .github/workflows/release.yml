@@ -33,6 +33,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 25
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Install Pnpm
         run: corepack enable
