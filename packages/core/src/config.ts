@@ -591,6 +591,8 @@ const composeShimsConfig = (format: Format, shims?: Shims): RsbuildConfig => {
       };
     case 'umd':
       return {};
+    case 'mf':
+      return {};
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
