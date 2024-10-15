@@ -541,7 +541,7 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
   }
 };
 
-const composeShimsConfig = (format: Format, shims: Shims): RsbuildConfig => {
+const composeShimsConfig = (format: Format, shims?: Shims): RsbuildConfig => {
   const resolvedShims = {
     cjs: {
       'import.meta.url': shims?.cjs?.['import.meta.url'] ?? true,
