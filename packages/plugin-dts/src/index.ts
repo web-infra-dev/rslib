@@ -1,7 +1,11 @@
 import { fork } from 'node:child_process';
-import { extname, join } from 'node:path';
+import { dirname, extname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { type RsbuildConfig, type RsbuildPlugin, logger } from '@rsbuild/core';
 import { processSourceEntry } from './utils';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export type PluginDtsOptions = {
   bundle?: boolean;
