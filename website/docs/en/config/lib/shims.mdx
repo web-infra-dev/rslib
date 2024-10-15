@@ -5,17 +5,17 @@
 ```ts
 type Shims = {
   cjs?:
-  | boolean
-  | {
-      'import.meta.url'?: boolean;
-    };
+    | boolean
+    | {
+        'import.meta.url'?: boolean;
+      };
   esm?:
-  | boolean
-  | {
-      __filename?: boolean;
-      __dirname?: boolean;
-      require?: boolean;
-    };
+    | boolean
+    | {
+        __filename?: boolean;
+        __dirname?: boolean;
+        require?: boolean;
+      };
 };
 ```
 
@@ -50,24 +50,31 @@ Options:
 
 - `true`: when `format` is `cjs`, the `import.meta.url` in source code will be replaced with the URL of the current module.
 
-    For example, given the following source code:
+  For example, given the following source code:
 
-    ```js
-    import { readFileSync } from 'fs';
-    const buffer = readFileSync(new URL('./data.proto', import.meta.url));
-    ```
+  ```js
+  import { readFileSync } from 'fs';
+  const buffer = readFileSync(new URL('./data.proto', import.meta.url));
+  ```
 
-    the CJS output will be transformed to:
+  the CJS output will be transformed to:
 
-    ```js
-    const { readFileSync } = require('fs');
-    const buffer = readFileSync(new URL('./data.proto', /*#__PURE__*/ (function () {
-    return typeof document === 'undefined'
-        ? new (module.require('url'.replace('', '')).URL)('file:' + __filename).href
-        : (document.currentScript && document.currentScript.src) ||
-        new URL('main.js', document.baseURI).href;
-    })()));
-    ```
+  ```js
+  const { readFileSync } = require('fs');
+  const buffer = readFileSync(
+    new URL(
+      './data.proto',
+      /*#__PURE__*/ (function () {
+        return typeof document === 'undefined'
+          ? new (module.require('url'.replace('', '')).URL)(
+              'file:' + __filename,
+            ).href
+          : (document.currentScript && document.currentScript.src) ||
+              new URL('main.js', document.baseURI).href;
+      })(),
+    ),
+  );
+  ```
 
 - `false`: the `import.meta.url` will be leave as is, which will cause a runtime error when running the output.
 
@@ -77,7 +84,7 @@ Options:
 - set to `false` to disable all shims for ESM output.
 - set the fields to `true` to enable the corresponding shims for ESM output.
 
-### shims.esm.__filename
+### shims.esm.\_\_filename
 
 - **Default:** `false`
 
@@ -85,44 +92,50 @@ Options:
 
 - `true`: when `format` is `esm`, the `__filename` in source code will be replaced with the filename of the current module.
 
-    For example, given the following source code:
+  For example, given the following source code:
 
-    ```js
-    console.log(__filename);
-    ```
+  ```js
+  console.log(__filename);
+  ```
 
-    the ESM output will be transformed to:
+  the ESM output will be transformed to:
 
-    ```js
-    import { fileURLToPath as __webpack_fileURLToPath__ } from "url";
-    import { dirname as __webpack_dirname__ } from "path";
-    var src_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));
-    var src_filename = __webpack_fileURLToPath__(import.meta.url);
-    console.log(src_filename);
-    ```
+  ```js
+  import { fileURLToPath as __webpack_fileURLToPath__ } from 'url';
+  import { dirname as __webpack_dirname__ } from 'path';
+  var src_dirname = __webpack_dirname__(
+    __webpack_fileURLToPath__(import.meta.url),
+  );
+  var src_filename = __webpack_fileURLToPath__(import.meta.url);
+  console.log(src_filename);
+  ```
+
 - `false`: the `__filename` will be leave as is, which will cause a runtime error when running the output.
 
-### shims.esm.__dirname
+### shims.esm.\_\_dirname
 
 - **Default:** `false`
 
 Options:
+
 - `true`: when `format` is `esm`, the `__dirname` in source code will be replaced with the directory name of the current module.
 
-    For example, given the following source code:
+  For example, given the following source code:
 
-    ```js
-    console.log(__dirname);
-    ```
+  ```js
+  console.log(__dirname);
+  ```
 
-    the ESM output will be transformed to:
+  the ESM output will be transformed to:
 
-    ```js
-    import { fileURLToPath as __webpack_fileURLToPath__ } from "url";
-    import { dirname as __webpack_dirname__ } from "path";
-    var src_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));
-    console.log(src_dirname);
-    ```
+  ```js
+  import { fileURLToPath as __webpack_fileURLToPath__ } from 'url';
+  import { dirname as __webpack_dirname__ } from 'path';
+  var src_dirname = __webpack_dirname__(
+    __webpack_fileURLToPath__(import.meta.url),
+  );
+  console.log(src_dirname);
+  ```
 
 - `false`: the `__dirname` will be leave as is, which will cause a runtime error when running the output.
 
@@ -131,34 +144,37 @@ Options:
 - **Default:** `false`
 
 Options:
-- `true`: when `format` is `esm`, the `require` in source code will be replaced with the directory name of the current module.
 
-    For example, given the following source code:
+- `true`: when `format` is `esm`, there will be a `require` that created by `createRequire` at the beginning of the output which can be accessed in source code like the global `require` like CommonJS.
 
-    ```js
-    const someModule = require('./someModule');
+  For example, given the following source code:
 
-    // dynamic require
-    const dynamicRequiredModule = require(SOME_VALUE_IN_RUNTIME);
-    // require.resolve
-    const someModulePath = require.resolve('./someModule');
-    // use require as a expression
-    const lazyFn = (module, requireFn) => {};
-    lazyFn('./other.js', require);
-    ```
+  ```js
+  const someModule = require('./someModule');
 
-    the ESM output will be transformed to:
+  // dynamic require
+  const dynamicRequiredModule = require(SOME_VALUE_IN_RUNTIME);
+  // require.resolve
+  const someModulePath = require.resolve('./someModule');
+  // use require as a expression
+  const lazyFn = (module, requireFn) => {};
+  lazyFn('./other.js', require);
+  ```
 
-    ```js
-    import __rslib_shim_module__ from 'module';
-    const require = /*#__PURE__*/ __rslib_shim_module__.createRequire(import.meta.url);
-    // dynamic require
-    require(SOME_VALUE_IN_RUNTIME);
-    // require.resolve
-    require.resolve('./someModule');
-    // use require as a expression
-    const lazyFn = (module, requireFn)=>{};
-    lazyFn('./other.js', require);
-    ```
+  the ESM output will be transformed to:
+
+  ```js
+  import __rslib_shim_module__ from 'module';
+  const require = /*#__PURE__*/ __rslib_shim_module__.createRequire(
+    import.meta.url,
+  );
+  // dynamic require
+  require(SOME_VALUE_IN_RUNTIME);
+  // require.resolve
+  require.resolve('./someModule');
+  // use require as a expression
+  const lazyFn = (module, requireFn) => {};
+  lazyFn('./other.js', require);
+  ```
 
 - `false`: the `require` will be leave as is, which will cause a runtime error when running the output.
