@@ -58,9 +58,14 @@
     "vitest": "^2.1.2",
     "zx": "^8.1.9"
   },
-  "packageManager": "pnpm@9.9.0",
+  "packageManager": "pnpm@9.12.1",
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=9.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "zx>@types/node": "-"
+    }
   }
 }
