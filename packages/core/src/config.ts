@@ -70,24 +70,43 @@ export function defineConfig(config: RslibConfigExport) {
   return config;
 }
 
-const findConfig = (basePath: string): string | undefined => {
-  return DEFAULT_CONFIG_EXTENSIONS.map((ext) => basePath + ext).find(
-    fs.existsSync,
+async function isFileExist(filePath: string) {
+  try {
+    await fs.promises.access(filePath, fs.constants.R_OK);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+const findConfig = async (basePath: string): Promise<string | undefined> => {
+  const promises: Promise<false | string>[] = DEFAULT_CONFIG_EXTENSIONS.map(
+    async (ext) => {
+      const configPath = basePath + ext;
+      const isExist = await isFileExist(configPath);
+      return isExist ? configPath : false;
+    },
   );
+  const configPaths = await Promise.all(promises);
+
+  return configPaths.find((i) => i !== false);
 };
 
-const resolveConfigPath = (root: string, customConfig?: string): string => {
+const resolveConfigPath = async (
+  root: string,
+  customConfig?: string,
+): Promise<string> => {
   if (customConfig) {
     const customConfigPath = isAbsolute(customConfig)
       ? customConfig
       : join(root, customConfig);
-    if (fs.existsSync(customConfigPath)) {
+    if (await isFileExist(customConfigPath)) {
       return customConfigPath;
     }
     logger.warn(`Cannot find config file: ${color.dim(customConfigPath)}\n`);
   }
 
-  const configFilePath = findConfig(join(root, DEFAULT_CONFIG_NAME));
+  const configFilePath = await findConfig(join(root, DEFAULT_CONFIG_NAME));
 
   if (configFilePath) {
     return configFilePath;
@@ -105,7 +124,7 @@ export async function loadConfig({
   path?: string;
   envMode?: string;
 }): Promise<RslibConfig> {
-  const configFilePath = resolveConfigPath(cwd, path);
+  const configFilePath = await resolveConfigPath(cwd, path);
   const { content } = await loadRsbuildConfig({
     cwd: dirname(configFilePath),
     path: configFilePath,
