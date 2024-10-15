@@ -36,7 +36,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | sourceDir       | 🟢     |                                                          |
 | sourceMap       | 🟢     |                                                          |
 | splitting       | ⚪️     |                                                          |
-| style           | ⚪️     |                                                          |
+| style           | 🟡     | asset svgr in CSS / css banner and footer                |
 | target          | 🟢     |                                                          |
 | transformImport | 🟢     |                                                          |
 | transformLodash | 🟢     |                                                          |

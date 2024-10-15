@@ -27,7 +27,11 @@ export async function emitDts(
   const start = Date.now();
   const { configPath, declarationDir, name, dtsExtension, banner, footer } =
     options;
-  const { options: rawCompilerOptions, fileNames } = loadTsconfig(configPath);
+  const {
+    options: rawCompilerOptions,
+    fileNames,
+    projectReferences,
+  } = loadTsconfig(configPath);
 
   const compilerOptions = {
     ...rawCompilerOptions,
@@ -40,11 +44,12 @@ export async function emitDts(
   if (!isWatch) {
     const host: ts.CompilerHost = ts.createCompilerHost(compilerOptions);
 
-    const program: ts.Program = ts.createProgram(
-      fileNames,
-      compilerOptions,
+    const program: ts.Program = ts.createProgram({
+      rootNames: fileNames,
+      options: compilerOptions,
+      projectReferences,
       host,
-    );
+    });
 
     const emitResult = program.emit();
 

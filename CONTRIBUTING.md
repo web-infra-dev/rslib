@@ -129,7 +129,9 @@ Repository maintainers can publish a new version of all packages to npm.
 
 Here are the steps to publish (we generally use CI for releases and avoid publishing npm packages locally):
 
-1. [Create release pull request](https://github.com/web-infra-dev/rslib/actions/workflows/release-pull-request.yml).
+<!-- 1. [Create release pull request](https://github.com/web-infra-dev/rslib/actions/workflows/release-pull-request.yml). -->
+
+1. Run `pnpm generate-release-pr` to create a release pull request.
 2. [Run the release action](https://github.com/web-infra-dev/rslib/actions/workflows/release.yml).
 3. [Generate the release notes](https://github.com/web-infra-dev/rslib/releases).
 4. Merge the release pull request.
@@ -138,6 +140,6 @@ Here are the steps to publish (we generally use CI for releases and avoid publis
 
 The project is still in its early stages and under active development, so it possible dependents on Rsbuild or Rspack canary versions to test the latest features. The current versions are:
 
-| Package      | Link                                              |
-| ------------ | ------------------------------------------------- |
-| @rspack/core | https://github.com/web-infra-dev/rspack/pull/7939 |
+| Package      | Link                                                         |
+| ------------ | ------------------------------------------------------------ |
+| @rspack/core | https://github.com/web-infra-dev/rspack/releases/tag/v1.0.10 |
