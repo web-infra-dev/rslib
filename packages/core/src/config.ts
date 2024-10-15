@@ -542,50 +542,17 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
   }
 };
 
-const resolveShims = (shims?: Shims) => {
-  const resolvedShims = {
+const resolveShims = (shims?: Shims): ResolvedShims => {
+  return {
     cjs: {
-      'import.meta.url': true,
+      'import.meta.url': shims?.cjs?.['import.meta.url'] ?? true,
     },
     esm: {
-      __filename: true,
-      __dirname: true,
-      require: false,
+      __filename: shims?.esm?.__filename ?? false,
+      __dirname: shims?.esm?.__dirname ?? false,
+      require: shims?.esm?.require ?? false,
     },
   };
-
-  if (!shims) {
-    return resolvedShims;
-  }
-
-  if (shims.cjs) {
-    if (typeof shims.cjs === 'boolean') {
-      if (shims.cjs === true) {
-        resolvedShims.cjs['import.meta.url'] = true;
-      } else {
-        resolvedShims.cjs['import.meta.url'] = false;
-      }
-    } else {
-      resolvedShims.cjs['import.meta.url'] =
-        shims.cjs['import.meta.url'] ?? false;
-    }
-  }
-
-  if (shims.esm) {
-    if (typeof shims.esm === 'boolean') {
-      if (shims.esm === true) {
-        resolvedShims.esm.__filename = true;
-        resolvedShims.esm.__dirname = true;
-        resolvedShims.esm.require = true;
-      }
-    } else {
-      resolvedShims.esm.__filename = shims.esm.__filename ?? false;
-      resolvedShims.esm.__dirname = shims.esm.__dirname ?? false;
-      resolvedShims.esm.require = shims.esm.require ?? false;
-    }
-  }
-
-  return resolvedShims;
 };
 
 const composeShimsConfig = (

@@ -2,45 +2,39 @@
 
 - **Type:**
 
-```ts
-type Shims = {
-  cjs?:
-    | boolean
-    | {
-        'import.meta.url'?: boolean;
-      };
-  esm?:
-    | boolean
-    | {
-        __filename?: boolean;
-        __dirname?: boolean;
-        require?: boolean;
-      };
-};
-```
+  ```ts
+  type Shims = {
+    cjs?: {
+      'import.meta.url'?: boolean;
+    };
+    esm?: {
+      __filename?: boolean;
+      __dirname?: boolean;
+      require?: boolean;
+    };
+  };
+  ```
 
 - **Default:**
 
-```js
-{
-  cjs: {
-    'import.meta.url': true,
-  },
-  esm: {
-    __filename: true,
-    __dirname: true,
-    require: false,
-  },
-}
-```
+  ```js
+  {
+    cjs: {
+      'import.meta.url': true,
+    },
+    esm: {
+      __filename: false,
+      __dirname: false,
+      require: false,
+    },
+  }
+  ```
 
 Used to configure the shims for CommonJS and ESM output.
 
 ## shims.cjs
 
-- set to `true` to enable all shims for CommonJS output.
-- set to `false` to disable all shims for CommonJS output.
-- set the fields to `true` to enable the corresponding shims for CommonJS output.
+Set the fields to `true` to enable the corresponding shims for CommonJS output.
 
 ### shims.cjs['import.meta.url']
 
@@ -80,9 +74,7 @@ Options:
 
 ## shims.esm
 
-- set to `true` to enable all shims for ESM output.
-- set to `false` to disable all shims for ESM output.
-- set the fields to `true` to enable the corresponding shims for ESM output.
+Set the fields to `true` to enable the corresponding shims for ESM output.
 
 ### shims.esm.\_\_filename
 

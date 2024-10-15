@@ -6,7 +6,7 @@ export default defineConfig({
     generateBundleEsmConfig(),
     generateBundleCjsConfig({
       shims: {
-        cjs: true,
+        cjs: { 'import.meta.url': true },
       },
     }),
   ],

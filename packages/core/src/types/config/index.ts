@@ -49,18 +49,14 @@ export type BannerAndFooter = {
 };
 
 export type Shims = {
-  cjs?:
-    | boolean
-    | {
-        'import.meta.url'?: boolean;
-      };
-  esm?:
-    | boolean
-    | {
-        __filename?: boolean;
-        __dirname?: boolean;
-        require?: boolean;
-      };
+  cjs?: {
+    'import.meta.url'?: boolean;
+  };
+  esm?: {
+    __filename?: boolean;
+    __dirname?: boolean;
+    require?: boolean;
+  };
 };
 
 export type ResolvedShims = {

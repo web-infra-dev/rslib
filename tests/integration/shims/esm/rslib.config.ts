@@ -4,7 +4,7 @@ import { generateBundleEsmConfig } from 'test-helper';
 export default defineConfig({
   lib: [
     generateBundleEsmConfig({
-      shims: { esm: true },
+      shims: { esm: { __dirname: true, __filename: true } },
       source: {
         entry: {
           index: './src/index.ts',
@@ -17,7 +17,7 @@ export default defineConfig({
       },
     }),
     generateBundleEsmConfig({
-      shims: { esm: true },
+      shims: { esm: { __dirname: true, __filename: true } },
       syntax: 'esnext',
       source: {
         entry: {
@@ -31,7 +31,7 @@ export default defineConfig({
       },
     }),
     generateBundleEsmConfig({
-      shims: { esm: true },
+      shims: { esm: { __dirname: true, __filename: true } },
       syntax: 'esnext',
       source: {
         entry: {

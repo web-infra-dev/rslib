@@ -61,8 +61,11 @@ describe('ESM shims disabled', async () => {
       fixturePath,
       configPath: './rslibShimsDisabled.config.ts',
     });
+
+    expect(entries.esm0).not.toContain('fileURLToPath');
+
     const context = vm.createContext({});
-    const module = new vm.SourceTextModule(entries.esm, {
+    const module = new vm.SourceTextModule(entries.esm1!, {
       context,
     });
 
