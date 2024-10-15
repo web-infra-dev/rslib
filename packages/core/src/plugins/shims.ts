@@ -12,7 +12,7 @@ const importMetaUrlShim = `/*#__PURE__*/ (function () {
 // - Inject `importMetaUrl` to the end of the module (can't inject at the beginning because of `"use strict";`).
 // This is a short-term solution, and we hope to provide built-in polyfills like `node.__filename` on Rspack side.
 export const pluginCjsImportMetaUrlShim = (): RsbuildPlugin => ({
-  name: 'rsbuild-plugin-cjs-import-meta-url-shim',
+  name: 'rsbuild:cjs-import-meta-url-shim',
   setup(api) {
     api.modifyEnvironmentConfig((config) => {
       config.source.define = {
@@ -29,7 +29,7 @@ const require = /*#__PURE__*/ __rslib_shim_module__.createRequire(import.meta.ur
 `;
 
 export const pluginEsmRequireShim = (): RsbuildPlugin => ({
-  name: 'rsbuild-plugin-esm-require-shim',
+  name: 'rsbuild:esm-require-shim',
   setup(api) {
     api.modifyRspackConfig((config) => {
       config.plugins ??= [];

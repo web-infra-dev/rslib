@@ -59,11 +59,6 @@ export type Shims = {
   };
 };
 
-export type ResolvedShims = {
-  cjs: Required<NonNullable<Exclude<Shims['cjs'], boolean>>>;
-  esm: Required<NonNullable<Exclude<Shims['esm'], boolean>>>;
-};
-
 export type Redirect = {
   // TODO: support other redirects
   // alias?: boolean;

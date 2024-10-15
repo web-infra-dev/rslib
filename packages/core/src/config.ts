@@ -35,7 +35,6 @@ import type {
   LibConfig,
   PkgJson,
   Redirect,
-  ResolvedShims,
   RsbuildConfigOutputTarget,
   RslibConfig,
   RslibConfigAsyncFn,
@@ -542,8 +541,8 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
   }
 };
 
-const resolveShims = (shims?: Shims): ResolvedShims => {
-  return {
+const composeShimsConfig = (format: Format, shims: Shims): RsbuildConfig => {
+  const resolvedShims = {
     cjs: {
       'import.meta.url': shims?.cjs?.['import.meta.url'] ?? true,
     },
@@ -553,12 +552,7 @@ const resolveShims = (shims?: Shims): ResolvedShims => {
       require: shims?.esm?.require ?? false,
     },
   };
-};
 
-const composeShimsConfig = (
-  format: Format,
-  resolvedShims: ResolvedShims,
-): RsbuildConfig => {
   switch (format) {
     case 'esm':
       return {
@@ -962,6 +956,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
 
   const {
     format,
+    shims,
     banner = {},
     footer = {},
     autoExtension = true,
@@ -969,8 +964,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     externalHelpers = false,
     redirect = {},
   } = config;
-  const resolvedShims = resolveShims(config.shims);
-  const shimsConfig = composeShimsConfig(format!, resolvedShims);
+  const shimsConfig = composeShimsConfig(format!, shims);
   const formatConfig = composeFormatConfig(format!);
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,
