@@ -80,16 +80,25 @@ async function isFileExist(filePath: string) {
 }
 
 const findConfig = async (basePath: string): Promise<string | undefined> => {
-  const promises: Promise<false | string>[] = DEFAULT_CONFIG_EXTENSIONS.map(
-    async (ext) => {
+  return new Promise<string | undefined>((resolve) => {
+    const arr: boolean[] = [];
+    DEFAULT_CONFIG_EXTENSIONS.forEach(async (ext, index) => {
       const configPath = basePath + ext;
       const isExist = await isFileExist(configPath);
-      return isExist ? configPath : false;
-    },
-  );
-  const configPaths = await Promise.all(promises);
+      arr[index] = isExist;
+      const allResolved = arr.slice(0, index).every((i) => {
+        return i === false;
+      });
 
-  return configPaths.find((i) => i !== false);
+      if (allResolved) {
+        if (isExist) {
+          resolve(configPath);
+        } else {
+          resolve(undefined);
+        }
+      }
+    });
+  });
 };
 
 const resolveConfigPath = async (
