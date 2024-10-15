@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import fs from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   type InspectConfigResult,
@@ -133,7 +133,7 @@ export async function getResults(
       }
 
       entries[key] = content[entryFile]!;
-      entryFiles[key] = entryFile;
+      entryFiles[key] = normalize(entryFile);
     }
   }
 
