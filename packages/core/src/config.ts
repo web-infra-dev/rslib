@@ -95,7 +95,7 @@ const findConfig = async (basePath: string): Promise<string | undefined> => {
           resolve(configPath);
           return;
         }
-        if (index === DEFAULT_CONFIG_EXTENSIONS.length - 1) {
+        if (arr.slice(index + 1).every((i) => i === false)) {
           resolve(undefined);
           return;
         }
