@@ -2,13 +2,10 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { parseArgs } from 'node:util';
 import { $, chalk } from 'zx';
 
-// Exit when error
 $.verbose = false;
-
-const args = process.argv.slice(2);
-const bumpTypeArgs = args.find((arg) => arg.startsWith('--type='));
 
 async function getCurrentVersion() {
   const packageJsonPath = path.join(
@@ -56,20 +53,33 @@ async function main() {
     const currentVersion = await getCurrentVersion();
     console.log(chalk.blue(`Current version: ${currentVersion}`));
 
-    // 2. Determine bump type
-    const bumpType = bumpTypeArgs ? bumpTypeArgs.split('=')[1] : 'patch';
+    // 2. Determine bump type and next release version
+    const options = {
+      type: {
+        type: 'string',
+        short: 't',
+        default: 'patch',
+      },
+    };
+    const args = process.argv.slice(3);
+    const { values } = parseArgs({ args, options });
+
+    const bumpType = values.type;
 
     if (!['major', 'minor', 'patch'].includes(bumpType)) {
       console.error('Invalid bump type. Please select major, minor, or patch.');
       process.exit(1);
     }
 
-    const nextVersion = await getNextVersion(currentVersion, bumpType);
-    const branchName = `release-v${nextVersion}`;
+    console.log(chalk.blue(`Bump type: ${bumpType}`));
 
-    console.log(chalk.blue(`Creating branch: ${branchName}`));
+    const nextVersion = await getNextVersion(currentVersion, bumpType);
+    console.log(chalk.blue(`Next version: ${nextVersion}`));
 
     // 3. Create and switch to new branch
+    const branchName = `release-v${nextVersion}`;
+    console.log(chalk.blue(`Creating branch: ${branchName}`));
+
     await $`git checkout -b ${branchName}`;
 
     // 4. Generate changeset file

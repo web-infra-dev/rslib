@@ -4,6 +4,8 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+pnpmfileChecksum: sirncs5aff6cpwccwwvtlwwvli
+
 importers:
 
   .:
@@ -53,6 +55,9 @@ importers:
       vitest:
         specifier: ^2.1.2
         version: 2.1.2(@types/node@18.19.39)(terser@5.31.6)
+      zx:
+        specifier: ^8.1.9
+        version: 8.1.9
 
   examples/express-plugin:
     devDependencies:
@@ -4808,6 +4813,11 @@ packages:
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
+
+  zx@8.1.9:
+    resolution: {integrity: sha512-UHuLHphHmsBYKkAchkSrEN4nzDyagafqC9HUxtc1J7eopaScW6H9dsLJ1lmkAntnLtDTGoM8fa+jrJrXiIfKFA==}
+    engines: {node: '>= 12.17.0'}
+    hasBin: true
 
 snapshots:
 
@@ -9588,3 +9598,7 @@ snapshots:
   yocto-queue@1.1.1: {}
 
   zwitch@2.0.4: {}
+
+  zx@8.1.9:
+    optionalDependencies:
+      '@types/fs-extra': 11.0.4
