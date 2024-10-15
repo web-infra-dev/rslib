@@ -449,7 +449,11 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
   });
 }
 
-const composeFormatConfig = (format: Format): RsbuildConfig => {
+const composeFormatConfig = ({
+  format,
+  bundle = true,
+  umdName,
+}: { format: Format; bundle?: boolean; umdName?: string }): RsbuildConfig => {
   const jsParserOptions = {
     cjs: {
       requireResolve: false,
@@ -517,8 +521,14 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
           },
         },
       };
-    case 'umd':
-      return {
+    case 'umd': {
+      if (bundle === false) {
+        throw new Error(
+          'When "format" is set to "umd", "bundle" must not be set to "false", consider setting "bundle" to "true" or remove the field, it\'s default value is "true".',
+        );
+      }
+
+      const config: RsbuildConfig = {
         tools: {
           rspack: {
             module: {
@@ -529,13 +539,23 @@ const composeFormatConfig = (format: Format): RsbuildConfig => {
               },
             },
             output: {
-              library: {
-                type: 'umd',
-              },
+              asyncChunks: false,
+
+              library: umdName
+                ? {
+                    type: 'umd',
+                    name: umdName,
+                  }
+                : {
+                    type: 'umd',
+                  },
             },
           },
         },
       };
+
+      return config;
+    }
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
@@ -785,7 +805,7 @@ const composeBundleConfig = (
   jsExtension: string,
   redirect: Redirect,
   cssModulesAuto: CssLoaderOptionsAuto,
-  bundle = true,
+  bundle: boolean,
 ): RsbuildConfig => {
   if (bundle) return {};
 
@@ -957,15 +977,21 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   const {
     format,
     shims,
+    bundle = true,
     banner = {},
     footer = {},
     autoExtension = true,
     autoExternal = true,
     externalHelpers = false,
     redirect = {},
+    umdName,
   } = config;
   const shimsConfig = composeShimsConfig(format!, shims);
-  const formatConfig = composeFormatConfig(format!);
+  const formatConfig = composeFormatConfig({
+    format: format!,
+    bundle,
+    umdName,
+  });
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,
     pkgJson,
@@ -983,7 +1009,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     jsExtension,
     redirect,
     cssModulesAuto,
-    config.bundle,
+    bundle,
   );
   const targetConfig = composeTargetConfig(config.output?.target);
   const syntaxConfig = composeSyntaxConfig(

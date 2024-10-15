@@ -2,6 +2,15 @@
   "name": "test-helper",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./helper": "./helper.ts",
+    "./index": "./index.ts",
+    "./rsbuild": "./rsbuild.ts",
+    "./shared": "./shared.ts",
+    "./vitest": "./vitest.ts"
+  },
   "main": "index.ts",
   "types": "index.ts"
 }

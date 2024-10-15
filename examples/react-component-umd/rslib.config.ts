@@ -2,31 +2,17 @@ import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { defineConfig } from '@rslib/core';
 
-const shared = {
-  dts: {
-    bundle: false,
-  },
-};
-
 export default defineConfig({
   lib: [
     {
-      ...shared,
-      format: 'esm',
+      format: 'umd',
+      umdName: 'RslibUmdExample',
       output: {
-        distPath: {
-          root: './dist/esm',
-          css: '.',
-          cssAsync: '.',
+        externals: {
+          react: 'React',
         },
-      },
-    },
-    {
-      ...shared,
-      format: 'cjs',
-      output: {
         distPath: {
-          root: './dist/cjs',
+          root: './dist/umd',
           css: '.',
           cssAsync: '.',
         },
