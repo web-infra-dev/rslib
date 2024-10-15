@@ -81,21 +81,21 @@ async function isFileExist(filePath: string) {
 
 const findConfig = async (basePath: string): Promise<string | undefined> => {
   return new Promise<string | undefined>((resolve) => {
-    const arr: boolean[] = [];
+    const arr: boolean[] = new Array(DEFAULT_CONFIG_EXTENSIONS.length).fill(
+      null,
+    );
     DEFAULT_CONFIG_EXTENSIONS.forEach(async (ext, index) => {
       const configPath = basePath + ext;
       const isExist = await isFileExist(configPath);
       arr[index] = isExist;
-      const allResolved = arr.slice(0, index).every((i) => {
-        return i === false;
-      });
+      const allResolved = arr.slice(0, index).every((i) => i === false);
 
       if (allResolved) {
         if (isExist) {
           resolve(configPath);
           return;
         }
-        if (arr.slice(index + 1).every((i) => i === false)) {
+        if (arr.every((i) => i === false)) {
           resolve(undefined);
           return;
         }
