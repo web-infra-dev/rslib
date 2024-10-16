@@ -1,0 +1,61 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`resolve false 1`] = `
+"var __webpack_modules__ = {
+    \\"?69d8\\": function() {
+    /* (ignored) */ }
+};
+/************************************************************************/ // The module cache
+var __webpack_module_cache__ = {};
+// The require function
+function __webpack_require__(moduleId) {
+    // Check if module is in cache
+    var cachedModule = __webpack_module_cache__[moduleId];
+    if (void 0 !== cachedModule) return cachedModule.exports;
+    // Create a new module (and put it into the cache)
+    var module = __webpack_module_cache__[moduleId] = {
+        exports: {}
+    };
+    // Execute the module function
+    __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+    // Return the exports of the module
+    return module.exports;
+}
+/************************************************************************/ // webpack/runtime/compat_get_default_export
+(()=>{
+    // getDefaultExport function for compatibility with non-harmony modules
+    __webpack_require__.n = function(module) {
+        var getter = module && module.__esModule ? function() {
+            return module['default'];
+        } : function() {
+            return module;
+        };
+        __webpack_require__.d(getter, {
+            a: getter
+        });
+        return getter;
+    };
+})();
+// webpack/runtime/define_property_getters
+(()=>{
+    __webpack_require__.d = function(exports, definition) {
+        for(var key in definition)if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) Object.defineProperty(exports, key, {
+            enumerable: true,
+            get: definition[key]
+        });
+    };
+})();
+// webpack/runtime/has_own_property
+(()=>{
+    __webpack_require__.o = function(obj, prop) {
+        return Object.prototype.hasOwnProperty.call(obj, prop);
+    };
+})(); /************************************************************************/ 
+const bar = 'bar';
+// EXTERNAL MODULE: ./browser-false/util (ignored)
+var util_ignored_ = __webpack_require__(\\"?69d8\\");
+var util_ignored_default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
+console.log('foo:', util_ignored_default()); // the value of \`foo\` should \`{}\`
+console.log('bar: ', bar);
+"
+`;
