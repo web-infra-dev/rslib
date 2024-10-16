@@ -180,12 +180,13 @@ export function checkMFPlugin(config: LibConfig): boolean {
     return true;
   }
 
+  // https://github.com/module-federation/core/blob/4e5c4b96ee45899f3ba5904b8927768980d5ad0e/packages/rsbuild-plugin/src/cli/index.ts#L17
   const added = isPluginIncluded(config, 'rsbuild:module-federation-enhanced');
   if (!added) {
     logger.warn(
-      `${color.green('mf format')} is enabled, but the ${color.blue(
+      `${color.green('"mf format"')} should be used with ${color.blue(
         '@module-federation/rsbuild-plugin',
-      )} plugin was not found in plugins.`,
+      )}," consider installing and adding to plugins. Check the documentation (https://module-federation.io/guide/basic/rsbuild.html#rslib-module) to get start with "mf" output.`,
     );
     process.exit(1);
   }

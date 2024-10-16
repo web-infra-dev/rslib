@@ -308,7 +308,7 @@ export function composeMinifyConfig(config: LibConfig): RsbuildConfig {
               defaults: false,
               unused: true,
               dead_code: true,
-              // mf format if use toplevel, remoteEntry's global variable will be tree-shaking
+              // remoteEntry's global variable will be tree-shaken if `toplevel` is enabled in "mf" format
               toplevel: format !== 'mf',
             },
             format: {
