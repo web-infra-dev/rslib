@@ -548,6 +548,10 @@ const composeFormatConfig = (
             output: {
               uniqueName: pkgJson.name as string,
             },
+            // now we have not provide dev mode for users, so we can always set nodeEnv as 'production'
+            optimization: {
+              nodeEnv: 'production',
+            },
           },
         },
       };
