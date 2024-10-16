@@ -52,7 +52,7 @@ export default defineConfig({
           root: './dist/mf',
         },
         // add your assetPrefix here
-        // assetPrefix: 'http://localhost:3001/mf',
+        assetPrefix: 'http://localhost:3001/mf',
       },
       plugins: [
         pluginModuleFederation({
@@ -134,6 +134,19 @@ export const Counter: React.FC = () => {
 ```
 
 这样可以保证在多种 format 中都能按预期进行加载模块
+
+## 常见问题
+
+如果 Rslib 生产者是通过 build 构建的，这意味着生产者的 `process.env.NODE_ENV` 是 `production`。如果这时消费者是 dev 模式启动的，
+由于 Module Federation 的 shared 加载策略默认是 `version-first`，可能会出现加载到不同模式的 react 和 react-dom 的问题（例如 development 模式的 react，production 模式的 react-dom）。
+这时可以在消费者处设置 [shareStrategy](https://module-federation.io/configure/sharestrategy) 来解决这个问题，但请确保您充分了解这个配置
+
+```ts
+pluginModuleFederation({
+  // ...
+  shareStrategy: 'loaded-first',
+}),
+```
 
 ## 参考例子
 
