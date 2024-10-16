@@ -36,12 +36,6 @@ export default defineConfig({
           root: './dist/mf',
         },
         assetPrefix: 'http://localhost:3001/mf',
-        minify: false,
-      },
-      source: {
-        define: {
-          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-        },
       },
       plugins: [
         pluginModuleFederation({
@@ -61,11 +55,5 @@ export default defineConfig({
       ],
     },
   ],
-  plugins: [
-    pluginReact({
-      splitChunks: {
-        react: false,
-      },
-    }),
-  ],
+  plugins: [pluginReact()],
 });

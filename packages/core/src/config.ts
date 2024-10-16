@@ -285,9 +285,9 @@ export const composeAutoExternalConfig = (options: {
     : {};
 };
 
-export function composeMinifyConfig(
-  minify: NonNullable<RsbuildConfig['output']>['minify'],
-): RsbuildConfig {
+export function composeMinifyConfig(config: LibConfig): RsbuildConfig {
+  const minify = config.output?.minify;
+  const format = config.format;
   if (minify !== undefined) {
     // User's minify configuration will be merged afterwards.
     return {};
@@ -308,7 +308,8 @@ export function composeMinifyConfig(
               defaults: false,
               unused: true,
               dead_code: true,
-              toplevel: true,
+              // mf format if use toplevel, remoteEntry's global variable will be tree-shaking
+              toplevel: format !== 'mf',
             },
             format: {
               comments: 'all',
@@ -1033,7 +1034,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     autoExternalConfig?.output?.externals,
     externalsConfig?.output?.externals,
   );
-  const minifyConfig = composeMinifyConfig(config.output?.minify);
+  const minifyConfig = composeMinifyConfig(config);
   const bannerFooterConfig = composeBannerFooterConfig(banner, footer);
   const decoratorsConfig = composeDecoratorsConfig(
     compilerOptions,
