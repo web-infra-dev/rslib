@@ -1,0 +1,28 @@
+{
+  "name": "rslib-react-js",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch"
+  },
+  "devDependencies": {
+    "@rslib/core": "workspace:*",
+    "@rsbuild/plugin-react": "^1.0.5",
+    "react": "^18.3.1"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}
