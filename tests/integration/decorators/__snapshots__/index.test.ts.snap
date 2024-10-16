@@ -4,8 +4,8 @@ exports[`decorators default to 2022-03 1`] = `
 "function applyDecs2203RFactory() {
     function createAddInitializerMethod(initializers, decoratorFinishedRef) {
         return function(initializer) {
-            assertNotFinished(decoratorFinishedRef, \\"addInitializer\\");
-            assertCallable(initializer, \\"An initializer\\");
+            assertNotFinished(decoratorFinishedRef, "addInitializer");
+            assertCallable(initializer, "An initializer");
             initializers.push(initializer);
         };
     }
@@ -13,23 +13,23 @@ exports[`decorators default to 2022-03 1`] = `
         var kindStr;
         switch(kind){
             case 1:
-                kindStr = \\"accessor\\";
+                kindStr = "accessor";
                 break;
             case 2:
-                kindStr = \\"method\\";
+                kindStr = "method";
                 break;
             case 3:
-                kindStr = \\"getter\\";
+                kindStr = "getter";
                 break;
             case 4:
-                kindStr = \\"setter\\";
+                kindStr = "setter";
                 break;
             default:
-                kindStr = \\"field\\";
+                kindStr = "field";
         }
         var ctx = {
             kind: kindStr,
-            name: isPrivate ? \\"#\\" + name : name,
+            name: isPrivate ? "#" + name : name,
             static: isStatic,
             private: isPrivate,
             metadata: metadata
@@ -77,22 +77,22 @@ exports[`decorators default to 2022-03 1`] = `
         }
     }
     function assertNotFinished(decoratorFinishedRef, fnName) {
-        if (decoratorFinishedRef.v) throw new Error(\\"attempted to call \\" + fnName + \\" after decoration was finished\\");
+        if (decoratorFinishedRef.v) throw new Error("attempted to call " + fnName + " after decoration was finished");
     }
     function assertCallable(fn, hint) {
-        if (\\"function\\" != typeof fn) throw new TypeError(hint + \\" must be a function\\");
+        if ("function" != typeof fn) throw new TypeError(hint + " must be a function");
     }
     function assertValidReturnValue(kind, value) {
         var type = typeof value;
         if (1 === kind) {
-            if (\\"object\\" !== type || null === value) throw new TypeError(\\"accessor decorators must return an object with get, set, or init properties or void 0\\");
-            if (void 0 !== value.get) assertCallable(value.get, \\"accessor.get\\");
-            if (void 0 !== value.set) assertCallable(value.set, \\"accessor.set\\");
-            if (void 0 !== value.init) assertCallable(value.init, \\"accessor.init\\");
-        } else if (\\"function\\" !== type) {
+            if ("object" !== type || null === value) throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");
+            if (void 0 !== value.get) assertCallable(value.get, "accessor.get");
+            if (void 0 !== value.set) assertCallable(value.set, "accessor.set");
+            if (void 0 !== value.init) assertCallable(value.init, "accessor.init");
+        } else if ("function" !== type) {
             var hint;
-            hint = 0 === kind ? \\"field\\" : 10 === kind ? \\"class\\" : \\"method\\";
-            throw new TypeError(hint + \\" decorators must return a function or void 0\\");
+            hint = 0 === kind ? "field" : 10 === kind ? "class" : "method";
+            throw new TypeError(hint + " decorators must return a function or void 0");
         }
     }
     function applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, initializers, metadata) {
@@ -117,7 +117,7 @@ exports[`decorators default to 2022-03 1`] = `
         else if (3 === kind) value = desc.get;
         else if (4 === kind) value = desc.set;
         var newValue, get, set;
-        if (\\"function\\" == typeof decs) {
+        if ("function" == typeof decs) {
             newValue = memberDec(decs, name, desc, initializers, kind, isStatic, isPrivate, metadata, value);
             if (void 0 !== newValue) {
                 assertValidReturnValue(kind, newValue);
@@ -150,7 +150,7 @@ exports[`decorators default to 2022-03 1`] = `
                 } else value = newValue;
                 if (void 0 !== newInit) {
                     if (void 0 === init) init = newInit;
-                    else if (\\"function\\" == typeof init) init = [
+                    else if ("function" == typeof init) init = [
                         init,
                         newInit
                     ];
@@ -162,7 +162,7 @@ exports[`decorators default to 2022-03 1`] = `
             if (void 0 === init) init = function(instance, init) {
                 return init;
             };
-            else if (\\"function\\" != typeof init) {
+            else if ("function" != typeof init) {
                 var ownInitializers = init;
                 init = function(instance, init) {
                     var value = init;
@@ -227,7 +227,7 @@ exports[`decorators default to 2022-03 1`] = `
                 if (0 !== kind && !isPrivate) {
                     var existingNonFields = isStatic ? existingStaticNonFields : existingProtoNonFields;
                     var existingKind = existingNonFields.get(name) || 0;
-                    if (true === existingKind || 3 === existingKind && 4 !== kind || 4 === existingKind && 3 !== kind) throw new Error(\\"Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: \\" + name);
+                    if (true === existingKind || 3 === existingKind && 4 !== kind || 4 === existingKind && 3 !== kind) throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + name);
                     if (!existingKind && kind > 2) existingNonFields.set(name, kind);
                     else existingNonFields.set(name, true);
                 }
@@ -255,7 +255,7 @@ exports[`decorators default to 2022-03 1`] = `
                 };
                 try {
                     var nextNewClass = classDecs[i](newClass, {
-                        kind: \\"class\\",
+                        kind: "class",
                         name: name,
                         addInitializer: createAddInitializerMethod(initializers, decoratorFinishedRef),
                         metadata
@@ -277,14 +277,14 @@ exports[`decorators default to 2022-03 1`] = `
         }
     }
     function defineMetadata(Class, metadata) {
-        return Object.defineProperty(Class, Symbol.metadata || Symbol.for(\\"Symbol.metadata\\"), {
+        return Object.defineProperty(Class, Symbol.metadata || Symbol.for("Symbol.metadata"), {
             configurable: true,
             enumerable: true,
             value: metadata
         });
     }
     return function(targetClass, memberDecs, classDecs, parentClass) {
-        if (void 0 !== parentClass) var parentMetadata = parentClass[Symbol.metadata || Symbol.for(\\"Symbol.metadata\\")];
+        if (void 0 !== parentClass) var parentMetadata = parentClass[Symbol.metadata || Symbol.for("Symbol.metadata")];
         var metadata = Object.create(void 0 === parentMetadata ? null : parentMetadata);
         var e = applyMemberDecs(targetClass, memberDecs, metadata);
         if (!classDecs.length) defineMetadata(targetClass, metadata);
@@ -358,8 +358,8 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
 "function applyDecs2203RFactory() {
     function createAddInitializerMethod(initializers, decoratorFinishedRef) {
         return function(initializer) {
-            assertNotFinished(decoratorFinishedRef, \\"addInitializer\\");
-            assertCallable(initializer, \\"An initializer\\");
+            assertNotFinished(decoratorFinishedRef, "addInitializer");
+            assertCallable(initializer, "An initializer");
             initializers.push(initializer);
         };
     }
@@ -367,23 +367,23 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
         var kindStr;
         switch(kind){
             case 1:
-                kindStr = \\"accessor\\";
+                kindStr = "accessor";
                 break;
             case 2:
-                kindStr = \\"method\\";
+                kindStr = "method";
                 break;
             case 3:
-                kindStr = \\"getter\\";
+                kindStr = "getter";
                 break;
             case 4:
-                kindStr = \\"setter\\";
+                kindStr = "setter";
                 break;
             default:
-                kindStr = \\"field\\";
+                kindStr = "field";
         }
         var ctx = {
             kind: kindStr,
-            name: isPrivate ? \\"#\\" + name : name,
+            name: isPrivate ? "#" + name : name,
             static: isStatic,
             private: isPrivate,
             metadata: metadata
@@ -431,22 +431,22 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
         }
     }
     function assertNotFinished(decoratorFinishedRef, fnName) {
-        if (decoratorFinishedRef.v) throw new Error(\\"attempted to call \\" + fnName + \\" after decoration was finished\\");
+        if (decoratorFinishedRef.v) throw new Error("attempted to call " + fnName + " after decoration was finished");
     }
     function assertCallable(fn, hint) {
-        if (\\"function\\" != typeof fn) throw new TypeError(hint + \\" must be a function\\");
+        if ("function" != typeof fn) throw new TypeError(hint + " must be a function");
     }
     function assertValidReturnValue(kind, value) {
         var type = typeof value;
         if (1 === kind) {
-            if (\\"object\\" !== type || null === value) throw new TypeError(\\"accessor decorators must return an object with get, set, or init properties or void 0\\");
-            if (void 0 !== value.get) assertCallable(value.get, \\"accessor.get\\");
-            if (void 0 !== value.set) assertCallable(value.set, \\"accessor.set\\");
-            if (void 0 !== value.init) assertCallable(value.init, \\"accessor.init\\");
-        } else if (\\"function\\" !== type) {
+            if ("object" !== type || null === value) throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");
+            if (void 0 !== value.get) assertCallable(value.get, "accessor.get");
+            if (void 0 !== value.set) assertCallable(value.set, "accessor.set");
+            if (void 0 !== value.init) assertCallable(value.init, "accessor.init");
+        } else if ("function" !== type) {
             var hint;
-            hint = 0 === kind ? \\"field\\" : 10 === kind ? \\"class\\" : \\"method\\";
-            throw new TypeError(hint + \\" decorators must return a function or void 0\\");
+            hint = 0 === kind ? "field" : 10 === kind ? "class" : "method";
+            throw new TypeError(hint + " decorators must return a function or void 0");
         }
     }
     function applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, initializers, metadata) {
@@ -471,7 +471,7 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
         else if (3 === kind) value = desc.get;
         else if (4 === kind) value = desc.set;
         var newValue, get, set;
-        if (\\"function\\" == typeof decs) {
+        if ("function" == typeof decs) {
             newValue = memberDec(decs, name, desc, initializers, kind, isStatic, isPrivate, metadata, value);
             if (void 0 !== newValue) {
                 assertValidReturnValue(kind, newValue);
@@ -504,7 +504,7 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
                 } else value = newValue;
                 if (void 0 !== newInit) {
                     if (void 0 === init) init = newInit;
-                    else if (\\"function\\" == typeof init) init = [
+                    else if ("function" == typeof init) init = [
                         init,
                         newInit
                     ];
@@ -516,7 +516,7 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
             if (void 0 === init) init = function(instance, init) {
                 return init;
             };
-            else if (\\"function\\" != typeof init) {
+            else if ("function" != typeof init) {
                 var ownInitializers = init;
                 init = function(instance, init) {
                     var value = init;
@@ -581,7 +581,7 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
                 if (0 !== kind && !isPrivate) {
                     var existingNonFields = isStatic ? existingStaticNonFields : existingProtoNonFields;
                     var existingKind = existingNonFields.get(name) || 0;
-                    if (true === existingKind || 3 === existingKind && 4 !== kind || 4 === existingKind && 3 !== kind) throw new Error(\\"Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: \\" + name);
+                    if (true === existingKind || 3 === existingKind && 4 !== kind || 4 === existingKind && 3 !== kind) throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + name);
                     if (!existingKind && kind > 2) existingNonFields.set(name, kind);
                     else existingNonFields.set(name, true);
                 }
@@ -609,7 +609,7 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
                 };
                 try {
                     var nextNewClass = classDecs[i](newClass, {
-                        kind: \\"class\\",
+                        kind: "class",
                         name: name,
                         addInitializer: createAddInitializerMethod(initializers, decoratorFinishedRef),
                         metadata
@@ -631,14 +631,14 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
         }
     }
     function defineMetadata(Class, metadata) {
-        return Object.defineProperty(Class, Symbol.metadata || Symbol.for(\\"Symbol.metadata\\"), {
+        return Object.defineProperty(Class, Symbol.metadata || Symbol.for("Symbol.metadata"), {
             configurable: true,
             enumerable: true,
             value: metadata
         });
     }
     return function(targetClass, memberDecs, classDecs, parentClass) {
-        if (void 0 !== parentClass) var parentMetadata = parentClass[Symbol.metadata || Symbol.for(\\"Symbol.metadata\\")];
+        if (void 0 !== parentClass) var parentMetadata = parentClass[Symbol.metadata || Symbol.for("Symbol.metadata")];
         var metadata = Object.create(void 0 === parentMetadata ? null : parentMetadata);
         var e = applyMemberDecs(targetClass, memberDecs, metadata);
         if (!classDecs.length) defineMetadata(targetClass, metadata);
