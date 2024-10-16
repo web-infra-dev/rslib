@@ -548,6 +548,7 @@ const composeFormatConfig = (
             output: {
               uniqueName: pkgJson.name as string,
             },
+            // TODO when we provide dev mode for rslib mf format, this should be modified to as the same with config.mode
             // can not set nodeEnv to false, because mf format should build shared module.
             // If nodeEnv is false, the process.env.NODE_ENV in third-party packages's will not be replaced
             // now we have not provide dev mode for users, so we can always set nodeEnv as 'production'
