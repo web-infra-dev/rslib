@@ -415,10 +415,16 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
     dev: {
       progressBar: false,
     },
+    performance: {
+      chunkSplit: {
+        strategy: 'all-in-one',
+      },
+    },
     tools: {
       htmlPlugin: false,
       rspack: {
         optimization: {
+          // splitChunks: false,
           moduleIds: 'named',
           nodeEnv: false,
         },
