@@ -5,11 +5,14 @@
   "linked": [],
   "access": "restricted",
   "baseBranch": "main",
+  "privatePackages": {
+    "version": false,
+    "tag": false
+  },
   "fixed": [["@rslib/*", "rsbuild-plugin-dts", "create-rslib"]],
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "onlyUpdatePeerDependentsWhenOutOfRange": true,
     "updateInternalDependents": "always"
   },
-  "updateInternalDependencies": "patch",
-  "ignore": []
+  "updateInternalDependencies": "patch"
 }

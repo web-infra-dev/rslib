@@ -8,7 +8,7 @@ test.todo('build command', async () => {});
 
 test('inspect command', async () => {
   await fse.remove(path.join(__dirname, 'dist'));
-  execSync('npx rslib inspect', {
+  execSync('pnpm run inspect', {
     cwd: __dirname,
   });
 
