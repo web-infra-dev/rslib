@@ -1,0 +1,9 @@
+{
+  "name": "@example/mf",
+  "scripts": {
+    "dev:all": "pnpm dev:host & pnpm dev:lib & pnpm dev:remote",
+    "dev:host": "pnpm --filter mf-host dev",
+    "dev:lib": "pnpm --filter mf-react-component run serve",
+    "dev:remote": "pnpm --filter mf-remote dev"
+  }
+}

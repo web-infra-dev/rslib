@@ -7,4 +7,21 @@ export default defineConfig({
   retries: process.env.CI ? 3 : 0,
   // Print line for each test being run in CI
   reporter: 'list',
+  webServer: [
+    {
+      command: 'cd ../examples/module-federation && npm run dev:host',
+      url: 'http://127.0.0.1:3000',
+      timeout: 120 * 1000,
+    },
+    {
+      command: 'cd ../examples/module-federation && npm run dev:lib',
+      url: 'http://127.0.0.1:3001',
+      timeout: 120 * 1000,
+    },
+    {
+      command: 'cd ../examples/module-federation && npm run dev:remote',
+      url: 'http://127.0.0.1:3002',
+      timeout: 120 * 1000,
+    },
+  ],
 });
