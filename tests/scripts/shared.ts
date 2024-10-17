@@ -43,6 +43,19 @@ export function generateBundleCjsConfig(config: LibConfig = {}): LibConfig {
   return mergeConfig(cjsBasicConfig, config)!;
 }
 
+export function generateBundleUmdConfig(config: LibConfig = {}): LibConfig {
+  const umdBasicConfig: LibConfig = {
+    format: 'umd',
+    output: {
+      distPath: {
+        root: './dist/umd',
+      },
+    },
+  };
+
+  return mergeConfig(umdBasicConfig, config)!;
+}
+
 export type FormatType = Format | `${Format}${number}`;
 type FilePath = string;
 
@@ -150,11 +163,17 @@ export async function getResults(
 export async function rslibBuild({
   cwd,
   path,
-}: { cwd: string; path?: string }) {
+  modifyConfig,
+}: {
+  cwd: string;
+  path?: string;
+  modifyConfig?: (config: RslibConfig) => void;
+}) {
   const rslibConfig = await loadConfig({
     cwd,
     path,
   });
+  modifyConfig?.(rslibConfig);
   process.chdir(cwd);
   const rsbuildInstance = await build(rslibConfig);
   return { rsbuildInstance, rslibConfig };

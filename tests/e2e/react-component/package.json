@@ -2,8 +2,14 @@
   "name": "react-component-e2e",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "dev:bundle": "../../node_modules/.bin/rsbuild dev --environment=bundle",
+    "dev:bundle-false": "../../node_modules/.bin/rsbuild dev --environment=bundleFalse",
+    "dev:umd": "../../node_modules/.bin/rsbuild dev --environment=umd"
+  },
   "dependencies": {
     "@examples/react-component-bundle": "workspace:*",
-    "@examples/react-component-bundle-false": "workspace:*"
+    "@examples/react-component-bundle-false": "workspace:*",
+    "@examples/react-component-umd": "workspace:*"
   }
 }
