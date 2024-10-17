@@ -9,11 +9,9 @@ export default defineConfig({
   lang: 'en',
   base: '/',
   title: 'Rslib',
-  icon: 'https://assets.rspack.dev/rslib/rslib-logo.png',
-  logo: {
-    light: 'https://assets.rspack.dev/rslib/rslib-logo.png',
-    dark: 'https://assets.rspack.dev/rslib/rslib-logo.png',
-  },
+  icon: 'https://assets.rspack.dev/rslib/rslib-logo-192x192.png',
+  logo: 'https://assets.rspack.dev/rslib/rslib-logo-192x192.png',
+  logoText: 'Rslib',
   ssg: {
     strict: true,
   },
@@ -65,6 +63,9 @@ export default defineConfig({
         outlineTitle: '目录',
         prevPageText: '上一页',
         nextPageText: '下一页',
+        searchPlaceholderText: '搜索文档',
+        searchNoResultsText: '无法找到相关搜索结果',
+        searchSuggestedQueryText: '请使用不同的关键字重试',
         description: '基于 Rsbuild 的库构建工具',
         editLink: {
           docRepoBaseUrl:
