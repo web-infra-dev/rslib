@@ -7,7 +7,10 @@ exports[`should downgrade class private method by default 1`] = `
     }
     #bar() {}
 }
-export { Foo };
+function foo(options = {}) {
+    console.log(options);
+}
+export { Foo, foo };
 "
 `;
 
@@ -31,7 +34,11 @@ class Foo {
     }
 }
 function bar() {}
-export { Foo };
+function foo() {
+    let options = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+    console.log(options);
+}
+export { Foo, foo };
 "
 `;
 
@@ -42,6 +49,9 @@ exports[`should downgrade class private method with output.syntax config 2`] = `
     }
     #bar() {}
 }
-export { Foo };
+function foo(options = {}) {
+    console.log(options);
+}
+export { Foo, foo };
 "
 `;
