@@ -13,8 +13,6 @@ export default defineConfig({
         },
         distPath: {
           root: './dist/umd',
-          css: '.',
-          cssAsync: '.',
         },
       },
     },

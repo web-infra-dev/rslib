@@ -83,6 +83,8 @@ export interface LibConfig extends RsbuildConfig {
   umdName?: string;
 }
 
+export type LibOnlyConfig = Omit<LibConfig, keyof RsbuildConfig>;
+
 export interface RslibConfig extends RsbuildConfig {
   lib: LibConfig[];
 }
