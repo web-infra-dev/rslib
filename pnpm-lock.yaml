@@ -111,6 +111,24 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1
 
+  examples/react-component-umd:
+    devDependencies:
+      '@rsbuild/plugin-react':
+        specifier: ^1.0.4
+        version: 1.0.4(@rsbuild/core@1.0.14)
+      '@rsbuild/plugin-sass':
+        specifier: ^1.0.3
+        version: 1.0.3(@rsbuild/core@1.0.14)
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@types/react':
+        specifier: ^18.3.11
+        version: 18.3.11
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+
   packages/core:
     dependencies:
       '@microsoft/api-extractor':
@@ -287,6 +305,9 @@ importers:
       '@examples/react-component-bundle-false':
         specifier: workspace:*
         version: link:../../../examples/react-component-bundle-false
+      '@examples/react-component-umd':
+        specifier: workspace:*
+        version: link:../../../examples/react-component-umd
 
   tests/integration/alias: {}
 
@@ -563,6 +584,23 @@ importers:
         version: 4.17.10
 
   tests/integration/tsconfig: {}
+
+  tests/integration/umd: {}
+
+  tests/integration/umd-globals:
+    devDependencies:
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-aliased:
+        specifier: npm:react@18.3.0
+        version: react@18.3.0
+
+  tests/integration/umd-library-name:
+    devDependencies:
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
 
   tests/scripts: {}
 
@@ -3884,6 +3922,10 @@ packages:
     peerDependencies:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
+
+  react@18.3.0:
+    resolution: {integrity: sha512-RPutkJftSAldDibyrjuku7q11d3oy6wKOyPe5K1HA/HwwrXcEqBdHsLypkC2FFYjP7bPUa6gbzSBhw4sY2JcDg==}
+    engines: {node: '>=0.10.0'}
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -8604,6 +8646,10 @@ snapshots:
       prop-types: 15.8.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+
+  react@18.3.0:
+    dependencies:
+      loose-envify: 1.4.0
 
   react@18.3.1:
     dependencies:

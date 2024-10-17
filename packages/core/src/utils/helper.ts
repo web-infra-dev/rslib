@@ -147,16 +147,17 @@ export function pick<T, U extends keyof T>(
 
 export function omit<T extends object, U extends keyof T>(
   obj: T,
-  keys: ReadonlyArray<U>,
-): Omit<T, U> {
+  keysObj: Record<U, boolean>,
+): Omit<T, keyof U> {
+  type K = keyof U;
   return Object.keys(obj).reduce(
     (ret, key) => {
-      if (!keys.includes(key as U)) {
-        ret[key as keyof Omit<T, U>] = obj[key as keyof Omit<T, U>];
+      if (keysObj[key as U] !== true) {
+        ret[key as keyof Omit<T, K>] = obj[key as keyof Omit<T, K>];
       }
       return ret;
     },
-    {} as Omit<T, U>,
+    {} as Omit<T, K>,
   );
 }
 
