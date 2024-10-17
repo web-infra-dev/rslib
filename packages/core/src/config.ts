@@ -524,7 +524,7 @@ const composeFormatConfig = ({
     case 'umd': {
       if (bundle === false) {
         throw new Error(
-          'When "format" is set to "umd", "bundle" must not be set to "false", consider setting "bundle" to "true" or remove the field, it\'s default value is "true".',
+          'When using "umd" format, "bundle" must be set to "true". Since the default value for "bundle" is "true", so you can either explicitly set it to "true" or remove the field entirely.',
         );
       }
 
