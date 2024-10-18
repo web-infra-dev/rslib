@@ -9,7 +9,7 @@ import {
   mergeRsbuildConfig,
   rspack,
 } from '@rsbuild/core';
-import glob from 'fast-glob';
+import { glob } from 'tinyglobby';
 import {
   DEFAULT_CONFIG_EXTENSIONS,
   DEFAULT_CONFIG_NAME,
@@ -777,6 +777,7 @@ const composeEntryConfig = async (
     // Turn entries in array into each separate entry.
     const globEntryFiles = await glob(entryFiles, {
       cwd: root,
+      absolute: true,
     });
 
     // Filter the glob resolved entry files based on the allowed extensions
