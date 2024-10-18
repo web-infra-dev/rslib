@@ -33,6 +33,7 @@ import type {
   BannerAndFooter,
   Format,
   LibConfig,
+  LibOnlyConfig,
   PkgJson,
   Redirect,
   RsbuildConfigOutputTarget,
@@ -451,10 +452,17 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
   });
 }
 
-const composeFormatConfig = (
-  format: Format,
-  pkgJson: PkgJson,
-): RsbuildConfig => {
+const composeFormatConfig = ({
+  format,
+  bundle = true,
+  umdName,
+  pkgJson,
+}: {
+  format: Format;
+  pkgJson: PkgJson;
+  bundle?: boolean;
+  umdName?: string;
+}): RsbuildConfig => {
   const jsParserOptions = {
     cjs: {
       requireResolve: false,
@@ -522,8 +530,14 @@ const composeFormatConfig = (
           },
         },
       };
-    case 'umd':
-      return {
+    case 'umd': {
+      if (bundle === false) {
+        throw new Error(
+          'When using "umd" format, "bundle" must be set to "true". Since the default value for "bundle" is "true", so you can either explicitly set it to "true" or remove the field entirely.',
+        );
+      }
+
+      const config: RsbuildConfig = {
         tools: {
           rspack: {
             module: {
@@ -534,13 +548,23 @@ const composeFormatConfig = (
               },
             },
             output: {
-              library: {
-                type: 'umd',
-              },
+              asyncChunks: false,
+
+              library: umdName
+                ? {
+                    type: 'umd',
+                    name: umdName,
+                  }
+                : {
+                    type: 'umd',
+                  },
             },
           },
         },
       };
+
+      return config;
+    }
     case 'mf':
       return {
         tools: {
@@ -817,7 +841,7 @@ const composeBundleConfig = (
   jsExtension: string,
   redirect: Redirect,
   cssModulesAuto: CssLoaderOptionsAuto,
-  bundle = true,
+  bundle: boolean,
 ): RsbuildConfig => {
   if (bundle) return {};
 
@@ -990,15 +1014,22 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   const {
     format,
     shims,
+    bundle = true,
     banner = {},
     footer = {},
     autoExtension = true,
     autoExternal = true,
     externalHelpers = false,
     redirect = {},
+    umdName,
   } = config;
   const shimsConfig = composeShimsConfig(format!, shims);
-  const formatConfig = composeFormatConfig(format!, pkgJson!);
+  const formatConfig = composeFormatConfig({
+    format: format!,
+    pkgJson: pkgJson!,
+    bundle,
+    umdName,
+  });
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,
     pkgJson,
@@ -1016,7 +1047,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     jsExtension,
     redirect,
     cssModulesAuto,
-    config.bundle,
+    bundle,
   );
   const targetConfig = composeTargetConfig(config.output?.target);
   const syntaxConfig = composeSyntaxConfig(
@@ -1119,19 +1150,20 @@ export async function composeCreateRsbuildConfig(
       config: mergeRsbuildConfig(
         constantRsbuildConfig,
         libRsbuildConfig,
-        omit(userConfig, [
-          'bundle',
-          'format',
-          'autoExtension',
-          'autoExternal',
-          'redirect',
-          'syntax',
-          'externalHelpers',
-          'banner',
-          'footer',
-          'dts',
-          'shims',
-        ]),
+        omit<LibConfig, keyof LibOnlyConfig>(userConfig, {
+          bundle: true,
+          format: true,
+          autoExtension: true,
+          autoExternal: true,
+          redirect: true,
+          syntax: true,
+          externalHelpers: true,
+          banner: true,
+          footer: true,
+          dts: true,
+          shims: true,
+          umdName: true,
+        }),
       ),
     };
   });

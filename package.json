@@ -1,11 +1,6 @@
 {
   "name": "rslib-monorepo",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  },
   "scripts": {
     "build": "cross-env NX_DAEMON=false nx run-many -t build --exclude @examples/* --parallel=10",
     "build:examples": "cross-env NX_DAEMON=false nx run-many -t build --projects @examples/* --parallel=10",

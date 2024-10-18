@@ -23,7 +23,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | dts-composite   | ⚪️     |                                                          |
 | esbuildOptions  | ⚫️    |                                                          |
 | externals       | 🟢     |                                                          |
-| format          | 🟡     | Support `cjs` and `esm`, `umd` still need to be tested   |
+| format          | 🟢     |                                                          |
 | input           | 🟢     |                                                          |
 | jsx             | ⚪️     |                                                          |
 | metafile        | ⚫️    |                                                          |
@@ -42,5 +42,5 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | transformLodash | 🟢     |                                                          |
 | tsconfig        | 🟢     |                                                          |
 | tsconfigExtends | 🟢     |                                                          |
-| umdGlobals      | ⚪️     |                                                          |
-| umdModuleName   | ⚪️     |                                                          |
+| umdGlobals      | 🟢     |                                                          |
+| umdModuleName   | 🟡     | lacks 1. non string type 2. auto transform to camel case |

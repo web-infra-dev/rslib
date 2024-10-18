@@ -7,16 +7,19 @@ exports[`should downgrade class private method by default 1`] = `
     }
     #bar() {}
 }
-export { Foo };
+function foo(options = {}) {
+    console.log(options);
+}
+export { Foo, foo };
 "
 `;
 
 exports[`should downgrade class private method with output.syntax config 1`] = `
 "function _check_private_redeclaration(obj, privateCollection) {
-    if (privateCollection.has(obj)) throw new TypeError(\\"Cannot initialize the same private elements twice on an object\\");
+    if (privateCollection.has(obj)) throw new TypeError("Cannot initialize the same private elements twice on an object");
 }
 function _class_private_method_get(receiver, privateSet, fn) {
-    if (!privateSet.has(receiver)) throw new TypeError(\\"attempted to get private field on non-instance\\");
+    if (!privateSet.has(receiver)) throw new TypeError("attempted to get private field on non-instance");
     return fn;
 }
 function _class_private_method_init(obj, privateSet) {
@@ -31,7 +34,11 @@ class Foo {
     }
 }
 function bar() {}
-export { Foo };
+function foo() {
+    let options = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+    console.log(options);
+}
+export { Foo, foo };
 "
 `;
 
@@ -42,6 +49,9 @@ exports[`should downgrade class private method with output.syntax config 2`] = `
     }
     #bar() {}
 }
-export { Foo };
+function foo(options = {}) {
+    console.log(options);
+}
+export { Foo, foo };
 "
 `;

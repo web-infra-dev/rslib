@@ -90,32 +90,32 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@rsbuild/core':
-        specifier: ^1.0.1
+        specifier: ^1.0.14
         version: 1.0.14
       '@rsbuild/plugin-react':
-        specifier: ^1.0.1
+        specifier: ^1.0.4
         version: 1.0.4(@rsbuild/core@1.0.14)
       '@types/react':
-        specifier: ^18.3.5
+        specifier: ^18.3.11
         version: 18.3.11
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: ^18.3.1
         version: 18.3.1
       typescript:
-        specifier: ^5.5.2
+        specifier: ^5.6.3
         version: 5.6.3
 
   examples/module-federation/mf-react-component:
     dependencies:
-      '@module-federation/enhanced':
-        specifier: ^0.6.11
-        version: 0.6.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0)
       '@module-federation/rsbuild-plugin':
         specifier: 0.0.2
         version: 0.0.2(@module-federation/enhanced@0.6.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.0.14)
     devDependencies:
+      '@module-federation/enhanced':
+        specifier: ^0.6.11
+        version: 0.6.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0)
       '@rsbuild/plugin-react':
-        specifier: ^1.0.3
+        specifier: ^1.0.4
         version: 1.0.4(@rsbuild/core@1.0.14)
       '@rslib/core':
         specifier: workspace:*
@@ -146,19 +146,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@rsbuild/core':
-        specifier: ^1.0.1
+        specifier: ^1.0.14
         version: 1.0.14
       '@rsbuild/plugin-react':
-        specifier: ^1.0.1
+        specifier: ^1.0.4
         version: 1.0.4(@rsbuild/core@1.0.14)
       '@types/react':
-        specifier: ^18.3.5
+        specifier: ^18.3.11
         version: 18.3.11
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: ^18.3.1
         version: 18.3.1
       typescript:
-        specifier: ^5.5.2
+        specifier: ^5.6.3
         version: 5.6.3
 
   examples/react-component-bundle:
@@ -197,13 +197,31 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1
 
+  examples/react-component-umd:
+    devDependencies:
+      '@rsbuild/plugin-react':
+        specifier: ^1.0.4
+        version: 1.0.4(@rsbuild/core@1.0.14)
+      '@rsbuild/plugin-sass':
+        specifier: ^1.0.3
+        version: 1.0.3(@rsbuild/core@1.0.14)
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@types/react':
+        specifier: ^18.3.11
+        version: 18.3.11
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+
   packages/core:
     dependencies:
       '@microsoft/api-extractor':
         specifier: ^7
         version: 7.47.9(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: ~1.0.14
+        specifier: ^1.0.14
         version: 1.0.14
       rsbuild-plugin-dts:
         specifier: workspace:*
@@ -290,7 +308,7 @@ importers:
         specifier: ^7.47.9
         version: 7.47.9(@types/node@18.19.39)
       '@rsbuild/core':
-        specifier: ~1.0.14
+        specifier: ^1.0.14
         version: 1.0.14
       '@rslib/tsconfig':
         specifier: workspace:*
@@ -356,8 +374,8 @@ importers:
         specifier: ^11.2.0
         version: 11.2.0
       path-serializer:
-        specifier: 0.0.6
-        version: 0.0.6
+        specifier: 0.1.3
+        version: 0.1.3
       strip-ansi:
         specifier: ^7.1.0
         version: 7.1.0
@@ -373,6 +391,9 @@ importers:
       '@examples/react-component-bundle-false':
         specifier: workspace:*
         version: link:../../../examples/react-component-bundle-false
+      '@examples/react-component-umd':
+        specifier: workspace:*
+        version: link:../../../examples/react-component-umd
 
   tests/integration/alias: {}
 
@@ -646,12 +667,29 @@ importers:
 
   tests/integration/tsconfig: {}
 
+  tests/integration/umd: {}
+
+  tests/integration/umd-globals:
+    devDependencies:
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-aliased:
+        specifier: npm:react@18.3.0
+        version: react@18.3.0
+
+  tests/integration/umd-library-name:
+    devDependencies:
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+
   tests/scripts: {}
 
   website:
     devDependencies:
       '@rsbuild/core':
-        specifier: ~1.0.14
+        specifier: ^1.0.14
         version: 1.0.14
       '@rslib/tsconfig':
         specifier: workspace:*
@@ -2099,8 +2137,8 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
-  axios@1.7.5:
-    resolution: {integrity: sha512-fZu86yCo+svH3uqJ/yTdQ0QHpQu5oL+/QE+QPSv6BZSkDAoky9vytxp7u5qk83OJFS3kEBcesWni9WTZAv3tSw==}
+  axios@1.7.7:
+    resolution: {integrity: sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==}
 
   b-tween@0.3.3:
     resolution: {integrity: sha512-oEHegcRpA7fAuc9KC4nktucuZn2aS8htymCPcP3qkEGPqiBH+GfqtqoG2l7LxHngg6O0HFM7hOeOYExl1Oz4ZA==}
@@ -3991,8 +4029,8 @@ packages:
     resolution: {integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==}
     engines: {node: '>=16 || 14 >=14.18'}
 
-  path-serializer@0.0.6:
-    resolution: {integrity: sha512-kBhnac4AnaKORPpadUFKsxdTOMDF+vNuYyZcmbmeWnjogEUIjdOgOMpKxdb8acv6i8ldVthtDV35EOXIt1DbJw==}
+  path-serializer@0.1.3:
+    resolution: {integrity: sha512-QHctOXmm/EMIrzaEND1gYlGgu8WOSv5aqRRbUxkpFiV/2aPBtSCx2lTr2XPK2raMsI/v/jJti49g615B35MAkQ==}
 
   path-to-regexp@0.1.10:
     resolution: {integrity: sha512-7lf7qcQidTku0Gu3YDPc8DJ1q7OOucfa/BSsIwjuh56VU7katFvuM8hULfkwB3Fns/rsVF7PwPKVw1sl5KQS9w==}
@@ -4240,6 +4278,10 @@ packages:
     peerDependencies:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
+
+  react@18.3.0:
+    resolution: {integrity: sha512-RPutkJftSAldDibyrjuku7q11d3oy6wKOyPe5K1HA/HwwrXcEqBdHsLypkC2FFYjP7bPUa6gbzSBhw4sY2JcDg==}
+    engines: {node: '>=0.10.0'}
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -5573,7 +5615,7 @@ snapshots:
 
   '@codspeed/core@3.1.1':
     dependencies:
-      axios: 1.7.5
+      axios: 1.7.7
       find-up: 6.3.0
       form-data: 4.0.0
       node-gyp-build: 4.8.2
@@ -5843,7 +5885,7 @@ snapshots:
       '@module-federation/third-party-dts-extractor': 0.6.11
       adm-zip: 0.5.16
       ansi-colors: 4.1.3
-      axios: 1.7.5
+      axios: 1.7.7
       chalk: 3.0.0
       fs-extra: 9.1.0
       isomorphic-ws: 5.0.0(ws@8.18.0)
@@ -6896,7 +6938,7 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
-  axios@1.7.5:
+  axios@1.7.7:
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0
@@ -8955,7 +8997,7 @@ snapshots:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.0-rc.46
       '@zkochan/js-yaml': 0.0.7
-      axios: 1.7.5
+      axios: 1.7.7
       chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
@@ -9143,7 +9185,7 @@ snapshots:
       lru-cache: 10.4.3
       minipass: 7.1.2
 
-  path-serializer@0.0.6: {}
+  path-serializer@0.1.3: {}
 
   path-to-regexp@0.1.10: {}
 
@@ -9385,6 +9427,10 @@ snapshots:
       prop-types: 15.8.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+
+  react@18.3.0:
+    dependencies:
+      loose-envify: 1.4.0
 
   react@18.3.1:
     dependencies:

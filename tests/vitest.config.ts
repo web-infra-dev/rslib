@@ -13,5 +13,6 @@ export default defineConfig({
       include: ['./benchmark/**/*.bench.ts'],
     },
   },
-  plugins: [codspeedPlugin()],
+  // Don't run CodSpeed locally as no instruments are setup.
+  plugins: [!!process.env.CI && codspeedPlugin()].filter(Boolean),
 });
