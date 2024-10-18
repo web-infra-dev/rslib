@@ -421,6 +421,7 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
       htmlPlugin: false,
       rspack: {
         optimization: {
+          splitChunks: false,
           moduleIds: 'named',
           nodeEnv: false,
         },

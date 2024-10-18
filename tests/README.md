@@ -47,27 +47,27 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 
 ## [dev](https://github.com/web-infra-dev/modern.js/tree/main/tests/integration/module/fixtures/dev)
 
-WIP.
+Not applicable, Rslib doesn't introduce new plugin system.
 
 ## [platform](https://github.com/web-infra-dev/modern.js/tree/main/tests/integration/module/fixtures/platform)
 
-WIP.
+Not applicable, the doc tool integrated with Rspress will be implemented decoupled from Rslib.
 
 ## [preset](https://github.com/web-infra-dev/modern.js/tree/main/tests/integration/module/fixtures/preset)
 
-WIP.
+Not applicable, Rslib will provide a more simple unencapsulated build boilerplate.
 
 ## [plugins](https://github.com/web-infra-dev/modern.js/tree/main/tests/integration/module/plugins)
 
 Rslib could reuse the plugins from Rsbuild, which means the [official plugins](https://edenx.bytedance.net/module-tools/en/plugins/official-list/overview.html) provided by Modern Module could be replaced by Rsbuild plugins.
 
-| Plugins                            | Status | Note                                                                          |
-| ---------------------------------- | ------ | ----------------------------------------------------------------------------- |
-| @edenx/plugin-module-import        | ⚪️     | Use https://rsbuild.dev/config/source/transform-import#sourcetransformimport. |
-| @edenx/plugin-module-banner        | 🟢     | BannerPlugin.                                                                 |
-| @edenx/plugin-module-node-polyfill | ⚪️     | Use https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill.           |
-| @edenx/plugin-module-polyfill      | ⚪️     | Use https://rsbuild.dev/config/output/polyfill#outputpolyfill.                |
-| @edenx/plugin-module-babel         | ⚪️     | Use https://rsbuild.dev/plugins/list/plugin-babel.                            |
-| @edenx/plugin-module-vue           | ⚪️     | Use https://rsbuild.dev/plugins/list/plugin-vue.                              |
+| Plugins                                | Status | Note                                                                          |
+| -------------------------------------- | ------ | ----------------------------------------------------------------------------- |
+| @modern-js/plugin-module-import        | 🟢     | Use https://rsbuild.dev/config/source/transform-import#sourcetransformimport. |
+| @modern-js/plugin-module-banner        | 🟢     | BannerPlugin.                                                                 |
+| @modern-js/plugin-module-node-polyfill | ⚪️     | Use https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill.           |
+| @modern-js/plugin-module-polyfill      | ⚪️     | Use https://rsbuild.dev/config/output/polyfill#outputpolyfill.                |
+| @modern-js/plugin-module-babel         | 🟢     | Use https://rsbuild.dev/plugins/list/plugin-babel.                            |
+| @modern-js/plugin-module-vue           | ⚪️     | Use https://rsbuild.dev/plugins/list/plugin-vue.                              |
 
 ##
