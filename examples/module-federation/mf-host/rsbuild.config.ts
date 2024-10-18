@@ -21,7 +21,4 @@ export default defineConfig({
       shareStrategy: 'loaded-first',
     }),
   ],
-  server: {
-    port: 3000,
-  },
 });

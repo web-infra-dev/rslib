@@ -184,9 +184,9 @@ export function checkMFPlugin(config: LibConfig): boolean {
   const added = isPluginIncluded(config, 'rsbuild:module-federation-enhanced');
   if (!added) {
     logger.warn(
-      `${color.green('"mf format"')} should be used with ${color.blue(
+      `${color.green('format: "mf"')} should be used with ${color.blue(
         '@module-federation/rsbuild-plugin',
-      )}," consider installing and adding to plugins. Check the documentation (https://module-federation.io/guide/basic/rsbuild.html#rslib-module) to get start with "mf" output.`,
+      )}", consider installing and adding it to plugins. Check the documentation (https://module-federation.io/guide/basic/rsbuild.html#rslib-module) to get started with "mf" output.`,
     );
     process.exit(1);
   }
