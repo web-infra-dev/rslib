@@ -109,7 +109,9 @@ export async function processDtsFiles(
     return;
   }
 
-  const dtsFiles = await glob(convertPath(join(dir, '/**/*.d.ts')));
+  const dtsFiles = await glob(convertPath(join(dir, '/**/*.d.ts')), {
+    absolute: true,
+  });
 
   for (const file of dtsFiles) {
     try {

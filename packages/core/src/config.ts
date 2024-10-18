@@ -748,6 +748,7 @@ const composeEntryConfig = async (
     // Turn entries in array into each separate entry.
     const globEntryFiles = await glob(entryFiles, {
       cwd: root,
+      absolute: true,
     });
 
     // Filter the glob resolved entry files based on the allowed extensions
