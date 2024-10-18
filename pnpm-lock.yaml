@@ -79,9 +79,6 @@ importers:
 
   examples/module-federation/mf-host:
     dependencies:
-      '@module-federation/rsbuild-plugin':
-        specifier: 0.0.2
-        version: 0.0.2(@module-federation/enhanced@0.6.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.0.14)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -89,6 +86,9 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
     devDependencies:
+      '@module-federation/rsbuild-plugin':
+        specifier: 0.0.2
+        version: 0.0.2(@module-federation/enhanced@0.6.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.0.14)
       '@rsbuild/core':
         specifier: ^1.0.14
         version: 1.0.14
@@ -106,14 +106,13 @@ importers:
         version: 5.6.3
 
   examples/module-federation/mf-react-component:
-    dependencies:
-      '@module-federation/rsbuild-plugin':
-        specifier: 0.0.2
-        version: 0.0.2(@module-federation/enhanced@0.6.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.0.14)
     devDependencies:
       '@module-federation/enhanced':
         specifier: ^0.6.11
         version: 0.6.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0)
+      '@module-federation/rsbuild-plugin':
+        specifier: 0.0.2
+        version: 0.0.2(@module-federation/enhanced@0.6.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.0.14)
       '@rsbuild/plugin-react':
         specifier: ^1.0.4
         version: 1.0.4(@rsbuild/core@1.0.14)
@@ -135,9 +134,6 @@ importers:
 
   examples/module-federation/mf-remote:
     dependencies:
-      '@module-federation/rsbuild-plugin':
-        specifier: 0.0.2
-        version: 0.0.2(@module-federation/enhanced@0.6.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.0.14)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -145,6 +141,9 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
     devDependencies:
+      '@module-federation/rsbuild-plugin':
+        specifier: 0.0.2
+        version: 0.0.2(@module-federation/enhanced@0.6.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.0.14)
       '@rsbuild/core':
         specifier: ^1.0.14
         version: 1.0.14

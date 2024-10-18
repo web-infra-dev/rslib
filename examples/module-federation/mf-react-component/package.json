@@ -15,11 +15,9 @@
     "build": "rslib build",
     "serve": "pnpm build && http-server -p 3001 ./dist/ --cors"
   },
-  "dependencies": {
-    "@module-federation/rsbuild-plugin": "0.0.2"
-  },
   "devDependencies": {
     "@module-federation/enhanced": "^0.6.11",
+    "@module-federation/rsbuild-plugin": "0.0.2",
     "@rsbuild/plugin-react": "^1.0.4",
     "@rslib/core": "workspace:*",
     "@types/react": "^18.3.11",
