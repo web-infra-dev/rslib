@@ -646,12 +646,14 @@ const composeExternalsConfig = (
     esm: 'module-import',
     cjs: 'commonjs',
     umd: 'umd',
+    mf: 'var', // same as default value
   } as const;
 
   switch (format) {
     case 'esm':
     case 'cjs':
     case 'umd':
+    case 'mf':
       return {
         output: externals
           ? {
@@ -663,14 +665,6 @@ const composeExternalsConfig = (
             externalsType: externalsTypeMap[format],
           },
         },
-      };
-    case 'mf':
-      return {
-        output: externals
-          ? {
-              externals,
-            }
-          : {},
       };
     default:
       throw new Error(`Unsupported format: ${format}`);
