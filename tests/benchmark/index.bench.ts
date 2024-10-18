@@ -44,4 +44,12 @@ describe('benchmark Rslib in examples', () => {
     },
     { iterations },
   );
+  bench(
+    'examples/module-federation/mf-react-component',
+    async () => {
+      const cwd = getCwdByExample('module-federation/mf-react-component');
+      await rslibBuild({ cwd, modifyConfig: disableDts });
+    },
+    { iterations },
+  );
 });
