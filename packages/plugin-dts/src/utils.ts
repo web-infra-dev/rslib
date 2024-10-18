@@ -3,13 +3,11 @@ import fsP from 'node:fs/promises';
 import { platform } from 'node:os';
 import path, { join } from 'node:path';
 import { type RsbuildConfig, logger } from '@rsbuild/core';
-import fg from 'fast-glob';
 import MagicString from 'magic-string';
 import color from 'picocolors';
+import { convertPathToPattern, glob } from 'tinyglobby';
 import ts from 'typescript';
 import type { DtsEntry } from './index';
-
-const { convertPathToPattern } = fg;
 
 export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
   const configFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
@@ -68,8 +66,8 @@ export const prettyTime = (seconds: number): string => {
   return `${format(minutes.toFixed(2))} m`;
 };
 
-// fast-glob only accepts posix path
-// https://github.com/mrmlnc/fast-glob#convertpathtopatternpath
+// tinyglobby only accepts posix path
+// https://github.com/SuperchupuDev/tinyglobby?tab=readme-ov-file#api
 const convertPath = (path: string) => {
   if (platform() === 'win32') {
     return convertPathToPattern(path);
@@ -111,7 +109,7 @@ export async function processDtsFiles(
     return;
   }
 
-  const dtsFiles = await fg(convertPath(join(dir, '/**/*.d.ts')));
+  const dtsFiles = await glob(convertPath(join(dir, '/**/*.d.ts')));
 
   for (const file of dtsFiles) {
     try {

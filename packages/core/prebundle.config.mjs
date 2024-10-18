@@ -13,7 +13,6 @@ export default {
   },
   dependencies: [
     'commander',
-    'fast-glob',
     {
       name: 'rslog',
       afterBundle(task) {

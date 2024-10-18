@@ -1,13 +1,10 @@
 import { platform } from 'node:os';
 import { join } from 'node:path';
-import fg, {
-  type Options as GlobOptions,
-  convertPathToPattern,
-} from 'fast-glob';
 import fse from 'fs-extra';
+import { type GlobOptions, convertPathToPattern, glob } from 'tinyglobby';
 
-// fast-glob only accepts posix path
-// https://github.com/mrmlnc/fast-glob#convertpathtopatternpath
+// tinyglobby only accepts posix path
+// https://github.com/SuperchupuDev/tinyglobby?tab=readme-ov-file#api
 const convertPath = (path: string) => {
   if (platform() === 'win32') {
     return convertPathToPattern(path);
@@ -19,7 +16,7 @@ export const globContentJSON = async (
   path: string,
   options?: GlobOptions,
 ): Promise<Record<string, string>> => {
-  const files = await fg(convertPath(join(path, '**/*')), options);
+  const files = await glob(convertPath(join(path, '**/*')), options);
   const ret: Record<string, string> = {};
 
   await Promise.all(

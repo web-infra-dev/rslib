@@ -9,7 +9,7 @@ import {
   mergeRsbuildConfig,
   rspack,
 } from '@rsbuild/core';
-import glob from 'fast-glob';
+import { glob } from 'tinyglobby';
 import {
   DEFAULT_CONFIG_EXTENSIONS,
   DEFAULT_CONFIG_NAME,
