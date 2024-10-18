@@ -1,5 +1,7 @@
 # Rsbuild Project
 
+Module Federation Remote Example
+
 ## Setup
 
 Install the dependencies:

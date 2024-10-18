@@ -1,5 +1,7 @@
 # Rsbuild Project
 
+Module Federation Host Example
+
 ## Setup
 
 Install the dependencies:
