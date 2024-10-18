@@ -10,32 +10,33 @@ Module Federation is a JavaScript application divide-and-conquer architecture pa
 
 Module federation has some typical usage scenarios, including:
 
-Allows independent applications (called "Micro-Frontend" in the Micro-Frontend architecture) to share modules without having to recompile the entire application.
-Different teams work on different parts of the same application without having to recompile the entire application.
-Dynamic code loading and sharing between applications at runtime.
-Module federation can help you:
+- Allows independent applications (called "Micro-Frontend" in the Micro-Frontend architecture) to share modules without having to recompile the entire application.
+- Different teams work on different parts of the same application without having to recompile the entire application.
+- Dynamic code loading and sharing between applications at runtime.
+
+Module Federation can help you:
 
 - Reduce code duplication
 - Improve code maintainability
 - Reduce the overall size of the application
 - Improve application performance
 
-## Quick access
+## Quick Start
 
-First install the Module Federation Rsbuild Plugin (Rslib is built on Rsbuild)
+First install the Module Federation Rsbuild Plugin (Rslib is based on Rsbuild).
 
 import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs
   command={{
-    npm: 'npm add @module-federation/rsbuild-plugin --save-dev',
-    yarn: 'yarn add @module-federation/rsbuild-plugin --save-dev',
-    pnpm: 'pnpm add @module-federation/rsbuild-plugin --save-dev',
-    bun: 'bun add @module-federation/rsbuild-plugin --save-dev',
+    npm: 'npm add @module-federation/rsbuild-plugin -D',
+    yarn: 'yarn add @module-federation/rsbuild-plugin -D',
+    pnpm: 'pnpm add @module-federation/rsbuild-plugin -D',
+    bun: 'bun add @module-federation/rsbuild-plugin -D',
   }}
 />
 
-Add the plugin to the `rslib.config.ts` file
+Add the plugin to the `rslib.config.ts` file:
 
 ```ts title='rslib.config.ts'
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';

@@ -10,9 +10,10 @@ Module Federation 是一种 JavaScript 应用分治的架构模式（类似于�
 
 模块联邦有一些典型的使用场景，包括：
 
-允许独立应用（在微前端架构中称为"微前端"）之间共享模块，无需重新编译整个应用。
-不同的团队在不需要重新编译整个应用的情况下处理同一应用的不同部分。
-应用之间在运行时进行动态代码加载和共享。
+- 允许独立应用（在微前端架构中称为"微前端"）之间共享模块，无需重新编译整个应用。
+- 不同的团队在不需要重新编译整个应用的情况下处理同一应用的不同部分。
+- 应用之间在运行时进行动态代码加载和共享。
+
 模块联邦可以帮助你：
 
 - 减少代码重复
@@ -22,20 +23,20 @@ Module Federation 是一种 JavaScript 应用分治的架构模式（类似于�
 
 ## 快速接入
 
-首先安装 Module Federation Rsbuild 插件(Rslib 基于 Rsbuild 构建)
+首先安装 Module Federation Rsbuild 插件（Rslib 基于 Rsbuild 实现）。
 
 import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs
   command={{
-    npm: 'npm add @module-federation/rsbuild-plugin --save-dev',
-    yarn: 'yarn add @module-federation/rsbuild-plugin --save-dev',
-    pnpm: 'pnpm add @module-federation/rsbuild-plugin --save-dev',
-    bun: 'bun add @module-federation/rsbuild-plugin --save-dev',
+    npm: 'npm add @module-federation/rsbuild-plugin -D',
+    yarn: 'yarn add @module-federation/rsbuild-plugin -D',
+    pnpm: 'pnpm add @module-federation/rsbuild-plugin -D',
+    bun: 'bun add @module-federation/rsbuild-plugin -D',
   }}
 />
 
-将插件添加到 `rslib.config.ts` 中
+将插件添加到 `rslib.config.ts` 中：
 
 ```ts title='rslib.config.ts'
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
@@ -78,11 +79,11 @@ export default defineConfig({
 });
 ```
 
-这样我们就完成了 Rslib Module 作为生产者的接入，构建完成后可以看到产物中新增了 mf 目录，消费者可以直接消费这个包
+这样我们就完成了 Rslib Module 作为生产者的接入，构建完成后可以看到产物中新增了 mf 目录，消费者可以直接消费这个包。
 
-在上面的例子中我们增加了一个新的 `format: 'mf'`，这会帮助你新增一份额外的 Module Federation 产物，与此同时还可以配置 `cjs` 和 `esm` 的 format，这并不冲突。
+在上面的例子中，我们设置了一个新的 `format: 'mf'`，这会帮助你生成一份额外的 Module Federation 产物，与此同时，还可以配置 `cjs` 和 `esm` 的 format，它们互相不冲突。
 
-但是如果希望这个 Rslib Module 同时可以消费其他生产者，请不要使用构建配置 `remote` 参数，因为在其他 format 中，这可能会导致错误，请参考下方使用 Module Federation 运行时的例子
+如果你希望这个 Rslib Module 同时可以消费其他生产者，请不要使用构建配置 `remote` 参数，因为在其他 format 中，这可能会导致错误，请参考下方使用 Module Federation 运行时的例子。
 
 ## 消费其他 Module Federation 模块
 
