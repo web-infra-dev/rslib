@@ -47,6 +47,7 @@ import type {
 import { getDefaultExtension } from './utils/extension';
 import {
   calcLongestCommonPath,
+  checkMFPlugin,
   color,
   isEmptyObject,
   isObject,
@@ -285,9 +286,9 @@ export const composeAutoExternalConfig = (options: {
     : {};
 };
 
-export function composeMinifyConfig(
-  minify: NonNullable<RsbuildConfig['output']>['minify'],
-): RsbuildConfig {
+export function composeMinifyConfig(config: LibConfig): RsbuildConfig {
+  const minify = config.output?.minify;
+  const format = config.format;
   if (minify !== undefined) {
     // User's minify configuration will be merged afterwards.
     return {};
@@ -308,7 +309,8 @@ export function composeMinifyConfig(
               defaults: false,
               unused: true,
               dead_code: true,
-              toplevel: true,
+              // remoteEntry's global variable will be tree-shaken if `toplevel` is enabled in "mf" format
+              toplevel: format !== 'mf',
             },
             format: {
               comments: 'all',
@@ -454,7 +456,13 @@ const composeFormatConfig = ({
   format,
   bundle = true,
   umdName,
-}: { format: Format; bundle?: boolean; umdName?: string }): RsbuildConfig => {
+  pkgJson,
+}: {
+  format: Format;
+  pkgJson: PkgJson;
+  bundle?: boolean;
+  umdName?: string;
+}): RsbuildConfig => {
   const jsParserOptions = {
     cjs: {
       requireResolve: false,
@@ -557,6 +565,23 @@ const composeFormatConfig = ({
 
       return config;
     }
+    case 'mf':
+      return {
+        tools: {
+          rspack: {
+            output: {
+              uniqueName: pkgJson.name as string,
+            },
+            // TODO when we provide dev mode for rslib mf format, this should be modified to as the same with config.mode
+            // can not set nodeEnv to false, because mf format should build shared module.
+            // If nodeEnv is false, the process.env.NODE_ENV in third-party packages's will not be replaced
+            // now we have not provide dev mode for users, so we can always set nodeEnv as 'production'
+            optimization: {
+              nodeEnv: 'production',
+            },
+          },
+        },
+      };
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
@@ -598,6 +623,8 @@ const composeShimsConfig = (format: Format, shims?: Shims): RsbuildConfig => {
       };
     case 'umd':
       return {};
+    case 'mf':
+      return {};
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
@@ -619,12 +646,14 @@ const composeExternalsConfig = (
     esm: 'module-import',
     cjs: 'commonjs',
     umd: 'umd',
+    mf: 'var', // same as default value
   } as const;
 
   switch (format) {
     case 'esm':
     case 'cjs':
     case 'umd':
+    case 'mf':
       return {
         output: externals
           ? {
@@ -967,6 +996,7 @@ const composeExternalHelpersConfig = (
 };
 
 async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
+  checkMFPlugin(config);
   const rootPath = dirname(configPath);
   const pkgJson = readPackageJson(rootPath);
   const { compilerOptions } = await loadTsconfig(
@@ -990,6 +1020,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   const shimsConfig = composeShimsConfig(format!, shims);
   const formatConfig = composeFormatConfig({
     format: format!,
+    pkgJson: pkgJson!,
     bundle,
     umdName,
   });
@@ -1035,7 +1066,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     autoExternalConfig?.output?.externals,
     externalsConfig?.output?.externals,
   );
-  const minifyConfig = composeMinifyConfig(config.output?.minify);
+  const minifyConfig = composeMinifyConfig(config);
   const bannerFooterConfig = composeBannerFooterConfig(banner, footer);
   const decoratorsConfig = composeDecoratorsConfig(
     compilerOptions,
@@ -1152,6 +1183,7 @@ export async function initRsbuild(
     esm: 0,
     cjs: 0,
     umd: 0,
+    mf: 0,
   };
 
   for (const { format, config } of rsbuildConfigObject) {

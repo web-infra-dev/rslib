@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import path from 'node:path';
 import color from 'picocolors';
-import type { PkgJson } from '../types';
+
+import type { LibConfig, PkgJson } from '../types';
 import { logger } from './logger';
 
 /**
@@ -159,6 +160,38 @@ export function omit<T extends object, U extends keyof T>(
     },
     {} as Omit<T, K>,
   );
+}
+
+export function isPluginIncluded(
+  config: LibConfig,
+  pluginName: string,
+): boolean {
+  return Boolean(
+    config.plugins?.some((plugin) => {
+      if (typeof plugin === 'object' && plugin !== null && 'name' in plugin) {
+        return plugin.name === pluginName;
+      }
+      return false;
+    }),
+  );
+}
+
+export function checkMFPlugin(config: LibConfig): boolean {
+  if (config.format !== 'mf') {
+    return true;
+  }
+
+  // https://github.com/module-federation/core/blob/4e5c4b96ee45899f3ba5904b8927768980d5ad0e/packages/rsbuild-plugin/src/cli/index.ts#L17
+  const added = isPluginIncluded(config, 'rsbuild:module-federation-enhanced');
+  if (!added) {
+    logger.warn(
+      `${color.green('format: "mf"')} should be used with ${color.blue(
+        '@module-federation/rsbuild-plugin',
+      )}", consider installing and adding it to plugins. Check the documentation (https://module-federation.io/guide/basic/rsbuild.html#rslib-module) to get started with "mf" output.`,
+    );
+    process.exit(1);
+  }
+  return added;
 }
 
 export { color };

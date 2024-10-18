@@ -1,0 +1,31 @@
+{
+  "name": "@examples/mf-react-component",
+  "private": true,
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/cjs/index.d.ts"
+    }
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/cjs/index.d.ts",
+  "scripts": {
+    "build": "rslib build",
+    "serve": "pnpm build && http-server -p 3001 ./dist/ --cors"
+  },
+  "devDependencies": {
+    "@module-federation/enhanced": "^0.6.11",
+    "@module-federation/rsbuild-plugin": "^0.0.2",
+    "@rsbuild/plugin-react": "^1.0.4",
+    "@rslib/core": "workspace:*",
+    "@types/react": "^18.3.11",
+    "http-server": "^14.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}

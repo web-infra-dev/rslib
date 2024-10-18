@@ -9,6 +9,16 @@ const disableDts = (rslibConfig: RslibConfig) => {
   }
 };
 
+const onlyEnableMF = (rslibConfig: RslibConfig) => {
+  const length = rslibConfig.lib.length;
+  for (let i = length - 1; i >= 0; i--) {
+    if (rslibConfig.lib[i] && rslibConfig.lib[i]!.format !== 'mf') {
+      rslibConfig.lib.splice(i, 1);
+    }
+  }
+  disableDts(rslibConfig);
+};
+
 const iterations = process.env.CI ? 10 : 50;
 
 describe('benchmark Rslib in examples', () => {
@@ -41,6 +51,14 @@ describe('benchmark Rslib in examples', () => {
     async () => {
       const cwd = getCwdByExample('react-component-bundle-false');
       await rslibBuild({ cwd, modifyConfig: disableDts });
+    },
+    { iterations },
+  );
+  bench(
+    'examples/module-federation/mf-react-component',
+    async () => {
+      const cwd = getCwdByExample('module-federation/mf-react-component');
+      await rslibBuild({ cwd, modifyConfig: onlyEnableMF });
     },
     { iterations },
   );

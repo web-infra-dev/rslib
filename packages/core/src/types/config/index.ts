@@ -1,7 +1,7 @@
 import type { RsbuildConfig } from '@rsbuild/core';
 import type { PluginDtsOptions } from 'rsbuild-plugin-dts';
 
-export type Format = 'esm' | 'cjs' | 'umd';
+export type Format = 'esm' | 'cjs' | 'umd' | 'mf';
 
 export type FixedEcmaVersions =
   | 'es5'

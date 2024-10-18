@@ -1,0 +1,158 @@
+# Module Federation
+
+This chapter introduces how to build Module Federation output in Rslib.
+
+## Glossary
+
+Module Federation is a JavaScript application divide-and-conquer architecture pattern (similar to server-side microservices) that allows you to share code and resources between multiple JavaScript applications (or Micro-Frontend).
+
+## Usage scenarios
+
+Module federation has some typical usage scenarios, including:
+
+- Allows independent applications (called "Micro-Frontend" in the Micro-Frontend architecture) to share modules without having to recompile the entire application.
+- Different teams work on different parts of the same application without having to recompile the entire application.
+- Dynamic code loading and sharing between applications at runtime.
+
+Module Federation can help you:
+
+- Reduce code duplication
+- Improve code maintainability
+- Reduce the overall size of the application
+- Improve application performance
+
+## Quick Start
+
+First install the Module Federation Rsbuild Plugin (Rslib is based on Rsbuild).
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm add @module-federation/rsbuild-plugin -D',
+    yarn: 'yarn add @module-federation/rsbuild-plugin -D',
+    pnpm: 'pnpm add @module-federation/rsbuild-plugin -D',
+    bun: 'bun add @module-federation/rsbuild-plugin -D',
+  }}
+/>
+
+Add the plugin to the `rslib.config.ts` file:
+
+```ts title='rslib.config.ts'
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    // ... other format
+    {
+      format: 'mf',
+      output: {
+        distPath: {
+          root: './dist/mf',
+        },
+        // add your assetPrefix here
+        assetPrefix: 'http://localhost:3001/mf',
+      },
+      plugins: [
+        pluginModuleFederation({
+          name: 'rslib_provider',
+          exposes: {
+            // add expose here
+          },
+          // can not add 'remote' here, because you may build 'esm' or 'cjs' assets in one build.
+          // if you want the rslib package use remote module, please see below.
+          shared: {
+            react: {
+              singleton: true,
+            },
+            'react-dom': {
+              singleton: true,
+            },
+          },
+        }),
+      ],
+    },
+  ],
+  plugins: [pluginReact()],
+});
+```
+
+In this way, we have completed the integration of Rslib Module as a producer. After the construction is completed, we can see that the mf directory has been added to the product, and consumers can directly consume this package
+
+In the above example we added a new `format: 'mf'` , which will help you add an additional Module Federation product, while also configuring the format of `cjs` and `esm` , which does not conflict.
+
+However, if you want this Rslib Module to consume other producers at the same time, do not use the build configuration `remote` parameter, because in other formats, this may cause errors, please refer to the example below using the Module Federation runtime
+
+## Consume other Module Federation modules
+
+Because there are multiple formats in Rslib, if you configure the `remote` parameter to consume other modules during construction, it may not work properly in all formats. It is recommended to access through the [Module Federation Runtime](https://module-federation.io/guide/basic/runtime.html)
+
+First install the runtime dependencies
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm add @module-federation/enhanced --save',
+    yarn: 'yarn add @module-federation/enhanced --save',
+    pnpm: 'pnpm add @module-federation/enhanced --save',
+    bun: 'bun add @module-federation/enhanced --save',
+  }}
+/>
+
+Then consume other Module Federation modules at runtime, for example
+
+```ts
+import { init, loadRemote } from '@module-federation/enhanced/runtime';
+import { Suspense, createElement, lazy } from 'react';
+
+init({
+  name: 'rslib_provider',
+  remotes: [
+    {
+      name: 'mf_remote',
+      entry: 'http://localhost:3002/mf-manifest.json',
+    },
+  ],
+});
+
+export const Counter: React.FC = () => {
+  return (
+    <div>
+      <Suspense fallback={<div>loading</div>}>
+        {createElement(
+          lazy(
+            () =>
+              loadRemote('mf_remote') as Promise<{
+                default: React.FC;
+              }>,
+          ),
+        )}
+      </Suspense>
+    </div>
+  );
+};
+```
+
+This ensures that modules can be loaded as expected in multiple formats.
+
+## FAQs
+
+If the Rslib producer is built with build, this means that the `process.env.NODE_ENV` of the producer is `production` . If the consumer is started in dev mode at this time,
+Due to the shared loading policy of Module Federation being `version-first` by default, there may be problems loading into different modes of react and react-dom (e.g. react in development mode, react-dom in production mode).
+You can set up [shareStrategy](https://module-federation.io/configure/sharestrategy) at the consumer to solve this problem, but make sure you fully understand this configuration
+
+```ts
+pluginModuleFederation({
+  // ...
+  shareStrategy: 'loaded-first',
+}),
+```
+
+## Examples
+
+[Rslib Module Federation Example](https://github.com/web-infra-dev/rslib/tree/main/examples/module-federation)
+
+- `mf-host`: Rsbuild App Consumer
+- `mf-react-component`: Rslib Module, which is both a producer and a consumer, provides the module to the `mf-host` as a producer, and consumes the `mf-remote`
+- `mf-remote`: Rsbuild App Producer
