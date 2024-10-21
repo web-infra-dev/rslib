@@ -19,6 +19,7 @@
       groupName: 'rsbuild',
       matchPackageNames: ['@rsbuild/**'],
       groupSlug: 'rsbuild',
+      extends: ['schedule:daily'],
     },
     {
       groupName: 'rslib',
@@ -30,6 +31,7 @@
       groupName: 'rspress',
       matchPackageNames: ['@rspress/**'],
       groupSlug: 'rspress',
+      extends: ['schedule:daily'],
     },
     {
       groupName: 'modern-js',
@@ -61,6 +63,8 @@
     // align Node.js version minimum requirements
     '@types/node',
     'node',
+    // umd tests need to lock this version
+    'react-aliased',
   ],
   postUpdateOptions: ['pnpmDedupe'],
 }
