@@ -21,7 +21,7 @@ const onlyEnableMF = (rslibConfig: RslibConfig) => {
 
 const iterations = process.env.CI ? 10 : 50;
 
-const exampleCwds = {
+const exampleCwd = {
   'express-plugin': getCwdByExample('express-plugin'),
   'react-component-bundle': getCwdByExample('react-component-bundle'),
   'react-component-bundle-false': getCwdByExample(
@@ -37,7 +37,7 @@ describe('benchmark Rslib in examples', async () => {
   bench(
     'examples/express-plugin',
     async () => {
-      const cwd = exampleCwds['express-plugin'];
+      const cwd = exampleCwd['express-plugin'];
       await rslibBuild({ cwd, modifyConfig: disableDts });
     },
     { iterations },
@@ -45,7 +45,7 @@ describe('benchmark Rslib in examples', async () => {
   bench(
     'examples/react-component-bundle',
     async () => {
-      const cwd = exampleCwds['react-component-bundle'];
+      const cwd = exampleCwd['react-component-bundle'];
       await rslibBuild({ cwd, modifyConfig: disableDts });
     },
     { iterations },
@@ -53,7 +53,7 @@ describe('benchmark Rslib in examples', async () => {
   bench(
     'examples/react-component-bundle-false',
     async () => {
-      const cwd = exampleCwds['react-component-bundle-false'];
+      const cwd = exampleCwd['react-component-bundle-false'];
       await rslibBuild({ cwd, modifyConfig: disableDts });
     },
     { iterations },
@@ -61,7 +61,7 @@ describe('benchmark Rslib in examples', async () => {
   bench(
     'examples/react-component-umd',
     async () => {
-      const cwd = exampleCwds['react-component-bundle-false'];
+      const cwd = exampleCwd['react-component-bundle-false'];
       await rslibBuild({ cwd, modifyConfig: disableDts });
     },
     { iterations },
@@ -69,7 +69,7 @@ describe('benchmark Rslib in examples', async () => {
   bench(
     'examples/module-federation/mf-react-component',
     async () => {
-      const cwd = exampleCwds['module-federation/mf-react-component'];
+      const cwd = exampleCwd['module-federation/mf-react-component'];
       await rslibBuild({ cwd, modifyConfig: onlyEnableMF });
     },
     { iterations },
