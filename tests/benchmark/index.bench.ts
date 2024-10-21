@@ -24,13 +24,16 @@ const iterations = process.env.CI ? 10 : 50;
 const exampleCwds = {
   'express-plugin': getCwdByExample('express-plugin'),
   'react-component-bundle': getCwdByExample('react-component-bundle'),
-  'react-component-bundle-false': getCwdByExample('react-component-bundle-false'),
+  'react-component-bundle-false': getCwdByExample(
+    'react-component-bundle-false',
+  ),
   'react-component-umd': getCwdByExample('react-component-bundle-false'),
-  'module-federation/mf-react-component': getCwdByExample('module-federation/mf-react-component'),
+  'module-federation/mf-react-component': getCwdByExample(
+    'module-federation/mf-react-component',
+  ),
 };
 
 describe('benchmark Rslib in examples', async () => {
-
   bench(
     'examples/express-plugin',
     async () => {
