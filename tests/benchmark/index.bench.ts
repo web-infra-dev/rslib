@@ -21,11 +21,23 @@ const onlyEnableMF = (rslibConfig: RslibConfig) => {
 
 const iterations = process.env.CI ? 10 : 50;
 
-describe('benchmark Rslib in examples', () => {
+const exampleCwd = {
+  'express-plugin': getCwdByExample('express-plugin'),
+  'react-component-bundle': getCwdByExample('react-component-bundle'),
+  'react-component-bundle-false': getCwdByExample(
+    'react-component-bundle-false',
+  ),
+  'react-component-umd': getCwdByExample('react-component-bundle-false'),
+  'module-federation/mf-react-component': getCwdByExample(
+    'module-federation/mf-react-component',
+  ),
+};
+
+describe('benchmark Rslib in examples', async () => {
   bench(
     'examples/express-plugin',
     async () => {
-      const cwd = getCwdByExample('express-plugin');
+      const cwd = exampleCwd['express-plugin'];
       await rslibBuild({ cwd, modifyConfig: disableDts });
     },
     { iterations },
@@ -33,7 +45,7 @@ describe('benchmark Rslib in examples', () => {
   bench(
     'examples/react-component-bundle',
     async () => {
-      const cwd = getCwdByExample('react-component-bundle');
+      const cwd = exampleCwd['react-component-bundle'];
       await rslibBuild({ cwd, modifyConfig: disableDts });
     },
     { iterations },
@@ -41,7 +53,7 @@ describe('benchmark Rslib in examples', () => {
   bench(
     'examples/react-component-bundle-false',
     async () => {
-      const cwd = getCwdByExample('react-component-bundle-false');
+      const cwd = exampleCwd['react-component-bundle-false'];
       await rslibBuild({ cwd, modifyConfig: disableDts });
     },
     { iterations },
@@ -49,7 +61,7 @@ describe('benchmark Rslib in examples', () => {
   bench(
     'examples/react-component-umd',
     async () => {
-      const cwd = getCwdByExample('react-component-bundle-false');
+      const cwd = exampleCwd['react-component-bundle-false'];
       await rslibBuild({ cwd, modifyConfig: disableDts });
     },
     { iterations },
@@ -57,7 +69,7 @@ describe('benchmark Rslib in examples', () => {
   bench(
     'examples/module-federation/mf-react-component',
     async () => {
-      const cwd = getCwdByExample('module-federation/mf-react-component');
+      const cwd = exampleCwd['module-federation/mf-react-component'];
       await rslibBuild({ cwd, modifyConfig: onlyEnableMF });
     },
     { iterations },
