@@ -11,10 +11,9 @@ beforeEach(() => {
 
 expect.addSnapshotSerializer(
   createSnapshotSerializer({
-    workspace: path.join(__dirname, '..'),
-    cwd: path.join(__dirname, '..'),
+    root: path.join(__dirname, '..'),
     features: {
-      ansiDoubleQuotes: false,
+      escapeDoubleQuotes: false,
     },
   }),
 );
