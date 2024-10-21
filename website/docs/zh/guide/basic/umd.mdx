@@ -1,0 +1,49 @@
+# UMD
+
+## Introduction
+
+UMD is a library that can be used in both the browser and Node.js environments. It is a combination of CommonJS and AMD.
+
+## How to build a UMD library?
+
+- Set the `output.format` to `umd` in the Rslib configuration file.
+- If the library need to be exported with a name, set `output.umdName` to the name of the UMD library.
+- Use `output.externals` to specify the external dependencies that the UMD library depends on, `lib.autoExtension` is enabled by default for UMD.
+
+## Examples
+
+The following Rslib config is an example to build a UMD library.
+
+- `output.format: 'umd'`: instruct Rslib to build in UMD format.
+- `output.umdName: 'RslibUmdExample'`: set the export name of the UMD library.
+- `output.externals.react: 'React'`: specify the external dependency `react` could be accessed by `window.React`.
+- `runtime: 'classic'`: use the classic runtime of React to support applications that using React version under 18.
+
+```ts title="rslib.config.ts" {7-12,22}
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'umd',
+      umdName: 'RslibUmdExample',
+      output: {
+        externals: {
+          react: 'React',
+        },
+        distPath: {
+          root: './dist/umd',
+        },
+      },
+    },
+  ],
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'classic',
+      },
+    }),
+  ],
+});
+```
