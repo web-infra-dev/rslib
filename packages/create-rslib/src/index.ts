@@ -49,7 +49,7 @@ function mapESLintTemplate(templateName: string) {
 create({
   root: path.resolve(__dirname, '..'),
   name: 'rslib',
-  templates: ['example-js', 'example-ts'],
+  templates: ['node-dual-js', 'node-dual-ts', 'node-esm-js', 'node-esm-ts'],
   getTemplateName,
   mapESLintTemplate,
 });

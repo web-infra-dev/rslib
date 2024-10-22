@@ -3,12 +3,20 @@ import { join } from 'node:path';
 import { expect, test } from 'vitest';
 import { createAndValidate } from './helper';
 
-test('should create example-js project as expected', async () => {
-  createAndValidate(__dirname, 'example-js');
+test('should create node-dual-js project as expected', async () => {
+  createAndValidate(__dirname, 'node-dual-js');
 });
 
-test('should create example-ts project as expected', async () => {
-  createAndValidate(__dirname, 'example-ts');
+test('should create node-dual-ts project as expected', async () => {
+  createAndValidate(__dirname, 'node-dual-ts');
+});
+
+test('should create node-esm-js project as expected', async () => {
+  createAndValidate(__dirname, 'node-esm-js');
+});
+
+test('should create node-esm-ts project as expected', async () => {
+  createAndValidate(__dirname, 'node-esm-ts');
 });
 
 test('should allow to create project in sub dir', async () => {
