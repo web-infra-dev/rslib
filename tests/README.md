@@ -59,7 +59,7 @@ Not applicable, Rslib will provide a more simple unencapsulated build boilerplat
 
 ## [plugins](https://github.com/web-infra-dev/modern.js/tree/main/tests/integration/module/plugins)
 
-Rslib could reuse the plugins from Rsbuild, which means the [official plugins](https://edenx.bytedance.net/module-tools/en/plugins/official-list/overview.html) provided by Modern Module could be replaced by Rsbuild plugins.
+Rslib could reuse the plugins from Rsbuild, which means the [official plugins](https://modernjs.dev/en/plugin/plugin-system/introduction.html#official-plugins) provided by Modern Module could be replaced by Rsbuild plugins.
 
 | Plugins                                | Status | Note                                                                          |
 | -------------------------------------- | ------ | ----------------------------------------------------------------------------- |
