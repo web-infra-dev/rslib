@@ -65,7 +65,7 @@ Rslib could reuse the plugins from Rsbuild, which means the [official plugins](h
 | -------------------------------------- | ------ | ----------------------------------------------------------------------------- |
 | @modern-js/plugin-module-import        | 🟢     | Use https://rsbuild.dev/config/source/transform-import#sourcetransformimport. |
 | @modern-js/plugin-module-banner        | 🟢     | BannerPlugin.                                                                 |
-| @modern-js/plugin-module-node-polyfill | ⚪️     | Use https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill.           |
+| @modern-js/plugin-module-node-polyfill | 🟢     | Use https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill.           |
 | @modern-js/plugin-module-polyfill      | ⚪️     | Use https://rsbuild.dev/config/output/polyfill#outputpolyfill.                |
 | @modern-js/plugin-module-babel         | 🟢     | Use https://rsbuild.dev/plugins/list/plugin-babel.                            |
 | @modern-js/plugin-module-vue           | ⚪️     | Use https://rsbuild.dev/plugins/list/plugin-vue.                              |

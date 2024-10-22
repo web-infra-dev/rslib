@@ -1,0 +1,52 @@
+import { Steps, SourceCode } from '@theme';
+import { PackageManagerTabs } from '@theme';
+
+# Node Polyfill
+
+:::tip About Node Polyfill
+Normally, we don't need to use Node libs on the browser side. However, it is possible to use some Node libs when the code will run on both the Node side and the browser side, and Node Polyfill provides browser versions of polyfills for these Node libs.
+:::
+
+By using [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill), Node core libs polyfills are automatically injected into the browser-side, allowing you to use these modules on the browser side with confidence.
+
+## Getting Start
+
+<Steps>
+
+### Install plugin
+
+Rslib uses [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill) to provide the Node Polyfill feature.
+
+<PackageManagerTabs command="@rsbuild/plugin-node-polyfill -D" />
+
+### Register plugin
+
+Add the plugin into the plugins field.
+
+```ts
+import { defineConfig } from '@rslib/core';
+import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
+
+export default defineConfig({
+  lib: [{ format: 'esm' }],
+  plugins: [pluginNodePolyfill()],
+});
+```
+
+### Setup
+
+- For projects with `bundle` enabled, the Node Polyfill will be injected and included in the output.
+- For projects with `bundle` disabled, polyfills are not injected into the output by default. To avoid inlining the polyfill in every module. The modules are externalized and need to be added to dependencies manually, follow these steps:
+
+  1. Configure `output.external` with `resolvedPolyfillToModules`, which you can import from [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill). This will externalize the polyfill modules to the installed polyfill dependencies.
+  2. Install used polyfill modules as dependencies.
+
+  With the following steps, every usage of the polyfill module will be replaced by the corresponding module in the `externals` field. Checkout the <SourceCode href="https://github.com/web-infra-dev/rslib/blob/main/tests/integration/node-polyfill/bundle-false/rslib.config.ts" /> of the example for more details.
+
+</Steps>
+
+###
+
+## Configurations
+
+Check out the documentation of [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill), all the configurations are applicable for Rslib.
