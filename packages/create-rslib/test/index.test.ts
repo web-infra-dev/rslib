@@ -20,19 +20,19 @@ test('should create node-esm-ts project as expected', async () => {
 });
 
 test('should allow to create project in sub dir', async () => {
-  createAndValidate(__dirname, 'example', {
+  createAndValidate(__dirname, 'node-esm-js', {
     name: 'test-temp-dir/rslib-project',
   });
 });
 
 test('should allow to create project in relative dir', async () => {
-  createAndValidate(__dirname, 'example', {
+  createAndValidate(__dirname, 'node-esm-js', {
     name: './test-temp-relative-dir',
   });
 });
 
 test('should create project with eslint as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
+  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'node-esm-js', {
     name: 'test-temp-eslint',
     tools: ['eslint'],
     clean: false,
@@ -43,7 +43,7 @@ test('should create project with eslint as expected', async () => {
 });
 
 test('should create project with prettier as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
+  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'node-esm-js', {
     name: 'test-temp-prettier',
     tools: ['prettier'],
     clean: false,
@@ -54,7 +54,7 @@ test('should create project with prettier as expected', async () => {
 });
 
 test('should create project with eslint and prettier as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
+  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'node-esm-js', {
     name: 'test-temp-eslint-prettier',
     tools: ['eslint', 'prettier'],
     clean: false,
@@ -67,7 +67,7 @@ test('should create project with eslint and prettier as expected', async () => {
 });
 
 test('should create project with biome as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
+  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'node-esm-js', {
     name: 'test-temp-eslint',
     tools: ['biome'],
     clean: false,
