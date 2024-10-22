@@ -120,3 +120,12 @@ jobs:
 
       - name: E2E Test (Playwright)
         run: pnpm run test:e2e
+
+  # ======== exit ========
+  pr-check-required:
+    if: (!cancelled() && !failure())
+    needs: [ut-windows, integration-e2e-windows]
+    runs-on: ubuntu-latest
+    name: Test passed or skipped
+    steps:
+      - run: echo "All tests passed or skipped."
