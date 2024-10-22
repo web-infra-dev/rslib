@@ -21,7 +21,10 @@ async function getTemplateName({ template }: Argv) {
   const type = checkCancel<string>(
     await select({
       message: 'Select template',
-      options: [{ value: 'example', label: 'Example' }],
+      options: [
+        { value: 'node-dual', label: 'Node.js dual ESM/CJS package' },
+        { value: 'node-esm', label: 'Node.js pure ESM package' },
+      ],
     }),
   );
 
