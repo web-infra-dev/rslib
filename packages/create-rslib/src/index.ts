@@ -17,8 +17,8 @@ async function getTemplateName({ template }: Argv) {
     if (lang && ['js', 'ts'].includes(lang)) {
       return template;
     }
-    // default to js
-    return `${template}-js`;
+    // default to ts
+    return `${template}-ts`;
   }
 
   const type = checkCancel<string>(
