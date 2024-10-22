@@ -48,6 +48,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "not dead",
         ],
       },
+      "performance": {
+        "chunkSplit": {
+          "strategy": "custom",
+        },
+      },
       "plugins": [],
       "source": {
         "alias": {
@@ -71,6 +76,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "optimization": {
               "moduleIds": "named",
               "nodeEnv": false,
+              "splitChunks": {
+                "chunks": "async",
+              },
             },
             "resolve": {
               "extensionAlias": {
@@ -199,6 +207,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "not dead",
         ],
       },
+      "performance": {
+        "chunkSplit": {
+          "strategy": "custom",
+        },
+      },
       "plugins": [
         {
           "name": "rsbuild:cjs-import-meta-url-shim",
@@ -231,6 +244,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "optimization": {
               "moduleIds": "named",
               "nodeEnv": false,
+              "splitChunks": {
+                "chunks": "async",
+              },
             },
             "resolve": {
               "extensionAlias": {
@@ -348,6 +364,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "not dead",
         ],
       },
+      "performance": {
+        "chunkSplit": {
+          "strategy": "custom",
+        },
+      },
       "source": {
         "alias": {
           "bar": "bar",
@@ -370,6 +391,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "optimization": {
               "moduleIds": "named",
               "nodeEnv": false,
+              "splitChunks": {
+                "chunks": "async",
+              },
             },
             "resolve": {
               "extensionAlias": {

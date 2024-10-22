@@ -417,10 +417,19 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
     dev: {
       progressBar: false,
     },
+    performance: {
+      chunkSplit: {
+        strategy: 'custom',
+      },
+    },
     tools: {
       htmlPlugin: false,
       rspack: {
         optimization: {
+          splitChunks: {
+            // Splitted "sync" chunks will make entry modules can't be inlined.
+            chunks: 'async',
+          },
           moduleIds: 'named',
           nodeEnv: false,
         },
