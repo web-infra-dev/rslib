@@ -567,13 +567,6 @@ importers:
   tests/integration/minify/default: {}
 
   tests/integration/node-polyfill/bundle:
-    dependencies:
-      core-js:
-        specifier: ^3.38.1
-        version: 3.38.1
-      core-js-pure:
-        specifier: ^3.38.1
-        version: 3.38.1
     devDependencies:
       '@rsbuild/plugin-node-polyfill':
         specifier: ^1.2.0
@@ -584,12 +577,6 @@ importers:
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
-      core-js:
-        specifier: ^3.38.1
-        version: 3.38.1
-      core-js-pure:
-        specifier: ^3.38.1
-        version: 3.38.1
     devDependencies:
       '@rsbuild/plugin-node-polyfill':
         specifier: ^1.2.0
@@ -2509,9 +2496,6 @@ packages:
 
   copy-to-clipboard@3.3.3:
     resolution: {integrity: sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA==}
-
-  core-js-pure@3.38.1:
-    resolution: {integrity: sha512-BY8Etc1FZqdw1glX0XNOq2FDwfrg/VGqoZOZCdaL+UmdaqDwQwYXkMJT4t6In+zfEfOJDcM9T0KdbBeJg8KKCQ==}
 
   core-js@3.38.1:
     resolution: {integrity: sha512-OP35aUorbU3Zvlx7pjsFdu1rGNnD4pgw/CWoYzRY3t2EzoVT7shKHY1dlAy3f41cGIO7ZDPQimhGFTlEYkG/Hw==}
@@ -7607,8 +7591,6 @@ snapshots:
   copy-to-clipboard@3.3.3:
     dependencies:
       toggle-selection: 1.0.6
-
-  core-js-pure@3.38.1: {}
 
   core-js@3.38.1: {}
 
