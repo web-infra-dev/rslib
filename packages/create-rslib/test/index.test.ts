@@ -3,28 +3,36 @@ import { join } from 'node:path';
 import { expect, test } from 'vitest';
 import { createAndValidate } from './helper';
 
-test('should create example-js project as expected', async () => {
-  createAndValidate(__dirname, 'example-js');
+test('should create node-dual-js project as expected', async () => {
+  createAndValidate(__dirname, 'node-dual-js');
 });
 
-test('should create example-ts project as expected', async () => {
-  createAndValidate(__dirname, 'example-ts');
+test('should create node-dual-ts project as expected', async () => {
+  createAndValidate(__dirname, 'node-dual-ts');
+});
+
+test('should create node-esm-js project as expected', async () => {
+  createAndValidate(__dirname, 'node-esm-js');
+});
+
+test('should create node-esm-ts project as expected', async () => {
+  createAndValidate(__dirname, 'node-esm-ts');
 });
 
 test('should allow to create project in sub dir', async () => {
-  createAndValidate(__dirname, 'example', {
+  createAndValidate(__dirname, 'node-esm-js', {
     name: 'test-temp-dir/rslib-project',
   });
 });
 
 test('should allow to create project in relative dir', async () => {
-  createAndValidate(__dirname, 'example', {
+  createAndValidate(__dirname, 'node-esm-js', {
     name: './test-temp-relative-dir',
   });
 });
 
 test('should create project with eslint as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
+  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'node-esm-js', {
     name: 'test-temp-eslint',
     tools: ['eslint'],
     clean: false,
@@ -35,7 +43,7 @@ test('should create project with eslint as expected', async () => {
 });
 
 test('should create project with prettier as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
+  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'node-esm-js', {
     name: 'test-temp-prettier',
     tools: ['prettier'],
     clean: false,
@@ -46,7 +54,7 @@ test('should create project with prettier as expected', async () => {
 });
 
 test('should create project with eslint and prettier as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
+  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'node-esm-js', {
     name: 'test-temp-eslint-prettier',
     tools: ['eslint', 'prettier'],
     clean: false,
@@ -59,7 +67,7 @@ test('should create project with eslint and prettier as expected', async () => {
 });
 
 test('should create project with biome as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
+  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'node-esm-js', {
     name: 'test-temp-eslint',
     tools: ['biome'],
     clean: false,

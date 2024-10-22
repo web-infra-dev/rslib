@@ -13,15 +13,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 async function getTemplateName({ template }: Argv) {
   if (typeof template === 'string') {
     const pair = template.split('-');
-    const language = pair[1] ?? 'js';
-    const type = pair[0];
-    return `${type}-${language}`;
+    const lang = pair[pair.length - 1];
+    if (lang && ['js', 'ts'].includes(lang)) {
+      return template;
+    }
+    // default to ts
+    return `${template}-ts`;
   }
 
   const type = checkCancel<string>(
     await select({
       message: 'Select template',
-      options: [{ value: 'example', label: 'Example' }],
+      options: [
+        { value: 'node-dual', label: 'Node.js dual ESM/CJS package' },
+        { value: 'node-esm', label: 'Node.js pure ESM package' },
+      ],
     }),
   );
 
@@ -39,14 +45,14 @@ async function getTemplateName({ template }: Argv) {
 }
 
 function mapESLintTemplate(templateName: string) {
-  const language = templateName.split('-')[1];
+  const language = templateName.split('-').pop();
   return `vanilla-${language}` as ESLintTemplateName;
 }
 
 create({
   root: path.resolve(__dirname, '..'),
   name: 'rslib',
-  templates: ['example-js', 'example-ts'],
+  templates: ['node-dual-js', 'node-dual-ts', 'node-esm-js', 'node-esm-ts'],
   getTemplateName,
   mapESLintTemplate,
 });
