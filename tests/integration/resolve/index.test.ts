@@ -8,7 +8,7 @@ test('resolve data url', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
-    "/* harmony default export */ const javascript_export_default_42 = 42;
+    "/* ESM default export */ const javascript_export_default_42 = 42;
     console.log('x:', javascript_export_default_42);
     "
   `);
