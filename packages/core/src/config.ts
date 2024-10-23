@@ -923,7 +923,7 @@ const composeDtsConfig = async (
   return {
     plugins: [
       pluginDts({
-        // only set dts.bundle to true can generate bundle DTS
+        // Only setting ⁠dts.bundle to true will generate the bundled d.ts.
         bundle: dts?.bundle ?? false,
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
         abortOnError: dts?.abortOnError ?? true,
