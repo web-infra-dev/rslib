@@ -173,7 +173,10 @@ export function transformSyntaxToRspackTarget(
         ) {
           return 'es2022';
         }
-
+        // The es6 is the same as es2015, compatible with rspack API schema
+        if (normalizedSyntaxItem === 'es6') {
+          return 'es2015';
+        }
         return normalizedSyntaxItem;
       }
 
