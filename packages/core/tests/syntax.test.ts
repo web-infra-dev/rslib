@@ -153,12 +153,19 @@ describe('transformSyntaxToBrowserslist', () => {
 
 describe('transformSyntaxToRspackTarget', () => {
   test('esX', () => {
+    const es6 = transformSyntaxToRspackTarget('es6');
     const es2023 = transformSyntaxToRspackTarget('es2023');
     const es2024 = transformSyntaxToRspackTarget('es2024');
     const esnext = transformSyntaxToRspackTarget('esnext');
 
     expect(es2023).toEqual(es2024);
     expect(es2023).toEqual(esnext);
+
+    expect(es6).toMatchInlineSnapshot(`
+      [
+        "es2015",
+      ]
+    `);
 
     expect(es2023).toMatchInlineSnapshot(
       `
@@ -184,6 +191,15 @@ describe('transformSyntaxToRspackTarget', () => {
       [
         "browserslist:Chrome 123",
         "es2022",
+      ]
+    `);
+
+    expect(
+      transformSyntaxToRspackTarget(['Chrome 123', 'es6']),
+    ).toMatchInlineSnapshot(`
+      [
+        "browserslist:Chrome 123",
+        "es2015",
       ]
     `);
   });
