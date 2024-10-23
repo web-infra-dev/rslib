@@ -12,9 +12,15 @@
   <a href="https://github.com/web-infra-dev/rslib/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=F8F5FF" alt="license" /></a>
 </p>
 
-Rslib is a library build tool powered by [Rsbuild](https://rsbuild.dev). It allows library developers to leverage the knowledge and ecosystem of webpack and Rspack. Rslib is built on top of Rsbuild's excellent configurations and plugins, providing optimal ESM and CJS output.
+Rslib is a library build tool that leverages the well-designed configurations and plugins of [Rsbuild](https://rsbuild.dev), empowering library developers to take advantage of the extensive knowledge and ecosystem of webpack and Rspack.
 
-Rslib provides out-of-the-box configurations for library development, including compilation of TypeScript, JSX, Sass, Less, CSS Modules, and Wasm. It supports bundleless output, DTS generation (including isolated declarations), Module Federation, assets compression, type checking, PostCSS, and Lightning CSS.
+Rslib provides a comprehensive set of build features for library development, including:
+
+- **Compilation of diverse languages**: TypeScript, JSX, Sass, Less, CSS Modules, Wasm, and more.
+- **Flexible build modes**: Bundle and bundleless options to meet varying needs.
+- **Multiple output formats**: ESM, CJS, and UMD for maximum compatibility.
+- **Declaration file generation**: Including isolated declarations.
+- **Advanced features**: Module Federation, asset compression, PostCSS, Lightning CSS, and more.
 
 ## ✨ Why Rslib?
 
