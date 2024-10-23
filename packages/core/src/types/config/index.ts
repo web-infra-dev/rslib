@@ -32,7 +32,7 @@ export type Dts =
   | (Pick<PluginDtsOptions, 'bundle' | 'distPath' | 'abortOnError'> & {
       autoExtension?: boolean;
     })
-  | false;
+  | boolean;
 
 export type AutoExternal =
   | boolean

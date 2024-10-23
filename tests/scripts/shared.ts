@@ -82,6 +82,7 @@ export async function getResults(
     esm: 0,
     cjs: 0,
     umd: 0,
+    mf: 0,
   };
   let key = '';
 
@@ -105,7 +106,9 @@ export async function getResults(
       globFolder = libConfig?.output?.distPath?.root!;
     } else if (type === 'dts' && libConfig.dts !== false) {
       globFolder =
-        libConfig.dts?.distPath! ?? libConfig?.output?.distPath?.root!;
+        libConfig.dts === true
+          ? libConfig?.output?.distPath?.root!
+          : (libConfig.dts?.distPath! ?? libConfig?.output?.distPath?.root!);
     }
 
     if (!globFolder) continue;
