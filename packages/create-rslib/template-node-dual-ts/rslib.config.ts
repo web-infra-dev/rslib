@@ -5,7 +5,7 @@ export default defineConfig({
     {
       format: 'esm',
       syntax: 'es2021',
-      dts: {},
+      dts: true,
     },
     {
       format: 'cjs',

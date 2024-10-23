@@ -38,6 +38,20 @@ describe('dts when bundle: false', () => {
     expect(files.esm).toMatchInlineSnapshot('undefined');
   });
 
+  test('dts true', async () => {
+    const fixturePath = join(__dirname, 'bundle-false', 'true');
+    const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle-false/true/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/true/dist/esm/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/true/dist/esm/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/true/dist/esm/utils/strings.d.ts",
+      ]
+    `);
+  });
+
   test('distPath', async () => {
     const fixturePath = join(__dirname, 'bundle-false', 'dist-path');
     const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });
@@ -80,17 +94,25 @@ describe('dts when bundle: false', () => {
 describe('dts when bundle: true', () => {
   test('basic', async () => {
     const fixturePath = join(__dirname, 'bundle', 'basic');
-    const { entryFiles, entries } = await buildAndGetResults({
+    const { files, entries } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
     });
 
-    expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/dts/bundle/basic/dist/esm/index.d.ts"`,
+    expect(files.esm).toMatchInlineSnapshot(
+      `
+      [
+        "<ROOT>/tests/integration/dts/bundle/basic/dist/esm/index.d.ts",
+      ]
+    `,
     );
 
-    expect(entryFiles.cjs).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/dts/bundle/basic/dist/cjs/index.d.ts"`,
+    expect(files.cjs).toMatchInlineSnapshot(
+      `
+      [
+        "<ROOT>/tests/integration/dts/bundle/basic/dist/cjs/index.d.ts",
+      ]
+    `,
     );
 
     expect(entries).toMatchSnapshot();
@@ -98,23 +120,46 @@ describe('dts when bundle: true', () => {
 
   test('dts false', async () => {
     const fixturePath = join(__dirname, 'bundle', 'false');
-    const { entryFiles } = await buildAndGetResults({
+    const { files } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
     });
 
-    expect(entryFiles.esm).toMatchInlineSnapshot('undefined');
+    expect(files.esm).toMatchInlineSnapshot('undefined');
+  });
+
+  test('dts true', async () => {
+    const fixturePath = join(__dirname, 'bundle', 'true');
+    const { files } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(
+      `
+      [
+        "<ROOT>/tests/integration/dts/bundle/true/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle/true/dist/esm/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle/true/dist/esm/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle/true/dist/esm/utils/strings.d.ts",
+      ]
+    `,
+    );
   });
 
   test('distPath', async () => {
     const fixturePath = join(__dirname, 'bundle', 'dist-path');
-    const { entryFiles } = await buildAndGetResults({
+    const { files } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
     });
 
-    expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/dts/bundle/dist-path/dist/custom/index.d.ts"`,
+    expect(files.esm).toMatchInlineSnapshot(
+      `
+      [
+        "<ROOT>/tests/integration/dts/bundle/dist-path/dist/custom/index.d.ts",
+      ]
+    `,
     );
   });
 
@@ -130,37 +175,49 @@ describe('dts when bundle: true', () => {
 
   test('autoExtension: true', async () => {
     const fixturePath = join(__dirname, 'bundle', 'auto-extension');
-    const { entryFiles } = await buildAndGetResults({
+    const { files } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
     });
 
-    expect(entryFiles.cjs).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/dts/bundle/auto-extension/dist/cjs/index.d.cts"`,
+    expect(files.cjs).toMatchInlineSnapshot(
+      `
+      [
+        "<ROOT>/tests/integration/dts/bundle/auto-extension/dist/cjs/index.d.cts",
+      ]
+    `,
     );
   });
 
   test('bundleName -- set source.entry', async () => {
     const fixturePath = join(__dirname, 'bundle', 'bundle-name');
-    const { entryFiles } = await buildAndGetResults({
+    const { files } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
     });
 
-    expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/dts/bundle/bundle-name/dist/esm/bundleName.d.ts"`,
+    expect(files.esm).toMatchInlineSnapshot(
+      `
+      [
+        "<ROOT>/tests/integration/dts/bundle/bundle-name/dist/esm/bundleName.d.ts",
+      ]
+    `,
     );
   });
 
   test('entry is an absolute path', async () => {
     const fixturePath = join(__dirname, 'bundle', 'absolute-entry');
-    const { entryFiles } = await buildAndGetResults({
+    const { files } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
     });
 
-    expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/dts/bundle/absolute-entry/dist/esm/index.d.ts"`,
+    expect(files.esm).toMatchInlineSnapshot(
+      `
+      [
+        "<ROOT>/tests/integration/dts/bundle/absolute-entry/dist/esm/index.d.ts",
+      ]
+    `,
     );
   });
 });

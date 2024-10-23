@@ -906,15 +906,25 @@ const composeDtsConfig = async (
   libConfig: LibConfig,
   dtsExtension: string,
 ): Promise<RsbuildConfig> => {
-  const { dts, bundle, output, autoExternal, banner, footer } = libConfig;
+  const { output, autoExternal, banner, footer } = libConfig;
+
+  let { dts } = libConfig;
 
   if (dts === false || dts === undefined) return {};
+
+  // DTS default to bundleless whether js is bundle or not
+  if (dts === true) {
+    dts = {
+      bundle: false,
+    };
+  }
 
   const { pluginDts } = await import('rsbuild-plugin-dts');
   return {
     plugins: [
       pluginDts({
-        bundle: dts?.bundle ?? bundle,
+        // Only setting ⁠dts.bundle to true will generate the bundled d.ts.
+        bundle: dts?.bundle ?? false,
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
         abortOnError: dts?.abortOnError ?? true,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
