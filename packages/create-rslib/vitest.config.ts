@@ -5,5 +5,6 @@ export default defineConfig({
   test: {
     ...shared,
     name: 'unit-create',
+    include: ['./test/*.{test,spec}.?(c|m)[jt]s?(x)'],
   },
 });
