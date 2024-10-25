@@ -304,7 +304,8 @@ export function composeMinifyConfig(config: LibConfig): RsbuildConfig {
         jsOptions: {
           minimizerOptions: {
             mangle: false,
-            minify: false,
+            // MF assets are loaded over the network, which means they will not be compressed by the project. Therefore, minifying them is necessary.
+            minify: format === 'mf',
             compress: {
               defaults: false,
               unused: true,
