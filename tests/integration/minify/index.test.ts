@@ -33,7 +33,7 @@ test('minify is enabled by default in mf format, bar and baz should be minified'
   const fixturePath = join(__dirname, 'mf/default');
   const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
   expect(mfExposeEntry).toMatchInlineSnapshot(`
-    ""use strict";exports.ids=["249"];exports.modules={"../../__fixtures__/src/index.ts":function(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{foo:function(){return foo}});const foo=()=>{}}};"
+    ""use strict";(globalThis["webpackChunkminify_mf_default_test"]=globalThis["webpackChunkminify_mf_default_test"]||[]).push([["249"],{"../../__fixtures__/src/index.ts":function(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{foo:function(){return foo}});const foo=()=>{}}}]);"
   `);
 });
 
@@ -42,8 +42,7 @@ test('minify is disabled by the user, bar and baz should not be minified', async
   const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
   expect(mfExposeEntry).toMatchInlineSnapshot(`
     ""use strict";
-    exports.ids = ['249'];
-    exports.modules = {
+    (globalThis['webpackChunkminify_mf_config_test'] = globalThis['webpackChunkminify_mf_config_test'] || []).push([["249"], {
     "../../__fixtures__/src/index.ts": (function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
     __webpack_require__.r(__webpack_exports__);
     __webpack_require__.d(__webpack_exports__, {
@@ -58,7 +57,6 @@ test('minify is disabled by the user, bar and baz should not be minified', async
 
     }),
 
-    };
-    ;"
+    }]);"
   `);
 });

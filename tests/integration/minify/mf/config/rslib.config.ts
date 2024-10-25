@@ -20,7 +20,6 @@ export default defineConfig({
     }),
   ],
   output: {
-    target: 'node',
     minify: false,
   },
   source: {

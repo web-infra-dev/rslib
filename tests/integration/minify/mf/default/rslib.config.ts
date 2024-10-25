@@ -19,9 +19,6 @@ export default defineConfig({
       },
     }),
   ],
-  output: {
-    target: 'node',
-  },
   source: {
     entry: {
       index: path.resolve(__dirname, '../../__fixtures__/src/index.ts'),
