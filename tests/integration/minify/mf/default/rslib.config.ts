@@ -19,6 +19,14 @@ export default defineConfig({
       },
     }),
   ],
+  // add chunkLoadingGlobal to avoid cspell error
+  tools: {
+    rspack: {
+      output: {
+        chunkLoadingGlobal: 'default_minify',
+      },
+    },
+  },
   source: {
     entry: {
       index: path.resolve(__dirname, '../../__fixtures__/src/index.ts'),

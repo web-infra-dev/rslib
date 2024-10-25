@@ -19,6 +19,14 @@ export default defineConfig({
       },
     }),
   ],
+  // add chunkLoadingGlobal to avoid cspell error
+  tools: {
+    rspack: {
+      output: {
+        chunkLoadingGlobal: 'disable_minify',
+      },
+    },
+  },
   output: {
     minify: false,
   },
