@@ -656,7 +656,8 @@ const composeExternalsConfig = (
     esm: 'module-import',
     cjs: 'commonjs',
     umd: 'umd',
-    mf: 'var', // same as default value
+    // if use 'var', when users use external package like '@pkg', this will cause syntax error like 'var pkg = @pkg'
+    mf: 'global',
   } as const;
 
   switch (format) {
