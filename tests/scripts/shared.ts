@@ -2,6 +2,7 @@ import assert from 'node:assert';
 import fs from 'node:fs';
 import { dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import {
   type InspectConfigResult,
   mergeRsbuildConfig as mergeConfig,
@@ -43,6 +44,23 @@ export function generateBundleCjsConfig(config: LibConfig = {}): LibConfig {
   return mergeConfig(cjsBasicConfig, config)!;
 }
 
+export function generateBundleMFConfig(
+  options: Parameters<typeof pluginModuleFederation>[0],
+  config: LibConfig = {},
+): LibConfig {
+  const mfBasicConfig: LibConfig = {
+    format: 'mf',
+    output: {
+      distPath: {
+        root: './dist/mf',
+      },
+    },
+    plugins: [pluginModuleFederation(options)],
+  };
+
+  return mergeConfig(mfBasicConfig, config)!;
+}
+
 export function generateBundleUmdConfig(config: LibConfig = {}): LibConfig {
   const umdBasicConfig: LibConfig = {
     format: 'umd',
@@ -64,6 +82,7 @@ type BuildResult = {
   contents: Record<FormatType, Record<FilePath, string>>;
   entries: Record<FormatType, string>;
   entryFiles: Record<FormatType, FilePath>;
+  mfExposeEntry: string | undefined;
 
   rspackConfig: InspectConfigResult['origin']['bundlerConfigs'];
   rsbuildConfig: InspectConfigResult['origin']['rsbuildConfig'];
@@ -84,6 +103,7 @@ export async function getResults(
     umd: 0,
     mf: 0,
   };
+  let mfExposeEntry: string | undefined;
   let key = '';
 
   const formatCount: Record<Format, number> = rslibConfig.lib.reduce(
@@ -142,15 +162,21 @@ export async function getResults(
     // Only applied in bundle mode, a shortcut to get single entry result
     if (libConfig.bundle !== false && fileSet.length) {
       let entryFile: string | undefined;
+      let mfExposeFile: string | undefined;
       if (fileSet.length === 1) {
         entryFile = fileSet[0];
       } else {
         entryFile = fileSet.find((file) => file.includes('index'));
+        mfExposeFile = fileSet.find((file) => file.includes('expose'));
       }
 
       if (typeof entryFile === 'string') {
         entries[key] = content[entryFile]!;
         entryFiles[key] = normalize(entryFile);
+      }
+
+      if (typeof mfExposeFile === 'string') {
+        mfExposeEntry = content[mfExposeFile]!;
       }
     }
   }
@@ -159,6 +185,7 @@ export async function getResults(
     files,
     contents,
     entries,
+    mfExposeEntry,
     entryFiles,
   };
 }
@@ -253,6 +280,7 @@ export async function buildAndGetResults({
     files: results.files,
     entries: results.entries,
     entryFiles: results.entryFiles,
+    mfExposeEntry: results.mfExposeEntry,
     rspackConfig: bundlerConfigs,
     rsbuildConfig: rsbuildConfig,
     isSuccess: Boolean(rsbuildInstance),

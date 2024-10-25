@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { defineConfig } from '@rslib/core';
 import { generateBundleEsmConfig } from 'test-helper';
 
@@ -9,7 +10,7 @@ export default defineConfig({
   },
   source: {
     entry: {
-      index: './src/index.ts',
+      index: path.resolve(__dirname, '../__fixtures__/src/index.ts'),
     },
   },
 });
