@@ -27,11 +27,12 @@ export async function emitDts(
   const start = Date.now();
   const { configPath, declarationDir, name, dtsExtension, banner, footer } =
     options;
+  const configFileParseResult = loadTsconfig(configPath);
   const {
     options: rawCompilerOptions,
     fileNames,
     projectReferences,
-  } = loadTsconfig(configPath);
+  } = configFileParseResult;
 
   const compilerOptions = {
     ...rawCompilerOptions,
@@ -49,6 +50,9 @@ export async function emitDts(
       options: compilerOptions,
       projectReferences,
       host,
+      configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(
+        configFileParseResult,
+      ),
     });
 
     const emitResult = program.emit();
@@ -60,7 +64,7 @@ export async function emitDts(
     const diagnosticMessages: string[] = [];
 
     for (const diagnostic of allDiagnostics) {
-      const fileLoc = getFileLoc(diagnostic);
+      const fileLoc = getFileLoc(diagnostic, configPath);
       const message = `${fileLoc} - ${color.red('error')} ${color.gray(`TS${diagnostic.code}:`)} ${ts.flattenDiagnosticMessageText(
         diagnostic.messageText,
         host.getNewLine(),
@@ -94,7 +98,7 @@ export async function emitDts(
     };
 
     const reportDiagnostic = (diagnostic: ts.Diagnostic) => {
-      const fileLoc = getFileLoc(diagnostic);
+      const fileLoc = getFileLoc(diagnostic, configPath);
 
       logger.error(
         `${fileLoc} - ${color.red('error')} ${color.gray(`TS${diagnostic.code}:`)}`,
