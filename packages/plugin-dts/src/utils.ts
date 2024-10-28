@@ -38,7 +38,10 @@ export function ensureTempDeclarationDir(cwd: string): string {
   return dirPath;
 }
 
-export function getFileLoc(diagnostic: ts.Diagnostic): string {
+export function getFileLoc(
+  diagnostic: ts.Diagnostic,
+  configPath: string,
+): string {
   if (diagnostic.file) {
     const { line, character } = ts.getLineAndCharacterOfPosition(
       diagnostic.file,
@@ -47,7 +50,7 @@ export function getFileLoc(diagnostic: ts.Diagnostic): string {
     return `${color.cyan(diagnostic.file.fileName)}:${color.yellow(line + 1)}:${color.yellow(character + 1)}`;
   }
 
-  return '';
+  return `${color.cyan(configPath)}`;
 }
 
 export const prettyTime = (seconds: number): string => {
