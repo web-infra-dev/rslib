@@ -656,7 +656,9 @@ const composeExternalsConfig = (
     esm: 'module-import',
     cjs: 'commonjs',
     umd: 'umd',
-    // if use 'var', when users use external package like '@pkg', this will cause syntax error like 'var pkg = @pkg'
+    // If use 'var', when projects import an external package like '@pkg', this will cause a syntax error such as 'var pkg = @pkg'.
+    // If use 'umd', the judgement conditions may be affected by other packages that define variables like 'define'.
+    // Therefore, we use 'global' to satisfy both web and node environments.
     mf: 'global',
   } as const;
 
