@@ -23,6 +23,7 @@ export async function emitDts(
   onComplete: (isSuccess: boolean) => void,
   bundle = false,
   isWatch = false,
+  build = false,
 ): Promise<void> {
   const start = Date.now();
   const { configPath, declarationDir, name, dtsExtension, banner, footer } =
@@ -42,131 +43,172 @@ export async function emitDts(
     emitDeclarationOnly: true,
   };
 
-  if (!isWatch) {
-    const host: ts.CompilerHost = ts.createCompilerHost(compilerOptions);
+  const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
+  const formatHost: ts.FormatDiagnosticsHost = {
+    getCanonicalFileName: (path) => path,
+    getCurrentDirectory: ts.sys.getCurrentDirectory,
+    getNewLine: () => ts.sys.newLine,
+  };
 
-    const program: ts.Program = ts.createProgram({
-      rootNames: fileNames,
-      options: compilerOptions,
-      projectReferences,
-      host,
-      configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(
-        configFileParseResult,
-      ),
-    });
+  const reportDiagnostic = (diagnostic: ts.Diagnostic) => {
+    const fileLoc = getFileLoc(diagnostic, configPath);
 
-    const emitResult = program.emit();
-
-    const allDiagnostics = ts
-      .getPreEmitDiagnostics(program)
-      .concat(emitResult.diagnostics);
-
-    const diagnosticMessages: string[] = [];
-
-    for (const diagnostic of allDiagnostics) {
-      const fileLoc = getFileLoc(diagnostic, configPath);
-      const message = `${fileLoc} - ${color.red('error')} ${color.gray(`TS${diagnostic.code}:`)} ${ts.flattenDiagnosticMessageText(
+    logger.error(
+      `${fileLoc} - ${color.red('error')} ${color.gray(`TS${diagnostic.code}:`)}`,
+      ts.flattenDiagnosticMessageText(
         diagnostic.messageText,
-        host.getNewLine(),
-      )}`;
-      diagnosticMessages.push(message);
+        formatHost.getNewLine(),
+      ),
+    );
+  };
+
+  const reportWatchStatusChanged: ts.WatchStatusReporter = async (
+    diagnostic: ts.Diagnostic,
+    _newLine: string,
+    _options: ts.CompilerOptions,
+    errorCount?: number,
+  ) => {
+    const message = `${ts.flattenDiagnosticMessageText(
+      diagnostic.messageText,
+      formatHost.getNewLine(),
+    )} ${color.gray(`(${name})`)}`;
+
+    // 6031: File change detected. Starting incremental compilation...
+    // 6032: Starting compilation in watch mode...
+    if (diagnostic.code === 6031 || diagnostic.code === 6032) {
+      logger.info(message);
     }
 
-    await processDtsFiles(bundle, declarationDir, dtsExtension, banner, footer);
-
-    if (diagnosticMessages.length) {
-      logger.error(
-        `Failed to emit declaration files. ${color.gray(`(${name})`)}`,
-      );
-
-      for (const message of diagnosticMessages) {
+    // 6194: 0 errors or 2+ errors!
+    if (diagnostic.code === 6194) {
+      if (errorCount === 0 || !errorCount) {
+        logger.info(message);
+        onComplete(true);
+      } else {
         logger.error(message);
       }
+      await processDtsFiles(
+        bundle,
+        declarationDir,
+        dtsExtension,
+        banner,
+        footer,
+      );
+    }
 
-      throw new Error('DTS generation failed');
+    // 6193: 1 error
+    if (diagnostic.code === 6193) {
+      logger.error(message);
+      await processDtsFiles(
+        bundle,
+        declarationDir,
+        dtsExtension,
+        banner,
+        footer,
+      );
+    }
+  };
+
+  const system = { ...ts.sys };
+
+  if (!isWatch) {
+    // build mode
+    if (!build) {
+      const host: ts.CompilerHost = ts.createCompilerHost(compilerOptions);
+
+      const program: ts.Program = ts.createProgram({
+        rootNames: fileNames,
+        options: compilerOptions,
+        projectReferences,
+        host,
+        configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(
+          configFileParseResult,
+        ),
+      });
+
+      const emitResult = program.emit();
+
+      const allDiagnostics = ts
+        .getPreEmitDiagnostics(program)
+        .concat(emitResult.diagnostics);
+
+      const diagnosticMessages: string[] = [];
+
+      for (const diagnostic of allDiagnostics) {
+        const fileLoc = getFileLoc(diagnostic, configPath);
+        const message = `${fileLoc} - ${color.red('error')} ${color.gray(`TS${diagnostic.code}:`)} ${ts.flattenDiagnosticMessageText(
+          diagnostic.messageText,
+          host.getNewLine(),
+        )}`;
+        diagnosticMessages.push(message);
+      }
+
+      await processDtsFiles(
+        bundle,
+        declarationDir,
+        dtsExtension,
+        banner,
+        footer,
+      );
+
+      if (diagnosticMessages.length) {
+        logger.error(
+          `Failed to emit declaration files. ${color.gray(`(${name})`)}`,
+        );
+
+        for (const message of diagnosticMessages) {
+          logger.error(message);
+        }
+
+        throw new Error('DTS generation failed');
+      }
+    } else {
+      // incremental build with project references
+      const host = ts.createSolutionBuilderHost(
+        system,
+        createProgram,
+        reportDiagnostic,
+      );
+
+      const solutionBuilder = ts.createSolutionBuilder(host, [configPath], {});
+
+      solutionBuilder.build();
     }
 
     logger.ready(
       `DTS generated in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
     );
   } else {
-    const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
-    const formatHost: ts.FormatDiagnosticsHost = {
-      getCanonicalFileName: (path) => path,
-      getCurrentDirectory: ts.sys.getCurrentDirectory,
-      getNewLine: () => ts.sys.newLine,
-    };
-
-    const reportDiagnostic = (diagnostic: ts.Diagnostic) => {
-      const fileLoc = getFileLoc(diagnostic, configPath);
-
-      logger.error(
-        `${fileLoc} - ${color.red('error')} ${color.gray(`TS${diagnostic.code}:`)}`,
-        ts.flattenDiagnosticMessageText(
-          diagnostic.messageText,
-          formatHost.getNewLine(),
-        ),
+    // watch mode
+    if (!build) {
+      const host = ts.createWatchCompilerHost(
+        configPath,
+        compilerOptions,
+        system,
+        createProgram,
+        reportDiagnostic,
+        reportWatchStatusChanged,
       );
-    };
 
-    const reportWatchStatusChanged: ts.WatchStatusReporter = async (
-      diagnostic: ts.Diagnostic,
-      _newLine: string,
-      _options: ts.CompilerOptions,
-      errorCount?: number,
-    ) => {
-      const message = `${ts.flattenDiagnosticMessageText(
-        diagnostic.messageText,
-        formatHost.getNewLine(),
-      )} ${color.gray(`(${name})`)}`;
+      ts.createWatchProgram(host);
+    } else {
+      // incremental build with project references
+      const host = ts.createSolutionBuilderWithWatchHost(
+        system,
+        createProgram,
+        reportDiagnostic,
+        undefined,
+        reportWatchStatusChanged,
+      );
 
-      // 6031: File change detected. Starting incremental compilation...
-      // 6032: Starting compilation in watch mode...
-      if (diagnostic.code === 6031 || diagnostic.code === 6032) {
-        logger.info(message);
-      }
+      const solutionBuilder = ts.createSolutionBuilderWithWatch(
+        host,
+        [configPath],
+        {},
+        { watch: true },
+      );
 
-      // 6194: 0 errors or 2+ errors!
-      if (diagnostic.code === 6194) {
-        if (errorCount === 0) {
-          logger.info(message);
-          onComplete(true);
-        } else {
-          logger.error(message);
-        }
-        await processDtsFiles(
-          bundle,
-          declarationDir,
-          dtsExtension,
-          banner,
-          footer,
-        );
-      }
-
-      // 6193: 1 error
-      if (diagnostic.code === 6193) {
-        logger.error(message);
-        await processDtsFiles(
-          bundle,
-          declarationDir,
-          dtsExtension,
-          banner,
-          footer,
-        );
-      }
-    };
-
-    const system = { ...ts.sys };
-
-    const host = ts.createWatchCompilerHost(
-      configPath,
-      compilerOptions,
-      system,
-      createProgram,
-      reportDiagnostic,
-      reportWatchStatusChanged,
-    );
-
-    ts.createWatchProgram(host);
+      solutionBuilder.build();
+    }
   }
 }

@@ -110,6 +110,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     tsconfigPath,
     name,
     cwd,
+    build,
     isWatch,
     dtsExtension = '.d.ts',
     autoExternal = true,
@@ -204,6 +205,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     onComplete,
     bundle,
     isWatch,
+    build,
   );
 
   if (!isWatch) {
