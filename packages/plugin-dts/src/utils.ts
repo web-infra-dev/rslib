@@ -50,7 +50,7 @@ export function getFileLoc(
     return `${color.cyan(diagnostic.file.fileName)}:${color.yellow(line + 1)}:${color.yellow(character + 1)}`;
   }
 
-  return `${color.cyan(configPath)}:`;
+  return `${color.cyan(configPath)}`;
 }
 
 export const prettyTime = (seconds: number): string => {
