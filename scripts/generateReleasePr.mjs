@@ -77,7 +77,7 @@ async function main() {
     console.log(chalk.blue(`Next version: ${nextVersion}`));
 
     // 3. Create and switch to new branch
-    const branchName = `release-v${nextVersion}`;
+    const branchName = `release_v${nextVersion}`;
     console.log(chalk.blue(`Creating branch: ${branchName}`));
 
     await $`git checkout -b ${branchName}`;
