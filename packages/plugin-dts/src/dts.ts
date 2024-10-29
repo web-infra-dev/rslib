@@ -147,6 +147,14 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       throw Error(`Can not set "dts.bundle: true" when "dts.build = true"`);
     }
 
+    console.log(
+      'rawCompilerOptions.declarationDir: ',
+      rawCompilerOptions.declarationDir,
+    );
+    console.log(
+      'resolve(dirname(configPath), outDir): ',
+      resolve(dirname(configPath), outDir),
+    );
     // can not set '--declarationDir' or '--outDir' when 'build: true'.
     if (
       (!rawCompilerOptions.outDir ||
