@@ -132,9 +132,9 @@ Here are the steps to publish (we generally use CI for releases and avoid publis
 <!-- 1. [Create release pull request](https://github.com/web-infra-dev/rslib/actions/workflows/release-pull-request.yml). -->
 
 1. Run `pnpm generate-release-pr` to create a release pull request.
-2. Merge the release pull request.
-3. [Run the release action on main branch](https://github.com/web-infra-dev/rslib/actions/workflows/release.yml)
-4. [Create Git tag and generate the release notes](https://github.com/web-infra-dev/rslib/releases).
+2. [Run the release action on release branch](https://github.com/web-infra-dev/rslib/actions/workflows/release.yml).
+3. Merge the release pull request.
+4. [Create Git tag on main branch and generate the release notes](https://github.com/web-infra-dev/rslib/releases).
 
 ## Caveats
 
