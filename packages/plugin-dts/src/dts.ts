@@ -4,6 +4,7 @@ import {
   dirname,
   isAbsolute,
   join,
+  normalize,
   relative,
   resolve,
 } from 'node:path';
@@ -147,21 +148,14 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       throw Error(`Can not set "dts.bundle: true" when "dts.build = true"`);
     }
 
-    console.log(
-      'rawCompilerOptions.declarationDir: ',
-      rawCompilerOptions.declarationDir,
-    );
-    console.log(
-      'resolve(dirname(configPath), outDir): ',
-      resolve(dirname(configPath), outDir),
-    );
     // can not set '--declarationDir' or '--outDir' when 'build: true'.
     if (
       (!rawCompilerOptions.outDir ||
-        rawCompilerOptions.outDir !== resolve(dirname(configPath), outDir)) &&
+        normalize(rawCompilerOptions.outDir) !==
+          normalize(resolve(dirname(configPath), outDir))) &&
       (!rawCompilerOptions.declarationDir ||
-        rawCompilerOptions.declarationDir !==
-          resolve(dirname(configPath), outDir))
+        normalize(rawCompilerOptions.declarationDir) !==
+          normalize(resolve(dirname(configPath), outDir)))
     ) {
       const info =
         rawCompilerOptions.outDir && !rawCompilerOptions.declarationDir
