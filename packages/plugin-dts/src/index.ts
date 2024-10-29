@@ -55,7 +55,7 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
   setup(api) {
     options.bundle = options.bundle ?? false;
     options.abortOnError = options.abortOnError ?? true;
-    options.build = options.build || false;
+    options.build = options.build ?? false;
 
     const dtsPromises: Promise<TaskResult>[] = [];
     let promisesResult: TaskResult[] = [];
