@@ -1,5 +1,12 @@
 import fs from 'node:fs';
-import { basename, dirname, isAbsolute, join, relative } from 'node:path';
+import {
+  basename,
+  dirname,
+  isAbsolute,
+  join,
+  relative,
+  resolve,
+} from 'node:path';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import ts from 'typescript';
@@ -110,6 +117,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     tsconfigPath,
     name,
     cwd,
+    build,
     isWatch,
     dtsExtension = '.d.ts',
     autoExternal = true,
@@ -132,6 +140,32 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   const outDir = distPath
     ? distPath
     : rawCompilerOptions.declarationDir || './dist';
+
+  if (build) {
+    // do not allow to use bundle DTS when 'build: true' since temp declarationDir should be set by user in tsconfig
+    if (bundle) {
+      throw Error(`Can not set "dts.bundle: true" when "dts.build = true"`);
+    }
+
+    // can not set '--declarationDir' or '--outDir' when 'build: true'.
+    if (
+      (!rawCompilerOptions.outDir ||
+        rawCompilerOptions.outDir !== resolve(dirname(configPath), outDir)) &&
+      (!rawCompilerOptions.declarationDir ||
+        rawCompilerOptions.declarationDir !==
+          resolve(dirname(configPath), outDir))
+    ) {
+      const info =
+        rawCompilerOptions.outDir && !rawCompilerOptions.declarationDir
+          ? 'outDir'
+          : 'declarationDir';
+      throw Error(
+        `Please set ${info}: "${outDir}" in ${color.underline(
+          configPath,
+        )} to keep it same as Lib config.`,
+      );
+    }
+  }
 
   const getDeclarationDir = (bundle: boolean, distPath?: string) => {
     if (bundle) {
@@ -204,6 +238,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     onComplete,
     bundle,
     isWatch,
+    build,
   );
 
   if (!isWatch) {

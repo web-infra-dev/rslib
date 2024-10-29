@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 import { describe, expect, test } from 'vitest';
@@ -219,5 +220,83 @@ describe('dts when bundle: true', () => {
       ]
     `,
     );
+  });
+});
+
+describe('dts when build: true', () => {
+  test('basic', async () => {
+    const fixturePath = join(__dirname, 'composite', 'basic');
+    const { files } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/composite/basic/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/composite/basic/dist/esm/sum.d.ts",
+      ]
+    `);
+
+    const compositeDistPath = join(
+      fixturePath,
+      '../__references__/dist/index.d.ts',
+    );
+    expect(existsSync(compositeDistPath)).toBeTruthy();
+  });
+
+  test('distPath', async () => {
+    const fixturePath = join(__dirname, 'composite', 'dist-path');
+    const { files } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/composite/dist-path/dist/custom/index.d.ts",
+      ]
+    `);
+  });
+
+  test('process files - auto extension and banner / footer', async () => {
+    const fixturePath = join(__dirname, 'composite', 'process-files');
+    const { contents } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(contents.esm).toMatchInlineSnapshot(`
+      {
+        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/index.d.mts": "/*! hello banner dts composite*/
+      export declare const num1 = 1;
+
+      /*! hello banner dts composite*/
+      ",
+      }
+    `);
+  });
+
+  test('abortOnError: false', async () => {
+    const fixturePath = join(__dirname, 'composite', 'abort-on-error');
+    const { isSuccess } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(isSuccess).toBe(true);
+  });
+
+  test('tsconfig missing some fields', async () => {
+    const fixturePath = join(__dirname, 'composite', 'tsconfig');
+    try {
+      await buildAndGetResults({
+        fixturePath,
+        type: 'dts',
+      });
+    } catch (err: any) {
+      // not easy to proxy child process stdout
+      expect(err.message).toBe('Error occurred in esm DTS generation');
+    }
   });
 });

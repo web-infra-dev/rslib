@@ -1,0 +1,14 @@
+{
+  "extends": "@rslib/tsconfig/base",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "rootDir": "src",
+    "declaration": true
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../__references__"
+    }
+  ]
+}
