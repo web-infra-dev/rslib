@@ -20,7 +20,7 @@ Rslib will try to cover the common scenarios in the [integration test cases of M
 | decorator       | 🟢     |                                                          |
 | define          | 🟢     |                                                          |
 | dts             | 🟢     |                                                          |
-| dts-composite   | ⚪️     |                                                          |
+| dts-composite   | 🟢     |                                                          |
 | esbuildOptions  | ⚫️    |                                                          |
 | externals       | 🟢     |                                                          |
 | format          | 🟢     |                                                          |

@@ -95,10 +95,17 @@ export async function addBannerAndFooter(
   const content = await fsP.readFile(file, 'utf-8');
   const code = new MagicString(content);
 
-  banner && code.prepend(`${banner}\n`);
-  footer && code.append(`\n${footer}\n`);
+  if (banner && !content.trimStart().startsWith(banner.trim())) {
+    code.prepend(`${banner}\n`);
+  }
 
-  await fsP.writeFile(file, code.toString());
+  if (footer && !content.trimEnd().endsWith(footer.trim())) {
+    code.append(`\n${footer}\n`);
+  }
+
+  if (code.hasChanged()) {
+    await fsP.writeFile(file, code.toString());
+  }
 }
 
 export async function processDtsFiles(

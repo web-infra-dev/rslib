@@ -930,6 +930,7 @@ const composeDtsConfig = async (
         // Only setting ⁠dts.bundle to true will generate the bundled d.ts.
         bundle: dts?.bundle ?? false,
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
+        build: dts?.build ?? false,
         abortOnError: dts?.abortOnError ?? true,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
         autoExternal,

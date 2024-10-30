@@ -29,7 +29,10 @@ export type Syntax =
   | string[];
 
 export type Dts =
-  | (Pick<PluginDtsOptions, 'bundle' | 'distPath' | 'abortOnError'> & {
+  | (Pick<
+      PluginDtsOptions,
+      'bundle' | 'distPath' | 'abortOnError' | 'build'
+    > & {
       autoExtension?: boolean;
     })
   | boolean;
