@@ -1,1 +1,103 @@
 # CLI
+
+Rslib comes with a lightweight CLI that includes commands such as build and inspect.
+
+## rslib -h
+
+To view all available CLI commands, run the following command in the project directory:
+
+```bash
+npx rslib -h
+```
+
+The output is shown below:
+
+```text
+Usage: rslib <command> [options]
+
+Options:
+  -V, --version      output the version number
+  -h, --help         display help for command
+
+Commands:
+  build [options]    build the library for production
+  inspect [options]  inspect the Rsbuild / Rspack configs of Rslib projects
+  help [command]     display help for command
+```
+
+## rslib build
+
+The `rslib build` command will build the outputs for production in the `dist/` directory by default.
+
+```text
+Usage: rslib build [options]
+
+build the library for production
+
+Options:
+  -c --config <config>  specify the configuration file, can be a relative or absolute path
+  --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
+  -w --watch            turn on watch mode, watch for changes and rebuild
+  -h, --help            display help for command
+```
+
+:::tip
+
+You can use `rslib build --watch` to turn on watch mode for watching for changes and rebuild.
+:::
+
+## rslib inspect
+
+The `rslib inspect` command is used to view the Rsbuild config and Rspack config of the Rslib project.
+
+```text
+Usage: rslib inspect [options]
+
+inspect the Rsbuild / Rspack configs of Rslib projects
+
+Options:
+  -c --config <config>  specify the configuration file, can be a relative or absolute path
+  --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
+  --output <output>     specify inspect content output path (default: ".rsbuild")
+  --verbose             show full function definitions in output
+  -h, --help            display help for command
+```
+
+When you run the command `npx rslib inspect` in the project root directory, the following files will be generated in the `dist/.rsbuild` directory of the project:
+
+- `rsbuild.config.mjs`: Represents the Rsbuild configuration used during the build.
+- `rspack.config.web.mjs`: Represents the Rspack configuration used during the build.
+
+```text
+➜ npx rslib inspect
+
+success Inspect config succeed, open following files to view the content:
+
+  - Rsbuild Config: /project/dist/.rsbuild/rsbuild.config.mjs
+  - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
+```
+
+### Verbose content
+
+By default, the inspect command omits the content of functions in the configuration object. You can add the `--verbose` option to output the complete content of functions:
+
+```bash
+rslib inspect --verbose
+```
+
+### Multiple output formats
+
+If the current project has multiple output formats, such as ESM artifact and CJS artifact simultaneously, multiple Rspack configuration files will be generated in the `dist/.rsbuild` directory.
+
+```text
+➜ npx rslib inspect
+
+Inspect config succeed, open following files to view the content:
+
+success Inspect config succeed, open following files to view the content:
+
+  - Rsbuild Config (esm): /project/dist/.rsbuild/rsbuild.config.esm.mjs
+  - Rsbuild Config (cjs): /project/dist/.rsbuild/rsbuild.config.cjs.mjs
+  - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
+  - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
+```
