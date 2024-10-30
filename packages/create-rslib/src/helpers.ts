@@ -6,9 +6,6 @@ import { copyFolder } from 'create-rstack';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const fragmentsDir = path.resolve(__dirname, '../fragments');
-const RSLIB_VERSION = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../../core/package.json'), 'utf-8'),
-).version;
 
 export type Lang = 'ts' | 'js';
 
@@ -46,8 +43,6 @@ export function genTemplate({
     from: srcBase,
     to: target,
     isMergePackageJson: true,
-    version: RSLIB_VERSION,
-    skipFiles: [],
   });
 
   if (tools) {
@@ -57,8 +52,6 @@ export function genTemplate({
         from: toolDir,
         to: target,
         isMergePackageJson: true,
-        version: RSLIB_VERSION,
-        skipFiles: [],
       });
     }
   }
