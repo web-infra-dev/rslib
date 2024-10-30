@@ -164,7 +164,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       throw Error(
         `Please set ${info}: "${outDir}" in ${color.underline(
           configPath,
-        )} to keep it same as Lib config.`,
+        )} to keep it same as "dts.distPath" or "output.distPath" field in lib config.`,
       );
     }
   }
