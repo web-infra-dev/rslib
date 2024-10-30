@@ -2,7 +2,11 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "paths": {
+      "*": ["./@mf-types/*"]
+    }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "src/stories"]
 }

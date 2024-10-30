@@ -18,6 +18,8 @@ export default defineConfig({
           singleton: true,
         },
       },
+      // if rslib module run 'npm run build', this is necessary because react in rslib module is 'production' mode, but host app is 'development'
+      // reference: https://lib.rsbuild.dev/guide/advanced/module-federation#faqs
       shareStrategy: 'loaded-first',
     }),
   ],

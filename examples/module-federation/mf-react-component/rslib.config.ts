@@ -37,6 +37,13 @@ export default defineConfig({
         },
         assetPrefix: 'http://localhost:3001/mf',
       },
+      dev: {
+        assetPrefix: 'http://localhost:3001/mf',
+      },
+      // just for dev
+      server: {
+        port: 3001,
+      },
       plugins: [
         pluginModuleFederation({
           name: 'rslib_provider',
