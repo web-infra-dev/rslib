@@ -1,20 +1,17 @@
-import { memo } from 'react';
-import { usePageData } from 'rspress/runtime';
 import styles from './Copyright.module.scss';
 
-export const CopyRight = memo(() => {
-  const { siteData } = usePageData();
-  const { message } = siteData.themeConfig.footer || {};
-
-  if (!message) {
-    return null;
-  }
-
+export const CopyRight = () => {
   return (
     <footer className={styles.copyRight}>
       <div className={styles.copyRightInner}>
-        <div className={styles.copyRightText}>{message}</div>
+        <div className={styles.copyRightText}>
+          <p className="mb-2">
+            Rslib is free and open source software released under the MIT
+            license.
+          </p>
+          <p>© 2024-present ByteDance Inc.</p>
+        </div>
       </div>
     </footer>
   );
-});
+};
