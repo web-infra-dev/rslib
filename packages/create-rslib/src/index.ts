@@ -5,10 +5,14 @@ import {
   type ESLintTemplateName,
   checkCancel,
   create,
+  multiselect,
   select,
 } from 'create-rstack';
+import { type Lang, TEMPLATES, composeTemplateName } from './helpers';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+type TemplateName = 'react' | 'node';
 
 async function getTemplateName({ template }: Argv) {
   if (typeof template === 'string') {
@@ -21,13 +25,34 @@ async function getTemplateName({ template }: Argv) {
     return `${template}-ts`;
   }
 
-  const type = checkCancel<string>(
+  const templateName = checkCancel<TemplateName>(
     await select({
-      message: 'Select template',
+      message: 'Select templates',
       options: [
         { value: 'node-dual', label: 'Node.js dual ESM/CJS package' },
         { value: 'node-esm', label: 'Node.js pure ESM package' },
+        { value: 'react', label: 'React' },
+        // { value: 'universal', label: 'universal' }, // TODO: provide universal template in the future?
       ],
+    }),
+  );
+
+  const supportStorybook = templateName === 'react';
+
+  type ExcludesFalse = <T>(x: T | false) => x is T;
+  const tools = checkCancel<string[]>(
+    await multiselect({
+      message:
+        'Select development tools (Use <space> to select, <enter> to continue)',
+      required: false,
+      options: [
+        supportStorybook && {
+          value: 'storybook',
+          label: 'Storybook',
+        },
+        { value: 'vitest', label: 'Vitest' },
+        // TODO: support Rspress Module doc in the future
+      ].filter(Boolean as any as ExcludesFalse),
     }),
   );
 
@@ -41,7 +66,13 @@ async function getTemplateName({ template }: Argv) {
     }),
   );
 
-  return `${type}-${language}`;
+  return composeTemplateName({
+    template: templateName,
+    lang: language as Lang,
+    tools: Object.fromEntries(
+      tools.map((tool) => [tool, `vitest-${tool}-${language}`]),
+    ),
+  });
 }
 
 function mapESLintTemplate(templateName: string) {
@@ -52,7 +83,9 @@ function mapESLintTemplate(templateName: string) {
 create({
   root: path.resolve(__dirname, '..'),
   name: 'rslib',
-  templates: ['node-dual-js', 'node-dual-ts', 'node-esm-js', 'node-esm-ts'],
+  templates: TEMPLATES.map(({ template, tools, lang }) =>
+    composeTemplateName({ template, lang, tools }),
+  ),
   getTemplateName,
   mapESLintTemplate,
 });

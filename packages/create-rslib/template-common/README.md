@@ -19,5 +19,5 @@ pnpm build
 Build the library in watch mode:
 
 ```bash
-pnpm build --watch
+pnpm dev
 ```

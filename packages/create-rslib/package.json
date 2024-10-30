@@ -23,9 +23,11 @@
     "bin.js"
   ],
   "scripts": {
-    "build": "rslib build",
+    "build": "rslib build && pnpm generate-templates",
     "dev": "rslib build --watch",
-    "start": "node ./dist/index.js"
+    "generate-templates": "pnpm tsx ./src/genTemplates.ts",
+    "start": "node ./dist/index.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "create-rstack": "1.0.8"
@@ -34,9 +36,10 @@
     "@rslib/core": "workspace:*",
     "@rslib/tsconfig": "workspace:*",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "~18.19.39",
+    "@types/node": "^22.8.1",
     "fs-extra": "^11.2.0",
     "rslib": "npm:@rslib/core@0.0.14",
+    "tsx": "^4.19.1",
     "typescript": "^5.6.3"
   },
   "engines": {
