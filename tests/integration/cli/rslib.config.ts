@@ -1,6 +1,6 @@
 import { defineConfig } from '@rslib/core';
-import { generateBundleEsmConfig } from 'test-helper';
+import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
-  lib: [generateBundleEsmConfig()],
+  lib: [generateBundleEsmConfig(), generateBundleCjsConfig()],
 });

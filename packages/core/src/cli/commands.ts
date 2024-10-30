@@ -57,9 +57,12 @@ export function runCli(): void {
     });
 
   inspectCommand
-    .description('inspect the Rslib / Rsbuild / Rspack configs')
-    .option('--env <env>', 'specify env mode', 'development')
-    .option('--output <output>', 'specify inspect content output path', './')
+    .description('inspect the Rsbuild / Rspack configs of Rslib projects')
+    .option(
+      '--output <output>',
+      'specify inspect content output path',
+      '.rsbuild',
+    )
     .option('--verbose', 'show full function definitions in output')
     .action(async (options: InspectOptions) => {
       try {
