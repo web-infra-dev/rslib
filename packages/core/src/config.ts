@@ -304,7 +304,8 @@ export function composeMinifyConfig(config: LibConfig): RsbuildConfig {
         jsOptions: {
           minimizerOptions: {
             mangle: false,
-            minify: false,
+            // MF assets are loaded over the network, which means they will not be compressed by the project. Therefore, minifying them is necessary.
+            minify: format === 'mf',
             compress: {
               defaults: false,
               unused: true,
@@ -417,10 +418,19 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
     dev: {
       progressBar: false,
     },
+    performance: {
+      chunkSplit: {
+        strategy: 'custom',
+      },
+    },
     tools: {
       htmlPlugin: false,
       rspack: {
         optimization: {
+          splitChunks: {
+            // Splitted "sync" chunks will make entry modules can't be inlined.
+            chunks: 'async',
+          },
           moduleIds: 'named',
           nodeEnv: false,
         },
@@ -646,7 +656,10 @@ const composeExternalsConfig = (
     esm: 'module-import',
     cjs: 'commonjs',
     umd: 'umd',
-    mf: 'var', // same as default value
+    // If use 'var', when projects import an external package like '@pkg', this will cause a syntax error such as 'var pkg = @pkg'.
+    // If use 'umd', the judgement conditions may be affected by other packages that define variables like 'define'.
+    // Therefore, we use 'global' to satisfy both web and node environments.
+    mf: 'global',
   } as const;
 
   switch (format) {
@@ -897,16 +910,27 @@ const composeDtsConfig = async (
   libConfig: LibConfig,
   dtsExtension: string,
 ): Promise<RsbuildConfig> => {
-  const { dts, bundle, output, autoExternal, banner, footer } = libConfig;
+  const { output, autoExternal, banner, footer } = libConfig;
+
+  let { dts } = libConfig;
 
   if (dts === false || dts === undefined) return {};
+
+  // DTS default to bundleless whether js is bundle or not
+  if (dts === true) {
+    dts = {
+      bundle: false,
+    };
+  }
 
   const { pluginDts } = await import('rsbuild-plugin-dts');
   return {
     plugins: [
       pluginDts({
-        bundle: dts?.bundle ?? bundle,
+        // Only setting ⁠dts.bundle to true will generate the bundled d.ts.
+        bundle: dts?.bundle ?? false,
         distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
+        build: dts?.build ?? false,
         abortOnError: dts?.abortOnError ?? true,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
         autoExternal,

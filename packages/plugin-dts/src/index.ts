@@ -10,6 +10,7 @@ const __dirname = dirname(__filename);
 export type PluginDtsOptions = {
   bundle?: boolean;
   distPath?: string;
+  build?: boolean;
   abortOnError?: boolean;
   dtsExtension?: string;
   autoExternal?:
@@ -33,6 +34,7 @@ export type DtsGenOptions = PluginDtsOptions & {
   cwd: string;
   isWatch: boolean;
   dtsEntry: DtsEntry;
+  build?: boolean;
   tsconfigPath?: string;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 };
@@ -46,7 +48,6 @@ export const PLUGIN_DTS_NAME = 'rsbuild:dts';
 
 // use ts compiler API to generate bundleless dts
 // use ts compiler API and api-extractor to generate dts bundle
-// TODO: support incremental build, to build one or more projects and their dependencies
 // TODO: deal alias in dts
 export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
   name: PLUGIN_DTS_NAME,
@@ -54,6 +55,7 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
   setup(api) {
     options.bundle = options.bundle ?? false;
     options.abortOnError = options.abortOnError ?? true;
+    options.build = options.build ?? false;
 
     const dtsPromises: Promise<TaskResult>[] = [];
     let promisesResult: TaskResult[] = [];

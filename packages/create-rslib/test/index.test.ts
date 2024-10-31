@@ -1,70 +1,138 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
+import { TEMPLATES, composeTemplateName } from '../src/helpers';
 import { createAndValidate } from './helper';
 
-test('should create example-js project as expected', async () => {
-  createAndValidate(__dirname, 'example-js');
+const CASES_NODE_DUAL = [
+  '[node-dual]-[]-js',
+  '[node-dual]-[]-ts',
+  '[node-dual]-[vitest]-js',
+  '[node-dual]-[vitest]-ts',
+];
+
+const CASES_NODE_ESM = [
+  '[node-esm]-[]-js',
+  '[node-esm]-[]-ts',
+  '[node-esm]-[vitest]-js',
+  '[node-esm]-[vitest]-ts',
+];
+
+const CASES_REACT = [
+  '[react]-[]-js',
+  '[react]-[]-ts',
+  '[react]-[storybook,vitest]-js',
+  '[react]-[storybook,vitest]-ts',
+  '[react]-[storybook]-js',
+  '[react]-[vitest]-js',
+  '[react]-[storybook]-ts',
+  '[react]-[vitest]-ts',
+];
+
+test('exhaust all cases', () => {
+  expect(TEMPLATES.map(composeTemplateName).sort()).toEqual(
+    [...CASES_NODE_DUAL, ...CASES_NODE_ESM, ...CASES_REACT].sort(),
+  );
 });
 
-test('should create example-ts project as expected', async () => {
-  createAndValidate(__dirname, 'example-ts');
+describe('node-dual', () => {
+  for (const c of CASES_NODE_DUAL) {
+    test(`should create ${c} project as expected`, async () => {
+      createAndValidate(__dirname, c);
+    });
+  }
 });
 
-test('should allow to create project in sub dir', async () => {
-  createAndValidate(__dirname, 'example', {
-    name: 'test-temp-dir/rslib-project',
+describe('node-esm', () => {
+  for (const c of CASES_NODE_ESM) {
+    test(`should create ${c} project as expected`, async () => {
+      createAndValidate(__dirname, c);
+    });
+  }
+});
+
+describe('react', () => {
+  for (const c of CASES_REACT) {
+    test(`should create ${c} project as expected`, async () => {
+      createAndValidate(__dirname, c);
+    });
+  }
+});
+
+describe('custom path to create', () => {
+  test('should allow to create project in sub dir', async () => {
+    createAndValidate(__dirname, '[node-esm]-[]-js', {
+      name: 'test-temp-dir/rslib-project',
+    });
+  });
+
+  test('should allow to create project in relative dir', async () => {
+    createAndValidate(__dirname, '[node-esm]-[]-js', {
+      name: './test-temp-relative-dir',
+    });
   });
 });
 
-test('should allow to create project in relative dir', async () => {
-  createAndValidate(__dirname, 'example', {
-    name: './test-temp-relative-dir',
+describe('linter and formatter', () => {
+  test('should create project with eslint as expected', async () => {
+    const { dir, pkgJson, clean } = createAndValidate(
+      __dirname,
+      '[node-esm]-[]-js',
+      {
+        name: 'test-temp-eslint',
+        tools: ['eslint'],
+        clean: false,
+      },
+    );
+    expect(pkgJson.devDependencies.eslint).toBeTruthy();
+    expect(existsSync(join(dir, 'eslint.config.mjs'))).toBeTruthy();
+    clean();
   });
-});
 
-test('should create project with eslint as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
-    name: 'test-temp-eslint',
-    tools: ['eslint'],
-    clean: false,
+  test('should create project with prettier as expected', async () => {
+    const { dir, pkgJson, clean } = createAndValidate(
+      __dirname,
+      '[node-esm]-[]-js',
+      {
+        name: 'test-temp-prettier',
+        tools: ['prettier'],
+        clean: false,
+      },
+    );
+    expect(pkgJson.devDependencies.prettier).toBeTruthy();
+    expect(existsSync(join(dir, '.prettierrc'))).toBeTruthy();
+    clean();
   });
-  expect(pkgJson.devDependencies.eslint).toBeTruthy();
-  expect(existsSync(join(dir, 'eslint.config.mjs'))).toBeTruthy();
-  clean();
-});
 
-test('should create project with prettier as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
-    name: 'test-temp-prettier',
-    tools: ['prettier'],
-    clean: false,
+  test('should create project with eslint and prettier as expected', async () => {
+    const { dir, pkgJson, clean } = createAndValidate(
+      __dirname,
+      '[node-esm]-[]-js',
+      {
+        name: 'test-temp-eslint-prettier',
+        tools: ['eslint', 'prettier'],
+        clean: false,
+      },
+    );
+    expect(pkgJson.devDependencies.eslint).toBeTruthy();
+    expect(pkgJson.devDependencies.prettier).toBeTruthy();
+    expect(existsSync(join(dir, '.prettierrc'))).toBeTruthy();
+    expect(existsSync(join(dir, 'eslint.config.mjs'))).toBeTruthy();
+    clean();
   });
-  expect(pkgJson.devDependencies.prettier).toBeTruthy();
-  expect(existsSync(join(dir, '.prettierrc'))).toBeTruthy();
-  clean();
-});
 
-test('should create project with eslint and prettier as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
-    name: 'test-temp-eslint-prettier',
-    tools: ['eslint', 'prettier'],
-    clean: false,
+  test('should create project with biome as expected', async () => {
+    const { dir, pkgJson, clean } = createAndValidate(
+      __dirname,
+      '[node-esm]-[]-js',
+      {
+        name: 'test-temp-eslint',
+        tools: ['biome'],
+        clean: false,
+      },
+    );
+    expect(pkgJson.devDependencies['@biomejs/biome']).toBeTruthy();
+    expect(existsSync(join(dir, 'biome.json'))).toBeTruthy();
+    clean();
   });
-  expect(pkgJson.devDependencies.eslint).toBeTruthy();
-  expect(pkgJson.devDependencies.prettier).toBeTruthy();
-  expect(existsSync(join(dir, '.prettierrc'))).toBeTruthy();
-  expect(existsSync(join(dir, 'eslint.config.mjs'))).toBeTruthy();
-  clean();
-});
-
-test('should create project with biome as expected', async () => {
-  const { dir, pkgJson, clean } = createAndValidate(__dirname, 'example', {
-    name: 'test-temp-eslint',
-    tools: ['biome'],
-    clean: false,
-  });
-  expect(pkgJson.devDependencies['@biomejs/biome']).toBeTruthy();
-  expect(existsSync(join(dir, 'biome.json'))).toBeTruthy();
-  clean();
 });

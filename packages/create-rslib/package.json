@@ -1,6 +1,6 @@
 {
   "name": "create-rslib",
-  "version": "0.0.13",
+  "version": "0.0.15",
   "description": "Create a new Rslib project",
   "homepage": "https://lib.rsbuild.dev",
   "repository": {
@@ -23,19 +23,23 @@
     "bin.js"
   ],
   "scripts": {
-    "build": "rslib build",
+    "build": "rslib build && pnpm generate-templates",
     "dev": "rslib build --watch",
-    "start": "node ./dist/index.js"
+    "generate-templates": "pnpm tsx ./src/genTemplates.ts",
+    "start": "node ./dist/index.js",
+    "test": "vitest run"
   },
   "dependencies": {
-    "create-rstack": "1.0.7"
+    "create-rstack": "1.0.9"
   },
   "devDependencies": {
+    "@rslib/core": "workspace:*",
     "@rslib/tsconfig": "workspace:*",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "~18.19.39",
+    "@types/node": "^22.8.1",
     "fs-extra": "^11.2.0",
-    "rslib": "npm:@rslib/core@0.0.13",
+    "rslib": "npm:@rslib/core@0.0.15",
+    "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   },
   "engines": {

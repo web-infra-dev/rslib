@@ -4,8 +4,7 @@
   "exports": {
     ".": {
       "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/cjs/index.d.ts"
+      "require": "./dist/cjs/index.js"
     }
   },
   "main": "./dist/cjs/index.js",
@@ -15,15 +14,15 @@
     "build": "rslib build",
     "dev": "rslib dev:mf",
     "serve": "pnpm build & http-server -p 3001 ./dist/ --cors",
-    "storybook": "pnpm dev & storybook dev -p 6006"
+    "storybook": "storybook dev -p 6006"
   },
   "devDependencies": {
-    "@module-federation/enhanced": "^0.6.11",
+    "@module-federation/enhanced": "^0.6.14",
     "@module-federation/rsbuild-plugin": "^0.6.14",
     "@module-federation/storybook-addon": "0.0.0-next-20241029093536",
-    "@rsbuild/plugin-react": "^1.0.5",
+    "@rsbuild/plugin-react": "^1.0.6",
     "@rslib/core": "workspace:*",
-    "@types/react": "^18.3.11",
+    "@types/react": "^18.3.12",
     "http-server": "^14.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

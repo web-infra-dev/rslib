@@ -12,19 +12,29 @@ test('inspect command', async () => {
     cwd: __dirname,
   });
 
-  const files = await globContentJSON(path.join(__dirname, 'dist'));
-  const fileNames = Object.keys(files);
+  const files = await globContentJSON(path.join(__dirname, 'dist/.rsbuild'));
+  const fileNames = Object.keys(files).sort();
 
-  const rsbuildConfig = fileNames.find((item) =>
-    item.includes('rsbuild.config.mjs'),
+  expect(fileNames).toMatchInlineSnapshot(`
+    [
+      "<ROOT>/tests/integration/cli/dist/.rsbuild/rsbuild.config.cjs.mjs",
+      "<ROOT>/tests/integration/cli/dist/.rsbuild/rsbuild.config.esm.mjs",
+      "<ROOT>/tests/integration/cli/dist/.rsbuild/rspack.config.cjs.mjs",
+      "<ROOT>/tests/integration/cli/dist/.rsbuild/rspack.config.esm.mjs",
+    ]
+  `);
+
+  // esm rsbuild config
+  const rsbuildConfigEsm = fileNames.find((item) =>
+    item.includes('rsbuild.config.esm.mjs'),
   );
+  expect(rsbuildConfigEsm).toBeTruthy();
+  expect(files[rsbuildConfigEsm!]).toContain("type: 'modern-module'");
 
-  expect(rsbuildConfig).toBeTruthy();
-  expect(files[rsbuildConfig!]).toContain("type: 'modern-module'");
-
-  const rspackConfig = fileNames.find((item) =>
+  // esm rspack config
+  const rspackConfigEsm = fileNames.find((item) =>
     item.includes('rspack.config.esm.mjs'),
   );
-  expect(rspackConfig).toBeTruthy();
-  expect(files[rspackConfig!]).toContain("type: 'modern-module'");
+  expect(rspackConfigEsm).toBeTruthy();
+  expect(files[rspackConfigEsm!]).toContain("type: 'modern-module'");
 });

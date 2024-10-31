@@ -147,3 +147,12 @@ jobs:
           run: pnpm run test:benchmark
           # token retrieved from the CodSpeed app at the previous step
           token: ${{ secrets.CODSPEED_TOKEN }}
+
+  # ======== exit ========
+  pr-check-required:
+    if: (!cancelled() && !failure())
+    needs: [ut-ubuntu, integration-e2e-ubuntu, benchmark-ubuntu]
+    runs-on: ubuntu-latest
+    name: Test passed or skipped
+    steps:
+      - run: echo "All tests passed or skipped."
