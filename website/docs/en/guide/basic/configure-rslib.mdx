@@ -1,1 +1,209 @@
 # Configure Rslib
+
+Rslib provides a wide range of configuration options and sets a common default value for each option, which can meet the requirements of most use cases. Therefore, in most cases, you can use Rslib out of the box with few configurations.
+
+If you need to customize build behaviors, you can read the following sections to learn about the configuration options and its usage.
+
+## Configuration Structure
+
+The configuration structure of Rslib looks like this:
+
+```js title="rslib.config.mjs"
+export default {
+  // Array of library configurations.
+  // Each object represents a set of independent configurations for each output format.
+  // Different Rslib and Rsbuild configurations can be specified in each object.
+  lib: [
+    // The first set of configurations
+    {
+      // Independent Rslib configuration of ESM format
+      format: 'esm', // options for the output format of JavaScript files
+      bundle: true, // options for the build type
+      autoExtension: true, // options for the extensions of JavaScript files
+      syntax: 'esnext', // options for the target syntax
+      externalHelpers: false, // options for externalizing helper functions
+      umdName: 'RslibUmdExample', // options for the export name of the UMD library
+      autoExternal: {
+        // options for automatically externalizing third-party dependencies
+      },
+      redirect: {
+        // options for redirecting import paths
+      },
+      dts: {
+        // options for generating TypeScript declaration files
+      },
+      shims: {
+        // options for compatibility shims
+      },
+      banner: {
+        // options for the file banner
+      },
+      footer: {
+        // options for the file footer
+      },
+      // Independent Rsbuild configuration
+      output: {
+        // options for build outputs
+      },
+      source: {
+        // options for source code parsing and compilation
+      },
+      tools: {
+        // options for the low-level tools
+      },
+      plugins: [
+        // configure Rsbuild plugins
+      ],
+      // other independent Rsbuild configuration options
+    },
+    {
+      // The second set of configurations of CJS format
+      format: 'cjs',
+      // ... other independent Rslib / Rsbuild configurations
+    },
+    // ... Extra sets of configurations (if needed)
+  ],
+  // Shared Rsbuild configuration which will be merged into each of the above lib configuration objects
+  output: {
+    // options for build outputs
+  },
+  source: {
+    // options for source code parsing and compilation
+  },
+  tools: {
+    // options for the low-level tools
+  },
+  plugins: [
+    // configure Rsbuild plugins
+  ],
+  // ... other Rsbuild configuration options
+};
+```
+
+The configuration file exports a default object that includes a `lib` array and shared Rsbuild configuration options. You can find detailed descriptions of all configs on the [Configure Overview](/config/) page.
+
+- **Lib Configuration (required)**: The `lib` array contains multiple objects, each representing a set of independent configurations tailored for different output formats, such as ESM and CJS. Each object within the `lib` array can specify distinct configurations for both Rslib and Rsbuild.
+  - **Independent Rslib Configuration (required)**: The configuration options provided by Rslib. Rslib will transform these options into complex Rsbuild configuration of each object.
+  - **Independent Rsbuild Configuration (optional)**: The configuration options provided by Rsbuild which can override the shared Rsbuild configuration outside.
+- **Shared Rsbuild Configuration (optional)**: Outside the `lib` array, there are shared Rsbuild configuration options that will be deep merged with independent Rsbuild configuration of each `lib` configuration object.
+
+Rslib generates corresponding Rsbuild [environments](https://rsbuild.dev/guide/advanced/environments) configurations based on the multiple build configurations of different output formats. See [Configuration Debug](#configuration-debug) for more details.
+
+## Configuration Usage
+
+When you use the CLI of Rslib, Rslib will automatically read the configuration file in the root directory of the current project and resolve it in the following order:
+
+- `rslib.config.mjs`
+- `rslib.config.ts`
+- `rslib.config.js`
+- `rslib.config.cjs`
+- `rslib.config.mts`
+- `rslib.config.cts`
+
+We recommend using the `.mjs` or `.ts` format for the configuration file and importing the `defineConfig` utility function from `@rslib/core`. It provides friendly TypeScript type hints and autocompletion, which can help you avoid errors in the configuration.
+
+For example, in `rslib.config.ts`, you can define the Rslib [syntax](/config/lib/syntax) configuration and the Rsbuild [output.target](https://rsbuild.dev/config/output/target#outputtarget) configuration:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      syntax: 'es2021',
+    },
+  ],
+  output: {
+    target: 'node',
+  },
+});
+```
+
+If you are developing a non-TypeScript project, you can use the `.mjs` format for the configuration file.
+
+:::tip
+
+When you use the `.ts`, `.mts`, and `.cts` extensions, Rslib will use [jiti](https://github.com/unjs/jiti) to load configuration files, providing interoperability between ESM and CommonJS. The behavior of module resolution differs slightly from the native behavior of Node.js.
+
+:::
+
+## Specify Config File
+
+Rslib CLI uses the `--config` option to specify the config file, which can be set to a relative path or an absolute path.
+
+For example, if you need to use the `rslib.prod.config.mjs` file when running `build`, you can add the following scripts to `package.json`:
+
+```json title="package.json"
+{
+  "scripts": {
+    "build": "rslib build --config rslib.prod.config.mjs"
+  }
+}
+```
+
+You can also abbreviate the `--config` option to `-c`:
+
+```bash
+rslib build -c rslib.prod.config.mjs
+```
+
+## Using Environment Variables
+
+In the configuration file, you can use Node.js environment variables such as `process.env.NODE_ENV` to dynamically set different configurations:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+    },
+  ],
+  source: {
+    alias: {
+      '@request':
+        process.env.NODE_ENV === 'development'
+          ? './src/request.dev.js'
+          : './src/request.prod.js',
+    },
+  },
+});
+```
+
+## Configure Rsbuild
+
+In Rslib project, you can configure Rsbuild related configurations in both `lib` configuration object and shared configuration section.
+
+Common-used Rsbuild configurations in library development are listed at [Rsbuild Configuration](/config/rsbuild).
+
+You can also refer to the [Rsbuild Configuration](https://rsbuild.dev/config/index#config-overview) for checking the complete configuration items.
+
+## Configure Rspack
+
+Rslib is built on top of Rsbuild and Rsbuild supports directly modifying the Rspack configuration object and also supports modifying the built-in Rspack configuration of Rsbuild through `rspack-chain`. This means you can configure Rspack related configurations in an Rslib project as well.
+
+For more details, refer to [Configure Rspack](https://rsbuild.dev/guide/basic/configure-rspack).
+
+## Configuration Debug
+
+You can enable Rslib's debug mode by adding the `DEBUG=rsbuild` environment variable when executing a build. It will display the final Rsbuild/Rspack configuration after processing by Rslib.
+
+```bash
+DEBUG=rsbuild pnpm build
+```
+
+In debug mode, Rslib will write the Rsbuild / Rspack config to the dist directory, which is convenient for developers to view and debug.
+
+```
+success Inspect config succeed, open following files to view the content:
+
+  - Rsbuild Config (esm): /project/dist/.rsbuild/rsbuild.config.esm.mjs
+  - Rsbuild Config (cjs): /project/dist/.rsbuild/rsbuild.config.cjs.mjs
+  - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
+  - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
+```
+
+- Open the generated `/dist/.rsbuild/rsbuild.config.esm.mjs` file to see the complete content of the Rsbuild config.
+- Open the generated `/dist/.rsbuild/rspack.config.esm.mjs` file to see the complete content of the Rspack config.
