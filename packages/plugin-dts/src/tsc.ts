@@ -1,5 +1,6 @@
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
+import type { BannerAndFooter } from 'src';
 import ts from 'typescript';
 import {
   getFileLoc,
@@ -14,8 +15,8 @@ export type EmitDtsOptions = {
   configPath: string;
   declarationDir: string;
   dtsExtension: string;
-  banner?: string;
-  footer?: string;
+  banner: BannerAndFooter;
+  footer: BannerAndFooter;
 };
 
 export async function emitDts(

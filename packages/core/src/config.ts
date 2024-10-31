@@ -327,8 +327,8 @@ export function composeBannerFooterConfig(
   banner: BannerAndFooter,
   footer: BannerAndFooter,
 ): RsbuildConfig {
-  const bannerConfig = pick(banner, ['js', 'css']);
-  const footerConfig = pick(footer, ['js', 'css']);
+  const bannerConfig = pick(banner, ['js', 'css', 'raw']);
+  const footerConfig = pick(footer, ['js', 'css', 'raw']);
 
   if (isEmptyObject(bannerConfig) && isEmptyObject(footerConfig)) {
     return {};
@@ -342,7 +342,7 @@ export function composeBannerFooterConfig(
         new rspack.BannerPlugin({
           banner: bannerConfig.js,
           stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
-          raw: true,
+          raw: bannerConfig?.raw ?? true,
           include: /\.(js|mjs|cjs)$/,
         }),
       );
@@ -352,7 +352,7 @@ export function composeBannerFooterConfig(
         new rspack.BannerPlugin({
           banner: bannerConfig.css,
           stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
-          raw: true,
+          raw: bannerConfig?.raw ?? true,
           include: /\.(css)$/,
         }),
       );
@@ -365,7 +365,7 @@ export function composeBannerFooterConfig(
         new rspack.BannerPlugin({
           banner: footerConfig.js,
           stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
-          raw: true,
+          raw: footerConfig?.raw ?? true,
           footer: true,
           include: /\.(js|mjs|cjs)$/,
         }),
@@ -376,7 +376,7 @@ export function composeBannerFooterConfig(
         new rspack.BannerPlugin({
           banner: footerConfig.css,
           stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
-          raw: true,
+          raw: footerConfig?.raw ?? true,
           footer: true,
           include: /\.(css)$/,
         }),
@@ -934,8 +934,8 @@ const composeDtsConfig = async (
         abortOnError: dts?.abortOnError ?? true,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
         autoExternal,
-        banner: banner?.dts,
-        footer: footer?.dts,
+        banner: { content: banner?.dts, raw: banner?.raw ?? true },
+        footer: { content: footer?.dts, raw: footer?.raw ?? true },
       }),
     ],
   };

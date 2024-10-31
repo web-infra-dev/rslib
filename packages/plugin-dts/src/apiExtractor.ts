@@ -6,7 +6,7 @@ import {
 } from '@microsoft/api-extractor';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
-import type { DtsEntry } from './index';
+import type { BannerAndFooter, DtsEntry } from './index';
 import { addBannerAndFooter, getTimeCost } from './utils';
 
 export type BundleOptions = {
@@ -14,8 +14,8 @@ export type BundleOptions = {
   cwd: string;
   outDir: string;
   dtsExtension: string;
-  banner?: string;
-  footer?: string;
+  banner: BannerAndFooter;
+  footer: BannerAndFooter;
   dtsEntry: DtsEntry;
   tsconfigPath?: string;
   bundledPackages?: string[];

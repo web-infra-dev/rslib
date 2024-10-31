@@ -20,9 +20,11 @@ export type PluginDtsOptions = {
         devDependencies?: boolean;
         peerDependencies?: boolean;
       };
-  banner?: string;
-  footer?: string;
+  banner: BannerAndFooter;
+  footer: BannerAndFooter;
 };
+
+export type BannerAndFooter = { content?: string; raw?: boolean };
 
 export type DtsEntry = {
   name?: string;

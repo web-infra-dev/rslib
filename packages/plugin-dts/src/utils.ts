@@ -7,7 +7,7 @@ import MagicString from 'magic-string';
 import color from 'picocolors';
 import { convertPathToPattern, glob } from 'tinyglobby';
 import ts from 'typescript';
-import type { DtsEntry } from './index';
+import type { BannerAndFooter, DtsEntry } from './index';
 
 export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
   const configFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
@@ -85,22 +85,34 @@ export function getTimeCost(start: number): string {
 
 export async function addBannerAndFooter(
   file: string,
-  banner?: string,
-  footer?: string,
+  banner: BannerAndFooter,
+  footer: BannerAndFooter,
 ): Promise<void> {
-  if (!banner && !footer) {
+  if (!banner.content && !footer.content) {
     return;
   }
 
   const content = await fsP.readFile(file, 'utf-8');
   const code = new MagicString(content);
 
-  if (banner && !content.trimStart().startsWith(banner.trim())) {
-    code.prepend(`${banner}\n`);
+  if (
+    banner.content &&
+    !content.trimStart().startsWith(banner.content.trim()) &&
+    !content.trimStart().startsWith(`/*! ${banner.content.trim()} */`)
+  ) {
+    code.prepend(
+      banner?.raw ? `${banner.content}\n` : `/*! ${banner.content} */\n`,
+    );
   }
 
-  if (footer && !content.trimEnd().endsWith(footer.trim())) {
-    code.append(`\n${footer}\n`);
+  if (
+    footer.content &&
+    !content.trimEnd().endsWith(footer.content.trim()) &&
+    !content.trimEnd().endsWith(`/*! ${footer.content.trim()} */`)
+  ) {
+    code.append(
+      footer?.raw ? `\n${footer.content}\n` : `\n/*! ${footer.content} */\n`,
+    );
   }
 
   if (code.hasChanged()) {
@@ -112,8 +124,8 @@ export async function processDtsFiles(
   bundle: boolean,
   dir: string,
   dtsExtension: string,
-  banner?: string,
-  footer?: string,
+  banner: BannerAndFooter,
+  footer: BannerAndFooter,
 ): Promise<void> {
   if (bundle) {
     return;

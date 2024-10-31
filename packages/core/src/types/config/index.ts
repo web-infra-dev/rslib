@@ -45,11 +45,13 @@ export type AutoExternal =
       peerDependencies?: boolean;
     };
 
+export type BannerAndFooterOptions = { raw?: boolean };
+
 export type BannerAndFooter = {
   js?: string;
   css?: string;
   dts?: string;
-};
+} & BannerAndFooterOptions;
 
 export type Shims = {
   cjs?: {
