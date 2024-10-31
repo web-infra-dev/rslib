@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 import { expect, test } from 'vitest';
 
@@ -10,8 +11,7 @@ enum BannerFooter {
   DTS_FOOTER = '/*! hello footer dts */',
 }
 
-test('banner and footer should work in js, css and dts', async () => {
-  const fixturePath = __dirname;
+const testBannerAndFooter = async (fixturePath: string) => {
   const { js, css, dts } = await buildAndGetResults({
     fixturePath,
     type: 'all',
@@ -57,4 +57,16 @@ test('banner and footer should work in js, css and dts', async () => {
   checkBannerAndFooter(jsContents, 'js');
   checkBannerAndFooter(cssContents, 'css');
   checkBannerAndFooter(dtsContents, 'dts');
+};
+
+test('banner and footer should work in js, css and dts', async () => {
+  const fixturePath = path.join(__dirname, 'raw');
+
+  testBannerAndFooter(fixturePath);
+});
+
+test('banner and footer should work in js, css, and dts with raw option set to false', async () => {
+  const fixturePath = path.join(__dirname, 'raw-false');
+
+  testBannerAndFooter(fixturePath);
 });
