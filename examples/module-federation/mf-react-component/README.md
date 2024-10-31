@@ -9,29 +9,29 @@ Dev MF module
 1. start remote module which is loaded by rslib module
 
 ```
-cd examples/module-federation/mf-remote && pnpm dev
+nx run @examples/mf-remote:dev
 ```
 
 2. start dev mode of rslib module
 
 ```
-cd examples/module-federation/mf-react-component && pnpm dev
+nx run @examples/mf-react-component:dev
 ```
 
 3. use storybook to dev rslib module
 
 ```
-cd examples/module-federation/mf-react-component && pnpm storybook
+nx run @examples/mf-react-component:storybook
 ```
 
 Build
 
 ```
-cd examples/module-federation/mf-react-component && pnpm build
+nx run @examples/mf-react-component:build
 ```
 
 Build and Serve dist
 
 ```
-cd examples/module-federation/mf-react-component && pnpm serve
+nx run @examples/mf-react-component:serve
 ```
