@@ -10,13 +10,13 @@ The configuration structure of Rslib looks like this:
 
 ```js title="rslib.config.mjs"
 export default {
-  // Array of library configurations.
+  // Array of Lib configurations.
   // Each object represents a set of independent configurations for each output format.
-  // Distinct configurations can be specified in each object, which is a superset of Rsbuild configurations.
+  // Distinct configurations can be specified in each object, which is a superset of Rsbuild configurations along with Rslib's specific configurations.
   lib: [
-    // The first set of configurations
+    // The first set of Lib configurations
     {
-      // Independent lib configuration of ESM format
+      // Independent Rslib specific configurations
       format: 'esm', // options for the output format of JavaScript files
       bundle: true, // options for the build type
       autoExtension: true, // options for the extensions of JavaScript files
@@ -41,7 +41,7 @@ export default {
       footer: {
         // options for the file footer
       },
-      // Independent Rsbuild configuration
+      // Independent Rsbuild configurations
       output: {
         // options for build outputs
       },
@@ -54,16 +54,16 @@ export default {
       plugins: [
         // configure Rsbuild plugins
       ],
-      // other independent Rsbuild configuration options
+      // other independent Rsbuild configurations
     },
     {
-      // The second set of configurations of CJS format
+      // The second set of Lib configurations
       format: 'cjs',
-      // ... other independent lib configurations and Rsbuild configurations
+      // ... other independent Rslib specific configurations and Rsbuild configurations
     },
-    // ... Extra sets of configurations (if needed)
+    // ... Additional sets of Lib configurations (if needed)
   ],
-  // Shared Rsbuild configuration which will be merged into each of the above lib configuration objects
+  // Shared Rsbuild configurations
   output: {
     // options for build outputs
   },
@@ -76,18 +76,17 @@ export default {
   plugins: [
     // configure Rsbuild plugins
   ],
-  // ... other Rsbuild configuration options
+  // ... other Rsbuild configurations
 };
 ```
 
 The configuration file exports a default object that includes a `lib` array and shared Rsbuild configuration options. You can find detailed descriptions of all configs on the [Configure Overview](/config/) page.
 
-- **[Lib Configuration](/config/lib) (at least one object is required)**: The `lib` array contains multiple objects, each representing a set of independent configurations tailored for different output formats, such as ESM and CJS. Each object within the `lib` array can specify distinct configurations, which is a superset of Rsbuild configurations.
-  - **Independent [lib Configuration](/config/lib) (only [format](/config/lib/format) is required)**: The configuration options extended by Rslib. Rslib will transform these options into adapted Rsbuild configuration of each object.
-  - **Independent [Rsbuild Configuration](/config/rsbuild) (optional)**: The configuration options provided by Rsbuild which can override the shared Rsbuild configuration outside.
-- **Shared [Rsbuild Configuration](/config/rsbuild) (optional)**: Outside the `lib` array, there are shared Rsbuild configuration options that will be deep merged with independent Rsbuild configuration of each `lib` configuration object.
+- **[Lib configurations](/config/lib) (at least one object is required)**: The `lib` array contains multiple objects, each representing a set of independent configurations that will generate different outputs. Each object within the `lib` array can specify unique configurations, which is a superset of Rsbuild
+  configurations along with Rslib's specific configurations.
+- **Shared [Rsbuild configurations](/config/rsbuild) (optional)**: Outside the `lib` array, there are shared Rsbuild configuration options that will be deep merged with independent Rsbuild configuration of each `lib` configuration object.
 
-Rslib generates corresponding Rsbuild [environments](https://rsbuild.dev/guide/advanced/environments) configurations based on the multiple build configurations of different output formats. See [Configuration Debug](#configuration-debug) for more details.
+Rslib generates corresponding Rsbuild [environments](https://rsbuild.dev/guide/advanced/environments) configurations based on the multiple build configurations of different output formats. You can view the final generated configurations through the [configuration debug](#configuration-debug) documentation.
 
 ## Configuration Usage
 
