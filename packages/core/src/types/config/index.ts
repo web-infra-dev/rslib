@@ -73,15 +73,15 @@ export type Redirect = {
 
 export interface LibConfig extends RsbuildConfig {
   /**
+   * Output format for the generated JavaScript files.
+   * @default undefined
+   */
+    format?: Format;
+  /**
    * Whether to bundle the library.
    * @default true
    */
   bundle?: boolean;
-  /**
-   * Output format for the generated JavaScript files.
-   * @default undefined
-   */
-  format?: Format;
   /**
    * Whether to automatically set the file extension based on the `format` option in the JS and DTS output files.
    * @default true

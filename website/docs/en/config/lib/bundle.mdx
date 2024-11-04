@@ -3,4 +3,144 @@
 - **Type:** `boolean`
 - **Default:** `true`
 
-Whether to bundle the library.
+Specify whether to bundle the library, which is known as bundle mode when `bundle` is set to `true`, and bundleless mode when set to `false`.
+
+::: warning
+
+The bundleless mode is not fully supported yet, and some features like assets may not work properly.
+
+:::
+
+## Set entry
+
+We should specify the entry file for the build.
+
+### bundle: true
+
+When `bundle` is set to `true`, the entry should be set to the entry file. The default entry is `src/index.(ts|js|tsx|jsx|mjs|cjs)`. You should make sure that the entry file exists, or customize entry through the [`source.entry`](https://rsbuild.dev/config/source/entry) configuration.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'cjs',
+      bundle: true,
+    },
+  ],
+  source: {
+    entry: {
+      index: './foo/index.ts',
+    },
+  },
+};
+```
+
+### bundle: false
+
+When `bundle` is set to `false`, the entry should be set a glob pattern to include all the files.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'cjs',
+      bundle: false,
+    },
+  ],
+  source: {
+    entry: {
+      index: './src/**',
+    },
+  },
+};
+```
+
+You can also use the glob pattern to exclude some files.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'cjs',
+      bundle: false,
+    },
+  ],
+  source: {
+    entry: {
+      index: ['./src/**', '!**/foo.*'],
+    },
+  },
+};
+```
+
+## Example
+
+For below file structure of source code:
+
+```
+.
+├── src
+│   ├── index.ts
+│   ├── foo.ts
+│   └── bar.ts
+└── package.json
+```
+
+### bundle: true
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    {
+      format: 'cjs',
+      bundle: true,
+    },
+  ],
+});
+```
+
+When `bundle` is set to `true`, as known as bundle mode, Rslib will bundle the library into a single file.
+
+```diff
+  .
++ ├── dist
++ │   └── index.js
+  ├── src
+  │   ├── index.ts
+  │   ├── foo.ts
+  │   └── bar.ts
+  └── package.json
+```
+
+### bundle: false
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    {
+      format: 'cjs',
+      bundle: false,
+    },
+  ],
+  source: {
+    entry: {
+      index: ['./src/**'],
+    },
+  },
+});
+```
+
+When `bundle` is set to `false`, as known as bundleless mode, Rslib will only transform the code into multiple files.
+
+```diff
+  .
++ ├── dist
++ │   ├── index.js
++ │   ├── foo.js
++ │   └── bar.js
+  ├── src
+  │   ├── index.ts
+  │   ├── foo.ts
+  │   └── bar.ts
+  └── package.json
+```
