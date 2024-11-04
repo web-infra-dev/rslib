@@ -83,7 +83,7 @@ export interface LibConfig extends RsbuildConfig {
    */
   bundle?: boolean;
   /**
-   * Whether to automatically set the file extension based on the `format` option in the JS and DTS output files.
+   * Whether to automatically set the file extension based on the `format` option in the JavaScript output files.
    * @default true
    */
   autoExtension?: boolean;
