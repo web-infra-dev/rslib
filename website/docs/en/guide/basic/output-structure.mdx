@@ -1,0 +1,20 @@
+# Output Structure
+
+## bundle / bundleless
+
+So first let's understand bundle and bundleless.
+
+A bundle is a package of build artifacts, which may be a single file or multiple files based on a certain [code splitting strategy](https://esbuild.github.io/api/#splitting).
+
+bundleless, on the other hand, means that each source file is compiled and built separately, but not bundled together. Each output file can be found with its corresponding source code file. The process of **bundleless build can also be understood as the process of code conversion of source files only**.
+
+They have their own benefits.
+
+- bundle can reduce the size of build artifacts and also pre-package dependencies to reduce the size of installed dependencies. Packaging libraries in advance can speed up application project builds.
+- bundleless maintains the original file structure and is more conducive to debugging and tree shaking.
+
+:::warning
+bundleless is a single-file compilation mode, so for referencing and exporting types, you need to add the `type` keyword. For example, `import type { A } from './types'`. Please refer to [TypeScript - isolatedModules](/guide/basic/typescript#isolatedmodules) for more information.
+:::
+
+You can specify whether to bundle using the [bundle](/config/lib/bundle) option, which is set to `true` by default.
