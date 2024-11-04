@@ -6,33 +6,33 @@ overviewHeaders: [2, 3]
 
 - **Type:**
 
-  ```ts
-  type Shims = {
-    cjs?: {
-      'import.meta.url'?: boolean;
-    };
-    esm?: {
-      __filename?: boolean;
-      __dirname?: boolean;
-      require?: boolean;
-    };
+```ts
+type Shims = {
+  cjs?: {
+    'import.meta.url'?: boolean;
   };
-  ```
+  esm?: {
+    __filename?: boolean;
+    __dirname?: boolean;
+    require?: boolean;
+  };
+};
+```
 
 - **Default:**
 
-  ```js
-  {
-    cjs: {
-      'import.meta.url': true,
-    },
-    esm: {
-      __filename: false,
-      __dirname: false,
-      require: false,
-    },
-  }
-  ```
+```js
+const defaultShims = {
+  cjs: {
+    'import.meta.url': true,
+  },
+  esm: {
+    __filename: false,
+    __dirname: false,
+    require: false,
+  },
+};
+```
 
 Used to configure the shims for CommonJS and ESM output.
 
