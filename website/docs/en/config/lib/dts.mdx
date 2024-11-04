@@ -1,1 +1,17 @@
 # lib.dts
+
+- **Type:**
+
+```ts
+type Dts =
+  | {
+      build?: boolean;
+      bundle?: boolean;
+      distPath?: string;
+      abortOnError?: boolean;
+      autoExtension?: boolean;
+    }
+  | boolean;
+```
+
+- **Default:** `undefined`
