@@ -1,1 +1,95 @@
+import { PackageManagerTabs } from '@theme';
+
 # Use Storybook
+
+[Storybook](https://storybook.js.org/) is a powerful tool for developing UI components in isolation for React, Vue, and other frameworks. It enables you to build and test components independently, which can accelerate both development and testing.
+
+[storybook-rsbuild](https://github.com/rspack-contrib/storybook-rsbuild) is the Rsbuild powered Storybook builder, and provided the framework integration for React, Vue3 and vanilla JavaScript. The coherent Rsbuild system could make Storybook use an unified configuration with Rslib.
+
+:::tip
+You can create a new project with Storybook by using [create-rslib](/guide/start/quick-start#creating-an-rslib-project).
+:::
+
+## Getting Started
+
+### Setup a Rslib project
+
+This is the prerequisite for setting up Storybook. You need to have a Rslib project with components that you want to showcase in Storybook, check out [Solution](/guide/solution) to setup a Rslib project.
+
+### Add Storybook to project
+
+Set up a Storybook project with an existing Rslib project. To use React, Vue 3, vanilla JavaScript, or other frameworks, you must first install the appropriate Storybook framework package. For installation instructions, refer to the [Storybook Rsbuild documentation](https://storybook.rsbuild.dev/guide/framework.html).
+
+Using React as an example, at this step you need to:
+
+1. Install the dependencies for Storybook Rsbuild React framework. The essential ones include
+
+   - [storybook](https://www.npmjs.com/package/@storybook/addon-essentials): The Storybook core.
+   - [@storybook/addon-essentials](https://www.npmjs.com/package/@storybook/addon-essentials): a curated collection of addons to bring out the best of Storybook.
+   - [@rsbuild/core](https://www.npmjs.com/package/@rsbuild/core): Storybook builder.
+   - [storybook-addon-rslib](https://www.npmjs.com/package/storybook-addon-rslib): This addon will make Storybook Rsbuild could derive Rsbuild configuration from Rslib config file.
+     The addon will automatically read the Rslib configuration and apply it to Storybook Rsbuild, ensuring that the configuration is unified. You can check the [storybook-addon-rslib](https://storybook.rsbuild.dev/guide/integrations/rslib.html) documentation for available options.
+
+   <PackageManagerTabs
+     command={{
+       npm: 'npm add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
+       yarn: 'yarn add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
+       pnpm: 'pnpm add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
+       bun: 'bun add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
+     }}
+   />
+
+   The dependencies may vary for each framework, please refer to the [Storybook Rsbuild documentation](https://storybook.rsbuild.dev/guide/framework.html) for details. In this React example, we will install [storybook-rsbuild-react](https://www.npmjs.com/package/storybook-react-rsbuild) as the framework integration.
+
+2. Configure the Storybook configuration file `.storybook/main.js`, specify the stories and addons, and set the framework with corresponding framework integration.
+
+   ```js title=".storybook/main.js"
+   export default {
+     stories: [
+       '../stories/**/*.mdx',
+       '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+     ],
+     addons: ['@storybook/addon-essentials', 'storybook-addon-rslib'],
+     framework: 'storybook-react-rsbuild', // storybook-react-rsbuild for example
+   };
+   ```
+
+   3. Add a simple story to the `stories` directory. For example, create a `Button.stories.js` file with the following content:
+
+   ```js title="stories/Button.stories.js"
+   import { Button } from '../src/Button';
+
+   const meta = {
+     title: 'Example/Button',
+     component: Button,
+   };
+
+   export default meta;
+
+   export const Primary = {
+     args: {
+       primary: true,
+       label: 'Button',
+     },
+   };
+   ```
+
+:::tip
+In case you are using [Yarn Plug-n-Play](https://yarnpkg.com/features/pnp) or your project is set up within a mono repository environment, you might run into issues with module resolution. In such cases, you can add an `getAbsolutePath('storybook-addon-rslib')` function to resolve the addon. Check the [Storybook's FAQ](https://storybook.js.org/docs/faq#how-do-i-fix-module-resolution-in-special-environments) for more information.
+:::
+
+There you go, you could start and build the Storybook server with the following command:
+
+```bash
+npx storybook dev   // development mode
+npx storybook build // build static files
+```
+
+Check out more details in the [Storybook Rsbuild documentation](https://storybook.rsbuild.dev/) and the [Storybook documentation](https://storybook.js.org/docs/react/get-started/introduction).
+
+{/* TODO: */}
+{/* ## Module Federation */}
+
+## Example
+
+- [React component library + Rslib + Storybook](https://github.com/rspack-contrib/storybook-rsbuild/tree/main/sandboxes/rslib-react-component)
