@@ -3,7 +3,7 @@ export { runCli } from './cli/commands';
 export {
   defineConfig,
   loadConfig,
-  composeCreateRsbuildConfig as _composeCreateRsbuildConfig,
+  composeCreateRsbuildConfig as unstable_composeCreateRsbuildConfig,
 } from './config';
 export { build } from './build';
 export { logger } from './utils/logger';
