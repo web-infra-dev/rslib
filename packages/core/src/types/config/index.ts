@@ -41,6 +41,7 @@ export type AutoExternal =
   | boolean
   | {
       dependencies?: boolean;
+      optionalDependencies?: boolean;
       devDependencies?: boolean;
       peerDependencies?: boolean;
     };

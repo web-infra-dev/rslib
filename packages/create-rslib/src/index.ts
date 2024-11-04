@@ -37,6 +37,16 @@ async function getTemplateName({ template }: Argv) {
     }),
   );
 
+  const language = checkCancel<string>(
+    await select({
+      message: 'Select language',
+      options: [
+        { value: 'ts', label: 'TypeScript' },
+        { value: 'js', label: 'JavaScript' },
+      ],
+    }),
+  );
+
   const supportStorybook = templateName === 'react';
 
   type ExcludesFalse = <T>(x: T | false) => x is T;
@@ -53,16 +63,6 @@ async function getTemplateName({ template }: Argv) {
         { value: 'vitest', label: 'Vitest' },
         // TODO: support Rspress Module doc in the future
       ].filter(Boolean as any as ExcludesFalse),
-    }),
-  );
-
-  const language = checkCancel<string>(
-    await select({
-      message: 'Select language',
-      options: [
-        { value: 'ts', label: 'TypeScript' },
-        { value: 'js', label: 'JavaScript' },
-      ],
     }),
   );
 

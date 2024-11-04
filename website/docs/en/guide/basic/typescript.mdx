@@ -1,0 +1,46 @@
+# Use Typescript
+
+Rslib supports TypeScript by default, allowing you to directly use `.ts` and `.tsx` files in your projects.
+
+## TypeScript Transpilation
+
+Rslib uses SWC by default for transpiling TypeScript code, and it also supports switching to Babel for transpilation.
+
+### isolatedModules
+
+Unlike the native TypeScript compiler, tools like SWC and Babel compile each file separately and cannot determine whether an imported name is a type or a value. Therefore, when using TypeScript in Rslib, you need to enable the [isolatedModules](https://typescriptlang.org/tsconfig/#isolatedModules) option in your `tsconfig.json` file:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "isolatedModules": true
+  }
+}
+```
+
+This option can help you avoid using certain syntax that cannot be correctly compiled by SWC and Babel, such as cross-file type references. It will guide you to correct the corresponding usage:
+
+```ts
+// Wrong
+export { SomeType } from './types';
+
+// Correct
+export type { SomeType } from './types';
+```
+
+> See [SWC - Migrating from tsc](https://swc.rs/docs/migrating-from-tsc) for more details about the differences between SWC and tsc.
+
+## tsconfig.json Path
+
+Rslib by default reads the `tsconfig.json` file from the root directory. You can use [source.tsconfigPath](https://rsbuild.dev/config/source/tsconfig-path) to configure a custom tsconfig.json file path.
+
+```ts
+export default {
+  lib: [
+    // ...
+  ],
+  source: {
+    tsconfigPath: './tsconfig.custom.json',
+  },
+};
+```
