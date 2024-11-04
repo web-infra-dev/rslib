@@ -76,7 +76,7 @@ export interface LibConfig extends RsbuildConfig {
    * Output format for the generated JavaScript files.
    * @default undefined
    */
-    format?: Format;
+  format?: Format;
   /**
    * Whether to bundle the library.
    * @default true
