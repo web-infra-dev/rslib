@@ -1,6 +1,17 @@
 # lib.format
 
-- **Type:** `string`
+- **Type:** `'esm' | 'cjs' | 'umd' | 'mf'`
+
 - **Default:** `undefined`
 
-Output format for the generated JavaScript files.
+- **Required**: true
+
+Specify the output format for the generated JavaScript files.
+
+See [Output Format](/guide/basic/output-format) and [Module Federation](/guide/advanced/module-federation) for more details.
+
+::: note
+
+The `umd` format only works when [bundle](/config/lib/bundle) is set to `true`.
+
+:::
