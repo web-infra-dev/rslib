@@ -46,7 +46,7 @@ export default defineConfig({
         lang: 'en',
         label: 'English',
         title: 'Rslib',
-        description: 'The Rsbuild-based library build tool',
+        description: 'The Rsbuild-based library dev tool',
         editLink: {
           docRepoBaseUrl:
             'https://github.com/web-infra-dev/rslib/tree/main/website/docs',

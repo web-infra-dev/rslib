@@ -4,7 +4,7 @@
 
 # Rslib
 
-Rslib is a library build tool powered by [Rsbuild](https://rsbuild.dev). It allows library developers to leverage the knowledge and ecosystem of webpack and Rspack.
+Rslib is a library dev tool powered by [Rsbuild](https://rsbuild.dev). It allows library developers to leverage the knowledge and ecosystem of webpack and Rspack.
 
 ## Documentation
 
