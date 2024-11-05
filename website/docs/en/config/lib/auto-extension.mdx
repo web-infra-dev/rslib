@@ -15,7 +15,7 @@ By default that when `autoExtension` is set to `true`, the file extension will b
 
 :::warning
 
-When [`bundle`](/config/lib/bundle) is set to `false` that as known as bundleless mode, you should write full path instead of ignoring main file in source code.
+When [bundle](/config/lib/bundle) is set to `false` that as known as bundleless mode, you should write full path instead of ignoring directory indexes (e.g. `'./foo/index.js'`) in source code.
 
 For example, if `foo` is a folder, you need to rewrite `import * from './foo'` to `import * from './foo/index'`.
 
@@ -25,7 +25,7 @@ When `autoExtension` is set to `false`, the file extension will be default to `.
 
 ## Customize Extension
 
-You can set `autoExtension` to `false` and use [`output.filename`](https://rsbuild.dev/config/output/filename) to customize the JavaScript output files.
+You can set `autoExtension` to `false` and use [output.filename](https://rsbuild.dev/config/output/filename) to customize the JavaScript output files.
 
 ```ts title="rslib.config.ts"
 export default defineConfig({

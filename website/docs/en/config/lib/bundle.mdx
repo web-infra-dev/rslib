@@ -9,17 +9,17 @@ See [bundle / bundleless](/guide/basic/output-structure#bundle--bundleless) for 
 
 ::: warning
 
-The bundleless mode is not fully supported yet, and some features like assets may not work properly.
+The bundleless mode is not fully supported yet, and some features like [assets](/guide/advanced/assets) may not work properly.
 
 :::
 
-## Set entry
+## Set Entry
 
 We should specify the entry file for the build.
 
 ### bundle: true
 
-When `bundle` is set to `true`, the entry should be set to the entry file. The default entry is `src/index.(ts|js|tsx|jsx|mjs|cjs)`. You should make sure that the entry file exists, or customize entry through the [`source.entry`](https://rsbuild.dev/config/source/entry) configuration.
+When `bundle` is set to `true`, the entry should be set to the entry file. The default entry is `src/index.(ts|js|tsx|jsx|mjs|cjs)`. You should make sure that the entry file exists, or customize entry through the [source.entry](https://rsbuild.dev/config/source/entry) configuration.
 
 ```ts title="rslib.config.ts"
 export default {
@@ -39,7 +39,7 @@ export default {
 
 ### bundle: false
 
-When `bundle` is set to `false`, the entry should be set a glob pattern to include all the files.
+When `bundle` is set to `false`, the entry should be set a [glob pattern](https://github.com/micromatch/picomatch#globbing-features) to include all the files.
 
 ```ts title="rslib.config.ts"
 export default {
@@ -57,7 +57,7 @@ export default {
 };
 ```
 
-You can also use the glob pattern to exclude some files.
+You can also use with an exclamation mark to exclude some files.
 
 ```ts title="rslib.config.ts"
 export default {
