@@ -1,0 +1,72 @@
+# Node.js
+
+In this document, you will learn how to build a Node.js library using Rslib.
+
+## Create Node.js Project
+
+You can use `create-rslib` to create a project with Rslib + Node.js. Just execute the following command:
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm create rslib@latest',
+    yarn: 'yarn create rslib',
+    pnpm: 'pnpm create rslib@latest',
+    bun: 'bun create rslib@latest',
+  }}
+/>
+
+Then select `Node.js` when prompted to "Select template".
+
+## Use Rslib in an existing project
+
+To development an Node.js library, you need to set [target](/config/rsbuild/output#target) to `"node"` in `rslib.config.ts`. This is crucial because when the `target` is set to `"node"`, Rslib automatically adjusts many configurations for Node.js. For example, [output.externals](/config/rsbuild/output#target) will exclude built-in Node.js modules, and [shims](/config/lib/shims) will add a shim for `import.meta.url` in CJS output by default.
+
+For example, in `rsbuild.config.ts`:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      output: {
+        distPath: {
+          root: './dist/esm',
+        },
+      },
+    },
+    {
+      format: 'cjs',
+      output: {
+        distPath: {
+          root: './dist/cjs',
+        },
+      },
+    },
+  ],
+  output: {
+    target: 'node',
+  },
+});
+```
+
+## Target for Node.js
+
+When [target](/config/rsbuild/output#target) is set to `"node"`, Rslib will automatically adjust the following configurations:
+
+### Externals
+
+All Node.js [built-in modules](https://nodejs.org/docs/latest/api/) are externalized by default.
+
+### Shims
+
+- `global`: leave it as it is, while it's recommended to use [globalThis](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis) instead.
+- `__filename`: When outputting in ESM format, replace `__filename` with the result of `fileURLToPath(import.meta.url)`.
+- `__dirname`: When outputting in ESM format, replace `__dirname` with the result of `dirname(fileURLToPath(import.meta.url))`.
+
+{/* TODO: Rspack doesn't support createRequire now */}
+{/* ### createRequire */}
+{/* Requiring module with [createRequire](https://nodejs.org/api/module.html#modulecreaterequirefilename) will also works in ESM format. */}
