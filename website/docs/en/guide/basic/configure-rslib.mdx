@@ -82,9 +82,9 @@ export default {
 
 The configuration file exports a default object that includes a `lib` array and shared Rsbuild configuration options. You can find detailed descriptions of all configs on the [Configure Overview](/config/) page.
 
-- **[Lib configurations](/config/lib) (at least one object is required)**: The `lib` array contains multiple objects, each representing a set of independent configurations that will generate different outputs. Each object within the `lib` array can specify unique configurations, which is a superset of Rsbuild
+- **[Lib Configurations](/config/lib) (at least one object is required)**: The `lib` array contains multiple objects, each representing a set of independent configurations that will generate different outputs. Each object within the `lib` array can specify unique configurations, which is a superset of Rsbuild
   configurations along with Rslib's specific configurations.
-- **Shared [Rsbuild configurations](/config/rsbuild) (optional)**: Outside the `lib` array, there are shared Rsbuild configuration options that will be deep merged with independent Rsbuild configuration of each `lib` configuration object.
+- **Shared [Rsbuild Configurations](/config/rsbuild) (optional)**: Outside the `lib` array, there are shared Rsbuild configuration options that will be deep merged with independent Rsbuild configuration of each `lib` configuration object.
 
 Rslib generates corresponding Rsbuild [environments](https://rsbuild.dev/guide/advanced/environments) configurations based on the multiple build configurations of different output formats. You can view the final generated configurations through the [configuration debug](#configuration-debug) documentation.
 
