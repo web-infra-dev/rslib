@@ -92,7 +92,30 @@ Rslib support use `storybook` to develop Module Federation Rslib module
 
 #### 1. install storybook and rsbuild storybook addon
 
-<PackageManagerTabs command="install storybook storybook-addon-rslib @module-federation/storybook-addon storybook-react-rsbuild -D" />
+<PackageManagerTabs command="install storybook storybook-addon-rslib @module-federation/storybook-addon -D" />
+
+`React App`
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm add storybook-react-rsbuild  -D',
+    yarn: 'yarn add storybook-react-rsbuild  -D',
+    pnpm: 'pnpm add storybook-react-rsbuild  -D',
+    bun: 'bun add storybook-react-rsbuild  -D',
+  }}
+/>
+
+`Vue App`
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm add storybook-vue-rsbuild  -D',
+    yarn: 'yarn add storybook-vue-rsbuild  -D',
+    pnpm: 'pnpm add storybook-vue-rsbuild  -D',
+    bun: 'bun add storybook-vue-rsbuild  -D',
+  }}
+/>
+This chapter will use `React App` as an example later.
 
 #### 2. create `.storybook/main.ts` and add addons
 
