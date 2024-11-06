@@ -88,7 +88,7 @@ However, if you want this Rslib Module to consume other producers at the same ti
 
 ## Develop Module Federation remote module
 
-Rslib support use `storybook` to develop Module Federation Rslib module
+Rslib supports use `storybook` to develop Module Federation Rslib module
 
 #### 1. install storybook and rsbuild storybook addon
 
@@ -152,6 +152,8 @@ const config: StorybookConfig = {
         // we have set dev.assetPrefix and server.port to 3001 in rslib.config.ts above
         remotes: {
           'rslib-module':
+            // you can also add shared here for storybook app
+            // shared: {}
             'rslib-module@http://localhost:3001/mf/mf-manifest.json',
         },
       },
