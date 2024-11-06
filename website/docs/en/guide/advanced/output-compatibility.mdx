@@ -1,7 +1,28 @@
 import { Steps, SourceCode } from '@theme';
 import { PackageManagerTabs } from '@theme';
 
-# Node Polyfill
+# Output Compatibility
+
+This chapter introduces how to specify which target environment should be supported.
+
+## Syntax Downgrade
+
+By setting [lib.syntax](/config/lib/syntax), you can choose the syntax to which JavaScript and CSS will be downgraded. You can use the query syntax from [Browserslist](https://browsersl.ist/). Rslib also supports common ECMAScript version numbers, such as `ES2015`.
+
+Rslib also supports using a [.browserslistrc](https://github.com/browserslist/browserslist#config-file) file to specify settings. Note that [lib.syntax](/config/lib/syntax) takes precedence over `.browserslistrc`. If both are present, `lib.syntax` will be used.
+
+By default, the syntax is set to `ESNext`, which will only supports only the latest version of mainstream browsers (Chrome / Firefox / Edge / macOS Safari / iOS Safari) or Node.js according to [output.target](/config/rsbuild/output#target).
+
+## Polyfill
+
+Before dealing with compatibility issues, it is recommended that you understand the following background knowledge to better handle related issues. Check out the background knowledge on [syntax transpilation and API polyfill](https://rsbuild.dev/guide/advanced/browser-compatibility#syntax-downgrade-and-api-downgrade).
+
+### Browser
+
+{/* TODO */}
+{/* Implement a Rsbuild polyfill plugin by using core-js-pure */}
+
+### Node.js
 
 :::tip About Node Polyfill
 Normally, we don't need to use Node libs on the browser side. However, it is possible to use some Node libs when the code will run on both the Node side and the browser side, and Node Polyfill provides browser versions of polyfills for these Node libs.
@@ -9,19 +30,15 @@ Normally, we don't need to use Node libs on the browser side. However, it is pos
 
 By using [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill), Node core libs polyfills are automatically injected into the browser-side, allowing you to use these modules on the browser side with confidence.
 
-## Getting Started
-
-### Install plugin
+#### Set up
 
 Rslib uses [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill) to provide the Node Polyfill feature.
 
 <PackageManagerTabs command="@rsbuild/plugin-node-polyfill -D" />
 
-### Register plugin
-
 Then add the plugin into the plugins field.
 
-```ts
+```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 
@@ -31,7 +48,7 @@ export default defineConfig({
 });
 ```
 
-### Setup
+#### Configurations
 
 - For projects with `bundle` enabled, the Node Polyfill will be injected and included in the output.
 - For projects with `bundle` disabled, polyfills are not injected into the output by default. To avoid inlining the polyfill in every module. The modules are externalized and need to be added to dependencies manually, follow these steps:
@@ -40,7 +57,5 @@ export default defineConfig({
   2. Install used polyfill modules as dependencies.
 
   With the following steps, every usage of the polyfill module will be replaced by the corresponding module in the `externals` field. Checkout the <SourceCode href="https://github.com/web-infra-dev/rslib/blob/main/tests/integration/node-polyfill/bundle-false/rslib.config.ts" /> of the example for more details.
-
-## Configurations
 
 Check out the documentation of [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill), all the configurations are applicable for Rslib.
