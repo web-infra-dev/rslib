@@ -7,7 +7,7 @@ This chapter introduces how to specify which target environment should be suppor
 
 ## Syntax Downgrade
 
-By setting [output.syntax](/config/lib/syntax), you can choose the syntax to which JavaScript and CSS will be downgraded. You can use the query syntax from [Browserslist](https://browsersl.ist/). Rslib also supports common ECMAScript version numbers, such as `ES2015`.
+By setting [lib.syntax](/config/lib/syntax), you can choose the syntax to which JavaScript and CSS will be downgraded. You can use the query syntax from [Browserslist](https://browsersl.ist/). Rslib also supports common ECMAScript version numbers, such as `ES2015`.
 
 Rslib also supports using a [.browserslistrc](https://github.com/browserslist/browserslist#config-file) file to specify settings. Note that [output.syntax](/config/lib/syntax) takes precedence over `.browserslistrc`. If both are present, `output.syntax` will be used.
 
