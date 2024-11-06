@@ -46,30 +46,30 @@ export default defineConfig({
         lang: 'en',
         label: 'English',
         title: 'Rslib',
-        description: 'The Rsbuild-based library build tool',
+        description: 'The Rsbuild-based library development tool',
         editLink: {
           docRepoBaseUrl:
             'https://github.com/web-infra-dev/rslib/tree/main/website/docs',
           text: '📝 Edit this page on GitHub',
         },
       },
-      {
-        lang: 'zh',
-        label: '简体中文',
-        title: 'Rslib',
-        outlineTitle: '目录',
-        prevPageText: '上一页',
-        nextPageText: '下一页',
-        searchPlaceholderText: '搜索文档',
-        searchNoResultsText: '无法找到相关搜索结果',
-        searchSuggestedQueryText: '请使用不同的关键字重试',
-        description: '基于 Rsbuild 的库构建工具',
-        editLink: {
-          docRepoBaseUrl:
-            'https://github.com/web-infra-dev/rslib/tree/main/website/docs',
-          text: '📝 在 GitHub 上编辑此页',
-        },
-      },
+      // {
+      //   lang: 'zh',
+      //   label: '简体中文',
+      //   title: 'Rslib',
+      //   outlineTitle: '目录',
+      //   prevPageText: '上一页',
+      //   nextPageText: '下一页',
+      //   searchPlaceholderText: '搜索文档',
+      //   searchNoResultsText: '无法找到相关搜索结果',
+      //   searchSuggestedQueryText: '请使用不同的关键字重试',
+      //   description: '基于 Rsbuild 的库构建工具',
+      //   editLink: {
+      //     docRepoBaseUrl:
+      //       'https://github.com/web-infra-dev/rslib/tree/main/website/docs',
+      //     text: '📝 在 GitHub 上编辑此页',
+      //   },
+      // },
     ],
   },
   builderConfig: {

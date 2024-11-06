@@ -41,6 +41,7 @@ export type AutoExternal =
   | boolean
   | {
       dependencies?: boolean;
+      optionalDependencies?: boolean;
       devDependencies?: boolean;
       peerDependencies?: boolean;
     };
@@ -71,18 +72,78 @@ export type Redirect = {
 };
 
 export interface LibConfig extends RsbuildConfig {
-  bundle?: boolean;
+  /**
+   * Output format for the generated JavaScript files.
+   * @default undefined
+   */
   format?: Format;
+  /**
+   * Whether to bundle the library.
+   * @default true
+   */
+  bundle?: boolean;
+  /**
+   * Whether to automatically set the file extension based on the `format` option in the JavaScript output files.
+   * @default true
+   */
   autoExtension?: boolean;
+  /**
+   * Whether to automatically externalize dependencies and do not bundle them.
+   * @default true
+   */
   autoExternal?: AutoExternal;
+  /**
+   * Configure the redirect of the import paths.
+   * @default {}
+   */
   redirect?: Redirect;
-  /** Support esX and browserslist query */
+  /**
+   * Support esX and browserslist query
+   * @default 'esnext'
+   */
   syntax?: Syntax;
+  /**
+   * Whether to import SWC helper functions from `@swc/helpers` instead of inlining them.
+   * @default false
+   */
   externalHelpers?: boolean;
+  /**
+   * Inject content into the top of each JS, CSS or DTS file.
+   * @default {}
+   */
   banner?: BannerAndFooter;
+  /**
+   * Inject content into the bottom of each JS, CSS or DTS file.
+   * @default {}
+   */
   footer?: BannerAndFooter;
+  /**
+   * Configure the shims for CommonJS and ESM output.
+   *
+   * @default
+   * ```js
+   * const defaultShims = {
+   *   cjs: {
+   *     'import.meta.url': true,
+   *   },
+   *   esm: {
+   *     __filename: false,
+   *     __dirname: false,
+   *     require: false,
+   *   },
+   * };
+   * ```
+   */
   shims?: Shims;
+  /**
+   * Configure the generation of the TypeScript declaration files.
+   * @default false
+   */
   dts?: Dts;
+  /**
+   * The export name of the UMD bundle.
+   * @default undefined
+   */
   umdName?: string;
 }
 

@@ -12,7 +12,7 @@
   <a href="https://github.com/web-infra-dev/rslib/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=F8F5FF" alt="license" /></a>
 </p>
 
-Rslib is a library build tool that leverages the well-designed configurations and plugins of [Rsbuild](https://rsbuild.dev), empowering library developers to take advantage of the extensive knowledge and ecosystem of webpack and Rspack.
+Rslib is a library development tool that leverages the well-designed configurations and plugins of [Rsbuild](https://rsbuild.dev), empowering library developers to take advantage of the extensive knowledge and ecosystem of webpack and Rspack.
 
 Rslib provides a comprehensive set of build features for library development, including:
 

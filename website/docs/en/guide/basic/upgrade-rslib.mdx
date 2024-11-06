@@ -1,1 +1,68 @@
 # Upgrade Rslib
+
+This section explains how to upgrade the project's Rslib dependencies to the latest version.
+
+{/* TODO */}
+{/* > Please see [Releases](/community/releases/index) to understand the Rsbuild release strategy. */}
+
+:::info
+Rslib is still in the early stages of development, and the API may change frequently. We recommend upgrading to the latest version to access new features and bug fixes. We plan to release version 0.1.0 in the fourth quarter of 2024.
+:::
+
+## Using Taze
+
+We recommend using [Taze](https://github.com/antfu-collective/taze) to upgrade the Rslib version. Taze is a CLI tool for updating npm dependencies.
+
+### Usage
+
+Run the following command to upgrade all dependencies that include `rslib` and `rsbuild` in their names:
+
+```bash
+npx taze major --include "/(rsbuild|rslib)/" -w
+```
+
+:::tip
+Rslib has not yet reached version 0.1.0, so you need to add the `major` parameter when updating.
+:::
+
+The result will look similar to:
+
+```bash
+rslib - 2 major, 1 patch
+
+  @rsbuild/plugin-react       dev  ~2mo  ^1.0.1   →  ^1.0.6
+  @rslib/core                 dev  ~7d  ^0.0.15  →  ^0.0.16
+  rsbuild-plugin-dts          dev  ~7d  ^0.0.15  →  ^0.0.16
+
+ℹ changes written to package.json, run npm i to install updates.
+```
+
+You can also adjust the `include` pattern to match specific packages, for example, to upgrade only packages under the `@rslib` scope:
+
+```bash
+npx taze --include /@rslib/ -w
+```
+
+### Options
+
+Here are some examples of using taze options.
+
+- In a monorepo, you can add the `-r` option to upgrade recursively:
+
+```bash
+npx taze --include /(rsbuild|rslib)/ -w -r
+```
+
+- Add `-l` to upgrade locked versions:
+
+```bash
+npx taze --include /(rsbuild|rslib)/ -w -l
+```
+
+- To upgrade to a major version:
+
+```bash
+npx taze major --include /(rsbuild|rslib)/ -w
+```
+
+> For more options, please refer to the [taze documentation](https://github.com/antfu-collective/taze).

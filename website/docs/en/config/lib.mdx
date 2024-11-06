@@ -1,1 +1,30 @@
-# Lib
+# Lib Configurations
+
+- **Type:**
+
+```ts
+interface LibConfig extends RsbuildConfig {
+  format?: Format;
+  bundle?: boolean;
+  autoExtension?: boolean;
+  autoExternal?: AutoExternal;
+  redirect?: Redirect;
+  syntax?: Syntax;
+  externalHelpers?: boolean;
+  banner?: BannerAndFooter;
+  footer?: BannerAndFooter;
+  shims?: Shims;
+  dts?: Dts;
+  umdName?: string;
+}
+
+interface RslibConfig extends RsbuildConfig {
+  lib: LibConfig[];
+}
+```
+
+- **Default:** `undefined`
+
+- **Required:** `true`
+
+The `lib` configuration is an array of objects, each representing a distinct set of configurations. These include all Rsbuild configurations as well as Rslib-specific configurations, designed to generate different outputs.

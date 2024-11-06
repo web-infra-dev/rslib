@@ -1,0 +1,102 @@
+# React
+
+In this document, you will learn how to build a React component library with Rslib.
+
+## Create React Project
+
+You can use `create-rslib` to create a project with Rslib + React. Just execute the following command:
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm create rslib@latest',
+    yarn: 'yarn create rslib',
+    pnpm: 'pnpm create rslib@latest',
+    bun: 'bun create rslib@latest',
+  }}
+/>
+
+Then select `React` when prompted to "Select template".
+
+## Use Rslib in an Existing Project
+
+To compile React (JSX and TSX), you need to register the Rsbuild [React Plugin](https://rsbuild.dev/plugins/list/plugin-react). The plugin will automatically add the necessary configuration for React builds.
+
+For example, register in `rslib.config.ts`:
+
+```ts title="rslib.config.ts" {2,8}
+import { defineConfig } from '@rslib/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+
+export default defineConfig({
+  lib: [
+    // ...
+  ],
+  plugins: [pluginReact(/** options here */)],
+});
+```
+
+## JSX Transform
+
+- **Type**: `'automatic' | 'classic'`
+- **Default**: `'automatic'`
+
+React introduced a [new JSX transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html) in version 17. This new transform removes the need to import `React` when using JSX.
+
+By default, Rsbuild uses the new JSX transform, which is `runtime: 'automatic'`. It requires at least React `16.14.0` or higher. The peer dependency for React should be declared as above `16.14.0`.
+
+To change the JSX transform, you can pass the [swcReactOptions](https://rsbuild.dev/plugins/list/plugin-react#swcreactoptionsruntime) option to the React plugin. For example, to use the classic runtime:
+
+```ts title="rslib.config.ts" {10-12}
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    // ...
+  ],
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'classic',
+      },
+    }),
+  ],
+});
+```
+
+## JSX Import Source
+
+- **Type**: `string`
+- **Default**: `'react'`
+
+When `runtime` is `'automatic'`, you can specify the import path of the JSX transform through `importSource`.
+
+For example, when using [Emotion](https://emotion.sh/), you can set `importSource` to `'@emotion/react'`:
+
+```ts title="rslib.config.ts" {10-12}
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    // ...
+  ],
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        importSource: '@emotion/react',
+      },
+    }),
+  ],
+});
+```
+
+{/* TODO */}
+{/* ## SVGR */}
+
+## Further Reading
+
+- [Rsbuild React Plugin](https://rsbuild.dev/plugins/list/plugin-react#swcreactoptionsruntime)
+- [SWC Compilation - jsc.transform.react](https://swc.rs/docs/configuration/compilation#jsctransformreact)

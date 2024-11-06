@@ -1,1 +1,19 @@
 # lib.dts
+
+- **Type:**
+
+```ts
+type Dts =
+  | {
+      build?: boolean;
+      bundle?: boolean;
+      distPath?: string;
+      abortOnError?: boolean;
+      autoExtension?: boolean;
+    }
+  | boolean;
+```
+
+- **Default:** `undefined`
+
+Configure the generation of the TypeScript declaration files.

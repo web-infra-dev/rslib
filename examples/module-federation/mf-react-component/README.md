@@ -12,13 +12,7 @@ Dev MF module
 nx run @examples/mf-remote:dev
 ```
 
-2. start dev mode of rslib module
-
-```
-nx run @examples/mf-react-component:dev
-```
-
-3. use storybook to dev rslib module
+2. use storybook to dev rslib module
 
 ```
 nx run @examples/mf-react-component:storybook

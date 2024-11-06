@@ -1,1 +1,113 @@
 # lib.autoExternal
+
+- **Type:**
+
+```ts
+type AutoExternal =
+  | boolean
+  | {
+      dependencies?: boolean;
+      optionalDependencies?: boolean;
+      devDependencies?: boolean;
+      peerDependencies?: boolean;
+    };
+```
+
+- **Default:** `true`
+
+Whether to automatically externalize dependencies and do not bundle them.
+
+## autoExternal.dependencies
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Whether to externalize dependencies of type `dependencies`.
+
+## autoExternal.optionalDependencies
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Whether to externalize dependencies of type `optionalDependencies`.
+
+## autoExternal.peerDependencies
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Whether to externalize dependencies of type `peerDependencies`.
+
+## autoExternal.devDependencies
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Whether to bundle dependencies of type `devDependencies`.
+
+## Default Value
+
+The default value of `autoExternal` is `true`, which means the following dependency types will **not be bundled**:
+
+- `dependencies`
+- `optionalDependencies`
+- `peerDependencies`
+
+And the following dependency types will be **bundled**:
+
+- `devDependencies`
+
+It is equivalent to the following configuration:
+
+```ts
+export default {
+  lib: [
+    {
+      format: 'esm',
+      autoExternal: {
+        dependencies: true,
+        optionalDependencies: true,
+        peerDependencies: true,
+        devDependencies: false,
+      },
+    },
+  ],
+};
+```
+
+## Example
+
+### Customize Externalized Dependency Types
+
+To disable the processing of a specific type of dependency, you can configure `autoExternal` as an object like this:
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      autoExternal: {
+        dependencies: false,
+        peerDependencies: false,
+      },
+    },
+  ],
+};
+```
+
+### Disable Default Behavior
+
+If you want to disable the default behavior, you can set `autoExternal` to `false`:
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      autoExternal: false,
+    },
+  ],
+};
+```
+
+For more details about handling third-party dependencies, please refer to [Handle Third-party Dependencies](/guide/advanced/third-party-deps).

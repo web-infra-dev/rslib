@@ -27,12 +27,22 @@ async function getTemplateName({ template }: Argv) {
 
   const templateName = checkCancel<TemplateName>(
     await select({
-      message: 'Select templates',
+      message: 'Select template',
       options: [
         { value: 'node-dual', label: 'Node.js dual ESM/CJS package' },
         { value: 'node-esm', label: 'Node.js pure ESM package' },
         { value: 'react', label: 'React' },
         // { value: 'universal', label: 'universal' }, // TODO: provide universal template in the future?
+      ],
+    }),
+  );
+
+  const language = checkCancel<string>(
+    await select({
+      message: 'Select language',
+      options: [
+        { value: 'ts', label: 'TypeScript' },
+        { value: 'js', label: 'JavaScript' },
       ],
     }),
   );
@@ -53,16 +63,6 @@ async function getTemplateName({ template }: Argv) {
         { value: 'vitest', label: 'Vitest' },
         // TODO: support Rspress Module doc in the future
       ].filter(Boolean as any as ExcludesFalse),
-    }),
-  );
-
-  const language = checkCancel<string>(
-    await select({
-      message: 'Select language',
-      options: [
-        { value: 'ts', label: 'TypeScript' },
-        { value: 'js', label: 'JavaScript' },
-      ],
     }),
   );
 
