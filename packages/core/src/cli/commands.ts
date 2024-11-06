@@ -2,7 +2,6 @@ import type { RsbuildMode } from '@rsbuild/core';
 import { type Command, program } from 'commander';
 import { build } from '../build';
 import { initRsbuild, loadConfig } from '../config';
-import { dev } from '../dev';
 import { logger } from '../utils/logger';
 
 export type CommonOptions = {
@@ -37,9 +36,8 @@ export function runCli(): void {
 
   const buildCommand = program.command('build');
   const inspectCommand = program.command('inspect');
-  const devCommand = program.command('dev:mf');
 
-  [buildCommand, inspectCommand, devCommand].forEach(applyCommonOptions);
+  [buildCommand, inspectCommand].forEach(applyCommonOptions);
 
   buildCommand
     .option('-w --watch', 'turn on watch mode, watch for changes and rebuild')
@@ -82,22 +80,6 @@ export function runCli(): void {
         });
       } catch (err) {
         logger.error('Failed to inspect config.');
-        logger.error(err);
-        process.exit(1);
-      }
-    });
-
-  devCommand
-    .description(`dev format: 'mf' library`)
-    .action(async (options: CommonOptions) => {
-      try {
-        const rslibConfig = await loadConfig({
-          path: options.config,
-          envMode: options.envMode,
-        });
-        await dev(rslibConfig);
-      } catch (err) {
-        logger.error('Failed to dev.');
         logger.error(err);
         process.exit(1);
       }

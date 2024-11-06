@@ -20,7 +20,15 @@ const config: StorybookConfig = {
   },
   addons: [
     {
-      name: '@module-federation/storybook-addon/dist/preset.js',
+      name: getAbsolutePath('storybook-addon-rslib'),
+      options: {
+        rslib: {
+          include: ['**/stories/**'],
+        },
+      },
+    },
+    {
+      name: '@module-federation/storybook-addon/preset',
       options: {
         remotes: {
           'rslib-module':
