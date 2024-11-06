@@ -9,7 +9,7 @@ This chapter introduces how to specify which target environment should be suppor
 
 By setting [lib.syntax](/config/lib/syntax), you can choose the syntax to which JavaScript and CSS will be downgraded. You can use the query syntax from [Browserslist](https://browsersl.ist/). Rslib also supports common ECMAScript version numbers, such as `ES2015`.
 
-Rslib also supports using a [.browserslistrc](https://github.com/browserslist/browserslist#config-file) file to specify settings. Note that [output.syntax](/config/lib/syntax) takes precedence over `.browserslistrc`. If both are present, `output.syntax` will be used.
+Rslib also supports using a [.browserslistrc](https://github.com/browserslist/browserslist#config-file) file to specify settings. Note that [lib.syntax](/config/lib/syntax) takes precedence over `.browserslistrc`. If both are present, `lib.syntax` will be used.
 
 By default, the syntax is set to `ESNext`, which will only supports only the latest version of mainstream browsers (Chrome / Firefox / Edge / macOS Safari / iOS Safari) or Node.js according to [output.target](/config/rsbuild/output#target).
 
