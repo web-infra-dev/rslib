@@ -6,13 +6,13 @@ This example demonstrates how to use Rslib to build a simple Module Federation R
 
 Dev MF module
 
-1. start remote module which is loaded by rslib module
+1. Start remote module which is loaded by Rslib module.
 
 ```
 nx run @examples/mf-remote:dev
 ```
 
-2. use storybook to dev rslib module
+2. Use Storybook to development component.
 
 ```
 nx run @examples/mf-react-component:storybook
