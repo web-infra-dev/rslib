@@ -48,11 +48,11 @@ export default defineConfig({
         // for production, add online assetPrefix here
         assetPrefix: 'http://localhost:3001/mf',
       },
-      // for storybook to dev
+      // for Storybook to dev
       dev: {
         assetPrefix: 'http://localhost:3001/mf',
       },
-      // for storybook to dev
+      // for Storybook to dev
       server: {
         port: 3001,
       },
@@ -88,9 +88,9 @@ However, if you want this Rslib Module to consume other producers at the same ti
 
 ## Develop Module Federation remote module
 
-Rslib supports use `storybook` to develop Module Federation Rslib module
+Rslib support using Storybook to development Module Federation Rslib module.
 
-#### 1. install storybook and rsbuild storybook addon
+#### 1. Install Storybook and Rsbuild Storybook addon
 
 <PackageManagerTabs command="install storybook storybook-addon-rslib @module-federation/storybook-addon -D" />
 
@@ -117,7 +117,7 @@ Rslib supports use `storybook` to develop Module Federation Rslib module
 />
 This chapter will use `React App` as an example later.
 
-#### 2. create `.storybook/main.ts` and add addons
+#### 2. Create `.storybook/main.ts` and add addons
 
 ```ts title=".storybook/main.ts" {13-35}
 import { dirname, join } from 'node:path';
@@ -167,7 +167,7 @@ export default config;
 #### 3. Start writing stories
 
 ```ts title="stories/index.stories.tsx" {1-2}
-// load your remote module here, storybook like a host app
+// Load your remote module here, Storybook will act as the host app.
 import { Counter } from 'rslib-module';
 
 const Component = () => <Counter />;
@@ -194,9 +194,9 @@ export const Primary = {};
 }
 ```
 
-#### 5. Start storybook app
+#### 5. Start Storybook app
 
-There you go, start Storybook with `npx storybook`.
+There you go, start Storybook with `npx storybook dev`.
 
 ## Consume other Module Federation modules
 
