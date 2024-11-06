@@ -90,34 +90,21 @@ However, if you want this Rslib Module to consume other producers at the same ti
 
 Rslib support using Storybook to development Module Federation Rslib module.
 
-#### 1. Install Storybook and Rsbuild Storybook addon
+### 1. Install Storybook and Rsbuild Storybook addon
 
 <PackageManagerTabs command="install storybook storybook-addon-rslib @module-federation/storybook-addon -D" />
 
 `React App`
 
-<PackageManagerTabs
-  command={{
-    npm: 'npm add storybook-react-rsbuild  -D',
-    yarn: 'yarn add storybook-react-rsbuild  -D',
-    pnpm: 'pnpm add storybook-react-rsbuild  -D',
-    bun: 'bun add storybook-react-rsbuild  -D',
-  }}
-/>
+<PackageManagerTabs command="install storybook-react-rsbuild -D" />
 
 `Vue App`
 
-<PackageManagerTabs
-  command={{
-    npm: 'npm add storybook-vue-rsbuild  -D',
-    yarn: 'yarn add storybook-vue-rsbuild  -D',
-    pnpm: 'pnpm add storybook-vue-rsbuild  -D',
-    bun: 'bun add storybook-vue-rsbuild  -D',
-  }}
-/>
+<PackageManagerTabs command="install storybook-vue-rsbuild -D" />
+
 This chapter will use `React App` as an example later.
 
-#### 2. Create `.storybook/main.ts` and add addons
+### 2. Create `.storybook/main.ts` and add addons
 
 ```ts title=".storybook/main.ts" {13-35}
 import { dirname, join } from 'node:path';
@@ -164,7 +151,7 @@ const config: StorybookConfig = {
 export default config;
 ```
 
-#### 3. Start writing stories
+### 3. Start writing stories
 
 ```ts title="stories/index.stories.tsx" {1-2}
 // Load your remote module here, Storybook will act as the host app.
@@ -180,7 +167,7 @@ export default {
 export const Primary = {};
 ```
 
-#### 4. Add Module Federation types and stories into `tsconfig.json`.
+### 4. Add Module Federation types and stories into `tsconfig.json`.
 
 ```json title="tsconfig.json"
 {
@@ -194,7 +181,7 @@ export const Primary = {};
 }
 ```
 
-#### 5. Start Storybook app
+### 5. Start Storybook app
 
 There you go, start Storybook with `npx storybook dev`.
 
