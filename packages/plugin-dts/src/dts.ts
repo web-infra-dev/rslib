@@ -133,9 +133,17 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     throw new Error();
   }
   const { options: rawCompilerOptions, fileNames } = loadTsconfig(configPath);
+
+  // The longest common path of all non-declaration input files.
+  // If composite is set, the default is instead the directory containing the tsconfig.json file.
+  // see https://www.typescriptlang.org/tsconfig/#rootDir
   const rootDir =
     rawCompilerOptions.rootDir ??
-    (await calcLongestCommonPath(fileNames)) ??
+    (rawCompilerOptions.composite
+      ? dirname(configPath)
+      : await calcLongestCommonPath(
+          fileNames.filter((fileName) => !/\.d\.(ts|mts|cts)$/.test(fileName)),
+        )) ??
     dirname(configPath);
 
   const outDir = distPath

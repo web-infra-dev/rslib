@@ -221,6 +221,28 @@ describe('dts when bundle: true', () => {
     `,
     );
   });
+
+  test('rootdir calculation should ignore declaration files', async () => {
+    const fixturePath = join(__dirname, 'bundle', 'rootdir');
+    const { files, entries } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle/rootdir/dist/esm/index.d.ts",
+      ]
+    `);
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle/rootdir/dist/cjs/index.d.ts",
+      ]
+    `);
+
+    expect(entries).toMatchSnapshot();
+  });
 });
 
 describe('dts when build: true', () => {
