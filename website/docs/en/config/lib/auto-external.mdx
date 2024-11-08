@@ -15,30 +15,32 @@ type AutoExternal =
 
 - **Default:** `true`
 
-Whether to automatically externalize dependencies and do not bundle them.
+Whether to automatically externalize dependencies of different dependency types and do not bundle them.
 
-## autoExternal.dependencies
+## Object Type
+
+### autoExternal.dependencies
 
 - **Type:** `boolean`
 - **Default:** `true`
 
 Whether to externalize dependencies of type `dependencies`.
 
-## autoExternal.optionalDependencies
+### autoExternal.optionalDependencies
 
 - **Type:** `boolean`
 - **Default:** `true`
 
 Whether to externalize dependencies of type `optionalDependencies`.
 
-## autoExternal.peerDependencies
+### autoExternal.peerDependencies
 
 - **Type:** `boolean`
 - **Default:** `true`
 
 Whether to externalize dependencies of type `peerDependencies`.
 
-## autoExternal.devDependencies
+### autoExternal.devDependencies
 
 - **Type:** `boolean`
 - **Default:** `false`
@@ -57,7 +59,7 @@ And the following dependency types will be **bundled**:
 
 - `devDependencies`
 
-It is equivalent to the following configuration:
+This configuration is equivalent to the following object type:
 
 ```ts
 export default {

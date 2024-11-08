@@ -22,3 +22,46 @@ type Syntax = EcmaScriptVersion | string[];
 ```
 
 - **Default:** `'esnext'`
+
+Configure the syntax to which JavaScript and CSS will be downgraded.
+
+See [Output Compatibility - Syntax Downgrade](/guide/advanced/output-compatibility) for more details.
+
+## Set ECMAScript Version
+
+You can set the ECMAScript version directly, such as `es2015`, `es2022`, etc.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    // ...
+  ],
+  syntax: 'es2015',
+};
+```
+
+## Set Browserslist Query
+
+You can also set the Browserslist query, such as `last 2 versions`, `> 1%`, `node >= 16`, `chrome >= 80`, etc.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    // ...
+  ],
+  syntax: ['last 2 versions', '> 1%'],
+};
+```
+
+## Mix ECMAScript Version and Browserslist Query
+
+You can also mix ECMAScript version and Browserslist query, such as `es2015` and `node 20`. We will turn ECMAScript Version into Browserslist query, and then merge them together.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    // ...
+  ],
+  syntax: ['es2015', 'node 20'],
+};
+```

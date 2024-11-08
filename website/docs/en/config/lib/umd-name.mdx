@@ -3,4 +3,25 @@
 - **Type:** `string`
 - **Default:** `undefined`
 
-The export name of the UMD bundle.
+The export name of the [UMD](/guide/basic/output-format#umd) bundle.
+
+:::tip
+
+The module name of the UMD bundle must not conflict with the global variable name.
+
+:::
+
+## Example
+
+The UMD bundle will be mounted to `global.MyLibrary`.
+
+```ts title="rslib.config.ts" {5}
+export default {
+  lib: [
+    {
+      format: 'umd',
+      umdName: 'MyLibrary',
+    },
+  ],
+};
+```

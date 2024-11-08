@@ -88,17 +88,18 @@ export interface LibConfig extends RsbuildConfig {
    */
   autoExtension?: boolean;
   /**
-   * Whether to automatically externalize dependencies and do not bundle them.
+   * Whether to automatically externalize dependencies of different dependency types and do not bundle them.
    * @default true
    */
   autoExternal?: AutoExternal;
   /**
-   * Configure the redirect of the import paths.
+   * Configure the redirect of the import paths, applicable when `bundle: false`.
    * @default {}
    */
   redirect?: Redirect;
   /**
-   * Support esX and browserslist query
+   * Configure the syntax to which JavaScript and CSS will be downgraded.
+   * Support ECMAScript version and browserslist query.
    * @default 'esnext'
    */
   syntax?: Syntax;
