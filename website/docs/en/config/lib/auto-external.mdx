@@ -17,6 +17,36 @@ type AutoExternal =
 
 Whether to automatically externalize dependencies of different dependency types and do not bundle them.
 
+## Object Type
+
+### autoExternal.dependencies
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Whether to externalize dependencies of type `dependencies`.
+
+### autoExternal.optionalDependencies
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Whether to externalize dependencies of type `optionalDependencies`.
+
+### autoExternal.peerDependencies
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Whether to externalize dependencies of type `peerDependencies`.
+
+### autoExternal.devDependencies
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Whether to bundle dependencies of type `devDependencies`.
+
 ## Default Value
 
 The default value of `autoExternal` is `true`, which means the following dependency types will **not be bundled**:
@@ -29,7 +59,7 @@ And the following dependency types will be **bundled**:
 
 - `devDependencies`
 
-It is equivalent to the following configuration:
+This configuration is equivalent to the following object type:
 
 ```ts
 export default {
