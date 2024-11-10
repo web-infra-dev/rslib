@@ -104,7 +104,12 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "strategy": "custom",
         },
       },
-      "plugins": [],
+      "plugins": [
+        {
+          "name": "rsbuild:entry",
+          "setup": [Function],
+        },
+      ],
       "source": {
         "alias": {
           "bar": "bar",
@@ -193,6 +198,16 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           {
             "target": [
               "node",
+            ],
+          },
+          {
+            "plugins": [
+              PostEntryPlugin {
+                "enabledImportMetaUrlShim": true,
+                "importMetaUrlShims": {},
+                "reactDirectives": {},
+                "shebangEntries": {},
+              },
             ],
           },
           {
@@ -321,6 +336,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "name": "rsbuild:cjs-import-meta-url-shim",
           "setup": [Function],
         },
+        {
+          "name": "rsbuild:entry",
+          "setup": [Function],
+        },
       ],
       "source": {
         "alias": {
@@ -403,6 +422,16 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           {
             "target": [
               "node",
+            ],
+          },
+          {
+            "plugins": [
+              PostEntryPlugin {
+                "enabledImportMetaUrlShim": true,
+                "importMetaUrlShims": {},
+                "reactDirectives": {},
+                "shebangEntries": {},
+              },
             ],
           },
           {
@@ -526,6 +555,12 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "strategy": "custom",
         },
       },
+      "plugins": [
+        {
+          "name": "rsbuild:entry",
+          "setup": [Function],
+        },
+      ],
       "source": {
         "alias": {
           "bar": "bar",
@@ -595,6 +630,16 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           {
             "target": [
               "node",
+            ],
+          },
+          {
+            "plugins": [
+              PostEntryPlugin {
+                "enabledImportMetaUrlShim": true,
+                "importMetaUrlShims": {},
+                "reactDirectives": {},
+                "shebangEntries": {},
+              },
             ],
           },
           {

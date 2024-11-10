@@ -1,11 +1,13 @@
 import { type RsbuildPlugin, rspack } from '@rsbuild/core';
 
-const importMetaUrlShim = `/*#__PURE__*/ (function () {
+// The shim will be injected in PostEntryPlugin.
+export const importMetaUrlShim = `const __rslib_import_meta_url__ = /*#__PURE__*/ (function () {
   return typeof document === 'undefined'
-    ? new (module.require('url'.replace('', '')).URL)('file:' + __filename).href
+    ? new (require('url'.replace('', '')).URL)('file:' + __filename).href
     : (document.currentScript && document.currentScript.src) ||
       new URL('main.js', document.baseURI).href;
-})()`;
+})();
+`;
 
 // This Rsbuild plugin will shim `import.meta.url` for CommonJS modules.
 // - Replace `import.meta.url` with `importMetaUrl`.
@@ -17,7 +19,7 @@ export const pluginCjsImportMetaUrlShim = (): RsbuildPlugin => ({
     api.modifyEnvironmentConfig((config) => {
       config.source.define = {
         ...config.source.define,
-        'import.meta.url': importMetaUrlShim,
+        'import.meta.url': '__rslib_import_meta_url__',
       };
     });
   },
