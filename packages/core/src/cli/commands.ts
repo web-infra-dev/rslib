@@ -2,6 +2,7 @@ import type { RsbuildMode } from '@rsbuild/core';
 import { type Command, program } from 'commander';
 import { build } from '../build';
 import { initRsbuild, loadConfig } from '../config';
+import { startMFDevServer } from '../mf';
 import { logger } from '../utils/logger';
 
 export type CommonOptions = {
@@ -36,8 +37,9 @@ export function runCli(): void {
 
   const buildCommand = program.command('build');
   const inspectCommand = program.command('inspect');
+  const mfDevCommand = program.command('mf dev');
 
-  [buildCommand, inspectCommand].forEach(applyCommonOptions);
+  [buildCommand, inspectCommand, mfDevCommand].forEach(applyCommonOptions);
 
   buildCommand
     .option('-w --watch', 'turn on watch mode, watch for changes and rebuild')
@@ -85,5 +87,20 @@ export function runCli(): void {
       }
     });
 
+  mfDevCommand
+    .description(`dev format: 'mf' library`)
+    .action(async (options: CommonOptions) => {
+      try {
+        const rslibConfig = await loadConfig({
+          path: options.config,
+          envMode: options.envMode,
+        });
+        await startMFDevServer(rslibConfig);
+      } catch (err) {
+        logger.error('Failed to start mf dev.');
+        logger.error(err);
+        process.exit(1);
+      }
+    });
   program.parse();
 }

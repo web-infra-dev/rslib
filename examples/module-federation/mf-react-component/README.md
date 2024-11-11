@@ -12,7 +12,13 @@ Dev MF module
 nx run @examples/mf-remote:dev
 ```
 
-2. Use Storybook to development component.
+2. Start MF dev mode.
+
+```
+nx run @examples/mf-react-component:dev
+```
+
+3. Use Storybook to development component.
 
 ```
 nx run @examples/mf-react-component:storybook
