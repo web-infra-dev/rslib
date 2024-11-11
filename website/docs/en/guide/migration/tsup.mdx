@@ -64,22 +64,6 @@ Here is the corresponding Rslib configuration for tsup configuration:
 | terserOptions | [output.minify](/config/rsbuild/output)                                                    |
 | tsconfig      | [source.tsconfigPath](/config/rsbuild/source)                                              |
 
-## Platform
-
-For `platform`, tsup defaults to `node` while Rslib defaults to `web` (the same as tsup's `browser`).
-
-If your target platform is `node`, you can set `output.target` to `node`:
-
-```ts title="rslib.config.ts"
-import { defineConfig } from '@rslib/core';
-
-export default defineConfig({
-  output: {
-    target: 'node',
-  },
-});
-```
-
 ## Contents Supplement
 
 The current document only covers part of the migration process. If you find suitable content to add, feel free to contribute to the documentation via pull request 🤝.

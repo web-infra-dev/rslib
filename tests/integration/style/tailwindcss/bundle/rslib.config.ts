@@ -11,4 +11,7 @@ export default defineConfig({
   tools: {
     lightningcssLoader: false,
   },
+  output: {
+    target: 'web',
+  },
 });

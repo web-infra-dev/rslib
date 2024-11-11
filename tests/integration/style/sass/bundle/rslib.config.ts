@@ -16,9 +16,10 @@ export default defineConfig({
       },
     }),
   ],
-  // output: {
-  //   dataUriLimit: {
-  //     svg: 0
-  //   }
-  // }
+  output: {
+    target: 'web',
+    // dataUriLimit: {
+    //   svg: 0,
+    // },
+  },
 });

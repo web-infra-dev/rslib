@@ -16,6 +16,7 @@ export default defineConfig({
       index: ['./src/**'],
     },
   },
+  // TODO: Remove this after bumping Rslib
   output: {
     target: 'node',
   },

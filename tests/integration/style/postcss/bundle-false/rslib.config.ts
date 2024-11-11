@@ -19,4 +19,7 @@ export default defineConfig({
       },
     },
   },
+  output: {
+    target: 'web',
+  },
 });

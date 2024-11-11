@@ -15,6 +15,9 @@ export default defineConfig({
       ),
     },
   },
+  output: {
+    target: 'web',
+  },
   plugins: [
     pluginLess({
       lessLoaderOptions: {
