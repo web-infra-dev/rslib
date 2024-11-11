@@ -16,13 +16,14 @@ The output is shown below:
 Usage: rslib <command> [options]
 
 Options:
-  -V, --version      output the version number
-  -h, --help         display help for command
+  -V, --version       output the version number
+  -h, --help          display help for command
 
 Commands:
-  build [options]    build the library for production
-  inspect [options]  inspect the Rsbuild / Rspack configs of Rslib projects
-  help [command]     display help for command
+  build [options]     build the library for production
+  inspect [options]   inspect the Rsbuild / Rspack configs of Rslib projects
+  mf [options] <dev>  start Rsbuild dev server of Module Federation format
+  help [command]      display help for command
 ```
 
 ## rslib build
@@ -59,7 +60,7 @@ inspect the Rsbuild / Rspack configs of Rslib projects
 Options:
   -c --config <config>  specify the configuration file, can be a relative or absolute path
   --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
-  --lib <name>          build the specified library (may be repeated)
+  --lib <name>          inspect the specified library (may be repeated)
   --output <output>     specify inspect content output path (default: ".rsbuild")
   --verbose             show full function definitions in output
   -h, --help            display help for command
@@ -105,12 +106,13 @@ Inspect config succeed, open following files to view the content:
 ## rslib mf dev
 
 The `rslib mf dev` command is utilized to start Rsbuild dev server of Module Federation format.
+
 This enables you to develop your mf format module within the host app more rapidly.
 
 ```text
-Usage: rslib mf dev [options]
+Usage: rslib mf [options] <dev>
 
-start Rsbuild dev server of Module Federation format.
+start Rsbuild dev server of Module Federation format
 
 Options:
   -c --config <config>  specify the configuration file, can be a relative or absolute path
