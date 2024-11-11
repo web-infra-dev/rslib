@@ -135,11 +135,3 @@ Here are the steps to publish (we generally use CI for releases and avoid publis
 2. [Run the release action on release branch](https://github.com/web-infra-dev/rslib/actions/workflows/release.yml).
 3. Merge the release pull request.
 4. [Create Git tag on main branch and generate the release notes](https://github.com/web-infra-dev/rslib/releases).
-
-## Caveats
-
-The project is still in its early stages and under active development, so it possible dependents on Rsbuild or Rspack canary versions to test the latest features. The current versions are:
-
-| Package      | Link                                                         |
-| ------------ | ------------------------------------------------------------ |
-| @rspack/core | https://github.com/web-infra-dev/rspack/releases/tag/v1.0.14 |
