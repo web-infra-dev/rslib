@@ -112,7 +112,7 @@ export function runCli(): void {
     });
 
   mfDevCommand
-    .description(`dev format: 'mf' library`)
+    .description('start Rsbuild dev server of Module Federation format')
     .action(async (options: CommonOptions) => {
       try {
         const rslibConfig = await loadConfig({

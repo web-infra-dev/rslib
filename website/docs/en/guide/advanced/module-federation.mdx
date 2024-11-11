@@ -27,7 +27,7 @@ First install the Module Federation Rsbuild Plugin (Rslib is based on Rsbuild).
 
 import { PackageManagerTabs } from '@theme';
 
-<PackageManagerTabs command="install @module-federation/rsbuild-plugin -D" />
+<PackageManagerTabs command="add @module-federation/rsbuild-plugin -D" />
 
 Add the plugin to the `rslib.config.ts` file:
 
@@ -90,23 +90,39 @@ However, if you want this Rslib Module to consume other producers at the same ti
 
 Rslib support using Storybook to development Module Federation Rslib module.
 
-### 1. Install Storybook and Rsbuild Storybook addon
+### 1. Add Rslib `mf dev` command
 
-<PackageManagerTabs command="install storybook storybook-addon-rslib @module-federation/storybook-addon -D" />
+```json title="package.json"
+{
+  // ...
+  "scripts": {
+    "dev": "rslib mf dev"
+  }
+}
+```
+
+<PackageManagerTabs command="run dev" />
+Running the `dev` command can start the Module Federation development mode,
+enabling consumption by either your host app or the Storybook app, along with
+Hot Module Replacement (HMR).
+
+### 2. Install Storybook and Rsbuild Storybook addon
+
+<PackageManagerTabs command="add storybook storybook-addon-rslib @module-federation/storybook-addon -D" />
 
 `React App`
 
-<PackageManagerTabs command="install storybook-react-rsbuild -D" />
+<PackageManagerTabs command="add storybook-react-rsbuild -D" />
 
 `Vue App`
 
-<PackageManagerTabs command="install storybook-vue-rsbuild -D" />
+<PackageManagerTabs command="add storybook-vue-rsbuild -D" />
 
 This chapter will use `React App` as an example later.
 
-### 2. Create `.storybook/main.ts` and add addons
+### 3. Create `.storybook/main.ts` and add addons
 
-```ts title=".storybook/main.ts" {13-35}
+```ts title=".storybook/main.ts" {13-38}
 import { dirname, join } from 'node:path';
 import type { StorybookConfig } from 'storybook-react-rsbuild';
 
@@ -151,9 +167,9 @@ const config: StorybookConfig = {
 export default config;
 ```
 
-### 3. Start writing stories
+### 4. Start writing stories
 
-```ts title="stories/index.stories.tsx" {1-2}
+```ts title="stories/index.stories.tsx" {2-3}
 import React from 'react';
 // Load your remote module here, Storybook will act as the host app.
 import { Counter } from 'rslib-module';
@@ -168,7 +184,7 @@ export default {
 export const Primary = {};
 ```
 
-### 4. Add Module Federation types and stories into `tsconfig.json`.
+### 5. Add Module Federation types and stories into `tsconfig.json`.
 
 ```json title="tsconfig.json"
 {
@@ -182,19 +198,6 @@ export const Primary = {};
 }
 ```
 
-### 5. Add Rslib `mf dev` command
-
-```json title="package.json"
-{
-  // ...
-  "scripts": {
-    "dev": "rslib mf dev"
-  }
-}
-```
-
-And run `npm run dev` to start Module Federation development mode
-
 ### 6. Start Storybook app
 
 There you go, start Storybook with `npx storybook dev`.
@@ -205,7 +208,7 @@ Because there are multiple formats in Rslib, if you configure the `remote` param
 
 First install the runtime dependencies
 
-<PackageManagerTabs command="install @module-federation/enhanced -D" />
+<PackageManagerTabs command="add @module-federation/enhanced -D" />
 
 Then consume other Module Federation modules at runtime, for example
 

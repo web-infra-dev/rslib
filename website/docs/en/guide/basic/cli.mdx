@@ -101,3 +101,19 @@ Inspect config succeed, open following files to view the content:
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
   - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
 ```
+
+## rslib mf dev
+
+The `rslib mf dev` command is utilized to start Rsbuild dev server of Module Federation format.
+This enables you to develop your mf format module within the host app more rapidly.
+
+```text
+Usage: rslib mf dev [options]
+
+start Rsbuild dev server of Module Federation format.
+
+Options:
+  -c --config <config>  specify the configuration file, can be a relative or absolute path
+  --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
+  -h, --help            display help for command
+```
