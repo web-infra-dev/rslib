@@ -8,4 +8,7 @@ export default defineConfig({
       index: '../__fixtures__/basic/src/import.css',
     },
   },
+  output: {
+    target: 'web',
+  },
 });

@@ -21,6 +21,9 @@ export default defineConfig({
       },
     }),
   ],
+  output: {
+    target: 'web',
+  },
   plugins: [pluginNodePolyfill()],
   source: {
     entry: {

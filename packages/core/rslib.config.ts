@@ -21,6 +21,7 @@ export default defineConfig({
     },
   },
   output: {
+    // TODO: Remove this after bumping Rslib
     target: 'node',
     externals: {
       picocolors: '../compiled/picocolors/index.js',

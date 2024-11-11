@@ -11,4 +11,7 @@ export default defineConfig({
       index: ['../__fixtures__/basic/src/*.css'],
     },
   },
+  output: {
+    target: 'web',
+  },
 });

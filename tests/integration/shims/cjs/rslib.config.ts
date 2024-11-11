@@ -11,7 +11,6 @@ export default defineConfig({
     }),
   ],
   output: {
-    target: 'node',
     copy: [{ from: 'src/ok.cjs' }],
   },
   source: {

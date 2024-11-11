@@ -8,7 +8,6 @@ export default defineConfig({
         distPath: {
           root: './dist/node',
         },
-        target: 'node',
       },
     }),
     generateBundleEsmConfig({
@@ -16,6 +15,7 @@ export default defineConfig({
         distPath: {
           root: './dist/browser',
         },
+        target: 'web',
       },
     }),
   ],

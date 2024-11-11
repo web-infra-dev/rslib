@@ -10,5 +10,6 @@ export default defineConfig({
   },
   output: {
     externals: { react: 'react' },
+    target: 'web',
   },
 });

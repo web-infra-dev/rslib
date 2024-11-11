@@ -22,6 +22,7 @@ export default defineConfig({
     },
   },
   output: {
+    target: 'web',
     copy: [{ from: './src/index.less' }, { from: './src/style.module.less' }],
   },
 });

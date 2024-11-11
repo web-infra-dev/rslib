@@ -22,7 +22,6 @@ export default defineConfig({
         distPath: {
           root: './dist/node',
         },
-        target: 'node',
       },
       source: {
         entry: {

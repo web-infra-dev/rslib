@@ -32,4 +32,7 @@ export default defineConfig({
       index: path.resolve(__dirname, '../../__fixtures__/src/index.ts'),
     },
   },
+  output: {
+    target: 'web',
+  },
 });

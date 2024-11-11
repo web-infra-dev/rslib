@@ -66,16 +66,18 @@ Here is the corresponding Rslib configuration for tsup configuration:
 
 ## Platform
 
-For `platform`, tsup defaults to `node` while Rslib defaults to `web` (the same as tsup's `browser`).
+For `platform`, tsup defaults to `node` as same as Rslib.
 
-If your target platform is `node`, you can set `output.target` to `node`:
+If your target platform is `node`, you do not need to configure it.
+
+If your target platform is `browser`, you can set `output.target` to `web` in `rslib.config.ts`:
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   output: {
-    target: 'node',
+    target: 'web',
   },
 });
 ```

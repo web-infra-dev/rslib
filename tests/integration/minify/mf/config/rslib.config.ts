@@ -28,6 +28,7 @@ export default defineConfig({
     },
   },
   output: {
+    target: 'web',
     minify: false,
   },
   source: {

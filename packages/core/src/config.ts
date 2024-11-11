@@ -453,6 +453,7 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
       },
     },
     output: {
+      target: 'node',
       filenameHash: false,
       distPath: {
         js: './',
@@ -558,7 +559,6 @@ const composeFormatConfig = ({
             },
             output: {
               asyncChunks: false,
-
               library: umdName
                 ? {
                     type: 'umd',
@@ -714,7 +714,7 @@ const composeAutoExtensionConfig = (
 
 const composeSyntaxConfig = (
   syntax?: Syntax,
-  target?: RsbuildConfigOutputTarget,
+  target: RsbuildConfigOutputTarget = 'node',
 ): RsbuildConfig => {
   // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
   if (syntax) {
@@ -941,7 +941,7 @@ const composeDtsConfig = async (
 };
 
 const composeTargetConfig = (
-  target: RsbuildConfigOutputTarget = 'web',
+  target: RsbuildConfigOutputTarget = 'node',
 ): RsbuildConfig => {
   switch (target) {
     case 'web':

@@ -11,5 +11,4 @@ export default defineConfig({
       syntax: 'es2021',
     },
   ],
-  output: { target: 'node' },
 });
