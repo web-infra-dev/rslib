@@ -1,9 +1,8 @@
 import fs from 'node:fs';
 import path, { dirname, extname, isAbsolute, join } from 'node:path';
 import {
+  type EnvironmentConfig,
   type RsbuildConfig,
-  type RsbuildInstance,
-  createRsbuild,
   defineConfig as defineRsbuildConfig,
   loadConfig as loadRsbuildConfig,
   mergeRsbuildConfig,
@@ -1191,9 +1190,9 @@ export async function composeCreateRsbuildConfig(
   return composedRsbuildConfig;
 }
 
-export async function initRsbuild(
+export async function composeRsbuildEnvironments(
   rslibConfig: RslibConfig,
-): Promise<RsbuildInstance> {
+): Promise<Record<string, EnvironmentConfig>> {
   const rsbuildConfigObject = await composeCreateRsbuildConfig(rslibConfig);
   const environments: RsbuildConfig['environments'] = {};
   const formatCount: Record<Format, number> = rsbuildConfigObject.reduce(
@@ -1220,9 +1219,18 @@ export async function initRsbuild(
     ] = config;
   }
 
-  return createRsbuild({
-    rsbuildConfig: {
-      environments,
-    },
-  });
+  return environments;
 }
+
+export const pruneEnvironments = (
+  environments: Record<string, EnvironmentConfig>,
+  libs?: string[],
+): Record<string, EnvironmentConfig> => {
+  if (!libs) {
+    return environments;
+  }
+
+  return Object.fromEntries(
+    Object.entries(environments).filter(([name]) => libs.includes(name)),
+  );
+};
