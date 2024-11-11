@@ -27,14 +27,7 @@ First install the Module Federation Rsbuild Plugin (Rslib is based on Rsbuild).
 
 import { PackageManagerTabs } from '@theme';
 
-<PackageManagerTabs
-  command={{
-    npm: 'npm add @module-federation/rsbuild-plugin -D',
-    yarn: 'yarn add @module-federation/rsbuild-plugin -D',
-    pnpm: 'pnpm add @module-federation/rsbuild-plugin -D',
-    bun: 'bun add @module-federation/rsbuild-plugin -D',
-  }}
-/>
+<PackageManagerTabs command="add @module-federation/rsbuild-plugin -D" />
 
 Add the plugin to the `rslib.config.ts` file:
 
@@ -52,8 +45,16 @@ export default defineConfig({
         distPath: {
           root: './dist/mf',
         },
-        // add your assetPrefix here
+        // for production, add online assetPrefix here
         assetPrefix: 'http://localhost:3001/mf',
+      },
+      // for Storybook to dev
+      dev: {
+        assetPrefix: 'http://localhost:3001/mf',
+      },
+      // for Storybook to dev
+      server: {
+        port: 3001,
       },
       plugins: [
         pluginModuleFederation({
@@ -62,7 +63,7 @@ export default defineConfig({
             // add expose here
           },
           // can not add 'remote' here, because you may build 'esm' or 'cjs' assets in one build.
-          // if you want the rslib package use remote module, please see below.
+          // if you want the Rslib package use remote module, please see below.
           shared: {
             react: {
               singleton: true,
@@ -88,20 +89,129 @@ In the above example we added a new `format: 'mf'` , which will help you add an 
 
 However, if you want this Rslib Module to consume other producers at the same time, do not use the build configuration `remote` parameter, because in other formats, this may cause errors, please refer to the example below using the Module Federation runtime
 
+## Develop Module Federation remote module
+
+Rslib support using Storybook to development Module Federation Rslib module.
+
+### 1. Add Rslib `mf dev` command
+
+```json title="package.json"
+{
+  // ...
+  "scripts": {
+    "dev": "rslib mf dev"
+  }
+}
+```
+
+<PackageManagerTabs command="run dev" />
+Running the `dev` command can start the Module Federation development mode,
+enabling consumption by either your **Host app** or the **Storybook app**, along
+with Hot Module Replacement (HMR).
+
+### 2. Install Storybook and Rsbuild Storybook addon
+
+<PackageManagerTabs command="add storybook storybook-addon-rslib @module-federation/storybook-addon -D" />
+
+`React App`
+
+<PackageManagerTabs command="add storybook-react-rsbuild -D" />
+
+`Vue App`
+
+<PackageManagerTabs command="add storybook-vue-rsbuild -D" />
+
+This chapter will use `React App` as an example later.
+
+### 3. Create `.storybook/main.ts` and add addons
+
+```ts title=".storybook/main.ts" {13-38}
+import { dirname, join } from 'node:path';
+import type { StorybookConfig } from 'storybook-react-rsbuild';
+
+function getAbsolutePath(value: string): any {
+  return dirname(require.resolve(join(value, 'package.json')));
+}
+
+const config: StorybookConfig = {
+  stories: [
+    '../stories/**/*.mdx',
+    '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+  ],
+  framework: {
+    name: getAbsolutePath('storybook-react-rsbuild'),
+    options: {},
+  },
+  addons: [
+    {
+      name: getAbsolutePath('storybook-addon-rslib'),
+      options: {
+        rslib: {
+          include: ['**/stories/**'],
+        },
+      },
+    },
+    {
+      name: '@module-federation/storybook-addon/preset',
+      options: {
+        // add your rslib module manifest here for storybook dev
+        // we have set dev.assetPrefix and server.port to 3001 in rslib.config.ts above
+        remotes: {
+          'rslib-module':
+            // you can also add shared here for storybook app
+            // shared: {}
+            'rslib-module@http://localhost:3001/mf/mf-manifest.json',
+        },
+      },
+    },
+  ],
+};
+
+export default config;
+```
+
+### 4. Start writing stories
+
+```ts title="stories/index.stories.tsx" {2-3}
+import React from 'react';
+// Load your remote module here, Storybook will act as the host app.
+import { Counter } from 'rslib-module';
+
+const Component = () => <Counter />;
+
+export default {
+  title: 'App Component',
+  component: Component,
+};
+
+export const Primary = {};
+```
+
+### 5. Add Module Federation types and stories into `tsconfig.json`.
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // ...
+    "paths": {
+      "*": ["./@mf-types/*"]
+    }
+  },
+  "include": ["src/**/*", ".storybook/**/*", "stories/**/*"]
+}
+```
+
+### 6. Start Storybook app
+
+There you go, start Storybook with `npx storybook dev`.
+
 ## Consume other Module Federation modules
 
 Because there are multiple formats in Rslib, if you configure the `remote` parameter to consume other modules during construction, it may not work properly in all formats. It is recommended to access through the [Module Federation Runtime](https://module-federation.io/guide/basic/runtime.html)
 
 First install the runtime dependencies
 
-<PackageManagerTabs
-  command={{
-    npm: 'npm add @module-federation/enhanced -D',
-    yarn: 'yarn add @module-federation/enhanced -D',
-    pnpm: 'pnpm add @module-federation/enhanced -D',
-    bun: 'bun add @module-federation/enhanced -D',
-  }}
-/>
+<PackageManagerTabs command="add @module-federation/enhanced -D" />
 
 Then consume other Module Federation modules at runtime, for example
 
@@ -159,3 +269,5 @@ pluginModuleFederation({
 - `mf-host`: Rsbuild App Consumer
 - `mf-react-component`: Rslib Module, which is both a producer and a consumer, provides the module to the `mf-host` as a producer, and consumes the `mf-remote`
 - `mf-remote`: Rsbuild App Producer
+
+[Rslib Module Federation Storybook Example](https://github.com/web-infra-dev/rslib/tree/main/examples/module-federation/mf-react-component)

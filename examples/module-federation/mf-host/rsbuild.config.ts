@@ -18,6 +18,8 @@ export default defineConfig({
           singleton: true,
         },
       },
+      // Enable this when the output of Rslib is build under 'production' mode, while the host app is 'development'.
+      // Reference: https://lib.rsbuild.dev/guide/advanced/module-federation#faqs
       shareStrategy: 'loaded-first',
     }),
   ],

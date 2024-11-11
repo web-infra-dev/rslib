@@ -14,7 +14,7 @@ export default defineConfig({
       timeout: 120 * 1000,
     },
     {
-      command: 'cd ../examples/module-federation && npm run dev:lib',
+      command: 'cd ../examples/module-federation && npm run serve:lib',
       url: 'http://127.0.0.1:3001',
       timeout: 120 * 1000,
     },
