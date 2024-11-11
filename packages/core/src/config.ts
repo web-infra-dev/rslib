@@ -713,8 +713,8 @@ const composeAutoExtensionConfig = (
 };
 
 const composeSyntaxConfig = (
+  target: RsbuildConfigOutputTarget,
   syntax?: Syntax,
-  target: RsbuildConfigOutputTarget = 'node',
 ): RsbuildConfig => {
   // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
   if (syntax) {
@@ -942,30 +942,39 @@ const composeDtsConfig = async (
 
 const composeTargetConfig = (
   target: RsbuildConfigOutputTarget = 'node',
-): RsbuildConfig => {
+): {
+  config: RsbuildConfig;
+  target: RsbuildConfigOutputTarget;
+} => {
   switch (target) {
     case 'web':
       return {
-        tools: {
-          rspack: {
-            target: ['web'],
+        config: {
+          tools: {
+            rspack: {
+              target: ['web'],
+            },
           },
         },
+        target: 'web',
       };
     case 'node':
       return {
-        tools: {
-          rspack: {
-            target: ['node'],
+        config: {
+          tools: {
+            rspack: {
+              target: ['node'],
+            },
+          },
+          output: {
+            // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
+            // Simply override the built-in modules to make them external.
+            // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
+            externals: nodeBuiltInModules,
+            target: 'node',
           },
         },
-        output: {
-          // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
-          // Simply override the built-in modules to make them external.
-          // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
-          externals: nodeBuiltInModules,
-          target: 'node',
-        },
+        target: 'node',
       };
     // TODO: Support `neutral` target, however Rsbuild don't list it as an option in the target field.
     // case 'neutral':
@@ -1067,11 +1076,10 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     cssModulesAuto,
     bundle,
   );
-  const targetConfig = composeTargetConfig(config.output?.target);
-  const syntaxConfig = composeSyntaxConfig(
-    config?.syntax,
+  const { config: targetConfig, target } = composeTargetConfig(
     config.output?.target,
   );
+  const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
   const autoExternalConfig = composeAutoExternalConfig({
     autoExternal,
     pkgJson,
