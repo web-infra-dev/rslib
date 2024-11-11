@@ -1,1 +1,87 @@
-# tsup
+# Tsup
+
+This section introduces how to migrate a project using tsup to Rslib.
+
+## Installing Dependencies
+
+First, you need to replace the npm dependencies of tsup with Rslib's dependencies.
+
+import { PackageManagerTabs } from '@theme';
+
+- Remove tsup:
+
+<PackageManagerTabs command="remove tsup" />
+
+- Install Rslib:
+
+<PackageManagerTabs command="add @rslib/core -D" />
+
+## Updating npm scripts
+
+Next, you need to update the npm scripts in your package.json to use Rslib's CLI commands.
+
+```diff title="package.json"
+{
+  "scripts": {
+-   "build": "tsup",
+-   "build:watch": "tsup --watch",
++   "build": "rslib build",
++   "build:watch": "rslib build --watch"
+  }
+}
+```
+
+## Create Configuration File
+
+Create a Rslib configuration file `rslib.config.ts` in the same directory as package.json, and add the following content:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({});
+```
+
+## Configuration Migration
+
+Here is the corresponding Rslib configuration for tsup configuration:
+
+| tsup          | Rslib                                                                                      |
+| ------------- | ------------------------------------------------------------------------------------------ |
+| banner        | [lib.banner](/config/lib/banner)                                                           |
+| bundle        | [lib.bundle](/config/lib/bundle)                                                           |
+| clean         | [output.cleanDistPath](/config/rsbuild/output)                                             |
+| define        | [source.define](/config/rsbuild/source)                                                    |
+| dts           | [lib.dts](/config/lib/dts)                                                                 |
+| entry         | [source.entry](/config/rsbuild/source)                                                     |
+| external      | [output.externals](/config/rsbuild/output) / [lib.autoExternal](/config/lib/auto-external) |
+| format        | [lib.format](/config/lib/format)                                                           |
+| footer        | [lib.footer](/config/lib/footer)                                                           |
+| minify        | [output.minify](/config/rsbuild/output)                                                    |
+| platform      | [output.target](/config/rsbuild/output)                                                    |
+| plugins       | [plugins](/config/rsbuild/plugins)                                                         |
+| sourcemap     | [output.sourceMap](/config/rsbuild/output)                                                 |
+| shims         | [lib.shims](/config/lib/shims)                                                             |
+| terserOptions | [output.minify](/config/rsbuild/output)                                                    |
+| tsconfig      | [source.tsconfigPath](/config/rsbuild/source)                                              |
+
+## Platform
+
+For `platform`, tsup defaults to `node` while Rslib defaults to `web` (the same as tsup's `browser`).
+
+If your target platform is `node`, you can set `output.target` to `node`:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  output: {
+    target: 'node',
+  },
+});
+```
+
+## Contents Supplement
+
+The current document only covers part of the migration process. If you find suitable content to add, feel free to contribute to the documentation via pull request 🤝.
+
+> The documentation for Rslib can be found in the [rslib/website](https://github.com/web-infra-dev/rslib/tree/main/website) directory.
