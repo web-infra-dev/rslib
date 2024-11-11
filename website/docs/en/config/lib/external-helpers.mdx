@@ -3,4 +3,108 @@
 - **Type:** `boolean`
 - **Default:** `false`
 
-Whether to import SWC helper functions from `@swc/helpers` instead of inlining them.
+Whether to import SWC helper functions from [@swc/helpers](https://www.npmjs.com/package/@swc/helpers) instead of inlining them.
+
+By default, the output JavaScript file may depend on helper functions to support the target environment or output format, and these helper functions will be inlined in the file that requires it.
+
+When `externalHelpers` set to `true`, the output JavaScript will import helper functions from the external module `@swc/helpers`.
+
+::: note
+
+Make sure to declare the `@swc/helpers` in `dependencies` field of `package.json`.
+
+:::
+
+## Example
+
+Take the following code as an example:
+
+```ts title="index.ts"
+export default class FOO {
+  get bar() {
+    return;
+  }
+}
+```
+
+When `externalHelpers` is disabled, the output JavaScript will inline helper functions.
+
+```ts title="rslib.config.ts" {6}
+export default {
+  lib: [
+    // ...
+    syntax: 'es5'
+  ],
+  externalHelpers: false,
+};
+```
+
+Below is the output JavaScript file:
+
+```js title="index.js"
+function _class_call_check(instance, Constructor) {
+  if (!(instance instanceof Constructor))
+    throw new TypeError('Cannot call a class as a function');
+}
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ('value' in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+function _create_class(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+var src_FOO = /*#__PURE__*/ (function () {
+  'use strict';
+  function FOO() {
+    _class_call_check(this, FOO);
+  }
+  _create_class(FOO, [
+    {
+      key: 'bar',
+      get: function () {},
+    },
+  ]);
+  return FOO;
+})();
+export { src_FOO as default };
+```
+
+When `externalHelpers` is enabled, the output JavaScript will import helper functions from the external module `@swc/helpers`.
+
+```ts title="rslib.config.ts" {6}
+export default {
+  lib: [
+    // ...
+    syntax: 'es5'
+  ],
+  externalHelpers: true,
+};
+```
+
+Below is the output JavaScript file:
+
+```js title="index.js" {1-2}
+import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__ from '@swc/helpers/_/_class_call_check';
+import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__ from '@swc/helpers/_/_create_class';
+var src_FOO = /*#__PURE__*/ (function () {
+  'use strict';
+  function FOO() {
+    (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__._)(this, FOO);
+  }
+  (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__._)(FOO, [
+    {
+      key: 'bar',
+      get: function () {},
+    },
+  ]);
+  return FOO;
+})();
+export { src_FOO as default };
+```

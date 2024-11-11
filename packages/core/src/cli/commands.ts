@@ -1,13 +1,18 @@
-import type { RsbuildMode } from '@rsbuild/core';
+import { type RsbuildMode, createRsbuild } from '@rsbuild/core';
 import { type Command, program } from 'commander';
 import { build } from '../build';
-import { initRsbuild, loadConfig } from '../config';
+import {
+  composeRsbuildEnvironments,
+  loadConfig,
+  pruneEnvironments,
+} from '../config';
 import { startMFDevServer } from '../mf';
 import { logger } from '../utils/logger';
 
 export type CommonOptions = {
   config?: string;
   envMode?: string;
+  lib?: string[];
 };
 
 export type BuildOptions = CommonOptions & {
@@ -32,6 +37,10 @@ const applyCommonOptions = (command: Command) => {
     );
 };
 
+const repeatableOption = (value: string, previous: string[]) => {
+  return (previous ?? []).concat([value]);
+};
+
 export function runCli(): void {
   program.name('rslib').usage('<command> [options]').version(RSLIB_VERSION);
 
@@ -42,6 +51,11 @@ export function runCli(): void {
   [buildCommand, inspectCommand, mfDevCommand].forEach(applyCommonOptions);
 
   buildCommand
+    .option(
+      '--lib <name>',
+      'build the specified library (may be repeated)',
+      repeatableOption,
+    )
     .option('-w --watch', 'turn on watch mode, watch for changes and rebuild')
     .description('build the library for production')
     .action(async (options: BuildOptions) => {
@@ -61,6 +75,11 @@ export function runCli(): void {
   inspectCommand
     .description('inspect the Rsbuild / Rspack configs of Rslib projects')
     .option(
+      '--lib <name>',
+      'inspect the specified library (may be repeated)',
+      repeatableOption,
+    )
+    .option(
       '--output <output>',
       'specify inspect content output path',
       '.rsbuild',
@@ -73,7 +92,12 @@ export function runCli(): void {
           path: options.config,
           envMode: options.envMode,
         });
-        const rsbuildInstance = await initRsbuild(rslibConfig);
+        const environments = await composeRsbuildEnvironments(rslibConfig);
+        const rsbuildInstance = await createRsbuild({
+          rsbuildConfig: {
+            environments: pruneEnvironments(environments, options.lib),
+          },
+        });
         await rsbuildInstance.inspectConfig({
           mode: options.mode,
           verbose: options.verbose,

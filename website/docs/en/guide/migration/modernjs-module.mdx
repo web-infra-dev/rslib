@@ -1,1 +1,167 @@
 # Modern.js Module
+
+The migration path from `Modern.js Module` to `Rslib` is straightforward. The reason for it is the same underlying `Rsbuild` configuration.
+
+## Adapt package.json
+
+`Rslib` has a minimal dependency footprint. For the basic functionality you only need the package `@rslib/core`. Let's update your `package.json` file.
+
+- Remove the fields `main`, `lint-staged`, `simple-git-hooks`, `sideEffects` and `publishConfig`
+- Change the `types` field from `./dist/types/index.d.ts` to `./dist/index.d.ts`
+- Change the `module` field from `./dist/es/index.js` to `./dist/index.js`
+- Remove the scripts fields `prepare`, `build:watch`, `reset`, `change`, `bump`, `pre`, `change-status`, `gen-release-note`, `release`, `new`, `upgrade`
+- Change the script `build` from `modern build` to `rslib build`
+- Change the script `lint` name to `check` and keep the value
+- Add a new script `format` with the value `biome format --write`
+- Change the script `dev` from `modern dev` to `rslib build --watch`
+- Add the script `test` with the value `vitest run`
+- Add the field `exports` (object)
+  - Add the field `"."` (object)
+  - Add the fields `"types": "./dist/index.d.ts"` and `"import": "./dist/index.js"`
+- Add the field `files` with the value `["dist"]`
+- Depending on your configuration and use-case the `devDependencies` can vary
+  - It is important to replace `"@modern-js/module-tools"` with `"@rslib/core"`
+  - We do not need `rimraf`, `lint-staged` and `simple-git-hooks` anymore for starters
+- Copy over your required `dependencies` and `peerDependencies` if needed
+
+Your `package.json` should look something like this:
+
+```json title="package.json"
+{
+  "name": "rslib",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "rslib build",
+    "check": "biome check --write",
+    "dev": "rslib build --watch",
+    "format": "biome format --write",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.3",
+    "@rslib/core": "^0.0.16",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {},
+  "dependencies": {}
+}
+```
+
+## Adapt bundler config
+
+Now we have a clean slate to work with. We will continue with the `Rslib` configuration. It follows the same pattern as all `Rs*` projects. Since this step is very unique for every environment, we will only touch the basics here:
+Replace your `modern.config.ts` with a `rslib.config.ts`:
+
+```js title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  source: {
+    entry: {
+      index: ['./src/**'],
+    },
+  },
+  lib: [
+    {
+      bundle: false,
+      dts: true,
+      format: 'esm',
+    },
+  ],
+});
+```
+
+## Typescript
+
+If you use Typescript in your `Modern.js Module`, add the following changes:
+
+```js title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  //...
+  lib: [
+    {
+      //...
+      dts: true,
+    },
+  ],
+});
+```
+
+## React
+
+If you use React in your `Modern.js Module`, add the following changes:
+
+```js title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+// Quick tip: You can use all Rsbuild plugins here since they are compatible with Rslib
+import { pluginReact } from '@rsbuild/plugin-react';
+
+export default defineConfig({
+  //...
+  plugins: [pluginReact()],
+});
+```
+
+In addition, you have to install the `@rsbuild/plugin-react` package as devDependency
+
+## Sass
+
+If you use Sass in your `Modern.js Module`, add the following changes:
+
+```js title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+// Quick tip: You can use all Rsbuild plugins here since they are compatible with Rslib
+import { pluginSass } from '@rsbuild/plugin-sass';
+
+export default defineConfig({
+  //...
+  plugins: [pluginSass()],
+});
+```
+
+In addition, you have to install the `@rsbuild/plugin-sass` package as devDependency.
+
+If you run Typescript together with Sass, you might run into DTS generation errors. This can be resolved by adding a `global.d.ts` file in your `/src` directory.
+
+```ts title="global.d.ts"
+declare module '*.scss' {
+  const content: { [className: string]: string };
+  export default content;
+}
+```
+
+## css-modules
+
+If you use css-modules in your `Modern.js Module`, add the following changes:
+
+```js title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginSass } from '@rsbuild/plugin-sass';
+
+export default defineConfig({
+  lib: [
+    {
+      //...
+      output: {
+        cssModules: {
+          // the css-modules options are 1:1 the same as in the official "css-modules" package
+          localIdentName: '[local]--[hash:base64:5]',
+        },
+      },
+    },
+  ],
+  plugins: [pluginSass()],
+});
+```

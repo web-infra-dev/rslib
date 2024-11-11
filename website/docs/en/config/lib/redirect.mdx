@@ -8,6 +8,42 @@ type Redirect = {
 };
 ```
 
-- **Default:** `{}`
+- **Default:**
+
+```ts
+const defaultRedirect = {
+  style: true,
+};
+```
 
 Configure the redirect of the import paths.
+
+When `bundle: false`, the import path is redirected to ensure that it points to the correct output.
+
+:::note
+
+As bundleless mode is still under development, additional redirect configurations will be introduced in the future.
+
+:::
+
+If you don't need these redirects, you can turn it off, and its import path will not be changed.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    // ..
+  ],
+  redirect: {
+    style: false, // Turn off the redirect of the style file
+  },
+};
+```
+
+## redirect.style
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Whether to redirect the import path of the style file. For example:
+
+- `import './index.less'` will be rewritten to `import './index.css'`

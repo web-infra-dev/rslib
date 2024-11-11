@@ -34,7 +34,7 @@ const defaultShims = {
 };
 ```
 
-Used to configure the shims for CommonJS and ESM output.
+Configure the shims for CommonJS and ESM output.
 
 ## shims.cjs
 
@@ -46,7 +46,7 @@ Set the fields to `true` to enable the corresponding shims for CommonJS output.
 
 Options:
 
-- `true`: when `format` is `cjs`, the `import.meta.url` in source code will be replaced with the URL of the current module.
+- `true`: when [format](/config/lib/format) is `cjs`, the `import.meta.url` in source code will be replaced with the URL of the current module.
 
   For example, given the following source code:
 
@@ -88,7 +88,7 @@ Whether to shim the global `__filename` of CommonJS in ESM output.
 
 Options:
 
-- `true`: when `format` is `esm`, the `__filename` in source code will be replaced with the filename of the current module.
+- `true`: when [format](/config/lib/format) is `esm`, the `__filename` in source code will be replaced with the filename of the current module.
 
   For example, given the following source code:
 
@@ -118,7 +118,7 @@ Whether to shim the global `__dirname` of CommonJS in ESM output.
 
 Options:
 
-- `true`: when `format` is `esm`, the `__dirname` in source code will be replaced with the directory name of the current module.
+- `true`: when [format](/config/lib/format) is `esm`, the `__dirname` in source code will be replaced with the directory name of the current module.
 
   For example, given the following source code:
 
@@ -147,7 +147,7 @@ Whether to shim the global `require` of CommonJS in ESM output.
 
 Options:
 
-- `true`: when `format` is `esm`, there will be a `require` that created by `createRequire` at the beginning of the output which can be accessed in source code like the global `require` like CommonJS.
+- `true`: when [format](/config/lib/format) is `esm`, there will be a `require` that created by `createRequire` at the beginning of the output which can be accessed in source code like the global `require` like CommonJS.
 
   For example, given the following source code:
 
