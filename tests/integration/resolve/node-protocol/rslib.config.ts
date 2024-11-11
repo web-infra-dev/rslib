@@ -8,7 +8,4 @@ export default defineConfig({
       index: './index.ts',
     },
   },
-  output: {
-    target: 'node',
-  },
 });

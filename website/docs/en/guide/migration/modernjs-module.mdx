@@ -110,6 +110,9 @@ import { pluginReact } from '@rsbuild/plugin-react';
 
 export default defineConfig({
   //...
+  output: {
+    target: 'web',
+  },
   plugins: [pluginReact()],
 });
 ```

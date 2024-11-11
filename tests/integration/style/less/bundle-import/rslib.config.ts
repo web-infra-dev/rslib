@@ -9,5 +9,8 @@ export default defineConfig({
       index: ['../__fixtures__/import/src/index.ts'],
     },
   },
+  output: {
+    target: 'web',
+  },
   plugins: [pluginLess()],
 });

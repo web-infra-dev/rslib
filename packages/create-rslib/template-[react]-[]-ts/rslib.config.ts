@@ -14,6 +14,9 @@ export default defineConfig({
       format: 'esm',
     },
   ],
+  output: {
+    target: 'web',
+  },
   plugins: [
     pluginReact({
       swcReactOptions: {

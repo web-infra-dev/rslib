@@ -26,4 +26,7 @@ export default defineConfig({
       index: './src/index.js',
     },
   },
+  output: {
+    target: 'web',
+  },
 });

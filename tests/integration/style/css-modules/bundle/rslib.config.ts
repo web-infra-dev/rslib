@@ -9,6 +9,9 @@ export default defineConfig({
       index: ['../__fixtures__/basic/src/index.ts'],
     },
   },
+  output: {
+    target: 'web',
+  },
   plugins: [
     pluginSass({
       sassLoaderOptions: {

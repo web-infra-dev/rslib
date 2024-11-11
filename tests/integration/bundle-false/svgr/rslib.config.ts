@@ -17,5 +17,8 @@ export default defineConfig({
       index: ['./src/**'],
     },
   },
+  output: {
+    target: 'web',
+  },
   plugins: [pluginReact(), pluginSvgr()],
 });

@@ -29,6 +29,7 @@ export default defineConfig({
     }),
   ],
   output: {
+    target: 'web',
     // TODO: support asset
     // dataUriLimit: 0
   },
