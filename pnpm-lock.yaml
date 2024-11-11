@@ -87,8 +87,8 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@module-federation/rsbuild-plugin':
-        specifier: ^0.6.15
-        version: 0.6.15(@module-federation/enhanced@0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.0)
+        specifier: ^0.7.1
+        version: 0.7.1(@module-federation/enhanced@0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.0)
       '@rsbuild/core':
         specifier: ~1.1.0
         version: 1.1.0
@@ -111,8 +111,8 @@ importers:
         specifier: ^0.7.1
         version: 0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0)
       '@module-federation/rsbuild-plugin':
-        specifier: ^0.6.15
-        version: 0.6.15(@module-federation/enhanced@0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.0)
+        specifier: ^0.7.1
+        version: 0.7.1(@module-federation/enhanced@0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.0)
       '@rsbuild/plugin-react':
         specifier: ^1.0.7
         version: 1.0.7(@rsbuild/core@1.1.0)
@@ -142,8 +142,8 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@module-federation/rsbuild-plugin':
-        specifier: ^0.6.15
-        version: 0.6.15(@module-federation/enhanced@0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.0)
+        specifier: ^0.7.1
+        version: 0.7.1(@module-federation/enhanced@0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.0)
       '@rsbuild/core':
         specifier: ~1.1.0
         version: 1.1.0
@@ -340,8 +340,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(vite@5.3.3(@types/node@22.8.1)(terser@5.31.6))(vitest@2.1.4(@types/node@22.8.1)(terser@5.31.6))
       '@module-federation/rsbuild-plugin':
-        specifier: ^0.6.15
-        version: 0.6.15(@module-federation/enhanced@0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.0)
+        specifier: ^0.7.1
+        version: 0.7.1(@module-federation/enhanced@0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.0)
       '@playwright/test':
         specifier: 1.48.2
         version: 1.48.2
@@ -1406,11 +1406,11 @@ packages:
   '@module-federation/manifest@0.7.1':
     resolution: {integrity: sha512-ugZz6y1ltxIrO7EVUthHyog/+dydizgFKc+MFxqyO9SE1xkN1wtsJpw+s0C8ASG6oB5ADhpnIn5zgmRwB3EKIA==}
 
-  '@module-federation/rsbuild-plugin@0.6.15':
-    resolution: {integrity: sha512-/VCcud4Wq7DNVbH7vH5sZk2ms5oBhpCkNCyhN37Rf/+Kv1wkjqhNm9DQjGnW+G/M2N7RcrrpNIizCkJd2/Mt+A==}
+  '@module-federation/rsbuild-plugin@0.7.1':
+    resolution: {integrity: sha512-iPZ2ztIPLzK6Dp7ZACYT8Fqi5kkzxkESZfqyeAMMsftEqYGNf2c6YcH7P3rBAM1hD9UWbTSZQdBFkM7nP4Hw0w==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      '@module-federation/enhanced': 0.6.15
+      '@module-federation/enhanced': 0.7.1
       '@rsbuild/core': 1.x
 
   '@module-federation/rspack@0.7.1':
@@ -1438,9 +1438,6 @@ packages:
 
   '@module-federation/sdk@0.5.1':
     resolution: {integrity: sha512-exvchtjNURJJkpqjQ3/opdbfeT2wPKvrbnGnyRkrwW5o3FH1LaST1tkiNviT6OXTexGaVc2DahbdniQHVtQ7pA==}
-
-  '@module-federation/sdk@0.6.15':
-    resolution: {integrity: sha512-2hRCwigHmSWy0wjd23YZVxt8jL1Ael4xElDTTyyOn1JpBy0qDbZvT6tZYvpyGIMw/0OWCwq1fHLFYwwhkfIbTw==}
 
   '@module-federation/sdk@0.7.1':
     resolution: {integrity: sha512-fcjJoxdi8YHYAU9gcFC2hoDPoE4rbpfpJyVE/RNbnAP+nhYNVU4WDm9PO4HohDMZ5a/4Xr0z6WSh4ZqdFn7+AA==}
@@ -3818,10 +3815,6 @@ packages:
   isobject@3.0.1:
     resolution: {integrity: sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==}
     engines: {node: '>=0.10.0'}
-
-  isomorphic-rslog@0.0.4:
-    resolution: {integrity: sha512-KwROYmorP1F97yiPCRENbvJRshPiWFLzU73CSzqO8jUVGiGK8d3RqrKBSTmSLc7MKse69LyYydTq6Xy0xBFE0g==}
-    engines: {node: '>=14.17.6'}
 
   isomorphic-rslog@0.0.6:
     resolution: {integrity: sha512-HM0q6XqQ93psDlqvuViNs/Ea3hAyGDkIdVAHlrEocjjAwGrs1fZ+EdQjS9eUPacnYB7Y8SoDdSY3H8p3ce205A==}
@@ -6602,10 +6595,10 @@ snapshots:
       - utf-8-validate
       - vue-tsc
 
-  '@module-federation/rsbuild-plugin@0.6.15(@module-federation/enhanced@0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.0)':
+  '@module-federation/rsbuild-plugin@0.7.1(@module-federation/enhanced@0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.0)':
     dependencies:
       '@module-federation/enhanced': 0.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0)
-      '@module-federation/sdk': 0.6.15
+      '@module-federation/sdk': 0.7.1
       '@rsbuild/core': 1.1.0
 
   '@module-federation/rspack@0.7.1(typescript@5.6.3)':
@@ -6644,10 +6637,6 @@ snapshots:
       '@module-federation/sdk': 0.7.1
 
   '@module-federation/sdk@0.5.1': {}
-
-  '@module-federation/sdk@0.6.15':
-    dependencies:
-      isomorphic-rslog: 0.0.4
 
   '@module-federation/sdk@0.7.1':
     dependencies:
@@ -9264,8 +9253,6 @@ snapshots:
   isexe@2.0.0: {}
 
   isobject@3.0.1: {}
-
-  isomorphic-rslog@0.0.4: {}
 
   isomorphic-rslog@0.0.6: {}
 
