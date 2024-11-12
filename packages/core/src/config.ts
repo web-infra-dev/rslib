@@ -949,11 +949,11 @@ const composeTargetConfig = (
   config: RsbuildConfig;
   target: RsbuildConfigOutputTarget;
 } => {
-  let recommendedTarget = target;
-  if (!recommendedTarget) {
-    recommendedTarget = format === 'mf' ? 'web' : 'node';
+  let defaultTarget = target;
+  if (!defaultTarget) {
+    defaultTarget = format === 'mf' ? 'web' : 'node';
   }
-  switch (recommendedTarget) {
+  switch (defaultTarget) {
     case 'web':
       return {
         config: {
@@ -993,7 +993,7 @@ const composeTargetConfig = (
     //     },
     //   };
     default:
-      throw new Error(`Unsupported platform: ${recommendedTarget}`);
+      throw new Error(`Unsupported platform: ${defaultTarget}`);
   }
 };
 
