@@ -10,14 +10,14 @@ const loader: LoaderDefinition = function loader(source) {
   let result = source;
 
   if (this.resourceQuery === `?${RSLIB_ENTRY_QUERY}`) {
-    const rest1 = result.split('\n').slice(1);
+    const rest1 = result.split(os.EOL).slice(1);
     if (source.startsWith(SHEBANG_PREFIX)) {
-      result = rest1.join('\n');
+      result = rest1.join(os.EOL);
     }
 
     const [firstLine, ...rest2] = result.split(os.EOL);
     if (REACT_DIRECTIVE_REGEX.test(firstLine!)) {
-      result = rest2.join('\n');
+      result = rest2.join(os.EOL);
     }
   }
 
