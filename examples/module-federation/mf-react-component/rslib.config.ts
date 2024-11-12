@@ -62,8 +62,5 @@ export default defineConfig({
       ],
     },
   ],
-  output: {
-    target: 'web',
-  },
   plugins: [pluginReact()],
 });

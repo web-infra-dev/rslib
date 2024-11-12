@@ -581,7 +581,6 @@ const composeFormatConfig = ({
             output: {
               uniqueName: pkgJson.name as string,
             },
-            // TODO when we provide dev mode for rslib mf format, this should be modified to as the same with config.mode
             // can not set nodeEnv to false, because mf format should build shared module.
             // If nodeEnv is false, the process.env.NODE_ENV in third-party packages's will not be replaced
             // now we have not provide dev mode for users, so we can always set nodeEnv as 'production'
@@ -589,6 +588,9 @@ const composeFormatConfig = ({
               nodeEnv: 'production',
             },
           },
+        },
+        output: {
+          target: 'web',
         },
       };
     default:
@@ -941,12 +943,17 @@ const composeDtsConfig = async (
 };
 
 const composeTargetConfig = (
-  target: RsbuildConfigOutputTarget = 'node',
+  target: RsbuildConfigOutputTarget,
+  format: Format,
 ): {
   config: RsbuildConfig;
   target: RsbuildConfigOutputTarget;
 } => {
-  switch (target) {
+  let recommendedTarget = target;
+  if (!recommendedTarget) {
+    recommendedTarget = format === 'mf' ? 'web' : 'node';
+  }
+  switch (recommendedTarget) {
     case 'web':
       return {
         config: {
@@ -986,7 +993,7 @@ const composeTargetConfig = (
     //     },
     //   };
     default:
-      throw new Error(`Unsupported platform: ${target}`);
+      throw new Error(`Unsupported platform: ${recommendedTarget}`);
   }
 };
 
@@ -1078,6 +1085,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   );
   const { config: targetConfig, target } = composeTargetConfig(
     config.output?.target,
+    format!,
   );
   const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
   const autoExternalConfig = composeAutoExternalConfig({
