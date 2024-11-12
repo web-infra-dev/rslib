@@ -14,7 +14,7 @@ export const RSLIB_ENTRY_QUERY = '__rslib_entry__';
 export const SHEBANG_PREFIX = '#!';
 export const SHEBANG_REGEX: RegExp = /#!.*[\s\n\r]*/;
 export const REACT_DIRECTIVE_REGEX: RegExp =
-  /^['"]use (client|server)['"](;?)$/;
+  /^['"]use (client|server)['"](;?)[\s\n\r]*$/;
 
 export const JS_EXTENSIONS: string[] = [
   'js',

@@ -1,4 +1,5 @@
 import { createRequire } from 'node:module';
+import os from 'node:os';
 import {
   type RsbuildConfig,
   type RsbuildPlugin,
@@ -17,7 +18,7 @@ const require = createRequire(import.meta.url);
 const PLUGIN_NAME = 'rsbuild:entry';
 
 const matchFirstLine = (source: string, regex: RegExp) => {
-  const [firstLine] = source.split('\n');
+  const [firstLine] = source.split(os.EOL);
   if (!firstLine) {
     return false;
   }
@@ -154,7 +155,7 @@ class PostEntryPlugin {
         {
           name: PLUGIN_NAME,
           // Just after minify stage, to avoid from being minified.
-          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
+          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_DEV_TOOLING - 1,
         },
         (assets) => {
           const chunkAsset = Object.keys(assets);

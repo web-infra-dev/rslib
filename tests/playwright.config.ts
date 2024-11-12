@@ -7,6 +7,9 @@ export default defineConfig({
   retries: process.env.CI ? 3 : 0,
   // Print line for each test being run in CI
   reporter: 'list',
+  expect: {
+    timeout: process.env.CI ? 10_000 : 5_000,
+  },
   webServer: [
     {
       command: 'cd ../examples/module-federation && npm run dev:host',

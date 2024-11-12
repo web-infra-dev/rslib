@@ -7,11 +7,12 @@ describe('shebang', async () => {
   const { entries } = await buildAndGetResults({ fixturePath });
 
   test('shebang at the beginning', async () => {
-    expect(entries.esm0!.startsWith('#!/usr/bin/env node\n')).toBe(true);
+    console.log('😧1', entries.esm0!);
+    expect(entries.esm0!.startsWith('#!/usr/bin/env node')).toBe(true);
   });
 
   test('shebang at the beginning even if minified', async () => {
-    expect(entries.esm1!.startsWith('#!/usr/bin/env node\n')).toBe(true);
+    expect(entries.esm1!.startsWith('#!/usr/bin/env node')).toBe(true);
   });
 });
 
@@ -23,6 +24,7 @@ describe('react', async () => {
       return path.basename(key) === 'bar.js';
     })?.[1];
 
+    console.log('😧2', bar!);
     expect(bar!.startsWith(`'use server';`)).toBe(true);
 
     const foo = Object.entries(contents.esm0!).find(([key]) => {

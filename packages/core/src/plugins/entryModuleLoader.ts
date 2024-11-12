@@ -1,3 +1,4 @@
+import os from 'node:os';
 import type { LoaderDefinition } from '@rspack/core';
 import {
   REACT_DIRECTIVE_REGEX,
@@ -14,7 +15,7 @@ const loader: LoaderDefinition = function loader(source) {
       result = rest1.join('\n');
     }
 
-    const [firstLine, ...rest2] = result.split('\n');
+    const [firstLine, ...rest2] = result.split(os.EOL);
     if (REACT_DIRECTIVE_REGEX.test(firstLine!)) {
       result = rest2.join('\n');
     }
