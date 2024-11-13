@@ -6,10 +6,10 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       banner: {
-        dts: '/*! hello banner dts composite*/',
+        dts: '/*! hello banner dts build*/',
       },
       footer: {
-        dts: '/*! hello banner dts composite*/',
+        dts: '/*! hello banner dts build*/',
       },
       dts: {
         bundle: false,
