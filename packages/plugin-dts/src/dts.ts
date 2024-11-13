@@ -125,6 +125,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     userExternals,
     banner,
     footer,
+    rootDistPath,
   } = data;
   logger.start(`Generating DTS... ${color.gray(`(${name})`)}`);
   const configPath = ts.findConfigFile(cwd, ts.sys.fileExists, tsconfigPath);
@@ -146,9 +147,12 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
         )) ??
     dirname(configPath);
 
-  const outDir = distPath
-    ? distPath
-    : rawCompilerOptions.declarationDir || './dist';
+  const dtsEmitPath =
+    distPath ?? rawCompilerOptions.declarationDir ?? rootDistPath;
+
+  const resolvedDtsEmitPath = normalize(
+    resolve(dirname(configPath), dtsEmitPath),
+  );
 
   if (build) {
     // do not allow to use bundle DTS when 'build: true' since temp declarationDir should be set by user in tsconfig
@@ -159,34 +163,24 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     // can not set '--declarationDir' or '--outDir' when 'build: true'.
     if (
       (!rawCompilerOptions.outDir ||
-        normalize(rawCompilerOptions.outDir) !==
-          normalize(resolve(dirname(configPath), outDir))) &&
+        normalize(rawCompilerOptions.outDir) !== resolvedDtsEmitPath) &&
       (!rawCompilerOptions.declarationDir ||
-        normalize(rawCompilerOptions.declarationDir) !==
-          normalize(resolve(dirname(configPath), outDir)))
+        normalize(rawCompilerOptions.declarationDir) !== resolvedDtsEmitPath)
     ) {
       const info =
         rawCompilerOptions.outDir && !rawCompilerOptions.declarationDir
           ? 'outDir'
           : 'declarationDir';
       throw Error(
-        `Please set ${info}: "${outDir}" in ${color.underline(
+        `Please set ${info}: "${dtsEmitPath}" in ${color.underline(
           configPath,
-        )} to keep it same as "dts.distPath" or "output.distPath" field in lib config.`,
+        )} to keep it same as "dts.distPath" or "output.distPath.root" field in lib config.`,
       );
     }
   }
 
-  const getDeclarationDir = (bundle: boolean, distPath?: string) => {
-    if (bundle) {
-      return ensureTempDeclarationDir(cwd);
-    }
-    return distPath
-      ? distPath
-      : (rawCompilerOptions.declarationDir ?? './dist');
-  };
+  const declarationDir = bundle ? ensureTempDeclarationDir(cwd) : dtsEmitPath;
 
-  const declarationDir = getDeclarationDir(bundle!, distPath);
   const { name: entryName, path: entryPath } = dtsEntry;
   let entry = '';
 
@@ -211,7 +205,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       await bundleDts({
         name,
         cwd,
-        outDir,
+        distPath: dtsEmitPath,
         dtsEntry: {
           name: entryName,
           path: entry,

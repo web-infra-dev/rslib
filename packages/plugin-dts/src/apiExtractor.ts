@@ -12,7 +12,7 @@ import { addBannerAndFooter, getTimeCost } from './utils';
 export type BundleOptions = {
   name: string;
   cwd: string;
-  outDir: string;
+  distPath: string;
   dtsExtension: string;
   banner?: string;
   footer?: string;
@@ -25,7 +25,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
   const {
     name,
     cwd,
-    outDir,
+    distPath,
     dtsExtension,
     banner,
     footer,
@@ -40,7 +40,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     const start = Date.now();
     const untrimmedFilePath = join(
       cwd,
-      relative(cwd, outDir),
+      relative(cwd, distPath),
       `${dtsEntry.name}${dtsExtension}`,
     );
     const mainEntryPointFilePath = dtsEntry.path!;

@@ -911,7 +911,7 @@ const composeDtsConfig = async (
   libConfig: LibConfig,
   dtsExtension: string,
 ): Promise<RsbuildConfig> => {
-  const { output, autoExternal, banner, footer } = libConfig;
+  const { autoExternal, banner, footer } = libConfig;
 
   let { dts } = libConfig;
 
@@ -929,10 +929,10 @@ const composeDtsConfig = async (
     plugins: [
       pluginDts({
         // Only setting ⁠dts.bundle to true will generate the bundled d.ts.
-        bundle: dts?.bundle ?? false,
-        distPath: dts?.distPath ?? output?.distPath?.root ?? './dist',
-        build: dts?.build ?? false,
-        abortOnError: dts?.abortOnError ?? true,
+        bundle: dts?.bundle,
+        distPath: dts?.distPath,
+        build: dts?.build,
+        abortOnError: dts?.abortOnError,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
         autoExternal,
         banner: banner?.dts,
