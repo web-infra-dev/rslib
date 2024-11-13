@@ -15,6 +15,7 @@ it('readPackageJson correctly', async () => {
 it('checkMFPlugin correctly', async () => {
   expect(
     checkMFPlugin({
+      format: 'mf',
       plugins: [
         { name: 'rsbuild:module-federation-enhanced', setup: () => {} },
       ],
@@ -23,6 +24,7 @@ it('checkMFPlugin correctly', async () => {
 
   expect(
     checkMFPlugin({
+      format: 'mf',
       plugins: [
         [
           { name: 'rsbuild:module-federation-enhanced', setup: () => {} },
