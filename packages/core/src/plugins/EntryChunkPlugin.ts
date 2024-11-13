@@ -1,3 +1,4 @@
+import { chmodSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import os from 'node:os';
 import {
@@ -15,7 +16,8 @@ import {
 import { importMetaUrlShim } from './shims';
 const require = createRequire(import.meta.url);
 
-const PLUGIN_NAME = 'rsbuild:entry';
+const PLUGIN_NAME = 'rsbuild:lib-entry-chunk';
+const LOADER_NAME = 'rsbuild:lib-entry-module';
 
 const matchFirstLine = (source: string, regex: RegExp) => {
   const [firstLine] = source.split(os.EOL);
@@ -30,19 +32,23 @@ const matchFirstLine = (source: string, regex: RegExp) => {
   return matched[0];
 };
 
-class PostEntryPlugin {
-  private enabledImportMetaUrlShim: boolean;
-  private shebangEntries: Record<string, string> = {};
+class EntryChunkPlugin {
   private reactDirectives: Record<string, string> = {};
+
+  private shebangChmod = 0o755;
+  private shebangEntries: Record<string, string> = {};
+  private shebangInjectedAssets: Set<string> = new Set();
+
+  private enabledImportMetaUrlShim: boolean;
   private importMetaUrlShims: Record<string, { startsWithUseStrict: boolean }> =
     {};
 
   constructor({
-    importMetaUrlShim = true,
+    enabledImportMetaUrlShim = true,
   }: {
-    importMetaUrlShim: boolean;
+    enabledImportMetaUrlShim: boolean;
   }) {
-    this.enabledImportMetaUrlShim = importMetaUrlShim;
+    this.enabledImportMetaUrlShim = enabledImportMetaUrlShim;
   }
 
   apply(compiler: Rspack.Compiler) {
@@ -136,7 +142,7 @@ class PostEntryPlugin {
                   replaceSource.replace(
                     0,
                     11, // 'use strict;'.length,
-                    `"use strict";\n${importMetaUrlShim}`,
+                    `"use strict";${os.EOL}${importMetaUrlShim}`,
                   );
                 } else {
                   replaceSource.insert(0, importMetaUrlShim);
@@ -168,12 +174,13 @@ class PostEntryPlugin {
                 const replaceSource = new rspack.sources.ReplaceSource(old);
                 // Shebang
                 if (shebangValue) {
-                  replaceSource.insert(0, `${shebangValue}\n`);
+                  replaceSource.insert(0, `${shebangValue}${os.EOL}`);
+                  this.shebangInjectedAssets.add(name);
                 }
 
                 // React directives
                 if (reactDirectiveValue) {
-                  replaceSource.insert(0, `${reactDirectiveValue}\n`);
+                  replaceSource.insert(0, `${reactDirectiveValue}${os.EOL}`);
                 }
 
                 return replaceSource;
@@ -183,34 +190,39 @@ class PostEntryPlugin {
         },
       );
     });
+
+    compiler.hooks.assetEmitted.tap(PLUGIN_NAME, (file, { targetPath }) => {
+      if (this.shebangInjectedAssets.has(file)) {
+        chmodSync(targetPath, this.shebangChmod);
+      }
+    });
   }
 }
 
-const entryModuleLoaderPlugin = (): RsbuildPlugin => ({
+const entryModuleLoaderRsbuildPlugin = (): RsbuildPlugin => ({
   name: PLUGIN_NAME,
   setup(api) {
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
-      const rule = config.module.rule(CHAIN_ID.RULE.JS);
-      rule
-        .use('shebang')
-        .loader(require.resolve('./entryModuleLoader.js'))
-        .options({});
+      config.module
+        .rule(CHAIN_ID.RULE.JS)
+        .use(LOADER_NAME)
+        .loader(require.resolve('./entryModuleLoader.js'));
     });
   },
 });
 
-export const composePostEntryChunkConfig = ({
-  importMetaUrlShim,
+export const composeEntryChunkConfig = ({
+  enabledImportMetaUrlShim,
 }: {
-  importMetaUrlShim: boolean;
+  enabledImportMetaUrlShim: boolean;
 }): RsbuildConfig => {
   return {
-    plugins: [entryModuleLoaderPlugin()],
+    plugins: [entryModuleLoaderRsbuildPlugin()],
     tools: {
       rspack: {
         plugins: [
-          new PostEntryPlugin({
-            importMetaUrlShim: importMetaUrlShim,
+          new EntryChunkPlugin({
+            enabledImportMetaUrlShim,
           }),
         ],
       },

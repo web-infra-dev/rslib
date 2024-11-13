@@ -5,6 +5,7 @@ const pluginName = 'REMOVE_CSS_EXTRACT_ASSET_PLUGIN';
 type Options = {
   include: RegExp;
 };
+
 class RemoveCssExtractAssetPlugin implements RspackPluginInstance {
   readonly name: string = pluginName;
   options: Options;

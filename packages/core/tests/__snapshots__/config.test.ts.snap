@@ -106,7 +106,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
       },
       "plugins": [
         {
-          "name": "rsbuild:entry",
+          "name": "rsbuild:lib-entry-chunk",
           "setup": [Function],
         },
       ],
@@ -202,11 +202,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           },
           {
             "plugins": [
-              PostEntryPlugin {
+              EntryChunkPlugin {
                 "enabledImportMetaUrlShim": true,
                 "importMetaUrlShims": {},
                 "reactDirectives": {},
+                "shebangChmod": 493,
                 "shebangEntries": {},
+                "shebangInjectedAssets": Set {},
               },
             ],
           },
@@ -337,7 +339,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "setup": [Function],
         },
         {
-          "name": "rsbuild:entry",
+          "name": "rsbuild:lib-entry-chunk",
           "setup": [Function],
         },
       ],
@@ -426,11 +428,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           },
           {
             "plugins": [
-              PostEntryPlugin {
+              EntryChunkPlugin {
                 "enabledImportMetaUrlShim": true,
                 "importMetaUrlShims": {},
                 "reactDirectives": {},
+                "shebangChmod": 493,
                 "shebangEntries": {},
+                "shebangInjectedAssets": Set {},
               },
             ],
           },
@@ -557,7 +561,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
       },
       "plugins": [
         {
-          "name": "rsbuild:entry",
+          "name": "rsbuild:lib-entry-chunk",
           "setup": [Function],
         },
       ],
@@ -634,11 +638,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           },
           {
             "plugins": [
-              PostEntryPlugin {
+              EntryChunkPlugin {
                 "enabledImportMetaUrlShim": true,
                 "importMetaUrlShims": {},
                 "reactDirectives": {},
+                "shebangChmod": 493,
                 "shebangEntries": {},
+                "shebangInjectedAssets": Set {},
               },
             ],
           },

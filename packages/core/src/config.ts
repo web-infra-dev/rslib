@@ -24,7 +24,7 @@ import {
   cssExternalHandler,
   isCssGlobalFile,
 } from './css/cssConfig';
-import { composePostEntryChunkConfig } from './plugins/PostEntryChunkPlugin';
+import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
 import {
   pluginCjsImportMetaUrlShim,
   pluginEsmRequireShim,
@@ -1123,8 +1123,8 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     cssModulesAuto,
   );
   const cssConfig = composeCssConfig(lcp, config.bundle);
-  const postEntryChunkConfig = composePostEntryChunkConfig({
-    importMetaUrlShim: !!resolvedShims?.cjs?.['import.meta.url'],
+  const entryChunkConfig = composeEntryChunkConfig({
+    enabledImportMetaUrlShim: !!resolvedShims?.cjs?.['import.meta.url'],
   });
   const dtsConfig = await composeDtsConfig(config, dtsExtension);
   const externalsWarnConfig = composeExternalsWarnConfig(
@@ -1153,7 +1153,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     targetConfig,
     entryConfig,
     cssConfig,
-    postEntryChunkConfig,
+    entryChunkConfig,
     minifyConfig,
     dtsConfig,
     bannerFooterConfig,

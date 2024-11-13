@@ -3,20 +3,20 @@ import type { LoaderDefinition } from '@rspack/core';
 import {
   REACT_DIRECTIVE_REGEX,
   RSLIB_ENTRY_QUERY,
-  SHEBANG_PREFIX,
+  SHEBANG_REGEX,
 } from '../constant';
 
 const loader: LoaderDefinition = function loader(source) {
   let result = source;
 
   if (this.resourceQuery === `?${RSLIB_ENTRY_QUERY}`) {
-    const rest1 = result.split(os.EOL).slice(1);
-    if (source.startsWith(SHEBANG_PREFIX)) {
+    const [firstLine1, ...rest1] = result.split(os.EOL).slice(1);
+    if (SHEBANG_REGEX.test(firstLine1!)) {
       result = rest1.join(os.EOL);
     }
 
-    const [firstLine, ...rest2] = result.split(os.EOL);
-    if (REACT_DIRECTIVE_REGEX.test(firstLine!)) {
+    const [firstLine2, ...rest2] = result.split(os.EOL);
+    if (REACT_DIRECTIVE_REGEX.test(firstLine2!)) {
       result = rest2.join(os.EOL);
     }
   }
