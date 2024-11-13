@@ -9,6 +9,15 @@ const esmShared = {
   },
 };
 
+const esmSharedBundleFalse = {
+  bundle: false,
+  source: {
+    entry: {
+      index: './src/*',
+    },
+  },
+};
+
 export default defineConfig({
   lib: [
     generateBundleEsmConfig({
@@ -27,6 +36,25 @@ export default defineConfig({
         minify: true,
         distPath: {
           root: './dist/bundle/esm1',
+        },
+      },
+    }),
+    generateBundleEsmConfig({
+      ...esmSharedBundleFalse,
+      shims: { esm: { __dirname: true, __filename: true } },
+      output: {
+        distPath: {
+          root: './dist/bundle-false/esm0',
+        },
+      },
+    }),
+    generateBundleEsmConfig({
+      ...esmSharedBundleFalse,
+      shims: { esm: { __dirname: true, __filename: true } },
+      output: {
+        minify: true,
+        distPath: {
+          root: './dist/bundle-false/esm1',
         },
       },
     }),
