@@ -40,8 +40,6 @@ class EntryChunkPlugin {
   private shebangInjectedAssets: Set<string> = new Set();
 
   private enabledImportMetaUrlShim: boolean;
-  private importMetaUrlShims: Record<string, { startsWithUseStrict: boolean }> =
-    {};
 
   constructor({
     enabledImportMetaUrlShim = true,
@@ -89,17 +87,6 @@ class EntryChunkPlugin {
         if (reactDirective) {
           this.reactDirectives[name] = reactDirective;
         }
-
-        // import.meta.url shim
-        if (this.enabledImportMetaUrlShim) {
-          this.importMetaUrlShims[name] = {
-            startsWithUseStrict:
-              // This is a hypothesis that no comments will occur before "use strict;".
-              // But it should cover most cases.
-              content.startsWith('use strict;') ||
-              content.startsWith('"use strict";'),
-          };
-        }
       }
     });
 
@@ -120,11 +107,6 @@ class EntryChunkPlugin {
         if (reactDirective) {
           this.reactDirectives[filename] = reactDirective;
         }
-
-        const importMetaUrlShimInfo = this.importMetaUrlShims[name];
-        if (importMetaUrlShimInfo) {
-          this.importMetaUrlShims[filename] = importMetaUrlShimInfo;
-        }
       });
     });
 
@@ -134,24 +116,22 @@ class EntryChunkPlugin {
         for (const name of chunkAsset) {
           if (this.enabledImportMetaUrlShim) {
             compilation.updateAsset(name, (old) => {
-              const importMetaUrlShimInfo = this.importMetaUrlShims[name];
-              if (importMetaUrlShimInfo) {
-                const replaceSource = new rspack.sources.ReplaceSource(old);
-
-                if (importMetaUrlShimInfo.startsWithUseStrict) {
-                  replaceSource.replace(
-                    0,
-                    11, // 'use strict;'.length,
-                    `"use strict";${os.EOL}${importMetaUrlShim}`,
-                  );
-                } else {
-                  replaceSource.insert(0, importMetaUrlShim);
-                }
-
-                return replaceSource;
+              const oldSource = old.source().toString();
+              const replaceSource = new rspack.sources.ReplaceSource(old);
+              if (
+                oldSource.startsWith('use strict;') ||
+                oldSource.startsWith('"use strict";')
+              ) {
+                replaceSource.replace(
+                  0,
+                  11, // 'use strict;'.length,
+                  `"use strict";${os.EOL}${importMetaUrlShim}`,
+                );
+              } else {
+                replaceSource.insert(0, importMetaUrlShim);
               }
 
-              return old;
+              return replaceSource;
             });
           }
         }

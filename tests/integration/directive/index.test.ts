@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { buildAndGetResults, queryContent } from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
+// The test for `import.meta.url` shim is in tests/integration/shims/index.test.ts
+
 describe('shebang', async () => {
   const fixturePath = join(__dirname, 'shebang');
   const { entries, contents, entryFiles } = await buildAndGetResults({

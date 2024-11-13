@@ -95,6 +95,10 @@ describe('CJS shims', () => {
     const fileUrl = pathToFileURL(entryFiles.cjs).href;
     expect(importMetaUrl).toBe(fileUrl);
     expect(requiredModule).toBe('ok');
+    expect(cjsCode.startsWith('"use strict"')).toBe(true);
+    expect(cjsCode).toContain(
+      'const __rslib_import_meta_url__ = /*#__PURE__*/ function() {',
+    );
   });
 
   test('ESM should not be affected by CJS shims configuration', async () => {
@@ -102,7 +106,6 @@ describe('CJS shims', () => {
     const { entries } = await buildAndGetResults({ fixturePath });
     expect(entries.esm).toMatchInlineSnapshot(`
       "import * as __WEBPACK_EXTERNAL_MODULE_node_module__ from "node:module";
-      // import.meta.url
       const importMetaUrl = import.meta.url;
       const src_rslib_entry_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url);
       const requiredModule = src_rslib_entry_require('./ok.cjs');
