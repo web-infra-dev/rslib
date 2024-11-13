@@ -64,20 +64,19 @@ describe('shebang', async () => {
     });
   });
 
-  describe('chmod', async () => {
-    // Windows uses Access Control Lists (ACLs) for file permissions, which are represented differently from Linux modes.
-    const mode = os.platform() === 'win32' ? 0o100644 : 0o100755;
-
+  // Windows uses Access Control Lists (ACLs) for file permissions, which are represented differently from Linux modes.
+  // The mode in CI is not stable on Windows, it might be 100644, 100666 and others probably.
+  describe.runIf(os.platform() !== 'win32')('chmod', async () => {
     test('shebang at the beginning', async () => {
       const filePath = entryFiles.esm0!;
       const fileStats = fs.statSync(filePath);
-      expect(fileStats.mode).toBe(mode);
+      expect(fileStats.mode).toBe(0o100755);
     });
 
     test('shebang at the beginning even if minified', async () => {
       const filePath = entryFiles.esm1!;
       const fileStats = fs.statSync(filePath);
-      expect(fileStats.mode).toBe(mode);
+      expect(fileStats.mode).toBe(0o100755);
     });
   });
 });
