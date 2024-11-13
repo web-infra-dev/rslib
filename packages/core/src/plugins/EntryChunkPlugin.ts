@@ -112,28 +112,28 @@ class EntryChunkPlugin {
 
     compiler.hooks.make.tap(PLUGIN_NAME, (compilation) => {
       compilation.hooks.processAssets.tap(PLUGIN_NAME, (assets) => {
+        if (!this.enabledImportMetaUrlShim) return;
+
         const chunkAsset = Object.keys(assets);
         for (const name of chunkAsset) {
-          if (this.enabledImportMetaUrlShim) {
-            compilation.updateAsset(name, (old) => {
-              const oldSource = old.source().toString();
-              const replaceSource = new rspack.sources.ReplaceSource(old);
-              if (
-                oldSource.startsWith('use strict;') ||
-                oldSource.startsWith('"use strict";')
-              ) {
-                replaceSource.replace(
-                  0,
-                  11, // 'use strict;'.length,
-                  `"use strict";${os.EOL}${importMetaUrlShim}`,
-                );
-              } else {
-                replaceSource.insert(0, importMetaUrlShim);
-              }
+          compilation.updateAsset(name, (old) => {
+            const oldSource = old.source().toString();
+            const replaceSource = new rspack.sources.ReplaceSource(old);
+            if (
+              oldSource.startsWith('use strict;') ||
+              oldSource.startsWith('"use strict";')
+            ) {
+              replaceSource.replace(
+                0,
+                11, // 'use strict;'.length,
+                `"use strict";${os.EOL}${importMetaUrlShim}`,
+              );
+            } else {
+              replaceSource.insert(0, importMetaUrlShim);
+            }
 
-              return replaceSource;
-            });
-          }
+            return replaceSource;
+          });
         }
       });
 

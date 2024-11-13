@@ -16,13 +16,7 @@ test('tree shaking is disabled by the user, bar and baz should be kept', async (
   const fixturePath = join(__dirname, 'config');
   const { entries } = await buildAndGetResults({ fixturePath });
   expect(entries.esm).toMatchInlineSnapshot(`
-    "const __rslib_import_meta_url__ = /*#__PURE__*/ (function () {
-      return typeof document === 'undefined'
-        ? new (require('url'.replace('', '')).URL)('file:' + __filename).href
-        : (document.currentScript && document.currentScript.src) ||
-          new URL('main.js', document.baseURI).href;
-    })();
-
+    "
     ;// CONCATENATED MODULE: ../__fixtures__/src/index.ts?__rslib_entry__
     const foo = ()=>{};
     const bar = ()=>{};

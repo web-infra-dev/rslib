@@ -1124,7 +1124,8 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   );
   const cssConfig = composeCssConfig(lcp, config.bundle);
   const entryChunkConfig = composeEntryChunkConfig({
-    enabledImportMetaUrlShim: !!resolvedShims?.cjs?.['import.meta.url'],
+    enabledImportMetaUrlShim:
+      format === 'cjs' && !!resolvedShims?.cjs?.['import.meta.url'],
   });
   const dtsConfig = await composeDtsConfig(config, dtsExtension);
   const externalsWarnConfig = composeExternalsWarnConfig(
