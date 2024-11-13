@@ -34,6 +34,7 @@ export type DtsGenOptions = PluginDtsOptions & {
   cwd: string;
   isWatch: boolean;
   dtsEntry: DtsEntry;
+  rootDistPath: string;
   build?: boolean;
   tsconfigPath?: string;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
@@ -68,8 +69,6 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
 
         const { config } = environment;
 
-        options.distPath = options.distPath ?? config.output?.distPath?.root;
-
         const jsExtension = extname(__filename);
         const childProcess = fork(join(__dirname, `./dts${jsExtension}`), [], {
           stdio: 'inherit',
@@ -86,6 +85,7 @@ export const pluginDts = (options: PluginDtsOptions): RsbuildPlugin => ({
           ...options,
           dtsEntry,
           userExternals: config.output.externals,
+          rootDistPath: config.output?.distPath?.root,
           tsconfigPath: config.source.tsconfigPath,
           name: environment.name,
           cwd: api.context.rootPath,

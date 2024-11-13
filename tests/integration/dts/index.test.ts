@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { buildAndGetResults } from 'test-helper';
+import { buildAndGetResults, globContentJSON } from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
 describe('dts when bundle: false', () => {
@@ -87,6 +87,27 @@ describe('dts when bundle: false', () => {
         "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/sum.d.cts",
         "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/utils/numbers.d.cts",
         "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/utils/strings.d.cts",
+      ]
+    `);
+  });
+
+  test('should use declarationDir when not set dts.distPath', async () => {
+    const fixturePath = join(__dirname, 'bundle-false', 'declaration-dir');
+    const distTypesPath = join(fixturePath, 'dist-types');
+
+    await buildAndGetResults({ fixturePath, type: 'dts' });
+
+    const distTypeFiles = await globContentJSON(distTypesPath, {
+      absolute: true,
+    });
+    const distTypeFilePaths = Object.keys(distTypeFiles).sort();
+
+    expect(distTypeFilePaths).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle-false/declaration-dir/dist-types/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/declaration-dir/dist-types/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/declaration-dir/dist-types/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/declaration-dir/dist-types/utils/strings.d.ts",
       ]
     `);
   });
@@ -309,7 +330,7 @@ describe('dts when build: true', () => {
     expect(isSuccess).toBe(true);
   });
 
-  test('tsconfig missing some fields', async () => {
+  test('tsconfig missing some fields - declarationDir or outDir', async () => {
     const fixturePath = join(__dirname, 'composite', 'tsconfig');
     try {
       await buildAndGetResults({
