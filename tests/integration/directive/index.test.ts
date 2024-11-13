@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import os from 'node:os';
 import { join } from 'node:path';
 import { buildAndGetResults, queryContent } from 'test-helper';
 import { describe, expect, test } from 'vitest';
@@ -62,16 +63,19 @@ describe('shebang', async () => {
   });
 
   describe('chmod', async () => {
+    // Windows uses Access Control Lists (ACLs) for file permissions, which are represented differently from Linux modes.
+    const mode = os.platform() === 'win32' ? 0o100644 : 0o100755;
+
     test('shebang at the beginning', async () => {
       const filePath = entryFiles.esm0!;
       const fileStats = fs.statSync(filePath);
-      expect(fileStats.mode).toBe(0o100755);
+      expect(fileStats.mode).toBe(mode);
     });
 
     test('shebang at the beginning even if minified', async () => {
       const filePath = entryFiles.esm1!;
       const fileStats = fs.statSync(filePath);
-      expect(fileStats.mode).toBe(0o100755);
+      expect(fileStats.mode).toBe(mode);
     });
   });
 });
