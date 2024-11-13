@@ -268,7 +268,7 @@ describe('dts when bundle: true', () => {
 
 describe('dts when build: true', () => {
   test('basic', async () => {
-    const fixturePath = join(__dirname, 'composite', 'basic');
+    const fixturePath = join(__dirname, 'build', 'basic');
     const { files } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
@@ -276,20 +276,20 @@ describe('dts when build: true', () => {
 
     expect(files.esm).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/integration/dts/composite/basic/dist/esm/index.d.ts",
-        "<ROOT>/tests/integration/dts/composite/basic/dist/esm/sum.d.ts",
+        "<ROOT>/tests/integration/dts/build/basic/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/build/basic/dist/esm/sum.d.ts",
       ]
     `);
 
-    const compositeDistPath = join(
+    const referenceDistPath = join(
       fixturePath,
       '../__references__/dist/index.d.ts',
     );
-    expect(existsSync(compositeDistPath)).toBeTruthy();
+    expect(existsSync(referenceDistPath)).toBeTruthy();
   });
 
   test('distPath', async () => {
-    const fixturePath = join(__dirname, 'composite', 'dist-path');
+    const fixturePath = join(__dirname, 'build', 'dist-path');
     const { files } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
@@ -297,13 +297,13 @@ describe('dts when build: true', () => {
 
     expect(files.esm).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/integration/dts/composite/dist-path/dist/custom/index.d.ts",
+        "<ROOT>/tests/integration/dts/build/dist-path/dist/custom/index.d.ts",
       ]
     `);
   });
 
   test('process files - auto extension and banner / footer', async () => {
-    const fixturePath = join(__dirname, 'composite', 'process-files');
+    const fixturePath = join(__dirname, 'build', 'process-files');
     const { contents } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
@@ -311,17 +311,17 @@ describe('dts when build: true', () => {
 
     expect(contents.esm).toMatchInlineSnapshot(`
       {
-        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/index.d.mts": "/*! hello banner dts composite*/
+        "<ROOT>/tests/integration/dts/build/process-files/dist/esm/index.d.mts": "/*! hello banner dts build*/
       export declare const num1 = 1;
 
-      /*! hello banner dts composite*/
+      /*! hello banner dts build*/
       ",
       }
     `);
   });
 
   test('abortOnError: false', async () => {
-    const fixturePath = join(__dirname, 'composite', 'abort-on-error');
+    const fixturePath = join(__dirname, 'build', 'abort-on-error');
     const { isSuccess } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
@@ -331,7 +331,7 @@ describe('dts when build: true', () => {
   });
 
   test('tsconfig missing some fields - declarationDir or outDir', async () => {
-    const fixturePath = join(__dirname, 'composite', 'tsconfig');
+    const fixturePath = join(__dirname, 'build', 'tsconfig');
     try {
       await buildAndGetResults({
         fixturePath,
