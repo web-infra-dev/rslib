@@ -332,12 +332,7 @@ describe('minify', () => {
         "js": true,
         "jsOptions": {
           "minimizerOptions": {
-            "compress": {
-              "dead_code": true,
-              "defaults": false,
-              "toplevel": true,
-              "unused": true,
-            },
+            "compress": true,
             "format": {
               "comments": "all",
             },
