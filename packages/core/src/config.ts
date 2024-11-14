@@ -600,10 +600,14 @@ const composeFormatConfig = ({
   }
 };
 
+type DeepRequired<T> = Required<{
+  [K in keyof T]: T[K] extends Required<T[K]> ? T[K] : DeepRequired<T[K]>;
+}>;
+
 const composeShimsConfig = (
   format: Format,
   shims?: Shims,
-): { rsbuildConfig: RsbuildConfig; resolvedShims: Shims } => {
+): { rsbuildConfig: RsbuildConfig; enabledShims: DeepRequired<Shims> } => {
   const resolvedShims = {
     cjs: {
       'import.meta.url': shims?.cjs?.['import.meta.url'] ?? true,
@@ -613,6 +617,23 @@ const composeShimsConfig = (
       __dirname: shims?.esm?.__dirname ?? false,
       require: shims?.esm?.require ?? false,
     },
+  };
+
+  const enabledShims = {
+    cjs:
+      format === 'cjs'
+        ? resolvedShims.cjs
+        : {
+            'import.meta.url': false,
+          },
+    esm:
+      format === 'esm'
+        ? resolvedShims.esm
+        : {
+            __filename: false,
+            __dirname: false,
+            require: false,
+          },
   };
 
   let rsbuildConfig: RsbuildConfig = {};
@@ -648,7 +669,7 @@ const composeShimsConfig = (
       throw new Error(`Unsupported format: ${format}`);
   }
 
-  return { rsbuildConfig, resolvedShims };
+  return { rsbuildConfig, enabledShims };
 };
 
 export const composeModuleImportWarn = (request: string): string => {
@@ -1020,7 +1041,7 @@ const composeTargetConfig = (
 const composeExternalHelpersConfig = (
   externalHelpers: boolean,
   pkgJson?: PkgJson,
-): RsbuildConfig => {
+) => {
   let defaultConfig = {
     tools: {
       swc: {
@@ -1077,7 +1098,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     redirect = {},
     umdName,
   } = config;
-  const { rsbuildConfig: shimsConfig, resolvedShims } = composeShimsConfig(
+  const { rsbuildConfig: shimsConfig, enabledShims } = composeShimsConfig(
     format!,
     shims,
   );
@@ -1124,8 +1145,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   );
   const cssConfig = composeCssConfig(lcp, config.bundle);
   const entryChunkConfig = composeEntryChunkConfig({
-    enabledImportMetaUrlShim:
-      format === 'cjs' && !!resolvedShims?.cjs?.['import.meta.url'],
+    enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
   });
   const dtsConfig = await composeDtsConfig(config, dtsExtension);
   const externalsWarnConfig = composeExternalsWarnConfig(

@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import fs from 'node:fs';
-import path, { dirname, join, normalize } from 'node:path';
+import { basename, dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import {
@@ -327,9 +327,9 @@ export function queryContent(
     basename?: boolean;
   } = {},
 ): string | null {
-  const basename = options?.basename ?? false;
+  const useBasename = options?.basename ?? false;
   const matched = Object.entries(contents).find(([key]) => {
-    const toQueried = basename ? path.basename(key) : key;
+    const toQueried = useBasename ? basename(key) : key;
     return typeof query === 'string'
       ? toQueried === query
       : query.test(toQueried);
