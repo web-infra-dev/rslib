@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import path from 'node:path';
+import type { RsbuildPlugins } from '@rsbuild/core';
 import color from 'picocolors';
 
 import type { LibConfig, PkgJson } from '../types';
@@ -163,11 +164,14 @@ export function omit<T extends object, U extends keyof T>(
 }
 
 export function isPluginIncluded(
-  config: LibConfig,
   pluginName: string,
+  plugins?: RsbuildPlugins,
 ): boolean {
   return Boolean(
-    config.plugins?.some((plugin) => {
+    plugins?.some((plugin) => {
+      if (Array.isArray(plugin)) {
+        return isPluginIncluded(pluginName, plugin);
+      }
       if (typeof plugin === 'object' && plugin !== null && 'name' in plugin) {
         return plugin.name === pluginName;
       }
@@ -182,7 +186,10 @@ export function checkMFPlugin(config: LibConfig): boolean {
   }
 
   // https://github.com/module-federation/core/blob/4e5c4b96ee45899f3ba5904b8927768980d5ad0e/packages/rsbuild-plugin/src/cli/index.ts#L17
-  const added = isPluginIncluded(config, 'rsbuild:module-federation-enhanced');
+  const added = isPluginIncluded(
+    'rsbuild:module-federation-enhanced',
+    config.plugins,
+  );
   if (!added) {
     logger.warn(
       `${color.green('format: "mf"')} should be used with ${color.blue(
