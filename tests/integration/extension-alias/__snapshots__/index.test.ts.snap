@@ -3,24 +3,21 @@
 exports[`resolve.extensionAlias should work 1`] = `
 ""use strict";
 var __webpack_exports__ = {};
-const bar = 'bar';
-const foo = 'foo';
+let bar = 'bar', foo = 'foo';
 // Relative import paths need explicit file extensions in ECMAScript imports
 // when '--moduleResolution' is 'node16' or 'nodenext'.
-console.log(foo + bar);
+console.log("foobar");
 var __webpack_export_target__ = exports;
 for(var i in __webpack_exports__)__webpack_export_target__[i] = __webpack_exports__[i];
-if (__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, '__esModule', {
-    value: true
+__webpack_exports__.__esModule && Object.defineProperty(__webpack_export_target__, '__esModule', {
+    value: !0
 });
 "
 `;
 
 exports[`resolve.extensionAlias should work 2`] = `
-"const bar = 'bar';
-const foo = 'foo';
-// Relative import paths need explicit file extensions in ECMAScript imports
+"// Relative import paths need explicit file extensions in ECMAScript imports
 // when '--moduleResolution' is 'node16' or 'nodenext'.
-console.log(foo + bar);
+console.log("foobar");
 "
 `;

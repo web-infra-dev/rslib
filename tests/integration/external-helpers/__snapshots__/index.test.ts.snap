@@ -8,13 +8,12 @@ var src_FOO = /*#__PURE__*/ function() {
     function FOO() {
         (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__._)(this, FOO);
     }
-    (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__._)(FOO, [
+    return (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__._)(FOO, [
         {
             key: "bar",
             get: function() {}
         }
-    ]);
-    return FOO;
+    ]), FOO;
 }();
 export { src_FOO as default };
 "
@@ -28,83 +27,64 @@ var src_FOO = /*#__PURE__*/ function() {
     function FOO() {
         (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__._)(this, FOO);
     }
-    (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__._)(FOO, [
+    return (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__._)(FOO, [
         {
             key: "bar",
             get: function() {}
         }
-    ]);
-    return FOO;
+    ]), FOO;
 }();
 export { src_FOO as default };
 "
 `;
 
 exports[`should not external @swc/helpers by default 1`] = `
-"function _class_call_check(instance, Constructor) {
-    if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(target, props) {
+"function _defineProperties(target, props) {
     for(var i = 0; i < props.length; i++){
         var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
+        descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
     }
-}
-function _create_class(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    return Constructor;
 }
 var src_FOO = /*#__PURE__*/ function() {
     "use strict";
+    var Constructor, protoProps, staticProps;
     function FOO() {
-        _class_call_check(this, FOO);
+        !function(instance, Constructor) {
+            if (!(instance instanceof Constructor)) throw TypeError("Cannot call a class as a function");
+        }(this, FOO);
     }
-    _create_class(FOO, [
+    return Constructor = FOO, protoProps = [
         {
             key: "bar",
             get: function() {}
         }
-    ]);
-    return FOO;
+    ], _defineProperties(Constructor.prototype, protoProps), FOO;
 }();
 export { src_FOO as default };
 "
 `;
 
 exports[`should respect user override externalHelpers config 1`] = `
-"function _class_call_check(instance, Constructor) {
-    if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(target, props) {
+"function _defineProperties(target, props) {
     for(var i = 0; i < props.length; i++){
         var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
+        descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
     }
-}
-function _create_class(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    return Constructor;
 }
 var src_FOO = /*#__PURE__*/ function() {
     "use strict";
+    var Constructor, protoProps, staticProps;
     function FOO() {
-        _class_call_check(this, FOO);
+        !function(instance, Constructor) {
+            if (!(instance instanceof Constructor)) throw TypeError("Cannot call a class as a function");
+        }(this, FOO);
     }
-    _create_class(FOO, [
+    return Constructor = FOO, protoProps = [
         {
             key: "bar",
             get: function() {}
         }
-    ]);
-    return FOO;
+    ], _defineProperties(Constructor.prototype, protoProps), FOO;
 }();
 export { src_FOO as default };
 "
@@ -118,13 +98,12 @@ var src_FOO = /*#__PURE__*/ function() {
     function FOO() {
         (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__._)(this, FOO);
     }
-    (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__._)(FOO, [
+    return (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__._)(FOO, [
         {
             key: "bar",
             get: function() {}
         }
-    ]);
-    return FOO;
+    ]), FOO;
 }();
 export { src_FOO as default };
 "

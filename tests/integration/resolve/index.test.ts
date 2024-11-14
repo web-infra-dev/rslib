@@ -8,8 +8,7 @@ test('resolve data url', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
-    "/* ESM default export */ const javascript_export_default_42 = 42;
-    console.log('x:', javascript_export_default_42);
+    "console.log('x:', 42);
     "
   `);
 });
@@ -31,7 +30,7 @@ test('resolve node protocol', async () => {
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_node_path__ from "node:path";
-    const { join } = __WEBPACK_EXTERNAL_MODULE_node_path__["default"];
+    let { join } = __WEBPACK_EXTERNAL_MODULE_node_path__.default;
     export { join };
     "
   `);
@@ -63,8 +62,7 @@ test('resolve with js extensions', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
-    "const value = 1;
-    console.log(value);
+    "console.log(1);
     "
   `);
 });
@@ -76,8 +74,7 @@ test('resolve with main fields', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(Object.values(results[0]!)[0]).toMatchInlineSnapshot(`
-    "const value = 1;
-    console.log(value);
+    "console.log(1);
     "
   `);
   expect(Object.values(results[1]!)[0]).toContain('main');

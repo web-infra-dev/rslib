@@ -6,7 +6,7 @@ test('tree shaking is enabled by default, bar and baz should be shaken', async (
   const fixturePath = join(__dirname, 'default');
   const { entries } = await buildAndGetResults({ fixturePath });
   expect(entries.esm).toMatchInlineSnapshot(`
-    "const foo = ()=>{};
+    "let foo = ()=>{};
     export { foo };
     "
   `);

@@ -1,2 +1,4 @@
-const lazyFn = (module, requireFn) => {};
+const lazyFn = (module, requireFn) => {
+  requireFn(module);
+};
 lazyFn('./other.js', require);

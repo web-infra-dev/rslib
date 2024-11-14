@@ -12,7 +12,7 @@ describe('ESM shims', async () => {
   test('__dirname', async () => {
     for (const shim of [
       'import { fileURLToPath as __webpack_fileURLToPath__ } from "url";',
-      'var src_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));',
+      'var src_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url)),',
     ]) {
       expect(entries.esm0).toContain(shim);
     }
@@ -25,7 +25,7 @@ describe('ESM shims', async () => {
   test('__filename', async () => {
     for (const shim of [
       'import { fileURLToPath as __webpack_fileURLToPath__ } from "url";',
-      'var src_filename = __webpack_fileURLToPath__(import.meta.url);',
+      'src_filename = __webpack_fileURLToPath__(import.meta.url);',
     ]) {
       expect(entries.esm0).toContain(shim);
     }
@@ -38,7 +38,7 @@ describe('ESM shims', async () => {
   test('import.meta.url', async () => {
     for (const shouldPreserve of [
       // import.meta.url should not be substituted
-      'const importMetaUrl = import.meta.url;',
+      'importMetaUrl: import.meta.url',
     ]) {
       expect(entries.esm0).toContain(shouldPreserve);
     }
@@ -103,9 +103,7 @@ describe('CJS shims', () => {
     expect(entries.esm).toMatchInlineSnapshot(`
       "import * as __WEBPACK_EXTERNAL_MODULE_node_module__ from "node:module";
       // import.meta.url
-      const importMetaUrl = import.meta.url;
-      const src_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url);
-      const requiredModule = src_require('./ok.cjs');
+      let importMetaUrl = import.meta.url, requiredModule = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url)('./ok.cjs');
       export { importMetaUrl, requiredModule };
       "
     `);
