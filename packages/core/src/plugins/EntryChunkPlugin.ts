@@ -111,7 +111,9 @@ class EntryChunkPlugin {
       compilation.hooks.processAssets.tap(PLUGIN_NAME, (assets) => {
         if (!this.enabledImportMetaUrlShim) return;
 
-        const chunkAsset = Object.keys(assets);
+        const chunkAsset = Object.keys(assets).filter((name) =>
+          JS_EXTENSIONS_PATTERN.test(name),
+        );
         for (const name of chunkAsset) {
           compilation.updateAsset(name, (old) => {
             const oldSource = old.source().toString();

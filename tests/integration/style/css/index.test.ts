@@ -4,40 +4,132 @@ import { expect, test } from 'vitest';
 
 test('should extract css successfully in bundle', async () => {
   const fixturePath = join(__dirname, 'bundle');
-  const { contents } = await buildAndGetResults({ fixturePath, type: 'css' });
-  const esmFiles = Object.keys(contents.esm);
-  expect(esmFiles).toMatchInlineSnapshot(`
+  const { contents, files } = await buildAndGetResults({
+    fixturePath,
+    type: 'css',
+  });
+
+  expect(files.esm).toMatchInlineSnapshot(`
     [
       "<ROOT>/tests/integration/style/css/bundle/dist/esm/static/css/index.css",
     ]
   `);
 
-  const cjsFiles = Object.keys(contents.cjs);
-  expect(cjsFiles).toMatchInlineSnapshot(`
+  expect(contents.esm).toMatchInlineSnapshot(`
+    {
+      "<ROOT>/tests/integration/style/css/bundle/dist/esm/static/css/index.css": "@import url(https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css);
+    @import url(https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.css);
+    .lib1 {
+      color: red;
+    }
+
+    .lib2 {
+      color: green;
+    }
+
+    .import {
+      background-image: url("https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css");
+    }
+
+    ",
+    }
+  `);
+
+  expect(files.cjs).toMatchInlineSnapshot(`
     [
       "<ROOT>/tests/integration/style/css/bundle/dist/cjs/static/css/index.css",
     ]
+  `);
+
+  expect(contents.cjs).toMatchInlineSnapshot(`
+    {
+      "<ROOT>/tests/integration/style/css/bundle/dist/cjs/static/css/index.css": "@import url(https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css);
+    @import url(https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.css);
+    .lib1 {
+      color: red;
+    }
+
+    .lib2 {
+      color: green;
+    }
+
+    .import {
+      background-image: url("https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css");
+    }
+
+    ",
+    }
   `);
 });
 
 test('should extract css successfully in bundle-false', async () => {
   const fixturePath = join(__dirname, 'bundle-false');
-  const { contents } = await buildAndGetResults({ fixturePath, type: 'css' });
-  const esmFiles = Object.keys(contents.esm);
-  expect(esmFiles).toMatchInlineSnapshot(`
+  const { contents, files } = await buildAndGetResults({
+    fixturePath,
+    type: 'css',
+  });
+
+  expect(files.esm).toMatchInlineSnapshot(`
     [
       "<ROOT>/tests/integration/style/css/bundle-false/dist/esm/import.css",
       "<ROOT>/tests/integration/style/css/bundle-false/dist/esm/lib1.css",
       "<ROOT>/tests/integration/style/css/bundle-false/dist/esm/lib2.css",
     ]
   `);
+  expect(contents.esm).toMatchInlineSnapshot(`
+    {
+      "<ROOT>/tests/integration/style/css/bundle-false/dist/esm/import.css": "@import "https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css";
+    @import "https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.css";
+    @import "lib1.css";
+    @import "lib2.css";
 
-  const cjsFiles = Object.keys(contents.cjs);
-  expect(cjsFiles).toMatchInlineSnapshot(`
+    .import {
+      background-image: url("https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css");
+    }
+
+    ",
+      "<ROOT>/tests/integration/style/css/bundle-false/dist/esm/lib1.css": ".lib1 {
+      color: red;
+    }
+
+    ",
+      "<ROOT>/tests/integration/style/css/bundle-false/dist/esm/lib2.css": ".lib2 {
+      color: green;
+    }
+
+    ",
+    }
+  `);
+
+  expect(files.cjs).toMatchInlineSnapshot(`
     [
       "<ROOT>/tests/integration/style/css/bundle-false/dist/cjs/import.css",
       "<ROOT>/tests/integration/style/css/bundle-false/dist/cjs/lib1.css",
       "<ROOT>/tests/integration/style/css/bundle-false/dist/cjs/lib2.css",
     ]
+  `);
+  expect(contents.cjs).toMatchInlineSnapshot(`
+    {
+      "<ROOT>/tests/integration/style/css/bundle-false/dist/cjs/import.css": "@import "https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css";
+    @import "https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.css";
+    @import "lib1.css";
+    @import "lib2.css";
+
+    .import {
+      background-image: url("https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css");
+    }
+
+    ",
+      "<ROOT>/tests/integration/style/css/bundle-false/dist/cjs/lib1.css": ".lib1 {
+      color: red;
+    }
+
+    ",
+      "<ROOT>/tests/integration/style/css/bundle-false/dist/cjs/lib2.css": ".lib2 {
+      color: green;
+    }
+
+    ",
+    }
   `);
 });
