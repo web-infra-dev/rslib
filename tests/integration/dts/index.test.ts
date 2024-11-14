@@ -286,6 +286,9 @@ describe('dts when build: true', () => {
       '../__references__/dist/index.d.ts',
     );
     expect(existsSync(referenceDistPath)).toBeTruthy();
+
+    const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
+    expect(existsSync(buildInfoPath)).toBeTruthy();
   });
 
   test('distPath', async () => {
@@ -300,6 +303,9 @@ describe('dts when build: true', () => {
         "<ROOT>/tests/integration/dts/build/dist-path/dist/custom/index.d.ts",
       ]
     `);
+
+    const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
+    expect(existsSync(buildInfoPath)).toBeTruthy();
   });
 
   test('process files - auto extension and banner / footer', async () => {
@@ -318,6 +324,9 @@ describe('dts when build: true', () => {
       ",
       }
     `);
+
+    const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
+    expect(existsSync(buildInfoPath)).toBeTruthy();
   });
 
   test('abortOnError: false', async () => {
@@ -328,6 +337,9 @@ describe('dts when build: true', () => {
     });
 
     expect(isSuccess).toBe(true);
+
+    const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
+    expect(existsSync(buildInfoPath)).toBeTruthy();
   });
 
   test('tsconfig missing some fields - declarationDir or outDir', async () => {
@@ -341,5 +353,103 @@ describe('dts when build: true', () => {
       // not easy to proxy child process stdout
       expect(err.message).toBe('Error occurred in esm DTS generation');
     }
+  });
+});
+
+describe('dts when composite: true', () => {
+  test('basic', async () => {
+    const fixturePath = join(__dirname, 'composite', 'basic');
+    const { files } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/composite/basic/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/composite/basic/dist/esm/sum.d.ts",
+        "<ROOT>/tests/integration/dts/composite/basic/dist/esm/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/composite/basic/dist/esm/utils/strings.d.ts",
+      ]
+    `);
+
+    const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
+    expect(existsSync(buildInfoPath)).toBeTruthy();
+  });
+
+  test('abortOnError: false', async () => {
+    const fixturePath = join(__dirname, 'composite', 'abort-on-error');
+    const { isSuccess } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(isSuccess).toBe(true);
+
+    const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
+    expect(existsSync(buildInfoPath)).toBeTruthy();
+  });
+
+  test('distPath', async () => {
+    const fixturePath = join(__dirname, 'composite', 'dist-path');
+    const { files } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/composite/dist-path/dist-types/index.d.ts",
+        "<ROOT>/tests/integration/dts/composite/dist-path/dist-types/sum.d.ts",
+        "<ROOT>/tests/integration/dts/composite/dist-path/dist-types/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/composite/dist-path/dist-types/utils/strings.d.ts",
+      ]
+    `);
+
+    const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
+    expect(existsSync(buildInfoPath)).toBeTruthy();
+  });
+
+  test('process files - auto extension and banner / footer', async () => {
+    const fixturePath = join(__dirname, 'composite', 'process-files');
+    const { contents } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(contents.esm).toMatchInlineSnapshot(`
+      {
+        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/index.d.mts": "/*! hello banner dts composite*/
+      export * from './utils/numbers';
+      export * from './utils/strings';
+      export * from './sum';
+
+      /*! hello banner dts composite*/
+      ",
+        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/sum.d.mts": "/*! hello banner dts composite*/
+      export declare const numSum: number;
+      export declare const strSum: string;
+
+      /*! hello banner dts composite*/
+      ",
+        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/utils/numbers.d.mts": "/*! hello banner dts composite*/
+      export declare const num1 = 1;
+      export declare const num2 = 2;
+      export declare const num3 = 3;
+
+      /*! hello banner dts composite*/
+      ",
+        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/utils/strings.d.mts": "/*! hello banner dts composite*/
+      export declare const str1 = "str1";
+      export declare const str2 = "str2";
+      export declare const str3 = "str3";
+
+      /*! hello banner dts composite*/
+      ",
+      }
+    `);
+
+    const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
+    expect(existsSync(buildInfoPath)).toBeTruthy();
   });
 });
