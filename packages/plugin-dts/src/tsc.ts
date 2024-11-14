@@ -260,7 +260,7 @@ export async function emitDts(
       `DTS generated in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
     );
   } else {
-    // watch mode
+    // watch mode, can also deal with incremental build
     if (!build) {
       const host = ts.createWatchCompilerHost(
         configPath,
@@ -273,7 +273,7 @@ export async function emitDts(
 
       ts.createWatchProgram(host);
     } else {
-      // incremental build with build project references
+      // incremental build watcher with build project references
       const host = ts.createSolutionBuilderWithWatchHost(
         system,
         createProgram,
