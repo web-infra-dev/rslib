@@ -1,6 +1,5 @@
 import { chmodSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import os from 'node:os';
 import {
   type RsbuildConfig,
   type RsbuildPlugin,
@@ -19,12 +18,10 @@ const require = createRequire(import.meta.url);
 const PLUGIN_NAME = 'rsbuild:lib-entry-chunk';
 const LOADER_NAME = 'rsbuild:lib-entry-module';
 
-const matchFirstLine = (source: string, regex: RegExp) => {
-  const [firstLine] = source.split(os.EOL);
-  if (!firstLine) {
-    return false;
-  }
-  const matched = regex.exec(firstLine);
+const matchFirstLine = (source: string, regex: RegExp): string | false => {
+  const lineBreakPos = source.match(/(\r\n|\n)/);
+  const firstLineContent = source.slice(0, lineBreakPos?.index);
+  const matched = regex.exec(firstLineContent);
   if (!matched) {
     return false;
   }
@@ -126,7 +123,7 @@ class EntryChunkPlugin {
               replaceSource.replace(
                 0,
                 11, // 'use strict;'.length,
-                `"use strict";${os.EOL}${importMetaUrlShim}`,
+                `"use strict";\n${importMetaUrlShim}`,
               );
             } else {
               replaceSource.insert(0, importMetaUrlShim);
@@ -154,13 +151,13 @@ class EntryChunkPlugin {
                 const replaceSource = new rspack.sources.ReplaceSource(old);
                 // Shebang
                 if (shebangValue) {
-                  replaceSource.insert(0, `${shebangValue}${os.EOL}`);
+                  replaceSource.insert(0, `${shebangValue}\n`);
                   this.shebangInjectedAssets.add(name);
                 }
 
                 // React directives
                 if (reactDirectiveValue) {
-                  replaceSource.insert(0, `${reactDirectiveValue}${os.EOL}`);
+                  replaceSource.insert(0, `${reactDirectiveValue}\n`);
                 }
 
                 return replaceSource;

@@ -95,10 +95,11 @@ describe('CJS shims', () => {
     const fileUrl = pathToFileURL(entryFiles.cjs).href;
     expect(importMetaUrl).toBe(fileUrl);
     expect(requiredModule).toBe('ok');
-    expect(cjsCode.startsWith('"use strict"')).toBe(true);
-    expect(cjsCode).toContain(
-      'const __rslib_import_meta_url__ = /*#__PURE__*/ function() {',
-    );
+    expect(
+      cjsCode.startsWith(
+        `"use strict";\nconst __rslib_import_meta_url__ = /*#__PURE__*/ function() {`,
+      ),
+    ).toBe(true);
   });
 
   test('ESM should not be affected by CJS shims configuration', async () => {
