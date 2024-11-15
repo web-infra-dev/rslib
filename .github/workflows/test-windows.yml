@@ -126,6 +126,6 @@ jobs:
     if: (!cancelled() && !failure())
     needs: [ut-windows, integration-e2e-windows]
     runs-on: ubuntu-latest
-    name: Test passed or skipped
+    name: Test passed or skipped (Windows)
     steps:
-      - run: echo "All tests passed or skipped."
+      - run: echo "All tests passed or skipped (Windows)."
