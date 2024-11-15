@@ -32,6 +32,7 @@ import {
 import type {
   AutoExternal,
   BannerAndFooter,
+  DeepRequired,
   Format,
   LibConfig,
   LibOnlyConfig,
@@ -599,10 +600,6 @@ const composeFormatConfig = ({
       throw new Error(`Unsupported format: ${format}`);
   }
 };
-
-type DeepRequired<T> = Required<{
-  [K in keyof T]: T[K] extends Required<T[K]> ? T[K] : DeepRequired<T[K]>;
-}>;
 
 const composeShimsConfig = (
   format: Format,
