@@ -18,6 +18,43 @@ export type EmitDtsOptions = {
   footer?: string;
 };
 
+async function handleDiagnosticsAndProcessFiles(
+  diagnostics: readonly ts.Diagnostic[],
+  configPath: string,
+  host: ts.CompilerHost,
+  bundle: boolean,
+  declarationDir: string,
+  dtsExtension: string,
+  banner?: string,
+  footer?: string,
+  name?: string,
+): Promise<void> {
+  const diagnosticMessages: string[] = [];
+
+  for (const diagnostic of diagnostics) {
+    const fileLoc = getFileLoc(diagnostic, configPath);
+    const message = `${fileLoc} - ${color.red('error')} ${color.gray(`TS${diagnostic.code}:`)} ${ts.flattenDiagnosticMessageText(
+      diagnostic.messageText,
+      host.getNewLine(),
+    )}`;
+    diagnosticMessages.push(message);
+  }
+
+  await processDtsFiles(bundle, declarationDir, dtsExtension, banner, footer);
+
+  if (diagnosticMessages.length) {
+    logger.error(
+      `Failed to emit declaration files. ${color.gray(`(${name})`)}`,
+    );
+
+    for (const message of diagnosticMessages) {
+      logger.error(message);
+    }
+
+    throw new Error('DTS generation failed');
+  }
+}
+
 export async function emitDts(
   options: EmitDtsOptions,
   onComplete: (isSuccess: boolean) => void,
@@ -37,6 +74,7 @@ export async function emitDts(
 
   const compilerOptions = {
     ...rawCompilerOptions,
+    configFilePath: configPath,
     noEmit: false,
     declaration: true,
     declarationDir,
@@ -111,9 +149,10 @@ export async function emitDts(
 
   const system = { ...ts.sys };
 
+  // build mode
   if (!isWatch) {
-    // build mode
-    if (!build) {
+    // normal build - npx tsc
+    if (!build && !compilerOptions.composite) {
       const host: ts.CompilerHost = ts.createCompilerHost(compilerOptions);
 
       const program: ts.Program = ts.createProgram({
@@ -132,38 +171,53 @@ export async function emitDts(
         .getPreEmitDiagnostics(program)
         .concat(emitResult.diagnostics);
 
-      const diagnosticMessages: string[] = [];
-
-      for (const diagnostic of allDiagnostics) {
-        const fileLoc = getFileLoc(diagnostic, configPath);
-        const message = `${fileLoc} - ${color.red('error')} ${color.gray(`TS${diagnostic.code}:`)} ${ts.flattenDiagnosticMessageText(
-          diagnostic.messageText,
-          host.getNewLine(),
-        )}`;
-        diagnosticMessages.push(message);
-      }
-
-      await processDtsFiles(
+      await handleDiagnosticsAndProcessFiles(
+        allDiagnostics,
+        configPath,
+        host,
         bundle,
         declarationDir,
         dtsExtension,
         banner,
         footer,
+        name,
       );
+    } else if (!build && compilerOptions.composite) {
+      // incremental build with composite true - npx tsc
+      const host: ts.CompilerHost =
+        ts.createIncrementalCompilerHost(compilerOptions);
 
-      if (diagnosticMessages.length) {
-        logger.error(
-          `Failed to emit declaration files. ${color.gray(`(${name})`)}`,
-        );
+      const program = ts.createIncrementalProgram({
+        rootNames: fileNames,
+        options: compilerOptions,
+        configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(
+          configFileParseResult,
+        ),
+        projectReferences,
+        host,
+        createProgram,
+      });
 
-        for (const message of diagnosticMessages) {
-          logger.error(message);
-        }
+      program.emit();
 
-        throw new Error('DTS generation failed');
-      }
+      const allDiagnostics = program
+        .getSemanticDiagnostics()
+        .concat(program.getConfigFileParsingDiagnostics());
+
+      await handleDiagnosticsAndProcessFiles(
+        allDiagnostics,
+        configPath,
+        host,
+        bundle,
+        declarationDir,
+        dtsExtension,
+        banner,
+        footer,
+        name,
+      );
     } else {
-      // incremental build with project references
+      // incremental build with build project references
+      // The equivalent of the `--build` flag for the tsc command.
       let errorNumber = 0;
       const reportErrorSummary = (errorCount: number) => {
         errorNumber = errorCount;
@@ -206,7 +260,7 @@ export async function emitDts(
       `DTS generated in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
     );
   } else {
-    // watch mode
+    // watch mode, can also deal with incremental build
     if (!build) {
       const host = ts.createWatchCompilerHost(
         configPath,
@@ -219,7 +273,7 @@ export async function emitDts(
 
       ts.createWatchProgram(host);
     } else {
-      // incremental build with project references
+      // incremental build watcher with build project references
       const host = ts.createSolutionBuilderWithWatchHost(
         system,
         createProgram,
