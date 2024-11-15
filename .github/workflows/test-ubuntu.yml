@@ -153,6 +153,6 @@ jobs:
     if: (!cancelled() && !failure())
     needs: [ut-ubuntu, integration-e2e-ubuntu, benchmark-ubuntu]
     runs-on: ubuntu-latest
-    name: Test passed or skipped
+    name: Test passed or skipped (Ubuntu)
     steps:
-      - run: echo "All tests passed or skipped."
+      - run: echo "All tests passed or skipped (Ubuntu)."
