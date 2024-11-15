@@ -19,8 +19,54 @@ Before dealing with compatibility issues, it is recommended that you understand 
 
 ### Browser
 
-{/* TODO */}
-{/* Implement a Rsbuild polyfill plugin by using core-js-pure */}
+Normally, we don't need to inject polyfill for npm packages, this step should be done on the web application framework side, but in some scenarios we need to inject polyfill in order to make our library run directly in low version browsers.
+
+Note that this plugin does not transform your code syntax, it only injects polyfill for unsupported functions used in your code, importing them as normal functions instead of polluting the global. You need to install the [core-js-pure](https://www.npmjs.com/package/core-js-pure) dependency.
+
+#### Set up
+
+The polyfill relies on Babel to inject the polyfill code, so you need to install the [Rsbuild Babel plugin](https://rsbuild.dev/plugins/list/plugin-babel) and [babel-plugin-polyfill-corejs3](https://www.npmjs.com/package/babel-plugin-polyfill-corejs3) to inject the polyfill code.
+
+<PackageManagerTabs command="add @rsbuild/plugin-babel babel-plugin-polyfill-corejs3 -D" />
+
+And install [core-js-pure](https://www.npmjs.com/package/core-js-pure) as the runtime relied code.
+
+<PackageManagerTabs command="add core-js-pure" />
+
+Configure the Babel plugin with polyfill options, set the [target](https://babeljs.io/docs/options#targets) field to specify the target browser version.
+
+```ts title="rslib.config.ts" {1,11-24}
+import { pluginBabel } from '@rsbuild/plugin-babel';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+    },
+  ],
+  plugins: [
+    pluginBabel({
+      babelLoaderOptions: {
+        plugins: [
+          [
+            require('babel-plugin-polyfill-corejs3'),
+            {
+              method: 'usage-pure',
+              targets: { ie: '10' },
+              version: '3.29',
+            },
+          ],
+        ],
+      },
+    }),
+  ],
+});
+```
+
+#### Configurations
+
+Check out [babel-plugin-polyfill-corejs3](https://www.npmjs.com/package/babel-plugin-polyfill-corejs3) documentation for more details.
 
 ### Node.js
 
