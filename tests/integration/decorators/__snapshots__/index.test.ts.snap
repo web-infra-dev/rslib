@@ -300,13 +300,13 @@ function _apply_decs_2203_r(targetClass, memberDecs, classDecs, parentClass) {
     return (_apply_decs_2203_r = applyDecs2203RFactory())(targetClass, memberDecs, classDecs, parentClass);
 }
 var _dec, _initClass;
-function src_enhancer(name) {
+function src_rslib_entry_enhancer(name) {
     return function(target) {
         target.prototype.name = name;
     };
 }
 let _Person;
-_dec = src_enhancer('rslib');
+_dec = src_rslib_entry_enhancer('rslib');
 class Person {
     static{
         ({ c: [_Person, _initClass] } = _apply_decs_2203_r(this, [], [
@@ -335,7 +335,7 @@ exports[`decorators with experimentalDecorators in tsconfig 1`] = `
 function _ts_metadata(k, v) {
     if ("object" == typeof Reflect && "function" == typeof Reflect.metadata) return Reflect.metadata(k, v);
 }
-function src_enhancer(name) {
+function src_rslib_entry_enhancer(name) {
     return function(target) {
         target.prototype.name = name;
     };
@@ -346,7 +346,7 @@ class Person {
     }
 }
 Person = _ts_decorate([
-    src_enhancer('rslib'),
+    src_rslib_entry_enhancer('rslib'),
     _ts_metadata("design:type", Function),
     _ts_metadata("design:paramtypes", [])
 ], Person);
@@ -654,13 +654,13 @@ function _apply_decs_2203_r(targetClass, memberDecs, classDecs, parentClass) {
     return (_apply_decs_2203_r = applyDecs2203RFactory())(targetClass, memberDecs, classDecs, parentClass);
 }
 var _dec, _initClass;
-function src_enhancer(name) {
+function src_rslib_entry_enhancer(name) {
     return function(target) {
         target.prototype.name = name;
     };
 }
 let _Person;
-_dec = src_enhancer('rslib');
+_dec = src_rslib_entry_enhancer('rslib');
 class Person {
     static{
         ({ c: [_Person, _initClass] } = _apply_decs_2203_r(this, [], [

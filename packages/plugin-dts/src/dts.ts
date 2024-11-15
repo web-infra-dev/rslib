@@ -189,14 +189,13 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       ? entryPath
       : join(cwd, entryPath);
     const relativePath = relative(rootDir, dirname(entrySourcePath));
-    entry = join(
-      declarationDir!,
-      relativePath,
-      basename(entrySourcePath),
-    ).replace(
-      /\.(js|mjs|jsx|ts|mts|tsx|cjs|cts|cjsx|ctsx|mjsx|mtsx)$/,
-      '.d.ts',
-    );
+    entry = join(declarationDir!, relativePath, basename(entrySourcePath))
+      // Remove query in file path, such as RSLIB_ENTRY_QUERY.
+      .replace(/\?.*$/, '')
+      .replace(
+        /\.(js|mjs|jsx|ts|mts|tsx|cjs|cts|cjsx|ctsx|mjsx|mtsx)$/,
+        '.d.ts',
+      );
   }
 
   const bundleDtsIfNeeded = async () => {

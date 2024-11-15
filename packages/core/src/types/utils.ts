@@ -6,3 +6,7 @@ export type PkgJson = {
   devDependencies?: Record<string, string>;
   optionalDependencies?: Record<string, string>;
 };
+
+export type DeepRequired<T> = Required<{
+  [K in keyof T]: T[K] extends Required<T[K]> ? T[K] : DeepRequired<T[K]>;
+}>;

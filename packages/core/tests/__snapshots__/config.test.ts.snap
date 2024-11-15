@@ -104,7 +104,12 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "strategy": "custom",
         },
       },
-      "plugins": [],
+      "plugins": [
+        {
+          "name": "rsbuild:lib-entry-chunk",
+          "setup": [Function],
+        },
+      ],
       "source": {
         "alias": {
           "bar": "bar",
@@ -193,6 +198,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           {
             "target": [
               "node",
+            ],
+          },
+          {
+            "plugins": [
+              EntryChunkPlugin {
+                "enabledImportMetaUrlShim": false,
+                "reactDirectives": {},
+                "shebangChmod": 493,
+                "shebangEntries": {},
+                "shebangInjectedAssets": Set {},
+              },
             ],
           },
           {
@@ -321,6 +337,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "name": "rsbuild:cjs-import-meta-url-shim",
           "setup": [Function],
         },
+        {
+          "name": "rsbuild:lib-entry-chunk",
+          "setup": [Function],
+        },
       ],
       "source": {
         "alias": {
@@ -403,6 +423,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           {
             "target": [
               "node",
+            ],
+          },
+          {
+            "plugins": [
+              EntryChunkPlugin {
+                "enabledImportMetaUrlShim": true,
+                "reactDirectives": {},
+                "shebangChmod": 493,
+                "shebangEntries": {},
+                "shebangInjectedAssets": Set {},
+              },
             ],
           },
           {
@@ -526,6 +557,12 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "strategy": "custom",
         },
       },
+      "plugins": [
+        {
+          "name": "rsbuild:lib-entry-chunk",
+          "setup": [Function],
+        },
+      ],
       "source": {
         "alias": {
           "bar": "bar",
@@ -595,6 +632,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           {
             "target": [
               "node",
+            ],
+          },
+          {
+            "plugins": [
+              EntryChunkPlugin {
+                "enabledImportMetaUrlShim": false,
+                "reactDirectives": {},
+                "shebangChmod": 493,
+                "shebangEntries": {},
+                "shebangInjectedAssets": Set {},
+              },
             ],
           },
           {

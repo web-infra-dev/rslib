@@ -43,7 +43,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
       relative(cwd, distPath),
       `${dtsEntry.name}${dtsExtension}`,
     );
-    const mainEntryPointFilePath = dtsEntry.path!;
+    const mainEntryPointFilePath = dtsEntry.path!.replace(/\?.*$/, '')!;
     const internalConfig = {
       mainEntryPointFilePath,
       bundledPackages,

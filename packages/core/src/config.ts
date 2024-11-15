@@ -14,6 +14,7 @@ import {
   DEFAULT_CONFIG_NAME,
   ENTRY_EXTENSIONS_PATTERN,
   JS_EXTENSIONS_PATTERN,
+  RSLIB_ENTRY_QUERY,
   SWC_HELPERS,
 } from './constant';
 import {
@@ -23,6 +24,7 @@ import {
   cssExternalHandler,
   isCssGlobalFile,
 } from './css/cssConfig';
+import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
 import {
   pluginCjsImportMetaUrlShim,
   pluginEsmRequireShim,
@@ -30,6 +32,7 @@ import {
 import type {
   AutoExternal,
   BannerAndFooter,
+  DeepRequired,
   Format,
   LibConfig,
   LibOnlyConfig,
@@ -598,7 +601,10 @@ const composeFormatConfig = ({
   }
 };
 
-const composeShimsConfig = (format: Format, shims?: Shims): RsbuildConfig => {
+const composeShimsConfig = (
+  format: Format,
+  shims?: Shims,
+): { rsbuildConfig: RsbuildConfig; enabledShims: DeepRequired<Shims> } => {
   const resolvedShims = {
     cjs: {
       'import.meta.url': shims?.cjs?.['import.meta.url'] ?? true,
@@ -610,9 +616,27 @@ const composeShimsConfig = (format: Format, shims?: Shims): RsbuildConfig => {
     },
   };
 
+  const enabledShims = {
+    cjs:
+      format === 'cjs'
+        ? resolvedShims.cjs
+        : {
+            'import.meta.url': false,
+          },
+    esm:
+      format === 'esm'
+        ? resolvedShims.esm
+        : {
+            __filename: false,
+            __dirname: false,
+            require: false,
+          },
+  };
+
+  let rsbuildConfig: RsbuildConfig = {};
   switch (format) {
-    case 'esm':
-      return {
+    case 'esm': {
+      rsbuildConfig = {
         tools: {
           rspack: {
             node: {
@@ -626,19 +650,23 @@ const composeShimsConfig = (format: Format, shims?: Shims): RsbuildConfig => {
           Boolean,
         ),
       };
+      break;
+    }
     case 'cjs':
-      return {
+      rsbuildConfig = {
         plugins: [
           resolvedShims.cjs['import.meta.url'] && pluginCjsImportMetaUrlShim(),
         ].filter(Boolean),
       };
+      break;
     case 'umd':
-      return {};
     case 'mf':
-      return {};
+      break;
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
+
+  return { rsbuildConfig, enabledShims };
 };
 
 export const composeModuleImportWarn = (request: string): string => {
@@ -746,6 +774,16 @@ const composeSyntaxConfig = (
   };
 };
 
+const appendEntryQuery = (
+  entry: NonNullable<RsbuildConfig['source']>['entry'],
+): NonNullable<RsbuildConfig['source']>['entry'] => {
+  const newEntry: Record<string, string> = {};
+  for (const key in entry) {
+    newEntry[key] = `${entry[key]}?${RSLIB_ENTRY_QUERY}`;
+  }
+  return newEntry;
+};
+
 const composeEntryConfig = async (
   entries: NonNullable<RsbuildConfig['source']>['entry'],
   bundle: LibConfig['bundle'],
@@ -760,7 +798,7 @@ const composeEntryConfig = async (
     return {
       entryConfig: {
         source: {
-          entry: entries,
+          entry: appendEntryQuery(entries),
         },
       },
       lcp: null,
@@ -836,7 +874,7 @@ const composeEntryConfig = async (
   const lcp = await calcLongestCommonPath(Object.values(resolvedEntries));
   const entryConfig: RsbuildConfig = {
     source: {
-      entry: resolvedEntries,
+      entry: appendEntryQuery(resolvedEntries),
     },
   };
 
@@ -1000,7 +1038,7 @@ const composeTargetConfig = (
 const composeExternalHelpersConfig = (
   externalHelpers: boolean,
   pkgJson?: PkgJson,
-): RsbuildConfig => {
+) => {
   let defaultConfig = {
     tools: {
       swc: {
@@ -1057,7 +1095,10 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     redirect = {},
     umdName,
   } = config;
-  const shimsConfig = composeShimsConfig(format!, shims);
+  const { rsbuildConfig: shimsConfig, enabledShims } = composeShimsConfig(
+    format!,
+    shims,
+  );
   const formatConfig = composeFormatConfig({
     format: format!,
     pkgJson: pkgJson!,
@@ -1100,6 +1141,9 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     cssModulesAuto,
   );
   const cssConfig = composeCssConfig(lcp, config.bundle);
+  const entryChunkConfig = composeEntryChunkConfig({
+    enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
+  });
   const dtsConfig = await composeDtsConfig(config, dtsExtension);
   const externalsWarnConfig = composeExternalsWarnConfig(
     format!,
@@ -1127,6 +1171,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     targetConfig,
     entryConfig,
     cssConfig,
+    entryChunkConfig,
     minifyConfig,
     dtsConfig,
     bannerFooterConfig,

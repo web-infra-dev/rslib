@@ -12,7 +12,7 @@ describe('ESM shims', async () => {
   test('__dirname', async () => {
     for (const shim of [
       'import { fileURLToPath as __webpack_fileURLToPath__ } from "url";',
-      'var src_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));',
+      'var src_rslib_entry_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));',
     ]) {
       expect(entries.esm0).toContain(shim);
     }
@@ -25,7 +25,7 @@ describe('ESM shims', async () => {
   test('__filename', async () => {
     for (const shim of [
       'import { fileURLToPath as __webpack_fileURLToPath__ } from "url";',
-      'var src_filename = __webpack_fileURLToPath__(import.meta.url);',
+      'var src_rslib_entry_filename = __webpack_fileURLToPath__(import.meta.url);',
     ]) {
       expect(entries.esm0).toContain(shim);
     }
@@ -95,6 +95,11 @@ describe('CJS shims', () => {
     const fileUrl = pathToFileURL(entryFiles.cjs).href;
     expect(importMetaUrl).toBe(fileUrl);
     expect(requiredModule).toBe('ok');
+    expect(
+      cjsCode.startsWith(
+        `"use strict";\nconst __rslib_import_meta_url__ = /*#__PURE__*/ function() {`,
+      ),
+    ).toBe(true);
   });
 
   test('ESM should not be affected by CJS shims configuration', async () => {
@@ -102,11 +107,16 @@ describe('CJS shims', () => {
     const { entries } = await buildAndGetResults({ fixturePath });
     expect(entries.esm).toMatchInlineSnapshot(`
       "import * as __WEBPACK_EXTERNAL_MODULE_node_module__ from "node:module";
-      // import.meta.url
+      import * as __WEBPACK_EXTERNAL_MODULE_url__ from "url";
       const importMetaUrl = import.meta.url;
-      const src_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url);
-      const requiredModule = src_require('./ok.cjs');
-      export { importMetaUrl, requiredModule };
+      const src_rslib_entry_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url);
+      const requiredModule = src_rslib_entry_require('./ok.cjs');
+      // https://github.com/web-infra-dev/rslib/issues/425
+      const src_rslib_entry_filename = (0, __WEBPACK_EXTERNAL_MODULE_url__.fileURLToPath)(import.meta.url);
+      console.log(src_rslib_entry_filename);
+      // https://github.com/web-infra-dev/rslib/pull/399
+      const src_rslib_entry_module = null;
+      export { src_rslib_entry_filename as __filename, importMetaUrl, src_rslib_entry_module as module, requiredModule };
       "
     `);
   });

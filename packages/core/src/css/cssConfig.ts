@@ -110,10 +110,10 @@ export function cssExternalHandler(
   return false;
 }
 
-const pluginName = 'rsbuild:lib-css';
+const PLUGIN_NAME = 'rsbuild:lib-css';
 
 const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
-  name: pluginName,
+  name: PLUGIN_NAME,
   setup(api) {
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
       let isUsingCssExtract = false;

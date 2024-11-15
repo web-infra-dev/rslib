@@ -17,7 +17,7 @@ test('tree shaking is disabled by the user, bar and baz should be kept', async (
   const { entries } = await buildAndGetResults({ fixturePath });
   expect(entries.esm).toMatchInlineSnapshot(`
     "
-    ;// CONCATENATED MODULE: ../__fixtures__/src/index.ts
+    ;// CONCATENATED MODULE: ../__fixtures__/src/index.ts?__rslib_entry__
     const foo = ()=>{};
     const bar = ()=>{};
     const baz = ()=>{
@@ -32,9 +32,8 @@ test('tree shaking is disabled by the user, bar and baz should be kept', async (
 test('minify is enabled by default in mf format, bar and baz should be minified', async () => {
   const fixturePath = join(__dirname, 'mf/default');
   const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
-  expect(mfExposeEntry).toMatchInlineSnapshot(`
-    ""use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["249"],{"../../__fixtures__/src/index.ts":function(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{foo:function(){return foo}});const foo=()=>{}}}]);"
-  `);
+  // biome-ignore format: snapshot
+  expect(mfExposeEntry).toMatchInlineSnapshot(`""use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["249"],{"../../__fixtures__/src/index.ts":function(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{foo:function(){return foo}});const foo=()=>{}}}]);"`);
 });
 
 test('minify is disabled by the user, bar and baz should not be minified', async () => {

@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import fs from 'node:fs';
-import { dirname, join, normalize } from 'node:path';
+import { basename, dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import {
@@ -318,4 +318,26 @@ export function getFileBySuffix(
   const content = files[fileName];
   assert(content);
   return content;
+}
+
+export function queryContent(
+  contents: Record<string, string>,
+  query: string | RegExp,
+  options: {
+    basename?: boolean;
+  } = {},
+): string | null {
+  const useBasename = options?.basename ?? false;
+  const matched = Object.entries(contents).find(([key]) => {
+    const toQueried = useBasename ? basename(key) : key;
+    return typeof query === 'string'
+      ? toQueried === query
+      : query.test(toQueried);
+  });
+
+  if (!matched) {
+    return null;
+  }
+
+  return matched[1];
 }
