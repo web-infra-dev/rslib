@@ -1,4 +1,4 @@
-import type { LoaderDefinition } from '@rspack/core';
+import type { Rspack } from '@rsbuild/core';
 import {
   REACT_DIRECTIVE_REGEX,
   RSLIB_ENTRY_QUERY,
@@ -14,7 +14,7 @@ function splitFromFirstLine(text: string): [string, string] {
   return [text.slice(0, match.index), text.slice(match.index)];
 }
 
-const loader: LoaderDefinition = function loader(source) {
+const loader: Rspack.LoaderDefinition = function loader(source) {
   let result = source;
 
   if (this.resourceQuery === `?${RSLIB_ENTRY_QUERY}`) {

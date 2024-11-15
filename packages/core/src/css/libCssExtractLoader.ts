@@ -6,7 +6,7 @@
  * 3. add `import './[name].css';`
  */
 import path, { extname } from 'node:path';
-import type { LoaderDefinition } from '@rspack/core';
+import type { Rspack } from '@rsbuild/core';
 
 interface DependencyDescription {
   identifier: string;
@@ -35,7 +35,7 @@ function stringifyLocal(value: any) {
   return typeof value === 'function' ? value.toString() : JSON.stringify(value);
 }
 
-const loader: LoaderDefinition = function loader(content) {
+const loader: Rspack.LoaderDefinition = function loader(content) {
   if (
     this._compiler?.options?.experiments?.css &&
     this._module &&
@@ -49,7 +49,11 @@ const loader: LoaderDefinition = function loader(content) {
   return;
 };
 
-export const pitch: LoaderDefinition['pitch'] = function (request, _, _data) {
+export const pitch: Rspack.LoaderDefinition['pitch'] = function (
+  request,
+  _,
+  _data,
+) {
   if (
     this._compiler?.options?.experiments?.css &&
     this._module &&
