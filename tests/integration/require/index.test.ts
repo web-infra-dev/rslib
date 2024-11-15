@@ -7,23 +7,21 @@ test('require.resolve', async () => {
   const { entries } = await buildAndGetResults({ fixturePath });
 
   const statements = [
-    "const cjs1 = require.resolve('./other')",
-    'const cjs2 = require.resolve(`${process.env.DIR}./other`)',
-    'const assignedResolve = require.resolve',
-    "const cjs3 = assignedResolve('./other')",
-    "const cr1 = _require.resolve('./other')",
-    'const cr2 = _require.resolve(`${process.env.DIR}./other`)',
-    'const assignedResolve2 = _require.resolve',
-    "const cr3 = assignedResolve2('./other')",
+    "let cjs1 = require.resolve('./other')",
+    'cjs2 = require.resolve(`${process.env.DIR}./other`)',
+    "cjs3 = (0, require.resolve)('./other')",
+    "cr1 = _require.resolve('./other')",
+    'cr2 = _require.resolve(`${process.env.DIR}./other`)',
+    "cr3 = (0, _require.resolve)('./other')",
   ];
 
   const esmStatements = [
     'import * as __WEBPACK_EXTERNAL_MODULE_node_module__ from "node:module"',
-    'const _require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url)',
+    '_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url)',
   ];
 
   const cjsStatements = [
-    'const _require = (0, external_node_module_namespaceObject.createRequire)(',
+    '_require = (0, external_node_module_namespaceObject.createRequire)(',
   ];
 
   for (const statement of [...statements, ...esmStatements]) {
@@ -48,11 +46,11 @@ test('require dynamic', async () => {
 
   const esmStatements = [
     'import * as __WEBPACK_EXTERNAL_MODULE_node_module__ from "node:module"',
-    'const _require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url)',
+    '_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url)',
   ];
 
   const cjsStatements = [
-    'const _require = (0, external_node_module_namespaceObject.createRequire)(',
+    '_require = (0, external_node_module_namespaceObject.createRequire)(',
   ];
 
   for (const statement of [...statements, ...esmStatements]) {
@@ -69,9 +67,9 @@ test('import dynamic', async () => {
   const { entries } = await buildAndGetResults({ fixturePath });
 
   const statements = [
-    'const i1 = import(`${process.env.DIR}./other`)',
-    'const i2 = import(process.env.DIR)',
-    "const i3 = import(condition ? './other1' : './other2')",
+    'let i1 = import(`${process.env.DIR}./other`)',
+    'i2 = import(process.env.DIR)',
+    "i3 = import(Math.random() > 0.5 ? './other1' : './other2')",
   ];
 
   for (const statement of [...statements]) {
@@ -87,14 +85,12 @@ test('require as expression', async () => {
   const fixturePath = join(__dirname, 'require-as-expression');
   const { entries } = await buildAndGetResults({ fixturePath });
 
+  expect(entries.esm).toContain(`console.log('./other.js', require);`);
+
   const statements = [
-    'const lazyFn = (module, requireFn)=>{}',
+    'let lazyFn = (module, requireFn)=>{',
     "lazyFn('./other.js', require)",
   ];
-
-  for (const statement of [...statements]) {
-    expect(entries.esm).toContain(statement);
-  }
 
   for (const statement of [...statements]) {
     expect(entries.cjs).toContain(statement);

@@ -3,6 +3,7 @@ import path, { dirname, extname, isAbsolute, join } from 'node:path';
 import {
   type EnvironmentConfig,
   type RsbuildConfig,
+  type RsbuildTarget,
   defineConfig as defineRsbuildConfig,
   loadConfig as loadRsbuildConfig,
   mergeRsbuildConfig,
@@ -285,13 +286,17 @@ export const composeAutoExternalConfig = (options: {
     : {};
 };
 
-export function composeMinifyConfig(config: LibConfig): RsbuildConfig {
+export function composeMinifyConfig(
+  config: LibConfig,
+  target?: RsbuildTarget,
+): RsbuildConfig {
   const minify = config.output?.minify;
-  const format = config.format;
   if (minify !== undefined) {
     // User's minify configuration will be merged afterwards.
     return {};
   }
+
+  const format = config.format;
 
   // When minify is not specified, Rslib will use a sane default for minify options.
   // The default options will only perform dead code elimination and unused code elimination.
@@ -303,15 +308,21 @@ export function composeMinifyConfig(config: LibConfig): RsbuildConfig {
         jsOptions: {
           minimizerOptions: {
             mangle: false,
-            // MF assets are loaded over the network, which means they will not be compressed by the project. Therefore, minifying them is necessary.
+            // MF assets are loaded over the network, which means they will not be compressed by the project.
+            // Therefore, minifying them is necessary.
             minify: format === 'mf',
-            compress: {
-              defaults: false,
-              unused: true,
-              dead_code: true,
-              // remoteEntry's global variable will be tree-shaken if `toplevel` is enabled in "mf" format
-              toplevel: format !== 'mf',
-            },
+            compress:
+              // For the Node target, keep output bundles as small as possible while retaining the necessary information
+              // for debugging, as Node outputs usually executed directly at runtime rather than being built again.
+              target === 'node'
+                ? true
+                : {
+                    defaults: false,
+                    unused: true,
+                    dead_code: true,
+                    // remoteEntry's global variable will be tree-shaken if `toplevel` is enabled in "mf" format
+                    toplevel: format !== 'mf',
+                  },
             format: {
               comments: 'all',
             },
@@ -1106,7 +1117,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     autoExternalConfig?.output?.externals,
     externalsConfig?.output?.externals,
   );
-  const minifyConfig = composeMinifyConfig(config);
+  const minifyConfig = composeMinifyConfig(config, target);
   const bannerFooterConfig = composeBannerFooterConfig(banner, footer);
   const decoratorsConfig = composeDecoratorsConfig(
     compilerOptions,
