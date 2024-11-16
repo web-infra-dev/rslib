@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  '@rspack/core': npm:@rspack/core-canary@1.1.2-canary-49a99741-20241115094711
   zx>@types/node: '-'
 
 importers:
@@ -1872,6 +1873,7 @@ packages:
       typescript:
         optional: true
 
+<<<<<<< HEAD
   '@rspack/binding-darwin-arm64@1.1.0':
     resolution: {integrity: sha512-02YmzmtKMNHCSMzVT5sgbJuPDn+HunkrtWq0D95Fh9sGKYap9cs0JOpzTfyAL3KXJ9JzVfOAZA3VgVQOBaQNWQ==}
     cpu: [arm64]
@@ -1922,6 +1924,58 @@ packages:
 
   '@rspack/core@1.1.0':
     resolution: {integrity: sha512-+IYWSe9D3wB97VVBfaojuWLv3wGIBe9pfJkxNObkorN60Nj3UHYzBLuACrHn4hW2mZjAWrv06ReHXJUEGzQqaQ==}
+=======
+  '@rspack/binding-canary@1.1.2-canary-49a99741-20241115094711':
+    resolution: {integrity: sha512-xbGzo930YmYcNvp3HQrZsnPkvWeTistmN1LWuZ5biVtIKxDFbCgihxZaUnvUUr7Yxu/9gqQ2MZgpmZp/AHmAtQ==}
+
+  '@rspack/binding-darwin-arm64-canary@1.1.2-canary-49a99741-20241115094711':
+    resolution: {integrity: sha512-mCTbwBdbx6mh3CXVvIvZKNf4RCd3gFHbvMI49AN97FRtYluAAYfNIwg24dRe92IrfUfxcZv2huhoIaoIj60SQw==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@rspack/binding-darwin-x64-canary@1.1.2-canary-49a99741-20241115094711':
+    resolution: {integrity: sha512-Dn8B4lYgtT2mSk5Bxuc7iHmtbAs1+iuzJL1EVItED+b7QaEij979EIX4WonesXCFrinREq4D3NFkLPGAVlCo4Q==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@rspack/binding-linux-arm64-gnu-canary@1.1.2-canary-49a99741-20241115094711':
+    resolution: {integrity: sha512-uxfQw7BiC72XmW03ai0NXMzUmMFv5D3+yiAlRedo4KvtJ1pgEV0x2U6lFl0H5hb6ewPdo7/1IqXQeGwM9v+jqA==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@rspack/binding-linux-arm64-musl-canary@1.1.2-canary-49a99741-20241115094711':
+    resolution: {integrity: sha512-qdrwSeQ0zIzpNhkUa/sJOihQfXQaMuTXgtTgjubc/lQ3gium2cQM7b4r5/jUjF6g6FZQ0ZkzgAd9FPFVVqQ4FQ==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@rspack/binding-linux-x64-gnu-canary@1.1.2-canary-49a99741-20241115094711':
+    resolution: {integrity: sha512-yqBSQXhfhLrAe/A84NA/znR3MY72aFzJI0Udq2ozRjaGYdIq9GNK5qYvMM61pTJwXlY9SIA/vA2C9KFsdfuEtw==}
+    cpu: [x64]
+    os: [linux]
+
+  '@rspack/binding-linux-x64-musl-canary@1.1.2-canary-49a99741-20241115094711':
+    resolution: {integrity: sha512-DnfBG2pf75MJFG595zRqUAiGJ2h+vyraKWdfBbrgHT2sB3ejDV0dlB3iPmocZomW8P/ORhWDzPREdqo8UVX7nA==}
+    cpu: [x64]
+    os: [linux]
+
+  '@rspack/binding-win32-arm64-msvc-canary@1.1.2-canary-49a99741-20241115094711':
+    resolution: {integrity: sha512-JFUZdSW4lxEk0HgacaUTJ1ZT9XS3OKwqt/iE9w0/+iIrZWK7jS0gii/mBUmv+OGwB/mqaOm+RUExL7wCsmuhcQ==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@rspack/binding-win32-ia32-msvc-canary@1.1.2-canary-49a99741-20241115094711':
+    resolution: {integrity: sha512-R1pNKfk/rJT7WJT46cRgXSWkYuGZeb23rubOari8fkl6Ctc3mEwc9dyivtUI7bDNaQLIPzI0OXFfU9qtzuG6dw==}
+    cpu: [ia32]
+    os: [win32]
+
+  '@rspack/binding-win32-x64-msvc-canary@1.1.2-canary-49a99741-20241115094711':
+    resolution: {integrity: sha512-Qjv0Dah60DuzHoCi2Ngiv3fk5SEVHz5/y6R6svsUldsF8d925P+nmHUT1CDkZpxhKhvrrWJbuMPOZc+eKD/9jQ==}
+    cpu: [x64]
+    os: [win32]
+
+  '@rspack/core-canary@1.1.2-canary-49a99741-20241115094711':
+    resolution: {integrity: sha512-PThzk1tfa4UujoLnFc4is3qrRateXIsqs2mKfdCyHrEGVr+Y+KeUsxIUywyjEGB1WwG8T6gveGqagMTRqcIcLw==}
+>>>>>>> 159f492 (feat!: use 'commonjs-import' as CJS external type by default)
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@swc/helpers': '>=0.5.1'
@@ -7407,9 +7461,22 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.18.1':
     optional: true
 
+<<<<<<< HEAD
   '@rsbuild/core@1.1.3':
+=======
+  '@rsbuild/core@1.0.19':
     dependencies:
-      '@rspack/core': 1.1.0(@swc/helpers@0.5.15)
+      '@rspack/core': '@rspack/core-canary@1.1.2-canary-49a99741-20241115094711(@swc/helpers@0.5.15)'
+      '@rspack/lite-tapable': 1.0.1
+      '@swc/helpers': 0.5.15
+      core-js: 3.38.1
+    optionalDependencies:
+      fsevents: 2.3.3
+
+  '@rsbuild/core@1.1.0':
+>>>>>>> 159f492 (feat!: use 'commonjs-import' as CJS external type by default)
+    dependencies:
+      '@rspack/core': '@rspack/core-canary@1.1.2-canary-49a99741-20241115094711(@swc/helpers@0.5.15)'
       '@rspack/lite-tapable': 1.0.1
       '@swc/helpers': 0.5.15
       core-js: 3.39.0
@@ -7531,6 +7598,7 @@ snapshots:
       '@microsoft/api-extractor': 7.47.11(@types/node@22.8.1)
       typescript: 5.6.3
 
+<<<<<<< HEAD
   '@rspack/binding-darwin-arm64@1.1.0':
     optional: true
 
@@ -7574,6 +7642,51 @@ snapshots:
     dependencies:
       '@module-federation/runtime-tools': 0.5.1
       '@rspack/binding': 1.1.0
+=======
+  '@rspack/binding-canary@1.1.2-canary-49a99741-20241115094711':
+    optionalDependencies:
+      '@rspack/binding-darwin-arm64': '@rspack/binding-darwin-arm64-canary@1.1.2-canary-49a99741-20241115094711'
+      '@rspack/binding-darwin-x64': '@rspack/binding-darwin-x64-canary@1.1.2-canary-49a99741-20241115094711'
+      '@rspack/binding-linux-arm64-gnu': '@rspack/binding-linux-arm64-gnu-canary@1.1.2-canary-49a99741-20241115094711'
+      '@rspack/binding-linux-arm64-musl': '@rspack/binding-linux-arm64-musl-canary@1.1.2-canary-49a99741-20241115094711'
+      '@rspack/binding-linux-x64-gnu': '@rspack/binding-linux-x64-gnu-canary@1.1.2-canary-49a99741-20241115094711'
+      '@rspack/binding-linux-x64-musl': '@rspack/binding-linux-x64-musl-canary@1.1.2-canary-49a99741-20241115094711'
+      '@rspack/binding-win32-arm64-msvc': '@rspack/binding-win32-arm64-msvc-canary@1.1.2-canary-49a99741-20241115094711'
+      '@rspack/binding-win32-ia32-msvc': '@rspack/binding-win32-ia32-msvc-canary@1.1.2-canary-49a99741-20241115094711'
+      '@rspack/binding-win32-x64-msvc': '@rspack/binding-win32-x64-msvc-canary@1.1.2-canary-49a99741-20241115094711'
+
+  '@rspack/binding-darwin-arm64-canary@1.1.2-canary-49a99741-20241115094711':
+    optional: true
+
+  '@rspack/binding-darwin-x64-canary@1.1.2-canary-49a99741-20241115094711':
+    optional: true
+
+  '@rspack/binding-linux-arm64-gnu-canary@1.1.2-canary-49a99741-20241115094711':
+    optional: true
+
+  '@rspack/binding-linux-arm64-musl-canary@1.1.2-canary-49a99741-20241115094711':
+    optional: true
+
+  '@rspack/binding-linux-x64-gnu-canary@1.1.2-canary-49a99741-20241115094711':
+    optional: true
+
+  '@rspack/binding-linux-x64-musl-canary@1.1.2-canary-49a99741-20241115094711':
+    optional: true
+
+  '@rspack/binding-win32-arm64-msvc-canary@1.1.2-canary-49a99741-20241115094711':
+    optional: true
+
+  '@rspack/binding-win32-ia32-msvc-canary@1.1.2-canary-49a99741-20241115094711':
+    optional: true
+
+  '@rspack/binding-win32-x64-msvc-canary@1.1.2-canary-49a99741-20241115094711':
+    optional: true
+
+  '@rspack/core-canary@1.1.2-canary-49a99741-20241115094711(@swc/helpers@0.5.15)':
+    dependencies:
+      '@module-federation/runtime-tools': 0.5.1
+      '@rspack/binding': '@rspack/binding-canary@1.1.2-canary-49a99741-20241115094711'
+>>>>>>> 159f492 (feat!: use 'commonjs-import' as CJS external type by default)
       '@rspack/lite-tapable': 1.0.1
       caniuse-lite: 1.0.30001680
     optionalDependencies:
