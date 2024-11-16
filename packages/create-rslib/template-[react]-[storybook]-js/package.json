@@ -15,6 +15,7 @@
     "build": "rslib build",
     "build:storybook": "storybook build",
     "dev": "rslib build --watch",
+    "prepublishOnly": "pnpm run build",
     "storybook": "storybook dev"
   },
   "devDependencies": {

@@ -27,6 +27,7 @@ export const expectPackageJson = (
   expect(pkgJson.name).toBe(name);
   expect(pkgJson.scripts.dev).toBe('rslib build --watch');
   expect(pkgJson.scripts.build).toBe('rslib build');
+  expect(pkgJson.scripts.prepublishOnly).toBe('pnpm run build');
   expect(pkgJson.devDependencies['@rslib/core']).toBeTruthy();
 };
 
@@ -53,7 +54,6 @@ export const createAndValidate = (
   }
 
   execSync(command, { cwd });
-
   const pkgJson = fse.readJSONSync(path.join(dir, 'package.json'));
   expectPackageJson(pkgJson, path.basename(name));
 
