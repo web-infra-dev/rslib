@@ -73,6 +73,16 @@ export type Redirect = {
 
 export interface LibConfig extends RsbuildConfig {
   /**
+   * Each lib configuration has a unique identifier used to distinguish different lib configurations.
+   * By default, Rslib generates a unique identifier based on the order of lib configurations, in the format `${format}${index}`.
+   * When there is only one lib of the format, the index is empty, otherwise, it starts from 0 and increments.
+   * For example:
+   * - If only ESM and CJS formats are configured, the identifier for ESM is `esm` and for CJS is `cjs`.
+   * - If two ESM formats and one CJS format are configured, they are represented as `esm0`, `esm1`, and `cjs`.
+   * @default undefined
+   */
+  id?: string;
+  /**
    * Output format for the generated JavaScript files.
    * @default undefined
    */

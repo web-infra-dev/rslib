@@ -33,6 +33,7 @@ import type {
   AutoExternal,
   BannerAndFooter,
   DeepRequired,
+  ExcludesFalse,
   Format,
   LibConfig,
   LibOnlyConfig,
@@ -1179,10 +1180,16 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   );
 }
 
+type RsbuildConfigWithLibInfo = {
+  id?: string;
+  format: Format;
+  config: RsbuildConfig;
+};
+
 export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
   path?: string,
-): Promise<{ format: Format; config: RsbuildConfig }[]> {
+): Promise<RsbuildConfigWithLibInfo[]> {
   const constantRsbuildConfig = await createConstantRsbuildConfig();
   const configPath = path ?? rslibConfig._privateMeta?.configFilePath!;
   const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
@@ -1216,7 +1223,7 @@ export async function composeCreateRsbuildConfig(
     userConfig.output ??= {};
     delete userConfig.output.externals;
 
-    return {
+    const config: RsbuildConfigWithLibInfo = {
       format: libConfig.format!,
       // The merge order represents the priority of the configuration
       // The priorities from high to low are as follows:
@@ -1230,6 +1237,7 @@ export async function composeCreateRsbuildConfig(
         constantRsbuildConfig,
         libRsbuildConfig,
         omit<LibConfig, keyof LibOnlyConfig>(userConfig, {
+          id: true,
           bundle: true,
           format: true,
           autoExtension: true,
@@ -1245,6 +1253,12 @@ export async function composeCreateRsbuildConfig(
         }),
       ),
     };
+
+    if (typeof libConfig.id === 'string') {
+      config.id = libConfig.id;
+    }
+
+    return config;
   });
 
   const composedRsbuildConfig = await Promise.all(libConfigPromises);
@@ -1253,10 +1267,19 @@ export async function composeCreateRsbuildConfig(
 
 export async function composeRsbuildEnvironments(
   rslibConfig: RslibConfig,
+  path?: string,
 ): Promise<Record<string, EnvironmentConfig>> {
-  const rsbuildConfigObject = await composeCreateRsbuildConfig(rslibConfig);
+  const rsbuildConfigWithLibInfo = await composeCreateRsbuildConfig(
+    rslibConfig,
+    path,
+  );
+
+  // User provided ids should take precedence over generated ids.
+  const usedIds = rsbuildConfigWithLibInfo
+    .map(({ id }) => id)
+    .filter(Boolean as any as ExcludesFalse);
   const environments: RsbuildConfig['environments'] = {};
-  const formatCount: Record<Format, number> = rsbuildConfigObject.reduce(
+  const formatCount: Record<Format, number> = rsbuildConfigWithLibInfo.reduce(
     (acc, { format }) => {
       acc[format] = (acc[format] ?? 0) + 1;
       return acc;
@@ -1264,20 +1287,32 @@ export async function composeRsbuildEnvironments(
     {} as Record<Format, number>,
   );
 
-  const formatIndex: Record<Format, number> = {
-    esm: 0,
-    cjs: 0,
-    umd: 0,
-    mf: 0,
+  const composeDefaultId = (format: Format): string => {
+    const nextDefaultId = (format: Format, index: number) => {
+      return `${format}${formatCount[format] === 1 && index === 0 ? '' : index}`;
+    };
+
+    let index = 0;
+    let candidateId = nextDefaultId(format, index);
+    while (usedIds.indexOf(candidateId) !== -1) {
+      candidateId = nextDefaultId(format, ++index);
+    }
+    usedIds.push(candidateId);
+    return candidateId;
   };
 
-  for (const { format, config } of rsbuildConfigObject) {
-    const currentFormatCount = formatCount[format];
-    const currentFormatIndex = formatIndex[format]++;
+  for (const { format, id, config } of rsbuildConfigWithLibInfo) {
+    const libId = typeof id === 'string' ? id : composeDefaultId(format);
+    environments[libId] = config;
+  }
 
-    environments[
-      currentFormatCount === 1 ? format : `${format}${currentFormatIndex}`
-    ] = config;
+  const conflictIds = usedIds.filter(
+    (id, index) => usedIds.indexOf(id) !== index,
+  );
+  if (conflictIds.length) {
+    throw new Error(
+      `The following ids are duplicated: ${conflictIds.map((id) => `"${id}"`).join(', ')}. Please change the "lib.id" to be unique.`,
+    );
   }
 
   return environments;

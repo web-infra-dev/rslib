@@ -52,7 +52,7 @@ export function runCli(): void {
 
   buildCommand
     .option(
-      '--lib <name>',
+      '--lib <id>',
       'build the specified library (may be repeated)',
       repeatableOption,
     )
@@ -75,7 +75,7 @@ export function runCli(): void {
   inspectCommand
     .description('inspect the Rsbuild / Rspack configs of Rslib projects')
     .option(
-      '--lib <name>',
+      '--lib <id>',
       'inspect the specified library (may be repeated)',
       repeatableOption,
     )
