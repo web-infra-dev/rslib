@@ -48,6 +48,7 @@ class EntryChunkPlugin {
 
   apply(compiler: Rspack.Compiler) {
     compiler.hooks.entryOption.tap(PLUGIN_NAME, (_context, entries) => {
+      console.time('entryOption');
       for (const name in entries) {
         const entry = (entries as Rspack.EntryStaticNormalized)[name];
         if (!entry) continue;
@@ -85,9 +86,11 @@ class EntryChunkPlugin {
           this.reactDirectives[name] = reactDirective;
         }
       }
+      console.timeEnd('entryOption');
     });
 
     compiler.hooks.thisCompilation.tap(PLUGIN_NAME, (compilation) => {
+      console.time('chunkAsset');
       compilation.hooks.chunkAsset.tap(PLUGIN_NAME, (chunk, filename) => {
         const isJs = JS_EXTENSIONS_PATTERN.test(filename);
         if (!isJs) return;
@@ -105,9 +108,11 @@ class EntryChunkPlugin {
           this.reactDirectives[filename] = reactDirective;
         }
       });
+      console.timeEnd('chunkAsset');
     });
 
     compiler.hooks.make.tap(PLUGIN_NAME, (compilation) => {
+      console.time('processAssets');
       compilation.hooks.processAssets.tap(PLUGIN_NAME, (assets) => {
         if (!this.enabledImportMetaUrlShim) return;
 
@@ -168,12 +173,15 @@ class EntryChunkPlugin {
           }
         },
       );
+      console.timeEnd('processAssets');
     });
 
     compiler.hooks.assetEmitted.tap(PLUGIN_NAME, (file, { targetPath }) => {
+      console.time('assetEmitted');
       if (this.shebangInjectedAssets.has(file)) {
         chmodSync(targetPath, this.shebangChmod);
       }
+      console.timeEnd('assetEmitted');
     });
   }
 }
