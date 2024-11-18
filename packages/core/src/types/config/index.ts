@@ -80,59 +80,68 @@ export type Redirect = {
 export interface LibConfig extends RsbuildConfig {
   /**
    * The unique identifier of the library.
-   * @default undefined
+   * @defaultValue `undefined`
+   * @see {@link https://lib.rsbuild.dev/config/lib/id}
    */
   id?: string;
   /**
    * Output format for the generated JavaScript files.
-   * @default undefined
+   * @defaultValue `undefined`
+   * @see {@link https://lib.rsbuild.dev/config/lib/format}
    */
   format?: Format;
   /**
    * Whether to bundle the library.
-   * @default true
+   * @defaultValue `true`
+   * @see {@link https://lib.rsbuild.dev/config/lib/bundle}
    */
   bundle?: boolean;
   /**
-   * Whether to automatically set the file extension based on the `format` option in the JavaScript output files.
-   * @default true
+   * Whether to automatically set the file extension based on {@link format} option in the JavaScript output files.
+   * @defaultValue `true`
+   * @see {@link https://lib.rsbuild.dev/config/lib/auto-extension}
    */
   autoExtension?: boolean;
   /**
    * Whether to automatically externalize dependencies of different dependency types and do not bundle them.
-   * @default true
+   * @defaultValue `true`
+   * @see {@link https://lib.rsbuild.dev/config/lib/auto-external}
    */
   autoExternal?: AutoExternal;
   /**
-   * Configure the redirect of the import paths, applicable when `bundle: false`.
-   * @default {}
+   * Configure the redirect of the import paths, applicable {@link bundle} is set to `false`.
+   * @defaultValue `{}`
+   * @see {@link https://lib.rsbuild.dev/config/lib/redirect}
    */
   redirect?: Redirect;
   /**
    * Configure the syntax to which JavaScript and CSS will be downgraded.
-   * Support ECMAScript version and browserslist query.
-   * @default 'esnext'
+   * @defaultValue `'esnext'`
+   * @see {@link https://lib.rsbuild.dev/config/lib/syntax}
    */
   syntax?: Syntax;
   /**
    * Whether to import SWC helper functions from `@swc/helpers` instead of inlining them.
-   * @default false
+   * @defaultValue `false`
+   * @see {@link https://lib.rsbuild.dev/config/lib/external-helpers}
    */
   externalHelpers?: boolean;
   /**
    * Inject content into the top of each JS, CSS or DTS file.
-   * @default {}
+   * @defaultValue `{}`
+   * @see {@link https://lib.rsbuild.dev/config/lib/banner}
    */
   banner?: BannerAndFooter;
   /**
    * Inject content into the bottom of each JS, CSS or DTS file.
-   * @default {}
+   * @defaultValue `{}`
+   * @see {@link https://lib.rsbuild.dev/config/lib/footer}
    */
   footer?: BannerAndFooter;
   /**
    * Configure the shims for CommonJS and ESM output.
    *
-   * @default
+   * @defaultValue
    * ```js
    * const defaultShims = {
    *   cjs: {
@@ -145,16 +154,19 @@ export interface LibConfig extends RsbuildConfig {
    *   },
    * };
    * ```
+   * @see {@link https://lib.rsbuild.dev/config/lib/shims}
    */
   shims?: Shims;
   /**
    * Configure the generation of the TypeScript declaration files.
-   * @default false
+   * @defaultValue `false`
+   * @see {@link https://lib.rsbuild.dev/config/lib/dts}
    */
   dts?: Dts;
   /**
    * The export name of the UMD bundle.
-   * @default undefined
+   * @defaultValue `undefined`
+   * @see {@link https://lib.rsbuild.dev/config/lib/umd-name}
    */
   umdName?: string;
 }
