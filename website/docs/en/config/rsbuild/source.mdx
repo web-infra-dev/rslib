@@ -1,1 +1,91 @@
+import { Badge } from '@theme';
+import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
+
 # source
+
+Configure the source code parsing and compilation options.
+
+## source.aliasStrategy <RsbuildDocBadge path="/config/source/alias-strategy" text="source.aliasStrategy" />
+
+`source.aliasStrategy` is used to control the priority between the `paths` option in `tsconfig.json` and the `alias` option in the bundler.
+
+## source.alias <RsbuildDocBadge path="/config/source/alias" text="source.alias" />
+
+Create aliases to import or require certain modules, same as the [resolve.alias](https://rspack.dev/config/resolve#resolvealias) config of Rspack.
+
+It is important to note that `source.alias` differs from [output.externals](/config/rsbuild/output#externals) in the following ways:
+
+- The `source.alias` is used when bundling target code into the product (when [lib.bundle](/config/lib/bundle) is set to `true`). It allows you to replace the target module you want to include in the output with another module.
+
+  For example, if you want to replace `lodash` with `lodash-es` in a bundled CLI application, you can configure it as follows:
+
+  ```ts title="rslib.config.ts"
+  export default {
+    // ...
+    source: {
+      alias: {
+        lodash: 'lodash-es',
+      },
+    },
+  };
+  ```
+
+  All `lodash` modules imported in the source code will be mapped to `lodash-es` and be bundled into the output.
+
+- `output.externals` is used to handle alias mapping for externalized modules. Externalized modules are not included in the bundle; instead, they are imported from external sources at runtime.
+
+  For example, if you want to replace `react` and `react-dom` with `preact/compat` in the bundle, you can configure it as follows:
+
+  ```ts title="rslib.config.ts"
+  export default {
+    // ...
+    source: {
+      alias: {
+        react: 'preact/compat',
+        'react-dom': 'preact/compat',
+      },
+    },
+  };
+  ```
+
+  Now, the code `import { useState } from 'react'` will be replaced with `import { useState } from 'preact/compat'`.
+
+## source.assetsInclude <RsbuildDocBadge path="/config/source/assets-include" text="source.include" />
+
+Include additional files that should be treated as static assets.
+
+## source.decorators <RsbuildDocBadge path="/config/source/decorators" text="source.decorators" />
+
+Used to configure the decorators syntax.
+
+## source.define <RsbuildDocBadge path="/config/source/define" text="source.define" />
+
+Replaces variables in your code with other values or expressions at compile time. This can be useful for allowing different behavior between development builds and production builds.
+
+## source.entry <RsbuildDocBadge path="/config/source/entry" text="source.entry" />
+
+Used to set the entry modules for building.
+
+:::info
+Check out the [lib.bundle](/config/lib/bundle#set-entry) to learn how to set entry for bundle and bundleless project.
+:::
+
+## source.exclude <RsbuildDocBadge path="/config/source/exclude" text="source.exclude" />
+
+Specifies JavaScript/TypeScript files that do not need to be compiled. The usage is consistent with [Rule.exclude](https://rspack.dev/config/module#ruleexclude) in Rspack, which supports passing in strings or regular expressions to match the module path.
+
+## source.include <RsbuildDocBadge path="/config/source/include" text="source.include" />
+
+The `source.include` is used to specify additional JavaScript files that need to be compiled.
+
+{/* ## source.preEntry <RsbuildDocBadge path="/config/source/pre-entry" text="source.preEntry" /> */}
+
+{/* Add a script before the entry file of each page. This script will be executed before the page code. It can be used to execute global logics, such as injecting polyfills, setting global styles, etc. */}
+
+## source.transformImport <RsbuildDocBadge path="/config/source/transform-import" text="source.transformImport" />
+
+Transform the import path, which can be used to modularly import the subpath of third-party packages. The functionality is similar to [babel-plugin-import](https://npmjs.com/package/babel-plugin-import).
+
+## source.tsconfigPath <RsbuildDocBadge path="/config/source/tsconfig-path" text="source.tsconfigPath" />
+
+Configure a custom tsconfig.json file path to use, can be a relative or absolute path.
