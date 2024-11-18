@@ -172,6 +172,21 @@ importers:
         specifier: ^5.6.3
         version: 5.6.3
 
+  examples/preact-component-bundle-false:
+    devDependencies:
+      '@rsbuild/plugin-preact':
+        specifier: ^1.2.0
+        version: 1.2.0(@rsbuild/core@1.1.3)(preact@10.24.3)
+      '@rsbuild/plugin-sass':
+        specifier: ^1.1.1
+        version: 1.1.1(@rsbuild/core@1.1.3)
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      preact:
+        specifier: ^10.24.3
+        version: 10.24.3
+
   examples/react-component-bundle:
     devDependencies:
       '@rsbuild/plugin-react':
@@ -1687,6 +1702,14 @@ packages:
   '@polka/url@1.0.0-next.28':
     resolution: {integrity: sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==}
 
+  '@prefresh/core@1.5.3':
+    resolution: {integrity: sha512-nDzxj0tA1/M6APNAWqaxkZ+3sTdPHESa+gol4+Bw7rMc2btWdkLoNH7j9rGhUb8SThC0Vz0VoXtq+U+9azGLHg==}
+    peerDependencies:
+      preact: ^10.0.0
+
+  '@prefresh/utils@1.2.0':
+    resolution: {integrity: sha512-KtC/fZw+oqtwOLUFM9UtiitB0JsVX0zLKNyRTA332sqREqSALIIQQxdUCS1P3xR/jT1e2e8/5rwH6gdcMLEmsQ==}
+
   '@remix-run/router@1.21.0':
     resolution: {integrity: sha512-xfSkCAchbdG5PnbrKqFWwia4Bi61nH+wm8wLEqfHDyp7Y3dZzgqS2itV8i4gAq9pC2HsTpwyBC6Ds8VHZ96JlA==}
     engines: {node: '>=14.0.0'}
@@ -1803,6 +1826,11 @@ packages:
       '@rsbuild/core':
         optional: true
 
+  '@rsbuild/plugin-preact@1.2.0':
+    resolution: {integrity: sha512-f1ZXXNjDqoNfuHb+IL8aqJnV6Vh+BHB8RoHkjp1hOwqRYpfPYbSA1Gb8Hp5L37TXn94nX9RrZiShFg7iAiUR1Q==}
+    peerDependencies:
+      '@rsbuild/core': 1.x
+
   '@rsbuild/plugin-react@1.0.6':
     resolution: {integrity: sha512-k2VS7nvNm74DlVQROK+w+Ua1j60n3qSnVFva8zjmj6uakLCxxp85aRwfEHzaVP/YdDLffweypROuQPYvTZ57ew==}
     peerDependencies:
@@ -1904,6 +1932,12 @@ packages:
   '@rspack/lite-tapable@1.0.1':
     resolution: {integrity: sha512-VynGOEsVw2s8TAlLf/uESfrgfrq2+rcXB1muPJYBWbsm1Oa6r5qVQhjA5ggM6z/coYPrsVMgovl3Ff7Q7OCp1w==}
     engines: {node: '>=16.0.0'}
+
+  '@rspack/plugin-preact-refresh@1.1.1':
+    resolution: {integrity: sha512-ilJKprdF71SK8dCLsyr2sSdM/fiwg98LQ+2/7t63NbfR2RU/PKXSLqn6L+qPCzzmhSrRudrntqsbwD7RxWzpLg==}
+    peerDependencies:
+      '@prefresh/core': ^1.5.0
+      '@prefresh/utils': ^1.2.0
 
   '@rspack/plugin-react-refresh@1.0.0':
     resolution: {integrity: sha512-WvXkLewW5G0Mlo5H1b251yDh5FFiH4NDAbYlFpvFjcuXX2AchZRf9zdw57BDE/ADyWsJgA8kixN/zZWBTN3iYA==}
@@ -2199,11 +2233,17 @@ packages:
     peerDependencies:
       '@svgr/core': '*'
 
+  '@swc/counter@0.1.3':
+    resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
+
   '@swc/helpers@0.5.13':
     resolution: {integrity: sha512-UoKGxQ3r5kYI9dALKJapMmuK+1zWM/H17Z1+iwnNmzcJRnfFuevZs375TA5rW31pu4BS4NoSy1fRsexDXfWn5w==}
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
+
+  '@swc/plugin-prefresh@5.0.0':
+    resolution: {integrity: sha512-lldjXy40xr8rGdufo7z1GMVFOTOln7349OwWRaCvzknyv8Pm6ZFu1AYJLZM/GwYwEs27OGIbUoTXL6Xm4v0Mlg==}
 
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
@@ -4954,6 +4994,9 @@ packages:
     resolution: {integrity: sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==}
     engines: {node: ^10 || ^12 || >=14}
 
+  preact@10.24.3:
+    resolution: {integrity: sha512-Z2dPnBnMUfyQfSQ+GBdsGa16hz35YmLmtTLhM169uW944hYL6xzTYkJjC07j+Wosz733pMWx0fgON3JNw1jJQA==}
+
   prebundle@1.2.5:
     resolution: {integrity: sha512-Q5MG7i+AqurdHLuit5INkFNsekfA40KAhsqpddDAmIR5NSEVc7sGiSAf7Cmu3OafvkI3QUl4RRTvvjfVP4nqrA==}
     hasBin: true
@@ -7300,6 +7343,12 @@ snapshots:
 
   '@polka/url@1.0.0-next.28': {}
 
+  '@prefresh/core@1.5.3(preact@10.24.3)':
+    dependencies:
+      preact: 10.24.3
+
+  '@prefresh/utils@1.2.0': {}
+
   '@remix-run/router@1.21.0': {}
 
   '@rollup/pluginutils@5.1.3(rollup@4.18.1)':
@@ -7413,6 +7462,16 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.1.3
 
+  '@rsbuild/plugin-preact@1.2.0(@rsbuild/core@1.1.3)(preact@10.24.3)':
+    dependencies:
+      '@prefresh/core': 1.5.3(preact@10.24.3)
+      '@prefresh/utils': 1.2.0
+      '@rsbuild/core': 1.1.3
+      '@rspack/plugin-preact-refresh': 1.1.1(@prefresh/core@1.5.3(preact@10.24.3))(@prefresh/utils@1.2.0)
+      '@swc/plugin-prefresh': 5.0.0
+    transitivePeerDependencies:
+      - preact
+
   '@rsbuild/plugin-react@1.0.6(@rsbuild/core@1.1.3)':
     dependencies:
       '@rsbuild/core': 1.1.3
@@ -7521,6 +7580,11 @@ snapshots:
       '@swc/helpers': 0.5.15
 
   '@rspack/lite-tapable@1.0.1': {}
+
+  '@rspack/plugin-preact-refresh@1.1.1(@prefresh/core@1.5.3(preact@10.24.3))(@prefresh/utils@1.2.0)':
+    dependencies:
+      '@prefresh/core': 1.5.3(preact@10.24.3)
+      '@prefresh/utils': 1.2.0
 
   '@rspack/plugin-react-refresh@1.0.0(react-refresh@0.14.2)':
     dependencies:
@@ -7921,6 +7985,8 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
+  '@swc/counter@0.1.3': {}
+
   '@swc/helpers@0.5.13':
     dependencies:
       tslib: 2.8.1
@@ -7928,6 +7994,10 @@ snapshots:
   '@swc/helpers@0.5.15':
     dependencies:
       tslib: 2.8.1
+
+  '@swc/plugin-prefresh@5.0.0':
+    dependencies:
+      '@swc/counter': 0.1.3
 
   '@trysound/sax@0.2.0': {}
 
@@ -11176,6 +11246,8 @@ snapshots:
       nanoid: 3.3.7
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  preact@10.24.3: {}
 
   prebundle@1.2.5(typescript@5.6.3):
     dependencies:

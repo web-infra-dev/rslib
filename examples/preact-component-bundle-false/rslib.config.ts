@@ -1,28 +1,31 @@
-import { pluginReact } from '@rsbuild/plugin-react';
+import { pluginPreact } from '@rsbuild/plugin-preact';
 import { pluginSass } from '@rsbuild/plugin-sass';
-import { defineConfig } from '@rslib/core';
+import { type LibConfig, defineConfig } from '@rslib/core';
 
 export default defineConfig({
+  source: {
+    entry: {
+      index: ['./src/**', '!./src/env.d.ts'],
+    },
+  },
   lib: [
     {
-      format: 'esm',
+      bundle: false,
       dts: true,
+      format: 'esm',
       output: {
         distPath: {
           root: './dist/esm',
-          css: '.',
-          cssAsync: '.',
         },
       },
     },
     {
-      format: 'cjs',
+      bundle: false,
       dts: true,
+      format: 'cjs',
       output: {
         distPath: {
           root: './dist/cjs',
-          css: '.',
-          cssAsync: '.',
         },
       },
     },
@@ -30,12 +33,5 @@ export default defineConfig({
   output: {
     target: 'web',
   },
-  plugins: [
-    pluginReact({
-      swcReactOptions: {
-        runtime: 'classic',
-      },
-    }),
-    pluginSass(),
-  ],
+  plugins: [pluginPreact(), pluginSass()],
 });
