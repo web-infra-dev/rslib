@@ -51,6 +51,11 @@ If you want to generate bundleless DTS, you can:
 If you want to generate bundle DTS, you can:
 
 - Install `@microsoft/api-extractor` as a development dependency.
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs command="add @microsoft/api-extractor -D" />
+
 - Set `dts: { bundle: true }` in the Rslib configuration file.
 
-More details about DTS configuration, please refer to [lib.dts](/config/dts).
+You can refer to [lib.dts](/config/dts) for more details about DTS configuration.
