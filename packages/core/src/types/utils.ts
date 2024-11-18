@@ -10,3 +10,5 @@ export type PkgJson = {
 export type DeepRequired<T> = Required<{
   [K in keyof T]: T[K] extends Required<T[K]> ? T[K] : DeepRequired<T[K]>;
 }>;
+
+export type ExcludesFalse = <T>(x: T | false | undefined | null) => x is T;

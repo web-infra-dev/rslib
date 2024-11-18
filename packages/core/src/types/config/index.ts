@@ -18,6 +18,12 @@ export type FixedEcmaVersions =
 export type LatestEcmaVersions = 'es2024' | 'esnext';
 export type EcmaScriptVersion = FixedEcmaVersions | LatestEcmaVersions;
 
+export type RsbuildConfigWithLibInfo = {
+  id?: string;
+  format: Format;
+  config: RsbuildConfig;
+};
+
 export type RsbuildConfigOutputTarget = NonNullable<
   RsbuildConfig['output']
 >['target'];
@@ -72,6 +78,11 @@ export type Redirect = {
 };
 
 export interface LibConfig extends RsbuildConfig {
+  /**
+   * The unique identifier of the library.
+   * @default undefined
+   */
+  id?: string;
   /**
    * Output format for the generated JavaScript files.
    * @default undefined

@@ -1,6 +1,10 @@
 import { join } from 'node:path';
 import { describe, expect, test, vi } from 'vitest';
-import { composeCreateRsbuildConfig, loadConfig } from '../src/config';
+import {
+  composeCreateRsbuildConfig,
+  composeRsbuildEnvironments,
+  loadConfig,
+} from '../src/config';
 import type { RslibConfig } from '../src/types/config';
 
 vi.mock('rslog');
@@ -400,5 +404,119 @@ describe('minify', () => {
         "js": false,
       }
     `);
+  });
+});
+
+describe('id', () => {
+  test('default id logic', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+        },
+        {
+          format: 'cjs',
+        },
+        {
+          format: 'esm',
+        },
+        {
+          format: 'umd',
+        },
+        {
+          format: 'esm',
+        },
+      ],
+    };
+
+    const composedRsbuildConfig = await composeRsbuildEnvironments(
+      rslibConfig,
+      process.cwd(),
+    );
+
+    expect(Object.keys(composedRsbuildConfig)).toMatchInlineSnapshot(`
+      [
+        "esm0",
+        "cjs",
+        "esm1",
+        "umd",
+        "esm2",
+      ]
+    `);
+  });
+
+  test('with user specified id', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          id: 'esm1',
+          format: 'esm',
+        },
+        {
+          format: 'cjs',
+        },
+        {
+          format: 'esm',
+        },
+        {
+          id: 'cjs',
+          format: 'umd',
+        },
+        {
+          id: 'esm0',
+          format: 'esm',
+        },
+      ],
+    };
+
+    const composedRsbuildConfig = await composeRsbuildEnvironments(
+      rslibConfig,
+      process.cwd(),
+    );
+    expect(Object.keys(composedRsbuildConfig)).toMatchInlineSnapshot(`
+      [
+        "esm1",
+        "cjs1",
+        "esm2",
+        "cjs",
+        "esm0",
+      ]
+    `);
+  });
+
+  test('do not allow conflicted id', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          id: 'a',
+          format: 'esm',
+        },
+        {
+          format: 'cjs',
+        },
+        {
+          format: 'esm',
+        },
+        {
+          id: 'a',
+          format: 'umd',
+        },
+        {
+          id: 'b',
+          format: 'esm',
+        },
+        {
+          id: 'b',
+          format: 'esm',
+        },
+      ],
+    };
+
+    // await composeRsbuildEnvironments(rslibConfig, process.cwd());
+    await expect(() =>
+      composeRsbuildEnvironments(rslibConfig, process.cwd()),
+    ).rejects.toThrowError(
+      'The following ids are duplicated: "a", "b". Please change the "lib.id" to be unique.',
+    );
   });
 });
