@@ -40,6 +40,7 @@ import type {
   PkgJson,
   Redirect,
   RsbuildConfigOutputTarget,
+  RsbuildConfigWithLibInfo,
   RslibConfig,
   RslibConfigAsyncFn,
   RslibConfigExport,
@@ -1179,12 +1180,6 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     decoratorsConfig,
   );
 }
-
-type RsbuildConfigWithLibInfo = {
-  id?: string;
-  format: Format;
-  config: RsbuildConfig;
-};
 
 export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
