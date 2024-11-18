@@ -15,6 +15,7 @@ function splitFromFirstLine(text: string): [string, string] {
 }
 
 const loader: Rspack.LoaderDefinition = function loader(source) {
+  console.time('entryModuleLoader');
   let result = source;
 
   if (this.resourceQuery === `?${RSLIB_ENTRY_QUERY}`) {
@@ -29,6 +30,8 @@ const loader: Rspack.LoaderDefinition = function loader(source) {
       result = rest2;
     }
   }
+
+  console.timeEnd('entryModuleLoader');
 
   return result;
 };
