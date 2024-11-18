@@ -81,6 +81,7 @@ export interface LibConfig extends RsbuildConfig {
   /**
    * The unique identifier of the library.
    * @defaultValue `undefined`
+   * @see {@link https://lib.rsbuild.dev/config/lib/id}
    */
   id?: string;
   /**
