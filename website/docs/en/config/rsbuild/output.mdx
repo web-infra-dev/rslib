@@ -1,1 +1,103 @@
+import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
+
 # output
+
+Configure the build outputs.
+
+{/* ## output.assetPrefix <RsbuildDocBadge path="/config/output/asset-prefix" text="output.assetPrefix" /> */}
+
+{/* In [production mode](https://rsbuild.dev/config/mode), use this option to set the URL prefix for static assets, such as setting it to a CDN URL. */}
+
+## output.charset <RsbuildDocBadge path="/config/output/charset" text="output.charset" />
+
+The `charset` config allows you to specify the [character encoding](https://developer.mozilla.org/en-US/docs/Glossary/Character_encoding) for output files to ensure they are displayed correctly in different environments.
+
+## output.cleanDistPath <RsbuildDocBadge path="/config/output/clean-dist-path" text="output.cleanDistPath" />
+
+Whether to clean up all files under the output directory before the build starts (the output directory defaults to `dist`).
+
+## output.copy <RsbuildDocBadge path="/config/output/copy" text="output.copy" />
+
+Copies the specified file or directory to the dist directory, implemented based on [rspack.CopyRspackPlugin](https://rspack.dev/plugins/rspack/copy-rspack-plugin).
+
+## output.cssModules <RsbuildDocBadge path="/config/output/css-modules" text="output.cssModules" />
+
+For custom CSS Modules configuration.
+
+## output.dataUriLimit <RsbuildDocBadge path="/config/output/data-uri-limit" text="output.dataUriLimit" />
+
+Set the size threshold to inline static assets such as images and fonts.
+
+## output.distPath <RsbuildDocBadge path="/config/output/dist-path" text="output.distPath" />
+
+Set the directory of the dist files. Rsbuild will output files to the corresponding subdirectory according to the file type.
+
+{/* ## output.emitAssets <RsbuildDocBadge path="/config/output/emit-assets" text="output.emitAssets" /> */}
+
+{/* Control whether to emit static assets such as images, fonts, audio, video, etc. */}
+
+## output.emitCss <RsbuildDocBadge path="/config/output/emit-css" text="output.emitCss" />
+
+Whether to emit CSS to the output bundles.
+
+## output.externals <RsbuildDocBadge path="/config/output/externals" text="output.externals" />
+
+At build time, prevent some `import` dependencies from being packed into bundles in your code, and instead fetch them externally at runtime.
+
+It is important to note that `output.externals` differs from [source.alias](/config/rsbuild/source#sourcealias). Check out [source.alias](/config/rsbuild/source#sourcealias) documentation for more information.
+
+## output.filenameHash <RsbuildDocBadge path="/config/output/filename-hash" text="output.filenameHash" />
+
+Whether to add a hash value to the filename after the production build.
+
+## output.filename <RsbuildDocBadge path="/config/output/filename" text="output.filename" />
+
+Sets the filename of dist files.
+
+{/* ## output.injectStyles <RsbuildDocBadge path="/config/output/inject-styles" text="output.injectStyles" /> */}
+
+{/* Whether to inject styles into DOM. */}
+
+## output.inlineScripts <RsbuildDocBadge path="/config/output/inline-scripts" text="output.inlineScripts" />
+
+Whether to inline output scripts files (.js files) into HTML with `<script>` tags.
+
+## output.inlineStyles <RsbuildDocBadge path="/config/output/inline-styles" text="output.inlineStyles" />
+
+Whether to inline output style files (.css files) into HTML with `<style>` tags.
+
+## output.legalComments <RsbuildDocBadge path="/config/output/legal-comments" text="output.legalComments" />
+
+Configure how to handle the legal comment.
+
+## output.manifest <RsbuildDocBadge path="/config/output/manifest" text="output.manifest" />
+
+Whether to generate a manifest file that contains information of all assets, and the mapping relationship between [entry module](https://rsbuild.dev/config/source/entry) and assets.
+
+## output.minify <RsbuildDocBadge path="/config/output/minify" text="output.minify" />
+
+Configure whether to enable code minification in production mode, or to configure minimizer options.
+
+## output.overrideBrowserslist <RsbuildDocBadge path="/config/output/override-browserslist" text="output.overrideBrowserslist" />
+
+Specifies the range of target browsers that the project is compatible with.
+
+## output.polyfill <RsbuildDocBadge path="/config/output/polyfill" text="output.polyfill" />
+
+Through the `output.polyfill` option, you can control the injection mode of the polyfills.
+
+:::warning
+Rsbuild's `output.polyfill` injects polyfills into the global scope, which can unexpectedly modify global variables for library consumers. For a non-global polyfill solution for browsers, please refer to [Polyfill - Browser](/guide/advanced/output-compatibility#browser).
+:::
+
+## output.sourceMap <RsbuildDocBadge path="/config/output/source-map" text="output.sourceMap" />
+
+Used to set whether to generate source map files, and which format of source map to generate.
+
+## output.target <RsbuildDocBadge path="/config/output/target" text="output.target" />
+
+Setting the build target of Rsbuild.
+
+:::info
+Check out the [Solution](/guide/solution) to learn more about the build target.
+:::
