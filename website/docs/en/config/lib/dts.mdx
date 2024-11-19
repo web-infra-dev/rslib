@@ -1,3 +1,7 @@
+---
+overviewHeaders: [2, 3]
+---
+
 # lib.dts
 
 - **Type:**
@@ -5,9 +9,9 @@
 ```ts
 type Dts =
   | {
-      build?: boolean;
       bundle?: boolean;
       distPath?: string;
+      build?: boolean;
       abortOnError?: boolean;
       autoExtension?: boolean;
     }
@@ -17,3 +21,172 @@ type Dts =
 - **Default:** `undefined`
 
 Configure the generation of the TypeScript declaration files.
+
+## Boolean Type
+
+DTS generation is an optional feature, you can set `dts: true` to enable [bundleless DTS](/guide/advanced/dts#bundleless-dts) generation.
+
+```ts title="rslib.config.ts" {5}
+export default {
+  lib: [
+    {
+      format: 'esm',
+      dts: true,
+    },
+  ],
+};
+```
+
+If you want to disable DTS generation, you can set `dts: false` or do not specify the `dts` option.
+
+```ts title="rslib.config.ts" {5}
+export default {
+  lib: [
+    {
+      format: 'esm',
+      dts: false,
+    },
+  ],
+};
+```
+
+## Object Type
+
+If you want to customize the DTS generation, you can set the `dts` option to an object.
+
+### dts.bundle
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Whether to bundle the DTS files.
+
+#### Example
+
+If you want to [bundle DTS](/guide/advanced/dts#bundle-dts) files, you should:
+
+1. Install `@microsoft/api-extractor` as a development dependency, which is the underlying tool used for bundling DTS files.
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs command="add @microsoft/api-extractor -D" />
+
+2. Set `dts.bundle` to `true`.
+
+```ts title="rslib.config.ts" {5-7}
+export default {
+  lib: [
+    {
+      format: 'esm',
+      dts: {
+        bundle: true,
+      },
+    },
+  ],
+};
+```
+
+::: note
+
+[@microsoft/api-extractor](https://github.com/microsoft/rushstack/tree/main/apps/api-extractor) only supports bundle DTS for single entry. If you want to generate bundle DTS for multiple entries, you can add extra lib configuration in [lib](/config/lib) field to split multiple entries into multiple lib configurations.
+
+:::
+
+#### Handle Third-Party Packages
+
+When we bundle DTS files, we should specify which third-party package types need to be bundled, refer to the [Handle Third-Party Dependencies](/guide/advanced/third-party-deps) documentation for more details about externals related configurations.
+
+### dts.distPath
+
+- **Type:** `string`
+
+The output directory of DTS files.
+
+#### Default Value
+
+The default value follows the priority below:
+
+1. The `dts.distPath` value in the current lib configuration.
+2. The `declarationDir` value in the `tsconfig.json` file.
+3. The [output.distPath.root](/config/rsbuild/output#outputdistpath) value in the current lib configuration.
+
+#### Example
+
+```ts title="rslib.config.ts" {5-7}
+export default {
+  lib: [
+    {
+      format: 'esm',
+      dts: {
+        distPath: './dist-types',
+      },
+    },
+  ],
+};
+```
+
+### dts.build
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Determines whether to generate DTS files while building the project references. This is equivalent to using the `--build` flag with the `tsc` command. See [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html) for more details.
+
+::: note
+
+When this option is enabled, you must explicitly set `declarationDir` or `outDir` in `tsconfig.json` in order to meet the build requirements.
+
+:::
+
+### dts.abortOnError
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Whether to abort the build process when an error occurs during DTS generation.
+
+By default, type errors will cause the build to fail.
+
+When `abortOnError` is set to `false` like below, the build will still succeed even if there are type issues in the code.
+
+```ts title="rslib.config.ts" {5-7}
+export default {
+  lib: [
+    {
+      format: 'esm',
+      dts: {
+        abortOnError: false,
+      },
+    },
+  ],
+};
+```
+
+::: warning
+
+When this configuration is disabled, there is no guarantee that the type files will be generated correctly.
+
+:::
+
+### dts.autoExtension
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Whether to automatically set the DTS file extension based on the [format](/config/lib/format) option.
+
+#### Default Extension
+
+By default that when `dts.autoExtension` is `false`, the DTS file extension will be `.d.ts`.
+
+When `dts.autoExtension` is set to `true`, the DTS file extension will be:
+
+- `.d.ts` with `esm` format and `.d.cts` with `cjs` format when `type: module` in `package.json`.
+
+- `.d.ts` with `cjs` format and `.d.mts` with `esm` format when `type: commonjs` or no `type` field in `package.json`.
+
+::: note
+
+It follows the same logic as [lib.autoExtension](/config/lib/auto-extension), but the default value is different since the DTS file extension may cause some issues with different module resolution strategies.
+
+:::

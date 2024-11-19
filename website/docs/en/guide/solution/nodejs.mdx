@@ -52,9 +52,9 @@ export default defineConfig({
 
 ## Target for Node.js
 
-Rslib set [target](/config/rsbuild/output#target) to `"node"` by default, which is different from the default target of Rsbuild.
+Rslib set [target](/config/rsbuild/output#outputtarget) to `"node"` by default, which is different from the default target of Rsbuild.
 
-Rslib adjusts many configurations for Node.js. For example, [output.externals](/config/rsbuild/output#target) will exclude built-in Node.js modules, and [shims](/config/lib/shims) will add a shim for `import.meta.url` in CJS output by default.
+Rslib adjusts many configurations for Node.js. For example, [output.externals](/config/rsbuild/output#outputtarget) will exclude built-in Node.js modules, and [shims](/config/lib/shims) will add a shim for `import.meta.url` in CJS output by default.
 
 ### Externals
 
