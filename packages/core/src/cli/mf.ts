@@ -1,20 +1,28 @@
 import { createRsbuild, mergeRsbuildConfig } from '@rsbuild/core';
-import { composeCreateRsbuildConfig } from './config';
-
 import type { RsbuildConfig, RsbuildInstance } from '@rsbuild/core';
-import type { RslibConfig } from './types';
+import { composeCreateRsbuildConfig } from '../config';
+import type { RslibConfig } from '../types';
+import { getAbsolutePath } from '../utils/helper';
+import type { CommonOptions } from './commands';
 
 export async function startMFDevServer(
   config: RslibConfig,
+  options: Pick<CommonOptions, 'root'> = {},
 ): Promise<RsbuildInstance | undefined> {
-  const rsbuildInstance = await initMFRsbuild(config);
+  const cwd = process.cwd();
+  options.root = options.root ? getAbsolutePath(cwd, options.root) : cwd;
+  const rsbuildInstance = await initMFRsbuild(config, options.root);
   return rsbuildInstance;
 }
 
 async function initMFRsbuild(
   rslibConfig: RslibConfig,
+  root: string,
 ): Promise<RsbuildInstance | undefined> {
-  const rsbuildConfigObject = await composeCreateRsbuildConfig(rslibConfig);
+  const rsbuildConfigObject = await composeCreateRsbuildConfig(
+    rslibConfig,
+    root,
+  );
   const mfRsbuildConfig = rsbuildConfigObject.find(
     (config) => config.format === 'mf',
   );

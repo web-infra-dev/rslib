@@ -205,7 +205,9 @@ export async function rslibBuild({
   });
   modifyConfig?.(rslibConfig);
   process.chdir(cwd);
-  const rsbuildInstance = await build(rslibConfig);
+  const rsbuildInstance = await build(rslibConfig, {
+    root: cwd,
+  });
   return { rsbuildInstance, rslibConfig };
 }
 

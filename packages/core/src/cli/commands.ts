@@ -1,15 +1,13 @@
-import { type RsbuildMode, createRsbuild } from '@rsbuild/core';
+import type { RsbuildMode } from '@rsbuild/core';
 import { type Command, program } from 'commander';
-import { build } from '../build';
-import {
-  composeRsbuildEnvironments,
-  loadConfig,
-  pruneEnvironments,
-} from '../config';
-import { startMFDevServer } from '../mf';
 import { logger } from '../utils/logger';
+import { build } from './build';
+import { getRslibConfig } from './init';
+import { inspect } from './inspect';
+import { startMFDevServer } from './mf';
 
 export type CommonOptions = {
+  root?: string;
   config?: string;
   envMode?: string;
   lib?: string[];
@@ -20,8 +18,8 @@ export type BuildOptions = CommonOptions & {
 };
 
 export type InspectOptions = CommonOptions & {
-  mode: RsbuildMode;
-  output: string;
+  mode?: RsbuildMode;
+  output?: string;
   verbose?: boolean;
 };
 
@@ -30,6 +28,10 @@ const applyCommonOptions = (command: Command) => {
     .option(
       '-c --config <config>',
       'specify the configuration file, can be a relative or absolute path',
+    )
+    .option(
+      '-r --root <root>',
+      'specify the project root directory, can be an absolute path or a path relative to cwd',
     )
     .option(
       '--env-mode <mode>',
@@ -60,11 +62,12 @@ export function runCli(): void {
     .description('build the library for production')
     .action(async (options: BuildOptions) => {
       try {
-        const rslibConfig = await loadConfig({
-          path: options.config,
-          envMode: options.envMode,
+        const { root, rslibConfig } = await getRslibConfig(options);
+        await build(rslibConfig, {
+          root,
+          lib: options.lib,
+          watch: options.watch,
         });
-        await build(rslibConfig, options);
       } catch (err) {
         logger.error('Failed to build.');
         logger.error(err);
@@ -88,21 +91,13 @@ export function runCli(): void {
     .action(async (options: InspectOptions) => {
       try {
         // TODO: inspect should output Rslib's config
-        const rslibConfig = await loadConfig({
-          path: options.config,
-          envMode: options.envMode,
-        });
-        const environments = await composeRsbuildEnvironments(rslibConfig);
-        const rsbuildInstance = await createRsbuild({
-          rsbuildConfig: {
-            environments: pruneEnvironments(environments, options.lib),
-          },
-        });
-        await rsbuildInstance.inspectConfig({
+        const { root, rslibConfig } = await getRslibConfig(options);
+        await inspect(rslibConfig, {
+          root,
+          lib: options.lib,
           mode: options.mode,
+          output: options.output,
           verbose: options.verbose,
-          outputPath: options.output,
-          writeToDisk: true,
         });
       } catch (err) {
         logger.error('Failed to inspect config.');
@@ -115,11 +110,11 @@ export function runCli(): void {
     .description('start Rsbuild dev server of Module Federation format')
     .action(async (options: CommonOptions) => {
       try {
-        const rslibConfig = await loadConfig({
-          path: options.config,
-          envMode: options.envMode,
+        const { root, rslibConfig } = await getRslibConfig(options);
+        // TODO: support lib option in mf dev server
+        await startMFDevServer(rslibConfig, {
+          root,
         });
-        await startMFDevServer(rslibConfig);
       } catch (err) {
         logger.error('Failed to start mf dev.');
         logger.error(err);

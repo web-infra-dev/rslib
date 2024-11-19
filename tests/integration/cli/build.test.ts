@@ -51,4 +51,40 @@ describe('build command', async () => {
       ]
     `);
   });
+
+  test('--config', async () => {
+    await fse.remove(path.join(__dirname, 'dist'));
+    execSync(
+      'npx rslib build --config ./custom-config/rslib.config.custom.ts',
+      {
+        cwd: __dirname,
+      },
+    );
+
+    const files = await globContentJSON(path.join(__dirname, 'dist'));
+    const fileNames = Object.keys(files).sort();
+    expect(fileNames).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/cli/dist/custom/index.cjs",
+        "<ROOT>/tests/integration/cli/dist/custom/index.js",
+      ]
+    `);
+  });
+
+  test('--root', async () => {
+    await fse.remove(path.join(__dirname, 'dist'));
+    console.log('__dirname: ', __dirname);
+    execSync('npx rslib build --root custom-root', {
+      cwd: __dirname,
+    });
+
+    const files = await globContentJSON(path.join(__dirname, 'dist'));
+    const fileNames = Object.keys(files).sort();
+    expect(fileNames).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/cli/dist/root/index.cjs",
+        "<ROOT>/tests/integration/cli/dist/root/index.js",
+      ]
+    `);
+  });
 });

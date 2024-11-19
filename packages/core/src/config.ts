@@ -1084,12 +1084,11 @@ const composeExternalHelpersConfig = (
   return defaultConfig;
 };
 
-async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
+async function composeLibRsbuildConfig(config: LibConfig, root: string) {
   checkMFPlugin(config);
-  const rootPath = dirname(configPath);
-  const pkgJson = readPackageJson(rootPath);
+  const pkgJson = readPackageJson(root);
   const { compilerOptions } = await loadTsconfig(
-    rootPath,
+    root,
     config.source?.tsconfigPath,
   );
   const cssModulesAuto = config.output?.cssModules?.auto ?? true;
@@ -1148,7 +1147,7 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
   const { entryConfig, lcp } = await composeEntryConfig(
     config.source?.entry,
     config.bundle,
-    dirname(configPath),
+    root,
     cssModulesAuto,
   );
   const cssConfig = composeCssConfig(lcp, config.bundle);
@@ -1192,10 +1191,9 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
 
 export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
-  path?: string,
+  root: string,
 ): Promise<RsbuildConfigWithLibInfo[]> {
   const constantRsbuildConfig = await createConstantRsbuildConfig();
-  const configPath = path ?? rslibConfig._privateMeta?.configFilePath!;
   const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
 
   if (!libConfigsArray) {
@@ -1212,10 +1210,7 @@ export async function composeCreateRsbuildConfig(
 
     // Merge the configuration of each environment based on the shared Rsbuild
     // configuration and Lib configuration in the settings.
-    const libRsbuildConfig = await composeLibRsbuildConfig(
-      userConfig,
-      configPath,
-    );
+    const libRsbuildConfig = await composeLibRsbuildConfig(userConfig, root);
 
     // Reset certain fields because they will be completely overridden by the upcoming merge.
     // We don't want to retain them in the final configuration.
@@ -1271,11 +1266,11 @@ export async function composeCreateRsbuildConfig(
 
 export async function composeRsbuildEnvironments(
   rslibConfig: RslibConfig,
-  path?: string,
+  root: string,
 ): Promise<Record<string, EnvironmentConfig>> {
   const rsbuildConfigWithLibInfo = await composeCreateRsbuildConfig(
     rslibConfig,
-    path,
+    root,
   );
 
   // User provided ids should take precedence over generated ids.
