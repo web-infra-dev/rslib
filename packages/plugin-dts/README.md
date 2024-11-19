@@ -8,7 +8,7 @@ An Rsbuild plugin to emit declaration files for TypeScript which is built-in in 
 
 ## Using in Rslib
 
-Read [DTS](https://lib.rsbuild.dev/guide/advanced/dts#dts) and [lib.dts](https://lib.rsbuild.dev/config/lib/dts) for more details.
+Read [DTS](https://lib.rsbuild.dev/guide/advanced/dts) and [lib.dts](https://lib.rsbuild.dev/config/lib/dts) for more details.
 
 ## Using in Rsbuild
 

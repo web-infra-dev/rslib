@@ -13,7 +13,7 @@ Configure the source code parsing and compilation options.
 
 Create aliases to import or require certain modules, same as the [resolve.alias](https://rspack.dev/config/resolve#resolvealias) config of Rspack.
 
-It is important to note that `source.alias` differs from [output.externals](/config/rsbuild/output#externals) in the following ways:
+It is important to note that `source.alias` differs from [output.externals](/config/rsbuild/output#outputexternals) in the following ways:
 
 - The `source.alias` is used when bundling target code into the product (when [lib.bundle](/config/lib/bundle) is set to `true`). It allows you to replace the target module you want to include in the output with another module.
 

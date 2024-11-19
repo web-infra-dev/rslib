@@ -21,7 +21,7 @@ Then select `React` when prompted to "Select template".
 
 ## Use Rslib in an Existing Project
 
-To develop a React library, you need to set the [target](/config/rsbuild/output#target) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default, which differs from the default target of Rsbuild.
+To develop a React library, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default, which differs from the default target of Rsbuild.
 
 To compile React (JSX and TSX), you need to register the Rsbuild [React Plugin](https://rsbuild.dev/plugins/list/plugin-react). The plugin will automatically add the necessary configuration for React builds.
 
