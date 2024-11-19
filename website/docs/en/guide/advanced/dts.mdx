@@ -50,14 +50,16 @@ If you want to generate bundleless DTS, you can:
 
 If you want to generate bundle DTS, you can:
 
-- Install `@microsoft/api-extractor` as a development dependency.
+1. Install `@microsoft/api-extractor` as a development dependency, which is the underlying tool used for bundling DTS files.
 
 import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @microsoft/api-extractor -D" />
 
-- Set `dts: { bundle: true }` in the Rslib configuration file.
+2. Set `dts: { bundle: true }` in the Rslib configuration file.
+
+::: tip
 
 You can refer to [lib.dts](/config/lib/dts) for more details about DTS configuration.
 
-- Specify which third-party package types need to be bundled, refer to the [Handle Third-Party Dependencies](/guide/advanced/third-party-deps) documentation for more details about externals related configurations.
+:::

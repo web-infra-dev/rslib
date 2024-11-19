@@ -4,7 +4,7 @@
 
 # rsbuild-plugin-dts
 
-An Rsbuild plugin to emit declaration files for TypeScript which is built-in in Rslib.
+An [Rsbuild plugin](https://www.npmjs.com/package/rsbuild-plugin-dts) to emit declaration files for TypeScript which is built-in in Rslib.
 
 ## Using in Rslib
 
@@ -18,7 +18,7 @@ Install:
 npm add rsbuild-plugin-dts -D
 ```
 
-Add plugin to your `rsbuild.config.ts`:
+Add plugin to `rsbuild.config.ts`:
 
 ```ts
 // rsbuild.config.ts
@@ -38,15 +38,15 @@ export default {
 
 Whether to bundle the DTS files.
 
-If you want to generate [bundle DTS](https://lib.rsbuild.dev/guide/advanced/dts#bundle-dts) files, you should:
+If you want to [bundle DTS](https://lib.rsbuild.dev/guide/advanced/dts#bundle-dts) files, you should:
 
-- Install `@microsoft/api-extractor` as a development dependency.
+1. Install `@microsoft/api-extractor` as a development dependency, which is the underlying tool used for bundling DTS files.
 
 ```bash
 npm add @microsoft/api-extractor -D
 ```
 
-- Set `bundle` to `true`.
+2. Set `bundle` to `true`.
 
 ```js
 pluginDts({
@@ -75,7 +75,7 @@ pluginDts({
 - **Type:** `boolean`
 - **Default:** `false`
 
-Determines whether to generate DTS files while building the project's references. This is equivalent to using the `--build` flag with the `tsc` command.
+Determines whether to generate DTS files while building the project references. This is equivalent to using the `--build` flag with the `tsc` command. See [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html) for more details.
 
 When this option is enabled, you must explicitly set `declarationDir` or `outDir` in `tsconfig.json` in order to meet the build requirements.
 
@@ -86,7 +86,9 @@ When this option is enabled, you must explicitly set `declarationDir` or `outDir
 
 Whether to abort the build process when an error occurs during DTS generation.
 
-By default, type errors will cause the build to fail. When `abortOnError` is set to `false`, the build will still succeed even if there are type issues in the code.
+By default, type errors will cause the build to fail.
+
+When `abortOnError` is set to `false`, the build will still succeed even if there are type issues in the code.
 
 ```js
 pluginDts({
@@ -153,13 +155,13 @@ pluginDts({
 - **Type:** `string`
 - **Default:** `undefined`
 
+Inject content into the bottom of each DTS file.
+
 ```js
 pluginDts({
   footer: '/** @footer */',
 });
 ```
-
-Inject content into the bottom of each DTS file.
 
 ## Contributing
 
