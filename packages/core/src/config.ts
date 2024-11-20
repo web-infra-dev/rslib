@@ -730,16 +730,24 @@ const composeAutoExtensionConfig = (
     autoExtension,
   });
 
-  return {
-    config: {
-      output: {
-        filename: {
-          js: `[name]${jsExtension}`,
-          ...config.output?.filename,
-        },
+  const updatedConfig: RsbuildConfig = {
+    output: {
+      filename: {
+        js: `[name]${jsExtension}`,
+        ...config.output?.filename,
       },
     },
-    jsExtension,
+  };
+
+  const updatedJsExtension =
+    typeof updatedConfig.output?.filename?.js === 'string' &&
+    updatedConfig.output?.filename?.js
+      ? extname(updatedConfig.output.filename.js)
+      : jsExtension;
+
+  return {
+    config: updatedConfig,
+    jsExtension: updatedJsExtension,
     dtsExtension,
   };
 };
@@ -934,6 +942,7 @@ const composeBundleConfig = (
                   return callback();
                 }
               } else {
+                // TODO: add redirect.extension option
                 request = `${request}${jsExtension}`;
               }
             }
