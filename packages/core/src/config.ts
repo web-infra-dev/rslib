@@ -685,7 +685,7 @@ const composeExternalsConfig = (
 
   const externalsTypeMap = {
     esm: 'module-import',
-    cjs: 'commonjs',
+    cjs: 'commonjs-import',
     umd: 'umd',
     // If use 'var', when projects import an external package like '@pkg', this will cause a syntax error such as 'var pkg = @pkg'.
     // If use 'umd', the judgement conditions may be affected by other packages that define variables like 'define'.

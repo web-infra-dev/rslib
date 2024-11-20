@@ -66,3 +66,11 @@ test('should get warn when use require in ESM', async () => {
 
   restore();
 });
+
+test('require ESM from CJS', async () => {
+  const fixturePath = join(__dirname, 'node');
+  const { entryFiles } = await buildAndGetResults({ fixturePath });
+  const baz = (await import(entryFiles.cjs)).baz;
+  const bazValue = await baz();
+  expect(bazValue).toBe('baz');
+});
