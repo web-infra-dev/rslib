@@ -193,10 +193,7 @@ describe('Should compose create Rsbuild config correctly', () => {
         },
       },
     };
-    const composedRsbuildConfig = await composeCreateRsbuildConfig(
-      rslibConfig,
-      process.cwd(),
-    );
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
     expect(composedRsbuildConfig).toMatchSnapshot();
   });
 });
@@ -211,10 +208,7 @@ describe('syntax', () => {
       ],
     };
 
-    const composedRsbuildConfig = await composeCreateRsbuildConfig(
-      rslibConfig,
-      process.cwd(),
-    );
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
       composedRsbuildConfig[0].config.output?.overrideBrowserslist,
@@ -237,10 +231,7 @@ describe('syntax', () => {
       },
     };
 
-    const composedRsbuildConfig = await composeCreateRsbuildConfig(
-      rslibConfig,
-      process.cwd(),
-    );
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
       composedRsbuildConfig[0].config.output?.overrideBrowserslist,
@@ -268,10 +259,7 @@ describe('syntax', () => {
       },
     };
 
-    const composedRsbuildConfig = await composeCreateRsbuildConfig(
-      rslibConfig,
-      process.cwd(),
-    );
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
       composedRsbuildConfig[0].config.output?.overrideBrowserslist,
@@ -292,10 +280,7 @@ describe('syntax', () => {
       ],
     };
 
-    const composedRsbuildConfig = await composeCreateRsbuildConfig(
-      rslibConfig,
-      process.cwd(),
-    );
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
       composedRsbuildConfig[0].config.output?.overrideBrowserslist,
@@ -323,10 +308,7 @@ describe('minify', () => {
       ],
     };
 
-    const composedRsbuildConfig = await composeCreateRsbuildConfig(
-      rslibConfig,
-      process.cwd(),
-    );
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
       composedRsbuildConfig[0].config.output?.minify,
@@ -383,10 +365,7 @@ describe('minify', () => {
       },
     };
 
-    const composedRsbuildConfig = await composeCreateRsbuildConfig(
-      rslibConfig,
-      process.cwd(),
-    );
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
       composedRsbuildConfig[0].config.output?.minify,
@@ -429,10 +408,7 @@ describe('id', () => {
       ],
     };
 
-    const composedRsbuildConfig = await composeRsbuildEnvironments(
-      rslibConfig,
-      process.cwd(),
-    );
+    const composedRsbuildConfig = await composeRsbuildEnvironments(rslibConfig);
 
     expect(Object.keys(composedRsbuildConfig)).toMatchInlineSnapshot(`
       [
@@ -469,10 +445,7 @@ describe('id', () => {
       ],
     };
 
-    const composedRsbuildConfig = await composeRsbuildEnvironments(
-      rslibConfig,
-      process.cwd(),
-    );
+    const composedRsbuildConfig = await composeRsbuildEnvironments(rslibConfig);
     expect(Object.keys(composedRsbuildConfig)).toMatchInlineSnapshot(`
       [
         "esm1",
@@ -512,9 +485,8 @@ describe('id', () => {
       ],
     };
 
-    // await composeRsbuildEnvironments(rslibConfig, process.cwd());
     await expect(() =>
-      composeRsbuildEnvironments(rslibConfig, process.cwd()),
+      composeRsbuildEnvironments(rslibConfig),
     ).rejects.toThrowError(
       'The following ids are duplicated: "a", "b". Please change the "lib.id" to be unique.',
     );
