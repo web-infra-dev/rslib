@@ -9,9 +9,9 @@ export async function build(
   options: Pick<BuildOptions, 'root' | 'lib' | 'watch'> = {},
 ): Promise<RsbuildInstance> {
   const cwd = process.cwd();
-  options.root = options.root ? getAbsolutePath(cwd, options.root) : cwd;
+  const root = options.root ? getAbsolutePath(cwd, options.root) : cwd;
 
-  const environments = await composeRsbuildEnvironments(config, options.root);
+  const environments = await composeRsbuildEnvironments(config, root);
   const rsbuildInstance = await createRsbuild({
     rsbuildConfig: {
       environments: pruneEnvironments(environments, options.lib),

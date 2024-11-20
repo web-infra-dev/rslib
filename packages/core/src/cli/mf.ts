@@ -10,8 +10,8 @@ export async function startMFDevServer(
   options: Pick<CommonOptions, 'root'> = {},
 ): Promise<RsbuildInstance | undefined> {
   const cwd = process.cwd();
-  options.root = options.root ? getAbsolutePath(cwd, options.root) : cwd;
-  const rsbuildInstance = await initMFRsbuild(config, options.root);
+  const root = options.root ? getAbsolutePath(cwd, options.root) : cwd;
+  const rsbuildInstance = await initMFRsbuild(config, root);
   return rsbuildInstance;
 }
 
