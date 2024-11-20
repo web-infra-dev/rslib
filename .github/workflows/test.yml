@@ -158,7 +158,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install Dependencies
-        run: pnpm install && cd ./tests && npx playwright install chromium
+        run: pnpm install && cd ./tests && pnpm playwright install chromium
 
       # only run benchmark in Ubuntu
       - name: Benchmarks (Vitest)

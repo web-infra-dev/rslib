@@ -1,37 +1,28 @@
 # @examples/mf-react-component
 
-This example demonstrates how to use Rslib to build a simple Module Federation React component.
+> [!NOTE]  
+> Check out [README](../README.md) to see how to develop a Rslib MF project in a host app or Storybook.
 
-### Usage
+A React component built with Rslib in the Module Federation format. It includes a Storybook configuration that demonstrates how to develop MF in Storybook.
 
-Dev MF module
+## Usage
 
-1. Start remote module which is loaded by Rslib module.
+### Develop MF module
 
-```
-nx run @examples/mf-remote:dev
-```
-
-2. Start MF dev mode.
-
-```
-nx run @examples/mf-react-component:dev
+```bash
+pnpm run dev
 ```
 
-3. Use Storybook to development component.
+### Build and serve the dist in production mode
 
-```
-nx run @examples/mf-react-component:storybook
-```
+Build the project
 
-Build
-
-```
-nx run @examples/mf-react-component:build
+```bash
+pnpm run build
 ```
 
-Build and Serve dist
+Serve the dist
 
-```
-nx run @examples/mf-react-component:serve
+```bash
+pnpm run serve
 ```

@@ -1,10 +1,14 @@
 {
-  "name": "@examples/mf",
+  "name": "@examples/module-federation",
   "private": true,
   "scripts": {
-    "dev:all": "pnpm dev:host & pnpm serve:lib & pnpm dev:remote",
+    "build:lib": "pnpm --filter mf-react-component run build",
+    "dev:all:host": "pnpm dev:host & pnpm dev:mf & pnpm dev:remote",
+    "dev:all:storybook": "pnpm dev:mf & pnpm dev:storybook & pnpm dev:remote",
     "dev:host": "pnpm --filter mf-host dev",
+    "dev:mf": "pnpm --filter mf-react-component dev",
     "dev:remote": "pnpm --filter mf-remote dev",
+    "dev:storybook": "pnpm --filter mf-react-component storybook",
     "serve:lib": "pnpm --filter mf-react-component run serve"
   }
 }

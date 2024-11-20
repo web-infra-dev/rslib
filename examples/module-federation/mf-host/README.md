@@ -1,16 +1,13 @@
-# Rsbuild Project
+# @examples/mf-host
 
-Module Federation Host Example
+> [!NOTE]  
+> Check out [README](../README.md) to see how to develop a Rslib MF project in a host app or Storybook.
 
-## Setup
+An Rsbuild app that consumes Module Federation remote module.
 
-Install the dependencies:
+## Usage
 
-```bash
-pnpm install
-```
-
-## Get Started
+### Development
 
 Start the dev server:
 
@@ -18,11 +15,15 @@ Start the dev server:
 pnpm dev
 ```
 
+### Build
+
 Build the app for production:
 
 ```bash
 pnpm build
 ```
+
+### Preview
 
 Preview the production build locally:
 
