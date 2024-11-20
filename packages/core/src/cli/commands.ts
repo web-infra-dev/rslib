@@ -2,7 +2,7 @@ import type { RsbuildMode } from '@rsbuild/core';
 import { type Command, program } from 'commander';
 import { logger } from '../utils/logger';
 import { build } from './build';
-import { getRslibConfig } from './init';
+import { loadRslibConfig } from './init';
 import { inspect } from './inspect';
 import { startMFDevServer } from './mf';
 
@@ -62,9 +62,8 @@ export function runCli(): void {
     .description('build the library for production')
     .action(async (options: BuildOptions) => {
       try {
-        const { root, rslibConfig } = await getRslibConfig(options);
+        const rslibConfig = await loadRslibConfig(options);
         await build(rslibConfig, {
-          root,
           lib: options.lib,
           watch: options.watch,
         });
@@ -91,9 +90,8 @@ export function runCli(): void {
     .action(async (options: InspectOptions) => {
       try {
         // TODO: inspect should output Rslib's config
-        const { root, rslibConfig } = await getRslibConfig(options);
+        const rslibConfig = await loadRslibConfig(options);
         await inspect(rslibConfig, {
-          root,
           lib: options.lib,
           mode: options.mode,
           output: options.output,
@@ -110,11 +108,9 @@ export function runCli(): void {
     .description('start Rsbuild dev server of Module Federation format')
     .action(async (options: CommonOptions) => {
       try {
-        const { root, rslibConfig } = await getRslibConfig(options);
+        const rslibConfig = await loadRslibConfig(options);
         // TODO: support lib option in mf dev server
-        await startMFDevServer(rslibConfig, {
-          root,
-        });
+        await startMFDevServer(rslibConfig);
       } catch (err) {
         logger.error('Failed to start mf dev.');
         logger.error(err);

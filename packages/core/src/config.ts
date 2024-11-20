@@ -53,6 +53,7 @@ import {
   calcLongestCommonPath,
   checkMFPlugin,
   color,
+  getAbsolutePath,
   isEmptyObject,
   isObject,
   nodeBuiltInModules,
@@ -1084,11 +1085,16 @@ const composeExternalHelpersConfig = (
   return defaultConfig;
 };
 
-async function composeLibRsbuildConfig(config: LibConfig, root: string) {
+async function composeLibRsbuildConfig(config: LibConfig) {
   checkMFPlugin(config);
-  const pkgJson = readPackageJson(root);
+
+  // Get the absolute path of the root directory to align with Rsbuild's default behavior
+  const rootPath = config.root
+    ? getAbsolutePath(process.cwd(), config.root)
+    : process.cwd();
+  const pkgJson = readPackageJson(rootPath);
   const { compilerOptions } = await loadTsconfig(
-    root,
+    rootPath,
     config.source?.tsconfigPath,
   );
   const cssModulesAuto = config.output?.cssModules?.auto ?? true;
@@ -1147,7 +1153,7 @@ async function composeLibRsbuildConfig(config: LibConfig, root: string) {
   const { entryConfig, lcp } = await composeEntryConfig(
     config.source?.entry,
     config.bundle,
-    root,
+    rootPath,
     cssModulesAuto,
   );
   const cssConfig = composeCssConfig(lcp, config.bundle);
@@ -1191,7 +1197,6 @@ async function composeLibRsbuildConfig(config: LibConfig, root: string) {
 
 export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
-  root: string,
 ): Promise<RsbuildConfigWithLibInfo[]> {
   const constantRsbuildConfig = await createConstantRsbuildConfig();
   const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
@@ -1210,7 +1215,7 @@ export async function composeCreateRsbuildConfig(
 
     // Merge the configuration of each environment based on the shared Rsbuild
     // configuration and Lib configuration in the settings.
-    const libRsbuildConfig = await composeLibRsbuildConfig(userConfig, root);
+    const libRsbuildConfig = await composeLibRsbuildConfig(userConfig);
 
     // Reset certain fields because they will be completely overridden by the upcoming merge.
     // We don't want to retain them in the final configuration.
@@ -1266,12 +1271,9 @@ export async function composeCreateRsbuildConfig(
 
 export async function composeRsbuildEnvironments(
   rslibConfig: RslibConfig,
-  root: string,
 ): Promise<Record<string, EnvironmentConfig>> {
-  const rsbuildConfigWithLibInfo = await composeCreateRsbuildConfig(
-    rslibConfig,
-    root,
-  );
+  const rsbuildConfigWithLibInfo =
+    await composeCreateRsbuildConfig(rslibConfig);
 
   // User provided ids should take precedence over generated ids.
   const usedIds = rsbuildConfigWithLibInfo
