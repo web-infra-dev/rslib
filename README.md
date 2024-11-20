@@ -45,6 +45,10 @@ If you're interested in Rslib, feel free to submit issues or pull requests to he
 
 You can also clone the repository and run the examples in the [examples](https://github.com/web-infra-dev/rslib/tree/main/examples) folder to experience Rslib.
 
+## 📚 Getting Started
+
+To get started with Rslib, see the [Quick Start](https://lib.rsbuild.dev/guide/start/quick-start).
+
 ## 🦀 Links
 
 - [Rspack](https://github.com/web-infra-dev/rspack): A fast Rust-based web bundler.
@@ -74,6 +78,40 @@ Please read the [Contributing Guide](https://github.com/web-infra-dev/rslib/blob
         <img src="https://contrib.rocks/image?repo=web-infra-dev/rslib&columns=16&max=96"><br/><br/>
       </th>
     </tr>
+    <tr>
+      <td>
+        <picture>
+          <source 
+            media="(prefers-color-scheme: dark)" 
+            srcset="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=active&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=dark"
+          />
+          <img 
+            alt="Contributors of web-infra-dev/rslib" 
+            src="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=active&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=light"
+          />
+        </picture>
+      </td>
+      <td rowspan="2">
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=4x7&color_scheme=dark">
+          <img alt="New trends of web-infra-dev" src="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=4x7&color_scheme=light">
+        </picture>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <picture>
+          <source 
+            media="(prefers-color-scheme: dark)" 
+            srcset="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=dark"
+          />
+          <img 
+            alt="Contributors of web-infra-dev/rslib" 
+            src="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=light"
+          />
+        </picture>
+      </td>
+    </tr>
   </table>
 </a>
 
@@ -95,6 +133,8 @@ Some of the implementations of Rslib have drawn inspiration from outstanding pro
 
 - [esbuild](https://github.com/evanw/esbuild), created by [Evan Wallace](https://github.com/evanw).
 - [tsup](https://github.com/egoist/tsup), created by [EGOIST](https://github.com/egoist).
+
+This Rslib website is powered by [Netlify](https://www.netlify.com/).
 
 ## 📖 License
 
