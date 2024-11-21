@@ -14,14 +14,6 @@
 
 Rslib is a library development tool that leverages the well-designed configurations and plugins of [Rsbuild](https://rsbuild.dev), empowering library developers to take advantage of the extensive knowledge and ecosystem of webpack and Rspack.
 
-Rslib provides a comprehensive set of build features for library development, including:
-
-- **Compilation of diverse languages**: TypeScript, JSX, Sass, Less, CSS Modules, Wasm, and more.
-- **Flexible build modes**: Bundle and bundleless options to meet varying needs.
-- **Multiple output formats**: ESM, CJS, and UMD for maximum compatibility.
-- **Declaration file generation**: Including isolated declarations.
-- **Advanced features**: Module Federation, asset compression, PostCSS, Lightning CSS, and more.
-
 ## ✨ Why Rslib?
 
 In the past, we typically did not use webpack or Rspack to build ESM packages because they often included excessive runtime code, making them less friendly to package consumers. However, the community has developed a vast ecosystem around webpack and Rspack, which provides powerful features like tree shaking, code splitting, module federation and more.
@@ -30,20 +22,26 @@ So we decided to create Rslib. It improves the quality of ESM output from Rspack
 
 ![](https://assets.rspack.dev/rsbuild/assets/rspack-stack-layers.png)
 
-## 📍 Roadmap
-
-🚧 Rslib is still in its early stages and under active development. We are building Rslib by working in two main parts:
+Rslib is still in its early stages and under active development. We are building Rslib by working in two main parts:
 
 - [bundler support track](https://github.com/web-infra-dev/rslib/issues/45): Improve the quality of ESM / CJS outputs by contributing to Rspack and webpack.
 - [Rslib features track](https://github.com/web-infra-dev/rslib/issues/46): Develop the core features of Rslib.
 
-> You can click the link above to check the progress of these tasks. The roadmap may change as we move forward.
+The roadmap may change as we move forward.
 
-We plan to complete the core features of Rslib in Q3 2024 and use Rslib to build our npm packages such as Rspack and Rsbuild (dogfooding). And Rslib will have a public stable version in Q4 2024.
+## 🔥 Features
 
-If you're interested in Rslib, feel free to submit issues or pull requests to help us get there faster.
+Rslib has the following features:
 
-You can also clone the repository and run the examples in the [examples](https://github.com/web-infra-dev/rslib/tree/main/examples) folder to experience Rslib.
+- **Compilation of diverse languages**: TypeScript, JSX, Sass, Less, CSS Modules, Wasm, and more.
+- **Flexible build modes**: Bundle and bundleless options to meet varying needs.
+- **Multiple output formats**: ESM, CJS, and UMD for maximum compatibility.
+- **Declaration file generation**: Including isolated declarations.
+- **Advanced features**: Module Federation, asset compression, PostCSS, Lightning CSS, and more.
+
+## 📚 Getting Started
+
+To get started with Rslib, see the [Quick Start](https://lib.rsbuild.dev/guide/start/quick-start).
 
 ## 🦀 Links
 
@@ -74,6 +72,40 @@ Please read the [Contributing Guide](https://github.com/web-infra-dev/rslib/blob
         <img src="https://contrib.rocks/image?repo=web-infra-dev/rslib&columns=16&max=96"><br/><br/>
       </th>
     </tr>
+    <tr>
+      <td>
+        <picture>
+          <source 
+            media="(prefers-color-scheme: dark)" 
+            srcset="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=active&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=dark"
+          />
+          <img 
+            alt="Contributors of web-infra-dev/rslib" 
+            src="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=active&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=light"
+          />
+        </picture>
+      </td>
+      <td rowspan="2">
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=4x7&color_scheme=dark">
+          <img alt="New trends of web-infra-dev" src="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=4x7&color_scheme=light">
+        </picture>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <picture>
+          <source 
+            media="(prefers-color-scheme: dark)" 
+            srcset="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=dark"
+          />
+          <img 
+            alt="Contributors of web-infra-dev/rslib" 
+            src="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=light"
+          />
+        </picture>
+      </td>
+    </tr>
   </table>
 </a>
 
@@ -95,6 +127,8 @@ Some of the implementations of Rslib have drawn inspiration from outstanding pro
 
 - [esbuild](https://github.com/evanw/esbuild), created by [Evan Wallace](https://github.com/evanw).
 - [tsup](https://github.com/egoist/tsup), created by [EGOIST](https://github.com/egoist).
+
+This Rslib website is powered by [Netlify](https://www.netlify.com/).
 
 ## 📖 License
 
