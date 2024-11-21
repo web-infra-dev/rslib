@@ -10,8 +10,6 @@ export default defineConfig({
       output: {
         distPath: {
           root: './dist/esm',
-          css: '.',
-          cssAsync: '.',
         },
       },
     },
@@ -21,8 +19,6 @@ export default defineConfig({
       output: {
         distPath: {
           root: './dist/cjs',
-          css: '.',
-          cssAsync: '.',
         },
       },
     },

@@ -10,14 +10,14 @@ test('should extract css-modules successfully in bundle', async () => {
   const esmFiles = Object.keys(contents.esm);
   expect(esmFiles).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/integration/style/css-modules/bundle/dist/esm/static/css/index.css",
+      "<ROOT>/tests/integration/style/css-modules/bundle/dist/esm/index.css",
     ]
   `);
 
   const cjsFiles = Object.keys(contents.cjs);
   expect(cjsFiles).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/integration/style/css-modules/bundle/dist/cjs/static/css/index.css",
+      "<ROOT>/tests/integration/style/css-modules/bundle/dist/cjs/index.css",
     ]
   `);
 });

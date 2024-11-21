@@ -9,7 +9,7 @@ test('should extract css when using tailwindcss successfully in bundle', async (
   const esmFiles = Object.keys(contents.esm);
   expect(esmFiles).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/integration/style/tailwindcss/bundle/dist/esm/static/css/index.css",
+      "<ROOT>/tests/integration/style/tailwindcss/bundle/dist/esm/index.css",
     ]
   `);
   expectFileContainContent(contents.esm, 'index.css', [
@@ -21,7 +21,7 @@ test('should extract css when using tailwindcss successfully in bundle', async (
   const cjsFiles = Object.keys(contents.cjs);
   expect(cjsFiles).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/integration/style/tailwindcss/bundle/dist/cjs/static/css/index.css",
+      "<ROOT>/tests/integration/style/tailwindcss/bundle/dist/cjs/index.css",
     ]
   `);
   expectFileContainContent(contents.cjs, 'index.css', [
