@@ -15,12 +15,11 @@
   },
   "main": "./dist/index.js",
   "bin": {
-    "create-rslib": "./bin.js"
+    "create-rslib": "./dist/index.js"
   },
   "files": [
     "template-*",
-    "dist",
-    "bin.js"
+    "dist"
   ],
   "scripts": {
     "build": "rslib build && pnpm generate-templates",
