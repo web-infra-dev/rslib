@@ -11,13 +11,13 @@ test('should extract css successfully in bundle', async () => {
 
   expect(files.esm).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/integration/style/css/bundle/dist/esm/static/css/index.css",
+      "<ROOT>/tests/integration/style/css/bundle/dist/esm/index.css",
     ]
   `);
 
   expect(contents.esm).toMatchInlineSnapshot(`
     {
-      "<ROOT>/tests/integration/style/css/bundle/dist/esm/static/css/index.css": "@import url(https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css);
+      "<ROOT>/tests/integration/style/css/bundle/dist/esm/index.css": "@import url(https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css);
     @import url(https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.css);
     .lib1 {
       color: red;
@@ -37,13 +37,13 @@ test('should extract css successfully in bundle', async () => {
 
   expect(files.cjs).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/integration/style/css/bundle/dist/cjs/static/css/index.css",
+      "<ROOT>/tests/integration/style/css/bundle/dist/cjs/index.css",
     ]
   `);
 
   expect(contents.cjs).toMatchInlineSnapshot(`
     {
-      "<ROOT>/tests/integration/style/css/bundle/dist/cjs/static/css/index.css": "@import url(https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css);
+      "<ROOT>/tests/integration/style/css/bundle/dist/cjs/index.css": "@import url(https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.css);
     @import url(https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.css);
     .lib1 {
       color: red;
