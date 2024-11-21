@@ -463,6 +463,9 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
       filenameHash: false,
       distPath: {
         js: './',
+        jsAsync: './',
+        css: './',
+        cssAsync: './',
       },
     },
   });
