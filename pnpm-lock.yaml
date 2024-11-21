@@ -88,7 +88,7 @@ importers:
     devDependencies:
       '@module-federation/rsbuild-plugin':
         specifier: ^0.7.5
-        version: 0.7.5(@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.4)
+        version: 0.7.5(@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.4)
       '@rsbuild/core':
         specifier: ~1.1.4
         version: 1.1.4
@@ -109,13 +109,13 @@ importers:
     devDependencies:
       '@module-federation/enhanced':
         specifier: ^0.7.5
-        version: 0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0)
+        version: 0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1)
       '@module-federation/rsbuild-plugin':
         specifier: ^0.7.5
-        version: 0.7.5(@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.4)
+        version: 0.7.5(@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.4)
       '@module-federation/storybook-addon':
         specifier: ^3.0.8
-        version: 3.0.8(@rsbuild/core@1.1.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack-virtual-modules@0.6.2)(webpack@5.94.0)
+        version: 3.0.8(@rsbuild/core@1.1.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack-virtual-modules@0.6.2)(webpack@5.96.1)
       '@rsbuild/plugin-react':
         specifier: ^1.0.7
         version: 1.0.7(@rsbuild/core@1.1.4)
@@ -142,7 +142,7 @@ importers:
         version: 0.1.4(@rsbuild/core@1.1.4)(@rslib/core@packages+core)(storybook-builder-rsbuild@0.1.4(@rsbuild/core@1.1.4)(@types/react@18.3.12)(storybook@8.4.4(prettier@3.3.3))(typescript@5.6.3)(webpack-sources@3.2.3))(typescript@5.6.3)
       storybook-react-rsbuild:
         specifier: ^0.1.4
-        version: 0.1.4(@rsbuild/core@1.1.4)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.18.1)(storybook@8.4.4(prettier@3.3.3))(typescript@5.6.3)(webpack-sources@3.2.3)(webpack@5.94.0)
+        version: 0.1.4(@rsbuild/core@1.1.4)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.18.1)(storybook@8.4.4(prettier@3.3.3))(typescript@5.6.3)(webpack-sources@3.2.3)(webpack@5.96.1)
 
   examples/module-federation/mf-remote:
     dependencies:
@@ -155,7 +155,7 @@ importers:
     devDependencies:
       '@module-federation/rsbuild-plugin':
         specifier: ^0.7.5
-        version: 0.7.5(@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.4)
+        version: 0.7.5(@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.4)
       '@rsbuild/core':
         specifier: ~1.1.4
         version: 1.1.4
@@ -240,6 +240,24 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
+
+  examples/vue-component-bundle:
+    devDependencies:
+      '@rsbuild/plugin-vue':
+        specifier: ^1.0.5
+        version: 1.0.5(@rsbuild/core@1.1.4)(vue@3.5.13(typescript@5.6.3))
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      typescript:
+        specifier: ^5.6.3
+        version: 5.6.3
+      vue:
+        specifier: ^3.5.13
+        version: 3.5.13(typescript@5.6.3)
+      vue-tsc:
+        specifier: ^2.1.10
+        version: 2.1.10(typescript@5.6.3)
 
   packages/core:
     dependencies:
@@ -362,7 +380,7 @@ importers:
         version: 3.1.1(vite@5.3.3(@types/node@22.8.1)(terser@5.31.6))(vitest@2.1.5(@types/node@22.8.1)(terser@5.31.6))
       '@module-federation/rsbuild-plugin':
         specifier: ^0.7.5
-        version: 0.7.5(@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.4)
+        version: 0.7.5(@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.4)
       '@playwright/test':
         specifier: 1.48.2
         version: 1.48.2
@@ -811,7 +829,7 @@ importers:
         version: 1.0.3(@rsbuild/core@1.1.4)
       rspress:
         specifier: 1.37.0
-        version: 1.37.0(webpack@5.94.0)
+        version: 1.37.0(webpack@5.96.1)
       rspress-plugin-font-open-sans:
         specifier: 1.0.0
         version: 1.0.0
@@ -1859,6 +1877,11 @@ packages:
       '@rsbuild/core':
         optional: true
 
+  '@rsbuild/plugin-vue@1.0.5':
+    resolution: {integrity: sha512-/jfBrKMN3P6NjsgtKIwoeKWROH/ct8SzEH2gGtdpgyuJwnABGA5Zg6z44S3ngclbgtevOT9m114D2rmBGTXx1Q==}
+    peerDependencies:
+      '@rsbuild/core': 1.x
+
   '@rslib/core@0.0.18':
     resolution: {integrity: sha512-TN3WOgpX5FvHDA5oWm/5vG+sQQhzkUiHx0YjgEQHA0IiRUJNwaqDvSyRyQkBqWrQw5o6WpVet9kM/P6+rm4RSw==}
     engines: {node: '>=16.0.0'}
@@ -2288,11 +2311,20 @@ packages:
   '@types/doctrine@0.0.9':
     resolution: {integrity: sha512-eOIHzCUSH7SMfonMG1LsC2f8vxBFtho6NGBznK41R84YzPuvSBzrhEps33IsQiOW9+VL6NQ9DbjQJznk/S4uRA==}
 
+  '@types/eslint-scope@3.7.7':
+    resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
+
+  '@types/eslint@9.6.1':
+    resolution: {integrity: sha512-FXx2pKgId/WyYo2jXw63kk7/+TY7u7AziEJxJAnSFzHlqTAS3Ync6SvgYAN/k4/PQpnnVuzoMuVnByKK2qp0ag==}
+
   '@types/estree-jsx@1.0.5':
     resolution: {integrity: sha512-52CcUVNFyfb1A2ALocQw/Dd1BQFNmSdkuC3BkZ6iqhdMfQz7JWOFRuJFloOzjk+6WijU56m9oKXFAXc7o3Towg==}
 
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
+
+  '@types/estree@1.0.6':
+    resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
   '@types/express-serve-static-core@5.0.0':
     resolution: {integrity: sha512-AbXMTZGt40T+KON9/Fdxx0B2WK5hsgxcfXJLr5bFpZ7b4JCex2WyQPTEKdXqfHiY5nKKBScZ7yCoO6Pvgxfvnw==}
@@ -2426,6 +2458,55 @@ packages:
   '@vitest/utils@2.1.5':
     resolution: {integrity: sha512-yfj6Yrp0Vesw2cwJbP+cl04OC+IHFsuQsrsJBL9pyGeQXE56v1UAOQco+SR55Vf1nQzfV0QJg1Qum7AaWUwwYg==}
 
+  '@volar/language-core@2.4.10':
+    resolution: {integrity: sha512-hG3Z13+nJmGaT+fnQzAkS0hjJRa2FCeqZt6Bd+oGNhUkQ+mTFsDETg5rqUTxyzIh5pSOGY7FHCWUS8G82AzLCA==}
+
+  '@volar/source-map@2.4.10':
+    resolution: {integrity: sha512-OCV+b5ihV0RF3A7vEvNyHPi4G4kFa6ukPmyVocmqm5QzOd8r5yAtiNvaPEjl8dNvgC/lj4JPryeeHLdXd62rWA==}
+
+  '@volar/typescript@2.4.10':
+    resolution: {integrity: sha512-F8ZtBMhSXyYKuBfGpYwqA5rsONnOwAVvjyE7KPYJ7wgZqo2roASqNWUnianOomJX5u1cxeRooHV59N0PhvEOgw==}
+
+  '@vue/compiler-core@3.5.13':
+    resolution: {integrity: sha512-oOdAkwqUfW1WqpwSYJce06wvt6HljgY3fGeM9NcVA1HaYOij3mZG9Rkysn0OHuyUAGMbEbARIpsG+LPVlBJ5/Q==}
+
+  '@vue/compiler-dom@3.5.13':
+    resolution: {integrity: sha512-ZOJ46sMOKUjO3e94wPdCzQ6P1Lx/vhp2RSvfaab88Ajexs0AHeV0uasYhi99WPaogmBlRHNRuly8xV75cNTMDA==}
+
+  '@vue/compiler-sfc@3.5.13':
+    resolution: {integrity: sha512-6VdaljMpD82w6c2749Zhf5T9u5uLBWKnVue6XWxprDobftnletJ8+oel7sexFfM3qIxNmVE7LSFGTpv6obNyaQ==}
+
+  '@vue/compiler-ssr@3.5.13':
+    resolution: {integrity: sha512-wMH6vrYHxQl/IybKJagqbquvxpWCuVYpoUJfCqFZwa/JY1GdATAQ+TgVtgrwwMZ0D07QhA99rs/EAAWfvG6KpA==}
+
+  '@vue/compiler-vue2@2.7.16':
+    resolution: {integrity: sha512-qYC3Psj9S/mfu9uVi5WvNZIzq+xnXMhOwbTFKKDD7b1lhpnn71jXSFdTQ+WsIEk0ONCd7VV2IMm7ONl6tbQ86A==}
+
+  '@vue/language-core@2.1.10':
+    resolution: {integrity: sha512-DAI289d0K3AB5TUG3xDp9OuQ71CnrujQwJrQnfuZDwo6eGNf0UoRlPuaVNO+Zrn65PC3j0oB2i7mNmVPggeGeQ==}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@vue/reactivity@3.5.13':
+    resolution: {integrity: sha512-NaCwtw8o48B9I6L1zl2p41OHo/2Z4wqYGGIK1Khu5T7yxrn+ATOixn/Udn2m+6kZKB/J7cuT9DbWWhRxqixACg==}
+
+  '@vue/runtime-core@3.5.13':
+    resolution: {integrity: sha512-Fj4YRQ3Az0WTZw1sFe+QDb0aXCerigEpw418pw1HBUKFtnQHWzwojaukAs2X/c9DQz4MQ4bsXTGlcpGxU/RCIw==}
+
+  '@vue/runtime-dom@3.5.13':
+    resolution: {integrity: sha512-dLaj94s93NYLqjLiyFzVs9X6dWhTdAlEAciC3Moq7gzAc13VJUdCnjjRurNM6uTLFATRHexHCTu/Xp3eW6yoog==}
+
+  '@vue/server-renderer@3.5.13':
+    resolution: {integrity: sha512-wAi4IRJV/2SAW3htkTlB+dHeRmpTiVIK1OGLWV1yeStVSebSQQOwGwIq0D3ZIoBj2C2qpgz5+vX9iEBkTdk5YA==}
+    peerDependencies:
+      vue: 3.5.13
+
+  '@vue/shared@3.5.13':
+    resolution: {integrity: sha512-/hnE/qP5ZoGpol0a5mDi45bOd7t3tjYJBjsgCsivow7D48cJeV5l05RD82lPqi7gRiphZM37rnhW1l6ZoCNNnQ==}
+
   '@webassemblyjs/ast@1.12.1':
     resolution: {integrity: sha512-EKfMUOPRRUTy5UII4qJDGPpqfwjOmZ5jeGFwid9mnoqIFK+e0vqoi1qH56JpmZSzEL53jKnNzScdmftJyG5xWg==}
 
@@ -2496,11 +2577,6 @@ packages:
     resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
     engines: {node: '>= 0.6'}
 
-  acorn-import-attributes@1.9.5:
-    resolution: {integrity: sha512-n02Vykv5uA3eHGM/Z2dQrcD56kL8TyDb2p1+0P83PClMnC/nc+anbQRhIOWnSq4Ke/KvDPrY3C9hDtC/A3eHnQ==}
-    peerDependencies:
-      acorn: ^8
-
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -2542,6 +2618,9 @@ packages:
 
   ajv@8.16.0:
     resolution: {integrity: sha512-F0twR8U1ZU67JIEtekUcLkXkoO5mMMmgGD8sK/xUFzJ805jxHQl92hImFAqqXMyMYjSPOyUPAwHYhB72g5sTXw==}
+
+  alien-signals@0.2.2:
+    resolution: {integrity: sha512-cZIRkbERILsBOXTQmMrxc9hgpxglstn69zm+F1ARf4aPAzdAFYd6sBq87ErO0Fj3DV94tglcyHG5kQz9nDC/8A==}
 
   ansi-colors@4.1.3:
     resolution: {integrity: sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw==}
@@ -3093,6 +3172,9 @@ packages:
 
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
+
+  de-indent@1.0.2:
+    resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -3765,6 +3847,9 @@ packages:
   hash-base@3.1.0:
     resolution: {integrity: sha512-1nmYp/rhMDiE7AYkDw+lLwlAzz0AntGIe51F3RfFfEqyQ3feY2eI/NcwC6umIQVOASPMsWJLJScWKSSvzL9IVA==}
     engines: {node: '>=4'}
+
+  hash-sum@2.0.0:
+    resolution: {integrity: sha512-WdZTbAByD+pHfl/g9QSsBIIwy8IT+EsPiKDs0KNX+zSHhdDLFKdZu0BQHljvO+0QI/BasbMSUa8wYNCZTvhslg==}
 
   hash.js@1.1.7:
     resolution: {integrity: sha512-taOaskGt4z4SOANNseOviYDvjEJinIkRgmp7LbKP2YTTmVxWBl87s/uzK9r+44BclBSp2X7K1hqeNfz9JbBeXA==}
@@ -4613,6 +4698,9 @@ packages:
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+
+  muggle-string@0.4.1:
+    resolution: {integrity: sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==}
 
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
@@ -6214,6 +6302,35 @@ packages:
   vm-browserify@1.1.2:
     resolution: {integrity: sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==}
 
+  vscode-uri@3.0.8:
+    resolution: {integrity: sha512-AyFQ0EVmsOZOlAnxoFOGOq1SQDWAB7C6aqMGS23svWAllfOaxbuFvcT8D1i8z3Gyn8fraVeZNNmN6e9bxxXkKw==}
+
+  vue-loader@17.4.2:
+    resolution: {integrity: sha512-yTKOA4R/VN4jqjw4y5HrynFL8AK0Z3/Jt7eOJXEitsm0GMRHDBjCfCiuTiLP7OESvsZYo2pATCWhDqxC5ZrM6w==}
+    peerDependencies:
+      '@vue/compiler-sfc': '*'
+      vue: '*'
+      webpack: ^4.1.0 || ^5.0.0-0
+    peerDependenciesMeta:
+      '@vue/compiler-sfc':
+        optional: true
+      vue:
+        optional: true
+
+  vue-tsc@2.1.10:
+    resolution: {integrity: sha512-RBNSfaaRHcN5uqVqJSZh++Gy/YUzryuv9u1aFWhsammDJXNtUiJMNoJ747lZcQ68wUQFx6E73y4FY3D8E7FGMA==}
+    hasBin: true
+    peerDependencies:
+      typescript: '>=5.0.0'
+
+  vue@3.5.13:
+    resolution: {integrity: sha512-wmeiSMxkZCSc+PM2w2VRsOYAZC8GdipNFRTsLSfodVqI9mbejKeXEGr8SckuLnrQPGe3oJN5c3K0vpoU9q/wCQ==}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   w-json@1.3.10:
     resolution: {integrity: sha512-XadVyw0xE+oZ5FGApXsdswv96rOhStzKqL53uSe5UaTadABGkWIg1+DTx8kiZ/VqTZTBneoL0l65RcPe4W3ecw==}
 
@@ -6238,8 +6355,8 @@ packages:
   webpack-virtual-modules@0.6.2:
     resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
 
-  webpack@5.94.0:
-    resolution: {integrity: sha512-KcsGn50VT+06JH/iunZJedYGUJS5FGjow8wb9c0v5n1Om8O1g4L6LjtfxwlXIATopoQu+vOXXa7gYisWxCoPyg==}
+  webpack@5.96.1:
+    resolution: {integrity: sha512-l2LlBSvVZGhL4ZrPwyr8+37AunkcYj5qh8o6u2/2rzoPc8gxFJkLj1WxNgooi9pnoc06jh0BjuXnamM4qlujZA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     peerDependencies:
@@ -7034,11 +7151,11 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@mdx-js/loader@2.3.0(webpack@5.94.0)':
+  '@mdx-js/loader@2.3.0(webpack@5.96.1)':
     dependencies:
       '@mdx-js/mdx': 2.3.0
       source-map: 0.7.4
-      webpack: 5.94.0
+      webpack: 5.96.1
     transitivePeerDependencies:
       - supports-color
 
@@ -7132,7 +7249,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@module-federation/dts-plugin@0.7.5(typescript@5.6.3)':
+  '@module-federation/dts-plugin@0.7.5(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))':
     dependencies:
       '@module-federation/error-codes': 0.7.5
       '@module-federation/managers': 0.7.5
@@ -7151,27 +7268,30 @@ snapshots:
       rambda: 9.3.0
       typescript: 5.6.3
       ws: 8.18.0
+    optionalDependencies:
+      vue-tsc: 2.1.10(typescript@5.6.3)
     transitivePeerDependencies:
       - bufferutil
       - debug
       - supports-color
       - utf-8-validate
 
-  '@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0)':
+  '@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1)':
     dependencies:
       '@module-federation/bridge-react-webpack-plugin': 0.7.5
       '@module-federation/data-prefetch': 0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@module-federation/dts-plugin': 0.7.5(typescript@5.6.3)
+      '@module-federation/dts-plugin': 0.7.5(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))
       '@module-federation/managers': 0.7.5
-      '@module-federation/manifest': 0.7.5(typescript@5.6.3)
-      '@module-federation/rspack': 0.7.5(typescript@5.6.3)
+      '@module-federation/manifest': 0.7.5(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))
+      '@module-federation/rspack': 0.7.5(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))
       '@module-federation/runtime-tools': 0.7.5
       '@module-federation/sdk': 0.7.5
       btoa: 1.2.1
       upath: 2.0.1
     optionalDependencies:
       typescript: 5.6.3
-      webpack: 5.94.0
+      vue-tsc: 2.1.10(typescript@5.6.3)
+      webpack: 5.96.1
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -7188,9 +7308,9 @@ snapshots:
       find-pkg: 2.0.0
       fs-extra: 9.1.0
 
-  '@module-federation/manifest@0.7.5(typescript@5.6.3)':
+  '@module-federation/manifest@0.7.5(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))':
     dependencies:
-      '@module-federation/dts-plugin': 0.7.5(typescript@5.6.3)
+      '@module-federation/dts-plugin': 0.7.5(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))
       '@module-federation/managers': 0.7.5
       '@module-federation/sdk': 0.7.5
       chalk: 3.0.0
@@ -7203,22 +7323,23 @@ snapshots:
       - utf-8-validate
       - vue-tsc
 
-  '@module-federation/rsbuild-plugin@0.7.5(@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0))(@rsbuild/core@1.1.4)':
+  '@module-federation/rsbuild-plugin@0.7.5(@module-federation/enhanced@0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.4)':
     dependencies:
-      '@module-federation/enhanced': 0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0)
+      '@module-federation/enhanced': 0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1)
       '@module-federation/sdk': 0.7.5
       '@rsbuild/core': 1.1.4
 
-  '@module-federation/rspack@0.7.5(typescript@5.6.3)':
+  '@module-federation/rspack@0.7.5(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))':
     dependencies:
       '@module-federation/bridge-react-webpack-plugin': 0.7.5
-      '@module-federation/dts-plugin': 0.7.5(typescript@5.6.3)
+      '@module-federation/dts-plugin': 0.7.5(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))
       '@module-federation/managers': 0.7.5
-      '@module-federation/manifest': 0.7.5(typescript@5.6.3)
+      '@module-federation/manifest': 0.7.5(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))
       '@module-federation/runtime-tools': 0.7.5
       '@module-federation/sdk': 0.7.5
     optionalDependencies:
       typescript: 5.6.3
+      vue-tsc: 2.1.10(typescript@5.6.3)
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -7250,13 +7371,13 @@ snapshots:
     dependencies:
       isomorphic-rslog: 0.0.6
 
-  '@module-federation/storybook-addon@3.0.8(@rsbuild/core@1.1.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack-virtual-modules@0.6.2)(webpack@5.94.0)':
+  '@module-federation/storybook-addon@3.0.8(@rsbuild/core@1.1.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack-virtual-modules@0.6.2)(webpack@5.96.1)':
     dependencies:
-      '@module-federation/enhanced': 0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(webpack@5.94.0)
+      '@module-federation/enhanced': 0.7.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1)
       '@module-federation/sdk': 0.7.5
     optionalDependencies:
       '@rsbuild/core': 1.1.4
-      webpack: 5.94.0
+      webpack: 5.96.1
       webpack-virtual-modules: 0.6.2
     transitivePeerDependencies:
       - bufferutil
@@ -7353,7 +7474,7 @@ snapshots:
 
   '@rollup/pluginutils@5.1.3(rollup@4.18.1)':
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       estree-walker: 2.0.2
       picomatch: 4.0.2
     optionalDependencies:
@@ -7509,10 +7630,10 @@ snapshots:
   '@rsbuild/plugin-type-check@1.0.1(@rsbuild/core@1.1.4)(typescript@5.6.3)':
     dependencies:
       deepmerge: 4.3.1
-      fork-ts-checker-webpack-plugin: 9.0.2(typescript@5.6.3)(webpack@5.94.0)
+      fork-ts-checker-webpack-plugin: 9.0.2(typescript@5.6.3)(webpack@5.96.1)
       json5: 2.2.3
       reduce-configs: 1.0.0
-      webpack: 5.94.0
+      webpack: 5.96.1
     optionalDependencies:
       '@rsbuild/core': 1.1.4
     transitivePeerDependencies:
@@ -7520,6 +7641,19 @@ snapshots:
       - esbuild
       - typescript
       - uglify-js
+      - webpack-cli
+
+  '@rsbuild/plugin-vue@1.0.5(@rsbuild/core@1.1.4)(vue@3.5.13(typescript@5.6.3))':
+    dependencies:
+      '@rsbuild/core': 1.1.4
+      vue-loader: 17.4.2(vue@3.5.13(typescript@5.6.3))(webpack@5.96.1)
+      webpack: 5.96.1
+    transitivePeerDependencies:
+      - '@swc/core'
+      - '@vue/compiler-sfc'
+      - esbuild
+      - uglify-js
+      - vue
       - webpack-cli
 
   '@rslib/core@0.0.18(@microsoft/api-extractor@7.47.11(@types/node@22.8.1))(typescript@5.6.3)':
@@ -7593,10 +7727,10 @@ snapshots:
     optionalDependencies:
       react-refresh: 0.14.2
 
-  '@rspress/core@1.37.0(webpack@5.94.0)':
+  '@rspress/core@1.37.0(webpack@5.96.1)':
     dependencies:
       '@loadable/component': 5.16.4(react@18.3.1)
-      '@mdx-js/loader': 2.3.0(webpack@5.94.0)
+      '@mdx-js/loader': 2.3.0(webpack@5.96.1)
       '@mdx-js/mdx': 2.3.0
       '@mdx-js/react': 2.3.0(react@18.3.1)
       '@modern-js/utils': 2.62.0
@@ -7868,7 +8002,7 @@ snapshots:
     dependencies:
       storybook: 8.4.4(prettier@3.3.3)
 
-  '@storybook/react-docgen-typescript-plugin@1.0.1(typescript@5.6.3)(webpack@5.94.0)':
+  '@storybook/react-docgen-typescript-plugin@1.0.1(typescript@5.6.3)(webpack@5.96.1)':
     dependencies:
       debug: 4.3.7
       endent: 2.1.0
@@ -7878,7 +8012,7 @@ snapshots:
       react-docgen-typescript: 2.2.2(typescript@5.6.3)
       tslib: 2.8.1
       typescript: 5.6.3
-      webpack: 5.94.0
+      webpack: 5.96.1
     transitivePeerDependencies:
       - supports-color
 
@@ -8007,7 +8141,7 @@ snapshots:
 
   '@types/acorn@4.0.6':
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
 
   '@types/argparse@1.0.38': {}
 
@@ -8056,11 +8190,23 @@ snapshots:
 
   '@types/doctrine@0.0.9': {}
 
+  '@types/eslint-scope@3.7.7':
+    dependencies:
+      '@types/eslint': 9.6.1
+      '@types/estree': 1.0.6
+
+  '@types/eslint@9.6.1':
+    dependencies:
+      '@types/estree': 1.0.6
+      '@types/json-schema': 7.0.15
+
   '@types/estree-jsx@1.0.5':
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
 
   '@types/estree@1.0.5': {}
+
+  '@types/estree@1.0.6': {}
 
   '@types/express-serve-static-core@5.0.0':
     dependencies:
@@ -8209,6 +8355,90 @@ snapshots:
       loupe: 3.1.2
       tinyrainbow: 1.2.0
 
+  '@volar/language-core@2.4.10':
+    dependencies:
+      '@volar/source-map': 2.4.10
+
+  '@volar/source-map@2.4.10': {}
+
+  '@volar/typescript@2.4.10':
+    dependencies:
+      '@volar/language-core': 2.4.10
+      path-browserify: 1.0.1
+      vscode-uri: 3.0.8
+
+  '@vue/compiler-core@3.5.13':
+    dependencies:
+      '@babel/parser': 7.26.2
+      '@vue/shared': 3.5.13
+      entities: 4.5.0
+      estree-walker: 2.0.2
+      source-map-js: 1.2.1
+
+  '@vue/compiler-dom@3.5.13':
+    dependencies:
+      '@vue/compiler-core': 3.5.13
+      '@vue/shared': 3.5.13
+
+  '@vue/compiler-sfc@3.5.13':
+    dependencies:
+      '@babel/parser': 7.26.2
+      '@vue/compiler-core': 3.5.13
+      '@vue/compiler-dom': 3.5.13
+      '@vue/compiler-ssr': 3.5.13
+      '@vue/shared': 3.5.13
+      estree-walker: 2.0.2
+      magic-string: 0.30.12
+      postcss: 8.4.49
+      source-map-js: 1.2.1
+
+  '@vue/compiler-ssr@3.5.13':
+    dependencies:
+      '@vue/compiler-dom': 3.5.13
+      '@vue/shared': 3.5.13
+
+  '@vue/compiler-vue2@2.7.16':
+    dependencies:
+      de-indent: 1.0.2
+      he: 1.2.0
+
+  '@vue/language-core@2.1.10(typescript@5.6.3)':
+    dependencies:
+      '@volar/language-core': 2.4.10
+      '@vue/compiler-dom': 3.5.13
+      '@vue/compiler-vue2': 2.7.16
+      '@vue/shared': 3.5.13
+      alien-signals: 0.2.2
+      minimatch: 9.0.5
+      muggle-string: 0.4.1
+      path-browserify: 1.0.1
+    optionalDependencies:
+      typescript: 5.6.3
+
+  '@vue/reactivity@3.5.13':
+    dependencies:
+      '@vue/shared': 3.5.13
+
+  '@vue/runtime-core@3.5.13':
+    dependencies:
+      '@vue/reactivity': 3.5.13
+      '@vue/shared': 3.5.13
+
+  '@vue/runtime-dom@3.5.13':
+    dependencies:
+      '@vue/reactivity': 3.5.13
+      '@vue/runtime-core': 3.5.13
+      '@vue/shared': 3.5.13
+      csstype: 3.1.3
+
+  '@vue/server-renderer@3.5.13(vue@3.5.13(typescript@5.6.3))':
+    dependencies:
+      '@vue/compiler-ssr': 3.5.13
+      '@vue/shared': 3.5.13
+      vue: 3.5.13(typescript@5.6.3)
+
+  '@vue/shared@3.5.13': {}
+
   '@webassemblyjs/ast@1.12.1':
     dependencies:
       '@webassemblyjs/helper-numbers': 1.11.6
@@ -8309,10 +8539,6 @@ snapshots:
       mime-types: 2.1.35
       negotiator: 0.6.3
 
-  acorn-import-attributes@1.9.5(acorn@8.14.0):
-    dependencies:
-      acorn: 8.14.0
-
   acorn-jsx@5.3.2(acorn@8.14.0):
     dependencies:
       acorn: 8.14.0
@@ -8360,6 +8586,8 @@ snapshots:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
       uri-js: 4.4.1
+
+  alien-signals@0.2.2: {}
 
   ansi-colors@4.1.3: {}
 
@@ -8927,6 +9155,8 @@ snapshots:
 
   dayjs@1.11.13: {}
 
+  de-indent@1.0.2: {}
+
   debug@2.6.9:
     dependencies:
       ms: 2.0.0
@@ -9237,7 +9467,7 @@ snapshots:
 
   estree-util-attach-comments@2.1.1:
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
 
   estree-util-build-jsx@2.2.2:
     dependencies:
@@ -9262,7 +9492,7 @@ snapshots:
 
   estree-walker@3.0.3:
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
 
   esutils@2.0.3: {}
 
@@ -9456,7 +9686,7 @@ snapshots:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
 
-  fork-ts-checker-webpack-plugin@9.0.2(typescript@5.6.3)(webpack@5.94.0):
+  fork-ts-checker-webpack-plugin@9.0.2(typescript@5.6.3)(webpack@5.96.1):
     dependencies:
       '@babel/code-frame': 7.26.2
       chalk: 4.1.2
@@ -9471,7 +9701,7 @@ snapshots:
       semver: 7.6.3
       tapable: 2.2.1
       typescript: 5.6.3
-      webpack: 5.94.0
+      webpack: 5.96.1
 
   form-data@4.0.0:
     dependencies:
@@ -9672,6 +9902,8 @@ snapshots:
       readable-stream: 3.6.2
       safe-buffer: 5.2.1
 
+  hash-sum@2.0.0: {}
+
   hash.js@1.1.7:
     dependencies:
       inherits: 2.0.4
@@ -9750,7 +9982,7 @@ snapshots:
 
   hast-util-to-estree@2.3.3:
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       '@types/estree-jsx': 1.0.5
       '@types/hast': 2.3.10
       '@types/unist': 2.0.11
@@ -10072,7 +10304,7 @@ snapshots:
 
   is-reference@3.0.2:
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
 
   is-stream@2.0.1: {}
 
@@ -10593,7 +10825,7 @@ snapshots:
 
   micromark-extension-mdx-expression@1.0.8:
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       micromark-factory-mdx-expression: 1.0.9
       micromark-factory-space: 1.1.0
       micromark-util-character: 1.2.0
@@ -10605,7 +10837,7 @@ snapshots:
   micromark-extension-mdx-jsx@1.0.5:
     dependencies:
       '@types/acorn': 4.0.6
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       estree-util-is-identifier-name: 2.1.0
       micromark-factory-mdx-expression: 1.0.9
       micromark-factory-space: 1.1.0
@@ -10621,7 +10853,7 @@ snapshots:
 
   micromark-extension-mdxjs-esm@1.0.5:
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       micromark-core-commonmark: 1.1.0
       micromark-util-character: 1.2.0
       micromark-util-events-to-acorn: 1.2.3
@@ -10657,7 +10889,7 @@ snapshots:
 
   micromark-factory-mdx-expression@1.0.9:
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       micromark-util-character: 1.2.0
       micromark-util-events-to-acorn: 1.2.3
       micromark-util-symbol: 1.1.0
@@ -10721,7 +10953,7 @@ snapshots:
   micromark-util-events-to-acorn@1.2.3:
     dependencies:
       '@types/acorn': 4.0.6
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       '@types/unist': 2.0.11
       estree-util-visit: 1.2.1
       micromark-util-symbol: 1.1.0
@@ -10837,6 +11069,8 @@ snapshots:
   ms@2.0.0: {}
 
   ms@2.1.3: {}
+
+  muggle-string@0.4.1: {}
 
   mz@2.7.0:
     dependencies:
@@ -11162,7 +11396,7 @@ snapshots:
 
   periscopic@3.1.0:
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       estree-walker: 3.0.3
       is-reference: 3.0.2
 
@@ -11689,10 +11923,10 @@ snapshots:
 
   rspress-plugin-font-open-sans@1.0.0: {}
 
-  rspress@1.37.0(webpack@5.94.0):
+  rspress@1.37.0(webpack@5.96.1):
     dependencies:
       '@rsbuild/core': 1.1.4
-      '@rspress/core': 1.37.0(webpack@5.94.0)
+      '@rspress/core': 1.37.0(webpack@5.96.1)
       '@rspress/shared': 1.37.0
       cac: 6.7.14
       chalk: 5.3.0
@@ -12041,12 +12275,12 @@ snapshots:
       - webpack-cli
       - webpack-sources
 
-  storybook-react-rsbuild@0.1.4(@rsbuild/core@1.1.4)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.18.1)(storybook@8.4.4(prettier@3.3.3))(typescript@5.6.3)(webpack-sources@3.2.3)(webpack@5.94.0):
+  storybook-react-rsbuild@0.1.4(@rsbuild/core@1.1.4)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.18.1)(storybook@8.4.4(prettier@3.3.3))(typescript@5.6.3)(webpack-sources@3.2.3)(webpack@5.96.1):
     dependencies:
       '@rollup/pluginutils': 5.1.3(rollup@4.18.1)
       '@rsbuild/core': 1.1.4
       '@storybook/react': 8.4.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.4(prettier@3.3.3))(typescript@5.6.3)
-      '@storybook/react-docgen-typescript-plugin': 1.0.1(typescript@5.6.3)(webpack@5.94.0)
+      '@storybook/react-docgen-typescript-plugin': 1.0.1(typescript@5.6.3)(webpack@5.96.1)
       '@types/node': 18.19.64
       find-up: 5.0.0
       magic-string: 0.30.12
@@ -12252,14 +12486,14 @@ snapshots:
 
   term-size@2.2.1: {}
 
-  terser-webpack-plugin@5.3.10(webpack@5.94.0):
+  terser-webpack-plugin@5.3.10(webpack@5.96.1):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
       terser: 5.31.6
-      webpack: 5.94.0
+      webpack: 5.96.1
 
   terser@5.31.6:
     dependencies:
@@ -12590,6 +12824,34 @@ snapshots:
 
   vm-browserify@1.1.2: {}
 
+  vscode-uri@3.0.8: {}
+
+  vue-loader@17.4.2(vue@3.5.13(typescript@5.6.3))(webpack@5.96.1):
+    dependencies:
+      chalk: 4.1.2
+      hash-sum: 2.0.0
+      watchpack: 2.4.2
+      webpack: 5.96.1
+    optionalDependencies:
+      vue: 3.5.13(typescript@5.6.3)
+
+  vue-tsc@2.1.10(typescript@5.6.3):
+    dependencies:
+      '@volar/typescript': 2.4.10
+      '@vue/language-core': 2.1.10(typescript@5.6.3)
+      semver: 7.6.3
+      typescript: 5.6.3
+
+  vue@3.5.13(typescript@5.6.3):
+    dependencies:
+      '@vue/compiler-dom': 3.5.13
+      '@vue/compiler-sfc': 3.5.13
+      '@vue/runtime-dom': 3.5.13
+      '@vue/server-renderer': 3.5.13(vue@3.5.13(typescript@5.6.3))
+      '@vue/shared': 3.5.13
+    optionalDependencies:
+      typescript: 5.6.3
+
   w-json@1.3.10: {}
 
   watchpack@2.4.2:
@@ -12609,14 +12871,14 @@ snapshots:
 
   webpack-virtual-modules@0.6.2: {}
 
-  webpack@5.94.0:
+  webpack@5.96.1:
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/eslint-scope': 3.7.7
+      '@types/estree': 1.0.6
       '@webassemblyjs/ast': 1.12.1
       '@webassemblyjs/wasm-edit': 1.12.1
       '@webassemblyjs/wasm-parser': 1.12.1
       acorn: 8.14.0
-      acorn-import-attributes: 1.9.5(acorn@8.14.0)
       browserslist: 4.24.2
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.17.1
@@ -12631,7 +12893,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(webpack@5.94.0)
+      terser-webpack-plugin: 5.3.10(webpack@5.96.1)
       watchpack: 2.4.2
       webpack-sources: 3.2.3
     transitivePeerDependencies:
