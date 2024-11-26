@@ -31,11 +31,12 @@ If you don't need these redirects, you can turn it off, and its import path will
 ```ts title="rslib.config.ts"
 export default {
   lib: [
-    // ..
+    {
+      redirect: {
+        style: false, // Turn off the redirect of the style file
+      },
+    },
   ],
-  redirect: {
-    style: false, // Turn off the redirect of the style file
-  },
 };
 ```
 
