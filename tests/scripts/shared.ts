@@ -363,8 +363,8 @@ export async function createTempFiles(
   checkFile.push(tempFileCjs, tempFileEsm);
 
   if (bundle) {
-    const tempDirRslib = join(fixturePath, '.rslib/declarations', 'cjs');
-    const tempDirRslibEsm = join(fixturePath, '.rslib/declarations', 'esm');
+    const tempDirRslib = join(fixturePath, '.rslib', 'declarations', 'cjs');
+    const tempDirRslibEsm = join(fixturePath, '.rslib', 'declarations', 'esm');
     const tempFileRslibCjs = join(tempDirRslib, 'tempFile.d.ts');
     const tempFileRslibEsm = join(tempDirRslibEsm, 'tempFile.d.ts');
 

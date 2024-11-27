@@ -38,14 +38,35 @@ export function ensureTempDeclarationDir(cwd: string, name: string): string {
   return dirPath;
 }
 
+export async function pathExists(path: string): Promise<boolean> {
+  return fs.promises
+    .access(path)
+    .then(() => true)
+    .catch(() => false);
+}
+
+export async function emptyDir(dir: string): Promise<void> {
+  if (!(await pathExists(dir))) {
+    return;
+  }
+
+  try {
+    for (const file of await fs.promises.readdir(dir)) {
+      await fs.promises.rm(path.resolve(dir, file), {
+        recursive: true,
+        force: true,
+      });
+    }
+  } catch (err) {
+    logger.debug(`Failed to empty dir: ${dir}`);
+    logger.debug(err);
+  }
+}
+
 export async function clearTempDeclarationDir(cwd: string): Promise<void> {
   const dirPath = path.join(cwd, TEMP_DTS_DIR);
 
-  try {
-    await fsP.rm(dirPath, { recursive: true, force: true });
-  } catch (error) {
-    logger.error(`Error clearing temporary directory ${dirPath}: ${error}`);
-  }
+  await emptyDir(dirPath);
 }
 
 export function getFileLoc(
