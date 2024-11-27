@@ -10,14 +10,9 @@ import {
 } from 'node:path';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
-import ts from 'typescript';
 import type { DtsGenOptions } from './index';
 import { emitDts } from './tsc';
-import {
-  calcLongestCommonPath,
-  ensureTempDeclarationDir,
-  loadTsconfig,
-} from './utils';
+import { calcLongestCommonPath, ensureTempDeclarationDir } from './utils';
 
 const isObject = (obj: unknown): obj is Record<string, any> =>
   Object.prototype.toString.call(obj) === '[object Object]';
@@ -113,9 +108,10 @@ export const calcBundledPackages = (options: {
 export async function generateDts(data: DtsGenOptions): Promise<void> {
   const {
     bundle,
-    distPath,
+    dtsEmitPath,
     dtsEntry,
     tsconfigPath,
+    tsConfigResult,
     name,
     cwd,
     build,
@@ -125,15 +121,10 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     userExternals,
     banner,
     footer,
-    rootDistPath,
   } = data;
   logger.start(`Generating DTS... ${color.gray(`(${name})`)}`);
-  const configPath = ts.findConfigFile(cwd, ts.sys.fileExists, tsconfigPath);
-  if (!configPath) {
-    logger.error(`tsconfig.json not found in ${cwd}`);
-    throw new Error();
-  }
-  const { options: rawCompilerOptions, fileNames } = loadTsconfig(configPath);
+
+  const { options: rawCompilerOptions, fileNames } = tsConfigResult;
 
   // The longest common path of all non-declaration input files.
   // If composite is set, the default is instead the directory containing the tsconfig.json file.
@@ -141,17 +132,14 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   const rootDir =
     rawCompilerOptions.rootDir ??
     (rawCompilerOptions.composite
-      ? dirname(configPath)
+      ? dirname(tsconfigPath)
       : await calcLongestCommonPath(
           fileNames.filter((fileName) => !/\.d\.(ts|mts|cts)$/.test(fileName)),
         )) ??
-    dirname(configPath);
-
-  const dtsEmitPath =
-    distPath ?? rawCompilerOptions.declarationDir ?? rootDistPath;
+    dirname(tsconfigPath);
 
   const resolvedDtsEmitPath = normalize(
-    resolve(dirname(configPath), dtsEmitPath),
+    resolve(dirname(tsconfigPath), dtsEmitPath),
   );
 
   if (build) {
@@ -173,13 +161,15 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
           : 'declarationDir';
       throw Error(
         `Please set ${info}: "${dtsEmitPath}" in ${color.underline(
-          configPath,
+          tsconfigPath,
         )} to keep it same as "dts.distPath" or "output.distPath.root" field in lib config.`,
       );
     }
   }
 
-  const declarationDir = bundle ? ensureTempDeclarationDir(cwd) : dtsEmitPath;
+  const declarationDir = bundle
+    ? ensureTempDeclarationDir(cwd, name)
+    : dtsEmitPath;
 
   const { name: entryName, path: entryPath } = dtsEntry;
   let entry = '';
@@ -232,7 +222,8 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     {
       name,
       cwd,
-      configPath,
+      configPath: tsconfigPath,
+      tsConfigResult,
       declarationDir,
       dtsExtension,
       banner,
