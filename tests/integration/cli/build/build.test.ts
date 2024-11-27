@@ -15,8 +15,8 @@ describe('build command', async () => {
     const fileNames = Object.keys(files).sort();
     expect(fileNames).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/integration/cli/dist/cjs/index.cjs",
-        "<ROOT>/tests/integration/cli/dist/esm/index.js",
+        "<ROOT>/tests/integration/cli/build/dist/cjs/index.cjs",
+        "<ROOT>/tests/integration/cli/build/dist/esm/index.js",
       ]
     `);
   });
@@ -31,7 +31,7 @@ describe('build command', async () => {
     const fileNames = Object.keys(files).sort();
     expect(fileNames).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/integration/cli/dist/esm/index.js",
+        "<ROOT>/tests/integration/cli/build/dist/esm/index.js",
       ]
     `);
   });
@@ -46,8 +46,8 @@ describe('build command', async () => {
     const fileNames = Object.keys(files).sort();
     expect(fileNames).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/integration/cli/dist/cjs/index.cjs",
-        "<ROOT>/tests/integration/cli/dist/esm/index.js",
+        "<ROOT>/tests/integration/cli/build/dist/cjs/index.cjs",
+        "<ROOT>/tests/integration/cli/build/dist/esm/index.js",
       ]
     `);
   });
@@ -65,15 +65,14 @@ describe('build command', async () => {
     const fileNames = Object.keys(files).sort();
     expect(fileNames).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/integration/cli/dist/custom/index.cjs",
-        "<ROOT>/tests/integration/cli/dist/custom/index.js",
+        "<ROOT>/tests/integration/cli/build/dist/custom/index.cjs",
+        "<ROOT>/tests/integration/cli/build/dist/custom/index.js",
       ]
     `);
   });
 
   test('--root', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
-    console.log('__dirname: ', __dirname);
     execSync('npx rslib build --root custom-root', {
       cwd: __dirname,
     });
@@ -82,8 +81,8 @@ describe('build command', async () => {
     const fileNames = Object.keys(files).sort();
     expect(fileNames).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/integration/cli/dist/root/index.cjs",
-        "<ROOT>/tests/integration/cli/dist/root/index.js",
+        "<ROOT>/tests/integration/cli/build/dist/root/index.cjs",
+        "<ROOT>/tests/integration/cli/build/dist/root/index.js",
       ]
     `);
   });

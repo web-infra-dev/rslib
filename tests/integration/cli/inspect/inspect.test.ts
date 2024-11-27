@@ -16,13 +16,13 @@ describe('inspect command', async () => {
     const fileNames = Object.keys(files).sort();
 
     expect(fileNames).toMatchInlineSnapshot(`
-    [
-      "<ROOT>/tests/integration/cli/dist/.rsbuild/rsbuild.config.cjs.mjs",
-      "<ROOT>/tests/integration/cli/dist/.rsbuild/rsbuild.config.esm.mjs",
-      "<ROOT>/tests/integration/cli/dist/.rsbuild/rspack.config.cjs.mjs",
-      "<ROOT>/tests/integration/cli/dist/.rsbuild/rspack.config.esm.mjs",
-    ]
-  `);
+      [
+        "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rsbuild.config.cjs.mjs",
+        "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rsbuild.config.esm.mjs",
+        "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rspack.config.cjs.mjs",
+        "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rspack.config.esm.mjs",
+      ]
+    `);
 
     // esm rsbuild config
     const rsbuildConfigEsm = fileNames.find((item) =>
@@ -52,11 +52,11 @@ describe('inspect command', async () => {
 
     // Rsbuild will emit dump files to `dist/esm` if only one environment is specified.
     expect(fileNames).toMatchInlineSnapshot(`
-    [
-      "<ROOT>/tests/integration/cli/dist/esm/.rsbuild/rsbuild.config.mjs",
-      "<ROOT>/tests/integration/cli/dist/esm/.rsbuild/rspack.config.esm.mjs",
-    ]
-  `);
+      [
+        "<ROOT>/tests/integration/cli/inspect/dist/esm/.rsbuild/rsbuild.config.mjs",
+        "<ROOT>/tests/integration/cli/inspect/dist/esm/.rsbuild/rspack.config.esm.mjs",
+      ]
+    `);
 
     // esm rsbuild config
     const rsbuildConfigEsm = fileNames.find((item) =>
@@ -84,12 +84,12 @@ describe('inspect command', async () => {
 
     // Rsbuild will emit dump files to `dist/esm` if only one environment is specified.
     expect(fileNames).toMatchInlineSnapshot(`
-    [
-      "<ROOT>/tests/integration/cli/dist/.rsbuild/rsbuild.config.cjs.mjs",
-      "<ROOT>/tests/integration/cli/dist/.rsbuild/rsbuild.config.esm.mjs",
-      "<ROOT>/tests/integration/cli/dist/.rsbuild/rspack.config.cjs.mjs",
-      "<ROOT>/tests/integration/cli/dist/.rsbuild/rspack.config.esm.mjs",
-    ]
-  `);
+      [
+        "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rsbuild.config.cjs.mjs",
+        "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rsbuild.config.esm.mjs",
+        "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rspack.config.cjs.mjs",
+        "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rspack.config.esm.mjs",
+      ]
+    `);
   });
 });
