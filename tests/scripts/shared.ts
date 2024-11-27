@@ -166,6 +166,7 @@ export async function getResults(
       if (fileSet.length === 1) {
         entryFile = fileSet[0];
       } else {
+        // TODO: Do not support multiple entry files yet.
         entryFile = fileSet.find((file) => file.includes('index'));
         mfExposeFile = fileSet.find((file) => file.includes('expose'));
       }
