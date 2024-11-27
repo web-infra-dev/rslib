@@ -39,6 +39,8 @@ import type {
   LibOnlyConfig,
   PkgJson,
   Redirect,
+  RsbuildConfigEntry,
+  RsbuildConfigEntryItem,
   RsbuildConfigOutputTarget,
   RsbuildConfigWithLibInfo,
   RslibConfig,
@@ -788,18 +790,36 @@ const composeSyntaxConfig = (
   };
 };
 
-const appendEntryQuery = (
-  entry: NonNullable<RsbuildConfig['source']>['entry'],
-): NonNullable<RsbuildConfig['source']>['entry'] => {
-  const newEntry: Record<string, string> = {};
-  for (const key in entry) {
-    newEntry[key] = `${entry[key]}?${RSLIB_ENTRY_QUERY}`;
+export const appendEntryQuery = (
+  entry: RsbuildConfigEntry,
+): RsbuildConfigEntry => {
+  const newEntry: Record<string, RsbuildConfigEntryItem> = {};
+
+  for (const [key, value] of Object.entries(entry)) {
+    let result: RsbuildConfigEntryItem = value;
+
+    if (typeof value === 'string') {
+      result = `${value}?${RSLIB_ENTRY_QUERY}`;
+    } else if (Array.isArray(value)) {
+      result = value.map((item) => `${item}?${RSLIB_ENTRY_QUERY}`);
+    } else {
+      result = {
+        ...value,
+        import:
+          typeof value.import === 'string'
+            ? `${value.import}?${RSLIB_ENTRY_QUERY}`
+            : value.import.map((item) => `${item}?${RSLIB_ENTRY_QUERY}`),
+      };
+    }
+
+    newEntry[key] = result;
   }
+
   return newEntry;
 };
 
 const composeEntryConfig = async (
-  entries: NonNullable<RsbuildConfig['source']>['entry'],
+  entries: RsbuildConfigEntry,
   bundle: LibConfig['bundle'],
   root: string,
   cssModulesAuto: CssLoaderOptionsAuto,
@@ -1154,7 +1174,7 @@ async function composeLibRsbuildConfig(config: LibConfig) {
     userExternals: config.output?.externals,
   });
   const { entryConfig, lcp } = await composeEntryConfig(
-    config.source?.entry,
+    config.source?.entry!,
     config.bundle,
     rootPath,
     cssModulesAuto,
