@@ -24,6 +24,11 @@ export type RsbuildConfigWithLibInfo = {
   config: RsbuildConfig;
 };
 
+export type RsbuildConfigEntry = NonNullable<
+  NonNullable<RsbuildConfig['source']>['entry']
+>;
+export type RsbuildConfigEntryItem = RsbuildConfigEntry[string];
+
 export type RsbuildConfigOutputTarget = NonNullable<
   RsbuildConfig['output']
 >['target'];
