@@ -13,7 +13,7 @@ describe('Should load config file correctly', () => {
   test('Load config.js in cjs project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/cjs');
     const configFilePath = join(fixtureDir, 'rslib.config.js');
-    const config = await loadConfig({ path: configFilePath });
+    const { content: config } = await loadConfig({ path: configFilePath });
     expect(config).toEqual({
       lib: [],
       source: {
@@ -30,7 +30,7 @@ describe('Should load config file correctly', () => {
   test('Load config.mjs in cjs project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/cjs');
     const configFilePath = join(fixtureDir, 'rslib.config.mjs');
-    const config = await loadConfig({ path: configFilePath });
+    const { content: config } = await loadConfig({ path: configFilePath });
     expect(config).toEqual({
       lib: [],
       source: {
@@ -47,7 +47,7 @@ describe('Should load config file correctly', () => {
   test('Load config.ts in cjs project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/cjs');
     const configFilePath = join(fixtureDir, 'rslib.config.ts');
-    const config = await loadConfig({ path: configFilePath });
+    const { content: config } = await loadConfig({ path: configFilePath });
     expect(config).toEqual({
       lib: [],
       source: {
@@ -64,7 +64,7 @@ describe('Should load config file correctly', () => {
   test('Load config.cjs with defineConfig in cjs project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/cjs');
     const configFilePath = join(fixtureDir, 'rslib.config.cjs');
-    const config = await loadConfig({ path: configFilePath });
+    const { content: config } = await loadConfig({ path: configFilePath });
     expect(config).toEqual({
       lib: [],
       source: {
@@ -81,7 +81,7 @@ describe('Should load config file correctly', () => {
   test('Load config.js in esm project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/esm');
     const configFilePath = join(fixtureDir, 'rslib.config.js');
-    const config = await loadConfig({ path: configFilePath });
+    const { content: config } = await loadConfig({ path: configFilePath });
     expect(config).toEqual({
       lib: [],
       source: {
@@ -98,7 +98,7 @@ describe('Should load config file correctly', () => {
   test('Load config.cjs in esm project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/esm');
     const configFilePath = join(fixtureDir, 'rslib.config.cjs');
-    const config = await loadConfig({ path: configFilePath });
+    const { content: config } = await loadConfig({ path: configFilePath });
     expect(config).toEqual({
       lib: [],
       source: {
@@ -115,7 +115,7 @@ describe('Should load config file correctly', () => {
   test('Load config.ts in esm project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/esm');
     const configFilePath = join(fixtureDir, 'rslib.config.ts');
-    const config = await loadConfig({ path: configFilePath });
+    const { content: config } = await loadConfig({ path: configFilePath });
     expect(config).toEqual({
       lib: [],
       source: {
@@ -132,7 +132,7 @@ describe('Should load config file correctly', () => {
   test('Load config.mjs with defineConfig in esm project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/esm');
     const configFilePath = join(fixtureDir, 'rslib.config.mjs');
-    const config = await loadConfig({ path: configFilePath });
+    const { content: config } = await loadConfig({ path: configFilePath });
     expect(config).toMatchObject({
       lib: [],
       source: {

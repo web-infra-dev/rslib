@@ -3,17 +3,16 @@ import type { RslibConfig } from '../types';
 import { getAbsolutePath } from '../utils/helper';
 import type { CommonOptions } from './commands';
 
-export async function loadRslibConfig(
-  options: CommonOptions,
-): Promise<RslibConfig> {
+export async function loadRslibConfig(options: CommonOptions): Promise<{
+  content: RslibConfig;
+  filePath: string;
+}> {
   const cwd = process.cwd();
   const root = options.root ? getAbsolutePath(cwd, options.root) : cwd;
 
-  const rslibConfig = await loadConfig({
+  return loadConfig({
     cwd: root,
     path: options.config,
     envMode: options.envMode,
   });
-
-  return rslibConfig;
 }

@@ -200,7 +200,7 @@ export async function rslibBuild({
   path?: string;
   modifyConfig?: (config: RslibConfig) => void;
 }) {
-  const rslibConfig = await loadConfig({
+  const { content: rslibConfig } = await loadConfig({
     cwd,
     path,
   });

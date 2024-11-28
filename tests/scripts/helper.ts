@@ -61,3 +61,33 @@ export const proxyConsole = (
     },
   };
 };
+
+export const waitFor = async (
+  fn: () => boolean,
+  {
+    maxChecks = 100,
+    interval = 20,
+  }: {
+    maxChecks?: number;
+    interval?: number;
+  } = {},
+) => {
+  let checks = 0;
+
+  while (checks < maxChecks) {
+    if (fn()) {
+      return true;
+    }
+    checks++;
+    await new Promise((resolve) => setTimeout(resolve, interval));
+  }
+
+  return false;
+};
+
+export const awaitFileExists = async (dir: string) => {
+  const result = await waitFor(() => fse.existsSync(dir), { interval: 50 });
+  if (!result) {
+    throw new Error(`awaitFileExists failed: ${dir}`);
+  }
+};

@@ -14,6 +14,11 @@ export default {
   dependencies: [
     'commander',
     {
+      name: 'chokidar',
+      // strip sourcemap comment
+      prettier: true,
+    },
+    {
       name: 'rslog',
       afterBundle(task) {
         // use the cjs bundle of rslog

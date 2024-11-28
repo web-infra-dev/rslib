@@ -117,7 +117,10 @@ export async function loadConfig({
   cwd?: string;
   path?: string;
   envMode?: string;
-}): Promise<RslibConfig> {
+}): Promise<{
+  content: RslibConfig;
+  filePath: string;
+}> {
   const configFilePath = resolveConfigPath(cwd, path);
   const { content } = await loadRsbuildConfig({
     cwd: dirname(configFilePath),
@@ -125,7 +128,7 @@ export async function loadConfig({
     envMode,
   });
 
-  return content as RslibConfig;
+  return { content: content as RslibConfig, filePath: configFilePath };
 }
 
 const composeExternalsWarnConfig = (

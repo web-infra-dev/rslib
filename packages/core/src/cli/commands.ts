@@ -5,6 +5,7 @@ import { build } from './build';
 import { loadRslibConfig } from './init';
 import { inspect } from './inspect';
 import { startMFDevServer } from './mf';
+import { watchFilesForRestart } from './restart';
 
 export type CommonOptions = {
   root?: string;
@@ -62,11 +63,20 @@ export function runCli(): void {
     .description('build the library for production')
     .action(async (options: BuildOptions) => {
       try {
-        const rslibConfig = await loadRslibConfig(options);
-        await build(rslibConfig, {
-          lib: options.lib,
-          watch: options.watch,
-        });
+        const cliBuild = async () => {
+          const { content: rslibConfig, filePath } =
+            await loadRslibConfig(options);
+
+          await build(rslibConfig, options);
+
+          if (options.watch) {
+            watchFilesForRestart([filePath], async () => {
+              await cliBuild();
+            });
+          }
+        };
+
+        await cliBuild();
       } catch (err) {
         logger.error('Failed to build.');
         logger.error(err);
@@ -90,7 +100,7 @@ export function runCli(): void {
     .action(async (options: InspectOptions) => {
       try {
         // TODO: inspect should output Rslib's config
-        const rslibConfig = await loadRslibConfig(options);
+        const { content: rslibConfig } = await loadRslibConfig(options);
         await inspect(rslibConfig, {
           lib: options.lib,
           mode: options.mode,
@@ -108,9 +118,18 @@ export function runCli(): void {
     .description('start Rsbuild dev server of Module Federation format')
     .action(async (options: CommonOptions) => {
       try {
-        const rslibConfig = await loadRslibConfig(options);
-        // TODO: support lib option in mf dev server
-        await startMFDevServer(rslibConfig);
+        const cliMfDev = async () => {
+          const { content: rslibConfig, filePath } =
+            await loadRslibConfig(options);
+          // TODO: support lib option in mf dev server
+          await startMFDevServer(rslibConfig);
+
+          watchFilesForRestart([filePath], async () => {
+            await cliMfDev();
+          });
+        };
+
+        await cliMfDev();
       } catch (err) {
         logger.error('Failed to start mf dev.');
         logger.error(err);
