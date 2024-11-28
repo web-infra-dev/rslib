@@ -145,13 +145,16 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
       order: 'post',
     });
 
-    api.onCloseBuild(() => {
+    const killProcesses = () => {
       for (const childProcess of childProcesses) {
         if (!childProcess.killed) {
           childProcess.kill();
         }
       }
       childProcesses = [];
-    });
+    };
+
+    api.onCloseBuild(killProcesses);
+    api.onCloseDevServer(killProcesses);
   },
 });

@@ -1,7 +1,7 @@
 import path from 'node:path';
 import chokidar from 'chokidar';
-import { color, debounce, isTTY } from './utils/helper';
-import { logger } from './utils/logger';
+import { color, debounce, isTTY } from '../utils/helper';
+import { logger } from '../utils/logger';
 
 export async function watchFilesForRestart(
   files: string[],
