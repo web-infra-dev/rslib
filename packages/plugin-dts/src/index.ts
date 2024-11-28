@@ -1,4 +1,4 @@
-import { fork } from 'node:child_process';
+import { type ChildProcess, fork } from 'node:child_process';
 import { dirname, extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { type RsbuildConfig, type RsbuildPlugin, logger } from '@rsbuild/core';
@@ -60,6 +60,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
 
     const dtsPromises: Promise<TaskResult>[] = [];
     let promisesResult: TaskResult[] = [];
+    let childProcesses: ChildProcess[] = [];
 
     api.onBeforeEnvironmentCompile(
       ({ isWatch, isFirstCompile, environment }) => {
@@ -73,6 +74,8 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         const childProcess = fork(join(__dirname, `./dts${jsExtension}`), [], {
           stdio: 'inherit',
         });
+
+        childProcesses.push(childProcess);
 
         // TODO: @microsoft/api-extractor only support single entry to bundle DTS
         // use first element of Record<string, string> type entry config
@@ -140,6 +143,15 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         }
       },
       order: 'post',
+    });
+
+    api.onCloseBuild(() => {
+      for (const childProcess of childProcesses) {
+        if (!childProcess.killed) {
+          childProcess.kill();
+        }
+      }
+      childProcesses = [];
     });
   },
 });

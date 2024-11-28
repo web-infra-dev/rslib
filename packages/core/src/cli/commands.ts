@@ -62,7 +62,13 @@ export function runCli(): void {
     .description('build the library for production')
     .action(async (options: BuildOptions) => {
       try {
-        await build(options);
+        const { content: rslibConfig, filePath: configFilePath } =
+          await loadRslibConfig(options);
+        await build(rslibConfig, {
+          configFilePath,
+          lib: options.lib,
+          watch: options.watch,
+        });
       } catch (err) {
         logger.error('Failed to build.');
         logger.error(err);

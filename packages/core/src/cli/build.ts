@@ -1,20 +1,16 @@
 import { type RsbuildInstance, createRsbuild } from '@rsbuild/core';
-import {
-  composeRsbuildEnvironments,
-  loadConfig,
-  pruneEnvironments,
-} from '../config';
+import { composeRsbuildEnvironments, pruneEnvironments } from '../config';
 import { onBeforeRestartServer, watchFilesForRestart } from '../restart';
+import type { RslibConfig } from '../types/config';
 import type { BuildOptions } from './commands';
+import { loadRslibConfig } from './init';
 
 export async function build(
-  options: BuildOptions = {},
+  config: RslibConfig,
+  options: Pick<BuildOptions, 'lib' | 'watch'> & {
+    configFilePath?: string;
+  } = {},
 ): Promise<RsbuildInstance> {
-  const { content: config, filePath: configFilePath } = await loadConfig({
-    path: options?.config,
-    envMode: options?.envMode,
-  });
-
   const environments = await composeRsbuildEnvironments(config);
   const rsbuildInstance = await createRsbuild({
     rsbuildConfig: {
@@ -28,12 +24,17 @@ export async function build(
 
   if (options?.watch) {
     const files: string[] = [];
-    files.push(configFilePath);
+    options.configFilePath && files.push(options?.configFilePath);
 
     onBeforeRestartServer(buildInstance.close);
 
     watchFilesForRestart(files, async () => {
-      await build(options);
+      const { content: rslibConfig, filePath: configFilePath } =
+        await loadRslibConfig(options);
+      await build(rslibConfig, {
+        configFilePath,
+        ...options,
+      });
     });
   } else {
     await buildInstance.close();

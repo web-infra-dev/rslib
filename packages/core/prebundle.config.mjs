@@ -13,7 +13,11 @@ export default {
   },
   dependencies: [
     'commander',
-    'chokidar',
+    {
+      name: 'chokidar',
+      // strip sourcemap comment
+      prettier: true,
+    },
     {
       name: 'rslog',
       afterBundle(task) {
