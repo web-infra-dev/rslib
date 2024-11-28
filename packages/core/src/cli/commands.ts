@@ -60,11 +60,7 @@ export function runCli(): void {
     .description('build the library for production')
     .action(async (options: BuildOptions) => {
       try {
-        const rslibConfig = await loadConfig({
-          path: options.config,
-          envMode: options.envMode,
-        });
-        await build(rslibConfig, options);
+        await build(options);
       } catch (err) {
         logger.error('Failed to build.');
         logger.error(err);
@@ -88,7 +84,7 @@ export function runCli(): void {
     .action(async (options: InspectOptions) => {
       try {
         // TODO: inspect should output Rslib's config
-        const rslibConfig = await loadConfig({
+        const { content: rslibConfig } = await loadConfig({
           path: options.config,
           envMode: options.envMode,
         });
@@ -115,7 +111,7 @@ export function runCli(): void {
     .description('start Rsbuild dev server of Module Federation format')
     .action(async (options: CommonOptions) => {
       try {
-        const rslibConfig = await loadConfig({
+        const { content: rslibConfig } = await loadConfig({
           path: options.config,
           envMode: options.envMode,
         });

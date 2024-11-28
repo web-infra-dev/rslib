@@ -13,6 +13,7 @@ export default {
   },
   dependencies: [
     'commander',
+    'chokidar',
     {
       name: 'rslog',
       afterBundle(task) {

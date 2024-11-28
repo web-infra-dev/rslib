@@ -25,6 +25,7 @@ export default defineConfig({
     externals: {
       picocolors: '../compiled/picocolors/index.js',
       commander: '../compiled/commander/index.js',
+      chokidar: '../compiled/chokidar/index.js',
       rslog: '../compiled/rslog/index.js',
     },
   },
