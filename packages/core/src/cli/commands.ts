@@ -69,7 +69,7 @@ export function runCli(): void {
 
           await build(rslibConfig, options);
 
-          if (options?.watch) {
+          if (options.watch) {
             watchFilesForRestart([filePath], async () => {
               await cliBuild();
             });
