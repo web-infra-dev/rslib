@@ -24,13 +24,17 @@ export async function build(
 
   if (options?.watch) {
     const files: string[] = [];
-    options.configFilePath && files.push(options?.configFilePath);
+
+    if (options.configFilePath) {
+      files.push(options.configFilePath);
+    }
 
     onBeforeRestartServer(buildInstance.close);
 
     watchFilesForRestart(files, async () => {
       const { content: rslibConfig, filePath: configFilePath } =
         await loadRslibConfig(options);
+
       await build(rslibConfig, {
         configFilePath,
         ...options,
