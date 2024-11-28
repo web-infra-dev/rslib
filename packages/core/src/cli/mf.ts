@@ -41,6 +41,7 @@ function changeEnvToDev(rsbuildConfig: RsbuildConfig) {
       rspack: {
         optimization: {
           nodeEnv: 'development',
+          moduleIds: 'named',
         },
       },
     },
