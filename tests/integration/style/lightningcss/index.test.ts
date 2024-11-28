@@ -9,7 +9,7 @@ test('should extract css with lightningcss-loader successfully in bundle', async
   const esmFiles = Object.keys(contents.esm);
   expect(esmFiles).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/integration/style/lightningcss/bundle/dist/esm/static/css/index.css",
+      "<ROOT>/tests/integration/style/lightningcss/bundle/dist/esm/index.css",
     ]
   `);
   expectFileContainContent(
@@ -21,7 +21,7 @@ test('should extract css with lightningcss-loader successfully in bundle', async
   const cjsFiles = Object.keys(contents.cjs);
   expect(cjsFiles).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/integration/style/lightningcss/bundle/dist/cjs/static/css/index.css",
+      "<ROOT>/tests/integration/style/lightningcss/bundle/dist/cjs/index.css",
     ]
   `);
   expectFileContainContent(

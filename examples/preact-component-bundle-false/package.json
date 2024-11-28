@@ -1,0 +1,19 @@
+{
+  "name": "@examples/preact-component-bundle-false",
+  "private": true,
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/cjs/index.d.ts",
+  "scripts": {
+    "build": "rslib build"
+  },
+  "devDependencies": {
+    "@rsbuild/plugin-preact": "^1.2.0",
+    "@rsbuild/plugin-sass": "^1.1.1",
+    "@rslib/core": "workspace:*",
+    "preact": "^10.25.0"
+  },
+  "peerDependencies": {
+    "preact": "^10"
+  }
+}

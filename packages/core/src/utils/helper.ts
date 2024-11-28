@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import fsP from 'node:fs/promises';
-import path from 'node:path';
+import path, { isAbsolute, join } from 'node:path';
 import type { RsbuildPlugins } from '@rsbuild/core';
 import color from 'picocolors';
 
@@ -107,6 +107,10 @@ export async function calcLongestCommonPath(
   }
 
   return lca;
+}
+
+export function getAbsolutePath(base: string, filepath: string): string {
+  return isAbsolute(filepath) ? filepath : join(base, filepath);
 }
 
 export const readPackageJson = (rootPath: string): undefined | PkgJson => {

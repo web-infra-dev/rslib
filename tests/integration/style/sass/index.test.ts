@@ -8,14 +8,14 @@ test('should extract css with pluginSass in bundle', async () => {
   const esmFiles = Object.keys(contents.esm);
   expect(esmFiles).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/integration/style/sass/bundle/dist/esm/static/css/index.css",
+      "<ROOT>/tests/integration/style/sass/bundle/dist/esm/index.css",
     ]
   `);
 
   const cjsFiles = Object.keys(contents.cjs);
   expect(cjsFiles).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/integration/style/sass/bundle/dist/cjs/static/css/index.css",
+      "<ROOT>/tests/integration/style/sass/bundle/dist/cjs/index.css",
     ]
   `);
 });

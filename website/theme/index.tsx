@@ -23,7 +23,7 @@ const Layout = () => {
                 : '🚧 Rslib 中文文档正在施工中，可以先查阅英文文档'
             }
             localStorageKey="rslib-announcement-closed"
-            display={page.pageType === 'home'}
+            display={false}
           />
         </NoSSR>
       }

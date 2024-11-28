@@ -47,9 +47,10 @@ You can also set the Browserslist query, such as `last 2 versions`, `> 1%`, `nod
 ```ts title="rslib.config.ts"
 export default {
   lib: [
-    // ...
+    {
+      syntax: ['last 2 versions', '> 1%'],
+    },
   ],
-  syntax: ['last 2 versions', '> 1%'],
 };
 ```
 
@@ -60,8 +61,9 @@ You can also mix ECMAScript version and Browserslist query, such as `es2015` and
 ```ts title="rslib.config.ts"
 export default {
   lib: [
-    // ...
+    {
+      syntax: ['es2015', 'node 20'],
+    },
   ],
-  syntax: ['es2015', 'node 20'],
 };
 ```

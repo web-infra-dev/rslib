@@ -1,11 +1,13 @@
 export { prepareCli } from './cli/prepare';
 export { runCli } from './cli/commands';
+export { build } from './cli/build';
+export { inspect } from './cli/inspect';
+export { startMFDevServer } from './cli/mf';
 export {
   defineConfig,
   loadConfig,
   composeCreateRsbuildConfig as unstable_composeCreateRsbuildConfig,
 } from './config';
-export { build } from './build';
 export { logger } from './utils/logger';
 export type * from './types';
 

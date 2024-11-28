@@ -37,16 +37,20 @@ build the library for production
 
 Options:
   -c --config <config>  specify the configuration file, can be a relative or absolute path
+  -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
   --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
-  --lib <name>          build the specified library (may be repeated)
+  --lib <id>            build the specified library (may be repeated)
   -w --watch            turn on watch mode, watch for changes and rebuild
   -h, --help            display help for command
 ```
 
-:::tip
+### Watch Mode
 
 You can use `rslib build --watch` to turn on watch mode for watching for changes and rebuild.
-:::
+
+### Filter Libraries
+
+You can use the `--lib` option to build specific libraries. The `--lib` option can be repeated to build multiple libraries. Check out the [lib.id](/config/lib/id) to learn how to get or set the library ID.
 
 ## rslib inspect
 
@@ -59,8 +63,9 @@ inspect the Rsbuild / Rspack configs of Rslib projects
 
 Options:
   -c --config <config>  specify the configuration file, can be a relative or absolute path
+  -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
   --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
-  --lib <name>          inspect the specified library (may be repeated)
+  --lib <id>            inspect the specified library (may be repeated)
   --output <output>     specify inspect content output path (default: ".rsbuild")
   --verbose             show full function definitions in output
   -h, --help            display help for command
@@ -80,7 +85,7 @@ Inspect config succeed, open following files to view the content:
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
 ```
 
-### Verbose content
+### Verbose Content
 
 By default, the inspect command omits the content of functions in the configuration object. You can add the `--verbose` option to output the complete content of functions:
 
@@ -88,7 +93,7 @@ By default, the inspect command omits the content of functions in the configurat
 rslib inspect --verbose
 ```
 
-### Multiple output formats
+### Multiple Output Formats
 
 If the current project has multiple output formats, such as ESM artifact and CJS artifact simultaneously, multiple Rspack configuration files will be generated in the `dist/.rsbuild` directory.
 
@@ -103,6 +108,10 @@ Inspect config succeed, open following files to view the content:
   - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
 ```
 
+### Filter Libraries
+
+You can use the `--lib` option to inspect specific libraries. The `--lib` option can be repeated to inspect multiple libraries. Check out the [lib.id](/config/lib/id) to learn how to get or set the library ID.
+
 ## rslib mf dev
 
 The `rslib mf dev` command is utilized to start Rsbuild dev server of Module Federation format.
@@ -116,6 +125,7 @@ start Rsbuild dev server of Module Federation format
 
 Options:
   -c --config <config>  specify the configuration file, can be a relative or absolute path
+  -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
   --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
   -h, --help            display help for command
 ```

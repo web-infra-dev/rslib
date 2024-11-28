@@ -18,6 +18,7 @@ export default defineConfig({
     },
   },
   output: {
-    externals: { react: 'react', bar: 'bar' },
+    externals: { react: 'react', bar: 'bar', './baz.mjs': './baz.mjs' },
+    copy: [{ from: './src/baz.mjs' }],
   },
 });

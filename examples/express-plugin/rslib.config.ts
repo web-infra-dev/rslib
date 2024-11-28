@@ -1,16 +1,10 @@
 import { defineConfig } from '@rslib/core';
 
-const shared = {
-  dts: {
-    bundle: false,
-  },
-};
-
 export default defineConfig({
   lib: [
     {
-      ...shared,
       format: 'esm',
+      dts: true,
       output: {
         distPath: {
           root: './dist/esm',
@@ -18,8 +12,8 @@ export default defineConfig({
       },
     },
     {
-      ...shared,
       format: 'cjs',
+      dts: true,
       output: {
         distPath: {
           root: './dist/cjs',

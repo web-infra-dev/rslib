@@ -44,22 +44,44 @@ test('auto add js extension for relative import', async () => {
   const fixturePath = join(__dirname, 'js-extension');
   const { contents } = await buildAndGetResults({ fixturePath });
 
+  // basic esm
   for (const importer of [
     'import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "./bar.js";',
     'import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";',
     'import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";',
     'import * as __WEBPACK_EXTERNAL_MODULE__qux_js__ from "./qux.js";',
   ]) {
-    expect(Object.values(contents.esm)[3]).toContain(importer);
+    expect(Object.values(contents.esm0!)[3]).toContain(importer);
   }
 
+  // basic cjs
   for (const requirer of [
     'const external_bar_cjs_namespaceObject = require("./bar.cjs");',
     'const external_baz_cjs_namespaceObject = require("./baz.cjs");',
     'const external_foo_cjs_namespaceObject = require("./foo.cjs");',
     'const external_qux_cjs_namespaceObject = require("./qux.cjs");',
   ]) {
-    expect(Object.values(contents.cjs)[3]).toContain(requirer);
+    expect(Object.values(contents.cjs0!)[3]).toContain(requirer);
+  }
+
+  // using `autoExtension: false` along with `output.filename.js` - esm
+  for (const importer of [
+    'import * as __WEBPACK_EXTERNAL_MODULE__bar_mjs__ from "./bar.mjs";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__baz_mjs__ from "./baz.mjs";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__foo_mjs__ from "./foo.mjs";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__qux_mjs__ from "./qux.mjs";',
+  ]) {
+    expect(Object.values(contents.esm1!)[3]).toContain(importer);
+  }
+
+  // using `autoExtension: false` along with `output.filename.js` - cjs
+  for (const requirer of [
+    'const external_bar_cjs_namespaceObject = require("./bar.cjs");',
+    'const external_baz_cjs_namespaceObject = require("./baz.cjs");',
+    'const external_foo_cjs_namespaceObject = require("./foo.cjs");',
+    'const external_qux_cjs_namespaceObject = require("./qux.cjs");',
+  ]) {
+    expect(Object.values(contents.cjs1!)[3]).toContain(requirer);
   }
 });
 

@@ -1,13 +1,15 @@
 import { type RsbuildInstance, createRsbuild } from '@rsbuild/core';
-import type { BuildOptions } from './cli/commands';
 import {
   composeRsbuildEnvironments,
   loadConfig,
   pruneEnvironments,
-} from './config';
-import { onBeforeRestartServer, watchFilesForRestart } from './restart';
+} from '../config';
+import { onBeforeRestartServer, watchFilesForRestart } from '../restart';
+import type { BuildOptions } from './commands';
 
-export async function build(options?: BuildOptions): Promise<RsbuildInstance> {
+export async function build(
+  options: BuildOptions = {},
+): Promise<RsbuildInstance> {
   const { content: config, filePath: configFilePath } = await loadConfig({
     path: options?.config,
     envMode: options?.envMode,
@@ -16,12 +18,12 @@ export async function build(options?: BuildOptions): Promise<RsbuildInstance> {
   const environments = await composeRsbuildEnvironments(config);
   const rsbuildInstance = await createRsbuild({
     rsbuildConfig: {
-      environments: pruneEnvironments(environments, options?.lib),
+      environments: pruneEnvironments(environments, options.lib),
     },
   });
 
   const buildInstance = await rsbuildInstance.build({
-    watch: options?.watch,
+    watch: options.watch,
   });
 
   if (options?.watch) {

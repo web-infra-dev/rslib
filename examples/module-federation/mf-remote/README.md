@@ -1,14 +1,11 @@
-# Rsbuild Project
+# @examples/mf-remote
 
-Module Federation Remote Example
+> [!NOTE]  
+> Check out [README](../README.md) to see how to develop a Rslib MF project in a host app or Storybook.
 
-## Setup
+A Module Federation remote module built with Rsbuild. It is consumed by [mf-react-component](./mf-react-component/) to show how a Rslib MF module could be consumed by another Rslib app while consuming other remote modules at the same time.
 
-Install the dependencies:
-
-```bash
-pnpm install
-```
+Extra remote module is **optional**, it is used to demonstrate a complex Module Federation set up here.
 
 ## Get Started
 

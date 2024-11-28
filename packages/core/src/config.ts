@@ -33,12 +33,16 @@ import type {
   AutoExternal,
   BannerAndFooter,
   DeepRequired,
+  ExcludesFalse,
   Format,
   LibConfig,
   LibOnlyConfig,
   PkgJson,
   Redirect,
+  RsbuildConfigEntry,
+  RsbuildConfigEntryItem,
   RsbuildConfigOutputTarget,
+  RsbuildConfigWithLibInfo,
   RslibConfig,
   RslibConfigAsyncFn,
   RslibConfigExport,
@@ -51,6 +55,7 @@ import {
   calcLongestCommonPath,
   checkMFPlugin,
   color,
+  getAbsolutePath,
   isEmptyObject,
   isObject,
   nodeBuiltInModules,
@@ -463,6 +468,9 @@ export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
       filenameHash: false,
       distPath: {
         js: './',
+        jsAsync: './',
+        css: './',
+        cssAsync: './',
       },
     },
   });
@@ -686,7 +694,7 @@ const composeExternalsConfig = (
 
   const externalsTypeMap = {
     esm: 'module-import',
-    cjs: 'commonjs',
+    cjs: 'commonjs-import',
     umd: 'umd',
     // If use 'var', when projects import an external package like '@pkg', this will cause a syntax error such as 'var pkg = @pkg'.
     // If use 'umd', the judgement conditions may be affected by other packages that define variables like 'define'.
@@ -731,16 +739,24 @@ const composeAutoExtensionConfig = (
     autoExtension,
   });
 
-  return {
-    config: {
-      output: {
-        filename: {
-          js: `[name]${jsExtension}`,
-          ...config.output?.filename,
-        },
+  const updatedConfig: RsbuildConfig = {
+    output: {
+      filename: {
+        js: `[name]${jsExtension}`,
+        ...config.output?.filename,
       },
     },
-    jsExtension,
+  };
+
+  const updatedJsExtension =
+    typeof updatedConfig.output?.filename?.js === 'string' &&
+    updatedConfig.output?.filename?.js
+      ? extname(updatedConfig.output.filename.js)
+      : jsExtension;
+
+  return {
+    config: updatedConfig,
+    jsExtension: updatedJsExtension,
     dtsExtension,
   };
 };
@@ -777,18 +793,36 @@ const composeSyntaxConfig = (
   };
 };
 
-const appendEntryQuery = (
-  entry: NonNullable<RsbuildConfig['source']>['entry'],
-): NonNullable<RsbuildConfig['source']>['entry'] => {
-  const newEntry: Record<string, string> = {};
-  for (const key in entry) {
-    newEntry[key] = `${entry[key]}?${RSLIB_ENTRY_QUERY}`;
+export const appendEntryQuery = (
+  entry: RsbuildConfigEntry,
+): RsbuildConfigEntry => {
+  const newEntry: Record<string, RsbuildConfigEntryItem> = {};
+
+  for (const [key, value] of Object.entries(entry)) {
+    let result: RsbuildConfigEntryItem = value;
+
+    if (typeof value === 'string') {
+      result = `${value}?${RSLIB_ENTRY_QUERY}`;
+    } else if (Array.isArray(value)) {
+      result = value.map((item) => `${item}?${RSLIB_ENTRY_QUERY}`);
+    } else {
+      result = {
+        ...value,
+        import:
+          typeof value.import === 'string'
+            ? `${value.import}?${RSLIB_ENTRY_QUERY}`
+            : value.import.map((item) => `${item}?${RSLIB_ENTRY_QUERY}`),
+      };
+    }
+
+    newEntry[key] = result;
   }
+
   return newEntry;
 };
 
 const composeEntryConfig = async (
-  entries: NonNullable<RsbuildConfig['source']>['entry'],
+  entries: RsbuildConfigEntry,
   bundle: LibConfig['bundle'],
   root: string,
   cssModulesAuto: CssLoaderOptionsAuto,
@@ -935,6 +969,7 @@ const composeBundleConfig = (
                   return callback();
                 }
               } else {
+                // TODO: add redirect.extension option
                 request = `${request}${jsExtension}`;
               }
             }
@@ -1076,9 +1111,13 @@ const composeExternalHelpersConfig = (
   return defaultConfig;
 };
 
-async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
+async function composeLibRsbuildConfig(config: LibConfig) {
   checkMFPlugin(config);
-  const rootPath = dirname(configPath);
+
+  // Get the absolute path of the root directory to align with Rsbuild's default behavior
+  const rootPath = config.root
+    ? getAbsolutePath(process.cwd(), config.root)
+    : process.cwd();
   const pkgJson = readPackageJson(rootPath);
   const { compilerOptions } = await loadTsconfig(
     rootPath,
@@ -1138,9 +1177,9 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
     userExternals: config.output?.externals,
   });
   const { entryConfig, lcp } = await composeEntryConfig(
-    config.source?.entry,
+    config.source?.entry!,
     config.bundle,
-    dirname(configPath),
+    rootPath,
     cssModulesAuto,
   );
   const cssConfig = composeCssConfig(lcp, config.bundle);
@@ -1184,10 +1223,8 @@ async function composeLibRsbuildConfig(config: LibConfig, configPath: string) {
 
 export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
-  path?: string,
-): Promise<{ format: Format; config: RsbuildConfig }[]> {
+): Promise<RsbuildConfigWithLibInfo[]> {
   const constantRsbuildConfig = await createConstantRsbuildConfig();
-  const configPath = path ?? rslibConfig._privateMeta?.configFilePath!;
   const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
 
   if (!libConfigsArray) {
@@ -1204,10 +1241,7 @@ export async function composeCreateRsbuildConfig(
 
     // Merge the configuration of each environment based on the shared Rsbuild
     // configuration and Lib configuration in the settings.
-    const libRsbuildConfig = await composeLibRsbuildConfig(
-      userConfig,
-      configPath,
-    );
+    const libRsbuildConfig = await composeLibRsbuildConfig(userConfig);
 
     // Reset certain fields because they will be completely overridden by the upcoming merge.
     // We don't want to retain them in the final configuration.
@@ -1219,7 +1253,7 @@ export async function composeCreateRsbuildConfig(
     userConfig.output ??= {};
     delete userConfig.output.externals;
 
-    return {
+    const config: RsbuildConfigWithLibInfo = {
       format: libConfig.format!,
       // The merge order represents the priority of the configuration
       // The priorities from high to low are as follows:
@@ -1233,6 +1267,7 @@ export async function composeCreateRsbuildConfig(
         constantRsbuildConfig,
         libRsbuildConfig,
         omit<LibConfig, keyof LibOnlyConfig>(userConfig, {
+          id: true,
           bundle: true,
           format: true,
           autoExtension: true,
@@ -1248,6 +1283,12 @@ export async function composeCreateRsbuildConfig(
         }),
       ),
     };
+
+    if (typeof libConfig.id === 'string') {
+      config.id = libConfig.id;
+    }
+
+    return config;
   });
 
   const composedRsbuildConfig = await Promise.all(libConfigPromises);
@@ -1257,9 +1298,15 @@ export async function composeCreateRsbuildConfig(
 export async function composeRsbuildEnvironments(
   rslibConfig: RslibConfig,
 ): Promise<Record<string, EnvironmentConfig>> {
-  const rsbuildConfigObject = await composeCreateRsbuildConfig(rslibConfig);
+  const rsbuildConfigWithLibInfo =
+    await composeCreateRsbuildConfig(rslibConfig);
+
+  // User provided ids should take precedence over generated ids.
+  const usedIds = rsbuildConfigWithLibInfo
+    .map(({ id }) => id)
+    .filter(Boolean as any as ExcludesFalse);
   const environments: RsbuildConfig['environments'] = {};
-  const formatCount: Record<Format, number> = rsbuildConfigObject.reduce(
+  const formatCount: Record<Format, number> = rsbuildConfigWithLibInfo.reduce(
     (acc, { format }) => {
       acc[format] = (acc[format] ?? 0) + 1;
       return acc;
@@ -1267,20 +1314,32 @@ export async function composeRsbuildEnvironments(
     {} as Record<Format, number>,
   );
 
-  const formatIndex: Record<Format, number> = {
-    esm: 0,
-    cjs: 0,
-    umd: 0,
-    mf: 0,
+  const composeDefaultId = (format: Format): string => {
+    const nextDefaultId = (format: Format, index: number) => {
+      return `${format}${formatCount[format] === 1 && index === 0 ? '' : index}`;
+    };
+
+    let index = 0;
+    let candidateId = nextDefaultId(format, index);
+    while (usedIds.indexOf(candidateId) !== -1) {
+      candidateId = nextDefaultId(format, ++index);
+    }
+    usedIds.push(candidateId);
+    return candidateId;
   };
 
-  for (const { format, config } of rsbuildConfigObject) {
-    const currentFormatCount = formatCount[format];
-    const currentFormatIndex = formatIndex[format]++;
+  for (const { format, id, config } of rsbuildConfigWithLibInfo) {
+    const libId = typeof id === 'string' ? id : composeDefaultId(format);
+    environments[libId] = config;
+  }
 
-    environments[
-      currentFormatCount === 1 ? format : `${format}${currentFormatIndex}`
-    ] = config;
+  const conflictIds = usedIds.filter(
+    (id, index) => usedIds.indexOf(id) !== index,
+  );
+  if (conflictIds.length) {
+    throw new Error(
+      `The following ids are duplicated: ${conflictIds.map((id) => `"${id}"`).join(', ')}. Please change the "lib.id" to be unique.`,
+    );
   }
 
   return environments;

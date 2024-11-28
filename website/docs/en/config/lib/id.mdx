@@ -1,0 +1,60 @@
+# lib.id
+
+- **Type:** `string`
+- **Default:** `undefined`
+
+Specify the library ID. The ID identifies the library and is useful when using the `--lib` flag to build specific libraries with a meaningful `id` in the CLI.
+
+:::tip
+
+Rslib uses Rsbuild's [environments](https://rsbuild.dev/guide/advanced/environments) feature to build multiple libraries in a single project under the hood. `lib.id` will be used as the key for the generated Rsbuild environment.
+
+:::
+
+## Default Value
+
+By default, Rslib automatically generates an ID for each library in the format `${format}${index}`. Here, `format` refers to the value specified in the current lib's [format](/config/lib/format), and `index` indicates the order of the library within all libraries of the same format. If there is only one library with the current format, the `index` will be empty. Otherwise, it will start from `0` and increment.
+
+For example, the libraries in the `esm` format will start from `esm0`, followed by `esm1`, `esm2`, and so on. In contrast, `cjs` and `umd` formats do not include the `index` part since there is only one library for each format.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    { format: 'esm' }, // id is `esm0`
+    { format: 'cjs' }, // id is `cjs`
+    { format: 'esm' }, // id is `esm1`
+    { format: 'umd' }, // id is `umd`
+    { format: 'esm' }, // id is `esm2`
+  ],
+};
+```
+
+## Customize ID
+
+You can also specify a readable or meaningful ID of the library by setting the `id` field in the library configuration. The user-specified ID will take priority, while the rest will be used together to generate the default ID.
+
+For example, `my-lib-a`, `my-lib-b`, and `my-lib-c` will be the IDs of the specified libraries, while the rest will be used to generate and apply the default ID.
+
+{/* prettier-ignore-start */}
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    { format: 'esm', id: 'my-lib-a' }, // ID is `my-lib-a`
+    { format: 'cjs', id: 'my-lib-b' }, // ID is `my-lib-b`
+    { format: 'esm' },                 // ID is `esm0`
+    { format: 'umd', id: 'my-lib-c' }, // ID is `my-lib-c`
+    { format: 'esm' },                 // ID is `esm1`
+  ],
+};
+```
+{/* prettier-ignore-end */}
+
+Then you could only build `my-lib-a` and `my-lib-b` by running the following command:
+
+```bash
+npx rslib build --lib my-lib-a --lib my-lib-b
+```
+
+:::note
+The id of each library must be unique, otherwise it will cause an error.
+:::

@@ -10,7 +10,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
       "mode": "production",
       "output": {
         "distPath": {
+          "css": "./",
+          "cssAsync": "./",
           "js": "./",
+          "jsAsync": "./",
         },
         "externals": [
           [Function],
@@ -72,7 +75,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "pnpapi",
         ],
         "filename": {
-          "js": "[name].js",
+          "js": "[name].mjs",
         },
         "filenameHash": false,
         "minify": {
@@ -239,7 +242,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
       "mode": "production",
       "output": {
         "distPath": {
+          "css": "./",
+          "cssAsync": "./",
           "js": "./",
+          "jsAsync": "./",
         },
         "externals": [
           "assert",
@@ -396,7 +402,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             },
           },
           {
-            "externalsType": "commonjs",
+            "externalsType": "commonjs-import",
             "module": {
               "parser": {
                 "javascript": {
@@ -464,7 +470,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
       "mode": "production",
       "output": {
         "distPath": {
+          "css": "./",
+          "cssAsync": "./",
           "js": "./",
+          "jsAsync": "./",
         },
         "externals": [
           "assert",

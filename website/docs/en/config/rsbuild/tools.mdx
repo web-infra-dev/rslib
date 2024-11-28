@@ -1,1 +1,41 @@
+import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
+ 
 # tools
+
+Configure the low-level tools.
+
+## tools.bundlerChain <RsbuildDocBadge path="/config/tools/bundler-chain" text="tools.bundlerChain" />
+
+[rspack-chain](https://github.com/rspack-contrib/rspack-chain) is a utility library for configuring Rspack.
+
+{/* ## tools.cssExtract <RsbuildDocBadge path="/config/tools/css-extract" text="tools.cssExtract" /> */}
+
+{/* Rsbuild uses the CssExtractRspackPlugin plugin by default to extract CSS into separate files. */}
+
+## tools.cssLoader <RsbuildDocBadge path="/config/tools/css-loader" text="tools.cssLoader" />
+
+Rsbuild uses [css-loader](https://github.com/webpack-contrib/css-loader) by default to handle CSS resources. You can modify the options of css-loader through `tools.cssLoader`.
+
+{/* ## tools.htmlPlugin <RsbuildDocBadge path="/config/tools/html-plugin" text="tools.htmlPlugin" /> */}
+
+{/* The configs of [html-rspack-plugin](https://github.com/rspack-contrib/html-rspack-plugin) can be modified through `tools.htmlPlugin`. */}
+
+## tools.lightningcssLoader <RsbuildDocBadge path="/config/tools/lightningcss-loader" text="tools.lightningcssLoader" />
+
+You can set the options for [builtin:lightningcss-loader](https://rspack.dev/guide/features/builtin-lightningcss-loader) through `tools.lightningcssLoader`.
+
+## tools.postcss <RsbuildDocBadge path="/config/tools/postcss" text="tools.postcss" />
+
+Rsbuild integrates PostCSS by default, you can configure [postcss-loader](https://github.com/webpack-contrib/postcss-loader) through `tools.postcss`.
+
+## tools.rspack <RsbuildDocBadge path="/config/tools/rspack" text="tools.rspack" />
+
+`tools.rspack` is used to configure [Rspack](https://rspack.dev/).
+
+## tools.styleLoader <RsbuildDocBadge path="/config/tools/style-loader" text="tools.styleLoader" />
+
+The config of [style-loader](https://github.com/webpack-contrib/style-loader) can be set through `tools.styleLoader`.
+
+## tools.swc <RsbuildDocBadge path="/config/tools/swc" text="tools.swc" />
+
+You can set the options of [builtin:swc-loader](https://rspack.dev/guide/features/builtin-swc-loader) through `tools.swc`.
