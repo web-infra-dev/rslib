@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import { platform } from 'node:os';
-import path, { join } from 'node:path';
+import path, { basename, dirname, join, relative, resolve } from 'node:path';
 import { type RsbuildConfig, logger } from '@rsbuild/core';
 import MagicString from 'magic-string';
 import color from 'picocolors';
@@ -23,8 +23,8 @@ export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
 export const TEMP_FOLDER = '.rslib';
 export const TEMP_DTS_DIR: string = `${TEMP_FOLDER}/declarations`;
 
-export function ensureTempDeclarationDir(cwd: string): string {
-  const dirPath = path.join(cwd, TEMP_DTS_DIR);
+export function ensureTempDeclarationDir(cwd: string, name: string): string {
+  const dirPath = path.join(cwd, TEMP_DTS_DIR, name);
 
   if (fs.existsSync(dirPath)) {
     return dirPath;
@@ -36,6 +36,37 @@ export function ensureTempDeclarationDir(cwd: string): string {
   fs.writeFileSync(gitIgnorePath, '**/*\n');
 
   return dirPath;
+}
+
+export async function pathExists(path: string): Promise<boolean> {
+  return fs.promises
+    .access(path)
+    .then(() => true)
+    .catch(() => false);
+}
+
+export async function emptyDir(dir: string): Promise<void> {
+  if (!(await pathExists(dir))) {
+    return;
+  }
+
+  try {
+    for (const file of await fs.promises.readdir(dir)) {
+      await fs.promises.rm(path.resolve(dir, file), {
+        recursive: true,
+        force: true,
+      });
+    }
+  } catch (err) {
+    logger.debug(`Failed to empty dir: ${dir}`);
+    logger.debug(err);
+  }
+}
+
+export async function clearTempDeclarationDir(cwd: string): Promise<void> {
+  const dirPath = path.join(cwd, TEMP_DTS_DIR);
+
+  await emptyDir(dirPath);
 }
 
 export function getFileLoc(
@@ -195,4 +226,42 @@ export async function calcLongestCommonPath(
   }
 
   return lca;
+}
+
+export async function cleanDtsFiles(dir: string): Promise<void> {
+  const patterns = ['/**/*.d.ts', '/**/*.d.cts', '/**/*.d.mts'];
+  const files = await Promise.all(
+    patterns.map((pattern) =>
+      glob(convertPath(join(dir, pattern)), { absolute: true }),
+    ),
+  );
+
+  const allFiles = files.flat();
+
+  await Promise.all(allFiles.map((file) => fsP.rm(file, { force: true })));
+}
+
+export async function cleanTsBuildInfoFile(
+  tsconfigPath: string,
+  tsConfigResult: ts.ParsedCommandLine,
+): Promise<void> {
+  const tsconfigDir = dirname(tsconfigPath);
+  const { outDir, rootDir, tsBuildInfoFile } = tsConfigResult.options;
+  let tsbuildInfoFilePath = `${basename(
+    tsconfigPath,
+    '.json',
+  )}${tsBuildInfoFile ?? '.tsbuildinfo'}`;
+  if (outDir) {
+    if (rootDir) {
+      tsbuildInfoFilePath = join(
+        outDir,
+        relative(resolve(tsconfigDir, rootDir), tsconfigDir),
+        tsbuildInfoFilePath,
+      );
+    } else {
+      tsbuildInfoFilePath = join(outDir, tsbuildInfoFilePath);
+    }
+  }
+
+  await fsP.rm(tsbuildInfoFilePath, { force: true });
 }

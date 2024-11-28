@@ -1,0 +1,15 @@
+{
+  "extends": "@rslib/tsconfig/base",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "rootDir": "src",
+    "declaration": true,
+    "declarationDir": "./dist-types/esm"
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../__references__"
+    }
+  ]
+}

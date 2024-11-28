@@ -1,6 +1,10 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { buildAndGetResults, globContentJSON } from 'test-helper';
+import {
+  buildAndGetResults,
+  createTempFiles,
+  globContentJSON,
+} from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
 describe('dts when bundle: false', () => {
@@ -108,6 +112,36 @@ describe('dts when bundle: false', () => {
         "<ROOT>/tests/integration/dts/bundle-false/declaration-dir/dist-types/sum.d.ts",
         "<ROOT>/tests/integration/dts/bundle-false/declaration-dir/dist-types/utils/numbers.d.ts",
         "<ROOT>/tests/integration/dts/bundle-false/declaration-dir/dist-types/utils/strings.d.ts",
+      ]
+    `);
+  });
+
+  test('should clean dts dist files', async () => {
+    const fixturePath = join(__dirname, 'bundle-false', 'clean');
+
+    const checkFiles = await createTempFiles(fixturePath, false);
+
+    const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });
+
+    for (const file of checkFiles) {
+      expect(existsSync(file)).toBe(false);
+    }
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle-false/clean/dist-types/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/clean/dist-types/esm/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/clean/dist-types/esm/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/clean/dist-types/esm/utils/strings.d.ts",
+      ]
+    `);
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle-false/clean/dist-types/cjs/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/clean/dist-types/cjs/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/clean/dist-types/cjs/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/clean/dist-types/cjs/utils/strings.d.ts",
       ]
     `);
   });
@@ -264,6 +298,30 @@ describe('dts when bundle: true', () => {
 
     expect(entries).toMatchSnapshot();
   });
+
+  test('should clean dts dist files and .rslib folder', async () => {
+    const fixturePath = join(__dirname, 'bundle', 'clean');
+
+    const checkFiles = await createTempFiles(fixturePath, true);
+
+    const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });
+
+    for (const file of checkFiles) {
+      expect(existsSync(file)).toBe(false);
+    }
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle/clean/dist-types/esm/index.d.ts",
+      ]
+    `);
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle/clean/dist-types/cjs/index.d.ts",
+      ]
+    `);
+  });
 });
 
 describe('dts when build: true', () => {
@@ -353,6 +411,44 @@ describe('dts when build: true', () => {
       // not easy to proxy child process stdout
       expect(err.message).toBe('Error occurred in esm DTS generation');
     }
+  });
+
+  test('should clean dts dist files', async () => {
+    const fixturePath = join(__dirname, 'build', 'clean');
+
+    const checkFiles = await createTempFiles(fixturePath, false);
+
+    const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });
+
+    for (const file of checkFiles) {
+      expect(existsSync(file)).toBe(false);
+    }
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/build/clean/dist-types/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/build/clean/dist-types/esm/sum.d.ts",
+      ]
+    `);
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/build/clean/dist-types/cjs/index.d.ts",
+        "<ROOT>/tests/integration/dts/build/clean/dist-types/cjs/sum.d.ts",
+      ]
+    `);
+
+    const referenceDistPath = join(
+      fixturePath,
+      '../__references__/dist/index.d.ts',
+    );
+    expect(existsSync(referenceDistPath)).toBeTruthy();
+
+    const cjsBuildInfoPath = join(fixturePath, 'tsconfig.cjs.tsbuildinfo');
+    expect(existsSync(cjsBuildInfoPath)).toBeTruthy();
+
+    const esmBuildInfoPath = join(fixturePath, 'tsconfig.esm.tsbuildinfo');
+    expect(existsSync(esmBuildInfoPath)).toBeTruthy();
   });
 });
 
@@ -447,6 +543,30 @@ describe('dts when composite: true', () => {
       /*! hello banner dts composite*/
       ",
       }
+    `);
+
+    const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
+    expect(existsSync(buildInfoPath)).toBeTruthy();
+  });
+
+  test('should clean dts dist files', async () => {
+    const fixturePath = join(__dirname, 'composite', 'clean');
+
+    const checkFiles = await createTempFiles(fixturePath, false);
+
+    const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });
+
+    for (const file of checkFiles) {
+      expect(existsSync(file)).toBe(false);
+    }
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/composite/clean/dist-types/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/composite/clean/dist-types/esm/sum.d.ts",
+        "<ROOT>/tests/integration/dts/composite/clean/dist-types/esm/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/composite/clean/dist-types/esm/utils/strings.d.ts",
+      ]
     `);
 
     const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');

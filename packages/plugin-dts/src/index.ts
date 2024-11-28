@@ -2,7 +2,14 @@ import { type ChildProcess, fork } from 'node:child_process';
 import { dirname, extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { type RsbuildConfig, type RsbuildPlugin, logger } from '@rsbuild/core';
-import { processSourceEntry } from './utils';
+import ts from 'typescript';
+import {
+  cleanDtsFiles,
+  cleanTsBuildInfoFile,
+  clearTempDeclarationDir,
+  loadTsconfig,
+  processSourceEntry,
+} from './utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,9 +41,10 @@ export type DtsGenOptions = PluginDtsOptions & {
   cwd: string;
   isWatch: boolean;
   dtsEntry: DtsEntry;
-  rootDistPath: string;
+  dtsEmitPath: string;
   build?: boolean;
-  tsconfigPath?: string;
+  tsconfigPath: string;
+  tsConfigResult: ts.ParsedCommandLine;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 };
 
@@ -63,19 +71,12 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
     let childProcesses: ChildProcess[] = [];
 
     api.onBeforeEnvironmentCompile(
-      ({ isWatch, isFirstCompile, environment }) => {
+      async ({ isWatch, isFirstCompile, environment }) => {
         if (!isFirstCompile) {
           return;
         }
 
         const { config } = environment;
-
-        const jsExtension = extname(__filename);
-        const childProcess = fork(join(__dirname, `./dts${jsExtension}`), [], {
-          stdio: 'inherit',
-        });
-
-        childProcesses.push(childProcess);
 
         // TODO: @microsoft/api-extractor only support single entry to bundle DTS
         // use first element of Record<string, string> type entry config
@@ -84,14 +85,55 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
           config.source?.entry,
         );
 
+        const cwd = api.context.rootPath;
+        const tsconfigPath = ts.findConfigFile(
+          cwd,
+          ts.sys.fileExists,
+          config.source.tsconfigPath,
+        );
+
+        if (!tsconfigPath) {
+          logger.error(`tsconfig.json not found in ${cwd}`);
+          throw new Error();
+        }
+
+        const tsConfigResult = loadTsconfig(tsconfigPath);
+        const dtsEmitPath =
+          options.distPath ??
+          tsConfigResult.options.declarationDir ??
+          config.output?.distPath?.root;
+
+        const jsExtension = extname(__filename);
+        const childProcess = fork(join(__dirname, `./dts${jsExtension}`), [], {
+          stdio: 'inherit',
+        });
+
+        childProcesses.push(childProcess);
+
+        const { cleanDistPath } = config.output;
+
+        // clean dts files
+        if (cleanDistPath !== false) {
+          await cleanDtsFiles(dtsEmitPath);
+        }
+
+        // clean .rslib temp folder
+        if (options.bundle) {
+          await clearTempDeclarationDir(cwd);
+        }
+
+        // clean tsbuildinfo file
+        await cleanTsBuildInfoFile(tsconfigPath, tsConfigResult);
+
         const dtsGenOptions: DtsGenOptions = {
           ...options,
           dtsEntry,
+          dtsEmitPath,
           userExternals: config.output.externals,
-          rootDistPath: config.output?.distPath?.root,
-          tsconfigPath: config.source.tsconfigPath,
+          tsconfigPath,
+          tsConfigResult,
           name: environment.name,
-          cwd: api.context.rootPath,
+          cwd,
           isWatch,
         };
 

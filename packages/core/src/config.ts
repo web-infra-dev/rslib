@@ -597,9 +597,9 @@ const composeFormatConfig = ({
             },
             // can not set nodeEnv to false, because mf format should build shared module.
             // If nodeEnv is false, the process.env.NODE_ENV in third-party packages's will not be replaced
-            // now we have not provide dev mode for users, so we can always set nodeEnv as 'production'
             optimization: {
               nodeEnv: 'production',
+              moduleIds: 'deterministic',
             },
           },
         },
