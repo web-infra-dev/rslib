@@ -7,7 +7,7 @@ import { describe, test } from 'vitest';
 describe('build --watch command', async () => {
   test('basic', async () => {
     const distPath = path.join(__dirname, 'dist');
-    await fse.remove(distPath);
+    fse.removeSync(distPath);
 
     const tempConfigFile = path.join(__dirname, 'test-temp-rslib.config.mjs');
 
@@ -30,7 +30,7 @@ export default defineConfig({
 
     await awaitFileExists(distEsmIndexFile);
 
-    await fse.remove(distPath);
+    fse.removeSync(distPath);
 
     fse.outputFileSync(
       tempConfigFile,
