@@ -2,7 +2,7 @@ import { createRsbuild, mergeRsbuildConfig } from '@rsbuild/core';
 import type { RsbuildConfig, RsbuildInstance } from '@rsbuild/core';
 import { composeCreateRsbuildConfig } from '../config';
 import type { RslibConfig } from '../types';
-import { onBeforeRestartServer } from './restart';
+import { onBeforeRestart } from './restart';
 
 export async function startMFDevServer(
   config: RslibConfig,
@@ -30,7 +30,7 @@ async function initMFRsbuild(
   });
   const devServer = await rsbuildInstance.startDevServer();
 
-  onBeforeRestartServer(devServer.server.close);
+  onBeforeRestart(devServer.server.close);
   return rsbuildInstance;
 }
 

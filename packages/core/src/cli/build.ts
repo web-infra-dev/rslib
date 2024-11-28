@@ -2,7 +2,7 @@ import { type RsbuildInstance, createRsbuild } from '@rsbuild/core';
 import { composeRsbuildEnvironments, pruneEnvironments } from '../config';
 import type { RslibConfig } from '../types/config';
 import type { BuildOptions } from './commands';
-import { onBeforeRestartServer } from './restart';
+import { onBeforeRestart } from './restart';
 
 export async function build(
   config: RslibConfig,
@@ -20,7 +20,7 @@ export async function build(
   });
 
   if (options.watch) {
-    onBeforeRestartServer(buildInstance.close);
+    onBeforeRestart(buildInstance.close);
   } else {
     await buildInstance.close();
   }

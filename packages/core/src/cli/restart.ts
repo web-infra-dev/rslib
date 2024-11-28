@@ -41,7 +41,7 @@ let cleaners: Cleaner[] = [];
 /**
  * Add a cleaner to handle side effects
  */
-export const onBeforeRestartServer = (cleaner: Cleaner): void => {
+export const onBeforeRestart = (cleaner: Cleaner): void => {
   cleaners.push(cleaner);
 };
 

@@ -118,18 +118,18 @@ export function runCli(): void {
     .description('start Rsbuild dev server of Module Federation format')
     .action(async (options: CommonOptions) => {
       try {
-        const mfDev = async () => {
+        const cliMfDev = async () => {
           const { content: rslibConfig, filePath } =
             await loadRslibConfig(options);
           // TODO: support lib option in mf dev server
           await startMFDevServer(rslibConfig);
 
           watchFilesForRestart([filePath], async () => {
-            await mfDev();
+            await cliMfDev();
           });
         };
 
-        await mfDev();
+        await cliMfDev();
       } catch (err) {
         logger.error('Failed to start mf dev.');
         logger.error(err);
