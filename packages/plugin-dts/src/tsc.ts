@@ -1,17 +1,13 @@
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import ts from 'typescript';
-import {
-  getFileLoc,
-  getTimeCost,
-  loadTsconfig,
-  processDtsFiles,
-} from './utils';
+import { getFileLoc, getTimeCost, processDtsFiles } from './utils';
 
 export type EmitDtsOptions = {
   name: string;
   cwd: string;
   configPath: string;
+  tsConfigResult: ts.ParsedCommandLine;
   declarationDir: string;
   dtsExtension: string;
   banner?: string;
@@ -63,14 +59,20 @@ export async function emitDts(
   build = false,
 ): Promise<void> {
   const start = Date.now();
-  const { configPath, declarationDir, name, dtsExtension, banner, footer } =
-    options;
-  const configFileParseResult = loadTsconfig(configPath);
+  const {
+    configPath,
+    tsConfigResult,
+    declarationDir,
+    name,
+    dtsExtension,
+    banner,
+    footer,
+  } = options;
   const {
     options: rawCompilerOptions,
     fileNames,
     projectReferences,
-  } = configFileParseResult;
+  } = tsConfigResult;
 
   const compilerOptions = {
     ...rawCompilerOptions,
@@ -160,9 +162,8 @@ export async function emitDts(
         options: compilerOptions,
         projectReferences,
         host,
-        configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(
-          configFileParseResult,
-        ),
+        configFileParsingDiagnostics:
+          ts.getConfigFileParsingDiagnostics(tsConfigResult),
       });
 
       const emitResult = program.emit();
@@ -190,9 +191,8 @@ export async function emitDts(
       const program = ts.createIncrementalProgram({
         rootNames: fileNames,
         options: compilerOptions,
-        configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(
-          configFileParseResult,
-        ),
+        configFileParsingDiagnostics:
+          ts.getConfigFileParsingDiagnostics(tsConfigResult),
         projectReferences,
         host,
         createProgram,

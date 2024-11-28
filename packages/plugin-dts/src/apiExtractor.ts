@@ -52,9 +52,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
         untrimmedFilePath,
       },
       compiler: {
-        tsconfigFilePath: tsconfigPath.includes(cwd)
-          ? tsconfigPath
-          : join(cwd, tsconfigPath),
+        tsconfigFilePath: tsconfigPath,
       },
       projectFolder: cwd,
     };

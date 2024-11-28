@@ -342,3 +342,46 @@ export function queryContent(
 
   return matched[1];
 }
+
+export async function createTempFiles(
+  fixturePath: string,
+  bundle: boolean,
+): Promise<string[]> {
+  const checkFile: string[] = [];
+
+  const tempDirCjs = join(fixturePath, 'dist-types', 'cjs');
+  const tempDirEsm = join(fixturePath, 'dist-types', 'esm');
+  const tempFileCjs = join(tempDirCjs, 'tempFile.d.ts');
+  const tempFileEsm = join(tempDirEsm, 'tempFile.d.ts');
+
+  await fs.promises.mkdir(tempDirCjs, { recursive: true });
+  await fs.promises.mkdir(tempDirEsm, { recursive: true });
+
+  await fs.promises.writeFile(tempFileCjs, 'console.log("temp file for cjs");');
+  await fs.promises.writeFile(tempFileEsm, 'console.log("temp file for esm");');
+
+  checkFile.push(tempFileCjs, tempFileEsm);
+
+  if (bundle) {
+    const tempDirRslib = join(fixturePath, '.rslib', 'declarations', 'cjs');
+    const tempDirRslibEsm = join(fixturePath, '.rslib', 'declarations', 'esm');
+    const tempFileRslibCjs = join(tempDirRslib, 'tempFile.d.ts');
+    const tempFileRslibEsm = join(tempDirRslibEsm, 'tempFile.d.ts');
+
+    await fs.promises.mkdir(tempDirRslib, { recursive: true });
+    await fs.promises.mkdir(tempDirRslibEsm, { recursive: true });
+
+    await fs.promises.writeFile(
+      tempFileRslibCjs,
+      'console.log("temp file for cjs");',
+    );
+    await fs.promises.writeFile(
+      tempFileRslibEsm,
+      'console.log("temp file for esm");',
+    );
+
+    checkFile.push(tempFileRslibCjs, tempFileRslibEsm);
+  }
+
+  return checkFile;
+}
