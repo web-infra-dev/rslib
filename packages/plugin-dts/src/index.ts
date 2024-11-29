@@ -98,9 +98,10 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         }
 
         const tsConfigResult = loadTsconfig(tsconfigPath);
+        const compilerOptions = tsConfigResult.options;
         const dtsEmitPath =
           options.distPath ??
-          tsConfigResult.options.declarationDir ??
+          compilerOptions.declarationDir ??
           config.output?.distPath?.root;
 
         const jsExtension = extname(__filename);
@@ -123,7 +124,13 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         }
 
         // clean tsbuildinfo file
-        await cleanTsBuildInfoFile(tsconfigPath, tsConfigResult);
+        if (
+          compilerOptions.composite ||
+          compilerOptions.incremental ||
+          options.build
+        ) {
+          await cleanTsBuildInfoFile(tsconfigPath, tsConfigResult);
+        }
 
         const dtsGenOptions: DtsGenOptions = {
           ...options,

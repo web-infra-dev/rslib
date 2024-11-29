@@ -263,5 +263,7 @@ export async function cleanTsBuildInfoFile(
     }
   }
 
-  await fsP.rm(tsbuildInfoFilePath, { force: true });
+  if (await pathExists(tsbuildInfoFilePath)) {
+    await fsP.rm(tsbuildInfoFilePath, { force: true });
+  }
 }
