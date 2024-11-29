@@ -243,10 +243,10 @@ export async function cleanDtsFiles(dir: string): Promise<void> {
 
 export async function cleanTsBuildInfoFile(
   tsconfigPath: string,
-  tsConfigResult: ts.ParsedCommandLine,
+  compilerOptions: ts.CompilerOptions,
 ): Promise<void> {
   const tsconfigDir = dirname(tsconfigPath);
-  const { outDir, rootDir, tsBuildInfoFile } = tsConfigResult.options;
+  const { outDir, rootDir, tsBuildInfoFile } = compilerOptions;
   let tsbuildInfoFilePath = `${basename(
     tsconfigPath,
     '.json',

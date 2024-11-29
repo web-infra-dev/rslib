@@ -12,7 +12,13 @@ import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import type { DtsGenOptions } from './index';
 import { emitDts } from './tsc';
-import { calcLongestCommonPath, ensureTempDeclarationDir } from './utils';
+import {
+  calcLongestCommonPath,
+  cleanDtsFiles,
+  cleanTsBuildInfoFile,
+  clearTempDeclarationDir,
+  ensureTempDeclarationDir,
+} from './utils';
 
 const isObject = (obj: unknown): obj is Record<string, any> =>
   Object.prototype.toString.call(obj) === '[object Object]';
@@ -108,10 +114,12 @@ export const calcBundledPackages = (options: {
 export async function generateDts(data: DtsGenOptions): Promise<void> {
   const {
     bundle,
-    dtsEmitPath,
     dtsEntry,
     tsconfigPath,
     tsConfigResult,
+    distPath,
+    rootDistPath,
+    cleanDistPath,
     name,
     cwd,
     build,
@@ -125,6 +133,24 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   logger.start(`Generating DTS... ${color.gray(`(${name})`)}`);
 
   const { options: rawCompilerOptions, fileNames } = tsConfigResult;
+
+  const dtsEmitPath =
+    distPath ?? rawCompilerOptions.declarationDir ?? rootDistPath;
+
+  // clean dts files
+  if (cleanDistPath !== false) {
+    await cleanDtsFiles(dtsEmitPath);
+  }
+
+  // clean .rslib temp folder
+  if (bundle) {
+    await clearTempDeclarationDir(cwd);
+  }
+
+  // clean tsbuildinfo file
+  if (rawCompilerOptions.composite || rawCompilerOptions.incremental || build) {
+    await cleanTsBuildInfoFile(tsconfigPath, rawCompilerOptions);
+  }
 
   // The longest common path of all non-declaration input files.
   // If composite is set, the default is instead the directory containing the tsconfig.json file.
