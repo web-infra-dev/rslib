@@ -4,7 +4,7 @@ Thanks for that you are interested in contributing to Rslib. Before starting you
 
 ## Install Node.js
 
-Use [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm) to run the command below. This will switch to the Node.js version (currently 18) specified in the project's `.nvmrc` file.
+Use [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm) to run the command below. This will switch to the Node.js version specified in the project's `.nvmrc` file.
 
 ```bash
 # with fnm
@@ -88,21 +88,27 @@ You can also run the unit tests of single package:
 pnpm run test:unit packages/core
 ```
 
-### Run artifact tests
-
-Rslib will also verify the correctness of generated artifacts. You can run the artifact tests by executing the following command:
+Update snapshots:
 
 ```sh
-pnpm run test:artifact
+pnpm run test:unit -u
+```
+
+### Run integration tests
+
+Rslib will also verify the correctness of generated artifacts. You can run the integration tests by executing the following command:
+
+```sh
+pnpm run test:integration
 ```
 
 If you need to run a specified test, you can add keywords to filter:
 
 ```sh
 # Only run test cases which contains `dts` keyword in file path
-pnpm test:artifact dts
+pnpm test:integration dts
 # Only run test cases which contains `dts` keyword in test name
-pnpm test:artifact -t dts
+pnpm test:integration -t dts
 ```
 
 ## Linting
