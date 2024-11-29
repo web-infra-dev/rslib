@@ -1,5 +1,4 @@
 import path from 'node:path';
-import chokidar from 'chokidar';
 import { color, debounce, isTTY } from '../utils/helper';
 import { logger } from '../utils/logger';
 
@@ -11,11 +10,12 @@ export async function watchFilesForRestart(
     return;
   }
 
+  const chokidar = await import('chokidar');
+
   const watcher = chokidar.watch(files, {
     ignoreInitial: true,
     // If watching fails due to read permissions, the errors will be suppressed silently.
     ignorePermissionErrors: true,
-    ignored: ['**/node_modules/**', '**/.git/**', '**/.DS_Store/**'],
   });
 
   const callback = debounce(
