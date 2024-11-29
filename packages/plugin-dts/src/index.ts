@@ -3,13 +3,7 @@ import { dirname, extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { type RsbuildConfig, type RsbuildPlugin, logger } from '@rsbuild/core';
 import ts from 'typescript';
-import {
-  cleanDtsFiles,
-  cleanTsBuildInfoFile,
-  clearTempDeclarationDir,
-  loadTsconfig,
-  processSourceEntry,
-} from './utils';
+import { loadTsconfig, processSourceEntry } from './utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -41,10 +35,11 @@ export type DtsGenOptions = PluginDtsOptions & {
   cwd: string;
   isWatch: boolean;
   dtsEntry: DtsEntry;
-  dtsEmitPath: string;
   build?: boolean;
   tsconfigPath: string;
   tsConfigResult: ts.ParsedCommandLine;
+  rootDistPath: string;
+  cleanDistPath: NonNullable<RsbuildConfig['output']>['cleanDistPath'];
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 };
 
@@ -98,10 +93,6 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         }
 
         const tsConfigResult = loadTsconfig(tsconfigPath);
-        const dtsEmitPath =
-          options.distPath ??
-          tsConfigResult.options.declarationDir ??
-          config.output?.distPath?.root;
 
         const jsExtension = extname(__filename);
         const childProcess = fork(join(__dirname, `./dts${jsExtension}`), [], {
@@ -110,28 +101,14 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
 
         childProcesses.push(childProcess);
 
-        const { cleanDistPath } = config.output;
-
-        // clean dts files
-        if (cleanDistPath !== false) {
-          await cleanDtsFiles(dtsEmitPath);
-        }
-
-        // clean .rslib temp folder
-        if (options.bundle) {
-          await clearTempDeclarationDir(cwd);
-        }
-
-        // clean tsbuildinfo file
-        await cleanTsBuildInfoFile(tsconfigPath, tsConfigResult);
-
         const dtsGenOptions: DtsGenOptions = {
           ...options,
           dtsEntry,
-          dtsEmitPath,
+          rootDistPath: config.output?.distPath?.root,
           userExternals: config.output.externals,
           tsconfigPath,
           tsConfigResult,
+          cleanDistPath: config.output.cleanDistPath,
           name: environment.name,
           cwd,
           isWatch,
