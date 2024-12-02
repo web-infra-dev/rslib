@@ -87,8 +87,8 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@module-federation/rsbuild-plugin':
-        specifier: ^0.7.7
-        version: 0.7.7(@module-federation/enhanced@0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.6)
+        specifier: ^0.8.0
+        version: 0.8.0(@module-federation/enhanced@0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.6)
       '@rsbuild/core':
         specifier: ~1.1.6
         version: 1.1.6
@@ -111,8 +111,8 @@ importers:
         specifier: ^0.7.7
         version: 0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1)
       '@module-federation/rsbuild-plugin':
-        specifier: ^0.7.7
-        version: 0.7.7(@module-federation/enhanced@0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.6)
+        specifier: ^0.8.0
+        version: 0.8.0(@module-federation/enhanced@0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.6)
       '@module-federation/storybook-addon':
         specifier: ^3.0.10
         version: 3.0.10(@rsbuild/core@1.1.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack-virtual-modules@0.6.2)(webpack@5.96.1)
@@ -154,8 +154,8 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@module-federation/rsbuild-plugin':
-        specifier: ^0.7.7
-        version: 0.7.7(@module-federation/enhanced@0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.6)
+        specifier: ^0.8.0
+        version: 0.8.0(@module-federation/enhanced@0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.6)
       '@rsbuild/core':
         specifier: ~1.1.6
         version: 1.1.6
@@ -382,8 +382,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(vite@5.3.3(@types/node@22.8.1)(terser@5.31.6))(vitest@2.1.6(@types/node@22.8.1)(terser@5.31.6))
       '@module-federation/rsbuild-plugin':
-        specifier: ^0.7.7
-        version: 0.7.7(@module-federation/enhanced@0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.6)
+        specifier: ^0.8.0
+        version: 0.8.0(@module-federation/enhanced@0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.6)
       '@playwright/test':
         specifier: 1.49.0
         version: 1.49.0
@@ -1563,11 +1563,11 @@ packages:
   '@module-federation/manifest@0.7.7':
     resolution: {integrity: sha512-+NBk0y6t27GT2rfltGQ9CZMzyZ8+mJU8QfQ/Ih/N6l8avbt49IXL5ZuRNiFge4YK2J3hF2ptu74ZICe46d4fgQ==}
 
-  '@module-federation/rsbuild-plugin@0.7.7':
-    resolution: {integrity: sha512-Dpp2Dogn3ZBnIqfLHcc4FVHK2SBOfiPeqn2zZZ1SfWspj2vCzgZ56qwEIE+GGzI2d+excU5IBq8lTiZaD/0adQ==}
+  '@module-federation/rsbuild-plugin@0.8.0':
+    resolution: {integrity: sha512-/CbaSRrpNtt6c5S3TuaQQ3CiUY7QfvaU0J33CyWkv8h0xKfYN6A0aMoxQvYi3z5qyTPth2V49YnlRUlQnaecPA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      '@module-federation/enhanced': 0.7.7
+      '@module-federation/enhanced': 0.8.0
       '@rsbuild/core': 1.x
 
   '@module-federation/rspack@0.7.7':
@@ -1598,6 +1598,9 @@ packages:
 
   '@module-federation/sdk@0.7.7':
     resolution: {integrity: sha512-UMiw+WvgNwc4gw3X0aST7uP9qnfPaOoynY922Vl+JB30NT8MM8jAp/tAoyYARFbB5MNyZF0UicE8dDT2yYHgcw==}
+
+  '@module-federation/sdk@0.8.0':
+    resolution: {integrity: sha512-V2cNGO//sWCyHTaQ0iTcoslolqVgdBIBOkZVLyk9AkZ4B3CO49pe/TmIIaVs9jVg3GO+ZmmazBFKRkqdn2PdRg==}
 
   '@module-federation/storybook-addon@3.0.10':
     resolution: {integrity: sha512-szAEHwTxXGuNdGwQFv+/6YoC8Lvn10QxHCDY1ja5zsNbCCCMB4U7Yp/mEK80xqAS6hUeAQ49JqPGFK01R8sa+Q==}
@@ -7252,10 +7255,10 @@ snapshots:
       - utf-8-validate
       - vue-tsc
 
-  '@module-federation/rsbuild-plugin@0.7.7(@module-federation/enhanced@0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.6)':
+  '@module-federation/rsbuild-plugin@0.8.0(@module-federation/enhanced@0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1))(@rsbuild/core@1.1.6)':
     dependencies:
       '@module-federation/enhanced': 0.7.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))(webpack@5.96.1)
-      '@module-federation/sdk': 0.7.7
+      '@module-federation/sdk': 0.8.0
       '@rsbuild/core': 1.1.6
 
   '@module-federation/rspack@0.7.7(typescript@5.6.3)(vue-tsc@2.1.10(typescript@5.6.3))':
@@ -7297,6 +7300,10 @@ snapshots:
   '@module-federation/sdk@0.5.1': {}
 
   '@module-federation/sdk@0.7.7':
+    dependencies:
+      isomorphic-rslog: 0.0.6
+
+  '@module-federation/sdk@0.8.0':
     dependencies:
       isomorphic-rslog: 0.0.6
 
