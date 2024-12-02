@@ -7,6 +7,8 @@ export default defineConfig({
     entry: {
       index: './src/index.ts',
     },
+  },
+  resolve: {
     alias: {
       '@src': 'src',
     },
