@@ -169,7 +169,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         if (!childProcess.killed) {
           try {
             childProcess.kill();
-            // silent kill error, such as: kill EPERM error on windows
+            // mute kill error, such as: kill EPERM error on windows
             // https://github.com/nodejs/node/issues/51766
           } catch (_err) {}
         }
