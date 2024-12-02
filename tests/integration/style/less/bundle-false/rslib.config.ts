@@ -11,6 +11,8 @@ export default defineConfig({
     entry: {
       index: ['../__fixtures__/basic/src/**', '!../__fixtures__/**/*.d.ts'],
     },
+  },
+  resolve: {
     alias: {
       '~': require('node:path').resolve(
         __dirname,

@@ -8,6 +8,8 @@ export default defineConfig({
     entry: {
       index: ['../__fixtures__/basic/src/index.less'],
     },
+  },
+  resolve: {
     alias: {
       '~': require('node:path').resolve(
         __dirname,

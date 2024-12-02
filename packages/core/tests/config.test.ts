@@ -154,19 +154,23 @@ describe('Should compose create Rsbuild config correctly', () => {
         {
           format: 'esm',
           source: {
+            preEntry: './b.js',
+          },
+          resolve: {
             alias: {
               foo: 'foo/esm',
             },
-            preEntry: './b.js',
           },
         },
         {
           format: 'cjs',
           source: {
+            preEntry: ['./c.js', './d.js'],
+          },
+          resolve: {
             alias: {
               bar: 'bar/cjs',
             },
-            preEntry: ['./c.js', './d.js'],
           },
         },
         {
@@ -174,11 +178,13 @@ describe('Should compose create Rsbuild config correctly', () => {
         },
       ],
       source: {
+        preEntry: './a.js',
+      },
+      resolve: {
         alias: {
           foo: 'foo',
           bar: 'bar',
         },
-        preEntry: './a.js',
       },
       output: {
         filenameHash: false,

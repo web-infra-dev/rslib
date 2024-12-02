@@ -113,11 +113,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "setup": [Function],
         },
       ],
-      "source": {
+      "resolve": {
         "alias": {
           "bar": "bar",
           "foo": "foo/esm",
         },
+      },
+      "source": {
         "entry": {},
         "preEntry": "./b.js",
       },
@@ -348,11 +350,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "setup": [Function],
         },
       ],
-      "source": {
+      "resolve": {
         "alias": {
           "bar": "bar/cjs",
           "foo": "foo",
         },
+      },
+      "source": {
         "entry": {},
         "preEntry": [
           "./a.js",
@@ -572,11 +576,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
           "setup": [Function],
         },
       ],
-      "source": {
+      "resolve": {
         "alias": {
           "bar": "bar",
           "foo": "foo",
         },
+      },
+      "source": {
         "entry": {},
         "preEntry": "./a.js",
       },
