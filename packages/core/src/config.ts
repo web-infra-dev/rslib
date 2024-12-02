@@ -3,6 +3,7 @@ import path, { dirname, extname, isAbsolute, join } from 'node:path';
 import {
   type EnvironmentConfig,
   type RsbuildConfig,
+  type RsbuildPlugin,
   defineConfig as defineRsbuildConfig,
   loadConfig as loadRsbuildConfig,
   mergeRsbuildConfig,
@@ -612,6 +613,19 @@ const composeFormatConfig = ({
   }
 };
 
+const formatRsbuildPlugin = (): RsbuildPlugin => ({
+  name: 'rsbuild:format',
+  setup(api) {
+    api.modifyBundlerChain((config, { CHAIN_ID }) => {
+      // Fix for https://github.com/web-infra-dev/rslib/issues/499.
+      // Prevent parsing and try bundling `new URL()` in ESM format.
+      config.module.rule(CHAIN_ID.RULE.JS).parser({
+        url: false,
+      });
+    });
+  },
+});
+
 const composeShimsConfig = (
   format: Format,
   shims?: Shims,
@@ -657,9 +671,10 @@ const composeShimsConfig = (
             },
           },
         },
-        plugins: [resolvedShims.esm.require && pluginEsmRequireShim()].filter(
-          Boolean,
-        ),
+        plugins: [
+          resolvedShims.esm.require && pluginEsmRequireShim(),
+          formatRsbuildPlugin(),
+        ].filter(Boolean),
       };
       break;
     }
