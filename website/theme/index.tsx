@@ -5,8 +5,6 @@ import Theme from 'rspress/theme';
 import { HomeLayout } from './pages';
 import './index.scss';
 
-const ANNOUNCEMENT_URL = '/';
-
 const Layout = () => {
   const { page } = usePageData();
   const lang = useLang();
@@ -16,14 +14,10 @@ const Layout = () => {
       beforeNav={
         <NoSSR>
           <Announcement
-            href={ANNOUNCEMENT_URL}
-            message={
-              lang === 'en'
-                ? '🚧 Rslib documentation is under construction, stay tuned for a stable version!'
-                : '🚧 Rslib 中文文档正在施工中，可以先查阅英文文档'
-            }
+            href={`${page.routePath.replace('/zh', '')}`}
+            message={'🚧 Rslib 中文文档正在施工中，点击查阅英文文档'}
             localStorageKey="rslib-announcement-closed"
-            display={false}
+            display={lang === 'zh'}
           />
         </NoSSR>
       }
