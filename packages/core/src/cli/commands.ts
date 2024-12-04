@@ -2,7 +2,7 @@ import type { RsbuildMode } from '@rsbuild/core';
 import { type Command, program } from 'commander';
 import { logger } from '../utils/logger';
 import { build } from './build';
-import { loadRslibConfig } from './init';
+import { init } from './init';
 import { inspect } from './inspect';
 import { startMFDevServer } from './mf';
 import { watchFilesForRestart } from './restart';
@@ -10,6 +10,7 @@ import { watchFilesForRestart } from './restart';
 export type CommonOptions = {
   root?: string;
   config?: string;
+  envDir?: string;
   envMode?: string;
   lib?: string[];
 };
@@ -37,7 +38,8 @@ const applyCommonOptions = (command: Command) => {
     .option(
       '--env-mode <mode>',
       'specify the env mode to load the `.env.[mode]` file',
-    );
+    )
+    .option('--env-dir <dir>', 'specify the directory to load `.env` files');
 };
 
 const repeatableOption = (value: string, previous: string[]) => {
@@ -64,13 +66,12 @@ export function runCli(): void {
     .action(async (options: BuildOptions) => {
       try {
         const cliBuild = async () => {
-          const { content: rslibConfig, filePath } =
-            await loadRslibConfig(options);
+          const { config, watchFiles } = await init(options);
 
-          await build(rslibConfig, options);
+          await build(config, options);
 
           if (options.watch) {
-            watchFilesForRestart([filePath], async () => {
+            watchFilesForRestart(watchFiles, async () => {
               await cliBuild();
             });
           }
@@ -100,8 +101,8 @@ export function runCli(): void {
     .action(async (options: InspectOptions) => {
       try {
         // TODO: inspect should output Rslib's config
-        const { content: rslibConfig } = await loadRslibConfig(options);
-        await inspect(rslibConfig, {
+        const { config } = await init(options);
+        await inspect(config, {
           lib: options.lib,
           mode: options.mode,
           output: options.output,
@@ -119,12 +120,11 @@ export function runCli(): void {
     .action(async (options: CommonOptions) => {
       try {
         const cliMfDev = async () => {
-          const { content: rslibConfig, filePath } =
-            await loadRslibConfig(options);
+          const { config, watchFiles } = await init(options);
           // TODO: support lib option in mf dev server
-          await startMFDevServer(rslibConfig);
+          await startMFDevServer(config);
 
-          watchFilesForRestart([filePath], async () => {
+          watchFilesForRestart(watchFiles, async () => {
             await cliMfDev();
           });
         };
