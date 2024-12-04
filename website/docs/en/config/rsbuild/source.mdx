@@ -5,51 +5,6 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 Configure the source code parsing and compilation options.
 
-## source.aliasStrategy <RsbuildDocBadge path="/config/source/alias-strategy" text="source.aliasStrategy" />
-
-`source.aliasStrategy` is used to control the priority between the `paths` option in `tsconfig.json` and the `alias` option in the bundler.
-
-## source.alias <RsbuildDocBadge path="/config/source/alias" text="source.alias" />
-
-Create aliases to import or require certain modules, same as the [resolve.alias](https://rspack.dev/config/resolve#resolvealias) config of Rspack.
-
-It is important to note that `source.alias` differs from [output.externals](/config/rsbuild/output#outputexternals) in the following ways:
-
-- The `source.alias` is used when bundling target code into the product (when [lib.bundle](/config/lib/bundle) is set to `true`). It allows you to replace the target module you want to include in the output with another module.
-
-  For example, if you want to replace `lodash` with `lodash-es` in a bundled CLI application, you can configure it as follows:
-
-  ```ts title="rslib.config.ts"
-  export default {
-    // ...
-    source: {
-      alias: {
-        lodash: 'lodash-es',
-      },
-    },
-  };
-  ```
-
-  All `lodash` modules imported in the source code will be mapped to `lodash-es` and be bundled into the output.
-
-- `output.externals` is used to handle alias mapping for externalized modules. Externalized modules are not included in the bundle; instead, they are imported from external sources at runtime.
-
-  For example, if you want to replace `react` and `react-dom` with `preact/compat` in the bundle, you can configure it as follows:
-
-  ```ts title="rslib.config.ts"
-  export default {
-    // ...
-    source: {
-      alias: {
-        react: 'preact/compat',
-        'react-dom': 'preact/compat',
-      },
-    },
-  };
-  ```
-
-  Now, the code `import { useState } from 'react'` will be replaced with `import { useState } from 'preact/compat'`.
-
 ## source.assetsInclude <RsbuildDocBadge path="/config/source/assets-include" text="source.include" />
 
 Include additional files that should be treated as static assets.
