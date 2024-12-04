@@ -30,6 +30,7 @@ const JS_EXTENSIONS: string[] = [
   'mjsx',
   'mtsx',
   'ctsx',
+  'vue',
 ] as const;
 
 const CSS_EXTENSIONS: string[] = [

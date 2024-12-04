@@ -1177,6 +1177,13 @@ const composeBundlelessExternalConfig = (
         externals: [
           async (data, callback) => {
             const { request, getResolve, context, contextInfo } = data;
+
+            // TEMP: for Vue
+            if (request?.endsWith('lang.css')) {
+              console.log('👌', request);
+              return callback();
+            }
+
             if (!request || !getResolve || !context || !contextInfo) {
               return callback();
             }
@@ -1562,7 +1569,7 @@ async function composeLibRsbuildConfig(
     bundlelessExternalConfig,
     // #endregion
     entryConfig,
-    cssConfig,
+    // cssConfig,
     assetConfig,
     entryChunkConfig,
     minifyConfig,

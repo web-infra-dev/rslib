@@ -155,11 +155,38 @@ const pluginLibCss = (
 
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
       let isUsingCssExtract = false;
+
+      const baseRule = config.module.rules.get(CHAIN_ID.RULE.CSS);
+      baseRule.resourceQuery({
+        not: /raw|inline|vue/,
+      });
+      const newRule = config.module
+        .rule('lint')
+        .after(CHAIN_ID.RULE.CSS)
+        .merge(baseRule.entries())
+        .resourceQuery({
+          not: /ppppppp/,
+        })
+        .test((request) => {
+          console.log('😽', request, /lang\.css$/.test(request));
+          return /lang\.css/.test(request);
+        });
+      // .resourceQuery((...query) => {
+      //   // console.log('👨‍🍳', ...query);
+      //   return false;
+      // });
+
+      for (const use of baseRule.uses.values()) {
+        // @ts-ignore
+        newRule.use(use.name).merge(use.entries());
+      }
+
       for (const ruleId of [
         CHAIN_ID.RULE.CSS,
         CHAIN_ID.RULE.SASS,
         CHAIN_ID.RULE.LESS,
         CHAIN_ID.RULE.STYLUS,
+        'lint',
       ]) {
         const rule = config.module.rule(ruleId);
         if (rule.uses.has(CHAIN_ID.USE.MINI_CSS_EXTRACT)) {
