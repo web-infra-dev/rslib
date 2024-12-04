@@ -11,7 +11,7 @@ describe('ESM shims', async () => {
 
   test('__dirname', async () => {
     for (const shim of [
-      'import { fileURLToPath as __webpack_fileURLToPath__ } from "url";',
+      'import { fileURLToPath as __webpack_fileURLToPath__ } from "node:url";',
       'var src_rslib_entry_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));',
     ]) {
       expect(entries.esm0).toContain(shim);
@@ -24,7 +24,7 @@ describe('ESM shims', async () => {
 
   test('__filename', async () => {
     for (const shim of [
-      'import { fileURLToPath as __webpack_fileURLToPath__ } from "url";',
+      'import { fileURLToPath as __webpack_fileURLToPath__ } from "node:url";',
       'var src_rslib_entry_filename = __webpack_fileURLToPath__(import.meta.url);',
     ]) {
       expect(entries.esm0).toContain(shim);
