@@ -12,7 +12,7 @@ Create aliases to import or require certain modules, same as the [resolve.alias]
 
 It is important to note that `resolve.alias` differs from [output.externals](/config/rsbuild/output#outputexternals) in the following ways:
 
-- `resolve.alias` is used when bundling target code into the product (when [lib.bundle](/config/lib/bundle) is set to `true`). It allows you to replace the target module you want to include in the output with another module.
+- `resolve.alias` allows you to replace the target module you want to include in the output bundles with another module. It only works if [lib.bundle](/config/lib/bundle) is set to `true`.
 
   For example, if you want to replace `lodash` with `lodash-es` in a bundled CLI application, you can configure it as follows:
 
