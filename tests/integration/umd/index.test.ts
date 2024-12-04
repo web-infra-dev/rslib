@@ -2,13 +2,15 @@ import { buildAndGetResults } from 'test-helper';
 import { expect, test } from 'vitest';
 
 test('read UMD value in CommonJS', async () => {
+  process.env.NODE_ENV = 'production';
   const fixturePath = __dirname;
   const { entryFiles } = await buildAndGetResults({
     fixturePath,
   });
 
   const fn = require(entryFiles.umd);
-  expect(fn('ok')).toBe('DEBUG:ok');
+  expect(fn('ok')).toBe('production: DEBUG:ok');
+  delete process.env.NODE_ENV;
 });
 
 test('throw error when using UMD with `bundle: false`', async () => {

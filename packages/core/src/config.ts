@@ -583,6 +583,9 @@ const composeFormatConfig = ({
                     type: 'umd',
                   },
             },
+            optimization: {
+              nodeEnv: process.env.NODE_ENV,
+            },
           },
         },
       };

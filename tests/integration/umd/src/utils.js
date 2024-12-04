@@ -1,4 +1,4 @@
-const addPrefix = (prefix, str) => `${prefix}${str}`;
+const addPrefix = (prefix, str, env) => `${env}: ${prefix}${str}`;
 
 module.exports = {
   addPrefix,
