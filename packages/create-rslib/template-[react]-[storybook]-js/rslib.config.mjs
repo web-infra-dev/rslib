@@ -16,11 +16,5 @@ export default defineConfig({
   output: {
     target: 'web',
   },
-  plugins: [
-    pluginReact({
-      swcReactOptions: {
-        runtime: 'classic',
-      },
-    }),
-  ],
+  plugins: [pluginReact()],
 });
