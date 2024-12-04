@@ -39,9 +39,91 @@ Options:
   -c --config <config>  specify the configuration file, can be a relative or absolute path
   -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
   --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
+  --env-dir <dir>       specify the directory to load `.env` files
   --lib <id>            build the specified library (may be repeated)
   -w --watch            turn on watch mode, watch for changes and rebuild
   -h, --help            display help for command
+```
+
+### Environment Variables
+
+Rslib supports injecting env variables or expressions into the code during build, which is helpful for distinguishing the running environment or replacing constants.
+
+You can see more details in [Environment Variables](https://rsbuild.dev/guide/advanced/env-vars#environment-variables).
+
+::: note
+
+`process.env.NODE_ENV` will be preserved in the build output when [format](/config/lib/format) is set to `esm` or `cjs`. For `mf` or `umd` format, it will be preserved to make output directly usable.
+
+:::
+
+#### Env Mode
+
+Rslib supports reading `.env.[mode]` and `.env.[mode].local` files. You can specify the env mode using the `--env-mode <mode>` flag.
+
+For example, set the env mode as `test`:
+
+```bash
+npx rslib build --env-mode test
+```
+
+Rslib will then read the following files in sequence:
+
+- `.env`
+- `.env.local`
+- `.env.test`
+- `.env.test.local`
+
+:::tip
+
+The `--env-mode` option takes precedence over `process.env.NODE_ENV`.
+
+It is recommended to use `--env-mode` to set the env mode, and not to modify `process.env.NODE_ENV`.
+
+:::
+
+#### Env Directory
+
+By default, the `.env` file is located in the root directory of the project. You can specify the env directory by using the `--env-dir <dir>` option in the CLI.
+
+For example, to specify the env directory as `config`:
+
+```bash
+npx rslib build --env-dir config
+```
+
+In this case, Rslib will read the `./config/.env` and other env files.
+
+##### Example
+
+For example, create a `.env` file and add the following contents:
+
+```shell title=".env"
+FOO=hello
+BAR=1
+```
+
+Then in the `rslib.config.ts` file, you can access the above env variables using `import.meta.env.[name]` or `process.env.[name]`:
+
+```ts title="rslib.config.ts"
+console.log(import.meta.env.FOO); // 'hello'
+console.log(import.meta.env.BAR); // '1'
+
+console.log(process.env.FOO); // 'hello'
+console.log(process.env.BAR); // '1'
+```
+
+Now, create a `.env.local` file and add the following contents:
+
+```shell title=".env.local"
+BAR=2
+```
+
+The value of `BAR` is overwritten to `'2'`:
+
+```ts title="rslib.config.ts"
+console.log(import.meta.env.BAR); // '2'
+console.log(process.env.BAR); // '2'
 ```
 
 ### Watch Mode
@@ -65,6 +147,7 @@ Options:
   -c --config <config>  specify the configuration file, can be a relative or absolute path
   -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
   --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
+  --env-dir <dir>       specify the directory to load `.env` files
   --lib <id>            inspect the specified library (may be repeated)
   --output <output>     specify inspect content output path (default: ".rsbuild")
   --verbose             show full function definitions in output
@@ -127,5 +210,6 @@ Options:
   -c --config <config>  specify the configuration file, can be a relative or absolute path
   -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
   --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
+  --env-dir <dir>       specify the directory to load `.env` files
   -h, --help            display help for command
 ```
