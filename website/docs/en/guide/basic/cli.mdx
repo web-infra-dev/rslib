@@ -1,6 +1,6 @@
 # CLI
 
-Rslib comes with a lightweight CLI that includes commands such as build and inspect.
+Rslib comes with a lightweight CLI that includes commands such as [rslib build](#rslib-build) and [rslib inspect](#rslib-inspect).
 
 ## rslib -h
 
@@ -45,15 +45,24 @@ Options:
   -h, --help            display help for command
 ```
 
+### Watch Mode
+
+You can use `rslib build --watch` or `rslib build -w` to enable watch mode for watching for changes and rebuild.
+
+```bash
+npx rslib build -w
+```
+
 ### Environment Variables
 
 Rslib supports injecting env variables or expressions into the code during build, which is helpful for distinguishing the running environment or replacing constants.
 
-You can see more details in [Environment Variables](https://rsbuild.dev/guide/advanced/env-vars#environment-variables).
+You can see more details in [Rsbuild - Environment Variables](https://rsbuild.dev/guide/advanced/env-vars).
 
 ::: note
 
-`process.env.NODE_ENV` will be preserved in the build output when [format](/config/lib/format) is set to `esm` or `cjs`. For `mf` or `umd` format, it will be preserved to make output directly usable.
+- If [format](/config/lib/format) is `esm` or `cjs`, `process.env.NODE_ENV` will be preserved in the build output.
+- If [format](/config/lib/format) is `mf` or `umd`, `process.env.NODE_ENV` will be replaced to ensure that the output can run in the browser.
 
 :::
 
@@ -126,14 +135,6 @@ console.log(import.meta.env.BAR); // '2'
 console.log(process.env.BAR); // '2'
 ```
 
-### Watch Mode
-
-You can use `rslib build --watch` to turn on watch mode for watching for changes and rebuild.
-
-### Filter Libraries
-
-You can use the `--lib` option to build specific libraries. The `--lib` option can be repeated to build multiple libraries. Check out the [lib.id](/config/lib/id) to learn how to get or set the library ID.
-
 ## rslib inspect
 
 The `rslib inspect` command is used to view the Rsbuild config and Rspack config of the Rslib project.
@@ -191,15 +192,11 @@ Inspect config succeed, open following files to view the content:
   - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
 ```
 
-### Filter Libraries
-
-You can use the `--lib` option to inspect specific libraries. The `--lib` option can be repeated to inspect multiple libraries. Check out the [lib.id](/config/lib/id) to learn how to get or set the library ID.
-
 ## rslib mf dev
 
-The `rslib mf dev` command is utilized to start Rsbuild dev server of Module Federation format.
+The `rslib mf dev` command is utilized to start Rsbuild dev server for the [Module Federation](/guide/advanced/module-federation) format.
 
-This enables you to develop your mf format module within the host app more rapidly.
+This enables you to develop and debug your mf format module within the host app.
 
 ```text
 Usage: rslib mf [options] <dev>
@@ -213,3 +210,23 @@ Options:
   --env-dir <dir>       specify the directory to load `.env` files
   -h, --help            display help for command
 ```
+
+## Common Options
+
+### Filter Libraries
+
+Rslib provides the `--lib` option to run command for specified libraries.
+
+```bash
+# Only build the library with id `esm`
+npx rslib build --lib esm
+```
+
+The `--lib` option can be repeated to specify multiple libraries.
+
+```bash
+# Build the libraries with id `esm` and `cjs`
+npx rslib build --lib esm --lib cjs
+```
+
+> Check out the [lib.id](/config/lib/id) to learn how to get or set the library ID.
