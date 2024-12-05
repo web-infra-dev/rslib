@@ -1,60 +1,93 @@
 import { join } from 'node:path';
 import { buildAndGetResults } from 'test-helper';
-import { expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
-test('tree shaking is enabled by default, bar and baz should be shaken', async () => {
-  const fixturePath = join(__dirname, 'default');
-  const { entries } = await buildAndGetResults({ fixturePath });
-  expect(entries.esm).toMatchInlineSnapshot(`
-    "const foo = ()=>{};
-    export { foo };
+describe('minify config', () => {
+  test('tree shaking is enabled by default, bar and baz should be shaken, some comments and annotations are preserved', async () => {
+    const fixturePath = join(__dirname, 'default');
+    const { entries } = await buildAndGetResults({ fixturePath });
+    expect(entries.esm).toMatchInlineSnapshot(`
+    "/*! For license information please see index.js.LICENSE.txt */
+    import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime__ from "react/jsx-runtime";
+    /*! Legal Comment */ const foo = ()=>{};
+    const Button = ()=>/*#__PURE__*/ (0, __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime__.jsx)('button', {});
+    export { Button, foo };
     "
   `);
-});
+  });
 
-test('tree shaking is disabled by the user, bar and baz should be kept', async () => {
-  const fixturePath = join(__dirname, 'config');
-  const { entries } = await buildAndGetResults({ fixturePath });
-  expect(entries.esm).toMatchInlineSnapshot(`
-    "
-    ;// CONCATENATED MODULE: ../__fixtures__/src/index.ts?__rslib_entry__
+  test('minify is disabled, nothing will be stripped', async () => {
+    const fixturePath = join(__dirname, 'config/disabled');
+    const { entries } = await buildAndGetResults({ fixturePath });
+    expect(entries.esm).toMatchInlineSnapshot(`
+    "import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime__ from "react/jsx-runtime";
+
+    ;// CONCATENATED MODULE: external "react/jsx-runtime"
+
+    ;// CONCATENATED MODULE: ../../__fixtures__/src/index.ts?__rslib_entry__
+    /*! Legal Comment */ 
     const foo = ()=>{};
     const bar = ()=>{};
     const baz = ()=>{
         return bar();
     };
+    // normal comment
+    const Button = ()=>/*#__PURE__*/ (0,__WEBPACK_EXTERNAL_MODULE_react_jsx_runtime__.jsx)('button', {});
 
-    export { foo };
+    export { Button, foo };
     "
   `);
+  });
+
+  test('minify is enabled, only preserve some comments and annotations', async () => {
+    const fixturePath = join(__dirname, 'config/enabled');
+    const { entries } = await buildAndGetResults({ fixturePath });
+    expect(entries.esm).toMatchInlineSnapshot(`
+    "/*! For license information please see index.js.LICENSE.txt */
+    import*as t from"react/jsx-runtime";/*! Legal Comment */let o=()=>{},r=()=>/*#__PURE__*/(0,t.jsx)("button",{});export{r as Button,o as foo};"
+  `);
+  });
 });
 
-test('minify is enabled by default in mf format, bar and baz should be minified', async () => {
-  const fixturePath = join(__dirname, 'mf/default');
-  const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
-  // biome-ignore format: snapshot
-  expect(mfExposeEntry).toMatchInlineSnapshot(`""use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["249"],{163:function(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{foo:function(){return foo}});const foo=()=>{}}}]);"`);
-});
+describe('minify config (mf)', () => {
+  test('minify is enabled by default in mf format, bar and baz should be shaken, some comments and annotations are preserved', async () => {
+    const fixturePath = join(__dirname, 'mf/default');
+    const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
+    // biome-ignore format: snapshot
+    expect(mfExposeEntry).toMatchInlineSnapshot(`
+    "/*! For license information please see __federation_expose_default_export.js.LICENSE.txt */
+    "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["249"],{163:function(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{Button:function(){return Button},foo:function(){return foo}});var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__=__webpack_require__(37);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button",{})}}]);"
+  `);
+  });
 
-test('minify is disabled by the user, bar and baz should not be minified', async () => {
-  const fixturePath = join(__dirname, 'mf/config');
-  const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
+  test('minify is disabled by the user, nothing not be stripped', async () => {
+    const fixturePath = join(__dirname, 'mf/config');
+    const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
 
-  expect(mfExposeEntry).toMatchInlineSnapshot(`""use strict";
-(globalThis['disable_minify'] = globalThis['disable_minify'] || []).push([["249"], {
-"163": (function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-__webpack_require__.r(__webpack_exports__);
-__webpack_require__.d(__webpack_exports__, {
-  foo: function() { return foo; }
-});
-const foo = ()=>{};
-const bar = ()=>{};
-const baz = ()=>{
-    return bar();
-};
+    expect(mfExposeEntry).toMatchInlineSnapshot(`
+    ""use strict";
+    (globalThis['disable_minify'] = globalThis['disable_minify'] || []).push([["249"], {
+    "163": (function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+    __webpack_require__.r(__webpack_exports__);
+    __webpack_require__.d(__webpack_exports__, {
+      Button: function() { return Button; },
+      foo: function() { return foo; }
+    });
+    /* ESM import */var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
+    /* ESM import */var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+    /*! Legal Comment */ 
+    const foo = ()=>{};
+    const bar = ()=>{};
+    const baz = ()=>{
+        return bar();
+    };
+    // normal comment
+    const Button = ()=>/*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('button', {});
 
 
-}),
+    }),
 
-}]);"`);
+    }]);"
+  `);
+  });
 });

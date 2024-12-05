@@ -6,10 +6,11 @@ export default defineConfig({
   lib: [generateBundleEsmConfig()],
   output: {
     minify: false,
+    externals: ['react/jsx-runtime'],
   },
   source: {
     entry: {
-      index: path.resolve(__dirname, '../__fixtures__/src/index.ts'),
+      index: path.resolve(__dirname, '../../__fixtures__/src/index.ts'),
     },
   },
 });
