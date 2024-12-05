@@ -1,1 +1,22 @@
 # 产物结构
+
+## bundle / bundleless
+
+首先让我们了解一下 bundle 和 bundleless。
+
+所谓 bundle 是指对构建产物进行打包，构建产物可能是一个文件，也有可能是基于一定的[代码拆分策略](https://esbuild.github.io/api/#splitting)得到的多个文件。
+
+而 bundleless，则是指对每个源文件单独进行编译构建，但是并不将它们打包在一起。每一个产物文件都可以找到与之相对应的源码文件。bundleless 构建的过程，也可以理解为仅对源文件进行代码转换的过程。
+
+它们有各自的好处：
+
+- bundle 可以减少构建产物的体积，也可以对依赖预打包，减小安装依赖的体积。提前对库进行打包，可以加快应用项目构建的速度。
+- bundleless 则是可以保持原有的文件结构，更有利于调试和 tree shaking。
+
+:::warning
+
+bundleless 是单文件编译模式，因此对于类型的引用和导出你需要加上 `type` 字段， 例如 `import type { A } from './types`。更多信息可以参考 [TypeScript - isolatedModules](/guide/basic/typescript#isolatedmodules)。
+
+:::
+
+你可以使用 [bundle](/config/lib/bundle) 选项来指定是否进行 bundle，默认情况下该选项设置为 `true`。

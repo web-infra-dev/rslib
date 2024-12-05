@@ -32,9 +32,9 @@ export type { SomeType } from './types';
 
 ## tsconfig.json Path
 
-Rslib by default reads the `tsconfig.json` file from the root directory. You can use [source.tsconfigPath](https://rsbuild.dev/config/source/tsconfig-path) to configure a custom tsconfig.json file path.
+Rslib by default reads the `tsconfig.json` file from the root directory. You can use [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath) to configure a custom `tsconfig.json` file path.
 
-```ts
+```ts title="rslib.config.ts"
 export default {
   lib: [
     // ...

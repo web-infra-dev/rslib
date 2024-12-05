@@ -1,1 +1,82 @@
 # 处理三方依赖
+
+通常，项目所需的三方依赖可以通过包管理器的 `install` 命令安装。安装成功后，它们通常会出现在项目的 `package.json` 文件中的 `dependencies` 和 `devDependencies` 字段下。
+
+```json title="package.json"
+{
+  "dependencies": {},
+  "devDependencies": {}
+}
+```
+
+`dependencies` 字段下的依赖通常来说是这个包运行所需的依赖，如果这些三方依赖声明在 `devDependencies` 字段下，那么在生产运行时会出现缺失依赖。
+
+除了 `dependencies` 字段，`peerDependencies` 也可以声明在生产环境中需要的依赖，但它更强调这些依赖在项目运行时的存在，类似于插件机制。
+
+## 三方依赖的默认处理
+
+默认情况下，`dependencies`、`optionalDependencies` 和 `peerDependencies` 字段下的三方依赖不会被 Rslib 打包。
+
+这是因为在 npm 包安装时，其 `dependencies` 也会被安装。通过不打包 `dependencies`，可以减少包的体积。
+
+如果需要打包某些依赖，建议将它们从 `dependencies` 移动到 `devDependencies`，这相当于预打包依赖，并减少依赖安装的体积。
+
+### 示例
+
+如果项目依赖了 `react`。
+
+```json title="package.json"
+{
+  "dependencies": {
+    "react": "^18"
+  },
+  // 或
+  "peerDependencies": {
+    "react": "^18"
+  }
+}
+```
+
+当在源代码中使用 `react` 依赖时：
+
+```tsx title="src/index.ts"
+import React from 'react';
+console.info(React);
+```
+
+此时产物中不会包含 `react` 的代码:
+
+```js title="dist/index.js"
+import * as __WEBPACK_EXTERNAL_MODULE_react__ from 'react';
+console.info(__WEBPACK_EXTERNAL_MODULE_react__['default']);
+```
+
+如果想要修改默认的处理方式，可以通过下面的 API 进行修改:
+
+- [lib.autoExternal](/config/lib/auto-external)
+- [output.externals](/config/rsbuild/output#outputexternals)
+
+## 排除指定三方依赖
+
+上面介绍的配置可以让你实现对三方依赖更细微的处理。
+
+例如当我们需要仅对某些依赖不进行打包处理的时候，可以按照如下方式进行配置：
+
+:::tip
+在这种情况下，某些依赖可能不适合打包。如果遇到这种情况，则可以按照下面的方式进行处理。
+:::
+
+```ts
+export default defineConfig({
+  lib: [
+    {
+      // ...
+      autoExternal: true,
+      output: {
+        externals: ['pkg-1', /pkg-2/],
+      },
+      // ...
+    },
+  ],
+});
+```

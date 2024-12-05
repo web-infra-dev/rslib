@@ -9,17 +9,17 @@ Generally, third-party dependencies required by a project can be installed via t
 }
 ```
 
-Dependencies under `"dependencies"` are generally related to project code and builds, and if these third-party dependencies are declared under `"devDependencies"`, then there will be missing dependencies in production runtime.
+Dependencies under `"dependencies"` are generally required for the package in runtime, and if these third-party dependencies are declared under `"devDependencies"`, then there will be missing dependencies in production runtime.
 
 In addition to `"dependencies"`, `"peerDependencies"`can also declare dependencies that are needed in the production environment, but it puts more emphasis on the existence of these dependencies declared by `"peerDependencies"` in the project's runtime environment, similar to the plugin mechanism.
 
 ## Default handling of third-party dependencies
 
-By default, **third-party dependencies under `"dependencies"`, `"optionalDependencies"` and `"peerDependencies"` are not bundled by Rslib**.
+By default, third-party dependencies under `"dependencies"`, `"optionalDependencies"` and `"peerDependencies"` are not bundled by Rslib.
 
 This is because when the npm package is installed, its `"dependencies"` will also be installed. By not packaging `"dependencies"`, you can reduce the size of the package product.
 
-If you need to package some dependencies, it is recommended to move them from `"dependencies"` to `"devDependencies"`, which is equivalent to **prebundle** the dependencies and reduces the size of the dependency installation.
+If you need to package some dependencies, it is recommended to move them from `"dependencies"` to `"devDependencies"`, which is equivalent to prebundle the dependencies and reduces the size of the dependency installation.
 
 ### Example
 
@@ -51,13 +51,14 @@ import * as __WEBPACK_EXTERNAL_MODULE_react__ from 'react';
 console.info(__WEBPACK_EXTERNAL_MODULE_react__['default']);
 ```
 
-If you want to modify the default processing, you can use the following API.
+If you want to modify the default processing, you can use the following API:
 
 - [lib.autoExternal](/config/lib/auto-external)
+- [output.externals](/config/rsbuild/output#outputexternals)
 
 ## Exclude specified third-party dependencies
 
-We previously introduced the use of [`lib.autoExternal`](/config/lib/auto-external). This configuration lets you manage third-party dependencies more precisely.
+The configuration described above allows you to implement more fine-grained handling of third-party dependencies.
 
 For example, when we need to leave only certain dependencies unbundled, we can configure it as follows.
 

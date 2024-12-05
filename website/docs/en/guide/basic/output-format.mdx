@@ -5,7 +5,7 @@ import MF from '../start/components/MF.mdx';
 
 # Output Format
 
-This sets the output format for the generated JavaScript files. There are three supported values now: `esm`, `cjs`, and `umd`. In this guide, we will discuss the differences between these formats and how to choose the right one for your library.
+There are four supported output formats for the generated JavaScript files in Rslib: `esm`, `cjs`, `umd`, and `mf`. In this chapter, we will introduce the differences between these formats and how to choose the right one for your library.
 
 ## ESM / CJS
 
@@ -13,19 +13,17 @@ Library authors need to carefully consider which module formats to support. Let'
 
 ### What are ESM and CJS?
 
-<ESM />
-
 - **ESM**: ESM is <ESM />
 
 - **CommonJS**: [CommonJS](https://nodejs.org/api/modules.html#modules-commonjs-modules) is <CJS />
 
-### What is the dilemma of esm / cjs
+### What is the dilemma of ESM / CJS
 
 > The following references are from [Node Modules at War: Why CommonJS and ES Modules Can't Get Along](https://redfin.engineering/node-modules-at-war-why-commonjs-and-es-modules-cant-get-along-9617135eeca1).
 
 1. You can't `require()` ESM scripts; you can only import ESM scripts, like this: `import {foo} from 'foo'`
 2. CJS scripts can't use static `import` statements like the one above.
-3. ESM scripts can `import` CJS scripts, but only by using the “default import” syntax `import _ from 'lodash'`, not the “named import” syntax `import {shuffle} from 'lodash'`, which is a hassle if the CJS script uses named exports. (Except, sometimes, unpredictibly, Node can figure out what you meant!)
+3. ESM scripts can `import` CJS scripts, but only by using the **default import** syntax `import _ from 'lodash'`, not the **named import** syntax `import {shuffle} from 'lodash'`, which is a hassle if the CJS script uses named exports. (Except, sometimes, unpredictibly, Node can figure out what you meant!)
 4. ESM scripts can `require()` CJS scripts, even with named exports, but it's typically not worth the trouble, because it requires even more boilerplate, and, worst of all, bundlers like Webpack and Rollup don't/won't know how to work with ESM scripts that use `require()`.
 5. CJS is the default; you have to opt-in to ESM mode. You can opt-in to ESM mode by renaming your script from `.js` to `.mjs`. Alternately, you can set `"type": "module"` in `package.json`, and then you can opt-out of ESM by renaming scripts from `.js` to `.cjs`. (You can even tweak just an individual subdirectory by putting a one-line `{"type": "module"}` `package.json` file in there.)
 
@@ -33,7 +31,7 @@ Library authors need to carefully consider which module formats to support. Let'
 
 For different shapes of libraries, the choice of module format may vary. Here are two common scenarios:
 
-#### ship [pure ESM](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) package.
+#### ship [pure ESM](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) package
 
 shipping only ESM is the best choice for libraries that are intended to be used in modern environments, such as browser applications or Node.js applications that support ESM. However, if the upstream library is in format of CJS, they only can import pure ESM by using dynamic import like `const pureEsmLib = await import('pure-esm-lib')`.
 
@@ -47,7 +45,7 @@ shipping only ESM is the best choice for libraries that are intended to be used 
   - Some Node.js tools and libraries still have limited or incomplete support for ESM, requiring workarounds or additional configuration.
   - You must explicitly include file extensions in import paths, which can be cumbersome, especially when working with TypeScript or other transpiled languages.
 
-#### ship [ESM & CJS (dual)](https://antfu.me/posts/publish-esm-and-cjs#compatibility) package.
+#### ship [ESM & CJS (dual)](https://antfu.me/posts/publish-esm-and-cjs#compatibility) package
 
 The community is migrating to ESM, but there are still many projects using CJS. If you want to support both ESM and CJS, you can publish a dual package. For most library authors, offering dual formats is a safer and smoother way to access the best of both worlds. You could read antfu' blog post [Publish ESM and CJS packages](https://antfu.me/posts/publish-esm-and-cjs) for more details.
 
@@ -60,8 +58,8 @@ The community is migrating to ESM, but there are still many projects using CJS. 
 
 - **Cons:**
 
-  - Increased complexity: Maintaining two module formats adds complexity to the build process, requiring additional configuration and testing to ensure both versions work correctly14.
-  - Dual package hazard: Mixing ESM and CJS can lead to issues such as broken instanceof checks or unexpected behavior when dependencies are loaded in different formats13.
+  - Increased complexity: Maintaining two module formats adds complexity to the build process, requiring additional configuration and testing to ensure both versions work correctly.
+  - Dual package hazard: Mixing ESM and CJS can lead to issues such as broken instanceof checks or unexpected behavior when dependencies are loaded in different formats.
 
 ## UMD
 
@@ -78,17 +76,17 @@ A detailed answer from StackOverflow: [What is the Universal Module Definition (
 > However, for frontend libraries, you still offer a single file for convenience, that users can download (from a CDN) and directly embed in their web pages. This still commonly employs a UMD pattern, it's just no longer written/copied by the library author into their source code, but added automatically by the transpiler/bundler.
 >
 > And similarly, for backend/universal libraries that are supposed to work in
-> node.js, you still also distribute a commonjs module build via npm to support
-> all the users who still use a legacy version of node.js (and don't want/need
+> Node.js, you still also distribute a commonjs module build via npm to support
+> all the users who still use a legacy version of Node.js (and don't want/need
 > to employ a transpiler themselves). This is less common nowadays for new
 > libraries, but existing ones try hard to stay backwards-compatible and not
 > cause applications to break.
 
 ### How to build a UMD library?
 
-- Set the `lib.format` to `umd` in the Rslib configuration file.
-- If the library need to be exported with a name, set `lib.umdName` to the name of the UMD library.
-- Use `output.externals` to specify the external dependencies that the UMD library depends on, `lib.autoExtension` is enabled by default for UMD.
+- Set the [lib.format](/config/lib/format) to `umd` in the Rslib configuration file.
+- If the library need to be exported with a name, set [lib.umdName](/config/lib/umd-name) to the name of the UMD library.
+- Use [output.externals](/config/rsbuild/output#outputexternals) to specify the external dependencies that the UMD library depends on, [lib.autoExtension](/config/lib/auto-extension) is enabled by default for UMD.
 
 ### Examples
 
@@ -136,9 +134,3 @@ export default defineConfig({
 ### What is MF?
 
 MF stands for Module Federation. <MF />
-
-### When to use MF?
-
-### How to build a MF library?
-
-Check out [Advanced - Module Federation](/guide/advanced/module-federation) chapter for more details.
