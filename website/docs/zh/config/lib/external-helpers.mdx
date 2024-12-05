@@ -1,1 +1,110 @@
 # lib.externalHelpers
+
+- **类型:** `boolean`
+- **默认值:** `false`
+
+是否从 [@swc/helpers](https://www.npmjs.com/package/@swc/helpers) 导入 SWC 辅助函数而不是内联它们。
+
+默认情况下，输出的 JavaScript 文件可能需要辅助函数来支持目标环境或输出格式，这些辅助函数会被内联到需要它们的文件中。
+
+当 `externalHelpers` 设置为 `true` 时，输出的 JavaScript 将从外部模块 `@swc/helpers` 导入辅助函数。
+
+::: note
+
+请确保在 `package.json` 的 `dependencies` 字段中声明并安装了 `@swc/helpers`。
+
+:::
+
+## 示例
+
+以下面的代码为例：
+
+```ts title="index.ts"
+export default class FOO {
+  get bar() {
+    return;
+  }
+}
+```
+
+当 `externalHelpers` 禁用时，输出的 JavaScript 将内联辅助函数。
+
+```ts title="rslib.config.ts" {6}
+export default {
+  lib: [
+    // ...
+    syntax: 'es5'
+  ],
+  externalHelpers: false,
+};
+```
+
+以下是输出的 JavaScript 文件，高亮部分是内联的辅助函数：
+
+```js title="index.js" {1-18}
+function _class_call_check(instance, Constructor) {
+  if (!(instance instanceof Constructor))
+    throw new TypeError('Cannot call a class as a function');
+}
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ('value' in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+function _create_class(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+var src_FOO = /*#__PURE__*/ (function () {
+  'use strict';
+  function FOO() {
+    _class_call_check(this, FOO);
+  }
+  _create_class(FOO, [
+    {
+      key: 'bar',
+      get: function () {},
+    },
+  ]);
+  return FOO;
+})();
+export { src_FOO as default };
+```
+
+当启用 `externalHelpers` 时，输出的 JavaScript 将从外部模块 `@swc/helpers` 导入辅助函数。
+
+```ts title="rslib.config.ts" {6}
+export default {
+  lib: [
+    // ...
+    syntax: 'es5'
+  ],
+  externalHelpers: true,
+};
+```
+
+以下是输出的 JavaScript 文件，高亮部分是导入的辅助函数：
+
+```js title="index.js" {1-2}
+import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__ from '@swc/helpers/_/_class_call_check';
+import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__ from '@swc/helpers/_/_create_class';
+var src_FOO = /*#__PURE__*/ (function () {
+  'use strict';
+  function FOO() {
+    (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__._)(this, FOO);
+  }
+  (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__._)(FOO, [
+    {
+      key: 'bar',
+      get: function () {},
+    },
+  ]);
+  return FOO;
+})();
+export { src_FOO as default };
+```

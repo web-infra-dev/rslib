@@ -11,7 +11,7 @@ When `externalHelpers` set to `true`, the output JavaScript will import helper f
 
 ::: note
 
-Make sure to declare the `@swc/helpers` in `dependencies` field of `package.json`.
+Make sure to declare and install `@swc/helpers` in `dependencies` field of `package.json`.
 
 :::
 
@@ -39,9 +39,9 @@ export default {
 };
 ```
 
-Below is the output JavaScript file:
+Below is the output JavaScript file, the highlighted code is the inlined helper functions:
 
-```js title="index.js"
+```js title="index.js" {1-18}
 function _class_call_check(instance, Constructor) {
   if (!(instance instanceof Constructor))
     throw new TypeError('Cannot call a class as a function');
@@ -88,7 +88,7 @@ export default {
 };
 ```
 
-Below is the output JavaScript file:
+Below is the output JavaScript file, the highlighted code is importing helper functions:
 
 ```js title="index.js" {1-2}
 import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__ from '@swc/helpers/_/_class_call_check';

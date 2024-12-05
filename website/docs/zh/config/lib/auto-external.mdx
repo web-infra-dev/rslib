@@ -3,3 +3,117 @@ overviewHeaders: [2, 3]
 ---
 
 # lib.autoExternal
+
+- **类型：**
+
+```ts
+type AutoExternal =
+  | boolean
+  | {
+      dependencies?: boolean;
+      optionalDependencies?: boolean;
+      devDependencies?: boolean;
+      peerDependencies?: boolean;
+    };
+```
+
+- **默认值：** `true`
+
+是否自动对不同依赖类型的依赖进行外部化处理，不将其打包。
+
+## 对象类型
+
+### autoExternal.dependencies
+
+- **类型：** `boolean`
+- **默认值：** `true`
+
+是否自动外部化 `dependencies` 类型的依赖。
+
+### autoExternal.optionalDependencies
+
+- **类型：** `boolean`
+- **默认值：** `true`
+
+是否自动外部化 `optionalDependencies` 类型的依赖。
+
+### autoExternal.peerDependencies
+
+- **类型：** `boolean`
+- **默认值：** `true`
+
+是否自动外部化 `peerDependencies` 类型的依赖。
+
+### autoExternal.devDependencies
+
+- **类型：** `boolean`
+- **默认值：** `false`
+
+是否自动外部化 `devDependencies` 类型的依赖。
+
+## 默认值
+
+`autoExternal` 的默认值为 `true`，意味着以下依赖类型**不会被打包**：
+
+- `dependencies`
+- `optionalDependencies`
+- `peerDependencies`
+
+而以下依赖类型会被**打包**：
+
+- `devDependencies`
+
+此配置等同于下面的对象类型：
+
+```ts
+export default {
+  lib: [
+    {
+      format: 'esm',
+      autoExternal: {
+        dependencies: true,
+        optionalDependencies: true,
+        peerDependencies: true,
+        devDependencies: false,
+      },
+    },
+  ],
+};
+```
+
+## 示例
+
+### 自定义外部化的依赖类型
+
+要禁用特定类型依赖的处理，你可以将 `autoExternal` 配置为一个对象，如下所示：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      autoExternal: {
+        dependencies: false,
+        peerDependencies: false,
+      },
+    },
+  ],
+};
+```
+
+### 禁用默认行为
+
+如果你想禁用默认行为，可以将 `autoExternal` 设置为 `false`：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      autoExternal: false,
+    },
+  ],
+};
+```
+
+关于第三方依赖处理的更多细节，请参考 [处理第三方依赖](/guide/advanced/third-party-deps)。

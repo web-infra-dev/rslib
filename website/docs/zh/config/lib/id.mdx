@@ -1,1 +1,60 @@
 # lib.id
+
+- **类型：** `string`
+- **默认值：** `undefined`
+
+指定库的 ID。ID 用于标识库，在使用 CLI 的 `--lib` 标志构建特定库时，可以使用有意义的 `id` 进行构建。
+
+:::tip
+
+Rslib 在底层使用了 Rsbuild 的 [environments](https://rsbuild.dev/guide/advanced/environments) 特性来在单个项目中构建多个库。`lib.id` 将被用作生成的 Rsbuild environment 的键名。
+
+:::
+
+## 默认值
+
+默认情况下，Rslib 会自动为每个库生成一个格式为 `${format}${index}` 的 ID。其中，`format` 是指当前库在 [format](/config/lib/format) 中指定的值，`index` 表示该库在所有相同格式的库中的序号。如果当前格式只有一个库，则 `index` 为空；否则，从 `0` 开始递增。
+
+例如，`esm` 格式的库将从 `esm0` 开始，依次为 `esm1`、`esm2` 等。相比之下，`cjs` 和 `umd` 格式不包含 `index` 部分，因为每种格式只有一个库。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    { format: 'esm' }, // id is `esm0`
+    { format: 'cjs' }, // id is `cjs`
+    { format: 'esm' }, // id is `esm1`
+    { format: 'umd' }, // id is `umd`
+    { format: 'esm' }, // id is `esm2`
+  ],
+};
+```
+
+## 自定义 ID
+
+你可以通过在库配置中设置 `id` 字段来指定一个可读性更强或更有意义的库 ID。用户指定的 ID 将优先使用，而其余的将继续使用默认生成的 ID。
+
+例如，`my-lib-a`、`my-lib-b` 和 `my-lib-c` 将作为指定库的 ID，而其余的库将使用生成的默认 ID。
+
+{/* prettier-ignore-start */}
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    { format: 'esm', id: 'my-lib-a' }, // ID is `my-lib-a`
+    { format: 'cjs', id: 'my-lib-b' }, // ID is `my-lib-b`
+    { format: 'esm' },                 // ID is `esm0`
+    { format: 'umd', id: 'my-lib-c' }, // ID is `my-lib-c`
+    { format: 'esm' },                 // ID is `esm1`
+  ],
+};
+```
+{/* prettier-ignore-end */}
+
+然后你可以通过运行以下命令来单独构建 `my-lib-a` 和 `my-lib-b`：
+
+```bash
+npx rslib build --lib my-lib-a --lib my-lib-b
+```
+
+:::note
+每个库的 ID 必须是唯一的，否则会导致错误。
+:::

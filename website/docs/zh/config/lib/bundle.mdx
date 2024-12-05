@@ -1,1 +1,144 @@
 # lib.bundle
+
+- **类型：** `boolean`
+- **默认值：** `undefined`
+
+指定是否打包库，当 `bundle` 设置为 `true` 时称为打包模式，设置为 `false` 时称为 bundleless 模式。更多详情请参见 [bundle / bundleless](/guide/basic/output-structure#bundle--bundleless)。
+
+::: warning
+无打包模式尚未完全支持，某些功能如 [资源](/guide/advanced/assets) 可能无法正常工作。
+:::
+
+## 设置入口
+
+我们需要为构建指定入口文件。
+
+### bundle: true
+
+当 `bundle` 设置为 `true` 时，入口需要设置为入口文件。默认入口为 `src/index.(ts|js|tsx|jsx|mjs|cjs)`。你需要确保入口文件存在，或通过 [source.entry](https://rsbuild.dev/zh/config/source/entry) 配置自定义入口。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'cjs',
+      bundle: true,
+    },
+  ],
+  source: {
+    entry: {
+      index: './foo/index.ts',
+    },
+  },
+};
+```
+
+### bundle: false
+
+当 `bundle` 设置为 `false` 时，入口需要设置为 [glob 模式](https://github.com/micromatch/picomatch#globbing-features) 以包含所有文件。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'cjs',
+      bundle: false,
+    },
+  ],
+  source: {
+    entry: {
+      index: './src/**',
+    },
+  },
+};
+```
+
+你也可以使用感叹号来排除一些文件。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'cjs',
+      bundle: false,
+    },
+  ],
+  source: {
+    entry: {
+      index: ['./src/**', '!**/foo.*'],
+    },
+  },
+};
+```
+
+## Example
+
+对于以下的源代码文件结构：
+
+```
+.
+├── src
+│   ├── index.ts
+│   ├── foo.ts
+│   └── bar.ts
+└── package.json
+```
+
+### bundle: true
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    {
+      format: 'cjs',
+      bundle: true,
+    },
+  ],
+});
+```
+
+当 `bundle` 设置为 `true` 时，也称为 bundle 模式，Rslib 会将库打包成单个文件。
+
+```diff
+  .
++ ├── dist
++ │   └── index.js
+  ├── src
+  │   ├── index.ts
+  │   ├── foo.ts
+  │   └── bar.ts
+  └── package.json
+```
+
+### bundle: false
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    {
+      format: 'cjs',
+      bundle: false,
+    },
+  ],
+  source: {
+    entry: {
+      index: ['./src/**'],
+    },
+  },
+});
+```
+
+当 `bundle` 设置为 `false` 时，也称为 bundleless 模式，Rslib 只会将代码转换为多个文件。
+
+```diff
+  .
++ ├── dist
++ │   ├── index.js
++ │   ├── foo.js
++ │   └── bar.js
+  ├── src
+  │   ├── index.ts
+  │   ├── foo.ts
+  │   └── bar.ts
+  └── package.json
+```

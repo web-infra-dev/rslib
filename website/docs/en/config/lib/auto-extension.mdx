@@ -15,7 +15,7 @@ By default that when `autoExtension` is set to `true`, the file extension will b
 
 :::warning
 
-When [bundle](/config/lib/bundle) is set to `false` that as known as bundleless mode, you should write full path instead of ignoring directory indexes (e.g. `'./foo/index.js'`) in source code.
+When [bundle](/config/lib/bundle) is set to `false` that as known as bundleless mode, you should write full path instead of ignoring directory indexes (e.g. using `'./foo'` as a shorthand for `'./foo/index.js'`) in source code.
 
 For example, if `foo` is a folder, you need to rewrite `import * from './foo'` to `import * from './foo/index'`.
 

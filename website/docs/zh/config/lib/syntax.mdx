@@ -1,1 +1,69 @@
 # lib.syntax
+
+- **类型：**
+
+```ts
+type EcmaScriptVersion =
+  | 'es5'
+  | 'es6'
+  | 'es2015'
+  | 'es2016'
+  | 'es2017'
+  | 'es2018'
+  | 'es2019'
+  | 'es2020'
+  | 'es2021'
+  | 'es2022'
+  | 'es2023'
+  | 'es2024'
+  | 'esnext';
+
+type Syntax = EcmaScriptVersion | string[];
+```
+
+- **默认值：** `'esnext'`
+
+配置 JavaScript 和 CSS 将被降级的语法版本。
+
+参见 [输出兼容性 - 语法降级](/guide/advanced/output-compatibility) 了解更多详情。
+
+## 设置 ECMAScript 版本
+
+你可以直接设置 ECMAScript 版本，例如 `es2015`、`es2022` 等。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    // ...
+  ],
+  syntax: 'es2015',
+};
+```
+
+## 设置 Browserslist 查询
+
+你也可以设置 [Browserslist 查询语句](https://browsersl.ist/)，例如 `last 2 versions`、`> 1%`、`node >= 16`、`chrome >= 80` 等。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      syntax: ['last 2 versions', '> 1%'],
+    },
+  ],
+};
+```
+
+## 混合使用 ECMAScript 版本和 Browserslist 查询
+
+你也可以混合使用 ECMAScript 版本和 Browserslist 查询语句，例如 `es2015` 和 `node 20`。Rslib 会将 ECMAScript 版本转换为 Browserslist 查询语句，然后将它们合并在一起。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      syntax: ['es2015', 'node 20'],
+    },
+  ],
+};
+```

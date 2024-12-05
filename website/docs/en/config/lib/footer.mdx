@@ -16,7 +16,7 @@ type Footer = {
 
 - **Default:** `{}`
 
-Inject content into the bottom of each JS, CSS or DTS file.
+Inject content into the bottom of each JavaScript, CSS or DTS file.
 
 ## Object Type
 
@@ -25,25 +25,25 @@ Inject content into the bottom of each JS, CSS or DTS file.
 - **Type:** `string`
 - **Default:** `undefined`
 
-Inject content into the bottom of each JS file.
+Inject content into the bottom of each JavaScript output file.
 
 ### footer.css
 
 - **Type:** `string`
 - **Default:** `undefined`
 
-Inject content into the bottom of each CSS file.
+Inject content into the bottom of each CSS output file.
 
 ### footer.dts
 
 - **Type:** `string`
 - **Default:** `undefined`
 
-Inject content into the bottom of each DTS file.
+Inject content into the bottom of each DTS output file.
 
 ## Notice
 
-The footer content in JS/CSS file is based on the [BannerPlugin](https://rspack.dev/plugins/webpack/banner-plugin) of Rspack. You should notice the following points:
+The footer content in JavaScript and CSS file is based on the [BannerPlugin](https://rspack.dev/plugins/webpack/banner-plugin) of Rspack. You should notice the following points:
 
 - `raw: true` is enabled by default, so the footer content will be injected as a raw string instead of wrapping in a comment. So if you want to inject a comment, you should add `/*` and `*/` or other comment syntax by yourself.
 - The `stage` option is set to the stage after the JavaScript and CSS files are optimized, thus preventing the footer content from being optimized away.
@@ -74,6 +74,6 @@ export default {
 
 :::warning
 
-The footer content in DTS files is handled differently from JS/CSS files. It is written directly using the file system API, so setting `BannerPlugin` will not affect it.
+The footer content in DTS files is handled differently from JavaScript and CSS files. It is written directly using the file system API, so setting `BannerPlugin` will not affect it.
 
 :::

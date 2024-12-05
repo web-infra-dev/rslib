@@ -1,1 +1,50 @@
 # lib.redirect
+
+- **类型：**
+
+```ts
+type Redirect = {
+  style?: boolean;
+};
+```
+
+- **默认值：**
+
+```ts
+const defaultRedirect = {
+  style: true,
+};
+```
+
+配置导入路径的重定向。
+
+当 `bundle: false` 时，会对导入路径进行重定向，以确保它指向正确的输出。
+
+:::note
+
+由于 bundleless 模式仍在开发中，未来会引入更多重定向配置。
+
+:::
+
+如果你不需要这些重定向，可以关闭它，这样导入路径将保持不变。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      redirect: {
+        style: false, // Turn off the redirect of the style file
+      },
+    },
+  ],
+};
+```
+
+## redirect.style
+
+- **类型：** `boolean`
+- **默认值：** `true`
+
+是否重定向样式文件的导入路径。例如：
+
+- `import './index.less'` 将被重写为 `import './index.css'`
