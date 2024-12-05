@@ -1,1 +1,46 @@
 # 使用 Typescript
+
+Rslib 默认支持 TypeScript，你可以直接在项目中使用 `.ts` 和 `.tsx` 文件。
+
+## TypeScript 转译
+
+Rslib 默认使用 SWC 进行 TypeScript 代码的转译，同时也支持切换到 Babel 进行转译。
+
+### isolatedModules
+
+不同于原生的 TypeScript 编译器，SWC 和 Babel 这类工具会单独编译每个文件，这会导致无法确定导入的名称是类型还是值。因此，在 Rslib 中使用 TypeScript 时，你需要在 `tsconfig.json` 文件中启用 [isolatedModules](https://typescriptlang.org/tsconfig/#isolatedModules) 选项：
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "isolatedModules": true
+  }
+}
+```
+
+这个选项可以帮助你避免使用某些在 SWC 和 Babel 中无法正确编译的语法，例如跨文件的类型引用。它会引导你修正为对应正确的用法：
+
+```ts
+// 错误
+export { SomeType } from './types';
+
+// 正确
+export type { SomeType } from './types';
+```
+
+> 更多关于 SWC 和 tsc 之间差异的详细信息，可以查看 [SWC - Migrating from tsc](https://swc.rs/docs/migrating-from-tsc)。
+
+## tsconfig.json 路径
+
+Rslib 默认从根目录下读取 `tsconfig.json` 文件。你可以使用 [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath) 配置一个自定义的 `tsconfig.json` 文件路径。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    // ...
+  ],
+  source: {
+    tsconfigPath: './tsconfig.custom.json',
+  },
+};
+```

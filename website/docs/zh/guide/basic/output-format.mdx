@@ -1,1 +1,131 @@
+import ESM from '../start/components/ESM.mdx';
+import CJS from '../start/components/CJS.mdx';
+import UMD from '../start/components/UMD.mdx';
+import MF from '../start/components/MF.mdx';
+
 # 产物输出格式
+
+Rslib 支持四种 JavaScript 文件的输出格式：`esm`、`cjs`、`umd` 和 `mf`。在本章中，我们将介绍这些格式之间的区别以及如何为你的库选择合适的格式。
+
+## ESM / CJS
+
+库作者需要仔细考虑支持哪种模块格式。让我们了解一下 ESM (ECMAScript Modules) 和 CJS (CommonJS)，以及何时使用它们。
+
+### 什么是 ESM 和 CJS？
+
+- **ESM**: ESM 是<ESM />
+
+- **CommonJS**: [CommonJS](https://nodejs.org/api/modules.html#modules-commonjs-modules) 是<CJS />
+
+### ESM 和 CJS 的困境
+
+> 以下参考自 [Node 模块之战：为什么 CommonJS 和 ES Modules 无法共存](https://redfin.engineering/node-modules-at-war-why-commonjs-and-es-modules-cant-get-along-9617135eeca1)。
+
+1. 你不能 `require()` ESM 脚本；你只能导入 ESM 脚本，像这样：`import {foo} from 'foo'`
+2. CJS 脚本不能使用静态 `import` 语句，如上所示。
+3. ESM 脚本可以 `import` CJS 脚本，但只能使用**默认导入**语法 `import _ from 'lodash'`，而不能使用**命名导入**语法 `import {shuffle} from 'lodash'`，如果 CJS 脚本使用命名导出，这会很麻烦。（不过，有时 Node 会不可预料 地猜出你的意思！）
+4. ESM 脚本可以 `require()` CJS 脚本，即使是命名导出，但通常不值得这样做，因为这需要更多的模板代码，而且最糟糕的是，像 webpack 和 Rollup 这样的打包工具不知道/不会处理使用 `require()` 的 ESM 脚本。
+5. CJS 是默认的；你需要选择加入 ESM 模式。你可以通过将脚本从 `.js` 重命名为 `.mjs` 来选择性开启 ESM 模式。或者，你可以在 `package.json` 中设置 `"type": "module"`，然后通过将脚本从 `.js` 重命名为 `.cjs` 来选择性关闭 ESM。（你甚至可以通过在单个子目录中放置一行 `{"type": "module"}` `package.json` 来调整它。）
+
+### 何时支持哪种格式？
+
+对于不同类型的库，模块格式的选择可能会有所不同。以下是两种常见的情况：
+
+#### 发布纯 ESM 库
+
+发布纯 ESM 库是现代环境库的最佳选择，例如浏览器应用程序或支持 ESM 的 Node.js 应用程序。然而，如果上游库是 CJS 格式，它们只能通过动态导入使用纯 ESM 库，例如 `const pureEsmLib = await import('pure-esm-lib')`。
+
+- **优点:**
+  - ESM 是官方的 JavaScript 标准，使其更具前瞻性和跨环境支持。
+  - ESM 支持静态分析，这有助于摇树优化移除未使用的代码。
+  - 语法更简洁直观，与 CommonJS 相比，import 和 export 语句更容易阅读。
+  - ESM 允许在浏览器和 Node.js 环境中更好地兼容，使其成为同构或通用 JavaScript 应用程序的理想选择。
+- **缺点:**
+  - ESM 模块是异步加载的，这在某些情况下可能会使条件引入和懒加载变得复杂。
+  - 一些 Node.js 工具和库仍然对 ESM 有限制或不支持，需要解决方法或额外配置。
+  - 你必须在导入路径中显式包含文件扩展名，这可能会很麻烦，尤其是在使用 TypeScript 或其他转译语言时。
+
+#### 发布 [ESM 和 CJS（双重）](https://antfu.me/posts/publish-esm-and-cjs#compatibility) 包
+
+社区正在向 ESM 迁移，但仍有许多项目在使用 CJS。如果你想同时支持 ESM 和 CJS，可以发布一个双重包。对于大多数库作者来说，提供双重格式是一种更安全、更平滑的方式，可以同时享受两种格式的优点。你可以阅读 antfu 的博客文章 [在一个包中发布 ESM 和 CJS](https://antfu.me/posts/publish-esm-and-cjs) 了解更多详情。
+
+- **优点:**
+
+  - 更广泛的兼容性：双重包支持现代 ESM 环境和旧版 CJS 环境，确保在不同生态系统中更广泛的使用。
+  - 渐进式迁移：开发者可以逐步从 CJS 迁移到 ESM，而无需破坏现有项目，从而更平滑地采用新标准。
+  - 灵活性：用户可以根据自己的项目选择最适合的模块系统，在不同的构建工具和环境中提供灵活性。
+  - 跨运行时支持：双重包可以在多个运行时中工作，例如 Node.js 和浏览器，而无需额外的打包或转译。
+
+- **缺点:**
+
+  - 增加复杂性：维护两种模块格式会增加构建过程的复杂性，需要额外的配置和测试，以确保两种版本都能正常工作。
+  - 双重包风险：混合 ESM 和 CJS 可能会导致实例检查失败或依赖项在不同格式中加载时出现意外行为。
+
+## UMD
+
+### 什么是 UMD？
+
+<UMD />
+
+### 何时使用 UMD？
+
+如果你正在构建一个需要在浏览器和 Node.js 环境中使用的库，UMD 是一个不错的选择。UMD 可以作为独立的脚本标签在浏览器中使用，也可以作为 CommonJS 模块在 Node.js 中使用。
+
+StackOverflow 上的详细回答：[什么是通用模块定义 (UMD)？](https://stackoverflow.com/a/77284527/8063488)
+
+> 然而，对于前端库，你仍然可以提供一个单一文件，方便用户从 CDN 下载并直接嵌入到他们的网页中。这通常仍然采用 UMD 模式，只是现在不再由库作者手动编写/复制到源代码中，而是由转译器/打包器自动添加。
+>
+> 同样地，对于需要在 Node.js 中运行的后端/通用库，你仍然可以通过 npm 分发一个 CommonJS 模块构建，以支持所有仍在使用旧版 Node.js 的用户（他们不想/不需要自己使用转译器）。这在新库中不太常见，但现有库会尽力保持向后兼容，不会导致应用程序被破坏。
+
+### 如何构建 UMD 库？
+
+- 在 Rslib 配置文件中将 [lib.format](/config/lib/format) 设置为 `umd`。
+- 如果库需要导出名称，请将 [lib.umdName](/config/lib/umd-name) 设置为 UMD 库的名称。
+- 使用 [output.externals](/config/rsbuild/output#outputexternals) 指定 UMD 库依赖的外部依赖，UMD 的 [lib.autoExtension](/config/lib/auto-extension) 配置默认启用。
+
+### 示例
+
+以下是一个构建 UMD 库的 Rslib 配置示例。
+
+- `lib.format: 'umd'`: 配置 Rslib 构建 UMD 库。
+- `lib.umdName: 'RslibUmdExample'`: 设置 UMD 库的导出名称。
+- `output.externals.react: 'React'`: 指定外部依赖 `react` 可以通过 `window.React` 访问。
+- `runtime: 'classic'`: 使用 React 的 classic 运行时，以支持使用 React 版本低于 18 的应用程序。
+
+```ts title="rslib.config.ts" {7-12,22}
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'umd',
+      umdName: 'RslibUmdExample',
+      output: {
+        externals: {
+          react: 'React',
+        },
+        distPath: {
+          root: './dist/umd',
+        },
+      },
+    },
+  ],
+  output: {
+    target: 'web',
+  },
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'classic',
+      },
+    }),
+  ],
+});
+```
+
+## MF
+
+### 什么是 MF？
+
+MF 代表 Module Federation。<MF />
