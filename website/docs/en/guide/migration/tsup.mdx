@@ -16,7 +16,7 @@ import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @rslib/core -D" />
 
-## Updating npm scripts
+## Updating npm Scripts
 
 Next, you need to update the npm scripts in your package.json to use Rslib's CLI commands.
 
@@ -33,7 +33,7 @@ Next, you need to update the npm scripts in your package.json to use Rslib's CLI
 
 ## Create Configuration File
 
-Create a Rslib configuration file `rslib.config.ts` in the same directory as package.json, and add the following content:
+Create a Rslib configuration file `rslib.config.ts` in the same directory as `package.json`, and add the following content:
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
@@ -45,24 +45,24 @@ export default defineConfig({});
 
 Here is the corresponding Rslib configuration for tsup configuration:
 
-| tsup          | Rslib                                                                                      |
-| ------------- | ------------------------------------------------------------------------------------------ |
-| banner        | [lib.banner](/config/lib/banner)                                                           |
-| bundle        | [lib.bundle](/config/lib/bundle)                                                           |
-| clean         | [output.cleanDistPath](/config/rsbuild/output)                                             |
-| define        | [source.define](/config/rsbuild/source)                                                    |
-| dts           | [lib.dts](/config/lib/dts)                                                                 |
-| entry         | [source.entry](/config/rsbuild/source)                                                     |
-| external      | [output.externals](/config/rsbuild/output) / [lib.autoExternal](/config/lib/auto-external) |
-| format        | [lib.format](/config/lib/format)                                                           |
-| footer        | [lib.footer](/config/lib/footer)                                                           |
-| minify        | [output.minify](/config/rsbuild/output)                                                    |
-| platform      | [output.target](/config/rsbuild/output)                                                    |
-| plugins       | [plugins](/config/rsbuild/plugins)                                                         |
-| sourcemap     | [output.sourceMap](/config/rsbuild/output)                                                 |
-| shims         | [lib.shims](/config/lib/shims)                                                             |
-| terserOptions | [output.minify](/config/rsbuild/output)                                                    |
-| tsconfig      | [source.tsconfigPath](/config/rsbuild/source)                                              |
+| tsup          | Rslib                                                                                                      |
+| ------------- | ---------------------------------------------------------------------------------------------------------- |
+| banner        | [lib.banner](/config/lib/banner)                                                                           |
+| bundle        | [lib.bundle](/config/lib/bundle)                                                                           |
+| clean         | [output.cleanDistPath](/config/rsbuild/output#outputcleandistpath)                                         |
+| define        | [source.define](/config/rsbuild/source#sourcedefine)                                                       |
+| dts           | [lib.dts](/config/lib/dts)                                                                                 |
+| entry         | [source.entry](/config/rsbuild/source#sourceentry)                                                         |
+| external      | [output.externals](/config/rsbuild/output#outputexternals) / [lib.autoExternal](/config/lib/auto-external) |
+| format        | [lib.format](/config/lib/format)                                                                           |
+| footer        | [lib.footer](/config/lib/footer)                                                                           |
+| minify        | [output.minify](/config/rsbuild/output#outputminify)                                                       |
+| platform      | [output.target](/config/rsbuild/output#outputtarget)                                                       |
+| plugins       | [plugins](/config/rsbuild/plugins)                                                                         |
+| sourcemap     | [output.sourceMap](/config/rsbuild/output#outputsourcemap)                                                 |
+| shims         | [lib.shims](/config/lib/shims)                                                                             |
+| terserOptions | [output.minify](/config/rsbuild/output#outputminify)                                                       |
+| tsconfig      | [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath)                                           |
 
 ## Contents Supplement
 
