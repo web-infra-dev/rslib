@@ -16,14 +16,14 @@ npx rslib -h
 Usage: rslib <command> [options]
 
 Options:
-  -V, --version       output the version number
-  -h, --help          display help for command
+  -V, --version       显示版本号
+  -h, --help          显示命令帮助
 
 Commands:
-  build [options]     build the library for production
-  inspect [options]   inspect the Rsbuild / Rspack configs of Rslib projects
-  mf [options] <dev>  start Rsbuild dev server of Module Federation format
-  help [command]      display help for command
+  build [options]     构建用于生产环境的产物
+  inspect [options]   检查 Rslib 项目的 Rsbuild 配置和 Rspack 配置
+  mf [options] <dev>  为 Module Federation 格式的库启用 Rsbuild 开发服务器。
+  help [command]      显示命令帮助
 ```
 
 ## rslib build
@@ -201,7 +201,7 @@ Inspect config succeed, open following files to view the content:
 ```text
 Usage: rslib mf [options] <dev>
 
-启动 Rsbuild 开发服务器，用于 Module Federation 格式
+为 Module Federation 格式的库启用 Rsbuild 开发服务器。
 
 Options:
   -c --config <config>  指定配置文件路径，可以为相对路径或绝对路径
