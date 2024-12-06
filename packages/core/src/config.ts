@@ -58,6 +58,7 @@ import {
   color,
   getAbsolutePath,
   isEmptyObject,
+  isIntermediateOutputFormat,
   isObject,
   nodeBuiltInModules,
   omit,
@@ -235,13 +236,14 @@ const composeExternalsWarnConfig = (
 };
 
 export const composeAutoExternalConfig = (options: {
-  autoExternal: AutoExternal;
+  format: Format;
+  autoExternal?: AutoExternal;
   pkgJson?: PkgJson;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 }): RsbuildConfig => {
-  const { autoExternal, pkgJson, userExternals } = options;
+  const { format, autoExternal = true, pkgJson, userExternals } = options;
 
-  if (!autoExternal) {
+  if (autoExternal === false || !isIntermediateOutputFormat(format)) {
     return {};
   }
 
@@ -1005,7 +1007,7 @@ const composeDtsConfig = async (
   libConfig: LibConfig,
   dtsExtension: string,
 ): Promise<RsbuildConfig> => {
-  const { autoExternal, banner, footer } = libConfig;
+  const { format, autoExternal = true, banner, footer } = libConfig;
 
   let { dts } = libConfig;
 
@@ -1028,7 +1030,9 @@ const composeDtsConfig = async (
         build: dts?.build,
         abortOnError: dts?.abortOnError,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
-        autoExternal,
+        autoExternal: !isIntermediateOutputFormat(format!)
+          ? false
+          : autoExternal,
         banner: banner?.dts,
         footer: footer?.dts,
       }),
@@ -1150,7 +1154,7 @@ async function composeLibRsbuildConfig(config: LibConfig) {
     banner = {},
     footer = {},
     autoExtension = true,
-    autoExternal = true,
+    autoExternal,
     externalHelpers = false,
     redirect = {},
     umdName,
@@ -1190,6 +1194,7 @@ async function composeLibRsbuildConfig(config: LibConfig) {
   );
   const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
   const autoExternalConfig = composeAutoExternalConfig({
+    format: format!,
     autoExternal,
     pkgJson,
     userExternals: config.output?.externals,
