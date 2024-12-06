@@ -109,6 +109,7 @@ export interface LibConfig extends RsbuildConfig {
   autoExtension?: boolean;
   /**
    * Whether to automatically externalize dependencies of different dependency types and do not bundle them.
+   * Only takes effect when {@link format} is `cjs` or `esm`.
    * @defaultValue `true`
    * @see {@link https://lib.rsbuild.dev/config/lib/auto-external}
    */
