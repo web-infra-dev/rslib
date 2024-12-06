@@ -43,12 +43,12 @@ type Footer = {
 
 ## 注意事项
 
-JavaScript 和 CSS 文件中的底部内容是基于 Rspack 的 [BannerPlugin](https://rspack.dev/plugins/webpack/banner-plugin) 实现的。你需要注意以下几点：
+JavaScript 和 CSS 文件中的 footer 内容是基于 Rspack 的 [BannerPlugin](https://rspack.dev/plugins/webpack/banner-plugin) 实现的。你需要注意以下几点：
 
-- 默认启用了 `raw: true`，所以底部内容会作为原始字符串注入，而不是包裹在注释中。因此如果你想注入注释，需要自行添加 `/*` 和 `*/` 或其他注释语法。
-- `stage` 选项被设置在 JavaScript 和 CSS 文件优化之后的阶段，从而防止底部内容被优化掉。
+- 默认启用了 `raw: true`，所以 footer 内容会作为原始字符串注入，而不是包裹在注释中。因此如果你想注入注释，需要自行添加 `/*` 和 `*/` 或其他注释语法。
+- `stage` 选项被设置在 JavaScript 和 CSS 文件优化之后的阶段，从而防止 footer 内容被优化掉。
 
-## 自定义底部内容
+## 自定义 Footer 内容
 
 如果以上默认设置无法满足你的需求，你可以通过 `tools.rspack.plugins` 自定义添加带有相应选项的 [BannerPlugin](https://rspack.dev/plugins/webpack/banner-plugin) 实例。
 
@@ -74,6 +74,6 @@ export default {
 
 :::warning
 
-DTS 文件中的底部内容与 JavaScript 和 CSS 文件的处理方式不同。它是直接通过文件系统 API 写入的，所以设置 `BannerPlugin` 不会对其产生影响。
+DTS 文件中的 footer 内容与 JavaScript 和 CSS 文件的处理方式不同。它是直接通过文件系统 API 写入的，所以设置 `BannerPlugin` 不会对其产生影响。
 
 :::
