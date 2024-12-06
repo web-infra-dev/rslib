@@ -3,3 +3,180 @@ overviewHeaders: [2, 3]
 ---
 
 # lib.shims
+
+- **类型：**
+
+```ts
+type Shims = {
+  cjs?: {
+    'import.meta.url'?: boolean;
+  };
+  esm?: {
+    __filename?: boolean;
+    __dirname?: boolean;
+    require?: boolean;
+  };
+};
+```
+
+- **默认值：**
+
+```js
+const defaultShims = {
+  cjs: {
+    'import.meta.url': true,
+  },
+  esm: {
+    __filename: false,
+    __dirname: false,
+    require: false,
+  },
+};
+```
+
+配置 CommonJS 和 ESM 输出的 [shims（垫片）](https://developer.mozilla.org/zh-CN/docs/Glossary/Shim)。
+
+## shims.cjs
+
+将字段设置为 `true` 以启用对应的 CommonJS 输出 shims。
+
+### shims.cjs['import.meta.url']
+
+- **默认值：** `true`
+
+选项：
+
+- `true`：当 [format](/config/lib/format) 为 `cjs` 时，源代码中的 `import.meta.url` 将被替换为当前模块的 URL。
+
+  例如，给定以下源代码：
+
+  ```js
+  import { readFileSync } from 'fs';
+  const buffer = readFileSync(new URL('./data.proto', import.meta.url));
+  ```
+
+  将被转换为以下 CJS 输出代码：
+
+  ```js
+  const { readFileSync } = require('fs');
+  const buffer = readFileSync(
+    new URL(
+      './data.proto',
+      /*#__PURE__*/ (function () {
+        return typeof document === 'undefined'
+          ? new (module.require('url'.replace('', '')).URL)(
+              'file:' + __filename,
+            ).href
+          : (document.currentScript && document.currentScript.src) ||
+              new URL('main.js', document.baseURI).href;
+      })(),
+    ),
+  );
+  ```
+
+- `false`：`import.meta.url` 将保持原样，这将会导致运行时错误。
+
+## shims.esm
+
+将字段设置为 `true` 以启用对应的 ESM 输出 shims。
+
+### shims.esm.\_\_filename
+
+是否在 ESM 输出中为 CommonJS 的全局 `__filename` 注入 shims。
+
+- **默认值：** `false`
+
+选项：
+
+- `true`：当 [format](/config/lib/format) 为 `esm` 时，源代码中的 `__filename` 将被替换为当前模块的文件名。
+
+  例如，给定以下源代码：
+
+  ```js
+  console.log(__filename);
+  ```
+
+  ESM 输出将被转换为：
+
+  ```js
+  import { fileURLToPath as __webpack_fileURLToPath__ } from 'url';
+  import { dirname as __webpack_dirname__ } from 'path';
+  var src_dirname = __webpack_dirname__(
+    __webpack_fileURLToPath__(import.meta.url),
+  );
+  var src_filename = __webpack_fileURLToPath__(import.meta.url);
+  console.log(src_filename);
+  ```
+
+- `false`：`__filename` 将保持原样，这将会导致运行时错误。
+
+### shims.esm.\_\_dirname
+
+是否在 ESM 输出中为 CommonJS 的全局 `__dirname` 注入 shims。
+
+- **默认值：** `false`
+
+选项：
+
+- `true`：当 [format](/config/lib/format) 为 `esm` 时，源代码中的 `__dirname` 将被替换为当前模块的目录名。
+
+  例如，给定以下源代码：
+
+  ```js
+  console.log(__dirname);
+  ```
+
+  ESM 输出将被转换为：
+
+  ```js
+  import { fileURLToPath as __webpack_fileURLToPath__ } from 'url';
+  import { dirname as __webpack_dirname__ } from 'path';
+  var src_dirname = __webpack_dirname__(
+    __webpack_fileURLToPath__(import.meta.url),
+  );
+  console.log(src_dirname);
+  ```
+
+- `false`：`__dirname` 将保持原样，这将会导致运行时错误。
+
+### shims.esm.require
+
+是否在 ESM 输出中为 CommonJS 的全局 `require` 注入 shims。
+
+- **默认值：** `false`
+
+选项：
+
+- `true`：当 [format](/config/lib/format) 为 `esm` 时，在输出的开头将会创建一个由 `createRequire` 生成的 `require`，可以在源代码中像 CommonJS 的全局 `require` 一样使用。
+
+  例如，给定以下源代码：
+
+  ```js
+  const someModule = require('./someModule');
+
+  // dynamic require
+  const dynamicRequiredModule = require(SOME_VALUE_IN_RUNTIME);
+  // require.resolve
+  const someModulePath = require.resolve('./someModule');
+  // use require as a expression
+  const lazyFn = (module, requireFn) => {};
+  lazyFn('./other.js', require);
+  ```
+
+  ESM 输出将被转换为：
+
+  ```js
+  import __rslib_shim_module__ from 'module';
+  const require = /*#__PURE__*/ __rslib_shim_module__.createRequire(
+    import.meta.url,
+  );
+  // dynamic require
+  require(SOME_VALUE_IN_RUNTIME);
+  // require.resolve
+  require.resolve('./someModule');
+  // use require as a expression
+  const lazyFn = (module, requireFn) => {};
+  lazyFn('./other.js', require);
+  ```
+
+- `false`: `require` 将保持原样，这将会导致运行时错误。

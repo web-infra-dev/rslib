@@ -1,1 +1,27 @@
 # lib.umdName
+
+- **类型：** `string`
+- **默认值：** `undefined`
+
+[UMD](/guide/basic/output-format#umd) 包的导出名称。
+
+:::tip
+
+UMD 包的模块名称不能与全局变量名称冲突。
+
+:::
+
+## 示例
+
+UMD 包将会挂载到 `global.MyLibrary`。
+
+```ts title="rslib.config.ts" {5}
+export default {
+  lib: [
+    {
+      format: 'umd',
+      umdName: 'MyLibrary',
+    },
+  ],
+};
+```
