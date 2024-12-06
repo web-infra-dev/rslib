@@ -1,94 +1,72 @@
 # Configure Rslib
 
-Rslib provides a wide range of configuration options and sets a common default value for each option, which can meet the requirements of most use cases. Therefore, in most cases, you can use Rslib out of the box with few configurations.
-
-If you need to customize build behaviors, you can read the following sections to learn about the configuration options and its usage.
+Rslib's configuration is based on Rsbuild, which means that you can use all of Rsbuild configurations, as well as the `lib` configuration specific to Rslib.
 
 ## Configuration Structure
 
-The configuration structure of Rslib looks like this:
+Rslib provides the `lib` option to configure the library outputs. It is an array, and each object is used to describe a format of the output.
+
+For example, output ESM and CJS formats, and use `es2021` syntax:
 
 ```js title="rslib.config.mjs"
 export default {
-  // Array of Lib configurations.
-  // Each object represents a set of independent configurations for each output format.
-  // Distinct configurations can be specified in each object, which is a superset of Rsbuild configurations along with Rslib's specific configurations.
   lib: [
-    // The first set of Lib configurations
-    {
-      // Independent Rslib specific configurations
-      format: 'esm', // options for the output format of JavaScript files
-      bundle: true, // options for the build type
-      autoExtension: true, // options for the extensions of JavaScript files
-      syntax: 'esnext', // options for the target syntax
-      externalHelpers: false, // options for externalizing helper functions
-      umdName: 'RslibUmdExample', // options for the export name of the UMD library
-      autoExternal: {
-        // options for automatically externalizing third-party dependencies
-      },
-      redirect: {
-        // options for redirecting import paths
-      },
-      dts: {
-        // options for generating TypeScript declaration files
-      },
-      shims: {
-        // options for compatibility shims
-      },
-      banner: {
-        // options for the file banner
-      },
-      footer: {
-        // options for the file footer
-      },
-      // Independent Rsbuild configurations
-      output: {
-        // options for build outputs
-      },
-      source: {
-        // options for source code parsing and compilation
-      },
-      tools: {
-        // options for the low-level tools
-      },
-      plugins: [
-        // configure Rsbuild plugins
-      ],
-      // other independent Rsbuild configurations
-    },
-    {
-      // The second set of Lib configurations
-      format: 'cjs',
-      // ... other independent Rslib specific configurations and Rsbuild configurations
-    },
-    // ... Additional sets of Lib configurations (if needed)
+    { format: 'esm', syntax: 'es2021' },
+    { format: 'cjs', syntax: 'es2021' },
   ],
-  // Shared Rsbuild configurations
-  output: {
-    // options for build outputs
-  },
-  source: {
-    // options for source code parsing and compilation
-  },
-  tools: {
-    // options for the low-level tools
-  },
-  plugins: [
-    // configure Rsbuild plugins
-  ],
-  // ... other Rsbuild configurations
 };
 ```
 
-The configuration file exports a default object that includes a `lib` array and shared Rsbuild configuration options. You can find detailed descriptions of all configs on the [Configure Overview](/config/) page.
+### Common Rsbuild Configurations
 
-- **[Lib Configurations](/config/lib/) (at least one object is required)**: The `lib` array contains multiple objects, each representing a set of independent configurations that will generate different outputs. Each object within the `lib` array can specify unique configurations, which is a superset of Rsbuild
-  configurations along with Rslib's specific configurations.
-- **Shared [Rsbuild Configurations](/config/rsbuild/) (optional)**: Outside the `lib` array, there are shared Rsbuild configuration options that will be deep merged with independent Rsbuild configuration of each `lib` configuration object.
+You can set common Rsbuild configurations outside the `lib` field, which will be inherited by each configuration object inside the `lib` field.
 
-Rslib generates corresponding Rsbuild [environments](https://rsbuild.dev/guide/advanced/environments) configurations based on the multiple build configurations of different output formats. You can view the final generated configurations through the [configuration debug](#configuration-debug) documentation.
+For example, set the [output.target](/config/rsbuild/output#outputtarget) of Rsbuild to `web`, which will affect the output of all `lib` configuration objects:
 
-## Configuration Usage
+```js title="rslib.config.mjs"
+export default {
+  lib: [
+    { format: 'esm', syntax: 'es2021' },
+    { format: 'cjs', syntax: 'es2021' },
+  ],
+  output: {
+    target: 'web',
+  },
+};
+```
+
+### Separate Rsbuild Configurations
+
+In the `lib` field, you can set separate Rsbuild configurations for each output format, which will override the common Rsbuild configurations outside the `lib` field.
+
+For example, separately set the [output.target](/config/rsbuild/output#outputtarget) of the ESM output to `web`:
+
+```js title="rslib.config.mjs"
+export default {
+  lib: [
+    // The target of the ESM output is `web`
+    {
+      format: 'esm',
+      output: {
+        target: 'web',
+      },
+    },
+    // The CJS output inherits the common configuration and target is `node`
+    {
+      format: 'cjs',
+    },
+  ],
+  output: {
+    target: 'node',
+  },
+};
+```
+
+Rslib will generate the [environments](https://rsbuild.dev/config/environments) configuration of Rsbuild internally, please refer to [Configuration Debug](#configuration-debug) to view the final generated configuration.
+
+You can also refer to the [Configuration Overview](/config/) page to view the detailed introduction of all configurations.
+
+## Configuration File
 
 When you use the CLI of Rslib, Rslib will automatically read the configuration file in the root directory of the current project and resolve it in the following order:
 
@@ -173,11 +151,10 @@ export default defineConfig({
 
 ## Configure Rsbuild
 
-In Rslib project, you can configure Rsbuild related configurations in both `lib` configuration object and shared configuration section.
+Rslib allows you to use most of the Rsbuild configurations. Currently, the `environments` config is not supported because it is generated internally by Rslib.
 
-Common-used Rsbuild configurations in library development are listed at [Rsbuild Configuration](/config/rsbuild/).
-
-You can also refer to the [Rsbuild Configuration](https://rsbuild.dev/config/index#config-overview) for checking the complete configuration items.
+- Refer to [Rsbuild Configuration](/config/rsbuild/) for common Rsbuild configurations.
+- Refer to [Rsbuild Documentation](https://rsbuild.dev/config/index#config-overview) for all Rsbuild configurations.
 
 ## Configure Rspack
 
@@ -195,7 +172,7 @@ DEBUG=rsbuild pnpm build
 
 In debug mode, Rslib will write the Rsbuild / Rspack config to the dist directory, which is convenient for developers to view and debug.
 
-Below is an example of a configuration for Rslib that builds both CJS and ESM output.
+Here is an example of a library that sets both CJS and ESM formats:
 
 ```
 Inspect config succeed, open following files to view the content:
