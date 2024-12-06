@@ -132,13 +132,13 @@ export interface LibConfig extends RsbuildConfig {
    */
   externalHelpers?: boolean;
   /**
-   * Inject content into the top of each JS, CSS or DTS file.
+   * Inject content into the top of each JavaScript, CSS or DTS file.
    * @defaultValue `{}`
    * @see {@link https://lib.rsbuild.dev/config/lib/banner}
    */
   banner?: BannerAndFooter;
   /**
-   * Inject content into the bottom of each JS, CSS or DTS file.
+   * Inject content into the bottom of each JavaScript, CSS or DTS file.
    * @defaultValue `{}`
    * @see {@link https://lib.rsbuild.dev/config/lib/footer}
    */
