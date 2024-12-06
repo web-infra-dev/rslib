@@ -1,1 +1,187 @@
 # 配置 Rslib
+
+Rslib 的配置是基于 Rsbuild 扩展的，这意味着你可以使用 Rsbuild 的所有配置项，并在此基础上使用 Rslib 特有的 `lib` 配置。
+
+## 配置结构
+
+Rslib 提供了 `lib` 选项来配置库产物，它是一个数组，每个对象用于描述一种输出格式。
+
+例如，输出 ESM 和 CJS 两种格式的产物，并使用 `es2021` 语法：
+
+```js title="rslib.config.mjs"
+export default {
+  lib: [
+    { format: 'esm', syntax: 'es2021' },
+    { format: 'cjs', syntax: 'es2021' },
+  ],
+};
+```
+
+### 公共的 Rsbuild 配置
+
+在 `lib` 字段外部，你可以设置公共的 Rsbuild 配置，这些配置将被 `lib` 内的每个配置对象继承。
+
+例如，设置 Rsbuild 的 [output.target](/config/rsbuild/output#outputtarget) 为 `web`，这会影响所有 `lib` 配置对象的输出：
+
+```js title="rslib.config.mjs"
+export default {
+  lib: [
+    { format: 'esm', syntax: 'es2021' },
+    { format: 'cjs', syntax: 'es2021' },
+  ],
+  output: {
+    target: 'web',
+  },
+};
+```
+
+### 单独的 Rsbuild 配置
+
+在 `lib` 字段内部，你可以为每种输出格式设置单独的 Rsbuild 配置，这些配置将覆盖外部的公共 Rsbuild 配置。
+
+例如，单独设置 ESM 产物的 [output.target](/config/rsbuild/output#outputtarget) 为 `web`：
+
+```js title="rslib.config.mjs"
+export default {
+  lib: [
+    // ESM 产物的 target 为 `web`
+    {
+      format: 'esm',
+      output: {
+        target: 'web',
+      },
+    },
+    // CJS 产物继承了公共配置，target 为 `node`
+    {
+      format: 'cjs',
+    },
+  ],
+  output: {
+    target: 'node',
+  },
+};
+```
+
+Rslib 会在内部生成 Rsbuild 的 [environments](/guide/advanced/environments) 配置，请参考 [调试配置](#调试配置) 来查看最终生成的配置。
+
+你也可以在 [配置概览](/config/) 页面查看所有配置的详细介绍。
+
+## 配置文件
+
+当你使用 Rslib 的 CLI 命令时，Rslib 会自动读取当前项目根目录下的配置文件，按照以下顺序进行解析：
+
+- `rslib.config.mjs`
+- `rslib.config.ts`
+- `rslib.config.js`
+- `rslib.config.cjs`
+- `rslib.config.mts`
+- `rslib.config.cts`
+
+我们推荐使用 `.mjs` 或 `.ts` 格式的配置文件，并从 `@rslib/core` 中导入 `defineConfig` 工具函数, 它提供了友好的 TypeScript 类型推导和自动补全，可以帮助你避免配置中的错误。
+
+比如在 `rslib.config.ts` 中，你可以定义 Rslib 的 [syntax](/config/lib/syntax) 配置和 Rsbuild 的 [output.target](https://rsbuild.dev/config/output/target#outputtarget) 配置：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      syntax: 'es2021',
+    },
+  ],
+  output: {
+    target: 'node',
+  },
+});
+```
+
+如果你在开发一个非 TypeScript 项目，可以使用 `.mjs` 格式的配置文件。
+
+:::tip
+
+当你使用 `.ts`, `.mts` 和 `.cts` 后缀时，Rslib 会使用 [jiti](https://github.com/unjs/jiti) 来加载配置文件，提供 ESM 与 CommonJS 的互操作性，模块解析的行为与 Node.js 原生行为存在一定差异。
+
+:::
+
+## 指定配置文件
+
+Rslib CLI 通过 `--config` 选项来指定配置文件，可以设置为相对路径或绝对路径。
+
+例如，你需要在执行 `build` 命令时使用 `rslib.prod.config.mjs` 文件，可以在 `package.json` 中添加如下配置：
+
+```json title="package.json"
+{
+  "scripts": {
+    "build": "rslib build --config rslib.prod.config.mjs"
+  }
+}
+```
+
+你也可以将 `--config` 选项缩写为 `-c`：
+
+```bash
+rslib build -c rslib.prod.config.mjs
+```
+
+## 使用环境变量
+
+在配置文件中，你可以使用 `process.env.NODE_ENV` 等 Node.js 环境变量，来动态写入不同的配置：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+    },
+  ],
+  source: {
+    alias: {
+      '@request':
+        process.env.NODE_ENV === 'development'
+          ? './src/request.dev.js'
+          : './src/request.prod.js',
+    },
+  },
+});
+```
+
+## 配置 Rsbuild
+
+Rslib 允许你使用绝大部分的 Rsbuild 配置。目前不支持使用 `environments` 配置，因为该字段由 Rslib 内部生成。
+
+- 参考 [Rsbuild 配置](/config/rsbuild/) 了解常用的 Rsbuild 配置。
+- 参考 [Rsbuild 文档](https://rsbuild.dev/config/index#config-overview) 了解所有 Rsbuild 配置。
+
+## 配置 Rspack
+
+Rslib 基于 Rsbuild 构建，Rsbuild 支持直接修改 Rspack 配置对象，也支持通过 `rspack-chain` 修改 Rsbuild 内置的 Rspack 配置。这意味着你可以在 Rslib 项目中配置 Rspack 相关配置。
+
+详情请参考 [配置 Rspack](https://rsbuild.dev/guide/basic/configure-rspack)。
+
+## 调试配置
+
+在执行构建时，你可以通过添加 `DEBUG=rsbuild` 环境变量来启用 Rslib 的调试模式，它会在 Rslib 处理后显示最终的 Rsbuild 和 Rspack 配置。
+
+```bash
+DEBUG=rsbuild pnpm build
+```
+
+在调试模式下，Rslib 会将 Rsbuild 和 Rspack 配置写入到 `dist` 目录下，方便开发者查看和调试。
+
+以下是一个例子，这个库设置了 CJS 和 ESM 两种输出格式：
+
+```
+Inspect config succeed, open following files to view the content:
+
+  - Rsbuild Config (esm): /project/dist/.rsbuild/rsbuild.config.esm.mjs
+  - Rsbuild Config (cjs): /project/dist/.rsbuild/rsbuild.config.cjs.mjs
+  - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
+  - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
+```
+
+- 打开生成的 `/dist/.rsbuild/rsbuild.config.esm.mjs` 文件，即可查看 Rsbuild 配置的完整内容。
+- 打开生成的 `/dist/.rsbuild/rspack.config.esm.mjs` 文件，即可查看 Rspack 配置的完整内容。
