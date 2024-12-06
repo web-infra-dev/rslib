@@ -4,7 +4,7 @@ import path, { isAbsolute, join } from 'node:path';
 import type { RsbuildPlugins } from '@rsbuild/core';
 import color from 'picocolors';
 
-import type { LibConfig, PkgJson } from '../types';
+import type { Format, LibConfig, PkgJson } from '../types';
 import { logger } from './logger';
 
 /**
@@ -230,6 +230,10 @@ export const isTTY = (type: 'stdin' | 'stdout' = 'stdout'): boolean => {
     (type === 'stdin' ? process.stdin.isTTY : process.stdout.isTTY) &&
     !process.env.CI
   );
+};
+
+export const isIntermediateOutputFormat = (format: Format): boolean => {
+  return format === 'cjs' || format === 'esm';
 };
 
 export { color };

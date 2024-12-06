@@ -15,7 +15,7 @@ In addition to `"dependencies"`, `"peerDependencies"`can also declare dependenci
 
 ## Default handling of third-party dependencies
 
-By default, third-party dependencies under `"dependencies"`, `"optionalDependencies"` and `"peerDependencies"` are not bundled by Rslib.
+By default, when generating CJS or ESM outputs, third-party dependencies under `"dependencies"`, `"optionalDependencies"` and `"peerDependencies"` are not bundled by Rslib.
 
 This is because when the npm package is installed, its `"dependencies"` will also be installed. By not packaging `"dependencies"`, you can reduce the size of the package product.
 
