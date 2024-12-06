@@ -1,1 +1,186 @@
+import { PackageManagerTabs } from '@theme';
+
 # Modern.js Module
+
+本章节介绍如何将使用 Modern.js Module 的项目迁移到 Rslib。
+
+## 调整 package.json
+
+`Rslib` 的依赖链路非常短。对于基本功能，你只需要使用 `@rslib/core` 包。
+
+你可以通过 [快速开始](/guide/start/quick-start) 创建一个 Rslib 项目，然后更新你的 `package.json` 文件，如下所示：
+
+- 移除 `main`, `lint-staged`, `simple-git-hooks`, `sideEffects` 和 `publishConfig` 字段
+- 将 `types` 字段从 `./dist/types/index.d.ts` 改为 `./dist/index.d.ts`
+- 将 `module` 字段从 `./dist/es/index.js` 改为 `./dist/index.js`
+- 移除 `prepare`, `build:watch`, `reset`, `change`, `bump`, `pre`, `change-status`, `gen-release-note`, `release`, `new`, `upgrade` 脚本
+- 将 `build` 脚本从 `modern build` 改为 `rslib build`
+- 将 `dev` 脚本从 `modern dev` 改为 `rslib build --watch`
+- 将 `lint` 脚本名称改为 `check` 并保持其值
+- 添加一个新脚本 `format` 并设置其值为 `biome format --write`
+- 添加一个新脚本 `test` 并设置其值为 `vitest run`
+- 添加 `exports` 字段 (object)
+  - 添加 `"."` (object)
+  - 添加 `"types": "./dist/index.d.ts"` 和 `"import": "./dist/index.js"` 字段
+- 添加 `files` 字段并设置其值为 `["dist"]`
+- 根据你的配置和使用情况，`devDependencies` 可能会有所不同
+  - 重要提示：将 `@modern-js/module-tools` 替换为 `@rslib/core`
+  - 我们不再需要 `rimraf`, `lint-staged` 和 `simple-git-hooks` 了
+- 复制你需要的 `dependencies` 和 `peerDependencies` 字段
+
+你的 `package.json` 文件应该如下所示：
+
+```json title="package.json"
+{
+  "name": "rslib",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "rslib build",
+    "check": "biome check --write",
+    "dev": "rslib build --watch",
+    "format": "biome format --write",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.3",
+    "@rslib/core": "^0.1.3",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  },
+  "peerDependencies": {},
+  "dependencies": {}
+}
+```
+
+## 调整打包配置
+
+现在我们有了一个干净的起点。我们将继续使用 `Rslib` 配置。它遵循所有 `Rs*` 项目的相同模式。由于此步骤对于每个人来说都不同，下面是一个基本的示例：
+
+将你的 `modern.config.ts` 文件替换为 `rslib.config.ts` 文件：
+
+```js title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  source: {
+    entry: {
+      index: ['./src/**'],
+    },
+  },
+  lib: [
+    {
+      bundle: false,
+      dts: true,
+      format: 'esm',
+    },
+  ],
+});
+```
+
+## TypeScript 类型定义
+
+如果你在 `Modern.js Module` 中使用 Typescript 并需要生成类型定义文件，请添加以下更改：
+
+```js title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  //...
+  lib: [
+    {
+      //...
+      dts: true,
+    },
+  ],
+});
+```
+
+## React
+
+如果你在 `Modern.js Module` 中使用 React，请添加以下更改：
+
+```js title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+// 快速提示：你可以在这里使用所有 Rsbuild 插件，因为它们与 Rslib 兼容
+import { pluginReact } from '@rsbuild/plugin-react';
+
+export default defineConfig({
+  //...
+  output: {
+    target: 'web',
+  },
+  plugins: [pluginReact()],
+});
+```
+
+此外，你需要安装 `@rsbuild/plugin-react` 包作为 `devDependencies`。
+
+<PackageManagerTabs command="add @rsbuild/plugin-react -D" />
+
+## Sass
+
+如果你在 `Modern.js Module` 中使用 Sass，请添加以下更改：
+
+```js title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+// 快速提示：你可以在这里使用所有 Rsbuild 插件，因为它们与 Rslib 兼容
+import { pluginSass } from '@rsbuild/plugin-sass';
+
+export default defineConfig({
+  //...
+  plugins: [pluginSass()],
+});
+```
+
+此外，你需要安装 `@rsbuild/plugin-sass` 包作为 `devDependencies`。
+
+<PackageManagerTabs command="add @rsbuild/plugin-sass -D" />
+
+如果你在运行 Typescript 和 Sass，你可能会遇到 DTS 生成错误。这可以通过在 `/src` 目录中添加一个 `global.d.ts` 文件来解决。
+
+```ts title="global.d.ts"
+declare module '*.scss' {
+  const content: { [className: string]: string };
+  export default content;
+}
+```
+
+## CSS Modules
+
+如果你在 `Modern.js Module` 中使用 CSS Modules，请添加以下更改：
+
+```js title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginSass } from '@rsbuild/plugin-sass';
+
+export default defineConfig({
+  lib: [
+    {
+      //...
+      output: {
+        cssModules: {
+          // CSS Modules 选项与官方 "css-modules" 包中的选项完全相同
+          localIdentName: '[local]--[hash:base64:5]',
+        },
+      },
+    },
+  ],
+  plugins: [pluginSass()],
+});
+```
+
+## 内容补充
+
+此迁移文档由社区用户 [YanPes](https://github.com/YanPes) 贡献。非常感谢他的贡献！
+
+Rslib 旨在成为 Modern.js Module 的下一代解决方案，我们将在 2025 年第一季度提供更多详细的迁移指南和脚本。
