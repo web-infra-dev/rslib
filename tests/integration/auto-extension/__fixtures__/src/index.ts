@@ -1,3 +1,2 @@
-import { a } from './common';
-
-console.log(a);
+export { foo } from './foo';
+export * from './utils';
