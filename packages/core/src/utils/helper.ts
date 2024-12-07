@@ -241,3 +241,8 @@ export const isIntermediateOutputFormat = (format: Format): boolean => {
 };
 
 export { color };
+
+const windowsSlashRegex = /\\/g;
+export function normalizeSlash(p: string): string {
+  return p.replace(windowsSlashRegex, '/');
+}

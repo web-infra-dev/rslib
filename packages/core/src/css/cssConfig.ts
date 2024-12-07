@@ -77,7 +77,7 @@ export function isCssGlobalFile(
   return !isCssModules;
 }
 
-type ExternalCallback = (arg0?: null, arg1?: string) => void;
+type ExternalCallback = (arg0?: undefined, arg1?: string) => void;
 
 export function cssExternalHandler(
   request: string,
@@ -99,12 +99,12 @@ export function cssExternalHandler(
   if (request[0] === '.' && isCssFile(request)) {
     // preserve import './CounterButton.module.scss'
     if (!isStyleRedirect) {
-      return callback(null, request);
+      return callback(undefined, request);
     }
     if (isCssModulesRequest) {
-      return callback(null, request.replace(/\.[^.]+$/, jsExtension));
+      return callback(undefined, request.replace(/\.[^.]+$/, jsExtension));
     }
-    return callback(null, request.replace(/\.[^.]+$/, '.css'));
+    return callback(undefined, request.replace(/\.[^.]+$/, '.css'));
   }
 
   return false;

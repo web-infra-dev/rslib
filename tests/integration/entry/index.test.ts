@@ -39,7 +39,9 @@ test('multiple entry bundle', async () => {
     }
   `);
 
-  const index = queryContent(contents.esm, 'index.js', { basename: true });
+  const { content: index } = queryContent(contents.esm, 'index.js', {
+    basename: true,
+  });
   expect(index).toMatchInlineSnapshot(`
     "const shared = 'shared';
     const foo = 'foo' + shared;
@@ -48,7 +50,9 @@ test('multiple entry bundle', async () => {
     "
   `);
 
-  const foo = queryContent(contents.esm, 'foo.js', { basename: true });
+  const { content: foo } = queryContent(contents.esm, 'foo.js', {
+    basename: true,
+  });
   expect(foo).toMatchInlineSnapshot(`
     "const shared = 'shared';
     const foo = 'foo' + shared;
@@ -56,14 +60,18 @@ test('multiple entry bundle', async () => {
     "
   `);
 
-  const bar = queryContent(contents.esm, 'bar.js', { basename: true });
+  const { content: bar } = queryContent(contents.esm, 'bar.js', {
+    basename: true,
+  });
   expect(bar).toMatchInlineSnapshot(`
     "const bar = 'bar';
     export { bar };
     "
   `);
 
-  const shared = queryContent(contents.esm, 'shared.js', { basename: true });
+  const { content: shared } = queryContent(contents.esm, 'shared.js', {
+    basename: true,
+  });
   expect(shared).toMatchInlineSnapshot(`
     "const shared = 'shared';
     export { shared };
