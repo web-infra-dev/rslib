@@ -4,6 +4,7 @@ import {
   type EnvironmentConfig,
   type RsbuildConfig,
   type RsbuildPlugin,
+  type Rspack,
   defineConfig as defineRsbuildConfig,
   loadConfig as loadRsbuildConfig,
   mergeRsbuildConfig,
@@ -36,6 +37,7 @@ import type {
   DeepRequired,
   ExcludesFalse,
   Format,
+  GetAsyncFunctionFromUnion,
   LibConfig,
   LibOnlyConfig,
   PkgJson,
@@ -60,6 +62,7 @@ import {
   isEmptyObject,
   isObject,
   nodeBuiltInModules,
+  normalizeSlash,
   omit,
   pick,
   readPackageJson,
@@ -949,23 +952,37 @@ const composeBundleConfig = (
 
   const isStyleRedirect = redirect.style ?? true;
 
+  type Resolver = GetAsyncFunctionFromUnion<
+    ReturnType<NonNullable<Rspack.ExternalItemFunctionData['getResolve']>>
+  >;
+  let resolver: Resolver | undefined;
+
   return {
     output: {
       externals: [
-        (data: any, callback: any) => {
+        async (data, callback) => {
+          const { request, getResolve, context, contextInfo } = data;
+          if (!request || !getResolve || !context || !contextInfo) {
+            return callback();
+          }
+
+          if (!resolver) {
+            resolver = (await getResolve()) as Resolver;
+          }
+
           // Issuer is not empty string when the module is imported by another module.
           // Prevent from externalizing entry modules here.
-          if (data.contextInfo.issuer) {
+          if (contextInfo.issuer) {
             // Node.js ECMAScript module loader does no extension searching.
             // Add a file extension according to autoExtension config
             // when data.request is a relative path and do not have an extension.
             // If data.request already have an extension, we replace it with new extension
             // This may result in a change in semantics,
             // user should use copy to keep origin file or use another separate entry to deal this
-            let request: string = data.request;
+            let resolvedRequest: string = request;
 
             const cssExternal = cssExternalHandler(
-              request,
+              resolvedRequest,
               callback,
               jsExtension,
               cssModulesAuto,
@@ -976,27 +993,39 @@ const composeBundleConfig = (
               return cssExternal;
             }
 
-            if (request[0] === '.') {
-              const ext = extname(request);
+            if (resolvedRequest[0] === '.') {
+              const resolved = await resolver(context, resolvedRequest);
+              resolvedRequest = normalizeSlash(
+                path.relative(path.dirname(contextInfo.issuer), resolved),
+              );
+
+              if (resolvedRequest[0] !== '.') {
+                resolvedRequest = `./${resolvedRequest}`;
+              }
+
+              const ext = extname(resolvedRequest);
 
               if (ext) {
-                if (JS_EXTENSIONS_PATTERN.test(request)) {
-                  request = request.replace(/\.[^.]+$/, jsExtension);
+                if (JS_EXTENSIONS_PATTERN.test(resolvedRequest)) {
+                  resolvedRequest = resolvedRequest.replace(
+                    /\.[^.]+$/,
+                    jsExtension,
+                  );
                 } else {
                   // If it does not match jsExtensionsPattern, we should do nothing, eg: ./foo.png
                   return callback();
                 }
               } else {
                 // TODO: add redirect.extension option
-                request = `${request}${jsExtension}`;
+                resolvedRequest = `${resolvedRequest}${jsExtension}`;
               }
             }
 
-            return callback(null, request);
+            return callback(undefined, resolvedRequest);
           }
           callback();
         },
-      ],
+      ] as Rspack.ExternalItem[],
     },
   };
 };

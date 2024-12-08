@@ -327,7 +327,7 @@ export function queryContent(
   options: {
     basename?: boolean;
   } = {},
-): string | null {
+): { path: string; content: string } {
   const useBasename = options?.basename ?? false;
   const matched = Object.entries(contents).find(([key]) => {
     const toQueried = useBasename ? basename(key) : key;
@@ -337,10 +337,10 @@ export function queryContent(
   });
 
   if (!matched) {
-    return null;
+    throw new Error(`Cannot find content for ${query}`);
   }
 
-  return matched[1];
+  return { path: matched[0], content: matched[1] };
 }
 
 export async function createTempFiles(

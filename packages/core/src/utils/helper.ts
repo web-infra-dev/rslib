@@ -233,3 +233,8 @@ export const isTTY = (type: 'stdin' | 'stdout' = 'stdout'): boolean => {
 };
 
 export { color };
+
+const windowsSlashRegex = /\\/g;
+export function normalizeSlash(p: string): string {
+  return p.replace(windowsSlashRegex, '/');
+}
