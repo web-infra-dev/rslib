@@ -239,9 +239,7 @@ const getAutoExternalDefaultValue = (
   format: Format,
   autoExternal?: AutoExternal,
 ): AutoExternal => {
-  return isIntermediateOutputFormat(format)
-    ? (autoExternal ?? true)
-    : (autoExternal ?? false);
+  return autoExternal ?? isIntermediateOutputFormat(format);
 };
 
 export const composeAutoExternalConfig = (options: {
