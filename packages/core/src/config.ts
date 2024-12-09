@@ -235,15 +235,29 @@ const composeExternalsWarnConfig = (
   };
 };
 
+const getAutoExternalDefaultValue = (
+  format: Format,
+  autoExternal?: AutoExternal,
+): AutoExternal => {
+  return isIntermediateOutputFormat(format)
+    ? (autoExternal ?? true)
+    : (autoExternal ?? false);
+};
+
 export const composeAutoExternalConfig = (options: {
   format: Format;
   autoExternal?: AutoExternal;
   pkgJson?: PkgJson;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 }): RsbuildConfig => {
-  const { format, autoExternal = true, pkgJson, userExternals } = options;
+  const { format, pkgJson, userExternals } = options;
 
-  if (autoExternal === false || !isIntermediateOutputFormat(format)) {
+  const autoExternal = getAutoExternalDefaultValue(
+    format,
+    options.autoExternal,
+  );
+
+  if (autoExternal === false) {
     return {};
   }
 
@@ -1007,7 +1021,7 @@ const composeDtsConfig = async (
   libConfig: LibConfig,
   dtsExtension: string,
 ): Promise<RsbuildConfig> => {
-  const { format, autoExternal = true, banner, footer } = libConfig;
+  const { format, autoExternal, banner, footer } = libConfig;
 
   let { dts } = libConfig;
 
@@ -1030,9 +1044,7 @@ const composeDtsConfig = async (
         build: dts?.build,
         abortOnError: dts?.abortOnError,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
-        autoExternal: !isIntermediateOutputFormat(format!)
-          ? false
-          : autoExternal,
+        autoExternal: getAutoExternalDefaultValue(format!, autoExternal),
         banner: banner?.dts,
         footer: footer?.dts,
       }),

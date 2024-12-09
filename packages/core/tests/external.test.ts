@@ -4,7 +4,7 @@ import { composeAutoExternalConfig } from '../src/config';
 vi.mock('rslog');
 
 describe('should composeAutoExternalConfig correctly', () => {
-  it('autoExternal is undefined', () => {
+  it('autoExternal default value', () => {
     const esmResult = composeAutoExternalConfig({
       format: 'esm',
       autoExternal: undefined,
@@ -21,6 +21,28 @@ describe('should composeAutoExternalConfig correctly', () => {
       autoExternal: undefined,
       pkgJson: {
         name: 'cjs',
+        dependencies: {
+          foo: '1.0.0',
+        },
+      },
+    });
+
+    const umdResult = composeAutoExternalConfig({
+      format: 'umd',
+      autoExternal: undefined,
+      pkgJson: {
+        name: 'umd',
+        dependencies: {
+          foo: '1.0.0',
+        },
+      },
+    });
+
+    const mfResult = composeAutoExternalConfig({
+      format: 'mf',
+      autoExternal: undefined,
+      pkgJson: {
+        name: 'mf',
         dependencies: {
           foo: '1.0.0',
         },
@@ -48,33 +70,8 @@ describe('should composeAutoExternalConfig correctly', () => {
         },
       }
     `);
-  });
-
-  it('autoExternal should be disabled when format is umd or mf', () => {
-    const umdResult = composeAutoExternalConfig({
-      format: 'umd',
-      autoExternal: undefined,
-      pkgJson: {
-        name: 'umd',
-        dependencies: {
-          foo: '1.0.0',
-        },
-      },
-    });
 
     expect(umdResult).toMatchInlineSnapshot('{}');
-
-    const mfResult = composeAutoExternalConfig({
-      format: 'mf',
-      autoExternal: undefined,
-      pkgJson: {
-        name: 'mf',
-        dependencies: {
-          foo: '1.0.0',
-        },
-      },
-    });
-
     expect(mfResult).toMatchInlineSnapshot('{}');
   });
 
@@ -109,6 +106,52 @@ describe('should composeAutoExternalConfig correctly', () => {
         ],
       },
     });
+  });
+
+  it('autoExternal is true when format is umd or mf', () => {
+    const umdResult = composeAutoExternalConfig({
+      format: 'umd',
+      autoExternal: true,
+      pkgJson: {
+        name: 'umd',
+        dependencies: {
+          foo: '1.0.0',
+        },
+      },
+    });
+
+    expect(umdResult).toMatchInlineSnapshot(`
+      {
+        "output": {
+          "externals": [
+            /\\^foo\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+            "foo",
+          ],
+        },
+      }
+    `);
+
+    const mfResult = composeAutoExternalConfig({
+      format: 'mf',
+      autoExternal: true,
+      pkgJson: {
+        name: 'mf',
+        dependencies: {
+          foo: '1.0.0',
+        },
+      },
+    });
+
+    expect(mfResult).toMatchInlineSnapshot(`
+      {
+        "output": {
+          "externals": [
+            /\\^foo\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+            "foo",
+          ],
+        },
+      }
+    `);
   });
 
   it('autoExternal will deduplication ', () => {
