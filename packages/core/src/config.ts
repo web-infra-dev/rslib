@@ -339,7 +339,8 @@ export function composeMinifyConfig(config: LibConfig): RsbuildConfig {
               toplevel: format !== 'mf',
             },
             format: {
-              comments: 'all',
+              comments: 'some',
+              preserve_annotations: true,
             },
           },
         },
