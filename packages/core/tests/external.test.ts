@@ -4,10 +4,83 @@ import { composeAutoExternalConfig } from '../src/config';
 vi.mock('rslog');
 
 describe('should composeAutoExternalConfig correctly', () => {
+  it('autoExternal default value', () => {
+    const esmResult = composeAutoExternalConfig({
+      format: 'esm',
+      autoExternal: undefined,
+      pkgJson: {
+        name: 'esm',
+        dependencies: {
+          foo: '1.0.0',
+        },
+      },
+    });
+
+    const cjsResult = composeAutoExternalConfig({
+      format: 'cjs',
+      autoExternal: undefined,
+      pkgJson: {
+        name: 'cjs',
+        dependencies: {
+          foo: '1.0.0',
+        },
+      },
+    });
+
+    const umdResult = composeAutoExternalConfig({
+      format: 'umd',
+      autoExternal: undefined,
+      pkgJson: {
+        name: 'umd',
+        dependencies: {
+          foo: '1.0.0',
+        },
+      },
+    });
+
+    const mfResult = composeAutoExternalConfig({
+      format: 'mf',
+      autoExternal: undefined,
+      pkgJson: {
+        name: 'mf',
+        dependencies: {
+          foo: '1.0.0',
+        },
+      },
+    });
+
+    expect(esmResult).toMatchInlineSnapshot(`
+      {
+        "output": {
+          "externals": [
+            /\\^foo\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+            "foo",
+          ],
+        },
+      }
+    `);
+
+    expect(cjsResult).toMatchInlineSnapshot(`
+      {
+        "output": {
+          "externals": [
+            /\\^foo\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+            "foo",
+          ],
+        },
+      }
+    `);
+
+    expect(umdResult).toMatchInlineSnapshot('{}');
+    expect(mfResult).toMatchInlineSnapshot('{}');
+  });
+
   it('autoExternal is true', () => {
     const result = composeAutoExternalConfig({
+      format: 'esm',
       autoExternal: true,
       pkgJson: {
+        name: 'esm',
         dependencies: {
           foo: '1.0.0',
           foo1: '1.0.0',
@@ -35,10 +108,58 @@ describe('should composeAutoExternalConfig correctly', () => {
     });
   });
 
-  it('autoExternal will deduplication ', () => {
-    const result = composeAutoExternalConfig({
+  it('autoExternal is true when format is umd or mf', () => {
+    const umdResult = composeAutoExternalConfig({
+      format: 'umd',
       autoExternal: true,
       pkgJson: {
+        name: 'umd',
+        dependencies: {
+          foo: '1.0.0',
+        },
+      },
+    });
+
+    expect(umdResult).toMatchInlineSnapshot(`
+      {
+        "output": {
+          "externals": [
+            /\\^foo\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+            "foo",
+          ],
+        },
+      }
+    `);
+
+    const mfResult = composeAutoExternalConfig({
+      format: 'mf',
+      autoExternal: true,
+      pkgJson: {
+        name: 'mf',
+        dependencies: {
+          foo: '1.0.0',
+        },
+      },
+    });
+
+    expect(mfResult).toMatchInlineSnapshot(`
+      {
+        "output": {
+          "externals": [
+            /\\^foo\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+            "foo",
+          ],
+        },
+      }
+    `);
+  });
+
+  it('autoExternal will deduplication ', () => {
+    const result = composeAutoExternalConfig({
+      format: 'esm',
+      autoExternal: true,
+      pkgJson: {
+        name: 'esm',
         dependencies: {
           foo: '1.0.0',
           foo1: '1.0.0',
@@ -70,11 +191,13 @@ describe('should composeAutoExternalConfig correctly', () => {
 
   it('autoExternal is object', () => {
     const result = composeAutoExternalConfig({
+      format: 'esm',
       autoExternal: {
         peerDependencies: false,
         devDependencies: true,
       },
       pkgJson: {
+        name: 'esm',
         dependencies: {
           foo: '1.0.0',
         },
@@ -96,8 +219,10 @@ describe('should composeAutoExternalConfig correctly', () => {
 
   it('autoExternal is false', () => {
     const result = composeAutoExternalConfig({
+      format: 'esm',
       autoExternal: false,
       pkgJson: {
+        name: 'esm',
         dependencies: {
           foo: '1.0.0',
         },
@@ -109,8 +234,10 @@ describe('should composeAutoExternalConfig correctly', () => {
 
   it('autoExternal with user externals object', () => {
     const result = composeAutoExternalConfig({
+      format: 'esm',
       autoExternal: true,
       pkgJson: {
+        name: 'esm',
         dependencies: {
           foo: '1.0.0',
           bar: '1.0.0',
@@ -130,6 +257,7 @@ describe('should composeAutoExternalConfig correctly', () => {
 
   it('read package.json failed', () => {
     const result = composeAutoExternalConfig({
+      format: 'esm',
       autoExternal: true,
     });
 

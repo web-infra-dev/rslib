@@ -15,7 +15,7 @@
 
 ## 三方依赖的默认处理
 
-默认情况下，`dependencies`、`optionalDependencies` 和 `peerDependencies` 字段下的三方依赖不会被 Rslib 打包。
+默认情况下，当生成 CJS 或 ESM 产物时，`dependencies`、`optionalDependencies` 和 `peerDependencies` 字段下的三方依赖不会被 Rslib 打包。
 
 这是因为在 npm 包安装时，其 `dependencies` 也会被安装。通过不打包 `dependencies`，可以减少包的体积。
 

@@ -58,6 +58,7 @@ import {
   color,
   getAbsolutePath,
   isEmptyObject,
+  isIntermediateOutputFormat,
   isObject,
   nodeBuiltInModules,
   omit,
@@ -234,14 +235,27 @@ const composeExternalsWarnConfig = (
   };
 };
 
+const getAutoExternalDefaultValue = (
+  format: Format,
+  autoExternal?: AutoExternal,
+): AutoExternal => {
+  return autoExternal ?? isIntermediateOutputFormat(format);
+};
+
 export const composeAutoExternalConfig = (options: {
-  autoExternal: AutoExternal;
+  format: Format;
+  autoExternal?: AutoExternal;
   pkgJson?: PkgJson;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 }): RsbuildConfig => {
-  const { autoExternal, pkgJson, userExternals } = options;
+  const { format, pkgJson, userExternals } = options;
 
-  if (!autoExternal) {
+  const autoExternal = getAutoExternalDefaultValue(
+    format,
+    options.autoExternal,
+  );
+
+  if (autoExternal === false) {
     return {};
   }
 
@@ -1005,7 +1019,7 @@ const composeDtsConfig = async (
   libConfig: LibConfig,
   dtsExtension: string,
 ): Promise<RsbuildConfig> => {
-  const { autoExternal, banner, footer } = libConfig;
+  const { format, autoExternal, banner, footer } = libConfig;
 
   let { dts } = libConfig;
 
@@ -1028,7 +1042,7 @@ const composeDtsConfig = async (
         build: dts?.build,
         abortOnError: dts?.abortOnError,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
-        autoExternal,
+        autoExternal: getAutoExternalDefaultValue(format!, autoExternal),
         banner: banner?.dts,
         footer: footer?.dts,
       }),
@@ -1150,7 +1164,7 @@ async function composeLibRsbuildConfig(config: LibConfig) {
     banner = {},
     footer = {},
     autoExtension = true,
-    autoExternal = true,
+    autoExternal,
     externalHelpers = false,
     redirect = {},
     umdName,
@@ -1190,6 +1204,7 @@ async function composeLibRsbuildConfig(config: LibConfig) {
   );
   const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
   const autoExternalConfig = composeAutoExternalConfig({
+    format: format!,
     autoExternal,
     pkgJson,
     userExternals: config.output?.externals,
