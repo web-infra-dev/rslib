@@ -1,1 +1,58 @@
+import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
+
 # resolve
+
+与模块解析相关的选项。
+
+## resolve.aliasStrategy <RsbuildDocBadge path="/config/resolve/alias-strategy" text="resolve.aliasStrategy" />
+
+控制 `tsconfig.json` 中的 `paths` 选项与 Rsbuild 中的 `resolve.alias` 选项的优先级。
+
+## resolve.alias <RsbuildDocBadge path="/config/resolve/alias" text="resolve.alias" />
+
+设置文件引用的别名，对应 Rspack 的 [resolve.alias](https://rspack.dev/config/resolve#resolvealias) 配置。
+
+值得注意的是，`resolve.alias` 与 [output.externals](/config/rsbuild/output#outputexternals) 在以下方面有所不同：
+
+- `resolve.alias` 允许你将目标模块替换为另一个模块。它仅在 [lib.bundle](/config/lib/bundle) 设置为 `true` 时有效。
+
+  例如，如果你想在打包一个 package 时将 `lodash` 替换为 `lodash-es`，可以这样配置：
+
+  ```ts title="rslib.config.ts"
+  export default {
+    // ...
+    resolve: {
+      alias: {
+        lodash: 'lodash-es',
+      },
+    },
+  };
+  ```
+
+  所有在源代码中导入的 `lodash` 模块将被映射为 `lodash-es`，并被打包到产物中。
+
+- `output.externals` 用于处理外部化模块的别名映射。外部化模块不会被打包到产物中，而是在运行时从外部源导入。
+
+  例如，如果你想在 bundle 中将 `react` 和 `react-dom` 替换为 `preact/compat`，可以这样配置：
+
+  ```ts title="rslib.config.ts"
+  export default {
+    // ...
+    output: {
+      externals: {
+        react: 'preact/compat',
+        'react-dom': 'preact/compat',
+      },
+    },
+  };
+  ```
+
+  此时，代码 `import { useState } from 'react'` 将被替换为 `import { useState } from 'preact/compat'`。
+
+## resolve.dedupe <RsbuildDocBadge path="/config/resolve/dedupe" text="resolve.dedupe" />
+
+强制 Rsbuild 从项目根目录解析指定的包，这可以用于移除重复包和减少包大小。
+
+## resolve.extensions <RsbuildDocBadge path="/config/resolve/extensions" text="resolve.extensions" />
+
+自动添加导入文件的扩展名。这意味着你可以导入文件，而不需要显式地写它们的扩展名。

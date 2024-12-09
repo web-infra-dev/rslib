@@ -2,9 +2,11 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 # resolve
 
+Options for module resolution.
+
 ## resolve.aliasStrategy <RsbuildDocBadge path="/config/resolve/alias-strategy" text="resolve.aliasStrategy" />
 
-`resolve.aliasStrategy` is used to control the priority between the `paths` option in `tsconfig.json` and the `alias` option in the bundler.
+Control the priority between the `paths` option in `tsconfig.json` and the `resolve.alias` option of Rsbuild.
 
 ## resolve.alias <RsbuildDocBadge path="/config/resolve/alias" text="resolve.alias" />
 
@@ -14,7 +16,7 @@ It is important to note that `resolve.alias` differs from [output.externals](/co
 
 - `resolve.alias` allows you to replace the target module you want to include in the output bundles with another module. It only works if [lib.bundle](/config/lib/bundle) is set to `true`.
 
-  For example, if you want to replace `lodash` with `lodash-es` in a bundled CLI application, you can configure it as follows:
+  For example, if you want to replace `lodash` with `lodash-es` when bundling a package, you can configure it as follows:
 
   ```ts title="rslib.config.ts"
   export default {
@@ -49,4 +51,8 @@ It is important to note that `resolve.alias` differs from [output.externals](/co
 
 ## resolve.dedupe <RsbuildDocBadge path="/config/resolve/dedupe" text="resolve.dedupe" />
 
-`resolve.dedupe` is used to resolve the specified packages from project root, which is useful for deduplicating packages and reducing the bundle size.
+Force Rsbuild to resolve the specified packages from project root, which is useful for deduplicating packages and reducing the bundle size.
+
+## resolve.extensions <RsbuildDocBadge path="/config/resolve/extensions" text="resolve.extensions" />
+
+Automatically resolve file extensions when importing modules. This means you can import files without explicitly writing their extensions.

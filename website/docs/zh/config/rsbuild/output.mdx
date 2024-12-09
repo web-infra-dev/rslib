@@ -1,1 +1,91 @@
+import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
+
 # output
+
+与构建产物相关的选项。
+
+## output.charset <RsbuildDocBadge path="/config/output/charset" text="output.charset" />
+
+指定输出文件的 [字符编码](https://developer.mozilla.org/en-US/docs/Glossary/Character_encoding)，以确保它们在不同的环境中能够正确显示。
+
+## output.cleanDistPath <RsbuildDocBadge path="/config/output/clean-dist-path" text="output.cleanDistPath" />
+
+是否在构建开始前清理产物目录下的所有文件（产物目录默认为 `dist`）。
+
+## output.copy <RsbuildDocBadge path="/config/output/copy" text="output.copy" />
+
+将指定的文件或目录拷贝到构建输出目录中，基于 [rspack.CopyRspackPlugin](https://rspack.dev/plugins/rspack/copy-rspack-plugin) 实现。
+
+## output.cssModules <RsbuildDocBadge path="/config/output/css-modules" text="output.cssModules" />
+
+用于自定义 CSS Modules 配置。
+
+## output.dataUriLimit <RsbuildDocBadge path="/config/output/data-uri-limit" text="output.dataUriLimit" />
+
+设置图片、字体、媒体等静态资源被自动内联为 base64 的体积阈值。
+
+## output.distPath <RsbuildDocBadge path="/config/output/dist-path" text="output.distPath" />
+
+设置构建产物的输出目录，Rsbuild 会根据产物的类型输出到对应的子目录下。
+
+## output.emitCss <RsbuildDocBadge path="/config/output/emit-css" text="output.emitCss" />
+
+是否将 CSS 输出到产物中。
+
+## output.externals <RsbuildDocBadge path="/config/output/externals" text="output.externals" />
+
+在构建时，防止将代码中某些 `import` 的依赖包打包到 bundle 中，而是在运行时再去从外部获取这些依赖。
+
+需要注意的是，`output.externals` 与 [resolve.alias](/config/rsbuild/resolve#resolvealias) 有所不同。请查看 [resolve.alias](/config/rsbuild/resolve#resolvealias) 文档以了解更多信息。
+
+## output.filenameHash <RsbuildDocBadge path="/config/output/filename-hash" text="output.filenameHash" />
+
+在生产模式构建后，是否在产物的文件名中添加 hash 值。
+
+## output.filename <RsbuildDocBadge path="/config/output/filename" text="output.filename" />
+
+设置构建产物的名称。
+
+## output.inlineScripts <RsbuildDocBadge path="/config/output/inline-scripts" text="output.inlineScripts" />
+
+用来控制是否用 `<script>` 标签将产物中的 script 文件（.js 文件）inline 到 HTML 中。
+
+## output.inlineStyles <RsbuildDocBadge path="/config/output/inline-styles" text="output.inlineStyles" />
+
+用来控制是否用 `<style>` 标签将产物中的 style 文件（.css 文件）inline 到 HTML 中。
+
+## output.legalComments <RsbuildDocBadge path="/config/output/legal-comments" text="output.legalComments" />
+
+配置 legal comment 的处理方式。
+
+## output.manifest <RsbuildDocBadge path="/config/output/manifest" text="output.manifest" />
+
+是否生成 manifest 文件，该文件包含所有构建产物的信息、以及[入口模块](https://rsbuild.dev/config/source/entry)与构建产物间的映射关系。
+
+## output.minify <RsbuildDocBadge path="/config/output/minify" text="output.minify" />
+
+用于设置是否在生产模式下开启代码压缩，或是配置压缩工具的选项。
+
+## output.overrideBrowserslist <RsbuildDocBadge path="/config/output/override-browserslist" text="output.overrideBrowserslist" />
+
+指定项目兼容的目标浏览器范围。
+
+## output.polyfill <RsbuildDocBadge path="/config/output/polyfill" text="output.polyfill" />
+
+控制 polyfills 的注入方式。
+
+:::warning
+Rsbuild 的 `output.polyfill` 会将 polyfills 注入到全局作用域中，这可能会意外地修改库消费者的全局变量。对于非全局的 polyfill 方案，请参考 [Polyfill - 浏览器](/guide/advanced/output-compatibility#浏览器)。
+:::
+
+## output.sourceMap <RsbuildDocBadge path="/config/output/source-map" text="output.sourceMap" />
+
+用于设置是否生成 source map 文件，以及生成哪一种格式的 source map。
+
+## output.target <RsbuildDocBadge path="/config/output/target" text="output.target" />
+
+用于设置 Rsbuild 的构建产物类型。
+
+:::info
+请查看 [解决方案](/guide/solution/) 了解更多关于构建产物的信息。
+:::
