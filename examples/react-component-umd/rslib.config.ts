@@ -20,5 +20,12 @@ export default defineConfig({
   output: {
     target: 'web',
   },
-  plugins: [pluginReact(), pluginSass()],
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'classic',
+      },
+    }),
+    pluginSass(),
+  ],
 });
