@@ -3,7 +3,13 @@
 - **Type:**
 
 ```ts
+type JsRedirect = {
+  path?: boolean;
+  extension?: boolean;
+};
+
 type Redirect = {
+  js?: JsRedirect;
   style?: boolean;
 };
 ```
@@ -12,6 +18,10 @@ type Redirect = {
 
 ```ts
 const defaultRedirect = {
+  js: {
+    path: true,
+    extension: true,
+  },
   style: true,
 };
 ```
@@ -39,6 +49,28 @@ export default {
   ],
 };
 ```
+
+## redirect.js
+
+Controls the redirect of the import paths of output JavaScript files.
+
+### redirect.js.path
+
+Whether to automatically redirect the import paths of JavaScript output files, compilerOptions.paths in tsconfig.json will be applied by default.
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+### redirect.js.extension
+
+Whether to automatically add the file extension based on the JavaScript output files.
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+:::warning
+When [output.externals](/config/rsbuild/output#outputexternals) is configured and a request is matched, neither `redirect.js.path` nor `redirect.js.extension` will take effect, and the final rewritten request path will be entirely controlled by [output.externals](/config/rsbuild/output#outputexternals).
+:::
 
 ## redirect.style
 

@@ -74,12 +74,33 @@ export type Shims = {
   };
 };
 
+export type JsRedirect = {
+  /**
+   * Whether to automatically redirect the import paths of JavaScript output files,
+   * compilerOptions.paths in tsconfig.json will be applied by default.
+   * @defaultValue `true`
+   */
+  path?: boolean;
+  /**
+   * Whether to automatically add the file extension based on the JavaScript output files.
+   * @defaultValue `true`
+   */
+  extension?: boolean;
+};
+
+// @ts-expect-error TODO: support dts redirect in the future
+type DtsRedirect = {
+  path?: boolean;
+  extension?: boolean;
+};
+
 export type Redirect = {
-  // TODO: support other redirects
-  // alias?: boolean;
+  /** Controls the redirect of the import paths of JavaScript output files. */
+  js?: JsRedirect;
   style?: boolean;
+  // TODO: support other redirects
   // asset?: boolean;
-  // autoExtension?: boolean;
+  // dts?: DtsRedirect;
 };
 
 export interface LibConfig extends RsbuildConfig {

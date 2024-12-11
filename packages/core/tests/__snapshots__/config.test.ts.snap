@@ -174,7 +174,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "experiments": {
               "outputModule": true,
             },
-            "externalsType": "module-import",
             "module": {
               "parser": {
                 "javascript": {
@@ -210,6 +209,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "target": [
               "node",
             ],
+          },
+          {
+            "externalsType": "module-import",
           },
           {
             "plugins": [
@@ -414,7 +416,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             },
           },
           {
-            "externalsType": "commonjs-import",
             "module": {
               "parser": {
                 "javascript": {
@@ -442,6 +443,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "target": [
               "node",
             ],
+          },
+          {
+            "externalsType": "commonjs-import",
           },
           {
             "plugins": [
@@ -637,7 +641,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             },
           },
           {
-            "externalsType": "umd",
             "module": {
               "parser": {
                 "javascript": {
@@ -660,6 +663,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
             "target": [
               "node",
             ],
+          },
+          {
+            "externalsType": "umd",
           },
           {
             "plugins": [

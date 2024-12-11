@@ -40,6 +40,7 @@ import type {
   ExcludesFalse,
   Format,
   GetAsyncFunctionFromUnion,
+  JsRedirect,
   LibConfig,
   LibOnlyConfig,
   PkgJson,
@@ -959,15 +960,20 @@ const composeEntryConfig = async (
   };
 };
 
-const composeBundleConfig = (
+const composeBundlelessExternalConfig = (
   jsExtension: string,
   redirect: Redirect,
   cssModulesAuto: CssLoaderOptionsAuto,
   bundle: boolean,
-): RsbuildConfig => {
-  if (bundle) return {};
+): {
+  config: RsbuildConfig;
+  resolvedJsRedirect?: DeepRequired<JsRedirect>;
+} => {
+  if (bundle) return { config: {} };
 
-  const isStyleRedirect = redirect.style ?? true;
+  const doesRedirectStyle = redirect.style ?? true;
+  const jsRedirectPath = redirect.js?.path ?? true;
+  const jsRedirectExtension = redirect.js?.extension ?? true;
 
   type Resolver = GetAsyncFunctionFromUnion<
     ReturnType<NonNullable<Rspack.ExternalItemFunctionData['getResolve']>>
@@ -975,74 +981,91 @@ const composeBundleConfig = (
   let resolver: Resolver | undefined;
 
   return {
-    output: {
-      externals: [
-        async (data, callback) => {
-          const { request, getResolve, context, contextInfo } = data;
-          if (!request || !getResolve || !context || !contextInfo) {
-            return callback();
-          }
-
-          if (!resolver) {
-            resolver = (await getResolve()) as Resolver;
-          }
-
-          // Issuer is not empty string when the module is imported by another module.
-          // Prevent from externalizing entry modules here.
-          if (contextInfo.issuer) {
-            // Node.js ECMAScript module loader does no extension searching.
-            // Add a file extension according to autoExtension config
-            // when data.request is a relative path and do not have an extension.
-            // If data.request already have an extension, we replace it with new extension
-            // This may result in a change in semantics,
-            // user should use copy to keep origin file or use another separate entry to deal this
-            let resolvedRequest: string = request;
-
-            const cssExternal = cssExternalHandler(
-              resolvedRequest,
-              callback,
-              jsExtension,
-              cssModulesAuto,
-              isStyleRedirect,
-            );
-
-            if (cssExternal !== false) {
-              return cssExternal;
+    resolvedJsRedirect: {
+      path: jsRedirectPath,
+      extension: jsRedirectExtension,
+    },
+    config: {
+      output: {
+        externals: [
+          async (data, callback) => {
+            const { request, getResolve, context, contextInfo } = data;
+            if (!request || !getResolve || !context || !contextInfo) {
+              return callback();
             }
 
-            if (resolvedRequest[0] === '.') {
-              const resolved = await resolver(context, resolvedRequest);
-              resolvedRequest = normalizeSlash(
-                path.relative(path.dirname(contextInfo.issuer), resolved),
+            if (!resolver) {
+              resolver = (await getResolve()) as Resolver;
+            }
+
+            // Issuer is not empty string when the module is imported by another module.
+            // Prevent from externalizing entry modules here.
+            if (contextInfo.issuer) {
+              let resolvedRequest: string = request;
+
+              const cssExternal = cssExternalHandler(
+                resolvedRequest,
+                callback,
+                jsExtension,
+                cssModulesAuto,
+                doesRedirectStyle,
               );
 
-              if (resolvedRequest[0] !== '.') {
-                resolvedRequest = `./${resolvedRequest}`;
+              if (cssExternal !== false) {
+                return cssExternal;
               }
 
-              const ext = extname(resolvedRequest);
+              // Node.js ECMAScript module loader does no extension searching.
+              // Add a file extension according to autoExtension config
+              // when data.request is a relative path and do not have an extension.
+              // If data.request already have an extension, we replace it with new extension
+              // This may result in a change in semantics,
+              // user should use copy to keep origin file or use another separate entry to deal this
 
-              if (ext) {
-                if (JS_EXTENSIONS_PATTERN.test(resolvedRequest)) {
-                  resolvedRequest = resolvedRequest.replace(
-                    /\.[^.]+$/,
-                    jsExtension,
-                  );
-                } else {
-                  // If it does not match jsExtensionsPattern, we should do nothing, eg: ./foo.png
-                  return callback();
+              if (jsRedirectPath) {
+                try {
+                  resolvedRequest = await resolver(context, resolvedRequest);
+                } catch (e) {
+                  // Do nothing, fallthrough to other external matches.
                 }
-              } else {
-                // TODO: add redirect.extension option
-                resolvedRequest = `${resolvedRequest}${jsExtension}`;
+
+                resolvedRequest = normalizeSlash(
+                  path.relative(
+                    path.dirname(contextInfo.issuer),
+                    resolvedRequest,
+                  ),
+                );
+
+                if (resolvedRequest[0] !== '.') {
+                  resolvedRequest = `./${resolvedRequest}`;
+                }
               }
+
+              if (jsRedirectExtension) {
+                const ext = extname(resolvedRequest);
+                if (ext) {
+                  if (JS_EXTENSIONS_PATTERN.test(resolvedRequest)) {
+                    resolvedRequest = resolvedRequest.replace(
+                      /\.[^.]+$/,
+                      jsExtension,
+                    );
+                  } else {
+                    // If it does not match jsExtensionsPattern, we should do nothing, eg: ./foo.png
+                    return callback();
+                  }
+                } else {
+                  // TODO: add redirect.extension option
+                  resolvedRequest = `${resolvedRequest}${jsExtension}`;
+                }
+              }
+
+              return callback(undefined, resolvedRequest);
             }
 
-            return callback(undefined, resolvedRequest);
-          }
-          callback();
-        },
-      ] as Rspack.ExternalItem[],
+            callback();
+          },
+        ] as Rspack.ExternalItem[],
+      },
     },
   };
 };
@@ -1218,7 +1241,7 @@ async function composeLibRsbuildConfig(
     externalHelpers,
     pkgJson,
   );
-  const externalsConfig = composeExternalsConfig(
+  const userExternalConfig = composeExternalsConfig(
     format!,
     config.output?.externals,
   );
@@ -1227,7 +1250,7 @@ async function composeLibRsbuildConfig(
     jsExtension,
     dtsExtension,
   } = composeAutoExtensionConfig(config, autoExtension, pkgJson);
-  const bundleConfig = composeBundleConfig(
+  const { config: bundlelessExternalConfig } = composeBundlelessExternalConfig(
     jsExtension,
     redirect,
     cssModulesAuto,
@@ -1260,7 +1283,7 @@ async function composeLibRsbuildConfig(
   const externalsWarnConfig = composeExternalsWarnConfig(
     format!,
     autoExternalConfig?.output?.externals,
-    externalsConfig?.output?.externals,
+    userExternalConfig?.output?.externals,
   );
   const minifyConfig = composeMinifyConfig(config);
   const bannerFooterConfig = composeBannerFooterConfig(banner, footer);
@@ -1272,15 +1295,20 @@ async function composeLibRsbuildConfig(
   return mergeRsbuildConfig(
     formatConfig,
     shimsConfig,
-    externalHelpersConfig,
-    // externalsWarnConfig should before other externals config
-    externalsWarnConfig,
-    externalsConfig,
-    autoExternalConfig,
-    autoExtensionConfig,
     syntaxConfig,
-    bundleConfig,
+    externalHelpersConfig,
+    autoExtensionConfig,
+
+    // `externalsWarnConfig` should before other externals config.
+    externalsWarnConfig,
+    autoExternalConfig,
     targetConfig,
+    // The externals config in `bundleConfig` should present after all externals config as
+    // it relies on other externals config to bail out the externalized modules first then resolve
+    // the correct path for relative imports.
+    userExternalConfig,
+    bundlelessExternalConfig,
+
     entryConfig,
     cssConfig,
     assetConfig,
