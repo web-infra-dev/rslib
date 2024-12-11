@@ -34,5 +34,6 @@ export default defineConfig({
   },
   output: {
     target: 'web',
+    externals: ['react/jsx-runtime'],
   },
 });

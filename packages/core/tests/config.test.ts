@@ -331,7 +331,8 @@ describe('minify', () => {
               "unused": true,
             },
             "format": {
-              "comments": "all",
+              "comments": "some",
+              "preserve_annotations": true,
             },
             "mangle": false,
             "minify": false,

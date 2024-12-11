@@ -111,10 +111,8 @@ describe('CJS shims', () => {
       const importMetaUrl = import.meta.url;
       const src_rslib_entry_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url);
       const requiredModule = src_rslib_entry_require('./ok.cjs');
-      // https://github.com/web-infra-dev/rslib/issues/425
       const src_rslib_entry_filename = (0, __WEBPACK_EXTERNAL_MODULE_url__.fileURLToPath)(import.meta.url);
       console.log(src_rslib_entry_filename);
-      // https://github.com/web-infra-dev/rslib/pull/399
       const src_rslib_entry_module = null;
       export { src_rslib_entry_filename as __filename, importMetaUrl, src_rslib_entry_module as module, requiredModule };
       "
