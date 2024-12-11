@@ -705,6 +705,17 @@ importers:
         specifier: ^0.11.0
         version: 0.11.0(@babel/core@7.26.0)
 
+  tests/integration/redirect/js:
+    devDependencies:
+      '@types/lodash':
+        specifier: ^4.17.13
+        version: 4.17.13
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+
+  tests/integration/redirect/style-false: {}
+
   tests/integration/require/import-dynamic: {}
 
   tests/integration/require/require-as-expression: {}
@@ -768,8 +779,6 @@ importers:
       postcss-alias:
         specifier: 2.0.0
         version: 2.0.0
-
-  tests/integration/style/redirect-style-false: {}
 
   tests/integration/style/sass/bundle: {}
 
