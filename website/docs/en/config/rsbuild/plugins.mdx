@@ -2,7 +2,26 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 # plugins <RsbuildDocBadge path="/config/plugins" text="plugins" />
 
-Used to register Rsbuild plugins.
+`plugins` is used to register Rsbuild plugins.
+
+Rslib and Rsbuild share the same plugin system, so you can use Rsbuild plugins in Rslib.
+
+:::tip
+Currently, some plugins have not been adapted to the [bundleless](/guide/basic/output-structure#bundle--bundleless) mode of Rslib, such as the Vue plugin and Svelte plugin. Therefore, these plugins can only be used in the bundle mode.
+:::
+
+## Using Plugins
+
+You can register Rsbuild plugins in `rslib.config.*` using the `plugins` option, see [Rsbuild - plugins](https://rsbuild.dev/config/plugins).
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+
+export default defineConfig({
+  plugins: [pluginReact()],
+});
+```
 
 ## Official Plugins
 
@@ -10,50 +29,47 @@ The following are official plugins that can be used in Rsbuild, and applicable t
 
 ### For React
 
-Plugins available for the React framework:
+Plugins available for React:
 
 - [React Plugin](https://rsbuild.dev/plugins/list/plugin-react): Provides support for React.
 - [SVGR Plugin](https://rsbuild.dev/plugins/list/plugin-svgr): Support convert SVG to React components.
 - [Styled Components Plugin](https://github.com/rsbuild-contrib/rsbuild-plugin-styled-components): Provide compile-time support for styled-components.
 
-{/* ### For Vue */}
+### For Vue
 
-{/* Plugins available for the Vue framework: */}
+Plugins available for Vue:
 
-{/* - [Vue Plugin](https://rsbuild.dev/plugins/list/plugin-vue): Provides support for Vue 3 SFC (Single File Components). */}
-{/* - [Vue JSX Plugin](https://github.com/rspack-contrib/rsbuild-plugin-vue-jsx): Provides support for Vue 3 JSX / TSX syntax. */}
-{/* - [Vue2 Plugin](https://github.com/rspack-contrib/rsbuild-plugin-vue2): Provides support for Vue 2 SFC (Single File Components). */}
-{/* - [Vue2 JSX Plugin](https://github.com/rspack-contrib/rsbuild-plugin-vue2-jsx): Provides support for Vue 2 JSX / TSX syntax. */}
+- [Vue Plugin](https://rsbuild.dev/plugins/list/plugin-vue): Provides support for Vue 3 SFC (Single File Components).
+- [Vue JSX Plugin](https://github.com/rspack-contrib/rsbuild-plugin-vue-jsx): Provides support for Vue 3 JSX / TSX syntax.
+- [Vue2 Plugin](https://github.com/rspack-contrib/rsbuild-plugin-vue2): Provides support for Vue 2 SFC (Single File Components).
+- [Vue2 JSX Plugin](https://github.com/rspack-contrib/rsbuild-plugin-vue2-jsx): Provides support for Vue 2 JSX / TSX syntax.
 
 ### For Preact
 
-Plugins available for the Preact framework:
+Plugins available for Preact:
 
 - [Preact Plugin](https://rsbuild.dev/plugins/list/plugin-preact): Provides support for Preact.
 
-{/* ### For Svelte */}
+### For Svelte
 
-{/* Plugins available for the Svelte framework: */}
+Plugins available for Svelte:
 
-{/* - [Svelte Plugin](https://rsbuild.dev/plugins/list/plugin-svelte): Provides support for Svelte components (`.svelte` files). */}
+- [Svelte Plugin](https://rsbuild.dev/plugins/list/plugin-svelte): Provides support for Svelte components (`.svelte` files).
 
-{/* ### For Solid */}
+### For Solid
 
-{/* Plugins available for the Solid framework: */}
+Plugins available for Solid:
 
-{/* - [Solid Plugin](https://rsbuild.dev/plugins/list/plugin-solid): Provides support for Solid. */}
+- [Solid Plugin](https://rsbuild.dev/plugins/list/plugin-solid): Provides support for Solid.
 
 ### Common
 
 The following are common framework-agnostic plugins:
 
-{/* - [Assets Retry Plugin](https://rsbuild.dev/plugins/list/plugin-assets-retry): Used to automatically resend requests when static assets fail to load. */}
-
 - [Babel Plugin](https://rsbuild.dev/plugins/list/plugin-babel): Provides support for Babel transpilation capabilities.
 - [Sass Plugin](https://rsbuild.dev/plugins/list/plugin-sass): Use Sass as the CSS preprocessor.
 - [Less Plugin](https://rsbuild.dev/plugins/list/plugin-less): Use Less as the CSS preprocessor.
 - [Stylus Plugin](https://rsbuild.dev/plugins/list/plugin-stylus): Use Stylus as the CSS preprocessor.
-  {/* - [Basic SSL Plugin](https://github.com/rspack-contrib/rsbuild-plugin-basic-ssl): Generate an untrusted, self-signed certificate for the HTTPS server. */}
 - [ESLint Plugin](https://github.com/rspack-contrib/rsbuild-plugin-eslint): Run ESLint checks during the compilation.
 - [Type Check Plugin](https://github.com/rspack-contrib/rsbuild-plugin-type-check): Run TypeScript type checker on a separate process.
 - [Image Compress Plugin](https://github.com/rspack-contrib/rsbuild-plugin-image-compress): Compress the image assets.
