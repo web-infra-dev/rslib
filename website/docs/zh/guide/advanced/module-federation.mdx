@@ -151,7 +151,7 @@ export default defineConfig({
 
 Rslib 支持使用 Storybook 开发 Module Federation Rslib 项目。
 
-#### 1. 启动库的 MF `dev` 
+#### 1. 启动库的 MF `dev`
 
 添加 `dev` 命令在 `package.json` 文件:
 
@@ -179,52 +179,52 @@ Rslib 支持使用 Storybook 开发 Module Federation Rslib 项目。
 
    <PackageManagerTabs command="add storybook-addon-rslib @module-federation/storybook-addon -D" />
 
-2. 然后创建 Storybook 配置文件 `.storybook/main.ts`，指定 stories 和 addons，并设置 framework 和相应的 framework 集成。   
+2. 然后创建 Storybook 配置文件 `.storybook/main.ts`，指定 stories 和 addons，并设置 framework 和相应的 framework 集成。
 
 ```ts title=".storybook/main.ts" {18-38}
-   import { dirname, join } from 'node:path';
-   import type { StorybookConfig } from 'storybook-react-rsbuild';
+import { dirname, join } from 'node:path';
+import type { StorybookConfig } from 'storybook-react-rsbuild';
 
-   function getAbsolutePath(value: string): any {
-     return dirname(require.resolve(join(value, 'package.json')));
-   }
+function getAbsolutePath(value: string): any {
+  return dirname(require.resolve(join(value, 'package.json')));
+}
 
-   const config: StorybookConfig = {
-     stories: [
-       '../stories/**/*.mdx',
-       '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-     ],
-     framework: {
-       name: getAbsolutePath('storybook-react-rsbuild'),
-       options: {},
-     },
-     addons: [
-       {
-         name: getAbsolutePath('storybook-addon-rslib'),
-         options: {
-           rslib: {
-             include: ['**/stories/**'],
-           },
-         },
-       },
-       {
-         name: '@module-federation/storybook-addon/preset',
-         options: {
-           // 在添加 rslib module manifest 给 storybook dev
-           // 我们在上面已经设置了 dev.assetPrefix 和 server.port 到 3001 在 rslib.config.ts
-           remotes: {
-             'rslib-module':
-               //还可以在这里添加 storybook 的 shared
-               // shared: {}
-               'rslib-module@http://localhost:3001/mf/mf-manifest.json',
-           },
-         },
-       },
-     ],
-   };
+const config: StorybookConfig = {
+  stories: [
+    '../stories/**/*.mdx',
+    '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+  ],
+  framework: {
+    name: getAbsolutePath('storybook-react-rsbuild'),
+    options: {},
+  },
+  addons: [
+    {
+      name: getAbsolutePath('storybook-addon-rslib'),
+      options: {
+        rslib: {
+          include: ['**/stories/**'],
+        },
+      },
+    },
+    {
+      name: '@module-federation/storybook-addon/preset',
+      options: {
+        // 在添加 rslib module manifest 给 storybook dev
+        // 我们在上面已经设置了 dev.assetPrefix 和 server.port 到 3001 在 rslib.config.ts
+        remotes: {
+          'rslib-module':
+            //还可以在这里添加 storybook 的 shared
+            // shared: {}
+            'rslib-module@http://localhost:3001/mf/mf-manifest.json',
+        },
+      },
+    },
+  ],
+};
 
-   export default config;
-   ```
+export default config;
+```
 
 #### 3. 用远程模块 编写 stories
 
