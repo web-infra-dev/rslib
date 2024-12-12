@@ -310,7 +310,7 @@ export const Counter: React.FC = () => {
 ## FAQs
 
 如果 Rslib 生产者是用 build 构建的， 这意味着生产者中的 `process.env.NODE_ENV` 是 `production` 。如果这时消费者是使用的开发模式启动，由于模块联邦默认使用共享的加载策略，可能会有 react 和 react-dom 加载模式不一致的问题 (比如 react 在 development mode, react-dom 在 production mode)。
-你可以在消费者设置 [shareStrategy](https://module-federation.io/configure/sharestrategy) 来解决这个问题，但是确保你已经完全理解了这个配置。
+你可以在消费者设置 [shareStrategy](https://module-federation.io/zh/configure/sharestrategy) 来解决这个问题，这需要你确保已经完全理解了这个配置。
 
 ```ts
 pluginModuleFederation({
