@@ -9,14 +9,14 @@ TypeScript 声明文件 (DTS) 提供 JavaScript 代码的类型信息。 DTS 文
 1. **类型检查**: 为 JavaScript 代码提供类型信息，帮助开发人员在编译时捕获潜在的类型错误。
 2. **代码补全**: 增强代码编辑器功能，例如自动完成和代码导航。
 3. **文档生成**: 生成 JavaScript 代码文档，提供更好的开发体验。
-4. **IDE 支持**: 改善 Visual Studio Code、WebStorm 等 IDE 中的开发人员体验.
+4. **IDE 支持**: 改善 Visual Studio Code、WebStorm 等 IDE 中的开发者体验。
 5. **库消费**: 让其他使用者更容易使用和理解该库。
 
 ## 什么是 Bundle DTS 和 Bundleless DTS
 
 ### Bundle DTS
 
-Bundle DTS 涉及将多个 TypeScript 声明文件 bundle 到一个声明文件中。
+Bundle DTS 将多个 TypeScript 声明文件 bundle 到一个声明文件中。
 
 - **优势:**
 
@@ -24,12 +24,12 @@ Bundle DTS 涉及将多个 TypeScript 声明文件 bundle 到一个声明文件�
   - **容易分发**: 减少用户使用库时需要处理的文件数量。
 
 - **劣势:**
-  - **生成复杂**: 在大型项目中，生成和维护单个 bundle 文件可能会变得复杂.
+  - **生成复杂**: 在大型项目中，生成和维护单个 bundle 文件可能会变得复杂。
   - **调试困难**: 调试类型问题可能不像各个文件单独输出那样直观。
 
 ### Bundleless DTS
 
-Bundleless DTS 涉及为库中的每个模块生成单独的声明文件，就像 `tsc` 一样。
+Bundleless DTS 为库中的每个模块生成单独的声明文件，就像 `tsc` 一样。
 
 - **优势:**
 
@@ -40,7 +40,7 @@ Bundleless DTS 涉及为库中的每个模块生成单独的声明文件，就�
   - **多文件**: 用户在使用该库时可能需要处理多个声明文件。
   - **管理复杂**: 可能需要额外的配置才能正确引用所有文件。
 
-## 怎么在 Rslib 中生成 DTS
+## 如何在 Rslib 中生成 DTS
 
 Rslib 默认使用 [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) 生成 Bundleless DTS， [API Extractor](https://api-extractor.com/)
 
@@ -50,13 +50,13 @@ Rslib 默认使用 [TypeScript Compiler API](https://github.com/microsoft/TypeSc
 
 如果你想生成 Bundle DTS，可以：
 
-1. 安装 `@microsoft/api-extractor` 作为 `dev`, 这是用于 bundle DTS 文件的底层工具。
+1. 安装 `@microsoft/api-extractor` 作为 `devDependencies`, 这是用于 bundle DTS 文件的底层工具。
 
 import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @microsoft/api-extractor -D" />
 
-2. 设置 `dts: { bundle: true }` 在 Rslib 配置文件中。
+2. 在 Rslib 配置文件中设置 `dts: { bundle: true }`。
 
 ::: tip
 

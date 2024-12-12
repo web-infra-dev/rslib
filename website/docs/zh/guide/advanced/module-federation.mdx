@@ -13,7 +13,7 @@ import { Tab, Tabs } from 'rspress/theme';
 - 不同的团队处理同一应用程序的不同部分，而无需重新编译整个应用程序。
 - 运行时中在应用间动态加载和共享代码。
 
-模块联盟可以帮助你:
+模块联邦可以帮助你:
 
 - 减少代码重复
 - 提高代码可维护性
@@ -28,7 +28,7 @@ import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @module-federation/rsbuild-plugin -D" />
 
-然后在 `rslib.config.ts` 注册插件:
+然后在 `rslib.config.ts` 中注册插件:
 
 ```ts title='rslib.config.ts' {8-43}
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
@@ -94,7 +94,7 @@ export default defineConfig({
 
 Rslib 支持宿主应用和 Rslib 模块联邦项目同时开发。
 
-#### 1. 启动库中的 MF `dev`
+#### 1. 启动库中的 MF `dev` 命令
 
 添加 `dev` 命令在 `package.json` 文件:
 
@@ -106,14 +106,14 @@ Rslib 支持宿主应用和 Rslib 模块联邦项目同时开发。
 }
 ```
 
-然后运行 `dev` 命令即可启动模块联邦开发模式，可被 Host App 消费，
+然后运行 `dev` 命令即可启动模块联邦开发模式，可被宿主应用消费，
 同时具有热模块更换（HMR）功能。
 
 <PackageManagerTabs command="run dev" />
 
-#### 2. 启动 Host App
+#### 2. 启动宿主应用
 
-设置 Host 消费 Rslib 的模块联邦库。查看[@module-federation/rsbuild-plugin
+设置宿主应用消费 Rslib 的模块联邦库。查看[@module-federation/rsbuild-plugin
 ](https://www.npmjs.com/package/@module-federation/rsbuild-plugin) 获取更多信息。
 
 ```ts title="rsbuild.config.ts" {8-24}
@@ -145,7 +145,7 @@ export default defineConfig({
 });
 ```
 
-然后通过 `rsbuild dev` 启动 Host app。
+然后通过 `rsbuild dev` 启动宿主应用。
 
 ### 使用 Storybook
 

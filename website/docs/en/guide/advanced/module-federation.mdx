@@ -28,7 +28,7 @@ import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @module-federation/rsbuild-plugin -D" />
 
-Then register the plugin to the `rslib.config.ts` file:
+Then register the plugin in the `rslib.config.ts` file:
 
 ```ts title='rslib.config.ts' {8-43}
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
@@ -94,7 +94,7 @@ However, if you want this Rslib Module to consume other producers at the same ti
 
 Rslib support developing Module Federation Rslib project with a host application.
 
-#### 1. Start MF `dev` of library
+#### 1. Start MF `dev` command of library
 
 Adding the `dev` command to the `package.json` file:
 
