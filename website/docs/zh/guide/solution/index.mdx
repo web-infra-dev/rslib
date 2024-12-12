@@ -1,1 +1,25 @@
 # 解决方案
+
+在本章中，我们将介绍如何使用 Rslib 开发浏览器和 Node.js 的库。我们还将介绍如何为不同的 UI 框架创建库。
+
+## Browser Target
+
+开发在浏览器中运行的库时，可以将其打包为 [ESM](/guide/basic/output-format#esm--cjs) 和 [CJS](/guide/basic/output-format#esm--cjs) 格式，用于与 app 的 bundler 集成。将包 [conditional-exports](https://nodejs.org/api/packages.html#conditional-exports) 配置为 ESM 输出可以更好地进行树摇动。此外，您可以创建 [UMD](/guide/basic/output-format#umd) 格式输出以供浏览器直接使用，甚至可以生成 [Module Federation](/guide/advanced/module-federation) 格式以供其他应用程序动态加载。根据目标浏览器支持配置[Browserslist](https://rsbuild.dev/guide/advanced/browserslist)以确定输出的降级语法，或添加[polyfill](/guide/advanced/output-compatibility) API 兼容性。
+
+发布到 npm 时，你可以选择不压缩代码或[压缩代码](/config/rsbuild/output#outputminify)，同时提供[sourcemap](/config/rsbuild/output#outputsourcema) 以增强库使用者的调试体验。样式上，可以使用 [CSS](/guide/advanced/css) 或 [CSS 预处理器](/guide/advanced/css#preprocessors)，如 Sass、Less 或 Stylus 等，或使用 [PostCSS](/guide/advanced/css#postcss) 用于 CSS 后处理。 [Tailwind CSS](/guide/advanced/css#tailwind-css) 等工具也可以帮助您构建样式。或使用 [CSS 模块](/guide/advanced/css#css-modules)。
+
+在资源管理方面，Rslib 处理代码中使用的[静态资源](/guide/advanced/assets)，例如 SVG 和 PNG 文件。您还可以构建[React](/guide/solution/react)、[Preact](https://github.com/web-infra-dev/rslib/tree/main/examples/preact-component-的组件库Bundle-false) 或其他框架，使用 [Storybook](/guide/advanced/storybook) 进行 UI 组件开发和测试。
+
+参考本章的解决方案，了解如何使用 Rslib 开发一个在浏览器中使用的库，并。
+
+{/* TODO: Clarify default behavior */}
+{/* ### Default Behavior */}
+
+## Node.js Target
+
+通过设置 [target](/config/rsbuild/output#outputtarget) 为 `"node"` 来开发 Node.js 中使用的库。
+
+你可以创建一个 [pure ESM](/guide/basic/output-format#esm--cjs) 包或者 [dual package](/guide/basic/output-format#esm--cjs) 同时按需支持 ESM 和 CJS。在 CJS 输出中，由于兼容性 `import.meta.url` 会被自动 [shimmed](/config/lib/shims)，同时 `__dirname` 和 `__filename` 有可选的 ESM shims，以确保在不同的模块系统中正确使用。Node.js 中的 built-in packages 会被 [默认 externalized](/guide/advanced/third-party-deps)。
+
+{/* TODO: Clarify default behavior */}
+{/* ### Default Behavior */}

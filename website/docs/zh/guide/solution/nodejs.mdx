@@ -1,1 +1,71 @@
 # Node.js
+
+在本文档中，您将学习如何使用 Rslib 构建 Node.js 库。
+
+## Create Node.js Project
+
+您可以使用 `create-rslib` 使用 Rslib + Node.js 创建项目。只需执行以下命令：
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm create rslib@latest',
+    yarn: 'yarn create rslib',
+    pnpm: 'pnpm create rslib@latest',
+    bun: 'bun create rslib@latest',
+  }}
+/>
+
+然后在提示 "Select template" 时选择 `Node.js`。
+
+## 在现有项目中使用 Rslib
+
+Rslib 为 Node.js 项目提供无缝支持，允许你以最少的配置轻松构建 Node.js 项目。
+
+例如, 在 `rsbuild.config.ts`:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      output: {
+        distPath: {
+          root: './dist/esm',
+        },
+      },
+    },
+    {
+      format: 'cjs',
+      output: {
+        distPath: {
+          root: './dist/cjs',
+        },
+      },
+    },
+  ],
+});
+```
+
+## Node.js 中的 target 
+
+Rslib 默认将 [target](/config/rsbuild/output#outputtarget) 设置为 `"node"`，这与 Rsbuild 的target 默认值不同。
+
+当 target 为 `"node"`，Rslib 会为 Node.js 调整一些配置。例如，[output.externals](/config/rsbuild/output#outputtarget) 将排除内置 Node.js 模块，而 [shims](/config/lib/shims) 将在 CJS 产物中为 `import.meta.url` 添加 shim。
+
+### Externals
+
+所有 Node.js [built-in modules](https://nodejs.org/docs/latest/api/) 会默认被 external。
+
+### Shims
+
+- `global`: 保持原样，建议使用 [globalThis](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis) 替代.
+- `__filename`: 当以 ESM 格式输出时，替换 `__filename` 为 `fileURLToPath(import.meta.url)`.
+- `__dirname`: 当以 ESM 格式输出时，替换 `__dirname` 为 `dirname(fileURLToPath(import.meta.url))`.
+
+{/* TODO: Rspack doesn't support createRequire now */}
+{/* ### createRequire */}
+{/* Requiring module with [createRequire](https://nodejs.org/api/module.html#modulecreaterequirefilename) will also works in ESM format. */}
