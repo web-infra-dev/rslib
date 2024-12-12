@@ -11,6 +11,7 @@ export async function build(
   const environments = await composeRsbuildEnvironments(config);
   const rsbuildInstance = await createRsbuild({
     rsbuildConfig: {
+      plugins: config.plugins,
       environments: pruneEnvironments(environments, options.lib),
     },
   });

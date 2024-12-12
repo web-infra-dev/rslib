@@ -1258,7 +1258,7 @@ export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
 ): Promise<RsbuildConfigWithLibInfo[]> {
   const constantRsbuildConfig = await createConstantRsbuildConfig();
-  const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
+  const { lib: libConfigsArray, plugins, ...sharedRsbuildConfig } = rslibConfig;
 
   if (!libConfigsArray) {
     throw new Error(
