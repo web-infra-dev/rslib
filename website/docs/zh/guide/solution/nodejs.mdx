@@ -52,7 +52,7 @@ export default defineConfig({
 
 ## 用于 Node.js 的 target
 
-Rslib 中 [target](/config/rsbuild/output#outputtarget) 的默认值为 `"node"`，这与 Rsbuild 的target 默认值不同。
+Rslib 中 [target](/config/rsbuild/output#outputtarget) 的默认值为 `"node"`，这与 Rsbuild 的 target 默认值不同。
 
 当 target 为 `"node"`，Rslib 会为 Node.js 调整一些配置。例如，[output.externals](/config/rsbuild/output#outputtarget) 将 external 内置 Node.js 模块，而 [shims](/config/lib/shims) 将在 CJS 产物中为 `import.meta.url` 添加 shim。
 
