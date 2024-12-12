@@ -49,7 +49,7 @@ export default defineConfig({
 
 React introduced a [new JSX transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html) in version 17. This new transform removes the need to import `React` when using JSX.
 
-By default, Rsbuild uses the new JSX transform, which is `runtime: 'automatic'`. It requires at least React `16.14.0` or higher. The peer dependency for React should be declared as above `16.14.0`.
+By default, Rsbuild uses the new JSX transform, which is `runtime: 'automatic'`. It requires at least React `16.14.0` or higher. The `peerDependencies` should be declared as `"react": ">=16.14.0"`.
 
 To change the JSX transform, you can pass the [swcReactOptions](https://rsbuild.dev/plugins/list/plugin-react#swcreactoptionsruntime) option to the React plugin. For example, to use the classic runtime:
 
@@ -79,7 +79,7 @@ export default defineConfig({
 - **Type**: `string`
 - **Default**: `'react'`
 
-When `runtime` is `'automatic'`, you can specify the import path of the JSX transform through `importSource`.
+When `runtime` is set to `'automatic'`, you can specify the import path of the JSX transform through `importSource`.
 
 For example, when using [Emotion](https://emotion.sh/), you can set `importSource` to `'@emotion/react'`:
 

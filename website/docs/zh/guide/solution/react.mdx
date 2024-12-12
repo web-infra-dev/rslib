@@ -1,1 +1,113 @@
 # React
+
+在本文档中，你将学习如何使用 Rslib 构建 React 组件库。
+
+## 创建 React 项目
+
+你可以使用 "create-rslib" 创建 Rslib + React 项目。只需执行以下命令：
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm create rslib@latest',
+    yarn: 'yarn create rslib',
+    pnpm: 'pnpm create rslib@latest',
+    bun: 'bun create rslib@latest',
+  }}
+/>
+
+然后，当提示 "Select template" 选择 `React`。
+
+## 在现有 Rslib 项目中使用
+
+开发 React 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。 这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。
+
+要编译 React（JSX 和 TSX），你需要注册 Rsbuild [React 插件](https://rsbuild.dev/zh/plugins/list/plugin-react)。该插件将自动添加 React 构建所需的配置。
+
+例如，在 `rslib.config.ts` 中注册:
+
+```ts title="rslib.config.ts" {2,8-11}
+import { defineConfig } from '@rslib/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+
+export default defineConfig({
+  lib: [
+    // ...
+  ],
+  output: {
+    target: 'web',
+  },
+  plugins: [pluginReact(/** options here */)],
+});
+```
+
+## JSX Transform
+
+- **类型**: `'automatic' | 'classic'`
+- **默认值**: `'automatic'`
+
+React 引入了一个 [新的 JSX transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html) 在版本 17 中。这个新的 transform 在使用 JSX 时无需导入 `React`。
+
+默认情况下，Rsbuild 使用新的 JSX 转换，即 `runtime: 'automatic'`。需要 React `16.14.0` 或更高版本。 `peerDependencies` 中应声明 `"react": ">=16.14.0"`。
+
+要更改 JSX transform，可以传递 [swcReactOptions](https://rsbuild.dev/zh/plugins/list/plugin-react#swcreactoptionsruntime) 给 React plugin. 比如要使用 classic runtime 时:
+
+```ts title="rslib.config.ts" {13-15}
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    // ...
+  ],
+  output: {
+    target: 'web',
+  },
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'classic',
+      },
+    }),
+  ],
+});
+```
+
+## JSX Import Source
+
+- **类型**: `string`
+- **默认值**: `'react'`
+
+当 `runtime` 的值为 `'automatic'`，可以通过 `importSource` 指定 JSX transform 的 import 路径。
+
+例如，当使用 [Emotion](https://emotion.sh/)，你可以设置 `importSource` 为 `'@emotion/react'`:
+
+```ts title="rslib.config.ts" {13-15}
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    // ...
+  ],
+  output: {
+    target: 'web',
+  },
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        importSource: '@emotion/react',
+      },
+    }),
+  ],
+});
+```
+
+{/* TODO */}
+{/* ## SVGR */}
+
+## 进一步了解
+
+- [Rsbuild React Plugin](https://rsbuild.dev/zh/plugins/list/plugin-react#swcreactoptionsruntime)
+- [SWC Compilation - jsc.transform.react](https://swc.rs/docs/configuration/compilation#jsctransformreact)
