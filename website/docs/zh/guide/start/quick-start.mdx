@@ -1,18 +1,18 @@
 # 快速上手
 
-## 初始化环境
+## 环境准备
 
-开始之前，你需要先安装 [Node.js](https://nodejs.org/) >= 16 版本，建议使用 Node.js LTS 版本。
+开始之前，需要先安装 [Node.js](https://nodejs.org/) >= 16 版本，推荐使用 Node.js LTS 版本。
 
-使用以下命令检查当前的 Node.js 版本：
+通过以下命令检查当前的 Node.js 版本：
 
 ```bash
 node -v
 ```
 
-如果当前环境没有安装 Node.js，或者安装的版本太低，可以使用 [nvm](https://github.com/nvm-sh/nvm) 或 [fnm](https://github.com/nvm-sh/nvm) 或 [fnm](https:///github.com/Schniz/fnm)进行安装。
+如果你的环境中尚未安装 Node.js，或是版本太低，可以通过 [nvm](https://github.com/nvm-sh/nvm) 或 [fnm](https://github.com/nvm-sh/nvm) 或 [fnm](https:///github.com/Schniz/fnm) 安装。
 
-以下是如何通过 nvm 安装的示例：
+下面是通过 nvm 安装的例子：
 
 ```bash
 # 安装 Node.js LTS
@@ -23,7 +23,7 @@ nvm use --lts
 
 ## 创建一个 Rslib 项目
 
-您可以使用 [`create-rslib`](https://www.npmjs.com/package/create-rslib) 创建一个新的 Rslib 项目。运行以下命令：
+你可以使用 [`create-rslib`](https://www.npmjs.com/package/create-rslib) 创建一个 Rslib 项目。运行以下命令：
 
 import { PackageManagerTabs } from '@theme';
 
@@ -36,7 +36,7 @@ import { PackageManagerTabs } from '@theme';
   }}
 />
 
-然后按照提示完成操作。
+然后按照提示操作即可。
 
 ### 模板
 
@@ -56,9 +56,9 @@ import { PackageManagerTabs } from '@theme';
 
 ### 开发工具
 
-`create-rslib` 可以帮助你设置一些常用的开发工具，包括 [Vitest](https://vitest.dev/)、[Storybook](https://storybook.js.org/)。您可以使用方向键和空格键进行选择。如果您不需要这些工具，只需按 Enter 跳过即可。
+`create-rslib` 可以帮助你设置一些常用的开发工具，包括 [Vitest](https://vitest.dev/)、[Storybook](https://storybook.js.org/)。你可以使用方向键和空格键进行选择。如果你不需要这些工具，只需按 Enter 跳过即可。
 
-- Vitest适用于所有模板，它将根据模板的选择进行调整。
+- Vitest 适用于所有模板，它将根据模板的选择进行调整。
 - Storybook 可用于 Web 目标模板 (React)，它将根据模板的选择进行调整。
 
 ```text
@@ -70,7 +70,7 @@ import { PackageManagerTabs } from '@theme';
 
 ### 可选工具
 
-`create-rslib` 可以帮助您设置一些常用的格式化程序和 linter 工具，包括 [Biome](https://biomejs.dev/)、[ESLint](https://eslint.org/) 和 [prettier](https://prettier.io/)。您可以使用箭头键和空格键进行选择。如果您不需要这些工具，只需按 Enter 跳过即可。
+`create-rslib` 可以帮助你设置一些常用的格式化程序和 linter 工具，包括 [Biome](https://biomejs.dev/)、[ESLint](https://eslint.org/) 和 [prettier](https://prettier.io/)。你可以使用箭头键和空格键进行选择。如果你不需要这些工具，只需按 Enter 跳过即可。
 
 ```text
 ◆  Select additional tools (Use <space> to select, <enter> to continue)
@@ -81,12 +81,12 @@ import { PackageManagerTabs } from '@theme';
 ```
 
 :::tip
-Biome 提供与 ESLint 和 Prettier 类似的 linting 和格式化功能。如果您选择 Biome，通常也不需要选择 ESLint 或 Prettier。
+Biome 提供与 ESLint 和 Prettier 类似的 linting 和格式化功能。如果你选择 Biome，通常也不需要选择 ESLint 或 Prettier。
 :::
 
 ### 当前目录
 
-如果需要在当前目录下创建项目，可以将目标文件夹设置为 "."：
+如果需要在当前目录下创建项目，可以将目标文件夹设置为 `.`：
 
 ```text
 ◆  Create Rslib Project
@@ -100,18 +100,18 @@ Biome 提供与 ESLint 和 Prettier 类似的 linting 和格式化功能。如�
 
 ### 快速生成
 
-[create-rslib](https://www.npmjs.com/package/create-rslib) 提供了一些 CLI 标志。通过设置这些 CLI 标志，您可以跳过交互式选择步骤并使用一个命令创建项目。
+[create-rslib](https://www.npmjs.com/package/create-rslib) 提供了一些 CLI 选项。通过设置这些 CLI 选项，你可以跳过交互式选择步骤并使用一个命令创建项目。
 
-例如，要使用一个命令在 "my-project" 目录中创建一个示例项目：
+比如，一键创建 example 模版项目到 `my-project`：
 
 ```bash
 npx create-rslib --dir my-project --template example
 
-# Using abbreviations
+# 使用缩写
 npx create-rslib -d my-project -t example
 ```
 
-All the CLI flags of `create-rslib`:
+`create-rslib` 的完整的 CLI 选项如下：
 
 ```text
 Usage: create-rslib [options]
@@ -127,7 +127,7 @@ Options:
 
 ## 迁移
 
-如果您需要从现有项目迁移到 Rslib，可以参考以下指南：
+如果你需要从一个现有项目迁移迁移到 Rsbuild，可以参考以下指南：
 
 - [从 tsup 迁移](/guide/migration/tsup)
 - [从 Modern.js Module 迁移](/guide/migration/modernjs-module)

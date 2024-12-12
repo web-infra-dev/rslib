@@ -13,7 +13,7 @@ import { Tab, Tabs } from 'rspress/theme';
 - 不同的团队处理同一应用程序的不同部分，而无需重新编译整个应用程序。
 - 运行时中在应用间动态加载和共享代码。
 
-模块联盟可以帮助您:
+模块联盟可以帮助你:
 
 - 减少代码重复
 - 提高代码可维护性
@@ -61,8 +61,8 @@ export default defineConfig({
           exposes: {
             // 这里添加 expose
           },
-          // 此处无法添加 "remote"，因为您可能会在一次构建中构建 "esm" 或 "cjs" 产物。
-          // 如果您希望 Rslib 包使用远程模块，请参考下面。
+          // 此处无法添加 "remote"，因为你可能会在一次构建中构建 "esm" 或 "cjs" 产物。
+          // 如果你希望 Rslib 包使用远程模块，请参考下面。
           shared: {
             react: {
               singleton: true,
@@ -86,7 +86,7 @@ export default defineConfig({
 
 在上面的例子中，我们添加了一个新的 `format: 'mf'` ，它将添加一个额外的 Module Federation 产物，同时还配置了 `cjs` 和 `esm` 的格式，它们是不冲突的。
 
-但是，如果您希望此 Rslib Module 同时消费其他生产者，请不要使用构建配置 `remote` 参数，因为在其他格式下，这可能会导致错误，请参考下面使用 Module Federation 运行时的示例
+但是，如果你希望此 Rslib Module 同时消费其他生产者，请不要使用构建配置 `remote` 参数，因为在其他格式下，这可能会导致错误，请参考下面使用 Module Federation 运行时的示例
 
 ## 开发 MF 远程模块
 
@@ -170,7 +170,7 @@ Rslib 支持使用 Storybook 开发 Module Federation Rslib 项目。
 
 #### 2. 创建 Storybook 配置
 
-首先，在 Rslib 项目中配置 Storybook。您可以参考 [Storybook 章节](/guide/advanced/storybook)来了解如何执行此操作。在本章中，我们将使用 React 框架作为示例。
+首先，在 Rslib 项目中配置 Storybook。你可以参考 [Storybook 章节](/guide/advanced/storybook)来了解如何执行此操作。在本章中，我们将使用 React 框架作为示例。
 
 1. 安装以下 Storybook addon，让 Storybook 与 Rslib Module Federation 一起使用:
 
