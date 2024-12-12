@@ -17,7 +17,7 @@ Refer to the solutions in this chapter to learn how to use Rslib to develop brow
 
 ## Node.js Target
 
-By setting set [target](/config/rsbuild/output#outputtarget) to `"node"` to development libraries for Node.js.
+Rslib set [target](/config/rsbuild/output#outputtarget) to `"node"` by default to development libraries for Node.js.
 
 You can create a [pure ESM](/guide/basic/output-format#esm--cjs) package or a [dual package](/guide/basic/output-format#esm--cjs) that supports both ESM and CJS as needed. In CJS output, `import.meta.url` will be automatically [shimmed](/config/lib/shims) for compatibility and `__dirname` and `__filename` got optional ESM shims to ensure proper use across different module system. Node.js's built-in packages will be [externalized by default](/guide/advanced/third-party-deps).
 
