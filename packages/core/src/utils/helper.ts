@@ -184,16 +184,20 @@ export function isPluginIncluded(
   );
 }
 
-export function checkMFPlugin(config: LibConfig): boolean {
+export function checkMFPlugin(
+  config: LibConfig,
+  sharedPlugins?: RsbuildPlugins,
+): boolean {
   if (config.format !== 'mf') {
     return true;
   }
 
   // https://github.com/module-federation/core/blob/4e5c4b96ee45899f3ba5904b8927768980d5ad0e/packages/rsbuild-plugin/src/cli/index.ts#L17
-  const added = isPluginIncluded(
-    'rsbuild:module-federation-enhanced',
-    config.plugins,
-  );
+  const added = isPluginIncluded('rsbuild:module-federation-enhanced', [
+    ...(sharedPlugins || []),
+    ...(config.plugins || []),
+  ]);
+
   if (!added) {
     logger.warn(
       `${color.green('format: "mf"')} should be used with ${color.blue(

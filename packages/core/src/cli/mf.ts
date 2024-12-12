@@ -25,8 +25,15 @@ async function initMFRsbuild(
   }
 
   mfRsbuildConfig.config = changeEnvToDev(mfRsbuildConfig.config);
+
   const rsbuildInstance = await createRsbuild({
-    rsbuildConfig: mfRsbuildConfig.config,
+    rsbuildConfig: {
+      ...mfRsbuildConfig.config,
+      plugins: [
+        ...(rslibConfig.plugins || []),
+        ...(mfRsbuildConfig.config.plugins || []),
+      ],
+    },
   });
   const devServer = await rsbuildInstance.startDevServer();
 
