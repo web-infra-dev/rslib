@@ -4,11 +4,7 @@ import { HomeLayout } from './pages';
 import './index.scss';
 
 const Layout = () => {
-  return (
-    <Theme.Layout
-      beforeNavTitle={<NavIcon />}
-    />
-  );
+  return <Theme.Layout beforeNavTitle={<NavIcon />} />;
 };
 
 export default {
