@@ -28,7 +28,7 @@ import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @module-federation/rsbuild-plugin -D" />
 
-Then add the plugin to the `rslib.config.ts` file:
+Then register the plugin to the `rslib.config.ts` file:
 
 ```ts title='rslib.config.ts' {8-43}
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
@@ -82,7 +82,7 @@ export default defineConfig({
 });
 ```
 
-In this way, we have completed the integration of Rslib Module as a producer. After the construction is completed, we can see that the mf directory has been added to the product, and consumers can directly consume this package
+In this way, we have completed the integration of Rslib Module as a producer. After the construction is completed, we can see that the mf directory has been added to the product, and consumers can directly consume this package.
 
 In the above example we added a new `format: 'mf'` , which will help you add an additional Module Federation product, while also configuring the format of `cjs` and `esm` , which does not conflict.
 
@@ -310,7 +310,7 @@ This ensures that modules can be loaded as expected in multiple formats.
 ## FAQs
 
 If the Rslib producer is built with build, this means that the `process.env.NODE_ENV` of the producer is `production` . If the consumer is started in dev mode at this time,
-Due to the shared loading policy of Module Federation being `version-first` by default, there may be problems loading into different modes of react and react-dom (e.g. react in development mode, react-dom in production mode).
+due to the shared loading strategy of Module Federation being `version-first` by default, there may be problems loading into different modes of react and react-dom (e.g. react in development mode, react-dom in production mode).
 You can set up [shareStrategy](https://module-federation.io/configure/sharestrategy) at the consumer to solve this problem, but make sure you fully understand this configuration
 
 ```ts
