@@ -1,1 +1,30 @@
 # Features FAQ
+
+## How to preserve all comments in the output files?
+
+By default, Rslib uses SWC to remove comments. The corresponding SWC [jsc.minify.format](https://swc.rs/docs/configuration/minification#jscminifyformat) configuration is
+
+```js
+{
+    comments: 'some', //
+    preserveAnnotations: true,
+}
+```
+
+This will only preserve some legal comments and annotations. If you want to preserve all comments, you can refer to the following configuration
+
+```ts title="rslib.config.ts"
+export default {
+  output: {
+    minify: {
+      jsOptions: {
+        minimizerOptions: {
+          format: {
+            comments: 'all', // This will preserve all comments
+          },
+        },
+      },
+    },
+  },
+};
+```

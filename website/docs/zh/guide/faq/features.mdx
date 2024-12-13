@@ -1,1 +1,30 @@
 # 功能类问题
+
+## 如何保留产物文件代码中的注释？
+
+默认情况下，Rslib 使用 SWC 清除注释，对应的 SWC 的 [jsc.minify.format](https://swc.rs/docs/configuration/minification#jscminifyformat) 配置为
+
+```js
+{
+    comments: 'some', //
+    preserveAnnotations: true,
+}
+```
+
+这将仅保留部分 legal 注释及 annotations。如果你想保留所有注释，可以参考如下配置
+
+```ts title="rslib.config.ts"
+export default {
+  output: {
+    minify: {
+      jsOptions: {
+        minimizerOptions: {
+          format: {
+            comments: 'all', // 将保留所有注释
+          },
+        },
+      },
+    },
+  },
+};
+```
