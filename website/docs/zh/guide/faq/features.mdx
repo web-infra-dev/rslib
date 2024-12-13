@@ -1,12 +1,14 @@
 # 功能类问题
 
-## 如何保留产物文件代码中的注释？
+## 代码压缩
+
+### 如何保留产物文件代码中的注释？
 
 默认情况下，Rslib 使用 SWC 清除注释，对应的 SWC 的 [jsc.minify.format](https://swc.rs/docs/configuration/minification#jscminifyformat) 配置为
 
 ```js
 {
-    comments: 'some', //
+    comments: 'some',
     preserveAnnotations: true,
 }
 ```
@@ -15,6 +17,9 @@
 
 ```ts title="rslib.config.ts"
 export default {
+  lib: [
+    // ...
+  ],
   output: {
     minify: {
       jsOptions: {
@@ -22,6 +27,30 @@ export default {
           format: {
             comments: 'all', // 将保留所有注释
           },
+        },
+      },
+    },
+  },
+};
+```
+
+### 如何在保留代码可读性的同时，尽可能压缩产物体积？
+
+通过压缩代码可以减小产物体积，并提高加载速度，但是压缩后的代码可读性较差，不利于调试。如果你想保留代码可读性，可以通过如下配置，保留变量名并禁用压缩以方便调试。参考 [web-infra-dev/rsbuild#966](https://github.com/web-infra-dev/rsbuild/pull/3966).
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    // ...
+  ],
+  output: {
+    minify: {
+      jsOptions: {
+        minimizerOptions: {
+          // 保留变量名并禁用压缩以方便调试
+          mangle: false,
+          minify: false,
+          compress: true,
         },
       },
     },
