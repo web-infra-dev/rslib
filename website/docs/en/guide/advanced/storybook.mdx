@@ -25,11 +25,11 @@ Using React as an example, at this step you need to:
 
 1. Install the dependencies for Storybook Rsbuild React framework. The essential ones include
 
-  - [storybook](https://www.npmjs.com/package/storybook): The Storybook core.
-  - [@storybook/addon-essentials](https://www.npmjs.com/package/@storybook/addon-essentials): a curated collection of addons to bring out the best of Storybook.
-  - [@rsbuild/core](https://www.npmjs.com/package/@rsbuild/core): Storybook builder.
-  - [storybook-addon-rslib](https://www.npmjs.com/package/storybook-addon-rslib): This addon will make Storybook Rsbuild could derive Rsbuild configuration from Rslib config file.
-    The addon will automatically read the Rslib configuration and apply it to Storybook Rsbuild, ensuring that the configuration is unified. You can check the [storybook-addon-rslib](https://storybook.rsbuild.dev/guide/integrations/rslib.html) documentation for available options.
+   - [storybook](https://www.npmjs.com/package/storybook): The Storybook core.
+   - [@storybook/addon-essentials](https://www.npmjs.com/package/@storybook/addon-essentials): a curated collection of addons to bring out the best of Storybook.
+   - [@rsbuild/core](https://www.npmjs.com/package/@rsbuild/core): Storybook builder.
+   - [storybook-addon-rslib](https://www.npmjs.com/package/storybook-addon-rslib): This addon will make Storybook Rsbuild could derive Rsbuild configuration from Rslib config file.
+     The addon will automatically read the Rslib configuration and apply it to Storybook Rsbuild, ensuring that the configuration is unified. You can check the [storybook-addon-rslib](https://storybook.rsbuild.dev/guide/integrations/rslib.html) documentation for available options.
 
    <PackageManagerTabs
      command={{
@@ -40,48 +40,48 @@ Using React as an example, at this step you need to:
      }}
    />
 
-  The dependencies varies for each framework, please refer to the [Storybook Rsbuild documentation](https://storybook.rsbuild.dev/guide/framework.html) for details. In this React example, we will install [storybook-react-rsbuild](https://www.npmjs.com/package/storybook-react-rsbuild) as the framework integration.
+   The dependencies varies for each framework, please refer to the [Storybook Rsbuild documentation](https://storybook.rsbuild.dev/guide/framework.html) for details. In this React example, we will install [storybook-react-rsbuild](https://www.npmjs.com/package/storybook-react-rsbuild) as the framework integration.
 
-  <Tabs>
-    <Tab label="React">
-      <PackageManagerTabs command="add storybook-react-rsbuild -D" />
-    </Tab>
-    <Tab label="Vue">
-      <PackageManagerTabs command="add storybook-vue3-rsbuild -D" />
-    </Tab>
-  </Tabs>
+   <Tabs>
+     <Tab label="React">
+       <PackageManagerTabs command="add storybook-react-rsbuild -D" />
+     </Tab>
+     <Tab label="Vue">
+       <PackageManagerTabs command="add storybook-vue3-rsbuild -D" />
+     </Tab>
+   </Tabs>
 
 2. Configure the Storybook configuration file `.storybook/main.js`, specify the stories and addons, and set the framework with corresponding framework integration.
 
-  ```js title=".storybook/main.js"
-  export default {
-    stories: [
-      '../stories/**/*.mdx',
-      '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    ],
-    addons: ['@storybook/addon-essentials', 'storybook-addon-rslib'],
-    framework: 'storybook-react-rsbuild', // storybook-react-rsbuild for example
-  };
-  ```
+   ```js title=".storybook/main.js"
+   export default {
+     stories: [
+       '../stories/**/*.mdx',
+       '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+     ],
+     addons: ['@storybook/addon-essentials', 'storybook-addon-rslib'],
+     framework: 'storybook-react-rsbuild', // storybook-react-rsbuild for example
+   };
+   ```
 
 3. Add a simple story to the `stories` directory. For example, create a `Button.stories.js` file with the following content:
 
-  ```js title="stories/Button.stories.js"
-  import { Button } from '../src/Button';
+   ```js title="stories/Button.stories.js"
+   import { Button } from '../src/Button';
 
-  const meta = {
-    title: 'Example/Button',
-    component: Button,
-  };
+   const meta = {
+     title: 'Example/Button',
+     component: Button,
+   };
 
-  export default meta;
+   export default meta;
 
-  export const Primary = {
-    args: {
-      primary: true,
-      label: 'Button',
-    },
-  };
+   export const Primary = {
+     args: {
+       primary: true,
+       label: 'Button',
+     },
+   };
    ```
 
 :::tip

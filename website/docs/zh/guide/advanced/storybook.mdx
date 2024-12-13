@@ -17,7 +17,6 @@ import { Tab, Tabs } from 'rspress/theme';
 
 这是设置 Storybook 的前提条件。你需要有一个包含组件的 Rslib 项目，并希望在 Storybook 中展示这些组件，请查看 [解决方案](/guide/solution/) 以设置 Rslib 项目。
 
-
 ### 将 Storybook 添加到项目中
 
 使用现有的 Rslib 项目设置 Storybook。为了使用 React、Vue 3、原生 JavaScript 或其他框架，必须首先安装适当的 Storybook 框架包。有关安装说明，可以查阅 [Storybook Rsbuild 文档](https://storybook.rsbuild.dev/guide/framework.html)。
@@ -26,67 +25,67 @@ import { Tab, Tabs } from 'rspress/theme';
 
 1. 安装 Storybook Rsbuild React 框架的依赖。必要的依赖包括
 
-  - [storybook](https://www.npmjs.com/package/storybook)：Storybook core 包。
-  - [@storybook/addon-essentials](https://www.npmjs.com/package/@storybook/addon-essentials)：精选的插件集合，以充分发挥 Storybook 的作用。
-  - [@rsbuild/core](https://www.npmjs.com/package/@rsbuild/core)：Storybook 构建器。
-  - [storybook-addon-rslib](https://www.npmjs.com/package/storybook-addon-rslib)：此插件将使 Storybook Rsbuild 能够从 Rslib 配置文件中继承 Rsbuild 配置。
+   - [storybook](https://www.npmjs.com/package/storybook)：Storybook core 包。
+   - [@storybook/addon-essentials](https://www.npmjs.com/package/@storybook/addon-essentials)：精选的插件集合，以充分发挥 Storybook 的作用。
+   - [@rsbuild/core](https://www.npmjs.com/package/@rsbuild/core)：Storybook 构建器。
+   - [storybook-addon-rslib](https://www.npmjs.com/package/storybook-addon-rslib)：此插件将使 Storybook Rsbuild 能够从 Rslib 配置文件中继承 Rsbuild 配置。
      该插件将自动读取 Rslib 配置并将其应用于 Storybook Rsbuild，确保配置统一。你可以查看 [storybook-addon-rslib](https://storybook.rsbuild.dev/guide/integrations/rslib.html) 文档以了解可用选项。
 
-  <PackageManagerTabs
-    command={{
-      npm: 'npm add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
-      yarn: 'yarn add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
-      pnpm: 'pnpm add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
-      bun: 'bun add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
-    }}
-  />
+   <PackageManagerTabs
+     command={{
+       npm: 'npm add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
+       yarn: 'yarn add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
+       pnpm: 'pnpm add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
+       bun: 'bun add storybook @storybook/addon-essentials storybook-addon-rslib @rsbuild/core -D',
+     }}
+   />
 
    每个框架的依赖各不相同，可查阅 [Storybook Rsbuild 文档](https://storybook.rsbuild.dev/guide/framework.html) 了解详细信息。在这个 React 示例中，我们将安装 [storybook-react-rsbuild](https://www.npmjs.com/package/storybook-react-rsbuild) 作为框架集成。
 
-  <Tabs>
-    <Tab label="React">
-      <PackageManagerTabs command="add storybook-react-rsbuild -D" />
-    </Tab>
-    <Tab label="Vue">
-      <PackageManagerTabs command="add storybook-vue3-rsbuild -D" />
-    </Tab>
-  </Tabs>
+   <Tabs>
+     <Tab label="React">
+       <PackageManagerTabs command="add storybook-react-rsbuild -D" />
+     </Tab>
+     <Tab label="Vue">
+       <PackageManagerTabs command="add storybook-vue3-rsbuild -D" />
+     </Tab>
+   </Tabs>
 
 2. 配置 Storybook 配置文件 `.storybook/main.js`，指定 stories 和 addons，并使用相应的框架集成设置框架。
 
-  ```js title=".storybook/main.js"
-  export default {
-    stories: [
-      '../stories/**/*.mdx',
-      '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    ],
-    addons: ['@storybook/addon-essentials', 'storybook-addon-rslib'],
-    framework: 'storybook-react-rsbuild', // 例如 storybook-react-rsbuild
-  };
-  ```
+   ```js title=".storybook/main.js"
+   export default {
+     stories: [
+       '../stories/**/*.mdx',
+       '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+     ],
+     addons: ['@storybook/addon-essentials', 'storybook-addon-rslib'],
+     framework: 'storybook-react-rsbuild', // 例如 storybook-react-rsbuild
+   };
+   ```
 
 3. 向 `stories` 目录添加一个简单的 story。例如，创建一个 `Button.stories.js` 文件，内容如下：
 
-  ```js title="stories/Button.stories.js"
-  import { Button } from '../src/Button';
+   ```js title="stories/Button.stories.js"
+   import { Button } from '../src/Button';
 
-  const meta = {
-    title: 'Example/Button',
-    component: Button,
-  };
+   const meta = {
+     title: 'Example/Button',
+     component: Button,
+   };
 
-  export default meta;
+   export default meta;
 
-  export const Primary = {
-    args: {
-      primary: true,
-      label: 'Button',
-    },
-  };
-  ```
+   export const Primary = {
+     args: {
+       primary: true,
+       label: 'Button',
+     },
+   };
+   ```
 
-:::tip 
-如果你使用的是 Yarn Plug-n-Play 或者你的项目是在 monorepo 环境中设置的，你可能会遇到模块解析问题。在这种情况下，你可以添加一个 `getAbsolutePath('storybook-addon-rslib')` 函数来解析插件。有关更多信息，请查看 [Storybook 的 FAQ](https://storybook.js.org/docs/faq#how-do-i-fix-module-resolution-in-special-environments)。 
+:::tip
+如果你使用的是 Yarn Plug-n-Play 或者你的项目是在 monorepo 环境中设置的，你可能会遇到模块解析问题。在这种情况下，你可以添加一个 `getAbsolutePath('storybook-addon-rslib')` 函数来解析插件。有关更多信息，请查看 [Storybook 的 FAQ](https://storybook.js.org/docs/faq#how-do-i-fix-module-resolution-in-special-environments)。
 :::
 
 大功告成，你可以使用以下命令启动和构建 Storybook 服务器：
