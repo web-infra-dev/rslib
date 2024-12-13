@@ -25,7 +25,7 @@ Using React as an example, at this step you need to:
 
 1. Install the dependencies for Storybook Rsbuild React framework. The essential ones include
 
-   - [storybook](https://www.npmjs.com/package/@storybook/addon-essentials): The Storybook core.
+   - [storybook](https://www.npmjs.com/package/storybook): The Storybook core.
    - [@storybook/addon-essentials](https://www.npmjs.com/package/@storybook/addon-essentials): a curated collection of addons to bring out the best of Storybook.
    - [@rsbuild/core](https://www.npmjs.com/package/@rsbuild/core): Storybook builder.
    - [storybook-addon-rslib](https://www.npmjs.com/package/storybook-addon-rslib): This addon will make Storybook Rsbuild could derive Rsbuild configuration from Rslib config file.
@@ -64,7 +64,7 @@ Using React as an example, at this step you need to:
    };
    ```
 
-   3. Add a simple story to the `stories` directory. For example, create a `Button.stories.js` file with the following content:
+3. Add a simple story to the `stories` directory. For example, create a `Button.stories.js` file with the following content:
 
    ```js title="stories/Button.stories.js"
    import { Button } from '../src/Button';
@@ -96,9 +96,6 @@ npx storybook build // build static files
 ```
 
 Check out more details in the [Storybook Rsbuild documentation](https://storybook.rsbuild.dev/) and the [Storybook documentation](https://storybook.js.org/docs/react/get-started/introduction).
-
-{/* TODO: */}
-{/* ## Module Federation */}
 
 ## Example
 
