@@ -4,6 +4,7 @@ import {
   type EnvironmentConfig,
   type RsbuildConfig,
   type RsbuildPlugin,
+  type RsbuildPlugins,
   defineConfig as defineRsbuildConfig,
   loadConfig as loadRsbuildConfig,
   mergeRsbuildConfig,
@@ -1143,8 +1144,11 @@ const composeExternalHelpersConfig = (
   return defaultConfig;
 };
 
-async function composeLibRsbuildConfig(config: LibConfig) {
-  checkMFPlugin(config);
+async function composeLibRsbuildConfig(
+  config: LibConfig,
+  sharedPlugins?: RsbuildPlugins,
+) {
+  checkMFPlugin(config, sharedPlugins);
 
   // Get the absolute path of the root directory to align with Rsbuild's default behavior
   const rootPath = config.root
@@ -1258,7 +1262,11 @@ export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
 ): Promise<RsbuildConfigWithLibInfo[]> {
   const constantRsbuildConfig = await createConstantRsbuildConfig();
-  const { lib: libConfigsArray, ...sharedRsbuildConfig } = rslibConfig;
+  const {
+    lib: libConfigsArray,
+    plugins: sharedPlugins,
+    ...sharedRsbuildConfig
+  } = rslibConfig;
 
   if (!libConfigsArray) {
     throw new Error(
@@ -1274,7 +1282,10 @@ export async function composeCreateRsbuildConfig(
 
     // Merge the configuration of each environment based on the shared Rsbuild
     // configuration and Lib configuration in the settings.
-    const libRsbuildConfig = await composeLibRsbuildConfig(userConfig);
+    const libRsbuildConfig = await composeLibRsbuildConfig(
+      userConfig,
+      sharedPlugins,
+    );
 
     // Reset certain fields because they will be completely overridden by the upcoming merge.
     // We don't want to retain them in the final configuration.
