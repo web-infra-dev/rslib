@@ -19,7 +19,9 @@ const config: StorybookConfig = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
-    'storybook-addon-rslib',
+    {
+      name: getAbsolutePath('storybook-addon-rslib'),
+    },
   ],
   framework: {
     name: getAbsolutePath('storybook-react-rsbuild'),
