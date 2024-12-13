@@ -1,1 +1,59 @@
 # Features FAQ
+
+## Code Minification
+
+### How to preserve all comments in the output files?
+
+By default, Rslib uses SWC to remove comments. The corresponding SWC [jsc.minify.format](https://swc.rs/docs/configuration/minification#jscminifyformat) configuration is
+
+```js
+{
+    comments: 'some',
+    preserveAnnotations: true,
+}
+```
+
+This will only preserve some legal comments and annotations. If you want to preserve all comments, you can refer to the following configuration
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    // ...
+  ],
+  output: {
+    minify: {
+      jsOptions: {
+        minimizerOptions: {
+          format: {
+            comments: 'all', // This will preserve all comments
+          },
+        },
+      },
+    },
+  },
+};
+```
+
+### How to compress the output size while preserving code readability?
+
+Compressing code can reduce the output size and improve loading speed, but the compressed code is less readable and harder to debug. If you want to preserve code readability, you can keep variable names and disable compression to facilitate debugging. Refer to [web-infra-dev/rsbuild#966](https://github.com/web-infra-dev/rsbuild/pull/3966).
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    // ...
+  ],
+  output: {
+    minify: {
+      jsOptions: {
+        minimizerOptions: {
+          // preserve variable name and disable minify for easier debugging
+          mangle: false,
+          minify: false,
+          compress: true,
+        },
+      },
+    },
+  },
+};
+```
