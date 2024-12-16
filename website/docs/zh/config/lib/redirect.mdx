@@ -1,50 +1,107 @@
 # lib.redirect
 
-- **类型：**
+:::info
+
+Redirect 是 bundleless 模式（将 [lib.bundle](/config/lib/bundle) 设置为 `false`）的特定配置。在 bundle 模式下不会生效，因为所有输出文件都被打包成一个文件。所以，导入路径不存在因而不需要重定向。
+
+由于 bundleless 模式仍在开发中，未来将引入更多的重定向配置。
+
+:::
+
+- **Type:**
 
 ```ts
+type JsRedirect = {
+  path?: boolean;
+  extension?: boolean;
+};
+
 type Redirect = {
+  js?: JsRedirect;
   style?: boolean;
 };
 ```
 
-- **默认值：**
+- **Default:**
 
 ```ts
 const defaultRedirect = {
+  js: {
+    path: true,
+    extension: true,
+  },
   style: true,
 };
 ```
 
-配置导入路径的重定向。
+配置输出文件中导入路径的重定向。在 bundleless 模式下，通常需要使用别名或自动添加 ESM 产物的后缀。`redirect` 配置旨在解决这些问题。
 
-当 `bundle: false` 时，会对导入路径进行重定向，以确保它指向正确的输出。
+常见的需要 redirect 的场景：
 
-:::note
+- 自动将 tsconfig.json 路径转换为正确的相对路径
 
-由于 bundleless 模式仍在开发中，未来会引入更多重定向配置。
+  例如，在 tsconfig.json 中将 `compilerOptions.paths` 设置为 `{ "@/*": ["src/*"] }`，输出文件将被重定向到正确的相对路径：
 
+  ```ts
+  import { foo } from '@/foo'; // './src/bar.ts' 的源码 ↓
+  import { foo } from './foo.js'; // './dist/bar.js' 预期生成的代码
+
+  import { foo } from '@/foo'; // './src/utils/index.ts' 的源码 ↓
+  import { foo } from '../foo.js'; // './dist/utils/index.js' 预期生成的代码
+  ```
+
+- 自动添加文件后缀
+
+  对于在 Node.js 中运行的 ESM 产物，必须指定模块导入的完整路径才能正确加载。Rslib 将根据输出文件自动添加后缀。
+
+  ```ts
+  import { foo } from './foo'; // './src/bar.ts'  的源码 ↓
+  import { foo } from './foo.mjs'; // './dist/bar.js' 预期生成的代码
+
+  import { foo } from './foo.ts'; // './src/utils/index.ts' 的源码 ↓
+  import { foo } from './foo.mjs'; // './dist/utils/index.js' 预期生成的代码
+  ```
+
+## redirect.js
+
+控制输出 JavaScript 文件导入路径的重定向。
+
+:::warning
+当 [output.externals](/config/rsbuild/output#outputexternals) 被配置且请求被匹配时，`redirect.js.path` 和 `redirect.js.extension` 都不会生效，最终重写的请求路径将完全由 [output.externals](/config/rsbuild/output#outputexternals) 控制。
 :::
 
-如果你不需要这些重定向，可以关闭它，这样导入路径将保持不变。
+### redirect.js.path
 
-```ts title="rslib.config.ts"
-export default {
-  lib: [
-    {
-      redirect: {
-        style: false, // 关闭样式文件的重定向
-      },
-    },
-  ],
-};
-```
+是否自动重定向 JavaScript 输出文件的导入路径。
+
+- **类型:** `boolean`
+- **默认值:** `true`
+
+当设置为 `true` 时，[resolve.alias](/config/rsbuild/resolve#resolvealias) 和 [resolve.aliasStrategy](/config/resolve/alias-strategy) 将生效并应用于输出文件的重写导入路径。对于 TypeScript 项目，您只需在 tsconfig.json 文件中配置 [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths)。
+
+当设置为 `false` 时，导入路径将不受 [resolve.alias](/config/rsbuild/resolve#resolvealias)、[resolve.aliasStrategy](/config/resolve/alias-strategy) 和 tsconfig.json 的影响。
+
+### redirect.js.extension
+
+是否根据 JavaScript 输出文件自动添加文件扩展名到导入路径。
+
+- **类型:** `boolean`
+- **默认值:** `true`
+
+当设置为 `true` 时，无论原始扩展名或导入路径中是否指定，文件扩展名都将自动添加到输出文件的重写导入路径中。
+
+当设置为 `false` 时，文件扩展名将保持原始导入路径中的不变（无论是否指定或指定为任意值）。
 
 ## redirect.style
 
-- **类型：** `boolean`
-- **默认值：** `true`
+- **类型:** `boolean`
+- **默认值:** `true`
 
-是否重定向样式文件的导入路径。例如：
+是否重定向样式文件的导入路径。
 
-- `import './index.less'` 将被重写为 `import './index.css'`
+例如，当导入 `.less` 文件时，它将被重写为 `.css` 文件：
+
+```ts
+import './index.less'; // source code ↓
+import './index.css'; // output file
+```

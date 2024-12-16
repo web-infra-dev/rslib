@@ -1,5 +1,13 @@
 # lib.redirect
 
+:::info
+
+Redirect is the specific configuration for bundleless mode (set [lib.bundle](/config/lib/bundle) to `false`). It will not take effect in bundle mode because, all output files are packaged into a single file. As a result, import paths do not exist and do not need to be redirected.
+
+As bundleless mode is still under development, additional redirect configurations will be introduced in the future.
+
+:::
+
 - **Type:**
 
 ```ts
@@ -26,57 +34,74 @@ const defaultRedirect = {
 };
 ```
 
-Configure the redirect of the import paths.
+Configure the redirect for import paths in output files. In bundleless mode, there are often needs such as using aliases or automatically appending suffixes for ESM products. The `redirect` configuration is designed to address these issues.
 
-When `bundle: false`, the import path is redirected to ensure that it points to the correct output.
+Common scenarios that require redirect:
 
-:::note
+- Automatically convert tsconfig.json paths to correct relative path
 
-As bundleless mode is still under development, additional redirect configurations will be introduced in the future.
+  For example, set `compilerOptions.paths` to `{ "@/*": ["src/*"] }` in tsconfig.json, the output file will be redirected to the correct relative path:
 
-:::
+  ```ts
+  import { foo } from '@/foo'; // source code of './src/bar.ts' ↓
+  import { foo } from './foo.js'; // expected output of './dist/bar.js'
 
-If you don't need these redirects, you can turn it off, and its import path will not be changed.
+  import { foo } from '@/foo'; // source code of './src/utils/index.ts' ↓
+  import { foo } from '../foo.js'; // expected output './dist/utils/index.js'
+  ```
 
-```ts title="rslib.config.ts"
-export default {
-  lib: [
-    {
-      redirect: {
-        style: false, // Turn off the redirect of the style file
-      },
-    },
-  ],
-};
-```
+- Automatically append file suffix
+
+  For ESM products that run in Node.js, you must specify the exact full path for the module import to load correctly. Rslib will automatically add the suffix based on the output file.
+
+  ```ts
+  import { foo } from './foo'; // source code of './src/bar.ts' ↓
+  import { foo } from './foo.mjs'; // expected output of './dist/bar.js'
+
+  import { foo } from './foo.ts'; // source code of './src/utils/index.ts' ↓
+  import { foo } from './foo.mjs'; // expected output './dist/utils/index.js'
+  ```
 
 ## redirect.js
 
 Controls the redirect of the import paths of output JavaScript files.
 
-### redirect.js.path
-
-Whether to automatically redirect the import paths of JavaScript output files, compilerOptions.paths in tsconfig.json will be applied by default.
-
-- **Type:** `boolean`
-- **Default:** `true`
-
-### redirect.js.extension
-
-Whether to automatically add the file extension based on the JavaScript output files.
-
-- **Type:** `boolean`
-- **Default:** `true`
-
 :::warning
 When [output.externals](/config/rsbuild/output#outputexternals) is configured and a request is matched, neither `redirect.js.path` nor `redirect.js.extension` will take effect, and the final rewritten request path will be entirely controlled by [output.externals](/config/rsbuild/output#outputexternals).
 :::
+
+### redirect.js.path
+
+Whether to automatically redirect the import paths of JavaScript output files.
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+When set to `true`, [resolve.alias](/config/rsbuild/resolve#resolvealias) and [resolve.aliasStrategy](/config/resolve/alias-strategy) will take effect and applied in the rewritten import path of the output file. For TypeScript projects, you only need to configure [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) in the tsconfig.json file.
+
+When set to `false`, the import path will not be effected by [resolve.alias](/config/rsbuild/resolve#resolvealias), [resolve.aliasStrategy](/config/resolve/alias-strategy) and tsconfig.json.
+
+### redirect.js.extension
+
+Whether to automatically add the file extension to import paths based on the JavaScript output files.
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+When set to `true`, the file extension will automatically be added to the rewritten import path of the output file, regardless of the original extension or whether it is specified in the import path.
+
+When set to `false`, the file extension will remain unchanged from the original import path in the rewritten import path of the output file (regardless of whether it is specified or specified as any value).
 
 ## redirect.style
 
 - **Type:** `boolean`
 - **Default:** `true`
 
-Whether to redirect the import path of the style file. For example:
+Whether to redirect the import path of the style file.
 
-- `import './index.less'` will be rewritten to `import './index.css'`
+For example, when importing a `.less` file, it will be rewritten to a `.css` file:
+
+```ts
+import './index.less'; // source code ↓
+import './index.css'; // output file
+```
