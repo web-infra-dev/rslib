@@ -38,7 +38,7 @@ const defaultRedirect = {
 
 常见的需要 redirect 的场景：
 
-- 自动将 tsconfig.json 路径转换为正确的相对路径
+- 自动将 tsconfig.json 中 `compilerOptions.paths` 转换为正确的相对路径
 
   例如，在 tsconfig.json 中将 `compilerOptions.paths` 设置为 `{ "@/*": ["src/*"] }`，输出文件将被重定向到正确的相对路径：
 

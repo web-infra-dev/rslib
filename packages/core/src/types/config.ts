@@ -1,5 +1,6 @@
-import type { RsbuildConfig } from '@rsbuild/core';
+import type { RsbuildConfig, Rspack } from '@rsbuild/core';
 import type { PluginDtsOptions } from 'rsbuild-plugin-dts';
+import type { GetAsyncFunctionFromUnion } from './utils';
 
 export type Format = 'esm' | 'cjs' | 'umd' | 'mf';
 
@@ -28,6 +29,9 @@ export type RsbuildConfigEntry = NonNullable<
   NonNullable<RsbuildConfig['source']>['entry']
 >;
 export type RsbuildConfigEntryItem = RsbuildConfigEntry[string];
+export type RspackResolver = GetAsyncFunctionFromUnion<
+  ReturnType<NonNullable<Rspack.ExternalItemFunctionData['getResolve']>>
+>;
 
 export type RsbuildConfigOutputTarget = NonNullable<
   RsbuildConfig['output']

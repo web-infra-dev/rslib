@@ -38,7 +38,7 @@ Configure the redirect for import paths in output files. In bundleless mode, the
 
 Common scenarios that require redirect:
 
-- Automatically convert `paths` in `tsconfig.json` to correct relative path
+- Automatically convert `compilerOptions.paths` in tsconfig.json to correct relative path
 
   For example, set `compilerOptions.paths` to `{ "@/*": ["src/*"] }` in tsconfig.json, the output file will be redirected to the correct relative path:
 

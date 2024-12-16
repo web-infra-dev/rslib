@@ -39,7 +39,6 @@ import type {
   DeepRequired,
   ExcludesFalse,
   Format,
-  GetAsyncFunctionFromUnion,
   JsRedirect,
   LibConfig,
   LibOnlyConfig,
@@ -53,6 +52,7 @@ import type {
   RslibConfigAsyncFn,
   RslibConfigExport,
   RslibConfigSyncFn,
+  RspackResolver,
   Shims,
   Syntax,
 } from './types';
@@ -971,14 +971,11 @@ const composeBundlelessExternalConfig = (
 } => {
   if (bundle) return { config: {} };
 
-  const doesRedirectStyle = redirect.style ?? true;
+  const isStyleRedirected = redirect.style ?? true;
   const jsRedirectPath = redirect.js?.path ?? true;
   const jsRedirectExtension = redirect.js?.extension ?? true;
 
-  type Resolver = GetAsyncFunctionFromUnion<
-    ReturnType<NonNullable<Rspack.ExternalItemFunctionData['getResolve']>>
-  >;
-  let resolver: Resolver | undefined;
+  let resolver: RspackResolver | undefined;
 
   return {
     resolvedJsRedirect: {
@@ -995,7 +992,7 @@ const composeBundlelessExternalConfig = (
             }
 
             if (!resolver) {
-              resolver = (await getResolve()) as Resolver;
+              resolver = (await getResolve()) as RspackResolver;
             }
 
             // Issuer is not empty string when the module is imported by another module.
@@ -1008,7 +1005,7 @@ const composeBundlelessExternalConfig = (
                 callback,
                 jsExtension,
                 cssModulesAuto,
-                doesRedirectStyle,
+                isStyleRedirected,
               );
 
               if (cssExternal !== false) {
