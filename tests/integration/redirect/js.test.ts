@@ -23,7 +23,8 @@ test('redirect.js default', async () => {
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js__ from "./bar/index.js";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar);
+    import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js__.baz);
     export { src_rslib_entry_ as default };
     "
   `);
@@ -32,7 +33,7 @@ test('redirect.js default', async () => {
   const cjsResult = await import(indexCjsPath);
 
   expect(esmResult.default).toEqual(cjsResult.default);
-  expect(esmResult.default).toMatchInlineSnapshot(`"FOOBAR1FOOBAR1"`);
+  expect(esmResult.default).toMatchInlineSnapshot(`"FOOBAR1FOOBAR1BAZ"`);
 });
 
 test('redirect.js.path false', async () => {
@@ -45,9 +46,10 @@ test('redirect.js.path false', async () => {
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "@/bar.js";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "@/foo.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "~/baz.js";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "./bar.js";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_js__.bar + __WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_js__.bar);
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_js__.bar + __WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_js__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js__.baz);
     export { src_rslib_entry_ as default };
     "
   `);
@@ -67,9 +69,10 @@ test('redirect.js.path with user override externals', async () => {
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
     import * as __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__ from "./others/bar/index.js";
     import * as __WEBPACK_EXTERNAL_MODULE__others_foo_js__ from "./others/foo.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js__ from "./bar/index.js";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__others_foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__.bar);
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__others_foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js__.baz);
     export { src_rslib_entry_ as default };
     "
   `);
@@ -78,7 +81,9 @@ test('redirect.js.path with user override externals', async () => {
   const cjsResult = await import(indexCjsPath);
 
   expect(esmResult.default).toEqual(cjsResult.default);
-  expect(esmResult.default).toMatchInlineSnapshot(`"FOOBAR1OTHERFOOOTHERBAR2"`); // cspell:disable-line
+  expect(esmResult.default).toMatchInlineSnapshot(
+    `"FOOBAR1OTHERFOOOTHERBAR2BAZ"`,
+  ); // cspell:disable-line
 });
 
 test('redirect.js.extension: false', async () => {
@@ -90,7 +95,8 @@ test('redirect.js.extension: false', async () => {
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_index_ts__ from "./bar/index.ts";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_ts__ from "./foo.ts";
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_ts__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_ts__.bar + __WEBPACK_EXTERNAL_MODULE__foo_ts__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_ts__.bar);
+    import * as __WEBPACK_EXTERNAL_MODULE__baz_ts__ from "./baz.ts";
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_ts__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_ts__.bar + __WEBPACK_EXTERNAL_MODULE__foo_ts__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_ts__.bar + __WEBPACK_EXTERNAL_MODULE__baz_ts__.baz);
     export { src_rslib_entry_ as default };
     "
   `);

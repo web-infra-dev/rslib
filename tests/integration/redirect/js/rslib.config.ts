@@ -100,10 +100,13 @@ export default defineConfig({
       },
     }),
   ],
-
+  resolve: {
+    alias: {
+      '~': './src',
+    },
+  },
   source: {
     entry: {
-      // index: '../__fixtures__/src',
       index: './src/**',
     },
   },
