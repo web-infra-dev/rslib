@@ -82,8 +82,8 @@ test('redirect.js.path with user override externals', async () => {
 
   expect(esmResult.default).toEqual(cjsResult.default);
   expect(esmResult.default).toMatchInlineSnapshot(
-    `"FOOBAR1OTHERFOOOTHERBAR2BAZ"`,
-  ); // cspell:disable-line
+    `"FOOBAR1OTHERFOOOTHERBAR2BAZ"`, // cspell:disable-line
+  );
 });
 
 test('redirect.js.extension: false', async () => {
