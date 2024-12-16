@@ -14,7 +14,7 @@ expect.addSnapshotSerializer(
     root: path.join(__dirname, '..'),
     features: {
       escapeDoubleQuotes: false,
-      transformCLR: false
+      transformCLR: false,
     },
   }),
 );
