@@ -1015,18 +1015,14 @@ const composeBundlelessExternalConfig = (
                 return cssExternal;
               }
 
-              // Node.js ECMAScript module loader does no extension searching.
-              // Add a file extension according to autoExtension config
-              // when data.request is a relative path and do not have an extension.
-              // If data.request already have an extension, we replace it with new extension
-              // This may result in a change in semantics,
-              // user should use copy to keep origin file or use another separate entry to deal this
-
               if (jsRedirectPath) {
                 try {
                   resolvedRequest = await resolver(context, resolvedRequest);
                 } catch (e) {
                   // Do nothing, fallthrough to other external matches.
+                  logger.debug(
+                    `Failed to resolve ${resolvedRequest} with resolver`,
+                  );
                 }
 
                 resolvedRequest = normalizeSlash(
@@ -1041,6 +1037,12 @@ const composeBundlelessExternalConfig = (
                 }
               }
 
+              // Node.js ECMAScript module loader does no extension searching.
+              // Add a file extension according to autoExtension config
+              // when data.request is a relative path and do not have an extension.
+              // If data.request already have an extension, we replace it with new extension
+              // This may result in a change in semantics,
+              // user should use copy to keep origin file or use another separate entry to deal this
               if (jsRedirectExtension) {
                 const ext = extname(resolvedRequest);
                 if (ext) {
@@ -1054,7 +1056,6 @@ const composeBundlelessExternalConfig = (
                     return callback();
                   }
                 } else {
-                  // TODO: add redirect.extension option
                   resolvedRequest = `${resolvedRequest}${jsExtension}`;
                 }
               }
@@ -1106,17 +1107,15 @@ const composeDtsConfig = async (
 };
 
 const composeTargetConfig = (
-  target: RsbuildConfigOutputTarget,
+  userTarget: RsbuildConfigOutputTarget,
   format: Format,
 ): {
   config: RsbuildConfig;
+  externalsConfig: RsbuildConfig;
   target: RsbuildConfigOutputTarget;
 } => {
-  let defaultTarget = target;
-  if (!defaultTarget) {
-    defaultTarget = format === 'mf' ? 'web' : 'node';
-  }
-  switch (defaultTarget) {
+  const target = userTarget ?? (format === 'mf' ? 'web' : 'node');
+  switch (target) {
     case 'web':
       return {
         config: {
@@ -1127,6 +1126,7 @@ const composeTargetConfig = (
           },
         },
         target: 'web',
+        externalsConfig: {},
       };
     case 'node':
       return {
@@ -1137,14 +1137,18 @@ const composeTargetConfig = (
             },
           },
           output: {
-            // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
-            // Simply override the built-in modules to make them external.
-            // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
-            externals: nodeBuiltInModules,
             target: 'node',
           },
         },
         target: 'node',
+        externalsConfig: {
+          output: {
+            // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
+            // Simply override the built-in modules to make them external.
+            // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
+            externals: nodeBuiltInModules,
+          },
+        },
       };
     // TODO: Support `neutral` target, however Rsbuild don't list it as an option in the target field.
     // case 'neutral':
@@ -1156,7 +1160,7 @@ const composeTargetConfig = (
     //     },
     //   };
     default:
-      throw new Error(`Unsupported platform: ${defaultTarget}`);
+      throw new Error(`Unsupported platform: ${target}`);
   }
 };
 
@@ -1241,7 +1245,7 @@ async function composeLibRsbuildConfig(
     externalHelpers,
     pkgJson,
   );
-  const userExternalConfig = composeExternalsConfig(
+  const userExternalsConfig = composeExternalsConfig(
     format!,
     config.output?.externals,
   );
@@ -1256,10 +1260,11 @@ async function composeLibRsbuildConfig(
     cssModulesAuto,
     bundle,
   );
-  const { config: targetConfig, target } = composeTargetConfig(
-    config.output?.target,
-    format!,
-  );
+  const {
+    config: targetConfig,
+    externalsConfig: targetExternalsConfig,
+    target,
+  } = composeTargetConfig(config.output?.target, format!);
   const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
   const autoExternalConfig = composeAutoExternalConfig({
     format: format!,
@@ -1283,7 +1288,7 @@ async function composeLibRsbuildConfig(
   const externalsWarnConfig = composeExternalsWarnConfig(
     format!,
     autoExternalConfig?.output?.externals,
-    userExternalConfig?.output?.externals,
+    userExternalsConfig?.output?.externals,
   );
   const minifyConfig = composeMinifyConfig(config);
   const bannerFooterConfig = composeBannerFooterConfig(banner, footer);
@@ -1298,17 +1303,20 @@ async function composeLibRsbuildConfig(
     syntaxConfig,
     externalHelpersConfig,
     autoExtensionConfig,
-
-    // `externalsWarnConfig` should before other externals config.
+    targetConfig,
+    // #region Externals configs
+    // The order of the externals config should come in the following order:
+    // 1. `externalsWarnConfig` should come before other externals config to touch the externalized modules first.
+    // 2. The externals config in `bundlelessExternalConfig` should present after other externals config as
+    //    it relies on other externals config to bail out the externalized modules first then resolve
+    //    the correct path for relative imports.
+    // 3. `userExternalsConfig` should present later to override the externals config of the ahead ones.
     externalsWarnConfig,
     autoExternalConfig,
-    targetConfig,
-    // The externals config in `bundleConfig` should present after all externals config as
-    // it relies on other externals config to bail out the externalized modules first then resolve
-    // the correct path for relative imports.
-    userExternalConfig,
+    targetExternalsConfig,
+    userExternalsConfig,
     bundlelessExternalConfig,
-
+    // #endregion
     entryConfig,
     cssConfig,
     assetConfig,

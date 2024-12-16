@@ -76,13 +76,12 @@ export type Shims = {
 
 export type JsRedirect = {
   /**
-   * Whether to automatically redirect the import paths of JavaScript output files,
-   * compilerOptions.paths in tsconfig.json will be applied by default.
+   * Whether to automatically redirect the import paths of JavaScript output files.
    * @defaultValue `true`
    */
   path?: boolean;
   /**
-   * Whether to automatically add the file extension based on the JavaScript output files.
+   * Whether to automatically add the file extension to import paths based on the JavaScript output files.
    * @defaultValue `true`
    */
   extension?: boolean;
@@ -95,8 +94,9 @@ type DtsRedirect = {
 };
 
 export type Redirect = {
-  /** Controls the redirect of the import paths of JavaScript output files. */
+  /** Controls the redirect of the import paths of output JavaScript files. */
   js?: JsRedirect;
+  /** Whether to redirect the import path of the style file. */
   style?: boolean;
   // TODO: support other redirects
   // asset?: boolean;
