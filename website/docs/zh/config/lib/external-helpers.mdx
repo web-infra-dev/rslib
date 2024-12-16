@@ -32,10 +32,11 @@ export default class FOO {
 ```ts title="rslib.config.ts" {6}
 export default {
   lib: [
-    // ...
-    syntax: 'es5'
+    {
+      syntax: 'es5',
+      externalHelpers: false,
+    },
   ],
-  externalHelpers: false,
 };
 ```
 
@@ -81,10 +82,11 @@ export { src_FOO as default };
 ```ts title="rslib.config.ts" {6}
 export default {
   lib: [
-    // ...
-    syntax: 'es5'
+    {
+      syntax: 'es5',
+      externalHelpers: true,
+    },
   ],
-  externalHelpers: true,
 };
 ```
 

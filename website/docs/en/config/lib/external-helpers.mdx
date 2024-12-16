@@ -32,10 +32,11 @@ When `externalHelpers` is disabled, the output JavaScript will inline helper fun
 ```ts title="rslib.config.ts" {6}
 export default {
   lib: [
-    // ...
-    syntax: 'es5'
+    {
+      syntax: 'es5',
+      externalHelpers: false,
+    },
   ],
-  externalHelpers: false,
 };
 ```
 
@@ -81,10 +82,11 @@ When `externalHelpers` is enabled, the output JavaScript will import helper func
 ```ts title="rslib.config.ts" {6}
 export default {
   lib: [
-    // ...
-    syntax: 'es5'
+    {
+      syntax: 'es5',
+      externalHelpers: true,
+    },
   ],
-  externalHelpers: true,
 };
 ```
 

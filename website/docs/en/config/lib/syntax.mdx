@@ -34,9 +34,10 @@ You can set the ECMAScript version directly, such as `es2015`, `es2022`, etc.
 ```ts title="rslib.config.ts"
 export default {
   lib: [
-    // ...
+    {
+      syntax: 'es2015',
+    },
   ],
-  syntax: 'es2015',
 };
 ```
 
