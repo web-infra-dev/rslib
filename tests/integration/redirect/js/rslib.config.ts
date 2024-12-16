@@ -67,8 +67,8 @@ export default defineConfig({
           root: 'dist/js-path-externals-override/cjs',
         },
         externals: {
-          '@/foo': './src/others/foo',
-          '@/bar': './src/others/bar',
+          '@/foo': './others/foo.cjs',
+          '@/bar': './others/bar/index.cjs',
         },
       },
     }),

@@ -1,18 +1,24 @@
+import path from 'node:path';
 import { buildAndGetResults, queryContent } from 'test-helper';
 import { beforeAll, expect, test } from 'vitest';
 
 let contents: Awaited<ReturnType<typeof buildAndGetResults>>['contents'];
 
 beforeAll(async () => {
-  const fixturePath = __dirname;
+  const fixturePath = path.resolve(__dirname, './js');
   contents = (await buildAndGetResults({ fixturePath })).contents;
 });
 
 test('redirect.js default', async () => {
-  const { content: indexContent, path: indexPath } = queryContent(
+  const { content: indexContent, path: indexEsmPath } = queryContent(
     contents.esm0!,
     /esm\/index\.js/,
   );
+  const { path: indexCjsPath } = await queryContent(
+    contents.cjs0!,
+    /cjs\/index\.cjs/,
+  );
+
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js__ from "./bar/index.js";
@@ -22,9 +28,11 @@ test('redirect.js default', async () => {
     "
   `);
 
-  expect((await import(indexPath)).default).toMatchInlineSnapshot(
-    `"FOOBAR1FOOBAR1"`,
-  );
+  const esmResult = await import(indexEsmPath);
+  const cjsResult = await import(indexCjsPath);
+
+  expect(esmResult.default).toEqual(cjsResult.default);
+  expect(esmResult.default).toMatchInlineSnapshot(`"FOOBAR1FOOBAR1"`);
 });
 
 test('redirect.js.path false', async () => {
@@ -32,6 +40,7 @@ test('redirect.js.path false', async () => {
     contents.esm1!,
     /esm\/index\.js/,
   );
+
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "@/bar.js";
@@ -45,10 +54,15 @@ test('redirect.js.path false', async () => {
 });
 
 test('redirect.js.path with user override externals', async () => {
-  const { content: indexContent, path: indexPath } = queryContent(
+  const { content: indexContent, path: indexEsmPath } = queryContent(
     contents.esm2!,
     /esm\/index\.js/,
   );
+  const { path: indexCjsPath } = await queryContent(
+    contents.cjs2!,
+    /cjs\/index\.cjs/,
+  );
+
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
     import * as __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__ from "./others/bar/index.js";
@@ -60,9 +74,11 @@ test('redirect.js.path with user override externals', async () => {
     "
   `);
 
-  expect((await import(indexPath)).default).toMatchInlineSnapshot(
-    `"FOOBAR1OTHERFOOOTHERBAR2"`, // cspell:disable-line
-  );
+  const esmResult = await import(indexEsmPath);
+  const cjsResult = await import(indexCjsPath);
+
+  expect(esmResult.default).toEqual(cjsResult.default);
+  expect(esmResult.default).toMatchInlineSnapshot(`"FOOBAR1OTHERFOOOTHERBAR2"`); // cspell:disable-line
 });
 
 test('redirect.js.extension: false', async () => {
