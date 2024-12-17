@@ -161,6 +161,8 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
           }
         }
       },
+      // Set the order to 'post' to ensure that when DTS files of multiple formats are generated
+      // simultaneously, all errors are thrown together before exiting the process.
       order: 'post',
     });
 
