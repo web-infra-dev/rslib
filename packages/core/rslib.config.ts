@@ -1,4 +1,28 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import type { RsbuildPlugin } from '@rsbuild/core';
 import { defineConfig } from 'rslib';
+
+const pluginFixDtsTypes: RsbuildPlugin = {
+  name: 'fix-dts-types',
+  setup(api) {
+    api.onAfterBuild(() => {
+      const typesDir = path.join(process.cwd(), 'dist-types');
+      const pkgPath = path.join(typesDir, 'package.json');
+      if (!fs.existsSync(typesDir)) {
+        fs.mkdirSync(typesDir);
+      }
+      fs.writeFileSync(
+        pkgPath,
+        JSON.stringify({
+          '//': 'This file is for making TypeScript work with moduleResolution node16+.',
+          version: '1.0.0',
+        }),
+        'utf8',
+      );
+    });
+  },
+};
 
 export default defineConfig({
   lib: [
@@ -11,6 +35,7 @@ export default defineConfig({
       },
     },
   ],
+  plugins: [pluginFixDtsTypes],
   source: {
     entry: {
       index: './src/index.ts',
