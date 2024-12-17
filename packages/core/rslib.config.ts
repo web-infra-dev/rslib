@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { RsbuildPlugin } from '@rsbuild/core';
+import { pluginPublint } from 'rsbuild-plugin-publint';
 import { defineConfig } from 'rslib';
 
 const pluginFixDtsTypes: RsbuildPlugin = {
@@ -35,7 +36,7 @@ export default defineConfig({
       },
     },
   ],
-  plugins: [pluginFixDtsTypes],
+  plugins: [pluginFixDtsTypes, pluginPublint()],
   source: {
     entry: {
       index: './src/index.ts',
