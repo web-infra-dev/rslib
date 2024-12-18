@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path, { dirname, extname, isAbsolute, join } from 'node:path';
+import { composeAssetConfig } from './asset/assetConfig'
 import {
   type EnvironmentConfig,
   type RsbuildConfig,
@@ -1221,6 +1222,8 @@ async function composeLibRsbuildConfig(
     cssModulesAuto,
   );
   const cssConfig = composeCssConfig(lcp, config.bundle);
+  const assetConfig = composeAssetConfig(bundle, format!);
+
   const entryChunkConfig = composeEntryChunkConfig({
     enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
   });
@@ -1251,6 +1254,7 @@ async function composeLibRsbuildConfig(
     targetConfig,
     entryConfig,
     cssConfig,
+    assetConfig,
     entryChunkConfig,
     minifyConfig,
     dtsConfig,

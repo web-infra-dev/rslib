@@ -155,7 +155,7 @@ export const composeCssConfig = (
   bundle = true,
 ): RsbuildConfig => {
   if (bundle || rootDir === null) {
-    return {};
+    return {}
   }
 
   return {
