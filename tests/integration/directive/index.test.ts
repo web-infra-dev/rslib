@@ -24,40 +24,46 @@ describe('shebang', async () => {
 
   describe('bundle-false', async () => {
     test('shebang at the beginning', async () => {
-      const index = queryContent(contents.esm2!, 'index.js', {
+      const { content: index } = queryContent(contents.esm2!, 'index.js', {
         basename: true,
       });
       expect(index!.startsWith('#!/usr/bin/env node')).toBe(true);
 
-      const bar = queryContent(contents.esm2!, 'bar.js', { basename: true });
+      const { content: bar } = queryContent(contents.esm2!, 'bar.js', {
+        basename: true,
+      });
       expect(bar!.startsWith('#!/usr/bin/env node')).toBe(true);
 
-      const foo = queryContent(contents.esm2!, 'foo.js', { basename: true });
+      const { content: foo } = queryContent(contents.esm2!, 'foo.js', {
+        basename: true,
+      });
       expect(foo!.includes('#!')).toBe(false);
     });
 
     test('shebang at the beginning even if minified', async () => {
-      const index = queryContent(contents.esm3!, 'index.js', {
+      const { content: index } = queryContent(contents.esm3!, 'index.js', {
         basename: true,
       });
       expect(index!.startsWith('#!/usr/bin/env node')).toBe(true);
 
-      const bar = queryContent(contents.esm3!, 'bar.js', {
+      const { content: bar } = queryContent(contents.esm3!, 'bar.js', {
         basename: true,
       });
       expect(bar!.startsWith('#!/usr/bin/env node')).toBe(true);
 
-      const foo = queryContent(contents.esm2!, 'foo.js', { basename: true });
+      const { content: foo } = queryContent(contents.esm2!, 'foo.js', {
+        basename: true,
+      });
       expect(foo!.includes('#!')).toBe(false);
     });
 
     test.todo('shebang commented by JS parser should be striped', async () => {
-      const index = queryContent(contents.esm3!, 'index.js', {
+      const { content: index } = queryContent(contents.esm3!, 'index.js', {
         basename: true,
       });
       expect(index!.includes('//#!')).toBe(false);
 
-      const bar = queryContent(contents.esm3!, 'bar.js', {
+      const { content: bar } = queryContent(contents.esm3!, 'bar.js', {
         basename: true,
       });
       expect(bar!.includes('//#!')).toBe(false);
@@ -87,18 +93,26 @@ describe('react', async () => {
 
   describe('bundle-false', async () => {
     test('React directive at the beginning', async () => {
-      const foo = queryContent(contents.esm0!, 'foo.js', { basename: true });
+      const { content: foo } = queryContent(contents.esm0!, 'foo.js', {
+        basename: true,
+      });
       expect(foo!.startsWith(`'use client';`)).toBe(true);
 
-      const bar = queryContent(contents.esm0!, 'bar.js', { basename: true });
+      const { content: bar } = queryContent(contents.esm0!, 'bar.js', {
+        basename: true,
+      });
       expect(bar!.startsWith(`'use server';`)).toBe(true);
     });
 
     test('React directive at the beginning even if minified', async () => {
-      const foo = queryContent(contents.esm1!, 'foo.js', { basename: true });
+      const { content: foo } = queryContent(contents.esm1!, 'foo.js', {
+        basename: true,
+      });
       expect(foo!.startsWith(`'use client';`)).toBe(true);
 
-      const bar = queryContent(contents.esm1!, 'bar.js', { basename: true });
+      const { content: bar } = queryContent(contents.esm1!, 'bar.js', {
+        basename: true,
+      });
       expect(bar!.startsWith(`'use server';`)).toBe(true);
     });
   });

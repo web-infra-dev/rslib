@@ -349,7 +349,7 @@ importers:
     dependencies:
       magic-string:
         specifier: ^0.30.15
-        version: 0.30.15
+        version: 0.30.17
       picocolors:
         specifier: 1.1.1
         version: 1.1.1
@@ -489,11 +489,15 @@ importers:
 
   tests/integration/auto-extension/type-commonjs/false: {}
 
+  tests/integration/auto-extension/type-commonjs/false-bundleless: {}
+
   tests/integration/auto-extension/type-module/config-override: {}
 
   tests/integration/auto-extension/type-module/default: {}
 
   tests/integration/auto-extension/type-module/false: {}
+
+  tests/integration/auto-extension/type-module/false-bundleless: {}
 
   tests/integration/auto-external/default:
     dependencies:
@@ -713,6 +717,17 @@ importers:
         specifier: ^0.11.0
         version: 0.11.0(@babel/core@7.26.0)
 
+  tests/integration/redirect/js:
+    devDependencies:
+      '@types/lodash':
+        specifier: ^4.17.13
+        version: 4.17.13
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+
+  tests/integration/redirect/style-false: {}
+
   tests/integration/require/import-dynamic: {}
 
   tests/integration/require/require-as-expression: {}
@@ -776,8 +791,6 @@ importers:
       postcss-alias:
         specifier: 2.0.0
         version: 2.0.0
-
-  tests/integration/style/redirect-style-false: {}
 
   tests/integration/style/sass/bundle: {}
 
@@ -4381,8 +4394,8 @@ packages:
     resolution: {integrity: sha512-rh+Zjr6DNfUYR3bPwJEnuwDdqMbxZW7LOQfUN4B54+Cl+0o5zaU9RJ6bcidfDtC1cWCZXQ+nvX8bf6bAji37QQ==}
     engines: {node: '>=12'}
 
-  magic-string@0.30.15:
-    resolution: {integrity: sha512-zXeaYRgZ6ldS1RJJUrMrYgNJ4fdwnyI6tVqoiIhyCyv5IVTK9BU8Ic2l253GGETQHxI4HNUwhJ3fjDhKqEoaAw==}
+  magic-string@0.30.17:
+    resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
 
   make-dir@3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
@@ -8291,7 +8304,7 @@ snapshots:
     dependencies:
       '@vitest/spy': 2.1.8
       estree-walker: 3.0.3
-      magic-string: 0.30.15
+      magic-string: 0.30.17
     optionalDependencies:
       vite: 5.3.3(@types/node@22.8.1)(terser@5.31.6)
 
@@ -8307,7 +8320,7 @@ snapshots:
   '@vitest/snapshot@2.1.8':
     dependencies:
       '@vitest/pretty-format': 2.1.8
-      magic-string: 0.30.15
+      magic-string: 0.30.17
       pathe: 1.1.2
 
   '@vitest/spy@2.1.8':
@@ -8353,7 +8366,7 @@ snapshots:
       '@vue/compiler-ssr': 3.5.13
       '@vue/shared': 3.5.13
       estree-walker: 2.0.2
-      magic-string: 0.30.15
+      magic-string: 0.30.17
       postcss: 8.4.49
       source-map-js: 1.2.1
 
@@ -10408,7 +10421,7 @@ snapshots:
 
   luxon@3.5.0: {}
 
-  magic-string@0.30.15:
+  magic-string@0.30.17:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
 
@@ -11731,7 +11744,7 @@ snapshots:
 
   rollup-plugin-dts@6.1.1(rollup@4.18.1)(typescript@5.6.3):
     dependencies:
-      magic-string: 0.30.15
+      magic-string: 0.30.17
       rollup: 4.18.1
       typescript: 5.6.3
     optionalDependencies:
@@ -11762,7 +11775,7 @@ snapshots:
   rsbuild-plugin-dts@0.1.4(@microsoft/api-extractor@7.48.1(@types/node@22.8.1))(@rsbuild/core@1.1.10)(typescript@5.6.3):
     dependencies:
       '@rsbuild/core': 1.1.10
-      magic-string: 0.30.15
+      magic-string: 0.30.17
       picocolors: 1.1.1
       tinyglobby: 0.2.10
     optionalDependencies:
@@ -12123,7 +12136,7 @@ snapshots:
       constants-browserify: 1.0.0
       es-module-lexer: 1.5.4
       fs-extra: 11.2.0
-      magic-string: 0.30.15
+      magic-string: 0.30.17
       path-browserify: 1.0.1
       process: 0.11.10
       rsbuild-plugin-html-minifier-terser: 1.1.1(@rsbuild/core@1.1.10)
@@ -12148,7 +12161,7 @@ snapshots:
       '@storybook/react-docgen-typescript-plugin': 1.0.1(typescript@5.6.3)(webpack@5.96.1)
       '@types/node': 18.19.64
       find-up: 5.0.0
-      magic-string: 0.30.15
+      magic-string: 0.30.17
       react: 19.0.0
       react-docgen: 7.1.0
       react-dom: 19.0.0(react@19.0.0)
@@ -12682,7 +12695,7 @@ snapshots:
       chai: 5.1.2
       debug: 4.3.7
       expect-type: 1.1.0
-      magic-string: 0.30.15
+      magic-string: 0.30.17
       pathe: 1.1.2
       std-env: 3.8.0
       tinybench: 2.9.0

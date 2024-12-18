@@ -1,26 +1,69 @@
 import { join } from 'node:path';
-import { buildAndGetResults } from 'test-helper';
+import { buildAndGetResults, queryContent } from 'test-helper';
 import { expect, test } from 'vitest';
 
 test('basic', async () => {
   const fixturePath = join(__dirname, 'basic');
-  const { files } = await buildAndGetResults({ fixturePath });
+  const { files, contents } = await buildAndGetResults({ fixturePath });
 
   expect(files.esm).toMatchInlineSnapshot(`
     [
       "<ROOT>/tests/integration/bundle-false/basic/dist/esm/index.js",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/esm/mainFiles1/index.js",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/esm/mainFiles2/index.js",
       "<ROOT>/tests/integration/bundle-false/basic/dist/esm/sum.js",
       "<ROOT>/tests/integration/bundle-false/basic/dist/esm/utils/numbers.js",
       "<ROOT>/tests/integration/bundle-false/basic/dist/esm/utils/strings.js",
     ]
   `);
+
+  const { path: esmIndexPath } = queryContent(contents.esm, 'index.js', {
+    basename: true,
+  });
+
+  expect(await import(esmIndexPath)).toMatchInlineSnapshot(`
+    {
+      "mainFiles1": "mainFiles1",
+      "mainFiles2": "mainFiles2",
+      "num1": 1,
+      "num2": 2,
+      "num3": 3,
+      "numSum": 6,
+      "str1": "str1",
+      "str2": "str2",
+      "str3": "str3",
+      "strSum": "str1str2str3",
+    }
+  `);
+
   expect(files.cjs).toMatchInlineSnapshot(`
     [
       "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/index.cjs",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/mainFiles1/index.cjs",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/mainFiles2/index.cjs",
       "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/sum.cjs",
       "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/utils/numbers.cjs",
       "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/utils/strings.cjs",
     ]
+  `);
+
+  const { path: cjsIndexPath } = queryContent(contents.cjs, 'index.cjs', {
+    basename: true,
+  });
+
+  expect((await import(cjsIndexPath)).default).toMatchInlineSnapshot(`
+    {
+      "mainFiles1": "mainFiles1",
+      "mainFiles2": "mainFiles2",
+      "num1": 1,
+      "num2": 2,
+      "num3": 3,
+      "numSum": 6,
+      "str1": "str1",
+      "str2": "str2",
+      "str3": "str3",
+      "strSum": "str1str2str3",
+    }
   `);
 });
 
@@ -47,7 +90,7 @@ test('auto add js extension for relative import', async () => {
   // basic esm
   for (const importer of [
     'import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "./bar.js";',
-    'import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__baz_js_js__ from "./baz.js.js";',
     'import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";',
     'import * as __WEBPACK_EXTERNAL_MODULE__qux_js__ from "./qux.js";',
   ]) {
@@ -57,7 +100,7 @@ test('auto add js extension for relative import', async () => {
   // basic cjs
   for (const requirer of [
     'const external_bar_cjs_namespaceObject = require("./bar.cjs");',
-    'const external_baz_cjs_namespaceObject = require("./baz.cjs");',
+    'const external_baz_js_cjs_namespaceObject = require("./baz.js.cjs");',
     'const external_foo_cjs_namespaceObject = require("./foo.cjs");',
     'const external_qux_cjs_namespaceObject = require("./qux.cjs");',
   ]) {
@@ -67,7 +110,7 @@ test('auto add js extension for relative import', async () => {
   // using `autoExtension: false` along with `output.filename.js` - esm
   for (const importer of [
     'import * as __WEBPACK_EXTERNAL_MODULE__bar_mjs__ from "./bar.mjs";',
-    'import * as __WEBPACK_EXTERNAL_MODULE__baz_mjs__ from "./baz.mjs";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__baz_js_mjs__ from "./baz.js.mjs";',
     'import * as __WEBPACK_EXTERNAL_MODULE__foo_mjs__ from "./foo.mjs";',
     'import * as __WEBPACK_EXTERNAL_MODULE__qux_mjs__ from "./qux.mjs";',
   ]) {
@@ -77,7 +120,7 @@ test('auto add js extension for relative import', async () => {
   // using `autoExtension: false` along with `output.filename.js` - cjs
   for (const requirer of [
     'const external_bar_cjs_namespaceObject = require("./bar.cjs");',
-    'const external_baz_cjs_namespaceObject = require("./baz.cjs");',
+    'const external_baz_js_cjs_namespaceObject = require("./baz.js.cjs");',
     'const external_foo_cjs_namespaceObject = require("./foo.cjs");',
     'const external_qux_cjs_namespaceObject = require("./qux.cjs");',
   ]) {

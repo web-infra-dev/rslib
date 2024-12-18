@@ -5,6 +5,7 @@ import {
   type RsbuildConfig,
   type RsbuildPlugin,
   type RsbuildPlugins,
+  type Rspack,
   defineConfig as defineRsbuildConfig,
   loadConfig as loadRsbuildConfig,
   mergeRsbuildConfig,
@@ -38,6 +39,7 @@ import type {
   DeepRequired,
   ExcludesFalse,
   Format,
+  JsRedirect,
   LibConfig,
   LibOnlyConfig,
   PkgJson,
@@ -50,6 +52,7 @@ import type {
   RslibConfigAsyncFn,
   RslibConfigExport,
   RslibConfigSyncFn,
+  RspackResolver,
   Shims,
   Syntax,
 } from './types';
@@ -63,6 +66,7 @@ import {
   isIntermediateOutputFormat,
   isObject,
   nodeBuiltInModules,
+  normalizeSlash,
   omit,
   pick,
   readPackageJson,
@@ -956,64 +960,113 @@ const composeEntryConfig = async (
   };
 };
 
-const composeBundleConfig = (
+const composeBundlelessExternalConfig = (
   jsExtension: string,
   redirect: Redirect,
   cssModulesAuto: CssLoaderOptionsAuto,
   bundle: boolean,
-): RsbuildConfig => {
-  if (bundle) return {};
+): {
+  config: RsbuildConfig;
+  resolvedJsRedirect?: DeepRequired<JsRedirect>;
+} => {
+  if (bundle) return { config: {} };
 
-  const isStyleRedirect = redirect.style ?? true;
+  const isStyleRedirected = redirect.style ?? true;
+  const jsRedirectPath = redirect.js?.path ?? true;
+  const jsRedirectExtension = redirect.js?.extension ?? true;
+
+  let resolver: RspackResolver | undefined;
 
   return {
-    output: {
-      externals: [
-        (data: any, callback: any) => {
-          // Issuer is not empty string when the module is imported by another module.
-          // Prevent from externalizing entry modules here.
-          if (data.contextInfo.issuer) {
-            // Node.js ECMAScript module loader does no extension searching.
-            // Add a file extension according to autoExtension config
-            // when data.request is a relative path and do not have an extension.
-            // If data.request already have an extension, we replace it with new extension
-            // This may result in a change in semantics,
-            // user should use copy to keep origin file or use another separate entry to deal this
-            let request: string = data.request;
-
-            const cssExternal = cssExternalHandler(
-              request,
-              callback,
-              jsExtension,
-              cssModulesAuto,
-              isStyleRedirect,
-            );
-
-            if (cssExternal !== false) {
-              return cssExternal;
+    resolvedJsRedirect: {
+      path: jsRedirectPath,
+      extension: jsRedirectExtension,
+    },
+    config: {
+      output: {
+        externals: [
+          async (data, callback) => {
+            const { request, getResolve, context, contextInfo } = data;
+            if (!request || !getResolve || !context || !contextInfo) {
+              return callback();
             }
 
-            if (request[0] === '.') {
-              const ext = extname(request);
+            if (!resolver) {
+              resolver = (await getResolve()) as RspackResolver;
+            }
 
-              if (ext) {
-                if (JS_EXTENSIONS_PATTERN.test(request)) {
-                  request = request.replace(/\.[^.]+$/, jsExtension);
-                } else {
-                  // If it does not match jsExtensionsPattern, we should do nothing, eg: ./foo.png
-                  return callback();
-                }
-              } else {
-                // TODO: add redirect.extension option
-                request = `${request}${jsExtension}`;
+            // Issuer is not empty string when the module is imported by another module.
+            // Prevent from externalizing entry modules here.
+            if (contextInfo.issuer) {
+              let resolvedRequest: string = request;
+
+              const cssExternal = cssExternalHandler(
+                resolvedRequest,
+                callback,
+                jsExtension,
+                cssModulesAuto,
+                isStyleRedirected,
+              );
+
+              if (cssExternal !== false) {
+                return cssExternal;
               }
+
+              if (jsRedirectPath) {
+                try {
+                  resolvedRequest = await resolver(context, resolvedRequest);
+                } catch (e) {
+                  // Do nothing, fallthrough to other external matches.
+                  logger.debug(
+                    `Failed to resolve ${resolvedRequest} with resolver`,
+                  );
+                }
+
+                resolvedRequest = normalizeSlash(
+                  path.relative(
+                    path.dirname(contextInfo.issuer),
+                    resolvedRequest,
+                  ),
+                );
+
+                // Requests that fall through here cannot be matched by any other externals config ahead.
+                // Treat all these requests as relative import of source code. Node.js won't add the
+                // leading './' to the relative path resolved by `path.relative`. So add manually it here.
+                if (resolvedRequest[0] !== '.') {
+                  resolvedRequest = `./${resolvedRequest}`;
+                }
+              }
+
+              // Node.js ECMAScript module loader does no extension searching.
+              // Add a file extension according to autoExtension config
+              // when data.request is a relative path and do not have an extension.
+              // If data.request already have an extension, we replace it with new extension
+              // This may result in a change in semantics,
+              // user should use copy to keep origin file or use another separate entry to deal this
+              if (jsRedirectExtension) {
+                const ext = extname(resolvedRequest);
+                if (ext) {
+                  if (JS_EXTENSIONS_PATTERN.test(resolvedRequest)) {
+                    resolvedRequest = resolvedRequest.replace(
+                      /\.[^.]+$/,
+                      jsExtension,
+                    );
+                  } else {
+                    // If it does not match jsExtensionsPattern, we should do nothing, eg: ./foo.png
+                    return callback();
+                  }
+                } else {
+                  resolvedRequest = `${resolvedRequest}${jsExtension}`;
+                }
+              }
+
+              return callback(undefined, resolvedRequest);
             }
 
-            return callback(null, request);
-          }
-          callback();
-        },
-      ],
+            callback();
+          },
+        ] as Rspack.ExternalItem[],
+      },
     },
   };
 };
@@ -1054,17 +1107,15 @@ const composeDtsConfig = async (
 };
 
 const composeTargetConfig = (
-  target: RsbuildConfigOutputTarget,
+  userTarget: RsbuildConfigOutputTarget,
   format: Format,
 ): {
   config: RsbuildConfig;
+  externalsConfig: RsbuildConfig;
   target: RsbuildConfigOutputTarget;
 } => {
-  let defaultTarget = target;
-  if (!defaultTarget) {
-    defaultTarget = format === 'mf' ? 'web' : 'node';
-  }
-  switch (defaultTarget) {
+  const target = userTarget ?? (format === 'mf' ? 'web' : 'node');
+  switch (target) {
     case 'web':
       return {
         config: {
@@ -1075,6 +1126,7 @@ const composeTargetConfig = (
           },
         },
         target: 'web',
+        externalsConfig: {},
       };
     case 'node':
       return {
@@ -1085,14 +1137,18 @@ const composeTargetConfig = (
             },
           },
           output: {
-            // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
-            // Simply override the built-in modules to make them external.
-            // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
-            externals: nodeBuiltInModules,
             target: 'node',
           },
         },
         target: 'node',
+        externalsConfig: {
+          output: {
+            // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
+            // Simply override the built-in modules to make them external.
+            // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
+            externals: nodeBuiltInModules,
+          },
+        },
       };
     // TODO: Support `neutral` target, however Rsbuild don't list it as an option in the target field.
     // case 'neutral':
@@ -1104,7 +1160,7 @@ const composeTargetConfig = (
     //     },
     //   };
     default:
-      throw new Error(`Unsupported platform: ${defaultTarget}`);
+      throw new Error(`Unsupported platform: ${target}`);
   }
 };
 
@@ -1189,7 +1245,7 @@ async function composeLibRsbuildConfig(
     externalHelpers,
     pkgJson,
   );
-  const externalsConfig = composeExternalsConfig(
+  const userExternalsConfig = composeExternalsConfig(
     format!,
     config.output?.externals,
   );
@@ -1198,16 +1254,17 @@ async function composeLibRsbuildConfig(
     jsExtension,
     dtsExtension,
   } = composeAutoExtensionConfig(config, autoExtension, pkgJson);
-  const bundleConfig = composeBundleConfig(
+  const { config: bundlelessExternalConfig } = composeBundlelessExternalConfig(
     jsExtension,
     redirect,
     cssModulesAuto,
     bundle,
   );
-  const { config: targetConfig, target } = composeTargetConfig(
-    config.output?.target,
-    format!,
-  );
+  const {
+    config: targetConfig,
+    externalsConfig: targetExternalsConfig,
+    target,
+  } = composeTargetConfig(config.output?.target, format!);
   const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
   const autoExternalConfig = composeAutoExternalConfig({
     format: format!,
@@ -1231,7 +1288,7 @@ async function composeLibRsbuildConfig(
   const externalsWarnConfig = composeExternalsWarnConfig(
     format!,
     autoExternalConfig?.output?.externals,
-    externalsConfig?.output?.externals,
+    userExternalsConfig?.output?.externals,
   );
   const minifyConfig = composeMinifyConfig(config);
   const bannerFooterConfig = composeBannerFooterConfig(banner, footer);
@@ -1243,15 +1300,23 @@ async function composeLibRsbuildConfig(
   return mergeRsbuildConfig(
     formatConfig,
     shimsConfig,
-    externalHelpersConfig,
-    // externalsWarnConfig should before other externals config
-    externalsWarnConfig,
-    externalsConfig,
-    autoExternalConfig,
-    autoExtensionConfig,
     syntaxConfig,
-    bundleConfig,
+    externalHelpersConfig,
+    autoExtensionConfig,
     targetConfig,
+    // #region Externals configs
+    // The order of the externals config should come in the following order:
+    // 1. `externalsWarnConfig` should come before other externals config to touch the externalized modules first.
+    // 2. The externals config in `bundlelessExternalConfig` should present after other externals config as
+    //    it relies on other externals config to bail out the externalized modules first then resolve
+    //    the correct path for relative imports.
+    // 3. `userExternalsConfig` should present later to override the externals config of the ahead ones.
+    externalsWarnConfig,
+    autoExternalConfig,
+    targetExternalsConfig,
+    userExternalsConfig,
+    bundlelessExternalConfig,
+    // #endregion
     entryConfig,
     cssConfig,
     assetConfig,

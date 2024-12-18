@@ -12,3 +12,9 @@ export type DeepRequired<T> = Required<{
 }>;
 
 export type ExcludesFalse = <T>(x: T | false | undefined | null) => x is T;
+
+export type GetAsyncFunctionFromUnion<T> = T extends (
+  ...args: any[]
+) => Promise<any>
+  ? T
+  : never;

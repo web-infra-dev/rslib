@@ -1,5 +1,6 @@
-import type { RsbuildConfig } from '@rsbuild/core';
+import type { RsbuildConfig, Rspack } from '@rsbuild/core';
 import type { PluginDtsOptions } from 'rsbuild-plugin-dts';
+import type { GetAsyncFunctionFromUnion } from './utils';
 
 export type Format = 'esm' | 'cjs' | 'umd' | 'mf';
 
@@ -28,6 +29,9 @@ export type RsbuildConfigEntry = NonNullable<
   NonNullable<RsbuildConfig['source']>['entry']
 >;
 export type RsbuildConfigEntryItem = RsbuildConfigEntry[string];
+export type RspackResolver = GetAsyncFunctionFromUnion<
+  ReturnType<NonNullable<Rspack.ExternalItemFunctionData['getResolve']>>
+>;
 
 export type RsbuildConfigOutputTarget = NonNullable<
   RsbuildConfig['output']
@@ -74,12 +78,33 @@ export type Shims = {
   };
 };
 
+export type JsRedirect = {
+  /**
+   * Whether to automatically redirect the import paths of JavaScript output files.
+   * @defaultValue `true`
+   */
+  path?: boolean;
+  /**
+   * Whether to automatically add the file extension to import paths based on the JavaScript output files.
+   * @defaultValue `true`
+   */
+  extension?: boolean;
+};
+
+// @ts-expect-error TODO: support dts redirect in the future
+type DtsRedirect = {
+  path?: boolean;
+  extension?: boolean;
+};
+
 export type Redirect = {
-  // TODO: support other redirects
-  // alias?: boolean;
+  /** Controls the redirect of the import paths of output JavaScript files. */
+  js?: JsRedirect;
+  /** Whether to redirect the import path of the style file. */
   style?: boolean;
+  // TODO: support other redirects
   // asset?: boolean;
-  // autoExtension?: boolean;
+  // dts?: DtsRedirect;
 };
 
 export interface LibConfig extends RsbuildConfig {

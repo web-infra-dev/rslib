@@ -1,5 +1,5 @@
 import { extname, join } from 'node:path';
-import { buildAndGetResults } from 'test-helper';
+import { buildAndGetResults, queryContent } from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
 describe('autoExtension: true', () => {
@@ -40,7 +40,7 @@ describe('should respect output.filename.js to override builtin logic', () => {
     const { entryFiles } = await buildAndGetResults({ fixturePath });
     expect(extname(entryFiles.esm!)).toEqual('.mjs');
     expect(entryFiles.cjs).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs/index.15d386b8.js"`,
+      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs/index.1310c114.js"`,
     );
   });
 
@@ -48,8 +48,40 @@ describe('should respect output.filename.js to override builtin logic', () => {
     const fixturePath = join(__dirname, 'type-module', 'config-override');
     const { entryFiles } = await buildAndGetResults({ fixturePath });
     expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm/index.d2068839.js"`,
+      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm/index.996a7edd.js"`,
     );
     expect(extname(entryFiles.cjs!)).toEqual('.cjs');
+  });
+});
+
+describe('ESM output should add main files automatically', () => {
+  test('type is commonjs', async () => {
+    const fixturePath = join(__dirname, 'type-commonjs', 'false-bundleless');
+    const { contents } = await buildAndGetResults({ fixturePath });
+    const { path: indexFile } = queryContent(contents.esm, 'index.js', {
+      basename: true,
+    });
+
+    expect(await import(indexFile)).toMatchInlineSnapshot(`
+      {
+        "bar": "bar",
+        "foo": "foo",
+      }
+    `);
+  });
+
+  test('type is module', async () => {
+    const fixturePath = join(__dirname, 'type-module', 'false-bundleless');
+    const { contents } = await buildAndGetResults({ fixturePath });
+    const { path: indexFile } = queryContent(contents.esm, 'index.js', {
+      basename: true,
+    });
+
+    expect(await import(indexFile)).toMatchInlineSnapshot(`
+      {
+        "bar": "bar",
+        "foo": "foo",
+      }
+    `);
   });
 });
