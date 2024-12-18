@@ -62,6 +62,7 @@ export default defineConfig({
   },
   output: {
     target: 'web',
+    dataUriLimit: 0
   },
   plugins: [
     pluginReact({

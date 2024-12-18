@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { type Page, expect, test } from '@playwright/test';
 import { dev } from 'test-helper/rsbuild';
+import assert from 'node:assert';
 
 function getCwdByExample(exampleName: string) {
   return path.join(__dirname, '../../../examples', exampleName);
@@ -27,9 +28,19 @@ async function styleShouldWork(page: Page) {
 
   const buttonEl = page.locator('#root button');
   const [subtractEl, addEl] = await buttonEl.all();
-  subtractEl &&
-    expect(subtractEl).toHaveCSS('background-color', 'rgb(255, 255, 0)');
-  addEl && expect(addEl).toHaveCSS('background-color', 'rgb(255, 255, 0)');
+  assert(subtractEl);
+  assert(addEl);
+  expect(subtractEl).toHaveCSS('background-color', 'rgb(255, 255, 0)');
+  expect(addEl).toHaveCSS('background-color', 'rgb(255, 255, 0)');
+}
+
+async function assetShouldWork(page: Page) {
+  // asset in css url('./logo.svg')
+  const h1El = page.locator('h1');
+  assert(h1El);
+  expect(h1El).toHaveCSS('background', /static\/svg\/logo/);
+
+  // TODO: asset in js
 }
 
 test('should render example "react-component-bundle" successfully', async ({
@@ -43,6 +54,7 @@ test('should render example "react-component-bundle" successfully', async ({
 
   await counterCompShouldWork(page);
   await styleShouldWork(page);
+  await assetShouldWork(page);
   await rsbuild.close();
 });
 
