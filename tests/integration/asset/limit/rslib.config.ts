@@ -8,15 +8,15 @@ export default defineConfig({
         distPath: {
           root: './dist/esm/inline',
         },
+        dataUriLimit: {
+          svg: 4096,
+        },
       },
     }),
     generateBundleEsmConfig({
       output: {
         distPath: {
           root: './dist/esm/external',
-        },
-        dataUriLimit: {
-          svg: 0,
         },
       },
     }),
@@ -25,6 +25,9 @@ export default defineConfig({
       output: {
         distPath: {
           root: './dist/esm/inline-bundleless',
+        },
+        dataUriLimit: {
+          svg: 4096,
         },
       },
     }),
