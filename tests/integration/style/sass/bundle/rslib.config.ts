@@ -18,8 +18,6 @@ export default defineConfig({
   ],
   output: {
     target: 'web',
-    // dataUriLimit: {
-    //   svg: 0,
-    // },
+    assetPrefix: 'auto', // TODO: move this line to packages/core/src/asset/assetConfig.ts
   },
 });

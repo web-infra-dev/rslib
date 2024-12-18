@@ -9,9 +9,8 @@ export const composeAssetConfig = (
     if (bundle) {
       return {
         output: {
-          // default: no inline asset
-          dataUriLimit: 0,
-          // assetPrefix: 'auto', // will turn on this with `preserveImport`
+          dataUriLimit: 0, // default: no inline asset
+          // assetPrefix: 'auto', // TODO: will turn on this with js support together in the future
         },
       };
     }
