@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path, { dirname, extname, isAbsolute, join } from 'node:path';
-import { composeAssetConfig } from './asset/assetConfig'
 import {
   type EnvironmentConfig,
   type RsbuildConfig,
@@ -12,6 +11,7 @@ import {
   rspack,
 } from '@rsbuild/core';
 import { glob } from 'tinyglobby';
+import { composeAssetConfig } from './asset/assetConfig';
 import {
   DEFAULT_CONFIG_EXTENSIONS,
   DEFAULT_CONFIG_NAME,
