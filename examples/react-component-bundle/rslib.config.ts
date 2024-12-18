@@ -25,6 +25,7 @@ export default defineConfig({
   ],
   output: {
     target: 'web',
+    assetPrefix: 'auto', // FIXME: move this line to packages/core/src/asset/assetConfig.ts
   },
   plugins: [pluginReact(), pluginSass()],
 });

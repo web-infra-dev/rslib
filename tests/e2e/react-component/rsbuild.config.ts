@@ -62,7 +62,7 @@ export default defineConfig({
   },
   output: {
     target: 'web',
-    dataUriLimit: 0
+    dataUriLimit: 0, // always emit asset for test
   },
   plugins: [
     pluginReact({

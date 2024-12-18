@@ -1,8 +1,8 @@
+import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
 import { type Page, expect, test } from '@playwright/test';
 import { dev } from 'test-helper/rsbuild';
-import assert from 'node:assert';
 
 function getCwdByExample(exampleName: string) {
   return path.join(__dirname, '../../../examples', exampleName);

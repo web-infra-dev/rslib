@@ -11,7 +11,7 @@ export const composeAssetConfig = (
         output: {
           // default: no inline asset
           dataUriLimit: 0,
-          assetPrefix: 'auto', // we currently not support import asset in js because of 'auto' publicPath runtime
+          // assetPrefix: 'auto', // will turn on this with `preserveImport`
         },
       };
     }
