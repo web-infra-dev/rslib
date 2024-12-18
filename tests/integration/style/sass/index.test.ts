@@ -29,6 +29,7 @@ test('should extract css with pluginSass in bundle-false', async () => {
     [
       "<ROOT>/tests/integration/style/sass/bundle-false/dist/esm/foundation/_code.css",
       "<ROOT>/tests/integration/style/sass/bundle-false/dist/esm/foundation/_lists.css",
+      "<ROOT>/tests/integration/style/sass/bundle-false/dist/esm/foundation/index.css",
       "<ROOT>/tests/integration/style/sass/bundle-false/dist/esm/index.css",
     ]
   `);
@@ -38,6 +39,7 @@ test('should extract css with pluginSass in bundle-false', async () => {
     [
       "<ROOT>/tests/integration/style/sass/bundle-false/dist/cjs/foundation/_code.css",
       "<ROOT>/tests/integration/style/sass/bundle-false/dist/cjs/foundation/_lists.css",
+      "<ROOT>/tests/integration/style/sass/bundle-false/dist/cjs/foundation/index.css",
       "<ROOT>/tests/integration/style/sass/bundle-false/dist/cjs/index.css",
     ]
   `);

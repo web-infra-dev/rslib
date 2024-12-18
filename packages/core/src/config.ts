@@ -11,6 +11,7 @@ import {
   rspack,
 } from '@rsbuild/core';
 import { glob } from 'tinyglobby';
+import { composeAssetConfig } from './asset/assetConfig';
 import {
   DEFAULT_CONFIG_EXTENSIONS,
   DEFAULT_CONFIG_NAME,
@@ -1221,6 +1222,8 @@ async function composeLibRsbuildConfig(
     cssModulesAuto,
   );
   const cssConfig = composeCssConfig(lcp, config.bundle);
+  const assetConfig = composeAssetConfig(bundle, format!);
+
   const entryChunkConfig = composeEntryChunkConfig({
     enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
   });
@@ -1251,6 +1254,7 @@ async function composeLibRsbuildConfig(
     targetConfig,
     entryConfig,
     cssConfig,
+    assetConfig,
     entryChunkConfig,
     minifyConfig,
     dtsConfig,
