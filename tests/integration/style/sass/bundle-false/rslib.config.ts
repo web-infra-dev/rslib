@@ -25,8 +25,5 @@ export default defineConfig({
   output: {
     target: 'web',
     assetPrefix: 'auto',
-    dataUriLimit: {
-      svg: 0,
-    },
   },
 });
