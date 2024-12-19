@@ -72,6 +72,7 @@ test('should render example "react-component-bundle-false" successfully', async 
   await assetShouldWork(page);
   await rsbuild.close();
 });
+
 test('should render example "react-component-umd" successfully', async ({
   page,
 }) => {
