@@ -1,6 +1,5 @@
 import { createRsbuild, mergeRsbuildConfig } from '@rsbuild/core';
 import type { RsbuildConfig, RsbuildInstance } from '@rsbuild/core';
-import merge from 'node_modules/@rsbuild/core/compiled/webpack-merge';
 import { composeCreateRsbuildConfig } from '../config';
 import type { RslibConfig } from '../types';
 import { onBeforeRestart } from './restart';
@@ -40,8 +39,7 @@ async function initMFRsbuild(
       ),
     },
   });
-  console.log('rslibConfig.server: ', rslibConfig.server);
-  console.log('mfRsbuildConfig.config.server: ', mfRsbuildConfig.config.server);
+
   const devServer = await rsbuildInstance.startDevServer();
 
   onBeforeRestart(devServer.server.close);
