@@ -86,9 +86,40 @@ test('redirect.js.path with user override externals', async () => {
   );
 });
 
+test('redirect.js.path with user override alias', async () => {
+  const { content: indexContent, path: indexEsmPath } = queryContent(
+    contents.esm3!,
+    /esm\/index\.js/,
+  );
+  const { path: indexCjsPath } = await queryContent(
+    contents.cjs3!,
+    /cjs\/index\.cjs/,
+  );
+
+  expect(indexContent).toMatchInlineSnapshot(`
+    "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__ from "./others/bar/index.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__others_foo_js__ from "./others/foo.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js__ from "./bar/index.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__others_foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js__.baz);
+    export { src_rslib_entry_ as default };
+    "
+  `);
+
+  const esmResult = await import(indexEsmPath);
+  const cjsResult = await import(indexCjsPath);
+
+  expect(esmResult.default).toEqual(cjsResult.default);
+  expect(esmResult.default).toMatchInlineSnapshot(
+    `"FOOBAR1OTHERFOOOTHERBAR2BAZ"`, // cspell:disable-line
+  );
+});
+
 test('redirect.js.extension: false', async () => {
   const { content: indexContent } = queryContent(
-    contents.esm3!,
+    contents.esm4!,
     /esm\/index\.js/,
   );
   expect(indexContent).toMatchInlineSnapshot(`

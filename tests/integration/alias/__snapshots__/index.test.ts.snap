@@ -18,3 +18,22 @@ if (__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_targe
 });
 "
 `;
+
+exports[`source.alias 3`] = `
+"import * as __WEBPACK_EXTERNAL_MODULE__a_js__ from "./a.js";
+console.info(__WEBPACK_EXTERNAL_MODULE__a_js__.a);
+"
+`;
+
+exports[`source.alias 4`] = `
+""use strict";
+var __webpack_exports__ = {};
+const external_a_cjs_namespaceObject = require("./a.cjs");
+console.info(external_a_cjs_namespaceObject.a);
+var __webpack_export_target__ = exports;
+for(var __webpack_i__ in __webpack_exports__)__webpack_export_target__[__webpack_i__] = __webpack_exports__[__webpack_i__];
+if (__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, '__esModule', {
+    value: true
+});
+"
+`;

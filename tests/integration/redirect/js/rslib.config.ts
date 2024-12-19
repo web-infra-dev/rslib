@@ -51,12 +51,12 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
+        distPath: {
+          root: 'dist/js-path-externals-override/esm',
+        },
         externals: {
           '@/foo': './others/foo.js',
           '@/bar': './others/bar/index.js',
-        },
-        distPath: {
-          root: 'dist/js-path-externals-override/esm',
         },
       },
     }),
@@ -72,7 +72,38 @@ export default defineConfig({
         },
       },
     }),
-    // 3 js.extension: false
+    // 3 js.path with user override alias
+    generateBundleEsmConfig({
+      bundle: false,
+      resolve: {
+        alias: {
+          '@/foo': './src/others/foo',
+          '@/bar': './src/others/bar',
+        },
+        aliasStrategy: 'prefer-alias',
+      },
+      output: {
+        distPath: {
+          root: 'dist/js-path-alias-override/esm',
+        },
+      },
+    }),
+    generateBundleCjsConfig({
+      bundle: false,
+      resolve: {
+        alias: {
+          '@/foo': './src/others/foo',
+          '@/bar': './src/others/bar',
+        },
+        aliasStrategy: 'prefer-alias',
+      },
+      output: {
+        distPath: {
+          root: 'dist/js-path-alias-override/cjs',
+        },
+      },
+    }),
+    // 4 js.extension: false
     generateBundleEsmConfig({
       bundle: false,
       output: {
