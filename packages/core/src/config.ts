@@ -1335,6 +1335,7 @@ export async function composeCreateRsbuildConfig(
   const {
     lib: libConfigsArray,
     plugins: sharedPlugins,
+    server,
     ...sharedRsbuildConfig
   } = rslibConfig;
 
