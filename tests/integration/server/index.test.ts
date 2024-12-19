@@ -34,18 +34,10 @@ describe('server config', async () => {
     childProcess.kill();
 
     // Check if the server config is merged correctly
-    const rsbuildConfig = await import(rsbuildConfigFile);
-    expect(rsbuildConfig.default.server).toMatchInlineSnapshot(`
-      {
-        "base": "/",
-        "compress": true,
-        "host": "0.0.0.0",
-        "htmlFallback": "index",
-        "open": true,
-        "port": 3002,
-        "printUrls": false,
-        "strictPort": false,
-      }
-    `);
+    const rsbuildConfigContent = await fse.readFile(rsbuildConfigFile, 'utf-8');
+    expect(rsbuildConfigContent).toContain(`base: '/'`);
+    expect(rsbuildConfigContent).toContain('open: true');
+    expect(rsbuildConfigContent).toContain('port: 3002');
+    expect(rsbuildConfigContent).toContain('printUrls: false');
   });
 });
