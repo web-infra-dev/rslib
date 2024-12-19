@@ -33,7 +33,7 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 - `output.externals` 用于处理外部化模块的别名映射。外部化模块不会被打包到产物中，而是在运行时从外部源导入。
 
-  例如，如果你想将外部化模块 `react` 和 `react-dom` 替换为 `preact/compat`，可以这样配置：
+  例如，如果你想将产物中的外部化模块 `react` 和 `react-dom` 替换为 `preact/compat`，可以这样配置：
 
   ```ts title="rslib.config.ts"
   export default {
