@@ -1,22 +1,25 @@
 /**
- * This function is copied from 
+ * This function is copied from
  * https://github.com/webpack-contrib/mini-css-extract-plugin/blob/3effaa0319bad5cc1bf0ae760553bf7abcbc35a4/src/utils.js#L169
+ * linted by biome
  */
-function getUndoPath(filename: string, outputPath: string, enforceRelative: boolean): string {
+function getUndoPath(
+  filename: string,
+  outputPathArg: string,
+  enforceRelative: boolean,
+): string {
   let depth = -1;
-  let append = "";
+  let append = '';
 
-  // eslint-disable-next-line no-param-reassign
-  outputPath = outputPath.replace(/[\\/]$/, "");
+  let outputPath = outputPathArg.replace(/[\\/]$/, '');
 
   for (const part of filename.split(/[/\\]+/)) {
-    if (part === "..") {
+    if (part === '..') {
       if (depth > -1) {
-        // eslint-disable-next-line no-plusplus
         depth--;
       } else {
-        const i = outputPath.lastIndexOf("/");
-        const j = outputPath.lastIndexOf("\\");
+        const i = outputPath.lastIndexOf('/');
+        const j = outputPath.lastIndexOf('\\');
         const pos = i < 0 ? j : j < 0 ? i : Math.max(i, j);
 
         if (pos < 0) {
@@ -25,20 +28,18 @@ function getUndoPath(filename: string, outputPath: string, enforceRelative: bool
 
         append = `${outputPath.slice(pos + 1)}/${append}`;
 
-        // eslint-disable-next-line no-param-reassign
         outputPath = outputPath.slice(0, pos);
       }
-    } else if (part !== ".") {
-      // eslint-disable-next-line no-plusplus
+    } else if (part !== '.') {
       depth++;
     }
   }
 
   return depth > 0
-    ? `${"../".repeat(depth)}${append}`
+    ? `${'../'.repeat(depth)}${append}`
     : enforceRelative
-    ? `./${append}`
-    : append;
+      ? `./${append}`
+      : append;
 }
 
-export { getUndoPath }
+export { getUndoPath };

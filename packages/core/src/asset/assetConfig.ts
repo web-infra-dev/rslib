@@ -20,7 +20,7 @@ export const composeAssetConfig = (
       output: {
         dataUriLimit: 0, // default: no inline asset
         // assetPrefix: 'auto', // TODO: will turn on this with js support together in the future
-      }
+      },
     };
   }
 

@@ -138,13 +138,7 @@ const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
       if (isUsingCssExtract) {
         const cssExtract = CHAIN_ID.PLUGIN.MINI_CSS_EXTRACT;
         config.plugins.delete(cssExtract);
-        config
-          .plugin(LibCssExtractPlugin.name)
-          .use(LibCssExtractPlugin, [
-            {
-              include: new RegExp(`^${RSLIB_CSS_ENTRY_FLAG}`),
-            },
-          ]);
+        config.plugin(LibCssExtractPlugin.name).use(LibCssExtractPlugin);
       }
     });
   },

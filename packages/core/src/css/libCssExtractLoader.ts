@@ -8,12 +8,12 @@
 import path, { extname } from 'node:path';
 import type { Rspack } from '@rsbuild/core';
 
-export const BASE_URI = "webpack://";
-export const MODULE_TYPE = "css/mini-extract";
-export const AUTO_PUBLIC_PATH = "__mini_css_extract_plugin_public_path_auto__";
+export const BASE_URI = 'webpack://';
+export const MODULE_TYPE = 'css/mini-extract';
+export const AUTO_PUBLIC_PATH = '__mini_css_extract_plugin_public_path_auto__';
 export const ABSOLUTE_PUBLIC_PATH: string = `${BASE_URI}/mini-css-extract-plugin/`;
 export const SINGLE_DOT_PATH_SEGMENT =
-	"__mini_css_extract_plugin_single_dot_path_segment__";
+  '__mini_css_extract_plugin_single_dot_path_segment__';
 
 interface DependencyDescription {
   identifier: string;
@@ -28,9 +28,7 @@ interface DependencyDescription {
 }
 
 // https://github.com/web-infra-dev/rspack/blob/c0986d39b7d647682f10fcef5bbade39fd016eca/packages/rspack/src/config/types.ts#L10
-type Filename =
-	| string
-	| ((pathData: any, assetInfo?: any) => string);
+type Filename = string | ((pathData: any, assetInfo?: any) => string);
 
 export interface CssExtractRspackLoaderOptions {
   publicPath?: string | ((resourcePath: string, context: string) => string);
@@ -92,32 +90,31 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
 
   let { publicPath } = this._compilation!.outputOptions;
 
+  if (typeof options.publicPath === 'string') {
+    // eslint-disable-next-line prefer-destructuring
+    publicPath = options.publicPath;
+  } else if (typeof options.publicPath === 'function') {
+    publicPath = options.publicPath(this.resourcePath, this.rootContext);
+  }
 
-	if (typeof options.publicPath === "string") {
-		// eslint-disable-next-line prefer-destructuring
-		publicPath = options.publicPath;
-	} else if (typeof options.publicPath === "function") {
-		publicPath = options.publicPath(this.resourcePath, this.rootContext);
-	}
+  if (publicPath === 'auto') {
+    publicPath = AUTO_PUBLIC_PATH;
+  }
 
-	if (publicPath === "auto") {
-		publicPath = AUTO_PUBLIC_PATH;
-	}
+  let publicPathForExtract: Filename | undefined;
 
-	let publicPathForExtract: Filename | undefined;
+  if (typeof publicPath === 'string') {
+    const isAbsolutePublicPath = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/.test(publicPath);
 
-	if (typeof publicPath === "string") {
-		const isAbsolutePublicPath = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/.test(publicPath);
-
-		publicPathForExtract = isAbsolutePublicPath
-			? publicPath
-			: `${ABSOLUTE_PUBLIC_PATH}${publicPath.replace(
-					/\./g,
-					SINGLE_DOT_PATH_SEGMENT
-				)}`;
-	} else {
-		publicPathForExtract = publicPath;
-	}
+    publicPathForExtract = isAbsolutePublicPath
+      ? publicPath
+      : `${ABSOLUTE_PUBLIC_PATH}${publicPath.replace(
+          /\./g,
+          SINGLE_DOT_PATH_SEGMENT,
+        )}`;
+  } else {
+    publicPathForExtract = publicPath;
+  }
 
   const handleExports = (
     originalExports:

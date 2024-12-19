@@ -1,41 +1,43 @@
-import { rspack, type Rspack } from '@rsbuild/core';
+import { type Rspack, rspack } from '@rsbuild/core';
+import { RSLIB_CSS_ENTRY_FLAG } from './cssConfig';
+import {
+  ABSOLUTE_PUBLIC_PATH,
+  AUTO_PUBLIC_PATH,
+  SINGLE_DOT_PATH_SEGMENT,
+} from './libCssExtractLoader';
 import { getUndoPath } from './utils';
-import { ABSOLUTE_PUBLIC_PATH, SINGLE_DOT_PATH_SEGMENT, AUTO_PUBLIC_PATH } from './libCssExtractLoader';
 
 const pluginName = 'LIB_CSS_EXTRACT_PLUGIN';
 
-type Options = {
-  include: RegExp;
-};
+type Options = Record<string, unknown>;
 
 class LibCssExtractPlugin implements Rspack.RspackPluginInstance {
   readonly name: string = pluginName;
   options: Options;
-  constructor(options: Options) {
-    this.options = options;
+  constructor(options?: Options) {
+    this.options = options ?? {};
   }
 
   apply(compiler: Rspack.Compiler): void {
-    const include = this.options.include;
+    // 1. mark and remove the normal css asset
+    // 2. preserve CSS Modules asset
     compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
       compilation.hooks.chunkAsset.tap(pluginName, (_chunk, filename) => {
         const asset = compilation.getAsset(filename);
-        console.log(asset);
         if (!asset) {
           return;
         }
-        const needRemove = Boolean(asset.name.match(include));
+        const needRemove = Boolean(asset.name.match(RSLIB_CSS_ENTRY_FLAG));
         if (needRemove) {
           compilation.deleteAsset(filename);
         }
       });
-      
     });
 
     /**
      * The following code is modified based on
      * https://github.com/webpack-contrib/mini-css-extract-plugin/blob/3effaa0319bad5cc1bf0ae760553bf7abcbc35a4/src/index.js#L1597
-     * 
+     *
      * replace publicPath placeholders of miniCssExtractLoader
      */
     compiler.hooks.make.tap(pluginName, (compilation) => {
@@ -50,8 +52,7 @@ class LibCssExtractPlugin implements Rspack.RspackPluginInstance {
 
             function replace(searchValue: string, replaceValue: string) {
               let start = oldSource.indexOf(searchValue);
-              while(start !== -1) {
-                console.log(start)
+              while (start !== -1) {
                 replaceSource.replace(
                   start,
                   start + searchValue.length - 1,
@@ -63,13 +64,16 @@ class LibCssExtractPlugin implements Rspack.RspackPluginInstance {
 
             replace(ABSOLUTE_PUBLIC_PATH, '');
             replace(SINGLE_DOT_PATH_SEGMENT, '.');
-            const undoPath = getUndoPath(name, compilation.outputOptions.path!, false);
-            replace(AUTO_PUBLIC_PATH, undoPath)
+            const undoPath = getUndoPath(
+              name,
+              compilation.outputOptions.path!,
+              false,
+            );
+            replace(AUTO_PUBLIC_PATH, undoPath);
 
             return replaceSource;
           });
         }
-
       });
     });
   }
