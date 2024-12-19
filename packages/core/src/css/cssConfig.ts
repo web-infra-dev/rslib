@@ -6,7 +6,7 @@ import type {
   RsbuildPlugin,
 } from '@rsbuild/core';
 import { CSS_EXTENSIONS_PATTERN } from '../constant';
-import { RemoveCssExtractAssetPlugin } from './RemoveCssExtractAssetPlugin';
+import { LibCssExtractPlugin } from './LibCssExtractPlugin';
 const require = createRequire(import.meta.url);
 
 export const RSLIB_CSS_ENTRY_FLAG = '__rslib_css__';
@@ -138,13 +138,7 @@ const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
       if (isUsingCssExtract) {
         const cssExtract = CHAIN_ID.PLUGIN.MINI_CSS_EXTRACT;
         config.plugins.delete(cssExtract);
-        config
-          .plugin(RemoveCssExtractAssetPlugin.name)
-          .use(RemoveCssExtractAssetPlugin, [
-            {
-              include: new RegExp(`^${RSLIB_CSS_ENTRY_FLAG}`),
-            },
-          ]);
+        config.plugin(LibCssExtractPlugin.name).use(LibCssExtractPlugin);
       }
     });
   },

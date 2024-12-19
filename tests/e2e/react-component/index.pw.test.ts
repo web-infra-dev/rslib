@@ -58,6 +58,21 @@ test('should render example "react-component-bundle" successfully', async ({
   await rsbuild.close();
 });
 
+test('should render example "react-component-bundle-false" successfully', async ({
+  page,
+}) => {
+  const rsbuild = await dev({
+    cwd: __dirname,
+    page,
+    environment: ['bundleFalse'],
+  });
+
+  await counterCompShouldWork(page);
+  await styleShouldWork(page);
+  await assetShouldWork(page);
+  await rsbuild.close();
+});
+
 test('should render example "react-component-umd" successfully', async ({
   page,
 }) => {
@@ -75,19 +90,5 @@ test('should render example "react-component-umd" successfully', async ({
   });
 
   await counterCompShouldWork(page);
-  await rsbuild.close();
-});
-
-test('should render example "react-component-bundle-false" successfully', async ({
-  page,
-}) => {
-  const rsbuild = await dev({
-    cwd: __dirname,
-    page,
-    environment: ['bundleFalse'],
-  });
-
-  await counterCompShouldWork(page);
-  await styleShouldWork(page);
   await rsbuild.close();
 });

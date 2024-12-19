@@ -3,10 +3,17 @@
  * https://github.com/web-infra-dev/rspack/blob/0a89e433a9f8596a7c6c4326542f168b5982d2da/packages/rspack/src/builtin-plugin/css-extract/loader.ts
  * 1. remove hmr/webpack runtime
  * 2. add `this.emitFile` to emit css files
- * 3. add `import './[name].css';`
+ * 3. add `import './[name].css';` to js module
  */
 import path, { extname } from 'node:path';
 import type { Rspack } from '@rsbuild/core';
+
+export const BASE_URI = 'webpack://';
+export const MODULE_TYPE = 'css/mini-extract';
+export const AUTO_PUBLIC_PATH = '__mini_css_extract_plugin_public_path_auto__';
+export const ABSOLUTE_PUBLIC_PATH: string = `${BASE_URI}/mini-css-extract-plugin/`;
+export const SINGLE_DOT_PATH_SEGMENT =
+  '__mini_css_extract_plugin_single_dot_path_segment__';
 
 interface DependencyDescription {
   identifier: string;
@@ -20,7 +27,11 @@ interface DependencyDescription {
   filepath: string;
 }
 
+// https://github.com/web-infra-dev/rspack/blob/c0986d39b7d647682f10fcef5bbade39fd016eca/packages/rspack/src/config/types.ts#L10
+type Filename = string | ((pathData: any, assetInfo?: any) => string);
+
 export interface CssExtractRspackLoaderOptions {
+  publicPath?: string | ((resourcePath: string, context: string) => string);
   emit?: boolean;
   esModule?: boolean;
   layer?: string;
@@ -29,7 +40,7 @@ export interface CssExtractRspackLoaderOptions {
   rootDir?: string;
 }
 
-const PLUGIN_NAME = 'LIB_CSS_EXTRACT_LOADER';
+const LOADER_NAME = 'LIB_CSS_EXTRACT_LOADER';
 
 function stringifyLocal(value: any) {
   return typeof value === 'function' ? value.toString() : JSON.stringify(value);
@@ -76,6 +87,34 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
   const callback = this.async();
   const filepath = this.resourcePath;
   const rootDir = options.rootDir ?? this.rootContext;
+
+  let { publicPath } = this._compilation!.outputOptions;
+
+  if (typeof options.publicPath === 'string') {
+    // eslint-disable-next-line prefer-destructuring
+    publicPath = options.publicPath;
+  } else if (typeof options.publicPath === 'function') {
+    publicPath = options.publicPath(this.resourcePath, this.rootContext);
+  }
+
+  if (publicPath === 'auto') {
+    publicPath = AUTO_PUBLIC_PATH;
+  }
+
+  let publicPathForExtract: Filename | undefined;
+
+  if (typeof publicPath === 'string') {
+    const isAbsolutePublicPath = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/.test(publicPath);
+
+    publicPathForExtract = isAbsolutePublicPath
+      ? publicPath
+      : `${ABSOLUTE_PUBLIC_PATH}${publicPath.replace(
+          /\./g,
+          SINGLE_DOT_PATH_SEGMENT,
+        )}`;
+  } else {
+    publicPathForExtract = publicPath;
+  }
 
   const handleExports = (
     originalExports:
@@ -196,7 +235,7 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
       return '';
     })();
 
-    let resultSource = `// extracted by ${PLUGIN_NAME}`;
+    let resultSource = `// extracted by ${LOADER_NAME}`;
 
     let importCssFiles = '';
 
@@ -249,6 +288,8 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
     `${this.resourcePath}.webpack[javascript/auto]!=!!!${request}`,
     {
       layer: options.layer,
+      publicPath: publicPathForExtract,
+      baseUri: `${BASE_URI}/`,
     },
     (error, exports) => {
       if (error) {

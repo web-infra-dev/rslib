@@ -11,8 +11,7 @@ export default defineConfig({
     entry: {
       index: [
         '../__fixtures__/src/**/*.scss',
-        // TODO: assets support
-        // '../__fixtures__/foundation/logo.svg'
+        '../__fixtures__/foundation/logo.svg',
       ],
     },
   },
@@ -25,8 +24,6 @@ export default defineConfig({
   ],
   output: {
     target: 'web',
-    // dataUriLimit: {
-    //   svg: 0
-    // }
+    assetPrefix: 'auto',
   },
 });

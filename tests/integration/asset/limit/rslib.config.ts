@@ -37,9 +37,6 @@ export default defineConfig({
         distPath: {
           root: './dist/esm/external-bundleless',
         },
-        dataUriLimit: {
-          svg: 0,
-        },
       },
     }),
   ],
