@@ -33,8 +33,13 @@ async function initMFRsbuild(
         ...(rslibConfig.plugins || []),
         ...(mfRsbuildConfig.config.plugins || []),
       ],
+      server: mergeRsbuildConfig(
+        rslibConfig.server,
+        mfRsbuildConfig.config.server,
+      ),
     },
   });
+
   const devServer = await rsbuildInstance.startDevServer();
 
   onBeforeRestart(devServer.server.close);
