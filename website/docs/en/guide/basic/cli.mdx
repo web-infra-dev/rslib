@@ -16,14 +16,14 @@ The output is shown below:
 Usage: rslib <command> [options]
 
 Options:
-  -V, --version       output the version number
-  -h, --help          display help for command
+  -V, --version      output the version number
+  -h, --help         display help for command
 
 Commands:
-  build [options]     build the library for production
-  inspect [options]   inspect the Rsbuild / Rspack configs of Rslib projects
-  mf [options] <dev>  start Rsbuild dev server of Module Federation format
-  help [command]      display help for command
+  build [options]    build the library for production
+  inspect [options]  inspect the Rsbuild / Rspack configs of Rslib projects
+  mf-dev [options]   start Rsbuild dev server of Module Federation format
+  help [command]     display help for command
 ```
 
 ## rslib build
@@ -40,7 +40,7 @@ Options:
   -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
   --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
   --env-dir <dir>       specify the directory to load `.env` files
-  --lib <id>            build the specified library (may be repeated)
+  --lib <id>            specify the library (repeatable, e.g. --lib esm --lib cjs)
   -w --watch            turn on watch mode, watch for changes and rebuild
   -h, --help            display help for command
 ```
@@ -149,7 +149,7 @@ Options:
   -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
   --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
   --env-dir <dir>       specify the directory to load `.env` files
-  --lib <id>            inspect the specified library (may be repeated)
+  --lib <id>            specify the library (repeatable, e.g. --lib esm --lib cjs)
   --output <output>     specify inspect content output path (default: ".rsbuild")
   --verbose             show full function definitions in output
   -h, --help            display help for command
@@ -192,9 +192,9 @@ Inspect config succeed, open following files to view the content:
   - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
 ```
 
-## rslib mf dev
+## rslib mf-dev
 
-The `rslib mf dev` command is utilized to start Rsbuild dev server for the [Module Federation](/guide/advanced/module-federation) format.
+The `rslib mf-dev` command is utilized to start Rsbuild dev server for the [Module Federation](/guide/advanced/module-federation) format.
 
 This enables you to develop and debug your mf format module within the host app.
 
@@ -208,6 +208,7 @@ Options:
   -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
   --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
   --env-dir <dir>       specify the directory to load `.env` files
+  --lib <id>            specify the library (repeatable, e.g. --lib esm --lib cjs)
   -h, --help            display help for command
 ```
 

@@ -14,11 +14,11 @@ export async function startMFDevServer(
 }
 
 async function initMFRsbuild(
-  rslibConfig: RslibConfig,
+  config: RslibConfig,
   options: Pick<CommonOptions, 'lib'> = {},
 ): Promise<RsbuildInstance | undefined> {
   const { environments, environmentWithInfos } =
-    await composeRsbuildEnvironments(rslibConfig);
+    await composeRsbuildEnvironments(config);
 
   const selectedEnvironmentIds = environmentWithInfos
     .filter((env) => {
@@ -42,13 +42,13 @@ async function initMFRsbuild(
   const rsbuildInstance = await createRsbuild({
     rsbuildConfig: {
       mode: 'development',
-      root: rslibConfig.root,
-      plugins: rslibConfig.plugins,
+      root: config.root,
+      plugins: config.plugins,
       dev: {
-        ...(rslibConfig.dev ?? {}),
+        ...(config.dev ?? {}),
         writeToDisk: true,
       },
-      server: rslibConfig.server,
+      server: config.server,
       tools: {
         rspack: {
           optimization: {
