@@ -16,13 +16,13 @@ describe('server config', async () => {
     expect(logoExists).toBe(false);
   });
 
-  test('mf dev command', async () => {
+  test('mf-dev command', async () => {
     const fixturePath = join(__dirname, 'mf-dev');
     const distPath = join(fixturePath, 'dist');
     const rsbuildConfigFile = join(distPath, '.rsbuild/rsbuild.config.mjs');
     fse.removeSync(distPath);
 
-    const childProcess = exec('npx rslib mf dev', {
+    const childProcess = exec('npx rslib mf-dev', {
       cwd: fixturePath,
       env: {
         ...process.env,
@@ -32,12 +32,9 @@ describe('server config', async () => {
 
     await awaitFileExists(rsbuildConfigFile);
 
-    // Check if the server config is merged correctly
     const rsbuildConfigContent = await fse.readFile(rsbuildConfigFile, 'utf-8');
-    expect(rsbuildConfigContent).toContain(`base: '/'`);
     expect(rsbuildConfigContent).toContain('open: true');
-    expect(rsbuildConfigContent).toContain('port: 3002');
-    expect(rsbuildConfigContent).toContain('printUrls: false');
+    expect(rsbuildConfigContent).toContain('port: 3001');
 
     childProcess.kill();
   });

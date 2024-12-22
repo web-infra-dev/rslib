@@ -5,10 +5,6 @@ export default defineConfig({
   lib: [
     {
       format: 'mf',
-      server: {
-        port: 3002,
-        printUrls: false,
-      },
     },
   ],
   server: {

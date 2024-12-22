@@ -1,4 +1,4 @@
-import type { RsbuildConfig, Rspack } from '@rsbuild/core';
+import type { EnvironmentConfig, Rspack } from '@rsbuild/core';
 import type {
   EcmaScriptVersion,
   FixedEcmaVersions,
@@ -191,8 +191,10 @@ export function transformSyntaxToRspackTarget(
 
 export function transformSyntaxToBrowserslist(
   syntax: Syntax,
-  target: NonNullable<RsbuildConfig['output']>['target'],
-): NonNullable<NonNullable<RsbuildConfig['output']>['overrideBrowserslist']> {
+  target: NonNullable<EnvironmentConfig['output']>['target'],
+): NonNullable<
+  NonNullable<EnvironmentConfig['output']>['overrideBrowserslist']
+> {
   const handleSyntaxItem = (
     syntaxItem: EcmaScriptVersion | string,
   ): string[] => {

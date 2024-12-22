@@ -1,7 +1,11 @@
 import { type ChildProcess, fork } from 'node:child_process';
 import { dirname, extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { type RsbuildConfig, type RsbuildPlugin, logger } from '@rsbuild/core';
+import {
+  type EnvironmentConfig,
+  type RsbuildPlugin,
+  logger,
+} from '@rsbuild/core';
 import ts from 'typescript';
 import { loadTsconfig, processSourceEntry } from './utils';
 
@@ -39,8 +43,8 @@ export type DtsGenOptions = PluginDtsOptions & {
   tsconfigPath: string;
   tsConfigResult: ts.ParsedCommandLine;
   rootDistPath: string;
-  cleanDistPath: NonNullable<RsbuildConfig['output']>['cleanDistPath'];
-  userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
+  cleanDistPath: NonNullable<EnvironmentConfig['output']>['cleanDistPath'];
+  userExternals?: NonNullable<EnvironmentConfig['output']>['externals'];
 };
 
 interface TaskResult {

@@ -415,7 +415,8 @@ describe('id', () => {
       ],
     };
 
-    const composedRsbuildConfig = await composeRsbuildEnvironments(rslibConfig);
+    const { environments: composedRsbuildConfig } =
+      await composeRsbuildEnvironments(rslibConfig);
 
     expect(Object.keys(composedRsbuildConfig)).toMatchInlineSnapshot(`
       [
@@ -452,7 +453,8 @@ describe('id', () => {
       ],
     };
 
-    const composedRsbuildConfig = await composeRsbuildEnvironments(rslibConfig);
+    const { environments: composedRsbuildConfig } =
+      await composeRsbuildEnvironments(rslibConfig);
     expect(Object.keys(composedRsbuildConfig)).toMatchInlineSnapshot(`
       [
         "esm1",

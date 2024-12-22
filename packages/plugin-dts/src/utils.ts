@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import { platform } from 'node:os';
 import path, { basename, dirname, join, relative, resolve } from 'node:path';
-import { type RsbuildConfig, logger } from '@rsbuild/core';
+import { type EnvironmentConfig, logger } from '@rsbuild/core';
 import MagicString from 'magic-string';
 import color from 'picocolors';
 import { convertPathToPattern, glob } from 'tinyglobby';
@@ -167,7 +167,7 @@ export async function processDtsFiles(
 
 export function processSourceEntry(
   bundle: boolean,
-  entryConfig: NonNullable<RsbuildConfig['source']>['entry'],
+  entryConfig: NonNullable<EnvironmentConfig['source']>['entry'],
 ): DtsEntry {
   if (!bundle) {
     return {

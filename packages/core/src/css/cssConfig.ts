@@ -2,7 +2,7 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import type {
   CSSLoaderOptions,
-  RsbuildConfig,
+  EnvironmentConfig,
   RsbuildPlugin,
 } from '@rsbuild/core';
 import { CSS_EXTENSIONS_PATTERN } from '../constant';
@@ -147,7 +147,7 @@ const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
 export const composeCssConfig = (
   rootDir: string | null,
   bundle = true,
-): RsbuildConfig => {
+): EnvironmentConfig => {
   if (bundle || rootDir === null) {
     return {};
   }
