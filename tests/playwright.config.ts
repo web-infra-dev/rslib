@@ -14,19 +14,16 @@ export default defineConfig({
     {
       command: 'cd ../examples/module-federation && npm run dev:host',
       url: 'http://localhost:3000',
-      reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
     },
     {
       command: 'cd ../examples/module-federation && npm run serve:lib',
       url: 'http://localhost:3001',
-      reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
     },
     {
       command: 'cd ../examples/module-federation && npm run dev:remote',
       url: 'http://localhost:3002',
-      reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
     },
   ],

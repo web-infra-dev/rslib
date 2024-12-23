@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "test:benchmark": "vitest bench",
-    "test:e2e": "lsof -i:3000 && lsof -i:3001 && lsof -i:3002 && cross-env DEBUG=pw:webserver playwright test --pass-with-no-tests"
+    "test:e2e": "playwright test --pass-with-no-tests"
   },
   "dependencies": {
     "react": "^19.0.0",

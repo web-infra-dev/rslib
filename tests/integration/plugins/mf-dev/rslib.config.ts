@@ -33,5 +33,8 @@ export default defineConfig({
       plugins: [pluginModuleFederation({ name: 'test-plugins' }), testPlugin2],
     },
   ],
+  server: {
+    port: 3009,
+  },
   plugins: [testPlugin1],
 });

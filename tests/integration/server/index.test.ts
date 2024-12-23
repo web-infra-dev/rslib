@@ -34,7 +34,7 @@ describe('server config', async () => {
 
     const rsbuildConfigContent = await fse.readFile(rsbuildConfigFile, 'utf-8');
     expect(rsbuildConfigContent).toContain('open: true');
-    expect(rsbuildConfigContent).toContain('port: 3001');
+    expect(rsbuildConfigContent).toContain('port: 3011');
 
     childProcess.kill();
   });

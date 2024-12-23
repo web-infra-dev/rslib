@@ -29,6 +29,9 @@ export default defineConfig({
       },
     },
   ],
+  server: {
+    port: 3007,
+  },
   plugins: [
     pluginModuleFederation({
       name: 'test',
