@@ -31,7 +31,6 @@ describe('server config', async () => {
     });
 
     await awaitFileExists(rsbuildConfigFile);
-    childProcess.kill();
 
     // Check if the server config is merged correctly
     const rsbuildConfigContent = await fse.readFile(rsbuildConfigFile, 'utf-8');
@@ -39,5 +38,7 @@ describe('server config', async () => {
     expect(rsbuildConfigContent).toContain('open: true');
     expect(rsbuildConfigContent).toContain('port: 3002');
     expect(rsbuildConfigContent).toContain('printUrls: false');
+
+    childProcess.kill();
   });
 });
