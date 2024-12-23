@@ -3,18 +3,19 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      version:
+      npm_tag:
         type: choice
-        description: 'Release Version (next, beta, alpha, latest)'
+        description: 'Specify npm tag'
         required: true
-        default: 'next'
+        default: 'alpha'
         options:
-          - next
-          - beta
           - alpha
+          - beta
+          - rc
+          - canary
           - latest
       branch:
-        description: 'Release Branch (confirm release branch)'
+        description: 'Branch to release'
         required: true
         default: 'main'
 
@@ -26,17 +27,18 @@ jobs:
     name: Release
     if: github.repository == 'web-infra-dev/rslib' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 25
+          fetch-depth: 1
           ref: ${{ github.event.inputs.branch }}
 
       - name: Install Pnpm
         run: corepack enable
 
-      - name: Setup Node.js 18
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
@@ -45,15 +47,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Release
-        uses: web-infra-dev/actions@v2
-        with:
-          version: ${{ github.event.inputs.version }}
-          branch: ${{ github.event.inputs.branch }}
-          type: 'release'
-          tools: 'changeset'
+      - name: Publish to npm
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          REPOSITORY: ${{ github.repository }}
-          REF: ${{ github.ref }}
+          NPM_TOKEN: ${{ secrets.RSLIB_NPM_TOKEN }}
+        run: |
+          npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
+          pnpm -r publish --tag ${{ github.event.inputs.npm_tag }} --publish-branch ${{ github.event.inputs.branch }}
