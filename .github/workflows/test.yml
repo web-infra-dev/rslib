@@ -1,20 +1,14 @@
 name: Test
 
-# Controls when the action will run.
 on:
-  # Triggers the workflow on pull request events but only for the main branch
   pull_request:
     branches: [main]
 
   push:
     branches: [main]
 
-  merge_group:
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # ======== calculate changes ========
   changes:
@@ -25,7 +19,6 @@ jobs:
       matrix:
         node-version: [18]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,7 +28,7 @@ jobs:
       - name: Install Pnpm
         run: corepack enable
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v3.0.2
         id: changes
         with:
           predicate-quantifier: 'every'
@@ -59,7 +52,6 @@ jobs:
           - node-version: 18
             os: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -100,7 +92,6 @@ jobs:
           - node-version: 18
             os: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Git config
         if: ${{ matrix.os == 'windows-latest' }}
@@ -141,7 +132,6 @@ jobs:
       matrix:
         node-version: [20]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
         uses: actions/checkout@v4
