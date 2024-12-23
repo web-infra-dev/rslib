@@ -51,10 +51,6 @@ export default defineConfig({
       dev: {
         assetPrefix: 'http://localhost:3001/mf',
       },
-      // for Storybook to dev
-      server: {
-        port: 3001,
-      },
       plugins: [
         pluginModuleFederation({
           name: 'rslib_provider',
@@ -75,6 +71,10 @@ export default defineConfig({
       ],
     },
   ],
+  // for Storybook to dev
+  server: {
+    port: 3001,
+  },
   output: {
     target: 'web',
   },
