@@ -50,7 +50,7 @@ It is worth noting that in bundle mode, both `resolve.alias` and [output.externa
   Now, the code `import { useState } from 'react'` will be replaced with `import { useState } from 'preact/compat'`.
 
 ::: note
-In bundleless mode, since there is no bundling concept, all modules will be externalized, so we will automatically replace the aliases in `resolve.alias` with `output.externals` to ensure the final output is generated correctly.
+In bundleless mode, since there is no bundling concept, all modules will be externalized, so Rslib will automatically externalize the aliased module in the final output by using `output.externals`.
 :::
 
 ## resolve.dedupe <RsbuildDocBadge path="/config/resolve/dedupe" text="resolve.dedupe" />
