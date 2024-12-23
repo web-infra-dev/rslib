@@ -1,14 +1,41 @@
-import { buildAndGetResults } from 'test-helper';
+import { buildAndGetResults, queryContent } from 'test-helper';
 import { expect, test } from 'vitest';
 
 test('source.alias', async () => {
   const fixturePath = __dirname;
-  const { entries } = await buildAndGetResults({ fixturePath });
+  const { contents } = await buildAndGetResults({ fixturePath });
 
-  expect(entries.esm).toContain('hello world');
-  expect(entries.cjs).toContain('hello world');
+  const { content: indexBundleEsmContent } = queryContent(
+    contents.esm0!,
+    /esm\/index\.js/,
+  );
+  const { content: indexBundleCjsContent } = queryContent(
+    contents.cjs0!,
+    /cjs\/index\.cjs/,
+  );
+  const { content: indexBundlelessEsmContent } = queryContent(
+    contents.esm1!,
+    /esm\/index\.js/,
+  );
+  const { content: indexBundlelessCjsContent } = queryContent(
+    contents.cjs1!,
+    /cjs\/index\.cjs/,
+  );
 
-  // simple artifacts check
-  expect(entries.esm).toMatchSnapshot();
-  expect(entries.cjs).toMatchSnapshot();
+  // bundle mode
+  expect(indexBundleEsmContent).toContain('hello world');
+  expect(indexBundleCjsContent).toContain('hello world');
+
+  // bundleless mode
+  expect(indexBundlelessEsmContent).toContain(
+    'import * as __WEBPACK_EXTERNAL_MODULE__a_js__ from "./a.js";',
+  );
+  expect(indexBundlelessCjsContent).toContain(
+    'const external_a_cjs_namespaceObject = require("./a.cjs");',
+  );
+
+  expect(indexBundleEsmContent).toMatchSnapshot();
+  expect(indexBundleCjsContent).toMatchSnapshot();
+  expect(indexBundlelessEsmContent).toMatchSnapshot();
+  expect(indexBundlelessCjsContent).toMatchSnapshot();
 });

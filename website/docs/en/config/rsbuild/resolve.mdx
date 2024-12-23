@@ -12,9 +12,9 @@ Control the priority between the `paths` option in `tsconfig.json` and the `reso
 
 Create aliases to import or require certain modules, same as the [resolve.alias](https://rspack.dev/config/resolve#resolvealias) config of Rspack.
 
-It is important to note that `resolve.alias` differs from [output.externals](/config/rsbuild/output#outputexternals) in the following ways:
+It is worth noting that in bundle mode, both `resolve.alias` and [output.externals](/config/rsbuild/output#outputexternals) can be used to set aliases, but they differ in the following ways:
 
-- `resolve.alias` allows you to replace the target module you want to include in the output bundles with another module. It only works if [lib.bundle](/config/lib/bundle) is set to `true`.
+- `resolve.alias` is used to replace the target module with another module, which will be bundled into the output.
 
   For example, if you want to replace `lodash` with `lodash-es` when bundling a package, you can configure it as follows:
 
@@ -29,11 +29,11 @@ It is important to note that `resolve.alias` differs from [output.externals](/co
   };
   ```
 
-  All `lodash` modules imported in the source code will be mapped to `lodash-es` and be bundled into the output.
+  Now, all `lodash` imports in the source code will be mapped to `lodash-es` and bundled into the output.
 
 - `output.externals` is used to handle alias mapping for externalized modules. Externalized modules are not included in the bundle; instead, they are imported from external sources at runtime.
 
-  For example, if you want to replace `react` and `react-dom` with `preact/compat` in the bundle, you can configure it as follows:
+  For example, if you want to replace externalized modules `react` and `react-dom` with `preact/compat` in the bundle, you can configure it as follows:
 
   ```ts title="rslib.config.ts"
   export default {
@@ -48,6 +48,10 @@ It is important to note that `resolve.alias` differs from [output.externals](/co
   ```
 
   Now, the code `import { useState } from 'react'` will be replaced with `import { useState } from 'preact/compat'`.
+
+::: note
+In bundleless mode, since there is no bundling concept, all modules will be externalized, so Rslib will automatically externalize the aliased module in the final output by using `output.externals`.
+:::
 
 ## resolve.dedupe <RsbuildDocBadge path="/config/resolve/dedupe" text="resolve.dedupe" />
 
