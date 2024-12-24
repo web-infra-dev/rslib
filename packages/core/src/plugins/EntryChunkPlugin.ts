@@ -1,7 +1,7 @@
 import { chmodSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import {
-  type RsbuildConfig,
+  type EnvironmentConfig,
   type RsbuildPlugin,
   type Rspack,
   rspack,
@@ -194,7 +194,7 @@ export const composeEntryChunkConfig = ({
   enabledImportMetaUrlShim,
 }: {
   enabledImportMetaUrlShim: boolean;
-}): RsbuildConfig => {
+}): EnvironmentConfig => {
   return {
     plugins: [entryModuleLoaderRsbuildPlugin()],
     tools: {

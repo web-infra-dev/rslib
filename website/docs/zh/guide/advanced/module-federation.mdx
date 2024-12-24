@@ -51,10 +51,6 @@ export default defineConfig({
       dev: {
         assetPrefix: 'http://localhost:3001/mf',
       },
-      // Storybook 在 dev 下使用
-      server: {
-        port: 3001,
-      },
       plugins: [
         pluginModuleFederation({
           name: 'rslib_provider',
@@ -75,6 +71,10 @@ export default defineConfig({
       ],
     },
   ],
+  // Storybook 在 dev 下使用
+  server: {
+    port: 3001,
+  },
   output: {
     target: 'web',
   },
@@ -94,14 +94,14 @@ export default defineConfig({
 
 Rslib 支持宿主应用和 Rslib 模块联邦项目同时开发。
 
-#### 1. 启动库的 `rslib mf dev` 命令
+#### 1. 启动库的 `rslib mf-dev` 命令
 
 添加 `dev` 命令在 `package.json` 文件:
 
 ```json title="package.json"
 {
   "scripts": {
-    "dev": "rslib mf dev"
+    "dev": "rslib mf-dev"
   }
 }
 ```
@@ -151,14 +151,14 @@ export default defineConfig({
 
 Rslib 支持使用 Storybook 开发 Rslib 模块联邦项目。
 
-#### 1. 启动库的 `rslib mf dev` 命令
+#### 1. 启动库的 `rslib mf-dev` 命令
 
 添加 `dev` 命令在 `package.json` 文件:
 
 ```json title="package.json"
 {
   "scripts": {
-    "dev": "rslib mf dev"
+    "dev": "rslib mf-dev"
   }
 }
 ```

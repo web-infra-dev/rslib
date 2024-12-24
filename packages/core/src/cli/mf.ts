@@ -1,42 +1,63 @@
-import { createRsbuild, mergeRsbuildConfig } from '@rsbuild/core';
-import type { RsbuildConfig, RsbuildInstance } from '@rsbuild/core';
-import { composeCreateRsbuildConfig } from '../config';
+import { createRsbuild } from '@rsbuild/core';
+import type { RsbuildInstance } from '@rsbuild/core';
+import { composeRsbuildEnvironments, pruneEnvironments } from '../config';
 import type { RslibConfig } from '../types';
+import type { CommonOptions } from './commands';
 import { onBeforeRestart } from './restart';
 
 export async function startMFDevServer(
   config: RslibConfig,
+  options: Pick<CommonOptions, 'lib'> = {},
 ): Promise<RsbuildInstance | undefined> {
-  const rsbuildInstance = await initMFRsbuild(config);
+  const rsbuildInstance = await initMFRsbuild(config, options);
   return rsbuildInstance;
 }
 
 async function initMFRsbuild(
-  rslibConfig: RslibConfig,
+  config: RslibConfig,
+  options: Pick<CommonOptions, 'lib'> = {},
 ): Promise<RsbuildInstance | undefined> {
-  const rsbuildConfigObject = await composeCreateRsbuildConfig(rslibConfig);
-  const mfRsbuildConfig = rsbuildConfigObject.find(
-    (config) => config.format === 'mf',
-  );
+  const { environments, environmentWithInfos } =
+    await composeRsbuildEnvironments(config);
 
-  if (!mfRsbuildConfig) {
-    // no mf format, return.
-    return;
+  const selectedEnvironmentIds = environmentWithInfos
+    .filter((env) => {
+      const isMf = env.format === 'mf';
+      if (!options?.lib) {
+        return isMf;
+      }
+      return env.id && options.lib.includes(env.id);
+    })
+    .map((env) => env.id);
+
+  if (!selectedEnvironmentIds.length) {
+    throw new Error('No mf format found, please check your config.');
   }
 
-  mfRsbuildConfig.config = changeEnvToDev(mfRsbuildConfig.config);
+  const selectedEnvironments = pruneEnvironments(
+    environments,
+    selectedEnvironmentIds,
+  );
 
   const rsbuildInstance = await createRsbuild({
     rsbuildConfig: {
-      ...mfRsbuildConfig.config,
-      plugins: [
-        ...(rslibConfig.plugins || []),
-        ...(mfRsbuildConfig.config.plugins || []),
-      ],
-      server: mergeRsbuildConfig(
-        rslibConfig.server,
-        mfRsbuildConfig.config.server,
-      ),
+      mode: 'development',
+      root: config.root,
+      plugins: config.plugins,
+      dev: {
+        ...(config.dev ?? {}),
+        writeToDisk: true,
+      },
+      server: config.server,
+      tools: {
+        rspack: {
+          optimization: {
+            nodeEnv: 'development',
+            moduleIds: 'named',
+          },
+        },
+      },
+      environments: selectedEnvironments,
     },
   });
 
@@ -44,21 +65,4 @@ async function initMFRsbuild(
 
   onBeforeRestart(devServer.server.close);
   return rsbuildInstance;
-}
-
-function changeEnvToDev(rsbuildConfig: RsbuildConfig) {
-  return mergeRsbuildConfig(rsbuildConfig, {
-    mode: 'development',
-    dev: {
-      writeToDisk: true,
-    },
-    tools: {
-      rspack: {
-        optimization: {
-          nodeEnv: 'development',
-          moduleIds: 'named',
-        },
-      },
-    },
-  });
 }

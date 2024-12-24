@@ -5,14 +5,10 @@ export default defineConfig({
   lib: [
     {
       format: 'mf',
-      server: {
-        port: 3002,
-        printUrls: false,
-      },
     },
   ],
   server: {
-    port: 3001,
+    port: 3011,
     open: true,
   },
   plugins: [

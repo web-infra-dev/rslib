@@ -77,12 +77,14 @@ describe('build command', async () => {
       cwd: __dirname,
     });
 
-    const files = await globContentJSON(path.join(__dirname, 'dist'));
+    const files = await globContentJSON(
+      path.join(__dirname, 'custom-root/dist'),
+    );
     const fileNames = Object.keys(files).sort();
     expect(fileNames).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/integration/cli/build/dist/root/index.cjs",
-        "<ROOT>/tests/integration/cli/build/dist/root/index.js",
+        "<ROOT>/tests/integration/cli/build/custom-root/dist/root/index.cjs",
+        "<ROOT>/tests/integration/cli/build/custom-root/dist/root/index.js",
       ]
     `);
   });

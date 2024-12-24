@@ -1,3 +1,4 @@
+import { join } from 'node:path';
 import { defineConfig } from '@rslib/core';
 import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
@@ -18,4 +19,9 @@ export default defineConfig({
       },
     }),
   ],
+  source: {
+    entry: {
+      index: join(__dirname, '../src/index.ts'),
+    },
+  },
 });

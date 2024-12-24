@@ -1,1 +1,30 @@
 # Lib 配置
+
+- **类型:**
+
+```ts
+interface LibConfig extends EnvironmentConfig {
+  format?: Format;
+  bundle?: boolean;
+  autoExtension?: boolean;
+  autoExternal?: AutoExternal;
+  redirect?: Redirect;
+  syntax?: Syntax;
+  externalHelpers?: boolean;
+  banner?: BannerAndFooter;
+  footer?: BannerAndFooter;
+  shims?: Shims;
+  dts?: Dts;
+  umdName?: string;
+}
+
+interface RslibConfig extends RsbuildConfig {
+  lib: LibConfig[];
+}
+```
+
+- **默认值:** `undefined`
+
+- **必选:** `true`
+
+`lib` 配置是一个对象数组，每个对象代表一组不同的配置。这些配置包括所有 Rsbuild 配置以及 Rslib 特定的配置，可以生成不同格式的产物。

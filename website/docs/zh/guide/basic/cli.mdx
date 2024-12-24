@@ -22,7 +22,7 @@ Options:
 Commands:
   build [options]     构建用于生产环境的产物
   inspect [options]   检查 Rslib 项目的 Rsbuild 配置和 Rspack 配置
-  mf [options] <dev>  为 Module Federation 格式的库启用 Rsbuild 开发服务器。
+  mf-dev [options]    为 Module Federation 格式的库启用 Rsbuild 开发服务器。
   help [command]      显示命令帮助
 ```
 
@@ -40,7 +40,7 @@ Options:
   -r --root <root>      指定项目根目录，可以是绝对路径或者相对于 cwd 的路径
   --env-mode <mode>     指定 env 模式来加载 `.env.[mode]` 文件
   --env-dir <dir>       指定目录来加载 `.env` 文件
-  --lib <id>            仅构建指定的库（可以重复）
+  --lib <id>            指定库（可重复，例如 --lib esm --lib cjs）
   -w --watch            开启 watch 模式, 监听文件变更并重新构建
   -h, --help            显示命令帮助
 ```
@@ -149,8 +149,8 @@ Options:
   -r --root <root>      指定项目根目录，可以是绝对路径或者相对于 cwd 的路径
   --env-mode <mode>     指定 env 模式来加载 `.env.[mode]` 文件
   --env-dir <dir>       指定目录来加载 `.env` 文件
-  --lib <id>            检查指定的库（可以重复）
-  --output <output>     指定检查内容输出路径（默认：".rsbuild")
+  --lib <id>            指定库（可重复，例如 --lib esm --lib cjs）
+  --output <output>     指定检查内容输出路径（默认：".rsbuild"）
   --verbose             在输出中显示完整的函数定义
   -h, --help            显示命令帮助
 ```
@@ -192,14 +192,14 @@ Inspect config succeed, open following files to view the content:
   - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
 ```
 
-## rslib mf dev
+## rslib mf-dev
 
-`rslib mf dev` 命令用于为 [Module Federation](/guide/advanced/module-federation) 格式的库启用 Rsbuild 开发服务器。
+`rslib mf-dev` 命令用于为 [Module Federation](/guide/advanced/module-federation) 格式的库启用 Rsbuild 开发服务器。
 
 这允许你在 host 应用中访问和调试 mf 格式的模块。
 
 ```text
-Usage: rslib mf [options] <dev>
+Usage: rslib mf-dev [options]
 
 为 Module Federation 格式的库启用 Rsbuild 开发服务器。
 
@@ -208,6 +208,7 @@ Options:
   -r --root <root>      指定项目根目录，可以是绝对路径或者相对于 cwd 的路径
   --env-mode <mode>     指定 env 模式来加载 `.env.[mode]` 文件
   --env-dir <dir>       指定目录来加载 `.env` 文件
+  --lib <id>            指定库（可重复，例如 --lib esm --lib cjs）
   -h, --help            显示命令帮助
 ```
 

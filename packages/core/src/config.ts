@@ -44,6 +44,7 @@ import type {
   LibOnlyConfig,
   PkgJson,
   Redirect,
+  RequireKey,
   RsbuildConfigEntry,
   RsbuildConfigEntryItem,
   RsbuildConfigOutputTarget,
@@ -141,13 +142,13 @@ export async function loadConfig({
 
 const composeExternalsWarnConfig = (
   format: Format,
-  ...externalsArray: NonNullable<RsbuildConfig['output']>['externals'][]
-): RsbuildConfig => {
+  ...externalsArray: NonNullable<EnvironmentConfig['output']>['externals'][]
+): EnvironmentConfig => {
   if (format !== 'esm') {
     return {};
   }
 
-  const externals: NonNullable<RsbuildConfig['output']>['externals'] = [];
+  const externals: NonNullable<EnvironmentConfig['output']>['externals'] = [];
   for (const e of externalsArray.filter(Boolean)) {
     if (Array.isArray(e)) {
       externals.push(...e);
@@ -159,7 +160,7 @@ const composeExternalsWarnConfig = (
 
   // Match logic is derived from https://github.com/webpack/webpack/blob/94aba382eccf3de1004d235045d4462918dfdbb7/lib/ExternalModuleFactoryPlugin.js#L166-L293.
   const matchUserExternals = (
-    externals: NonNullable<RsbuildConfig['output']>['externals'],
+    externals: NonNullable<EnvironmentConfig['output']>['externals'],
     request: string,
     callback: (matched?: true) => void,
   ) => {
@@ -252,8 +253,8 @@ export const composeAutoExternalConfig = (options: {
   format: Format;
   autoExternal?: AutoExternal;
   pkgJson?: PkgJson;
-  userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
-}): RsbuildConfig => {
+  userExternals?: NonNullable<EnvironmentConfig['output']>['externals'];
+}): EnvironmentConfig => {
   const { format, pkgJson, userExternals } = options;
 
   const autoExternal = getAutoExternalDefaultValue(
@@ -317,7 +318,7 @@ export const composeAutoExternalConfig = (options: {
     : {};
 };
 
-export function composeMinifyConfig(config: LibConfig): RsbuildConfig {
+export function composeMinifyConfig(config: LibConfig): EnvironmentConfig {
   const minify = config.output?.minify;
   const format = config.format;
   if (minify !== undefined) {
@@ -358,7 +359,7 @@ export function composeMinifyConfig(config: LibConfig): RsbuildConfig {
 export function composeBannerFooterConfig(
   banner: BannerAndFooter,
   footer: BannerAndFooter,
-): RsbuildConfig {
+): EnvironmentConfig {
   const bannerConfig = pick(banner, ['js', 'css']);
   const footerConfig = pick(footer, ['js', 'css']);
 
@@ -428,9 +429,9 @@ export function composeBannerFooterConfig(
 export function composeDecoratorsConfig(
   compilerOptions?: Record<string, any>,
   version?: NonNullable<
-    NonNullable<RsbuildConfig['source']>['decorators']
+    NonNullable<EnvironmentConfig['source']>['decorators']
   >['version'],
-): RsbuildConfig {
+): EnvironmentConfig {
   if (version || !compilerOptions?.experimentalDecorators) {
     return {};
   }
@@ -444,9 +445,8 @@ export function composeDecoratorsConfig(
   };
 }
 
-export async function createConstantRsbuildConfig(): Promise<RsbuildConfig> {
+export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> {
   return defineRsbuildConfig({
-    mode: 'production',
     dev: {
       progressBar: false,
     },
@@ -508,7 +508,7 @@ const composeFormatConfig = ({
   pkgJson: PkgJson;
   bundle?: boolean;
   umdName?: string;
-}): RsbuildConfig => {
+}): EnvironmentConfig => {
   const jsParserOptions = {
     cjs: {
       requireResolve: false,
@@ -583,7 +583,7 @@ const composeFormatConfig = ({
         );
       }
 
-      const config: RsbuildConfig = {
+      const config: EnvironmentConfig = {
         tools: {
           rspack: {
             module: {
@@ -653,7 +653,7 @@ const formatRsbuildPlugin = (): RsbuildPlugin => ({
 const composeShimsConfig = (
   format: Format,
   shims?: Shims,
-): { rsbuildConfig: RsbuildConfig; enabledShims: DeepRequired<Shims> } => {
+): { rsbuildConfig: EnvironmentConfig; enabledShims: DeepRequired<Shims> } => {
   const resolvedShims = {
     cjs: {
       'import.meta.url': shims?.cjs?.['import.meta.url'] ?? true,
@@ -682,7 +682,7 @@ const composeShimsConfig = (
           },
   };
 
-  let rsbuildConfig: RsbuildConfig = {};
+  let rsbuildConfig: EnvironmentConfig = {};
   switch (format) {
     case 'esm': {
       rsbuildConfig = {
@@ -725,8 +725,8 @@ export const composeModuleImportWarn = (request: string): string => {
 
 const composeExternalsConfig = (
   format: Format,
-  externals: NonNullable<RsbuildConfig['output']>['externals'],
-): RsbuildConfig => {
+  externals: NonNullable<EnvironmentConfig['output']>['externals'],
+): EnvironmentConfig => {
   // TODO: Define the internal externals config in Rsbuild's externals instead
   // Rspack's externals as they will not be merged from different fields. All externals
   // should to be unified and merged together in the future.
@@ -768,7 +768,7 @@ const composeAutoExtensionConfig = (
   autoExtension: boolean,
   pkgJson?: PkgJson,
 ): {
-  config: RsbuildConfig;
+  config: EnvironmentConfig;
   jsExtension: string;
   dtsExtension: string;
 } => {
@@ -778,7 +778,7 @@ const composeAutoExtensionConfig = (
     autoExtension,
   });
 
-  const updatedConfig: RsbuildConfig = {
+  const updatedConfig: EnvironmentConfig = {
     output: {
       filename: {
         js: `[name]${jsExtension}`,
@@ -803,7 +803,7 @@ const composeAutoExtensionConfig = (
 const composeSyntaxConfig = (
   target: RsbuildConfigOutputTarget,
   syntax?: Syntax,
-): RsbuildConfig => {
+): EnvironmentConfig => {
   // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
   if (syntax) {
     return {
@@ -865,7 +865,7 @@ const composeEntryConfig = async (
   bundle: LibConfig['bundle'],
   root: string,
   cssModulesAuto: CssLoaderOptionsAuto,
-): Promise<{ entryConfig: RsbuildConfig; lcp: string | null }> => {
+): Promise<{ entryConfig: EnvironmentConfig; lcp: string | null }> => {
   if (!entries) {
     return { entryConfig: {}, lcp: null };
   }
@@ -948,7 +948,7 @@ const composeEntryConfig = async (
   }
 
   const lcp = await calcLongestCommonPath(Object.values(resolvedEntries));
-  const entryConfig: RsbuildConfig = {
+  const entryConfig: EnvironmentConfig = {
     source: {
       entry: appendEntryQuery(resolvedEntries),
     },
@@ -966,7 +966,7 @@ const composeBundlelessExternalConfig = (
   cssModulesAuto: CssLoaderOptionsAuto,
   bundle: boolean,
 ): {
-  config: RsbuildConfig;
+  config: EnvironmentConfig;
   resolvedJsRedirect?: DeepRequired<JsRedirect>;
 } => {
   if (bundle) return { config: {} };
@@ -1074,7 +1074,7 @@ const composeBundlelessExternalConfig = (
 const composeDtsConfig = async (
   libConfig: LibConfig,
   dtsExtension: string,
-): Promise<RsbuildConfig> => {
+): Promise<EnvironmentConfig> => {
   const { format, autoExternal, banner, footer } = libConfig;
 
   let { dts } = libConfig;
@@ -1110,8 +1110,8 @@ const composeTargetConfig = (
   userTarget: RsbuildConfigOutputTarget,
   format: Format,
 ): {
-  config: RsbuildConfig;
-  externalsConfig: RsbuildConfig;
+  config: EnvironmentConfig;
+  externalsConfig: EnvironmentConfig;
   target: RsbuildConfigOutputTarget;
 } => {
   const target = userTarget ?? (format === 'mf' ? 'web' : 'node');
@@ -1204,14 +1204,13 @@ const composeExternalHelpersConfig = (
 
 async function composeLibRsbuildConfig(
   config: LibConfig,
+  root?: string,
   sharedPlugins?: RsbuildPlugins,
 ) {
   checkMFPlugin(config, sharedPlugins);
 
   // Get the absolute path of the root directory to align with Rsbuild's default behavior
-  const rootPath = config.root
-    ? getAbsolutePath(process.cwd(), config.root)
-    : process.cwd();
+  const rootPath = root ? getAbsolutePath(process.cwd(), root) : process.cwd();
   const pkgJson = readPackageJson(rootPath);
   const { compilerOptions } = await loadTsconfig(
     rootPath,
@@ -1334,7 +1333,10 @@ export async function composeCreateRsbuildConfig(
   const constantRsbuildConfig = await createConstantRsbuildConfig();
   const {
     lib: libConfigsArray,
+    mode,
+    root,
     plugins: sharedPlugins,
+    dev,
     server,
     ...sharedRsbuildConfig
   } = rslibConfig;
@@ -1355,6 +1357,7 @@ export async function composeCreateRsbuildConfig(
     // configuration and Lib configuration in the settings.
     const libRsbuildConfig = await composeLibRsbuildConfig(
       userConfig,
+      root,
       sharedPlugins,
     );
 
@@ -1412,9 +1415,13 @@ export async function composeCreateRsbuildConfig(
 
 export async function composeRsbuildEnvironments(
   rslibConfig: RslibConfig,
-): Promise<Record<string, EnvironmentConfig>> {
+): Promise<{
+  environments: Record<string, EnvironmentConfig>;
+  environmentWithInfos: RequireKey<RsbuildConfigWithLibInfo, 'id'>[];
+}> {
   const rsbuildConfigWithLibInfo =
     await composeCreateRsbuildConfig(rslibConfig);
+  const environmentWithInfos: RequireKey<RsbuildConfigWithLibInfo, 'id'>[] = [];
 
   // User provided ids should take precedence over generated ids.
   const usedIds = rsbuildConfigWithLibInfo
@@ -1446,6 +1453,7 @@ export async function composeRsbuildEnvironments(
   for (const { format, id, config } of rsbuildConfigWithLibInfo) {
     const libId = typeof id === 'string' ? id : composeDefaultId(format);
     environments[libId] = config;
+    environmentWithInfos.push({ id: libId, format, config });
   }
 
   const conflictIds = usedIds.filter(
@@ -1457,7 +1465,7 @@ export async function composeRsbuildEnvironments(
     );
   }
 
-  return environments;
+  return { environments, environmentWithInfos };
 }
 
 export const pruneEnvironments = (

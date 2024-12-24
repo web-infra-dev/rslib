@@ -1,4 +1,4 @@
-import type { RsbuildConfig, Rspack } from '@rsbuild/core';
+import type { EnvironmentConfig, RsbuildConfig, Rspack } from '@rsbuild/core';
 import type { PluginDtsOptions } from 'rsbuild-plugin-dts';
 import type { GetAsyncFunctionFromUnion } from './utils';
 
@@ -22,11 +22,11 @@ export type EcmaScriptVersion = FixedEcmaVersions | LatestEcmaVersions;
 export type RsbuildConfigWithLibInfo = {
   id?: string;
   format: Format;
-  config: RsbuildConfig;
+  config: EnvironmentConfig;
 };
 
 export type RsbuildConfigEntry = NonNullable<
-  NonNullable<RsbuildConfig['source']>['entry']
+  NonNullable<EnvironmentConfig['source']>['entry']
 >;
 export type RsbuildConfigEntryItem = RsbuildConfigEntry[string];
 export type RspackResolver = GetAsyncFunctionFromUnion<
@@ -34,7 +34,7 @@ export type RspackResolver = GetAsyncFunctionFromUnion<
 >;
 
 export type RsbuildConfigOutputTarget = NonNullable<
-  RsbuildConfig['output']
+  EnvironmentConfig['output']
 >['target'];
 
 export type Syntax =
@@ -107,7 +107,7 @@ export type Redirect = {
   // dts?: DtsRedirect;
 };
 
-export interface LibConfig extends RsbuildConfig {
+export interface LibConfig extends EnvironmentConfig {
   /**
    * The unique identifier of the library.
    * @defaultValue `undefined`
@@ -201,7 +201,7 @@ export interface LibConfig extends RsbuildConfig {
   umdName?: string;
 }
 
-export type LibOnlyConfig = Omit<LibConfig, keyof RsbuildConfig>;
+export type LibOnlyConfig = Omit<LibConfig, keyof EnvironmentConfig>;
 
 export interface RslibConfig extends RsbuildConfig {
   lib: LibConfig[];

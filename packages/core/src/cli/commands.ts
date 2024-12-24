@@ -39,7 +39,12 @@ const applyCommonOptions = (command: Command) => {
       '--env-mode <mode>',
       'specify the env mode to load the `.env.[mode]` file',
     )
-    .option('--env-dir <dir>', 'specify the directory to load `.env` files');
+    .option('--env-dir <dir>', 'specify the directory to load `.env` files')
+    .option(
+      '--lib <id>',
+      'specify the library (repeatable, e.g. --lib esm --lib cjs)',
+      repeatableOption,
+    );
 };
 
 const repeatableOption = (value: string, previous: string[]) => {
@@ -51,16 +56,11 @@ export function runCli(): void {
 
   const buildCommand = program.command('build');
   const inspectCommand = program.command('inspect');
-  const mfDevCommand = program.command('mf dev');
+  const mfDevCommand = program.command('mf-dev');
 
   [buildCommand, inspectCommand, mfDevCommand].forEach(applyCommonOptions);
 
   buildCommand
-    .option(
-      '--lib <id>',
-      'build the specified library (may be repeated)',
-      repeatableOption,
-    )
     .option('-w --watch', 'turn on watch mode, watch for changes and rebuild')
     .description('build the library for production')
     .action(async (options: BuildOptions) => {
@@ -87,11 +87,6 @@ export function runCli(): void {
 
   inspectCommand
     .description('inspect the Rsbuild / Rspack configs of Rslib projects')
-    .option(
-      '--lib <id>',
-      'inspect the specified library (may be repeated)',
-      repeatableOption,
-    )
     .option(
       '--output <output>',
       'specify inspect content output path',
@@ -121,8 +116,9 @@ export function runCli(): void {
       try {
         const cliMfDev = async () => {
           const { config, watchFiles } = await init(options);
-          // TODO: support lib option in mf dev server
-          await startMFDevServer(config);
+          await startMFDevServer(config, {
+            lib: options.lib,
+          });
 
           watchFilesForRestart(watchFiles, async () => {
             await cliMfDev();
@@ -131,7 +127,7 @@ export function runCli(): void {
 
         await cliMfDev();
       } catch (err) {
-        logger.error('Failed to start mf dev.');
+        logger.error('Failed to start mf-dev.');
         logger.error(err);
         process.exit(1);
       }

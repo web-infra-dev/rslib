@@ -6,12 +6,15 @@ import { onBeforeRestart } from './restart';
 
 export async function build(
   config: RslibConfig,
-  options: Pick<BuildOptions, 'lib' | 'watch'> = {},
+  options: Pick<BuildOptions, 'lib' | 'watch' | 'root'> = {},
 ): Promise<RsbuildInstance> {
-  const environments = await composeRsbuildEnvironments(config);
+  const { environments } = await composeRsbuildEnvironments(config);
   const rsbuildInstance = await createRsbuild({
     rsbuildConfig: {
+      mode: 'production',
+      root: config.root,
       plugins: config.plugins,
+      dev: config.dev,
       server: config.server,
       environments: pruneEnvironments(environments, options.lib),
     },

@@ -1,11 +1,11 @@
-import type { RsbuildConfig } from '@rsbuild/core';
+import type { EnvironmentConfig } from '@rsbuild/core';
 import type { Format } from '../types';
 
 // TODO: asset config document
 export const composeAssetConfig = (
   bundle: boolean,
   format: Format,
-): RsbuildConfig => {
+): EnvironmentConfig => {
   if (format === 'esm' || format === 'cjs') {
     if (bundle) {
       return {
