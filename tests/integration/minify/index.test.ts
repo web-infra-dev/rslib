@@ -7,36 +7,36 @@ describe('minify config', () => {
     const fixturePath = join(__dirname, 'default');
     const { entries } = await buildAndGetResults({ fixturePath });
     expect(entries.esm).toMatchInlineSnapshot(`
-    "/*! For license information please see index.js.LICENSE.txt */
-    import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime__ from "react/jsx-runtime";
-    /*! Legal Comment */ const foo = ()=>{};
-    const Button = ()=>/*#__PURE__*/ (0, __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime__.jsx)('button', {});
-    export { Button, foo };
-    "
-  `);
+      "/*! For license information please see index.js.LICENSE.txt */
+      import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__ from "react/jsx-runtime";
+      /*! Legal Comment */ const foo = ()=>{};
+      const Button = ()=>/*#__PURE__*/ (0, __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__.jsx)('button', {});
+      export { Button, foo };
+      "
+    `);
   });
 
   test('minify is disabled, nothing will be stripped', async () => {
     const fixturePath = join(__dirname, 'config/disabled');
     const { entries } = await buildAndGetResults({ fixturePath });
     expect(entries.esm).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime__ from "react/jsx-runtime";
+      "import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__ from "react/jsx-runtime";
 
-    ;// CONCATENATED MODULE: external "react/jsx-runtime"
+      ;// CONCATENATED MODULE: external "react/jsx-runtime"
 
-    ;// CONCATENATED MODULE: ../../__fixtures__/src/index.ts?__rslib_entry__
-    /*! Legal Comment */ 
-    const foo = ()=>{};
-    const bar = ()=>{};
-    const baz = ()=>{
-        return bar();
-    };
-    // normal comment
-    const Button = ()=>/*#__PURE__*/ (0,__WEBPACK_EXTERNAL_MODULE_react_jsx_runtime__.jsx)('button', {});
+      ;// CONCATENATED MODULE: ../../__fixtures__/src/index.ts?__rslib_entry__
+      /*! Legal Comment */ 
+      const foo = ()=>{};
+      const bar = ()=>{};
+      const baz = ()=>{
+          return bar();
+      };
+      // normal comment
+      const Button = ()=>/*#__PURE__*/ (0,__WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__.jsx)('button', {});
 
-    export { Button, foo };
-    "
-  `);
+      export { Button, foo };
+      "
+    `);
   });
 
   test('minify is enabled, only preserve some comments and annotations', async () => {
