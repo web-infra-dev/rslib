@@ -909,9 +909,12 @@ const composeEntryConfig = async (
     });
 
     // Filter the glob resolved entry files based on the allowed extensions
-    const resolvedEntryFiles = globEntryFiles.filter((file) =>
-      ENTRY_EXTENSIONS_PATTERN.test(file),
-    );
+    const resolvedEntryFiles = globEntryFiles;
+    ENTRY_EXTENSIONS_PATTERN;
+
+    // .filter((file) =>
+    //   ENTRY_EXTENSIONS_PATTERN.test(file),
+    // );
 
     if (resolvedEntryFiles.length === 0) {
       throw new Error(`Cannot find ${resolvedEntryFiles}`);
@@ -1006,6 +1009,7 @@ const composeBundlelessExternalConfig = (
                 jsExtension,
                 cssModulesAuto,
                 isStyleRedirected,
+                contextInfo.issuer,
               );
 
               if (cssExternal !== false) {
@@ -1053,7 +1057,11 @@ const composeBundlelessExternalConfig = (
                     );
                   } else {
                     // If it does not match jsExtensionsPattern, we should do nothing, eg: ./foo.png
-                    return callback();
+                    resolvedRequest = resolvedRequest.replace(
+                      /\.[^.]+$/,
+                      jsExtension,
+                    );
+                    // return callback();
                   }
                 } else {
                   resolvedRequest = `${resolvedRequest}${jsExtension}`;
