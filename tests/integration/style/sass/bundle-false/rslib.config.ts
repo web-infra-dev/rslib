@@ -24,6 +24,5 @@ export default defineConfig({
   ],
   output: {
     target: 'web',
-    assetPrefix: 'auto',
   },
 });

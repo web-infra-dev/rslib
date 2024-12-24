@@ -7,6 +7,7 @@ export default defineConfig({
     {
       format: 'esm',
       dts: true,
+      // syntax: 'es5',
       output: {
         distPath: {
           root: './dist/esm',
@@ -15,6 +16,7 @@ export default defineConfig({
     },
     {
       format: 'cjs',
+      syntax: 'es5',
       dts: true,
       output: {
         distPath: {
@@ -25,7 +27,6 @@ export default defineConfig({
   ],
   output: {
     target: 'web',
-    assetPrefix: 'auto', // TODO: move this line to packages/core/src/asset/assetConfig.ts
   },
   plugins: [pluginReact(), pluginSass()],
 });

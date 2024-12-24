@@ -1,8 +1,10 @@
 import { defineConfig } from '@rslib/core';
-import { generateBundleEsmConfig } from 'test-helper';
+import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
+    // 0. bundle
+    // esm
     generateBundleEsmConfig({
       output: {
         distPath: {
@@ -11,6 +13,16 @@ export default defineConfig({
         },
       },
     }),
+    generateBundleCjsConfig({
+      output: {
+        distPath: {
+          root: './dist/esm/bundle',
+          image: 'assets/bundle',
+        },
+      },
+    }),
+    // 1. bundleless
+    // esm
     generateBundleEsmConfig({
       bundle: false,
       output: {
@@ -20,12 +32,16 @@ export default defineConfig({
         },
       },
     }),
+    generateBundleCjsConfig({
+      bundle: false,
+      output: {
+        distPath: {
+          root: './dist/esm/bundleless',
+          image: 'assets/bundleless',
+        },
+      },
+    }),
   ],
-  source: {
-    entry: {
-      index: './src/index.js',
-    },
-  },
   output: {
     target: 'web',
   },

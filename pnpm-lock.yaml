@@ -459,9 +459,7 @@ importers:
 
   tests/integration/alias: {}
 
-  tests/integration/asset/limit: {}
-
-  tests/integration/asset/name:
+  tests/integration/asset/hash:
     dependencies:
       react:
         specifier: ^19.0.0
@@ -470,6 +468,8 @@ importers:
       '@rsbuild/plugin-react':
         specifier: ^1.1.0
         version: 1.1.0(@rsbuild/core@1.2.0-beta.0)
+
+  tests/integration/asset/limit: {}
 
   tests/integration/asset/path: {}
 

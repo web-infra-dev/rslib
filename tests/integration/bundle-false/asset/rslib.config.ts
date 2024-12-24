@@ -10,15 +10,4 @@ export default defineConfig({
       bundle: false,
     }),
   ],
-  // do not inline svg
-  output: {
-    dataUriLimit: {
-      svg: 0,
-    },
-  },
-  source: {
-    entry: {
-      index: ['./src/**'],
-    },
-  },
 });

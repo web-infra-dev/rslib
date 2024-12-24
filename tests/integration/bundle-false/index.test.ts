@@ -132,15 +132,24 @@ test('asset in bundleless', async () => {
   const fixturePath = join(__dirname, 'asset');
   const { contents } = await buildAndGetResults({ fixturePath });
 
-  const assets = [
-    'const image_namespaceObject = __webpack_require__.p + "static/image/image.png";',
-    'const logo_namespaceObject = __webpack_require__.p + "static/svg/logo.svg";',
-  ];
-
-  for (const asset of assets) {
-    expect(Object.values(contents.esm)[0]).toContain(asset);
-    expect(Object.values(contents.cjs)[0]).toContain(asset);
-  }
+  expect(Object.values(contents.esm)[0]).toMatchInlineSnapshot(`
+    "import __rslib_asset__ from '../static/image/image.png';
+    export default __rslib_asset__;
+    "
+  `);
+  expect(Object.values(contents.esm)[1]).toMatchInlineSnapshot(`
+    "import __rslib_asset__ from '../static/svg/logo.svg';
+    export default __rslib_asset__;
+    "
+  `);
+  expect(Object.values(contents.cjs)[0]).toMatchInlineSnapshot(`
+    "module.exports = require('../static/image/image.png');
+    "
+  `);
+  expect(Object.values(contents.cjs)[1]).toMatchInlineSnapshot(`
+    "module.exports = require('../static/svg/logo.svg');
+    "
+  `);
 });
 
 test('svgr in bundleless', async () => {
