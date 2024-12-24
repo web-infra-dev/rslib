@@ -20,6 +20,8 @@ describe('server config', async () => {
     const fixturePath = join(__dirname, 'mf-dev');
     const distPath = join(fixturePath, 'dist');
     const rsbuildConfigFile = join(distPath, '.rsbuild/rsbuild.config.mjs');
+    const doneFile = join(distPath, 'done.txt');
+
     fse.removeSync(distPath);
 
     const childProcess = exec('npx rslib mf-dev', {
@@ -30,7 +32,7 @@ describe('server config', async () => {
       },
     });
 
-    await awaitFileExists(rsbuildConfigFile);
+    await awaitFileExists(doneFile);
 
     const rsbuildConfigContent = await fse.readFile(rsbuildConfigFile, 'utf-8');
     expect(rsbuildConfigContent).toContain('open: true');
