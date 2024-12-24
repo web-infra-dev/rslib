@@ -85,12 +85,17 @@ export function cssExternalHandler(
   jsExtension: string,
   auto: CssLoaderOptionsAuto,
   isStyleRedirect: boolean,
+  issuer: string,
 ): void | false {
   const isCssModulesRequest = isCssModulesFile(request, auto);
 
   // cssExtract would execute the file handled by css-loader, so we cannot external the "helper import" from css-loader
-  // do not external @rsbuild/core/compiled/css-loader/noSourceMaps.js, sourceMaps.js, api.mjs etc.
+  // 1. do not external @rsbuild/core/compiled/css-loader/noSourceMaps.js, sourceMaps.js, api.mjs etc.
   if (/compiled\/css-loader\//.test(request)) {
+    return callback();
+  }
+  // 2.
+  if (isCssFile(issuer) && !isCssFile(request)) {
     return callback();
   }
 

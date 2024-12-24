@@ -5,7 +5,10 @@ import { type LibConfig, defineConfig } from '@rslib/core';
 export default defineConfig({
   source: {
     entry: {
-      index: ['./src/**', '!./src/env.d.ts'],
+      index: [
+        './src/**', 
+        '!./src/env.d.ts'
+      ],
     },
   },
   lib: [
