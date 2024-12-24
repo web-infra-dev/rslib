@@ -8,6 +8,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "progressBar": false,
       },
       "output": {
+        "assetPrefix": "auto",
         "dataUriLimit": 0,
         "distPath": {
           "css": "./",
@@ -215,6 +216,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           {
             "plugins": [
+              LibAssetExtractPlugin {
+                "name": "LIB_ASSET_EXTRACT_PLUGIN",
+                "options": {
+                  "bundle": true,
+                  "isUsingSvgr": false,
+                },
+              },
+            ],
+          },
+          {
+            "plugins": [
               EntryChunkPlugin {
                 "contextToWatch": null,
                 "contextWatched": false,
@@ -252,6 +264,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "progressBar": false,
       },
       "output": {
+        "assetPrefix": "auto",
         "dataUriLimit": 0,
         "distPath": {
           "css": "./",
@@ -447,6 +460,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           {
             "externalsType": "commonjs-import",
+          },
+          {
+            "plugins": [
+              LibAssetExtractPlugin {
+                "name": "LIB_ASSET_EXTRACT_PLUGIN",
+                "options": {
+                  "bundle": true,
+                  "isUsingSvgr": false,
+                },
+              },
+            ],
           },
           {
             "plugins": [

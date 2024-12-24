@@ -1,3 +1,3 @@
-import logo from '../../../../assets/logo.svg?react';
-
-console.log(logo);
+import './queryImport';
+import './namedImport';
+import './defaultImport';
