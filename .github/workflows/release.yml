@@ -36,7 +36,7 @@ jobs:
           fetch-depth: 1
           ref: ${{ github.event.inputs.branch }}
 
-      - name: Install Pnpm
+      - name: Install pnpm
         run: corepack enable
 
       - name: Setup Node.js
