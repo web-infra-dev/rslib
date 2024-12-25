@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { describe, expect, test, vi } from 'vitest';
 import {
   composeCreateRsbuildConfig,
@@ -148,7 +149,7 @@ describe('Should load config file correctly', () => {
 });
 
 describe('Should compose create Rsbuild config correctly', () => {
-  test('Merge Rsbuild config', async () => {
+  test('Merge Rsbuild config in each format', async () => {
     const rslibConfig: RslibConfig = {
       lib: [
         {
@@ -175,6 +176,10 @@ describe('Should compose create Rsbuild config correctly', () => {
         },
         {
           format: 'umd',
+        },
+        {
+          format: 'mf',
+          plugins: [pluginModuleFederation({})],
         },
       ],
       source: {

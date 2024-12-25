@@ -696,5 +696,159 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config 1
     },
     "format": "umd",
   },
+  {
+    "config": {
+      "dev": {
+        "progressBar": false,
+        "writeToDisk": true,
+      },
+      "output": {
+        "distPath": {
+          "css": "./",
+          "cssAsync": "./",
+          "js": "./",
+          "jsAsync": "./",
+        },
+        "filename": {
+          "js": "[name].js",
+        },
+        "filenameHash": false,
+        "minify": {
+          "css": false,
+          "js": true,
+          "jsOptions": {
+            "minimizerOptions": {
+              "compress": {
+                "dead_code": true,
+                "defaults": false,
+                "toplevel": false,
+                "unused": true,
+              },
+              "format": {
+                "comments": "some",
+                "preserve_annotations": true,
+              },
+              "mangle": false,
+              "minify": true,
+            },
+          },
+        },
+        "overrideBrowserslist": [
+          "last 1 Chrome versions",
+          "last 1 Firefox versions",
+          "last 1 Edge versions",
+          "last 1 Safari versions",
+          "last 1 ios_saf versions",
+          "not dead",
+        ],
+        "target": "web",
+      },
+      "performance": {
+        "chunkSplit": {
+          "strategy": "custom",
+        },
+      },
+      "plugins": [
+        {
+          "name": "rsbuild:lib-entry-chunk",
+          "setup": [Function],
+        },
+        {
+          "name": "rsbuild:module-federation-enhanced",
+          "setup": [Function],
+        },
+      ],
+      "resolve": {
+        "alias": {
+          "bar": "bar",
+          "foo": "foo",
+        },
+      },
+      "source": {
+        "entry": {},
+        "preEntry": "./a.js",
+      },
+      "tools": {
+        "htmlPlugin": false,
+        "rspack": [
+          {
+            "experiments": {
+              "rspackFuture": {
+                "bundlerInfo": {
+                  "force": false,
+                },
+              },
+            },
+            "optimization": {
+              "moduleIds": "named",
+              "nodeEnv": false,
+              "splitChunks": {
+                "chunks": "async",
+              },
+            },
+            "resolve": {
+              "extensionAlias": {
+                ".cjs": [
+                  ".cts",
+                  ".cjs",
+                ],
+                ".js": [
+                  ".ts",
+                  ".tsx",
+                  ".js",
+                  ".jsx",
+                ],
+                ".jsx": [
+                  ".tsx",
+                  ".jsx",
+                ],
+                ".mjs": [
+                  ".mts",
+                  ".mjs",
+                ],
+              },
+            },
+          },
+          [Function],
+          [Function],
+          {
+            "target": [
+              "web",
+            ],
+          },
+          {
+            "externalsType": "global",
+          },
+          {
+            "plugins": [
+              EntryChunkPlugin {
+                "enabledImportMetaUrlShim": false,
+                "reactDirectives": {},
+                "shebangChmod": 493,
+                "shebangEntries": {},
+                "shebangInjectedAssets": Set {},
+              },
+            ],
+          },
+          {
+            "resolve": {
+              "extensionAlias": {
+                ".js": [
+                  ".ts",
+                  ".tsx",
+                ],
+              },
+            },
+          },
+        ],
+        "swc": {
+          "jsc": {
+            "externalHelpers": false,
+          },
+        },
+      },
+    },
+    "format": "mf",
+  },
 ]
 `;
