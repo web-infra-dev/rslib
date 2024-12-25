@@ -25,7 +25,7 @@ jobs:
         with:
           fetch-depth: 10
 
-      - name: Install Pnpm
+      - name: Install pnpm
         run: corepack enable
 
       - uses: dorny/paths-filter@v3.0.2
@@ -64,7 +64,7 @@ jobs:
         run: |
           git config --system core.longpaths true
 
-      - name: Install Pnpm
+      - name: Install pnpm
         run: corepack enable
 
       - name: Setup Node.js ${{ matrix.node-version }}
@@ -104,7 +104,7 @@ jobs:
         with:
           fetch-depth: 10
 
-      - name: Install Pnpm
+      - name: Install pnpm
         run: corepack enable
 
       - name: Setup Node.js ${{ matrix.node-version }}
@@ -122,46 +122,10 @@ jobs:
       - name: E2E Test (Playwright)
         run: pnpm run test:e2e
 
-  # ======== benchmark ========
-  benchmark:
-    # Only Ubuntu 20.04 and 22.04 are supported at the moment.
-    # See https://github.com/CodSpeedHQ/action/blob/016456b513677f9d4a1c509c7f8a38d8dd55b2b0/.github/workflows/ci.yml#L19.
-    runs-on: ubuntu-22.04
-    needs: [integration-e2e]
-    strategy:
-      matrix:
-        node-version: [20]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 10
-
-      - name: Install Pnpm
-        run: corepack enable
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-
-      - name: Install Dependencies
-        run: pnpm install && cd ./tests && pnpm playwright install chromium
-
-      # only run benchmark in Ubuntu
-      - name: Benchmarks (Vitest)
-        uses: CodSpeedHQ/action@v3
-        with:
-          run: pnpm run test:benchmark
-          # token retrieved from the CodSpeed app at the previous step
-          token: ${{ secrets.CODSPEED_TOKEN }}
-
   # ======== exit ========
   pr-check-required:
     if: (!cancelled() && !failure())
-    needs: [ut, integration-e2e, benchmark]
+    needs: [ut, integration-e2e]
     runs-on: ubuntu-latest
     name: Test passed or skipped
     steps:
