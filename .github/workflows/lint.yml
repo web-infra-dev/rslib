@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Install Pnpm
+      - name: Install pnpm
         run: corepack enable
 
       - name: Setup Node.js
@@ -37,5 +37,5 @@ jobs:
       - name: Check Dependency Version
         run: pnpm run check-dependency-version
 
-      - name: Check Pnpm Dedupe
+      - name: Check pnpm Dedupe
         run: pnpm dedupe --check

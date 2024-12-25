@@ -1,0 +1,47 @@
+name: Benchmark
+
+on:
+  schedule:
+    - cron: '0 1 * * *' # 01:00 UTC
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'head to bench (input branch, tag or SHA)'
+        required: true
+        default: 'main'
+
+jobs:
+  benchmark:
+    # Only Ubuntu 20.04 and 22.04 are supported at the moment.
+    # See https://github.com/CodSpeedHQ/action/blob/016456b513677f9d4a1c509c7f8a38d8dd55b2b0/.github/workflows/ci.yml#L19.
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [20]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+          ref: ${{ inputs.ref || 'main' }}
+
+      - name: Install pnpm
+        run: corepack enable
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install && cd ./tests && pnpm playwright install chromium
+
+      # only run benchmark in Ubuntu
+      - name: Benchmarks (Vitest)
+        uses: CodSpeedHQ/action@v3
+        with:
+          run: pnpm run test:benchmark
+          # token retrieved from the CodSpeed app at the previous step
+          token: ${{ secrets.CODSPEED_TOKEN }}
