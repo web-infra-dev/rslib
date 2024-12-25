@@ -18,7 +18,7 @@ describe('server config', async () => {
 
   test('mf-dev command', async () => {
     const fixturePath = join(__dirname, 'mf-dev');
-    const distPath = join(fixturePath, 'dist');
+    const distPath = join(fixturePath, 'dist/mf');
     const rsbuildConfigFile = join(distPath, '.rsbuild/rsbuild.config.mjs');
     const doneFile = join(distPath, 'done.txt');
 

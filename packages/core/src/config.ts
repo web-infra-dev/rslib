@@ -616,17 +616,23 @@ const composeFormatConfig = ({
     }
     case 'mf':
       return {
+        dev: {
+          writeToDisk: true,
+        },
         tools: {
-          rspack: {
-            output: {
+          rspack: (config, { env }) => {
+            config.output = {
+              ...config.output,
               uniqueName: pkgJson.name as string,
-            },
-            // can not set nodeEnv to false, because mf format should build shared module.
-            // If nodeEnv is false, the process.env.NODE_ENV in third-party packages's will not be replaced
-            optimization: {
-              nodeEnv: 'production',
-              moduleIds: 'deterministic',
-            },
+            };
+
+            config.optimization = {
+              ...config.optimization,
+              // can not set nodeEnv to false, because mf format should build shared module.
+              // If nodeEnv is false, the process.env.NODE_ENV in third-party packages's will not be replaced
+              nodeEnv: env === 'development' ? 'development' : 'production',
+              moduleIds: env === 'development' ? 'named' : 'deterministic',
+            };
           },
         },
         output: {

@@ -1,12 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { defineConfig } from '@rslib/core';
+import { generateBundleMFConfig } from 'test-helper';
 
 let count = 0;
-export const plugin1Path = path.resolve(__dirname, 'dist/plugin1.txt');
-export const plugin2Path = path.resolve(__dirname, 'dist/plugin2.txt');
+export const plugin1Path = path.resolve(__dirname, 'dist/mf/plugin1.txt');
+export const plugin2Path = path.resolve(__dirname, 'dist/mf/plugin2.txt');
 
 const testPlugin1: RsbuildPlugin = {
   name: 'test1',
@@ -28,10 +28,12 @@ const testPlugin2: RsbuildPlugin = {
 
 export default defineConfig({
   lib: [
-    {
-      format: 'mf',
-      plugins: [pluginModuleFederation({ name: 'test-plugins' }), testPlugin2],
-    },
+    generateBundleMFConfig(
+      { name: 'test-plugins' },
+      {
+        plugins: [testPlugin2],
+      },
+    ),
   ],
   server: {
     port: 3009,

@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import { join } from 'node:path';
-import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { defineConfig } from '@rslib/core';
+import { generateBundleMFConfig } from 'test-helper';
 
-const distPath = join(__dirname, 'dist');
+const distPath = join(__dirname, 'dist/mf');
 
 const afterDevCompileDonePlugin: RsbuildPlugin = {
   name: 'dev-done',
@@ -16,19 +16,10 @@ const afterDevCompileDonePlugin: RsbuildPlugin = {
 };
 
 export default defineConfig({
-  lib: [
-    {
-      format: 'mf',
-    },
-  ],
+  lib: [generateBundleMFConfig({ name: 'test' })],
   server: {
     port: 3011,
     open: true,
   },
-  plugins: [
-    pluginModuleFederation({
-      name: 'test',
-    }),
-    afterDevCompileDonePlugin,
-  ],
+  plugins: [afterDevCompileDonePlugin],
 });

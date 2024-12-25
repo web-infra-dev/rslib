@@ -24,7 +24,6 @@ export default defineConfig({
     },
     {
       format: 'mf',
-      dts: true,
       output: {
         distPath: {
           root: './dist/mf',
@@ -52,6 +51,9 @@ export default defineConfig({
       ],
     },
   ],
+  source: {
+    tsconfigPath: './tsconfig.build.json',
+  },
   // just for dev
   server: {
     port: 3001,
