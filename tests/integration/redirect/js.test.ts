@@ -21,10 +21,10 @@ test('redirect.js default', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
-    import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js__ from "./bar/index.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js__.baz);
+    import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js_89500c0c__ from "./bar/index.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__baz_js_a2c1c788__ from "./baz.js";
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js_89500c0c__.bar + __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js_89500c0c__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js_a2c1c788__.baz);
     export { src_rslib_entry_ as default };
     "
   `);
@@ -44,12 +44,12 @@ test('redirect.js.path false', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
-    import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "@/bar.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "@/foo.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "~/baz.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "./bar.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_js__.bar + __WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_js__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js__.baz);
+    import * as __WEBPACK_EXTERNAL_MODULE__bar_js_fb2b582c__ from "@/bar.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo_js_ce8863d2__ from "@/foo.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__baz_js_b1797427__ from "~/baz.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__ from "./bar.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__.foo + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__.bar + __WEBPACK_EXTERNAL_MODULE__foo_js_ce8863d2__.foo + __WEBPACK_EXTERNAL_MODULE__bar_js_fb2b582c__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js_b1797427__.baz);
     export { src_rslib_entry_ as default };
     "
   `);
@@ -67,12 +67,12 @@ test('redirect.js.path with user override externals', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
-    import * as __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__ from "./others/bar/index.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__others_foo_js__ from "./others/foo.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js__ from "./bar/index.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__others_foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js__.baz);
+    import * as __WEBPACK_EXTERNAL_MODULE__others_bar_index_js_6776b573__ from "./others/bar/index.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__others_foo_js_920f94ba__ from "./others/foo.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__baz_js_a2c1c788__ from "./baz.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js_89500c0c__ from "./bar/index.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js_89500c0c__.bar + __WEBPACK_EXTERNAL_MODULE__others_foo_js_920f94ba__.foo + __WEBPACK_EXTERNAL_MODULE__others_bar_index_js_6776b573__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js_a2c1c788__.baz);
     export { src_rslib_entry_ as default };
     "
   `);
@@ -98,12 +98,12 @@ test('redirect.js.path with user override alias', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
-    import * as __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__ from "./others/bar/index.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__others_foo_js__ from "./others/foo.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js__ from "./bar/index.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__others_foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js__.baz);
+    import * as __WEBPACK_EXTERNAL_MODULE__others_bar_index_js_6776b573__ from "./others/bar/index.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__others_foo_js_920f94ba__ from "./others/foo.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__baz_js_a2c1c788__ from "./baz.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js_89500c0c__ from "./bar/index.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js_89500c0c__.bar + __WEBPACK_EXTERNAL_MODULE__others_foo_js_920f94ba__.foo + __WEBPACK_EXTERNAL_MODULE__others_bar_index_js_6776b573__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js_a2c1c788__.baz);
     export { src_rslib_entry_ as default };
     "
   `);
@@ -124,10 +124,10 @@ test('redirect.js.extension: false', async () => {
   );
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
-    import * as __WEBPACK_EXTERNAL_MODULE__bar_index_ts__ from "./bar/index.ts";
-    import * as __WEBPACK_EXTERNAL_MODULE__foo_ts__ from "./foo.ts";
-    import * as __WEBPACK_EXTERNAL_MODULE__baz_ts__ from "./baz.ts";
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_ts__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_ts__.bar + __WEBPACK_EXTERNAL_MODULE__foo_ts__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_ts__.bar + __WEBPACK_EXTERNAL_MODULE__baz_ts__.baz);
+    import * as __WEBPACK_EXTERNAL_MODULE__bar_index_ts_bd8d18e6__ from "./bar/index.ts";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo_ts_a526d0a1__ from "./foo.ts";
+    import * as __WEBPACK_EXTERNAL_MODULE__baz_ts_10ee073f__ from "./baz.ts";
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_ts_a526d0a1__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_ts_bd8d18e6__.bar + __WEBPACK_EXTERNAL_MODULE__foo_ts_a526d0a1__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_ts_bd8d18e6__.bar + __WEBPACK_EXTERNAL_MODULE__baz_ts_10ee073f__.baz);
     export { src_rslib_entry_ as default };
     "
   `);
