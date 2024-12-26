@@ -727,7 +727,7 @@ const composeShimsConfig = (
 };
 
 export const composeModuleImportWarn = (request: string): string => {
-  return `The externalized commonjs request ${color.green(`"${request}"`)} will use ${color.blue('"module"')} external type in ESM format. If you want to specify other external type, considering set the request and type with ${color.blue('"output.externals"')}.`;
+  return `The externalized commonjs request ${color.green(`"${request}"`)} will use ${color.blue('"module"')} external type in ESM format. If you want to specify other external type, consider setting the request and type with ${color.blue('"output.externals"')}.`;
 };
 
 const composeExternalsConfig = (
@@ -1022,25 +1022,24 @@ const composeBundlelessExternalConfig = (
               if (jsRedirectPath) {
                 try {
                   resolvedRequest = await resolver(context, resolvedRequest);
-                } catch (e) {
-                  // Do nothing, fallthrough to other external matches.
-                  logger.debug(
-                    `Failed to resolve ${resolvedRequest} with resolver`,
+                  resolvedRequest = normalizeSlash(
+                    path.relative(
+                      path.dirname(contextInfo.issuer),
+                      resolvedRequest,
+                    ),
                   );
-                }
-
-                resolvedRequest = normalizeSlash(
-                  path.relative(
-                    path.dirname(contextInfo.issuer),
-                    resolvedRequest,
-                  ),
-                );
-
-                // Requests that fall through here cannot be matched by any other externals config ahead.
-                // Treat all these requests as relative import of source code. Node.js won't add the
-                // leading './' to the relative path resolved by `path.relative`. So add manually it here.
-                if (resolvedRequest[0] !== '.') {
-                  resolvedRequest = `./${resolvedRequest}`;
+                  // Requests that fall through here cannot be matched by any other externals config ahead.
+                  // Treat all these requests as relative import of source code. Node.js won't add the
+                  // leading './' to the relative path resolved by `path.relative`. So add manually it here.
+                  if (resolvedRequest[0] !== '.') {
+                    resolvedRequest = `./${resolvedRequest}`;
+                  }
+                } catch (e) {
+                  // e.g. A react component library importing and using 'react' but while not defining
+                  // it in devDependencies and peerDependencies. Preserve 'react' as-is if so.
+                  logger.warn(
+                    `Failed to resolve module ${color.green(`"${resolvedRequest}"`)} from ${color.green(contextInfo.issuer)}. If it's an npm package, consider adding it to dependencies or peerDependencies in package.json to make it externalized.`,
+                  );
                 }
               }
 
@@ -1050,7 +1049,7 @@ const composeBundlelessExternalConfig = (
               // If data.request already have an extension, we replace it with new extension
               // This may result in a change in semantics,
               // user should use copy to keep origin file or use another separate entry to deal this
-              if (jsRedirectExtension) {
+              if (jsRedirectExtension && resolvedRequest.startsWith('.')) {
                 const ext = extname(resolvedRequest);
                 if (ext) {
                   if (JS_EXTENSIONS_PATTERN.test(resolvedRequest)) {
