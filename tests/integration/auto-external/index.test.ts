@@ -29,7 +29,7 @@ test('auto external sub path should works', async () => {
     'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
   );
   expect(entries.esm).toContain(
-    'import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__ from "react/jsx-runtime"',
+    'import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime__ from "react/jsx-runtime"',
   );
 
   expect(entries.cjs).toContain(

@@ -18,8 +18,8 @@ test('require.resolve', async () => {
   ];
 
   const esmStatements = [
-    'import * as __WEBPACK_EXTERNAL_MODULE_node_module_ab9f2194__ from "node:module"',
-    'const _require = (0, __WEBPACK_EXTERNAL_MODULE_node_module_ab9f2194__.createRequire)(import.meta.url)',
+    'import * as __WEBPACK_EXTERNAL_MODULE_node_module__ from "node:module"',
+    'const _require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url)',
   ];
 
   const cjsStatements = [
@@ -47,8 +47,8 @@ test('require dynamic', async () => {
   ];
 
   const esmStatements = [
-    'import * as __WEBPACK_EXTERNAL_MODULE_node_module_ab9f2194__ from "node:module"',
-    'const _require = (0, __WEBPACK_EXTERNAL_MODULE_node_module_ab9f2194__.createRequire)(import.meta.url)',
+    'import * as __WEBPACK_EXTERNAL_MODULE_node_module__ from "node:module"',
+    'const _require = (0, __WEBPACK_EXTERNAL_MODULE_node_module__.createRequire)(import.meta.url)',
   ];
 
   const cjsStatements = [
