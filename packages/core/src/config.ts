@@ -537,7 +537,6 @@ const composeFormatConfig = ({
             optimization: {
               concatenateModules: true,
               sideEffects: 'flag',
-              avoidEntryIife: true,
             },
             output: {
               module: true,

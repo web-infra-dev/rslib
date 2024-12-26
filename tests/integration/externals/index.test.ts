@@ -16,7 +16,7 @@ test('auto externalize Node.js built-in modules when `output.target` is "node"',
 
   for (const external of [
     'import * as __WEBPACK_EXTERNAL_MODULE_fs__ from "fs"',
-    'import * as __WEBPACK_EXTERNAL_MODULE_node_assert_3e74d44e__ from "node:assert"',
+    'import * as __WEBPACK_EXTERNAL_MODULE_node_assert__ from "node:assert"',
     'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
     'import * as __WEBPACK_EXTERNAL_MODULE_bar__ from "bar"',
     'module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("foo");',
