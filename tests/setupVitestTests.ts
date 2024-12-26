@@ -12,6 +12,12 @@ beforeEach(() => {
 expect.addSnapshotSerializer(
   createSnapshotSerializer({
     root: path.join(__dirname, '..'),
+    replace: [
+      {
+        match: /__WEBPACK_EXTERNAL_MODULE__(\w+)__/g,
+        mark: 'WEBPACK_EXTERNAL_MODULE',
+      }
+    ],
     features: {
       escapeDoubleQuotes: false,
       transformCLR: false,
