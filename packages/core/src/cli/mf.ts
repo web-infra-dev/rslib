@@ -44,11 +44,7 @@ async function initMFRsbuild(
       mode: 'development',
       root: config.root,
       plugins: config.plugins,
-      dev: {
-        ...(config.dev ?? {}),
-        // TODO: remove this after Rsbuild fix that the environment config of writeToDisk not takes effect
-        writeToDisk: true,
-      },
+      dev: config.dev,
       server: config.server,
       environments: selectedEnvironments,
     },
