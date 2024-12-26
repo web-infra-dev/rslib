@@ -195,10 +195,12 @@ export async function rslibBuild({
   cwd,
   path,
   modifyConfig,
+  lib,
 }: {
   cwd: string;
   path?: string;
   modifyConfig?: (config: RslibConfig) => void;
+  lib?: string[];
 }) {
   const { content: rslibConfig } = await loadConfig({
     cwd,
@@ -206,7 +208,7 @@ export async function rslibBuild({
   });
   modifyConfig?.(rslibConfig);
   process.chdir(cwd);
-  const rsbuildInstance = await build(rslibConfig);
+  const rsbuildInstance = await build(rslibConfig, { lib });
   return { rsbuildInstance, rslibConfig };
 }
 
@@ -214,6 +216,7 @@ export async function buildAndGetResults(options: {
   fixturePath: string;
   configPath?: string;
   type: 'all';
+  lib?: string[];
 }): Promise<{
   js: BuildResult;
   dts: BuildResult;
@@ -223,19 +226,23 @@ export async function buildAndGetResults(options: {
   fixturePath: string;
   configPath?: string;
   type?: 'js' | 'dts' | 'css';
+  lib?: string[];
 }): Promise<BuildResult>;
 export async function buildAndGetResults({
   fixturePath,
   configPath,
   type = 'js',
+  lib,
 }: {
   fixturePath: string;
   configPath?: string;
   type?: 'js' | 'dts' | 'css' | 'all';
+  lib?: string[];
 }) {
   const { rsbuildInstance, rslibConfig } = await rslibBuild({
     cwd: fixturePath,
     path: configPath,
+    lib,
   });
   const {
     origin: { bundlerConfigs, rsbuildConfig },
