@@ -44,12 +44,12 @@ test('auto external should be disabled when bundle is false', async () => {
   const fixturePath = join(__dirname, 'bundle-false');
   const { js } = await buildAndGetResults({ fixturePath, type: 'all' });
 
-  expect(js.files.esm).not.toContain(
+  expect(Object.values(js.contents.esm)[0]).toContain(
     'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
   );
 
-  expect(js.files.cjs).not.toContain(
-    'var external_react_namespaceObject = require("react");',
+  expect(Object.values(js.contents.cjs)[0]).toContain(
+    'const external_react_namespaceObject = require("react");',
   );
 });
 
@@ -62,7 +62,7 @@ test('auto external false should works', async () => {
   );
 
   expect(js.entries.cjs).not.toContain(
-    'var external_react_namespaceObject = require("react");',
+    'const external_react_namespaceObject = require("react");',
   );
 
   // dts should bundled
