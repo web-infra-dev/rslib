@@ -40,6 +40,19 @@ test('auto external sub path should works', async () => {
   );
 });
 
+test('auto external should be disabled when bundle is false', async () => {
+  const fixturePath = join(__dirname, 'bundle-false');
+  const { js } = await buildAndGetResults({ fixturePath, type: 'all' });
+
+  expect(js.files.esm).not.toContain(
+    'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
+  );
+
+  expect(js.files.cjs).not.toContain(
+    'var external_react_namespaceObject = require("react");',
+  );
+});
+
 test('auto external false should works', async () => {
   const fixturePath = join(__dirname, 'false');
   const { js, dts } = await buildAndGetResults({ fixturePath, type: 'all' });

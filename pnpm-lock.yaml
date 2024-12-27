@@ -502,6 +502,15 @@ importers:
 
   tests/integration/auto-extension/type-module/false-bundleless: {}
 
+  tests/integration/auto-external/bundle-false:
+    devDependencies:
+      ora:
+        specifier: 8.1.1
+        version: 8.1.1
+      react:
+        specifier: ^19.0.0
+        version: 19.0.0
+
   tests/integration/auto-external/default:
     dependencies:
       ora:
