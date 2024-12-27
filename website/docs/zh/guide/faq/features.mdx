@@ -1,5 +1,38 @@
 # 功能类问题
 
+## 样式处理
+
+### bundleless 模式如何跳过对 Less / Sass 等文件的预处理？
+
+bundleless 是指对每个源文件单独进行编译构建，可以理解为仅对源文件进行代码转换的过程。跳过对 `.less/.scss` 文件的预处理需要：
+
+1. 设置 `source.entry` 将 `.less/.scss` 文件从入口里移除。
+2. 设置 `output.copy` 将 `.less/.scss` 文件拷贝到产物目录。
+3. 设置 `redirect.style` 为 `false` 禁用对 `.less/.scss` 文件导入路径的重定向行为。
+
+下面是一个跳过 `.scss` 文件处理的例子，`src` 里面所有的 `.scss` 文件都会被拷贝到产物目录下并且保留一致的相对路径。
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    {
+      // ...
+      source: {
+        entry: {
+          index: ['./src/**', '!src/**/*.scss'],
+        },
+      },
+      output: {
+        copy: [{ from: '**/*.scss', context: path.join(__dirname, 'src') }],
+      },
+      redirect: {
+        style: false,
+      },
+    },
+  ],
+});
+```
+
 ## 代码压缩
 
 ### 如何保留产物文件代码中的注释？

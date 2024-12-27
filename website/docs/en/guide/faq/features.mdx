@@ -1,5 +1,38 @@
 # Features FAQ
 
+## Style Processing
+
+### How to skip the preprocessing of Less / Sass files in bundleless mode?
+
+Bundleless means that each source file is compiled and built separately, which can be understood as the process of code conversion of source files only. To skip the preprocessing of `.less/.scss` files, you need to:
+
+1. Set `source.entry` to remove `.less/.scss` files from the entry.
+2. Set `output.copy` to copy `.less/.scss` files to the output directory.
+3. Set `redirect.style` to `false` to disable the redirect behavior for the import path of `.less/.scss` files.
+
+Below is an example of skipping the `.scss` file processing. All `.scss` files in `src` will be copied to the output directory and retained with consistent relative paths.
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    {
+      // ...
+      source: {
+        entry: {
+          index: ['./src/**', '!src/**/*.scss'],
+        },
+      },
+      output: {
+        copy: [{ from: '**/*.scss', context: path.join(__dirname, 'src') }],
+      },
+      redirect: {
+        style: false,
+      },
+    },
+  ],
+});
+```
+
 ## Code Minification
 
 ### How to preserve all comments in the output files?
