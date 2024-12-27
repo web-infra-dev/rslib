@@ -21,9 +21,11 @@ test('redirect.js default', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js__ from "./bar/index.js";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
     import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";
+    console.log('prettier: ', __WEBPACK_EXTERNAL_MODULE_prettier__["default"]);
     const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js__.baz);
     export { src_rslib_entry_ as default };
     "
@@ -44,11 +46,13 @@ test('redirect.js.path false', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
     import * as __WEBPACK_EXTERNAL_MODULE__bar__ from "@/bar";
     import * as __WEBPACK_EXTERNAL_MODULE__foo__ from "@/foo";
     import * as __WEBPACK_EXTERNAL_MODULE__baz__ from "~/baz";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "./bar.js";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
+    console.log('prettier: ', __WEBPACK_EXTERNAL_MODULE_prettier__["default"]);
     const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_js__.bar + __WEBPACK_EXTERNAL_MODULE__foo__.foo + __WEBPACK_EXTERNAL_MODULE__bar__.bar + __WEBPACK_EXTERNAL_MODULE__baz__.baz);
     export { src_rslib_entry_ as default };
     "
@@ -67,11 +71,13 @@ test('redirect.js.path with user override externals', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
     import * as __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__ from "./others/bar/index.js";
     import * as __WEBPACK_EXTERNAL_MODULE__others_foo_js__ from "./others/foo.js";
     import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js__ from "./bar/index.js";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
+    console.log('prettier: ', __WEBPACK_EXTERNAL_MODULE_prettier__["default"]);
     const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__others_foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js__.baz);
     export { src_rslib_entry_ as default };
     "
@@ -98,11 +104,13 @@ test('redirect.js.path with user override alias', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
     import * as __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__ from "./others/bar/index.js";
     import * as __WEBPACK_EXTERNAL_MODULE__others_foo_js__ from "./others/foo.js";
     import * as __WEBPACK_EXTERNAL_MODULE__baz_js__ from "./baz.js";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_index_js__ from "./bar/index.js";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";
+    console.log('prettier: ', __WEBPACK_EXTERNAL_MODULE_prettier__["default"]);
     const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__others_foo_js__.foo + __WEBPACK_EXTERNAL_MODULE__others_bar_index_js__.bar + __WEBPACK_EXTERNAL_MODULE__baz_js__.baz);
     export { src_rslib_entry_ as default };
     "
@@ -124,9 +132,11 @@ test('redirect.js.extension: false', async () => {
   );
   expect(indexContent).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_index_ts__ from "./bar/index.ts";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_ts__ from "./foo.ts";
     import * as __WEBPACK_EXTERNAL_MODULE__baz_ts__ from "./baz.ts";
+    console.log('prettier: ', __WEBPACK_EXTERNAL_MODULE_prettier__["default"]);
     const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_ts__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_ts__.bar + __WEBPACK_EXTERNAL_MODULE__foo_ts__.foo + __WEBPACK_EXTERNAL_MODULE__bar_index_ts__.bar + __WEBPACK_EXTERNAL_MODULE__baz_ts__.baz);
     export { src_rslib_entry_ as default };
     "

@@ -250,12 +250,18 @@ const getAutoExternalDefaultValue = (
 };
 
 export const composeAutoExternalConfig = (options: {
+  bundle: boolean;
   format: Format;
   autoExternal?: AutoExternal;
   pkgJson?: PkgJson;
   userExternals?: NonNullable<EnvironmentConfig['output']>['externals'];
 }): EnvironmentConfig => {
-  const { format, pkgJson, userExternals } = options;
+  const { bundle, format, pkgJson, userExternals } = options;
+
+  // If bundle is false, autoExternal will be disabled
+  if (bundle === false) {
+    return {};
+  }
 
   const autoExternal = getAutoExternalDefaultValue(
     format,
@@ -1020,23 +1026,33 @@ const composeBundlelessExternalConfig = (
 
               if (jsRedirectPath) {
                 try {
+                  // use resolver to resolve the request
                   resolvedRequest = await resolver(context, resolvedRequest);
-                  resolvedRequest = normalizeSlash(
-                    path.relative(
-                      path.dirname(contextInfo.issuer),
-                      resolvedRequest,
-                    ),
-                  );
-                  // Requests that fall through here cannot be matched by any other externals config ahead.
-                  // Treat all these requests as relative import of source code. Node.js won't add the
-                  // leading './' to the relative path resolved by `path.relative`. So add manually it here.
-                  if (resolvedRequest[0] !== '.') {
-                    resolvedRequest = `./${resolvedRequest}`;
+
+                  // only handle the request that is not in node_modules
+                  if (!resolvedRequest.includes('node_modules')) {
+                    resolvedRequest = normalizeSlash(
+                      path.relative(
+                        path.dirname(contextInfo.issuer),
+                        resolvedRequest,
+                      ),
+                    );
+                    // Requests that fall through here cannot be matched by any other externals config ahead.
+                    // Treat all these requests as relative import of source code. Node.js won't add the
+                    // leading './' to the relative path resolved by `path.relative`. So add manually it here.
+                    if (resolvedRequest[0] !== '.') {
+                      resolvedRequest = `./${resolvedRequest}`;
+                    }
+                  } else {
+                    // NOTE: If request is a phantom dependency, which means it can be resolved but not specified in dependencies or peerDependencies in package.json, the output will be incorrect to use when the package is published
+                    // return the original request instead of the resolved request
+                    return callback(undefined, request);
                   }
                 } catch (e) {
+                  // catch error when request can not be resolved by resolver
                   // e.g. A react component library importing and using 'react' but while not defining
                   // it in devDependencies and peerDependencies. Preserve 'react' as-is if so.
-                  logger.warn(
+                  logger.debug(
                     `Failed to resolve module ${color.green(`"${resolvedRequest}"`)} from ${color.green(contextInfo.issuer)}. If it's an npm package, consider adding it to dependencies or peerDependencies in package.json to make it externalized.`,
                   );
                 }
@@ -1271,6 +1287,7 @@ async function composeLibRsbuildConfig(
   } = composeTargetConfig(config.output?.target, format!);
   const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
   const autoExternalConfig = composeAutoExternalConfig({
+    bundle,
     format: format!,
     autoExternal,
     pkgJson,
