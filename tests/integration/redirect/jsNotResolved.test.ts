@@ -1,28 +1,11 @@
 import path from 'node:path';
-import stripAnsi from 'strip-ansi';
-import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
+import { buildAndGetResults, queryContent } from 'test-helper';
 import { expect, test } from 'vitest';
 
 test('redirect.js default', async () => {
   const fixturePath = path.resolve(__dirname, './js-not-resolve');
-  // const { logs } = proxyConsole();
   const contents = (await buildAndGetResults({ fixturePath, lib: ['esm0'] }))
     .contents;
-
-  // const logStrings = logs
-  //   .map((log) => stripAnsi(log))
-  //   .filter((log) => log.startsWith('warn'))
-  //   .sort();
-
-  // expect(logStrings).toMatchInlineSnapshot(
-  //   `
-  //   [
-  //     "warn    Failed to resolve module "./bar.js" from <ROOT>/tests/integration/redirect/js-not-resolve/src/index.js. If it's an npm package, consider adding it to dependencies or peerDependencies in package.json to make it externalized.",
-  //     "warn    Failed to resolve module "./foo" from <ROOT>/tests/integration/redirect/js-not-resolve/src/index.js. If it's an npm package, consider adding it to dependencies or peerDependencies in package.json to make it externalized.",
-  //     "warn    Failed to resolve module "lodash" from <ROOT>/tests/integration/redirect/js-not-resolve/src/index.js. If it's an npm package, consider adding it to dependencies or peerDependencies in package.json to make it externalized.",
-  //   ]
-  // `,
-  // );
 
   const { content: indexContent } = queryContent(
     contents.esm0!,
@@ -43,15 +26,8 @@ test('redirect.js default', async () => {
 
 test('redirect.js.path false', async () => {
   const fixturePath = path.resolve(__dirname, './js-not-resolve');
-  // const { logs } = proxyConsole();
   const contents = (await buildAndGetResults({ fixturePath, lib: ['esm1'] }))
     .contents;
-
-  // const logStrings = logs
-  //   .map((log) => stripAnsi(log))
-  //   .filter((log) => log.startsWith('warn'));
-
-  // expect(logStrings.length).toBe(0);
 
   const { content: indexContent } = queryContent(
     contents.esm1!,
@@ -72,24 +48,8 @@ test('redirect.js.path false', async () => {
 
 test('redirect.js.extension: false', async () => {
   const fixturePath = path.resolve(__dirname, './js-not-resolve');
-  // const { logs } = proxyConsole();
   const contents = (await buildAndGetResults({ fixturePath, lib: ['esm2'] }))
     .contents;
-
-  // const logStrings = logs
-  //   .map((log) => stripAnsi(log))
-  //   .filter((log) => log.startsWith('warn'))
-  //   .sort();
-
-  // expect(logStrings).toMatchInlineSnapshot(
-  //   `
-  //   [
-  //     "warn    Failed to resolve module "./bar.js" from <ROOT>/tests/integration/redirect/js-not-resolve/src/index.js. If it's an npm package, consider adding it to dependencies or peerDependencies in package.json to make it externalized.",
-  //     "warn    Failed to resolve module "./foo" from <ROOT>/tests/integration/redirect/js-not-resolve/src/index.js. If it's an npm package, consider adding it to dependencies or peerDependencies in package.json to make it externalized.",
-  //     "warn    Failed to resolve module "lodash" from <ROOT>/tests/integration/redirect/js-not-resolve/src/index.js. If it's an npm package, consider adding it to dependencies or peerDependencies in package.json to make it externalized.",
-  //   ]
-  // `,
-  // );
 
   const { content: indexContent } = queryContent(
     contents.esm2!,
