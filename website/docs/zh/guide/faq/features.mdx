@@ -8,7 +8,7 @@ bundleless 是指对每个源文件单独进行编译构建，可以理解为仅
 
 1. 设置 `source.entry` 将 `.less/.scss` 文件从入口里移除。
 2. 设置 `output.copy` 将 `.less/.scss` 文件拷贝到产物目录。
-3. 设置 `redirect.style` 为 `false` 禁用对 `.less/.scss` 文件导入路径的重定向行为。
+3. 设置 `redirect.style.extension` 为 `false` 禁用对 `.less/.scss` 文件导入路径的重定向行为。
 
 下面是一个跳过 `.scss` 文件处理的例子，`src` 里面所有的 `.scss` 文件都会被拷贝到产物目录下并且保留一致的相对路径。
 
@@ -26,7 +26,9 @@ export default defineConfig({
         copy: [{ from: '**/*.scss', context: path.join(__dirname, 'src') }],
       },
       redirect: {
-        style: false,
+        style: {
+          extension: false,
+        },
       },
     },
   ],

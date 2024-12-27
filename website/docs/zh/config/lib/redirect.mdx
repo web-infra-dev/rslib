@@ -20,9 +20,9 @@ type JsRedirect = {
   extension?: boolean;
 };
 
-type Redirect = {
-  js?: JsRedirect;
-  style?: boolean;
+type StyleRedirect = {
+  path?: boolean;
+  extension?: boolean;
 };
 ```
 
@@ -34,7 +34,10 @@ const defaultRedirect = {
     path: true,
     extension: true,
   },
-  style: true,
+  style: {
+    path: true,
+    extension: true,
+  },
 };
 ```
 
@@ -98,14 +101,54 @@ const defaultRedirect = {
 
 ## redirect.style
 
+### redirect.style.path
+
+导入样式文件时是否自动重定向导入路径，规则与 [redirect.js.path](/config/lib/redirect#redirectjspath) 相同。
+
 - **类型:** `boolean`
 - **默认值:** `true`
 
-是否重定向样式文件的导入路径。
+- **示例：**
 
-例如，当导入 `.less` 文件时，它将被重写为 `.css` 文件：
+导入普通样式文件时：
 
 ```ts
-import './index.less'; // source code ↓
-import './index.css'; // output file
+import '@/foo.css'; // './src/bar.ts' 的源码 ↓
+import './foo.css'; // './dist/bar.js' 预期生成的代码
+
+import '@/foo.css'; // './src/utils/index.ts' 的源码 ↓
+import '../foo.css'; // './dist/utils/index.js' 预期生成的代码
+```
+
+导入 [CSS Modules](/zh/config/rsbuild/output#outputcssmodules) 时：
+
+```ts
+import styles from '@/foo.css'; // './src/bar.ts' 的源码 ↓
+import styles from './foo.css'; // './dist/bar.js' 预期生成的代码
+
+import styles from '@/foo.css'; // './src/utils/index.ts' 的源码 ↓
+import styles from '../foo.css'; // './dist/utils/index.js' 预期生成的代码
+```
+
+### redirect.style.extension
+
+是否重定向样式文件的扩展名。
+
+- **类型:** `boolean`
+- **默认值:** `true`
+
+当设置为 `true` 时，导入普通样式文件时，路径将被重写为 `.css` 文件，导入 [CSS Modules](/zh/config/rsbuild/output#outputcssmodules) 时，路径将被重写为到对应的 JavaScript 输出文件。
+
+当设置为 `false` 时，文件扩展名将保持原始导入路径中的不变。
+
+- **示例：**
+
+默认情况下，当从 `.less` 文件导入时：
+
+```ts
+import './index.less'; // 源码 ↓
+import './index.css'; // 预期生成的代码
+
+import styles from './index.module.less'; // 源码 ↓
+import styles from './index.module.mjs'; // 预期生成的代码
 ```

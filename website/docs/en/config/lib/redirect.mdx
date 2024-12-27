@@ -98,14 +98,54 @@ When set to `false`, the file extension will remain unchanged from the original 
 
 ## redirect.style
 
+### redirect.style.path
+
+Whether to automatically redirect the import path when importing style files, the rules are the same as [redirect.js.path](/config/lib/redirect#redirectjspath).
+
 - **Type:** `boolean`
 - **Default:** `true`
 
-Whether to redirect the import path of the style file.
+- **Example:**
 
-For example, when importing a `.less` file, it will be rewritten to a `.css` file:
+When importing normal style files:
+
+```ts
+import '@/foo.css'; // source code of './src/bar.ts' ↓
+import './foo.css'; // expected output of './dist/bar.js'
+
+import '@/foo.css'; // source code of './src/utils/index.ts' ↓
+import '../foo.css'; // expected output of './dist/utils/index.js'
+```
+
+When importing [CSS Modules](/zh/config/rsbuild/output#outputcssmodules) files:
+
+```ts
+import styles from '@/foo.css'; // source code of './src/bar.ts' ↓
+import styles from './foo.css'; // expected output of './dist/bar.js'
+
+import styles from '@/foo.css'; // source code of './src/utils/index.ts' ↓
+import styles from '../foo.css'; // expected output of './dist/utils/index.js'
+```
+
+### redirect.style.extension
+
+Whether to redirect style file extensions.
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+When set to `true`, When importing a normal style file, the path will be rewritten to the `.css` file. When importing [CSS Modules](/zh/config/rsbuild/output#outputcssmodules), the path will be rewritten to the corresponding JavaScript output file.
+
+When set to `false`, The file extension will remain unchanged from the original import path.
+
+- **Example:**
+
+When importing from a `.less` file:
 
 ```ts
 import './index.less'; // source code ↓
-import './index.css'; // output file
+import './index.css'; // expected output
+
+import styles from './index.module.less'; // source code ↓
+import styles from './index.module.mjs'; // expected output
 ```

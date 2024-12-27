@@ -8,7 +8,7 @@ Bundleless means that each source file is compiled and built separately, which c
 
 1. Set `source.entry` to remove `.less/.scss` files from the entry.
 2. Set `output.copy` to copy `.less/.scss` files to the output directory.
-3. Set `redirect.style` to `false` to disable the redirect behavior for the import path of `.less/.scss` files.
+3. Set `redirect.style.extension` to `false` to disable the redirect behavior for the import path of `.less/.scss` files.
 
 Below is an example of skipping the `.scss` file processing. All `.scss` files in `src` will be copied to the output directory and retained with consistent relative paths.
 
@@ -26,7 +26,9 @@ export default defineConfig({
         copy: [{ from: '**/*.scss', context: path.join(__dirname, 'src') }],
       },
       redirect: {
-        style: false,
+        style: {
+          extension: false,
+        },
       },
     },
   ],
