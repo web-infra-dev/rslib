@@ -473,6 +473,9 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
           nodeEnv: false,
         },
         experiments: {
+          cache: {
+            type: 'persistent',
+          },
           rspackFuture: {
             bundlerInfo: {
               force: false,
