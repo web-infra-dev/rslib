@@ -83,6 +83,7 @@ export default defineConfig({
     },
     tools: {
       rspack: {
+        cache: true,
         experiments: {
           cache: {
             type: 'persistent',

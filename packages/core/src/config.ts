@@ -472,6 +472,7 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
           moduleIds: 'named',
           nodeEnv: false,
         },
+        cache: true,
         experiments: {
           cache: {
             type: 'persistent',
