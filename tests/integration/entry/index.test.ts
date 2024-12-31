@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+import stripAnsi from 'strip-ansi';
 import { buildAndGetResults, queryContent } from 'test-helper';
 import { expect, test } from 'vitest';
 
@@ -97,4 +98,18 @@ test('glob entry bundleless', async () => {
       ],
     }
   `);
+});
+
+test('glob entry bundle', async () => {
+  const fixturePath = join(__dirname, 'glob-bundle');
+  let errMsg = '';
+  try {
+    await buildAndGetResults({ fixturePath });
+  } catch (e) {
+    errMsg = (e as Error).message;
+  }
+
+  expect(stripAnsi(errMsg)).toMatchInlineSnapshot(
+    `"Glob pattern is not supported when "bundle" is "true", considering set "bundle" to "false" to use bundleless mode. See https://lib.rsbuild.dev/guide/basic/output-structure for more details."`,
+  );
 });
