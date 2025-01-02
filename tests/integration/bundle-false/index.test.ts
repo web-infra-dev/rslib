@@ -89,10 +89,10 @@ test('auto add js extension for relative import', async () => {
 
   // basic esm
   for (const importer of [
-    'import * as __WEBPACK_EXTERNAL_MODULE__bar_js__ from "./bar.js";',
-    'import * as __WEBPACK_EXTERNAL_MODULE__baz_js_js__ from "./baz.js.js";',
-    'import * as __WEBPACK_EXTERNAL_MODULE__foo_js__ from "./foo.js";',
-    'import * as __WEBPACK_EXTERNAL_MODULE__qux_js__ from "./qux.js";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__ from "./bar.js";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__baz_js_js_7d4e15b7__ from "./baz.js.js";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__qux_js_3d9e4fc9__ from "./qux.js";',
   ]) {
     expect(Object.values(contents.esm0!)[3]).toContain(importer);
   }
@@ -109,10 +109,10 @@ test('auto add js extension for relative import', async () => {
 
   // using `autoExtension: false` along with `output.filename.js` - esm
   for (const importer of [
-    'import * as __WEBPACK_EXTERNAL_MODULE__bar_mjs__ from "./bar.mjs";',
-    'import * as __WEBPACK_EXTERNAL_MODULE__baz_js_mjs__ from "./baz.js.mjs";',
-    'import * as __WEBPACK_EXTERNAL_MODULE__foo_mjs__ from "./foo.mjs";',
-    'import * as __WEBPACK_EXTERNAL_MODULE__qux_mjs__ from "./qux.mjs";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__bar_mjs_89c909f2__ from "./bar.mjs";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__baz_js_mjs_09565ba6__ from "./baz.js.mjs";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__foo_mjs_ccdcdd01__ from "./foo.mjs";',
+    'import * as __WEBPACK_EXTERNAL_MODULE__qux_mjs_83952e37__ from "./qux.mjs";',
   ]) {
     expect(Object.values(contents.esm1!)[3]).toContain(importer);
   }
