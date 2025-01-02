@@ -918,76 +918,90 @@ const composeEntryConfig = async (
     };
   }
 
-  // In bundleless mode, resolve glob patterns and convert them to entry object.
-  const resolvedEntries: Record<string, string> = {};
-  for (const key of Object.keys(entries)) {
-    const entry = entries[key];
+  const scanGlobEntries = async (calcLcp: boolean) => {
+    // In bundleless mode, resolve glob patterns and convert them to entry object.
+    const resolvedEntries: Record<string, string> = {};
+    for (const key of Object.keys(entries)) {
+      const entry = entries[key];
 
-    // Entries in bundleless mode could be:
-    // 1. A string of glob pattern: { entry: { index: 'src/*.ts' } }
-    // 2. An array of glob patterns: { entry: { index: ['src/*.ts', 'src/*.tsx'] } }
-    // Not supported for now: entry description object
-    const entryFiles = Array.isArray(entry)
-      ? entry
-      : typeof entry === 'string'
-        ? [entry]
-        : null;
+      // Entries in bundleless mode could be:
+      // 1. A string of glob pattern: { entry: { index: 'src/*.ts' } }
+      // 2. An array of glob patterns: { entry: { index: ['src/*.ts', 'src/*.tsx'] } }
+      // Not supported for now: entry description object
+      const entryFiles = Array.isArray(entry)
+        ? entry
+        : typeof entry === 'string'
+          ? [entry]
+          : null;
 
-    if (!entryFiles) {
-      throw new Error(
-        'Entry can only be a string or an array of strings for now',
-      );
-    }
-
-    // Turn entries in array into each separate entry.
-    const globEntryFiles = await glob(entryFiles, {
-      cwd: root,
-      absolute: true,
-    });
-
-    // Filter the glob resolved entry files based on the allowed extensions
-    const resolvedEntryFiles = globEntryFiles.filter((file) =>
-      ENTRY_EXTENSIONS_PATTERN.test(file),
-    );
-
-    if (resolvedEntryFiles.length === 0) {
-      throw new Error(`Cannot find ${resolvedEntryFiles}`);
-    }
-
-    // Similar to `rootDir` in tsconfig and `outbase` in esbuild.
-    const lcp = await calcLongestCommonPath(resolvedEntryFiles);
-    // Using the longest common path of all non-declaration input files by default.
-    const outBase = lcp === null ? root : lcp;
-
-    function getEntryName(file: string) {
-      const { dir, name } = path.parse(path.relative(outBase, file));
-      // Entry filename contains nested path to preserve source directory structure.
-      const entryFileName = path.join(dir, name);
-
-      // 1. we mark the global css files (which will generate empty js chunk in cssExtract), and deleteAsset in RemoveCssExtractAssetPlugin
-      // 2. avoid the same name e.g: `index.ts` and `index.css`
-      if (isCssGlobalFile(file, cssModulesAuto)) {
-        return `${RSLIB_CSS_ENTRY_FLAG}/${entryFileName}`;
-      }
-
-      return entryFileName;
-    }
-
-    for (const file of resolvedEntryFiles) {
-      const entryName = getEntryName(file);
-      if (resolvedEntries[entryName]) {
-        logger.warn(
-          `duplicate entry: ${entryName}, this may lead to the incorrect output, please rename the file`,
+      if (!entryFiles) {
+        throw new Error(
+          'Entry can only be a string or an array of strings for now',
         );
       }
-      resolvedEntries[entryName] = file;
-    }
-  }
 
-  const lcp = await calcLongestCommonPath(Object.values(resolvedEntries));
+      // Turn entries in array into each separate entry.
+      const globEntryFiles = await glob(entryFiles, {
+        cwd: root,
+        absolute: true,
+      });
+
+      // Filter the glob resolved entry files based on the allowed extensions
+      const resolvedEntryFiles = globEntryFiles.filter((file) =>
+        ENTRY_EXTENSIONS_PATTERN.test(file),
+      );
+
+      if (resolvedEntryFiles.length === 0) {
+        throw new Error(`Cannot find ${resolvedEntryFiles}`);
+      }
+
+      // Similar to `rootDir` in tsconfig and `outbase` in esbuild.
+      const lcp = await calcLongestCommonPath(resolvedEntryFiles);
+      // Using the longest common path of all non-declaration input files by default.
+      const outBase = lcp === null ? root : lcp;
+
+      function getEntryName(file: string) {
+        const { dir, name } = path.parse(path.relative(outBase, file));
+        // Entry filename contains nested path to preserve source directory structure.
+        const entryFileName = path.join(dir, name);
+
+        // 1. we mark the global css files (which will generate empty js chunk in cssExtract), and deleteAsset in RemoveCssExtractAssetPlugin
+        // 2. avoid the same name e.g: `index.ts` and `index.css`
+        if (isCssGlobalFile(file, cssModulesAuto)) {
+          return `${RSLIB_CSS_ENTRY_FLAG}/${entryFileName}`;
+        }
+
+        return entryFileName;
+      }
+
+      for (const file of resolvedEntryFiles) {
+        const entryName = getEntryName(file);
+        if (resolvedEntries[entryName]) {
+          logger.warn(
+            `duplicate entry: ${entryName}, this may lead to the incorrect output, please rename the file`,
+          );
+        }
+        resolvedEntries[entryName] = file;
+      }
+    }
+
+    if (calcLcp) {
+      const lcp = await calcLongestCommonPath(Object.values(resolvedEntries));
+      return { resolvedEntries, lcp };
+    }
+    return { resolvedEntries, lcp: null };
+  };
+
+  // LCP could only be determined at the first time of glob scan.
+  const { lcp } = await scanGlobEntries(true);
   const entryConfig: EnvironmentConfig = {
-    source: {
-      entry: appendEntryQuery(resolvedEntries),
+    tools: {
+      rspack: {
+        entry: async () => {
+          const { resolvedEntries } = await scanGlobEntries(false);
+          return appendEntryQuery(resolvedEntries);
+        },
+      },
     },
   };
 
@@ -1342,6 +1356,7 @@ async function composeLibRsbuildConfig(
 
   const entryChunkConfig = composeEntryChunkConfig({
     enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
+    contextToWatch: lcp,
   });
   const dtsConfig = await composeDtsConfig(config, dtsExtension);
   const externalsWarnConfig = composeExternalsWarnConfig(

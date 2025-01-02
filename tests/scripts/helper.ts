@@ -86,8 +86,33 @@ export const waitFor = async (
 };
 
 export const awaitFileExists = async (dir: string) => {
-  const result = await waitFor(() => fse.existsSync(dir), { interval: 50 });
+  const result = await waitFor(() => fse.existsSync(dir), {
+    interval: 50,
+    maxChecks: 400,
+  });
   if (!result) {
     throw new Error(`awaitFileExists failed: ${dir}`);
   }
+};
+
+export const awaitFileChanges = async (file: string) => {
+  const oldContent = await fse.readFile(file, 'utf-8');
+  return async () => {
+    const result = await waitFor(
+      () => {
+        try {
+          return fse.readFileSync(file, 'utf-8') !== oldContent;
+        } catch (e) {
+          return false;
+        }
+      },
+      { interval: 50 },
+    );
+
+    if (!result) {
+      throw new Error(`awaitFileChanges failed: ${file}`);
+    }
+
+    return result;
+  };
 };
