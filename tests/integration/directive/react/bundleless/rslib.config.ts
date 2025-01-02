@@ -1,5 +1,5 @@
 import { defineConfig } from '@rslib/core';
-import { generateBundleEsmConfig } from 'test-helper';
+import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
@@ -7,16 +7,16 @@ export default defineConfig({
       bundle: false,
       output: {
         distPath: {
-          root: './dist/bundle/esm0',
+          root: './dist/esm',
         },
       },
     }),
-    generateBundleEsmConfig({
+    generateBundleCjsConfig({
       bundle: false,
       output: {
         minify: true,
         distPath: {
-          root: './dist/bundle/esm1',
+          root: './dist/cjs',
         },
       },
     }),

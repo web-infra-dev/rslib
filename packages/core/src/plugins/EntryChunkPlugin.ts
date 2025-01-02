@@ -37,40 +37,48 @@ class EntryChunkPlugin {
   private shebangInjectedAssets: Set<string> = new Set();
 
   private enabledImportMetaUrlShim: boolean;
+  private contextToWatch: string | null = null;
+  private contextWatched = false;
 
   constructor({
     enabledImportMetaUrlShim = true,
+    contextToWatch,
   }: {
     enabledImportMetaUrlShim: boolean;
+    contextToWatch: string | null;
   }) {
     this.enabledImportMetaUrlShim = enabledImportMetaUrlShim;
+    this.contextToWatch = contextToWatch;
   }
 
   apply(compiler: Rspack.Compiler) {
-    compiler.hooks.entryOption.tap(PLUGIN_NAME, (_context, entries) => {
-      for (const name in entries) {
-        const entry = (entries as Rspack.EntryStaticNormalized)[name];
-        if (!entry) continue;
+    compiler.hooks.afterCompile.tap(PLUGIN_NAME, (compilation) => {
+      if (this.contextWatched || this.contextToWatch === null) return;
 
-        let first: string | undefined;
-        if (Array.isArray(entry)) {
-          first = entry[0];
-        } else if (Array.isArray(entry.import)) {
-          first = entry.import[0];
-        } else if (typeof entry === 'string') {
-          first = entry;
+      const contextDep = compilation.contextDependencies;
+      contextDep.add(this.contextToWatch);
+      this.contextWatched = true;
+    });
+
+    compiler.hooks.make.tap(PLUGIN_NAME, (compilation) => {
+      const entries: Record<string, string> = {};
+      const entry = compilation.entries;
+      const values = entry;
+      for (const [key, value] of values) {
+        const dep0 = value.dependencies[0];
+        if (dep0?.request) {
+          entries[key] = dep0.request;
         }
+      }
 
-        if (typeof first !== 'string') continue;
-
+      for (const name in entries) {
+        const first = entries[name]!;
         const filename = first.split('?')[0]!;
         const isJs = JS_EXTENSIONS_PATTERN.test(filename);
         if (!isJs) continue;
-
         const content = compiler.inputFileSystem!.readFileSync!(filename, {
           encoding: 'utf-8',
         });
-
         // Shebang
         if (content.startsWith(SHEBANG_PREFIX)) {
           const shebangMatch = matchFirstLine(content, SHEBANG_REGEX);
@@ -78,7 +86,6 @@ class EntryChunkPlugin {
             this.shebangEntries[name] = shebangMatch;
           }
         }
-
         // React directive
         const reactDirective = matchFirstLine(content, REACT_DIRECTIVE_REGEX);
         if (reactDirective) {
@@ -87,7 +94,25 @@ class EntryChunkPlugin {
       }
     });
 
-    compiler.hooks.thisCompilation.tap(PLUGIN_NAME, (compilation) => {
+    compiler.hooks.make.tap(PLUGIN_NAME, (compilation) => {
+      compilation.hooks.chunkAsset.tap(PLUGIN_NAME, (chunk, filename) => {
+        const isJs = JS_EXTENSIONS_PATTERN.test(filename);
+        if (!isJs) return;
+
+        const name = chunk.name;
+        if (!name) return;
+
+        const shebangEntry = this.shebangEntries[name];
+        if (shebangEntry) {
+          this.shebangEntries[filename] = shebangEntry;
+        }
+
+        const reactDirective = this.reactDirectives[name];
+        if (reactDirective) {
+          this.reactDirectives[filename] = reactDirective;
+        }
+      });
+
       compilation.hooks.chunkAsset.tap(PLUGIN_NAME, (chunk, filename) => {
         const isJs = JS_EXTENSIONS_PATTERN.test(filename);
         if (!isJs) return;
@@ -192,8 +217,10 @@ const entryModuleLoaderRsbuildPlugin = (): RsbuildPlugin => ({
 
 export const composeEntryChunkConfig = ({
   enabledImportMetaUrlShim,
+  contextToWatch = null,
 }: {
   enabledImportMetaUrlShim: boolean;
+  contextToWatch: string | null;
 }): EnvironmentConfig => {
   return {
     plugins: [entryModuleLoaderRsbuildPlugin()],
@@ -202,6 +229,7 @@ export const composeEntryChunkConfig = ({
         plugins: [
           new EntryChunkPlugin({
             enabledImportMetaUrlShim,
+            contextToWatch,
           }),
         ],
       },

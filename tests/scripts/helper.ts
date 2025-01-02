@@ -1,5 +1,6 @@
 import { platform } from 'node:os';
 import { join } from 'node:path';
+import { type EmitArgs, type EmitArgsWithName, watch } from 'chokidar';
 import fse from 'fs-extra';
 import { type GlobOptions, convertPathToPattern, glob } from 'tinyglobby';
 
@@ -91,3 +92,55 @@ export const awaitFileExists = async (dir: string) => {
     throw new Error(`awaitFileExists failed: ${dir}`);
   }
 };
+
+export const awaitFileChanges = async (file: string) => {
+  const oldContent = await fse.readFile(file, 'utf-8');
+  return async () => {
+    const result = await waitFor(
+      () => {
+        try {
+          return fse.readFileSync(file, 'utf-8') !== oldContent;
+        } catch (e) {
+          return false;
+        }
+      },
+      { interval: 50 },
+    );
+
+    if (!result) {
+      throw new Error(`awaitFileExists failed: ${file}`);
+    }
+
+    return result;
+  };
+};
+
+// export const waitForFileChange = async (
+//   filePath: string | string[],
+//   tester: (...args: EmitArgsWithName) => boolean,
+// ) => {
+//   return new Promise<void>((resolve) => {
+//     const watcher = watch(
+//       typeof filePath === 'string' ? [filePath] : filePath,
+//       {
+//         ignoreInitial: true,
+//         ignorePermissionErrors: true,
+//       },
+//     );
+
+//     type Event = EmitArgsWithName[0];
+//     const callback: (event: Event) => (...args: EmitArgs) => void =
+//       (event) =>
+//       (...args) => {
+//         const matched = tester(event, ...args);
+//         if (matched) {
+//           resolve();
+//           watcher.close();
+//         }
+//       };
+
+//     watcher.on('add', callback('add'));
+//     watcher.on('change', callback('change'));
+//     watcher.on('unlink', callback('unlink'));
+//   });
+// };

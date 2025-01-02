@@ -93,24 +93,24 @@ describe('react', async () => {
 
   describe('bundle-false', async () => {
     test('React directive at the beginning', async () => {
-      const { content: foo } = queryContent(contents.esm0!, 'foo.js', {
+      const { content: foo } = queryContent(contents.esm!, 'foo.js', {
         basename: true,
       });
       expect(foo!.startsWith(`'use client';`)).toBe(true);
 
-      const { content: bar } = queryContent(contents.esm0!, 'bar.js', {
+      const { content: bar } = queryContent(contents.esm!, 'bar.js', {
         basename: true,
       });
       expect(bar!.startsWith(`'use server';`)).toBe(true);
     });
 
     test('React directive at the beginning even if minified', async () => {
-      const { content: foo } = queryContent(contents.esm1!, 'foo.js', {
+      const { content: foo } = queryContent(contents.cjs!, 'foo.cjs', {
         basename: true,
       });
       expect(foo!.startsWith(`'use client';`)).toBe(true);
 
-      const { content: bar } = queryContent(contents.esm1!, 'bar.js', {
+      const { content: bar } = queryContent(contents.cjs!, 'bar.cjs', {
         basename: true,
       });
       expect(bar!.startsWith(`'use server';`)).toBe(true);
