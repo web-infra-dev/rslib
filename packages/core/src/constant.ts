@@ -16,29 +16,24 @@ export const SHEBANG_REGEX: RegExp = /#!.*[\s\n\r]*$/;
 export const REACT_DIRECTIVE_REGEX: RegExp =
   /^['"]use (client|server)['"](;?)[\s\n\r]*$/;
 
-export const JS_EXTENSIONS: string[] = [
+const JS_EXTENSIONS: string[] = [
   'js',
   'mjs',
   'jsx',
-  'ts',
-  'mts',
+  '(?<!d.)ts', // ignore d.ts,
+  '(?<!d.)mts', // ditto
+  '(?<!d.)cts', // ditto
   'tsx',
   'cjs',
   'cjsx',
   'mjsx',
   'mtsx',
-  'cts',
   'ctsx',
 ] as const;
 
-export const CSS_EXTENSIONS: string[] = [
-  'css',
-  'sass',
-  'scss',
-  'less',
-] as const;
+const CSS_EXTENSIONS: string[] = ['css', 'sass', 'scss', 'less'] as const;
 
-export const ENTRY_EXTENSIONS: string[] = [
+const ENTRY_EXTENSIONS: string[] = [
   ...JS_EXTENSIONS,
   ...CSS_EXTENSIONS,
 ] as const;
