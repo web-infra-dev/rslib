@@ -13,14 +13,6 @@
 
 - 当 `package.json` 中设置 `type: commonjs` 或没有 `type` 字段时，`cjs` 格式使用 `.js`，`esm` 格式使用 `.mjs`。
 
-:::warning
-
-当 [bundle](/config/lib/bundle) 设置为 `false`（即 bundleless 模式）时，你需要在源代码中写完整的路径，而不是省略目录索引（例如，用 `'./foo'` 作为 `'./foo/index.js'` 的简写）。
-
-举例来说，如果 `foo` 是一个文件夹，你需要将 `import * from './foo'` 改写为 `import * from './foo/index'`。
-
-:::
-
 当 `autoExtension` 设置为 `false` 时，文件扩展名将默认为 `.js`。
 
 ## 自定义扩展名
