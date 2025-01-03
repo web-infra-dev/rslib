@@ -20,9 +20,14 @@ type JsRedirect = {
   extension?: boolean;
 };
 
+type StyleRedirect = {
+  path?: boolean;
+  extension?: boolean;
+};
+
 type Redirect = {
   js?: JsRedirect;
-  style?: boolean;
+  style?: StyleRedirect;
 };
 ```
 

@@ -12,7 +12,7 @@ overviewHeaders: [2, 3]
 
 :::
 
-- **Type:**
+- **类型：**
 
 ```ts
 type JsRedirect = {
@@ -24,9 +24,14 @@ type StyleRedirect = {
   path?: boolean;
   extension?: boolean;
 };
+
+type Redirect = {
+  js?: JsRedirect;
+  style?: StyleRedirect;
+};
 ```
 
-- **Default:**
+- **默认值：**
 
 ```ts
 const defaultRedirect = {
