@@ -122,7 +122,7 @@ import '@/foo.css'; // source code of './src/utils/index.ts' ↓
 import '../foo.css'; // expected output of './dist/utils/index.js'
 ```
 
-When importing [CSS Modules](/zh/config/rsbuild/output#outputcssmodules) files:
+When importing [CSS Modules](/config/rsbuild/output#outputcssmodules) files:
 
 ```ts
 import styles from '@/foo.css'; // source code of './src/bar.ts' ↓
@@ -139,7 +139,7 @@ Whether to redirect style file extensions.
 - **Type:** `boolean`
 - **Default:** `true`
 
-When set to `true`, When importing a normal style file, the path will be rewritten to the `.css` file. When importing [CSS Modules](/zh/config/rsbuild/output#outputcssmodules), the path will be rewritten to the corresponding JavaScript output file.
+When set to `true`, When importing a normal style file, the path will be rewritten to the `.css` file. When importing [CSS Modules](/config/rsbuild/output#outputcssmodules), the path will be rewritten to the corresponding JavaScript output file.
 
 When set to `false`, The file extension will remain unchanged from the original import path.
 
