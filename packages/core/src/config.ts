@@ -890,8 +890,11 @@ const composeEntryConfig = async (
   if (bundle !== false) {
     let isFileEntry = false;
     traverseEntryQuery(entries, (entry) => {
-      if (fs.existsSync(entry)) {
-        const stats = fs.statSync(entry);
+      const entryAbsPath = path.isAbsolute(entry)
+        ? entry
+        : path.resolve(root, entry);
+      if (fs.existsSync(entryAbsPath)) {
+        const stats = fs.statSync(entryAbsPath);
         isFileEntry = stats.isFile();
       }
 
