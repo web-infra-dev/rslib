@@ -3,6 +3,7 @@ import path, { dirname, extname, isAbsolute, join } from 'node:path';
 import {
   type EnvironmentConfig,
   type RsbuildConfig,
+  type RsbuildEntry,
   type RsbuildPlugin,
   type RsbuildPlugins,
   type Rspack,
@@ -844,8 +845,9 @@ const composeSyntaxConfig = (
   };
 };
 
-export const appendEntryQuery = (
+const traverseEntryQuery = (
   entry: RsbuildConfigEntry,
+  callback: (entry: string) => string,
 ): RsbuildConfigEntry => {
   const newEntry: Record<string, RsbuildConfigEntryItem> = {};
 
@@ -853,16 +855,16 @@ export const appendEntryQuery = (
     let result: RsbuildConfigEntryItem = value;
 
     if (typeof value === 'string') {
-      result = `${value}?${RSLIB_ENTRY_QUERY}`;
+      result = callback(value);
     } else if (Array.isArray(value)) {
-      result = value.map((item) => `${item}?${RSLIB_ENTRY_QUERY}`);
+      result = value.map(callback);
     } else {
       result = {
         ...value,
         import:
           typeof value.import === 'string'
-            ? `${value.import}?${RSLIB_ENTRY_QUERY}`
-            : value.import.map((item) => `${item}?${RSLIB_ENTRY_QUERY}`),
+            ? callback(value.import)
+            : value.import.map(callback),
       };
     }
 
@@ -871,6 +873,9 @@ export const appendEntryQuery = (
 
   return newEntry;
 };
+
+export const appendEntryQuery = (entries: RsbuildConfigEntry): RsbuildEntry =>
+  traverseEntryQuery(entries, (item) => `${item}?${RSLIB_ENTRY_QUERY}`);
 
 const composeEntryConfig = async (
   entries: RsbuildConfigEntry,
@@ -883,6 +888,25 @@ const composeEntryConfig = async (
   }
 
   if (bundle !== false) {
+    let isFileEntry = false;
+    traverseEntryQuery(entries, (entry) => {
+      const entryAbsPath = path.isAbsolute(entry)
+        ? entry
+        : path.resolve(root, entry);
+      if (fs.existsSync(entryAbsPath)) {
+        const stats = fs.statSync(entryAbsPath);
+        isFileEntry = stats.isFile();
+      }
+
+      return entry;
+    });
+
+    if (!isFileEntry) {
+      throw new Error(
+        `Glob pattern is not supported when "bundle" is "true", considering ${color.green('set "bundle" to "false"')} to use bundleless mode. See ${color.green('https://lib.rsbuild.dev/guide/basic/output-structure')} for more details.`,
+      );
+    }
+
     return {
       entryConfig: {
         source: {
