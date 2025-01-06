@@ -6,7 +6,7 @@
 指定是否打包库，当 `bundle` 设置为 `true` 时称为 bundle 模式，设置为 `false` 时称为 bundleless 模式。更多详情请参见 [bundle / bundleless](/guide/basic/output-structure#bundle--bundleless)。
 
 ::: warning
-无打包模式尚未完全支持，某些功能如 [资源](/guide/advanced/assets) 可能无法正常工作。
+Bundleless 模式尚未完全支持，某些功能如 [资源](/guide/advanced/assets) 可能无法正常工作。
 :::
 
 ## 设置入口
@@ -15,7 +15,9 @@
 
 ### bundle: true
 
-当 `bundle` 设置为 `true` 时，入口需要设置为入口文件。默认入口为 `src/index.(ts|js|tsx|jsx|mjs|cjs)`。你需要确保入口文件存在，或通过 [source.entry](https://rsbuild.dev/zh/config/source/entry) 配置自定义入口。
+当 `bundle` 设置为 `true` 时，entry 需要设置为入口文件。Bundle 模式下的默认入口为 `src/index.(ts|js|tsx|jsx|mjs|cjs)`。你需要确保入口文件存在，或通过 [source.entry](https://rsbuild.dev/zh/config/source/entry) 配置自定义入口。
+
+**例子：**
 
 ```ts title="rslib.config.ts"
 export default {
@@ -35,7 +37,9 @@ export default {
 
 ### bundle: false
 
-当 `bundle` 设置为 `false` 时，入口需要设置为 [glob 模式](https://github.com/micromatch/picomatch#globbing-features) 以包含所有文件。
+当 `bundle` 设置为 `false` 时，入口需要设置为 [glob 模式](https://github.com/micromatch/picomatch#globbing-features) 以包含所有文件。Bundleless 模式下的默认入口为 `src/**`。
+
+**例子：**
 
 ```ts title="rslib.config.ts"
 export default {
@@ -47,7 +51,7 @@ export default {
   ],
   source: {
     entry: {
-      index: './src/**',
+      index: './foo/**',
     },
   },
 };

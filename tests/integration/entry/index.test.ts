@@ -3,6 +3,30 @@ import stripAnsi from 'strip-ansi';
 import { buildAndGetResults, queryContent } from 'test-helper';
 import { expect, test } from 'vitest';
 
+test('default entry', async () => {
+  const fixturePath = join(__dirname, 'default');
+  const { files } = await buildAndGetResults({ fixturePath });
+
+  expect(files).toMatchInlineSnapshot(`
+    {
+      "cjs0": [
+        "<ROOT>/tests/integration/entry/default/dist/cjs-bundle/index.cjs",
+      ],
+      "cjs1": [
+        "<ROOT>/tests/integration/entry/default/dist/cjs-bundle-false/foo.cjs",
+        "<ROOT>/tests/integration/entry/default/dist/cjs-bundle-false/index.cjs",
+      ],
+      "esm0": [
+        "<ROOT>/tests/integration/entry/default/dist/esm-bundle/index.js",
+      ],
+      "esm1": [
+        "<ROOT>/tests/integration/entry/default/dist/esm-bundle-false/foo.js",
+        "<ROOT>/tests/integration/entry/default/dist/esm-bundle-false/index.js",
+      ],
+    }
+  `);
+});
+
 test('single entry bundle', async () => {
   const fixturePath = join(__dirname, 'single');
   const { files } = await buildAndGetResults({ fixturePath });

@@ -879,13 +879,23 @@ export const appendEntryQuery = (entries: RsbuildConfigEntry): RsbuildEntry =>
   traverseEntryQuery(entries, (item) => `${item}?${RSLIB_ENTRY_QUERY}`);
 
 const composeEntryConfig = async (
-  entries: RsbuildConfigEntry,
+  rawEntry: RsbuildConfigEntry,
   bundle: LibConfig['bundle'],
   root: string,
   cssModulesAuto: CssLoaderOptionsAuto,
 ): Promise<{ entryConfig: EnvironmentConfig; lcp: string | null }> => {
+  let entries = rawEntry;
+
   if (!entries) {
-    return { entryConfig: {}, lcp: null };
+    // In bundle mode, return directly to let Rsbuild apply default entry to './src/index.ts'
+    if (bundle !== false) {
+      return { entryConfig: {}, lcp: null };
+    }
+
+    // In bundleless mode, set default entry to './src/**'
+    entries = {
+      index: 'src/**',
+    };
   }
 
   if (bundle !== false) {
