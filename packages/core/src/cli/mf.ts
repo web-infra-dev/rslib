@@ -31,7 +31,13 @@ async function initMFRsbuild(
     .map((env) => env.id);
 
   if (!selectedEnvironmentIds.length) {
-    throw new Error('No mf format found, please check your config.');
+    throw new Error(
+      `No mf format found in ${
+        options.lib
+          ? `libs ${options.lib.map((lib) => `"${lib}"`).join(', ')}`
+          : 'your config'
+      }, please check your config to ensure that the mf format is enabled correctly.`,
+    );
   }
 
   const selectedEnvironments = pruneEnvironments(

@@ -1,7 +1,7 @@
 import { execSync } from 'node:child_process';
 import path from 'node:path';
 import fse from 'fs-extra';
-import { globContentJSON } from 'test-helper';
+import { buildAndGetResults, globContentJSON } from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
 describe('build command', async () => {
@@ -50,6 +50,21 @@ describe('build command', async () => {
         "<ROOT>/tests/integration/cli/build/dist/esm/index.js",
       ]
     `);
+  });
+
+  test('--lib should throw error if not found', async () => {
+    await fse.remove(path.join(__dirname, 'dist'));
+    try {
+      await buildAndGetResults({
+        fixturePath: __dirname,
+        lib: ['not-exist'],
+      });
+    } catch (error) {
+      expect((error as Error).message).toMatchInlineSnapshot(
+        `"The following libs are not found: "not-exist"."`,
+      );
+    }
+    expect(fse.existsSync(path.join(__dirname, 'dist'))).toBe(false);
   });
 
   test('--config', async () => {
