@@ -1561,7 +1561,15 @@ export const pruneEnvironments = (
     return environments;
   }
 
-  return Object.fromEntries(
+  const filteredEnvironments = Object.fromEntries(
     Object.entries(environments).filter(([name]) => libs.includes(name)),
   );
+
+  if (Object.keys(filteredEnvironments).length === 0) {
+    throw new Error(
+      `The following libs are not found: ${libs.map((lib) => `"${lib}"`).join(', ')}.`,
+    );
+  }
+
+  return filteredEnvironments;
 };

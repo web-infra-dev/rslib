@@ -1,6 +1,8 @@
 import { exec, execSync } from 'node:child_process';
 import { join } from 'node:path';
 import { describe } from 'node:test';
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+import { startMFDevServer } from '@rslib/core';
 import fse, { existsSync } from 'fs-extra';
 import { awaitFileExists } from 'test-helper';
 import { expect, test } from 'vitest';
@@ -56,6 +58,44 @@ describe('mf-dev', () => {
     expect(existsSync(distPath2)).toBe(true);
 
     childProcess.kill();
+  });
+
+  test('mf-dev --lib should error when lib not found', async () => {
+    try {
+      await startMFDevServer(
+        {
+          lib: [
+            {
+              format: 'mf',
+              plugins: [pluginModuleFederation({ name: 'test-not-exist' })],
+            },
+          ],
+        },
+        {
+          lib: ['not-exist'],
+        },
+      );
+    } catch (error) {
+      expect((error as Error).message).toMatchInlineSnapshot(
+        `"No mf format found in libs "not-exist", please check your config to ensure that the mf format is enabled correctly."`,
+      );
+    }
+  });
+
+  test('mf-dev should error when no mf format', async () => {
+    try {
+      await startMFDevServer({
+        lib: [
+          {
+            format: 'esm',
+          },
+        ],
+      });
+    } catch (error) {
+      expect((error as Error).message).toMatchInlineSnapshot(
+        `"No mf format found in your config, please check your config to ensure that the mf format is enabled correctly."`,
+      );
+    }
   });
 });
 
