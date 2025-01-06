@@ -19,10 +19,13 @@ Replaces variables in your code with other values or expressions at compile time
 
 ## source.entry <RsbuildDocBadge path="/config/source/entry" text="source.entry" />
 
-Used to set the entry modules for building.
+Used to set the entry modules for building. In Rslib, the default value of `source.entry` is:
+
+- bundle mode: `src/index.(ts|js|tsx|jsx|mjs|cjs)`
+- bundleless mode: `src/**`
 
 :::info
-Check out the [lib.bundle](/config/lib/bundle#set-entry) to learn how to set entry for bundle and bundleless project.
+Check out the [lib.bundle](/config/lib/bundle#set-entry) to learn more about how to set entry for bundle and bundleless project.
 :::
 
 ## source.exclude <RsbuildDocBadge path="/config/source/exclude" text="source.exclude" />

@@ -18,10 +18,13 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 ## source.entry <RsbuildDocBadge path="/config/source/entry" text="source.entry" />
 
-用于设置构建的入口模块。
+用于设置构建的入口模块。在 Rslib 中，`source.entry` 的默认值为：
+
+- bundle 模式：`src/index.(ts|js|tsx|jsx|mjs|cjs)`
+- bundleless 模式：`src/**`
 
 :::info
-参考 [lib.bundle](/config/lib/bundle#set-entry) 了解如何为 bundle 和 bundleless 项目设置入口。
+参考 [lib.bundle](/config/lib/bundle#set-entry) 进一步了解如何为 bundle 和 bundleless 项目设置入口。
 :::
 
 ## source.exclude <RsbuildDocBadge path="/config/source/exclude" text="source.exclude" />
