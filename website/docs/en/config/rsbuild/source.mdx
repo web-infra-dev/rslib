@@ -13,13 +13,17 @@ Include additional files that should be treated as static assets.
 
 Used to configure the decorators syntax.
 
+If `experimentalDecorators` is enabled in `tsconfig.json`, Rslib will set `source.decorators.version` to `legacy` by default.
+
 ## source.define <RsbuildDocBadge path="/config/source/define" text="source.define" />
 
 Replaces variables in your code with other values or expressions at compile time. This can be useful for allowing different behavior between development builds and production builds.
 
 ## source.entry <RsbuildDocBadge path="/config/source/entry" text="source.entry" />
 
-Used to set the entry modules for building. In Rslib, the default value of `source.entry` is:
+Used to set the entry modules for building.
+
+In Rslib, the default value is:
 
 - bundle mode: `src/index.(ts|js|tsx|jsx|mjs|cjs)`
 - bundleless mode: `src/**`

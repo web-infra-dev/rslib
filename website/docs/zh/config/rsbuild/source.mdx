@@ -12,13 +12,17 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 用于配置装饰器语法。
 
+如果在 `tsconfig.json` 中启用了 `experimentalDecorators`，Rslib 会默认将 `source.decorators.version` 设置为 `legacy`。
+
 ## source.define <RsbuildDocBadge path="/config/source/define" text="source.define" />
 
 构建时将代码中的变量替换成其它值或者表达式，可以用于在代码逻辑中区分开发模式与生产模式等场景。
 
 ## source.entry <RsbuildDocBadge path="/config/source/entry" text="source.entry" />
 
-用于设置构建的入口模块。在 Rslib 中，`source.entry` 的默认值为：
+用于设置构建的入口模块。
+
+在 Rslib 中，默认值为：
 
 - bundle 模式：`src/index.(ts|js|tsx|jsx|mjs|cjs)`
 - bundleless 模式：`src/**`

@@ -28,6 +28,24 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 设置构建产物的输出目录，Rsbuild 会根据产物的类型输出到对应的子目录下。
 
+Rslib 默认将 `output.distPath` 设置为：
+
+```ts
+const defaultDistPath = {
+  root: 'dist',
+  js: './',
+  jsAsync: './',
+  css: './',
+  cssAsync: './',
+  svg: 'static/svg',
+  font: 'static/font',
+  wasm: 'static/wasm',
+  image: 'static/image',
+  media: 'static/media',
+  assets: 'static/assets',
+};
+```
+
 ## output.emitCss <RsbuildDocBadge path="/config/output/emit-css" text="output.emitCss" />
 
 是否将 CSS 输出到产物中。
@@ -36,15 +54,23 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 在构建时，防止将代码中某些 `import` 的依赖包打包到 bundle 中，而是在运行时再去从外部获取这些依赖。
 
+在 bundle 模式下，Rslib 会默认将 `package.json` 中 `dependencies`、`optionalDependencies` 和 `peerDependencies` 字段下的三方依赖添加到 `output.externals` 中, 查看 [lib.autoExternal](/config/lib/auto-external) 了解更多信息。
+
+:::note
 需要注意的是，`output.externals` 与 [resolve.alias](/config/rsbuild/resolve#resolvealias) 有所不同。请查看 [resolve.alias](/config/rsbuild/resolve#resolvealias) 文档以了解更多信息。
+:::
 
 ## output.filenameHash <RsbuildDocBadge path="/config/output/filename-hash" text="output.filenameHash" />
 
 在生产模式构建后，是否在产物的文件名中添加 hash 值。
 
+Rslib 默认将 `output.filenameHash` 设置为 `false`。
+
 ## output.filename <RsbuildDocBadge path="/config/output/filename" text="output.filename" />
 
 设置构建产物的名称。
+
+Rslib 默认会根据 [format](/config/lib/format) 设置 `output.filename`，详情可查看 [autoExtension](/config/lib/auto-extension)。
 
 ## output.inlineScripts <RsbuildDocBadge path="/config/output/inline-scripts" text="output.inlineScripts" />
 
@@ -66,9 +92,73 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 用于设置是否在生产模式下开启代码压缩，或是配置压缩工具的选项。
 
+在未指定 `output.minify` 时，Rslib 会使用一个合理的默认值。
+
+- 在 format 为 `esm`, `cjs` 以及 `umd` 时，只会执行死代码消除和未使用代码消除，默认值为：
+
+```ts
+export default defineConfig({
+  output: {
+    minify: {
+      js: true,
+      css: false,
+      jsOptions: {
+        minimizerOptions: {
+          mangle: false,
+          minify: false,
+          compress: {
+            defaults: false,
+            unused: true,
+            dead_code: true,
+            toplevel: true,
+          },
+          format: {
+            comments: 'some',
+            preserve_annotations: true,
+          },
+        },
+      },
+    },
+  },
+});
+```
+
+- 在 format 为 `mf` 时，由于 MF 资源通过网络加载，这意味着它们不会被应用项目压缩。因此，需要在 Rslib 中对它们进行压缩。默认值为：
+
+```ts
+export default defineConfig({
+  output: {
+    minify: {
+      js: true,
+      css: false,
+      jsOptions: {
+        minimizerOptions: {
+          mangle: false,
+          // 启用压缩
+          minify: true,
+          compress: {
+            defaults: false,
+            unused: true,
+            dead_code: true,
+            // 避免 remoteEntry 的全局变量被 tree-shaking
+            toplevel: false,
+          },
+          format: {
+            comments: 'some',
+            preserve_annotations: true,
+          },
+        },
+      },
+    },
+  },
+});
+```
+
 ## output.overrideBrowserslist <RsbuildDocBadge path="/config/output/override-browserslist" text="output.overrideBrowserslist" />
 
 指定项目兼容的目标浏览器范围。
+
+Rslib 默认会根据 [syntax](/config/lib/syntax) 生成 `output.overrideBrowserslist`，查看 [ESX_TO_BROWSERSLIST](https://github.com/web-infra-dev/rslib/blob/8d65f3728d60254bcf1a8e24d72902ad79dae959/packages/core/src/utils/syntax.ts#L42-L153) 获取映射值。
 
 ## output.polyfill <RsbuildDocBadge path="/config/output/polyfill" text="output.polyfill" />
 
@@ -85,6 +175,8 @@ Rsbuild 的 `output.polyfill` 会将 polyfills 注入到全局作用域中，这
 ## output.target <RsbuildDocBadge path="/config/output/target" text="output.target" />
 
 用于设置 Rsbuild 的构建产物类型。
+
+Rslib 默认将 `output.target` 设置为 `node`。
 
 :::info
 请查看 [解决方案](/guide/solution/) 了解更多关于构建产物的信息。
