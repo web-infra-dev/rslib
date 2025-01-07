@@ -124,16 +124,34 @@ test('glob entry bundleless', async () => {
   `);
 });
 
-test('glob entry bundle', async () => {
-  const fixturePath = join(__dirname, 'glob-bundle');
+test('validate entry and throw errors', async () => {
+  const fixturePath = join(__dirname, 'validate');
   let errMsg = '';
   try {
-    await buildAndGetResults({ fixturePath });
+    await buildAndGetResults({
+      fixturePath,
+      configPath: 'bundleWithGlob.config.ts',
+    });
   } catch (e) {
-    errMsg = (e as Error).message;
+    errMsg = (e as AggregateError).errors.join('\n\n');
+  }
+
+  expect(stripAnsi(errMsg)).toMatchInlineSnapshot(`
+    "Error: Glob pattern "./src" is not supported when "bundle" is "true", considering "bundle" to "false" to use bundleless mode, or specify a file entry to bundle. See https://lib.rsbuild.dev/guide/basic/output-structure for more details.
+
+    Error: Glob pattern "!./src/ignored" is not supported when "bundle" is "true", considering "bundle" to "false" to use bundleless mode, or specify a file entry to bundle. See https://lib.rsbuild.dev/guide/basic/output-structure for more details."
+  `);
+
+  try {
+    await buildAndGetResults({
+      fixturePath,
+      configPath: 'nonExistingFile.config.ts',
+    });
+  } catch (e) {
+    errMsg = (e as AggregateError).errors.join('\n\n');
   }
 
   expect(stripAnsi(errMsg)).toMatchInlineSnapshot(
-    `"Glob pattern is not supported when "bundle" is "true", considering set "bundle" to "false" to use bundleless mode. See https://lib.rsbuild.dev/guide/basic/output-structure for more details."`,
+    `"Error: Can't resolve the entry "./src/main.ts" at the location <ROOT>/tests/integration/entry/validate/src/main.ts. Please ensure that the file exists."`,
   );
 });

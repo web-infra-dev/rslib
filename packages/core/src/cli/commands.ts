@@ -80,7 +80,13 @@ export function runCli(): void {
         await cliBuild();
       } catch (err) {
         logger.error('Failed to build.');
-        logger.error(err);
+        if (err instanceof AggregateError) {
+          for (const error of err.errors) {
+            logger.error(error);
+          }
+        } else {
+          logger.error(err);
+        }
         process.exit(1);
       }
     });
