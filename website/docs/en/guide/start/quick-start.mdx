@@ -125,9 +125,20 @@ Options:
   --override       override files in target directory
 ```
 
-## Migration
+## Migrate from Existing Projects
 
 If you need to migrate from an existing project to Rslib, you can refer to the following guides:
 
 - [Migrating from tsup](/guide/migration/tsup)
 - [Migrating from Modern.js Module](/guide/migration/modernjs-module)
+
+### Other Projects
+
+For other types of projects, you can manually install the [@rslib/core](https://www.npmjs.com/package/@rslib/core) package:
+
+<PackageManagerTabs command="add @rslib/core -D" />
+
+Then refer to the guide and documentation to enable the features you need:
+
+- See [CLI](/guide/basic/cli) to learn about available CLI commands.
+- See [Configure Rslib](/guide/basic/configure-rslib) to configure Rslib.

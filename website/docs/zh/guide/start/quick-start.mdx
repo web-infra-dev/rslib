@@ -21,7 +21,7 @@ nvm install --lts
 nvm use --lts
 ```
 
-## 创建一个 Rslib 项目
+## 创建 Rslib 项目
 
 你可以使用 [`create-rslib`](https://www.npmjs.com/package/create-rslib) 创建一个 Rslib 项目。运行以下命令：
 
@@ -125,9 +125,20 @@ Options:
   --override       override files in target directory
 ```
 
-## 迁移
+## 从现有项目迁移
 
 如果你需要从一个现有项目迁移迁移到 Rslib，可以参考以下指南：
 
 - [从 tsup 迁移](/guide/migration/tsup)
 - [从 Modern.js Module 迁移](/guide/migration/modernjs-module)
+
+### 其他项目
+
+对于其他类型的项目，你可以手动安装 [@rslib/core](https://www.npmjs.com/package/@rslib/core) 包：
+
+<PackageManagerTabs command="add @rslib/core -D" />
+
+然后参考指南和文档，按需启用各个功能：
+
+- 参考 [命令行工具](/guide/basic/cli) 来了解可用的 CLI 命令。
+- 参考 [配置 Rslib](/guide/basic/configure-rslib) 进行配置。
