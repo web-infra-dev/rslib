@@ -32,6 +32,24 @@ Set the size threshold to inline static assets such as images and fonts.
 
 Set the directory of the dist files. Rsbuild will output files to the corresponding subdirectory according to the file type.
 
+By default, Rslib sets `output.distPath` to:
+
+```ts
+const defaultDistPath = {
+  root: 'dist',
+  js: './',
+  jsAsync: './',
+  css: './',
+  cssAsync: './',
+  svg: 'static/svg',
+  font: 'static/font',
+  wasm: 'static/wasm',
+  image: 'static/image',
+  media: 'static/media',
+  assets: 'static/assets',
+};
+```
+
 {/* ## output.emitAssets <RsbuildDocBadge path="/config/output/emit-assets" text="output.emitAssets" /> */}
 
 {/* Control whether to emit static assets such as images, fonts, audio, video, etc. */}
@@ -44,15 +62,23 @@ Whether to emit CSS to the output bundles.
 
 At build time, prevent some `import` dependencies from being packed into bundles in your code, and instead fetch them externally at runtime.
 
+In bundle mode, Rslib will automatically add the dependencies listed in the `dependencies`, `optionalDependencies`, and `peerDependencies` fields of `package.json` to `output.externals`. See [lib.autoExternal](/config/lib/auto-external) for more information.
+
+:::note
 It is important to note that `output.externals` differs from [resolve.alias](/config/rsbuild/resolve#resolvealias). Check out [resolve.alias](/config/rsbuild/resolve#resolvealias) documentation for more information.
+:::
 
 ## output.filenameHash <RsbuildDocBadge path="/config/output/filename-hash" text="output.filenameHash" />
 
 Whether to add a hash value to the filename after the production build.
 
+Rslib sets `output.filenameHash` to `false` by default.
+
 ## output.filename <RsbuildDocBadge path="/config/output/filename" text="output.filename" />
 
 Sets the filename of dist files.
+
+By default, Rslib sets `output.filename` based on [format](/config/lib/format), see [autoExtension](/config/lib/auto-extension) for more information.
 
 {/* ## output.injectStyles <RsbuildDocBadge path="/config/output/inject-styles" text="output.injectStyles" /> */}
 
@@ -78,9 +104,73 @@ Whether to generate a manifest file that contains information of all assets, and
 
 Configure whether to enable code minification in production mode, or to configure minimizer options.
 
+When `output.minify` is not specified, Rslib will use a sane default value.
+
+- When format is `esm`, `cjs` and `umd`, only dead code elimination and unused code elimination will be performed. The default value is:
+
+```ts
+export default defineConfig({
+  output: {
+    minify: {
+      js: true,
+      css: false,
+      jsOptions: {
+        minimizerOptions: {
+          mangle: false,
+          minify: false,
+          compress: {
+            defaults: false,
+            unused: true,
+            dead_code: true,
+            toplevel: true,
+          },
+          format: {
+            comments: 'some',
+            preserve_annotations: true,
+          },
+        },
+      },
+    },
+  },
+});
+```
+
+- When format is `mf`, since MF assets are loaded over the network, which means they will not be compressed by the application project. Therefore, they need to be minified in Rslib. The default value is:
+
+```ts
+export default defineConfig({
+  output: {
+    minify: {
+      js: true,
+      css: false,
+      jsOptions: {
+        minimizerOptions: {
+          mangle: false,
+          // Enable minification
+          minify: true,
+          compress: {
+            defaults: false,
+            unused: true,
+            dead_code: true,
+            // Avoid remoteEntry's global variable being tree-shaken
+            toplevel: false,
+          },
+          format: {
+            comments: 'some',
+            preserve_annotations: true,
+          },
+        },
+      },
+    },
+  },
+});
+```
+
 ## output.overrideBrowserslist <RsbuildDocBadge path="/config/output/override-browserslist" text="output.overrideBrowserslist" />
 
 Specifies the range of target browsers that the project is compatible with.
+
+Rslib will generate `output.overrideBrowserslist` based on [syntax](/config/lib/syntax), see [ESX_TO_BROWSERSLIST](https://github.com/web-infra-dev/rslib/blob/8d65f3728d60254bcf1a8e24d72902ad79dae959/packages/core/src/utils/syntax.ts#L42-L153) to get the mapping value.
 
 ## output.polyfill <RsbuildDocBadge path="/config/output/polyfill" text="output.polyfill" />
 
@@ -97,6 +187,8 @@ Used to set whether to generate source map files, and which format of source map
 ## output.target <RsbuildDocBadge path="/config/output/target" text="output.target" />
 
 Setting the build target of Rsbuild.
+
+Rslib sets `output.target` to `node` by default.
 
 :::info
 Check out the [Solution](/guide/solution/) to learn more about the build target.
