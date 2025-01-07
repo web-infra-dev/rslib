@@ -74,3 +74,20 @@ test('require ESM from CJS', async () => {
   const bazValue = await baz();
   expect(bazValue).toBe('baz');
 });
+
+test('user externals', async () => {
+  // Ensure the priority of user externals higher than others.
+  // - memfs: userExternalsConfig > targetExternalsConfig
+  // - lodash-es/zip: userExternalsConfig > autoExternalConfig
+  const fixturePath = join(__dirname, 'user-externals');
+  const { entries } = await buildAndGetResults({ fixturePath });
+  expect(entries.esm).toMatchInlineSnapshot(
+    `
+    "import * as __WEBPACK_EXTERNAL_MODULE_memfs__ from "memfs";
+    import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_lodash_es_zip_b8981481__ from "lodash-es/zip";
+    console.log(__WEBPACK_EXTERNAL_MODULE_memfs__["default"], __WEBPACK_EXTERNAL_MODULE_lodash__["default"].add, __WEBPACK_EXTERNAL_MODULE_lodash_es_zip_b8981481__["default"]);
+    "
+  `,
+  );
+});
