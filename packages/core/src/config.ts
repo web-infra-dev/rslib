@@ -1391,7 +1391,7 @@ async function composeLibRsbuildConfig(
     // #region Externals configs
     // The order of the externals config should come in the following order:
     // 1. `externalsWarnConfig` should come before other externals config to touch the externalized modules first.
-    // 2. `userExternalsConfig` should present later to override the externals config of the ahead ones.
+    // 2. `userExternalsConfig` should present earlier to override the externals config of the ahead ones.
     // 3. The externals config in `bundlelessExternalConfig` should present after other externals config as
     //    it relies on other externals config to bail out the externalized modules first then resolve
     //    the correct path for relative imports.
