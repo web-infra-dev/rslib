@@ -694,6 +694,16 @@ importers:
 
   tests/integration/externals/node: {}
 
+  tests/integration/externals/user-externals:
+    dependencies:
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+    devDependencies:
+      '@types/lodash':
+        specifier: ^4.17.14
+        version: 4.17.14
+
   tests/integration/format: {}
 
   tests/integration/minify/config/disabled: {}

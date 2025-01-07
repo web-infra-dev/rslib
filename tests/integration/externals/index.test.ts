@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import stripAnsi from 'strip-ansi';
-import { buildAndGetResults, proxyConsole } from 'test-helper';
+import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
 import { expect, test } from 'vitest';
 import { composeModuleImportWarn } from '../../../packages/core/src/config';
 
@@ -73,4 +73,35 @@ test('require ESM from CJS', async () => {
   const baz = (await import(entryFiles.cjs)).baz;
   const bazValue = await baz();
   expect(bazValue).toBe('baz');
+});
+
+test('user externals', async () => {
+  // Ensure the priority of user externals higher than others.
+  // - "memfs": userExternalsConfig > targetExternalsConfig
+  // - "lodash-es/zip": userExternalsConfig > autoExternalConfig
+  // - "./foo2": userExternalsConfig > bundlelessExternalConfig
+
+  const fixturePath = join(__dirname, 'user-externals');
+  const { entries, contents } = await buildAndGetResults({ fixturePath });
+  expect(entries.esm0).toMatchInlineSnapshot(
+    `
+    "import * as __WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__ from "node:fs";
+    import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__ from "lodash/zip";
+    const foo = 'foo';
+    console.log(__WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__["default"], __WEBPACK_EXTERNAL_MODULE_lodash__["default"].add, __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__["default"], foo);
+    "
+  `,
+  );
+
+  expect(
+    queryContent(contents.esm1!, 'index.js', { basename: true }).content,
+  ).toMatchInlineSnapshot(`
+    "import * as __WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__ from "node:fs";
+    import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__ from "lodash/zip";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo2_1d132755__ from "./foo2";
+    console.log(__WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__["default"], __WEBPACK_EXTERNAL_MODULE_lodash__["default"].add, __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__["default"], __WEBPACK_EXTERNAL_MODULE__foo2_1d132755__.foo);
+    "
+  `);
 });
