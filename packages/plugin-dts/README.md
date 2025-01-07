@@ -75,7 +75,7 @@ pluginDts({
 - **Type:** `boolean`
 - **Default:** `false`
 
-Determines whether to generate DTS files while building the project references. This is equivalent to using the `--build` flag with the `tsc` command. See [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html) for more details.
+Whether to generate DTS files with building the project references. This is equivalent to using the `--build` flag with the `tsc` command. See [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html) for more details.
 
 When this option is enabled, you must explicitly set `declarationDir` or `outDir` in `tsconfig.json` in order to meet the build requirements.
 

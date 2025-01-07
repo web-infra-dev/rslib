@@ -1,5 +1,4 @@
 import type { EnvironmentConfig, RsbuildConfig, Rspack } from '@rsbuild/core';
-import type { PluginDtsOptions } from 'rsbuild-plugin-dts';
 import type { GetAsyncFunctionFromUnion } from './utils';
 
 export type Format = 'esm' | 'cjs' | 'umd' | 'mf';
@@ -44,21 +43,67 @@ export type Syntax =
   | string[];
 
 export type Dts =
-  | (Pick<
-      PluginDtsOptions,
-      'bundle' | 'distPath' | 'abortOnError' | 'build'
-    > & {
+  | {
+      /**
+       * Whether to bundle the DTS files.
+       * @defaultValue `false`
+       * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsbundle}
+       */
+      bundle?: boolean;
+      /**
+       * The output directory of DTS files.
+       * @defaultValue {@link https://lib.rsbuild.dev/config/lib/dts#default-value}
+       * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsdistpath}
+       */
+      distPath?: string;
+      /**
+       * Whether to generate DTS files with building the project references.
+       * @defaultValue `false`
+       * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsbuild}
+       */
+      build?: boolean;
+      /**
+       * Whether to abort the build process when an error occurs during DTS generation.
+       * @defaultValue `true`
+       * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsabortonerror}
+       */
+      abortOnError?: boolean;
+      /**
+       * Whether to automatically set the DTS file extension based on the {@link format} option.
+       * @defaultValue `false`
+       * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsautoextension}
+       */
       autoExtension?: boolean;
-    })
+    }
   | boolean;
 
 export type AutoExternal =
   | boolean
   | {
+      /**
+       * Whether to automatically externalize dependencies of type `dependencies`.
+       * @defaultValue `true`
+       * @see {@link https://lib.rsbuild.dev/config/lib/auto-external#autoexternaldependencies}
+       */
       dependencies?: boolean;
+      /**
+       * Whether to automatically externalize dependencies of type `optionalDependencies`.
+       * @defaultValue `true`
+       * @see {@link https://lib.rsbuild.dev/config/lib/auto-external#autoexternaloptionaldependencies}
+       */
       optionalDependencies?: boolean;
-      devDependencies?: boolean;
+      /**
+       * Whether to automatically externalize dependencies of type `peerDependencies`.
+       * @defaultValue `true`
+       * @see {@link https://lib.rsbuild.dev/config/lib/auto-external#autoexternalpeerdependencies}
+       */
       peerDependencies?: boolean;
+      /**
+       * Whether to automatically externalize dependencies of type `devDependencies`.
+       * @defaultValue `false`
+       * @see {@link https://lib.rsbuild.dev/config/lib/auto-external#autoexternaldevdependencies}
+       */
+      devDependencies?: boolean;
     };
 
 export type BannerAndFooter = {
@@ -68,12 +113,40 @@ export type BannerAndFooter = {
 };
 
 export type Shims = {
+  /**
+   * Configure the shims for CommonJS output.
+   * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimscjs}
+   */
   cjs?: {
+    /**
+     * Whether to inject shims for the `import.meta.url` in CommonJS output.
+     * @defaultValue `true`
+     * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimscjsimportmetaurl}
+     */
     'import.meta.url'?: boolean;
   };
+  /**
+   * Configure the shims for ESM output.
+   * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimsesm}
+   */
   esm?: {
+    /**
+     * Whether to inject shims for the global `__filename` of CommonJS in ESM output.
+     * @defaultValue `false`
+     * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimsesm__filename}
+     */
     __filename?: boolean;
+    /**
+     * Whether to inject shims for the global `__dirname` of CommonJS in ESM output.
+     * @defaultValue `false`
+     * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimsesm__dirname}
+     */
     __dirname?: boolean;
+    /**
+     * Whether to inject shims for the global `require` of CommonJS in ESM output.
+     * @defaultValue `false`
+     * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimsesmrequire}
+     */
     require?: boolean;
   };
 };
@@ -85,7 +158,7 @@ export type JsRedirect = {
    */
   path?: boolean;
   /**
-   * Whether to automatically add the file extension to import paths based on the JavaScript output files.
+   * Whether to automatically redirect the file extension to import paths based on the JavaScript output files.
    * @defaultValue `true`
    */
   extension?: boolean;
@@ -98,7 +171,7 @@ export type StyleRedirect = {
    */
   path?: boolean;
   /**
-   * Whether to automatically add the file extension to import paths based on the style output files.
+   * Whether to automatically redirect the file extension to import paths based on the style output files.
    * @defaultValue `true`
    */
   extension?: boolean;
@@ -113,7 +186,7 @@ type DtsRedirect = {
 export type Redirect = {
   /** Controls the redirect of the import paths of output JavaScript files. */
   js?: JsRedirect;
-  /** Whether to redirect the import path of the style file. */
+  /** Controls the redirect of the import paths of output style files. */
   style?: StyleRedirect;
   // TODO: support other redirects
   // asset?: boolean;
