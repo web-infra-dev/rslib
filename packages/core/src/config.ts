@@ -899,22 +899,40 @@ const composeEntryConfig = async (
   }
 
   if (bundle !== false) {
-    let isFileEntry = false;
+    const entryErrorReasons: string[] = [];
     traverseEntryQuery(entries, (entry) => {
       const entryAbsPath = path.isAbsolute(entry)
         ? entry
         : path.resolve(root, entry);
+      const isDirLike = path.extname(entryAbsPath) === '';
+      const dirError = `Glob pattern ${color.cyan(`"${entry}"`)} is not supported when "bundle" is "true", considering "bundle" to "false" to use bundleless mode, or specify a file entry to bundle. See ${color.green('https://lib.rsbuild.dev/guide/basic/output-structure')} for more details.`;
+
       if (fs.existsSync(entryAbsPath)) {
         const stats = fs.statSync(entryAbsPath);
-        isFileEntry = stats.isFile();
+        if (!stats.isFile()) {
+          // Existed dir.
+          entryErrorReasons.push(dirError);
+        } else {
+          // Existed file.
+        }
+      } else {
+        if (isDirLike) {
+          // Non-existed dir.
+          entryErrorReasons.push(dirError);
+        } else {
+          // Non-existed file.
+          entryErrorReasons.push(
+            `Can't resolve the entry ${color.cyan(`"${entry}"`)} at the location ${color.cyan(`${entryAbsPath}`)}. Please ensure that the file exists.`,
+          );
+        }
       }
 
       return entry;
     });
 
-    if (!isFileEntry) {
-      throw new Error(
-        `Glob pattern is not supported when "bundle" is "true", considering ${color.green('set "bundle" to "false"')} to use bundleless mode. See ${color.green('https://lib.rsbuild.dev/guide/basic/output-structure')} for more details.`,
+    if (entryErrorReasons.length) {
+      throw new AggregateError(
+        entryErrorReasons.map((reason) => new Error(reason)),
       );
     }
 
