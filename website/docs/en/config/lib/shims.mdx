@@ -42,6 +42,8 @@ Set the fields to `true` to enable the corresponding shims for CommonJS output.
 
 ### shims.cjs['import.meta.url']
 
+Whether to inject shims for the `import.meta.url` in CommonJS output.
+
 - **Default:** `true`
 
 Options:
@@ -82,7 +84,7 @@ Set the fields to `true` to enable the corresponding shims for ESM output.
 
 ### shims.esm.\_\_filename
 
-Whether to shim the global `__filename` of CommonJS in ESM output.
+Whether to inject shims for the global `__filename` of CommonJS in ESM output.
 
 - **Default:** `false`
 
@@ -112,7 +114,7 @@ Options:
 
 ### shims.esm.\_\_dirname
 
-Whether to shim the global `__dirname` of CommonJS in ESM output.
+Whether to inject shims for the global `__dirname` of CommonJS in ESM output.
 
 - **Default:** `false`
 
@@ -141,7 +143,7 @@ Options:
 
 ### shims.esm.require
 
-Whether to shim the global `require` of CommonJS in ESM output.
+Whether to inject shims for the global `require` of CommonJS in ESM output.
 
 - **Default:** `false`
 

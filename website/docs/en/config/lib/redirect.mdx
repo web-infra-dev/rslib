@@ -95,7 +95,7 @@ When set to `false`, the import path will not be effected by [resolve.alias](/co
 
 ### redirect.js.extension
 
-Whether to automatically add the file extension to import paths based on the JavaScript output files.
+Whether to automatically redirect the file extension to import paths based on the JavaScript output files.
 
 - **Type:** `boolean`
 - **Default:** `true`
@@ -106,9 +106,11 @@ When set to `false`, the file extension will remain unchanged from the original 
 
 ## redirect.style
 
+Controls the redirect of the import paths of output style files.
+
 ### redirect.style.path
 
-Whether to automatically redirect the import path when importing style files, the rules are the same as [redirect.js.path](/config/lib/redirect#redirectjspath).
+Whether to automatically redirect the import paths of style output files, the rules are the same as [redirect.js.path](/config/lib/redirect#redirectjspath).
 
 - **Type:** `boolean`
 - **Default:** `true`
@@ -137,7 +139,7 @@ import styles from '../foo.css'; // expected output of './dist/utils/index.js'
 
 ### redirect.style.extension
 
-Whether to redirect style file extensions.
+Whether to automatically redirect the file extension to import paths based on the style output files.
 
 - **Type:** `boolean`
 - **Default:** `true`
