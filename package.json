@@ -57,12 +57,20 @@
     "vitest": "^2.1.8",
     "zx": "^8.3.0"
   },
-  "packageManager": "pnpm@9.12.1",
+  "packageManager": "pnpm@10.0.0",
   "engines": {
     "node": ">=18.0.0",
-    "pnpm": ">=9.0.0"
+    "pnpm": ">=10.0.0"
   },
   "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "core-js",
+      "core-js-pure",
+      "esbuild",
+      "nx",
+      "simple-git-hooks"
+    ],
     "overrides": {
       "zx>@types/node": "-"
     }
