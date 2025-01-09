@@ -45,7 +45,7 @@ async function assetShouldWork(page: Page) {
   expect(imgEls).toHaveLength(2);
   const srcList = await Promise.all(
     imgEls.map((imgEl) => imgEl.getAttribute('src')),
-  )
+  );
   for (const src of srcList) {
     expect(src).toMatch(/static\/svg\/logo/);
   }
