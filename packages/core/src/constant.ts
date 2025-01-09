@@ -20,9 +20,9 @@ const JS_EXTENSIONS: string[] = [
   'js',
   'mjs',
   'jsx',
-  '(?<!d.)ts', // ignore d.ts,
-  '(?<!d.)mts', // ditto
-  '(?<!d.)cts', // ditto
+  '(?<!\\.d\\.)ts', // ignore d.ts,
+  '(?<!\\.d\\.)mts', // ditto
+  '(?<!\\.d\\.)cts', // ditto
   'tsx',
   'cjs',
   'cjsx',

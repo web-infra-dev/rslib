@@ -9,6 +9,8 @@ const jsTestStrings = [
   { str: 'index.js', expected: true },
   { str: './index.ts', expected: true },
   { str: './index.d.ts', expected: false },
+  { str: './spread.ts', expected: true },
+  { str: './index.d.jts', expected: false },
   { str: '/Users/path/index.ts', expected: true },
   { str: '/Users/path/index.d.ts', expected: false },
   { str: '/Users/path/index.d.mts', expected: false },
