@@ -67,7 +67,8 @@ class LibCssExtractPlugin implements Rspack.RspackPluginInstance {
             const undoPath = getUndoPath(
               name,
               compilation.outputOptions.path!,
-              false,
+              // https://github.com/web-infra-dev/rspack/pull/8946
+              true,
             );
             replace(`${ABSOLUTE_PUBLIC_PATH}${AUTO_PUBLIC_PATH}`, undoPath);
             replace(ABSOLUTE_PUBLIC_PATH, '');

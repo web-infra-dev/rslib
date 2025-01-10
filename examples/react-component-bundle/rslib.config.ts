@@ -7,7 +7,6 @@ export default defineConfig({
     {
       format: 'esm',
       dts: true,
-      // syntax: 'es5',
       output: {
         distPath: {
           root: './dist/esm',
@@ -16,7 +15,6 @@ export default defineConfig({
     },
     {
       format: 'cjs',
-      syntax: 'es5',
       dts: true,
       output: {
         distPath: {

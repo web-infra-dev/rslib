@@ -115,6 +115,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           "setup": [Function],
         },
         {
+          "name": "rsbuild:lib-asset",
+          "pre": [
+            "rsbuild:svgr",
+          ],
+          "setup": [Function],
+        },
+        {
           "name": "rsbuild:lib-entry-chunk",
           "setup": [Function],
         },
@@ -213,17 +220,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           {
             "externalsType": "module-import",
-          },
-          {
-            "plugins": [
-              LibAssetExtractPlugin {
-                "name": "LIB_ASSET_EXTRACT_PLUGIN",
-                "options": {
-                  "bundle": true,
-                  "isUsingSvgr": false,
-                },
-              },
-            ],
           },
           {
             "plugins": [
@@ -370,6 +366,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           "setup": [Function],
         },
         {
+          "name": "rsbuild:lib-asset",
+          "pre": [
+            "rsbuild:svgr",
+          ],
+          "setup": [Function],
+        },
+        {
           "name": "rsbuild:lib-entry-chunk",
           "setup": [Function],
         },
@@ -460,17 +463,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           {
             "externalsType": "commonjs-import",
-          },
-          {
-            "plugins": [
-              LibAssetExtractPlugin {
-                "name": "LIB_ASSET_EXTRACT_PLUGIN",
-                "options": {
-                  "bundle": true,
-                  "isUsingSvgr": false,
-                },
-              },
-            ],
           },
           {
             "plugins": [
