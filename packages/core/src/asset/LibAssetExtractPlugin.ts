@@ -35,7 +35,7 @@ const WEBPACK_REQUIRE_G_IIFE_ES5 =
 const WEBPACK_REQUIRE_P_IIFE =
   /\(\(\)\s*=>\s*{.*?__webpack_require__\.p\s\=.*?}\)\(\);/gms;
 const WEBPACK_REQUIRE_P_IIFE_ES5 =
-  /!function\(\)\s*\s*{.*?__webpack_require__\.p\s\=.*?}\(\);/gms
+  /!function\(\)\s*\s*{.*?__webpack_require__\.p\s\=.*?}\(\);/gms;
 
 // 2.1 bundle: concatenated
 const CONCATENATED_PATTERN: RegExp =
@@ -127,9 +127,14 @@ class LibAssetExtractPlugin implements Rspack.RspackPluginInstance {
               }
             }
 
-            const supportsArrowFunction = compilation.options.output.environment?.arrowFunction;
-            supportsArrowFunction ? replace(WEBPACK_REQUIRE_G_IIFE, () => '') : replace(WEBPACK_REQUIRE_G_IIFE_ES5, () => '');
-            supportsArrowFunction ? replace(WEBPACK_REQUIRE_P_IIFE, () => '') : replace(WEBPACK_REQUIRE_P_IIFE_ES5, () => '');
+            const supportsArrowFunction =
+              compilation.options.output.environment?.arrowFunction;
+            supportsArrowFunction
+              ? replace(WEBPACK_REQUIRE_G_IIFE, () => '')
+              : replace(WEBPACK_REQUIRE_G_IIFE_ES5, () => '');
+            supportsArrowFunction
+              ? replace(WEBPACK_REQUIRE_P_IIFE, () => '')
+              : replace(WEBPACK_REQUIRE_P_IIFE_ES5, () => '');
 
             replace(CONCATENATED_PATTERN, (match) => {
               const declarationKind = match[1];

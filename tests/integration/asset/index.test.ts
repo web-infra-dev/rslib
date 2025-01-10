@@ -137,7 +137,7 @@ test('set the assets output path', async () => {
 test('set the assets public path', async () => {
   const fixturePath = join(__dirname, 'public-path');
   const { contents } = await buildAndGetResults({ fixturePath });
-  
+
   // umd should preserve '__webpack_require__.p'
   const { content: indexUmdJs } = queryContent(contents.umd!, /index\.js/);
 
