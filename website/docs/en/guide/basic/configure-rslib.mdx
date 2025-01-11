@@ -2,7 +2,7 @@
 
 Rslib's configuration is based on Rsbuild, which means that you can use all of Rsbuild configurations, as well as the `lib` configuration specific to Rslib.
 
-## Configuration Structure
+## Configuration structure
 
 Rslib provides the `lib` option to configure the library outputs. It is an array, and each object is used to describe a format of the output.
 
@@ -17,7 +17,7 @@ export default {
 };
 ```
 
-### Common Rsbuild Configurations
+### Common Rsbuild configurations
 
 You can set common Rsbuild configurations outside the `lib` field, which will be inherited by each configuration object inside the `lib` field.
 
@@ -35,7 +35,7 @@ export default {
 };
 ```
 
-### Separate Rsbuild Configurations
+### Separate Rsbuild configurations
 
 In the `lib` field, you can set separate Rsbuild configurations for each output format, which will override the common Rsbuild configurations outside the `lib` field.
 
@@ -66,7 +66,7 @@ Rslib will generate the [environments](https://rsbuild.dev/config/environments) 
 
 You can also refer to the [Configuration Overview](/config/) page to view the detailed introduction of all configurations.
 
-## Configuration File
+## Configuration file
 
 When you use the CLI of Rslib, Rslib will automatically read the configuration file in the root directory of the current project and resolve it in the following order:
 
@@ -105,7 +105,7 @@ When you use the `.ts`, `.mts`, and `.cts` extensions, Rslib will use [jiti](htt
 
 :::
 
-## Specify Config File
+## Specify config file
 
 Rslib CLI uses the `--config` option to specify the config file, which can be set to a relative path or an absolute path.
 
@@ -125,7 +125,7 @@ You can also abbreviate the `--config` option to `-c`:
 rslib build -c rslib.prod.config.mjs
 ```
 
-## Using Environment Variables
+## Using environment variables
 
 In the configuration file, you can use Node.js environment variables such as `process.env.NODE_ENV` to dynamically set different configurations:
 
@@ -162,7 +162,7 @@ Rslib is built on top of Rsbuild and Rsbuild supports directly modifying the Rsp
 
 For more details, refer to [Configure Rspack](https://rsbuild.dev/guide/basic/configure-rspack).
 
-## Configuration Debug
+## Configuration debug
 
 You can enable Rslib's debug mode by adding the `DEBUG=rsbuild` environment variable when executing a build. It will display the final Rsbuild/Rspack configuration after processing by Rslib.
 

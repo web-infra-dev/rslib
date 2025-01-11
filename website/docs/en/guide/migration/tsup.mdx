@@ -2,7 +2,7 @@
 
 This section introduces how to migrate a project using tsup to Rslib.
 
-## Installing Dependencies
+## Installing dependencies
 
 First, you need to replace the npm dependencies of tsup with Rslib's dependencies.
 
@@ -16,7 +16,7 @@ import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @rslib/core -D" />
 
-## Updating npm Scripts
+## Updating npm scripts
 
 Next, you need to update the npm scripts in your package.json to use Rslib's CLI commands.
 
@@ -31,7 +31,7 @@ Next, you need to update the npm scripts in your package.json to use Rslib's CLI
 }
 ```
 
-## Create Configuration File
+## Create configuration file
 
 Create a Rslib configuration file `rslib.config.ts` in the same directory as `package.json`, and add the following content:
 
@@ -41,7 +41,7 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({});
 ```
 
-## Configuration Migration
+## Configuration migration
 
 Here is the corresponding Rslib configuration for tsup configuration:
 
@@ -64,7 +64,7 @@ Here is the corresponding Rslib configuration for tsup configuration:
 | terserOptions | [output.minify](/config/rsbuild/output#outputminify)                                                       |
 | tsconfig      | [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath)                                           |
 
-## Contents Supplement
+## Contents supplement
 
 The current document only covers part of the migration process. If you find suitable content to add, feel free to contribute to the documentation via pull request 🤝.
 

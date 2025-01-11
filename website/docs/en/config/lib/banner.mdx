@@ -18,7 +18,7 @@ type Banner = {
 
 Inject content into the top of each JavaScript, CSS or DTS output file.
 
-## Object Type
+## Object type
 
 ### banner.js
 
@@ -48,7 +48,7 @@ The banner content in JavaScript and CSS file is based on the [BannerPlugin](htt
 - `raw: true` is enabled by default, so the banner content will be injected as a raw string instead of wrapping in a comment. So if you want to inject a comment, you should add `/*` and `*/` or other comment syntax by yourself.
 - The `stage` option is set to the stage after the JavaScript and CSS files are optimized, thus preventing the banner content from being optimized away.
 
-## Customize Banner Content
+## Customize banner content
 
 If the above default settings cannot meet your requirements, you can customize the banner content through `tools.rspack.plugins` to add a [BannerPlugin](https://rspack.dev/plugins/webpack/banner-plugin) instance with the corresponding options.
 

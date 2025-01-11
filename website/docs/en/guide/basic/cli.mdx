@@ -45,7 +45,7 @@ Options:
   -h, --help            display help for command
 ```
 
-### Watch Mode
+### Watch mode
 
 You can use `rslib build --watch` or `rslib build -w` to enable watch mode for watching for changes and rebuild.
 
@@ -53,7 +53,7 @@ You can use `rslib build --watch` or `rslib build -w` to enable watch mode for w
 npx rslib build -w
 ```
 
-### Environment Variables
+### Environment variables
 
 Rslib supports injecting env variables or expressions into the code during build, which is helpful for distinguishing the running environment or replacing constants.
 
@@ -66,7 +66,7 @@ You can see more details in [Rsbuild - Environment Variables](https://rsbuild.de
 
 :::
 
-#### Env Mode
+#### Env mode
 
 Rslib supports reading `.env.[mode]` and `.env.[mode].local` files. You can specify the env mode using the `--env-mode <mode>` flag.
 
@@ -91,7 +91,7 @@ It is recommended to use `--env-mode` to set the env mode, and not to modify `pr
 
 :::
 
-#### Env Directory
+#### Env directory
 
 By default, the `.env` file is located in the root directory of the project. You can specify the env directory by using the `--env-dir <dir>` option in the CLI.
 
@@ -169,7 +169,7 @@ Inspect config succeed, open following files to view the content:
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
 ```
 
-### Verbose Content
+### Verbose content
 
 By default, the inspect command omits the content of functions in the configuration object. You can add the `--verbose` option to output the complete content of functions:
 
@@ -177,7 +177,7 @@ By default, the inspect command omits the content of functions in the configurat
 rslib inspect --verbose
 ```
 
-### Multiple Output Formats
+### Multiple output formats
 
 If the current project has multiple output formats, such as ESM artifact and CJS artifact simultaneously, multiple Rspack configuration files will be generated in the `dist/.rsbuild` directory.
 
@@ -212,9 +212,9 @@ Options:
   -h, --help            display help for command
 ```
 
-## Common Options
+## Common options
 
-### Filter Libraries
+### Filter libraries
 
 Rslib provides the `--lib` option to run command for specified libraries.
 

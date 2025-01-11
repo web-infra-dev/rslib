@@ -2,7 +2,7 @@
 
 In this chapter, we will introduce how to use Rslib to development libraries for browser and Node.js. We will also cover how to create libraries for different UI frameworks.
 
-## Browser Target
+## Browser target
 
 When developing a library that runs in the browser, you can package it in both [ESM](/guide/basic/output-format#esm--cjs) and [CJS](/guide/basic/output-format#esm--cjs) formats for integration with application bundlers. Configuring the package [conditional exports](https://nodejs.org/api/packages.html#conditional-exports) to ESM output allows for better tree shaking. Additionally, you can create [UMD](/guide/basic/output-format#umd) format output for direct browser use and even generate [Module Federation ](/guide/advanced/module-federation) formats for dynamic loading by other applications. Configure [Browserslist](https://rsbuild.dev/guide/advanced/browserslist) according to the target browser support to determine the downgrade syntax of the output, or adding [polyfill](/guide/advanced/output-compatibility) for API compatibility.
 
@@ -15,7 +15,7 @@ Refer to the solutions in this chapter to learn how to use Rslib to develop brow
 {/* TODO: Clarify default behavior */}
 {/* ### Default Behavior */}
 
-## Node.js Target
+## Node.js target
 
 Rslib set [target](/config/rsbuild/output#outputtarget) to `"node"` by default to development libraries for Node.js.
 

@@ -1,4 +1,4 @@
-# Rslib Contributing Guide
+# Rslib contributing guide
 
 Thanks for that you are interested in contributing to Rslib. Before starting your contribution, please take a moment to read the following guidelines.
 
@@ -14,7 +14,7 @@ fnm use
 nvm use
 ```
 
-## Install Dependencies
+## Install dependencies
 
 Enable [pnpm](https://pnpm.io/) with corepack:
 
@@ -34,11 +34,11 @@ What this will do:
 - Create symlinks between packages in the monorepo
 - Run the prepare script to build all packages, powered by [nx](https://nx.dev/).
 
-## Making Changes and Building
+## Making changes and building
 
 Once you have set up the local development environment in your forked repo, we can start development.
 
-### Checkout A New Branch
+### Checkout a new branch
 
 It is recommended to develop on a new branch, as it will make things easier later when you submit a pull request:
 
@@ -46,7 +46,7 @@ It is recommended to develop on a new branch, as it will make things easier late
 git checkout -b MY_BRANCH_NAME
 ```
 
-### Build the Package
+### Build the package
 
 Use [nx build](https://nx.dev/nx-api/nx/documents/run) to build the package you want to change:
 
@@ -68,13 +68,13 @@ npx nx build @rslib/core --watch
 
 ## Testing
 
-### Add New Tests
+### Add new tests
 
 If you've fixed a bug or added code that should be tested, then add some tests.
 
 You can add unit test cases in the `<PACKAGE_DIR>/tests` folder. The test runner is based on [Vitest](https://vitest.dev/).
 
-### Run Unit Tests
+### Run unit tests
 
 Before submitting a pull request, it's important to make sure that the changes haven't introduced any regressions or bugs. You can run the unit tests for the project by executing the following command:
 
