@@ -7,7 +7,7 @@ A Module Federation remote module built with Rsbuild. It is consumed by [mf-reac
 
 Extra remote module is **optional**, it is used to demonstrate a complex Module Federation set up here.
 
-## Get Started
+## Get started
 
 Start the dev server:
 

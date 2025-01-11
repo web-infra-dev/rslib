@@ -2,7 +2,7 @@
 
 在本章中，将介绍如何使用 Rslib 开发浏览器和 Node.js 的库。我们还将介绍如何为不同的 UI 框架创建库。
 
-## Browser Target
+## Browser target
 
 开发在浏览器中运行的库时，可以将其打包为 [ESM](/guide/basic/output-format#esm--cjs) 和 [CJS](/guide/basic/output-format#esm--cjs) 格式，用于与 app 的 bundler 集成。将包 [conditional-exports](https://nodejs.org/api/packages.html#conditional-exports) 配置为 ESM 输出可以更好地进行 treeshaking。此外，你可以创建 [UMD](/guide/basic/output-format#umd) 格式输出以供浏览器直接使用，甚至可以生成 [模块联邦](/guide/advanced/module-federation) 格式以供其他应用程序动态加载。根据目标浏览器支持配置 [Browserslist](https://rsbuild.dev/zh/guide/advanced/browserslist)以确定输出的降级语法，或添加 [polyfill](/guide/advanced/output-compatibility) 用于兼容 API。
 
@@ -15,7 +15,7 @@
 {/* TODO: Clarify default behavior */}
 {/* ### Default Behavior */}
 
-## Node.js Target
+## Node.js target
 
 Rslib 默认将 [target](/config/rsbuild/output#outputtarget) 设置为 `"node"`，以方便开发 Node.js 中使用的库。
 

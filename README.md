@@ -39,7 +39,7 @@ Rslib has the following features:
 - **Declaration file generation**: Including isolated declarations.
 - **Advanced features**: Module Federation, asset compression, PostCSS, Lightning CSS, and more.
 
-## 📚 Getting Started
+## 📚 Getting started
 
 To get started with Rslib, see the [Quick Start](https://lib.rsbuild.dev/guide/start/quick-start).
 
@@ -109,7 +109,7 @@ Please read the [Contributing Guide](https://github.com/web-infra-dev/rslib/blob
   </table>
 </a>
 
-### Code of Conduct
+### Code of conduct
 
 This repo has adopted the ByteDance Open Source Code of Conduct. Please check [Code of Conduct](./CODE_OF_CONDUCT.md) for more details.
 

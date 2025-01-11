@@ -2,7 +2,7 @@
 
 In this document, you will learn how to build a React component library with Rslib.
 
-## Create React Project
+## Create React project
 
 You can use `create-rslib` to create a project with Rslib + React. Just execute the following command:
 
@@ -19,7 +19,7 @@ import { PackageManagerTabs } from '@theme';
 
 Then select `React` when prompted to "Select template".
 
-## Use Rslib in an Existing Project
+## Use Rslib in an existing project
 
 To develop a React library, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default, which differs from the default target of Rsbuild.
 
@@ -42,7 +42,7 @@ export default defineConfig({
 });
 ```
 
-## JSX Transform
+## JSX transform
 
 - **Type**: `'automatic' | 'classic'`
 - **Default**: `'automatic'`
@@ -74,7 +74,7 @@ export default defineConfig({
 });
 ```
 
-## JSX Import Source
+## JSX import source
 
 - **Type**: `string`
 - **Default**: `'react'`
@@ -107,7 +107,7 @@ export default defineConfig({
 {/* TODO */}
 {/* ## SVGR */}
 
-## Further Reading
+## Further reading
 
 - [Rsbuild React Plugin](https://rsbuild.dev/plugins/list/plugin-react#swcreactoptionsruntime)
 - [SWC Compilation - jsc.transform.react](https://swc.rs/docs/configuration/compilation#jsctransformreact)

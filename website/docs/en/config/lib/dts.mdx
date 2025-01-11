@@ -22,7 +22,7 @@ type Dts =
 
 Configure the generation of the TypeScript declaration files.
 
-## Boolean Type
+## Boolean type
 
 DTS generation is an optional feature, you can set `dts: true` to enable [bundleless DTS](/guide/advanced/dts#bundleless-dts) generation.
 
@@ -50,7 +50,7 @@ export default {
 };
 ```
 
-## Object Type
+## Object type
 
 If you want to customize the DTS generation, you can set the `dts` option to an object.
 
@@ -92,7 +92,7 @@ export default {
 
 :::
 
-#### Handle Third-Party Packages
+#### Handle third-party packages
 
 When we bundle DTS files, we should specify which third-party package types need to be bundled, refer to the [Handle Third-Party Dependencies](/guide/advanced/third-party-deps) documentation for more details about externals related configurations.
 
@@ -102,7 +102,7 @@ When we bundle DTS files, we should specify which third-party package types need
 
 The output directory of DTS files.
 
-#### Default Value
+#### Default value
 
 The default value follows the priority below:
 
@@ -175,7 +175,7 @@ When this configuration is disabled, there is no guarantee that the type files w
 
 Whether to automatically set the DTS file extension based on the [format](/config/lib/format) option.
 
-#### Default Extension
+#### Default extension
 
 By default that when `dts.autoExtension` is `false`, the DTS file extension will be `.d.ts`.
 

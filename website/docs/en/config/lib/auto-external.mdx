@@ -29,7 +29,7 @@ type AutoExternal =
 
 Whether to automatically externalize dependencies of different dependency types and do not bundle them.
 
-## Object Type
+## Object type
 
 ### autoExternal.dependencies
 
@@ -59,7 +59,7 @@ Whether to automatically externalize dependencies of type `peerDependencies`.
 
 Whether to automatically externalize dependencies of type `devDependencies`.
 
-## Default Value
+## Default value
 
 The default value of `autoExternal` is `true`, which means the following dependency types will **not be bundled**:
 
@@ -91,7 +91,7 @@ export default {
 
 ## Example
 
-### Customize Externalized Dependency Types
+### Customize externalized dependency types
 
 To disable the processing of a specific type of dependency, you can configure `autoExternal` as an object like this:
 
@@ -109,7 +109,7 @@ export default {
 };
 ```
 
-### Disable Default Behavior
+### Disable default behavior
 
 If you want to disable the default behavior, you can set `autoExternal` to `false`:
 
