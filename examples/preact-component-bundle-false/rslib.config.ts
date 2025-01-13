@@ -1,6 +1,6 @@
 import { pluginPreact } from '@rsbuild/plugin-preact';
 import { pluginSass } from '@rsbuild/plugin-sass';
-import { type LibConfig, defineConfig } from '@rslib/core';
+import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   source: {
