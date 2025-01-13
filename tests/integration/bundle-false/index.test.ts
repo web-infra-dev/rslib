@@ -67,6 +67,21 @@ test('basic', async () => {
   `);
 });
 
+test('monorepo', async () => {
+  const fixturePath = join(__dirname, 'monorepo/importer');
+  const { contents } = await buildAndGetResults({ fixturePath });
+  expect(
+    queryContent(contents.esm, 'index.js', {
+      basename: true,
+    }).content,
+  ).toMatchInlineSnapshot(`
+    "import * as __WEBPACK_EXTERNAL_MODULE_bundle_false_monorepo_importee_test_35ca595f__ from "bundle-false-monorepo-importee-test";
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_bundle_false_monorepo_importee_test_35ca595f__["default"];
+    export { src_rslib_entry_ as default };
+    "
+  `);
+});
+
 test('single file', async () => {
   const fixturePath = join(__dirname, 'single-file');
   const { files } = await buildAndGetResults({ fixturePath });

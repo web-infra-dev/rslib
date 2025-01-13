@@ -5,6 +5,4 @@ import prettier from 'prettier';
 import bar from './bar.js';
 import foo from './foo';
 
-console.log('prettier: ', prettier);
-
-export default lodash.toUpper(foo + bar);
+export default lodash.toUpper(foo + bar + prettier.version);
