@@ -1,3 +1,3 @@
-import logo from '../../../../assets/logo.svg?react';
+import logo from '../assets/logo.svg?react';
 
 console.log(logo);

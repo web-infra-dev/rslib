@@ -1,20 +1,33 @@
+import { resolve } from 'node:path';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { defineConfig } from '@rslib/core';
 import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
-    generateBundleEsmConfig({ bundle: false }),
-    generateBundleCjsConfig({ bundle: false }),
+    generateBundleEsmConfig({
+      bundle: false,
+      output: {
+        distPath: {
+          root: resolve(__dirname, 'dist/esm'),
+        },
+      },
+    }),
+    generateBundleCjsConfig({
+      bundle: false,
+      output: {
+        distPath: {
+          root: resolve(__dirname, 'dist/cjs'),
+        },
+      },
+    }),
   ],
   source: {
     entry: {
-      index: [
-        '../__fixtures__/src/**/*.scss',
-        '../__fixtures__/foundation/logo.svg',
-      ],
+      index: ['./src/**/*.scss', './foundation/logo.svg'],
     },
   },
+  root: resolve(__dirname, '../__fixtures__'),
   plugins: [
     pluginSass({
       sassLoaderOptions: {

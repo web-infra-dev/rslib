@@ -552,6 +552,14 @@ importers:
 
   tests/integration/bundle-false/js-extension: {}
 
+  tests/integration/bundle-false/monorepo/importee: {}
+
+  tests/integration/bundle-false/monorepo/importer:
+    dependencies:
+      bundle-false-monorepo-importee-test:
+        specifier: workspace:*
+        version: link:../importee
+
   tests/integration/bundle-false/single-file: {}
 
   tests/integration/bundle-false/svgr:

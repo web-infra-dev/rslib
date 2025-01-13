@@ -17,8 +17,7 @@ test('redirect.js default', async () => {
     import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__ from "./bar.js";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
-    console.log('prettier: ', __WEBPACK_EXTERNAL_MODULE_prettier__["default"]);
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"]);
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"] + __WEBPACK_EXTERNAL_MODULE_prettier__["default"].version);
     export { src_rslib_entry_ as default };
     "
   `);
@@ -39,8 +38,7 @@ test('redirect.js.path false', async () => {
     import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__ from "./bar.js";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
-    console.log('prettier: ', __WEBPACK_EXTERNAL_MODULE_prettier__["default"]);
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"]);
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"] + __WEBPACK_EXTERNAL_MODULE_prettier__["default"].version);
     export { src_rslib_entry_ as default };
     "
   `);
@@ -61,8 +59,7 @@ test('redirect.js.extension: false', async () => {
     import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
     import * as __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__ from "./bar.js";
     import * as __WEBPACK_EXTERNAL_MODULE__foo_23da6eef__ from "./foo";
-    console.log('prettier: ', __WEBPACK_EXTERNAL_MODULE_prettier__["default"]);
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_23da6eef__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"]);
+    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_23da6eef__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"] + __WEBPACK_EXTERNAL_MODULE_prettier__["default"].version);
     export { src_rslib_entry_ as default };
     "
   `);

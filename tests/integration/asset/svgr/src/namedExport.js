@@ -1,3 +1,3 @@
-import { ReactComponent } from '../../../../assets/logo.svg';
+import { ReactComponent } from '../assets/logo.svg';
 
 console.log(ReactComponent);
