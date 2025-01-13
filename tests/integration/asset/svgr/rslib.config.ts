@@ -1,73 +1,63 @@
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
 import { defineConfig } from '@rslib/core';
-import { generateBundleEsmConfig } from 'test-helper';
+import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
+    // 0. bundle
+    // esm
     generateBundleEsmConfig({
-      source: {
-        entry: {
-          index: './src/index.js',
-        },
-      },
       output: {
         distPath: {
           root: './dist/esm/bundle-default',
         },
       },
-      plugins: [pluginSvgr()],
+      plugins: [
+        pluginSvgr({
+          mixedImport: true,
+        }),
+      ],
     }),
-    generateBundleEsmConfig({
-      source: {
-        entry: {
-          index: './src/index.js',
+    // cjs
+    generateBundleCjsConfig({
+      output: {
+        distPath: {
+          root: './dist/cjs/bundle-default',
         },
       },
+      plugins: [
+        pluginSvgr({
+          mixedImport: true,
+        }),
+      ],
+    }),
+    // 1. bundleless
+    // esm
+    generateBundleEsmConfig({
       bundle: false,
       output: {
         distPath: {
           root: './dist/esm/bundleless-default',
         },
       },
-      plugins: [pluginSvgr()],
-    }),
-    generateBundleEsmConfig({
-      source: {
-        entry: {
-          index: './src/namedExport.js',
-        },
-      },
-      output: {
-        distPath: {
-          root: './dist/esm/bundle-named',
-        },
-      },
       plugins: [
         pluginSvgr({
-          svgrOptions: {
-            exportType: 'named',
-          },
+          mixedImport: true,
         }),
       ],
     }),
-    generateBundleEsmConfig({
-      source: {
-        entry: {
-          index: './src/namedExport.js',
-        },
-      },
+    // cjs
+    generateBundleCjsConfig({
       bundle: false,
       output: {
         distPath: {
-          root: './dist/esm/bundleless-named',
+          root: './dist/cjs/bundleless-default',
         },
       },
       plugins: [
         pluginSvgr({
-          svgrOptions: {
-            exportType: 'named',
-          },
+          mixedImport: true,
         }),
       ],
     }),

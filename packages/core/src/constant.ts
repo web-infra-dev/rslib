@@ -16,6 +16,8 @@ export const SHEBANG_REGEX: RegExp = /#!.*[\s\n\r]*$/;
 export const REACT_DIRECTIVE_REGEX: RegExp =
   /^['"]use (client|server)['"](;?)[\s\n\r]*$/;
 
+const DTS_EXTENSIONS: string[] = ['d.ts', 'd.mts', 'd.cts'];
+
 const JS_EXTENSIONS: string[] = [
   'js',
   'mjs',
@@ -33,11 +35,6 @@ const JS_EXTENSIONS: string[] = [
 
 const CSS_EXTENSIONS: string[] = ['css', 'sass', 'scss', 'less'] as const;
 
-const ENTRY_EXTENSIONS: string[] = [
-  ...JS_EXTENSIONS,
-  ...CSS_EXTENSIONS,
-] as const;
-
 export const JS_EXTENSIONS_PATTERN: RegExp = new RegExp(
   `\\.(${JS_EXTENSIONS.join('|')})$`,
 );
@@ -46,6 +43,6 @@ export const CSS_EXTENSIONS_PATTERN: RegExp = new RegExp(
   `\\.(${CSS_EXTENSIONS.join('|')})$`,
 );
 
-export const ENTRY_EXTENSIONS_PATTERN: RegExp = new RegExp(
-  `\\.(${ENTRY_EXTENSIONS.join('|')})$`,
+export const DTS_EXTENSIONS_PATTERN: RegExp = new RegExp(
+  `\\.(${DTS_EXTENSIONS.join('|')})$`,
 );

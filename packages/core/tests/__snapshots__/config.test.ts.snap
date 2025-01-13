@@ -8,6 +8,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "progressBar": false,
       },
       "output": {
+        "assetPrefix": "auto",
         "dataUriLimit": 0,
         "distPath": {
           "css": "./",
@@ -111,6 +112,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "plugins": [
         {
           "name": "rsbuild:format",
+          "setup": [Function],
+        },
+        {
+          "name": "rsbuild:lib-asset",
+          "pre": [
+            "rsbuild:svgr",
+          ],
           "setup": [Function],
         },
         {
@@ -252,6 +260,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "progressBar": false,
       },
       "output": {
+        "assetPrefix": "auto",
         "dataUriLimit": 0,
         "distPath": {
           "css": "./",
@@ -354,6 +363,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "plugins": [
         {
           "name": "rsbuild:cjs-import-meta-url-shim",
+          "setup": [Function],
+        },
+        {
+          "name": "rsbuild:lib-asset",
+          "pre": [
+            "rsbuild:svgr",
+          ],
           "setup": [Function],
         },
         {

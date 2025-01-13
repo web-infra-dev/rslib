@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import {
   CSS_EXTENSIONS_PATTERN,
-  ENTRY_EXTENSIONS_PATTERN,
+  DTS_EXTENSIONS_PATTERN,
   JS_EXTENSIONS_PATTERN,
 } from '../src/constant';
 
@@ -27,6 +27,17 @@ const cssTestStrings = [
   { str: '/Users/path/index.sass', expected: true },
 ];
 
+const dtsTestStrings = [
+  { str: 'index.js', expected: false },
+  { str: './index.ts', expected: false },
+  { str: './index.d.ts', expected: true },
+  { str: '/Users/path/index.ts', expected: false },
+  { str: '/Users/path/index.d.ts', expected: true },
+  { str: '/Users/path/index.d.mts', expected: true },
+  { str: '/Users/path/index.d.cts', expected: true },
+  { str: '/Users/path/index.tsx', expected: false },
+];
+
 test('JS_EXTENSIONS_PATTERN', () => {
   for (const { str, expected } of jsTestStrings) {
     expect(JS_EXTENSIONS_PATTERN.test(str)).toBe(expected);
@@ -39,8 +50,8 @@ test('CSS_EXTENSIONS_PATTERN', () => {
   }
 });
 
-test('ENTRY_EXTENSIONS_PATTERN', () => {
-  for (const { str, expected } of [...jsTestStrings, ...cssTestStrings]) {
-    expect(ENTRY_EXTENSIONS_PATTERN.test(str)).toBe(expected);
+test('DTS_EXTENSIONS_PATTERN', () => {
+  for (const { str, expected } of dtsTestStrings) {
+    expect(DTS_EXTENSIONS_PATTERN.test(str)).toBe(expected);
   }
 });
