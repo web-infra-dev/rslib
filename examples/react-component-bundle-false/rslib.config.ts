@@ -1,6 +1,6 @@
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
-import { type LibConfig, defineConfig } from '@rslib/core';
+import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   source: {
