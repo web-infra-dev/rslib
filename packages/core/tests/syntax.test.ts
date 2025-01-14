@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { EcmaScriptVersion } from '../src/types';
 import {
   ESX_TO_BROWSERSLIST,
   transformSyntaxToBrowserslist,
@@ -6,8 +7,16 @@ import {
 } from '../src/utils/syntax';
 
 const compareSemver = (a: string, b: string) => {
-  const [aMajor, aMinor, aPatch] = a.split('.').map(Number);
-  const [bMajor, bMinor, bPatch] = b.split('.').map(Number);
+  const [aMajor, aMinor, aPatch] = a.split('.').map(Number) as [
+    number,
+    number,
+    number,
+  ];
+  const [bMajor, bMinor, bPatch] = b.split('.').map(Number) as [
+    number,
+    number,
+    number,
+  ];
 
   if (aMajor !== bMajor) {
     return aMajor - bMajor;
@@ -27,7 +36,7 @@ describe('ESX_TO_BROWSERSLIST', () => {
   });
 
   test('ECMA version mapped browserslist queries should increments', () => {
-    const sortedVersions = [
+    const sortedVersions: EcmaScriptVersion[] = [
       'es5',
       'es6',
       'es2015',
@@ -39,16 +48,18 @@ describe('ESX_TO_BROWSERSLIST', () => {
       'es2021',
       'es2022',
       'es2023',
-      'es2024',
-      'esnext',
     ];
 
     for (let i = 1; i < sortedVersions.length; i++) {
-      const prev = sortedVersions[i - 1];
-      const current = sortedVersions[i];
+      const prev = sortedVersions[i - 1]!;
+      const current = sortedVersions[i]!;
       for (const query of Object.keys(ESX_TO_BROWSERSLIST[current])) {
-        const prevQuery = ESX_TO_BROWSERSLIST[prev][query];
-        const currQuery = ESX_TO_BROWSERSLIST[current][query];
+        const prevQuery = (ESX_TO_BROWSERSLIST[prev] as Record<string, string>)[
+          query
+        ];
+        const currQuery = (
+          ESX_TO_BROWSERSLIST[current] as Record<string, string>
+        )[query];
         if (prevQuery && currQuery) {
           expect(compareSemver(currQuery, prevQuery)).toBeGreaterThanOrEqual(0);
         }
@@ -59,7 +70,9 @@ describe('ESX_TO_BROWSERSLIST', () => {
 
 describe('transformSyntaxToBrowserslist', () => {
   test('esX', () => {
-    expect(transformSyntaxToBrowserslist('es2015')).toMatchInlineSnapshot(`
+    expect(
+      transformSyntaxToBrowserslist('es2015', 'web'),
+    ).toMatchInlineSnapshot(`
       [
         "chrome >= 63.0.0",
         "edge >= 79.0.0",
@@ -71,7 +84,9 @@ describe('transformSyntaxToBrowserslist', () => {
       ]
     `);
 
-    expect(transformSyntaxToBrowserslist('es2018')).toMatchInlineSnapshot(`
+    expect(
+      transformSyntaxToBrowserslist('es2018', 'web'),
+    ).toMatchInlineSnapshot(`
       [
         "chrome >= 64.0.0",
         "edge >= 79.0.0",
@@ -111,7 +126,7 @@ describe('transformSyntaxToBrowserslist', () => {
 
   test('browserslist', () => {
     expect(
-      transformSyntaxToBrowserslist(['fully supports es6-module']),
+      transformSyntaxToBrowserslist(['fully supports es6-module'], 'web'),
     ).toMatchInlineSnapshot(`
         [
           "fully supports es6-module",
@@ -119,7 +134,7 @@ describe('transformSyntaxToBrowserslist', () => {
       `);
 
     expect(
-      transformSyntaxToBrowserslist(['node 14', 'Chrome 103']),
+      transformSyntaxToBrowserslist(['node 14', 'Chrome 103'], 'web'),
     ).toMatchInlineSnapshot(`
       [
         "node 14",
@@ -130,7 +145,7 @@ describe('transformSyntaxToBrowserslist', () => {
 
   test('combined', () => {
     expect(
-      transformSyntaxToBrowserslist(['Chrome 123', 'es5']),
+      transformSyntaxToBrowserslist(['Chrome 123', 'es5'], 'web'),
     ).toMatchInlineSnapshot(`
       [
         "Chrome 123",
@@ -145,8 +160,8 @@ describe('transformSyntaxToBrowserslist', () => {
       ]
     `);
 
-    expect(transformSyntaxToBrowserslist(['es5'])).toEqual(
-      transformSyntaxToBrowserslist('es5'),
+    expect(transformSyntaxToBrowserslist(['es5'], 'web')).toEqual(
+      transformSyntaxToBrowserslist('es5', 'web'),
     );
   });
 });

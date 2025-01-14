@@ -6,6 +6,7 @@ vi.mock('rslog');
 describe('should composeAutoExternalConfig correctly', () => {
   it('autoExternal default value', () => {
     const esmResult = composeAutoExternalConfig({
+      bundle: true,
       format: 'esm',
       autoExternal: undefined,
       pkgJson: {
@@ -17,6 +18,7 @@ describe('should composeAutoExternalConfig correctly', () => {
     });
 
     const cjsResult = composeAutoExternalConfig({
+      bundle: true,
       format: 'cjs',
       autoExternal: undefined,
       pkgJson: {
@@ -28,6 +30,7 @@ describe('should composeAutoExternalConfig correctly', () => {
     });
 
     const umdResult = composeAutoExternalConfig({
+      bundle: true,
       format: 'umd',
       autoExternal: undefined,
       pkgJson: {
@@ -39,6 +42,7 @@ describe('should composeAutoExternalConfig correctly', () => {
     });
 
     const mfResult = composeAutoExternalConfig({
+      bundle: true,
       format: 'mf',
       autoExternal: undefined,
       pkgJson: {
@@ -77,6 +81,7 @@ describe('should composeAutoExternalConfig correctly', () => {
 
   it('autoExternal is true', () => {
     const result = composeAutoExternalConfig({
+      bundle: true,
       format: 'esm',
       autoExternal: true,
       pkgJson: {
@@ -110,6 +115,7 @@ describe('should composeAutoExternalConfig correctly', () => {
 
   it('autoExternal is true when format is umd or mf', () => {
     const umdResult = composeAutoExternalConfig({
+      bundle: true,
       format: 'umd',
       autoExternal: true,
       pkgJson: {
@@ -132,6 +138,7 @@ describe('should composeAutoExternalConfig correctly', () => {
     `);
 
     const mfResult = composeAutoExternalConfig({
+      bundle: true,
       format: 'mf',
       autoExternal: true,
       pkgJson: {
@@ -156,6 +163,7 @@ describe('should composeAutoExternalConfig correctly', () => {
 
   it('autoExternal will deduplication ', () => {
     const result = composeAutoExternalConfig({
+      bundle: true,
       format: 'esm',
       autoExternal: true,
       pkgJson: {
@@ -191,6 +199,7 @@ describe('should composeAutoExternalConfig correctly', () => {
 
   it('autoExternal is object', () => {
     const result = composeAutoExternalConfig({
+      bundle: true,
       format: 'esm',
       autoExternal: {
         peerDependencies: false,
@@ -219,6 +228,7 @@ describe('should composeAutoExternalConfig correctly', () => {
 
   it('autoExternal is false', () => {
     const result = composeAutoExternalConfig({
+      bundle: true,
       format: 'esm',
       autoExternal: false,
       pkgJson: {
@@ -234,6 +244,7 @@ describe('should composeAutoExternalConfig correctly', () => {
 
   it('autoExternal with user externals object', () => {
     const result = composeAutoExternalConfig({
+      bundle: true,
       format: 'esm',
       autoExternal: true,
       pkgJson: {
@@ -257,10 +268,21 @@ describe('should composeAutoExternalConfig correctly', () => {
 
   it('read package.json failed', () => {
     const result = composeAutoExternalConfig({
+      bundle: true,
       format: 'esm',
       autoExternal: true,
     });
 
     expect(result).toEqual({});
+  });
+
+  it('bundleless', () => {
+    const result = composeAutoExternalConfig({
+      bundle: false,
+      format: 'esm',
+      autoExternal: true,
+    });
+
+    expect(result).toStrictEqual({});
   });
 });

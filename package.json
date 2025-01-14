@@ -22,6 +22,7 @@
     "test:unit": "vitest run --project unit*",
     "test:unit:watch": "vitest --project unit*",
     "testu": "pnpm run test:unit -u && pnpm run test:integration -u",
+    "type-check": "pnpm -r run type-check",
     "update:rsbuild": "npx taze minor --include /rsbuild/ -w -r -l",
     "watch": "pnpm build --watch"
   },
