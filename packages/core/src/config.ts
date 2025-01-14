@@ -10,6 +10,7 @@ import {
   defineConfig as defineRsbuildConfig,
   loadConfig as loadRsbuildConfig,
   mergeRsbuildConfig,
+  logger as rsbuildLogger,
   rspack,
 } from '@rsbuild/core';
 import { glob } from 'tinyglobby';
@@ -80,6 +81,15 @@ import {
   transformSyntaxToRspackTarget,
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
+
+rsbuildLogger.override({
+  start: (message) => {
+    // Soft clear, copied from https://github.com/lukeed/console-clear/blob/master/index.js.
+    // "start" callback will only be called on watch mode (first compile not included).
+    process.stdout.write('\x1B[H\x1B[2J');
+    logger.start(message);
+  },
+});
 
 /**
  * This function helps you to autocomplete configuration types.
