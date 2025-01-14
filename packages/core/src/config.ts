@@ -878,6 +878,12 @@ const traverseEntryQuery = (
 export const appendEntryQuery = (entries: RsbuildConfigEntry): RsbuildEntry =>
   traverseEntryQuery(entries, (item) => `${item}?${RSLIB_ENTRY_QUERY}`);
 
+export const resolveEntryPath = (
+  entries: RsbuildConfigEntry,
+  root: string,
+): RsbuildEntry =>
+  traverseEntryQuery(entries, (item) => path.resolve(root, item));
+
 const composeEntryConfig = async (
   rawEntry: RsbuildConfigEntry,
   bundle: LibConfig['bundle'],
@@ -939,7 +945,7 @@ const composeEntryConfig = async (
     return {
       entryConfig: {
         source: {
-          entry: appendEntryQuery(entries),
+          entry: appendEntryQuery(resolveEntryPath(entries, root)),
         },
       },
       lcp: null,
@@ -1044,6 +1050,7 @@ const composeBundlelessExternalConfig = (
   redirect: Redirect,
   cssModulesAuto: CssLoaderOptionsAuto,
   bundle: boolean,
+  rootPath: string,
 ): {
   config: EnvironmentConfig;
   resolvedJsRedirect?: DeepRequired<JsRedirect>;
@@ -1083,9 +1090,12 @@ const composeBundlelessExternalConfig = (
                 let resolvedRequest = request;
                 // use resolver to resolve the request
                 resolvedRequest = await resolver!(context!, resolvedRequest);
+                const isSubpath = resolvedRequest.startsWith(
+                  rootPath + path.sep,
+                );
 
-                // only handle the request that is not in node_modules
-                if (!resolvedRequest.includes('node_modules')) {
+                // only handle the request that within the root path
+                if (isSubpath) {
                   resolvedRequest = normalizeSlash(
                     path.relative(path.dirname(issuer), resolvedRequest),
                   );
@@ -1359,6 +1369,7 @@ async function composeLibRsbuildConfig(
     redirect,
     cssModulesAuto,
     bundle,
+    rootPath,
   );
   const {
     config: targetConfig,
