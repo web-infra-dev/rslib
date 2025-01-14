@@ -6,7 +6,7 @@ test('should get correct value from async chunks', async () => {
   const fixturePath = join(__dirname, 'default');
   const { entryFiles } = await buildAndGetResults({ fixturePath });
 
-  for (const format of ['esm', 'cjs']) {
+  for (const format of ['esm', 'cjs'] as const) {
     const { foo } = await import(entryFiles[format]);
     expect(await foo()).toBe('dynamic');
   }
