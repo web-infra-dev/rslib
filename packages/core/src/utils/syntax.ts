@@ -48,7 +48,7 @@ const RSPACK_TARGET_UNLISTED_MODERN_ECMA_VERSIONS: EcmaScriptVersion[] = [
  */
 export const ESX_TO_BROWSERSLIST: Record<
   FixedEcmaVersions,
-  Record<string, string | string[]>
+  Record<string, string>
 > &
   Record<LatestEcmaVersions, (target: RsbuildConfigOutputTarget) => string[]> =
   {

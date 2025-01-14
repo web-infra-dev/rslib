@@ -34,7 +34,8 @@
   "scripts": {
     "build": "rslib build",
     "dev": "rslib build --watch",
-    "prebundle": "prebundle"
+    "prebundle": "prebundle",
+    "type-check": "tsc --noEmit && tsc --noEmit -p tests"
   },
   "dependencies": {
     "@rsbuild/core": "1.2.0-beta.0",

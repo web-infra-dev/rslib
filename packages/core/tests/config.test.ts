@@ -222,7 +222,7 @@ describe('syntax', () => {
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
-      composedRsbuildConfig[0].config.output?.overrideBrowserslist,
+      composedRsbuildConfig[0]!.config.output?.overrideBrowserslist,
     ).toMatchInlineSnapshot(`
       [
         "last 1 node versions",
@@ -245,7 +245,7 @@ describe('syntax', () => {
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
-      composedRsbuildConfig[0].config.output?.overrideBrowserslist,
+      composedRsbuildConfig[0]!.config.output?.overrideBrowserslist,
     ).toMatchInlineSnapshot(`
       [
         "last 1 Chrome versions",
@@ -273,7 +273,7 @@ describe('syntax', () => {
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
-      composedRsbuildConfig[0].config.output?.overrideBrowserslist,
+      composedRsbuildConfig[0]!.config.output?.overrideBrowserslist,
     ).toMatchInlineSnapshot(`
       [
         "last 1 node versions",
@@ -294,7 +294,7 @@ describe('syntax', () => {
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
-      composedRsbuildConfig[0].config.output?.overrideBrowserslist,
+      composedRsbuildConfig[0]!.config.output?.overrideBrowserslist,
     ).toMatchInlineSnapshot(`
       [
         "chrome >= 63.0.0",
@@ -322,7 +322,7 @@ describe('minify', () => {
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
-      composedRsbuildConfig[0].config.output?.minify,
+      composedRsbuildConfig[0]!.config.output?.minify,
     ).toMatchInlineSnapshot(`
       {
         "css": false,
@@ -380,15 +380,15 @@ describe('minify', () => {
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(
-      composedRsbuildConfig[0].config.output?.minify,
+      composedRsbuildConfig[0]!.config.output?.minify,
     ).toMatchInlineSnapshot('false');
 
     expect(
-      composedRsbuildConfig[1].config.output?.minify,
+      composedRsbuildConfig[1]!.config.output?.minify,
     ).toMatchInlineSnapshot('true');
 
     expect(
-      composedRsbuildConfig[2].config.output?.minify,
+      composedRsbuildConfig[2]!.config.output?.minify,
     ).toMatchInlineSnapshot(`
       {
         "css": true,

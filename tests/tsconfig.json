@@ -2,15 +2,17 @@
   "extends": "@rslib/tsconfig/base",
   "compilerOptions": {
     "noEmit": true,
-    "composite": true
+    "composite": true,
+    "allowJs": true
   },
   "include": [
     "e2e/**/*.ts",
-    "integration/**/*.ts",
+    "integration/**/**.test.ts",
+    "integration/**/rslib.config.ts",
+    "integration/**/rslib.config.js",
     "benchmark/**/*.ts",
     "playwright.config.ts",
-    "scripts",
-    "integration/shims/cjs/src/ok.cjs"
+    "scripts"
   ],
   "exclude": ["**/node_modules", "**/.*/"],
   "references": [
