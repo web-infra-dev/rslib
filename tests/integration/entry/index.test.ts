@@ -165,6 +165,6 @@ test('validate entry and throw errors', async () => {
   }
 
   expect(stripAnsi(errMsg)).toMatchInlineSnapshot(
-    `"The source.entry configuration should be an object, but received string: ./src/**. Please check your configuration and ensure it is correctly configured."`,
+    `"The source.entry configuration should be an object, but received string: ./src/**. Checkout https://lib.rsbuild.dev/config/rsbuild/source#sourceentry for more details."`,
   );
 });

@@ -24,8 +24,22 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 在 Rslib 中，默认值为：
 
-- bundle 模式：`src/index.(ts|js|tsx|jsx|mjs|cjs)`
-- bundleless 模式：`src/**`
+- bundle 模式：
+
+```ts
+const defaultEntry = {
+  // default support for other suffixes such as ts, tsx, jsx, mjs, cjs
+  index: 'src/index.js',
+};
+```
+
+- bundleless 模式：
+
+```ts
+const defaultEntry = {
+  index: 'src/**',
+};
+```
 
 :::info
 参考 [lib.bundle](/config/lib/bundle#set-entry) 进一步了解如何为 bundle 和 bundleless 项目设置入口。

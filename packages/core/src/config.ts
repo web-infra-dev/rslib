@@ -909,7 +909,7 @@ const composeEntryConfig = async (
     throw new Error(
       `The ${color.cyan('source.entry')} configuration should be an object, but received ${typeof entries}: ${color.cyan(
         entries,
-      )}. Please check your configuration and ensure it is correctly configured.`,
+      )}. Checkout ${color.green('https://lib.rsbuild.dev/config/rsbuild/source#sourceentry')} for more details.`,
     );
   }
 
