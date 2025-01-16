@@ -890,7 +890,7 @@ const composeEntryConfig = async (
   root: string,
   cssModulesAuto: CssLoaderOptionsAuto,
 ): Promise<{ entryConfig: EnvironmentConfig; lcp: string | null }> => {
-  let entries = rawEntry;
+  let entries: RsbuildConfigEntry = rawEntry;
 
   if (!entries) {
     // In bundle mode, return directly to let Rsbuild apply default entry to './src/index.ts'
@@ -902,6 +902,15 @@ const composeEntryConfig = async (
     entries = {
       index: 'src/**',
     };
+  }
+
+  // Type check to ensure entries is of the expected type
+  if (typeof entries !== 'object') {
+    throw new Error(
+      `The ${color.cyan('source.entry')} configuration should be an object, but received ${typeof entries}: ${color.cyan(
+        entries,
+      )}. Checkout ${color.green('https://lib.rsbuild.dev/config/rsbuild/source#sourceentry')} for more details.`,
+    );
   }
 
   if (bundle !== false) {

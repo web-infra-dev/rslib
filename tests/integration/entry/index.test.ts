@@ -154,4 +154,17 @@ test('validate entry and throw errors', async () => {
   expect(stripAnsi(errMsg)).toMatchInlineSnapshot(
     `"Error: Can't resolve the entry "./src/main.ts" at the location <ROOT>/tests/integration/entry/validate/src/main.ts. Please ensure that the file exists."`,
   );
+
+  try {
+    await buildAndGetResults({
+      fixturePath,
+      configPath: 'bundlelessWithString.config.ts',
+    });
+  } catch (e) {
+    errMsg = (e as Error).message;
+  }
+
+  expect(stripAnsi(errMsg)).toMatchInlineSnapshot(
+    `"The source.entry configuration should be an object, but received string: ./src/**. Checkout https://lib.rsbuild.dev/config/rsbuild/source#sourceentry for more details."`,
+  );
 });

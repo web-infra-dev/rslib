@@ -25,8 +25,22 @@ Used to set the entry modules for building.
 
 In Rslib, the default value is:
 
-- bundle mode: `src/index.(ts|js|tsx|jsx|mjs|cjs)`
-- bundleless mode: `src/**`
+- bundle mode:
+
+```ts
+const defaultEntry = {
+  // default support for other suffixes such as ts, tsx, jsx, mjs, cjs
+  index: 'src/index.js',
+};
+```
+
+- bundleless mode:
+
+```ts
+const defaultEntry = {
+  index: 'src/**',
+};
+```
 
 :::info
 Check out the [lib.bundle](/config/lib/bundle#set-entry) to learn more about how to set entry for bundle and bundleless project.
