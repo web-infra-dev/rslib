@@ -28,6 +28,7 @@ type StyleRedirect = {
 type Redirect = {
   js?: JsRedirect;
   style?: StyleRedirect;
+  asset?: boolean;
 };
 ```
 
@@ -144,9 +145,9 @@ Whether to automatically redirect the file extension to import paths based on th
 - **Type:** `boolean`
 - **Default:** `true`
 
-When set to `true`, When importing a normal style file, the path will be rewritten to the `.css` file. When importing [CSS Modules](/config/rsbuild/output#outputcssmodules), the path will be rewritten to the corresponding JavaScript output file.
+When set to `true`, the file extension of importing a normal style file will be rewritten to `.css`. When importing [CSS Modules](/config/rsbuild/output#outputcssmodules), the path will be rewritten to the corresponding JavaScript output file.
 
-When set to `false`, The file extension will remain unchanged from the original import path.
+When set to `false`, the file extension will remain unchanged from the original import path.
 
 - **Example:**
 
@@ -158,4 +159,15 @@ import './index.css'; // expected output
 
 import styles from './index.module.less'; // source code ↓
 import styles from './index.module.mjs'; // expected output
+```
+
+## redirect.asset
+
+When set to `true`, the paths of imported resource files will be rewritten to the corresponding JavaScript product file.
+
+When set to `false`, the file extension will remain unchanged from the original import path.
+
+```ts
+import url from './assets/logo.svg'; // source code ↓
+import url from './assets/logo.mjs'; // expected output
 ```

@@ -1,37 +1,31 @@
 import { defineConfig } from '@rslib/core';
-import { generateBundleEsmConfig } from 'test-helper';
+import { generateBundleEsmConfig, generateBundleUmdConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
+    generateBundleUmdConfig({
+      output: {
+        assetPrefix: '/public/path',
+      },
+    }),
     generateBundleEsmConfig({
       output: {
         distPath: {
           root: './dist/esm/bundle',
         },
-        assetPrefix: '/public/path/bundle',
-        dataUriLimit: {
-          svg: 0,
-        },
+        assetPrefix: '/public/path',
       },
     }),
     generateBundleEsmConfig({
       bundle: false,
       output: {
         distPath: {
-          root: './dist/esm/bundleless',
+          root: './dist/esm/bundle-false',
         },
-        assetPrefix: '/public/path/bundleless',
-        dataUriLimit: {
-          svg: 0,
-        },
+        assetPrefix: '/public/path',
       },
     }),
   ],
-  source: {
-    entry: {
-      index: './src/index.js',
-    },
-  },
   output: {
     target: 'web',
   },

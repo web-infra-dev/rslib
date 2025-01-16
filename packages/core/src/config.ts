@@ -17,7 +17,7 @@ import { composeAssetConfig } from './asset/assetConfig';
 import {
   DEFAULT_CONFIG_EXTENSIONS,
   DEFAULT_CONFIG_NAME,
-  ENTRY_EXTENSIONS_PATTERN,
+  DTS_EXTENSIONS_PATTERN,
   JS_EXTENSIONS_PATTERN,
   RSLIB_ENTRY_QUERY,
   SWC_HELPERS,
@@ -990,9 +990,9 @@ const composeEntryConfig = async (
       });
 
       // Filter the glob resolved entry files based on the allowed extensions
-      const resolvedEntryFiles = globEntryFiles.filter((file) =>
-        ENTRY_EXTENSIONS_PATTERN.test(file),
-      );
+      const resolvedEntryFiles = globEntryFiles.filter((i) => {
+        return !DTS_EXTENSIONS_PATTERN.test(i);
+      });
 
       if (resolvedEntryFiles.length === 0) {
         throw new Error(`Cannot find ${resolvedEntryFiles}`);
@@ -1070,6 +1070,7 @@ const composeBundlelessExternalConfig = (
   const styleRedirectExtension = redirect.style?.extension ?? true;
   const jsRedirectPath = redirect.js?.path ?? true;
   const jsRedirectExtension = redirect.js?.extension ?? true;
+  const assetRedirect = redirect.asset ?? true;
 
   let resolver: RspackResolver | undefined;
 
@@ -1143,6 +1144,7 @@ const composeBundlelessExternalConfig = (
                 styleRedirectPath,
                 styleRedirectExtension,
                 redirectPath,
+                issuer,
               );
 
               if (cssExternal !== false) {
@@ -1163,20 +1165,33 @@ const composeBundlelessExternalConfig = (
               // If data.request already have an extension, we replace it with new extension
               // This may result in a change in semantics,
               // user should use copy to keep origin file or use another separate entry to deal this
-              if (jsRedirectExtension && resolvedRequest.startsWith('.')) {
+              if (resolvedRequest.startsWith('.')) {
                 const ext = extname(resolvedRequest);
+
                 if (ext) {
+                  // 1. js files hit JS_EXTENSIONS_PATTERN, ./foo.ts -> ./foo.mjs
                   if (JS_EXTENSIONS_PATTERN.test(resolvedRequest)) {
-                    resolvedRequest = resolvedRequest.replace(
-                      /\.[^.]+$/,
-                      jsExtension,
-                    );
+                    if (jsRedirectExtension) {
+                      resolvedRequest = resolvedRequest.replace(
+                        /\.[^.]+$/,
+                        jsExtension,
+                      );
+                    }
                   } else {
-                    // If it does not match jsExtensionsPattern, we should do nothing, eg: ./foo.png
-                    return callback();
+                    // 2. asset files, does not match jsExtensionsPattern, eg: ./foo.png -> ./foo.mjs
+                    // non-js && non-css files
+                    if (assetRedirect) {
+                      resolvedRequest = resolvedRequest.replace(
+                        /\.[^.]+$/,
+                        jsExtension,
+                      );
+                    }
                   }
                 } else {
-                  resolvedRequest = `${resolvedRequest}${jsExtension}`;
+                  // 1. js files hit JS_EXTENSIONS_PATTERN,./foo ->./foo.mjs
+                  if (jsRedirectExtension) {
+                    resolvedRequest = `${resolvedRequest}${jsExtension}`;
+                  }
                 }
               }
 
