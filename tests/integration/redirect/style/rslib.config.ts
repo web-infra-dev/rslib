@@ -55,6 +55,11 @@ export default defineConfig({
     // 2. style.extension: false
     generateBundleEsmConfig({
       bundle: false,
+      source: {
+        entry: {
+          index: ['./src/**/*.ts'],
+        },
+      },
       redirect: {
         style: {
           extension: false,
@@ -69,6 +74,11 @@ export default defineConfig({
     }),
     generateBundleCjsConfig({
       bundle: false,
+      source: {
+        entry: {
+          index: ['./src/**/*.ts'],
+        },
+      },
       redirect: {
         style: {
           extension: false,
@@ -86,6 +96,11 @@ export default defineConfig({
     // style.extension: false
     generateBundleEsmConfig({
       bundle: false,
+      source: {
+        entry: {
+          index: ['./src/**/*.ts'],
+        },
+      },
       redirect: {
         style: {
           path: false,
@@ -101,6 +116,11 @@ export default defineConfig({
     }),
     generateBundleCjsConfig({
       bundle: false,
+      source: {
+        entry: {
+          index: ['./src/**/*.ts'],
+        },
+      },
       redirect: {
         style: {
           path: false,
