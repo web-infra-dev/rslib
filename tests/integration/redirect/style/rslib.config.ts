@@ -10,11 +10,6 @@ export default defineConfig({
     // style.extension: true
     generateBundleEsmConfig({
       bundle: false,
-      source: {
-        entry: {
-          index: ['./src/**'],
-        },
-      },
       output: {
         distPath: {
           root: 'dist/default/esm',
@@ -23,11 +18,6 @@ export default defineConfig({
     }),
     generateBundleCjsConfig({
       bundle: false,
-      source: {
-        entry: {
-          index: ['./src/**'],
-        },
-      },
       output: {
         distPath: {
           root: 'dist/default/cjs',
@@ -38,11 +28,6 @@ export default defineConfig({
     // 1. style.path: false
     generateBundleEsmConfig({
       bundle: false,
-      source: {
-        entry: {
-          index: ['./src/**'],
-        },
-      },
       redirect: {
         style: {
           path: false,
@@ -56,11 +41,6 @@ export default defineConfig({
     }),
     generateBundleCjsConfig({
       bundle: false,
-      source: {
-        entry: {
-          index: ['./src/**'],
-        },
-      },
       redirect: {
         style: {
           path: false,
@@ -75,11 +55,6 @@ export default defineConfig({
     // 2. style.extension: false
     generateBundleEsmConfig({
       bundle: false,
-      source: {
-        entry: {
-          index: ['./src/**/*.ts'],
-        },
-      },
       redirect: {
         style: {
           extension: false,
@@ -94,11 +69,6 @@ export default defineConfig({
     }),
     generateBundleCjsConfig({
       bundle: false,
-      source: {
-        entry: {
-          index: ['./src/**/*.ts'],
-        },
-      },
       redirect: {
         style: {
           extension: false,
@@ -116,11 +86,6 @@ export default defineConfig({
     // style.extension: false
     generateBundleEsmConfig({
       bundle: false,
-      source: {
-        entry: {
-          index: ['./src/**/*.ts'],
-        },
-      },
       redirect: {
         style: {
           path: false,
@@ -136,11 +101,6 @@ export default defineConfig({
     }),
     generateBundleCjsConfig({
       bundle: false,
-      source: {
-        entry: {
-          index: ['./src/**/*.ts'],
-        },
-      },
       redirect: {
         style: {
           path: false,
