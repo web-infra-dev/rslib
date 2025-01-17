@@ -140,3 +140,37 @@ test('3. style.path: false, style.extension: false', async () => {
     'const index_module_cjs_namespaceObject = require("@/module/index.module.cjs");',
   );
 });
+
+test('should external 3rd packages CSS', async () => {
+  const { content: cssIndexJs } = queryContent(
+    contents.esm0!,
+    /esm\/less\/index\.js/,
+  );
+  const { content: cssIndexCjs } = queryContent(
+    contents.cjs0!,
+    /cjs\/less\/index\.cjs/,
+  );
+  expect(cssIndexJs).toMatchInlineSnapshot(`
+    "import "./index.css";
+    "
+  `);
+  expect(cssIndexCjs).toContain('require("./index.css");');
+
+  const { content: pkgIndexJs } = queryContent(
+    contents.esm0!,
+    /esm\/pkg\/index\.js/,
+  );
+  const { content: pkgIndexCjs } = queryContent(
+    contents.cjs0!,
+    /cjs\/pkg\/index\.cjs/,
+  );
+  expect(pkgIndexJs).toMatchInlineSnapshot(`
+    "import "element-ui/lib/theme-chunk/index.css";
+    import "element-ui/lib/theme-chunk/index";
+    "
+  `);
+  expect(pkgIndexCjs).toContain(
+    `require("element-ui/lib/theme-chunk/index.css");
+require("element-ui/lib/theme-chunk/index");`,
+  );
+});
