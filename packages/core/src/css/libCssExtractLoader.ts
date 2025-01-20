@@ -255,14 +255,13 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
 
     const m = new Map<string, string>();
 
-    for (const { content, filepath } of dependencies) {
+    for (const { content, filepath, sourceMap } of dependencies) {
       let distFilepath = getRelativePath(rootDir, filepath);
       const ext = extname(distFilepath);
       if (ext !== 'css') {
         distFilepath = distFilepath.replace(ext, '.css');
       }
       distFilepath = distFilepath.replace(/\.module\.css/, '_module.css');
-
       const cssFilename = path.basename(distFilepath);
       if (content.trim()) {
         m.get(distFilepath)
@@ -271,6 +270,13 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
 
         importCssFiles += '\n';
         importCssFiles += `import "./${cssFilename}"`;
+      }
+      if (sourceMap) {
+        const sourceMapPath = `${distFilepath}.map`;
+        m.set(sourceMapPath, `${sourceMap}`);
+        // 将 source map 与 CSS 文件关联
+        const sourceMappingURL = `/*# sourceMappingURL=${cssFilename}.map */`;
+        m.set(distFilepath, `${m.get(distFilepath)}\n${sourceMappingURL}`);
       }
     }
     for (const [distFilepath, content] of m.entries()) {
