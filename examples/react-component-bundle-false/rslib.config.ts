@@ -33,10 +33,6 @@ export default defineConfig({
   output: {
     target: 'web',
     assetPrefix: 'auto', // TODO: move this line to packages/core/src/asset/assetConfig.ts,
-    sourceMap: {
-      js: 'source-map',
-      css: true,
-    },
   },
   plugins: [pluginReact(), pluginSass()],
 });

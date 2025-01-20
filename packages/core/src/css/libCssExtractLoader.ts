@@ -274,7 +274,7 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
       if (sourceMap) {
         const sourceMapPath = `${distFilepath}.map`;
         m.set(sourceMapPath, `${sourceMap}`);
-        // 将 source map 与 CSS 文件关联
+        // Associate the source map with the CSS file
         const sourceMappingURL = `/*# sourceMappingURL=${cssFilename}.map */`;
         m.set(distFilepath, `${m.get(distFilepath)}\n${sourceMappingURL}`);
       }
