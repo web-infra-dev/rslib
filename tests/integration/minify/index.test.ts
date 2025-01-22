@@ -55,9 +55,9 @@ describe('minify config (mf)', () => {
     const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
     // biome-ignore format: snapshot
     expect(mfExposeEntry).toMatchInlineSnapshot(`
-    "/*! For license information please see __federation_expose_default_export.js.LICENSE.txt */
-    "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["249"],{163:function(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{Button:function(){return Button},foo:function(){return foo}});var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__=__webpack_require__(37);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button",{})}}]);"
-  `);
+      "/*! For license information please see __federation_expose_default_export.js.LICENSE.txt */
+      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["249"],{163:function(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{Button:()=>Button,foo:()=>foo});var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__=__webpack_require__(37);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button",{})}}]);"
+    `);
   });
 
   test('minify is disabled by the user, nothing not be stripped', async () => {
@@ -65,29 +65,29 @@ describe('minify config (mf)', () => {
     const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
 
     expect(mfExposeEntry).toMatchInlineSnapshot(`
-    ""use strict";
-    (globalThis['disable_minify'] = globalThis['disable_minify'] || []).push([["249"], {
-    "163": (function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-    __webpack_require__.r(__webpack_exports__);
-    __webpack_require__.d(__webpack_exports__, {
-      Button: function() { return Button; },
-      foo: function() { return foo; }
-    });
-    /* ESM import */var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
-    /* ESM import */var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-    /*! Legal Comment */ 
-    const foo = ()=>{};
-    const bar = ()=>{};
-    const baz = ()=>{
-        return bar();
-    };
-    // normal comment
-    const Button = ()=>/*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('button', {});
+      ""use strict";
+      (globalThis['disable_minify'] = globalThis['disable_minify'] || []).push([["249"], {
+      "163": (function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+      __webpack_require__.r(__webpack_exports__);
+      __webpack_require__.d(__webpack_exports__, {
+        Button: () => (Button),
+        foo: () => (foo)
+      });
+      /* ESM import */var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
+      /* ESM import */var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+      /*! Legal Comment */ 
+      const foo = ()=>{};
+      const bar = ()=>{};
+      const baz = ()=>{
+          return bar();
+      };
+      // normal comment
+      const Button = ()=>/*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('button', {});
 
 
-    }),
+      }),
 
-    }]);"
-  `);
+      }]);"
+    `);
   });
 });
