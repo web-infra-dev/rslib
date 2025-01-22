@@ -36,7 +36,7 @@ const pluginLibAsset = ({ bundle }: { bundle: boolean }): RsbuildPlugin => ({
         ? originalGeneratorOptions
         : {
             ...originalGeneratorOptions,
-            experimentalLibPreserveImport: true,
+            importMode: 'preserve',
           };
 
       const rule = config.module.rule(CHAIN_ID.RULE.SVG);
@@ -57,20 +57,25 @@ const pluginLibAsset = ({ bundle }: { bundle: boolean }): RsbuildPlugin => ({
         CHAIN_ID.RULE.FONT,
         CHAIN_ID.RULE.MEDIA,
         CHAIN_ID.RULE.IMAGE,
+        CHAIN_ID.RULE.ADDITIONAL_ASSETS,
       ];
       for (const ruleId of ruleIds) {
         const oneOfId = `${ruleId}-asset`;
-        const assetRule = config.module.rules.get(ruleId).oneOfs.get(oneOfId);
+        const assetRule = config.module.rules.get(ruleId);
+        if (!assetRule) {
+          continue;
+        }
+        const assetRuleOneOf = assetRule.oneOfs.get(oneOfId);
 
-        const originalTypeOptions = assetRule.get('type');
-        const originalParserOptions = assetRule.get('parser');
-        const originalGeneratorOptions = assetRule.get('generator');
+        const originalTypeOptions = assetRuleOneOf.get('type');
+        const originalParserOptions = assetRuleOneOf.get('parser');
+        const originalGeneratorOptions = assetRuleOneOf.get('generator');
 
         const generatorOptions = isUserSetPublicPath
           ? originalGeneratorOptions
           : {
               ...originalGeneratorOptions,
-              experimentalLibPreserveImport: true,
+              importMode: 'preserve',
             };
 
         const rule = config.module.rule(ruleId);

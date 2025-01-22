@@ -459,9 +459,9 @@ importers:
 
   tests/integration/alias: {}
 
-  tests/integration/asset/limit: {}
+  tests/integration/asset/asset-include: {}
 
-  tests/integration/asset/name:
+  tests/integration/asset/hash:
     dependencies:
       react:
         specifier: ^19.0.0
@@ -471,9 +471,15 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0(@rsbuild/core@1.2.0)
 
+  tests/integration/asset/json: {}
+
+  tests/integration/asset/limit: {}
+
   tests/integration/asset/path: {}
 
   tests/integration/asset/public-path: {}
+
+  tests/integration/asset/source: {}
 
   tests/integration/asset/svgr:
     devDependencies:
@@ -757,6 +763,8 @@ importers:
         specifier: ^0.11.0
         version: 0.11.0(@babel/core@7.26.0)
 
+  tests/integration/redirect/asset: {}
+
   tests/integration/redirect/js:
     devDependencies:
       '@types/lodash':
@@ -807,6 +815,8 @@ importers:
   tests/integration/sourcemap/external: {}
 
   tests/integration/sourcemap/inline: {}
+
+  tests/integration/style/asset: {}
 
   tests/integration/style/css-modules/bundle: {}
 

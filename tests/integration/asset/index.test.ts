@@ -322,3 +322,17 @@ test('use asset/source', async () => {
   const { content: dataJs } = queryContent(contents.esm1!, /assets\/draft\.js/);
   expect(dataJs).matchSnapshot();
 });
+
+test('use source.assetInclude', async () => {
+  const fixturePath = join(__dirname, 'asset-include');
+  const { contents } = await buildAndGetResults({ fixturePath });
+
+  // 0. bundle
+  // esm
+  const { content: indexJs } = queryContent(contents.esm0!, /index\.js/);
+  expect(indexJs).matchSnapshot();
+  // 1. bundleless
+  // esm
+  const { content: dataJs } = queryContent(contents.esm1!, /assets\/draft\.js/);
+  expect(dataJs).matchSnapshot();
+});

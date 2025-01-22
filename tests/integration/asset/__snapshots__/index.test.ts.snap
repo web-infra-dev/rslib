@@ -25,6 +25,18 @@ export { __webpack_exports__bar as bar, __webpack_exports__foo as foo };
 "
 `;
 
+exports[`use source.assetInclude 1`] = `
+"import draft_namespaceObject from "./static/assets/draft.txt";
+console.log(draft_namespaceObject);
+"
+`;
+
+exports[`use source.assetInclude 2`] = `
+"import draft_rslib_entry_namespaceObject from "../static/assets/draft.txt";
+export { draft_rslib_entry_namespaceObject as default };
+"
+`;
+
 exports[`use svgr 1`] = `
 "import __rslib_svgr_url__0__ from "./static/svg/logo.svg";
 import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__ from "react/jsx-runtime";
