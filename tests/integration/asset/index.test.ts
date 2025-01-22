@@ -324,7 +324,7 @@ test('use asset/source', async () => {
 });
 
 test('use source.assetInclude', async () => {
-  const fixturePath = join(__dirname, 'asset-include');
+  const fixturePath = join(__dirname, 'assets-include');
   const { contents } = await buildAndGetResults({ fixturePath });
 
   // 0. bundle
