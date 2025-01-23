@@ -135,35 +135,35 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
       },
     );
 
-    api.onAfterBuild(async ({ isFirstCompile }) => {
-      if (!isFirstCompile) {
-        return;
-      }
-
-      promisesResult = await Promise.all(dtsPromises);
-    });
-
     api.onAfterBuild({
-      handler: ({ isFirstCompile }) => {
+      handler: async ({ isFirstCompile }) => {
         if (!isFirstCompile) {
           return;
         }
 
-        for (const result of promisesResult) {
-          if (result.status === 'error') {
-            if (options.abortOnError) {
-              throw new Error(result.errorMessage);
-            }
-            result.errorMessage && logger.error(result.errorMessage);
-            logger.warn(
-              'With the `abortOnError` configuration currently turned off, type errors do not cause build failures, but they do not guarantee proper type file output.',
-            );
-          }
-        }
+        promisesResult = await Promise.all(dtsPromises);
       },
-      // Set the order to 'post' to ensure that when DTS files of multiple formats are generated
-      // simultaneously, all errors are thrown together before exiting the process.
-      order: 'post',
+      // Set the order to 'pre' to ensure that when DTS files of multiple formats are generated simultaneously,
+      // all errors are thrown together before exiting the process.
+      order: 'pre',
+    });
+
+    api.onAfterBuild(({ isFirstCompile }) => {
+      if (!isFirstCompile) {
+        return;
+      }
+
+      for (const result of promisesResult) {
+        if (result.status === 'error') {
+          if (options.abortOnError) {
+            throw new Error(result.errorMessage);
+          }
+          result.errorMessage && logger.error(result.errorMessage);
+          logger.warn(
+            'With the `abortOnError` configuration currently turned off, type errors do not cause build failures, but they do not guarantee proper type file output.',
+          );
+        }
+      }
     });
 
     const killProcesses = () => {
