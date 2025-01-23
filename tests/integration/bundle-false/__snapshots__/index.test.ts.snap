@@ -1,7 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`svgr in bundleless 1`] = `
-"import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__ from "react/jsx-runtime";
+"import __rslib_svgr_url__0__ from "../static/svg/logo.svg";
+import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__ from "react/jsx-runtime";
 import "react";
 const SvgLogo = (props)=>/*#__PURE__*/ (0, __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__.jsx)("svg", {
         xmlns: "http://www.w3.org/2000/svg",
@@ -24,9 +25,8 @@ const SvgLogo = (props)=>/*#__PURE__*/ (0, __WEBPACK_EXTERNAL_MODULE_react_jsx_r
             ]
         })
     });
-const logoreact = SvgLogo;
-const src_rslib_entry_ = logoreact;
-export { src_rslib_entry_ as default };
+const logo_rslib_entry_ = __rslib_svgr_url__0__;
+export { SvgLogo as ReactComponent, logo_rslib_entry_ as default };
 "
 `;
 
@@ -59,7 +59,8 @@ var __webpack_require__ = {};
 var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
-    default: ()=>src_rslib_entry_
+    ReactComponent: ()=>SvgLogo,
+    default: ()=>logo_rslib_entry_
 });
 const jsx_runtime_namespaceObject = require("react/jsx-runtime");
 require("react");
@@ -84,8 +85,7 @@ const SvgLogo = (props)=>/*#__PURE__*/ (0, jsx_runtime_namespaceObject.jsx)("svg
             ]
         })
     });
-const logoreact = SvgLogo;
-const src_rslib_entry_ = logoreact;
+const logo_rslib_entry_ = require("../static/svg/logo.svg");
 var __webpack_export_target__ = exports;
 for(var __webpack_i__ in __webpack_exports__)__webpack_export_target__[__webpack_i__] = __webpack_exports__[__webpack_i__];
 if (__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, '__esModule', {

@@ -1,9 +1,10 @@
-import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 import { generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
+    // 0. bundle default
+    // esm
     generateBundleEsmConfig({
       output: {
         distPath: {
@@ -14,6 +15,9 @@ export default defineConfig({
         },
       },
     }),
+
+    // 1. bundleless default
+    // esm
     generateBundleEsmConfig({
       bundle: false,
       output: {
@@ -26,13 +30,7 @@ export default defineConfig({
       },
     }),
   ],
-  source: {
-    entry: {
-      index: './src/index.jsx',
-    },
-  },
   output: {
     target: 'web',
   },
-  plugins: [pluginReact()],
 });

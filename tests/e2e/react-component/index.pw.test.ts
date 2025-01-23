@@ -40,7 +40,15 @@ async function assetShouldWork(page: Page) {
   assert(h1El);
   expect(h1El).toHaveCSS('background', /static\/svg\/logo/);
 
-  // TODO: asset in js
+  // asset by import url from './assets/logo.svg'
+  const imgEls = await page.$$('.counter-button>img');
+  expect(imgEls).toHaveLength(2);
+  const srcList = await Promise.all(
+    imgEls.map((imgEl) => imgEl.getAttribute('src')),
+  );
+  for (const src of srcList) {
+    expect(src).toMatch(/static\/svg\/logo/);
+  }
 }
 
 test('should render example "react-component-bundle" successfully', async ({

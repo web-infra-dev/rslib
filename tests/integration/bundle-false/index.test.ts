@@ -147,15 +147,66 @@ test('asset in bundleless', async () => {
   const fixturePath = join(__dirname, 'asset');
   const { contents } = await buildAndGetResults({ fixturePath });
 
-  const assets = [
-    'const image_namespaceObject = __webpack_require__.p + "static/image/image.png";',
-    'const logo_namespaceObject = __webpack_require__.p + "static/svg/logo.svg";',
-  ];
-
-  for (const asset of assets) {
-    expect(Object.values(contents.esm)[0]).toContain(asset);
-    expect(Object.values(contents.cjs)[0]).toContain(asset);
-  }
+  expect(Object.values(contents.esm)[0]).toMatchInlineSnapshot(`
+    "import image_rslib_entry_namespaceObject from "../static/image/image.png";
+    export { image_rslib_entry_namespaceObject as default };
+    "
+  `);
+  expect(Object.values(contents.esm)[1]).toMatchInlineSnapshot(`
+    "import logo_rslib_entry_namespaceObject from "../static/svg/logo.svg";
+    export { logo_rslib_entry_namespaceObject as default };
+    "
+  `);
+  expect(Object.values(contents.cjs)[0]).toMatchInlineSnapshot(`
+    ""use strict";
+    var __webpack_modules__ = {
+        "./src/assets/image.png?__rslib_entry__": function(module) {
+            module.exports = require("../static/image/image.png");
+        }
+    };
+    var __webpack_module_cache__ = {};
+    function __webpack_require__(moduleId) {
+        var cachedModule = __webpack_module_cache__[moduleId];
+        if (void 0 !== cachedModule) return cachedModule.exports;
+        var module = __webpack_module_cache__[moduleId] = {
+            exports: {}
+        };
+        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        return module.exports;
+    }
+    var __webpack_exports__ = __webpack_require__("./src/assets/image.png?__rslib_entry__");
+    var __webpack_export_target__ = exports;
+    for(var __webpack_i__ in __webpack_exports__)__webpack_export_target__[__webpack_i__] = __webpack_exports__[__webpack_i__];
+    if (__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, '__esModule', {
+        value: true
+    });
+    "
+  `);
+  expect(Object.values(contents.cjs)[1]).toMatchInlineSnapshot(`
+    ""use strict";
+    var __webpack_modules__ = {
+        "./src/assets/logo.svg?__rslib_entry__": function(module) {
+            module.exports = require("../static/svg/logo.svg");
+        }
+    };
+    var __webpack_module_cache__ = {};
+    function __webpack_require__(moduleId) {
+        var cachedModule = __webpack_module_cache__[moduleId];
+        if (void 0 !== cachedModule) return cachedModule.exports;
+        var module = __webpack_module_cache__[moduleId] = {
+            exports: {}
+        };
+        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        return module.exports;
+    }
+    var __webpack_exports__ = __webpack_require__("./src/assets/logo.svg?__rslib_entry__");
+    var __webpack_export_target__ = exports;
+    for(var __webpack_i__ in __webpack_exports__)__webpack_export_target__[__webpack_i__] = __webpack_exports__[__webpack_i__];
+    if (__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, '__esModule', {
+        value: true
+    });
+    "
+  `);
 });
 
 test('svgr in bundleless', async () => {

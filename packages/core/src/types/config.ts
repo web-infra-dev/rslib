@@ -188,8 +188,8 @@ export type Redirect = {
   js?: JsRedirect;
   /** Controls the redirect of the import paths of output style files. */
   style?: StyleRedirect;
-  // TODO: support other redirects
-  // asset?: boolean;
+  /** Controls the redirect of the import paths of output asset files. */
+  asset?: boolean;
   // dts?: DtsRedirect;
 };
 

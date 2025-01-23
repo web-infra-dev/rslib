@@ -3,6 +3,7 @@ import { RSLIB_CSS_ENTRY_FLAG } from './cssConfig';
 import {
   ABSOLUTE_PUBLIC_PATH,
   AUTO_PUBLIC_PATH,
+  BASE_URI,
   SINGLE_DOT_PATH_SEGMENT,
 } from './libCssExtractLoader';
 import { getUndoPath } from './utils';
@@ -62,14 +63,17 @@ class LibCssExtractPlugin implements Rspack.RspackPluginInstance {
               }
             }
 
-            replace(ABSOLUTE_PUBLIC_PATH, '');
             replace(SINGLE_DOT_PATH_SEGMENT, '.');
             const undoPath = getUndoPath(
               name,
               compilation.outputOptions.path!,
-              false,
+              // preserve './' in css url
+              // https://github.com/web-infra-dev/rspack/pull/8946
+              true,
             );
-            replace(AUTO_PUBLIC_PATH, undoPath);
+            replace(`${ABSOLUTE_PUBLIC_PATH}${AUTO_PUBLIC_PATH}`, undoPath);
+            replace(ABSOLUTE_PUBLIC_PATH, '');
+            replace(`${BASE_URI}/`, '');
 
             return replaceSource;
           });
