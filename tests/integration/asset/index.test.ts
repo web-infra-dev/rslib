@@ -284,29 +284,46 @@ test('use svgr', async () => {
   const { content: indexCjs } = queryContent(contents.cjs0!, /index\.cjs/);
   expect(indexCjs).matchSnapshot();
 
-  // 1. bundleless
+  // 1. bundleless mixedImport
   // esm
-  const { content: namedImportJs } = queryContent(
-    contents.esm1!,
-    /namedImport\.js/,
+  const { content: logoJs } = queryContent(contents.esm1!, /assets\/logo\.js/);
+  expect(logoJs).toMatchSnapshot(
+    'mixedImport: true should contain export { url as default, ReactComponent }',
   );
-  expect(namedImportJs).toMatchSnapshot();
-  const { content: defaultImportJs } = queryContent(
-    contents.esm1!,
-    /namedImport\.js/,
-  );
-  expect(defaultImportJs).toMatchSnapshot();
   // cjs
-  const { content: namedImportCjs } = queryContent(
+  const { content: logoCjs } = queryContent(
     contents.cjs1!,
-    /namedImport\.cjs/,
+    /assets\/logo\.cjs/,
   );
-  expect(namedImportCjs).toMatchSnapshot();
-  const { content: defaultImportCjs } = queryContent(
-    contents.cjs1!,
-    /namedImport\.cjs/,
+  expect(logoCjs).toMatchSnapshot(
+    'mixedImport: true should contain export { url as default, ReactComponent }',
   );
-  expect(defaultImportCjs).toMatchSnapshot();
+
+  // 2. bundleless only svgr
+  const { content: svgrLogoJs } = queryContent(
+    contents.esm2!,
+    /assets\/logo\.js/,
+  );
+  expect(svgrLogoJs).toMatchSnapshot('should only contain svgr default export');
+  const { content: urlLogoJs } = queryContent(
+    contents.esm2!,
+    /assets\/logo2\.js/,
+  );
+  expect(urlLogoJs).toMatchSnapshot('should only contain url default export');
+
+  // cjs
+  const { content: svgrLogoCjs } = queryContent(
+    contents.cjs2!,
+    /assets\/logo\.cjs/,
+  );
+  expect(svgrLogoCjs).toMatchSnapshot(
+    'should only contain svgr default export',
+  );
+  const { content: urlLogoCjs } = queryContent(
+    contents.cjs2!,
+    /assets\/logo2\.cjs/,
+  );
+  expect(urlLogoCjs).toMatchSnapshot('should only contain url default export');
 });
 
 test('use asset/source', async () => {

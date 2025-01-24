@@ -13,14 +13,15 @@ const RSBUILD_SVGR_PLUGIN_NAME = 'rsbuild:svgr';
 /**
  * Be compatible to css-extract importModule and experimentalLibPreserveExports
  * when set experimentalLibPreserveExports to true, the css-loader result can not executed in node side, so clone the assets rule
- * 1. js assets: original rule set issuer and experimentalLibPreserveExports: true
- * 2. css assets: a copy of original rule
+ * 1. js assets: original rule set issuer and experimentalLibPreserveExports: true, `import url from './foo.svg'`
+ * 2. css assets: a copy of original rule, `url('./foo.svg')`
  */
 const pluginLibAsset = ({ bundle }: { bundle: boolean }): RsbuildPlugin => ({
   name: PLUGIN_NAME,
   pre: [RSBUILD_SVGR_PLUGIN_NAME],
   setup(api) {
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
+      // for separating css assets and js assets
       // 1. modify svg rule first, svg is special because of svgr
       const svgAssetRule = config.module.rules
         .get(CHAIN_ID.RULE.SVG)
@@ -92,14 +93,17 @@ const pluginLibAsset = ({ bundle }: { bundle: boolean }): RsbuildPlugin => ({
       }
 
       // for svgr
+      const isUsingSvgr: boolean = config.module
+        .rule(CHAIN_ID.RULE.SVG)
+        .oneOf(CHAIN_ID.RULE.SVG)
+        .uses.has(CHAIN_ID.USE.SVGR);
+      const isUsingSvgrUrlLoader = config.module
+        .rule(CHAIN_ID.RULE.SVG)
+        .oneOf(CHAIN_ID.ONE_OF.SVG)
+        .uses.has(CHAIN_ID.USE.URL);
+
       // 1. remove __webpack_require__.p in svgr url-loader and file-loader
-      const isUsingSvgr = Boolean(
-        config.module
-          .rule(CHAIN_ID.RULE.SVG)
-          .oneOf(CHAIN_ID.RULE.SVG)
-          .uses.has(CHAIN_ID.USE.SVGR),
-      );
-      if (isUsingSvgr) {
+      if (isUsingSvgr && isUsingSvgrUrlLoader) {
         const urlLoaderRule = config.module
           .rule(CHAIN_ID.RULE.SVG)
           .oneOf(CHAIN_ID.ONE_OF.SVG)
@@ -113,8 +117,8 @@ const pluginLibAsset = ({ bundle }: { bundle: boolean }): RsbuildPlugin => ({
         });
         config.plugin(LibSvgrPatchPlugin.name).use(LibSvgrPatchPlugin, []);
       }
-      // 2. in bundleless, only support transform the svg asset to mixedImport svgr file
-      // remove issuer to make every svg asset is transformed
+      // 2. in bundleless, do not support queryImport
+      // remove issuer to make every svg asset is transformed by svgr-loader
       if (!bundle) {
         if (isUsingSvgr) {
           const rule = config.module

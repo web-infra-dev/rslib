@@ -32,13 +32,13 @@ export default defineConfig({
         }),
       ],
     }),
-    // 1. bundleless
+    // 1. bundleless mixedImport
     // esm
     generateBundleEsmConfig({
       bundle: false,
       output: {
         distPath: {
-          root: './dist/esm/bundleless-default',
+          root: './dist/esm/bundleless-mixed',
         },
       },
       plugins: [
@@ -52,12 +52,47 @@ export default defineConfig({
       bundle: false,
       output: {
         distPath: {
-          root: './dist/cjs/bundleless-default',
+          root: './dist/cjs/bundleless-mixed',
         },
       },
       plugins: [
         pluginSvgr({
           mixedImport: true,
+        }),
+      ],
+    }),
+    // 2. bundleless only svgr
+    // esm
+    generateBundleEsmConfig({
+      bundle: false,
+      output: {
+        distPath: {
+          root: './dist/esm/bundleless-only-svgr',
+        },
+      },
+      plugins: [
+        pluginSvgr({
+          svgrOptions: {
+            exportType: 'default',
+          },
+          exclude: /logo2\.svg$/,
+        }),
+      ],
+    }),
+    // cjs
+    generateBundleCjsConfig({
+      bundle: false,
+      output: {
+        distPath: {
+          root: './dist/cjs/bundleless-only-svgr',
+        },
+      },
+      plugins: [
+        pluginSvgr({
+          svgrOptions: {
+            exportType: 'default',
+          },
+          exclude: /logo2\.svg$/,
         }),
       ],
     }),
