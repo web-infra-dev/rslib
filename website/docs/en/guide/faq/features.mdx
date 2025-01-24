@@ -97,7 +97,7 @@ export default {
 
 ### How to additionally exclude specified dependencies when `dts.bundle` is `true`?
 
-Rslib uses [rsbuild-plugin-dts](https://github.com/web-infra-dev/rslib/blob/main/packages/plugin-dts/README.md) to generate d.ts files, which supports configuration via [output.externals](/config/rsbuild/output#outputtarget) for excluding certain dependencies.
+Rslib uses [rsbuild-plugin-dts](https://github.com/web-infra-dev/rslib/blob/main/packages/plugin-dts/README.md) to generate d.ts files, which supports configuration via [output.externals](/config/rsbuild/output#outputtarget) for excluding certain dependencies from bundled d.ts files.
 
 For example, a typical React component library often does not declare @types/react in peerDependencies but only in devDependencies. Following the [autoExternal](/config/lib/auto-external) logic for dependency handling, Rslib will attempt to bundle @types/react into the d.ts artifact during the build. However, in practice, a component library should not bundle @types/react.
 
