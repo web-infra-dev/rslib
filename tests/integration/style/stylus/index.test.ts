@@ -56,8 +56,10 @@ test('should extract css with pluginStylus in bundle', async () => {
 
 test('should extract css with pluginStylus in bundle-false', async () => {
   const fixturePath = join(__dirname, 'bundle-false');
-  const { contents } = await buildAndGetResults({ fixturePath, type: 'css' });
-  const { contents: jsContents } = await buildAndGetResults({ fixturePath });
+  const result = await buildAndGetResults({ fixturePath, type: 'all' });
+
+  const contents = result.css.contents;
+  const jsContents = result.js.contents;
 
   const esmCssFiles = Object.keys(contents.esm);
   const esmCssContents = Object.values(contents.esm);

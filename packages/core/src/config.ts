@@ -1414,7 +1414,12 @@ async function composeLibRsbuildConfig(
     rootPath,
     cssModulesAuto,
   );
-  const cssConfig = composeCssConfig(lcp, config.bundle);
+  const cssConfig = composeCssConfig(
+    lcp,
+    config.bundle,
+    banner?.css,
+    footer?.css,
+  );
   const assetConfig = composeAssetConfig(bundle, format!);
 
   const entryChunkConfig = composeEntryChunkConfig({
