@@ -51,10 +51,9 @@ export default defineConfig({
       dts: {
         bundle: false,
       },
-      // TODO: bundleless css
       source: {
         entry: {
-          index: ['./src/**/*.ts'],
+          index: ['./src/**'],
         },
       },
       ...bannerFooterConfig,
@@ -70,10 +69,9 @@ export default defineConfig({
       dts: {
         bundle: false,
       },
-      // TODO: bundleless css
       source: {
         entry: {
-          index: ['./src/**/*.ts'],
+          index: ['./src/**'],
         },
       },
       ...bannerFooterConfig,
@@ -96,5 +94,8 @@ export default defineConfig({
     entry: {
       index: './src/index.ts',
     },
+  },
+  output: {
+    target: 'web',
   },
 });

@@ -130,7 +130,11 @@ export async function cssExternalHandler(
 
 const PLUGIN_NAME = 'rsbuild:lib-css';
 
-const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
+const pluginLibCss = (
+  rootDir: string,
+  banner?: string,
+  footer?: string,
+): RsbuildPlugin => ({
   name: PLUGIN_NAME,
   setup(api) {
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
@@ -149,6 +153,8 @@ const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
             .loader(require.resolve('./libCssExtractLoader.js'))
             .options({
               rootDir,
+              banner,
+              footer,
             });
         }
       }
@@ -165,13 +171,15 @@ const pluginLibCss = (rootDir: string): RsbuildPlugin => ({
 export const composeCssConfig = (
   rootDir: string | null,
   bundle = true,
+  banner?: string,
+  footer?: string,
 ): EnvironmentConfig => {
   if (bundle || rootDir === null) {
     return {};
   }
 
   return {
-    plugins: [pluginLibCss(rootDir)],
+    plugins: [pluginLibCss(rootDir, banner, footer)],
     tools: {
       cssLoader: {
         // Otherwise, external variables will be executed by css-extract and cause an error.

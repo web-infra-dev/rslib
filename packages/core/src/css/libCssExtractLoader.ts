@@ -38,6 +38,8 @@ export interface CssExtractRspackLoaderOptions {
   defaultExport?: boolean;
 
   rootDir?: string;
+  banner?: string;
+  footer?: string;
 }
 
 const LOADER_NAME = 'LIB_CSS_EXTRACT_LOADER';
@@ -87,6 +89,8 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
   const callback = this.async();
   const filepath = this.resourcePath;
   const rootDir = options.rootDir ?? this.rootContext;
+  const banner = options.banner;
+  const footer = options.footer;
 
   let { publicPath } = this._compilation!.outputOptions;
 
@@ -279,7 +283,16 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
         m.set(distFilepath, `${m.get(distFilepath)}\n${sourceMappingURL}`);
       }
     }
-    for (const [distFilepath, content] of m.entries()) {
+    for (let [distFilepath, content] of m.entries()) {
+      // add banner and footer to css files in bundleless mode
+      if (banner) {
+        content = `${banner}\n${content}`;
+      }
+
+      if (footer) {
+        content = `${content}\n${footer}\n`;
+      }
+
       this.emitFile(distFilepath, content);
     }
 
