@@ -284,7 +284,7 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
       }
     }
     for (let [distFilepath, content] of m.entries()) {
-      // TODO: workaround solution for adding banner and footer to css files in bundleless mode
+      // add banner and footer to css files in bundleless mode
       if (banner) {
         content = `${banner}\n${content}`;
       }
