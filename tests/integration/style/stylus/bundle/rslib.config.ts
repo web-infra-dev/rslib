@@ -1,4 +1,4 @@
-import { pluginSass } from '@rsbuild/plugin-sass';
+import { pluginStylus } from '@rsbuild/plugin-stylus';
 import { defineConfig } from '@rslib/core';
 import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
@@ -6,16 +6,10 @@ export default defineConfig({
   lib: [generateBundleEsmConfig(), generateBundleCjsConfig()],
   source: {
     entry: {
-      index: ['../__fixtures__/src/index.scss'],
+      index: ['../__fixtures__/src/index.js'],
     },
   },
-  plugins: [
-    pluginSass({
-      sassLoaderOptions: {
-        additionalData: '$base-color: #c6538c;',
-      },
-    }),
-  ],
+  plugins: [pluginStylus()],
   output: {
     target: 'web',
   },

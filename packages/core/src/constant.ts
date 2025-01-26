@@ -33,7 +33,14 @@ const JS_EXTENSIONS: string[] = [
   'ctsx',
 ] as const;
 
-const CSS_EXTENSIONS: string[] = ['css', 'sass', 'scss', 'less'] as const;
+const CSS_EXTENSIONS: string[] = [
+  'css',
+  'sass',
+  'scss',
+  'less',
+  'styl',
+  'stylus',
+] as const;
 
 export const JS_EXTENSIONS_PATTERN: RegExp = new RegExp(
   `\\.(${JS_EXTENSIONS.join('|')})$`,
