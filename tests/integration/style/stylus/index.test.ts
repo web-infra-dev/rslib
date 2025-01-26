@@ -59,12 +59,12 @@ test('should extract css with pluginStylus in bundle-false', async () => {
   const { contents } = await buildAndGetResults({ fixturePath, type: 'css' });
   const { contents: jsContents } = await buildAndGetResults({ fixturePath });
 
-  const esmFiles = Object.keys(contents.esm);
+  const esmCssFiles = Object.keys(contents.esm);
   const esmCssContents = Object.values(contents.esm);
-  const cjsFiles = Object.keys(contents.cjs);
+  const cjsCssFiles = Object.keys(contents.cjs);
   const cjsCssContents = Object.values(contents.cjs);
 
-  expect(esmFiles).toMatchInlineSnapshot(`
+  expect(esmCssFiles).toMatchInlineSnapshot(`
     [
       "<ROOT>/tests/integration/style/stylus/bundle-false/dist/esm/a.css",
       "<ROOT>/tests/integration/style/stylus/bundle-false/dist/esm/b_module.css",
@@ -102,7 +102,7 @@ test('should extract css with pluginStylus in bundle-false', async () => {
     'import * as __WEBPACK_EXTERNAL_MODULE__b_module_js_6a8a3e41__ from "./b.module.js"',
   ]);
 
-  expect(cjsFiles).toMatchInlineSnapshot(`
+  expect(cjsCssFiles).toMatchInlineSnapshot(`
     [
       "<ROOT>/tests/integration/style/stylus/bundle-false/dist/cjs/a.css",
       "<ROOT>/tests/integration/style/stylus/bundle-false/dist/cjs/b_module.css",
