@@ -1,4 +1,4 @@
-import { join } from 'node:path';
+import path, { join } from 'node:path';
 import stripAnsi from 'strip-ansi';
 import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
 import { expect, test } from 'vitest';
@@ -179,7 +179,9 @@ test('duplicate entry in bundleless mode', async () => {
   expect(
     logStrings.some((log) =>
       log.includes(
-        'Duplicate entry index from src/index.ts and src/index.svg, which may lead to the incorrect output, please rename the file.',
+        `Duplicate entry index from ${path.normalize(
+          'src/index.ts',
+        )} and ${path.normalize('src/index.svg')}, which may lead to the incorrect output, please rename the file.`,
       ),
     ),
   ).toBe(true);
