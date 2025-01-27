@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import stripAnsi from 'strip-ansi';
-import { buildAndGetResults, queryContent } from 'test-helper';
+import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
 import { expect, test } from 'vitest';
 
 test('default entry', async () => {
@@ -167,4 +167,22 @@ test('validate entry and throw errors', async () => {
   expect(stripAnsi(errMsg)).toMatchInlineSnapshot(
     `"The source.entry configuration should be an object, but received string: ./src/**. Checkout https://lib.rsbuild.dev/config/rsbuild/source#sourceentry for more details."`,
   );
+});
+
+test('duplicate entry in bundleless mode', async () => {
+  const { logs, restore } = proxyConsole();
+  const fixturePath = join(__dirname, 'duplicate');
+  await buildAndGetResults({ fixturePath });
+
+  const logStrings = logs.map((log) => stripAnsi(log));
+
+  expect(
+    logStrings.some((log) =>
+      log.includes(
+        'Duplicate entry index from src/index.ts and src/index.svg, which may lead to the incorrect output, please rename the file.',
+      ),
+    ),
+  ).toBe(true);
+
+  restore();
 });

@@ -1019,11 +1019,18 @@ const composeEntryConfig = async (
 
       for (const file of resolvedEntryFiles) {
         const entryName = getEntryName(file);
+
         if (resolvedEntries[entryName]) {
-          logger.warn(
-            `duplicate entry: ${entryName}, this may lead to the incorrect output, please rename the file`,
-          );
+          const originalFile = resolvedEntries[entryName];
+
+          calcLcp &&
+            logger.warn(
+              `Duplicate entry ${color.cyan(entryName)} from ${color.cyan(
+                path.relative(root, file),
+              )} and ${color.cyan(path.relative(root, originalFile))}, which may lead to the incorrect output, please rename the file.`,
+            );
         }
+
         resolvedEntries[entryName] = file;
       }
     }
