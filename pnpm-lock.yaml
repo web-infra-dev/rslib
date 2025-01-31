@@ -735,8 +735,8 @@ importers:
   tests/integration/node-polyfill/bundle:
     devDependencies:
       '@rsbuild/plugin-node-polyfill':
-        specifier: ^1.2.0
-        version: 1.2.0(@rsbuild/core@1.2.3)
+        specifier: ^1.3.0
+        version: 1.3.0(@rsbuild/core@1.2.3)
 
   tests/integration/node-polyfill/bundle-false:
     dependencies:
@@ -745,8 +745,8 @@ importers:
         version: 6.0.3
     devDependencies:
       '@rsbuild/plugin-node-polyfill':
-        specifier: ^1.2.0
-        version: 1.2.0(@rsbuild/core@1.2.3)
+        specifier: ^1.3.0
+        version: 1.3.0(@rsbuild/core@1.2.3)
 
   tests/integration/plugins/basic: {}
 
@@ -1990,10 +1990,10 @@ packages:
     peerDependencies:
       '@rsbuild/core': 1.x
 
-  '@rsbuild/plugin-node-polyfill@1.2.0':
-    resolution: {integrity: sha512-mYctpK5Jn2yxTOxQ4rOJ0iFBJNW7sADFtKsLp9dL7MjToMhKiyIs4Mc65piI7B+YOBshdyMqCk3LPjJ+CtSRXQ==}
+  '@rsbuild/plugin-node-polyfill@1.3.0':
+    resolution: {integrity: sha512-KvckyUg9wq3F1Iv/y4+mlcnO/E7vDklvMY7kF6CxnUYImroQVw/EDS0zDezkPvcm7aKTH5b0Jaa0iIcTNFzhVw==}
     peerDependencies:
-      '@rsbuild/core': 1.x || ^1.0.1-beta.0
+      '@rsbuild/core': 1.x
     peerDependenciesMeta:
       '@rsbuild/core':
         optional: true
@@ -3347,8 +3347,9 @@ packages:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
 
-  crypto-browserify@3.12.0:
-    resolution: {integrity: sha512-fz4spIh+znjO2VjL+IdhEpRJ3YN6sMzITSBijk6FK2UvTqruSQW+/cCZTSNsMiZNvUeq0CqurF+dAbyiGOY6Wg==}
+  crypto-browserify@3.12.1:
+    resolution: {integrity: sha512-r4ESw/IlusD17lgQi1O20Fa3qNnsckR126TdUuBgAu7GBYSIPvdNyONd3Zrxh0xCwA4+6w/TDArBPsMvhur+KQ==}
+    engines: {node: '>= 0.10'}
 
   cspell-ban-words@0.0.4:
     resolution: {integrity: sha512-w+18WPFAEmo2F+Fr4L29+GdY5ckOLN95WPwb/arfrtuzzB5VzQRFyIujo0T7pq+xFE0Z2gjfLn33Wk/u5ctNQQ==}
@@ -7830,14 +7831,14 @@ snapshots:
       deepmerge: 4.3.1
       reduce-configs: 1.1.0
 
-  '@rsbuild/plugin-node-polyfill@1.2.0(@rsbuild/core@1.2.3)':
+  '@rsbuild/plugin-node-polyfill@1.3.0(@rsbuild/core@1.2.3)':
     dependencies:
       assert: 2.1.0
       browserify-zlib: 0.2.0
       buffer: 5.7.1
       console-browserify: 1.2.0
       constants-browserify: 1.0.0
-      crypto-browserify: 3.12.0
+      crypto-browserify: 3.12.1
       domain-browser: 5.7.0
       events: 3.3.0
       https-browserify: 1.0.0
@@ -9442,7 +9443,7 @@ snapshots:
       shebang-command: 2.0.0
       which: 2.0.2
 
-  crypto-browserify@3.12.0:
+  crypto-browserify@3.12.1:
     dependencies:
       browserify-cipher: 1.0.1
       browserify-sign: 4.2.3
@@ -9450,6 +9451,7 @@ snapshots:
       create-hash: 1.2.0
       create-hmac: 1.1.7
       diffie-hellman: 5.0.3
+      hash-base: 3.0.4
       inherits: 2.0.4
       pbkdf2: 3.1.2
       public-encrypt: 4.0.3
