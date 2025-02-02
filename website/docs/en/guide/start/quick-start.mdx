@@ -2,7 +2,7 @@
 
 ## Setup environment
 
-Before getting started, you will need to install [Node.js](https://nodejs.org/) >= version 16. We recommend using the Node.js LTS version.
+Before getting started, you will need to install [Node.js](https://nodejs.org/) >= version 16, it is recommended to use the Node.js LTS version.
 
 Check the current Node.js version with the following command:
 
@@ -10,7 +10,7 @@ Check the current Node.js version with the following command:
 node -v
 ```
 
-If you do not have Node.js installed in your current environment, or the installed version is too low, you can use [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm) to install.
+If you do not have Node.js installed in current environment, or the installed version is too low, you can use [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm) to install.
 
 Here is an example of how to install via nvm:
 
@@ -81,7 +81,7 @@ We're working to provide templates for more frameworks (such as Vue).
 ```
 
 :::tip
-Biome provides combined linting and formatting features. If you select Biome, you typically won't need ESLint or Prettier.
+Biome provides similar linting and formatting features to ESLint and Prettier. If you select Biome, you typically won't need to choose ESLint or Prettier as well.
 :::
 
 ### Current directory
@@ -100,7 +100,7 @@ If you need to create a project in the current directory, you can set the target
 
 ### Quick creation
 
-[create-rslib](https://www.npmjs.com/package/create-rslib) provides command-line options / flags. By setting these CLI flags, you can skip the interactive selection steps and create the project with one command.
+[create-rslib](https://www.npmjs.com/package/create-rslib) provides some CLI flags. By setting these CLI flags, you can skip the interactive selection steps and create the project with one command.
 
 For example, to create an example project in the `my-project` directory with one command:
 
@@ -111,7 +111,7 @@ npx create-rslib --dir my-project --template example
 npx create-rslib -d my-project -t example
 ```
 
-Current flags for `create-rslib`:
+All the CLI flags of `create-rslib`:
 
 ```text
 Usage: create-rslib [options]
@@ -136,7 +136,7 @@ To migrate from an existing project to Rslib, refer to the following guides:
 
 For other types of projects, you can manually install the [@rslib/core](https://www.npmjs.com/package/@rslib/core) package:
 
-`<PackageManagerTabs command="add @rslib/core -D" />`
+<PackageManagerTabs command="add @rslib/core -D" />
 
 Then refer to the guide and documentation to enable the features you need:
 
