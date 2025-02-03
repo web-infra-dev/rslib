@@ -26,7 +26,9 @@ jobs:
           fetch-depth: 10
 
       - name: Install pnpm
-        run: corepack enable
+        run: |
+          npm install -g corepack@latest --force
+          corepack enable
 
       - uses: dorny/paths-filter@v3.0.2
         id: changes
@@ -65,7 +67,9 @@ jobs:
           git config --system core.longpaths true
 
       - name: Install pnpm
-        run: corepack enable
+        run: |
+          npm install -g corepack@latest --force
+          corepack enable
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -108,7 +112,9 @@ jobs:
           fetch-depth: 10
 
       - name: Install pnpm
-        run: corepack enable
+        run: |
+          npm install -g corepack@latest --force
+          corepack enable
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4

@@ -27,7 +27,9 @@ jobs:
           ref: ${{ inputs.ref || 'main' }}
 
       - name: Install pnpm
-        run: corepack enable
+        run: |
+          npm install -g corepack@latest --force
+          corepack enable
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
