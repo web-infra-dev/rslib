@@ -28,7 +28,7 @@ jobs:
 
       - name: Install pnpm
         run: |
-          npm install -g corepack@latest
+          npm install -g corepack@latest --force
           corepack enable
 
       - name: Setup Node.js ${{ matrix.node-version }}

@@ -27,7 +27,7 @@ jobs:
 
       - name: Install pnpm
         run: |
-          npm install -g corepack@latest
+          npm install -g corepack@latest --force
           corepack enable
 
       - uses: dorny/paths-filter@v3.0.2
@@ -68,7 +68,7 @@ jobs:
 
       - name: Install pnpm
         run: |
-          npm install -g corepack@latest
+          npm install -g corepack@latest --force
           corepack enable
 
       - name: Setup Node.js ${{ matrix.node-version }}
@@ -113,7 +113,7 @@ jobs:
 
       - name: Install pnpm
         run: |
-          npm install -g corepack@latest
+          npm install -g corepack@latest --force
           corepack enable
 
       - name: Setup Node.js ${{ matrix.node-version }}
