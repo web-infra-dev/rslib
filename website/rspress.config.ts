@@ -18,6 +18,9 @@ export default defineConfig({
   markdown: {
     checkDeadLinks: true,
   },
+  search: {
+    codeBlocks: true,
+  },
   route: {
     cleanUrls: true,
     // exclude document fragments from routes
