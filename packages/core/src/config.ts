@@ -80,6 +80,7 @@ import {
   transformSyntaxToRspackTarget,
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
+import { validate } from './validate';
 
 /**
  * This function helps you to autocomplete configuration types.
@@ -138,7 +139,9 @@ export async function loadConfig({
     envMode,
   });
 
-  return { content: content as RslibConfig, filePath: configFilePath };
+  const rslibConfig = validate(content, configFilePath);
+
+  return { content: rslibConfig, filePath: configFilePath };
 }
 
 const composeExternalsWarnConfig = (

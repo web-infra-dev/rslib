@@ -3,6 +3,7 @@ import path from 'node:path';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { pluginPublint } from 'rsbuild-plugin-publint';
 import { defineConfig } from 'rslib';
+import { TypiaRspackPlugin } from 'typia-rspack-plugin';
 
 const pluginFixDtsTypes: RsbuildPlugin = {
   name: 'fix-dts-types',
@@ -53,6 +54,16 @@ export default defineConfig({
       commander: '../compiled/commander/index.js',
       chokidar: '../compiled/chokidar/index.js',
       rslog: '../compiled/rslog/index.js',
+    },
+  },
+  tools: {
+    rspack: {
+      plugins: [
+        new TypiaRspackPlugin({
+          log: false,
+          include: [path.resolve('./src/validate.ts')],
+        }),
+      ],
     },
   },
 });

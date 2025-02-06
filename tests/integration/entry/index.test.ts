@@ -165,7 +165,14 @@ test('validate entry and throw errors', async () => {
   }
 
   expect(stripAnsi(errMsg)).toMatchInlineSnapshot(
-    `"The source.entry configuration should be an object, but received string: ./src/**. Checkout https://lib.rsbuild.dev/config/rsbuild/source#sourceentry for more details."`,
+    `
+    "Invalid configuration loaded from <ROOT>/tests/integration/entry/validate/bundlelessWithString.config.ts
+
+    Invalid config on \`$input.lib[0].source.entry\`.
+      - Expect to be (RsbuildEntry | undefined)
+      - Got: string
+    "
+  `,
   );
 });
 
