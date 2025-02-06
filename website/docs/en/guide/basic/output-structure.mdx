@@ -8,9 +8,11 @@ A bundle is a package of build artifacts, which may be a single file or multiple
 
 bundleless, on the other hand, means that each source file is compiled and built separately, but not bundled together. Each output file can be found with its corresponding source code file. The process of bundleless build can also be understood as the process of code conversion of source files only.
 
+![rslib-bundleless-mode](https://assets.rspack.dev/rslib/rslib-bundleless-mode.png)
+
 They have their own benefits.
 
-- bundle can reduce the size of build artifacts and also pre-package dependencies to reduce the size of installed dependencies. Packaging libraries in advance can speed up application project builds.
+- bundle can reduce the size of build artifacts and also prebundle dependencies to reduce the size of installed dependencies and increase security. Packaging libraries in advance can speed up application project builds.
 - bundleless maintains the original file structure and is more conducive to debugging and tree shaking.
 
 :::warning
