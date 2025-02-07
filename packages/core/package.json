@@ -18,6 +18,9 @@
       "types": "./dist-types/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./types": {
+      "types": "./types.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
@@ -29,7 +32,8 @@
     "bin",
     "dist",
     "dist-types",
-    "compiled"
+    "compiled",
+    "types.d.ts"
   ],
   "scripts": {
     "build": "rslib build",

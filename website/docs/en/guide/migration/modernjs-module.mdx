@@ -146,13 +146,19 @@ In addition, you have to install the `@rsbuild/plugin-sass` package as `devDepen
 
 <PackageManagerTabs command="add @rsbuild/plugin-sass -D" />
 
-If you run Typescript together with Sass, you might run into DTS generation errors. This can be resolved by adding a `global.d.ts` file in your `/src` directory.
+If you run Typescript together with Sass, you might run into DTS generation errors. This can be resolved by adding a `env.d.ts` file in your `/src` directory.
 
-```ts title="global.d.ts"
+```ts title="src/env.d.ts"
 declare module '*.scss' {
   const content: { [className: string]: string };
   export default content;
 }
+```
+
+or
+
+```ts title="src/env.d.ts"
+/// <reference types="@rslib/core/types" />
 ```
 
 ## CSS Modules

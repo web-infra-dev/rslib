@@ -146,13 +146,19 @@ export default defineConfig({
 
 <PackageManagerTabs command="add @rsbuild/plugin-sass -D" />
 
-如果你在运行 Typescript 和 Sass，你可能会遇到 DTS 生成错误。这可以通过在 `/src` 目录中添加一个 `global.d.ts` 文件来解决。
+如果你在运行 Typescript 和 Sass，你可能会遇到 DTS 生成错误。这可以通过在 `/src` 目录中添加一个 `env.d.ts` 文件来解决。
 
-```ts title="global.d.ts"
+```ts title="src/env.d.ts"
 declare module '*.scss' {
   const content: { [className: string]: string };
   export default content;
 }
+```
+
+或者
+
+```ts title="src/env.d.ts"
+/// <reference types="@rslib/core/types" />
 ```
 
 ## CSS Modules
