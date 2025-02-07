@@ -2,6 +2,7 @@ import { type ChildProcess, fork } from 'node:child_process';
 import { dirname, extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { type RsbuildConfig, type RsbuildPlugin, logger } from '@rsbuild/core';
+import color from 'picocolors';
 import ts from 'typescript';
 import { loadTsconfig, processSourceEntry } from './utils';
 
@@ -88,7 +89,9 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         );
 
         if (!tsconfigPath) {
-          logger.error(`tsconfig.json not found in ${cwd}`);
+          logger.error(
+            `Failed to resolve tsconfig file ${color.cyan(`"${config.source.tsconfigPath}"`)} from ${color.cyan(cwd)}. Please ensure that the file exists.`,
+          );
           throw new Error();
         }
 

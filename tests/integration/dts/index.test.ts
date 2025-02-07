@@ -1,9 +1,11 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import stripAnsi from 'strip-ansi';
 import {
   buildAndGetResults,
   createTempFiles,
   globContentJSON,
+  proxyConsole,
 } from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
@@ -144,6 +146,21 @@ describe('dts when bundle: false', () => {
         "<ROOT>/tests/integration/dts/bundle-false/clean/dist-types/cjs/utils/strings.d.ts",
       ]
     `);
+  });
+
+  test('should emit error when tsconfig not found', async () => {
+    const fixturePath = join(__dirname, 'bundle-false', 'tsconfig-path');
+    await createTempFiles(fixturePath, false);
+
+    const { logs, restore } = proxyConsole();
+    try {
+      await buildAndGetResults({ fixturePath, type: 'dts' });
+    } catch (err: any) {
+      expect(logs.map((log) => stripAnsi(log)).join('')).toMatchInlineSnapshot(
+        `"error   Failed to resolve tsconfig file "../path_not_exist/tsconfig.json" from <ROOT>/tests/integration/dts/bundle-false/tsconfig-path. Please ensure that the file exists."`,
+      );
+    }
+    restore();
   });
 });
 
