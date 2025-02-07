@@ -201,7 +201,7 @@ pluginDts({
 
 Whether to automatically redirect the import paths of Typescript declaration output files.
 
-- When set to `true`, the [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) configured in the `tsconfig.json` file will take effect, and the import path of the DTS output file will be redirected to the corresponding relative path.
+- When set to `true`, Rslib will redirect the import path in the DTS output file to the corresponding relative path based on the [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) configured in `tsconfig.json`.
 
 ```ts
 // `compilerOptions.paths` is set to `{ "@/*": ["src/*"] }`

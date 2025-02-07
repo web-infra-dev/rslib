@@ -166,7 +166,7 @@ import styles from '../foo.css'; // './dist/utils/index.js' 预期生成的代�
 
 当设置为 `true` 时：
 
-- 导入普通样式文件的文件扩展名将被重写为 `.css`
+- 导入普通样式文件的文件扩展名将被重写为 `.css`。
 - 导入 [CSS Modules](/config/rsbuild/output#outputcssmodules) 时，路径将被重写为到对应的 JavaScript 产物文件。
 
 当设置为 `false` 时，文件扩展名将保持原始导入路径。
@@ -194,6 +194,8 @@ import styles from './index.module.mjs'; // 预期生成的代码
 
 当设置为 `false` 时，文件扩展名将保持原始导入路径。
 
+- **示例：**
+
 ```ts
 import url from './assets/logo.svg'; // 源码 ↓
 import url from './assets/logo.mjs'; // 预期生成的代码
@@ -210,7 +212,7 @@ import url from './assets/logo.mjs'; // 预期生成的代码
 - **类型:** `boolean`
 - **默认值:** `true`
 
-当设置为 `true` 时，`tsconfig.json` 文件中配置的 [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) 将生效，DTS 产物文件的导入路径会被重定向到对应的相对路径。
+当设置为 `true` 时，Rslib 会根据 `tsconfig.json` 文件中配置的 [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths)，将 DTS 产物文件中的导入路径重定向为对应的相对路径。
 
 当设置为 `false` 时，将保持原始导入路径不变。
 
@@ -233,7 +235,7 @@ import { foo } from '../foo'; // './dist/utils/index.d.ts' 预期生成的代码
 - **类型:** `boolean`
 - **默认值:** `false`
 
-当设置为 `true` 时，DTS 文件中的引入路径会被重定向到对应的可以解析到对应 DTS 文件的 JavaScript 文件扩展名。
+当设置为 `true` 时，DTS 文件中的引入路径会被重定向到对应的可以解析到相应 DTS 文件的 JavaScript 文件扩展名。
 
 当设置为 `false` 时，文件扩展名将保持原始导入路径不变（无论是否指定或指定为任意值）。
 
@@ -243,7 +245,7 @@ TypeScript 类型文件的扩展名与 [dts.autoExtension](/config/lib/dts#dtsau
 
 - **示例：**
 
-对于 `.d.mts` 文件，在一些场景下需要指定模块导入路径的完整扩展名才能正确加载。
+对于 `.d.mts` 类型文件，在一些场景下需要指定模块导入路径的完整扩展名才能正确加载。
 
 ```ts
 import { foo } from './foo'; // './src/bar.ts' 的源码 ↓

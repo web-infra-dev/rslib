@@ -6,7 +6,7 @@ overviewHeaders: [2, 3]
 
 :::info
 
-`redirect` is the unique configuration for [bundleless mode](/guide/basic/output-structure#bundle--bundleless). It will not take effect in bundle mode where all output files are packaged into a single file, eliminating the need for import path redirection.
+`redirect` is the unique configuration for [bundleless mode](/guide/basic/output-structure#bundle--bundleless). It will not take effect in bundle mode where all output files are bundled into a single file, eliminating the need for import path redirection.
 
 :::
 
@@ -58,7 +58,7 @@ const defaultRedirect = {
 
 Configure the redirect for import paths in output files.
 
-In bundleless mode, there are often needs such as using aliases or automatically appending suffixes for ESM products. The `redirect` configuration is designed to address these issues.
+In bundleless mode, there are often needs such as using aliases or automatically appending suffixes for ESM outputs. The `redirect` configuration is designed to address these issues.
 
 ## redirect.js
 
@@ -190,9 +190,11 @@ Controls the redirect of the import paths of output asset files.
 - **Type:** `boolean`
 - **Default:** `true`
 
-When set to `true`, the paths of imported resource files will be rewritten to the corresponding JavaScript product file.
+When set to `true`, the paths of imported asset files will be redirected to the corresponding JavaScript output file.
 
 When set to `false`, the file extension will remain unchanged from the original import path.
+
+- **Example:**
 
 ```ts
 import url from './assets/logo.svg'; // source code ↓
@@ -210,7 +212,7 @@ Whether to automatically redirect the import paths of Typescript declaration out
 - **Type:** `boolean`
 - **Default:** `true`
 
-When set to `true`, the [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) configured in the `tsconfig.json` file will take effect, and the import path of the DTS output file will be redirected to the corresponding relative path.
+When set to `true`, Rslib will redirect the import path in the DTS output file to the corresponding relative path based on the [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) configured in `tsconfig.json`.
 
 When set to `false`, the original import path will remain unchanged.
 
@@ -243,7 +245,7 @@ The extension of the TypeScript declaration file is related to the [dts.autoExte
 
 - **Example:**
 
-For the `.d.mts` file, in some scenarios, the full extension of the module import path is needed to load correctly.
+For the `.d.mts` declaration file, in some scenarios, the full extension of the module import path is needed to load correctly.
 
 ```ts
 import { foo } from './foo'; // source code of './src/bar.ts' ↓
