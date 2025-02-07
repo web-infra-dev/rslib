@@ -1217,7 +1217,7 @@ const composeDtsConfig = async (
   libConfig: LibConfig,
   dtsExtension: string,
 ): Promise<EnvironmentConfig> => {
-  const { format, autoExternal, banner, footer } = libConfig;
+  const { format, autoExternal, banner, footer, redirect } = libConfig;
 
   let { dts } = libConfig;
 
@@ -1243,6 +1243,7 @@ const composeDtsConfig = async (
         autoExternal: getAutoExternalDefaultValue(format!, autoExternal),
         banner: banner?.dts,
         footer: footer?.dts,
+        redirect: redirect?.dts,
       }),
     ],
   };

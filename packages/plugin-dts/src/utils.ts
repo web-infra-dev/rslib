@@ -1,13 +1,42 @@
 import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import { platform } from 'node:os';
-import path, { basename, dirname, join, relative, resolve } from 'node:path';
+import path, {
+  basename,
+  dirname,
+  extname,
+  join,
+  normalize,
+  relative,
+  resolve,
+} from 'node:path';
+import { type NapiConfig, parseAsync } from '@ast-grep/napi';
 import { type RsbuildConfig, logger } from '@rsbuild/core';
 import MagicString from 'magic-string';
 import color from 'picocolors';
 import { convertPathToPattern, glob } from 'tinyglobby';
+import { createMatchPath, loadConfig } from 'tsconfig-paths';
 import ts from 'typescript';
-import type { DtsEntry } from './index';
+import type { DtsEntry, DtsRedirect } from './index';
+
+const JS_EXTENSIONS: string[] = [
+  'js',
+  'mjs',
+  'jsx',
+  '(?<!\\.d\\.)ts', // ignore d.ts,
+  '(?<!\\.d\\.)mts', // ditto
+  '(?<!\\.d\\.)cts', // ditto
+  'tsx',
+  'cjs',
+  'cjsx',
+  'mjsx',
+  'mtsx',
+  'ctsx',
+] as const;
+
+export const JS_EXTENSIONS_PATTERN: RegExp = new RegExp(
+  `\\.(${JS_EXTENSIONS.join('|')})$`,
+);
 
 export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
   const configFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
@@ -115,7 +144,7 @@ export function getTimeCost(start: number): string {
 }
 
 export async function addBannerAndFooter(
-  file: string,
+  dtsFile: string,
   banner?: string,
   footer?: string,
 ): Promise<void> {
@@ -123,7 +152,7 @@ export async function addBannerAndFooter(
     return;
   }
 
-  const content = await fsP.readFile(file, 'utf-8');
+  const content = await fsP.readFile(dtsFile, 'utf-8');
   const code = new MagicString(content);
 
   if (banner && !content.trimStart().startsWith(banner.trim())) {
@@ -135,7 +164,162 @@ export async function addBannerAndFooter(
   }
 
   if (code.hasChanged()) {
-    await fsP.writeFile(file, code.toString());
+    await fsP.writeFile(dtsFile, code.toString());
+  }
+}
+
+export async function redirectDtsImports(
+  dtsFile: string,
+  dtsExtension: string,
+  tsconfigPath: string,
+  outDir: string,
+  rootDir: string,
+  redirect?: DtsRedirect,
+): Promise<void> {
+  if (!redirect || (!redirect.path && !redirect.extension)) {
+    return;
+  }
+
+  const extensions = dtsExtension
+    .replace(/\.d\.ts$/, '.js')
+    .replace(/\.d\.cts$/, '.cjs')
+    .replace(/\.d\.mts$/, '.mjs');
+  const content = await fsP.readFile(dtsFile, 'utf-8');
+  const code = new MagicString(content);
+  const sgNode = (await parseAsync('typescript', content)).root();
+  const matcher: NapiConfig = {
+    rule: {
+      kind: 'string_fragment',
+      any: [
+        {
+          inside: {
+            stopBy: 'end',
+            kind: 'import_statement',
+            field: 'source',
+          },
+        },
+        {
+          inside: {
+            stopBy: 'end',
+            kind: 'export_statement',
+            field: 'source',
+          },
+        },
+        {
+          inside: {
+            kind: 'string',
+            inside: {
+              kind: 'arguments',
+              inside: {
+                kind: 'call_expression',
+                has: {
+                  field: 'function',
+                  regex: '^(import|require)$',
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
+  };
+  const matchModule = sgNode.findAll(matcher).map((matchNode) => {
+    return {
+      n: matchNode.text(),
+      s: matchNode.range().start.index,
+      e: matchNode.range().end.index,
+    };
+  });
+
+  for (const imp of matchModule) {
+    const { n: importPath, s: start, e: end } = imp;
+
+    if (!importPath) continue;
+
+    try {
+      const result = loadConfig(tsconfigPath);
+
+      if (result.resultType === 'failed') {
+        logger.error(result.message);
+        return;
+      }
+
+      const { absoluteBaseUrl, paths, mainFields, addMatchAll } = result;
+      const matchPath = createMatchPath(
+        absoluteBaseUrl,
+        paths,
+        mainFields,
+        addMatchAll,
+      );
+      const absoluteImportPath = matchPath(importPath, undefined, undefined, [
+        '.jsx',
+        '.tsx',
+        '.js',
+        '.ts',
+        '.mjs',
+        '.mts',
+        '.cjs',
+        '.cts',
+      ]);
+
+      let redirectImportPath = importPath;
+
+      if (absoluteImportPath && redirect.path) {
+        const isOutsideRootdir = !normalize(absoluteImportPath).startsWith(
+          normalize(rootDir),
+        );
+
+        if (isOutsideRootdir) {
+          const relativePath = relative(dirname(dtsFile), absoluteImportPath);
+          redirectImportPath = relativePath.startsWith('..')
+            ? relativePath
+            : `./${relativePath}`;
+        } else {
+          const originalFilePath = resolve(rootDir, relative(outDir, dtsFile));
+          const originalSourceDir = dirname(originalFilePath);
+          const relativePath = relative(originalSourceDir, absoluteImportPath);
+          redirectImportPath = relativePath.startsWith('..')
+            ? relativePath
+            : `./${relativePath}`;
+        }
+      }
+
+      const ext = extname(redirectImportPath);
+
+      if (ext) {
+        if (JS_EXTENSIONS_PATTERN.test(redirectImportPath)) {
+          if (redirect.extension) {
+            redirectImportPath = redirectImportPath.replace(
+              /\.[^.]+$/,
+              extensions,
+            );
+          }
+        }
+      } else {
+        if (
+          absoluteImportPath &&
+          normalize(absoluteImportPath).startsWith(normalize(rootDir))
+        ) {
+          if (redirect.extension) {
+            redirectImportPath = `${redirectImportPath}${extensions}`;
+          }
+        }
+
+        if (!absoluteImportPath && importPath.startsWith('.')) {
+          if (redirect.extension) {
+            redirectImportPath = `${redirectImportPath}${extensions}`;
+          }
+        }
+      }
+
+      code.overwrite(start, end, redirectImportPath);
+    } catch (err) {
+      logger.debug(err);
+    }
+  }
+
+  if (code.hasChanged()) {
+    await fsP.writeFile(dtsFile, code.toString());
   }
 }
 
@@ -143,8 +327,11 @@ export async function processDtsFiles(
   bundle: boolean,
   dir: string,
   dtsExtension: string,
+  tsconfigPath: string,
+  rootDir: string,
   banner?: string,
   footer?: string,
+  redirect?: DtsRedirect,
 ): Promise<void> {
   if (bundle) {
     return;
@@ -157,6 +344,14 @@ export async function processDtsFiles(
   for (const file of dtsFiles) {
     try {
       await addBannerAndFooter(file, banner, footer);
+      await redirectDtsImports(
+        file,
+        dtsExtension,
+        tsconfigPath,
+        dir,
+        rootDir,
+        redirect,
+      );
       const newFile = file.replace('.d.ts', dtsExtension);
       fs.renameSync(file, newFile);
     } catch (error) {

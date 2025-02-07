@@ -177,9 +177,16 @@ export type StyleRedirect = {
   extension?: boolean;
 };
 
-// @ts-expect-error TODO: support dts redirect in the future
-type DtsRedirect = {
+export type DtsRedirect = {
+  /**
+   * Whether to automatically redirect the import paths of Typescript declaration output files.
+   * @defaultValue `true`
+   */
   path?: boolean;
+  /**
+   * Whether to automatically redirect the file extension to import paths based on the Typescript declaration output files.
+   * @defaultValue `false`
+   */
   extension?: boolean;
 };
 
@@ -190,7 +197,8 @@ export type Redirect = {
   style?: StyleRedirect;
   /** Controls the redirect of the import paths of output asset files. */
   asset?: boolean;
-  // dts?: DtsRedirect;
+  /** Controls the redirect of the import paths of output Typescript declaration files. */
+  dts?: DtsRedirect;
 };
 
 export interface LibConfig extends EnvironmentConfig {

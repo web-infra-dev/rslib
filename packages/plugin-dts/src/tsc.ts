@@ -1,6 +1,7 @@
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import ts from 'typescript';
+import type { DtsRedirect } from './index';
 import { getFileLoc, getTimeCost, processDtsFiles } from './utils';
 
 export type EmitDtsOptions = {
@@ -10,8 +11,10 @@ export type EmitDtsOptions = {
   tsConfigResult: ts.ParsedCommandLine;
   declarationDir: string;
   dtsExtension: string;
+  rootDir: string;
   banner?: string;
   footer?: string;
+  redirect?: DtsRedirect;
 };
 
 async function handleDiagnosticsAndProcessFiles(
@@ -21,8 +24,10 @@ async function handleDiagnosticsAndProcessFiles(
   bundle: boolean,
   declarationDir: string,
   dtsExtension: string,
+  rootDir: string,
   banner?: string,
   footer?: string,
+  redirect?: DtsRedirect,
   name?: string,
 ): Promise<void> {
   const diagnosticMessages: string[] = [];
@@ -36,7 +41,16 @@ async function handleDiagnosticsAndProcessFiles(
     diagnosticMessages.push(message);
   }
 
-  await processDtsFiles(bundle, declarationDir, dtsExtension, banner, footer);
+  await processDtsFiles(
+    bundle,
+    declarationDir,
+    dtsExtension,
+    configPath,
+    rootDir,
+    banner,
+    footer,
+    redirect,
+  );
 
   if (diagnosticMessages.length) {
     logger.error(
@@ -65,8 +79,10 @@ export async function emitDts(
     declarationDir,
     name,
     dtsExtension,
+    rootDir,
     banner,
     footer,
+    redirect,
   } = options;
   const {
     options: rawCompilerOptions,
@@ -131,8 +147,11 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        configPath,
+        rootDir,
         banner,
         footer,
+        redirect,
       );
     }
 
@@ -143,8 +162,11 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        configPath,
+        rootDir,
         banner,
         footer,
+        redirect,
       );
     }
   };
@@ -179,8 +201,10 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        rootDir,
         banner,
         footer,
+        redirect,
         name,
       );
     } else if (!build && compilerOptions.composite) {
@@ -211,8 +235,10 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        rootDir,
         banner,
         footer,
+        redirect,
         name,
       );
     } else {
@@ -243,8 +269,11 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        configPath,
+        rootDir,
         banner,
         footer,
+        redirect,
       );
 
       if (errorNumber > 0) {
