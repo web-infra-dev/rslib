@@ -312,7 +312,11 @@ export async function redirectDtsImports(
         }
       }
 
-      code.overwrite(start, end, redirectImportPath);
+      const normalizedRedirectImportPath = redirectImportPath
+        .split(path.sep)
+        .join('/');
+
+      code.overwrite(start, end, normalizedRedirectImportPath);
     } catch (err) {
       logger.debug(err);
     }
