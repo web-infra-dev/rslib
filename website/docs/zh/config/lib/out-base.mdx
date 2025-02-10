@@ -1,0 +1,52 @@
+# lib.outBase
+
+- **类型：** `boolean`
+- **默认值：** `undefined`
+
+:::info
+
+`outBase` 是 [bundleless 模式](/guide/basic/output-structure#bundle--bundleless) 的特定配置。该配置在 bundle 模式下不会生效，因为所有产物文件都被打包成一个文件，不需要再确定基础输出目录。
+
+:::
+
+在构建源文件存在于多个目录的 bundleless 项目时，输出目录结构将相对于 `outBase` 目录复制到输出目录中。如果未指定基础输出目录，则默认使用所有入口文件路径的 [最近公共祖先](<https://zh.wikipedia.org/wiki/%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88_(%E5%9B%BE%E8%AE%BA)>)。
+
+配置 `outBase` 将改变基础输出目录的路径，`outBase` 的路径相对于当前进程目录。
+
+举个例子，我们有以下目录结构：
+
+```txt
+.
+├── package.json
+├── rslib.config.ts
+└── src
+    └── utils
+        ├── bar
+        │   └── index.ts
+        ├── foo
+        │   └── index.ts
+        └── index.ts
+```
+
+如果未指定输出基础目录，则默认使用所有输入入口点路径的最近公共祖先目录，即 `src/utils`，最终的文件输出结构为：
+
+```txt
+dist
+├── bar
+│   └── index.js
+├── foo
+│   └── index.js
+└── index.js
+```
+
+当配置了 `outBase` 为 `./src` 时，输出目录结构为：
+
+```txt
+dist
+└── utils
+    ├── bar
+    │   └── index.js
+    ├── foo
+    │   └── index.js
+    └── index.js
+```

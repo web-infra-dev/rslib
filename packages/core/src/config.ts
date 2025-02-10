@@ -889,13 +889,14 @@ const composeEntryConfig = async (
   bundle: LibConfig['bundle'],
   root: string,
   cssModulesAuto: CssLoaderOptionsAuto,
-): Promise<{ entryConfig: EnvironmentConfig; lcp: string | null }> => {
+  userOutBase?: string,
+): Promise<{ entryConfig: EnvironmentConfig; outBase: string | null }> => {
   let entries: RsbuildConfigEntry = rawEntry;
 
   if (!entries) {
     // In bundle mode, return directly to let Rsbuild apply default entry to './src/index.ts'
     if (bundle !== false) {
-      return { entryConfig: {}, lcp: null };
+      return { entryConfig: {}, outBase: null };
     }
 
     // In bundleless mode, set default entry to './src/**'
@@ -957,13 +958,26 @@ const composeEntryConfig = async (
           entry: appendEntryQuery(resolveEntryPath(entries, root)),
         },
       },
-      lcp: null,
+      outBase: null,
     };
   }
 
-  const scanGlobEntries = async (calcLcp: boolean) => {
+  const scanGlobEntries = async (tryResolveOutBase: boolean) => {
     // In bundleless mode, resolve glob patterns and convert them to entry object.
     const resolvedEntries: Record<string, string> = {};
+
+    const resolveOutBase = async (resolvedEntryFiles: string[]) => {
+      // Similar to `rootDir` in tsconfig and `outbase` in esbuild.
+      const lcp = await calcLongestCommonPath(resolvedEntryFiles);
+      // Using the longest common path of all non-declaration input files by default.
+      const outBase = userOutBase
+        ? path.resolve(root, userOutBase)
+        : lcp === null
+          ? root
+          : lcp;
+      return outBase;
+    };
+
     for (const key of Object.keys(entries)) {
       const entry = entries[key];
 
@@ -998,10 +1012,7 @@ const composeEntryConfig = async (
         throw new Error(`Cannot find ${resolvedEntryFiles}`);
       }
 
-      // Similar to `rootDir` in tsconfig and `outbase` in esbuild.
-      const lcp = await calcLongestCommonPath(resolvedEntryFiles);
-      // Using the longest common path of all non-declaration input files by default.
-      const outBase = lcp === null ? root : lcp;
+      const outBase = await resolveOutBase(resolvedEntryFiles);
 
       function getEntryName(file: string) {
         const { dir, name } = path.parse(path.relative(outBase, file));
@@ -1021,7 +1032,7 @@ const composeEntryConfig = async (
         const entryName = getEntryName(file);
 
         if (resolvedEntries[entryName]) {
-          calcLcp &&
+          tryResolveOutBase &&
             logger.warn(
               `Duplicate entry ${color.cyan(entryName)} from ${color.cyan(
                 path.relative(root, file),
@@ -1035,15 +1046,15 @@ const composeEntryConfig = async (
       }
     }
 
-    if (calcLcp) {
-      const lcp = await calcLongestCommonPath(Object.values(resolvedEntries));
-      return { resolvedEntries, lcp };
+    if (tryResolveOutBase) {
+      const outBase = await resolveOutBase(Object.values(resolvedEntries));
+      return { resolvedEntries, outBase };
     }
-    return { resolvedEntries, lcp: null };
+    return { resolvedEntries, outBase: null };
   };
 
-  // LCP could only be determined at the first time of glob scan.
-  const { lcp } = await scanGlobEntries(true);
+  // OutBase could only be determined at the first time of glob scan.
+  const { outBase } = await scanGlobEntries(true);
   const entryConfig: EnvironmentConfig = {
     tools: {
       rspack: {
@@ -1057,7 +1068,7 @@ const composeEntryConfig = async (
 
   return {
     entryConfig,
-    lcp,
+    outBase,
   };
 };
 
@@ -1416,14 +1427,15 @@ async function composeLibRsbuildConfig(
     pkgJson,
     userExternals: config.output?.externals,
   });
-  const { entryConfig, lcp } = await composeEntryConfig(
+  const { entryConfig, outBase } = await composeEntryConfig(
     config.source?.entry!,
     config.bundle,
     rootPath,
     cssModulesAuto,
+    config.outBase,
   );
   const cssConfig = composeCssConfig(
-    lcp,
+    outBase,
     config.bundle,
     banner?.css,
     footer?.css,
@@ -1432,7 +1444,7 @@ async function composeLibRsbuildConfig(
 
   const entryChunkConfig = composeEntryChunkConfig({
     enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
-    contextToWatch: lcp,
+    contextToWatch: outBase,
   });
   const dtsConfig = await composeDtsConfig(config, dtsExtension);
   const externalsWarnConfig = composeExternalsWarnConfig(
@@ -1549,6 +1561,7 @@ export async function composeCreateRsbuildConfig(
           dts: true,
           shims: true,
           umdName: true,
+          outBase: true,
         }),
       ),
     };

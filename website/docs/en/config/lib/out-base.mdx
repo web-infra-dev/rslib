@@ -1,0 +1,52 @@
+# lib.outBase
+
+- **Type:** `boolean`
+- **Default Value:** `undefined`
+
+:::info
+
+`outBase` is a specific configuration for [bundleless mode](/guide/basic/output-structure#bundle--bundleless). This configuration does not take effect in bundle mode because all output files are bundled into a single file, so there's no need to determine the base output directory.
+
+:::
+
+When building a bundleless project where source files exist across multiple directories, the output directory structure will be replicated relative to the `outBase` directory in the output directory. If no base output directory is specified, the [lowest common ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) of all input entry points is used by default.
+
+Configuring `outBase` will change the base output directory path. The path of `outBase` is relative to the current process directory.
+
+For example, we have the following directory structure:
+
+```txt
+.
+├── package.json
+├── rslib.config.ts
+└── src
+    └── utils
+        ├── bar
+        │   └── index.ts
+        ├── foo
+        │   └── index.ts
+        └── index.ts
+```
+
+If the output base directory is not specified, the lowest common ancestor of all input entry point paths, i.e. `src/utils`, is used by default, and the final file output structure is:
+
+```txt
+dist
+├── bar
+│   └── index.js
+├── foo
+│   └── index.js
+└── index.js
+```
+
+When `outBase` is configured as `./src`, the output directory structure is:
+
+```txt
+dist
+└── utils
+    ├── bar
+    │   └── index.js
+    ├── foo
+    │   └── index.js
+    └── index.js
+```
