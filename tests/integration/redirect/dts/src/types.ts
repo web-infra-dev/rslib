@@ -7,3 +7,11 @@ export const defaultOptions: LoggerOptions = {
   logLevel: 'info',
   logBody: false,
 };
+
+export interface Foo {
+  foo: string;
+}
+
+export interface Bar {
+  bar: string;
+}

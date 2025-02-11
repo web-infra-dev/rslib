@@ -5,7 +5,8 @@ import { defaultOptions } from './types.js';
 
 export { logRequest, logger, type LoggerOptions, defaultOptions };
 
-export type { Foo } from '@src/logger';
+export type { Foo } from '@src/types';
+export type { Bar } from 'types';
 export * from './types';
 export * from 'rslog';
 export * from '@src/logger';

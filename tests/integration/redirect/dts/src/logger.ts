@@ -23,7 +23,3 @@ export function logRequest(req: Request, options: LoggerOptions): void {
     console.log('Request body:', req.body);
   }
 }
-
-export interface Foo {
-  bar: string;
-}
