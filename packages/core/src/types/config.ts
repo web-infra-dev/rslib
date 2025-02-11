@@ -179,12 +179,12 @@ export type StyleRedirect = {
 
 export type DtsRedirect = {
   /**
-   * Whether to automatically redirect the import paths of Typescript declaration output files.
+   * Whether to automatically redirect the import paths of TypeScript declaration output files.
    * @defaultValue `true`
    */
   path?: boolean;
   /**
-   * Whether to automatically redirect the file extension to import paths based on the Typescript declaration output files.
+   * Whether to automatically redirect the file extension to import paths based on the TypeScript declaration output files.
    * @defaultValue `false`
    */
   extension?: boolean;
@@ -197,7 +197,7 @@ export type Redirect = {
   style?: StyleRedirect;
   /** Controls the redirect of the import paths of output asset files. */
   asset?: boolean;
-  /** Controls the redirect of the import paths of output Typescript declaration files. */
+  /** Controls the redirect of the import paths of output TypeScript declaration files. */
   dts?: DtsRedirect;
 };
 

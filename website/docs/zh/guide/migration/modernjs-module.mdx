@@ -89,7 +89,7 @@ export default defineConfig({
 
 ## TypeScript 类型定义
 
-如果你在 `Modern.js Module` 中使用 Typescript 并需要生成类型定义文件，请添加以下更改：
+如果你在 `Modern.js Module` 中使用 TypeScript 并需要生成类型定义文件，请添加以下更改：
 
 ```js title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
@@ -146,7 +146,7 @@ export default defineConfig({
 
 <PackageManagerTabs command="add @rsbuild/plugin-sass -D" />
 
-如果你在运行 Typescript 和 Sass，你可能会遇到 DTS 生成错误。这可以通过在 `/src` 目录中添加一个 `env.d.ts` 文件来解决。
+如果你在运行 TypeScript 和 Sass，你可能会遇到 DTS 生成错误。这可以通过在 `/src` 目录中添加一个 `env.d.ts` 文件来解决。
 
 ```ts title="src/env.d.ts"
 declare module '*.scss' {
