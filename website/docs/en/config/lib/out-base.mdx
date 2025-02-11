@@ -1,6 +1,6 @@
 # lib.outBase
 
-- **Type:** `boolean`
+- **Type:** `string`
 - **Default Value:** `undefined`
 
 :::info
@@ -28,7 +28,7 @@ For example, we have the following directory structure:
         └── index.ts
 ```
 
-If the output base directory is not specified, the lowest common ancestor of all input entry point paths, i.e. `src/utils`, is used by default, and the final file output structure is:
+If the output base directory is not specified, the lowest common ancestor of all input entry point paths, i.e. `./src/utils`, is used by default, and the final file output structure is:
 
 ```txt
 dist
@@ -50,3 +50,11 @@ dist
     │   └── index.js
     └── index.js
 ```
+
+::: tip
+
+When the project needs to generate DTS type declaration files, to ensure that the generated DTS files and JS files maintain a consistent output directory structure, if you modify the `outBase` configuration, you need to also modify the [rootDir](https://www.typescriptlang.org/tsconfig/rootDir.html) in `tsconfig.json` to the same path.
+
+If `outBase` is not configured, both Rslib and TypeScript will use the lowest common ancestor of all entry file paths as the output directory by default, so there is no need to additionally configure [rootDir](https://www.typescriptlang.org/tsconfig/rootDir.html).
+
+:::
