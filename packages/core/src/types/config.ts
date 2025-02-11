@@ -293,6 +293,12 @@ export interface LibConfig extends EnvironmentConfig {
    * @see {@link https://lib.rsbuild.dev/config/lib/umd-name}
    */
   umdName?: string;
+  /**
+   * The base directory of the output files.
+   * @defaultValue `undefined`
+   * @see {@link https://lib.rsbuild.dev/config/lib/out-base}
+   */
+  outBase?: string;
 }
 
 export type LibOnlyConfig = Omit<LibConfig, keyof EnvironmentConfig>;

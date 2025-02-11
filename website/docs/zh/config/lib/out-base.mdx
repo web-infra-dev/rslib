@@ -1,0 +1,58 @@
+# lib.outBase
+
+- **类型：** `string`
+- **默认值：** `undefined`
+
+:::info
+
+`outBase` 是 [bundleless 模式](/guide/basic/output-structure#bundle--bundleless) 的特定配置。该配置在 bundle 模式下不会生效，因为所有产物文件都被打包成一个文件，不需要再确定基础输出目录。
+
+:::
+
+在使用 bundleless 模式构建源文件存在于多个目录的项目时，输出目录结构将相对于 `outBase` 目录复制到输出目录中。如果未指定基础输出目录，则默认使用所有入口文件路径的 [最近公共祖先](<https://zh.wikipedia.org/wiki/%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88_(%E5%9B%BE%E8%AE%BA)>)。
+
+配置 `outBase` 将改变基础输出目录的路径，`outBase` 可以是相对于当前进程目录的相对路径或绝对路径。
+
+举个例子，我们有以下目录结构：
+
+```txt
+.
+├── package.json
+├── rslib.config.ts
+└── src
+    └── utils
+        ├── bar
+        │   └── index.ts
+        ├── foo
+        │   └── index.ts
+        └── index.ts
+```
+
+如果未指定基础输出目录，则默认使用所有输入入口文件路径的最近公共祖先目录，即 `./src/utils`，最终的文件输出结构为：
+
+```txt
+dist
+├── bar
+│   └── index.js
+├── foo
+│   └── index.js
+└── index.js
+```
+
+当配置了 `outBase` 为 `./src` 时，输出目录结构为：
+
+```txt
+dist
+└── utils
+    ├── bar
+    │   └── index.js
+    ├── foo
+    │   └── index.js
+    └── index.js
+```
+
+::: tip
+
+当项目需要生成 DTS 类型声明文件时，为了保证生成的 DTS 文件与 JS 文件保持一致的输出目录结构，如果修改了 `outBase` 配置，需要确保 `tsconfig.json` 中的 [rootDir](https://www.typescriptlang.org/tsconfig/rootDir.html) 为相同的路径。
+
+:::
