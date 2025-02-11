@@ -15,7 +15,7 @@ import { type RsbuildConfig, logger } from '@rsbuild/core';
 import MagicString from 'magic-string';
 import color from 'picocolors';
 import { convertPathToPattern, glob } from 'tinyglobby';
-import { createMatchPath, loadConfig } from 'tsconfig-paths';
+import { type MatchPath, createMatchPath, loadConfig } from 'tsconfig-paths';
 import ts from 'typescript';
 import type { DtsEntry, DtsRedirect } from './index';
 
@@ -148,10 +148,6 @@ export async function addBannerAndFooter(
   banner?: string,
   footer?: string,
 ): Promise<void> {
-  if (!banner && !footer) {
-    return;
-  }
-
   const content = await fsP.readFile(dtsFile, 'utf-8');
   const code = new MagicString(content);
 
@@ -171,15 +167,11 @@ export async function addBannerAndFooter(
 export async function redirectDtsImports(
   dtsFile: string,
   dtsExtension: string,
-  tsconfigPath: string,
+  redirect: DtsRedirect,
+  matchPath: MatchPath,
   outDir: string,
   rootDir: string,
-  redirect?: DtsRedirect,
 ): Promise<void> {
-  if (!redirect || (!redirect.path && !redirect.extension)) {
-    return;
-  }
-
   const content = await fsP.readFile(dtsFile, 'utf-8');
   const code = new MagicString(content);
   const sgNode = (await parseAsync('typescript', content)).root();
@@ -226,22 +218,6 @@ export async function redirectDtsImports(
       e: matchNode.range().end.index,
     };
   });
-
-  const result = loadConfig(tsconfigPath);
-
-  if (result.resultType === 'failed') {
-    logger.error(result.message);
-    return;
-  }
-
-  const { absoluteBaseUrl, paths, mainFields, addMatchAll } = result;
-  const matchPath = createMatchPath(
-    absoluteBaseUrl,
-    paths,
-    mainFields,
-    addMatchAll,
-  );
-
   const extensions = dtsExtension
     .replace(/\.d\.ts$/, '.js')
     .replace(/\.d\.cts$/, '.cjs')
@@ -333,14 +309,33 @@ export async function processDtsFiles(
   bundle: boolean,
   dir: string,
   dtsExtension: string,
+  redirect: DtsRedirect,
   tsconfigPath: string,
   rootDir: string,
   banner?: string,
   footer?: string,
-  redirect?: DtsRedirect,
 ): Promise<void> {
   if (bundle) {
     return;
+  }
+
+  let matchPath: MatchPath | undefined;
+
+  if (redirect.path || redirect.extension) {
+    const result = loadConfig(tsconfigPath);
+
+    if (result.resultType === 'failed') {
+      logger.error(result.message);
+      return;
+    }
+
+    const { absoluteBaseUrl, paths, mainFields, addMatchAll } = result;
+    matchPath = createMatchPath(
+      absoluteBaseUrl,
+      paths,
+      mainFields,
+      addMatchAll,
+    );
   }
 
   const dtsFiles = await glob(convertPath(join(dir, '/**/*.d.ts')), {
@@ -349,15 +344,21 @@ export async function processDtsFiles(
 
   for (const file of dtsFiles) {
     try {
-      await addBannerAndFooter(file, banner, footer);
-      await redirectDtsImports(
-        file,
-        dtsExtension,
-        tsconfigPath,
-        dir,
-        rootDir,
-        redirect,
-      );
+      if (banner || footer) {
+        await addBannerAndFooter(file, banner, footer);
+      }
+
+      if ((redirect.path || redirect.extension) && matchPath) {
+        await redirectDtsImports(
+          file,
+          dtsExtension,
+          redirect,
+          matchPath,
+          dir,
+          rootDir,
+        );
+      }
+
       const newFile = file.replace('.d.ts', dtsExtension);
       fs.renameSync(file, newFile);
     } catch (error) {

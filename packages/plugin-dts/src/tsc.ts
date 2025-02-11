@@ -12,9 +12,9 @@ export type EmitDtsOptions = {
   declarationDir: string;
   dtsExtension: string;
   rootDir: string;
+  redirect: DtsRedirect;
   banner?: string;
   footer?: string;
-  redirect?: DtsRedirect;
 };
 
 async function handleDiagnosticsAndProcessFiles(
@@ -24,10 +24,10 @@ async function handleDiagnosticsAndProcessFiles(
   bundle: boolean,
   declarationDir: string,
   dtsExtension: string,
+  redirect: DtsRedirect,
   rootDir: string,
   banner?: string,
   footer?: string,
-  redirect?: DtsRedirect,
   name?: string,
 ): Promise<void> {
   const diagnosticMessages: string[] = [];
@@ -45,11 +45,11 @@ async function handleDiagnosticsAndProcessFiles(
     bundle,
     declarationDir,
     dtsExtension,
+    redirect,
     configPath,
     rootDir,
     banner,
     footer,
-    redirect,
   );
 
   if (diagnosticMessages.length) {
@@ -147,11 +147,11 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        redirect,
         configPath,
         rootDir,
         banner,
         footer,
-        redirect,
       );
     }
 
@@ -162,11 +162,11 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        redirect,
         configPath,
         rootDir,
         banner,
         footer,
-        redirect,
       );
     }
   };
@@ -201,10 +201,10 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        redirect,
         rootDir,
         banner,
         footer,
-        redirect,
         name,
       );
     } else if (!build && compilerOptions.composite) {
@@ -235,10 +235,10 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        redirect,
         rootDir,
         banner,
         footer,
-        redirect,
         name,
       );
     } else {
@@ -269,11 +269,11 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        redirect,
         configPath,
         rootDir,
         banner,
         footer,
-        redirect,
       );
 
       if (errorNumber > 0) {
