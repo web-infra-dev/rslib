@@ -967,15 +967,13 @@ const composeEntryConfig = async (
     const resolvedEntries: Record<string, string> = {};
 
     const resolveOutBase = async (resolvedEntryFiles: string[]) => {
+      if (userOutBase !== undefined) {
+        return path.resolve(root, userOutBase);
+      }
       // Similar to `rootDir` in tsconfig and `outbase` in esbuild.
-      const lcp = await calcLongestCommonPath(resolvedEntryFiles);
-      // Using the longest common path of all non-declaration input files by default.
-      const outBase = userOutBase
-        ? path.resolve(root, userOutBase)
-        : lcp === null
-          ? root
-          : lcp;
-      return outBase;
+      // Using the longest common path of all non-declaration input files if not specified.
+      const lcp = (await calcLongestCommonPath(resolvedEntryFiles)) ?? root;
+      return lcp;
     };
 
     for (const key of Object.keys(entries)) {
