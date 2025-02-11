@@ -180,10 +180,6 @@ export async function redirectDtsImports(
     return;
   }
 
-  const extensions = dtsExtension
-    .replace(/\.d\.ts$/, '.js')
-    .replace(/\.d\.cts$/, '.cjs')
-    .replace(/\.d\.mts$/, '.mjs');
   const content = await fsP.readFile(dtsFile, 'utf-8');
   const code = new MagicString(content);
   const sgNode = (await parseAsync('typescript', content)).root();
@@ -231,26 +227,32 @@ export async function redirectDtsImports(
     };
   });
 
+  const result = loadConfig(tsconfigPath);
+
+  if (result.resultType === 'failed') {
+    logger.error(result.message);
+    return;
+  }
+
+  const { absoluteBaseUrl, paths, mainFields, addMatchAll } = result;
+  const matchPath = createMatchPath(
+    absoluteBaseUrl,
+    paths,
+    mainFields,
+    addMatchAll,
+  );
+
+  const extensions = dtsExtension
+    .replace(/\.d\.ts$/, '.js')
+    .replace(/\.d\.cts$/, '.cjs')
+    .replace(/\.d\.mts$/, '.mjs');
+
   for (const imp of matchModule) {
     const { n: importPath, s: start, e: end } = imp;
 
     if (!importPath) continue;
 
     try {
-      const result = loadConfig(tsconfigPath);
-
-      if (result.resultType === 'failed') {
-        logger.error(result.message);
-        return;
-      }
-
-      const { absoluteBaseUrl, paths, mainFields, addMatchAll } = result;
-      const matchPath = createMatchPath(
-        absoluteBaseUrl,
-        paths,
-        mainFields,
-        addMatchAll,
-      );
       const absoluteImportPath = matchPath(importPath, undefined, undefined, [
         '.jsx',
         '.tsx',
