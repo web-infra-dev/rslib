@@ -24,6 +24,14 @@ describe('outBase', async () => {
         "<ROOT>/tests/integration/outBase/nested-dir/dist/esm1/utils/index.js",
       ]
     `);
+
+    expect(files.esm2!.sort()).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/outBase/nested-dir/dist/esm2/utils/bar/index.js",
+        "<ROOT>/tests/integration/outBase/nested-dir/dist/esm2/utils/foo/index.js",
+        "<ROOT>/tests/integration/outBase/nested-dir/dist/esm2/utils/index.js",
+      ]
+    `);
   });
 
   test('with custom entry', async () => {
@@ -41,6 +49,12 @@ describe('outBase', async () => {
     expect(files.esm1!.sort()).toMatchInlineSnapshot(`
       [
         "<ROOT>/tests/integration/outBase/custom-entry/dist/esm1/foo/index.js",
+      ]
+    `);
+
+    expect(files.esm2!.sort()).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/outBase/custom-entry/dist/esm2/foo/index.js",
       ]
     `);
   });

@@ -968,7 +968,9 @@ const composeEntryConfig = async (
 
     const resolveOutBase = async (resolvedEntryFiles: string[]) => {
       if (userOutBase !== undefined) {
-        return path.resolve(root, userOutBase);
+        return path.isAbsolute(userOutBase)
+          ? userOutBase
+          : path.resolve(root, userOutBase);
       }
       // Similar to `rootDir` in tsconfig and `outbase` in esbuild.
       // Using the longest common path of all non-declaration input files if not specified.
