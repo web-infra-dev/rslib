@@ -55,6 +55,4 @@ dist
 
 当项目需要生成 DTS 类型声明文件时，为了保证生成的 DTS 文件与 JS 文件保持一致的输出目录结构，如果修改了 `outBase` 配置，需要同时修改 `tsconfig.json` 中的 [rootDir](https://www.typescriptlang.org/tsconfig/rootDir.html) 为相同的路径。
 
-在没有配置 `outBase` 的情况下，Rslib 与 TypeScript 默认都会使用所有入口文件路径的最近公共祖先作为输出目录，所以不需要额外配置 [rootDir](https://www.typescriptlang.org/tsconfig/rootDir.html)。
-
 :::
