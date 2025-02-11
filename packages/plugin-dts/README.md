@@ -163,6 +163,77 @@ pluginDts({
 });
 ```
 
+### redirect
+
+- **Type:**
+
+```ts
+type DtsRedirect = {
+  path?: boolean;
+  extension?: boolean;
+};
+```
+
+- **Default:**
+
+```ts
+const defaultRedirect = {
+  path: true,
+  extension: false,
+};
+```
+
+Controls the redirect of the import paths of output TypeScript declaration files.
+
+```js
+pluginDts({
+  redirect: {
+    path: true,
+    extension: false,
+  },
+});
+```
+
+#### redirect.path
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Whether to automatically redirect the import paths of TypeScript declaration output files.
+
+- When set to `true`, Rslib will redirect the import path in the DTS output file to the corresponding relative path based on the [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) configured in `tsconfig.json`.
+
+```ts
+// `compilerOptions.paths` is set to `{ "@/*": ["src/*"] }`
+import { foo } from '@/foo'; // source code of './src/bar.ts' ↓
+import { foo } from './foo'; // expected output of './dist/bar.d.ts'
+
+import { foo } from '@/foo'; // source code of './src/utils/index.ts' ↓
+import { foo } from '../foo'; // expected output './dist/utils/index.d.ts'
+```
+
+- When set to `false`, the original import path will remain unchanged.
+
+#### redirect.extension
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Whether to automatically redirect the file extension to import paths based on the TypeScript declaration output files.
+
+- When set to `true`, the import paths in DTS files will be redirected to the corresponding JavaScript extension which can be resolved to corresponding DTS file. The extension of the DTS output file is related to the `dtsExtension` configuration.
+
+```ts
+// `dtsExtension` is set to `.d.mts`
+import { foo } from './foo'; // source code of './src/bar.ts' ↓
+import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
+
+import { foo } from './foo.ts'; // source code of './src/utils/index.ts' ↓
+import { foo } from './foo.mjs'; // expected output './dist/utils/index.d.mts'
+```
+
+- When set to `false`, the file extension will remain unchanged from the original import path in the rewritten import path of the output file (regardless of whether it is specified or specified as any value).
+
 ## Contributing
 
 Please read the [Contributing Guide](https://github.com/web-infra-dev/rslib/blob/main/CONTRIBUTING.md).

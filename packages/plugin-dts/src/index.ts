@@ -9,6 +9,11 @@ import { loadTsconfig, processSourceEntry } from './utils';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+export type DtsRedirect = {
+  path?: boolean;
+  extension?: boolean;
+};
+
 export type PluginDtsOptions = {
   bundle?: boolean;
   distPath?: string;
@@ -24,6 +29,7 @@ export type PluginDtsOptions = {
       };
   banner?: string;
   footer?: string;
+  redirect?: DtsRedirect;
 };
 
 export type DtsEntry = {
@@ -53,7 +59,6 @@ export const PLUGIN_DTS_NAME = 'rsbuild:dts';
 
 // use ts compiler API to generate bundleless dts
 // use ts compiler API and api-extractor to generate dts bundle
-// TODO: deal alias in dts
 export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
   name: PLUGIN_DTS_NAME,
 
@@ -61,6 +66,9 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
     options.bundle = options.bundle ?? false;
     options.abortOnError = options.abortOnError ?? true;
     options.build = options.build ?? false;
+    options.redirect = options.redirect ?? {};
+    options.redirect.path = options.redirect.path ?? true;
+    options.redirect.extension = options.redirect.extension ?? false;
 
     const dtsPromises: Promise<TaskResult>[] = [];
     let promisesResult: TaskResult[] = [];

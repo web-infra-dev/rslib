@@ -1,6 +1,7 @@
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import ts from 'typescript';
+import type { DtsRedirect } from './index';
 import { getFileLoc, getTimeCost, processDtsFiles } from './utils';
 
 export type EmitDtsOptions = {
@@ -10,6 +11,8 @@ export type EmitDtsOptions = {
   tsConfigResult: ts.ParsedCommandLine;
   declarationDir: string;
   dtsExtension: string;
+  rootDir: string;
+  redirect: DtsRedirect;
   banner?: string;
   footer?: string;
 };
@@ -21,6 +24,8 @@ async function handleDiagnosticsAndProcessFiles(
   bundle: boolean,
   declarationDir: string,
   dtsExtension: string,
+  redirect: DtsRedirect,
+  rootDir: string,
   banner?: string,
   footer?: string,
   name?: string,
@@ -36,7 +41,16 @@ async function handleDiagnosticsAndProcessFiles(
     diagnosticMessages.push(message);
   }
 
-  await processDtsFiles(bundle, declarationDir, dtsExtension, banner, footer);
+  await processDtsFiles(
+    bundle,
+    declarationDir,
+    dtsExtension,
+    redirect,
+    configPath,
+    rootDir,
+    banner,
+    footer,
+  );
 
   if (diagnosticMessages.length) {
     logger.error(
@@ -65,8 +79,10 @@ export async function emitDts(
     declarationDir,
     name,
     dtsExtension,
+    rootDir,
     banner,
     footer,
+    redirect,
   } = options;
   const {
     options: rawCompilerOptions,
@@ -131,6 +147,9 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        redirect,
+        configPath,
+        rootDir,
         banner,
         footer,
       );
@@ -143,6 +162,9 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        redirect,
+        configPath,
+        rootDir,
         banner,
         footer,
       );
@@ -179,6 +201,8 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        redirect,
+        rootDir,
         banner,
         footer,
         name,
@@ -211,6 +235,8 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        redirect,
+        rootDir,
         banner,
         footer,
         name,
@@ -243,6 +269,9 @@ export async function emitDts(
         bundle,
         declarationDir,
         dtsExtension,
+        redirect,
+        configPath,
+        rootDir,
         banner,
         footer,
       );

@@ -129,6 +129,10 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     userExternals,
     banner,
     footer,
+    redirect = {
+      path: true,
+      extension: false,
+    },
   } = data;
   logger.start(`Generating DTS... ${color.gray(`(${name})`)}`);
 
@@ -252,6 +256,8 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       tsConfigResult,
       declarationDir,
       dtsExtension,
+      redirect,
+      rootDir,
       banner,
       footer,
     },

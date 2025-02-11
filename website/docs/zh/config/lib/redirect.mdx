@@ -6,9 +6,7 @@ overviewHeaders: [2, 3]
 
 :::info
 
-`redirect` 是 bundleless 模式（将 [lib.bundle](/config/lib/bundle) 设置为 `false`）的特定配置。在 bundle 模式下不会生效，因为所有产物文件都被打包成一个文件。所以，导入路径不存在因而不需要重定向。
-
-由于 bundleless 模式仍在开发中，未来将引入更多的重定向配置。
+`redirect` 是 [bundleless 模式](/guide/basic/output-structure#bundle--bundleless) 的特定配置。该配置在 bundle 模式下不会生效，因为所有产物文件都被打包成一个文件，不需要进行文件导入路径的重定向。
 
 :::
 
@@ -25,9 +23,16 @@ type StyleRedirect = {
   extension?: boolean;
 };
 
+type DtsRedirect = {
+  path?: boolean;
+  extension?: boolean;
+};
+
 type Redirect = {
   js?: JsRedirect;
   style?: StyleRedirect;
+  asset?: boolean;
+  dts?: DtsRedirect;
 };
 ```
 
@@ -44,43 +49,25 @@ const defaultRedirect = {
     extension: true,
   },
   asset: true,
+  dts: {
+    path: true,
+    extension: false,
+  },
 };
 ```
 
-配置产物文件中导入路径的重定向。在 bundleless 模式下，通常需要使用别名或自动添加 ESM 产物的后缀。`redirect` 配置旨在解决这些问题。
+配置产物文件中导入路径的重定向。
 
-常见的需要 redirect 的场景：
-
-- 自动将 tsconfig.json 中 `compilerOptions.paths` 转换为正确的相对路径
-
-  例如，在 tsconfig.json 中将 `compilerOptions.paths` 设置为 `{ "@/*": ["src/*"] }`，产物文件将被重定向到正确的相对路径：
-
-  ```ts
-  import { foo } from '@/foo'; // './src/bar.ts' 的源码 ↓
-  import { foo } from './foo.js'; // './dist/bar.js' 预期生成的代码
-
-  import { foo } from '@/foo'; // './src/utils/index.ts' 的源码 ↓
-  import { foo } from '../foo.js'; // './dist/utils/index.js' 预期生成的代码
-  ```
-
-- 自动添加文件后缀
-
-  对于在 Node.js 中运行的 ESM 产物，必须指定模块导入的完整路径才能正确加载。Rslib 将根产物文件自动添加后缀。
-
-  ```ts
-  import { foo } from './foo'; // './src/bar.ts'  的源码 ↓
-  import { foo } from './foo.mjs'; // './dist/bar.js' 预期生成的代码
-
-  import { foo } from './foo.ts'; // './src/utils/index.ts' 的源码 ↓
-  import { foo } from './foo.mjs'; // './dist/utils/index.js' 预期生成的代码
-  ```
+在 bundleless 模式下，通常需要使用别名或自动添加 ESM 产物的后缀。`redirect` 配置旨在解决这些问题。
 
 ## redirect.js
 
 控制 JavaScript 产物文件导入路径的重定向。
 
 :::warning
+
 当 [output.externals](/config/rsbuild/output#outputexternals) 被配置且请求被匹配时，`redirect.js.path` 和 `redirect.js.extension` 都不会生效，最终重写的请求路径将完全由 [output.externals](/config/rsbuild/output#outputexternals) 控制。
+
 :::
 
 ### redirect.js.path
@@ -90,9 +77,21 @@ const defaultRedirect = {
 - **类型:** `boolean`
 - **默认值:** `true`
 
-当设置为 `true` 时，[resolve.alias](/config/rsbuild/resolve#resolvealias) 和 [resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) 将生效并应用于产物文件的重写导入路径。对于 TypeScript 项目，您只需在 tsconfig.json 文件中配置 [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths)。
+当设置为 `true` 时，[resolve.alias](/config/rsbuild/resolve#resolvealias) 和 [resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) 将生效并应用于产物文件的重写导入路径。对于 TypeScript 项目，在 `tsconfig.json` 文件中配置 [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) 即可。
 
-当设置为 `false` 时，导入路径将不受 [resolve.alias](/config/rsbuild/resolve#resolvealias)、[resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) 和 tsconfig.json 的影响。
+当设置为 `false` 时，导入路径将不受 [resolve.alias](/config/rsbuild/resolve#resolvealias)、[resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) 和 `tsconfig.json` 的影响。
+
+- 示例：
+
+在 `tsconfig.json` 中将 `compilerOptions.paths` 设置为 `{ "@/*": ["src/*"] }` 时，产物文件将被重定向到正确的相对路径：
+
+```ts
+import { foo } from '@/foo'; // './src/bar.ts' 的源码 ↓
+import { foo } from './foo.js'; // './dist/bar.js' 预期生成的代码
+
+import { foo } from '@/foo'; // './src/utils/index.ts' 的源码 ↓
+import { foo } from '../foo.js'; // './dist/utils/index.js' 预期生成的代码
+```
 
 ### redirect.js.extension
 
@@ -103,7 +102,23 @@ const defaultRedirect = {
 
 当设置为 `true` 时，无论原始扩展名或导入路径中是否指定，文件扩展名都将自动添加到产物文件的重写导入路径中。
 
-当设置为 `false` 时，文件扩展名将保持原始导入路径（无论是否指定或指定为任意值）。
+当设置为 `false` 时，文件扩展名将保持原始导入路径不变（无论是否指定或指定为任意值）。
+
+:::note
+JavaScript 产物文件的扩展名与 [autoExtension](/config/lib/auto-extension#libautoextension) 配置有关。
+:::
+
+- **示例：**
+
+对于在 Node.js 中运行的 ESM 产物，必须要指定模块导入路径的完整扩展名才能正确加载。Rslib 将根据实际的 JavaScript 产物文件自动添加对应的文件扩展名。
+
+```ts
+import { foo } from './foo'; // './src/bar.ts'  的源码 ↓
+import { foo } from './foo.mjs'; // './dist/bar.mjs' 预期生成的代码
+
+import { foo } from './foo.ts'; // './src/utils/index.ts' 的源码 ↓
+import { foo } from './foo.mjs'; // './dist/utils/index.mjs' 预期生成的代码
+```
 
 ## redirect.style
 
@@ -111,10 +126,14 @@ const defaultRedirect = {
 
 ### redirect.style.path
 
-是否自动重定向样式产物文件的导入路径，规则与 [redirect.js.path](/config/lib/redirect#redirectjspath) 相同。
+是否自动重定向样式产物文件的导入路径。
 
 - **类型:** `boolean`
 - **默认值:** `true`
+
+当设置为 `true` 时，相关重定向规则与 [redirect.js.path](/config/lib/redirect#redirectjspath) 相同。
+
+当设置为 `false` 时，将保持原始导入路径不变。
 
 - **示例：**
 
@@ -145,7 +164,10 @@ import styles from '../foo.css'; // './dist/utils/index.js' 预期生成的代�
 - **类型:** `boolean`
 - **默认值:** `true`
 
-当设置为 `true` 时，导入普通样式文件的文件扩展名将被重写为 `.css`，导入 [CSS Modules](/config/rsbuild/output#outputcssmodules) 时，路径将被重写为到对应的 JavaScript 产物文件。
+当设置为 `true` 时：
+
+- 导入普通样式文件的文件扩展名将被重写为 `.css`。
+- 导入 [CSS Modules](/config/rsbuild/output#outputcssmodules) 时，路径将被重写为到对应的 JavaScript 产物文件。
 
 当设置为 `false` 时，文件扩展名将保持原始导入路径。
 
@@ -163,11 +185,72 @@ import styles from './index.module.mjs'; // 预期生成的代码
 
 ## redirect.asset
 
+控制资源文件导入路径的重定向。
+
+- **类型:** `boolean`
+- **默认值:** `true`
+
 当设置为 `true` 时，导入资源文件的路径将被重写到对应的 JavaScript 产物文件。
 
 当设置为 `false` 时，文件扩展名将保持原始导入路径。
 
+- **示例：**
+
 ```ts
 import url from './assets/logo.svg'; // 源码 ↓
 import url from './assets/logo.mjs'; // 预期生成的代码
+```
+
+## redirect.dts
+
+控制 TypeScript 类型文件中导入路径的重定向。
+
+### redirect.dts.path
+
+是否自动重定向 TypeScript 类型文件中的导入路径。
+
+- **类型:** `boolean`
+- **默认值:** `true`
+
+当设置为 `true` 时，Rslib 会根据 `tsconfig.json` 文件中配置的 [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths)，将 DTS 产物文件中的导入路径重定向为对应的相对路径。
+
+当设置为 `false` 时，将保持原始导入路径不变。
+
+- **示例：**
+
+在 `tsconfig.json` 中将 `compilerOptions.paths` 设置为 `{ "@/*": ["src/*"] }` 时，DTS 产物文件将被重定向到正确的相对路径：
+
+```ts
+import { foo } from '@/foo'; // './src/bar.ts' 的源码 ↓
+import { foo } from './foo'; // './dist/bar.d.ts' 预期生成的代码
+
+import { foo } from '@/foo'; // './src/utils/index.ts' 的源码 ↓
+import { foo } from '../foo'; // './dist/utils/index.d.ts' 预期生成的代码
+```
+
+### redirect.dts.extension
+
+是否根据 TypeScript 类型文件自动重定向文件扩展名到导入路径。
+
+- **类型:** `boolean`
+- **默认值:** `false`
+
+当设置为 `true` 时，DTS 文件中的引入路径会被重定向到对应的可以解析到相应 DTS 文件的 JavaScript 文件扩展名。
+
+当设置为 `false` 时，文件扩展名将保持原始导入路径不变（无论是否指定或指定为任意值）。
+
+:::note
+TypeScript 类型文件的扩展名与 [dts.autoExtension](/config/lib/dts#dtsautoextension) 配置有关。
+:::
+
+- **示例：**
+
+对于 `.d.mts` 类型文件，在一些场景下需要指定模块导入路径的完整扩展名才能正确加载。
+
+```ts
+import { foo } from './foo'; // './src/bar.ts' 的源码 ↓
+import { foo } from './foo.mjs'; // './dist/bar.d.mts' 预期生成的代码
+
+import { foo } from './foo.ts'; // './src/utils/index.ts' 的源码 ↓
+import { foo } from './foo.mjs'; // './dist/utils/index.d.mts' 预期生成的代码
 ```
