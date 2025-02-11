@@ -9,7 +9,7 @@
 
 :::
 
-When building a bundleless project where source files exist across multiple directories, the output directory structure will be replicated relative to the `outBase` directory in the output directory. If no base output directory is specified, the [lowest common ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) of all input entry points is used by default.
+When building a project where source files exist across multiple directories with bundleless mode, the output directory structure will be replicated relative to the `outBase` directory in the output directory. If no base output directory is specified, the [lowest common ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) of all input entry points is used by default.
 
 Configuring `outBase` will change the path of the base output directory. `outBase` can be either a relative path from the current process directory or an absolute path.
 
