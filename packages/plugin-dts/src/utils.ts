@@ -243,8 +243,8 @@ export async function redirectDtsImports(
       let redirectImportPath = importPath;
 
       if (absoluteImportPath && redirect.path) {
-        const isOutsideRootdir = !normalize(absoluteImportPath).startsWith(
-          normalize(rootDir),
+        const isOutsideRootdir = !absoluteImportPath.startsWith(
+          rootDir + path.sep,
         );
 
         if (isOutsideRootdir) {
