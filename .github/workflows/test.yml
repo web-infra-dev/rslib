@@ -41,7 +41,7 @@ jobs:
           npm install -g corepack@latest --force
           corepack enable
 
-      - uses: dorny/paths-filter@v3.0.2
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
         id: changes
         with:
           predicate-quantifier: 'every'
@@ -99,7 +99,7 @@ jobs:
           npm install -g corepack@latest --force
           corepack enable
 
-      - uses: dorny/paths-filter@v3.0.2
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
         id: changes
         with:
           predicate-quantifier: 'every'
