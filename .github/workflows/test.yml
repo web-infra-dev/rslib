@@ -9,21 +9,32 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  # ======== calculate changes ========
-  changes:
-    runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ steps.changes.outputs.changed }}
+  # ======== ut ========
+  ut:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [18]
+        os: [ubuntu-latest]
+        node-version: [18, 20, 22]
+        include:
+          - node-version: 18
+            os: windows-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 10
+          fetch-depth: 1
+
+      - name: Git config
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: bash
+        run: |
+          git config --system core.longpaths true
 
       - name: Install pnpm
         run: |
@@ -41,56 +52,28 @@ jobs:
               - "!**/_meta.json"
               - "!**/dictionary.txt"
 
-  # ======== ut ========
-  ut:
-    runs-on: ${{ matrix.os }}
-    needs: changes
-    if: ${{ needs.changes.outputs.changed == 'true' }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node-version: [18, 20, 22]
-        include:
-          - node-version: 18
-            os: windows-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 10
-
-      - name: Git config
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: bash
-        run: |
-          git config --system core.longpaths true
-
-      - name: Install pnpm
-        run: |
-          npm install -g corepack@latest --force
-          corepack enable
-
       - name: Setup Node.js ${{ matrix.node-version }}
+        if: steps.changes.outputs.changed == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
       - name: Install Dependencies
+        if: steps.changes.outputs.changed == 'true'
         run: pnpm install
 
       - name: Type Check
+        if: steps.changes.outputs.changed == 'true'
         run: pnpm run type-check
 
       - name: Unit Test
+        if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:unit
 
   # ======== integration && e2e ========
   integration-e2e:
     runs-on: ${{ matrix.os }}
-    needs: changes
-    if: ${{ needs.changes.outputs.changed == 'true' }}
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -100,42 +83,48 @@ jobs:
             os: windows-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
       - name: Git config
         if: ${{ matrix.os == 'windows-latest' }}
         shell: bash
         run: |
           git config --system core.longpaths true
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 10
-
       - name: Install pnpm
         run: |
           npm install -g corepack@latest --force
           corepack enable
 
+      - uses: dorny/paths-filter@v3.0.2
+        id: changes
+        with:
+          predicate-quantifier: 'every'
+          filters: |
+            changed:
+              - "!**/*.md"
+              - "!**/*.mdx"
+              - "!**/_meta.json"
+              - "!**/dictionary.txt"
+
       - name: Setup Node.js ${{ matrix.node-version }}
+        if: steps.changes.outputs.changed == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
       - name: Install Dependencies
+        if: steps.changes.outputs.changed == 'true'
         run: pnpm install && cd ./tests && pnpm playwright install chromium
 
       - name: Integration Test (Vitest)
+        if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:integration
 
       - name: E2E Test (Playwright)
+        if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:e2e
-
-  # ======== exit ========
-  pr-check-required:
-    if: (!cancelled() && !failure())
-    needs: [ut, integration-e2e]
-    runs-on: ubuntu-latest
-    name: Test passed or skipped
-    steps:
-      - run: echo "All tests passed or skipped."
