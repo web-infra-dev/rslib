@@ -9,4 +9,6 @@ import { baz } from '~/baz';
 import { bar } from './bar';
 import { foo } from './foo';
 
-export default lodash.toUpper(foo + bar + foo2 + bar2 + baz + prettier.version);
+export default lodash.toUpper(
+  foo + bar + foo2 + bar2 + baz + typeof prettier.version,
+);
