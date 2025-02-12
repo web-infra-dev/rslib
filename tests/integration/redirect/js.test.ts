@@ -34,7 +34,7 @@ test('redirect.js default', async () => {
   const cjsResult = await import(indexCjsPath);
 
   expect(esmResult.default).toEqual(cjsResult.default);
-  expect(esmResult.default).toMatchInlineSnapshot(`"FOOBAR1FOOBAR1BAZSTRING"`);
+  expect(esmResult.default).toMatchInlineSnapshot(`"FOOBAR1FOOBAR1BAZSTRING"`); // cspell:disable-line
 });
 
 test('redirect.js.path false', async () => {
