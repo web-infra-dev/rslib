@@ -4,9 +4,11 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 Options for build outputs.
 
-{/* ## output.assetPrefix <RsbuildDocBadge path="/config/output/asset-prefix" text="output.assetPrefix" /> */}
+## output.assetPrefix <RsbuildDocBadge path="/config/output/asset-prefix" text="output.assetPrefix" />
 
-{/* In [production mode](https://rsbuild.dev/config/mode), use this option to set the URL prefix for static assets, such as setting it to a CDN URL. */}
+Use this option to set the URL prefix for static assets, such as setting it to a CDN URL.
+
+In cases where the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib sets `output.assetPrefix` to `"auto"`.
 
 ## output.charset <RsbuildDocBadge path="/config/output/charset" text="output.charset" />
 
