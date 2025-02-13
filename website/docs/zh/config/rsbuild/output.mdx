@@ -4,6 +4,12 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 与构建产物相关的选项。
 
+## output.assetPrefix <RsbuildDocBadge path="/config/output/asset-prefix" text="output.charset" />
+
+使用该选项设置静态资源的 URL 前缀，比如设置为 CDN 地址。
+
+在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 默认会将 `output.assetPrefix` 设置为 `"auto"`。
+
 ## output.charset <RsbuildDocBadge path="/config/output/charset" text="output.charset" />
 
 指定输出文件的 [字符编码](https://developer.mozilla.org/en-US/docs/Glossary/Character_encoding)，以确保它们在不同的环境中能够正确显示。
@@ -23,6 +29,8 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 ## output.dataUriLimit <RsbuildDocBadge path="/config/output/data-uri-limit" text="output.dataUriLimit" />
 
 设置图片、字体、媒体等静态资源被自动内联为 base64 的体积阈值。
+
+在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 默认会将 `output.dataUriLimit` 设置为 `0`，不内联任何静态资源，以便于应用侧的构建工具处理和优化。
 
 ## output.distPath <RsbuildDocBadge path="/config/output/dist-path" text="output.distPath" />
 

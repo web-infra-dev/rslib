@@ -1,3 +1,4 @@
-import a from './assets/data.json';
+import { bar, foo } from './assets/data.json';
 
-a;
+console.log(foo);
+console.log(bar);
