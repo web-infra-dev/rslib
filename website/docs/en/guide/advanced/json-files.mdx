@@ -1,12 +1,12 @@
-# 引用 JSON 文件
+# Import JSON files
 
-Rslib 支持在代码中引用 JSON 文件。
+Rslib supports import JSON files in code.
 
-## JSON 文件
+## JSON file
 
-你可以直接在 JavaScript 文件中引用 JSON 文件。
+You can directly reference JSON files in JavaScript files.
 
-### 默认引用
+### Default Import
 
 ```json title="example.json"
 {
@@ -24,17 +24,16 @@ console.log(example.items); // [1, 2];
 
 :::warning
 
-在 Bundle 模式下，JSON 文件支持默认引用和具名引用。
-
-在 Bundleless 模式下，JSON 文件仅支持具名引用。
+In Bundle mode, JSON files support both default and named imports.
+In Bundleless mode, JSON files only support named imports.
 
 :::
 
-### 具名引用
+### Named Import
 
-Rslib 同样支持通过 named import 来引用 JSON 文件：
+Rslib also supports referencing JSON files through named imports:
 
-下面是一个使用示例，假设源码如下：
+Here is an example, assuming the source code is as follows:
 
 import { Tabs, Tab } from '@theme';
 
@@ -60,7 +59,7 @@ console.log(name); // 'foo';
   </Tab>
 </Tabs>
 
-会根据配置文件中的 [产物结构](/guide/basic/output-structure) 配置，打包出如下产物：
+Based on the configuration in the [output structure](/guide/basic/output-structure) specified in the configuration file, the following outputs will be packaged:
 
 <Tabs>
 <Tab label="Bundle">
