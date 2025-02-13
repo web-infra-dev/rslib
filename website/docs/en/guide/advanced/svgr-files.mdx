@@ -1,22 +1,22 @@
-# 引用 SVGR
+# Referencing SVGR
 
-默认情况下，Rslib 会将 SVG 图片当作静态资源处理。
+By default, Rslib treats SVG images as static assets.
 
-通过添加 [@rsbuild/plugin-svgr](https://rsbuild.dev/zh/plugins/list/plugin-svgr) 插件，Rslib 支持调用 [SVGR](https://react-svgr.com/)，将 SVG 图片转换为一个 React 组件使用。
+By adding the [@rsbuild/plugin-svgr](https://rsbuild.dev/en/plugins/list/plugin-svgr) plugin, Rslib supports invoking [SVGR](https://react-svgr.com/) to convert SVG images into React components for use.
 
-## 快速开始
+## Quick Start
 
-### 安装插件
+### Install the Plugin
 
-你可以通过如下的命令安装插件:
+You can install the plugin using the following command:
 
 import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @rsbuild/plugin-svgr -D" />
 
-### 注册插件
+### Register the Plugin
 
-你可以在 `rslib.config.ts` 文件中注册插件：
+You can register the plugin in the `rslib.config.ts` file:
 
 ```ts title="rslib.config.ts"
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
@@ -26,13 +26,13 @@ export default {
 };
 ```
 
-## 示例
+## Examples
 
-### Bundle 模式
+### Bundle Mode
 
-在 Bundle 模式下，支持 [Rsbuild SVGR 插件](https://rsbuild.dev/zh/plugins/list/plugin-svgr) 下的所有用法，唯一的区别是当以 URL 形式使用 SVG 文件时，Rslib 会按照 [引用静态资源](/zh/guide/advanced/static-assets) 在产物中对应保留静态资源的 `import` 语句。
+In Bundle mode, all usages supported by the [Rsbuild SVGR plugin](https://rsbuild.dev/en/plugins/list/plugin-svgr) are available. The only difference is that when using an SVG file in URL form, Rslib will retain the `import` statement for the static asset in the output according to [Referencing Static Assets](/en/guide/advanced/static-assets).
 
-下面是一个使用示例：
+Here is an example of usage:
 
 ```jsx title="App.jsx"
 import Logo from './logo.svg?react';
@@ -40,7 +40,9 @@ import Logo from './logo.svg?react';
 export const App = () => <Logo />;
 ```
 
-如果导入的路径不包含 `?react` 后缀，那么 SVG 会被当做普通的静态资源来处理，保留对静态资源的 `import` 语句。
+If the import path does not include the `?react` suffix, the SVG will be treated as a normal static asset, and the `import` statement for the static asset will be retained.
+
+`@rsbuild/plugin-svgr` also supports default imports and mixed imports:
 
 ```js
 import logoURL from './static/logo.svg';
@@ -48,18 +50,18 @@ import logoURL from './static/logo.svg';
 console.log(logoURL);
 ```
 
-`@rsbuild/plugin-svgr` 也支持默认导入和混合导入等用法：
+`@rsbuild/plugin-svgr` also supports default imports and mixed imports:
 
-- 通过 [svgrOptions.exportType](https://rsbuild.dev/zh/plugins/list/plugin-svgr#svgroptionsexporttype) 设置为 `'default'` 来启用默认导入。
-- 通过 [mixedImport](https://rsbuild.dev/zh/plugins/list/plugin-svgr#mixedimport) 选项来启用混合导入，从而同时使用默认导入和具名导入。
+- Enable default imports by setting [svgrOptions.exportType](https://rsbuild.dev/en/plugins/list/plugin-svgr#svgroptionsexporttype) to `'default'`.
+- Enable mixed imports through the [mixedImport](https://rsbuild.dev/en/plugins/list/plugin-svgr#mixedimport) option to use both default and named imports.
 
-### Bundleless 模式
+### Bundleless Mode
 
-在 Bundleless 模式下，由于每个文件都是独立经过代码转换，因此不支持 `?react` 和 `?url` 的引用形式，但支持下面两种使用形式：
+In Bundleless mode, since each file undergoes code transformation independently, the import ways of `?react` and `?url` are not supported. However, the following two usage forms are supported:
 
-#### 具名导入
+#### Named Import
 
-`@rsbuild/plugin-svgr` 支持具名导入 `ReactComponent` 来使用 SVGR，你需要设置 [svgrOptions.exportType](https://rsbuild.dev/zh/plugins/list/plugin-svgr#svgroptionsexporttype) 为 `'named'`：
+`@rsbuild/plugin-svgr` supports named import of `ReactComponent` to use SVGR. You need to set [svgrOptions.exportType](https://rsbuild.dev/en/plugins/list/plugin-svgr#svgroptionsexporttype) to `'named'`.
 
 ```js
 pluginSvgr({
@@ -75,14 +77,14 @@ import { ReactComponent as Logo } from './logo.svg';
 export const App = () => <Logo />;
 ```
 
-所有的 `.svg` 文件都会被转换成 React 组件，此时你可以：
+All `.svg` files will be converted into React components. At this time, you can:
 
-- 通过设置 [exclude](https://rsbuild.dev/zh/plugins/list/plugin-svgr#exclude) 来排除不需要转换的文件。
-- 通过 [svgrOptions.exportType](https://rsbuild.dev/zh/plugins/list/plugin-svgr#svgroptionsexporttype) 设置为 `'default'` 来修改为默认导出。
+- Exclude files that do not need to be converted by setting [exclude](https://rsbuild.dev/en/plugins/list/plugin-svgr#exclude).
+- Change to default export by setting [svgrOptions.exportType](https://rsbuild.dev/en/plugins/list/plugin-svgr#svgroptionsexporttype) to `'default'`.
 
-#### 混合导入
+#### Mixed Import
 
-如果你的库中同时存在 url 和 React 组件两种引入形式，你也可以通过混合导入的方式来使用：
+If your library has both URL and React component import forms for SVG files, you can also use mixed imports.
 
 ```ts
 pluginSvgr({
@@ -93,7 +95,7 @@ pluginSvgr({
 });
 ```
 
-此时引用的 SVG 文件会同时导出 URL 和 React 组件：
+At this time, the imported SVG file will export both the URL and the React component.
 
 ```js
 import logoUrl, { ReactComponent as Logo } from './logo.svg';
@@ -102,4 +104,4 @@ console.log(logoUrl); // -> string
 console.log(Logo); // -> React component
 ```
 
-更多信息可以参考 [mixedImport](https://rsbuild.dev/zh/plugins/list/plugin-svgr#mixedimport) 选项。
+For more information, refer to the [mixedImport](https://rsbuild.dev/en/plugins/list/plugin-svgr#mixedimport) option.
