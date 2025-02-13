@@ -46,12 +46,13 @@ import { Tabs, Tab } from '@theme';
 
 <Tabs>
   <Tab label="src/index.ts">
+
 ```tsx
 import logo from './assets/logo.svg';
 
 console.log(logo);
+```
 
-````
   </Tab>
   <Tab label="src/assets/logo.svg">
     <img src="https://assets.rspack.dev/rslib/rslib-logo.svg" width="100" height="100" loading="lazy" />
@@ -64,11 +65,12 @@ console.log(logo);
 <Tab label="Bundle">
 <Tabs>
   <Tab label="dist/index.mjs">
+
 ```tsx
 import logo_rslib_entry_namespaceObject from './static/svg/logo.svg';
 
-console.log(logo_rslib_entry_namespaceObject)
-````
+console.log(logo_rslib_entry_namespaceObject);
+```
 
   </Tab>
   <Tab label="dist/static/svg/logo.svg">
@@ -129,11 +131,13 @@ export { logo_rslib_entry_namespaceObject as default };
 
 <Tabs>
   <Tab label="src/index.css">
+
 ```css
 .logo {
   background-image: url('./assets/logo.png');
 }
 ```
+
   </Tab>
   <Tab label="src/assets/logo.png">
     <img
