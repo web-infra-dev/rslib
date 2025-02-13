@@ -65,9 +65,10 @@ Based on the configuration in the [output structure](/guide/basic/output-structu
 <Tab label="Bundle">
 <Tabs>
   <Tab label="dist/index.js">
+
 ```tsx
 var example_namespaceObject = {
-  "name": "foo"
+  name: 'foo',
 };
 console.log(example_namespaceObject.name);
 ```
@@ -89,12 +90,14 @@ console.log(example.name);
 
   </Tab>
   <Tab label="dist/example.js">
+
 ```tsx
 var example_namespaceObject = JSON.parse('{"name":"foo","items":[1,2]}');
 var __webpack_exports__items = example_namespaceObject.items;
 var __webpack_exports__name = example_namespaceObject.name;
 export { __webpack_exports__items as items, __webpack_exports__name as name };
 ```
+
   </Tab>
 </Tabs>
 </Tab>
