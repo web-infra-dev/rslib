@@ -13,7 +13,14 @@ export { draft_rslib_entry_namespaceObject as default };
 `;
 
 exports[`use json 1`] = `
-"JSON.parse('{"foo":1,"bar":["2"]}');
+"var data_namespaceObject = {
+    R: 1,
+    K: [
+        "2"
+    ]
+};
+console.log(data_namespaceObject.R);
+console.log(data_namespaceObject.K);
 "
 `;
 
