@@ -319,3 +319,7 @@ export type RslibConfigExport =
   | RslibConfig
   | RslibConfigSyncFn
   | RslibConfigAsyncFn;
+
+export type TsconfigCompilerOptions = Record<string, any> & {
+  jsx?: 'react-jsx' | 'react-jsxdev' | 'react';
+};
