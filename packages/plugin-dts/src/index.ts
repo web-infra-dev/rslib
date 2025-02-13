@@ -4,7 +4,13 @@ import { fileURLToPath } from 'node:url';
 import { type RsbuildConfig, type RsbuildPlugin, logger } from '@rsbuild/core';
 import color from 'picocolors';
 import ts from 'typescript';
-import { loadTsconfig, processSourceEntry } from './utils';
+import {
+  cleanDtsFiles,
+  cleanTsBuildInfoFile,
+  clearTempDeclarationDir,
+  loadTsconfig,
+  processSourceEntry,
+} from './utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,11 +48,10 @@ export type DtsGenOptions = PluginDtsOptions & {
   cwd: string;
   isWatch: boolean;
   dtsEntry: DtsEntry;
+  dtsEmitPath: string;
   build?: boolean;
   tsconfigPath: string;
   tsConfigResult: ts.ParsedCommandLine;
-  rootDistPath: string;
-  cleanDistPath: NonNullable<RsbuildConfig['output']>['cleanDistPath'];
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
 };
 
@@ -104,6 +109,30 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         }
 
         const tsConfigResult = loadTsconfig(tsconfigPath);
+        const { options: rawCompilerOptions } = tsConfigResult;
+        const dtsEmitPath =
+          options.distPath ??
+          rawCompilerOptions.declarationDir ??
+          config.output?.distPath?.root;
+
+        // clean dts files
+        if (config.output.cleanDistPath !== false) {
+          await cleanDtsFiles(dtsEmitPath);
+        }
+
+        // clean .rslib temp folder
+        if (options.bundle) {
+          await clearTempDeclarationDir(cwd);
+        }
+
+        // clean tsbuildinfo file
+        if (
+          rawCompilerOptions.composite ||
+          rawCompilerOptions.incremental ||
+          options.build
+        ) {
+          await cleanTsBuildInfoFile(tsconfigPath, rawCompilerOptions);
+        }
 
         const jsExtension = extname(__filename);
         const childProcess = fork(join(__dirname, `./dts${jsExtension}`), [], {
@@ -115,11 +144,10 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         const dtsGenOptions: DtsGenOptions = {
           ...options,
           dtsEntry,
-          rootDistPath: config.output?.distPath?.root,
+          dtsEmitPath,
           userExternals: config.output.externals,
           tsconfigPath,
           tsConfigResult,
-          cleanDistPath: config.output.cleanDistPath,
           name: environment.name,
           cwd,
           isWatch,
