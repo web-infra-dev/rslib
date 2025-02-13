@@ -590,3 +590,20 @@ describe('dts when composite: true', () => {
     expect(existsSync(buildInfoPath)).toBeTruthy();
   });
 });
+
+describe('use with other features', async () => {
+  test('use output.copy to copy dts files', async () => {
+    const fixturePath = join(__dirname, 'copy');
+    const { files } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/copy/dist/esm/copy.d.ts",
+        "<ROOT>/tests/integration/dts/copy/dist/esm/index.d.ts",
+      ]
+    `);
+  });
+});
