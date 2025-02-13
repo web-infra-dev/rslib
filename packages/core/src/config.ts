@@ -141,6 +141,39 @@ export async function loadConfig({
   return { content: content as RslibConfig, filePath: configFilePath };
 }
 
+// Match logic is derived from https://github.com/webpack/webpack/blob/94aba382eccf3de1004d235045d4462918dfdbb7/lib/ExternalModuleFactoryPlugin.js#L89-L158
+const handleMatchedExternal = (
+  value: string | string[] | boolean | Record<string, string | string[]>,
+  request: string,
+): boolean => {
+  if (typeof value === 'boolean') {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    const [first, second] = value.split(' ');
+    const hasType = !!second;
+    const _request = second ? second : first;
+
+    // Don't need to warn explicit declared external type.
+    if (!hasType) {
+      return request === _request;
+    }
+
+    return false;
+  }
+
+  if (Array.isArray(value)) {
+    return handleMatchedExternal(value[0] ?? '', request);
+  }
+
+  if (typeof value === 'object') {
+    return false;
+  }
+
+  return false;
+};
+
 const composeExternalsWarnConfig = (
   format: Format,
   ...externalsArray: NonNullable<EnvironmentConfig['output']>['externals'][]
@@ -163,18 +196,24 @@ const composeExternalsWarnConfig = (
   const matchUserExternals = (
     externals: NonNullable<EnvironmentConfig['output']>['externals'],
     request: string,
-    callback: (matched?: true) => void,
+    callback: (matched: boolean, shouldWarn?: boolean) => void,
   ) => {
+    // string
     if (typeof externals === 'string') {
-      if (externals === request) {
-        callback(true);
+      if (handleMatchedExternal(externals, request)) {
+        callback(true, true);
         return;
       }
-    } else if (Array.isArray(externals)) {
+    }
+    // array
+    if (Array.isArray(externals)) {
       let i = 0;
       const next = () => {
         let asyncFlag: boolean;
-        const handleExternalsAndCallback = (matched?: true) => {
+        const handleExternalsAndCallback = (
+          matched: boolean,
+          shouldWarn?: boolean,
+        ) => {
           if (!matched) {
             if (asyncFlag) {
               asyncFlag = false;
@@ -183,13 +222,13 @@ const composeExternalsWarnConfig = (
             return next();
           }
 
-          callback(matched);
+          callback(matched, shouldWarn);
         };
 
         do {
           asyncFlag = true;
           if (i >= externals.length) {
-            return callback();
+            return callback(false);
           }
           matchUserExternals(
             externals[i++],
@@ -202,37 +241,47 @@ const composeExternalsWarnConfig = (
 
       next();
       return;
-    } else if (externals instanceof RegExp) {
+    }
+    // regexp
+    if (externals instanceof RegExp) {
       if (externals.test(request)) {
-        callback(true);
+        callback(true, true);
         return;
       }
-    } else if (typeof externals === 'function') {
+    }
+    // function
+    else if (typeof externals === 'function') {
       // TODO: Support function
-    } else if (typeof externals === 'object') {
+    }
+    // object
+    else if (typeof externals === 'object') {
       if (Object.prototype.hasOwnProperty.call(externals, request)) {
-        callback(true);
+        if (handleMatchedExternal(externals[request]!, request)) {
+          callback(true, true);
+        } else {
+          callback(true);
+        }
         return;
       }
     }
 
-    callback();
+    callback(false);
   };
 
   return {
     output: {
       externals: [
         ({ request, dependencyType, contextInfo }: any, callback: any) => {
-          let externalized = false;
-          const _callback = (matched?: true) => {
-            if (matched) {
-              externalized = true;
+          let shouldWarn = false;
+          const _callback = (_matched: boolean, _shouldWarn?: boolean) => {
+            if (_shouldWarn) {
+              shouldWarn = true;
             }
           };
 
           if (contextInfo.issuer && dependencyType === 'commonjs') {
             matchUserExternals(externals, request, _callback);
-            if (externalized) {
+            if (shouldWarn) {
               logger.warn(composeModuleImportWarn(request));
             }
           }
@@ -1449,8 +1498,8 @@ async function composeLibRsbuildConfig(
   const dtsConfig = await composeDtsConfig(config, dtsExtension);
   const externalsWarnConfig = composeExternalsWarnConfig(
     format!,
-    autoExternalConfig?.output?.externals,
     userExternalsConfig?.output?.externals,
+    autoExternalConfig?.output?.externals,
   );
   const minifyConfig = composeMinifyConfig(config);
   const bannerFooterConfig = composeBannerFooterConfig(banner, footer);

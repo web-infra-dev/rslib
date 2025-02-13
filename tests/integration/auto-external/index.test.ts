@@ -89,15 +89,30 @@ test('should get warn when use require in ESM', async () => {
   const { entries } = await buildAndGetResults({ fixturePath });
   const logStrings = logs.map((log) => stripAnsi(log));
 
-  expect(entries.esm).toContain(
-    'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
-  );
+  const shouldWarn = ['react', 'e2', 'e3', 'e5', 'e6', 'e7'];
+  const shouldNotWarn = ['e1', 'e4', 'e8', 'lodash/add', 'lodash/drop'];
 
-  expect(
-    logStrings.some((l) =>
-      l.includes(stripAnsi(composeModuleImportWarn('react'))),
-    ),
-  ).toBe(true);
+  for (const item of shouldWarn) {
+    expect(entries.esm).toContain(
+      `import * as __WEBPACK_EXTERNAL_MODULE_${item}__ from "${item}"`,
+    );
+  }
+
+  for (const item of shouldWarn) {
+    expect(
+      logStrings.some((l) =>
+        l.includes(stripAnsi(composeModuleImportWarn(item))),
+      ),
+    ).toBe(true);
+  }
+
+  for (const item of shouldNotWarn) {
+    expect(
+      logStrings.some((l) =>
+        l.includes(stripAnsi(composeModuleImportWarn(item))),
+      ),
+    ).toBe(false);
+  }
 
   restore();
 });
