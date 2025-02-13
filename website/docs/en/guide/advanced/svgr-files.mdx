@@ -4,9 +4,9 @@ By default, Rslib treats SVG images as static assets.
 
 By adding the [@rsbuild/plugin-svgr](https://rsbuild.dev/plugins/list/plugin-svgr) plugin, Rslib supports invoking [SVGR](https://react-svgr.com/) to convert SVG images into React components for use.
 
-## Quick Start
+## Quick start
 
-### Install the Plugin
+### Install the plugin
 
 You can install the plugin using the following command:
 
@@ -14,7 +14,7 @@ import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @rsbuild/plugin-svgr -D" />
 
-### Register the Plugin
+### Register the plugin
 
 You can register the plugin in the `rslib.config.ts` file:
 
@@ -28,7 +28,7 @@ export default {
 
 ## Examples
 
-### Bundle Mode
+### Bundle mode
 
 In Bundle mode, all usages supported by the [Rsbuild SVGR plugin](https://rsbuild.dev/plugins/list/plugin-svgr) are available. The only difference is that when using an SVG file in URL form, Rslib will retain the `import` statement for the static asset in the output according to [Referencing Static Assets](/guide/advanced/static-assets).
 
@@ -55,11 +55,11 @@ console.log(logoURL);
 - Enable default imports by setting [svgrOptions.exportType](https://rsbuild.dev/plugins/list/plugin-svgr#svgroptionsexporttype) to `'default'`.
 - Enable mixed imports through the [mixedImport](https://rsbuild.dev/plugins/list/plugin-svgr#mixedimport) option to use both default and named imports.
 
-### Bundleless Mode
+### Bundleless mode
 
 In Bundleless mode, since each file undergoes code transformation independently, the import ways of `?react` and `?url` are not supported. However, the following two usage forms are supported:
 
-#### Named Import
+#### Named import
 
 `@rsbuild/plugin-svgr` supports named import of `ReactComponent` to use SVGR. You need to set [svgrOptions.exportType](https://rsbuild.dev/plugins/list/plugin-svgr#svgroptionsexporttype) to `'named'`.
 
@@ -82,7 +82,7 @@ All `.svg` files will be converted into React components. At this time, you can:
 - Exclude files that do not need to be converted by setting [exclude](https://rsbuild.dev/plugins/list/plugin-svgr#exclude).
 - Change to default export by setting [svgrOptions.exportType](https://rsbuild.dev/plugins/list/plugin-svgr#svgroptionsexporttype) to `'default'`.
 
-#### Mixed Import
+#### Mixed import
 
 If your library has both URL and React component import forms for SVG files, you can also use mixed imports.
 
