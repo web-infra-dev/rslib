@@ -14,6 +14,7 @@ import {
 } from '@rsbuild/core';
 import { glob } from 'tinyglobby';
 import { composeAssetConfig } from './asset/assetConfig';
+import { composeCheckConfig } from './check';
 import {
   DEFAULT_CONFIG_EXTENSIONS,
   DEFAULT_CONFIG_NAME,
@@ -57,6 +58,7 @@ import type {
   RspackResolver,
   Shims,
   Syntax,
+  TsconfigCompilerOptions,
 } from './types';
 import { getDefaultExtension } from './utils/extension';
 import {
@@ -483,7 +485,7 @@ export function composeBannerFooterConfig(
 }
 
 export function composeDecoratorsConfig(
-  compilerOptions?: Record<string, any>,
+  compilerOptions?: TsconfigCompilerOptions,
   version?: NonNullable<
     NonNullable<EnvironmentConfig['source']>['decorators']
   >['version'],
@@ -1419,6 +1421,8 @@ async function composeLibRsbuildConfig(
     rootPath,
     config.source?.tsconfigPath,
   );
+
+  const checkConfig = composeCheckConfig({ compilerOptions });
   const cssModulesAuto = config.output?.cssModules?.auto ?? true;
 
   const {
@@ -1536,6 +1540,7 @@ async function composeLibRsbuildConfig(
     dtsConfig,
     bannerFooterConfig,
     decoratorsConfig,
+    checkConfig,
   );
 }
 
