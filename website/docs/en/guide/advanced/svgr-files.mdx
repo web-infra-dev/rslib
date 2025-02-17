@@ -1,0 +1,107 @@
+# Import SVGR
+
+By default, Rslib treats SVG images as static assets.
+
+By adding the [@rsbuild/plugin-svgr](https://rsbuild.dev/plugins/list/plugin-svgr) plugin, Rslib supports transforming SVG to React components via [SVGR](https://react-svgr.com/).
+
+## Quick start
+
+### Install the plugin
+
+You can install the plugin using the following command:
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs command="add @rsbuild/plugin-svgr -D" />
+
+### Register the plugin
+
+You can register the plugin in the `rslib.config.ts` file:
+
+```ts title="rslib.config.ts"
+import { pluginSvgr } from '@rsbuild/plugin-svgr';
+
+export default {
+  plugins: [pluginSvgr()],
+};
+```
+
+## Examples
+
+### Bundle mode
+
+In bundle mode, all usages supported by [@rsbuild/plugin-svgr](https://rsbuild.dev/plugins/list/plugin-svgr) are available in Rslib. The only difference is that when using an SVG file in URL form, Rslib will retain the `import` statement for the static asset in the output according to [Import static assets](/guide/advanced/static-assets).
+
+Here is an example of usage:
+
+```jsx title="App.jsx"
+import Logo from './logo.svg?react';
+
+export const App = () => <Logo />;
+```
+
+If the import path does not include the `?react` suffix, the SVG will be treated as a normal static asset, and the `import` statement for the static asset will be retained.
+
+`@rsbuild/plugin-svgr` also supports default imports and mixed imports:
+
+```js
+import logoURL from './static/logo.svg';
+
+console.log(logoURL);
+```
+
+`@rsbuild/plugin-svgr` also supports default import and mixed import:
+
+- Enable default import by setting [svgrOptions.exportType](https://rsbuild.dev/plugins/list/plugin-svgr#svgroptionsexporttype) to `'default'`.
+- Enable mixed import through the [mixedImport](https://rsbuild.dev/plugins/list/plugin-svgr#mixedimport) option to use both default and named import.
+
+### Bundleless mode
+
+In bundleless mode, since each file undergoes code transformation independently, the import ways of `?react` and `?url` are not supported. However, the following two usage forms are supported:
+
+#### Named import
+
+`@rsbuild/plugin-svgr` supports named import of `ReactComponent` to use SVGR. You need to set [svgrOptions.exportType](https://rsbuild.dev/plugins/list/plugin-svgr#svgroptionsexporttype) to `'named'`.
+
+```js
+pluginSvgr({
+  svgrOptions: {
+    exportType: 'named',
+  },
+});
+```
+
+```jsx title="App.jsx"
+import { ReactComponent as Logo } from './logo.svg';
+
+export const App = () => <Logo />;
+```
+
+All `.svg` files will be transformed into React components. At this time, you can:
+
+- Exclude files that do not need to be transformed by setting [exclude](https://rsbuild.dev/plugins/list/plugin-svgr#exclude).
+- Change to default export by setting [svgrOptions.exportType](https://rsbuild.dev/plugins/list/plugin-svgr#svgroptionsexporttype) to `'default'`.
+
+#### Mixed import
+
+If your library has both URL and React component import forms for SVG files, you can also use mixed import.
+
+```ts
+pluginSvgr({
+  mixedImport: true,
+  svgrOptions: {
+    exportType: 'named',
+  },
+});
+```
+
+At this time, the imported SVG file will export both the URL and the React component.
+
+```js
+import logoUrl, { ReactComponent as Logo } from './logo.svg';
+
+console.log(logoUrl); // -> string
+console.log(Logo); // -> React component
+```
+
+For more information, refer to the [mixedImport](https://rsbuild.dev/plugins/list/plugin-svgr#mixedimport) option.

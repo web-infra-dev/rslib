@@ -4,9 +4,11 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 Options for build outputs.
 
-{/* ## output.assetPrefix <RsbuildDocBadge path="/config/output/asset-prefix" text="output.assetPrefix" /> */}
+## output.assetPrefix <RsbuildDocBadge path="/config/output/asset-prefix" text="output.assetPrefix" />
 
-{/* In [production mode](https://rsbuild.dev/config/mode), use this option to set the URL prefix for static assets, such as setting it to a CDN URL. */}
+Use this option to set the URL prefix for static assets, such as setting it to a CDN URL.
+
+When [format](/config/lib/format) is set to `cjs` or `esm`, Rslib defaults to setting `output.assetPrefix` to `"auto"`.
 
 ## output.charset <RsbuildDocBadge path="/config/output/charset" text="output.charset" />
 
@@ -27,6 +29,8 @@ For custom CSS Modules configuration.
 ## output.dataUriLimit <RsbuildDocBadge path="/config/output/data-uri-limit" text="output.dataUriLimit" />
 
 Set the size threshold to inline static assets such as images and fonts.
+
+When [format](/config/lib/format) is set to `cjs` or `esm`, Rslib defaults to setting `output.dataUriLimit` to `0`, without inlining any static assets, so that build tools on the application side can handle and optimize them.
 
 ## output.distPath <RsbuildDocBadge path="/config/output/dist-path" text="output.distPath" />
 

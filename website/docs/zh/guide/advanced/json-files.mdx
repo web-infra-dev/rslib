@@ -1,0 +1,103 @@
+# 引用 JSON 文件
+
+Rslib 支持在代码中引用 JSON 文件。
+
+## JSON 文件
+
+你可以直接在 JavaScript 文件中引用 JSON 文件。
+
+:::warning
+
+在 bundle 模式下，JSON 文件支持默认引用和具名引用。
+
+在 bundleless 模式下，JSON 文件仅支持具名引用。
+
+:::
+
+### 默认引用
+
+```json title="example.json"
+{
+  "name": "foo",
+  "items": [1, 2]
+}
+```
+
+```js title="index.js"
+import example from './example.json';
+
+console.log(example.name); // 'foo';
+console.log(example.items); // [1, 2];
+```
+
+### 具名引用
+
+Rslib 同样支持通过 named import 来引用 JSON 文件。
+
+下面是一个使用示例，假设源码如下：
+
+import { Tabs, Tab } from '@theme';
+
+<Tabs>
+  <Tab label="src/index.ts">
+
+```js
+import { name } from './example.json';
+
+console.log(name); // 'foo';
+```
+
+  </Tab>
+  <Tab label="src/example.json">
+
+```json
+{
+  "name": "foo",
+  "items": [1, 2]
+}
+```
+
+  </Tab>
+</Tabs>
+
+会根据配置文件中的 [产物结构](/guide/basic/output-structure) 配置，输出如下产物：
+
+<Tabs>
+<Tab label="bundle">
+<Tabs>
+  <Tab label="dist/index.js">
+```tsx
+var example_namespaceObject = {
+  u: 'foo',
+};
+console.log(example_namespaceObject.u);
+```
+
+  </Tab>
+</Tabs>
+</Tab>
+
+<Tab label="bundleless">
+
+<Tabs>
+  <Tab label="dist/index.js">
+
+```tsx
+import * as example from './example.js';
+
+console.log(example.name);
+```
+
+  </Tab>
+  <Tab label="dist/example.js">
+```tsx
+var example_namespaceObject = JSON.parse('{"name":"foo","items":[1,2]}');
+var __webpack_exports__items = example_namespaceObject.items;
+var __webpack_exports__name = example_namespaceObject.name;
+export { __webpack_exports__items as items, __webpack_exports__name as name };
+```
+  </Tab>
+</Tabs>
+</Tab>
+
+</Tabs>

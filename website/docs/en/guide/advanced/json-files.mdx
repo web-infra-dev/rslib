@@ -1,0 +1,106 @@
+# Import JSON files
+
+Rslib supports import JSON files in code.
+
+## JSON file
+
+You can directly import JSON files in JavaScript files.
+
+:::warning
+
+In bundle mode, JSON files support both default and named import.
+
+In bundleless mode, JSON files only support named import.
+
+:::
+
+### Default import
+
+```json title="example.json"
+{
+  "name": "foo",
+  "items": [1, 2]
+}
+```
+
+```js title="index.js"
+import example from './example.json';
+
+console.log(example.name); // 'foo';
+console.log(example.items); // [1, 2];
+```
+
+### Named import
+
+Rslib also supports importing JSON files through named import.
+
+Here is an example, assuming the source code is as follows:
+
+import { Tabs, Tab } from '@theme';
+
+<Tabs>
+  <Tab label="src/index.ts">
+
+```js
+import { name } from './example.json';
+
+console.log(name); // 'foo';
+```
+
+  </Tab>
+  <Tab label="src/example.json">
+
+```json
+{
+  "name": "foo",
+  "items": [1, 2]
+}
+```
+
+  </Tab>
+</Tabs>
+
+Based on the configuration in the [output structure](/guide/basic/output-structure) specified in the configuration file, the following outputs will be emitted:
+
+<Tabs>
+<Tab label="bundle">
+<Tabs>
+  <Tab label="dist/index.js">
+
+```tsx
+var example_namespaceObject = {
+  u: 'foo',
+};
+console.log(example_namespaceObject.u);
+```
+
+  </Tab>
+</Tabs>
+</Tab>
+
+<Tab label="bundleless">
+
+<Tabs>
+  <Tab label="dist/index.js">
+
+```tsx
+import * as example from './example.js';
+
+console.log(example.name);
+```
+
+  </Tab>
+  <Tab label="dist/example.js">
+
+```tsx
+var example_namespaceObject = JSON.parse('{"name":"foo","items":[1,2]}');
+var __webpack_exports__items = example_namespaceObject.items;
+var __webpack_exports__name = example_namespaceObject.name;
+export { __webpack_exports__items as items, __webpack_exports__name as name };
+```
+
+  </Tab>
+</Tabs>
+</Tab>
+
+</Tabs>

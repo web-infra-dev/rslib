@@ -1,0 +1,295 @@
+# Import static assets
+
+Rslib supports import static assets, including images, fonts, audio and video.
+
+## Assets format
+
+The following are the formats supported by Rslib by default:
+
+- **images**: png, jpg, jpeg, gif, svg, bmp, webp, ico, apng, avif, tif, tiff, jfif, pjpeg, pjp, cur.
+- **fonts**: woff, woff2, eot, ttf, otf, ttc.
+- **audio**: mp3, wav, flac, aac, m4a, opus.
+- **video**: mp4, webm, ogg, mov.
+
+To import assets in other formats, refer to [Extend Asset Types](#extend-asset-types).
+
+## Import assets in JS file
+
+In JS files, you can directly import static assets with relative paths through `import`:
+
+```tsx
+// Import the logo.png image in the 'src/assets' directory
+import logo from './assets/logo.png';
+
+console.log(logo); // "/static/logo.[hash].png"
+
+export default = () => <img src={logo} />;
+```
+
+Import with **alias** is also available:
+
+```tsx
+import logo from '@/assets/logo.png';
+
+console.log(logo); // "/static/logo.[hash].png"
+
+export default = () => <img src={logo} />;
+```
+
+When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the output as an mid-level artifact that will be consumed by other build tools again and transforms the source file into a JS file and a static asset file that is emitted according to [output.distPath](/config/rsbuild/output#outputdistpath) by default, which is used to preserve the `import` statements for static assets.
+
+The following is an example of usage, assuming the source code is as follows:
+
+import { Tabs, Tab } from '@theme';
+
+<Tabs>
+  <Tab label="src/index.ts">
+
+```tsx
+import logo from './assets/logo.svg';
+
+console.log(logo);
+```
+
+  </Tab>
+  <Tab label="src/assets/logo.svg">
+    <img src="https://assets.rspack.dev/rslib/rslib-logo.svg" width="100" height="100" loading="lazy" />
+  </Tab>
+</Tabs>
+
+Based on the configuration in the [output structure](/guide/basic/output-structure) in the configuration file, the following outputs will be emitted:
+
+<Tabs>
+<Tab label="bundle">
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```tsx
+import logo_rslib_entry_namespaceObject from './static/svg/logo.svg';
+
+console.log(logo_rslib_entry_namespaceObject);
+```
+
+  </Tab>
+  <Tab label="dist/static/svg/logo.svg">
+    <img src="https://assets.rspack.dev/rslib/rslib-logo.svg" width="100" height="100" loading="lazy" />
+  </Tab>
+</Tabs>
+</Tab>
+
+<Tab label="bundleless">
+
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```tsx
+import logo from './assets/logo.mjs';
+
+console.log(logo);
+```
+
+  </Tab>
+  <Tab label="dist/assets/logo.mjs">
+
+```tsx
+import logo_rslib_entry_namespaceObject from '../static/svg/logo.svg';
+export { logo_rslib_entry_namespaceObject as default };
+```
+
+  </Tab>
+  <Tab label="dist/static/svg/logo.svg">
+    <img src="https://assets.rspack.dev/rslib/rslib-logo.svg" width="100" height="100" loading="lazy" />
+  </Tab>
+</Tabs>
+</Tab>
+
+</Tabs>
+
+## Import assets in CSS file
+
+In CSS files, you can import static assets with relative paths:
+
+```css title="src/index.css"
+.logo {
+  background-image: url('./assets/logo.png');
+}
+```
+
+Import with **alias** are also supported:
+
+```css title="src/index.css"
+.logo {
+  background-image: url('@/assets/logo.png');
+}
+```
+
+When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the output as an mid-level artifact that will be consumed by other build tools again and preserves relative reference paths in CSS outputs by default via setting [output.assetPrefix](/config/rsbuild/output#outputassetprefix) to `"auto"`.
+
+The following is an example of usage, assuming the source code is as follows:
+
+<Tabs>
+  <Tab label="src/index.css">
+
+```css
+.logo {
+  background-image: url('./assets/logo.png');
+}
+```
+
+  </Tab>
+  <Tab label="src/assets/logo.png">
+    <img
+      src="https://assets.rspack.dev/rslib/rslib-logo-192x192.png"
+      width="100"
+      height="100"
+      loading="lazy"
+    />
+  </Tab>
+</Tabs>
+
+The following output will be emitted:
+
+<Tabs>
+
+<Tab label="dist/index.css">
+
+```css
+.logo {
+  background-image: url('./static/image/logo.png');
+}
+```
+
+</Tab>
+
+<Tab label="dist/static/image/logo.png">
+  <img
+    src="https://assets.rspack.dev/rslib/rslib-logo-192x192.png"
+    width="100"
+    height="100"
+    loading="lazy"
+  />
+</Tab>
+
+</Tabs>
+
+---
+
+### Ignore some assets imported in CSS
+
+If you need to import a static asset with an absolute path in a CSS file:
+
+```css
+@font-face {
+  font-family: DingTalk;
+  src: url('/image/font/foo.ttf');
+}
+```
+
+By default, the built-in `css-loader` in Rslib will resolve absolute paths in `url()` and look for the specified modules. If you want to skip resolving absolute paths, you can configure [`tools.cssLoader`](/config/rsbuild/tools#toolscssloader) to filter out the specified paths. The filtered paths are preserved as they are in the code.
+
+```ts
+export default {
+  tools: {
+    cssLoader: {
+      url: {
+        filter: (url) => {
+          if (/\/image\/font/.test(url)) {
+            return false;
+          }
+          return true;
+        },
+      },
+    },
+  },
+};
+```
+
+## Inline static assets
+
+When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the output as an mid-level artifact that will be consumed by other build tools again and sets [output.dataUriLimit](/config/rsbuild/output#outputdataurilimit) to `0` by default to not inline any static assets.
+
+## Build output directory
+
+Once static assets are imported, they will automatically be output to the build output directory. You can:
+
+- Modify the filename of the outputs through [output.filename](/config/rsbuild/output#outputfilename).
+- Change the output path of the outputs through [output.distPath](/config/rsbuild/output#outputdistpath).
+
+## Type declaration
+
+When you import static assets in TypeScript code, TypeScript may prompt that the module is missing a type definition:
+
+```
+TS2307: Cannot find module './logo.png' or its corresponding type declarations.
+```
+
+To fix this, you need to add a type declaration file for the static assets, please create a `src/env.d.ts` file, and add the corresponding type declaration.
+
+- Method 1: If the `@rslib/core` package is installed, you can reference the **preset types** provided by `@rslib/core`:
+
+```ts
+/// <reference types="@rslib/core/types" />
+```
+
+- Method 2: Manually add the required type declarations:
+
+```ts title="src/env.d.ts"
+// Taking png images as an example
+declare module '*.png' {
+  const content: string;
+  export default content;
+}
+```
+
+After adding the type declaration, if the type error still exists, you can try to restart the current IDE, or adjust the directory where `env.d.ts` is located, making sure the TypeScript can correctly identify the type definition.
+
+## Extend asset types
+
+If the built-in static assets type of Rslib does not meet your needs, you can extend the additional static assets type in the following ways.
+
+### Use `source.assetsInclude`
+
+By using the [source.assetsInclude](/config/rsbuild/source#sourceassetsinclude) config, you can specify additional file types to be treated as static assets.
+
+```ts title="rslib.config.ts"
+export default {
+  source: {
+    assetsInclude: /\.pdf$/,
+  },
+};
+```
+
+After adding the above configuration, you can import `*.pdf` files in your code, for example:
+
+```js
+import myFile from './static/myFile.pdf';
+
+console.log(myFile);
+```
+
+### Use `tools.rspack`
+
+You can modify the built-in Rspack configuration and add custom static assets handling rules via [tools.rspack](/config/rsbuild/tools#toolsrspack).
+
+For example, to treat `*.pdf` files as assets and output them to the dist directory, you can add the following configuration:
+
+```ts title="rslib.config.ts"
+export default {
+  tools: {
+    rspack(config, { addRules }) {
+      addRules([
+        {
+          test: /\.pdf$/,
+          // Convert assets to separate files and keep import statements
+          type: 'asset/resource',
+          generator: {
+            importMode: 'preserve',
+          },
+        },
+      ]);
+    },
+  },
+};
+```
+
+For more information about asset modules, please refer to [Rspack - Asset modules](https://rspack.dev/guide/features/asset-module).

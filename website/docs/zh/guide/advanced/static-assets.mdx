@@ -1,0 +1,295 @@
+# 引用静态资源
+
+Rslib 支持在代码中引用图片、字体、音频、视频等类型的静态资源。
+
+## 静态资源格式
+
+以下是 Rslib 默认支持的静态资源格式：
+
+- **图片**：png、jpg、jpeg、gif、svg、bmp、webp、ico、apng、avif、tif、tiff、jfif、pjpeg、pjp、cur。
+- **字体**：woff、woff2、eot、ttf、otf、ttc。
+- **音频**：mp3、wav、flac、aac、m4a、opus。
+- **视频**：mp4、webm、ogg、mov。
+
+如果你需要引用其他格式的静态资源，请参考 [扩展静态资源类型](#扩展静态资源类型)。
+
+## 在 JS 文件中引用
+
+在 JS 文件中，可以直接通过 `import` 的方式引用相对路径下的静态资源：
+
+```tsx
+// 引用 src/assets 目录下的 logo.png 图片
+import logo from './assets/logo.png';
+
+console.log(logo); // "/static/logo.[hash].png"
+
+export default = () => <img src={logo} />;
+```
+
+也可以使用**路径别名**来引用：
+
+```tsx
+import logo from '@/assets/logo.png';
+
+console.log(logo); // "/static/logo.[hash].png"
+
+export default = () => <img src={logo} />;
+```
+
+在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物，默认会在代码转换时将源文件转化为一个 JS 文件和一个根据 [output.distPath](/config/rsbuild/output#outputdistpath) 输出的静态资源文件，从而保留引用静态资源的 `import` 语句。
+
+下面是一个使用示例，假设源码如下：
+
+import { Tabs, Tab } from '@theme';
+
+<Tabs>
+  <Tab label="src/index.ts">
+
+```tsx
+import logo from './assets/logo.svg';
+
+console.log(logo);
+```
+
+  </Tab>
+  <Tab label="src/assets/logo.svg">
+    <img src="https://assets.rspack.dev/rslib/rslib-logo.svg" width="100" height="100" loading="lazy" />
+  </Tab>
+</Tabs>
+
+会根据配置文件中的 [产物结构](/guide/basic/output-structure) 配置，输出如下产物：
+
+<Tabs>
+<Tab label="bundle">
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```tsx
+import logo_rslib_entry_namespaceObject from './static/svg/logo.svg';
+
+console.log(logo_rslib_entry_namespaceObject);
+```
+
+  </Tab>
+  <Tab label="dist/static/svg/logo.svg">
+    <img src="https://assets.rspack.dev/rslib/rslib-logo.svg" width="100" height="100" loading="lazy" />
+  </Tab>
+</Tabs>
+</Tab>
+
+<Tab label="bundleless">
+
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```tsx
+import logo from './assets/logo.mjs';
+
+console.log(logo);
+```
+
+  </Tab>
+  <Tab label="dist/assets/logo.mjs">
+
+```tsx
+import logo_rslib_entry_namespaceObject from '../static/svg/logo.svg';
+export { logo_rslib_entry_namespaceObject as default };
+```
+
+  </Tab>
+  <Tab label="dist/static/svg/logo.svg">
+    <img src="https://assets.rspack.dev/rslib/rslib-logo.svg" width="100" height="100" loading="lazy" />
+  </Tab>
+</Tabs>
+</Tab>
+
+</Tabs>
+
+## 在 CSS 文件中引用
+
+在 CSS 文件中，可以引用相对路径下的静态资源：
+
+```css title="src/index.css"
+.logo {
+  background-image: url('./assets/logo.png');
+}
+```
+
+也支持使用**路径别名**来引用：
+
+```css title="src/index.css"
+.logo {
+  background-image: url('@/assets/logo.png');
+}
+```
+
+在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物，默认会将 [output.assetPrefix](/config/rsbuild/output#outputassetprefix) 设置为 `"auto"` 来使 CSS 产物中保留相对引用路径。
+
+下面是一个使用示例，假设源码如下：
+
+<Tabs>
+  <Tab label="src/index.css">
+
+```css
+.logo {
+  background-image: url('./assets/logo.png');
+}
+```
+
+  </Tab>
+  <Tab label="src/assets/logo.png">
+    <img
+      src="https://assets.rspack.dev/rslib/rslib-logo-192x192.png"
+      width="100"
+      height="100"
+      loading="lazy"
+    />
+  </Tab>
+</Tabs>
+
+会输出如下产物：
+
+<Tabs>
+
+<Tab label="dist/index.css">
+
+```css
+.logo {
+  background-image: url('./static/image/logo.png');
+}
+```
+
+</Tab>
+
+<Tab label="dist/static/image/logo.png">
+  <img
+    src="https://assets.rspack.dev/rslib/rslib-logo-192x192.png"
+    width="100"
+    height="100"
+    loading="lazy"
+  />
+</Tab>
+
+</Tabs>
+
+---
+
+### 在 CSS 中忽略某些文件引用
+
+如果需要在 CSS 文件中引用绝对路径下的静态资源：
+
+```css
+@font-face {
+  font-family: DingTalk;
+  src: url('/image/font/foo.ttf');
+}
+```
+
+默认情况下，Rslib 内置的 `css-loader` 会解析 `url()` 中的绝对路径并寻找指定的模块。如果你希望跳过绝对路径的解析，可以配置 [`tools.cssLoader`](/config/rsbuild/tools#toolscssloader) 来过滤指定的路径，被过滤的路径将被原样保留在代码中。
+
+```ts
+export default {
+  tools: {
+    cssLoader: {
+      url: {
+        filter: (url) => {
+          if (/\/image\/font/.test(url)) {
+            return false;
+          }
+          return true;
+        },
+      },
+    },
+  },
+};
+```
+
+## 静态资源内联
+
+在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物，默认会将 [output.dataUriLimit](/config/rsbuild/output#outputdataurilimit) 设置为 `0` 以不内联任何静态资源。
+
+## 构建产物目录
+
+当静态资源被引用后，会自动被输出到构建产物的目录下，你可以：
+
+- 通过 [output.filename](/config/rsbuild/output#outputfilename) 来修改产物的文件名。
+- 通过 [output.distPath](/config/rsbuild/output#outputdistpath) 来修改产物的输出路径。
+
+## 类型声明
+
+当你在 TypeScript 代码中引用静态资源时，TypeScript 可能会提示该模块缺少类型定义：
+
+```
+TS2307: Cannot find module './logo.png' or its corresponding type declarations.
+```
+
+此时你需要为静态资源添加类型声明文件，请在项目中创建 `src/env.d.ts` 文件，并添加相应的类型声明。
+
+- 方法一：如果项目里安装了 `@rslib/core` 包，你可以直接引用 `@rslib/core` 提供的**预设类型**：
+
+```ts
+/// <reference types="@rslib/core/types" />
+```
+
+- 方法二：手动添加需要的类型声明：
+
+```ts title="src/env.d.ts"
+// 以 png 图片为例
+declare module '*.png' {
+  const url: string;
+  export default url;
+}
+```
+
+添加类型声明后，如果依然存在上述错误提示，请尝试重启当前 IDE，或者调整 `env.d.ts` 所在的目录，使 TypeScript 能够正确识别类型定义。
+
+## 扩展静态资源类型
+
+如果 Rslib 内置的静态资源类型不能满足你的需求，可以通过以下方式扩展额外的静态资源类型。
+
+### 使用 `source.assetsInclude`
+
+通过 [source.assetsInclude](/config/rsbuild/source#sourceassetsinclude) 配置项，你可以指定需要被视为静态资源的额外文件类型。
+
+```ts title="rslib.config.ts"
+export default {
+  source: {
+    assetsInclude: /\.pdf$/,
+  },
+};
+```
+
+添加以上配置后，你就可以在代码里引用 `*.pdf` 文件了，比如：
+
+```js
+import myFile from './static/myFile.pdf';
+
+console.log(myFile); // "/static/assets/myFile.[hash].pdf"
+```
+
+### 使用 `tools.rspack`
+
+可以通过 [tools.rspack](/config/rsbuild/tools#toolsrspack) 来修改内置的 Rspack 配置，并添加自定义的静态资源处理规则。
+
+比如，把 `*.pdf` 文件当做静态资源输出到产物目录，可以添加以下配置：
+
+```ts title="rslib.config.ts"
+export default {
+  tools: {
+    rspack(config, { addRules }) {
+      addRules([
+        {
+          test: /\.pdf$/,
+          // 将资源转换为单独的文件，并且保留 import 语句
+          type: 'asset/resource',
+          generator: {
+            importMode: 'preserve',
+          },
+        },
+      ]);
+    },
+  },
+};
+```
+
+关于资源模块的更多介绍，请参考 [Rspack - 资源模块](https://rspack.dev/zh/guide/features/asset-module)。
