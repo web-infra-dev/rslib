@@ -4,7 +4,15 @@ Rslib supports import JSON files in code.
 
 ## JSON file
 
-You can directly reference JSON files in JavaScript files.
+You can directly import JSON files in JavaScript files.
+
+:::warning
+
+In bundle mode, JSON files support both default and named import.
+
+In bundleless mode, JSON files only support named import.
+
+:::
 
 ### Default import
 
@@ -22,16 +30,9 @@ console.log(example.name); // 'foo';
 console.log(example.items); // [1, 2];
 ```
 
-:::warning
-
-In Bundle mode, JSON files support both default and named imports.
-In Bundleless mode, JSON files only support named imports.
-
-:::
-
 ### Named import
 
-Rslib also supports referencing JSON files through named imports:
+Rslib also supports importing JSON files through named import.
 
 Here is an example, assuming the source code is as follows:
 
@@ -59,25 +60,25 @@ console.log(name); // 'foo';
   </Tab>
 </Tabs>
 
-Based on the configuration in the [output structure](/guide/basic/output-structure) specified in the configuration file, the following outputs will be packaged:
+Based on the configuration in the [output structure](/guide/basic/output-structure) specified in the configuration file, the following outputs will be emitted:
 
 <Tabs>
-<Tab label="Bundle">
+<Tab label="bundle">
 <Tabs>
   <Tab label="dist/index.js">
 
 ```tsx
 var example_namespaceObject = {
-  name: 'foo',
+  u: 'foo',
 };
-console.log(example_namespaceObject.name);
+console.log(example_namespaceObject.u);
 ```
 
   </Tab>
 </Tabs>
 </Tab>
 
-<Tab label="Bundleless">
+<Tab label="bundleless">
 
 <Tabs>
   <Tab label="dist/index.js">

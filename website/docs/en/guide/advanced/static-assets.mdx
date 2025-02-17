@@ -15,7 +15,7 @@ To import assets in other formats, refer to [Extend Asset Types](#extend-asset-t
 
 ## Import assets in JS file
 
-In JS files, you can directly refer to static assets with relative paths through `import`:
+In JS files, you can directly import static assets with relative paths through `import`:
 
 ```tsx
 // Import the logo.png image in the 'src/assets' directory
@@ -36,7 +36,7 @@ console.log(logo); // "/static/logo.[hash].png"
 export default = () => <img src={logo} />;
 ```
 
-When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the output as an mid-level artifact that will be consumed by other build tools again. During the code transformation, Rslib transforms the source file into a JS file and a static asset file that is output according to [output.distPath](/config/rsbuild/output#outputdistpath), which is used to preserve the `import` statements for static assets.
+When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the output as an mid-level artifact that will be consumed by other build tools again and transforms the source file into a JS file and a static asset file that is emitted according to [output.distPath](/config/rsbuild/output#outputdistpath) by default, which is used to preserve the `import` statements for static assets.
 
 The following is an example of usage, assuming the source code is as follows:
 
@@ -57,10 +57,10 @@ console.log(logo);
   </Tab>
 </Tabs>
 
-Based on the configuration in the [output structure](/guide/basic/output-structure) in the configuration file, the following outputs will be packaged:
+Based on the configuration in the [output structure](/guide/basic/output-structure) in the configuration file, the following outputs will be emitted:
 
 <Tabs>
-<Tab label="Bundle">
+<Tab label="bundle">
 <Tabs>
   <Tab label="dist/index.mjs">
 
@@ -77,7 +77,7 @@ console.log(logo_rslib_entry_namespaceObject);
 </Tabs>
 </Tab>
 
-<Tab label="Bundleless">
+<Tab label="bundleless">
 
 <Tabs>
   <Tab label="dist/index.mjs">
@@ -123,7 +123,7 @@ Import with **alias** are also supported:
 }
 ```
 
-When the [format](/config/lib/format) is `cjs` or `esm`, Rslib treats the output as an intermediate product that will be consumed again by other packaging tools. Rslib preserves relative reference paths in CSS outputs by setting [output.assetPrefix](/config/rsbuild/output#outputassetprefix) to `"auto"`.
+When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the output as an mid-level artifact that will be consumed by other build tools again and preserves relative reference paths in CSS outputs by default via setting [output.assetPrefix](/config/rsbuild/output#outputassetprefix) to `"auto"`.
 
 The following is an example of usage, assuming the source code is as follows:
 
@@ -147,7 +147,7 @@ The following is an example of usage, assuming the source code is as follows:
   </Tab>
 </Tabs>
 
-The following output will be packaged:
+The following output will be emitted:
 
 <Tabs>
 
@@ -185,7 +185,7 @@ If you need to import a static asset with an absolute path in a CSS file:
 }
 ```
 
-By default, the built-in `css-loader` in Rslib will resolve absolute paths in `url()` and look for the specified modules. If you want to skip resolving absolute paths, you can configure [`tools.cssLoader`](/config/rsbuild/tools#toolscssloader) to filter out the specified paths. The filtered paths are left as they are in the code.
+By default, the built-in `css-loader` in Rslib will resolve absolute paths in `url()` and look for the specified modules. If you want to skip resolving absolute paths, you can configure [`tools.cssLoader`](/config/rsbuild/tools#toolscssloader) to filter out the specified paths. The filtered paths are preserved as they are in the code.
 
 ```ts
 export default {
@@ -206,16 +206,14 @@ export default {
 
 ## Inline static assets
 
-When developing libraries that will be consumed again by other build tools as intermediate products, static assets are typically not inlined, leaving the handling and optimization to the build tools on the application side.
-
-The automatic inlining size threshold can be modified via the [output.dataUriLimit](/config/rsbuild/output#outputdataurilimit) configuration option. When the [format](/config/lib/format) is `cjs` or `esm`, Rslib defaults the `output.dataUriLimit` to `0`, not inlining any static assets.
+When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the output as an mid-level artifact that will be consumed by other build tools again and sets [output.dataUriLimit](/config/rsbuild/output#outputdataurilimit) to `0` by default to not inline any static assets.
 
 ## Build output directory
 
-Once static assets are referenced, they will automatically be output to the build output directory. You can:
+Once static assets are imported, they will automatically be output to the build output directory. You can:
 
-- Modify the filename of the output through [output.filename](/config/rsbuild/output#outputfilename).
-- Change the output path of the product through [output.distPath](/config/rsbuild/output#outputdistpath).
+- Modify the filename of the outputs through [output.filename](/config/rsbuild/output#outputfilename).
+- Change the output path of the outputs through [output.distPath](/config/rsbuild/output#outputdistpath).
 
 ## Type declaration
 
@@ -282,7 +280,7 @@ export default {
       addRules([
         {
           test: /\.pdf$/,
-          // 将资源转换为单独的文件，并且保留 import 语句
+          // Convert assets to separate files and keep import statements
           type: 'asset/resource',
           generator: {
             importMode: 'preserve',

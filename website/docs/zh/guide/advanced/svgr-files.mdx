@@ -30,7 +30,7 @@ export default {
 
 ### Bundle 模式
 
-在 Bundle 模式下，支持 [Rsbuild SVGR 插件](https://rsbuild.dev/zh/plugins/list/plugin-svgr) 下的所有用法，唯一的区别是当以 URL 形式使用 SVG 文件时，Rslib 会按照 [引用静态资源](/zh/guide/advanced/static-assets) 在产物中对应保留静态资源的 `import` 语句。
+在 bundle 模式下，Rslib 支持 [@rsbuild/plugin-svgr](https://rsbuild.dev/zh/plugins/list/plugin-svgr) 下的所有用法，唯一的区别是当以 URL 形式使用 SVG 文件时，Rslib 会按照 [引用静态资源](/guide/advanced/static-assets) 在产物中对应保留静态资源的 `import` 语句。
 
 下面是一个使用示例：
 
@@ -40,7 +40,7 @@ import Logo from './logo.svg?react';
 export const App = () => <Logo />;
 ```
 
-如果导入的路径不包含 `?react` 后缀，那么 SVG 会被当做普通的静态资源来处理，保留对静态资源的 `import` 语句。
+如果导入的路径不包含 `?react` 后缀，那么 SVG 会被当做普通的静态资源来处理，即保留对静态资源的 `import` 语句。
 
 ```js
 import logoURL from './static/logo.svg';
@@ -55,7 +55,7 @@ console.log(logoURL);
 
 ### Bundleless 模式
 
-在 Bundleless 模式下，由于每个文件都是独立经过代码转换，因此不支持 `?react` 和 `?url` 的引用形式，但支持下面两种使用形式：
+在 bundleless 模式下，由于每个文件都是独立经过代码转换，因此不支持 `?react` 和 `?url` 的引用形式，但支持下面两种使用形式：
 
 #### 具名导入
 

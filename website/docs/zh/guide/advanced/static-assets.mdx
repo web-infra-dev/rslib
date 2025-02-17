@@ -36,7 +36,7 @@ console.log(logo); // "/static/logo.[hash].png"
 export default = () => <img src={logo} />;
 ```
 
-在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物。Rslib 会在代码转换时将源文件转化为一个 JS 文件和一个根据 [output.distPath](/config/rsbuild/output#outputdistpath) 输出的静态资源文件，用于保留对静态资源的 `import` 语句。
+在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物，默认会在代码转换时将源文件转化为一个 JS 文件和一个根据 [output.distPath](/config/rsbuild/output#outputdistpath) 输出的静态资源文件，从而保留引用静态资源的 `import` 语句。
 
 下面是一个使用示例，假设源码如下：
 
@@ -57,10 +57,10 @@ console.log(logo);
   </Tab>
 </Tabs>
 
-会根据配置文件中的 [产物结构](/guide/basic/output-structure) 配置，打包出如下产物：
+会根据配置文件中的 [产物结构](/guide/basic/output-structure) 配置，输出如下产物：
 
 <Tabs>
-<Tab label="Bundle">
+<Tab label="bundle">
 <Tabs>
   <Tab label="dist/index.mjs">
 
@@ -77,7 +77,7 @@ console.log(logo_rslib_entry_namespaceObject);
 </Tabs>
 </Tab>
 
-<Tab label="Bundleless">
+<Tab label="bundleless">
 
 <Tabs>
   <Tab label="dist/index.mjs">
@@ -123,7 +123,7 @@ export { logo_rslib_entry_namespaceObject as default };
 }
 ```
 
-在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物。Rslib 会通过设置 [output.assetPrefix](/config/rsbuild/output#outputassetprefix) 为 `"auto"` 来使 CSS 产物中保留相对引用路径。
+在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物，默认会将 [output.assetPrefix](/config/rsbuild/output#outputassetprefix) 设置为 `"auto"` 来使 CSS 产物中保留相对引用路径。
 
 下面是一个使用示例，假设源码如下：
 
@@ -147,7 +147,7 @@ export { logo_rslib_entry_namespaceObject as default };
   </Tab>
 </Tabs>
 
-会打包出如下产物：
+会输出如下产物：
 
 <Tabs>
 
@@ -206,9 +206,7 @@ export default {
 
 ## 静态资源内联
 
-在开发组件库这种会被其他打包工具再次消费的中间产物时，一般不会内联静态资源，交给应用侧的构建工具处理和优化。
-
-自动内联的体积阈值可以通过 [output.dataUriLimit](/config/rsbuild/output#outputdataurilimit) 配置项修改，在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 默认会将 `output.dataUriLimit` 设置为 `0`，不内联任何静态资源。
+在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物，默认会将 [output.dataUriLimit](/config/rsbuild/output#outputdataurilimit) 设置为 `0` 以不内联任何静态资源。
 
 ## 构建产物目录
 
@@ -294,4 +292,4 @@ export default {
 };
 ```
 
-关于 asset modules 的更多介绍，请参考 [Rspack - Asset modules](https://rspack.dev/guide/features/asset-module)。
+关于资源模块的更多介绍，请参考 [Rspack - 资源模块](https://rspack.dev/zh/guide/features/asset-module)。

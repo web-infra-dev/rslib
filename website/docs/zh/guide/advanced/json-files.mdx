@@ -6,6 +6,14 @@ Rslib 支持在代码中引用 JSON 文件。
 
 你可以直接在 JavaScript 文件中引用 JSON 文件。
 
+:::warning
+
+在 bundle 模式下，JSON 文件支持默认引用和具名引用。
+
+在 bundleless 模式下，JSON 文件仅支持具名引用。
+
+:::
+
 ### 默认引用
 
 ```json title="example.json"
@@ -22,17 +30,9 @@ console.log(example.name); // 'foo';
 console.log(example.items); // [1, 2];
 ```
 
-:::warning
-
-在 Bundle 模式下，JSON 文件支持默认引用和具名引用。
-
-在 Bundleless 模式下，JSON 文件仅支持具名引用。
-
-:::
-
 ### 具名引用
 
-Rslib 同样支持通过 named import 来引用 JSON 文件：
+Rslib 同样支持通过 named import 来引用 JSON 文件。
 
 下面是一个使用示例，假设源码如下：
 
@@ -60,24 +60,24 @@ console.log(name); // 'foo';
   </Tab>
 </Tabs>
 
-会根据配置文件中的 [产物结构](/guide/basic/output-structure) 配置，打包出如下产物：
+会根据配置文件中的 [产物结构](/guide/basic/output-structure) 配置，输出如下产物：
 
 <Tabs>
-<Tab label="Bundle">
+<Tab label="bundle">
 <Tabs>
   <Tab label="dist/index.js">
 ```tsx
 var example_namespaceObject = {
-  "name": "foo"
+  u: 'foo',
 };
-console.log(example_namespaceObject.name);
+console.log(example_namespaceObject.u);
 ```
 
   </Tab>
 </Tabs>
 </Tab>
 
-<Tab label="Bundleless">
+<Tab label="bundleless">
 
 <Tabs>
   <Tab label="dist/index.js">
