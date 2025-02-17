@@ -1099,6 +1099,7 @@ const composeEntryConfig = async (
       const outBase = await resolveOutBase(Object.values(resolvedEntries));
       return { resolvedEntries, outBase };
     }
+
     return { resolvedEntries, outBase: null };
   };
 
@@ -1126,7 +1127,7 @@ const composeBundlelessExternalConfig = (
   redirect: Redirect,
   cssModulesAuto: CssLoaderOptionsAuto,
   bundle: boolean,
-  rootPath: string,
+  outBase: string | null,
 ): {
   config: EnvironmentConfig;
   resolvedJsRedirect?: DeepRequired<JsRedirect>;
@@ -1167,8 +1168,14 @@ const composeBundlelessExternalConfig = (
                 let resolvedRequest = request;
                 // use resolver to resolve the request
                 resolvedRequest = await resolver!(context!, resolvedRequest);
-                const isSubpath = resolvedRequest.startsWith(
-                  rootPath + path.sep,
+                if (typeof outBase !== 'string') {
+                  throw new Error(
+                    `outBase expect to be a string in bundleless mode, but got ${outBase}`,
+                  );
+                }
+
+                const isSubpath = normalizeSlash(resolvedRequest).startsWith(
+                  `${normalizeSlash(outBase)}/`,
                 );
 
                 // only handle the request that within the root path
@@ -1456,12 +1463,19 @@ async function composeLibRsbuildConfig(
     jsExtension,
     dtsExtension,
   } = composeAutoExtensionConfig(config, autoExtension, pkgJson);
+  const { entryConfig, outBase } = await composeEntryConfig(
+    config.source?.entry!,
+    config.bundle,
+    rootPath,
+    cssModulesAuto,
+    config.outBase,
+  );
   const { config: bundlelessExternalConfig } = composeBundlelessExternalConfig(
     jsExtension,
     redirect,
     cssModulesAuto,
     bundle,
-    rootPath,
+    outBase,
   );
   const {
     config: targetConfig,
@@ -1476,13 +1490,6 @@ async function composeLibRsbuildConfig(
     pkgJson,
     userExternals: config.output?.externals,
   });
-  const { entryConfig, outBase } = await composeEntryConfig(
-    config.source?.entry!,
-    config.bundle,
-    rootPath,
-    cssModulesAuto,
-    config.outBase,
-  );
   const cssConfig = composeCssConfig(
     outBase,
     config.bundle,

@@ -6,8 +6,10 @@ test('basic', async () => {
   const fixturePath = join(__dirname, 'basic');
   const { files, contents } = await buildAndGetResults({ fixturePath });
 
+  // ESM
   expect(files.esm).toMatchInlineSnapshot(`
     [
+      "<ROOT>/tests/integration/bundle-false/basic/dist/esm/dep.js",
       "<ROOT>/tests/integration/bundle-false/basic/dist/esm/index.js",
       "<ROOT>/tests/integration/bundle-false/basic/dist/esm/mainFiles1/index.js",
       "<ROOT>/tests/integration/bundle-false/basic/dist/esm/mainFiles2/index.js",
@@ -23,6 +25,7 @@ test('basic', async () => {
 
   expect(await import(esmIndexPath)).toMatchInlineSnapshot(`
     {
+      "added": 3,
       "mainFiles1": "mainFiles1",
       "mainFiles2": "mainFiles2",
       "num1": 1,
@@ -36,8 +39,46 @@ test('basic', async () => {
     }
   `);
 
+  const { content: indexContent } = queryContent(contents.esm, 'index.js', {
+    basename: true,
+  });
+  const { content: depContent } = queryContent(contents.esm, 'dep.js', {
+    basename: true,
+  });
+  const { content: sumContent } = queryContent(contents.esm, 'sum.js', {
+    basename: true,
+  });
+  expect(indexContent).toMatchInlineSnapshot(`
+    "import * as __WEBPACK_EXTERNAL_MODULE__mainFiles1_index_js_c28bc628__ from "./mainFiles1/index.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__dep_js_6cc8d1bf__ from "./dep.js";
+    export * from "./mainFiles2/index.js";
+    export * from "./utils/numbers.js";
+    export * from "./utils/strings.js";
+    export * from "./sum.js";
+    var __webpack_exports__added = __WEBPACK_EXTERNAL_MODULE__dep_js_6cc8d1bf__.added;
+    var __webpack_exports__mainFiles1 = __WEBPACK_EXTERNAL_MODULE__mainFiles1_index_js_c28bc628__.mainFiles1;
+    export { __webpack_exports__added as added, __webpack_exports__mainFiles1 as mainFiles1 };
+    "
+  `);
+  expect(depContent).toMatchInlineSnapshot(`
+    "import * as __WEBPACK_EXTERNAL_MODULE_dep_add__ from "dep_add";
+    const added = (0, __WEBPACK_EXTERNAL_MODULE_dep_add__.add)(1, 2);
+    export { added };
+    "
+  `);
+  expect(sumContent).toMatchInlineSnapshot(`
+    "import * as __WEBPACK_EXTERNAL_MODULE__utils_numbers_js_ac3baff3__ from "./utils/numbers.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__utils_strings_js_56d354bf__ from "./utils/strings.js";
+    const numSum = __WEBPACK_EXTERNAL_MODULE__utils_numbers_js_ac3baff3__.num1 + __WEBPACK_EXTERNAL_MODULE__utils_numbers_js_ac3baff3__.num2 + __WEBPACK_EXTERNAL_MODULE__utils_numbers_js_ac3baff3__.num3;
+    const strSum = __WEBPACK_EXTERNAL_MODULE__utils_strings_js_56d354bf__.str1 + __WEBPACK_EXTERNAL_MODULE__utils_strings_js_56d354bf__.str2 + __WEBPACK_EXTERNAL_MODULE__utils_strings_js_56d354bf__.str3;
+    export { numSum, strSum };
+    "
+  `);
+
+  // CJS
   expect(files.cjs).toMatchInlineSnapshot(`
     [
+      "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/dep.cjs",
       "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/index.cjs",
       "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/mainFiles1/index.cjs",
       "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/mainFiles2/index.cjs",
@@ -53,6 +94,7 @@ test('basic', async () => {
 
   expect((await import(cjsIndexPath)).default).toMatchInlineSnapshot(`
     {
+      "added": 3,
       "mainFiles1": "mainFiles1",
       "mainFiles2": "mainFiles2",
       "num1": 1,
