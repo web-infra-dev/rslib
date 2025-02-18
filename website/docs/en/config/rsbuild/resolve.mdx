@@ -12,6 +12,8 @@ Control the priority between the `paths` option in `tsconfig.json` and the `reso
 
 Create aliases to import or require certain modules, same as the [resolve.alias](https://rspack.dev/config/resolve#resolvealias) config of Rspack.
 
+For TypeScript projects, you only need to configure [compilerOptions.paths](https://www.typescriptlang.org/tsconfig/#paths) in the `tsconfig.json` file. Rslib will automatically recognize it, so there is no need to configure the `resolve.alias` option separately.
+
 It is worth noting that in bundle mode, both `resolve.alias` and [output.externals](/config/rsbuild/output#outputexternals) can be used to set aliases, but they differ in the following ways:
 
 - `resolve.alias` is used to replace the target module with another module, which will be bundled into the output.
@@ -50,7 +52,7 @@ It is worth noting that in bundle mode, both `resolve.alias` and [output.externa
   Now, the code `import { useState } from 'react'` will be replaced with `import { useState } from 'preact/compat'`.
 
 ::: note
-In bundleless mode, since there is no bundling concept, all modules will be externalized, so Rslib will automatically externalize the aliased module in the final output by using `output.externals`.
+In bundleless mode, since there is no bundling concept, all modules will be externalized. Rslib will automatically transform the modules resolved to the [outBase](../lib/out-base) directory based on the mappings configured in `resolve.alias` or [compilerOptions.paths](https://www.typescriptlang.org/tsconfig/#paths) in `tsconfig.json`.
 :::
 
 ## resolve.dedupe <RsbuildDocBadge path="/config/resolve/dedupe" text="resolve.dedupe" />
