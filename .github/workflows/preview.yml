@@ -2,8 +2,8 @@
 name: Preview Release
 
 on:
-  pull_request:
-    types: [closed]
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   preview:
-    if: github.repository == 'web-infra-dev/rslib' && github.event.pull_request.merged == true
+    if: github.repository == 'web-infra-dev/rslib'
     runs-on: ubuntu-latest
 
     steps:
@@ -46,4 +46,4 @@ jobs:
 
       - name: Publish Preview
         if: steps.changes.outputs.changed == 'true'
-        run: pnpx pkg-pr-new publish --compact --pnpm
+        run: pnpx pkg-pr-new publish --compact --pnpm ./packages/*
