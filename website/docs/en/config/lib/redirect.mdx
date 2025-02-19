@@ -251,6 +251,6 @@ For the `.d.mts` declaration file, in some scenarios, the full extension of the 
 import { foo } from './foo'; // source code of './src/bar.ts' ↓
 import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 
-import { foo } from './foo.ts'; // source code of './src/utils/index.ts' ↓
-import { foo } from './foo.mjs'; // expected output './dist/utils/index.d.mts'
+import { foo } from './foo.ts'; // source code of './src/bar.ts' ↓
+import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 ```
