@@ -251,6 +251,6 @@ TypeScript 类型文件的扩展名与 [dts.autoExtension](/config/lib/dts#dtsau
 import { foo } from './foo'; // './src/bar.ts' 的源码 ↓
 import { foo } from './foo.mjs'; // './dist/bar.d.mts' 预期生成的代码
 
-import { foo } from './foo.ts'; // './src/utils/index.ts' 的源码 ↓
-import { foo } from './foo.mjs'; // './dist/utils/index.d.mts' 预期生成的代码
+import { foo } from './foo.ts'; // './src/bar.ts' 的源码 ↓
+import { foo } from './foo.mjs'; // './dist/bar.d.mts' 预期生成的代码
 ```

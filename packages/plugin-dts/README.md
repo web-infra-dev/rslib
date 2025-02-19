@@ -228,8 +228,8 @@ Whether to automatically redirect the file extension to import paths based on th
 import { foo } from './foo'; // source code of './src/bar.ts' ↓
 import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 
-import { foo } from './foo.ts'; // source code of './src/utils/index.ts' ↓
-import { foo } from './foo.mjs'; // expected output './dist/utils/index.d.mts'
+import { foo } from './foo.ts'; // source code of './src/bar.ts' ↓
+import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 ```
 
 - When set to `false`, the file extension will remain unchanged from the original import path in the rewritten import path of the output file (regardless of whether it is specified or specified as any value).
