@@ -179,7 +179,7 @@ importers:
     devDependencies:
       '@rsbuild/plugin-preact':
         specifier: ^1.3.1
-        version: 1.3.1(@rsbuild/core@1.2.9)(preact@10.25.4)
+        version: 1.3.1(@rsbuild/core@1.2.9)(preact@10.26.2)
       '@rsbuild/plugin-sass':
         specifier: ^1.2.2
         version: 1.2.2(@rsbuild/core@1.2.9)
@@ -187,8 +187,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core
       preact:
-        specifier: ^10.25.4
-        version: 10.25.4
+        specifier: ^10.26.2
+        version: 10.26.2
 
   examples/react-component-bundle:
     devDependencies:
@@ -5327,8 +5327,8 @@ packages:
     resolution: {integrity: sha512-MjOadfU3Ys9KYoX0AdkBlFEF1Vx37uCCeN4ZHnmwm9FfpbsGWMZeBLMmmpY+6Ocqod7mkdZ0DT31OlbsFrLlkA==}
     engines: {node: ^10 || ^12 || >=14}
 
-  preact@10.25.4:
-    resolution: {integrity: sha512-jLdZDb+Q+odkHJ+MpW/9U5cODzqnB+fy2EiHSZES7ldV5LK7yjlVzTp7R8Xy6W6y75kfK8iWYtFVH7lvjwrCMA==}
+  preact@10.26.2:
+    resolution: {integrity: sha512-0gNmv4qpS9HaN3+40CLBAnKe0ZfyE4ZWo5xKlC1rVrr0ckkEvJvAQqKaHANdFKsGstoxrY4AItZ7kZSGVoVjgg==}
 
   prebundle@1.2.7:
     resolution: {integrity: sha512-2i+g+cJA7vdLiap9ztl/fdTtmfAZnz6rbgX668eCdcMzu22aVjoaIqe0Wu1MNL4eHN142OHnxwnNhIXptRo6oQ==}
@@ -7840,9 +7840,9 @@ snapshots:
 
   '@polka/url@1.0.0-next.28': {}
 
-  '@prefresh/core@1.5.3(preact@10.25.4)':
+  '@prefresh/core@1.5.3(preact@10.26.2)':
     dependencies:
-      preact: 10.25.4
+      preact: 10.26.2
 
   '@prefresh/utils@1.2.0': {}
 
@@ -7987,12 +7987,12 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.2.9
 
-  '@rsbuild/plugin-preact@1.3.1(@rsbuild/core@1.2.9)(preact@10.25.4)':
+  '@rsbuild/plugin-preact@1.3.1(@rsbuild/core@1.2.9)(preact@10.26.2)':
     dependencies:
-      '@prefresh/core': 1.5.3(preact@10.25.4)
+      '@prefresh/core': 1.5.3(preact@10.26.2)
       '@prefresh/utils': 1.2.0
       '@rsbuild/core': 1.2.9
-      '@rspack/plugin-preact-refresh': 1.1.2(@prefresh/core@1.5.3(preact@10.25.4))(@prefresh/utils@1.2.0)
+      '@rspack/plugin-preact-refresh': 1.1.2(@prefresh/core@1.5.3(preact@10.26.2))(@prefresh/utils@1.2.0)
       '@swc/plugin-prefresh': 6.2.0
     transitivePeerDependencies:
       - preact
@@ -8186,9 +8186,9 @@ snapshots:
 
   '@rspack/lite-tapable@1.0.1': {}
 
-  '@rspack/plugin-preact-refresh@1.1.2(@prefresh/core@1.5.3(preact@10.25.4))(@prefresh/utils@1.2.0)':
+  '@rspack/plugin-preact-refresh@1.1.2(@prefresh/core@1.5.3(preact@10.26.2))(@prefresh/utils@1.2.0)':
     dependencies:
-      '@prefresh/core': 1.5.3(preact@10.25.4)
+      '@prefresh/core': 1.5.3(preact@10.26.2)
       '@prefresh/utils': 1.2.0
 
   '@rspack/plugin-react-refresh@1.0.1(react-refresh@0.16.0)':
@@ -11810,7 +11810,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  preact@10.25.4: {}
+  preact@10.26.2: {}
 
   prebundle@1.2.7(typescript@5.7.3):
     dependencies:
