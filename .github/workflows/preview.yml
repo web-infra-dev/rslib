@@ -5,6 +5,9 @@ on:
   pull_request:
     types: [closed]
 
+permissions:
+  contents: read
+
 jobs:
   preview:
     if: github.repository == 'web-infra-dev/rslib' && github.event.pull_request.merged == true
