@@ -59,7 +59,7 @@ describe('build --watch should handle add / change / unlink', async () => {
     const tempSrcPath = path.join(__dirname, 'test-temp-src');
     await fse.remove(tempSrcPath);
     await fse.remove(path.join(__dirname, 'dist'));
-    await fse.copy(path.join(__dirname, 'src'), './test-temp-src');
+    await fse.copy(path.join(__dirname, 'src'), tempSrcPath);
     const tempConfigFile = path.join(__dirname, 'test-temp-rslib.config.mjs');
     await fse.remove(tempConfigFile);
     fse.outputFileSync(
@@ -82,7 +82,7 @@ describe('build --watch should handle add / change / unlink', async () => {
       `,
     );
 
-    const srcIndexFile = path.join(tempSrcPath, 'index.js');
+    const srcIndexFile = path.join(tempSrcPath, 'index.ts');
     const srcFooFile = path.join(tempSrcPath, 'foo.js');
     const distFooFile = path.join(__dirname, 'dist/esm/foo.js');
 
