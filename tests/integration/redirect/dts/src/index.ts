@@ -7,6 +7,8 @@ export { logRequest, logger, type LoggerOptions, defaultOptions };
 
 export type { Foo } from '@src/types';
 export type { Bar } from 'types';
+export * from './foo';
+export * from '@src/foo';
 export * from './types';
 export * from 'rslog';
 export * from '@src/logger';

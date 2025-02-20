@@ -74,6 +74,15 @@ export async function pathExists(path: string): Promise<boolean> {
     .catch(() => false);
 }
 
+export async function isDirectory(filePath: string): Promise<boolean> {
+  try {
+    const stat = await fsP.stat(filePath);
+    return stat.isDirectory();
+  } catch {
+    return false;
+  }
+}
+
 export async function emptyDir(dir: string): Promise<void> {
   if (!(await pathExists(dir))) {
     return;
@@ -164,6 +173,27 @@ export async function addBannerAndFooter(
   }
 }
 
+async function addExtension(
+  redirect: DtsRedirect,
+  dtsFile: string,
+  path: string,
+  extension: string,
+): Promise<string> {
+  if (!redirect.extension) {
+    return path;
+  }
+
+  let redirectPath = path;
+
+  // If the import path refers to a directory, it most likely actually refers to a `index.*` file due to Node's module resolution
+  if (await isDirectory(join(dirname(dtsFile), redirectPath))) {
+    // This uses `/` instead of `path.join` here because `join` removes potential "./" prefixes
+    redirectPath = `${redirectPath}/index`;
+  }
+
+  return `${redirectPath}${extension}`;
+}
+
 export async function redirectDtsImports(
   dtsFile: string,
   dtsExtension: string,
@@ -218,7 +248,7 @@ export async function redirectDtsImports(
       e: matchNode.range().end.index,
     };
   });
-  const extensions = dtsExtension
+  const extension = dtsExtension
     .replace(/\.d\.ts$/, '.js')
     .replace(/\.d\.cts$/, '.cjs')
     .replace(/\.d\.mts$/, '.mjs');
@@ -269,7 +299,7 @@ export async function redirectDtsImports(
           if (redirect.extension) {
             redirectImportPath = redirectImportPath.replace(
               /\.[^.]+$/,
-              extensions,
+              extension,
             );
           }
         }
@@ -278,15 +308,21 @@ export async function redirectDtsImports(
           absoluteImportPath &&
           normalize(absoluteImportPath).startsWith(normalize(rootDir))
         ) {
-          if (redirect.extension) {
-            redirectImportPath = `${redirectImportPath}${extensions}`;
-          }
+          redirectImportPath = await addExtension(
+            redirect,
+            dtsFile,
+            redirectImportPath,
+            extension,
+          );
         }
 
         if (!absoluteImportPath && importPath.startsWith('.')) {
-          if (redirect.extension) {
-            redirectImportPath = `${redirectImportPath}${extensions}`;
-          }
+          redirectImportPath = await addExtension(
+            redirect,
+            dtsFile,
+            redirectImportPath,
+            extension,
+          );
         }
       }
 
