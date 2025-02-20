@@ -17,6 +17,8 @@ test('redirect.dts default', async () => {
     import { logRequest as logRequest2 } from '../logger';
     export { logRequest, logRequest2, logger };
     ",
+      "<ROOT>/tests/integration/redirect/dts/dist/default/esm/foo/index.d.ts": "export type Barrel = string;
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/default/esm/index.d.ts": "import { logRequest } from './logger';
     import { logger } from '../../../compile/rslog';
     import type { LoggerOptions } from './types';
@@ -24,6 +26,8 @@ test('redirect.dts default', async () => {
     export { logRequest, logger, type LoggerOptions, defaultOptions };
     export type { Foo } from './types';
     export type { Bar } from './types';
+    export * from './foo';
+    export * from './foo';
     export * from './types';
     export * from '../../../compile/rslog';
     export * from './logger';
@@ -56,6 +60,8 @@ test('redirect.dts.path false', async () => {
     import { logRequest as logRequest2 } from '../logger';
     export { logRequest, logRequest2, logger };
     ",
+      "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/foo/index.d.ts": "export type Barrel = string;
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/index.d.ts": "import { logRequest } from '@src/logger';
     import { logger } from 'rslog';
     import type { LoggerOptions } from './types';
@@ -63,6 +69,8 @@ test('redirect.dts.path false', async () => {
     export { logRequest, logger, type LoggerOptions, defaultOptions };
     export type { Foo } from '@src/types';
     export type { Bar } from 'types';
+    export * from './foo';
+    export * from '@src/foo';
     export * from './types';
     export * from 'rslog';
     export * from '@src/logger';
@@ -95,6 +103,8 @@ test('redirect.dts.extension true', async () => {
     import { logRequest as logRequest2 } from '../logger.js';
     export { logRequest, logRequest2, logger };
     ",
+      "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/foo/index.d.ts": "export type Barrel = string;
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/index.d.ts": "import { logRequest } from './logger.js';
     import { logger } from '../../../compile/rslog';
     import type { LoggerOptions } from './types.js';
@@ -102,6 +112,8 @@ test('redirect.dts.extension true', async () => {
     export { logRequest, logger, type LoggerOptions, defaultOptions };
     export type { Foo } from './types.js';
     export type { Bar } from './types.js';
+    export * from './foo/index.js';
+    export * from './foo/index.js';
     export * from './types.js';
     export * from '../../../compile/rslog';
     export * from './logger.js';
@@ -134,6 +146,8 @@ test('redirect.dts.extension true with dts.autoExtension true', async () => {
     import { logRequest as logRequest2 } from '../logger.mjs';
     export { logRequest, logRequest2, logger };
     ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/esm/foo/index.d.mts": "export type Barrel = string;
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/esm/index.d.mts": "import { logRequest } from './logger.mjs';
     import { logger } from '../../../compile/rslog';
     import type { LoggerOptions } from './types.mjs';
@@ -141,6 +155,8 @@ test('redirect.dts.extension true with dts.autoExtension true', async () => {
     export { logRequest, logger, type LoggerOptions, defaultOptions };
     export type { Foo } from './types.mjs';
     export type { Bar } from './types.mjs';
+    export * from './foo/index.mjs';
+    export * from './foo/index.mjs';
     export * from './types.mjs';
     export * from '../../../compile/rslog';
     export * from './logger.mjs';
