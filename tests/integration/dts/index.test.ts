@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, normalize, resolve } from 'node:path';
 import stripAnsi from 'strip-ansi';
 import {
   buildAndGetResults,
@@ -605,5 +605,28 @@ describe('use with other features', async () => {
         "<ROOT>/tests/integration/dts/copy/dist/esm/index.d.ts",
       ]
     `);
+  });
+});
+
+describe('check tsconfig.json field', async () => {
+  test('check whether declarationDir is resolved outside from project root', async () => {
+    const fixturePath = join(__dirname, 'check', 'outside-root');
+    const { logs, restore } = proxyConsole();
+    const { files } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+    const logStrings = logs.map((log) => stripAnsi(log));
+
+    expect(files.esm).toMatchInlineSnapshot('undefined');
+    expect(
+      logStrings.some((log) =>
+        log.includes(
+          `The resolved declarationDir ${normalize(join(__dirname, 'check/tsconfig/dist'))} is outside the project root ${normalize(join(__dirname, 'check/outside-root'))}, please check your tsconfig file.`,
+        ),
+      ),
+    ).toEqual(true);
+
+    restore();
   });
 });

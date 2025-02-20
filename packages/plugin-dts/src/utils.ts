@@ -505,3 +505,18 @@ export async function cleanTsBuildInfoFile(
     await fsP.rm(tsbuildInfoFilePath, { force: true });
   }
 }
+
+export function warnIfOutside(
+  cwd: string,
+  dir: string | undefined,
+  label: string,
+): void {
+  if (dir) {
+    const relDir = relative(cwd, dir);
+    if (relDir.startsWith('..') || relDir.startsWith('/')) {
+      logger.warn(
+        `The resolved ${label} ${color.cyan(dir)} is outside the project root ${color.cyan(cwd)}, please check your tsconfig file.`,
+      );
+    }
+  }
+}

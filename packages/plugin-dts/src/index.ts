@@ -1,5 +1,5 @@
 import { type ChildProcess, fork } from 'node:child_process';
-import { dirname, extname, join } from 'node:path';
+import { dirname, extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { type RsbuildConfig, type RsbuildPlugin, logger } from '@rsbuild/core';
 import color from 'picocolors';
@@ -10,6 +10,7 @@ import {
   clearTempDeclarationDir,
   loadTsconfig,
   processSourceEntry,
+  warnIfOutside,
 } from './utils';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -110,10 +111,17 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
 
         const tsConfigResult = loadTsconfig(tsconfigPath);
         const { options: rawCompilerOptions } = tsConfigResult;
+        const { declarationDir, outDir, composite, incremental } =
+          rawCompilerOptions;
         const dtsEmitPath =
           options.distPath ??
-          rawCompilerOptions.declarationDir ??
+          declarationDir ??
+          outDir ??
           config.output?.distPath?.root;
+
+        // check whether declarationDir or outDir is outside from current project
+        warnIfOutside(cwd, declarationDir, 'declarationDir');
+        warnIfOutside(cwd, outDir, 'outDir');
 
         // clean dts files
         if (config.output.cleanDistPath !== false) {
@@ -126,11 +134,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         }
 
         // clean tsbuildinfo file
-        if (
-          rawCompilerOptions.composite ||
-          rawCompilerOptions.incremental ||
-          options.build
-        ) {
+        if (composite || incremental || options.build) {
           await cleanTsBuildInfoFile(tsconfigPath, rawCompilerOptions);
         }
 
