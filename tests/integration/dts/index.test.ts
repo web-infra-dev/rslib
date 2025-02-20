@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { join, normalize, resolve } from 'node:path';
+import { join, normalize } from 'node:path';
 import stripAnsi from 'strip-ansi';
 import {
   buildAndGetResults,
