@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { join, normalize } from 'node:path';
+import path, { join } from 'node:path';
 import stripAnsi from 'strip-ansi';
 import {
   buildAndGetResults,
@@ -618,14 +618,22 @@ describe('check tsconfig.json field', async () => {
     });
     const logStrings = logs.map((log) => stripAnsi(log));
 
-    expect(files.esm).toMatchInlineSnapshot('undefined');
+    const expectDeclarationDir = join(__dirname, 'check/tsconfig/dist')
+      .split(path.sep)
+      .join('/');
+    const expectRoot = join(__dirname, 'check/outside-root')
+      .split(path.sep)
+      .join('/');
+
     expect(
       logStrings.some((log) =>
         log.includes(
-          `The resolved declarationDir ${normalize(join(__dirname, 'check/tsconfig/dist'))} is outside the project root ${normalize(join(__dirname, 'check/outside-root'))}, please check your tsconfig file.`,
+          `The resolved declarationDir ${expectDeclarationDir} is outside the project root ${expectRoot}, please check your tsconfig file.`,
         ),
       ),
     ).toEqual(true);
+
+    expect(files.esm).toMatchInlineSnapshot('undefined');
 
     restore();
   });

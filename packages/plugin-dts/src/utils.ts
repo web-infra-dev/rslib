@@ -506,6 +506,11 @@ export async function cleanTsBuildInfoFile(
   }
 }
 
+const windowsSlashRegex = /\\/g;
+export function normalizeSlash(p: string): string {
+  return p.replace(windowsSlashRegex, '/');
+}
+
 export function warnIfOutside(
   cwd: string,
   dir: string | undefined,
@@ -515,7 +520,7 @@ export function warnIfOutside(
     const relDir = relative(cwd, dir);
     if (relDir.startsWith('..') || relDir.startsWith('/')) {
       logger.warn(
-        `The resolved ${label} ${color.cyan(dir)} is outside the project root ${color.cyan(cwd)}, please check your tsconfig file.`,
+        `The resolved ${label} ${color.cyan(normalizeSlash(dir))} is outside the project root ${color.cyan(normalizeSlash(cwd))}, please check your tsconfig file.`,
       );
     }
   }
