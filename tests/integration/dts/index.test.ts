@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import path, { join } from 'node:path';
+import { join, normalize } from 'node:path';
 import stripAnsi from 'strip-ansi';
 import {
   buildAndGetResults,
@@ -617,13 +617,12 @@ describe('check tsconfig.json field', async () => {
       type: 'dts',
     });
     const logStrings = logs.map((log) => stripAnsi(log));
+    restore();
 
-    const expectDeclarationDir = join(__dirname, 'check/tsconfig/dist')
-      .split(path.sep)
-      .join('/');
-    const expectRoot = join(__dirname, 'check/outside-root')
-      .split(path.sep)
-      .join('/');
+    const expectDeclarationDir = normalize(
+      join(__dirname, 'check/tsconfig/dist'),
+    );
+    const expectRoot = normalize(join(__dirname, 'check/outside-root'));
 
     expect(
       logStrings.some((log) =>
@@ -634,7 +633,5 @@ describe('check tsconfig.json field', async () => {
     ).toEqual(true);
 
     expect(files.esm).toMatchInlineSnapshot('undefined');
-
-    restore();
   });
 });
