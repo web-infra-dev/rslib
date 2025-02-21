@@ -515,7 +515,8 @@ export function warnIfOutside(
     const normalizedCwd = normalize(cwd);
     const normalizedDir = normalize(dir);
     const relDir = relative(normalizedCwd, normalizedDir);
-    if (relDir.startsWith('..') || relDir.startsWith(path.sep)) {
+
+    if (relDir.startsWith('..')) {
       logger.warn(
         `The resolved ${label} ${color.cyan(normalizedDir)} is outside the project root ${color.cyan(normalizedCwd)}, please check your tsconfig file.`,
       );
