@@ -67,7 +67,7 @@ export default {
   ],
   source: {
     entry: {
-      index: ['./src/**', '!**/foo.*'],
+      index: ['./src/**', '!src/**/*.test.ts'],
     },
   },
 };
@@ -81,7 +81,7 @@ If [DTS generation](/config/lib/dts) is enabled, remember to set [exclude](https
 // tsconfig.json
 {
   "include": ["src"],
-  "exclude": ["src/**/foo.*"]
+  "exclude": ["src/**/*.test.ts"]
 }
 ```
 
