@@ -55,7 +55,7 @@ export default {
 };
 ```
 
-You can also use with an exclamation mark to exclude some files.
+You can also use with an exclamation mark to exclude some files. For example, exclude test files within the `src` folder:
 
 ```ts title="rslib.config.ts"
 export default {
@@ -67,11 +67,27 @@ export default {
   ],
   source: {
     entry: {
-      index: ['./src/**', '!**/foo.*'],
+      index: ['./src/**', '!src/**/*.test.ts'],
     },
   },
 };
 ```
+
+::: note
+
+If [DTS generation](/config/lib/dts) is enabled, remember to set [exclude](https://www.typescriptlang.org/tsconfig/#exclude) field in `tsconfig.json` to avoid generating TypeScript declaration files for the corresponding files.
+
+For example, exclude test files within the `src` folder:
+
+```json
+// tsconfig.json
+{
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts"]
+}
+```
+
+:::
 
 ## Example
 

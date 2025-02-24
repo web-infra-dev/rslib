@@ -53,7 +53,7 @@ export default {
 };
 ```
 
-你也可以使用感叹号来排除一些文件。
+你也可以使用感叹号来排除一些文件。例如，排除 `src` 文件夹中的测试文件：
 
 ```ts title="rslib.config.ts"
 export default {
@@ -65,11 +65,27 @@ export default {
   ],
   source: {
     entry: {
-      index: ['./src/**', '!**/foo.*'],
+      index: ['./src/**', '!src/**/*.test.ts'],
     },
   },
 };
 ```
+
+::: note
+
+当开启 [类型生成](/config/lib/dts) 时，记得在 `tsconfig.json` 中设置 [exclude](https://www.typescriptlang.org/tsconfig/#exclude) 字段，以避免相应的文件生成 TypeScript 类型声明文件。
+
+例如，排除 `src` 文件夹中的测试文件：
+
+```json
+// tsconfig.json
+{
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts"]
+}
+```
+
+:::
 
 ## Example
 
