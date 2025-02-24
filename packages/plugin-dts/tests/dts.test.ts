@@ -23,6 +23,7 @@ describe('getDtsEmitPath', () => {
     );
     expect(result).toBe('/dist-options');
   });
+
   it('should return declarationDir when options.distPath is undefined', () => {
     const options: PluginDtsOptions = {};
     const result = getDtsEmitPath(
