@@ -10,7 +10,7 @@ import {
 } from 'node:path';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
-import type { DtsGenOptions } from './index';
+import type { DtsEntry, DtsGenOptions } from './index';
 import { emitDts } from './tsc';
 import { calcLongestCommonPath, ensureTempDeclarationDir } from './utils';
 
@@ -198,7 +198,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
           );
         return { name: entryName, path: newPath };
       })
-      .filter(Boolean) as { name: string; path: string }[];
+      .filter(Boolean) as Required<DtsEntry>[];
   }
 
   const bundleDtsIfNeeded = async () => {
