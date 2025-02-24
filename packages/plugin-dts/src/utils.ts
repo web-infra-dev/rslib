@@ -506,6 +506,14 @@ export async function cleanTsBuildInfoFile(
   }
 }
 
+export function getDtsEmitPath(
+  pathFromPlugin: string | undefined,
+  declarationDir: string | undefined,
+  distPath: string,
+): string {
+  return pathFromPlugin ?? declarationDir ?? distPath;
+}
+
 export function warnIfOutside(
   cwd: string,
   dir: string | undefined,
