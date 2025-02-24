@@ -113,11 +113,10 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         const { options: rawCompilerOptions } = tsConfigResult;
         const { declarationDir, outDir, composite, incremental } =
           rawCompilerOptions;
+        // the priority of dtsEmitPath is dts.distPath > declarationDir > output.distPath.root
+        // outDir is not considered since in multiple formats, the dts files may not in the same directory as the js files
         const dtsEmitPath =
-          options.distPath ??
-          declarationDir ??
-          outDir ??
-          config.output?.distPath?.root;
+          options.distPath ?? declarationDir ?? config.output?.distPath?.root;
 
         // check whether declarationDir or outDir is outside from current project
         warnIfOutside(cwd, declarationDir, 'declarationDir');
