@@ -16,7 +16,7 @@ export type BundleOptions = {
   dtsExtension: string;
   banner?: string;
   footer?: string;
-  dtsEntry: DtsEntry;
+  dtsEntry: DtsEntry[];
   tsconfigPath?: string;
   bundledPackages?: string[];
 };
@@ -29,52 +29,56 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     dtsExtension,
     banner,
     footer,
-    dtsEntry = {
-      name: 'index',
-      path: 'index.d.ts',
-    },
+    dtsEntry,
     tsconfigPath = 'tsconfig.json',
     bundledPackages = [],
   } = options;
   try {
-    const start = Date.now();
-    const untrimmedFilePath = join(
-      cwd,
-      relative(cwd, distPath),
-      `${dtsEntry.name}${dtsExtension}`,
-    );
-    const mainEntryPointFilePath = dtsEntry.path!.replace(/\?.*$/, '')!;
-    const internalConfig = {
-      mainEntryPointFilePath,
-      bundledPackages,
-      dtsRollup: {
-        enabled: true,
-        untrimmedFilePath,
-      },
-      compiler: {
-        tsconfigFilePath: tsconfigPath,
-      },
-      projectFolder: cwd,
-    };
+    await Promise.all(
+      dtsEntry.map(async (entry) => {
+        const start = Date.now();
+        const untrimmedFilePath = join(
+          cwd,
+          relative(cwd, distPath),
+          `${entry.name}${dtsExtension}`,
+        );
+        const mainEntryPointFilePath = entry.path!.replace(/\?.*$/, '')!;
+        const internalConfig = {
+          mainEntryPointFilePath,
+          bundledPackages,
+          dtsRollup: {
+            enabled: true,
+            untrimmedFilePath,
+          },
+          compiler: {
+            tsconfigFilePath: tsconfigPath,
+          },
+          projectFolder: cwd,
+        };
 
-    const extractorConfig = ExtractorConfig.prepare({
-      configObject: internalConfig,
-      configObjectFullPath: undefined,
-      packageJsonFullPath: join(cwd, 'package.json'),
-    });
+        const extractorConfig = ExtractorConfig.prepare({
+          configObject: internalConfig,
+          configObjectFullPath: undefined,
+          packageJsonFullPath: join(cwd, 'package.json'),
+        });
 
-    const extractorResult: ExtractorResult = Extractor.invoke(extractorConfig, {
-      localBuild: true,
-    });
+        const extractorResult: ExtractorResult = Extractor.invoke(
+          extractorConfig,
+          {
+            localBuild: true,
+          },
+        );
 
-    if (!extractorResult.succeeded) {
-      throw new Error(`API Extractor error. ${color.gray(`(${name})`)}`);
-    }
+        if (!extractorResult.succeeded) {
+          throw new Error(`API Extractor error. ${color.gray(`(${name})`)}`);
+        }
 
-    await addBannerAndFooter(untrimmedFilePath, banner, footer);
+        await addBannerAndFooter(untrimmedFilePath, banner, footer);
 
-    logger.info(
-      `API Extractor bundle DTS succeeded: ${color.cyan(untrimmedFilePath)} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+        logger.info(
+          `API Extractor bundle DTS succeeded: ${color.cyan(untrimmedFilePath)} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+        );
+      }),
     );
   } catch (e) {
     logger.error('API Extractor Error');

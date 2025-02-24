@@ -86,12 +86,6 @@ export default {
 };
 ```
 
-::: note
-
-[@microsoft/api-extractor](https://www.npmjs.com/package/@microsoft/api-extractor) 只支持为单个入口打包 DTS。如果你想要为多个入口生成打包后的 DTS，你可以在 [lib](/config/lib/) 字段中添加额外的 lib 配置，将多个入口拆分为多个 lib 配置。
-
-:::
-
 #### 处理第三方依赖
 
 当我们打包 DTS 文件时，我们需要指定哪些第三方包的类型需要被打包，可以参考 [处理第三方依赖](/guide/advanced/third-party-deps) 文档了解更多关于 externals 相关的配置。

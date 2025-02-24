@@ -10,7 +10,7 @@ import {
 } from 'node:path';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
-import type { DtsGenOptions } from './index';
+import type { DtsEntry, DtsGenOptions } from './index';
 import { emitDts } from './tsc';
 import { calcLongestCommonPath, ensureTempDeclarationDir } from './utils';
 
@@ -175,21 +175,30 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     ? ensureTempDeclarationDir(cwd, name)
     : dtsEmitPath;
 
-  const { name: entryName, path: entryPath } = dtsEntry;
-  let entry = '';
-
-  if (bundle === true && entryPath) {
-    const entrySourcePath = isAbsolute(entryPath)
-      ? entryPath
-      : join(cwd, entryPath);
-    const relativePath = relative(rootDir, dirname(entrySourcePath));
-    entry = join(declarationDir!, relativePath, basename(entrySourcePath))
-      // Remove query in file path, such as RSLIB_ENTRY_QUERY.
-      .replace(/\?.*$/, '')
-      .replace(
-        /\.(js|mjs|jsx|ts|mts|tsx|cjs|cts|cjsx|ctsx|mjsx|mtsx)$/,
-        '.d.ts',
-      );
+  let dtsEntries: { name: string; path: string }[] = [];
+  if (bundle === true) {
+    dtsEntries = dtsEntry
+      .map((entryObj) => {
+        const { name: entryName, path: entryPath } = entryObj;
+        if (!entryPath) return null;
+        const entrySourcePath = isAbsolute(entryPath)
+          ? entryPath
+          : join(cwd, entryPath);
+        const relativePath = relative(rootDir, dirname(entrySourcePath));
+        const newPath = join(
+          declarationDir!,
+          relativePath,
+          basename(entrySourcePath),
+        )
+          // Remove query in file path, such as RSLIB_ENTRY_QUERY.
+          .replace(/\?.*$/, '')
+          .replace(
+            /\.(js|mjs|jsx|ts|mts|tsx|cjs|cts|cjsx|ctsx|mjsx|mtsx)$/,
+            '.d.ts',
+          );
+        return { name: entryName, path: newPath };
+      })
+      .filter(Boolean) as Required<DtsEntry>[];
   }
 
   const bundleDtsIfNeeded = async () => {
@@ -199,10 +208,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
         name,
         cwd,
         distPath: dtsEmitPath,
-        dtsEntry: {
-          name: entryName,
-          path: entry,
-        },
+        dtsEntry: dtsEntries,
         tsconfigPath,
         dtsExtension,
         banner,
