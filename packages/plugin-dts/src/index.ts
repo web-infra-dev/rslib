@@ -8,6 +8,7 @@ import {
   cleanDtsFiles,
   cleanTsBuildInfoFile,
   clearTempDeclarationDir,
+  getDtsEmitPath,
   loadTsconfig,
   processSourceEntry,
   warnIfOutside,
@@ -113,11 +114,11 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         const { options: rawCompilerOptions } = tsConfigResult;
         const { declarationDir, outDir, composite, incremental } =
           rawCompilerOptions;
-        const dtsEmitPath =
-          options.distPath ??
-          declarationDir ??
-          outDir ??
-          config.output?.distPath?.root;
+        const dtsEmitPath = getDtsEmitPath(
+          options.distPath,
+          declarationDir,
+          config.output?.distPath?.root,
+        );
 
         // check whether declarationDir or outDir is outside from current project
         warnIfOutside(cwd, declarationDir, 'declarationDir');
