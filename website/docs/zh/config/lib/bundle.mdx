@@ -71,6 +71,20 @@ export default {
 };
 ```
 
+::: note
+
+当开启 [类型生成](/config/lib/dts) 时，记得在 `tsconfig.json` 中设置 [exclude](https://www.typescriptlang.org/tsconfig/#exclude) 字段，以避免相应的文件生成 TypeScript 类型声明文件。
+
+```json
+// tsconfig.json
+{
+  "include": ["src"],
+  "exclude": ["src/**/foo.*"]
+}
+```
+
+:::
+
 ## Example
 
 对于以下的源代码文件结构：

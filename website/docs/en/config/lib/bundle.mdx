@@ -73,6 +73,20 @@ export default {
 };
 ```
 
+::: note
+
+If [DTS generation](/config/lib/dts) is enabled, remember to set [exclude](https://www.typescriptlang.org/tsconfig/#exclude) field in `tsconfig.json` to avoid generating TypeScript declaration files for the corresponding files.
+
+```json
+// tsconfig.json
+{
+  "include": ["src"],
+  "exclude": ["src/**/foo.*"]
+}
+```
+
+:::
+
 ## Example
 
 For below file structure of source code:
