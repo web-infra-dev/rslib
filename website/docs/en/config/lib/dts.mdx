@@ -86,12 +86,6 @@ export default {
 };
 ```
 
-::: note
-
-[@microsoft/api-extractor](https://www.npmjs.com/package/@microsoft/api-extractor) only supports bundle DTS for single entry. If you want to generate bundle DTS for multiple entries, you can add extra lib configuration in [lib](/config/lib/) field to split multiple entries into multiple lib configurations.
-
-:::
-
 #### Handle third-party packages
 
 When we bundle DTS files, we should specify which third-party package types need to be bundled, refer to the [Handle Third-Party Dependencies](/guide/advanced/third-party-deps) documentation for more details about externals related configurations.
