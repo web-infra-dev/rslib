@@ -12,11 +12,17 @@ import {
   SHEBANG_PREFIX,
   SHEBANG_REGEX,
 } from '../constant';
-import { importMetaUrlShim } from './shims';
 const require = createRequire(import.meta.url);
 
 const PLUGIN_NAME = 'rsbuild:lib-entry-chunk';
 const LOADER_NAME = 'rsbuild:lib-entry-module';
+const IMPORT_META_URL_SHIM = `const __rslib_import_meta_url__ = /*#__PURE__*/ (function () {
+  return typeof document === 'undefined'
+    ? new (require('url'.replace('', '')).URL)('file:' + __filename).href
+    : (document.currentScript && document.currentScript.src) ||
+      new URL('main.js', document.baseURI).href;
+})();
+`;
 
 const matchFirstLine = (source: string, regex: RegExp): string | false => {
   const lineBreakPos = source.match(/(\r\n|\n)/);
@@ -31,6 +37,8 @@ const matchFirstLine = (source: string, regex: RegExp): string | false => {
 
 class EntryChunkPlugin {
   private reactDirectives: Record<string, string> = {};
+
+  private shimsInjectedAssets: Set<string> = new Set();
 
   private shebangChmod = 0o755;
   private shebangEntries: Record<string, string> = {};
@@ -101,6 +109,8 @@ class EntryChunkPlugin {
         const name = chunk.name;
         if (!name) return;
 
+        this.shimsInjectedAssets.add(filename);
+
         const shebangEntry = this.shebangEntries[name];
         if (shebangEntry) {
           this.shebangEntries[filename] = shebangEntry;
@@ -117,9 +127,13 @@ class EntryChunkPlugin {
       compilation.hooks.processAssets.tap(PLUGIN_NAME, (assets) => {
         if (!this.enabledImportMetaUrlShim) return;
 
-        const chunkAsset = Object.keys(assets).filter((name) =>
-          JS_EXTENSIONS_PATTERN.test(name),
-        );
+        const chunkAsset = Object.keys(assets).filter((name) => {
+          return (
+            JS_EXTENSIONS_PATTERN.test(name) &&
+            this.shimsInjectedAssets.has(name)
+          );
+        });
+
         for (const name of chunkAsset) {
           compilation.updateAsset(name, (old) => {
             const oldSource = old.source().toString();
@@ -131,10 +145,10 @@ class EntryChunkPlugin {
               replaceSource.replace(
                 0,
                 11, // 'use strict;'.length,
-                `"use strict";\n${importMetaUrlShim}`,
+                `"use strict";\n${IMPORT_META_URL_SHIM}`,
               );
             } else {
-              replaceSource.insert(0, importMetaUrlShim);
+              replaceSource.insert(0, IMPORT_META_URL_SHIM);
             }
 
             return replaceSource;

@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import path, { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import vm from 'node:vm';
@@ -115,6 +116,21 @@ describe('CJS shims', () => {
       console.log(src_rslib_entry_filename);
       const src_rslib_entry_module = null;
       export { src_rslib_entry_filename as __filename, importMetaUrl, src_rslib_entry_module as module, requiredModule };
+      "
+    `);
+  });
+});
+
+describe('shims with copy', () => {
+  test('the CJS shims should not affect files in `output.copy`', async () => {
+    const fixturePath = join(__dirname, 'copy');
+    await buildAndGetResults({ fixturePath });
+    const copiedFile = path.resolve(fixturePath, 'dist/cjs/index.ts');
+    const copiedContent = fs.readFileSync(copiedFile, 'utf-8');
+    expect(copiedContent).toMatchInlineSnapshot(`
+      "#!/user/bin/env node
+
+      export default 'ok';
       "
     `);
   });

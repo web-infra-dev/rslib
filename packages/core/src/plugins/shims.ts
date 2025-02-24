@@ -1,14 +1,5 @@
 import { type RsbuildPlugin, rspack } from '@rsbuild/core';
 
-// The shim will be injected in PostEntryPlugin.
-export const importMetaUrlShim = `const __rslib_import_meta_url__ = /*#__PURE__*/ (function () {
-  return typeof document === 'undefined'
-    ? new (require('url'.replace('', '')).URL)('file:' + __filename).href
-    : (document.currentScript && document.currentScript.src) ||
-      new URL('main.js', document.baseURI).href;
-})();
-`;
-
 // This Rsbuild plugin will shim `import.meta.url` for CommonJS modules.
 // - Replace `import.meta.url` with `importMetaUrl`.
 // - Inject `importMetaUrl` to the end of the module (can't inject at the beginning because of `"use strict";`).
