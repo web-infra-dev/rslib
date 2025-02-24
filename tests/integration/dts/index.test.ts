@@ -6,6 +6,7 @@ import {
   createTempFiles,
   globContentJSON,
   proxyConsole,
+  queryContent,
 } from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
@@ -338,6 +339,43 @@ describe('dts when bundle: true', () => {
         "<ROOT>/tests/integration/dts/bundle/clean/dist-types/cjs/index.d.ts",
       ]
     `);
+  });
+
+  test('multiple entries', async () => {
+    const fixturePath = join(__dirname, 'bundle', 'multiple-entries');
+    const { files, contents } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle/multiple-entries/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle/multiple-entries/dist/esm/sum.d.ts",
+      ]
+    `);
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle/multiple-entries/dist/cjs/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle/multiple-entries/dist/cjs/sum.d.ts",
+      ]
+    `);
+
+    const { content: indexEsm } = queryContent(contents.esm, 'index.d.ts', {
+      basename: true,
+    });
+    const { content: indexCjs } = queryContent(contents.cjs, 'index.d.ts', {
+      basename: true,
+    });
+    const { content: sumEsm } = queryContent(contents.esm, 'sum.d.ts', {
+      basename: true,
+    });
+    const { content: sumCjs } = queryContent(contents.cjs, 'sum.d.ts', {
+      basename: true,
+    });
+
+    expect([indexEsm, indexCjs, sumEsm, sumCjs]).toMatchSnapshot();
   });
 });
 

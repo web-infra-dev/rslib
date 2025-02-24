@@ -49,7 +49,7 @@ export type DtsGenOptions = PluginDtsOptions & {
   name: string;
   cwd: string;
   isWatch: boolean;
-  dtsEntry: DtsEntry;
+  dtsEntry: DtsEntry[];
   dtsEmitPath: string;
   build?: boolean;
   tsconfigPath: string;
@@ -89,8 +89,9 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
 
         const { config } = environment;
 
-        // TODO: @microsoft/api-extractor only support single entry to bundle DTS
-        // use first element of Record<string, string> type entry config
+        // @microsoft/api-extractor only support single entry to bundle DTS
+        // see https://github.com/microsoft/rushstack/issues/1596#issuecomment-546790721
+        // we support multiple entries by calling api-extractor multiple times
         const dtsEntry = processSourceEntry(
           options.bundle!,
           config.source?.entry,
