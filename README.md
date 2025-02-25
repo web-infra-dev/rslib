@@ -12,22 +12,19 @@
   <a href="https://github.com/web-infra-dev/rslib/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=F8F5FF" alt="license" /></a>
 </p>
 
+English | [简体中文](./README.zh-CN.md)
+
 Rslib is a library development tool that leverages the well-designed configurations and plugins of [Rsbuild](https://rsbuild.dev), empowering library developers to take advantage of the extensive knowledge and ecosystem of webpack and Rspack.
 
-## ✨ Why Rslib?
+## ✨ Why Rslib
 
-In the past, we typically did not use webpack or Rspack to build ESM packages because they often included excessive runtime code, making them less friendly to package consumers. However, the community has developed a vast ecosystem around webpack and Rspack, which provides powerful features like tree shaking, code splitting, module federation and more.
+During the development of component or utility libraries, developers need to focus not only on implementing project logic, but also on handling tasks that are separate from the code itself, such as building, debugging, documentation, and testing. Although many community tools and solutions can address some of these needs, developers who are not familiar with them often face cumbersome configuration requirements or need to coordinate multiple tools to meet these demands.
 
-So we decided to create Rslib. It improves the quality of ESM output from Rspack and webpack, leverages their extensive ecosystem, and utilizes Rsbuild's excellent out-of-the-box configuration. Rslib aims to provide a superior developer experience and explore new possibilities based on the Rspack architecture.
+Based on Rspack and Rsbuild, Rslib offers a comprehensive solution tailored to the diverse requirements of library development, effectively addressing issues such as incomplete tool ecosystems, high costs for module standard compatibility, and insufficient output optimization. Rslib optimizes webpack's limited support for library ESM outputs, reducing redundant runtime code and generating high-quality ESM outputs that are tree-shaking friendly for library consumers. Additionally, Rslib fully leverages the build performance advantages of Rspack and capitalizes the strengths of both the webpack and Rspack ecosystems to robustly support features such as Module Federation.
 
-![](https://assets.rspack.dev/rsbuild/assets/rspack-stack-layers.png)
+Furthermore, Rslib utilizes Rsbuild's out-of-the-box configuration to facilitate configuration sharing between application and library projects, resolving the challenge of reusing build configurations between application projects and library projects, thereby reducing the configuration overhead for developers and improving development efficiency and experience.
 
-Rslib is still in its early stages and under active development. We are building Rslib by working in two main parts:
-
-- [bundler support track](https://github.com/web-infra-dev/rslib/issues/45): Improve the quality of ESM / CJS outputs by contributing to Rspack and webpack.
-- [Rslib features track](https://github.com/web-infra-dev/rslib/issues/46): Develop the core features of Rslib.
-
-The roadmap may change as we move forward.
+In the future, Rslib will explore additional possibilities by leveraging the new features of Rspack.
 
 ## 🔥 Features
 
@@ -38,6 +35,14 @@ Rslib has the following features:
 - **Multiple output formats**: ESM, CJS, and UMD for maximum compatibility.
 - **Declaration file generation**: Including isolated declarations.
 - **Advanced features**: Module Federation, asset compression, PostCSS, Lightning CSS, and more.
+
+## 🎯 Ecosystem
+
+Rslib is implemented based on Rsbuild and fully reuses the capabilities and ecosystem of Rsbuild.
+
+The following diagram illustrates the relationship between Rslib and other tools in the ecosystem:
+
+<img src="https://assets.rspack.dev/rsbuild/assets/rspack-stack-layers.png" alt="Rspack stack layers" width="760" />
 
 ## 📚 Getting started
 
@@ -58,55 +63,15 @@ To get started with Rslib, see the [Quick Start](https://lib.rsbuild.dev/guide/s
 
 ## 🤝 Contribution
 
-> New contributors welcome!
+> [!NOTE]
+> We highly value any contributions to Rslib!
 
 Please read the [Contributing Guide](https://github.com/web-infra-dev/rslib/blob/main/CONTRIBUTING.md).
 
 ### Contributors
 
 <a href="https://github.com/web-infra-dev/rslib/graphs/contributors" target="_blank">
-  <table>
-    <tr>
-      <th colspan="2">
-        <br/>
-        <img src="https://contrib.rocks/image?repo=web-infra-dev/rslib&columns=16&max=96"><br/><br/>
-      </th>
-    </tr>
-    <tr>
-      <td>
-        <picture>
-          <source 
-            media="(prefers-color-scheme: dark)" 
-            srcset="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=active&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=dark"
-          />
-          <img 
-            alt="Contributors of web-infra-dev/rslib" 
-            src="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=active&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=light"
-          />
-        </picture>
-      </td>
-      <td rowspan="2">
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=4x7&color_scheme=dark">
-          <img alt="New trends of web-infra-dev" src="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=4x7&color_scheme=light">
-        </picture>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <picture>
-          <source 
-            media="(prefers-color-scheme: dark)" 
-            srcset="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=dark"
-          />
-          <img 
-            alt="Contributors of web-infra-dev/rslib" 
-            src="https://next.ossinsight.io/widgets/official/compose-org-active-contributors/thumbnail.png?activity=new&period=past_90_days&owner_id=87694465&repo_ids=766839449&image_size=2x3&color_scheme=light"
-          />
-        </picture>
-      </td>
-    </tr>
-  </table>
+  <img src="https://contrib.rocks/image?repo=web-infra-dev/rslib&columns=24">
 </a>
 
 ### Code of conduct
