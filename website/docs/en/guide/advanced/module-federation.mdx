@@ -52,22 +52,7 @@ export default defineConfig({
         assetPrefix: 'http://localhost:3001/mf',
       },
       plugins: [
-        pluginModuleFederation({
-          name: 'rslib_provider',
-          exposes: {
-            // add expose here
-          },
-          // can not add 'remote' here, because you may build 'esm' or 'cjs' assets in one build.
-          // if you want the Rslib package use remote module, please see below.
-          shared: {
-            react: {
-              singleton: true,
-            },
-            'react-dom': {
-              singleton: true,
-            },
-          },
-        }),
+
       ],
     },
   ],
@@ -78,7 +63,25 @@ export default defineConfig({
   output: {
     target: 'web',
   },
-  plugins: [pluginReact()],
+  plugins: [
+    pluginReact()
+    pluginModuleFederation({
+      name: 'rslib_provider',
+      exposes: {
+        // add expose here
+      },
+      // can not add 'remote' here, because you may build 'esm' or 'cjs' assets in one build.
+      // if you want the Rslib package use remote module, please see below.
+      shared: {
+        react: {
+          singleton: true,
+        },
+        'react-dom': {
+          singleton: true,
+        },
+      },
+    }),
+  ],
 });
 ```
 
