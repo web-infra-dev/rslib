@@ -7,7 +7,7 @@ Whether to import SWC helper functions from [@swc/helpers](https://www.npmjs.com
 
 By default, the output JavaScript file may depend on helper functions to support the target environment or output format, and these helper functions will be inlined in the file that requires it.
 
-When `externalHelpers` set to `true`, the output JavaScript will import helper functions from the external module `@swc/helpers`.
+When `externalHelpers` set to `true`, the output JavaScript will import helper functions from the external module `@swc/helpers`. This helps reduce duplicate helper code in the final bundles, and reduces the bundle size.
 
 ::: note
 
@@ -29,7 +29,7 @@ export default class FOO {
 
 When `externalHelpers` is disabled, the output JavaScript will inline helper functions.
 
-```ts title="rslib.config.ts" {6}
+```ts title="rslib.config.ts" {5}
 export default {
   lib: [
     {
@@ -79,7 +79,7 @@ export { src_FOO as default };
 
 When `externalHelpers` is enabled, the output JavaScript will import helper functions from the external module `@swc/helpers`.
 
-```ts title="rslib.config.ts" {6}
+```ts title="rslib.config.ts" {5}
 export default {
   lib: [
     {
