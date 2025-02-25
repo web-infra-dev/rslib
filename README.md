@@ -18,9 +18,9 @@ Rslib is a library development tool that leverages the well-designed configurati
 
 Rslib aims to provide library developers with:
 
-- **Easy Library Creation**: Rslib provides a simple and intuitive way to help developers easily create high-quality JavaScript and TypeScript libraries.
-- **Simple Build Configuration**: Rslib provides out-of-the-box build capabilities to help developers meet the diverse needs of library development scenarios with simple configurations.
-- **Comprehensive Development Workflow**: Rslib provides best practices for building, debugging, documentation, and testing during library development to help improve development efficiency and experience.
+- **Easy Library Creation**: Helps developers easily create high-quality JavaScript and TypeScript libraries in a simple and intuitive way.
+- **Simple Build Configuration**: Provides out-of-the-box build capabilities to help developers meet the diverse needs of library development scenarios with simple configurations.
+- **Comprehensive Development Workflow**: Contains best practices for building, debugging, documentation, and testing during library development to help improve development efficiency and experience.
 
 ## 🔥 Features
 
