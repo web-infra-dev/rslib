@@ -89,7 +89,7 @@ Rslib 通过 [Web Infra QoS](https://web-infra-qos.netlify.app?product=rslib&met
 Rslib 的一些实现参考了社区中杰出的项目，对他们表示感谢：
 
 - [esbuild](https://github.com/evanw/esbuild)，由 [Evan Wallace](https://github.com/evanw) 创建。
-- [tsup](https://github.com/egoist/tsup), 由 [EGOIST](https://github.com/egoist) 创建。
+- [tsup](https://github.com/egoist/tsup)，由 [EGOIST](https://github.com/egoist) 创建。
 
 Rslib 网站由 [Netlify](https://www.netlify.com/) 提供支持。
 
