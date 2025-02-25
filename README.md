@@ -16,15 +16,10 @@ English | [简体中文](./README.zh-CN.md)
 
 Rslib is a library development tool that leverages the well-designed configurations and plugins of [Rsbuild](https://rsbuild.dev), empowering library developers to take advantage of the extensive knowledge and ecosystem of webpack and Rspack.
 
-## ✨ Why Rslib
+Rslib aims to provide library developers with:
 
-During the development of component or utility libraries, developers need to focus not only on implementing project logic, but also on handling tasks that are separate from the code itself, such as building, debugging, documentation, and testing. Although many community tools and solutions can address some of these needs, developers who are not familiar with them often face cumbersome configuration requirements or need to coordinate multiple tools to meet these demands.
-
-Based on Rspack and Rsbuild, Rslib offers a comprehensive solution tailored to the diverse requirements of library development, effectively addressing issues such as incomplete tool ecosystems, high costs for module standard compatibility, and insufficient output optimization. Rslib optimizes webpack's limited support for library ESM outputs, reducing redundant runtime code and generating high-quality ESM outputs that are tree-shaking friendly for library consumers. Additionally, Rslib fully leverages the build performance advantages of Rspack and capitalizes the strengths of both the webpack and Rspack ecosystems to robustly support features such as Module Federation.
-
-Furthermore, Rslib utilizes Rsbuild's out-of-the-box configuration to facilitate configuration sharing between application and library projects, resolving the challenge of reusing build configurations between application projects and library projects, thereby reducing the configuration overhead for developers and improving development efficiency and experience.
-
-In the future, Rslib will explore additional possibilities by leveraging the new features of Rspack.
+- **Comprehensive build configurations and high-quality artifacts**: Rslib offers a rich set of build configurations, ensuring your library is built with the highest quality and optimized for various scenarios.
+- **Seamless integration of development workflows**: Rslib simplifies the development process by cascading the stages of building, debugging, documentation, and testing, providing a complete and efficient practice out of the box.
 
 ## 🔥 Features
 
