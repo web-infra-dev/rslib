@@ -7,7 +7,7 @@
 
 默认情况下，输出的 JavaScript 文件可能需要辅助函数来支持目标环境或输出格式，这些辅助函数会被内联到需要它们的文件中。
 
-当 `externalHelpers` 设置为 `true` 时，输出的 JavaScript 将从外部模块 `@swc/helpers` 导入辅助函数。
+当 `externalHelpers` 设置为 `true` 时，输出的 JavaScript 将从外部模块 `@swc/helpers` 导入辅助函数，这有助于减少最终包中的重复辅助代码，减小包体积。
 
 ::: note
 
@@ -29,7 +29,7 @@ export default class FOO {
 
 当 `externalHelpers` 禁用时，输出的 JavaScript 将内联辅助函数。
 
-```ts title="rslib.config.ts" {6}
+```ts title="rslib.config.ts" {5}
 export default {
   lib: [
     {
@@ -79,7 +79,7 @@ export { src_FOO as default };
 
 当启用 `externalHelpers` 时，输出的 JavaScript 将从外部模块 `@swc/helpers` 导入辅助函数。
 
-```ts title="rslib.config.ts" {6}
+```ts title="rslib.config.ts" {5}
 export default {
   lib: [
     {
