@@ -142,10 +142,10 @@ importers:
         version: 8.5.8(prettier@3.5.2)
       storybook-addon-rslib:
         specifier: ^1.0.0
-        version: 1.0.0(@rsbuild/core@1.2.10)(@rslib/core@packages+core)(storybook-builder-rsbuild@0.1.10(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3))(typescript@5.7.3)
+        version: 1.0.0(@rsbuild/core@1.2.10)(@rslib/core@packages+core)(storybook-builder-rsbuild@1.0.0(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3))(typescript@5.7.3)
       storybook-react-rsbuild:
-        specifier: ^0.1.10
-        version: 0.1.10(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.34.2)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3)(webpack@5.98.0)
+        specifier: ^1.0.0
+        version: 1.0.0(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.34.2)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3)(webpack@5.98.0)
 
   examples/module-federation/mf-remote:
     dependencies:
@@ -6056,8 +6056,8 @@ packages:
       typescript:
         optional: true
 
-  storybook-builder-rsbuild@0.1.10:
-    resolution: {integrity: sha512-lTfDMxswJM80c/bj1RO4198S+h/WjXKfWffdotm6DsAykUz4kiyXy0/jO4O1Wz7WXX/yS7OMY08GPq4xjM7Jwg==}
+  storybook-builder-rsbuild@1.0.0:
+    resolution: {integrity: sha512-ECRjXUOQCsuWEe4P2gjsMdh5olEf/nudUpwZ7yWepl4QLYULuMvOY7tN8yxCXImO4AuhgKjQgw59V/ZoO0pyOw==}
     peerDependencies:
       '@rsbuild/core': ^1.0.1
       storybook: ^8.2.1
@@ -6066,8 +6066,8 @@ packages:
       typescript:
         optional: true
 
-  storybook-react-rsbuild@0.1.10:
-    resolution: {integrity: sha512-NOYj6a84f2+1BkkLmm12+ToaFH0bO8BoQi2YT063+ftR60NrMrKICNwjMjaQiftLy+BNIIeU3JQOA5asPPW/7A==}
+  storybook-react-rsbuild@1.0.0:
+    resolution: {integrity: sha512-rPxLZkfQaWEwbEROAhor7A2r3GNpXJIBIGnouOmpN1Qj/dvFmm0C6RUNXFfegXWk/kEP7zZzwNVG+tF3EuFMnw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@rsbuild/core': ^1.0.1
@@ -12581,15 +12581,15 @@ snapshots:
 
   stdin-discarder@0.2.2: {}
 
-  storybook-addon-rslib@1.0.0(@rsbuild/core@1.2.10)(@rslib/core@packages+core)(storybook-builder-rsbuild@0.1.10(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3))(typescript@5.7.3):
+  storybook-addon-rslib@1.0.0(@rsbuild/core@1.2.10)(@rslib/core@packages+core)(storybook-builder-rsbuild@1.0.0(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3))(typescript@5.7.3):
     dependencies:
       '@rsbuild/core': 1.2.10
       '@rslib/core': link:packages/core
-      storybook-builder-rsbuild: 0.1.10(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3)
+      storybook-builder-rsbuild: 1.0.0(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3)
     optionalDependencies:
       typescript: 5.7.3
 
-  storybook-builder-rsbuild@0.1.10(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3):
+  storybook-builder-rsbuild@1.0.0(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3):
     dependencies:
       '@rsbuild/core': 1.2.10
       '@rsbuild/plugin-type-check': 1.2.1(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(typescript@5.7.3)
@@ -12619,7 +12619,7 @@ snapshots:
       - '@types/react'
       - webpack-sources
 
-  storybook-react-rsbuild@0.1.10(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.34.2)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3)(webpack@5.98.0):
+  storybook-react-rsbuild@1.0.0(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.34.2)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3)(webpack@5.98.0):
     dependencies:
       '@rollup/pluginutils': 5.1.4(rollup@4.34.2)
       '@rsbuild/core': 1.2.10
@@ -12634,7 +12634,7 @@ snapshots:
       react-dom: 19.0.0(react@19.0.0)
       resolve: 1.22.10
       storybook: 8.5.8(prettier@3.5.2)
-      storybook-builder-rsbuild: 0.1.10(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3)
+      storybook-builder-rsbuild: 1.0.0(@rsbuild/core@1.2.10)(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/react@19.0.10)(storybook@8.5.8(prettier@3.5.2))(typescript@5.7.3)(webpack-sources@3.2.3)
       tsconfig-paths: 4.2.0
     optionalDependencies:
       typescript: 5.7.3
