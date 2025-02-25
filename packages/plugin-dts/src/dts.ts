@@ -175,7 +175,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     ? ensureTempDeclarationDir(cwd, name)
     : dtsEmitPath;
 
-  let dtsEntries: { name: string; path: string }[] = [];
+  let dtsEntries: Required<DtsEntry>[] = [];
   if (bundle === true) {
     dtsEntries = dtsEntry
       .map((entryObj) => {

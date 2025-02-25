@@ -146,7 +146,6 @@ const pluginLibAsset = ({ bundle }: { bundle: boolean }): RsbuildPlugin => ({
   },
 });
 
-// TODO: asset config document
 export const composeAssetConfig = (
   bundle: boolean,
   format: Format,
