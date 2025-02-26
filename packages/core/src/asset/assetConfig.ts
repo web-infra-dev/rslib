@@ -117,10 +117,25 @@ const pluginLibAsset = ({ bundle }: { bundle: boolean }): RsbuildPlugin => ({
         });
         config.plugin(LibSvgrPatchPlugin.name).use(LibSvgrPatchPlugin, []);
       }
-      // 2. in bundleless, do not support queryImport
-      // remove issuer to make every svg asset is transformed by svgr-loader
-      if (!bundle) {
-        if (isUsingSvgr) {
+
+      if (isUsingSvgr) {
+        // 2. in bundle, ?url should also be set importMode to preserve
+        if (bundle) {
+          const rule = config.module
+            .rule(CHAIN_ID.RULE.SVG)
+            .oneOf(CHAIN_ID.ONE_OF.SVG_URL);
+          const originalGeneratorOptions = rule.get('generator');
+
+          const generatorOptions = isUserSetPublicPath
+            ? originalGeneratorOptions
+            : {
+                ...originalGeneratorOptions,
+                importMode: 'preserve',
+              };
+          rule.generator(generatorOptions);
+        } else {
+          // 3. in bundleless, do not support queryImport
+          // remove issuer to make every svg asset is transformed by svgr-loader
           const rule = config.module
             .rule(CHAIN_ID.RULE.SVG)
             .oneOf(CHAIN_ID.ONE_OF.SVG);
