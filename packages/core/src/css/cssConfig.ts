@@ -142,7 +142,7 @@ const pluginLibCss = (
     // 1. mark and remove the "normal css asset" (contain RSLIB_CSS_ENTRY_FLAG)
     // 2. preserve CSS Modules asset
     api.processAssets(
-      { stage: 'optimize-count' },
+      { stage: 'additional' }, // deleteAsset as soon as possible for small perf
       ({ assets, compilation }) => {
         for (const key of Object.keys(assets)) {
           if (key.match(RSLIB_CSS_ENTRY_FLAG)) {
