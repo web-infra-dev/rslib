@@ -133,3 +133,15 @@ test('should extract css successfully in bundle-false', async () => {
     }
   `);
 });
+
+test('should not emit css and css related js in target: "node"', async () => {
+  const fixturePath = join(__dirname, 'node-bundle-false');
+  const { js, css, dts } = await buildAndGetResults({
+    fixturePath,
+    type: 'all',
+  });
+
+  expect(js.files).toMatchInlineSnapshot('{}');
+  expect(css.files).toMatchInlineSnapshot('{}');
+  expect(dts.files).toMatchInlineSnapshot('{}');
+});

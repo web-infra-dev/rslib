@@ -141,17 +141,13 @@ const pluginLibCss = (
   setup(api) {
     // 1. mark and remove the "normal css asset" (contain RSLIB_CSS_ENTRY_FLAG)
     // 2. preserve CSS Modules asset
-    api.processAssets(
-      { stage: 'additional', targets: ['web', 'node'] },
-      ({ assets, compilation, environment }) => {
-        for (const key of Object.keys(assets)) {
-          console.log(key, 2222222, environment);
-          if (key.match(RSLIB_CSS_ENTRY_FLAG)) {
-            compilation.deleteAsset(key);
-          }
+    api.processAssets({ stage: 'additional' }, ({ assets, compilation }) => {
+      for (const key of Object.keys(assets)) {
+        if (key.match(RSLIB_CSS_ENTRY_FLAG)) {
+          compilation.deleteAsset(key);
         }
-      },
-    );
+      }
+    });
 
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
       let isUsingCssExtract = false;
