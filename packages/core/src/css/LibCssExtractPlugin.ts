@@ -1,5 +1,4 @@
 import { type Rspack, rspack } from '@rsbuild/core';
-import { RSLIB_CSS_ENTRY_FLAG } from './cssConfig';
 import {
   ABSOLUTE_PUBLIC_PATH,
   AUTO_PUBLIC_PATH,
@@ -20,21 +19,6 @@ class LibCssExtractPlugin implements Rspack.RspackPluginInstance {
   }
 
   apply(compiler: Rspack.Compiler): void {
-    // 1. mark and remove the normal css asset
-    // 2. preserve CSS Modules asset
-    compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
-      compilation.hooks.chunkAsset.tap(pluginName, (_chunk, filename) => {
-        const asset = compilation.getAsset(filename);
-        if (!asset) {
-          return;
-        }
-        const needRemove = Boolean(asset.name.match(RSLIB_CSS_ENTRY_FLAG));
-        if (needRemove) {
-          compilation.deleteAsset(filename);
-        }
-      });
-    });
-
     /**
      * The following code is modified based on
      * https://github.com/webpack-contrib/mini-css-extract-plugin/blob/3effaa0319bad5cc1bf0ae760553bf7abcbc35a4/src/index.js#L1597

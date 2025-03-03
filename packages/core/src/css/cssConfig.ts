@@ -130,6 +130,8 @@ export async function cssExternalHandler(
 
 const PLUGIN_NAME = 'rsbuild:lib-css';
 
+// 1. replace CssExtractPlugin.loader with libCssExtractLoader
+// 2. replace CssExtractPlugin with LibCssExtractPlugin
 const pluginLibCss = (
   rootDir: string,
   banner?: string,
@@ -137,6 +139,19 @@ const pluginLibCss = (
 ): RsbuildPlugin => ({
   name: PLUGIN_NAME,
   setup(api) {
+    // 1. mark and remove the "normal css asset" (contain RSLIB_CSS_ENTRY_FLAG)
+    // 2. preserve CSS Modules asset
+    api.processAssets(
+      { stage: 'additional' }, // deleteAsset as soon as possible for small perf
+      ({ assets, compilation }) => {
+        for (const key of Object.keys(assets)) {
+          if (key.match(RSLIB_CSS_ENTRY_FLAG)) {
+            compilation.deleteAsset(key);
+          }
+        }
+      },
+    );
+
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
       let isUsingCssExtract = false;
       for (const ruleId of [
