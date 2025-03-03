@@ -84,6 +84,16 @@ export default defineConfig({
     dev: {
       lazyCompilation: true,
     },
+    tools: {
+      rspack: {
+        cache: true,
+        experiments: {
+          cache: {
+            type: 'persistent',
+          },
+        },
+      },
+    },
     source: {
       alias: {
         '@components': path.join(__dirname, '@components'),
