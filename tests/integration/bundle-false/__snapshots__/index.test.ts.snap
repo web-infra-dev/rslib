@@ -34,7 +34,7 @@ exports[`svgr in bundleless 2`] = `
 ""use strict";
 var __webpack_require__ = {};
 (()=>{
-    __webpack_require__.d = function(exports1, definition) {
+    __webpack_require__.d = (exports1, definition)=>{
         for(var key in definition)if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports1, key)) Object.defineProperty(exports1, key, {
             enumerable: true,
             get: definition[key]
@@ -42,9 +42,7 @@ var __webpack_require__ = {};
     };
 })();
 (()=>{
-    __webpack_require__.o = function(obj, prop) {
-        return Object.prototype.hasOwnProperty.call(obj, prop);
-    };
+    __webpack_require__.o = (obj, prop)=>Object.prototype.hasOwnProperty.call(obj, prop);
 })();
 (()=>{
     __webpack_require__.r = function(exports1) {
