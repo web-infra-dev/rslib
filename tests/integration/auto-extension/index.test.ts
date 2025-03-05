@@ -34,23 +34,43 @@ describe('autoExtension: false', () => {
   });
 });
 
-describe('should respect output.filename.js to override builtin logic', () => {
+describe('should respect output.filename.js and output.filenameHash to override builtin logic', () => {
   test('type is commonjs', async () => {
     const fixturePath = join(__dirname, 'type-commonjs', 'config-override');
     const { entryFiles } = await buildAndGetResults({ fixturePath });
-    expect(extname(entryFiles.esm!)).toEqual('.mjs');
-    expect(entryFiles.cjs).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs/index.58a9daaa.js"`,
+
+    // override output.filename.js
+    expect(extname(entryFiles.esm0!)).toEqual('.mjs');
+    expect(entryFiles.cjs0).toMatchInlineSnapshot(
+      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename/index.58a9daaa.js"`,
+    );
+
+    // override output.filenameHash
+    expect(entryFiles.esm1).toMatchInlineSnapshot(
+      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/esm-override-filename-hash/index.996a7edd.js"`,
+    );
+    expect(entryFiles.cjs1).toMatchInlineSnapshot(
+      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename-hash/index.58a9daaa.js"`,
     );
   });
 
   test('type is module', async () => {
     const fixturePath = join(__dirname, 'type-module', 'config-override');
     const { entryFiles } = await buildAndGetResults({ fixturePath });
-    expect(entryFiles.esm).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm/index.996a7edd.js"`,
+
+    // override output.filename.js
+    expect(entryFiles.esm0).toMatchInlineSnapshot(
+      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename/index.996a7edd.js"`,
     );
-    expect(extname(entryFiles.cjs!)).toEqual('.cjs');
+    expect(extname(entryFiles.cjs0!)).toEqual('.cjs');
+
+    // override output.filenameHash
+    expect(entryFiles.esm1).toMatchInlineSnapshot(
+      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename-hash/index.996a7edd.js"`,
+    );
+    expect(entryFiles.cjs1).toMatchInlineSnapshot(
+      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/cjs-override-filename-hash/index.58a9daaa.js"`,
+    );
   });
 });
 
