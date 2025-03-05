@@ -464,7 +464,9 @@ describe('dts when build: true', () => {
       });
     } catch (err: any) {
       // not easy to proxy child process stdout
-      expect(err.message).toBe('Error occurred in esm DTS generation');
+      expect(err.message).toBe(
+        'Error occurred in esm declaration files generation.',
+      );
     }
   });
 

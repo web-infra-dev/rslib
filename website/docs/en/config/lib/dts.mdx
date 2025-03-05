@@ -24,7 +24,7 @@ Configure the generation of the TypeScript declaration files.
 
 ## Boolean type
 
-DTS generation is an optional feature, you can set `dts: true` to enable [bundleless DTS](/guide/advanced/dts#bundleless-dts) generation.
+Declaration files generation is an optional feature, you can set `dts: true` to enable [bundleless declaration files](/guide/advanced/dts#bundleless-declaration-files) generation.
 
 ```ts title="rslib.config.ts" {5}
 export default {
@@ -37,7 +37,7 @@ export default {
 };
 ```
 
-If you want to disable DTS generation, you can set `dts: false` or do not specify the `dts` option.
+If you want to disable declaration files generation, you can set `dts: false` or do not specify the `dts` option.
 
 ```ts title="rslib.config.ts" {5}
 export default {
@@ -52,20 +52,20 @@ export default {
 
 ## Object type
 
-If you want to customize the DTS generation, you can set the `dts` option to an object.
+If you want to customize the declaration files generation, you can set the `dts` option to an object.
 
 ### dts.bundle
 
 - **Type:** `boolean`
 - **Default:** `false`
 
-Whether to bundle the DTS files.
+Whether to bundle the declaration files.
 
 #### Example
 
-If you want to [bundle DTS](/guide/advanced/dts#bundle-dts) files, you should:
+If you want to [bundle declaration files](/guide/advanced/dts#bundle-declaration-files) files, you should:
 
-1. Install [@microsoft/api-extractor](https://www.npmjs.com/package/@microsoft/api-extractor) as a development dependency, which is the underlying tool used for bundling DTS files.
+1. Install [@microsoft/api-extractor](https://www.npmjs.com/package/@microsoft/api-extractor) as a development dependency, which is the underlying tool used for bundling declaration files.
 
 import { PackageManagerTabs } from '@theme';
 
@@ -88,13 +88,13 @@ export default {
 
 #### Handle third-party packages
 
-When we bundle DTS files, we should specify which third-party package types need to be bundled, refer to the [Handle Third-Party Dependencies](/guide/advanced/third-party-deps) documentation for more details about externals related configurations.
+When we bundle declaration files, we should specify which third-party package types need to be bundled, refer to the [Handle Third-Party Dependencies](/guide/advanced/third-party-deps) documentation for more details about externals related configurations.
 
 ### dts.distPath
 
 - **Type:** `string`
 
-The output directory of DTS files.
+The output directory of declaration files.
 
 #### Default value
 
@@ -124,7 +124,7 @@ export default {
 - **Type:** `boolean`
 - **Default:** `false`
 
-Whether to generate DTS files with building the project references. This is equivalent to using the `--build` flag with the `tsc` command. See [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html) for more details.
+Whether to generate declaration files with building the project references. This is equivalent to using the `--build` flag with the `tsc` command. See [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html) for more details.
 
 ::: note
 
@@ -137,7 +137,7 @@ When this option is enabled, you must explicitly set `declarationDir` or `outDir
 - **Type:** `boolean`
 - **Default:** `true`
 
-Whether to abort the build process when an error occurs during DTS generation.
+Whether to abort the build process when an error occurs during declaration files generation.
 
 By default, type errors will cause the build to fail.
 
@@ -167,13 +167,13 @@ When this configuration is disabled, there is no guarantee that the type files w
 - **Type:** `boolean`
 - **Default:** `false`
 
-Whether to automatically set the DTS file extension based on the [format](/config/lib/format) option.
+Whether to automatically set the declaration file extension based on the [format](/config/lib/format) option.
 
 #### Default extension
 
-By default that when `dts.autoExtension` is `false`, the DTS file extension will be `.d.ts`.
+By default that when `dts.autoExtension` is `false`, the declaration file extension will be `.d.ts`.
 
-When `dts.autoExtension` is set to `true`, the DTS file extension will be:
+When `dts.autoExtension` is set to `true`, the declaration file extension will be:
 
 - `.d.ts` with `esm` format and `.d.cts` with `cjs` format when `type: module` in `package.json`.
 
@@ -181,6 +181,6 @@ When `dts.autoExtension` is set to `true`, the DTS file extension will be:
 
 ::: note
 
-It follows the same logic as [lib.autoExtension](/config/lib/auto-extension), but the default value is different since the DTS file extension may cause some issues with different module resolution strategies.
+It follows the same logic as [lib.autoExtension](/config/lib/auto-extension), but the default value is different since the declaration file extension may cause some issues with different module resolution strategies.
 
 :::

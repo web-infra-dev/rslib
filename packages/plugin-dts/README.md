@@ -8,7 +8,7 @@ An [Rsbuild plugin](https://www.npmjs.com/package/rsbuild-plugin-dts) to emit de
 
 ## Using in Rslib
 
-Read [DTS](https://lib.rsbuild.dev/guide/advanced/dts) and [lib.dts](https://lib.rsbuild.dev/config/lib/dts) for more details.
+Read [Declaration files](https://lib.rsbuild.dev/guide/advanced/dts) and [lib.dts](https://lib.rsbuild.dev/config/lib/dts) for more details.
 
 ## Using in Rsbuild
 
@@ -36,11 +36,11 @@ export default {
 - **Type:** `boolean`
 - **Default:** `false`
 
-Whether to bundle the DTS files.
+Whether to bundle the declaration files.
 
-If you want to [bundle DTS](https://lib.rsbuild.dev/guide/advanced/dts#bundle-dts) files, you should:
+If you want to [bundle declaration files](https://lib.rsbuild.dev/guide/advanced/dts#bundle-declaration-files) files, you should:
 
-1. Install `@microsoft/api-extractor` as a development dependency, which is the underlying tool used for bundling DTS files.
+1. Install `@microsoft/api-extractor` as a development dependency, which is the underlying tool used for bundling declaration files.
 
 ```bash
 npm add @microsoft/api-extractor -D
@@ -58,7 +58,7 @@ pluginDts({
 
 - **Type:** `string`
 
-The output directory of DTS files. The default value follows the priority below:
+The output directory of declaration files. The default value follows the priority below:
 
 1. The `distPath` value of the plugin options.
 2. The `declarationDir` value in the `tsconfig.json` file.
@@ -75,7 +75,7 @@ pluginDts({
 - **Type:** `boolean`
 - **Default:** `false`
 
-Whether to generate DTS files with building the project references. This is equivalent to using the `--build` flag with the `tsc` command. See [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html) for more details.
+Whether to generate declaration files with building the project references. This is equivalent to using the `--build` flag with the `tsc` command. See [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html) for more details.
 
 When this option is enabled, you must explicitly set `declarationDir` or `outDir` in `tsconfig.json` in order to meet the build requirements.
 
@@ -84,7 +84,7 @@ When this option is enabled, you must explicitly set `declarationDir` or `outDir
 - **Type:** `boolean`
 - **Default:** `true`
 
-Whether to abort the build process when an error occurs during DTS generation.
+Whether to abort the build process when an error occurs during declaration files generation.
 
 By default, type errors will cause the build to fail.
 
@@ -101,7 +101,7 @@ pluginDts({
 - **Type:** `string`
 - **Default:** `'.d.ts'`
 
-The extension of the DTS file.
+The extension of the declaration file.
 
 ```js
 pluginDts({
@@ -114,7 +114,7 @@ pluginDts({
 - **Type:** `boolean`
 - **Default:** `true`
 
-Whether to automatically externalize dependencies of different dependency types and do not bundle them into the DTS file.
+Whether to automatically externalize dependencies of different dependency types and do not bundle them into the declaration file.
 
 The default value of `autoExternal` is `true`, which means the following dependency types will not be bundled:
 
@@ -142,7 +142,7 @@ pluginDts({
 - **Type:** `string`
 - **Default:** `undefined`
 
-Inject content into the top of each DTS file.
+Inject content into the top of each declaration file.
 
 ```js
 pluginDts({
@@ -155,7 +155,7 @@ pluginDts({
 - **Type:** `string`
 - **Default:** `undefined`
 
-Inject content into the bottom of each DTS file.
+Inject content into the bottom of each declaration file.
 
 ```js
 pluginDts({
@@ -201,7 +201,7 @@ pluginDts({
 
 Whether to automatically redirect the import paths of TypeScript declaration output files.
 
-- When set to `true`, Rslib will redirect the import path in the DTS output file to the corresponding relative path based on the [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) configured in `tsconfig.json`.
+- When set to `true`, Rslib will redirect the import path in the declaration output file to the corresponding relative path based on the [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) configured in `tsconfig.json`.
 
 ```ts
 // `compilerOptions.paths` is set to `{ "@/*": ["src/*"] }`
@@ -221,7 +221,7 @@ import { foo } from '../foo'; // expected output './dist/utils/index.d.ts'
 
 Whether to automatically redirect the file extension to import paths based on the TypeScript declaration output files.
 
-- When set to `true`, the import paths in DTS files will be redirected to the corresponding JavaScript extension which can be resolved to corresponding DTS file. The extension of the DTS output file is related to the `dtsExtension` configuration.
+- When set to `true`, the import paths in declaration files will be redirected to the corresponding JavaScript extension which can be resolved to corresponding declaration file. The extension of the declaration output file is related to the `dtsExtension` configuration.
 
 ```ts
 // `dtsExtension` is set to `.d.mts`

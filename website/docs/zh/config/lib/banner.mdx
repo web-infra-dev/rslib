@@ -16,7 +16,7 @@ type Banner = {
 
 - **默认值：** `{}`
 
-在每个 JavaScript、CSS 或 DTS 输出文件顶部注入内容。
+在每个 JavaScript、CSS 或 类型声明输出文件顶部注入内容。
 
 ## 对象类型
 
@@ -39,7 +39,7 @@ type Banner = {
 - **类型：** `string`
 - **默认值：** `undefined`
 
-在每个 DTS 输出文件顶部注入内容。
+在每个类型声明输出文件顶部注入内容。
 
 ## 注意事项
 
@@ -73,6 +73,6 @@ export default {
 
 :::warning
 
-DTS 文件中的 banner 内容处理方式与 JavaScript 和 CSS 输出文件不同。它是直接使用文件系统 API 写入的，所以设置 `BannerPlugin` 不会对其产生影响。
+类型声明文件中的 banner 内容处理方式与 JavaScript 和 CSS 输出文件不同。它是直接使用文件系统 API 写入的，所以设置 `BannerPlugin` 不会对其产生影响。
 
 :::

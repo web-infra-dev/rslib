@@ -89,7 +89,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
 
         const { config } = environment;
 
-        // @microsoft/api-extractor only support single entry to bundle DTS
+        // @microsoft/api-extractor only support single entry to bundle declaration files
         // see https://github.com/microsoft/rushstack/issues/1596#issuecomment-546790721
         // we support multiple entries by calling api-extractor multiple times
         const dtsEntry = processSourceEntry(
@@ -171,7 +171,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
               } else if (message === 'error') {
                 resolve({
                   status: 'error',
-                  errorMessage: `Error occurred in ${environment.name} DTS generation`,
+                  errorMessage: `Error occurred in ${environment.name} declaration files generation.`,
                 });
               }
             });
@@ -188,7 +188,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
 
         promisesResult = await Promise.all(dtsPromises);
       },
-      // Set the order to 'pre' to ensure that when DTS files of multiple formats are generated simultaneously,
+      // Set the order to 'pre' to ensure that when declaration files of multiple formats are generated simultaneously,
       // all errors are thrown together before exiting the process.
       order: 'pre',
     });
@@ -205,7 +205,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
           }
           result.errorMessage && logger.error(result.errorMessage);
           logger.warn(
-            'With the `abortOnError` configuration currently turned off, type errors do not cause build failures, but they do not guarantee proper type file output.',
+            'With `abortOnError` configuration currently disabled, type errors will not fail the build, but proper type declaration output cannot be guaranteed.',
           );
         }
       }

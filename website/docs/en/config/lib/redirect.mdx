@@ -212,13 +212,13 @@ Whether to automatically redirect the import paths of TypeScript declaration out
 - **Type:** `boolean`
 - **Default:** `true`
 
-When set to `true`, Rslib will redirect the import path in the DTS output file to the corresponding relative path based on the [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) configured in `tsconfig.json`.
+When set to `true`, Rslib will redirect the import path in the declaration output file to the corresponding relative path based on the [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) configured in `tsconfig.json`.
 
 When set to `false`, the original import path will remain unchanged.
 
 - **Example:**
 
-When `compilerOptions.paths` is set to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the DTS output file will be redirected to the correct relative path:
+When `compilerOptions.paths` is set to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the declaration output file will be redirected to the correct relative path:
 
 ```ts
 import { foo } from '@/foo'; // source code of './src/bar.ts' ↓
@@ -235,7 +235,7 @@ Whether to automatically redirect the file extension to import paths based on th
 - **Type:** `boolean`
 - **Default:** `false`
 
-When set to `true`, the import paths in DTS files will be redirected to the corresponding JavaScript extension which can be resolved to corresponding DTS file.
+When set to `true`, the import paths in declaration files will be redirected to the corresponding JavaScript extension which can be resolved to corresponding declaration file.
 
 When set to `false`, the file extension will remain unchanged from the original import path in the rewritten import path of the output file (regardless of whether it is specified or specified as any value).
 

@@ -398,7 +398,7 @@ export async function processDtsFiles(
       const newFile = file.replace('.d.ts', dtsExtension);
       fs.renameSync(file, newFile);
     } catch (error) {
-      logger.error(`Error renaming DTS file ${file}: ${error}`);
+      logger.error(`Failed to rename declaration file ${file}: ${error}`);
     }
   }
 }
@@ -424,7 +424,7 @@ export function processSourceEntry(
   }
 
   throw new Error(
-    '@microsoft/api-extractor only support entry of Record<string, string> type to bundle DTS, please check your entry config.',
+    '@microsoft/api-extractor only support entry of Record<string, string> type to bundle declaration files, please check your entry config.',
   );
 }
 

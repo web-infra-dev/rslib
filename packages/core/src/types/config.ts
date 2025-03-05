@@ -45,31 +45,31 @@ export type Syntax =
 export type Dts =
   | {
       /**
-       * Whether to bundle the DTS files.
+       * Whether to bundle the declaration files.
        * @defaultValue `false`
        * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsbundle}
        */
       bundle?: boolean;
       /**
-       * The output directory of DTS files.
+       * The output directory of declaration files.
        * @defaultValue {@link https://lib.rsbuild.dev/config/lib/dts#default-value}
        * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsdistpath}
        */
       distPath?: string;
       /**
-       * Whether to generate DTS files with building the project references.
+       * Whether to generate declaration files with building the project references.
        * @defaultValue `false`
        * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsbuild}
        */
       build?: boolean;
       /**
-       * Whether to abort the build process when an error occurs during DTS generation.
+       * Whether to abort the build process when an error occurs during declaration files generation.
        * @defaultValue `true`
        * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsabortonerror}
        */
       abortOnError?: boolean;
       /**
-       * Whether to automatically set the DTS file extension based on the {@link format} option.
+       * Whether to automatically set the declaration file extension based on the {@link format} option.
        * @defaultValue `false`
        * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsautoextension}
        */
@@ -251,13 +251,13 @@ export interface LibConfig extends EnvironmentConfig {
    */
   externalHelpers?: boolean;
   /**
-   * Inject content into the top of each JavaScript, CSS or DTS file.
+   * Inject content into the top of each JavaScript, CSS or declaration file.
    * @defaultValue `{}`
    * @see {@link https://lib.rsbuild.dev/config/lib/banner}
    */
   banner?: BannerAndFooter;
   /**
-   * Inject content into the bottom of each JavaScript, CSS or DTS file.
+   * Inject content into the bottom of each JavaScript, CSS or declaration file.
    * @defaultValue `{}`
    * @see {@link https://lib.rsbuild.dev/config/lib/footer}
    */

@@ -24,7 +24,7 @@ type Dts =
 
 ## 布尔类型
 
-DTS 生成是一个可选功能，你可以设置 `dts: true` 来启用 [bundleless 的 DTS](/guide/advanced/dts#bundleless-dts) 生成。
+类型声明文件生成是一个可选功能，你可以设置 `dts: true` 来启用 [bundleless 类型](/guide/advanced/dts#bundleless-类型) 生成。
 
 ```ts title="rslib.config.ts" {5}
 export default {
@@ -37,7 +37,7 @@ export default {
 };
 ```
 
-如果你想要禁用 DTS 生成，可以设置 `dts: false` 或者不指定 `dts` 选项。
+如果你想要禁用类型声明文件生成，可以设置 `dts: false` 或者不指定 `dts` 选项。
 
 ```ts title="rslib.config.ts" {5}
 export default {
@@ -52,20 +52,20 @@ export default {
 
 ## 对象类型
 
-如果你想要自定义 DTS 的生成，可以将 `dts` 选项设置为一个对象。
+如果你想要自定义类型声明文件的生成，可以将 `dts` 选项设置为一个对象。
 
 ### dts.bundle
 
 - **类型：** `boolean`
 - **默认值：** `false`
 
-是否打包 DTS 文件。
+是否打包类型声明文件。
 
 #### 示例
 
-如果你想要 [打包 DTS](/guide/advanced/dts#bundle-dts) 文件，你需要：
+如果你想要 [bundle 类型](/guide/advanced/dts#bundle-类型)，你需要：
 
-1. 安装 [@microsoft/api-extractor](https://www.npmjs.com/package/@microsoft/api-extractor) 作为开发依赖，它是用于打包 DTS 文件的底层工具。
+1. 安装 [@microsoft/api-extractor](https://www.npmjs.com/package/@microsoft/api-extractor) 作为开发依赖，它是用于打包类型声明文件的底层工具。
 
 import { PackageManagerTabs } from '@theme';
 
@@ -88,13 +88,13 @@ export default {
 
 #### 处理第三方依赖
 
-当我们打包 DTS 文件时，我们需要指定哪些第三方包的类型需要被打包，可以参考 [处理第三方依赖](/guide/advanced/third-party-deps) 文档了解更多关于 externals 相关的配置。
+当我们打包类型声明文件时，我们需要指定哪些第三方包的类型需要被打包，可以参考 [处理第三方依赖](/guide/advanced/third-party-deps) 文档了解更多关于 externals 相关的配置。
 
 ### dts.distPath
 
 - **类型：** `string`
 
-DTS 文件的输出目录。
+类型声明文件的输出目录。
 
 #### 默认值
 
@@ -124,7 +124,7 @@ export default {
 - **类型：** `boolean`
 - **默认值：** `false`
 
-是否在生成 DTS 文件时构建项目的 references。这相当于在 `tsc` 命令中使用 `--build` 标志。更多详细信息请参考 [项目引用](https://www.typescriptlang.org/docs/handbook/project-references.html)。
+是否在生成类型声明文件时构建项目的 references。这相当于在 `tsc` 命令中使用 `--build` 标志。更多详细信息请参考 [项目引用](https://www.typescriptlang.org/docs/handbook/project-references.html)。
 
 ::: note
 
@@ -137,7 +137,7 @@ export default {
 - **类型：** `boolean`
 - **默认值：** `true`
 
-当 DTS 生成过程中出现错误时，是否中止构建过程。
+当类型声明文件生成过程中出现错误时，是否中止构建过程。
 
 默认情况下，类型错误会导致构建失败。
 
@@ -167,13 +167,13 @@ export default {
 - **类型：** `boolean`
 - **默认值：** `false`
 
-是否根据 [format](/config/lib/format) 选项自动设置 DTS 文件扩展名。
+是否根据 [format](/config/lib/format) 选项自动设置类型声明文件扩展名。
 
 #### 默认扩展名
 
-当 `dts.autoExtension` 为 `false` 时，DTS 文件扩展名默认为 `.d.ts`。
+当 `dts.autoExtension` 为 `false` 时，类型声明文件扩展名默认为 `.d.ts`。
 
-当 `dts.autoExtension` 设置为 `true` 时，DTS 文件扩展名将会是：
+当 `dts.autoExtension` 设置为 `true` 时，类型声明文件扩展名将会是：
 
 - 当 `package.json` 中设置 `type: module` 时，`esm` 格式使用 `.d.ts`，`cjs` 格式使用 `.d.cts`。
 
@@ -181,6 +181,6 @@ export default {
 
 ::: note
 
-这遵循与 [lib.autoExtension](/config/lib/auto-extension) 相同的逻辑，但默认值不同，因为 DTS 文件扩展名可能会在不同的模块解析策略中造成一些问题。
+这遵循与 [lib.autoExtension](/config/lib/auto-extension) 相同的逻辑，但默认值不同，因为类型声明文件扩展名可能会在不同的模块解析策略中造成一些问题。
 
 :::
