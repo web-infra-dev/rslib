@@ -126,7 +126,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       extension: false,
     },
   } = data;
-  logger.start(`Generating DTS... ${color.gray(`(${name})`)}`);
+  logger.start(`generating declaration files... ${color.gray(`(${name})`)}`);
 
   const { options: rawCompilerOptions, fileNames } = tsConfigResult;
 
@@ -147,7 +147,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   );
 
   if (build) {
-    // do not allow to use bundle DTS when 'build: true' since temp declarationDir should be set by user in tsconfig
+    // do not allow to use bundle declaration files when 'build: true' since temp declarationDir should be set by user in tsconfig
     if (bundle) {
       throw Error(`Can not set "dts.bundle: true" when "dts.build: true"`);
     }

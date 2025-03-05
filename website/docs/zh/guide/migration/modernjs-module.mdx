@@ -146,7 +146,7 @@ export default defineConfig({
 
 <PackageManagerTabs command="add @rsbuild/plugin-sass -D" />
 
-如果你在运行 TypeScript 和 Sass，你可能会遇到 DTS 生成错误。这可以通过在 `/src` 目录中添加一个 `env.d.ts` 文件来解决。
+如果你在运行 TypeScript 和 Sass，你可能会遇到类型声明文件生成错误。这可以通过在 `/src` 目录中添加一个 `env.d.ts` 文件来解决。
 
 ```ts title="src/env.d.ts"
 declare module '*.scss' {

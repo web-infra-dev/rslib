@@ -4,6 +4,8 @@ import ts from 'typescript';
 import type { DtsRedirect } from './index';
 import { getFileLoc, getTimeCost, processDtsFiles } from './utils';
 
+const logPrefix = color.dim('[tsc]');
+
 export type EmitDtsOptions = {
   name: string;
   cwd: string;
@@ -53,15 +55,13 @@ async function handleDiagnosticsAndProcessFiles(
   );
 
   if (diagnosticMessages.length) {
-    logger.error(
-      `Failed to emit declaration files. ${color.gray(`(${name})`)}`,
-    );
-
     for (const message of diagnosticMessages) {
-      logger.error(message);
+      logger.error(logPrefix, message);
     }
 
-    throw new Error('DTS generation failed');
+    throw new Error(
+      `Failed to generate declaration files. ${color.gray(`(${name})`)}`,
+    );
   }
 }
 
@@ -110,6 +110,7 @@ export async function emitDts(
     const fileLoc = getFileLoc(diagnostic, configPath);
 
     logger.error(
+      logPrefix,
       `${fileLoc} - ${color.red('error')} ${color.gray(`TS${diagnostic.code}:`)}`,
       ts.flattenDiagnosticMessageText(
         diagnostic.messageText,
@@ -132,16 +133,16 @@ export async function emitDts(
     // 6031: File change detected. Starting incremental compilation...
     // 6032: Starting compilation in watch mode...
     if (diagnostic.code === 6031 || diagnostic.code === 6032) {
-      logger.info(message);
+      logger.info(logPrefix, message);
     }
 
     // 6194: 0 errors or 2+ errors!
     if (diagnostic.code === 6194) {
       if (errorCount === 0 || !errorCount) {
-        logger.info(message);
+        logger.info(logPrefix, message);
         onComplete(true);
       } else {
-        logger.error(message);
+        logger.error(logPrefix, message);
       }
       await processDtsFiles(
         bundle,
@@ -157,7 +158,7 @@ export async function emitDts(
 
     // 6193: 1 error
     if (diagnostic.code === 6193) {
-      logger.error(message);
+      logger.error(logPrefix, message);
       await processDtsFiles(
         bundle,
         declarationDir,
@@ -277,16 +278,14 @@ export async function emitDts(
       );
 
       if (errorNumber > 0) {
-        logger.error(
-          `Failed to emit declaration files. ${color.gray(`(${name})`)}`,
+        throw new Error(
+          `Failed to generate declaration files. ${color.gray(`(${name})`)}`,
         );
-
-        throw new Error('DTS generation failed');
       }
     }
 
     logger.ready(
-      `DTS generated in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+      `declaration files generated in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
     );
   } else {
     // watch mode, can also deal with incremental build

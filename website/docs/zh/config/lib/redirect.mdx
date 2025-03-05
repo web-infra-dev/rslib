@@ -212,13 +212,13 @@ import url from './assets/logo.mjs'; // 预期生成的代码
 - **类型:** `boolean`
 - **默认值:** `true`
 
-当设置为 `true` 时，Rslib 会根据 `tsconfig.json` 文件中配置的 [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths)，将 DTS 产物文件中的导入路径重定向为对应的相对路径。
+当设置为 `true` 时，Rslib 会根据 `tsconfig.json` 文件中配置的 [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths)，将类型声明产物文件中的导入路径重定向为对应的相对路径。
 
 当设置为 `false` 时，将保持原始导入路径不变。
 
 - **示例：**
 
-在 `tsconfig.json` 中将 `compilerOptions.paths` 设置为 `{ "@/*": ["src/*"] }` 时，DTS 产物文件将被重定向到正确的相对路径：
+在 `tsconfig.json` 中将 `compilerOptions.paths` 设置为 `{ "@/*": ["src/*"] }` 时，类型声明产物文件将被重定向到正确的相对路径：
 
 ```ts
 import { foo } from '@/foo'; // './src/bar.ts' 的源码 ↓
@@ -235,7 +235,7 @@ import { foo } from '../foo'; // './dist/utils/index.d.ts' 预期生成的代码
 - **类型:** `boolean`
 - **默认值:** `false`
 
-当设置为 `true` 时，DTS 文件中的引入路径会被重定向到对应的可以解析到相应 DTS 文件的 JavaScript 文件扩展名。
+当设置为 `true` 时，类型声明文件中的引入路径会被重定向到对应的可以解析到相应类型声明文件的 JavaScript 文件扩展名。
 
 当设置为 `false` 时，文件扩展名将保持原始导入路径不变（无论是否指定或指定为任意值）。
 

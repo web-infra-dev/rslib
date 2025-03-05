@@ -16,7 +16,7 @@ type Banner = {
 
 - **Default:** `{}`
 
-Inject content into the top of each JavaScript, CSS or DTS output file.
+Inject content into the top of each JavaScript, CSS or declaration output file.
 
 ## Object type
 
@@ -39,7 +39,7 @@ Inject content into the top of each CSS output file.
 - **Type:** `string`
 - **Default:** `undefined`
 
-Inject content into the top of each DTS output file.
+Inject content into the top of each declaration output file.
 
 ## Notice
 
@@ -73,6 +73,6 @@ export default {
 
 :::warning
 
-The banner content in DTS files is handled differently from JavaScript and CSS output files. It is written directly using the file system API, so setting `BannerPlugin` will not affect it.
+The banner content in declaration files is handled differently from JavaScript and CSS output files. It is written directly using the file system API, so setting `BannerPlugin` will not affect it.
 
 :::

@@ -16,7 +16,7 @@ type Footer = {
 
 - **默认值：** `{}`
 
-在每个 JavaScript、CSS 或 DTS 文件底部注入内容。
+在每个 JavaScript、CSS 或类型声明文件底部注入内容。
 
 ## 对象类型
 
@@ -39,7 +39,7 @@ type Footer = {
 - **类型：** `string`
 - **默认值：** `undefined`
 
-在每个 DTS 输出文件底部注入内容。
+在每个类型声明输出文件底部注入内容。
 
 ## 注意事项
 
@@ -74,6 +74,6 @@ export default {
 
 :::warning
 
-DTS 文件中的 footer 内容与 JavaScript 和 CSS 文件的处理方式不同。它是直接通过文件系统 API 写入的，所以设置 `BannerPlugin` 不会对其产生影响。
+类型声明文件中的 footer 内容与 JavaScript 和 CSS 文件的处理方式不同。它是直接通过文件系统 API 写入的，所以设置 `BannerPlugin` 不会对其产生影响。
 
 :::
