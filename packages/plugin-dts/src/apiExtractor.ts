@@ -76,7 +76,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
         await addBannerAndFooter(untrimmedFilePath, banner, footer);
 
         logger.info(
-          `API Extractor bundle declaration files succeeded: ${color.cyan(untrimmedFilePath)} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+          `bundle declaration files succeeded: ${color.cyan(untrimmedFilePath)} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
         );
       }),
     );

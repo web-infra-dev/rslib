@@ -285,7 +285,7 @@ export async function emitDts(
     }
 
     logger.ready(
-      `Declaration files generated in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+      `declaration files generated in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
     );
   } else {
     // watch mode, can also deal with incremental build
