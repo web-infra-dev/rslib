@@ -624,7 +624,8 @@ const composeFormatConfig = ({
               iife: false,
               chunkFormat: 'commonjs',
               library: {
-                type: 'commonjs',
+                // type: 'commonjs',
+                type: 'commonjs-static',
               },
               chunkLoading: 'require',
               workerChunkLoading: 'async-node',
