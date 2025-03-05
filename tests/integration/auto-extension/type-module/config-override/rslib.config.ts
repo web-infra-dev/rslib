@@ -8,6 +8,9 @@ export default defineConfig({
         filename: {
           js: '[name].[contenthash:8].js',
         },
+        distPath: {
+          root: './dist/esm-override-filename',
+        },
       },
     }),
     generateBundleCjsConfig({
@@ -15,6 +18,26 @@ export default defineConfig({
       output: {
         filename: {
           js: '[name].cjs',
+        },
+        distPath: {
+          root: './dist/cjs-override-filename',
+        },
+      },
+    }),
+    generateBundleEsmConfig({
+      output: {
+        filenameHash: true,
+        distPath: {
+          root: './dist/esm-override-filename-hash',
+        },
+      },
+    }),
+    generateBundleCjsConfig({
+      autoExtension: false,
+      output: {
+        filenameHash: true,
+        distPath: {
+          root: './dist/cjs-override-filename-hash',
         },
       },
     }),

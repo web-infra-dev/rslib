@@ -841,10 +841,21 @@ const composeAutoExtensionConfig = (
     autoExtension,
   });
 
+  const filenameHash = config.output?.filenameHash ?? false;
+
+  const getHash = () => {
+    if (typeof filenameHash === 'string') {
+      return filenameHash ? `.[${filenameHash}]` : '';
+    }
+    return filenameHash ? '.[contenthash:8]' : '';
+  };
+
+  const hash = getHash();
+
   const updatedConfig: EnvironmentConfig = {
     output: {
       filename: {
-        js: `[name]${jsExtension}`,
+        js: `[name]${hash}${jsExtension}`,
         ...config.output?.filename,
       },
     },

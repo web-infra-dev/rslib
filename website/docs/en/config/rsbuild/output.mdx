@@ -78,11 +78,21 @@ Whether to add a hash value to the filename after the production build.
 
 Rslib sets `output.filenameHash` to `false` by default.
 
+::: info Filename hash
+
+By default, Rslib does not add a hash value in the middle of filenames.
+
+To enable this behavior, you can set `output.filenameHash` to `true`.
+
+You can also specify different filenames for different types of files by configuring `output.filename`.
+
+:::
+
 ## output.filename <RsbuildDocBadge path="/config/output/filename" text="output.filename" />
 
 Sets the filename of dist files.
 
-By default, Rslib sets `output.filename` based on [format](/config/lib/format), see [autoExtension](/config/lib/auto-extension) for more information.
+By default, Rslib will modify the extension of JavaScript output file according to [format](/config/lib/format), see [autoExtension](/config/lib/auto-extension) for more details.
 
 {/* ## output.injectStyles <RsbuildDocBadge path="/config/output/inject-styles" text="output.injectStyles" /> */}
 

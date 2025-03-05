@@ -74,11 +74,21 @@ const defaultDistPath = {
 
 Rslib 默认将 `output.filenameHash` 设置为 `false`。
 
+::: info 文件名中的 hash 值
+
+默认情况下，Rslib 不会在文件名中间添加 hash 值。
+
+要开启这个行为，你可以将 `output.filenameHash` 设置为 `true`。
+
+你也可以通过设置 `output.filename` 为不同类型的文件指定不同的名称。
+
+:::
+
 ## output.filename <RsbuildDocBadge path="/config/output/filename" text="output.filename" />
 
 设置构建产物的名称。
 
-Rslib 默认会根据 [format](/config/lib/format) 设置 `output.filename`，详情可查看 [autoExtension](/config/lib/auto-extension)。
+Rslib 默认会根据 [format](/config/lib/format) 设置 `output.filename.js` 来修改 JavaScript 产物文件的扩展名，详情可查看 [autoExtension](/config/lib/auto-extension)。
 
 ## output.inlineScripts <RsbuildDocBadge path="/config/output/inline-scripts" text="output.inlineScripts" />
 
