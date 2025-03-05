@@ -40,7 +40,7 @@ describe('should respect output.filename.js to override builtin logic', () => {
     const { entryFiles } = await buildAndGetResults({ fixturePath });
     expect(extname(entryFiles.esm!)).toEqual('.mjs');
     expect(entryFiles.cjs).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs/index.58a9daaa.js"`,
+      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs/index.b2c849e6.js"`,
     );
   });
 

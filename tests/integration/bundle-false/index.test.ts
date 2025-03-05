@@ -217,9 +217,8 @@ test('asset in bundleless', async () => {
         return module.exports;
     }
     var __webpack_exports__ = __webpack_require__("./src/assets/image.png?__rslib_entry__");
-    var __webpack_export_target__ = exports;
-    for(var __webpack_i__ in __webpack_exports__)__webpack_export_target__[__webpack_i__] = __webpack_exports__[__webpack_i__];
-    if (__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, '__esModule', {
+    exports["default"] = __webpack_exports__["default"];
+    Object.defineProperty(exports, '__esModule', {
         value: true
     });
     "
@@ -242,9 +241,8 @@ test('asset in bundleless', async () => {
         return module.exports;
     }
     var __webpack_exports__ = __webpack_require__("./src/assets/logo.svg?__rslib_entry__");
-    var __webpack_export_target__ = exports;
-    for(var __webpack_i__ in __webpack_exports__)__webpack_export_target__[__webpack_i__] = __webpack_exports__[__webpack_i__];
-    if (__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, '__esModule', {
+    exports["default"] = __webpack_exports__["default"];
+    Object.defineProperty(exports, '__esModule', {
         value: true
     });
     "

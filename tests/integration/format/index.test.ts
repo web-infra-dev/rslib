@@ -1,8 +1,10 @@
+import path from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 import { expect, test } from 'vitest';
+import { a } from 'vitest/dist/chunks/suite.qtkXWc6R.js';
 
-test('esm', async () => {
-  const fixturePath = __dirname;
+test('import.meta.url should be preserved', async () => {
+  const fixturePath = path.resolve(__dirname, 'import-meta-url');
   const { files, entries, entryFiles } = await buildAndGetResults({
     fixturePath,
   });
@@ -26,6 +28,29 @@ test('esm', async () => {
     {
       "foo": "foo",
       "packageDirectory": "<ROOT>/tests/integration/format/dist/esm/",
+    }
+  `);
+});
+
+test('CJS exports should be statically analyzable (cjs-module-lexer for Node.js)', async () => {
+  const fixturePath = path.resolve(__dirname, 'cjs-static-export');
+  const { entryFiles } = await buildAndGetResults({
+    fixturePath,
+  });
+
+  const { bar, foo } = await import(entryFiles.cjs);
+  expect(bar).toBe('bar');
+  expect(foo).toBe('foo');
+
+  const cjs = await import(entryFiles.cjs);
+  expect(cjs).toMatchInlineSnapshot(`
+    {
+      "bar": "bar",
+      "default": {
+        "bar": "bar",
+        "foo": "foo",
+      },
+      "foo": "foo",
     }
   `);
 });
