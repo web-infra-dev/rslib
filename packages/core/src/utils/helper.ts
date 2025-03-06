@@ -167,21 +167,23 @@ export function omit<T extends object, U extends keyof T>(
   );
 }
 
-export function isPluginIncluded(
+function findPlugin(pluginName: string, plugins?: RsbuildPlugins) {
+  return plugins?.find((plugin) => {
+    if (Array.isArray(plugin)) {
+      return isPluginIncluded(pluginName, plugin);
+    }
+    if (typeof plugin === 'object' && plugin !== null && 'name' in plugin) {
+      return plugin.name === pluginName;
+    }
+    return false;
+  });
+}
+
+function isPluginIncluded(
   pluginName: string,
   plugins?: RsbuildPlugins,
 ): boolean {
-  return Boolean(
-    plugins?.some((plugin) => {
-      if (Array.isArray(plugin)) {
-        return isPluginIncluded(pluginName, plugin);
-      }
-      if (typeof plugin === 'object' && plugin !== null && 'name' in plugin) {
-        return plugin.name === pluginName;
-      }
-      return false;
-    }),
-  );
+  return Boolean(findPlugin(pluginName, plugins));
 }
 
 export function checkMFPlugin(
