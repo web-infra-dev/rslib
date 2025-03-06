@@ -1571,9 +1571,11 @@ export async function composeCreateRsbuildConfig(
     ...sharedRsbuildConfig
   } = rslibConfig;
 
-  if (!libConfigsArray) {
+  if (!Array.isArray(libConfigsArray) || libConfigsArray.length === 0) {
     throw new Error(
-      `Expect lib field to be an array, but got ${libConfigsArray}.`,
+      `Expect "lib" field to be a non-empty array, but got: ${color.cyan(
+        JSON.stringify(libConfigsArray),
+      )}.`,
     );
   }
 
