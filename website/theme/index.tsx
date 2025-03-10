@@ -1,16 +1,12 @@
 import { NavIcon } from '@rstack-dev/doc-ui/nav-icon';
-import Theme from 'rspress/theme';
+import { Layout as BaseLayout } from 'rspress/theme';
 import { HomeLayout } from './pages';
 import './index.scss';
 
 const Layout = () => {
-  return <Theme.Layout beforeNavTitle={<NavIcon />} />;
+  return <BaseLayout beforeNavTitle={<NavIcon />} />;
 };
 
-export default {
-  ...Theme,
-  Layout,
-  HomeLayout,
-};
+export { Layout, HomeLayout };
 
 export * from 'rspress/theme';
