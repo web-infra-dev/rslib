@@ -9,7 +9,6 @@ export default defineConfig({
     },
   },
   tools: {
-    lightningcssLoader: false,
     postcss: {
       postcssOptions: {
         plugins: [require('postcss-alias')],

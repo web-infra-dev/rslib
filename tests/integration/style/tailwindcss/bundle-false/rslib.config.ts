@@ -10,9 +10,6 @@ export default defineConfig({
       bundle: false,
     }),
   ],
-  tools: {
-    lightningcssLoader: false,
-  },
   output: {
     target: 'web',
   },
