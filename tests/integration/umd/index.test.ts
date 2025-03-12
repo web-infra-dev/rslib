@@ -20,7 +20,7 @@ test('throw error when using UMD with `bundle: false`', async () => {
     configPath: './rslibBundleFalse.config.ts',
   });
 
-  expect(build).rejects.toThrowErrorMatchingInlineSnapshot(
+  await expect(build).rejects.toThrowErrorMatchingInlineSnapshot(
     `[Error: When using "umd" format, "bundle" must be set to "true". Since the default value for "bundle" is "true", so you can either explicitly set it to "true" or remove the field entirely.]`,
   );
 });

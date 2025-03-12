@@ -1,0 +1,167 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`should extract css with pluginSass in bundle 2`] = `
+[
+  ".lib1 {
+  font-size: 18px;
+}
+
+code {
+  padding: .25em;
+  line-height: 0;
+}
+
+ul, ol {
+  text-align: left;
+}
+
+ul ul, ul ol, ol ul, ol ol {
+  padding-bottom: 0;
+  padding-left: 0;
+}
+
+body, .url-variable {
+  background: url(./static/svg/logo.svg);
+}
+
+.alert {
+  border: 1px solid #c6538ce0;
+}
+
+",
+]
+`;
+
+exports[`should extract css with pluginSass in bundle 4`] = `
+[
+  ".lib1 {
+  font-size: 18px;
+}
+
+code {
+  padding: .25em;
+  line-height: 0;
+}
+
+ul, ol {
+  text-align: left;
+}
+
+ul ul, ul ol, ol ul, ol ol {
+  padding-bottom: 0;
+  padding-left: 0;
+}
+
+body, .url-variable {
+  background: url(./static/svg/logo.svg);
+}
+
+.alert {
+  border: 1px solid #c6538ce0;
+}
+
+",
+]
+`;
+
+exports[`should extract css with pluginSass in bundle-false 2`] = `
+[
+  "code {
+  padding: .25em;
+  line-height: 0;
+}
+
+",
+  "ul, ol {
+  text-align: left;
+}
+
+ul ul, ul ol, ol ul, ol ol {
+  padding-bottom: 0;
+  padding-left: 0;
+}
+
+",
+  "body {
+  background: url(../static/svg/logo.svg);
+}
+
+",
+  "@import "~lib1/index.css";
+
+code {
+  padding: .25em;
+  line-height: 0;
+}
+
+ul, ol {
+  text-align: left;
+}
+
+ul ul, ul ol, ol ul, ol ol {
+  padding-bottom: 0;
+  padding-left: 0;
+}
+
+body, .url-variable {
+  background: url(./static/svg/logo.svg);
+}
+
+.alert {
+  border: 1px solid #c6538ce0;
+}
+
+",
+]
+`;
+
+exports[`should extract css with pluginSass in bundle-false 4`] = `
+[
+  "code {
+  padding: .25em;
+  line-height: 0;
+}
+
+",
+  "ul, ol {
+  text-align: left;
+}
+
+ul ul, ul ol, ol ul, ol ol {
+  padding-bottom: 0;
+  padding-left: 0;
+}
+
+",
+  "body {
+  background: url(../static/svg/logo.svg);
+}
+
+",
+  "@import "~lib1/index.css";
+
+code {
+  padding: .25em;
+  line-height: 0;
+}
+
+ul, ol {
+  text-align: left;
+}
+
+ul ul, ul ol, ol ul, ol ol {
+  padding-bottom: 0;
+  padding-left: 0;
+}
+
+body, .url-variable {
+  background: url(./static/svg/logo.svg);
+}
+
+.alert {
+  border: 1px solid #c6538ce0;
+}
+
+",
+]
+`;

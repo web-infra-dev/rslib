@@ -24,10 +24,12 @@ export default defineConfig({
   ],
   source: {
     entry: {
-      index: ['./src/**/*.scss', './foundation/logo.svg'],
+      index: [
+        '../__fixtures__/src/**/*.scss',
+        '../__fixtures__/foundation/logo.svg',
+      ],
     },
   },
-  root: resolve(__dirname, '../__fixtures__'),
   plugins: [
     pluginSass({
       sassLoaderOptions: {

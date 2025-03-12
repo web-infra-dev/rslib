@@ -20,10 +20,9 @@ export default defineConfig({
       },
     }),
   ],
-  root: resolve(__dirname, '../__fixtures__/import'),
   source: {
     entry: {
-      index: './src/index.ts',
+      index: '../__fixtures__/import/src/index.ts',
     },
   },
   output: {

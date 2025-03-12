@@ -1,6 +1,6 @@
 const path = require('node:path');
 
-export default {
+module.exports = {
   plugins: {
     tailwindcss: {
       config: path.join(__dirname, './tailwind.config.cjs'),

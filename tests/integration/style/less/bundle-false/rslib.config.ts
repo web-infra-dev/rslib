@@ -22,10 +22,9 @@ export default defineConfig({
       },
     }),
   ],
-  root: resolve(__dirname, '../__fixtures__/basic'),
   source: {
     entry: {
-      index: ['./src/**'],
+      index: ['../__fixtures__/basic/src/**'],
     },
   },
   resolve: {
