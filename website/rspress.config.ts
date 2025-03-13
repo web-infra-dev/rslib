@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { defineConfig } from 'rspress/config';
@@ -91,6 +92,6 @@ export default defineConfig({
         '@zh': path.join(__dirname, 'docs/zh'),
       },
     },
-    plugins: [pluginGoogleAnalytics({ id: 'G-Q66CEHQ6JR' })],
+    plugins: [pluginGoogleAnalytics({ id: 'G-Q66CEHQ6JR' }), pluginSass()],
   },
 });
