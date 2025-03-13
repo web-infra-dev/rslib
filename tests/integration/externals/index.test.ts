@@ -40,6 +40,7 @@ test('should get warn when use require in ESM', async () => {
   const fixturePath = join(__dirname, 'module-import-warn');
   const { entries } = await buildAndGetResults({ fixturePath });
   const logStrings = logs.map((log) => stripAnsi(log));
+  const issuer = join(fixturePath, 'src/index.ts');
 
   for (const external of [
     'import * as __WEBPACK_EXTERNAL_MODULE_bar__ from "bar";',
@@ -51,7 +52,7 @@ test('should get warn when use require in ESM', async () => {
   for (const external of ['foo', 'bar', 'qux']) {
     expect(
       logStrings.some((l) =>
-        l.includes(stripAnsi(composeModuleImportWarn(external))),
+        l.includes(stripAnsi(composeModuleImportWarn(external, issuer))),
       ),
     ).toBe(true);
   }
@@ -59,7 +60,7 @@ test('should get warn when use require in ESM', async () => {
   for (const external of ['./baz', 'quxx']) {
     expect(
       logStrings.some((l) =>
-        l.includes(stripAnsi(composeModuleImportWarn(external))),
+        l.includes(stripAnsi(composeModuleImportWarn(external, issuer))),
       ),
     ).toBe(false);
   }
