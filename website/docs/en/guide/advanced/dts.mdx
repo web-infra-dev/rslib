@@ -58,6 +58,24 @@ import { PackageManagerTabs } from '@theme';
 
 2. Set `dts: { bundle: true }` in the Rslib configuration file.
 
+It should be noted that when generating declaration files, Rslib automatically sets some configuration options in `tsconfig.json` by default:
+
+```json
+{
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}
+```
+
+The priority from highest to lowest of final output directory of declaration files:
+
+- The configuration option [dts.distPath](/config/lib/dts#dtsdistpath)
+- The configuration option `declarationDir` in `tsconfig.json`
+- The configuration option [output.distPath.root](/config/rsbuild/output#outputdistpath)
+
 ::: tip
 
 You can refer to [lib.dts](/config/lib/dts) for more details about declaration files configuration.
