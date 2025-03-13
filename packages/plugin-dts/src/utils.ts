@@ -96,8 +96,8 @@ export async function emptyDir(dir: string): Promise<void> {
       });
     }
   } catch (err) {
-    logger.debug(`Failed to empty dir: ${dir}`);
-    logger.debug(err);
+    logger.warn(`Failed to empty dir: ${dir}`);
+    logger.warn(err);
   }
 }
 
@@ -332,7 +332,7 @@ export async function redirectDtsImports(
 
       code.overwrite(start, end, normalizedRedirectImportPath);
     } catch (err) {
-      logger.debug(err);
+      logger.warn(err);
     }
   }
 

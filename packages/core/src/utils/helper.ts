@@ -117,7 +117,9 @@ export const readPackageJson = (rootPath: string): undefined | PkgJson => {
   const pkgJsonPath = path.join(rootPath, './package.json');
 
   if (!fs.existsSync(pkgJsonPath)) {
-    logger.warn(`package.json does not exist in the ${rootPath} directory`);
+    logger.warn(
+      `The \`package.json\` file does not exist in the ${rootPath} directory`,
+    );
     return;
   }
 
