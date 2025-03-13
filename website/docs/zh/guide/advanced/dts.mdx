@@ -58,6 +58,24 @@ import { PackageManagerTabs } from '@theme';
 
 2. 在 Rslib 配置文件中设置 `dts: { bundle: true }`。
 
+需要注意的是，Rslib 在生成类型声明文件的过程中，默认会强制设置 `tsconfig.json` 中的一些配置项以保证 [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) 能够仅生成类型声明文件。
+
+```json
+{
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}
+```
+
+最终类型声明文件输出目录的优先级从高到低为：
+
+- [dts.distPath](/config/lib/dts#dtsdistpath) 配置项
+- `tsconfig.json` 中的 `declarationDir` 配置项
+- [output.distPath.root](/config/rsbuild/output#outputdistpath) 配置项
+
 ::: tip
 
 你可以参考 [lib.dts](/config/lib/dts) 获取更多有关类型声明文件配置的详细信息。
