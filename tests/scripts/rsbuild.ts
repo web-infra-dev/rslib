@@ -89,7 +89,9 @@ const updateConfigForTest = async (
 };
 
 const createRsbuild = async (
-  rsbuildOptions: CreateRsbuildOptions,
+  rsbuildOptions: CreateRsbuildOptions & {
+    rsbuildConfig?: RsbuildConfig;
+  },
   plugins: RsbuildPlugins = [],
 ) => {
   const { createRsbuild: createRsbuildInner } = await import('@rsbuild/core');
@@ -110,6 +112,7 @@ export async function dev({
   ...options
 }: CreateRsbuildOptions & {
   plugins?: RsbuildPlugins;
+  rsbuildConfig?: RsbuildConfig;
   /**
    * Playwright Page instance.
    * This method will automatically goto the page.
