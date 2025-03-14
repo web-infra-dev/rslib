@@ -24,7 +24,7 @@ export const getDefaultExtension = (options: {
 
   if (!pkgJson) {
     logger.warn(
-      'autoExtension configuration will not be applied due to read package.json failed',
+      'The `autoExtension` configuration will not be applied due to read package.json failed',
     );
     return {
       jsExtension,

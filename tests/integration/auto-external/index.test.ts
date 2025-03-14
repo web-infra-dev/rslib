@@ -91,6 +91,7 @@ test('should get warn when use require in ESM', async () => {
 
   const shouldWarn = ['react', 'e2', 'e3', 'e5', 'e6', 'e7'];
   const shouldNotWarn = ['e1', 'e4', 'e8', 'lodash/add', 'lodash/drop'];
+  const issuer = join(fixturePath, 'src/index.ts');
 
   for (const item of shouldWarn) {
     expect(entries.esm).toContain(
@@ -98,18 +99,18 @@ test('should get warn when use require in ESM', async () => {
     );
   }
 
-  for (const item of shouldWarn) {
+  for (const request of shouldWarn) {
     expect(
       logStrings.some((l) =>
-        l.includes(stripAnsi(composeModuleImportWarn(item))),
+        l.includes(stripAnsi(composeModuleImportWarn(request, issuer))),
       ),
     ).toBe(true);
   }
 
-  for (const item of shouldNotWarn) {
+  for (const request of shouldNotWarn) {
     expect(
       logStrings.some((l) =>
-        l.includes(stripAnsi(composeModuleImportWarn(item))),
+        l.includes(stripAnsi(composeModuleImportWarn(request, issuer))),
       ),
     ).toBe(false);
   }
