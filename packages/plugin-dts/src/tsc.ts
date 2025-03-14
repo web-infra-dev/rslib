@@ -28,7 +28,6 @@ export type EmitDtsOptions = {
 async function handleDiagnosticsAndProcessFiles(
   diagnostics: readonly ts.Diagnostic[],
   configPath: string,
-  host: ts.CompilerHost,
   bundle: boolean,
   declarationDir: string,
   dtsExtension: string,
@@ -192,7 +191,6 @@ export async function emitDts(
       await handleDiagnosticsAndProcessFiles(
         allDiagnostics,
         configPath,
-        host,
         bundle,
         declarationDir,
         dtsExtension,
@@ -226,7 +224,6 @@ export async function emitDts(
       await handleDiagnosticsAndProcessFiles(
         allDiagnostics,
         configPath,
-        host,
         bundle,
         declarationDir,
         dtsExtension,
