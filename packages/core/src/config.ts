@@ -282,7 +282,7 @@ const composeExternalsWarnConfig = (
           if (contextInfo.issuer && dependencyType === 'commonjs') {
             matchUserExternals(externals, request, _callback);
             if (shouldWarn) {
-              logger.warn(composeModuleImportWarn(request));
+              logger.warn(composeModuleImportWarn(request, contextInfo.issuer));
             }
           }
           callback();
@@ -324,7 +324,7 @@ export const composeAutoExternalConfig = (options: {
 
   if (!pkgJson) {
     logger.warn(
-      'autoExternal configuration will not be applied due to read package.json failed',
+      'The `autoExternal` configuration will not be applied due to read package.json failed',
     );
     return {};
   }
@@ -782,8 +782,11 @@ const composeShimsConfig = (
   return { rsbuildConfig, enabledShims };
 };
 
-export const composeModuleImportWarn = (request: string): string => {
-  return `The externalized commonjs request ${color.green(`"${request}"`)} will use ${color.blue('"module"')} external type in ESM format. If you want to specify other external type, consider setting the request and type with ${color.blue('"output.externals"')}.`;
+export const composeModuleImportWarn = (
+  request: string,
+  issuer: string,
+): string => {
+  return `The externalized commonjs request ${color.green(`"${request}"`)} from ${color.green(issuer)} will use ${color.blue('"module"')} external type in ESM format. If you want to specify other external type, consider setting the request and type with ${color.blue('"output.externals"')}.`;
 };
 
 const composeExternalsConfig = (

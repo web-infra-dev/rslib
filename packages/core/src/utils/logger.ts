@@ -1,24 +1,35 @@
+/**
+ * Logging message case convention:
+ *
+ * Info, ready, success and debug messages:
+ * - Start with lowercase
+ * - Example: "info  build started..."
+ *
+ * Errors and warnings:
+ * - Start with uppercase
+ * - Example: "error  Failed to build"
+ *
+ * This convention helps distinguish between normal operations
+ * and important alerts that require attention.
+ */
 import { type Logger, logger } from 'rslog';
 import { color } from './helper';
-
-// setup the logger level
-if (process.env.DEBUG) {
-  logger.level = 'verbose';
-}
 
 export const isDebug = (): boolean => {
   if (!process.env.DEBUG) {
     return false;
   }
 
-  logger.level = 'verbose'; // support `process.env.DEBUG` in e2e
   const values = process.env.DEBUG.toLocaleLowerCase().split(',');
-  return ['rslib', 'rsbuild', 'builder', '*'].some((key) =>
-    values.includes(key),
-  );
+  return ['rslib', 'rs*', 'rstack', '*'].some((key) => values.includes(key));
 };
 
-function getTime() {
+// setup the logger level
+if (isDebug()) {
+  logger.level = 'verbose';
+}
+
+function getTime(): string {
   const now = new Date();
   const hours = String(now.getHours()).padStart(2, '0');
   const minutes = String(now.getMinutes()).padStart(2, '0');
@@ -27,13 +38,15 @@ function getTime() {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-export const debug = (message: string | (() => string)): void => {
-  if (isDebug()) {
-    const result = typeof message === 'string' ? message : message();
+logger.override({
+  debug: (message, ...args) => {
+    if (logger.level !== 'verbose') {
+      return;
+    }
     const time = color.gray(`${getTime()}`);
-    logger.debug(`${time} ${result}`);
-  }
-};
+    console.log(`  ${color.green('rslib')} ${time} ${message}`, ...args);
+  },
+});
 
 export { logger };
 export type { Logger };
