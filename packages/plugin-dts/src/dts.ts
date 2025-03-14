@@ -126,7 +126,9 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       extension: false,
     },
   } = data;
-  logger.start(`generating declaration files... ${color.gray(`(${name})`)}`);
+  if (!isWatch) {
+    logger.start(`generating declaration files... ${color.gray(`(${name})`)}`);
+  }
 
   const { options: rawCompilerOptions, fileNames } = tsConfigResult;
 
