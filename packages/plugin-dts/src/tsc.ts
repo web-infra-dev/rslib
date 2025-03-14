@@ -2,9 +2,15 @@ import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import ts from 'typescript';
 import type { DtsRedirect } from './index';
-import { getFileLoc, getTimeCost, processDtsFiles } from './utils';
+import { getTimeCost, processDtsFiles } from './utils';
 
-const logPrefix = color.dim('[tsc]');
+const logPrefixTsc = color.dim('[tsc]');
+
+const formatHost: ts.FormatDiagnosticsHost = {
+  getCanonicalFileName: (path) => path,
+  getCurrentDirectory: ts.sys.getCurrentDirectory,
+  getNewLine: () => ts.sys.newLine,
+};
 
 export type EmitDtsOptions = {
   name: string;
@@ -35,11 +41,10 @@ async function handleDiagnosticsAndProcessFiles(
   const diagnosticMessages: string[] = [];
 
   for (const diagnostic of diagnostics) {
-    const fileLoc = getFileLoc(diagnostic, configPath);
-    const message = `${fileLoc} - ${color.red('error')} ${color.gray(`TS${diagnostic.code}:`)} ${ts.flattenDiagnosticMessageText(
-      diagnostic.messageText,
-      host.getNewLine(),
-    )}`;
+    const message = ts.formatDiagnosticsWithColorAndContext(
+      [diagnostic],
+      formatHost,
+    );
     diagnosticMessages.push(message);
   }
 
@@ -56,7 +61,7 @@ async function handleDiagnosticsAndProcessFiles(
 
   if (diagnosticMessages.length) {
     for (const message of diagnosticMessages) {
-      logger.error(logPrefix, message);
+      logger.error(logPrefixTsc, message);
     }
 
     throw new Error(
@@ -100,22 +105,11 @@ export async function emitDts(
   };
 
   const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
-  const formatHost: ts.FormatDiagnosticsHost = {
-    getCanonicalFileName: (path) => path,
-    getCurrentDirectory: ts.sys.getCurrentDirectory,
-    getNewLine: () => ts.sys.newLine,
-  };
 
   const reportDiagnostic = (diagnostic: ts.Diagnostic) => {
-    const fileLoc = getFileLoc(diagnostic, configPath);
-
     logger.error(
-      logPrefix,
-      `${fileLoc} - ${color.red('error')} ${color.gray(`TS${diagnostic.code}:`)}`,
-      ts.flattenDiagnosticMessageText(
-        diagnostic.messageText,
-        formatHost.getNewLine(),
-      ),
+      logPrefixTsc,
+      ts.formatDiagnosticsWithColorAndContext([diagnostic], formatHost),
     );
   };
 
@@ -133,16 +127,16 @@ export async function emitDts(
     // 6031: File change detected. Starting incremental compilation...
     // 6032: Starting compilation in watch mode...
     if (diagnostic.code === 6031 || diagnostic.code === 6032) {
-      logger.info(logPrefix, message);
+      logger.info(logPrefixTsc, message);
     }
 
     // 6194: 0 errors or 2+ errors!
     if (diagnostic.code === 6194) {
       if (errorCount === 0 || !errorCount) {
-        logger.info(logPrefix, message);
+        logger.info(logPrefixTsc, message);
         onComplete(true);
       } else {
-        logger.error(logPrefix, message);
+        logger.error(logPrefixTsc, message);
       }
       await processDtsFiles(
         bundle,
@@ -158,7 +152,7 @@ export async function emitDts(
 
     // 6193: 1 error
     if (diagnostic.code === 6193) {
-      logger.error(logPrefix, message);
+      logger.error(logPrefixTsc, message);
       await processDtsFiles(
         bundle,
         declarationDir,
@@ -284,9 +278,15 @@ export async function emitDts(
       }
     }
 
-    logger.ready(
-      `declaration files generated in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
-    );
+    if (bundle) {
+      logger.info(
+        `preparing declaration files in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+      );
+    } else {
+      logger.ready(
+        `declaration files generated in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+      );
+    }
   } else {
     // watch mode, can also deal with incremental build
     if (!build) {
