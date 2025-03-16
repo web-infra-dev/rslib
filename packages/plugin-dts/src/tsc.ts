@@ -277,7 +277,7 @@ export async function emitDts(
 
     if (bundle) {
       logger.info(
-        `preparing declaration files in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+        `declaration files prepared in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
       );
     } else {
       logger.ready(
