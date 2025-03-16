@@ -93,7 +93,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
         await addBannerAndFooter(untrimmedFilePath, banner, footer);
 
         logger.ready(
-          `bundle declaration files succeeded: ${color.cyan(relative(cwd, untrimmedFilePath))} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+          `declaration files bundled successfully: ${color.cyan(relative(cwd, untrimmedFilePath))} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
         );
       }),
     );
