@@ -7,7 +7,7 @@ import { composeModuleImportWarn } from '../../../packages/core/src/config';
 test('should fail to build when `output.target` is not "node"', async () => {
   const fixturePath = join(__dirname, 'browser');
   const build = buildAndGetResults({ fixturePath });
-  await expect(build).rejects.toThrowError('Rspack build failed!');
+  await expect(build).rejects.toThrowError('Rspack build failed.');
 });
 
 test('auto externalize Node.js built-in modules when `output.target` is "node"', async () => {
