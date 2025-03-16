@@ -46,7 +46,6 @@ class EntryChunkPlugin {
 
   private enabledImportMetaUrlShim: boolean;
   private contextToWatch: string | null = null;
-  private contextWatched = false;
 
   constructor({
     enabledImportMetaUrlShim = true,
@@ -60,12 +59,21 @@ class EntryChunkPlugin {
   }
 
   apply(compiler: Rspack.Compiler) {
-    compiler.hooks.afterCompile.tap(PLUGIN_NAME, (compilation) => {
-      if (this.contextWatched || this.contextToWatch === null) return;
+    // TODO: contextDependencies now can only be added in `tapPromise` hook.
+    // Change to `.tap` when it's supported.
+    compiler.hooks.afterCompile.tapPromise(PLUGIN_NAME, (compilation) => {
+      return new Promise((resolve) => {
+        if (this.contextToWatch === null) {
+          resolve();
+          return;
+        }
 
-      const contextDep = compilation.contextDependencies;
-      contextDep.add(this.contextToWatch);
-      this.contextWatched = true;
+        const contextDep = compilation.contextDependencies;
+        if (!contextDep.has(this.contextToWatch)) {
+          contextDep.add(this.contextToWatch);
+        }
+        resolve();
+      });
     });
 
     compiler.hooks.make.tap(PLUGIN_NAME, (compilation) => {
