@@ -1,5 +1,5 @@
 import { pluginSass } from '@rsbuild/plugin-sass';
-import { pluginTypedCSSModules } from "@rsbuild/plugin-typed-css-modules";
+import { pluginTypedCSSModules } from '@rsbuild/plugin-typed-css-modules';
 import { defineConfig } from '@rslib/core';
 import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
@@ -15,7 +15,7 @@ export default defineConfig({
     cssModules: {
       namedExport: true,
       exportLocalsConvention: 'camelCaseOnly',
-    }
+    },
   },
   plugins: [
     pluginSass({
@@ -23,6 +23,6 @@ export default defineConfig({
         additionalData: '$base-color: #c6538c;',
       },
     }),
-    pluginTypedCSSModules()
+    pluginTypedCSSModules(),
   ],
 });
