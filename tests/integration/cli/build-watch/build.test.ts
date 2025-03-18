@@ -127,7 +127,7 @@ export default defineConfig({
     fse.removeSync(srcIndexFile);
 
     // change
-    const wait = await awaitFileChanges(distFooFile);
+    const wait = await awaitFileChanges(distFooFile, 'foo1');
     fse.outputFileSync(srcFooFile, `export const foo = 'foo1';`);
     await wait();
     const content3 = await fse.readFile(distFooFile, 'utf-8');
