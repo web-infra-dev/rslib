@@ -58,11 +58,12 @@ export default defineConfig({
 describe('build --watch should handle add / change / unlink', async () => {
   test('basic', async () => {
     const tempSrcPath = path.join(__dirname, 'test-temp-src');
+    const tempConfigFile = path.join(__dirname, 'test-temp-rslib.config.mjs');
     await fse.remove(tempSrcPath);
     await fse.remove(path.join(__dirname, 'dist'));
-    await fse.copy(path.join(__dirname, 'src'), path.resolve(tempSrcPath));
-    const tempConfigFile = path.join(__dirname, 'test-temp-rslib.config.mjs');
     await fse.remove(tempConfigFile);
+
+    await fse.copy(path.join(__dirname, 'src'), path.resolve(tempSrcPath));
     fse.outputFileSync(
       tempConfigFile,
       `import { defineConfig } from '@rslib/core';
@@ -102,11 +103,11 @@ export default defineConfig({
         shell: true,
       },
     );
-
     await awaitFileExists(distIndexFile);
 
     fse.outputFileSync(srcFooFile, `export const foo = 'foo';`);
     fse.outputFileSync(srcFoo2File, `export const foo2 = 'foo2';`);
+    await awaitFileExists(distFooFile);
     await awaitFileExists(distFoo2File);
     const content1 = await fse.readFile(distFooFile, 'utf-8');
     expect(content1!).toMatchInlineSnapshot(`
@@ -126,7 +127,7 @@ export default defineConfig({
     fse.removeSync(srcIndexFile);
 
     // change
-    const wait = await awaitFileChanges(distFooFile);
+    const wait = await awaitFileChanges(distFooFile, 'foo1');
     fse.outputFileSync(srcFooFile, `export const foo = 'foo1';`);
     await wait();
     const content3 = await fse.readFile(distFooFile, 'utf-8');

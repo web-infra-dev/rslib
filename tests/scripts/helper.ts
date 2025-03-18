@@ -95,13 +95,16 @@ export const awaitFileExists = async (dir: string) => {
   }
 };
 
-export const awaitFileChanges = async (file: string) => {
+export const awaitFileChanges = async (file: string, content: string) => {
   const oldContent = await fse.readFile(file, 'utf-8');
   return async () => {
     const result = await waitFor(
       () => {
         try {
-          return fse.readFileSync(file, 'utf-8') !== oldContent;
+          return (
+            fse.readFileSync(file, 'utf-8') !== oldContent &&
+            fse.readFileSync(file, 'utf-8').includes(content)
+          );
         } catch (e) {
           return false;
         }
