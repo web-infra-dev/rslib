@@ -304,6 +304,10 @@ export interface LibConfig extends EnvironmentConfig {
    * @see {@link https://lib.rsbuild.dev/config/lib/out-base}
    */
   outBase?: string;
+  /**
+   * @inheritdoc
+   */
+  output?: RslibOutputConfig;
 }
 
 export type LibOnlyConfig = Omit<LibConfig, keyof EnvironmentConfig>;
