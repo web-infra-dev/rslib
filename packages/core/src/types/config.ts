@@ -324,7 +324,7 @@ interface RslibOutputConfig extends OutputConfig {
    * When minify is not specified, Rslib will use a sane default for minify options.
    * The default options will only perform dead code elimination and unused code elimination.
    *
-   * detail: {@link https://lib.rsbuild.dev/config/rsbuild/output#outputminify rsbuild-outputminify}
+   * @see {@link https://lib.rsbuild.dev/config/rsbuild/output#outputminify}
    */
   minify?: OutputConfig['minify'];
 }
