@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 10
           ref: ${{ inputs.ref || 'main' }}
@@ -32,7 +32,7 @@ jobs:
           corepack enable
 
       - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -42,7 +42,7 @@ jobs:
 
       # only run benchmark in Ubuntu
       - name: Benchmarks (Vitest)
-        uses: CodSpeedHQ/action@v3
+        uses: CodSpeedHQ/action@0010eb0ca6e89b80c88e8edaaa07cfe5f3e6664d # v3
         with:
           run: pnpm run test:benchmark
           # token retrieved from the CodSpeed app at the previous step
