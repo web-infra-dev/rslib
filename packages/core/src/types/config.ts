@@ -1,4 +1,9 @@
-import type { EnvironmentConfig, RsbuildConfig, Rspack } from '@rsbuild/core';
+import type {
+  EnvironmentConfig,
+  OutputConfig,
+  RsbuildConfig,
+  Rspack,
+} from '@rsbuild/core';
 import type { GetAsyncFunctionFromUnion } from './utils';
 
 export type Format = 'esm' | 'cjs' | 'umd' | 'mf';
@@ -303,8 +308,33 @@ export interface LibConfig extends EnvironmentConfig {
 
 export type LibOnlyConfig = Omit<LibConfig, keyof EnvironmentConfig>;
 
+interface RslibOutputConfig extends OutputConfig {
+  /**
+   * @override
+   * @default 'node'
+   */
+  target?: OutputConfig['target'];
+  /**
+   * @override
+   * @default false
+   */
+  filenameHash?: OutputConfig['filenameHash'];
+  /**
+   * @override
+   * When minify is not specified, Rslib will use a sane default for minify options.
+   * The default options will only perform dead code elimination and unused code elimination.
+   *
+   * detail: {@link https://lib.rsbuild.dev/config/rsbuild/output#outputminify rsbuild-outputminify}
+   */
+  minify?: OutputConfig['minify'];
+}
+
 export interface RslibConfig extends RsbuildConfig {
   lib: LibConfig[];
+  /**
+   * @inheritdoc
+   */
+  output?: RslibOutputConfig;
 }
 
 export type ConfigParams = {
