@@ -2,12 +2,15 @@ import { join, relative } from 'node:path';
 import {
   Extractor,
   ExtractorConfig,
+  ExtractorLogLevel,
   type ExtractorResult,
 } from '@microsoft/api-extractor';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import type { DtsEntry } from './index';
 import { addBannerAndFooter, getTimeCost } from './utils';
+
+const logPrefixApiExtractor = color.dim('[api-extractor]');
 
 export type BundleOptions = {
   name: string;
@@ -66,6 +69,20 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
           extractorConfig,
           {
             localBuild: true,
+            messageCallback(message) {
+              /**
+               * message.text is readonly, we can not add prefix
+               * do not log below two cases
+               * 1. Analysis will use the bundled TypeScript version 5.7.3
+               * 2. The target project appears to use TypeScript 5.8.2 which is newer than the bundled compiler engine; consider upgrading API Extractor.
+               */
+              if (
+                message.messageId === 'console-compiler-version-notice' ||
+                message.messageId === 'console-preamble'
+              ) {
+                message.logLevel = ExtractorLogLevel.None;
+              }
+            },
           },
         );
 
@@ -75,12 +92,12 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
 
         await addBannerAndFooter(untrimmedFilePath, banner, footer);
 
-        logger.info(
-          `bundle declaration files succeeded: ${color.cyan(untrimmedFilePath)} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+        logger.ready(
+          `declaration files bundled successfully: ${color.cyan(relative(cwd, untrimmedFilePath))} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
         );
       }),
     );
   } catch (e) {
-    throw new Error(`API Extractor Error:\n ${e}`);
+    throw new Error(`${logPrefixApiExtractor} ${e}`);
   }
 }
