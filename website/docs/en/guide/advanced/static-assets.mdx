@@ -13,9 +13,9 @@ The following are the formats supported by Rslib by default:
 
 To import assets in other formats, refer to [Extend Asset Types](#extend-asset-types).
 
-## Import assets in JS file
+## Import assets in JavaScript file
 
-In JS files, you can directly import static assets with relative paths through `import`:
+In JavaScript files, you can directly import static assets with relative paths through `import`:
 
 ```tsx
 // Import the logo.png image in the 'src/assets' directory
@@ -36,7 +36,7 @@ console.log(logo); // "/static/logo.[hash].png"
 export default = () => <img src={logo} />;
 ```
 
-When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the output as an mid-level artifact that will be consumed by other build tools again and transforms the source file into a JS file and a static asset file that is emitted according to [output.distPath](/config/rsbuild/output#outputdistpath) by default, which is used to preserve the `import` statements for static assets.
+When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the output as an mid-level artifact that will be consumed by other build tools again and transforms the source file into a JavaScript file and a static asset file that is emitted according to [output.distPath](/config/rsbuild/output#outputdistpath) by default with preserving the `import` or `require` statements for static assets.
 
 The following is an example of usage, assuming the source code is as follows:
 

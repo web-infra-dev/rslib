@@ -8,7 +8,14 @@ Options for build outputs.
 
 Use this option to set the URL prefix for static assets, such as setting it to a CDN URL.
 
-When [format](/config/lib/format) is set to `cjs` or `esm`, Rslib defaults to setting `output.assetPrefix` to `"auto"`.
+In Rslib, the default value for this option depends on [format](/config/lib/format):
+
+- When `format` is `cjs` or `esm`, the default value is `"auto"`.
+- When `format` is `mf` or `umd`, the default value is `"/"`.
+
+When `output.assetPrefix` is set to `"auto"`, Rslib defaults to setting [importMode](https://rspack.dev/config/module#modulegeneratorassetimportmode) to `"preserve"`, which preserves the `import` or `require` statements for static assets in JavaScript files. Additionally, the static asset references in CSS files remain as relative paths, see [Import static assets](/guide/advanced/static-assets) for more details.
+
+When `output.assetPrefix` is set to a specific path, the static asset import statements in JavaScript files will no longer be preserved and will be replaced with URLs prefixed by that path. Additionally, the static asset paths in CSS files will be substituted with paths that include this prefix.
 
 ## output.charset <RsbuildDocBadge path="/config/output/charset" text="output.charset" />
 
