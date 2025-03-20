@@ -8,7 +8,14 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 使用该选项设置静态资源的 URL 前缀，比如设置为 CDN 地址。
 
-在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 默认会将 `output.assetPrefix` 设置为 `"auto"`。
+在 Rslib 中，该选项的默认值由 [format](/config/lib/format) 决定：
+
+- 当 `format` 为 `cjs` 或 `esm` 时，默认值为 `"auto"`。
+- 当 `format` 为 `mf` 或 `umd` 时，默认值为 `"/"`。
+
+当 `output.assetPrefix` 设置为 `"auto"` 时，Rslib 会自动将 [importMode](https://rspack.dev/zh/config/module#modulegeneratorassetimportmode) 设置为 `"preserve"`，以保留 JavaScript 文件中引用静态资源的 `import` 或 `require` 语句。同时，CSS 文件中的静态资源会保留相对引用路径，详情可以查看 [引用静态资源](/guide/advanced/static-assets)。
+
+当 `output.assetPrefix` 设置为具体的路径时，JavaScript 文件中引用静态资源的 `import` 或 `require` 语句会被替换为包含该前缀的 URL。同时，CSS 文件中的静态资源会被直接替换为带有该前缀的路径。
 
 ## output.charset <RsbuildDocBadge path="/config/output/charset" text="output.charset" />
 

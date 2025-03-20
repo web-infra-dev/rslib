@@ -13,9 +13,9 @@ Rslib 支持在代码中引用图片、字体、音频、视频等类型的静�
 
 如果你需要引用其他格式的静态资源，请参考 [扩展静态资源类型](#扩展静态资源类型)。
 
-## 在 JS 文件中引用
+## 在 JavaScript 文件中引用
 
-在 JS 文件中，可以直接通过 `import` 的方式引用相对路径下的静态资源：
+在 JavaScript 文件中，可以直接通过 `import` 的方式引用相对路径下的静态资源：
 
 ```tsx
 // 引用 src/assets 目录下的 logo.png 图片
@@ -36,7 +36,7 @@ console.log(logo); // "/static/logo.[hash].png"
 export default = () => <img src={logo} />;
 ```
 
-在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物，默认会在代码转换时将源文件转化为一个 JS 文件和一个根据 [output.distPath](/config/rsbuild/output#outputdistpath) 输出的静态资源文件，从而保留引用静态资源的 `import` 语句。
+在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物，默认会在代码转换时将源文件转化为一个 JavaScript 文件和一个根据 [output.distPath](/config/rsbuild/output#outputdistpath) 输出的静态资源文件，并保留引用静态资源的 `import` 或 `require` 语句。
 
 下面是一个使用示例，假设源码如下：
 
