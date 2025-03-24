@@ -32,8 +32,9 @@ export type PluginDtsOptions = {
     | boolean
     | {
         dependencies?: boolean;
-        devDependencies?: boolean;
+        optionalDependencies?: boolean;
         peerDependencies?: boolean;
+        devDependencies?: boolean;
       };
   banner?: string;
   footer?: string;
