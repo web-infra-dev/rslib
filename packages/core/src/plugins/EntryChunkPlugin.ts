@@ -59,21 +59,15 @@ class EntryChunkPlugin {
   }
 
   apply(compiler: Rspack.Compiler) {
-    // TODO: contextDependencies now can only be added in `tapPromise` hook.
-    // Change to `.tap` when it's supported.
-    compiler.hooks.afterCompile.tapPromise(PLUGIN_NAME, (compilation) => {
-      return new Promise((resolve) => {
-        if (this.contextToWatch === null) {
-          resolve();
-          return;
-        }
+    compiler.hooks.afterCompile.tap(PLUGIN_NAME, (compilation) => {
+      if (this.contextToWatch === null) {
+        return;
+      }
 
-        const contextDep = compilation.contextDependencies;
-        if (!contextDep.has(this.contextToWatch)) {
-          contextDep.add(this.contextToWatch);
-        }
-        resolve();
-      });
+      const contextDep = compilation.contextDependencies;
+      if (!contextDep.has(this.contextToWatch)) {
+        contextDep.add(this.contextToWatch);
+      }
     });
 
     compiler.hooks.make.tap(PLUGIN_NAME, (compilation) => {
