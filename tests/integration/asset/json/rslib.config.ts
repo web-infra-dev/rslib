@@ -1,3 +1,5 @@
+import { pluginToml } from '@rsbuild/plugin-toml';
+import { pluginYaml } from '@rsbuild/plugin-yaml';
 import { defineConfig } from '@rslib/core';
 import { generateBundleEsmConfig } from 'test-helper';
 
@@ -10,8 +12,10 @@ export default defineConfig({
         distPath: {
           root: './dist/esm/bundle',
         },
-        filename: {
-          image: '[name].[contenthash:8][ext]',
+      },
+      source: {
+        entry: {
+          index: './src/bundle.ts',
         },
       },
     }),
@@ -24,8 +28,14 @@ export default defineConfig({
         distPath: {
           root: './dist/esm/bundleless',
         },
-        filename: {
-          image: '[name].[contenthash:16][ext]',
+      },
+      source: {
+        entry: {
+          index: [
+            './src/**/*',
+            '!./src/bundle.ts',
+            '!./src/assets/json-example.json',
+          ],
         },
       },
     }),
@@ -33,4 +43,5 @@ export default defineConfig({
   output: {
     target: 'web',
   },
+  plugins: [pluginYaml(), pluginToml()],
 });

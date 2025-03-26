@@ -258,18 +258,108 @@ test('set the assets public path', async () => {
   `);
 });
 
-test('use json', async () => {
+test('use json / yaml / toml', async () => {
   const fixturePath = join(__dirname, 'json');
   const { contents } = await buildAndGetResults({ fixturePath });
 
   // 0. bundle
   // esm
-  const { content: indexJs } = queryContent(contents.esm0!, /index\.js/);
-  expect(indexJs).matchSnapshot();
+  const { path: bundleIndexJs } = queryContent(contents.esm0!, /index\.js/);
+  expect(await import(bundleIndexJs)).toMatchInlineSnapshot(`
+    {
+      "Object": {
+        "jsonDefault": {
+          "items": [
+            1,
+            2,
+          ],
+          "name": "default",
+        },
+        "jsonNamed": {
+          "items": [
+            3,
+            4,
+          ],
+          "name": "named",
+        },
+        "tomlDefault": {
+          "foo": {
+            "bar": "baz",
+          },
+          "hello": "world",
+        },
+        "yamlDefault": {
+          "foo": {
+            "bar": "baz",
+          },
+          "hello": "world",
+        },
+      },
+    }
+  `);
   // 1. bundleless
   // esm
-  const { content: dataJs } = queryContent(contents.esm1!, /assets\/data\.js/);
-  expect(dataJs).matchSnapshot();
+  const { path: bundlelessIndexJs } = queryContent(contents.esm1!, /index\.js/);
+  expect(await import(bundlelessIndexJs)).toMatchInlineSnapshot(`
+    {
+      "Object": {
+        "jsonNamed": {
+          "items": [
+            3,
+            4,
+          ],
+          "name": "named",
+        },
+        "tomlDefault": {
+          "foo": {
+            "bar": "baz",
+          },
+          "hello": "world",
+        },
+        "yamlDefault": {
+          "foo": {
+            "bar": "baz",
+          },
+          "hello": "world",
+        },
+      },
+    }
+  `);
+  const { path: jsonFile } = queryContent(
+    contents.esm1!,
+    /json-named-example\.js/,
+  );
+  expect(await import(jsonFile)).toMatchInlineSnapshot(`
+    {
+      "items": [
+        3,
+        4,
+      ],
+      "name": "named",
+    }
+  `);
+  const { path: yamlFile } = queryContent(contents.esm1!, /yaml-example\.js/);
+  expect(await import(yamlFile)).toMatchInlineSnapshot(`
+    {
+      "default": {
+        "foo": {
+          "bar": "baz",
+        },
+        "hello": "world",
+      },
+    }
+  `);
+  const { path: tomlFile } = queryContent(contents.esm1!, /toml-example\.js/);
+  expect(await import(tomlFile)).toMatchInlineSnapshot(`
+    {
+      "default": {
+        "foo": {
+          "bar": "baz",
+        },
+        "hello": "world",
+      },
+    }
+  `);
 });
 
 test('use svgr', async () => {
