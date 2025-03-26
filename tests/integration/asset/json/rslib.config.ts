@@ -13,6 +13,11 @@ export default defineConfig({
           root: './dist/esm/bundle',
         },
       },
+      source: {
+        entry: {
+          index: './src/bundle.ts',
+        },
+      },
     }),
 
     // 1. bundleless default
@@ -22,6 +27,15 @@ export default defineConfig({
       output: {
         distPath: {
           root: './dist/esm/bundleless',
+        },
+      },
+      source: {
+        entry: {
+          index: [
+            './src/**/*',
+            '!./src/bundle.ts',
+            '!./src/assets/json-example.json',
+          ],
         },
       },
     }),
