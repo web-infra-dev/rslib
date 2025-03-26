@@ -32,6 +32,72 @@ export { __webpack_exports__bar as bar, __webpack_exports__foo as foo };
 "
 `;
 
+exports[`use json/yaml/toml 1`] = `
+"var json_example_namespaceObject = JSON.parse('{"u":"foo","e":[1,2]}');
+const toml_example = {
+    hello: "world",
+    foo: {
+        bar: "baz"
+    }
+};
+const yaml_example = {
+    hello: 'world',
+    foo: {
+        bar: 'baz'
+    }
+};
+console.log(json_example_namespaceObject.u);
+console.log(json_example_namespaceObject.e);
+console.log(yaml_example.hello);
+console.log(yaml_example.foo);
+console.log(toml_example.hello);
+console.log(toml_example.foo);
+"
+`;
+
+exports[`use json/yaml/toml 2`] = `
+"import * as __WEBPACK_EXTERNAL_MODULE__assets_json_example_js_f9233e35__ from "./assets/json-example.js";
+import * as __WEBPACK_EXTERNAL_MODULE__assets_toml_example_js_83d79853__ from "./assets/toml-example.js";
+import * as __WEBPACK_EXTERNAL_MODULE__assets_yaml_example_js_f81ac546__ from "./assets/yaml-example.js";
+console.log(__WEBPACK_EXTERNAL_MODULE__assets_json_example_js_f9233e35__.name);
+console.log(__WEBPACK_EXTERNAL_MODULE__assets_json_example_js_f9233e35__["default"].items);
+console.log(__WEBPACK_EXTERNAL_MODULE__assets_yaml_example_js_f81ac546__["default"].hello);
+console.log(__WEBPACK_EXTERNAL_MODULE__assets_yaml_example_js_f81ac546__["default"].foo);
+console.log(__WEBPACK_EXTERNAL_MODULE__assets_toml_example_js_83d79853__["default"].hello);
+console.log(__WEBPACK_EXTERNAL_MODULE__assets_toml_example_js_83d79853__["default"].foo);
+"
+`;
+
+exports[`use json/yaml/toml 3`] = `
+"var json_example_rslib_entry_namespaceObject = JSON.parse('{"name":"foo","items":[1,2]}');
+var __webpack_exports__items = json_example_rslib_entry_namespaceObject.items;
+var __webpack_exports__name = json_example_rslib_entry_namespaceObject.name;
+export { __webpack_exports__items as items, __webpack_exports__name as name };
+"
+`;
+
+exports[`use json/yaml/toml 4`] = `
+"const yaml_example_rslib_entry_ = {
+    hello: 'world',
+    foo: {
+        bar: 'baz'
+    }
+};
+export { yaml_example_rslib_entry_ as default };
+"
+`;
+
+exports[`use json/yaml/toml 5`] = `
+"const toml_example_rslib_entry_ = {
+    hello: "world",
+    foo: {
+        bar: "baz"
+    }
+};
+export { toml_example_rslib_entry_ as default };
+"
+`;
+
 exports[`use source.assetInclude 1`] = `
 "import draft_namespaceObject from "./static/assets/draft.txt";
 console.log(draft_namespaceObject);

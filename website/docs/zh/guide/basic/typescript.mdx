@@ -30,6 +30,16 @@ export type { SomeType } from './types';
 
 > 更多关于 SWC 和 tsc 之间差异的详细信息，可以查看 [SWC - Migrating from tsc](https://swc.rs/docs/migrating-from-tsc)。
 
+## 预设类型
+
+`@rslib/core` 提供了一些预设的类型定义，包含 CSS Modules、静态资源、`import.meta` 等类型。
+
+你可以创建一个 `src/env.d.ts` 文件来引用：
+
+```ts title="src/env.d.ts"
+/// <reference types="@rslib/core/types" />
+```
+
 ## tsconfig.json 路径
 
 Rslib 默认从根目录下读取 `tsconfig.json` 文件。你可以使用 [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath) 配置一个自定义的 `tsconfig.json` 文件路径。

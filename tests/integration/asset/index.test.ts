@@ -258,18 +258,36 @@ test('set the assets public path', async () => {
   `);
 });
 
-test('use json', async () => {
+test('use json/yaml/toml', async () => {
   const fixturePath = join(__dirname, 'json');
   const { contents } = await buildAndGetResults({ fixturePath });
 
   // 0. bundle
   // esm
-  const { content: indexJs } = queryContent(contents.esm0!, /index\.js/);
-  expect(indexJs).matchSnapshot();
+  const { content: bundleIndexJs } = queryContent(contents.esm0!, /index\.js/);
+  expect(bundleIndexJs).matchSnapshot();
   // 1. bundleless
   // esm
-  const { content: dataJs } = queryContent(contents.esm1!, /assets\/data\.js/);
-  expect(dataJs).matchSnapshot();
+  const { content: bundlelessIndexJs } = queryContent(
+    contents.esm1!,
+    /index\.js/,
+  );
+  expect(bundlelessIndexJs).matchSnapshot();
+  const { content: jsonFile } = queryContent(
+    contents.esm1!,
+    /json-example\.js/,
+  );
+  expect(jsonFile).matchSnapshot();
+  const { content: yamlFile } = queryContent(
+    contents.esm1!,
+    /yaml-example\.js/,
+  );
+  expect(yamlFile).matchSnapshot();
+  const { content: tomlFile } = queryContent(
+    contents.esm1!,
+    /toml-example\.js/,
+  );
+  expect(tomlFile).matchSnapshot();
 });
 
 test('use svgr', async () => {

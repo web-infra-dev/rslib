@@ -1,6 +1,6 @@
 # 引用 JSON 文件
 
-Rslib 支持在代码中引用 JSON 文件，同时也支持引用 [YAML](https://yaml.org/) 和 [TOML](https://toml.io/cn/) 文件并将其转换为 JSON 格式。
+Rslib 支持在代码中引用 JSON 文件，也支持引用 [YAML](https://yaml.org/) 和 [TOML](https://toml.io/cn/) 文件并将其转换为 JSON 格式。
 
 ## JSON 文件
 
@@ -129,20 +129,20 @@ export default {
 <Tabs>
   <Tab label="src/index.ts">
 
-```js
-import { name } from './example.yaml';
+```ts
+import example from './example.yaml';
 
-console.log(name); // 'foo';
+console.log(example.hello); // 'world';
+console.log(example.foo); // { bar: 'baz' };
 ```
 
 </Tab>
 <Tab label="src/example.yaml">
 
 ```yaml
-name: foo
-items:
-  - 1
-  - 2
+hello: world
+foo:
+  bar: baz
 ```
 
   </Tab>
@@ -150,7 +150,7 @@ items:
 
 ## TOML 文件
 
-[TOML](https://toml.io/cn/) 是一种数据序列化语言，通常用于编写配置文件。
+[TOML](https://toml.io/cn/) 是一种语义明显、易于阅读的配置文件格式。
 
 通过添加 [@rsbuild/plugin-toml](https://github.com/rspack-contrib/rsbuild-plugin-toml) 插件，你可以在 JavaScript 中引用 `.toml` 文件，它们会被自动转换为 JavaScript 对象。
 
@@ -173,18 +173,21 @@ export default {
 <Tabs>
   <Tab label="src/index.ts">
 
-```js
-import { name } from './example.toml';
+```ts
+import example from './example.toml';
 
-console.log(name); // 'foo';
+console.log(example.hello); // 'world';
+console.log(example.foo); // { bar: 'baz' };
 ```
 
   </Tab>
   <Tab label="src/example.toml">
 
 ```toml
-name = "foo"
-items = [1, 2]
+hello = "world"
+
+[foo]
+bar = "baz"
 ```
 
   </Tab>
@@ -192,9 +195,9 @@ items = [1, 2]
 
 ## 类型声明
 
-当你在 TypeScript 代码中引用 YAML 或 TOML 文件时，请在项目中创建 src/env.d.ts 文件，并添加相应的类型声明。
+当你在 TypeScript 代码中引用 YAML 或 TOML 文件时，请在项目中创建 `src/env.d.ts` 文件，并添加相应的类型声明。
 
-- 方法一：如果项目里安装了 `@rslib/core` 包，你可以直接引用 `@rslib/core` 提供的**预设类型**：
+- 方法一：如果项目里安装了 `@rslib/core` 包，你可以直接引用 `@rslib/core` 提供的 [预设类型](/guide/basic/typescript#预设类型)：
 
 ```ts title="src/env.d.ts"
 /// <reference types="@rslib/core/types" />
