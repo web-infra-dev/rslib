@@ -11,3 +11,11 @@
 ::: note
 `umd` 格式仅在 [bundle](/config/lib/bundle) 设置为 `true` 时有效。
 :::
+
+## 模块定义系统
+
+在不同的产物格式下，Rslib 默认使用的模块定义系统如下：
+
+- `esm`：[modern-module](https://rspack.dev/zh/config/output#type-modern-module)
+- `cjs`：[commonjs-static](https://rspack.dev/zh/config/output#type-commonjs-static)
+- `umd`：[umd](https://rspack.dev/zh/config/output#type-umd)

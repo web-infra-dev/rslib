@@ -13,3 +13,11 @@ See [Output Format](/guide/basic/output-format) and [Module Federation](/guide/a
 The `umd` format only works when [bundle](/config/lib/bundle) is set to `true`.
 
 :::
+
+## Module definition systems
+
+In different output formats, Rslib uses the following default module definition systems:
+
+- `esm`：[modern-module](https://rspack.dev/config/output#type-modern-module)
+- `cjs`：[commonjs-static](https://rspack.dev/config/output#type-commonjs-static)
+- `umd`：[umd](https://rspack.dev/config/output#type-umd)
