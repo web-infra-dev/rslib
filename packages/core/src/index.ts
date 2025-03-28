@@ -12,3 +12,6 @@ export { logger } from './utils/logger';
 export type * from './types';
 
 export const version: string = RSLIB_VERSION;
+
+export { rspack, type Rspack } from '@rsbuild/core';
+export * as rsbuild from '@rsbuild/core';
