@@ -15,4 +15,3 @@ export const version: string = RSLIB_VERSION;
 
 export { rspack, type Rspack } from '@rsbuild/core';
 export * as rsbuild from '@rsbuild/core';
-export type * as Rsbuild from '@rsbuild/core';
