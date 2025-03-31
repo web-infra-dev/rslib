@@ -7,6 +7,7 @@
  */
 import path, { extname } from 'node:path';
 import type { Rspack } from '@rsbuild/core';
+import { type CssLoaderOptionsAuto, isCssModulesFile } from './cssConfig';
 
 export const BASE_URI = 'webpack://';
 export const MODULE_TYPE = 'css/mini-extract';
@@ -38,6 +39,7 @@ export interface CssExtractRspackLoaderOptions {
   defaultExport?: boolean;
 
   rootDir?: string;
+  auto?: CssLoaderOptionsAuto;
   banner?: string;
   footer?: string;
 }
@@ -89,6 +91,7 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
   const callback = this.async();
   const filepath = this.resourcePath;
   const rootDir = options.rootDir ?? this.rootContext;
+  const auto = options.auto;
   const banner = options.banner;
   const footer = options.footer;
 
@@ -265,7 +268,10 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
       if (ext !== 'css') {
         distFilepath = distFilepath.replace(ext, '.css');
       }
-      distFilepath = distFilepath.replace(/\.module\.css/, '_module.css');
+      console.log(111, distFilepath, auto);
+      if (isCssModulesFile(filepath, auto)) {
+        distFilepath = distFilepath.replace(/\.module\.css/, '_module.css');
+      }
       const cssFilename = path.basename(distFilepath);
       if (content.trim()) {
         m.get(distFilepath)
