@@ -471,6 +471,12 @@ importers:
       '@examples/react-component-umd':
         specifier: workspace:*
         version: link:../../../examples/react-component-umd
+      react-18:
+        specifier: npm:react@18.3.1
+        version: react@18.3.1
+      react-dom-18:
+        specifier: npm:react-dom@18.3.1
+        version: react-dom@18.3.1(react@19.1.0)
 
   tests/integration/alias: {}
 
@@ -968,7 +974,7 @@ importers:
       react:
         specifier: ^19.1.0
         version: 19.1.0
-      react-aliased:
+      react-18:
         specifier: npm:react@18.3.0
         version: react@18.3.0
 
@@ -12325,6 +12331,12 @@ snapshots:
     dependencies:
       loose-envify: 1.4.0
       react: 18.3.1
+      scheduler: 0.23.2
+
+  react-dom@18.3.1(react@19.1.0):
+    dependencies:
+      loose-envify: 1.4.0
+      react: 19.1.0
       scheduler: 0.23.2
 
   react-dom@19.1.0(react@19.1.0):

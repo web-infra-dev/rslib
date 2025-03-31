@@ -23,7 +23,7 @@ export default defineConfig({
           {
             tag: 'script',
             attrs: {
-              src: 'https://unpkg.com/react@18/umd/react.development.js',
+              src: '/umd/react.development.js',
             },
             head: true,
             append: true,
@@ -31,7 +31,7 @@ export default defineConfig({
           {
             tag: 'script',
             attrs: {
-              src: 'https://unpkg.com/react-dom@18/umd/react-dom.development.js',
+              src: '/umd/react-dom.development.js',
             },
             head: true,
             append: true,
