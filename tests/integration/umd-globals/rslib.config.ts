@@ -5,7 +5,7 @@ export default defineConfig({
   lib: [generateBundleUmdConfig()],
   output: {
     externals: {
-      react: 'react-aliased',
+      react: 'react-18',
     },
   },
   source: {

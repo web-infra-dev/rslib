@@ -23,7 +23,7 @@ export default defineConfig({
           {
             tag: 'script',
             attrs: {
-              src: 'https://unpkg.com/react@18/umd/react.development.js',
+              src: '/umd/react.development.js',
             },
             head: true,
             append: true,
@@ -31,7 +31,7 @@ export default defineConfig({
           {
             tag: 'script',
             attrs: {
-              src: 'https://unpkg.com/react-dom@18/umd/react-dom.development.js',
+              src: '/umd/react-dom.development.js',
             },
             head: true,
             append: true,
@@ -57,6 +57,20 @@ export default defineConfig({
           'react-dom': 'window ReactDom',
           'react-dom/client': 'window ReactDom',
         },
+        copy: [
+          {
+            from: '../../../examples/react-component-umd/dist/umd/index.js',
+            to: 'umd/index.js',
+          },
+          {
+            from: 'node_modules/react-18/umd/react.development.js',
+            to: 'umd/react.development.js',
+          },
+          {
+            from: 'node_modules/react-dom-18/umd/react-dom.development.js',
+            to: 'umd/react-dom.development.js',
+          },
+        ],
       },
     },
   },

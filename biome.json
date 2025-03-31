@@ -21,10 +21,7 @@
     "ignoreUnknown": true
   },
   "formatter": {
-    "ignore": [
-      "**/.rslib/*",
-      "./tests/e2e/react-component/public/umd/index.js"
-    ],
+    "ignore": ["**/.rslib/*", "./tests/e2e/react-component/public/umd/*"],
     "indentStyle": "space"
   },
   "javascript": {
@@ -47,7 +44,7 @@
     "enabled": true,
     "ignore": [
       "./tests/integration/**/*/src/*",
-      "./tests/e2e/react-component/public/umd/index.js"
+      "./tests/e2e/react-component/public/umd/*"
     ],
     "rules": {
       "recommended": true,
