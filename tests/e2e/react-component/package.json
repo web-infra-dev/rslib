@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "build:umd": "cd ../../../examples/react-component-umd && pnpm run build",
     "dev:bundle": "../../node_modules/.bin/rsbuild dev --environment=bundle",
     "dev:bundle-false": "../../node_modules/.bin/rsbuild dev --environment=bundleFalse",
-    "dev:umd": "pnpm umd:build && pnpm umd:copy && ../../node_modules/.bin/rsbuild dev --environment=umd",
-    "umd:build": "cd ../../../examples/react-component-umd && pnpm run build",
-    "umd:copy": "rm -rf ./public && mkdir -p ./public/umd && cp ../../../examples/react-component-umd/dist/umd/index.js ./public/umd/index.js && cp node_modules/react-18/umd/react.development.js ./public/umd/react.development.js && cp node_modules/react-dom-18/umd/react-dom.development.js ./public/umd/react-dom.development.js"
+    "dev:umd": "pnpm build:umd && ../../node_modules/.bin/rsbuild dev --environment=umd"
   },
   "dependencies": {
     "@examples/react-component-bundle": "workspace:*",
