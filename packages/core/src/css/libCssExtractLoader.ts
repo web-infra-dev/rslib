@@ -268,7 +268,6 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
       if (ext !== 'css') {
         distFilepath = distFilepath.replace(ext, '.css');
       }
-      console.log(111, distFilepath, auto);
       if (isCssModulesFile(filepath, auto)) {
         distFilepath = distFilepath.replace(/\.module\.css/, '_module.css');
       }
