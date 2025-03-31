@@ -471,6 +471,12 @@ importers:
       '@examples/react-component-umd':
         specifier: workspace:*
         version: link:../../../examples/react-component-umd
+      react-18:
+        specifier: npm:react@18.3.1
+        version: react@18.3.1
+      react-dom-18:
+        specifier: npm:react-dom@18.3.1
+        version: react-dom@18.3.1(react@19.1.0)
 
   tests/integration/alias: {}
 
@@ -968,9 +974,9 @@ importers:
       react:
         specifier: ^19.1.0
         version: 19.1.0
-      react-aliased:
-        specifier: npm:react@18.3.0
-        version: react@18.3.0
+      react-18:
+        specifier: npm:react@18.3.1
+        version: react@18.3.1
 
   tests/integration/umd-library-name:
     devDependencies:
@@ -5805,10 +5811,6 @@ packages:
     peerDependencies:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
-
-  react@18.3.0:
-    resolution: {integrity: sha512-RPutkJftSAldDibyrjuku7q11d3oy6wKOyPe5K1HA/HwwrXcEqBdHsLypkC2FFYjP7bPUa6gbzSBhw4sY2JcDg==}
-    engines: {node: '>=0.10.0'}
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -12450,6 +12452,12 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
+  react-dom@18.3.1(react@19.1.0):
+    dependencies:
+      loose-envify: 1.4.0
+      react: 19.1.0
+      scheduler: 0.23.2
+
   react-dom@19.1.0(react@19.1.0):
     dependencies:
       react: 19.1.0
@@ -12512,10 +12520,6 @@ snapshots:
       prop-types: 15.8.1
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
-
-  react@18.3.0:
-    dependencies:
-      loose-envify: 1.4.0
 
   react@18.3.1:
     dependencies:

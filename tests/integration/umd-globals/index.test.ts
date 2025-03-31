@@ -8,5 +8,5 @@ test('correct read globals from CommonJS', async () => {
   });
 
   const { fn } = require(entryFiles.umd);
-  expect(await fn('ok')).toBe('DEBUG:18.3.0/ok');
+  expect(await fn('ok')).toBe('DEBUG:18.3.1/ok');
 });
