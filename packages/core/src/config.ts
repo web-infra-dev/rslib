@@ -1508,6 +1508,7 @@ async function composeLibRsbuildConfig(
   });
   const cssConfig = composeCssConfig(
     outBase,
+    cssModulesAuto,
     config.bundle,
     banner?.css,
     footer?.css,

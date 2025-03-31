@@ -134,6 +134,7 @@ const PLUGIN_NAME = 'rsbuild:lib-css';
 // 2. replace CssExtractPlugin with LibCssExtractPlugin
 const pluginLibCss = (
   rootDir: string,
+  auto: CssLoaderOptionsAuto,
   banner?: string,
   footer?: string,
 ): RsbuildPlugin => ({
@@ -168,6 +169,7 @@ const pluginLibCss = (
             .loader(require.resolve('./libCssExtractLoader.js'))
             .options({
               rootDir,
+              auto,
               banner,
               footer,
             });
@@ -185,6 +187,7 @@ const pluginLibCss = (
 
 export const composeCssConfig = (
   rootDir: string | null,
+  auto: CssLoaderOptionsAuto,
   bundle = true,
   banner?: string,
   footer?: string,
@@ -194,7 +197,7 @@ export const composeCssConfig = (
   }
 
   return {
-    plugins: [pluginLibCss(rootDir, banner, footer)],
+    plugins: [pluginLibCss(rootDir, auto, banner, footer)],
     tools: {
       cssLoader: {
         // Otherwise, external variables will be executed by css-extract and cause an error.
