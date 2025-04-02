@@ -10,7 +10,6 @@ export const DEFAULT_CONFIG_EXTENSIONS = [
 ] as const;
 
 export const SWC_HELPERS = '@swc/helpers';
-export const RSLIB_ENTRY_QUERY = '__rslib_entry__';
 export const SHEBANG_PREFIX = '#!';
 export const SHEBANG_REGEX: RegExp = /#!.*[\s\n\r]*$/;
 export const REACT_DIRECTIVE_REGEX: RegExp =

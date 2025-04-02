@@ -13,7 +13,7 @@ describe('ESM shims', async () => {
   test('__dirname', async () => {
     for (const shim of [
       'import { fileURLToPath as __webpack_fileURLToPath__ } from "node:url";',
-      'var src_rslib_entry_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));',
+      'var src_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));',
     ]) {
       expect(entries.esm0).toContain(shim);
     }
@@ -26,7 +26,7 @@ describe('ESM shims', async () => {
   test('__filename', async () => {
     for (const shim of [
       'import { fileURLToPath as __webpack_fileURLToPath__ } from "node:url";',
-      'var src_rslib_entry_filename = __webpack_fileURLToPath__(import.meta.url);',
+      'var src_filename = __webpack_fileURLToPath__(import.meta.url);',
     ]) {
       expect(entries.esm0).toContain(shim);
     }
@@ -110,12 +110,12 @@ describe('CJS shims', () => {
       "import * as __WEBPACK_EXTERNAL_MODULE_node_module_ab9f2194__ from "node:module";
       import * as __WEBPACK_EXTERNAL_MODULE_url__ from "url";
       const importMetaUrl = import.meta.url;
-      const src_rslib_entry_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module_ab9f2194__.createRequire)(import.meta.url);
-      const requiredModule = src_rslib_entry_require('./ok.cjs');
-      const src_rslib_entry_filename = (0, __WEBPACK_EXTERNAL_MODULE_url__.fileURLToPath)(import.meta.url);
-      console.log(src_rslib_entry_filename);
-      const src_rslib_entry_module = null;
-      export { src_rslib_entry_filename as __filename, importMetaUrl, src_rslib_entry_module as module, requiredModule };
+      const src_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module_ab9f2194__.createRequire)(import.meta.url);
+      const requiredModule = src_require('./ok.cjs');
+      const src_filename = (0, __WEBPACK_EXTERNAL_MODULE_url__.fileURLToPath)(import.meta.url);
+      console.log(src_filename);
+      const src_module = null;
+      export { src_filename as __filename, importMetaUrl, src_module as module, requiredModule };
       "
     `);
   });

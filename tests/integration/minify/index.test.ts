@@ -24,7 +24,7 @@ describe('minify config', () => {
 
       ;// CONCATENATED MODULE: external "react/jsx-runtime"
 
-      ;// CONCATENATED MODULE: ../../__fixtures__/src/index.ts?__rslib_entry__
+      ;// CONCATENATED MODULE: ../../__fixtures__/src/index.ts
       /*! Legal Comment */ 
       const foo = ()=>{};
       const bar = ()=>{};

@@ -36,13 +36,13 @@ test('set the size threshold to inline static assets', async () => {
   const { content: logoJs2 } = queryContent(contents.esm2!, /assets\/logo\.js/);
   expect(indexJs2).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE__assets_logo_js_450929b7__ from "./assets/logo.js";
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE__assets_logo_js_450929b7__["default"];
-    export { src_rslib_entry_ as default };
+    const src = __WEBPACK_EXTERNAL_MODULE__assets_logo_js_450929b7__["default"];
+    export { src as default };
     "
   `);
   expect(logoJs2).toMatchInlineSnapshot(`
-    "import logo_rslib_entry_namespaceObject from "../static/svg/logo.svg";
-    export { logo_rslib_entry_namespaceObject as default };
+    "import logo_namespaceObject from "../static/svg/logo.svg";
+    export { logo_namespaceObject as default };
     "
   `);
   // cjs
@@ -57,7 +57,7 @@ test('set the size threshold to inline static assets', async () => {
   expect(logoCjs2).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        "./src/assets/logo.svg?__rslib_entry__": function(module) {
+        "./src/assets/logo.svg": function(module) {
             module.exports = require("../static/svg/logo.svg");
         }
     };
@@ -71,7 +71,7 @@ test('set the size threshold to inline static assets', async () => {
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("./src/assets/logo.svg?__rslib_entry__");
+    var __webpack_exports__ = __webpack_require__("./src/assets/logo.svg");
     exports["default"] = __webpack_exports__["default"];
     for(var __webpack_i__ in __webpack_exports__)if (-1 === [
         "default"
@@ -105,8 +105,8 @@ test('set the assets filename with hash', async () => {
     /assets\/image\.js/,
   );
   expect(imageJs1).toMatchInlineSnapshot(`
-    "import image_rslib_entry_namespaceObject from "../static/image/image.c74653c1.png";
-    export { image_rslib_entry_namespaceObject as default };
+    "import image_namespaceObject from "../static/image/image.c74653c1.png";
+    export { image_namespaceObject as default };
     "
   `);
   // cjs
@@ -117,7 +117,7 @@ test('set the assets filename with hash', async () => {
   expect(imageCjs1).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        "./src/assets/image.png?__rslib_entry__": function(module) {
+        "./src/assets/image.png": function(module) {
             module.exports = require("../static/image/image.c74653c1.png");
         }
     };
@@ -131,7 +131,7 @@ test('set the assets filename with hash', async () => {
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("./src/assets/image.png?__rslib_entry__");
+    var __webpack_exports__ = __webpack_require__("./src/assets/image.png");
     exports["default"] = __webpack_exports__["default"];
     for(var __webpack_i__ in __webpack_exports__)if (-1 === [
         "default"
@@ -165,8 +165,8 @@ test('set the assets output path', async () => {
     /assets\/image\.js/,
   );
   expect(imageJs1).toMatchInlineSnapshot(`
-    "import image_rslib_entry_namespaceObject from "../assets/bundleless/image.png";
-    export { image_rslib_entry_namespaceObject as default };
+    "import image_namespaceObject from "../assets/bundleless/image.png";
+    export { image_namespaceObject as default };
     "
   `);
   // cjs
@@ -177,7 +177,7 @@ test('set the assets output path', async () => {
   expect(imageCjs1).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        "./src/assets/image.png?__rslib_entry__": function(module) {
+        "./src/assets/image.png": function(module) {
             module.exports = require("../assets/bundleless/image.png");
         }
     };
@@ -191,7 +191,7 @@ test('set the assets output path', async () => {
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("./src/assets/image.png?__rslib_entry__");
+    var __webpack_exports__ = __webpack_require__("./src/assets/image.png");
     exports["default"] = __webpack_exports__["default"];
     for(var __webpack_i__ in __webpack_exports__)if (-1 === [
         "default"
@@ -258,8 +258,8 @@ test('set the assets public path', async () => {
     (()=>{
         __webpack_require__.p = "/public/path/";
     })();
-    const image_rslib_entry_namespaceObject = __webpack_require__.p + "static/image/image.png";
-    export { image_rslib_entry_namespaceObject as default };
+    const image_namespaceObject = __webpack_require__.p + "static/image/image.png";
+    export { image_namespaceObject as default };
     "
   `);
 });

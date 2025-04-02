@@ -1,9 +1,5 @@
 import type { Rspack } from '@rsbuild/core';
-import {
-  REACT_DIRECTIVE_REGEX,
-  RSLIB_ENTRY_QUERY,
-  SHEBANG_REGEX,
-} from '../constant';
+import { REACT_DIRECTIVE_REGEX, SHEBANG_REGEX } from '../constant';
 
 function splitFromFirstLine(text: string): [string, string] {
   const match = text.match(/(\r\n|\n)/);
@@ -17,17 +13,15 @@ function splitFromFirstLine(text: string): [string, string] {
 const loader: Rspack.LoaderDefinition = function loader(source) {
   let result = source;
 
-  if (this.resourceQuery === `?${RSLIB_ENTRY_QUERY}`) {
-    const [firstLine1, rest] = splitFromFirstLine(result);
+  const [firstLine1, rest] = splitFromFirstLine(result);
 
-    if (SHEBANG_REGEX.test(firstLine1)) {
-      result = rest;
-    }
+  if (SHEBANG_REGEX.test(firstLine1)) {
+    result = rest;
+  }
 
-    const [firstLine2, rest2] = splitFromFirstLine(result);
-    if (REACT_DIRECTIVE_REGEX.test(firstLine2)) {
-      result = rest2;
-    }
+  const [firstLine2, rest2] = splitFromFirstLine(result);
+  if (REACT_DIRECTIVE_REGEX.test(firstLine2)) {
+    result = rest2;
   }
 
   return result;

@@ -50,13 +50,11 @@ test('multiple entry bundle', async () => {
   expect(files).toMatchInlineSnapshot(`
     {
       "cjs": [
-        "<ROOT>/tests/integration/entry/multiple/dist/cjs/bar.cjs",
         "<ROOT>/tests/integration/entry/multiple/dist/cjs/foo.cjs",
         "<ROOT>/tests/integration/entry/multiple/dist/cjs/index.cjs",
         "<ROOT>/tests/integration/entry/multiple/dist/cjs/shared.cjs",
       ],
       "esm": [
-        "<ROOT>/tests/integration/entry/multiple/dist/esm/bar.js",
         "<ROOT>/tests/integration/entry/multiple/dist/esm/foo.js",
         "<ROOT>/tests/integration/entry/multiple/dist/esm/index.js",
         "<ROOT>/tests/integration/entry/multiple/dist/esm/shared.js",
@@ -70,8 +68,8 @@ test('multiple entry bundle', async () => {
   expect(index).toMatchInlineSnapshot(`
     "const shared = 'shared';
     const foo = 'foo' + shared;
-    const src_rslib_entry_text = ()=>\`hello \${foo} \${shared}\`;
-    export { src_rslib_entry_text as text };
+    const src_text = ()=>\`hello \${foo} \${shared}\`;
+    export { src_text as text };
     "
   `);
 
@@ -82,15 +80,6 @@ test('multiple entry bundle', async () => {
     "const shared = 'shared';
     const foo = 'foo' + shared;
     export { foo };
-    "
-  `);
-
-  const { content: bar } = queryContent(contents.esm, 'bar.js', {
-    basename: true,
-  });
-  expect(bar).toMatchInlineSnapshot(`
-    "const bar = 'bar';
-    export { bar };
     "
   `);
 

@@ -118,8 +118,8 @@ test('monorepo', async () => {
     }).content,
   ).toMatchInlineSnapshot(`
     "import * as __WEBPACK_EXTERNAL_MODULE_bundle_false_monorepo_importee_test_35ca595f__ from "bundle-false-monorepo-importee-test";
-    const src_rslib_entry_ = __WEBPACK_EXTERNAL_MODULE_bundle_false_monorepo_importee_test_35ca595f__["default"];
-    export { src_rslib_entry_ as default };
+    const src = __WEBPACK_EXTERNAL_MODULE_bundle_false_monorepo_importee_test_35ca595f__["default"];
+    export { src as default };
     "
   `);
 });
@@ -190,19 +190,19 @@ test('asset in bundleless', async () => {
   const { contents } = await buildAndGetResults({ fixturePath });
 
   expect(Object.values(contents.esm)[0]).toMatchInlineSnapshot(`
-    "import image_rslib_entry_namespaceObject from "../static/image/image.png";
-    export { image_rslib_entry_namespaceObject as default };
+    "import image_namespaceObject from "../static/image/image.png";
+    export { image_namespaceObject as default };
     "
   `);
   expect(Object.values(contents.esm)[1]).toMatchInlineSnapshot(`
-    "import logo_rslib_entry_namespaceObject from "../static/svg/logo.svg";
-    export { logo_rslib_entry_namespaceObject as default };
+    "import logo_namespaceObject from "../static/svg/logo.svg";
+    export { logo_namespaceObject as default };
     "
   `);
   expect(Object.values(contents.cjs)[0]).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        "./src/assets/image.png?__rslib_entry__": function(module) {
+        "./src/assets/image.png": function(module) {
             module.exports = require("../static/image/image.png");
         }
     };
@@ -216,7 +216,7 @@ test('asset in bundleless', async () => {
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("./src/assets/image.png?__rslib_entry__");
+    var __webpack_exports__ = __webpack_require__("./src/assets/image.png");
     exports["default"] = __webpack_exports__["default"];
     for(var __webpack_i__ in __webpack_exports__)if (-1 === [
         "default"
@@ -229,7 +229,7 @@ test('asset in bundleless', async () => {
   expect(Object.values(contents.cjs)[1]).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        "./src/assets/logo.svg?__rslib_entry__": function(module) {
+        "./src/assets/logo.svg": function(module) {
             module.exports = require("../static/svg/logo.svg");
         }
     };
@@ -243,7 +243,7 @@ test('asset in bundleless', async () => {
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("./src/assets/logo.svg?__rslib_entry__");
+    var __webpack_exports__ = __webpack_require__("./src/assets/logo.svg");
     exports["default"] = __webpack_exports__["default"];
     for(var __webpack_i__ in __webpack_exports__)if (-1 === [
         "default"
