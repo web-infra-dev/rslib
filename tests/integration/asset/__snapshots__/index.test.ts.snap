@@ -7,8 +7,8 @@ console.log(draft_namespaceObject);
 `;
 
 exports[`use asset/source 2`] = `
-"const draft_rslib_entry_namespaceObject = "this is a txt file\\nthis is a txt file\\n";
-export { draft_rslib_entry_namespaceObject as default };
+"const draft_namespaceObject = "this is a txt file\\nthis is a txt file\\n";
+export { draft_namespaceObject as default };
 "
 `;
 
@@ -19,8 +19,8 @@ console.log(draft_namespaceObject);
 `;
 
 exports[`use source.assetInclude 2`] = `
-"import draft_rslib_entry_namespaceObject from "../static/assets/draft.txt";
-export { draft_rslib_entry_namespaceObject as default };
+"import draft_namespaceObject from "../static/assets/draft.txt";
+export { draft_namespaceObject as default };
 "
 `;
 
@@ -49,8 +49,8 @@ const SvgLogo = (props)=>/*#__PURE__*/ (0, __WEBPACK_EXTERNAL_MODULE_react_jsx_r
             ]
         })
     });
-const logo_rslib_entry_ = __rslib_svgr_url__0__;
-export { SvgLogo as ReactComponent, logo_rslib_entry_ as default };
+const logo = __rslib_svgr_url__0__;
+export { SvgLogo as ReactComponent, logo as default };
 "
 `;
 
@@ -81,7 +81,7 @@ var __webpack_require__ = {};
 var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
-    default: ()=>logo_rslib_entry_,
+    default: ()=>logo,
     ReactComponent: ()=>SvgLogo
 });
 const jsx_runtime_namespaceObject = require("react/jsx-runtime");
@@ -107,7 +107,7 @@ const SvgLogo = (props)=>/*#__PURE__*/ (0, jsx_runtime_namespaceObject.jsx)("svg
             ]
         })
     });
-const logo_rslib_entry_ = require("../static/svg/logo.svg");
+const logo = require("../static/svg/logo.svg");
 exports.ReactComponent = __webpack_exports__.ReactComponent;
 exports["default"] = __webpack_exports__["default"];
 for(var __webpack_i__ in __webpack_exports__)if (-1 === [
@@ -144,8 +144,8 @@ const SvgLogo = (props)=>/*#__PURE__*/ (0, __WEBPACK_EXTERNAL_MODULE_react_jsx_r
             ]
         })
     });
-const logo_rslib_entry_ = SvgLogo;
-export { logo_rslib_entry_ as default };
+const logo = SvgLogo;
+export { logo as default };
 "
 `;
 
@@ -176,7 +176,7 @@ var __webpack_require__ = {};
 var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
-    default: ()=>logo_rslib_entry_
+    default: ()=>logo
 });
 const jsx_runtime_namespaceObject = require("react/jsx-runtime");
 require("react");
@@ -201,7 +201,7 @@ const SvgLogo = (props)=>/*#__PURE__*/ (0, jsx_runtime_namespaceObject.jsx)("svg
             ]
         })
     });
-const logo_rslib_entry_ = SvgLogo;
+const logo = SvgLogo;
 exports["default"] = __webpack_exports__["default"];
 for(var __webpack_i__ in __webpack_exports__)if (-1 === [
     "default"
@@ -213,15 +213,15 @@ Object.defineProperty(exports, '__esModule', {
 `;
 
 exports[`use svgr > should only contain url default export 1`] = `
-"import logo2_rslib_entry_namespaceObject from "../static/svg/logo2.svg";
-export { logo2_rslib_entry_namespaceObject as default };
+"import logo2_namespaceObject from "../static/svg/logo2.svg";
+export { logo2_namespaceObject as default };
 "
 `;
 
 exports[`use svgr > should only contain url default export 2`] = `
 ""use strict";
 var __webpack_modules__ = {
-    "./src/assets/logo2.svg?__rslib_entry__": function(module) {
+    "./src/assets/logo2.svg": function(module) {
         module.exports = require("../static/svg/logo2.svg");
     }
 };
@@ -235,7 +235,7 @@ function __webpack_require__(moduleId) {
     __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
     return module.exports;
 }
-var __webpack_exports__ = __webpack_require__("./src/assets/logo2.svg?__rslib_entry__");
+var __webpack_exports__ = __webpack_require__("./src/assets/logo2.svg");
 exports["default"] = __webpack_exports__["default"];
 for(var __webpack_i__ in __webpack_exports__)if (-1 === [
     "default"

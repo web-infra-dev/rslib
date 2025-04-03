@@ -205,7 +205,9 @@ const entryModuleLoaderRsbuildPlugin = (): RsbuildPlugin => ({
   setup(api) {
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
       config.module
-        .rule(CHAIN_ID.RULE.JS)
+        .rule(`Rslib:${CHAIN_ID.RULE.JS}-entry-loader`)
+        .test(config.module.rule(CHAIN_ID.RULE.JS).get('test'))
+        .issuer(/^$/)
         .use(LOADER_NAME)
         .loader(require.resolve('./entryModuleLoader.js'));
     });

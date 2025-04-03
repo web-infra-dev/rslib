@@ -92,7 +92,7 @@ test('should extract css with pluginStylus in bundle-false', async () => {
   expectFileContainContent(
     jsContents.esm,
     'assets/logo.js',
-    'import logo_rslib_entry_namespaceObject from "../static/svg/logo.svg"',
+    'import logo_namespaceObject from "../static/svg/logo.svg"',
   );
   expectFileContainContent(
     jsContents.esm,

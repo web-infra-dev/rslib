@@ -4,7 +4,9 @@ import { join } from 'node:path';
 import { buildAndGetResults, queryContent } from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
-// The test for `import.meta.url` shim is in tests/integration/shims/index.test.ts
+const onlyStartsWith = (str: string, target: string) => {
+  return str.split(target).length === 2 && str.startsWith(target);
+};
 
 describe('shebang', async () => {
   const fixturePath = join(__dirname, 'shebang');
@@ -14,11 +16,11 @@ describe('shebang', async () => {
 
   describe('bundle', async () => {
     test('shebang at the beginning', async () => {
-      expect(entries.esm0!.startsWith('#!/usr/bin/env node')).toBe(true);
+      expect(onlyStartsWith(entries.esm0!, '#!/usr/bin/env node')).toBe(true);
     });
 
     test('shebang at the beginning even if minified', async () => {
-      expect(entries.esm1!.startsWith('#!/usr/bin/env node')).toBe(true);
+      expect(onlyStartsWith(entries.esm1!, '#!/usr/bin/env node')).toBe(true);
     });
   });
 
@@ -27,12 +29,12 @@ describe('shebang', async () => {
       const { content: index } = queryContent(contents.esm2!, 'index.js', {
         basename: true,
       });
-      expect(index!.startsWith('#!/usr/bin/env node')).toBe(true);
+      expect(onlyStartsWith(index!, '#!/usr/bin/env node')).toBe(true);
 
       const { content: bar } = queryContent(contents.esm2!, 'bar.js', {
         basename: true,
       });
-      expect(bar!.startsWith('#!/usr/bin/env node')).toBe(true);
+      expect(onlyStartsWith(bar!, '#!/usr/bin/env node')).toBe(true);
 
       const { content: foo } = queryContent(contents.esm2!, 'foo.js', {
         basename: true,
@@ -44,12 +46,12 @@ describe('shebang', async () => {
       const { content: index } = queryContent(contents.esm3!, 'index.js', {
         basename: true,
       });
-      expect(index!.startsWith('#!/usr/bin/env node')).toBe(true);
+      expect(onlyStartsWith(index!, '#!/usr/bin/env node')).toBe(true);
 
       const { content: bar } = queryContent(contents.esm3!, 'bar.js', {
         basename: true,
       });
-      expect(bar!.startsWith('#!/usr/bin/env node')).toBe(true);
+      expect(onlyStartsWith(bar!, '#!/usr/bin/env node')).toBe(true);
 
       const { content: foo } = queryContent(contents.esm2!, 'foo.js', {
         basename: true,
@@ -96,24 +98,24 @@ describe('react', async () => {
       const { content: foo } = queryContent(contents.esm!, 'foo.js', {
         basename: true,
       });
-      expect(foo!.startsWith(`'use client';`)).toBe(true);
+      expect(onlyStartsWith(foo!, `'use client';`)).toBe(true);
 
       const { content: bar } = queryContent(contents.esm!, 'bar.js', {
         basename: true,
       });
-      expect(bar!.startsWith(`'use server';`)).toBe(true);
+      expect(onlyStartsWith(bar!, `'use server';`)).toBe(true);
     });
 
     test('React directive at the beginning even if minified', async () => {
       const { content: foo } = queryContent(contents.cjs!, 'foo.cjs', {
         basename: true,
       });
-      expect(foo!.startsWith(`'use client';`)).toBe(true);
+      expect(onlyStartsWith(foo!, `'use client';`)).toBe(true);
 
       const { content: bar } = queryContent(contents.cjs!, 'bar.cjs', {
         basename: true,
       });
-      expect(bar!.startsWith(`'use server';`)).toBe(true);
+      expect(onlyStartsWith(bar!, `'use server';`)).toBe(true);
     });
   });
 });

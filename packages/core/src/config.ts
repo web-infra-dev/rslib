@@ -19,7 +19,6 @@ import {
   DEFAULT_CONFIG_NAME,
   DTS_EXTENSIONS_PATTERN,
   JS_EXTENSIONS_PATTERN,
-  RSLIB_ENTRY_QUERY,
   SWC_HELPERS,
 } from './constant';
 import {
@@ -940,9 +939,6 @@ const traverseEntryQuery = (
   return newEntry;
 };
 
-export const appendEntryQuery = (entries: RsbuildConfigEntry): RsbuildEntry =>
-  traverseEntryQuery(entries, (item) => `${item}?${RSLIB_ENTRY_QUERY}`);
-
 export const resolveEntryPath = (
   entries: RsbuildConfigEntry,
   root: string,
@@ -1020,7 +1016,7 @@ const composeEntryConfig = async (
     return {
       entryConfig: {
         source: {
-          entry: appendEntryQuery(resolveEntryPath(entries, root)),
+          entry: resolveEntryPath(entries, root),
         },
       },
       outBase: null,
@@ -1126,7 +1122,7 @@ const composeEntryConfig = async (
       rspack: {
         entry: async () => {
           const { resolvedEntries } = await scanGlobEntries(false);
-          return appendEntryQuery(resolvedEntries);
+          return resolvedEntries;
         },
       },
     },
