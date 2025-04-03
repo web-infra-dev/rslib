@@ -1122,7 +1122,6 @@ const composeEntryConfig = async (
       rspack: {
         entry: async () => {
           const { resolvedEntries } = await scanGlobEntries(false);
-          // return appendEntryQuery(resolvedEntries);
           return resolvedEntries;
         },
       },
