@@ -523,7 +523,11 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
           moduleIds: 'named',
           nodeEnv: false,
         },
+        cache: true,
         experiments: {
+          cache: {
+            type: 'persistent',
+          },
           rspackFuture: {
             bundlerInfo: {
               force: false,
@@ -1687,7 +1691,20 @@ export async function composeRsbuildEnvironments(
 
   for (const { format, id, config } of rsbuildConfigWithLibInfo) {
     const libId = typeof id === 'string' ? id : composeDefaultId(format);
-    environments[libId] = config;
+    environments[libId] = mergeRsbuildConfig(config, {
+      tools: {
+        rspack: {
+          experiments: {
+            cache: {
+              version:
+                libId +
+                config.source?.entry?.index +
+                config.output?.distPath?.root,
+            },
+          },
+        },
+      },
+    } as EnvironmentConfig);
     environmentWithInfos.push({ id: libId, format, config });
   }
 
