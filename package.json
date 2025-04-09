@@ -17,6 +17,7 @@
     "test": "pnpm run test:unit && pnpm run test:integration && pnpm run test:e2e",
     "test:benchmark": "cd ./tests && pnpm run test:benchmark",
     "test:e2e": "pnpm run build:examples && cd tests && pnpm run test:e2e",
+    "test:ecosystem-ci": "pnpm run test:unit && cross-env ECO_CI=1 pnpm run test:integration && pnpm run test:e2e",
     "test:integration": "cross-env NODE_OPTIONS='--experimental-vm-modules' vitest run --project integration",
     "test:integration:watch": "cross-env NODE_OPTIONS='--experimental-vm-modules' vitest --project integration",
     "test:unit": "vitest run --project unit*",
