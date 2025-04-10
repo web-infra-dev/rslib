@@ -378,29 +378,31 @@ export async function processDtsFiles(
     absolute: true,
   });
 
-  for (const file of dtsFiles) {
-    try {
-      if (banner || footer) {
-        await addBannerAndFooter(file, banner, footer);
-      }
+  await Promise.all(
+    dtsFiles.map(async (file) => {
+      try {
+        if (banner || footer) {
+          await addBannerAndFooter(file, banner, footer);
+        }
 
-      if ((redirect.path || redirect.extension) && matchPath) {
-        await redirectDtsImports(
-          file,
-          dtsExtension,
-          redirect,
-          matchPath,
-          dir,
-          rootDir,
-        );
-      }
+        if ((redirect.path || redirect.extension) && matchPath) {
+          await redirectDtsImports(
+            file,
+            dtsExtension,
+            redirect,
+            matchPath,
+            dir,
+            rootDir,
+          );
+        }
 
-      const newFile = file.replace('.d.ts', dtsExtension);
-      fs.renameSync(file, newFile);
-    } catch (error) {
-      logger.error(`Failed to rename declaration file ${file}: ${error}`);
-    }
-  }
+        const newFile = file.replace('.d.ts', dtsExtension);
+        await fsP.rename(file, newFile);
+      } catch (error) {
+        logger.error(`Failed to rename declaration file ${file}: ${error}`);
+      }
+    }),
+  );
 }
 
 export function processSourceEntry(
