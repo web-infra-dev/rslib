@@ -207,33 +207,35 @@ export async function redirectDtsImports(
   const sgNode = (await parseAsync('typescript', content)).root();
   const matcher: NapiConfig = {
     rule: {
-      kind: 'string_fragment',
       any: [
         {
-          inside: {
-            stopBy: 'end',
-            kind: 'import_statement',
+          kind: 'import_statement',
+          has: {
             field: 'source',
+            has: {
+              pattern: '$IMP',
+              kind: 'string_fragment',
+            },
           },
         },
         {
-          inside: {
-            stopBy: 'end',
-            kind: 'export_statement',
+          kind: 'export_statement',
+          has: {
             field: 'source',
+            has: {
+              pattern: '$IMP',
+              kind: 'string_fragment',
+            },
           },
         },
         {
-          inside: {
-            kind: 'string',
-            inside: {
-              kind: 'arguments',
-              inside: {
-                kind: 'call_expression',
-                has: {
-                  field: 'function',
-                  regex: '^(import|require)$',
-                },
+          any: [{ pattern: 'require($A)' }, { pattern: 'import($A)' }],
+          has: {
+            field: 'arguments',
+            has: {
+              has: {
+                pattern: '$IMP',
+                kind: 'string_fragment',
               },
             },
           },
@@ -241,7 +243,9 @@ export async function redirectDtsImports(
       ],
     },
   };
-  const matchModule = sgNode.findAll(matcher).map((matchNode) => {
+  const matchModule = sgNode.findAll(matcher).map((match) => {
+    // we can guarantee $IMP is matched given the rule
+    const matchNode = match.getMatch('IMP')!;
     return {
       n: matchNode.text(),
       s: matchNode.range().start.index,
