@@ -855,25 +855,29 @@ const composeAutoExtensionConfig = (
   };
 
   const hash = getHash();
+  const defaultJsFilename = `[name]${hash}${jsExtension}`;
+  const userJsFilename = config.output?.filename?.js;
 
-  const updatedConfig: EnvironmentConfig = {
-    output: {
-      filename: {
-        js: `[name]${hash}${jsExtension}`,
-        ...config.output?.filename,
-      },
-    },
-  };
-
-  const updatedJsExtension =
-    typeof updatedConfig.output?.filename?.js === 'string' &&
-    updatedConfig.output?.filename?.js
-      ? extname(updatedConfig.output.filename.js)
+  // will be returned to use in redirect feature
+  // only support string type for now since we can not get the return value of function
+  const finalJsExtension =
+    typeof userJsFilename === 'string' && userJsFilename
+      ? extname(userJsFilename)
       : jsExtension;
 
+  const finalConfig = userJsFilename
+    ? {}
+    : {
+        output: {
+          filename: {
+            js: defaultJsFilename,
+          },
+        },
+      };
+
   return {
-    config: updatedConfig,
-    jsExtension: updatedJsExtension,
+    config: finalConfig,
+    jsExtension: finalJsExtension,
     dtsExtension,
   };
 };

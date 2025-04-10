@@ -1,5 +1,9 @@
 import { extname, join } from 'node:path';
-import { buildAndGetResults, queryContent } from 'test-helper';
+import {
+  buildAndGetResults,
+  generateFileTree,
+  queryContent,
+} from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
 describe('autoExtension: true', () => {
@@ -52,6 +56,22 @@ describe('should respect output.filename.js and output.filenameHash to override 
     expect(entryFiles.cjs1).toMatchInlineSnapshot(
       `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename-hash/index.df02628a.js"`,
     );
+
+    // override different file types with function
+    const fileTree = generateFileTree(
+      join(fixturePath, './dist/cjs-override-filename-function'),
+    );
+    expect(fileTree).toMatchInlineSnapshot(`
+      {
+        "bar-image.js": "<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename-function/bar-image.js",
+        "bar-index.js": "<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename-function/bar-index.js",
+        "static": {
+          "image": {
+            "foo-image.png": "<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename-function/static/image/foo-image.png",
+          },
+        },
+      }
+    `);
   });
 
   test('type is module', async () => {
@@ -71,6 +91,22 @@ describe('should respect output.filename.js and output.filenameHash to override 
     expect(entryFiles.cjs1).toMatchInlineSnapshot(
       `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/cjs-override-filename-hash/index.df02628a.js"`,
     );
+
+    // override different file types with function
+    const fileTree = generateFileTree(
+      join(fixturePath, './dist/esm-override-filename-function'),
+    );
+    expect(fileTree).toMatchInlineSnapshot(`
+      {
+        "bar-image.js": "<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename-function/bar-image.js",
+        "bar-index.js": "<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename-function/bar-index.js",
+        "static": {
+          "image": {
+            "foo-image.png": "<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename-function/static/image/foo-image.png",
+          },
+        },
+      }
+    `);
   });
 });
 

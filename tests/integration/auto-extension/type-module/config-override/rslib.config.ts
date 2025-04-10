@@ -41,6 +41,30 @@ export default defineConfig({
         },
       },
     }),
+    generateBundleEsmConfig({
+      output: {
+        filename: {
+          image: () => {
+            return 'foo-[name][ext]';
+          },
+          js: () => {
+            return 'bar-[name].js';
+          },
+        },
+        distPath: {
+          root: './dist/esm-override-filename-function',
+        },
+      },
+      bundle: false,
+      source: {
+        entry: {
+          index: [
+            '../../__fixtures__/src/index.ts',
+            '../../__fixtures__/src/image.png',
+          ],
+        },
+      },
+    }),
   ],
   source: {
     entry: {
