@@ -13,7 +13,6 @@ export default defineConfig({
   icon: 'https://assets.rspack.dev/rslib/rslib-logo-192x192.png',
   logo: 'https://assets.rspack.dev/rslib/rslib-logo-192x192.png',
   logoText: 'Rslib',
-  ssg: true,
   markdown: {
     checkDeadLinks: true,
   },
