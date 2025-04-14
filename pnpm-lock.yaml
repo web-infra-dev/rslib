@@ -508,8 +508,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0(@rsbuild/core@1.3.5)
       '@rsbuild/plugin-svgr':
-        specifier: ^1.1.1
-        version: 1.1.1(@rsbuild/core@1.3.5)(typescript@5.8.3)
+        specifier: ^1.2.0
+        version: 1.2.0(@rsbuild/core@1.3.5)(typescript@5.8.3)
 
   tests/integration/async-chunks/default: {}
 
@@ -605,8 +605,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0(@rsbuild/core@1.3.5)
       '@rsbuild/plugin-svgr':
-        specifier: ^1.1.1
-        version: 1.1.1(@rsbuild/core@1.3.5)(typescript@5.8.3)
+        specifier: ^1.2.0
+        version: 1.2.0(@rsbuild/core@1.3.5)(typescript@5.8.3)
 
   tests/integration/cli/build: {}
 
@@ -2334,8 +2334,8 @@ packages:
     peerDependencies:
       '@rsbuild/core': 1.x
 
-  '@rsbuild/plugin-svgr@1.1.1':
-    resolution: {integrity: sha512-exQ58+Knf1LbbvWKRu1C+tg4F3wkebuno7N2X0w+jgXR6f+9oRxJn958iOGN8O3PalG+2OT1sWmTp7TdoNU7dg==}
+  '@rsbuild/plugin-svgr@1.2.0':
+    resolution: {integrity: sha512-J0XEqp++cXnzVpVXsq92H6S6VXYMuGjlw07Juh73tMpxlJdPsv95ULUoiCHmuTwUeTZMRfVMamTxz03/owYYSg==}
     peerDependencies:
       '@rsbuild/core': 1.x
 
@@ -4860,6 +4860,10 @@ packages:
   loader-utils@2.0.4:
     resolution: {integrity: sha512-xXqpXoINfFhgua9xiqD8fPFHgkoq1mmmpE92WlDbm9rNRd/EbRb+Gqf908T2DMfuHjjJlksiK2RbHVOdD/MqSw==}
     engines: {node: '>=8.9.0'}
+
+  loader-utils@3.3.1:
+    resolution: {integrity: sha512-FMJTLMXfCLMLfJxcX9PFqX5qD88Z5MRGaZCVzfuqeZSPsyiBzs+pahDQjbIWz2QIzPZz0NX9Zy4FX3lmK6YHIg==}
+    engines: {node: '>= 12.13.0'}
 
   locate-path@5.0.0:
     resolution: {integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==}
@@ -8453,7 +8457,7 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rsbuild/plugin-svgr@1.1.1(@rsbuild/core@1.3.5)(typescript@5.8.3)':
+  '@rsbuild/plugin-svgr@1.2.0(@rsbuild/core@1.3.5)(typescript@5.8.3)':
     dependencies:
       '@rsbuild/core': 1.3.5
       '@rsbuild/plugin-react': 1.2.0(@rsbuild/core@1.3.5)
@@ -8461,7 +8465,7 @@ snapshots:
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.8.3))
       '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.8.3))(typescript@5.8.3)
       deepmerge: 4.3.1
-      loader-utils: 2.0.4
+      loader-utils: 3.3.1
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -11292,6 +11296,8 @@ snapshots:
       big.js: 5.2.2
       emojis-list: 3.0.0
       json5: 2.2.3
+
+  loader-utils@3.3.1: {}
 
   locate-path@5.0.0:
     dependencies:
