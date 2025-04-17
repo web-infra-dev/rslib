@@ -1,10 +1,5 @@
 import { join, relative } from 'node:path';
-import {
-  Extractor,
-  ExtractorConfig,
-  ExtractorLogLevel,
-  type ExtractorResult,
-} from '@microsoft/api-extractor';
+import type * as ApiExtractor from '@microsoft/api-extractor';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import type { DtsEntry } from './index';
@@ -25,6 +20,16 @@ export type BundleOptions = {
 };
 
 export async function bundleDts(options: BundleOptions): Promise<void> {
+  let apiExtractor: typeof ApiExtractor | undefined = undefined;
+  try {
+    apiExtractor = await import('@microsoft/api-extractor');
+  } catch {
+    throw new Error(
+      `${color.cyan('@microsoft/api-extractor')} is required when ${color.cyan('dts.bundle')} is set to ${color.cyan('true')}, please make sure it is installed. You could check https://lib.rsbuild.dev/guide/advanced/dts#how-to-generate-declaration-files-in-rslib for more details.`,
+    );
+  }
+
+  const { Extractor, ExtractorConfig, ExtractorLogLevel } = apiExtractor!;
   const {
     name,
     cwd,
@@ -65,7 +70,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
           packageJsonFullPath: join(cwd, 'package.json'),
         });
 
-        const extractorResult: ExtractorResult = Extractor.invoke(
+        const extractorResult: ApiExtractor.ExtractorResult = Extractor.invoke(
           extractorConfig,
           {
             localBuild: true,
