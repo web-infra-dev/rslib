@@ -48,10 +48,10 @@
       groupSlug: 'types',
     },
     {
-      groupName: 'all patch dependencies',
-      groupSlug: 'all-patch',
+      groupName: 'all non-major dependencies',
+      groupSlug: 'all-non-major',
       matchPackageNames: ['**'],
-      matchUpdateTypes: ['patch'],
+      matchUpdateTypes: ['patch', 'minor'],
     },
     // manually update peer dependencies
     {
