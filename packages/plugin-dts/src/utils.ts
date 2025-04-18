@@ -378,9 +378,7 @@ export async function processDtsFiles(
     );
   }
 
-  const dtsFiles = await glob(convertPath(join(dir, '/**/*.d.ts')), {
-    absolute: true,
-  });
+  const dtsFiles = await globDtsFiles(dir);
 
   await Promise.all(
     dtsFiles.map(async (file) => {
@@ -399,9 +397,6 @@ export async function processDtsFiles(
             rootDir,
           );
         }
-
-        const newFile = file.replace('.d.ts', dtsExtension);
-        await fsP.rename(file, newFile);
       } catch (error) {
         logger.error(`Failed to rename declaration file ${file}: ${error}`);
       }
@@ -471,15 +466,19 @@ export async function calcLongestCommonPath(
   return lca;
 }
 
-export async function cleanDtsFiles(dir: string): Promise<void> {
+export const globDtsFiles = async (dir: string): Promise<string[]> => {
   const patterns = ['/**/*.d.ts', '/**/*.d.cts', '/**/*.d.mts'];
-  const files = await Promise.all(
+  const dtsFiles = await Promise.all(
     patterns.map((pattern) =>
       glob(convertPath(join(dir, pattern)), { absolute: true }),
     ),
   );
 
-  const allFiles = files.flat();
+  return dtsFiles.flat();
+};
+
+export async function cleanDtsFiles(dir: string): Promise<void> {
+  const allFiles = await globDtsFiles(dir);
 
   await Promise.all(allFiles.map((file) => fsP.rm(file, { force: true })));
 }

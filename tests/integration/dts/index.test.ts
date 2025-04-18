@@ -90,10 +90,14 @@ describe('dts when bundle: false', () => {
 
     expect(files.cjs).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/index.d.cts",
-        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/sum.d.cts",
-        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/utils/numbers.d.cts",
-        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/utils/strings.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/index.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/sum.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/utils/numbers.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/utils/strings.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/utils/strings.d.ts",
       ]
     `);
   });
@@ -421,6 +425,21 @@ describe('dts when build: true', () => {
     expect(existsSync(buildInfoPath)).toBeTruthy();
   });
 
+  test('autoExtension: true', async () => {
+    const fixturePath = join(__dirname, 'build', 'auto-extension');
+    const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/build/auto-extension/dist/types/index.d.cts",
+        "<ROOT>/tests/integration/dts/build/auto-extension/dist/types/sum.d.cts",
+      ]
+    `);
+
+    const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
+    expect(existsSync(buildInfoPath)).toBeTruthy();
+  });
+
   test('process files - auto extension and banner / footer', async () => {
     const fixturePath = join(__dirname, 'build', 'process-files');
     const { contents } = await buildAndGetResults({
@@ -561,6 +580,20 @@ describe('dts when composite: true', () => {
 
     const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
     expect(existsSync(buildInfoPath)).toBeTruthy();
+  });
+
+  test('autoExtension: true', async () => {
+    const fixturePath = join(__dirname, 'composite', 'auto-extension');
+    const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/composite/auto-extension/dist/types/index.d.cts",
+        "<ROOT>/tests/integration/dts/composite/auto-extension/dist/types/sum.d.cts",
+        "<ROOT>/tests/integration/dts/composite/auto-extension/dist/types/utils/numbers.d.cts",
+        "<ROOT>/tests/integration/dts/composite/auto-extension/dist/types/utils/strings.d.cts",
+      ]
+    `);
   });
 
   test('process files - auto extension and banner / footer', async () => {
