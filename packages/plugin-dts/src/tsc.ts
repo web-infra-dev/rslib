@@ -165,13 +165,44 @@ export async function emitDts(
     }
   };
 
-  const system = { ...ts.sys };
+  const renameDtsFile = (fileName: string): string => {
+    if (bundle) {
+      return fileName;
+    }
+    return fileName.replace(/\.d\.ts$/, dtsExtension);
+  };
+
+  const system: ts.System = {
+    ...ts.sys,
+    writeFile: (fileName, contents, writeByteOrderMark) => {
+      ts.sys.writeFile(renameDtsFile(fileName), contents, writeByteOrderMark);
+    },
+  };
 
   // build mode
   if (!isWatch) {
     // normal build - npx tsc
     if (!build && !compilerOptions.composite) {
-      const host: ts.CompilerHost = ts.createCompilerHost(compilerOptions);
+      const originHost: ts.CompilerHost =
+        ts.createCompilerHost(compilerOptions);
+      const host: ts.CompilerHost = {
+        ...originHost,
+        writeFile: (
+          fileName,
+          contents,
+          writeByteOrderMark,
+          onError,
+          sourceFiles,
+        ) => {
+          originHost.writeFile(
+            renameDtsFile(fileName),
+            contents,
+            writeByteOrderMark,
+            onError,
+            sourceFiles,
+          );
+        },
+      };
 
       const program: ts.Program = ts.createProgram({
         rootNames: fileNames,
@@ -202,8 +233,26 @@ export async function emitDts(
       );
     } else if (!build && compilerOptions.composite) {
       // incremental build with composite true - npx tsc
-      const host: ts.CompilerHost =
+      const originHost: ts.CompilerHost =
         ts.createIncrementalCompilerHost(compilerOptions);
+      const host: ts.CompilerHost = {
+        ...originHost,
+        writeFile: (
+          fileName,
+          contents,
+          writeByteOrderMark,
+          onError,
+          sourceFiles,
+        ) => {
+          originHost.writeFile(
+            renameDtsFile(fileName),
+            contents,
+            writeByteOrderMark,
+            onError,
+            sourceFiles,
+          );
+        },
+      };
 
       const program = ts.createIncrementalProgram({
         rootNames: fileNames,

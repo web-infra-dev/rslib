@@ -90,10 +90,14 @@ describe('dts when bundle: false', () => {
 
     expect(files.cjs).toMatchInlineSnapshot(`
       [
-        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/index.d.cts",
-        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/sum.d.cts",
-        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/utils/numbers.d.cts",
-        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/cjs/utils/strings.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/index.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/sum.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/utils/numbers.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/utils/strings.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/auto-extension/dist/types/utils/strings.d.ts",
       ]
     `);
   });

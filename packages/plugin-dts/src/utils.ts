@@ -378,7 +378,7 @@ export async function processDtsFiles(
     );
   }
 
-  const dtsFiles = await glob(convertPath(join(dir, '/**/*.d.ts')), {
+  const dtsFiles = await glob(convertPath(join(dir, '/**/*.d.{ts,cts,mts}')), {
     absolute: true,
   });
 
@@ -399,9 +399,6 @@ export async function processDtsFiles(
             rootDir,
           );
         }
-
-        const newFile = file.replace('.d.ts', dtsExtension);
-        await fsP.rename(file, newFile);
       } catch (error) {
         logger.error(`Failed to rename declaration file ${file}: ${error}`);
       }

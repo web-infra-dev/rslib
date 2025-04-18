@@ -5,11 +5,17 @@ export default defineConfig({
   lib: [
     generateBundleEsmConfig({
       bundle: false,
+      dts: {
+        autoExtension: true,
+        distPath: './dist/types',
+        bundle: false,
+      },
     }),
     generateBundleCjsConfig({
       bundle: false,
       dts: {
         autoExtension: true,
+        distPath: './dist/types',
         bundle: false,
       },
     }),
