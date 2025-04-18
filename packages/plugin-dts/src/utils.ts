@@ -416,12 +416,20 @@ export function processSourceEntry(
     entryConfig &&
     Object.values(entryConfig).every((val) => typeof val === 'string')
   ) {
-    return Object.entries(entryConfig as Record<string, string>).map(
+    const entries = Object.entries(entryConfig as Record<string, string>).map(
       ([name, path]) => ({
         name,
         path,
       }),
     );
+
+    if (entries.length === 0) {
+      throw new Error(
+        `Can not find a valid entry for ${color.cyan('dts.bundle')} option, please check your entry config.`,
+      );
+    }
+
+    return entries;
   }
 
   throw new Error(

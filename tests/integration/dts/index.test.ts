@@ -381,6 +381,21 @@ describe('dts when bundle: true', () => {
 
     expect([indexEsm, indexCjs, sumEsm, sumCjs]).toMatchSnapshot();
   });
+
+  test('can not find a valid entry', async () => {
+    const fixturePath = join(__dirname, 'bundle', 'no-entry');
+    const { restore } = proxyConsole();
+
+    try {
+      await buildAndGetResults({ fixturePath, type: 'dts' });
+    } catch (err: any) {
+      expect(stripAnsi(err.message)).toMatchInlineSnapshot(
+        `"Can not find a valid entry for dts.bundle option, please check your entry config."`,
+      );
+    }
+
+    restore();
+  });
 });
 
 describe('dts when build: true', () => {
