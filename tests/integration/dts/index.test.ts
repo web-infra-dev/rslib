@@ -385,7 +385,7 @@ describe('dts when bundle: true', () => {
     try {
       await buildAndGetResults({ fixturePath, type: 'dts' });
     } catch (err: any) {
-      expect(err.message).toMatchInlineSnapshot(
+      expect(stripAnsi(err.message)).toMatchInlineSnapshot(
         `"Can not find a valid entry for dts.bundle option, please check your entry config."`,
       );
     }
