@@ -1,5 +1,5 @@
 import { defineConfig } from '@rslib/core';
-import { generateBundleEsmConfig } from 'test-helper';
+import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
@@ -47,7 +47,23 @@ export default defineConfig({
       },
       output: {
         distPath: {
-          root: './dist/auto-extension-true/esm',
+          root: './dist/auto-extension-true',
+        },
+      },
+      redirect: {
+        dts: {
+          extension: true,
+        },
+      },
+    }),
+    // 4 - extension: true with dts.autoExtension true
+    generateBundleCjsConfig({
+      dts: {
+        autoExtension: true,
+      },
+      output: {
+        distPath: {
+          root: './dist/auto-extension-true',
         },
       },
       redirect: {

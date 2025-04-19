@@ -141,15 +141,22 @@ test('redirect.dts.extension true', async () => {
 test('redirect.dts.extension true with dts.autoExtension true', async () => {
   expect(contents.esm3).toMatchInlineSnapshot(`
     {
-      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/esm/foo/foo.d.mts": "import { logRequest } from '../logger.mjs';
-    import { logger } from '../../../../compile/rslog';
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/foo/foo.d.mts": "import { logRequest } from '../logger.mjs';
+    import { logger } from '../../../compile/rslog';
     import { logRequest as logRequest2 } from '../logger.mjs';
     export { logRequest, logRequest2, logger };
     ",
-      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/esm/foo/index.d.mts": "export type Barrel = string;
-    ",
-      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/esm/index.d.mts": "import { logRequest } from './logger.mjs';
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/foo/foo.d.ts": "import { logRequest } from '../logger.js';
     import { logger } from '../../../compile/rslog';
+    import { logRequest as logRequest2 } from '../logger.js';
+    export { logRequest, logRequest2, logger };
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/foo/index.d.mts": "export type Barrel = string;
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/foo/index.d.ts": "export type Barrel = string;
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/index.d.mts": "import { logRequest } from './logger.mjs';
+    import { logger } from '../../compile/rslog';
     import type { LoggerOptions } from './types.mjs';
     import { defaultOptions } from './types.mjs';
     export { logRequest, logger, type LoggerOptions, defaultOptions };
@@ -158,14 +165,43 @@ test('redirect.dts.extension true with dts.autoExtension true', async () => {
     export * from './foo/index.mjs';
     export * from './foo/index.mjs';
     export * from './types.mjs';
-    export * from '../../../compile/rslog';
+    export * from '../../compile/rslog';
     export * from './logger.mjs';
     ",
-      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/esm/logger.d.mts": "import type { Request } from 'express';
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/index.d.ts": "import { logRequest } from './logger.js';
+    import { logger } from '../../compile/rslog';
+    import type { LoggerOptions } from './types.js';
+    import { defaultOptions } from './types.js';
+    export { logRequest, logger, type LoggerOptions, defaultOptions };
+    export type { Foo } from './types.js';
+    export type { Bar } from './types.js';
+    export * from './foo/index.js';
+    export * from './foo/index.js';
+    export * from './types.js';
+    export * from '../../compile/rslog';
+    export * from './logger.js';
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/logger.d.mts": "import type { Request } from 'express';
     import type { LoggerOptions } from './types.mjs';
     export declare function logRequest(req: Request, options: LoggerOptions): void;
     ",
-      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/esm/types.d.mts": "export interface LoggerOptions {
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/logger.d.ts": "import type { Request } from 'express';
+    import type { LoggerOptions } from './types.js';
+    export declare function logRequest(req: Request, options: LoggerOptions): void;
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/types.d.mts": "export interface LoggerOptions {
+        logLevel: 'info' | 'debug' | 'warn' | 'error';
+        logBody: boolean;
+    }
+    export declare const defaultOptions: LoggerOptions;
+    export interface Foo {
+        foo: string;
+    }
+    export interface Bar {
+        bar: string;
+    }
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/types.d.ts": "export interface LoggerOptions {
         logLevel: 'info' | 'debug' | 'warn' | 'error';
         logBody: boolean;
     }
