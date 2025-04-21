@@ -187,11 +187,7 @@ async function addExtension(
   let redirectPath = path;
 
   // Only add extension if redirectPath is an absolute or relative path
-  if (
-    !isAbsolute(redirectPath) &&
-    !redirectPath.startsWith('./') &&
-    !redirectPath.startsWith('../')
-  ) {
+  if (!isAbsolute(redirectPath) && !redirectPath.startsWith('.')) {
     return redirectPath;
   }
 
