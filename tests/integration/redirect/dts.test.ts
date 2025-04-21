@@ -9,7 +9,7 @@ beforeAll(async () => {
   contents = (await buildAndGetResults({ fixturePath, type: 'dts' })).contents;
 });
 
-test('redirect.dts default - redirect.dts.path: true with redirect.dts.extension: false', async () => {
+test('redirect.dts.path: true with redirect.dts.extension: false - default', async () => {
   expect(contents.esm0).toMatchInlineSnapshot(`
     {
       "<ROOT>/tests/integration/redirect/dts/dist/default/esm/foo/foo.d.ts": "import { logRequest } from '../logger';
