@@ -5,6 +5,7 @@ import path, {
   basename,
   dirname,
   extname,
+  isAbsolute,
   join,
   normalize,
   relative,
@@ -185,10 +186,19 @@ async function addExtension(
 
   let redirectPath = path;
 
+  // Only add extension if redirectPath is an absolute or relative path
+  if (
+    !isAbsolute(redirectPath) &&
+    !redirectPath.startsWith('./') &&
+    !redirectPath.startsWith('../')
+  ) {
+    return redirectPath;
+  }
+
   // If the import path refers to a directory, it most likely actually refers to a `index.*` file due to Node's module resolution
   if (await isDirectory(join(dirname(dtsFile), redirectPath))) {
     // This uses `/` instead of `path.join` here because `join` removes potential "./" prefixes
-    redirectPath = `${redirectPath}/index`;
+    redirectPath = `${redirectPath.replace(/\/+$/, '')}/index`;
   }
 
   return `${redirectPath}${extension}`;
@@ -277,9 +287,12 @@ export async function redirectDtsImports(
       let redirectImportPath = importPath;
 
       if (absoluteImportPath && redirect.path) {
-        const isOutsideRootdir = !normalize(absoluteImportPath).startsWith(
-          normalize(rootDir) + path.sep,
+        const relativeRootDir = path.relative(
+          normalize(rootDir),
+          normalize(absoluteImportPath),
         );
+        const isOutsideRootdir =
+          relativeRootDir.startsWith('..') || path.isAbsolute(relativeRootDir);
 
         if (isOutsideRootdir) {
           const relativePath = relative(dirname(dtsFile), absoluteImportPath);

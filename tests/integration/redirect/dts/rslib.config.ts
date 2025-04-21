@@ -3,7 +3,7 @@ import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
-    // 0 - default
+    // 0 - default - path: true extension: false
     generateBundleEsmConfig({
       dts: true,
       output: {
@@ -12,7 +12,7 @@ export default defineConfig({
         },
       },
     }),
-    // 1 - path: false
+    // 1 - path: false extension: false
     generateBundleEsmConfig({
       dts: true,
       output: {
@@ -26,7 +26,7 @@ export default defineConfig({
         },
       },
     }),
-    // 2 - extension: true
+    // 2 - path: true extension: true
     generateBundleEsmConfig({
       dts: true,
       output: {
@@ -40,7 +40,22 @@ export default defineConfig({
         },
       },
     }),
-    // 3 - extension: true with dts.autoExtension true
+    // 3 - path: false extension: true
+    generateBundleEsmConfig({
+      dts: true,
+      output: {
+        distPath: {
+          root: './dist/path-false-extension-true/esm',
+        },
+      },
+      redirect: {
+        dts: {
+          path: false,
+          extension: true,
+        },
+      },
+    }),
+    // 4 - extension: true with dts.autoExtension true
     generateBundleEsmConfig({
       dts: {
         autoExtension: true,
@@ -56,7 +71,7 @@ export default defineConfig({
         },
       },
     }),
-    // 4 - extension: true with dts.autoExtension true
+    // 5 - extension: true with dts.autoExtension true
     generateBundleCjsConfig({
       dts: {
         autoExtension: true,

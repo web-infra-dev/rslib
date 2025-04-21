@@ -15,3 +15,7 @@ export interface Foo {
 export interface Bar {
   bar: string;
 }
+
+export interface Baz {
+  baz: string;
+}
