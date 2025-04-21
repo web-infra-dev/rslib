@@ -33,8 +33,7 @@ test('0. default', async () => {
     /cjs\/module\/index\.cjs/,
   );
   expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE__index_module_js_6796f91d__ from "./index.module.js";
-    __WEBPACK_EXTERNAL_MODULE__index_module_js_6796f91d__["default"];
+    "import default_0 from "./index.module.js";
     "
   `);
   expect(cssModuleIndexCjs).toContain(
@@ -66,8 +65,7 @@ test('1. style.path: false', () => {
     /cjs\/module\/index\.cjs/,
   );
   expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE__module_index_module_js_37f93df7__ from "@/module/index.module.js";
-    __WEBPACK_EXTERNAL_MODULE__module_index_module_js_37f93df7__["default"];
+    "import default_0 from "@/module/index.module.js";
     "
   `);
   expect(cssModuleIndexCjs).toContain(
@@ -99,8 +97,7 @@ test('2. style.extension: false', async () => {
     /cjs\/module\/index\.cjs/,
   );
   expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE__index_module_less_d1c6f702__ from "./index.module.less";
-    __WEBPACK_EXTERNAL_MODULE__index_module_less_d1c6f702__["default"];
+    "import default_0 from "./index.module.less";
     "
   `);
   expect(cssModuleIndexCjs).toContain(
@@ -132,8 +129,7 @@ test('3. style.path: false, style.extension: false', async () => {
     /cjs\/module\/index\.cjs/,
   );
   expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE__module_index_module_less_80aa7a8a__ from "@/module/index.module.less";
-    __WEBPACK_EXTERNAL_MODULE__module_index_module_less_80aa7a8a__["default"];
+    "import default_0 from "@/module/index.module.less";
     "
   `);
   expect(cssModuleIndexCjs).toContain(

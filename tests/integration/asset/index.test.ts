@@ -35,8 +35,8 @@ test('set the size threshold to inline static assets', async () => {
   const { content: indexJs2 } = queryContent(contents.esm2!, /index\.js/);
   const { content: logoJs2 } = queryContent(contents.esm2!, /assets\/logo\.js/);
   expect(indexJs2).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE__assets_logo_js_450929b7__ from "./assets/logo.js";
-    const src = __WEBPACK_EXTERNAL_MODULE__assets_logo_js_450929b7__["default"];
+    "import default_0 from "./assets/logo.js";
+    const src = default_0;
     export { src as default };
     "
   `);

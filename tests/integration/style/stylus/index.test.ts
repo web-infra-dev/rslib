@@ -101,7 +101,7 @@ test('should extract css with pluginStylus in bundle-false', async () => {
   );
   expectFileContainContent(jsContents.esm, 'index.js', [
     'import "./a.css"',
-    'import * as __WEBPACK_EXTERNAL_MODULE__b_module_js_6a8a3e41__ from "./b.module.js"',
+    'import default_0 from "./b.module.js',
   ]);
 
   expect(cjsCssFiles).toMatchInlineSnapshot(`
