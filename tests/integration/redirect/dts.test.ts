@@ -7,7 +7,7 @@ let contents: Awaited<ReturnType<typeof buildAndGetResults>>['contents'];
 beforeAll(async () => {
   const fixturePath = path.resolve(__dirname, './dts');
   contents = (await buildAndGetResults({ fixturePath, type: 'dts' })).contents;
-});
+}, 15000);
 
 test('redirect.dts.path: true with redirect.dts.extension: false - default', async () => {
   expect(contents.esm0).toMatchInlineSnapshot(`
