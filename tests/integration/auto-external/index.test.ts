@@ -8,7 +8,9 @@ test('auto external default should works', async () => {
   const fixturePath = join(__dirname, 'default');
   const { js, dts } = await buildAndGetResults({ fixturePath, type: 'all' });
 
-  expect(js.entries.esm).toContain('import default_0 from "react"');
+  expect(js.entries.esm).toContain(
+    'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
+  );
 
   expect(js!.entries.cjs).toContain(
     'const external_react_namespaceObject = require("react");',
@@ -23,8 +25,12 @@ test('auto external sub path should works', async () => {
   const fixturePath = join(__dirname, 'external-sub-path');
   const { entries } = await buildAndGetResults({ fixturePath });
 
-  expect(entries.esm).toContain('import default_0 from "react"');
-  expect(entries.esm).toContain('import default_1 from "react/jsx-runtime"');
+  expect(entries.esm).toContain(
+    'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
+  );
+  expect(entries.esm).toContain(
+    'import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__ from "react/jsx-runtime"',
+  );
 
   expect(entries.cjs).toContain(
     'const external_react_namespaceObject = require("react");',
@@ -39,7 +45,7 @@ test('auto external should be disabled when bundle is false', async () => {
   const { js } = await buildAndGetResults({ fixturePath, type: 'all' });
 
   expect(Object.values(js.contents.esm)[0]).toContain(
-    'import default_0 from "react"',
+    'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
   );
 
   expect(Object.values(js.contents.cjs)[0]).toContain(
@@ -51,7 +57,9 @@ test('auto external false should works', async () => {
   const fixturePath = join(__dirname, 'false');
   const { js, dts } = await buildAndGetResults({ fixturePath, type: 'all' });
 
-  expect(js.entries.esm).not.toContain('import default_0 from "react"');
+  expect(js.entries.esm).not.toContain(
+    'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
+  );
 
   expect(js.entries.cjs).not.toContain(
     'const external_react_namespaceObject = require("react");',
@@ -66,7 +74,9 @@ test('externals should overrides auto external', async () => {
   const fixturePath = join(__dirname, 'with-externals');
   const { entries } = await buildAndGetResults({ fixturePath });
 
-  expect(entries.esm).toContain('import default_0 from "react1"');
+  expect(entries.esm).toContain(
+    'import * as __WEBPACK_EXTERNAL_MODULE_react1__ from "react1"',
+  );
 
   expect(entries.cjs).toContain(
     'const external_react1_namespaceObject = require("react1");',

@@ -15,9 +15,9 @@ test('auto externalize Node.js built-in modules when `output.target` is "node"',
   const { entries } = await buildAndGetResults({ fixturePath });
 
   for (const external of [
-    'import default_0 from "fs"',
-    'import default_1 from "node:assert"',
-    'import default_2 from "react"',
+    'import * as __WEBPACK_EXTERNAL_MODULE_fs__ from "fs"',
+    'import * as __WEBPACK_EXTERNAL_MODULE_node_assert_3e74d44e__ from "node:assert"',
+    'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
     'import * as __WEBPACK_EXTERNAL_MODULE_bar__ from "bar"',
     'module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("foo");',
   ]) {
@@ -86,11 +86,11 @@ test('user externals', async () => {
   const { entries, contents } = await buildAndGetResults({ fixturePath });
   expect(entries.esm0).toMatchInlineSnapshot(
     `
-    "import default_0 from "node:fs";
-    import default_1 from "lodash";
-    import default_2 from "lodash/zip";
+    "import * as __WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__ from "node:fs";
+    import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__ from "lodash/zip";
     const foo = 'foo';
-    console.log(default_0, default_1.add, default_2, foo);
+    console.log(__WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__["default"], __WEBPACK_EXTERNAL_MODULE_lodash__["default"].add, __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__["default"], foo);
     "
   `,
   );
@@ -98,11 +98,11 @@ test('user externals', async () => {
   expect(
     queryContent(contents.esm1!, 'index.js', { basename: true }).content,
   ).toMatchInlineSnapshot(`
-    "import default_0 from "node:fs";
-    import default_1 from "lodash";
-    import default_2 from "lodash/zip";
-    import { foo } from "./foo2";
-    console.log(default_0, default_1.add, default_2, foo);
+    "import * as __WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__ from "node:fs";
+    import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__ from "lodash/zip";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo2_1d132755__ from "./foo2";
+    console.log(__WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__["default"], __WEBPACK_EXTERNAL_MODULE_lodash__["default"].add, __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__["default"], __WEBPACK_EXTERNAL_MODULE__foo2_1d132755__.foo);
     "
   `);
 });

@@ -27,7 +27,9 @@ test('source.alias', async () => {
   expect(indexBundleCjsContent).toContain('hello world');
 
   // bundleless mode
-  expect(indexBundlelessEsmContent).toContain('import { a } from "./a.js";');
+  expect(indexBundlelessEsmContent).toContain(
+    'import * as __WEBPACK_EXTERNAL_MODULE__a_js_256e6de1__ from "./a.js";',
+  );
   expect(indexBundlelessCjsContent).toContain(
     'const external_a_cjs_namespaceObject = require("./a.cjs");',
   );
