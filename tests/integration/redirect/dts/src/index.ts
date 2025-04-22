@@ -3,8 +3,10 @@ import { logger } from 'rslog';
 import type { Baz } from 'self-entry';
 import type { LoggerOptions } from './types';
 import { defaultOptions } from './types.js';
+import sources = require('@src/logger');
 
 export {
+  sources,
   type Baz as self,
   logRequest,
   logger,
