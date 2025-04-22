@@ -15,8 +15,8 @@ test('import.meta.url should be preserved', async () => {
     }
   `);
   expect(entries.esm).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE_node_url_e96de089__ from "node:url";
-    const packageDirectory = __WEBPACK_EXTERNAL_MODULE_node_url_e96de089__["default"].fileURLToPath(new URL('.', import.meta.url));
+    "import default_0 from "node:url";
+    const packageDirectory = default_0.fileURLToPath(new URL('.', import.meta.url));
     const foo = 'foo';
     export { foo, packageDirectory };
     "
