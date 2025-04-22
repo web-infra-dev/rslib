@@ -13,11 +13,11 @@ test('redirect.js default', async () => {
   );
 
   expect(indexContent).toMatchInlineSnapshot(`
-    "import default_0 from "lodash";
-    import default_1 from "prettier";
-    import default_2 from "./bar.js";
-    import default_3 from "./foo.js";
-    const src = default_0.toUpper(default_3 + default_2 + typeof default_1.version);
+    "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
+    import * as __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__ from "./bar.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
+    const src = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"] + typeof __WEBPACK_EXTERNAL_MODULE_prettier__["default"].version);
     export { src as default };
     "
   `);
@@ -34,11 +34,11 @@ test('redirect.js.path false', async () => {
   );
 
   expect(indexContent).toMatchInlineSnapshot(`
-    "import default_0 from "lodash";
-    import default_1 from "prettier";
-    import default_2 from "./bar.js";
-    import default_3 from "./foo.js";
-    const src = default_0.toUpper(default_3 + default_2 + typeof default_1.version);
+    "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
+    import * as __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__ from "./bar.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
+    const src = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"] + typeof __WEBPACK_EXTERNAL_MODULE_prettier__["default"].version);
     export { src as default };
     "
   `);
@@ -55,11 +55,11 @@ test('redirect.js.extension: false', async () => {
   );
 
   expect(indexContent).toMatchInlineSnapshot(`
-    "import default_0 from "lodash";
-    import default_1 from "prettier";
-    import default_2 from "./bar.js";
-    import default_3 from "./foo";
-    const src = default_0.toUpper(default_3 + default_2 + typeof default_1.version);
+    "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
+    import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
+    import * as __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__ from "./bar.js";
+    import * as __WEBPACK_EXTERNAL_MODULE__foo_23da6eef__ from "./foo";
+    const src = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_23da6eef__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"] + typeof __WEBPACK_EXTERNAL_MODULE_prettier__["default"].version);
     export { src as default };
     "
   `);
