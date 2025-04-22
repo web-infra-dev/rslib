@@ -24,7 +24,8 @@ test('redirect.dts.path: true with redirect.dts.extension: false - default', asy
     import type { Baz } from './';
     import type { LoggerOptions } from './types';
     import { defaultOptions } from './types.js';
-    export { type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    import sources = require('./logger');
+    export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
     export type { Foo } from './types';
     export type { Bar } from './types';
     export * from './foo';
@@ -71,7 +72,8 @@ test('redirect.dts.path: false with redirect.dts.extension: false', async () => 
     import type { Baz } from 'self-entry';
     import type { LoggerOptions } from './types';
     import { defaultOptions } from './types.js';
-    export { type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    import sources = require('@src/logger');
+    export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
     export type { Foo } from '@src/types';
     export type { Bar } from 'types';
     export * from './foo';
@@ -118,7 +120,8 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
     import type { Baz } from './index.js';
     import type { LoggerOptions } from './types.js';
     import { defaultOptions } from './types.js';
-    export { type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    import sources = require('./logger.js');
+    export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
     export type { Foo } from './types.js';
     export type { Bar } from './types.js';
     export * from './foo/index.js';
@@ -165,7 +168,8 @@ test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
     import type { Baz } from 'self-entry';
     import type { LoggerOptions } from './types.js';
     import { defaultOptions } from './types.js';
-    export { type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    import sources = require('@src/logger');
+    export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
     export type { Foo } from '@src/types';
     export type { Bar } from 'types';
     export * from './foo/index.js';
@@ -219,7 +223,8 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     import type { Baz } from './index.mjs';
     import type { LoggerOptions } from './types.mjs';
     import { defaultOptions } from './types.mjs';
-    export { type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    import sources = require('./logger.mjs');
+    export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
     export type { Foo } from './types.mjs';
     export type { Bar } from './types.mjs';
     export * from './foo/index.mjs';
@@ -233,7 +238,8 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     import type { Baz } from './index.js';
     import type { LoggerOptions } from './types.js';
     import { defaultOptions } from './types.js';
-    export { type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    import sources = require('./logger.js');
+    export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
     export type { Foo } from './types.js';
     export type { Bar } from './types.js';
     export * from './foo/index.js';

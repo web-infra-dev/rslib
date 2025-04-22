@@ -214,6 +214,7 @@ export async function redirectDtsImports(
   const matcher: NapiConfig = {
     rule: {
       any: [
+        // import foo from 'bar'
         {
           kind: 'import_statement',
           has: {
@@ -224,6 +225,21 @@ export async function redirectDtsImports(
             },
           },
         },
+        // import foo = require('bar')
+        {
+          kind: 'import_statement',
+          has: {
+            kind: 'import_require_clause',
+            has: {
+              field: 'source',
+              has: {
+                pattern: '$IMP',
+                kind: 'string_fragment',
+              },
+            },
+          },
+        },
+        // export { foo } from 'bar'
         {
           kind: 'export_statement',
           has: {
@@ -234,6 +250,7 @@ export async function redirectDtsImports(
             },
           },
         },
+        // require('foo') / import('foo')
         {
           any: [{ pattern: 'require($A)' }, { pattern: 'import($A)' }],
           has: {
