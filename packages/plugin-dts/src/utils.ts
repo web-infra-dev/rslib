@@ -371,8 +371,7 @@ export async function redirectDtsImports(
   }
 }
 
-export async function processDtsFiles(
-  bundle: boolean,
+export async function processBundlelessDtsFiles(
   dir: string,
   dtsExtension: string,
   redirect: DtsRedirect,
@@ -380,11 +379,8 @@ export async function processDtsFiles(
   rootDir: string,
   banner?: string,
   footer?: string,
+  resolveWatch?: () => void,
 ): Promise<void> {
-  if (bundle) {
-    return;
-  }
-
   let matchPath: MatchPath | undefined;
 
   if (redirect.path || redirect.extension) {
@@ -428,6 +424,8 @@ export async function processDtsFiles(
       }
     }),
   );
+
+  resolveWatch?.();
 }
 
 export function processSourceEntry(

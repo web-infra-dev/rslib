@@ -200,32 +200,43 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       .filter(Boolean) as Required<DtsEntry>[];
   }
 
-  const bundleDtsIfNeeded = async () => {
-    if (bundle === true) {
-      const { bundleDts } = await import('./apiExtractor');
-      await bundleDts({
-        name,
+  const bundleDtsFiles = async (resolveWatchCallback?: () => void) => {
+    const { bundleDts } = await import('./apiExtractor');
+    await bundleDts({
+      name,
+      cwd,
+      distPath: dtsEmitPath,
+      dtsEntry: dtsEntries,
+      tsconfigPath,
+      dtsExtension,
+      banner,
+      footer,
+      bundledPackages: calcBundledPackages({
+        autoExternal,
         cwd,
-        distPath: dtsEmitPath,
-        dtsEntry: dtsEntries,
-        tsconfigPath,
-        dtsExtension,
-        banner,
-        footer,
-        bundledPackages: calcBundledPackages({
-          autoExternal,
-          cwd,
-          userExternals,
-        }),
-      });
-    }
+        userExternals,
+      }),
+      resolveWatchCallback,
+    });
   };
 
-  const onComplete = async (isSuccess: boolean) => {
-    if (isSuccess) {
-      await bundleDtsIfNeeded();
-    }
+  let resolveWatchCallback: () => void;
+
+  const bundleDtsFunc = async () => {
+    await bundleDtsFiles(resolveWatchCallback);
   };
+
+  const resolveWatch = () => {
+    resolveWatchCallback();
+  };
+
+  const dtsCompletion = new Promise<void>((resolve) => {
+    if (isWatch) {
+      resolveWatchCallback = resolve;
+    } else {
+      resolve();
+    }
+  });
 
   await emitDts(
     {
@@ -240,15 +251,18 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       banner,
       footer,
     },
-    onComplete,
+    bundleDtsFunc,
+    resolveWatch,
     bundle,
     isWatch,
     build,
   );
 
-  if (!isWatch) {
-    await bundleDtsIfNeeded();
+  if (!isWatch && bundle) {
+    await bundleDtsFiles();
   }
+
+  await dtsCompletion;
 }
 
 process.on('message', async (data: DtsGenOptions) => {

@@ -17,6 +17,7 @@ export type BundleOptions = {
   dtsEntry: DtsEntry[];
   tsconfigPath?: string;
   bundledPackages?: string[];
+  resolveWatchCallback?: () => void;
 };
 
 export async function bundleDts(options: BundleOptions): Promise<void> {
@@ -40,6 +41,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     dtsEntry,
     tsconfigPath = 'tsconfig.json',
     bundledPackages = [],
+    resolveWatchCallback,
   } = options;
   try {
     await Promise.all(
@@ -102,6 +104,8 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
         );
       }),
     );
+
+    resolveWatchCallback?.();
   } catch (e) {
     throw new Error(`${logPrefixApiExtractor} ${e}`);
   }
