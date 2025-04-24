@@ -1,15 +1,17 @@
 import path from 'node:path';
 import { pluginSass } from '@rsbuild/plugin-sass';
+import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { defineConfig } from 'rspress/config';
 
 export default defineConfig({
-  plugins: [pluginFontOpenSans()],
+  plugins: [pluginFontOpenSans(), pluginLlms()],
   root: path.join(__dirname, 'docs'),
   lang: 'en',
   base: '/',
   title: 'Rslib',
+  description: 'Rsbuild-based library development tool',
   icon: 'https://assets.rspack.dev/rslib/rslib-logo-192x192.png',
   logo: 'https://assets.rspack.dev/rslib/rslib-logo-192x192.png',
   logoText: 'Rslib',
@@ -22,7 +24,7 @@ export default defineConfig({
   route: {
     cleanUrls: true,
     // exclude document fragments from routes
-    exclude: ['**/zh/shared/**', '**/en/shared/**', './theme'],
+    exclude: ['**/zh/shared/**', '**/en/shared/**'],
   },
   themeConfig: {
     socialLinks: [
