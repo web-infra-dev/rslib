@@ -11,7 +11,8 @@ export default defineConfig({
   lang: 'en',
   base: '/',
   title: 'Rslib',
-  description: 'Rsbuild-based library development tool',
+  description:
+    'Rslib is a library development tool that leverages the well-designed configurations and plugins of Rsbuild.',
   icon: 'https://assets.rspack.dev/rslib/rslib-logo-192x192.png',
   logo: 'https://assets.rspack.dev/rslib/rslib-logo-192x192.png',
   logoText: 'Rslib',
