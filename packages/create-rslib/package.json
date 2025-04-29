@@ -22,7 +22,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rslib build && pnpm generate-templates",
+    "build": "rslib build",
     "dev": "rslib build --watch",
     "generate-templates": "pnpm tsx ./src/genTemplates.ts",
     "start": "node ./dist/index.js",
