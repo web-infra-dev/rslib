@@ -111,7 +111,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       "plugins": [
         {
-          "name": "rsbuild:format",
+          "name": "rsbuild:disable-url-parse",
           "setup": [Function],
         },
         {
@@ -189,6 +189,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                   "requireAsExpression": false,
                   "requireDynamic": false,
                   "requireResolve": false,
+                  "worker": false,
                 },
               },
             },
@@ -366,6 +367,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           "setup": [Function],
         },
         {
+          "name": "rsbuild:disable-url-parse",
+          "setup": [Function],
+        },
+        {
           "name": "rsbuild:lib-asset",
           "pre": [
             "rsbuild:svgr",
@@ -441,6 +446,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                   "requireAsExpression": false,
                   "requireDynamic": false,
                   "requireResolve": false,
+                  "worker": false,
                 },
               },
             },
