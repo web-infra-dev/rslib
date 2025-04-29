@@ -29,9 +29,25 @@ const CASES_REACT = [
   '[react]-[vitest]-ts',
 ];
 
+const CASES_VUE = [
+  '[vue]-[]-js',
+  '[vue]-[]-ts',
+  '[vue]-[storybook,vitest]-js',
+  '[vue]-[storybook,vitest]-ts',
+  '[vue]-[storybook]-js',
+  '[vue]-[storybook]-ts',
+  '[vue]-[vitest]-js',
+  '[vue]-[vitest]-ts',
+];
+
 test('exhaust all cases', () => {
   expect(TEMPLATES.map(composeTemplateName).sort()).toEqual(
-    [...CASES_NODE_DUAL, ...CASES_NODE_ESM, ...CASES_REACT].sort(),
+    [
+      ...CASES_NODE_DUAL,
+      ...CASES_NODE_ESM,
+      ...CASES_REACT,
+      ...CASES_VUE,
+    ].sort(),
   );
 });
 
