@@ -576,6 +576,9 @@ const composeFormatConfig = ({
       importMeta: false,
       importDynamic: false,
     },
+    others: {
+      worker: false,
+    },
   } as const;
 
   switch (format) {
@@ -588,6 +591,7 @@ const composeFormatConfig = ({
                 javascript: {
                   ...jsParserOptions.esm,
                   ...jsParserOptions.cjs,
+                  ...jsParserOptions.others,
                 },
               },
             },
@@ -618,7 +622,11 @@ const composeFormatConfig = ({
           rspack: {
             module: {
               parser: {
-                javascript: { ...jsParserOptions.esm, ...jsParserOptions.cjs },
+                javascript: {
+                  ...jsParserOptions.esm,
+                  ...jsParserOptions.cjs,
+                  ...jsParserOptions.others,
+                },
               },
             },
             output: {
@@ -701,8 +709,8 @@ const composeFormatConfig = ({
   }
 };
 
-const formatRsbuildPlugin = (): RsbuildPlugin => ({
-  name: 'rsbuild:format',
+const disableUrlParseRsbuildPlugin = (): RsbuildPlugin => ({
+  name: 'rsbuild:disable-url-parse',
   setup(api) {
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
       // Fix for https://github.com/web-infra-dev/rslib/issues/499.
@@ -761,7 +769,7 @@ const composeShimsConfig = (
         },
         plugins: [
           resolvedShims.esm.require && pluginEsmRequireShim(),
-          formatRsbuildPlugin(),
+          disableUrlParseRsbuildPlugin(),
         ].filter(Boolean),
       };
       break;
@@ -770,6 +778,7 @@ const composeShimsConfig = (
       rsbuildConfig = {
         plugins: [
           resolvedShims.cjs['import.meta.url'] && pluginCjsImportMetaUrlShim(),
+          disableUrlParseRsbuildPlugin(),
         ].filter(Boolean),
       };
       break;
