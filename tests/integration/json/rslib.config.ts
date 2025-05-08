@@ -35,14 +35,7 @@ export default defineConfig({
       },
       output: {
         copy: [{ from: './**/*.json', context: './src' }],
-        externals: ({ request }, callback) => {
-          if (request?.endsWith('.json')) {
-            callback(undefined, request);
-            return;
-          }
-
-          return callback();
-        },
+        externals: [/.*\.json$/],
         distPath: {
           root: './dist/bundleless-preserve-json',
         },

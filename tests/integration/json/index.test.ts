@@ -35,7 +35,7 @@ describe('JSON', async () => {
     expect(bundlelessResult.default).toBe('foo1');
   });
 
-  test('bundleless preserver JSON', async () => {
+  test('bundleless preserve JSON', async () => {
     const { content: bundlelessPreserveJson } = queryContent(
       contents.esm2!,
       /index\.js/,
