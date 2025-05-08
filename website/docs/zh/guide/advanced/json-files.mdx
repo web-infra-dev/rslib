@@ -240,19 +240,19 @@ Rslib 支持在不同的打包模式下，JSON / YAML / TOML 文件以不同的�
 
 例如下面的配置将会将 `src` 目录下的所有 JSON 文件按原样输出：
 
-```ts title="rslib.config.ts" {7,11-12}
+```ts title="rslib.config.ts"
 export default defineConfig({
   lib: [
     {
       bundle: false,
       source: {
         entry: {
-          index: ['./src/**', '!./src/**/*.json'],
+          index: ['./src/**', '!./src/**/*.json'], // [!code highlight]
         },
       },
       output: {
-        copy: [{ from: './**/*.json', context: './src' }],
-        externals: [/.*\.json$/],
+        copy: [{ from: './**/*.json', context: './src' }], // [!code highlight]
+        externals: [/.*\.json$/], // [!code highlight]
       },
     },
   ],

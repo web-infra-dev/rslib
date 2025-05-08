@@ -92,18 +92,18 @@ StackOverflow 上的详细回答：[什么是通用模块定义 (UMD)？](https:
 - `output.externals.react: 'React'`: 指定外部依赖 `react` 可以通过 `window.React` 访问。
 - `runtime: 'classic'`: 使用 React 的 classic 运行时，以支持使用 React 版本低于 18 的应用程序。
 
-```ts title="rslib.config.ts" {7-12,22}
+```ts title="rslib.config.ts"
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   lib: [
     {
-      format: 'umd',
-      umdName: 'RslibUmdExample',
+      format: 'umd', // [!code highlight]
+      umdName: 'RslibUmdExample', // [!code highlight]
       output: {
         externals: {
-          react: 'React',
+          react: 'React', // [!code highlight]
         },
         distPath: {
           root: './dist/umd',
@@ -117,7 +117,7 @@ export default defineConfig({
   plugins: [
     pluginReact({
       swcReactOptions: {
-        runtime: 'classic',
+        runtime: 'classic', // [!code highlight]
       },
     }),
   ],

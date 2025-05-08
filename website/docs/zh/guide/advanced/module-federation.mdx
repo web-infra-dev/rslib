@@ -30,7 +30,7 @@ import { PackageManagerTabs } from '@theme';
 
 然后在 `rslib.config.ts` 中注册插件:
 
-```ts title='rslib.config.ts' {8-43}
+```ts title='rslib.config.ts'
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
@@ -38,6 +38,7 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     // ... 其他 format
+    // [!code highlight:35]
     {
       format: 'mf',
       output: {
@@ -116,7 +117,7 @@ Rslib 支持宿主应用和 Rslib 模块联邦项目同时开发。
 设置宿主应用消费 Rslib 的模块联邦库。查看[@module-federation/rsbuild-plugin
 ](https://www.npmjs.com/package/@module-federation/rsbuild-plugin) 获取更多信息。
 
-```ts title="rsbuild.config.ts" {8-24}
+```ts title="rsbuild.config.ts"
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
@@ -124,23 +125,23 @@ import { pluginReact } from '@rsbuild/plugin-react';
 export default defineConfig({
   plugins: [
     pluginReact(),
-    pluginModuleFederation({
-      name: 'rsbuild_host',
-      remotes: {
-        rslib: 'rslib@http://localhost:3001/mf/mf-manifest.json',
-      },
-      shared: {
-        react: {
-          singleton: true,
-        },
-        'react-dom': {
-          singleton: true,
-        },
-      },
-      // 开启这个当 Rslib 产物为 'production' 模式， 但是宿主应用是 'development' 模式。
-      // 参考链接: https://lib.rsbuild.dev/guide/advanced/module-federation#faqs
-      shareStrategy: 'loaded-first',
-    }),
+    pluginModuleFederation({ // [!code highlight]
+      name: 'rsbuild_host', // [!code highlight]
+      remotes: { // [!code highlight]
+        rslib: 'rslib@http://localhost:3001/mf/mf-manifest.json', // [!code highlight]
+      }, // [!code highlight]
+      shared: { // [!code highlight]
+        react: { // [!code highlight]
+          singleton: true, // [!code highlight]
+        }, // [!code highlight]
+        'react-dom': { // [!code highlight]
+          singleton: true, // [!code highlight]
+        }, // [!code highlight]
+      }, // [!code highlight]
+      // 开启这个当 Rslib 产物为 'production' 模式， 但是宿主应用是 'development' 模式。 // [!code highlight]
+      // 参考链接: https://lib.rsbuild.dev/guide/advanced/module-federation#faqs // [!code highlight]
+      shareStrategy: 'loaded-first', // [!code highlight]
+    }), // [!code highlight]
   ],
 });
 ```
@@ -181,7 +182,7 @@ Rslib 支持使用 Storybook 开发 Rslib 模块联邦项目。
 
 2. 然后创建 Storybook 配置文件 `.storybook/main.ts`，指定 stories 和 addons，并设置 framework 和相应的 framework 集成。
 
-```ts title=".storybook/main.ts" {18-38}
+```ts title=".storybook/main.ts"
 import { dirname, join } from 'node:path';
 import type { StorybookConfig } from 'storybook-react-rsbuild';
 
@@ -199,7 +200,7 @@ const config: StorybookConfig = {
     options: {},
   },
   addons: [
-    {
+    { // [!code highlight:20]
       name: getAbsolutePath('storybook-addon-rslib'),
       options: {
         rslib: {
@@ -230,10 +231,10 @@ export default config;
 
 从远程模块引入组件
 
-```ts title="stories/index.stories.tsx" {2-3}
+```ts title="stories/index.stories.tsx"
 import React from 'react';
-// 在这里加载远程模块，Storybook 相当于宿主应用.
-import { Counter } from 'rslib-module';
+// 在这里加载远程模块，Storybook 相当于宿主应用. // [!code highlight]
+import { Counter } from 'rslib-module'; // [!code highlight]
 
 const Component = () => <Counter />;
 
