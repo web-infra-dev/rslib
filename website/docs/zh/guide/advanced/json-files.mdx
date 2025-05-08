@@ -234,7 +234,7 @@ Rslib 支持在不同的打包模式下，JSON / YAML / TOML 文件以不同的�
 
 如果希望 JSON / YAML / TOML 文件按原样输出到产物目录，并且产物 JavaScript 文件中保留对这些文件的引用路径，可以通过以下方式完成：
 
-1. [bundleless](/config/rsbuild/source#sourceentry) 的入口文件 glob 匹配中忽略 JSON / YAML / TOML 文件
+1. 在 [source.entry](/config/rsbuild/source#sourceentry) 入口文件的 glob 匹配中忽略 JSON / YAML / TOML 文件
 2. 在 [output.externals](/config/rsbuild/output#outputexternals) 中保留 JSON / YAML / TOML 文件的请求路径
 3. 在产物输出中添加 [output.copy](/config/rsbuild/output#outputcopy) 选项，指定 JSON / YAML / TOML 文件的输出路径
 
