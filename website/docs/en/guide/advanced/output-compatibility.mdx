@@ -35,8 +35,8 @@ And install [core-js-pure](https://www.npmjs.com/package/core-js-pure) as the ru
 
 Configure the Babel plugin with polyfill options, set the [targets](https://babeljs.io/docs/options#targets) field to specify the target browser version.
 
-```ts title="rslib.config.ts" {1,11-24}
-import { pluginBabel } from '@rsbuild/plugin-babel';
+```ts title="rslib.config.ts"
+import { pluginBabel } from '@rsbuild/plugin-babel'; // [!code highlight]
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
@@ -46,20 +46,20 @@ export default defineConfig({
     },
   ],
   plugins: [
-    pluginBabel({
-      babelLoaderOptions: {
-        plugins: [
-          [
-            require('babel-plugin-polyfill-corejs3'),
-            {
-              method: 'usage-pure',
-              targets: { ie: '10' },
-              version: '3.29',
-            },
-          ],
-        ],
-      },
-    }),
+    pluginBabel({ // [!code highlight]
+      babelLoaderOptions: { // [!code highlight]
+        plugins: [ // [!code highlight]
+          [ // [!code highlight]
+            require('babel-plugin-polyfill-corejs3'), // [!code highlight]
+            { // [!code highlight]
+              method: 'usage-pure', // [!code highlight]
+              targets: { ie: '10' }, // [!code highlight]
+              version: '3.29', // [!code highlight]
+            }, // [!code highlight]
+          ], // [!code highlight]
+        ], // [!code highlight]
+      }, // [!code highlight]
+    }), // [!code highlight]
   ],
 });
 ```

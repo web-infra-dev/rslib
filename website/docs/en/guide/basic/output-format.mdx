@@ -97,18 +97,18 @@ The following Rslib config is an example to build a UMD library.
 - `output.externals.react: 'React'`: specify the external dependency `react` could be accessed by `window.React`.
 - `runtime: 'classic'`: use the classic runtime of React to support applications that using React version under 18.
 
-```ts title="rslib.config.ts" {7-12,22}
+```ts title="rslib.config.ts"
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   lib: [
     {
-      format: 'umd',
-      umdName: 'RslibUmdExample',
+      format: 'umd', // [!code highlight]
+      umdName: 'RslibUmdExample', // [!code highlight]
       output: {
         externals: {
-          react: 'React',
+          react: 'React', // [!code highlight]
         },
         distPath: {
           root: './dist/umd',
@@ -122,7 +122,7 @@ export default defineConfig({
   plugins: [
     pluginReact({
       swcReactOptions: {
-        runtime: 'classic',
+        runtime: 'classic', // [!code highlight]
       },
     }),
   ],
