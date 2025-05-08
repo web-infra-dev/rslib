@@ -222,3 +222,49 @@ declare module '*.toml' {
   export default content;
 }
 ```
+
+## Bundle Mode and Output
+
+Rslib supports outputting JSON / YAML / TOML files in different forms under different bundle modes.
+
+### bundle
+
+In bundle mode ([`bundle: true`](/config/lib/bundle)), JSON files will be directly bundled into JavaScript output, and unused keys in JSON files will be tree-shaken. The same applies to TOML and YAML files.
+
+### bundleless
+
+In bundleless mode ([`bundle: false`](/config/lib/bundle)), each JSON / YAML / TOML file will be converted into a corresponding JavaScript output file. JSON files will be converted to `JSON.parse` form and exported, while YAML and TOML files will be converted to JavaScript objects and exported.
+
+If you want JSON / YAML / TOML files to be output to the distribution directory as-is, and keep the reference paths to these files in the output JavaScript files, you can achieve this through the following steps:
+
+1. Exclude JSON / YAML / TOML files from the [bundleless](/config/rsbuild/source#sourceentry) entry file glob pattern.
+2. Reserve request paths for JSON / YAML / TOML files in [output.externals](/config/rsbuild/output#outputexternals).
+3. Add [output.copy](/config/rsbuild/output#outputcopy) option to the output configuration, specifying the output path for JSON / YAML / TOML files.
+
+For example, the following configuration will output all JSON files in the `src` directory as-is:
+
+```ts title="rslib.config.ts" {7,11-18}
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+      source: {
+        entry: {
+          index: ['./src/**', '!./src/**/*.json'],
+        },
+      },
+      output: {
+        copy: [{ from: './**/*.json', context: './src' }],
+        externals: ({ request }, callback) => {
+          if (request?.endsWith('.json')) {
+            callback(undefined, request);
+            return;
+          } else {
+            return callback();
+          }
+        },
+      },
+    },
+  ],
+});
+```

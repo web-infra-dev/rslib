@@ -219,3 +219,49 @@ declare module '*.toml' {
   export default content;
 }
 ```
+
+## 打包模式与输出
+
+Rslib 支持在不同的打包模式下，JSON / YAML / TOML 文件以不同的形式输出。
+
+### bundle
+
+在 bundle 模式下（即 [`bundle: true`](/config/lib/bundle)），JSON 文件会被直接打包到 JavaScript 产物中，且没有被使到的 JSON 文件中的 key 会被 tree-shake 掉，TOML 和 YAML 文件同理。
+
+### bundleless
+
+在 bundleless 模式下（即 [`bundle: false`](/config/lib/bundle)），每个 JSON / YAML / TOML 文件会被转换为对应的 JavaScript 模块输出，JSON 文件会被转换为 `JSON.parse` 的形式并导出，YAML 和 TOML 文件会被转换为 JavaScript 对象并导出。
+
+如果希望 JSON / YAML / TOML 文件按原样输出到产物目录，并且产物 JavaScript 文件中保留对这些文件的引用路径，可以通过以下方式完成：
+
+1. [bundleless](/config/rsbuild/source#sourceentry) 的入口文件 glob 匹配中忽略 JSON / YAML / TOML 文件
+2. 在 [output.externals](/config/rsbuild/output#outputexternals) 中保留 JSON / YAML / TOML 文件的请求路径
+3. 在产物输出中添加 [output.copy](/config/rsbuild/output#outputcopy) 选项，指定 JSON / YAML / TOML 文件的输出路径
+
+例如下面的配置将会将 `src` 目录下的所有 JSON 文件按原样输出：
+
+```ts title="rslib.config.ts" {7,11-18}
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+      source: {
+        entry: {
+          index: ['./src/**', '!./src/**/*.json'],
+        },
+      },
+      output: {
+        copy: [{ from: './**/*.json', context: './src' }],
+        externals: ({ request }, callback) => {
+          if (request?.endsWith('.json')) {
+            callback(undefined, request);
+            return;
+          } else {
+            return callback();
+          }
+        },
+      },
+    },
+  ],
+});
+```
