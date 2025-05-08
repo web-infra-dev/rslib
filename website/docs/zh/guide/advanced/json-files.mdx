@@ -226,7 +226,7 @@ Rslib 支持在不同的打包模式下，JSON / YAML / TOML 文件以不同的�
 
 ### bundle
 
-在 bundle 模式下（即 [`bundle: true`](/config/lib/bundle)），JSON 文件会被直接打包到 JavaScript 产物中，且没有被使到的 JSON 文件中的 key 会被 tree-shake 掉，TOML 和 YAML 文件同理。
+在 bundle 模式下（即 [`bundle: true`](/config/lib/bundle)），JSON 文件会被直接打包到 JavaScript 产物中，且 JSON 文件中没有被使用到的 key 会被 tree-shake 掉，TOML 和 YAML 文件同理。
 
 ### bundleless
 
