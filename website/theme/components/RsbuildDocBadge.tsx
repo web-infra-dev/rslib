@@ -15,7 +15,12 @@ export function RsbuildDocBadge({ path, text, alt }: Props) {
   const href = `https://rsbuild.dev${langPrefix}${path}`;
 
   return (
-    <Link href={href} target="_blank" rel="noreferrer">
+    <Link
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="rspress-toc-exclude"
+    >
       <Badge type="info">
         <img
           alt={alt || text}

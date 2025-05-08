@@ -26,12 +26,12 @@ type Dts =
 
 类型声明文件生成是一个可选功能，你可以设置 `dts: true` 来启用 [bundleless 类型](/guide/advanced/dts#bundleless-类型) 生成。
 
-```ts title="rslib.config.ts" {5}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'esm',
-      dts: true,
+      dts: true, // [!code highlight]
     },
   ],
 };
@@ -39,12 +39,12 @@ export default {
 
 如果你想要禁用类型声明文件生成，可以设置 `dts: false` 或者不指定 `dts` 选项。
 
-```ts title="rslib.config.ts" {5}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'esm',
-      dts: false,
+      dts: false, // [!code highlight]
     },
   ],
 };
@@ -73,13 +73,13 @@ import { PackageManagerTabs } from '@theme';
 
 2. 将 `dts.bundle` 设置为 `true`。
 
-```ts title="rslib.config.ts" {5-7}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'esm',
       dts: {
-        bundle: true,
+        bundle: true, // [!code highlight]
       },
     },
   ],
@@ -106,13 +106,13 @@ export default {
 
 #### 示例
 
-```ts title="rslib.config.ts" {5-7}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'esm',
       dts: {
-        distPath: './dist-types',
+        distPath: './dist-types', // [!code highlight]
       },
     },
   ],
@@ -143,13 +143,13 @@ export default {
 
 当 `abortOnError` 设置为 `false` 时（如下所示），即使代码中存在类型问题，构建仍然会成功。
 
-```ts title="rslib.config.ts" {5-7}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'esm',
       dts: {
-        abortOnError: false,
+        abortOnError: false, // [!code highlight]
       },
     },
   ],

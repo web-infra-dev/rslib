@@ -26,12 +26,12 @@ Configure the generation of the TypeScript declaration files.
 
 Declaration files generation is an optional feature, you can set `dts: true` to enable [bundleless declaration files](/guide/advanced/dts#bundleless-declaration-files) generation.
 
-```ts title="rslib.config.ts" {5}
+```ts
 export default {
   lib: [
     {
       format: 'esm',
-      dts: true,
+      dts: true, // [!code highlight]
     },
   ],
 };
@@ -39,12 +39,12 @@ export default {
 
 If you want to disable declaration files generation, you can set `dts: false` or do not specify the `dts` option.
 
-```ts title="rslib.config.ts" {5}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'esm',
-      dts: false,
+      dts: false, // [!code highlight]
     },
   ],
 };
@@ -73,14 +73,15 @@ import { PackageManagerTabs } from '@theme';
 
 2. Set `dts.bundle` to `true`.
 
-```ts title="rslib.config.ts" {5-7}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'esm',
       dts: {
-        bundle: true,
-      },
+        // [!code highlight]
+        bundle: true, // [!code highlight]
+      }, // [!code highlight]
     },
   ],
 };
@@ -106,14 +107,15 @@ The default value follows the priority below:
 
 #### Example
 
-```ts title="rslib.config.ts" {5-7}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'esm',
       dts: {
-        distPath: './dist-types',
-      },
+        // [!code highlight]
+        distPath: './dist-types', // [!code highlight]
+      }, // [!code highlight]
     },
   ],
 };
@@ -143,14 +145,15 @@ By default, type errors will cause the build to fail.
 
 When `abortOnError` is set to `false` like below, the build will still succeed even if there are type issues in the code.
 
-```ts title="rslib.config.ts" {5-7}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'esm',
       dts: {
-        abortOnError: false,
-      },
+        // [!code highlight]
+        abortOnError: false, // [!code highlight]
+      }, // [!code highlight]
     },
   ],
 };
