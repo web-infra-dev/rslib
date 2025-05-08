@@ -44,6 +44,15 @@ export default defineConfig({
             head: true,
             append: true,
           },
+          {
+            tag: 'link',
+            attrs: {
+              href: '/umd/index.css',
+              rel: 'stylesheet',
+            },
+            head: true,
+            append: true,
+          },
         ],
       },
       source: {
@@ -61,6 +70,10 @@ export default defineConfig({
           {
             from: '../../../examples/react-component-umd/dist/umd/index.js',
             to: 'umd/index.js',
+          },
+          {
+            from: '../../../examples/react-component-umd/dist/umd/index.css',
+            to: 'umd/index.css',
           },
           {
             from: 'node_modules/react-18/umd/react.development.js',

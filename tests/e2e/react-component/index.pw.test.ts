@@ -51,6 +51,23 @@ async function assetShouldWork(page: Page) {
   }
 }
 
+async function inlineAssetShouldWork(page: Page) {
+  // asset in css url('./logo.svg')
+  const h1El = page.locator('h1');
+  assert(h1El);
+  expect(h1El).toHaveCSS('background', /.*data:image\/svg\+xml;base64.*/);
+
+  // asset by import url from './assets/logo.svg'
+  const imgEls = await page.$$('.counter-button>img');
+  expect(imgEls).toHaveLength(2);
+  const srcList = await Promise.all(
+    imgEls.map((imgEl) => imgEl.getAttribute('src')),
+  );
+  for (const src of srcList) {
+    expect(src).toMatch(/.*data:image\/svg\+xml;base64.*/);
+  }
+}
+
 test('should render example "react-component-bundle" successfully', async ({
   page,
 }) => {
@@ -90,6 +107,7 @@ test('should render example "react-component-umd" successfully', async ({
   );
   fs.mkdirSync(path.resolve(__dirname, './public/umd'), { recursive: true });
   fs.copyFileSync(umdPath, path.resolve(__dirname, './public/umd/index.js'));
+  fs.copyFileSync(umdPath, path.resolve(__dirname, './public/umd/index.css'));
 
   const rsbuild = await dev({
     cwd: __dirname,
@@ -98,5 +116,7 @@ test('should render example "react-component-umd" successfully', async ({
   });
 
   await counterCompShouldWork(page);
+  await styleShouldWork(page);
+  await inlineAssetShouldWork(page);
   await rsbuild.close();
 });
