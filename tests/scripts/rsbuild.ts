@@ -121,6 +121,7 @@ export async function dev({
 }) {
   process.env.NODE_ENV = 'development';
 
+  options.callerName = 'rslib';
   options.rsbuildConfig = await updateConfigForTest(
     options.rsbuildConfig || {},
     options.cwd,

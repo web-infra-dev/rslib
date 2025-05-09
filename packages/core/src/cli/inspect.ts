@@ -9,6 +9,7 @@ export async function inspect(
 ): Promise<RsbuildInstance> {
   const { environments } = await composeRsbuildEnvironments(config);
   const rsbuildInstance = await createRsbuild({
+    callerName: 'rslib',
     rsbuildConfig: {
       mode: 'production',
       root: config.root,
