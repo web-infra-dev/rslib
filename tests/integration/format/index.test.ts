@@ -1,4 +1,3 @@
-import exp from 'node:constants';
 import path from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 import { expect, test } from 'vitest';
