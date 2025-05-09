@@ -1512,7 +1512,7 @@ async function composeLibRsbuildConfig(
   const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
   const autoExternalConfig = composeAutoExternalConfig({
     bundle,
-    format: format,
+    format,
     autoExternal,
     pkgJson,
     userExternals: config.output?.externals,
