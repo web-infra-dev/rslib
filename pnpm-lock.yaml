@@ -179,7 +179,7 @@ importers:
     devDependencies:
       '@rsbuild/plugin-preact':
         specifier: ^1.3.1
-        version: 1.3.1(@rsbuild/core@1.3.18)(preact@10.26.5)
+        version: 1.3.1(@rsbuild/core@1.3.18)(preact@10.26.6)
       '@rsbuild/plugin-sass':
         specifier: ^1.3.1
         version: 1.3.1(@rsbuild/core@1.3.18)
@@ -187,8 +187,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core
       preact:
-        specifier: ^10.26.5
-        version: 10.26.5
+        specifier: ^10.26.6
+        version: 10.26.6
 
   examples/react-component-bundle:
     devDependencies:
@@ -341,8 +341,8 @@ importers:
   packages/create-rslib:
     dependencies:
       create-rstack:
-        specifier: 1.4.0
-        version: 1.4.0
+        specifier: 1.4.1
+        version: 1.4.1
     devDependencies:
       '@rslib/tsconfig':
         specifier: workspace:*
@@ -3783,8 +3783,8 @@ packages:
   create-hmac@1.1.7:
     resolution: {integrity: sha512-MJG9liiZ+ogc4TzUwuvbER1JRdgvUFSB5+VR/g5h82fGaIRWMWddtKBHi7/sVhfjQZ6SehlyhvQYrcYkaUIpLg==}
 
-  create-rstack@1.4.0:
-    resolution: {integrity: sha512-XQelsLV+hJkrZB7hEUtrFKxnUqbGOyO+ws/cZ6cyuCOOvHq1bSUBlnT/nIPAMxlWWv1bejvqu8nKxqXv4EX/Yg==}
+  create-rstack@1.4.1:
+    resolution: {integrity: sha512-xg5GCjnW1G2/KJ1WokiOOcCE6jvlT6I+468EvdzQi0mjSQZ0HS/U6/eln1WbcR5itJbQBpGnSoGZmUzew0sp7w==}
 
   cron-parser@4.9.0:
     resolution: {integrity: sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==}
@@ -5705,8 +5705,8 @@ packages:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  preact@10.26.5:
-    resolution: {integrity: sha512-fmpDkgfGU6JYux9teDWLhj9mKN55tyepwYbxHgQuIxbWQzgFg5vk7Mrrtfx7xRxq798ynkY4DDDxZr235Kk+4w==}
+  preact@10.26.6:
+    resolution: {integrity: sha512-5SRRBinwpwkaD+OqlBDeITlRgvd8I8QlxHJw9AxSdMNV6O+LodN9nUyYGpSF7sadHjs6RzeFShMexC6DbtWr9g==}
 
   prebundle@1.3.3:
     resolution: {integrity: sha512-r9XaHCFjCWoFtxzbj0g1mb7Ur8JOasgjbb7UbK+bP0k/xHDvI7Ti9AOkrsx0dw5UkmOJ1LocfNY58tSc5Iei8A==}
@@ -8368,9 +8368,9 @@ snapshots:
 
   '@polka/url@1.0.0-next.28': {}
 
-  '@prefresh/core@1.5.3(preact@10.26.5)':
+  '@prefresh/core@1.5.3(preact@10.26.6)':
     dependencies:
-      preact: 10.26.5
+      preact: 10.26.6
 
   '@prefresh/utils@1.2.0': {}
 
@@ -8532,12 +8532,12 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.3.18
 
-  '@rsbuild/plugin-preact@1.3.1(@rsbuild/core@1.3.18)(preact@10.26.5)':
+  '@rsbuild/plugin-preact@1.3.1(@rsbuild/core@1.3.18)(preact@10.26.6)':
     dependencies:
-      '@prefresh/core': 1.5.3(preact@10.26.5)
+      '@prefresh/core': 1.5.3(preact@10.26.6)
       '@prefresh/utils': 1.2.0
       '@rsbuild/core': 1.3.18
-      '@rspack/plugin-preact-refresh': 1.1.2(@prefresh/core@1.5.3(preact@10.26.5))(@prefresh/utils@1.2.0)
+      '@rspack/plugin-preact-refresh': 1.1.2(@prefresh/core@1.5.3(preact@10.26.6))(@prefresh/utils@1.2.0)
       '@swc/plugin-prefresh': 6.2.0
     transitivePeerDependencies:
       - preact
@@ -8750,9 +8750,9 @@ snapshots:
 
   '@rspack/lite-tapable@1.0.1': {}
 
-  '@rspack/plugin-preact-refresh@1.1.2(@prefresh/core@1.5.3(preact@10.26.5))(@prefresh/utils@1.2.0)':
+  '@rspack/plugin-preact-refresh@1.1.2(@prefresh/core@1.5.3(preact@10.26.6))(@prefresh/utils@1.2.0)':
     dependencies:
-      '@prefresh/core': 1.5.3(preact@10.26.5)
+      '@prefresh/core': 1.5.3(preact@10.26.6)
       '@prefresh/utils': 1.2.0
 
   '@rspack/plugin-react-refresh@1.4.2(react-refresh@0.17.0)':
@@ -10216,7 +10216,7 @@ snapshots:
       safe-buffer: 5.2.1
       sha.js: 2.4.11
 
-  create-rstack@1.4.0: {}
+  create-rstack@1.4.1: {}
 
   cron-parser@4.9.0:
     dependencies:
@@ -12582,7 +12582,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  preact@10.26.5: {}
+  preact@10.26.6: {}
 
   prebundle@1.3.3(typescript@5.8.3):
     dependencies:
