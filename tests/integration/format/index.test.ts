@@ -1,6 +1,54 @@
+import exp from 'node:constants';
 import path from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 import { expect, test } from 'vitest';
+
+test('format default to esm', async () => {
+  const fixturePath = path.resolve(__dirname, 'default');
+  const { files, contents } = await buildAndGetResults({
+    fixturePath,
+  });
+
+  expect(files).toMatchInlineSnapshot(`
+    {
+      "cjs0": [
+        "<ROOT>/tests/integration/format/default/dist/bundle-cjs/index.cjs",
+      ],
+      "cjs1": [
+        "<ROOT>/tests/integration/format/default/dist/bundleless-cjs/foo.cjs",
+        "<ROOT>/tests/integration/format/default/dist/bundleless-cjs/index.cjs",
+      ],
+      "esm0": [
+        "<ROOT>/tests/integration/format/default/dist/bundle-esm/index.js",
+      ],
+      "esm1": [
+        "<ROOT>/tests/integration/format/default/dist/bundleless-esm/foo.js",
+        "<ROOT>/tests/integration/format/default/dist/bundleless-esm/index.js",
+      ],
+    }
+  `);
+
+  expect(contents.esm0).toMatchInlineSnapshot(`
+    {
+      "<ROOT>/tests/integration/format/default/dist/bundle-esm/index.js": "const foo = 'foo';
+    const str = 'hello' + foo + ' world';
+    export { str };
+    ",
+    }
+  `);
+
+  expect(contents.esm1).toMatchInlineSnapshot(`
+    {
+      "<ROOT>/tests/integration/format/default/dist/bundleless-esm/foo.js": "const foo = 'foo';
+    export { foo };
+    ",
+      "<ROOT>/tests/integration/format/default/dist/bundleless-esm/index.js": "import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
+    const str = 'hello' + __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__.foo + ' world';
+    export { str };
+    ",
+    }
+  `);
+});
 
 test('import.meta.url should be preserved', async () => {
   const fixturePath = path.resolve(__dirname, 'import-meta-url');

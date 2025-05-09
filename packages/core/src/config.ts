@@ -841,6 +841,7 @@ const composeExternalsConfig = (
 
 const composeAutoExtensionConfig = (
   config: LibConfig,
+  format: Format,
   autoExtension: boolean,
   pkgJson?: PkgJson,
 ): {
@@ -849,7 +850,7 @@ const composeAutoExtensionConfig = (
   dtsExtension: string;
 } => {
   const { jsExtension, dtsExtension } = getDefaultExtension({
-    format: config.format!,
+    format,
     pkgJson,
     autoExtension,
   });
@@ -1307,9 +1308,10 @@ const composeBundlelessExternalConfig = (
 
 const composeDtsConfig = async (
   libConfig: LibConfig,
+  format: Format,
   dtsExtension: string,
 ): Promise<EnvironmentConfig> => {
-  const { format, autoExternal, banner, footer, redirect } = libConfig;
+  const { autoExternal, banner, footer, redirect } = libConfig;
 
   let { dts } = libConfig;
 
@@ -1332,7 +1334,7 @@ const composeDtsConfig = async (
         build: dts?.build,
         abortOnError: dts?.abortOnError,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
-        autoExternal: getAutoExternalDefaultValue(format!, autoExternal),
+        autoExternal: getAutoExternalDefaultValue(format, autoExternal),
         banner: banner?.dts,
         footer: footer?.dts,
         redirect: redirect?.dts,
@@ -1454,7 +1456,7 @@ async function composeLibRsbuildConfig(
   const cssModulesAuto = config.output?.cssModules?.auto ?? true;
 
   const {
-    format,
+    format = 'esm',
     shims,
     bundle = true,
     banner = {},
@@ -1466,11 +1468,11 @@ async function composeLibRsbuildConfig(
     umdName,
   } = config;
   const { rsbuildConfig: shimsConfig, enabledShims } = composeShimsConfig(
-    format!,
+    format,
     shims,
   );
   const formatConfig = composeFormatConfig({
-    format: format!,
+    format: format,
     pkgJson: pkgJson!,
     bundle,
     umdName,
@@ -1480,14 +1482,14 @@ async function composeLibRsbuildConfig(
     pkgJson,
   );
   const userExternalsConfig = composeExternalsConfig(
-    format!,
+    format,
     config.output?.externals,
   );
   const {
     config: autoExtensionConfig,
     jsExtension,
     dtsExtension,
-  } = composeAutoExtensionConfig(config, autoExtension, pkgJson);
+  } = composeAutoExtensionConfig(config, format, autoExtension, pkgJson);
   const { entryConfig, outBase } = await composeEntryConfig(
     config.source?.entry!,
     config.bundle,
@@ -1506,11 +1508,11 @@ async function composeLibRsbuildConfig(
     config: targetConfig,
     externalsConfig: targetExternalsConfig,
     target,
-  } = composeTargetConfig(config.output?.target, format!);
+  } = composeTargetConfig(config.output?.target, format);
   const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
   const autoExternalConfig = composeAutoExternalConfig({
     bundle,
-    format: format!,
+    format: format,
     autoExternal,
     pkgJson,
     userExternals: config.output?.externals,
@@ -1522,15 +1524,15 @@ async function composeLibRsbuildConfig(
     banner?.css,
     footer?.css,
   );
-  const assetConfig = composeAssetConfig(bundle, format!);
+  const assetConfig = composeAssetConfig(bundle, format);
 
   const entryChunkConfig = composeEntryChunkConfig({
     enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
     contextToWatch: outBase,
   });
-  const dtsConfig = await composeDtsConfig(config, dtsExtension);
+  const dtsConfig = await composeDtsConfig(config, format, dtsExtension);
   const externalsWarnConfig = composeExternalsWarnConfig(
-    format!,
+    format,
     userExternalsConfig?.output?.externals,
     autoExternalConfig?.output?.externals,
   );
@@ -1619,7 +1621,7 @@ export async function composeCreateRsbuildConfig(
     delete userConfig.output.externals;
 
     const config: RsbuildConfigWithLibInfo = {
-      format: libConfig.format!,
+      format: libConfig.format ?? 'esm',
       // The merge order represents the priority of the configuration
       // The priorities from high to low are as follows:
       // 1 - userConfig: users can configure any Rsbuild and Rspack config
