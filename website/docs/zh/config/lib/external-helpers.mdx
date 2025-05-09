@@ -29,12 +29,12 @@ export default class FOO {
 
 当 `externalHelpers` 禁用时，输出的 JavaScript 将内联辅助函数。
 
-```ts title="rslib.config.ts" {5}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       syntax: 'es5',
-      externalHelpers: false,
+      externalHelpers: false, // [!code highlight]
     },
   ],
 };
@@ -42,7 +42,8 @@ export default {
 
 以下是输出的 JavaScript 文件，高亮部分是内联的辅助函数：
 
-```js title="index.js" {1-18}
+```js title="index.js"
+// [!code highlight:18]
 function _class_call_check(instance, Constructor) {
   if (!(instance instanceof Constructor))
     throw new TypeError('Cannot call a class as a function');
@@ -79,12 +80,12 @@ export { src_FOO as default };
 
 当启用 `externalHelpers` 时，输出的 JavaScript 将从外部模块 `@swc/helpers` 导入辅助函数。
 
-```ts title="rslib.config.ts" {5}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       syntax: 'es5',
-      externalHelpers: true,
+      externalHelpers: true, // [!code highlight]
     },
   ],
 };
@@ -92,7 +93,8 @@ export default {
 
 以下是输出的 JavaScript 文件，高亮部分是导入的辅助函数：
 
-```js title="index.js" {1-2}
+```js title="index.js"
+// [!code highlight:2]
 import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__ from '@swc/helpers/_/_class_call_check';
 import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__ from '@swc/helpers/_/_create_class';
 var src_FOO = /*#__PURE__*/ (function () {

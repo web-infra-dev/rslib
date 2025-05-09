@@ -35,10 +35,11 @@ export default defineConfig({
   lib: [
     // ...
   ],
+  // [!code highlight:4]
   output: {
-    target: 'web', // [!code highlight]
+    target: 'web',
   },
-  plugins: [pluginReact(/** options here */)], // [!code highlight]
+  plugins: [pluginReact(/** options here */)],
 });
 ```
 
@@ -66,9 +67,10 @@ export default defineConfig({
   },
   plugins: [
     pluginReact({
-      swcReactOptions: { // [!code highlight]
-        runtime: 'classic', // [!code highlight]
-      }, // [!code highlight]
+      // [!code highlight:3]
+      swcReactOptions: {
+        runtime: 'classic',
+      },
     }),
   ],
 });
@@ -96,9 +98,10 @@ export default defineConfig({
   },
   plugins: [
     pluginReact({
-      swcReactOptions: { // [!code highlight]
-        importSource: '@emotion/react', // [!code highlight]
-      }, // [!code highlight]
+      // [!code highlight:3]
+      swcReactOptions: {
+        importSource: '@emotion/react',
+      },
     }),
   ],
 });

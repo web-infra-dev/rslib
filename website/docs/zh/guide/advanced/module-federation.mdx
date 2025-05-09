@@ -38,7 +38,7 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     // ... 其他 format
-    // [!code highlight:35]
+    // [!code highlight:37]
     {
       format: 'mf',
       output: {
@@ -125,23 +125,24 @@ import { pluginReact } from '@rsbuild/plugin-react';
 export default defineConfig({
   plugins: [
     pluginReact(),
-    pluginModuleFederation({ // [!code highlight]
-      name: 'rsbuild_host', // [!code highlight]
-      remotes: { // [!code highlight]
-        rslib: 'rslib@http://localhost:3001/mf/mf-manifest.json', // [!code highlight]
-      }, // [!code highlight]
-      shared: { // [!code highlight]
-        react: { // [!code highlight]
-          singleton: true, // [!code highlight]
-        }, // [!code highlight]
-        'react-dom': { // [!code highlight]
-          singleton: true, // [!code highlight]
-        }, // [!code highlight]
-      }, // [!code highlight]
-      // 开启这个当 Rslib 产物为 'production' 模式， 但是宿主应用是 'development' 模式。 // [!code highlight]
-      // 参考链接: https://lib.rsbuild.dev/guide/advanced/module-federation#faqs // [!code highlight]
-      shareStrategy: 'loaded-first', // [!code highlight]
-    }), // [!code highlight]
+    // [!code highlight:17]
+    pluginModuleFederation({
+      name: 'rsbuild_host',
+      remotes: {
+        rslib: 'rslib@http://localhost:3001/mf/mf-manifest.json',
+      },
+      shared: {
+        react: {
+          singleton: true,
+        },
+        'react-dom': {
+          singleton: true,
+        },
+      },
+      // 开启这个当 Rslib 产物为 'production' 模式， 但是宿主应用是 'development' 模式。
+      // 参考链接: https://lib.rsbuild.dev/guide/advanced/module-federation#faqs
+      shareStrategy: 'loaded-first',
+    }),
   ],
 });
 ```
@@ -200,7 +201,8 @@ const config: StorybookConfig = {
     options: {},
   },
   addons: [
-    { // [!code highlight:20]
+    // [!code highlight:21]
+    {
       name: getAbsolutePath('storybook-addon-rslib'),
       options: {
         rslib: {
@@ -233,8 +235,9 @@ export default config;
 
 ```ts title="stories/index.stories.tsx"
 import React from 'react';
-// 在这里加载远程模块，Storybook 相当于宿主应用. // [!code highlight]
-import { Counter } from 'rslib-module'; // [!code highlight]
+// [!code highlight:2]
+// 在这里加载远程模块，Storybook 相当于宿主应用.
+import { Counter } from 'rslib-module';
 
 const Component = () => <Counter />;
 

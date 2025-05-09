@@ -38,7 +38,7 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     // ... other format
-    // [!code highlight:35]
+    // [!code highlight:37]
     {
       format: 'mf',
       output: {
@@ -126,23 +126,24 @@ import { pluginReact } from '@rsbuild/plugin-react';
 export default defineConfig({
   plugins: [
     pluginReact(),
-    pluginModuleFederation({ // [!code highlight]
-      name: 'rsbuild_host', // [!code highlight]
-      remotes: { // [!code highlight]
-        rslib: 'rslib@http://localhost:3001/mf/mf-manifest.json', // [!code highlight]
-      }, // [!code highlight]
-      shared: { // [!code highlight]
-        react: { // [!code highlight]
-          singleton: true, // [!code highlight]
-        }, // [!code highlight]
-        'react-dom': { // [!code highlight]
-          singleton: true, // [!code highlight]
-        }, // [!code highlight]
-      }, // [!code highlight]
-      // Enable this when the output of Rslib is build under 'production' mode, while the host app is 'development'. // [!code highlight]
-      // Reference: https://lib.rsbuild.dev/guide/advanced/module-federation#faqs // [!code highlight]
-      shareStrategy: 'loaded-first', // [!code highlight]
-    }), // [!code highlight]
+    // [!code highlight:17]
+    pluginModuleFederation({
+      name: 'rsbuild_host',
+      remotes: {
+        rslib: 'rslib@http://localhost:3001/mf/mf-manifest.json',
+      },
+      shared: {
+        react: {
+          singleton: true,
+        },
+        'react-dom': {
+          singleton: true,
+        },
+      },
+      // Enable this when the output of Rslib is build under 'production' mode, while the host app is 'development'.
+      // Reference: https://lib.rsbuild.dev/guide/advanced/module-federation#faqs
+      shareStrategy: 'loaded-first',
+    }),
   ],
 });
 ```
@@ -200,7 +201,8 @@ First, set up Storybook with the Rslib project. You can refer to the [Storybook 
        options: {},
      },
      addons: [
-       { // [!code highlight:20]
+       // [!code highlight:21]
+       {
          name: getAbsolutePath('storybook-addon-rslib'),
          options: {
            rslib: {
@@ -233,8 +235,9 @@ Import components from remote module.
 
 ```ts title="stories/index.stories.tsx"
 import React from 'react';
-// Load your remote module here, Storybook will act as the host app. // [!code highlight]
-import { Counter } from 'rslib-module'; // [!code highlight]
+// [!code highlight:2]
+// Load your remote module here, Storybook will act as the host app.
+import { Counter } from 'rslib-module';
 
 const Component = () => <Counter />;
 

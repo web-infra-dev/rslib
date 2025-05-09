@@ -35,8 +35,8 @@ polyfill 依赖于 Babel 注入 polyfill 代码，因此你需要安装 [Rsbuild
 
 配置 Babel 插件，设置 [targets](https://babeljs.io/docs/options#targets) 字段以指定目标浏览器版本。
 
-```ts title="rslib.config.ts" {1,11-24}
-import { pluginBabel } from '@rsbuild/plugin-babel';
+```ts title="rslib.config.ts"
+import { pluginBabel } from '@rsbuild/plugin-babel'; // [!code highlight]
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
@@ -46,6 +46,7 @@ export default defineConfig({
     },
   ],
   plugins: [
+    // [!code highlight:14]
     pluginBabel({
       babelLoaderOptions: {
         plugins: [

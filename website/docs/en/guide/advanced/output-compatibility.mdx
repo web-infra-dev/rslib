@@ -46,20 +46,21 @@ export default defineConfig({
     },
   ],
   plugins: [
-    pluginBabel({ // [!code highlight]
-      babelLoaderOptions: { // [!code highlight]
-        plugins: [ // [!code highlight]
-          [ // [!code highlight]
-            require('babel-plugin-polyfill-corejs3'), // [!code highlight]
-            { // [!code highlight]
-              method: 'usage-pure', // [!code highlight]
-              targets: { ie: '10' }, // [!code highlight]
-              version: '3.29', // [!code highlight]
-            }, // [!code highlight]
-          ], // [!code highlight]
-        ], // [!code highlight]
-      }, // [!code highlight]
-    }), // [!code highlight]
+    // [!code highlight:14]
+    pluginBabel({
+      babelLoaderOptions: {
+        plugins: [
+          [
+            require('babel-plugin-polyfill-corejs3'),
+            {
+              method: 'usage-pure',
+              targets: { ie: '10' },
+              version: '3.29',
+            },
+          ],
+        ],
+      },
+    }),
   ],
 });
 ```

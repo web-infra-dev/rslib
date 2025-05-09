@@ -99,11 +99,12 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     {
-      format: 'umd', // [!code highlight]
-      umdName: 'RslibUmdExample', // [!code highlight]
+      // [!code highlight:6]
+      format: 'umd',
+      umdName: 'RslibUmdExample',
       output: {
         externals: {
-          react: 'React', // [!code highlight]
+          react: 'React',
         },
         distPath: {
           root: './dist/umd',
