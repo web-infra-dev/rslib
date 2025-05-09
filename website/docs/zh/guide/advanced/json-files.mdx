@@ -251,8 +251,9 @@ export default defineConfig({
         },
       },
       output: {
-        copy: [{ from: './**/*.json', context: './src' }], // [!code highlight]
-        externals: [/.*\.json$/], // [!code highlight]
+        // [!code highlight:2]
+        copy: [{ from: './**/*.json', context: './src' }],
+        externals: [/.*\.json$/],
       },
     },
   ],
