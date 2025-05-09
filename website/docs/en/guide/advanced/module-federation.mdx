@@ -30,7 +30,7 @@ import { PackageManagerTabs } from '@theme';
 
 Then register the plugin in the `rslib.config.ts` file:
 
-```ts title='rslib.config.ts' {8-43}
+```ts title='rslib.config.ts'
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
@@ -38,6 +38,7 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     // ... other format
+    // [!code highlight:37]
     {
       format: 'mf',
       output: {
@@ -117,7 +118,7 @@ with Hot Module Replacement (HMR).
 Set up the host app to consume the Rslib Module Federation library. Check out the [@module-federation/rsbuild-plugin
 ](https://www.npmjs.com/package/@module-federation/rsbuild-plugin) for more information.
 
-```ts title="rsbuild.config.ts" {8-24}
+```ts title="rsbuild.config.ts"
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
@@ -125,6 +126,7 @@ import { pluginReact } from '@rsbuild/plugin-react';
 export default defineConfig({
   plugins: [
     pluginReact(),
+    // [!code highlight:17]
     pluginModuleFederation({
       name: 'rsbuild_host',
       remotes: {
@@ -181,7 +183,7 @@ First, set up Storybook with the Rslib project. You can refer to the [Storybook 
 
 2. Then set up the Storybook configuration file `.storybook/main.ts`, specify the stories and addons, and set the framework with corresponding framework integration.
 
-   ```ts title=".storybook/main.ts" {18-38}
+   ```ts title=".storybook/main.ts"
    import { dirname, join } from 'node:path';
    import type { StorybookConfig } from 'storybook-react-rsbuild';
 
@@ -199,6 +201,7 @@ First, set up Storybook with the Rslib project. You can refer to the [Storybook 
        options: {},
      },
      addons: [
+       // [!code highlight:21]
        {
          name: getAbsolutePath('storybook-addon-rslib'),
          options: {
@@ -230,8 +233,9 @@ First, set up Storybook with the Rslib project. You can refer to the [Storybook 
 
 Import components from remote module.
 
-```ts title="stories/index.stories.tsx" {2-3}
+```ts title="stories/index.stories.tsx"
 import React from 'react';
+// [!code highlight:2]
 // Load your remote module here, Storybook will act as the host app.
 import { Counter } from 'rslib-module';
 

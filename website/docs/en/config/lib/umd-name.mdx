@@ -15,12 +15,12 @@ The module name of the UMD bundle must not conflict with the global variable nam
 
 The UMD bundle will be mounted to `global.MyLibrary`.
 
-```ts title="rslib.config.ts" {5}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'umd',
-      umdName: 'MyLibrary',
+      umdName: 'MyLibrary', // [!code highlight]
     },
   ],
 };

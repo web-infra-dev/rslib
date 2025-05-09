@@ -1,12 +1,6 @@
 import assert from 'node:assert';
-import fs from 'node:fs';
-import path from 'node:path';
 import { type Page, expect, test } from '@playwright/test';
 import { dev } from 'test-helper/rsbuild';
-
-function getCwdByExample(exampleName: string) {
-  return path.join(__dirname, '../../../examples', exampleName);
-}
 
 async function counterCompShouldWork(page: Page) {
   const h2El = page.locator('h2');
@@ -101,14 +95,6 @@ test('should render example "react-component-bundle-false" successfully', async 
 test('should render example "react-component-umd" successfully', async ({
   page,
 }) => {
-  const umdPath = path.resolve(
-    getCwdByExample('react-component-umd'),
-    './dist/umd/index.js',
-  );
-  fs.mkdirSync(path.resolve(__dirname, './public/umd'), { recursive: true });
-  fs.copyFileSync(umdPath, path.resolve(__dirname, './public/umd/index.js'));
-  fs.copyFileSync(umdPath, path.resolve(__dirname, './public/umd/index.css'));
-
   const rsbuild = await dev({
     cwd: __dirname,
     page,

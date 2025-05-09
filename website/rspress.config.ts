@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginLlms } from '@rspress/plugin-llms';
+import { transformerNotationHighlight } from '@shikijs/transformers';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { defineConfig } from 'rspress/config';
@@ -18,6 +19,9 @@ export default defineConfig({
   logoText: 'Rslib',
   markdown: {
     checkDeadLinks: true,
+    shiki: {
+      transformers: [transformerNotationHighlight()],
+    },
   },
   search: {
     codeBlocks: true,

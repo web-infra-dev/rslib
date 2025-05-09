@@ -29,12 +29,12 @@ export default class FOO {
 
 When `externalHelpers` is disabled, the output JavaScript will inline helper functions.
 
-```ts title="rslib.config.ts" {5}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       syntax: 'es5',
-      externalHelpers: false,
+      externalHelpers: false, // [!code highlight]
     },
   ],
 };
@@ -42,7 +42,8 @@ export default {
 
 Below is the output JavaScript file, the highlighted code is the inlined helper functions:
 
-```js title="index.js" {1-18}
+```js title="index.js"
+// [!code highlight:18]
 function _class_call_check(instance, Constructor) {
   if (!(instance instanceof Constructor))
     throw new TypeError('Cannot call a class as a function');
@@ -79,12 +80,12 @@ export { src_FOO as default };
 
 When `externalHelpers` is enabled, the output JavaScript will import helper functions from the external module `@swc/helpers`.
 
-```ts title="rslib.config.ts" {5}
+```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       syntax: 'es5',
-      externalHelpers: true,
+      externalHelpers: true, // [!code highlight]
     },
   ],
 };
@@ -92,7 +93,8 @@ export default {
 
 Below is the output JavaScript file, the highlighted code is importing helper functions:
 
-```js title="index.js" {1-2}
+```js title="index.js"
+// [!code highlight:2]
 import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__ from '@swc/helpers/_/_class_call_check';
 import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__ from '@swc/helpers/_/_create_class';
 var src_FOO = /*#__PURE__*/ (function () {
