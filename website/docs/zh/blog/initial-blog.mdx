@@ -1,0 +1,128 @@
+import { ImageAlt } from '../../../theme/components/ImageAlt';
+
+# Rslib: Build library with Rspack
+
+![banner](https://assets.rspack.dev/rslib/rslib-banner.png)
+
+我们很高兴地向大家介绍 Rslib —— **一款基于 Rspack 的库开发工具**。Rslib 由字节跳动 Web Infra 团队开发，能够帮助开发者以简单直观的方式创建 JavaScript 库和 UI 组件库，并享受 Rspack 和 Rsbuild 带来的极致开发体验。
+
+## 为什么要做 Rslib
+
+过去，webpack 主要用于打包 web 应用，当开发 JavaScript 库时，开发者通常会引入 esbuild 或 Rollup 等优秀的打包工具，它们能够输出高质量的 ESM 和 CJS 产物，更好地满足 JavaScript 库的打包需求。
+在字节跳动内部，我们的研发团队已开发超过 1 万个 JavaScript 库，在这一过程中，我们观察到多种打包工具并存导致了生态的割裂。此外，在更复杂的库开发场景中，仍存在许多尚未得到良好解决的需求，例如：
+
+- **配置割裂**：库构建配置与应用开发存在明显差异，开发者需要学习不同的配置规则和方法。
+- **生态复用受限**：希望复用生态中沉淀的 webpack 插件或 loader。
+- **扩展能力不足**：希望有丰富的构建生命周期钩子，以满足自定义构建需求。
+- **多格式输出成本高**：库同时打包为 ESM、CJS、UMD 及 Module Federation 等多种格式的产物，需要使用不同工具重复配置。
+- **非 JS 资源处理薄弱**：样式方案和静态资源缺乏标准化处理方案。
+- **类型文件支持缺失**：希望在构建时同时打包依赖的 d.ts 文件。
+
+<br />
+面对这些痛点，我们希望理想的库开发工具能够：
+
+- **易于配置：** 提供开箱即用的配置覆盖大部分场景，通过插件机制实现高级功能扩展，安装即用。
+- **功能全面：** 不仅支持 JavaScript / TypeScript 转换与多格式产物打包，还提供 web 应用构建般全面的样式和资源处理方案。
+- **生态共享：** 库构建与应用构建配置统一，复用 Rspack 繁荣社区，推动统一工具链生态发展。
+- **性能优先：** 底层构建器基于 Rust 实现，具有良好的构建性能，提升开发者体验。
+
+<br />
+为此，我们创建了 Rslib。**它基于
+[Rsbuild](https://rsbuild.dev/zh/)精心设计的配置和插件，使库开发者得以复用
+webpack 和 Rspack 繁荣的知识和生态系统，为开发者提供了完备的库开发能力。**
+
+我们希望 Rslib 能为库开发者提供更强大的能力，并成为 Rspack 生态中的重要组成部分，持续推动基于 Rspack 的统一工具链的发展。
+
+![Rslib 在 Rstack 生态中的位置](https://assets.rspack.dev/others/assets/rslib/rslib-in-rstack.png)
+
+<ImageAlt>Rslib 在 Rstack 生态中的位置</ImageAlt>
+
+## 完备的库开发能力
+
+Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分库构建场景的需求：
+
+- **开箱即用的配置**
+
+  Rslib 提供了开箱即用的库构建配置。只需对配置进行少量调整，即可满足绝大部分库构建需求。不仅如此，对于更高级的集成需求，大多数情况下，只需安装相应的 Rsbuild 插件即可完成，避免了繁琐的配置过程。
+
+  Rslib 的配置基于 Rsbuild 进行扩展，使开发者能继续使用 Rsbuild 的配置及生态，在应用开发和库开发时能够保持一致的心智模型，并能复用构建配置相关的代码。这在需要维护多种构建配置的大型 monorepo 项目中尤为重要。
+
+- **多类型产物支持**
+
+  Rslib 支持将库打包成多种模块系统格式，包括 ESM（ES modules）、CJS（CommonJS）、UMD（Universal Module Definition）与模块联邦（Module Federation）。只需一个构建工具和一份配置文件，即可应对所有构建场景，特别适合需要跨项目和跨框架复用的库开发场景。同时，通过对 Rspack ESM 格式构建产物的优化，Rslib 也已经能构建出规范纯净的 ESM 产物。
+
+  对于 TypeScript 类型声明文件（d.ts），除了支持基于 TypeScript Compiler API 生成 d.ts 文件及相关后处理，也支持基于 [@microsoft/api-extractor](https://www.npmjs.com/package/@microsoft/api-extractor) 对 d.ts 文件进行打包，适合处理依赖复杂的场景。
+
+  ![一个配置文件中多种打包](https://assets.rspack.dev/others/assets/rslib/multiple-formats-config.png)
+
+  <ImageAlt>一个配置文件中多种打包</ImageAlt>
+
+![纯净的 ESM 产物](https://assets.rspack.dev/others/assets/rslib/simple-esm-output.png)
+
+<ImageAlt>纯净的 ESM 产物</ImageAlt>
+
+- **bundle & bundleless**
+
+  Rslib 支持在构建时选择打包（bundle）或仅做转换（bundleless）这两种常见的构建模式。对于 bundleless 场景，还支持了 [产物路径重定向](/config/lib/redirect) 功能，从而解决了常见的 JavaScript 和 d.ts 产物路径中别名替换以及 ESM 要求严格引用路径的问题。
+
+  ![bundleless 产物结构](https://assets.rspack.dev/rslib/rslib-bundleless-mode.png)
+
+  <ImageAlt>bundleless 产物结构</ImageAlt>
+
+- **样式解决方案**
+
+  在 UI 组件库的开发过程中，样式的构建一直是一个难题。与应用构建时使用 Less loader、Sass loader、PostCSS loader 相比，用户在构建库产物时往往需要手动使用对应样式解决方案的原生工具来进行转换。
+
+  借助 Rsbuild 的插件系统和生态，Rslib 可以直接复用 Sass、Less、Stylus、CSS Modules、Tailwind CSS 的解决方案。无论是在 bundle 还是 bundleless 的场景下，用户都可以像构建 web 应用一样，直接通过配置或安装相应插件来进行样式的处理。
+
+  ![支持多种样式解决方案](https://assets.rspack.dev/others/assets/rslib/multiple-styles-config.png)
+
+  <ImageAlt>支持多种样式解决方案</ImageAlt>
+
+- **Web 资源处理**
+
+  Rslib 支持在代码中引用图片、字体、音频、视频等类型的静态资源及内联资源，还支持在 CSS 中引用静态资源。安装相应插件后，用户还可以通过 SVGR 处理 SVG 文件，同时支持 JSON、TOML、YAML 格式。这项功能在构建含有资源的 UI 组件库时，能够提供极大的便利。
+
+- **框架无关**
+
+  Rslib 是一个框架无关的库构建解决方案，支持 Node.js 和多种 UI 组件库的构建。不同 DSL 的 UI 框架只需要通过接入相应插件（包括 React、Preact、Vue、Solid 等）即可完成底层构建配置进行开发。
+
+## 解锁 Rspack 生态可能性
+
+除了常见的 JavaScript 库开发解决方案，基于 Rspack 以及 Rsbuild 生态，Rslib 为开发者们提供了更高级的能力：
+
+- **Module Federation**
+
+  Rslib 内置提供对 [模块联邦](/guide/advanced/module-federation)（Module Federation）的一等公民支持，用户只需简单安装对应的 Rsbuild 插件，即可启动对模块联邦的调试及构建 MF 格式的产物，用户可以在构建库的同时将其作为远程模块发布到远程服务器上，也可以直接使用远程模块。
+
+- **复用 Rsbuild 能力**
+
+  Rslib 可以复用 Rsbuild 的大部分配置，支持的高级功能包括但不限于：[引入路径转换](https://rsbuild.dev/zh/config/source/transform-import)，[内联样式](http://output.inlineStyles)，[polyfill](https://rsbuild.dev/zh/config/output/polyfill) 等，在未来 Rslib 能持续享受 Rsbuild 迭代提供的更多能力。
+
+- **共享 Rspack 和 Rsbuild 生态**
+
+  基于 Rspack 和 Rsbuild 生态，Rslib 能复用一系列生态能力，包括但不限于：
+
+  - 使用 [Storybook](https://storybook.rsbuild.dev/guide/integrations/rslib.html) 直接读取 Rslib 的配置文件进行 UI 组件库开发调试。
+  - 使用 [Rsdoctor](https://rsdoctor.dev/) 进行构建性能及产物分析。
+  - 使用 [Node.js polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill) 插件开发跨运行时的库。
+  - 使用 [ESLint 插件](https://github.com/rspack-contrib/rsbuild-plugin-eslint) 在开发时进行 ESLint 校验。
+  - 使用 [publint 插件](https://github.com/rspack-contrib/rsbuild-plugin-publint) 检查开发的库的 package.json 是否配置正确。
+
+    ![使用 publint 检查 package.json 正确性](https://assets.rspack.dev/others/assets/rslib/publint-screenshot.png)
+
+    <ImageAlt>使用 publint 检查 package.json 正确性</ImageAlt>
+
+  ...... （更多插件的信息请参考 [这里](https://rsbuild.dev/zh/plugins/list/)）
+
+## 当前状态及版本演进
+
+目前 Rstack 工具链中的 Rspack / Rsbuild / Rspress 等项目已经使用 Rslib 进行构建，周下载量数万，在字节内部已经服务了多个业务，同时也是 Module Federation 模块的 [推荐解决方案](https://module-federation.io/guide/basic/rsbuild.html#rslib-module)。
+
+Rslib 目前处于 0.x 阶段，我们将在进一步优化产物输出，并确认最终 API 和配置的设计后发布 1.0 稳定版。你可以在 GitHub 上查看 1.0 版本的 [里程碑](https://github.com/web-infra-dev/rslib/milestone/1) 追踪进展。
+
+## 开始使用 Rslib
+
+我们提供了脚手架工具 [create-rslib](/guide/start/quick-start) 用于快速创建 Rslib 项目。该脚手架支持创建 Node.js / React 库项目及配套的开发工具。此外，我们还提供了 [迁移文档](/guide/migration/tsup)，帮助用户从其他构建工具迁移到 Rslib。你可以在这个 [CodeSandbox](https://codesandbox.io/p/devbox/rslib-demo-react-ts-7mqjsd) 中体验使用 Rslib 开发 React 组件库。
+
+我们相信，基于 Rspack 的统一工具链，将为开发者提供更多的可能性。我们期待你的反馈与贡献，帮助我们共同构建更完善的前端工具链生态。
