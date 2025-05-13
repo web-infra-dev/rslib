@@ -4,7 +4,7 @@ export default defineConfig({
   lib: [
     {
       format: 'esm',
-      syntax: 'esnext',
+      syntax: ['node 18'],
       dts: true,
     },
   ],
