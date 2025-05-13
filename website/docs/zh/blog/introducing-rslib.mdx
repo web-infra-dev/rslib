@@ -39,7 +39,12 @@ import { ImageAlt } from '../../../theme/components/ImageAlt';
 
 我们希望 Rslib 能为库开发者提供更强大的能力，并成为 Rspack 生态中的重要组成部分，持续推动基于 Rspack 的统一工具链的发展。
 
-![Rslib 在 Rstack 生态中的位置](https://assets.rspack.dev/others/assets/rslib/rslib-in-rstack.png)
+<img
+  src="https://assets.rspack.dev/others/assets/rslib/rslib-in-rstack.png"
+  alt="Rslib 在 Rstack 生态中的位置"
+  width="760"
+  style={{ display: 'block', margin: '0 auto' }}
+/>
 
 <ImageAlt>Rslib 在 Rstack 生态中的位置</ImageAlt>
 
@@ -59,11 +64,21 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
 
   对于 TypeScript 类型声明文件（d.ts），除了支持基于 TypeScript Compiler API 生成 d.ts 文件及相关后处理，也支持基于 [@microsoft/api-extractor](https://www.npmjs.com/package/@microsoft/api-extractor) 对 d.ts 文件进行打包，适合处理依赖复杂的场景。
 
-  ![一个配置文件中包含多种格式](https://assets.rspack.dev/others/assets/rslib/multiple-formats-config.png)
+  <img
+    src="https://assets.rspack.dev/others/assets/rslib/multiple-formats-config.png"
+    alt="一个配置文件中包含多种格式"
+    width="400"
+    style={{ display: 'block', margin: '0 auto' }}
+  />
 
   <ImageAlt>一个配置文件中包含多种格式</ImageAlt>
 
-  ![纯净的 ESM 产物](https://assets.rspack.dev/others/assets/rslib/simple-esm-output.png)
+  <img
+    src="https://assets.rspack.dev/others/assets/rslib/simple-esm-output.png"
+    alt="纯净的 ESM 产物"
+    width="400"
+    style={{ display: 'block', margin: '0 auto' }}
+  />
 
   <ImageAlt>纯净的 ESM 产物</ImageAlt>
 
@@ -71,7 +86,12 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
 
   Rslib 支持在构建时选择打包（bundle）或仅做转换（bundleless）这两种常见的构建模式。对于 bundleless 场景，还支持了 [产物路径重定向](/config/lib/redirect) 功能，从而解决了常见的 JavaScript 和 d.ts 产物路径中别名替换以及 ESM 要求严格引用路径的问题。
 
-  ![bundleless 产物结构](https://assets.rspack.dev/rslib/rslib-bundleless-mode.png)
+  <img
+    src="https://assets.rspack.dev/rslib/rslib-bundleless-mode.png"
+    alt="bundleless 产物结构"
+    width="760"
+    style={{ display: 'block', margin: '0 auto' }}
+  />
 
   <ImageAlt>bundleless 产物结构</ImageAlt>
 
@@ -81,7 +101,12 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
 
   借助 Rsbuild 的插件系统和生态，Rslib 可以直接复用 Sass、Less、Stylus、CSS Modules、Tailwind CSS 的解决方案。无论是在 bundle 还是 bundleless 的场景下，用户都可以像构建 web 应用一样，直接通过配置或安装相应插件来进行样式的处理。
 
-  ![支持多种样式解决方案](https://assets.rspack.dev/others/assets/rslib/multiple-styles-config.png)
+  <img
+    src="https://assets.rspack.dev/others/assets/rslib/multiple-styles-config.png"
+    alt="支持多种样式解决方案"
+    width="760"
+    style={{ display: 'block', margin: '0 auto' }}
+  />
 
   <ImageAlt>支持多种样式解决方案</ImageAlt>
 
@@ -115,9 +140,14 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
   - 使用 [ESLint 插件](https://github.com/rspack-contrib/rsbuild-plugin-eslint) 在开发时进行 ESLint 校验。
   - 使用 [publint 插件](https://github.com/rspack-contrib/rsbuild-plugin-publint) 检查开发的库的 package.json 是否配置正确。
 
-    ![使用 publint 检查 package.json 正确性](https://assets.rspack.dev/others/assets/rslib/publint-screenshot.png)
+  <img
+    src="https://assets.rspack.dev/others/assets/rslib/publint-screenshot.png"
+    alt="使用 publint 检查 package.json 正确性"
+    width="760"
+    style={{ display: 'block', margin: '0 auto' }}
+  />
 
-    <ImageAlt>使用 publint 检查 package.json 的正确性</ImageAlt>
+  <ImageAlt>使用 publint 检查 package.json 的正确性</ImageAlt>
 
   > 更多插件的信息请参考 [Rsbuild 插件总览](https://rsbuild.dev/zh/plugins/list/)。
 

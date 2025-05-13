@@ -39,7 +39,12 @@ Therefore, we created Rslib. **Based on the well-designed configurations and plu
 
 We hope Rslib can provide more powerful features for library developers and become an important part of the Rspack ecosystem, continuously promoting the development of unified toolchains based on Rspack.
 
-![Rslib in Rstack ecosystem](https://assets.rspack.dev/others/assets/rslib/rslib-in-rstack.png)
+<img
+  src="https://assets.rspack.dev/others/assets/rslib/rslib-in-rstack.png"
+  alt="Rslib in Rstack ecosystem"
+  width="760"
+  style={{ display: 'block', margin: '0 auto' }}
+/>
 
 <ImageAlt>The location of Rslib in the Rstack ecosystem</ImageAlt>
 
@@ -59,11 +64,21 @@ Rslib provides a comprehensive library building solution that covers most curren
 
   For TypeScript declaration files (d.ts), besides supporting d.ts file generation and related post-processing based on TypeScript Compiler API, it also supports bundling d.ts files using [@microsoft/api-extractor](https://www.npmjs.com/package/@microsoft/api-extractor), suitable for handling complex dependency scenarios.
 
-  ![Multiple formats in one configuration file](https://assets.rspack.dev/others/assets/rslib/multiple-formats-config.png)
+  <img
+    src="https://assets.rspack.dev/others/assets/rslib/multiple-formats-config.png"
+    alt="Multiple formats in one configuration file"
+    width="400"
+    style={{ display: 'block', margin: '0 auto' }}
+  />
 
   <ImageAlt>Multiple formats in one configuration file</ImageAlt>
 
-  ![Clean ESM output](https://assets.rspack.dev/others/assets/rslib/simple-esm-output.png)
+  <img
+    src="https://assets.rspack.dev/others/assets/rslib/simple-esm-output.png"
+    alt="Clean ESM output"
+    width="400"
+    style={{ display: 'block', margin: '0 auto' }}
+  />
 
   <ImageAlt>Clean ESM output</ImageAlt>
 
@@ -71,7 +86,12 @@ Rslib provides a comprehensive library building solution that covers most curren
 
   Rslib supports both bundle and bundleless build modes during build process. For bundleless scenarios, it also supports [output path redirection](/config/lib/redirect) feature, solving common issues with alias replacement in JavaScript and d.ts output paths, as well as strict path reference requirements in ESM.
 
-  ![bundleless output structure](https://assets.rspack.dev/rslib/rslib-bundleless-mode.png)
+  <img
+    src="https://assets.rspack.dev/rslib/rslib-bundleless-mode.png"
+    alt="bundleless output structure"
+    width="760"
+    style={{ display: 'block', margin: '0 auto' }}
+  />
 
   <ImageAlt>bundleless output structure</ImageAlt>
 
@@ -81,7 +101,12 @@ Rslib provides a comprehensive library building solution that covers most curren
 
   Leveraging Rsbuild's plugin system and ecosystem, Rslib can directly reuse solutions for Sass, Less, Stylus, CSS Modules, and Tailwind CSS. Whether in bundle or bundleless scenarios, users can process styles just like building web application, directly through configuration or installing corresponding plugins.
 
-  ![Support multiple style solutions](https://assets.rspack.dev/others/assets/rslib/multiple-styles-config.png)
+  <img
+    src="https://assets.rspack.dev/others/assets/rslib/multiple-styles-config.png"
+    alt="Support multiple style solutions"
+    width="760"
+    style={{ display: 'block', margin: '0 auto' }}
+  />
 
   <ImageAlt>Support multiple style solutions</ImageAlt>
 
@@ -115,7 +140,12 @@ Beyond common JavaScript library development solutions, based on Rspack and the 
   - Use [ESLint plugin](https://github.com/rspack-contrib/rsbuild-plugin-eslint) for ESLint validation during development.
   - Use [publint plugin](https://github.com/rspack-contrib/rsbuild-plugin-publint) to check if the library's package.json is configured correctly.
 
-  ![Use publint to check package.json](https://assets.rspack.dev/others/assets/rslib/publint-screenshot.png)
+  <img
+    src="https://assets.rspack.dev/others/assets/rslib/publint-screenshot.png"
+    alt="Use publint to check package.json"
+    width="760"
+    style={{ display: 'block', margin: '0 auto' }}
+  />
 
   <ImageAlt>Use publint to check package.json</ImageAlt>
 
