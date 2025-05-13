@@ -190,6 +190,15 @@ export async function getResults(
   };
 }
 
+const updateConfigForTest = (rslibConfig: RslibConfig) => {
+  Object.assign(rslibConfig, {
+    performance: {
+      // Do not print file size in tests
+      printFileSize: false,
+    },
+  });
+};
+
 export async function rslibBuild({
   cwd,
   path,
@@ -241,6 +250,7 @@ export async function buildAndGetResults({
   const { rsbuildInstance, rslibConfig } = await rslibBuild({
     cwd: fixturePath,
     path: configPath,
+    modifyConfig: updateConfigForTest,
     lib,
   });
   const {
