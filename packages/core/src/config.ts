@@ -1472,7 +1472,7 @@ async function composeLibRsbuildConfig(
     shims,
   );
   const formatConfig = composeFormatConfig({
-    format: format,
+    format,
     pkgJson: pkgJson!,
     bundle,
     umdName,
