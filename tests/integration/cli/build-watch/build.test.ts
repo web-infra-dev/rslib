@@ -83,6 +83,9 @@ export default defineConfig({
       index: ['./test-temp-src/**'],
     },
   },
+  performance: {
+    printFileSize: false,
+  }
 });
 `,
     );

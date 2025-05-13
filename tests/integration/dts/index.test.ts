@@ -75,11 +75,13 @@ describe('dts when bundle: false', () => {
   });
 
   test('abortOnError: false', async () => {
+    const { restore } = proxyConsole();
     const fixturePath = join(__dirname, 'bundle-false', 'abort-on-error');
     const { isSuccess } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
     });
+    restore();
 
     expect(isSuccess).toBe(true);
   });
@@ -243,10 +245,12 @@ describe('dts when bundle: true', () => {
 
   test('abortOnError: false', async () => {
     const fixturePath = join(__dirname, 'bundle', 'abort-on-error');
+    const { restore } = proxyConsole();
     const { isSuccess } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
     });
+    restore();
 
     expect(isSuccess).toBe(true);
   });
@@ -478,10 +482,12 @@ describe('dts when build: true', () => {
 
   test('abortOnError: false', async () => {
     const fixturePath = join(__dirname, 'build', 'abort-on-error');
+    const { restore } = proxyConsole();
     const { isSuccess } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
     });
+    restore();
 
     expect(isSuccess).toBe(true);
 
@@ -566,10 +572,12 @@ describe('dts when composite: true', () => {
 
   test('abortOnError: false', async () => {
     const fixturePath = join(__dirname, 'composite', 'abort-on-error');
+    const { restore } = proxyConsole();
     const { isSuccess } = await buildAndGetResults({
       fixturePath,
       type: 'dts',
     });
+    restore();
 
     expect(isSuccess).toBe(true);
 

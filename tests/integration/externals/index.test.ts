@@ -6,13 +6,17 @@ import { composeModuleImportWarn } from '../../../packages/core/src/config';
 
 test('should fail to build when `output.target` is not "node"', async () => {
   const fixturePath = join(__dirname, 'browser');
+  const { restore } = proxyConsole();
   const build = buildAndGetResults({ fixturePath });
   await expect(build).rejects.toThrowError('Rspack build failed.');
+  restore();
 });
 
 test('auto externalize Node.js built-in modules when `output.target` is "node"', async () => {
   const fixturePath = join(__dirname, 'node');
+  const { restore } = proxyConsole();
   const { entries } = await buildAndGetResults({ fixturePath });
+  restore();
 
   for (const external of [
     'import * as __WEBPACK_EXTERNAL_MODULE_fs__ from "fs"',
@@ -70,7 +74,9 @@ test('should get warn when use require in ESM', async () => {
 
 test('require ESM from CJS', async () => {
   const fixturePath = join(__dirname, 'node');
+  const { restore } = proxyConsole();
   const { entryFiles } = await buildAndGetResults({ fixturePath });
+  restore();
   const baz = (await import(entryFiles.cjs)).baz;
   const bazValue = await baz();
   expect(bazValue).toBe('baz');
