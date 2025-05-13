@@ -100,3 +100,14 @@ test('CJS exports should be statically analyzable (cjs-module-lexer for Node.js)
     }
   `);
 });
+
+test('throw error when using mf with `bundle: false`', async () => {
+  const fixturePath = path.resolve(__dirname, 'mf-bundle-false');
+  const build = buildAndGetResults({
+    fixturePath,
+  });
+
+  await expect(build).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: When using "mf" format, "bundle" must be set to "true". Since the default value for "bundle" is "true", so you can either explicitly set it to "true" or remove the field entirely.]`,
+  );
+});

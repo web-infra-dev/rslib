@@ -680,6 +680,12 @@ const composeFormatConfig = ({
       return config;
     }
     case 'mf':
+      if (bundle === false) {
+        throw new Error(
+          'When using "mf" format, "bundle" must be set to "true". Since the default value for "bundle" is "true", so you can either explicitly set it to "true" or remove the field entirely.',
+        );
+      }
+
       return {
         dev: {
           writeToDisk: true,
