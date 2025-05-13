@@ -4,11 +4,11 @@ export default defineConfig({
   lib: [
     {
       format: 'esm',
-      syntax: 'es2021',
+      syntax: 'esnext',
     },
     {
       format: 'cjs',
-      syntax: 'es2021',
+      syntax: 'esnext',
     },
   ],
 });
