@@ -20,7 +20,6 @@ export function getCwdByExample(exampleName: string) {
 
 export function generateBundleEsmConfig(config: LibConfig = {}): LibConfig {
   const esmBasicConfig: LibConfig = {
-    format: 'esm',
     output: {
       distPath: {
         root: './dist/esm',
@@ -107,19 +106,19 @@ export async function getResults(
   let key = '';
 
   const formatCount: Record<Format, number> = rslibConfig.lib.reduce(
-    (acc, { format }) => {
-      acc[format!] = (acc[format!] ?? 0) + 1;
+    (acc, { format = 'esm' }) => {
+      acc[format] = (acc[format] ?? 0) + 1;
       return acc;
     },
     {} as Record<Format, number>,
   );
 
   for (const libConfig of rslibConfig.lib) {
-    const { format } = libConfig;
-    const currentFormatCount = formatCount[format!];
-    const currentFormatIndex = formatIndex[format!]++;
+    const { format = 'esm' } = libConfig;
+    const currentFormatCount = formatCount[format];
+    const currentFormatIndex = formatIndex[format]++;
 
-    key = currentFormatCount === 1 ? format! : `${format}${currentFormatIndex}`;
+    key = currentFormatCount === 1 ? format : `${format}${currentFormatIndex}`;
 
     let globFolder = '';
     if (type === 'js' || type === 'css') {

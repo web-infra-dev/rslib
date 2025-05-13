@@ -215,7 +215,7 @@ export interface LibConfig extends EnvironmentConfig {
   id?: string;
   /**
    * Output format for the generated JavaScript files.
-   * @defaultValue `undefined`
+   * @defaultValue `'esm'`
    * @see {@link https://lib.rsbuild.dev/config/lib/format}
    */
   format?: Format;
