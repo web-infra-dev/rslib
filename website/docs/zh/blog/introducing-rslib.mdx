@@ -1,14 +1,19 @@
+---
+sidebar: false
+---
+
 import { ImageAlt } from '../../../theme/components/ImageAlt';
 
 # Rslib: Build library with Rspack
 
 ![banner](https://assets.rspack.dev/rslib/rslib-banner.png)
 
-我们很高兴地向大家介绍 Rslib —— **一款基于 Rspack 的库开发工具**。Rslib 由字节跳动 Web Infra 团队开发，能够帮助开发者以简单直观的方式创建 JavaScript 库和 UI 组件库，并享受 Rspack 和 Rsbuild 带来的极致开发体验。
+我们很高兴地向大家介绍 Rslib —— **一款基于 Rspack 的库开发工具**。Rslib 由字节跳动 Web Infra 团队开发，能够帮助开发者以简单直观的方式创建 JavaScript 库和 UI 组件库，并享受 [Rspack](https://rspack.dev/zh/) 和 [Rsbuild](https://rsbuild.dev/zh/) 带来的极致开发体验。
 
 ## 为什么要做 Rslib
 
 过去，webpack 主要用于打包 web 应用，当开发 JavaScript 库时，开发者通常会引入 esbuild 或 Rollup 等优秀的打包工具，它们能够输出高质量的 ESM 和 CJS 产物，更好地满足 JavaScript 库的打包需求。
+
 在字节跳动内部，我们的研发团队已开发超过 1 万个 JavaScript 库，在这一过程中，我们观察到多种打包工具并存导致了生态的割裂。此外，在更复杂的库开发场景中，仍存在许多尚未得到良好解决的需求，例如：
 
 - **配置割裂**：库构建配置与应用开发存在明显差异，开发者需要学习不同的配置规则和方法。
@@ -18,7 +23,6 @@ import { ImageAlt } from '../../../theme/components/ImageAlt';
 - **非 JS 资源处理薄弱**：样式方案和静态资源缺乏标准化处理方案。
 - **类型文件支持缺失**：希望在构建时同时打包依赖的 d.ts 文件。
 
-<br />
 面对这些痛点，我们希望理想的库开发工具能够：
 
 - **易于配置：** 提供开箱即用的配置覆盖大部分场景，通过插件机制实现高级功能扩展，安装即用。
@@ -26,10 +30,7 @@ import { ImageAlt } from '../../../theme/components/ImageAlt';
 - **生态共享：** 库构建与应用构建配置统一，复用 Rspack 繁荣社区，推动统一工具链生态发展。
 - **性能优先：** 底层构建器基于 Rust 实现，具有良好的构建性能，提升开发者体验。
 
-<br />
-为此，我们创建了 Rslib。**它基于
-[Rsbuild](https://rsbuild.dev/zh/)精心设计的配置和插件，使库开发者得以复用
-webpack 和 Rspack 繁荣的知识和生态系统，为开发者提供了完备的库开发能力。**
+为此，我们创建了 Rslib。**它基于 [Rsbuild](https://rsbuild.dev/zh/) 精心设计的配置和插件，使库开发者得以复用 webpack 和 Rspack 繁荣的知识和生态系统，为开发者提供了完备的库开发能力。**
 
 我们希望 Rslib 能为库开发者提供更强大的能力，并成为 Rspack 生态中的重要组成部分，持续推动基于 Rspack 的统一工具链的发展。
 
@@ -53,13 +54,13 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
 
   对于 TypeScript 类型声明文件（d.ts），除了支持基于 TypeScript Compiler API 生成 d.ts 文件及相关后处理，也支持基于 [@microsoft/api-extractor](https://www.npmjs.com/package/@microsoft/api-extractor) 对 d.ts 文件进行打包，适合处理依赖复杂的场景。
 
-  ![一个配置文件中多种打包](https://assets.rspack.dev/others/assets/rslib/multiple-formats-config.png)
+  ![一个配置文件中包含多种格式](https://assets.rspack.dev/others/assets/rslib/multiple-formats-config.png)
 
-  <ImageAlt>一个配置文件中多种打包</ImageAlt>
+  <ImageAlt>一个配置文件中包含多种格式</ImageAlt>
 
-![纯净的 ESM 产物](https://assets.rspack.dev/others/assets/rslib/simple-esm-output.png)
+  ![纯净的 ESM 产物](https://assets.rspack.dev/others/assets/rslib/simple-esm-output.png)
 
-<ImageAlt>纯净的 ESM 产物</ImageAlt>
+  <ImageAlt>纯净的 ESM 产物</ImageAlt>
 
 - **bundle & bundleless**
 
@@ -71,7 +72,7 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
 
 - **样式解决方案**
 
-  在 UI 组件库的开发过程中，样式的构建一直是一个难题。与应用构建时使用 Less loader、Sass loader、PostCSS loader 相比，用户在构建库产物时往往需要手动使用对应样式解决方案的原生工具来进行转换。
+  在 UI 组件库的开发过程中，样式的构建一直是个难题。与应用构建时使用 Less loader、Sass loader、PostCSS loader 相比，用户在构建库产物时往往需要手动使用对应样式解决方案的原生工具来进行转换。
 
   借助 Rsbuild 的插件系统和生态，Rslib 可以直接复用 Sass、Less、Stylus、CSS Modules、Tailwind CSS 的解决方案。无论是在 bundle 还是 bundleless 的场景下，用户都可以像构建 web 应用一样，直接通过配置或安装相应插件来进行样式的处理。
 
@@ -111,9 +112,9 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
 
     ![使用 publint 检查 package.json 正确性](https://assets.rspack.dev/others/assets/rslib/publint-screenshot.png)
 
-    <ImageAlt>使用 publint 检查 package.json 正确性</ImageAlt>
+    <ImageAlt>使用 publint 检查 package.json 的正确性</ImageAlt>
 
-  ...... （更多插件的信息请参考 [这里](https://rsbuild.dev/zh/plugins/list/)）
+  > 更多插件的信息请参考 [Rsbuild 插件总览](https://rsbuild.dev/zh/plugins/list/)。
 
 ## 当前状态及版本演进
 
@@ -125,4 +126,4 @@ Rslib 目前处于 0.x 阶段，我们将在进一步优化产物输出，并确
 
 我们提供了脚手架工具 [create-rslib](/guide/start/quick-start) 用于快速创建 Rslib 项目。该脚手架支持创建 Node.js / React 库项目及配套的开发工具。此外，我们还提供了 [迁移文档](/guide/migration/tsup)，帮助用户从其他构建工具迁移到 Rslib。你可以在这个 [CodeSandbox](https://codesandbox.io/p/devbox/rslib-demo-react-ts-7mqjsd) 中体验使用 Rslib 开发 React 组件库。
 
-我们相信，基于 Rspack 的统一工具链，将为开发者提供更多的可能性。我们期待你的反馈与贡献，帮助我们共同构建更完善的前端工具链生态。
+我们相信，基于 Rspack 的统一工具链，将为开发者提供更多的可能性。期待你的反馈与贡献，帮助我们共同构建更完善的前端工具链生态。

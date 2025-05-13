@@ -1,23 +1,28 @@
+---
+sidebar: false
+---
+
+import { ImageAlt } from '../../../theme/components/ImageAlt';
+
 # Rslib: Build library with Rspack
 
 ![banner](https://assets.rspack.dev/rslib/rslib-banner.png)
 
-We are excited to introduce Rslib — **a library development tool based on Rspack**. Developed by ByteDance Web Infra Team, Rslib helps developers create JavaScript libraries and UI component libraries in a simple and intuitive way while enjoying the ultimate development experience brought by Rspack and Rsbuild.
+We are excited to introduce Rslib — **a library development tool based on Rspack**. Developed by ByteDance Web Infra Team, Rslib helps developers create JavaScript libraries and UI component libraries in a simple and intuitive way while enjoying the ultimate development experience brought by [Rspack](https://rspack.dev/) and [Rsbuild](https://rsbuild.dev/).
 
 ## Why Rslib
 
-In the past, webpack was mainly used for bundling web applications. When developing JavaScript libraries, developers typically introduced excellent bundling tools like esbuild or Rollup, which could output high-quality ESM and CJS output to better meet JavaScript library bundling needs.
+In the past, webpack was mainly used for bundling web applications. When developing JavaScript libraries, developers typically introduced excellent bundlers like esbuild or Rollup, which could output high-quality ESM and CJS output to better meet JavaScript library bundling needs.
 
-Within ByteDance, our development teams have created over 10,000 JavaScript libraries. During this process, we observed that the coexistence of multiple bundling tools has led to ecosystem fragmentation. Additionally, in more complex library development scenarios, there are still many needs that haven't been well addressed, such as:
+Within ByteDance, our development teams have created over 10,000 JavaScript libraries. During this process, we observed that the coexistence of multiple bundlers has led to ecosystem fragmentation. Additionally, in more complex library development scenarios, there are still many needs that haven't been well addressed, such as:
 
 - **Configuration Fragmentation**: Library build configurations differ significantly from application development, requiring developers to learn different configuration rules and methods.
 - **Limited Ecosystem Reuse**: Desire to reuse webpack plugins or loaders accumulated in the ecosystem.
 - **Insufficient Extensibility**: Need for rich build lifecycle hooks to meet custom build requirements.
 - **High Cost of Multi-format Output**: Libraries need to be bundled into multiple formats like ESM, CJS, UMD, and Module Federation, requiring repeated configuration with different tools.
-- **Weak Non-JS Resource Handling**: Lack of standardized processing solutions for style schemes and static resources.
-- **Missing Type File Support**: Need to bundle dependent d.ts files during build.
+- **Weak Non-JS Resource Handling**: Lack of standardized processing solutions for style schemes and static assets.
+- **Missing Declaration File Support**: Need to bundle d.ts files of dependencies during build.
 
-<br />
 Facing these pain points, we hope the ideal library development tool would:
 
 - **Easy to Configure:** Provide out-of-the-box configurations covering most scenarios, with plugin mechanisms for advanced feature extensions that work right after installation.
@@ -25,17 +30,15 @@ Facing these pain points, we hope the ideal library development tool would:
 - **Shared Ecosystem:** Unify library building with application building configurations, reuse Rspack's prosperous community, and promote unified toolchain ecosystem development.
 - **Performance First:** The underlying bundler is implemented in Rust, offering excellent build performance and improving developer experience.
 
-<br />
-Therefore, we created Rslib. **Based on [Rsbuild](https://rsbuild.dev)'s
-carefully designed configuration and plugins, it allows library developers to
-reuse the prosperous knowledge and ecosystem of webpack and Rspack, providing
-comprehensive library development capabilities.**
+Therefore, we created Rslib. **Based on the well-designed configurations and plugins of [Rsbuild](https://rsbuild.dev)'s, it empowers library developers to take advantage of the extensive knowledge and ecosystem of webpack and Rspack, providing comprehensive library development features.**
 
-We hope Rslib can provide more powerful capabilities for library developers and become an important part of the Rspack ecosystem, continuously promoting the development of unified toolchains based on Rspack.
+We hope Rslib can provide more powerful features for library developers and become an important part of the Rspack ecosystem, continuously promoting the development of unified toolchains based on Rspack.
 
 ![Rslib in Rstack ecosystem](https://assets.rspack.dev/others/assets/rslib/rslib-in-rstack.png)
 
-## Comprehensive library development capabilities
+<ImageAlt>The location of Rslib in the Rstack ecosystem</ImageAlt>
+
+## Comprehensive library development features
 
 Rslib provides a comprehensive library building solution that covers most current library building scenario needs:
 
@@ -53,13 +56,19 @@ Rslib provides a comprehensive library building solution that covers most curren
 
   ![Multiple formats in one configuration file](https://assets.rspack.dev/others/assets/rslib/multiple-formats-config.png)
 
-  ![Decent ESM output](https://assets.rspack.dev/others/assets/rslib/simple-esm-output.png)
+  <ImageAlt>Multiple formats in one configuration file</ImageAlt>
+
+  ![Clean ESM output](https://assets.rspack.dev/others/assets/rslib/simple-esm-output.png)
+
+  <ImageAlt>Clean ESM output</ImageAlt>
 
 - **Bundle & Bundleless**
 
-  Rslib supports both bundled and bundleless build modes during construction. For bundleless scenarios, it also supports [output path redirection](/config/lib/redirect) functionality, solving common issues with alias replacement in JavaScript and d.ts output paths, as well as strict path reference requirements in ESM.
+  Rslib supports both bundle and bundleless build modes during build process. For bundleless scenarios, it also supports [output path redirection](/config/lib/redirect) feature, solving common issues with alias replacement in JavaScript and d.ts output paths, as well as strict path reference requirements in ESM.
 
   ![bundleless output structure](https://assets.rspack.dev/rslib/rslib-bundleless-mode.png)
+
+  <ImageAlt>bundleless output structure</ImageAlt>
 
 - **Style Solutions**
 
@@ -69,9 +78,11 @@ Rslib provides a comprehensive library building solution that covers most curren
 
   ![Support multiple style solutions](https://assets.rspack.dev/others/assets/rslib/multiple-styles-config.png)
 
+  <ImageAlt>Support multiple style solutions</ImageAlt>
+
 - **Web Resource Handling**
 
-  Rslib supports referencing static and inline resources like images, fonts, audio, and video in code, as well as static resources in CSS. After installing the appropriate plugins, users can also process SVG files through SVGR, while supporting JSON, TOML, and YAML formats. This feature provides great convenience when building UI component libraries containing resources.
+  Rslib supports referencing static and inline assets like images, fonts, audio, and video in code, as well as static assets in CSS. After installing the appropriate plugins, users can also process SVG files through SVGR, while supporting JSON, TOML, and YAML formats. This feature provides great convenience when building UI component libraries containing resources.
 
 - **Framework Agnostic**
 
@@ -79,19 +90,19 @@ Rslib provides a comprehensive library building solution that covers most curren
 
 ## Unlocking Rspack ecosystem possibilities
 
-Beyond common JavaScript library development solutions, based on Rspack and the Rsbuild ecosystem, Rslib provides developers with more advanced capabilities:
+Beyond common JavaScript library development solutions, based on Rspack and the Rsbuild ecosystem, Rslib provides developers with more advanced features:
 
 - **Module Federation**
 
   Rslib provides first-class support for [Module Federation](/guide/advanced/module-federation). Users only need to install the corresponding Rsbuild plugin to start debugging Module Federation and build MF format output. Users can publish libraries as remote modules to remote servers while building, or directly use remote modules.
 
-- **Leverage Rsbuild Capabilities**
+- **Leverage Rsbuild Features**
 
-  Rslib can reuse most of Rsbuild's configurations, supporting advanced features including but not limited to: [import path transformation](https://rsbuild.dev/config/source/transform-import), [inline styles](http://output.inlineStyles), [polyfill](https://rsbuild.dev/config/output/polyfill), and will continue to benefit from more capabilities provided by Rsbuild's iterations in the future.
+  Rslib can reuse most of Rsbuild's configurations, supporting advanced features including but not limited to: [import path transformation](https://rsbuild.dev/config/source/transform-import), [inline styles](http://output.inlineStyles), [polyfill](https://rsbuild.dev/config/output/polyfill), and will continue to benefit from more features provided by Rsbuild's iterations in the future.
 
 - **Share Rspack and Rsbuild Ecosystem**
 
-  Based on the Rspack and Rsbuild ecosystem, Rslib can reuse a series of ecosystem capabilities, including but not limited to:
+  Based on the Rspack and Rsbuild ecosystem, Rslib can reuse a series of ecosystem features, including but not limited to:
 
   - Use [Storybook](https://storybook.rsbuild.dev/guide/integrations/rslib.html) to directly read Rslib's configuration files for UI component library development debugging.
   - Use [Rsdoctor](https://rsdoctor.dev/) for build performance and output analysis.
@@ -101,16 +112,18 @@ Beyond common JavaScript library development solutions, based on Rspack and the 
 
   ![Use publint to check package.json](https://assets.rspack.dev/others/assets/rslib/publint-screenshot.png)
 
-  ...... (For more plugin information, please refer to [here](https://rsbuild.dev/plugins/list/))
+  <ImageAlt>Use publint to check package.json</ImageAlt>
+
+  > For more plugin information, please refer to [Rsbuild Plugin Overview](https://rsbuild.dev/plugins/list/).
 
 ## Current status and version evolution
 
 Currently, Rspack / Rsbuild / Rspress and other projects in the Rstack toolchain are using Rslib for building, with tens of thousands of weekly downloads, serving multiple businesses within ByteDance, and is also the [recommended solution](https://module-federation.io/guide/basic/rsbuild.html#rslib-module) for Module Federation modules.
 
-Rslib is currently in 0.x stage. We will release version 1.0 stable after further optimizing output output and confirming the final API and configuration design. You can track the progress of version 1.0 [milestone](https://github.com/web-infra-dev/rslib/milestone/1) on GitHub.
+Rslib is currently in 0.x stage. We will release stable version 1.0 after further optimizing output output and confirming the final API and configuration design. You can track the progress of version 1.0 [milestone](https://github.com/web-infra-dev/rslib/milestone/1) on GitHub.
 
 ## Start using Rslib
 
 We provide the scaffold tool [create-rslib](/guide/start/quick-start) for quickly creating Rslib projects. This scaffold supports creating Node.js / React library projects and supporting development tools. Additionally, we provide [migration documentation](/guide/migration/tsup) to help users migrate from other build tools to Rslib. You can experience developing React component libraries with Rslib in this [CodeSandbox](https://codesandbox.io/p/devbox/rslib-demo-react-ts-7mqjsd).
 
-We believe that a unified toolchain based on Rspack will provide developers with more possibilities. We look forward to your feedback and contributions to help us build a more complete frontend toolchain ecosystem together.
+We believe that a unified toolchain based on Rspack will provide developers with more possibilities. Looking forward to your feedback and contributions to help us build a more complete frontend toolchain ecosystem together.
