@@ -1,13 +1,44 @@
 import path from 'node:path';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginLlms } from '@rspress/plugin-llms';
+import { pluginRss } from '@rspress/plugin-rss';
 import { transformerNotationHighlight } from '@shikijs/transformers';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { defineConfig } from 'rspress/config';
 
+const siteUrl = 'https://lib.rsbuild.dev';
+
 export default defineConfig({
-  plugins: [pluginFontOpenSans(), pluginLlms()],
+  plugins: [
+    pluginFontOpenSans(),
+    pluginLlms(),
+    pluginRss({
+      siteUrl,
+      feed: [
+        {
+          id: 'blog-rss',
+          test: '/blog',
+          title: 'Rslib Blog',
+          language: 'en',
+          output: {
+            type: 'rss',
+            filename: 'blog-rss.xml',
+          },
+        },
+        {
+          id: 'blog-rss-zh',
+          test: '/zh/blog',
+          title: 'Rslib 博客',
+          language: 'zh-CN',
+          output: {
+            type: 'rss',
+            filename: 'blog-rss-zh.xml',
+          },
+        },
+      ],
+    }),
+  ],
   root: path.join(__dirname, 'docs'),
   lang: 'en',
   base: '/',
