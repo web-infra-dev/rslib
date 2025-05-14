@@ -4,10 +4,12 @@ import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginRss } from '@rspress/plugin-rss';
 import { transformerNotationHighlight } from '@shikijs/transformers';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
+import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { defineConfig } from 'rspress/config';
 
 const siteUrl = 'https://lib.rsbuild.dev';
+const description = 'The Rsbuild-based library development tool';
 
 export default defineConfig({
   plugins: [
@@ -62,6 +64,17 @@ export default defineConfig({
     // exclude document fragments from routes
     exclude: ['**/zh/shared/**', '**/en/shared/**'],
   },
+  head: [
+    ({ routePath }) => {
+      const getOgImage = () => {
+        if (routePath.endsWith('blog/introducing-rslib')) {
+          return 'assets/rslib-og-image-introducing.png';
+        }
+        return 'rslib-og-image.png';
+      };
+      return `<meta property="og:image" content="https://assets.rspack.dev/rslib/${getOgImage()}">`;
+    },
+  ],
   themeConfig: {
     socialLinks: [
       {
@@ -85,7 +98,7 @@ export default defineConfig({
         lang: 'en',
         label: 'English',
         title: 'Rslib',
-        description: 'The Rsbuild-based library development tool',
+        description,
         editLink: {
           docRepoBaseUrl:
             'https://github.com/web-infra-dev/rslib/tree/main/website/docs',
@@ -127,6 +140,19 @@ export default defineConfig({
         '@zh': path.join(__dirname, 'docs/zh'),
       },
     },
-    plugins: [pluginGoogleAnalytics({ id: 'G-Q66CEHQ6JR' }), pluginSass()],
+    plugins: [
+      pluginGoogleAnalytics({ id: 'G-Q66CEHQ6JR' }),
+      pluginSass(),
+      pluginOpenGraph({
+        title: 'Rslib',
+        type: 'website',
+        url: siteUrl,
+        description,
+        twitter: {
+          site: '@rspack_dev',
+          card: 'summary_large_image',
+        },
+      }),
+    ],
   },
 });
