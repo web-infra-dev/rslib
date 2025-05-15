@@ -17,6 +17,7 @@ module.exports = {
     'doc_build',
     'node_modules',
     'pnpm-lock.yaml',
+    'tests/integration/vue/index.test.ts',
   ],
   flagWords: banWords,
   dictionaries: ['dictionary'],
