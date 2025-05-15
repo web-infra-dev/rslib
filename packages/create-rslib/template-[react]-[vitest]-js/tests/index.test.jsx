@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/vue';
 import { expect, test } from 'vitest';
-import { Button } from '../src/Button';
+import { Button } from '../src/Button.vue';
 
 test('The button should have correct background color', async () => {
   render(<Button backgroundColor="#ccc" label="Demo Button" />);
