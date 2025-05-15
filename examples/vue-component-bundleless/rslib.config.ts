@@ -3,5 +3,5 @@ import { pluginUnpluginVue } from 'rsbuild-plugin-unplugin-vue';
 
 export default defineConfig({
   plugins: [pluginUnpluginVue()],
-  lib: [{ format: 'esm' }],
+  lib: [{ bundle: false, format: 'esm' }],
 });

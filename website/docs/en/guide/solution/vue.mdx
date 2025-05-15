@@ -1,0 +1,55 @@
+# Vue
+
+In this document, you will learn how to build a Vue component library using Rslib. You can check out Vue related demo projects in the [examples](https://github.com/web-infra-dev/rslib/tree/main/examples).
+
+::: note
+Currently only Vue3 version is supported, Vue2 version is not supported.
+:::
+
+{/* TODO: https://github.com/web-infra-dev/rslib/pull/960 */}
+{/* ## Creating Vue Project */}
+
+{/* You can create a Rslib + Vue project using `create-rslib`. Just execute the following command: */}
+
+{/* import { PackageManagerTabs } from '@theme'; */}
+
+{/* <PackageManagerTabs */}
+{/* command={{ */}
+{/* npm: 'npm create rslib@latest', */}
+{/* yarn: 'yarn create rslib', */}
+{/* pnpm: 'pnpm create rslib@latest', */}
+{/* bun: 'bun create rslib@latest', */}
+{/* }} */}
+{/* /> */}
+
+Then, when prompted with "Select template", choose `Vue`.
+
+## Using in Existing Rslib Project
+
+For developing Vue components, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets `target` to `"node"` by default, which is different from Rsbuild's default target value.
+
+To compile Vue (.vue single-file components), you need to register the [rsbuild-plugin-unplugin-vue plugin](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) based on [unplugin-vue](https://github.com/unplugin/unplugin-vue). This plugin will automatically add the necessary configurations for Vue build.
+
+For example, register in `rslib.config.ts`:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginUnpluginVue } from 'rsbuild-plugin-unplugin-vue'; // [!code highlight]
+
+export default defineConfig({
+  lib: [
+    // ...
+  ],
+  // [!code highlight:4]
+  output: {
+    target: 'web',
+  },
+  plugins: [pluginUnpluginVue(/** options here */)],
+});
+```
+
+::: note
+Currently, the rsbuild-plugin-unplugin-vue plugin does not support packaging Vue SFC scoped CSS styles. You can choose styling solutions like Less or Sass.
+:::
+
+For more configuration options, please refer to the [rsbuild-plugin-unplugin-vue](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) plugin documentation.
