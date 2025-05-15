@@ -1,6 +1,6 @@
 # lib.format
 
-- **类型：** `'esm' | 'cjs' | 'umd' | 'mf'`
+- **类型：** `'esm' | 'cjs' | 'umd' | 'mf' | 'iife'`
 - **默认值：** `'esm'`
 
 指定生成的 JavaScript 产物的输出格式。
@@ -10,9 +10,10 @@
 - `esm`：[modern-module](https://rspack.dev/zh/config/output#type-modern-module)
 - `cjs`：[commonjs-static](https://rspack.dev/zh/config/output#type-commonjs-static)
 - `umd`：[umd](https://rspack.dev/zh/config/output#type-umd)
+- `iife`：开启了 [output.iife](https://rspack.dev/zh/config/output#outputiife) 的 [modern-module](https://rspack.dev/zh/config/output#type-modern-module)
 
 更多详情请参考 [输出格式](/guide/basic/output-format) 和 [模块联邦](/guide/advanced/module-federation)。
 
 ::: note
-`umd` 格式仅在 [bundle](/config/lib/bundle) 设置为 `true` 时有效。
+`umd` 及 `iife` 格式仅在 [bundle](/config/lib/bundle) 设置为 `true` 时有效。
 :::
