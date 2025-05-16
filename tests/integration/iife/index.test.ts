@@ -15,7 +15,6 @@ test('iife', async () => {
 
   globalThis.globalHelper = { helperName: 'HELPER_NAME' };
   require(entryFiles.iife);
-  console.log(globalThis.globalHelper);
   expect(globalThis.addPrefix('ok')).toBe('production: HELPER_NAMEok');
   delete process.env.NODE_ENV;
   delete globalThis.globalHelper;
