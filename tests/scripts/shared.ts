@@ -73,6 +73,19 @@ export function generateBundleUmdConfig(config: LibConfig = {}): LibConfig {
   return mergeConfig(umdBasicConfig, config)!;
 }
 
+export function generateBundleIifeConfig(config: LibConfig = {}): LibConfig {
+  const iifeBasicConfig: LibConfig = {
+    format: 'iife',
+    output: {
+      distPath: {
+        root: './dist/iife',
+      },
+    },
+  };
+
+  return mergeConfig(iifeBasicConfig, config)!;
+}
+
 export type FormatType = Format | `${Format}${number}`;
 type FilePath = string;
 
@@ -101,6 +114,7 @@ export async function getResults(
     cjs: 0,
     umd: 0,
     mf: 0,
+    iife: 0,
   };
   let mfExposeEntry: string | undefined;
   let key = '';

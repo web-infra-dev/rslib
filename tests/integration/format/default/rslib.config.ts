@@ -3,6 +3,7 @@ import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
+    // ESM
     generateBundleEsmConfig({
       output: {
         distPath: {
@@ -10,6 +11,7 @@ export default defineConfig({
         },
       },
     }),
+    // CJS
     generateBundleCjsConfig({
       output: {
         distPath: {
@@ -17,6 +19,7 @@ export default defineConfig({
         },
       },
     }),
+    // ESM bundleless
     generateBundleEsmConfig({
       bundle: false,
       output: {
@@ -25,6 +28,7 @@ export default defineConfig({
         },
       },
     }),
+    // CJS bundleless
     generateBundleCjsConfig({
       bundle: false,
       output: {

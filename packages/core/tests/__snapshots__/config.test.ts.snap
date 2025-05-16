@@ -728,6 +728,231 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     "config": {
       "dev": {
         "progressBar": false,
+      },
+      "output": {
+        "distPath": {
+          "css": "./",
+          "cssAsync": "./",
+          "js": "./",
+          "jsAsync": "./",
+        },
+        "externals": [
+          "assert",
+          "assert/strict",
+          "async_hooks",
+          "buffer",
+          "child_process",
+          "cluster",
+          "console",
+          "constants",
+          "crypto",
+          "dgram",
+          "diagnostics_channel",
+          "dns",
+          "dns/promises",
+          "domain",
+          "events",
+          "fs",
+          "fs/promises",
+          "http",
+          "http2",
+          "https",
+          "inspector",
+          "inspector/promises",
+          "module",
+          "net",
+          "os",
+          "path",
+          "path/posix",
+          "path/win32",
+          "perf_hooks",
+          "process",
+          "punycode",
+          "querystring",
+          "readline",
+          "readline/promises",
+          "repl",
+          "stream",
+          "stream/consumers",
+          "stream/promises",
+          "stream/web",
+          "string_decoder",
+          "sys",
+          "timers",
+          "timers/promises",
+          "tls",
+          "trace_events",
+          "tty",
+          "url",
+          "util",
+          "util/types",
+          "v8",
+          "vm",
+          "wasi",
+          "worker_threads",
+          "zlib",
+          /\\^node:/,
+          "pnpapi",
+        ],
+        "filename": {
+          "js": "[name].js",
+        },
+        "filenameHash": false,
+        "minify": {
+          "css": false,
+          "js": true,
+          "jsOptions": {
+            "minimizerOptions": {
+              "compress": {
+                "dead_code": true,
+                "defaults": false,
+                "toplevel": true,
+                "unused": true,
+              },
+              "format": {
+                "comments": "some",
+                "preserve_annotations": true,
+              },
+              "mangle": false,
+              "minify": false,
+            },
+          },
+        },
+        "overrideBrowserslist": [
+          "last 1 node versions",
+        ],
+        "target": "node",
+      },
+      "performance": {
+        "chunkSplit": {
+          "strategy": "custom",
+        },
+      },
+      "plugins": [
+        {
+          "name": "rsbuild:lib-entry-chunk",
+          "setup": [Function],
+        },
+      ],
+      "resolve": {
+        "alias": {
+          "bar": "bar",
+          "foo": "foo",
+        },
+      },
+      "source": {
+        "entry": {},
+        "preEntry": "./a.js",
+      },
+      "tools": {
+        "htmlPlugin": false,
+        "rspack": [
+          {
+            "experiments": {
+              "rspackFuture": {
+                "bundlerInfo": {
+                  "force": false,
+                },
+              },
+            },
+            "optimization": {
+              "moduleIds": "named",
+              "nodeEnv": false,
+              "splitChunks": {
+                "chunks": "async",
+              },
+            },
+            "resolve": {
+              "extensionAlias": {
+                ".cjs": [
+                  ".cts",
+                  ".cjs",
+                ],
+                ".js": [
+                  ".ts",
+                  ".tsx",
+                  ".js",
+                  ".jsx",
+                ],
+                ".jsx": [
+                  ".tsx",
+                  ".jsx",
+                ],
+                ".mjs": [
+                  ".mts",
+                  ".mjs",
+                ],
+              },
+            },
+          },
+          {
+            "module": {
+              "parser": {
+                "javascript": {
+                  "importMeta": false,
+                },
+              },
+            },
+            "optimization": {
+              "nodeEnv": "test",
+            },
+            "output": {
+              "asyncChunks": false,
+              "iife": true,
+              "library": {
+                "type": "modern-module",
+              },
+            },
+          },
+          [Function],
+          {
+            "target": [
+              "node",
+            ],
+          },
+          {
+            "externalsType": "global",
+            "output": {
+              "globalObject": "globalThis",
+            },
+          },
+          {
+            "plugins": [
+              EntryChunkPlugin {
+                "contextToWatch": null,
+                "enabledImportMetaUrlShim": false,
+                "reactDirectives": {},
+                "shebangChmod": 493,
+                "shebangEntries": {},
+                "shebangInjectedAssets": Set {},
+                "shimsInjectedAssets": Set {},
+              },
+            ],
+          },
+          {
+            "resolve": {
+              "extensionAlias": {
+                ".js": [
+                  ".ts",
+                  ".tsx",
+                ],
+              },
+            },
+          },
+        ],
+        "swc": {
+          "jsc": {
+            "externalHelpers": false,
+          },
+        },
+      },
+    },
+    "format": "iife",
+  },
+  {
+    "config": {
+      "dev": {
+        "progressBar": false,
         "writeToDisk": true,
       },
       "output": {

@@ -130,3 +130,19 @@ export default defineConfig({
 ### 什么是 MF？
 
 MF 代表 Module Federation。<MF />
+
+## IIFE
+
+{/* 以下文档复制自 https://esbuild.github.io/api/#format-iife */}
+
+IIFE 格式代表「立即调用函数表达式」，旨在浏览器中运行。将代码包裹在函数表达式中，可确保代码中的任何变量不会意外与全局作用域中的变量发生冲突。若你的入口点有需要在浏览器中作为全局变量暴露的导出内容，可通过全局名称设置来配置该全局变量的名称。指定 `iife` 格式时产物如下:
+
+```js
+// source code
+alert('test');
+
+// iife output
+(() => {
+  alert('test');
+})();
+```

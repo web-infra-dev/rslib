@@ -7,6 +7,7 @@ import {
   type RsbuildPlugin,
   type RsbuildPlugins,
   type Rspack,
+  type ToolsConfig,
   defineConfig as defineRsbuildConfig,
   loadConfig as loadRsbuildConfig,
   mergeRsbuildConfig,
@@ -679,6 +680,39 @@ const composeFormatConfig = ({
 
       return config;
     }
+    case 'iife': {
+      if (bundle === false) {
+        throw new Error(
+          'When using "iife" format, "bundle" must be set to "true". Since the default value for "bundle" is "true", so you can either explicitly set it to "true" or remove the field entirely.',
+        );
+      }
+
+      const config: EnvironmentConfig = {
+        tools: {
+          rspack: {
+            module: {
+              parser: {
+                javascript: {
+                  importMeta: false,
+                },
+              },
+            },
+            output: {
+              iife: true,
+              asyncChunks: false,
+              library: {
+                type: 'modern-module',
+              },
+            },
+            optimization: {
+              nodeEnv: process.env.NODE_ENV,
+            },
+          },
+        },
+      };
+
+      return config;
+    }
     case 'mf':
       if (bundle === false) {
         throw new Error(
@@ -789,6 +823,7 @@ const composeShimsConfig = (
       };
       break;
     case 'umd':
+    case 'iife':
     case 'mf':
       break;
     default:
@@ -813,7 +848,7 @@ const composeExternalsConfig = (
   // Rspack's externals as they will not be merged from different fields. All externals
   // should to be unified and merged together in the future.
 
-  const externalsTypeMap = {
+  const externalsTypeMap: Record<Format, Rspack.ExternalsType> = {
     esm: 'module-import',
     cjs: 'commonjs-import',
     umd: 'umd',
@@ -821,28 +856,45 @@ const composeExternalsConfig = (
     // If use 'umd', the judgement conditions may be affected by other packages that define variables like 'define'.
     // Therefore, we use 'global' to satisfy both web and node environments.
     mf: 'global',
-  } as const;
+    iife: 'global',
+  };
+
+  const globalObjectMap: Record<Format, string | undefined> = {
+    esm: undefined,
+    cjs: undefined,
+    umd: undefined,
+    mf: undefined,
+    iife: 'globalThis',
+  };
+
+  const rspackConfig: ToolsConfig['rspack'] = {};
+  const rsbuildConfig: EnvironmentConfig = {};
 
   switch (format) {
     case 'esm':
     case 'cjs':
     case 'umd':
     case 'mf':
-      return {
-        output: externals
-          ? {
-              externals,
-            }
-          : {},
-        tools: {
-          rspack: {
-            externalsType: externalsTypeMap[format],
-          },
-        },
-      };
+    case 'iife':
+      rsbuildConfig.output = externals ? { externals } : {};
+      rspackConfig.externalsType = externalsTypeMap[format];
+      if (globalObjectMap[format]) {
+        rspackConfig.output = {
+          globalObject: globalObjectMap[format],
+        };
+      }
+
+      break;
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
+
+  return {
+    ...rsbuildConfig,
+    tools: {
+      rspack: rspackConfig,
+    },
+  };
 };
 
 const composeAutoExtensionConfig = (
