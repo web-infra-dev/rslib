@@ -1,14 +1,15 @@
+import { platform } from 'node:os';
 import { join } from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 import { describe, expect, test } from 'vitest';
 
-describe('ESM', async () => {
+// '__file' path can't be normalized on win32.
+describe.runIf(platform() !== 'win32')('ESM', async () => {
   const fixturePath = join(__dirname);
   const { js, css } = await buildAndGetResults({
     fixturePath,
     type: 'all',
   });
-
   test('bundle', async () => {
     expect(js.contents.esm1).toMatchInlineSnapshot(`
       {

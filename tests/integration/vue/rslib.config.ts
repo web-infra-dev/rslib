@@ -11,6 +11,7 @@ export default defineConfig({
       plugins: [pluginUnpluginVue()],
       bundle: false,
       output: {
+        target: 'web',
         distPath: {
           root: 'dist/bundleless',
         },
@@ -20,6 +21,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       plugins: [pluginUnpluginVue()],
       output: {
+        target: 'web',
         distPath: {
           root: 'dist/bundle',
         },
