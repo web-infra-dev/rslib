@@ -10,5 +10,6 @@ export default defineConfig({
   },
   output: {
     target: 'web',
+    overrideBrowserslist: ['iOS >= 8'],
   },
 });
