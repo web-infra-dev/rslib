@@ -44,18 +44,26 @@ The following diagram illustrates the relationship between Rslib and other tools
 
 To get started with Rslib, see the [Quick Start](https://lib.rsbuild.dev/guide/start/quick-start).
 
-## 🦀 Links
+## 🦀 Rstack
 
-- [Rspack](https://github.com/web-infra-dev/rspack): A fast Rust-based web bundler.
-- [Rsbuild](https://github.com/web-infra-dev/rsbuild): A high-performance build tool powered by Rspack.
-- [Rspress](https://github.com/web-infra-dev/rspress): A fast static site generator based on Rsbuild.
-- [Rsdoctor](https://github.com/web-infra-dev/rsdoctor): A one-stop build analyzer for Rspack and Webpack.
-- [Modern.js](https://github.com/web-infra-dev/modern.js): A progressive React framework based on Rsbuild.
-- [awesome-rspack](https://github.com/web-infra-dev/awesome-rspack): A curated list of awesome things related to Rspack and Rsbuild.
-- [rspack-examples](https://github.com/rspack-contrib/rspack-examples): Examples for Rspack, Rsbuild, Rspress and Rsdoctor.
+Rstack is a unified JavaScript toolchain built around Rspack, with high performance and consistent architecture.
+
+| Name                                                  | Description              |
+| ----------------------------------------------------- | ------------------------ |
+| [Rspack](https://github.com/web-infra-dev/rspack)     | Bundler                  |
+| [Rsbuild](https://github.com/web-infra-dev/rsbuild)   | Build tool               |
+| [Rslib](https://github.com/web-infra-dev/rslib)       | Library development tool |
+| [Rspress](https://github.com/web-infra-dev/rspress)   | Static site generator    |
+| [Rsdoctor](https://github.com/web-infra-dev/rsdoctor) | Build analyzer           |
+| [Rstest](https://github.com/web-infra-dev/rstest)     | Testing framework        |
+
+## 🔗 Links
+
+- [awesome-rspack](https://github.com/web-infra-dev/awesome-rspack): A curated list of awesome things related to Rstack.
+- [rstack-examples](https://github.com/rspack-contrib/rstack-examples): Examples for Rstack.
 - [storybook-rsbuild](https://github.com/rspack-contrib/storybook-rsbuild): Storybook builder powered by Rsbuild.
 - [rsbuild-plugin-template](https://github.com/rspack-contrib/rsbuild-plugin-template): Use this template to create your own Rsbuild plugin.
-- [rstack-design-resources](https://github.com/rspack-contrib/rstack-design-resources): Design resources for Rspack, Rsbuild, Rspress and Rsdoctor.
+- [rstack-design-resources](https://github.com/rspack-contrib/rstack-design-resources): Design resources for Rstack.
 
 ## 🤝 Contribution
 
