@@ -135,3 +135,30 @@ export default defineConfig({
 ### What is MF?
 
 MF stands for Module Federation. <MF />
+
+## IIFE
+
+{/* The following documentation is taken from https://esbuild.github.io/api/#format-iife */}
+
+The iife format stands for "immediately-invoked function expression" and is intended to be run in the browser. Wrapping your code in a function expression ensures that any variables in your code don't accidentally conflict with variables in the global scope. If your entry point has exports that you want to expose as a global in the browser, you can configure that global's name using the global name setting.
+
+In IIFE format, [output.globalObject](https://rspack.dev/config/output#outputglobalobject) is set to [globalThis](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis) by default. The `import` statements that match [externals](/config/rsbuild/output#outputexternals) in the source code will be transformed to access properties through `globalThis`. You can override [output.globalObject](https://rspack.dev/config/output#outputglobalobject) to any value.
+
+When specifying the `iife` format, the source code and corresponding output are as follows:
+
+```js title="source code"
+// parent-sdk is marked as externals
+// externals: ['parent-sdk']
+import { version } from 'parent-sdk';
+alert(version);
+```
+
+```js title="IIFE output"
+(
+  () => {
+    'use strict';
+    const external_parent_sdk_namespaceObject = globalThis['parent-sdk'];
+    alert(external_parent_sdk_namespaceObject.version);
+  },
+)();
+```

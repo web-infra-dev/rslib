@@ -178,6 +178,9 @@ describe('Should compose create Rsbuild config correctly', () => {
           format: 'umd',
         },
         {
+          format: 'iife',
+        },
+        {
           format: 'mf',
           plugins: [pluginModuleFederation({})],
         },

@@ -6,7 +6,7 @@ import type {
 } from '@rsbuild/core';
 import type { GetAsyncFunctionFromUnion } from './utils';
 
-export type Format = 'esm' | 'cjs' | 'umd' | 'mf';
+export type Format = 'esm' | 'cjs' | 'umd' | 'mf' | 'iife';
 
 export type FixedEcmaVersions =
   | 'es5'

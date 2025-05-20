@@ -1,6 +1,6 @@
 # lib.format
 
-- **Type:** `'esm' | 'cjs' | 'umd' | 'mf'`
+- **Type:** `'esm' | 'cjs' | 'umd' | 'mf' | 'iife'`
 - **Default:** `'esm'`
 
 Specify the output format for the generated JavaScript output files.
@@ -10,11 +10,12 @@ For different output formats, Rslib uses the following default value of [output.
 - `esm`：[modern-module](https://rspack.dev/config/output#type-modern-module)
 - `cjs`：[commonjs-static](https://rspack.dev/config/output#type-commonjs-static)
 - `umd`：[umd](https://rspack.dev/config/output#type-umd)
+- `iife`: [modern-module](https://rspack.dev/config/output#type-modern-module) with [output.iife](https://rspack.dev/config/output#outputiife) enabled.
 
 See [Output Format](/guide/basic/output-format) and [Module Federation](/guide/advanced/module-federation) for more details.
 
 ::: note
 
-The `umd` format only works when [bundle](/config/lib/bundle) is set to `true`.
+The `umd`, `mf` and `iife` formats only work when [bundle](/config/lib/bundle) is set to `true`.
 
 :::
