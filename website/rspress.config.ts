@@ -2,7 +2,10 @@ import path from 'node:path';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginRss } from '@rspress/plugin-rss';
-import { transformerNotationHighlight } from '@shikijs/transformers';
+import {
+  transformerNotationDiff,
+  transformerNotationHighlight,
+} from '@shikijs/transformers';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
@@ -53,7 +56,7 @@ export default defineConfig({
   markdown: {
     checkDeadLinks: true,
     shiki: {
-      transformers: [transformerNotationHighlight()],
+      transformers: [transformerNotationHighlight(), transformerNotationDiff()],
     },
   },
   search: {
