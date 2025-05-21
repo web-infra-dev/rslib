@@ -48,7 +48,18 @@ Check out the [lib.bundle](/config/lib/bundle#set-entry) to learn more about how
 
 ## source.exclude <RsbuildDocBadge path="/config/source/exclude" text="source.exclude" />
 
-Specifies JavaScript/TypeScript files that do not need to be compiled.
+Exclude JavaScript or TypeScript files that do not need to be compiled by [SWC](https://rsbuild.dev/guide/configuration/swc).
+
+::: note
+
+Files configured in `source.exclude` will not be translated by SWC, but the referenced files will still be bundled into the outputs.
+
+If you want certain files not to be bundled into the outputs, you can use the following methods:
+
+- **bundle mode**: Use Rspack's [IgnorePlugin](https://rspack.dev/plugins/webpack/ignore-plugin).
+- **bundleless mode**: Use `source.entry` to configure the corresponding glob expression, refer to [Set entry](/config/lib/bundle#bundle-false).
+
+:::
 
 ## source.include <RsbuildDocBadge path="/config/source/include" text="source.include" />
 
