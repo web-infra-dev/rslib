@@ -48,7 +48,7 @@ By default, Rslib uses SWC to remove comments. The corresponding SWC [jsc.minify
 }
 ```
 
-This will only preserve some legal comments and annotations. If you want to preserve all comments, you can refer to the following configuration
+This will only preserve some legal comments and annotations. If you want to preserve all comments, you can refer to the following configuration:
 
 ```ts title="rslib.config.ts"
 export default {
@@ -112,4 +112,31 @@ export default {
     externals: ['@types/react'],
   },
 };
+```
+
+## Miscellaneous
+
+### How to preserve module variables such as `__webpack_hash__` in the source code when generating outputs?
+
+Rslib based on Rspack will transform [module variables](https://rspack.dev/api/runtime-api/module-variables) like `__webpack_hash__`, `__webpack_nonce__`, `__webpack_public_path__`, etc. to runtime code containing `__webpack_require__` by default during build process. If you need to preserve these module variables in the outputs, you can configure [source.define](/config/rsbuild/source#sourcedefine) as follows:
+
+1. Replace the module variables that need to be preserved in the source code with a unique name, such as `__webpack_hash__` with `WEBPACK_HASH`, `__webpack_nonce__` with `WEBPACK_NONCE`, `__webpack_public_path__` with `WEBPACK_PUBLIC_PATH`, etc.
+
+```ts
+const isUpdateAvailable = () => lastCompilationHash !== __webpack_hash__; // [!code --]
+const isUpdateAvailable = () => lastCompilationHash !== WEBPACK_HASH; // [!code ++]
+```
+
+2. Add the module variables that need to be preserved in `source.define`. The key of the passed configuration object is the replaced variable name in the source code, and the value is the module variable that needs to be preserved in the outputs.
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  source: {
+    define: {
+      WEBPACK_HASH: '__webpack_hash__',
+      WEBPACK_NONCE: '__webpack_nonce__',
+      WEBPACK_PUBLIC_PATH: '__webpack_public_path__',
+    },
+  },
+});
 ```

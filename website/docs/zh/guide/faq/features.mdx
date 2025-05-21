@@ -48,7 +48,7 @@ export default defineConfig({
 }
 ```
 
-这将仅保留部分 legal 注释及 annotations。如果你想保留所有注释，可以参考如下配置
+这将仅保留部分 legal 注释及 annotations。如果你想保留所有注释，可以参考如下配置：
 
 ```ts title="rslib.config.ts"
 export default {
@@ -112,4 +112,31 @@ export default {
     externals: ['@types/react'],
   },
 };
+```
+
+## 其他
+
+### 如何在生成产物时保留源码中的 `__webpack_hash__` 等模块变量？
+
+Rslib 底层使用的 Rspack，在构建时会默认将 `__webpack_hash__`、`__webpack_nonce__`、`__webpack_public_path__` 等 [模块变量](https://rspack.dev/zh/api/runtime-api/module-variables) 转换为包含 `__webpack_require__` 的运行时代码。如果你需要在产物中保留这些模块变量，可以通过配置 [source.define](/config/rsbuild/source#sourcedefine) 来实现，如下所示：
+
+1. 在源码中将需要保留的模块变量替换为一个特征名称，如 `__webpack_hash__` 替换为 `WEBPACK_HASH`，`__webpack_nonce__` 替换为 `WEBPACK_NONCE`，`__webpack_public_path__` 替换为 `WEBPACK_PUBLIC_PATH` 等。
+
+```ts
+const isUpdateAvailable = () => lastCompilationHash !== __webpack_hash__; // [!code --]
+const isUpdateAvailable = () => lastCompilationHash !== WEBPACK_HASH; // [!code ++]
+```
+
+2. 在 `source.define` 中添加需要保留的模块变量，传入的配置对象的键名是源码中替换后的变量名称，值是需要在产物中保留的模块变量。
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  source: {
+    define: {
+      WEBPACK_HASH: '__webpack_hash__',
+      WEBPACK_NONCE: '__webpack_nonce__',
+      WEBPACK_PUBLIC_PATH: '__webpack_public_path__',
+    },
+  },
+});
 ```
