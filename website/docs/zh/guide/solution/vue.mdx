@@ -3,24 +3,14 @@
 在本文档中，你将学习如何使用 Rslib 构建 Vue 组件库。你可在 [示例](https://github.com/web-infra-dev/rslib/tree/main/examples) 中查看 Vue 相关演示项目。
 
 ::: note
-目前仅支持 Vue3 版本，Vue2 版本不支持。
+
+1. 仅支持 Vue3 版本，Vue2 版本不支持。
+
+2. Vue 的 d.ts 文件由 [vue-tsc](https://www.npmjs.com/package/vue-tsc) 生成，所以 [lib.dts](/config/lib/dts) / [lib.redirect.dts](/config/lib/redirect#redirectdts) / [lib.banner.dts](/config/lib/banner#bannerdts) / [lib.footer.dts](/config/lib/footer#bannerdts) 在 Vue 项目中不生效。
+
 :::
 
 {/* TODO: https://github.com/web-infra-dev/rslib/pull/960 */}
-{/* ## 创建 Vue 项目 */}
-
-{/* 你可以使用 `create-rslib` 创建 Rslib + Vue 项目。只需执行以下命令： */}
-
-{/* import { PackageManagerTabs } from '@theme'; */}
-
-{/* <PackageManagerTabs */}
-{/* command={{ */}
-{/* npm: 'npm create rslib@latest', */}
-{/* yarn: 'yarn create rslib', */}
-{/* pnpm: 'pnpm create rslib@latest', */}
-{/* bun: 'bun create rslib@latest', */}
-{/* }} */}
-{/* /> */}
 
 然后，当提示 "Select template" 选择 `Vue`。
 
