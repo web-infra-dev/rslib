@@ -1,5 +1,5 @@
 import type { RsbuildMode } from '@rsbuild/core';
-import { type Command, program } from 'commander';
+import cac, { type CAC } from 'cac';
 import { logger } from '../utils/logger';
 import { build } from './build';
 import { init } from './init';
@@ -25,14 +25,14 @@ export type InspectOptions = CommonOptions & {
   verbose?: boolean;
 };
 
-const applyCommonOptions = (command: Command) => {
-  command
+const applyCommonOptions = (cli: CAC) => {
+  cli
     .option(
-      '-c --config <config>',
+      '-c, --config <config>',
       'specify the configuration file, can be a relative or absolute path',
     )
     .option(
-      '-r --root <root>',
+      '-r, --root <root>',
       'specify the project root directory, can be an absolute path or a path relative to cwd',
     )
     .option(
@@ -43,26 +43,33 @@ const applyCommonOptions = (command: Command) => {
     .option(
       '--lib <id>',
       'specify the library (repeatable, e.g. --lib esm --lib cjs)',
-      repeatableOption,
+      {
+        type: [String],
+        default: [],
+      },
     );
 };
 
-const repeatableOption = (value: string, previous: string[]) => {
-  return (previous ?? []).concat([value]);
-};
-
 export function runCli(): void {
-  program.name('rslib').usage('<command> [options]').version(RSLIB_VERSION);
+  const cli = cac('rslib');
 
-  const buildCommand = program.command('build');
-  const inspectCommand = program.command('inspect');
-  const mfDevCommand = program.command('mf-dev');
+  cli.help();
+  cli.version(RSLIB_VERSION);
 
-  [buildCommand, inspectCommand, mfDevCommand].forEach(applyCommonOptions);
+  applyCommonOptions(cli);
+
+  const buildCommand = cli.command('build', 'build the library for production');
+  const inspectCommand = cli.command(
+    'inspect',
+    'inspect the Rsbuild / Rspack configs of Rslib projects',
+  );
+  const mfDevCommand = cli.command(
+    'mf-dev',
+    'start Rsbuild dev server of Module Federation format',
+  );
 
   buildCommand
-    .option('-w --watch', 'turn on watch mode, watch for changes and rebuild')
-    .description('build the library for production')
+    .option('-w, --watch', 'turn on watch mode, watch for changes and rebuild')
     .action(async (options: BuildOptions) => {
       try {
         const cliBuild = async () => {
@@ -92,12 +99,9 @@ export function runCli(): void {
     });
 
   inspectCommand
-    .description('inspect the Rsbuild / Rspack configs of Rslib projects')
-    .option(
-      '--output <output>',
-      'specify inspect content output path',
-      '.rsbuild',
-    )
+    .option('--output <output>', 'specify inspect content output path', {
+      default: '.rsbuild',
+    })
     .option('--verbose', 'show full function definitions in output')
     .action(async (options: InspectOptions) => {
       try {
@@ -116,27 +120,26 @@ export function runCli(): void {
       }
     });
 
-  mfDevCommand
-    .description('start Rsbuild dev server of Module Federation format')
-    .action(async (options: CommonOptions) => {
-      try {
-        const cliMfDev = async () => {
-          const { config, watchFiles } = await init(options);
-          await startMFDevServer(config, {
-            lib: options.lib,
-          });
+  mfDevCommand.action(async (options: CommonOptions) => {
+    try {
+      const cliMfDev = async () => {
+        const { config, watchFiles } = await init(options);
+        await startMFDevServer(config, {
+          lib: options.lib,
+        });
 
-          watchFilesForRestart(watchFiles, async () => {
-            await cliMfDev();
-          });
-        };
+        watchFilesForRestart(watchFiles, async () => {
+          await cliMfDev();
+        });
+      };
 
-        await cliMfDev();
-      } catch (err) {
-        logger.error('Failed to start mf-dev.');
-        logger.error(err);
-        process.exit(1);
-      }
-    });
-  program.parse();
+      await cliMfDev();
+    } catch (err) {
+      logger.error('Failed to start mf-dev.');
+      logger.error(err);
+      process.exit(1);
+    }
+  });
+
+  cli.parse();
 }

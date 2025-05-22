@@ -23,7 +23,7 @@ async function initMFRsbuild(
   const selectedEnvironmentIds = environmentWithInfos
     .filter((env) => {
       const isMf = env.format === 'mf';
-      if (!options?.lib) {
+      if (!options?.lib || options.lib.length === 0) {
         return isMf;
       }
       return env.id && options.lib.includes(env.id);

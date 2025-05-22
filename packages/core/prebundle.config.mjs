@@ -12,7 +12,6 @@ export default {
     typescript: 'typescript',
   },
   dependencies: [
-    'commander',
     {
       name: 'chokidar',
       // strip sourcemap comment
