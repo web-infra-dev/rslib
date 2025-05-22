@@ -1,0 +1,45 @@
+# Vue
+
+在本文档中，你将学习如何使用 Rslib 构建 Vue 组件库。你可在 [示例](https://github.com/web-infra-dev/rslib/tree/main/examples) 中查看 Vue 相关演示项目。
+
+::: note
+
+1. 仅支持 Vue3 版本，Vue2 版本不支持。
+
+2. Vue 的 d.ts 文件由 [vue-tsc](https://www.npmjs.com/package/vue-tsc) 生成，所以 [lib.dts](/config/lib/dts) / [lib.redirect.dts](/config/lib/redirect#redirectdts) / [lib.banner.dts](/config/lib/banner#bannerdts) / [lib.footer.dts](/config/lib/footer#bannerdts) 在 Vue 项目中不生效。
+
+:::
+
+{/* TODO: https://github.com/web-infra-dev/rslib/pull/960 */}
+
+{/* 然后，当提示 "Select template" 选择 `Vue`。 */}
+
+## 在现有 Rslib 项目中使用
+
+开发 Vue 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。 这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。
+
+要编译 Vue（.vue 单文件组件），你需要注册基于 [unplugin-vue](https://github.com/unplugin/unplugin-vue) 实现的 [rsbuild-plugin-unplugin-vue](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) 插件。该插件将自动添加 Vue 构建所需的配置。
+
+例如，在 `rslib.config.ts` 中注册:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginUnpluginVue } from 'rsbuild-plugin-unplugin-vue'; // [!code highlight]
+
+export default defineConfig({
+  lib: [
+    // ...
+  ],
+  // [!code highlight:4]
+  output: {
+    target: 'web',
+  },
+  plugins: [pluginUnpluginVue(/** options here */)],
+});
+```
+
+::: note
+目前 [rsbuild-plugin-unplugin-vue](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) 插件还不支持打包 Vue SFC [scoped CSS](https://vuejs.org/api/sfc-css-features#scoped-css) 样式，你可以选择 Less、Sass 等样式解决方案
+:::
+
+更多配置可以参考 [rsbuild-plugin-unplugin-vue](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) 插件文档。
