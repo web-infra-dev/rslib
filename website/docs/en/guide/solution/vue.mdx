@@ -18,7 +18,7 @@ In this document, you will learn how to build a Vue component library using Rsli
 
 For developing Vue components, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets `target` to `"node"` by default, which is different from Rsbuild's default target value.
 
-To compile Vue (.vue single-file components), you need to register the [rsbuild-plugin-unplugin-vue plugin](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) based on [unplugin-vue](https://github.com/unplugin/unplugin-vue). This plugin will automatically add the necessary configurations for Vue build.
+To compile Vue (.vue single-file components), you need to register the [rsbuild-plugin-unplugin-vue](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) plugin based on [unplugin-vue](https://github.com/unplugin/unplugin-vue). This plugin will automatically add the necessary configurations for Vue build.
 
 For example, register in `rslib.config.ts`:
 
@@ -39,7 +39,7 @@ export default defineConfig({
 ```
 
 ::: note
-Currently, the rsbuild-plugin-unplugin-vue plugin does not support packaging Vue SFC scoped CSS styles. You can choose styling solutions like Less or Sass.
+Currently, the [rsbuild-plugin-unplugin-vue](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) plugin does not support packaging Vue SFC [scoped CSS](https://vuejs.org/api/sfc-css-features#scoped-css) styles. You can choose styling solutions like Less or Sass.
 :::
 
 For more configuration options, please refer to the [rsbuild-plugin-unplugin-vue](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) plugin documentation.
