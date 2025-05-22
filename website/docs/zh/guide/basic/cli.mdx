@@ -1,8 +1,8 @@
 # 命令行工具
 
-Rslib 提供了一个轻量级的命令行工具，包含 [rslib build](#rslib-build) 和 [rslib inspect](#rslib-inspect) 等命令。
+Rslib 内置了一个轻量级的命令行工具，包含 [rslib build](#rslib-build)、[rslib inspect](#rslib-inspect) 等命令。
 
-## rslib -h
+## 查看所有命令
 
 如果你需要查看所有可用的 CLI 命令，请在项目目录中运行以下命令：
 
@@ -12,147 +12,65 @@ npx rslib -h
 
 输出如下：
 
-```text
-Usage: rslib <command> [options]
-
-Options:
-  -V, --version       显示版本号
-  -h, --help          显示命令帮助
+```bash
+Usage:
+  $ rslib <command> [options]
 
 Commands:
-  build [options]     构建用于生产环境的产物
-  inspect [options]   检查 Rslib 项目的 Rsbuild 配置和 Rspack 配置
-  mf-dev [options]    为 Module Federation 格式的库启用 Rsbuild 开发服务器。
-  help [command]      显示命令帮助
+  build    构建用于生产环境的产物
+  inspect  检查 Rslib 项目的 Rsbuild 配置和 Rspack 配置
+  mf-dev   为 Module Federation 格式的库启用 Rsbuild 开发服务器
 ```
+
+## 公共选项
+
+Rslib CLI 提供了一些公共选项，可以用于所有命令：
+
+| 选项                    | 描述                                                                                                                       |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `-c, --config <config>` | 指定配置文件路径，可以为相对路径或绝对路径，详见 [指定配置文件](/guide/basic/configure-rslib#指定配置文件)                 |
+| `--env-dir <dir>`       | 指定目录来加载 `.env` 文件，详见 [Rsbuild - Env 目录](https://rsbuild.dev/zh/guide/advanced/env-vars#env-目录)             |
+| `--env-mode <mode>`     | 指定 env 模式来加载 `.env.[mode]` 文件，详见 [Rsbuild - Env 模式](https://rsbuild.dev/zh/guide/advanced/env-vars#env-模式) |
+| `-h, --help`            | 显示命令帮助                                                                                                               |
+| `--lib <id>`            | 指定运行命令的库（可重复，例如：`--lib esm --lib cjs`），查看 [lib.id](/config/lib/id) 了解如何获取或设置库的 ID           |
+| `-r, --root <root>`     | 指定项目根目录，可以是绝对路径或者相对于 cwd 的路径                                                                        |
 
 ## rslib build
 
 `rslib build` 命令默认会在 `dist/` 目录下输出构建产物。
 
-```text
-Usage: rslib build [options]
-
-构建用于生产环境的产物
+```bash
+Usage:
+  $ rslib build
 
 Options:
-  -c --config <config>  指定配置文件路径，可以为相对路径或绝对路径
-  -r --root <root>      指定项目根目录，可以是绝对路径或者相对于 cwd 的路径
-  --env-mode <mode>     指定 env 模式来加载 `.env.[mode]` 文件
-  --env-dir <dir>       指定目录来加载 `.env` 文件
-  --lib <id>            指定库（可重复，例如 --lib esm --lib cjs）
   -w --watch            开启 watch 模式, 监听文件变更并重新构建
-  -h, --help            显示命令帮助
-```
-
-### Watch 模式
-
-你可以使用 `rslib build --watch` 或 `rslib build -w` 来开启 watch 模式，监听文件变更并重新构建。
-
-```bash
-npx rslib build -w
 ```
 
 ### 环境变量
 
 Rslib 支持在构建过程中向代码中注入环境变量或表达式，这对于区分运行环境、替换常量值等场景很有帮助。
 
-你可以在 [Rsbuild - 环境变量](https://rsbuild.dev/zh/guide/advanced/env-vars) 了解更多详细信息。
+你可以查看 [Rsbuild - 环境变量](https://rsbuild.dev/zh/guide/advanced/env-vars) 了解更多详细信息。
 
 ::: note
 
-- 当 [format](/config/lib/format) 设置为 `esm` 或 `cjs` 时，`process.env.NODE_ENV` 会在构建输出中被保留。
-- 当 [format](/config/lib/format) 设置为 `mf` 或 `umd` 时，`process.env.NODE_ENV` 将被替换，以确保构建输出可以在浏览器中运行。
+- 当 [format](/config/lib/format) 设置为 `esm` 或 `cjs` 时，`process.env.NODE_ENV` 会在构建产物中被保留。
+- 当 [format](/config/lib/format) 设置为 `mf` 或 `umd` 时，`process.env.NODE_ENV` 将被替换，以确保构建产物可以在浏览器中运行。
 
 :::
-
-#### Env 模式
-
-Rslib 支持读取 `.env.[mode]` 和 `.env.[mode].local` 文件。你可以通过 CLI 的 `--env-mode <mode>` 选项来指定 env 模式。
-
-比如，设置 env 模式为 `test`:
-
-```bash
-npx rslib build --env-mode test
-```
-
-Rslib 会依次读取以下文件：
-
-- `.env`
-- `.env.local`
-- `.env.test`
-- `.env.test.local`
-
-:::tip
-
-`--env-mode` 选项的优先级高于 `process.env.NODE_ENV`。
-
-推荐使用 `--env-mode` 来指定 env 模式，不建议修改 `process.env.NODE_ENV`。
-
-:::
-
-#### Env 目录
-
-默认情况下，`.env` 文件位于项目的根目录。你可以通过 CLI 的 `--env-dir <dir>` 选项来指定 env 目录。
-
-比如，指定 env 目录为 `config`：
-
-```bash
-npx rslib build --env-dir config
-```
-
-这种情况下，Rslib 会读取 `./config/.env` 等 env 文件。
-
-##### 示例
-
-比如创建 `.env` 文件并添加以下内容：
-
-```shell title=".env"
-FOO=hello
-BAR=1
-```
-
-然后在 `rslib.config.ts` 文件中，你可以通过 `import.meta.env.[name]` 或 `process.env.[name]` 访问到上述环境变量：
-
-```ts title="rslib.config.ts"
-console.log(import.meta.env.FOO); // 'hello'
-console.log(import.meta.env.BAR); // '1'
-
-console.log(process.env.FOO); // 'hello'
-console.log(process.env.BAR); // '1'
-```
-
-此时，创建一个 `.env.local` 文件，添加以下内容：
-
-```shell title=".env.local"
-BAR=2
-```
-
-`BAR` 的值会被覆盖为 `'2'`：
-
-```ts title="rslib.config.ts"
-console.log(import.meta.env.BAR); // '2'
-console.log(process.env.BAR); // '2'
-```
 
 ## rslib inspect
 
 `rslib inspect` 命令用于查看 Rslib 项目的 Rsbuild 配置和 Rspack 配置。
 
-```text
-Usage: rslib inspect [options]
-
-查看 Rslib 项目的 Rsbuild 配置和 Rspack 配置
+```bash
+Usage:
+  $ rslib inspect
 
 Options:
-  -c --config <config>  指定配置文件路径，可以为相对路径或绝对路径
-  -r --root <root>      指定项目根目录，可以是绝对路径或者相对于 cwd 的路径
-  --env-mode <mode>     指定 env 模式来加载 `.env.[mode]` 文件
-  --env-dir <dir>       指定目录来加载 `.env` 文件
-  --lib <id>            指定库（可重复，例如 --lib esm --lib cjs）
   --output <output>     指定检查内容输出路径（默认：".rsbuild"）
   --verbose             在输出中显示完整的函数定义
-  -h, --help            显示命令帮助
 ```
 
 当你在项目根目录下执行命令 `npx rsbuild inspect` 后，会在项目的 `dist/.rsbuild` 目录生成以下文件：
@@ -197,37 +115,3 @@ Inspect config succeed, open following files to view the content:
 `rslib mf-dev` 命令用于为 [Module Federation](/guide/advanced/module-federation) 格式的库启用 Rsbuild 开发服务器。
 
 这允许你在 host 应用中访问和调试 mf 格式的模块。
-
-```text
-Usage: rslib mf-dev [options]
-
-为 Module Federation 格式的库启用 Rsbuild 开发服务器。
-
-Options:
-  -c --config <config>  指定配置文件路径，可以为相对路径或绝对路径
-  -r --root <root>      指定项目根目录，可以是绝对路径或者相对于 cwd 的路径
-  --env-mode <mode>     指定 env 模式来加载 `.env.[mode]` 文件
-  --env-dir <dir>       指定目录来加载 `.env` 文件
-  --lib <id>            指定库（可重复，例如 --lib esm --lib cjs）
-  -h, --help            显示命令帮助
-```
-
-## 公共选项
-
-### 过滤器
-
-Rslib 提供了 `--lib` 选项来为指定的库运行命令。
-
-```bash
-# 仅构建 id 为 `esm` 的库
-npx rslib build --lib esm
-```
-
-`--lib` 选项可以重复使用来指定多个库。
-
-```bash
-# 构建 id 为 `esm` 和 `cjs` 的库
-npx rslib build --lib esm --lib cjs
-```
-
-> 请查看 [lib.id](/config/lib/id) 了解如何获取或设置库的 ID。

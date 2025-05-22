@@ -2,7 +2,7 @@
 
 Rslib comes with a lightweight CLI that includes commands such as [rslib build](#rslib-build) and [rslib inspect](#rslib-inspect).
 
-## rslib -h
+## All commands
 
 To view all available CLI commands, run the following command in the project directory:
 
@@ -12,52 +12,46 @@ npx rslib -h
 
 The output is shown below:
 
-```text
-Usage: rslib <command> [options]
-
-Options:
-  -V, --version      output the version number
-  -h, --help         display help for command
+```bash
+Usage:
+  $ rslib <command> [options]
 
 Commands:
-  build [options]    build the library for production
-  inspect [options]  inspect the Rsbuild / Rspack configs of Rslib projects
-  mf-dev [options]   start Rsbuild dev server of Module Federation format
-  help [command]     display help for command
+  build    build the library for production
+  inspect  inspect the Rsbuild / Rspack configs of Rslib projects
+  mf-dev   start Rsbuild dev server of Module Federation format
 ```
+
+## Common flags
+
+Rslib CLI provides several common flags that can be used with all commands:
+
+| Flag                    | Description                                                                                                                                                 |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-c, --config <config>` | Specify the configuration file, can be a relative or absolute path, see [Specify config file](/guide/basic/configure-rslib#specify-config-file)             |
+| `--env-dir <dir>`       | Specify the directory to load `.env` files, see [Rsbuild - Env directory](https://rsbuild.dev/guide/advanced/env-vars#env-directory)                        |
+| `--env-mode <mode>`     | Specify the env mode to load the `.env.[mode]` file, see [Rsbuild - Env mode](https://rsbuild.dev/guide/advanced/env-vars#env-mode)                         |
+| `-h, --help`            | Display help for command                                                                                                                                    |
+| `--lib <id>`            | Specify the library to run commands (repeatable, e.g. `--lib esm --lib cjs`), see [lib.id](/config/lib/id) to learn how to get or set the ID of the library |
+| `-r, --root <root>`     | Specify the project root directory, can be an absolute path or a path relative to cwd                                                                       |
 
 ## rslib build
 
 The `rslib build` command will build the outputs for production in the `dist/` directory by default.
 
-```text
-Usage: rslib build [options]
-
-build the library for production
+```bash
+Usage:
+  $ rslib build
 
 Options:
-  -c --config <config>  specify the configuration file, can be a relative or absolute path
-  -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
-  --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
-  --env-dir <dir>       specify the directory to load `.env` files
-  --lib <id>            specify the library (repeatable, e.g. --lib esm --lib cjs)
   -w --watch            turn on watch mode, watch for changes and rebuild
-  -h, --help            display help for command
-```
-
-### Watch mode
-
-You can use `rslib build --watch` or `rslib build -w` to enable watch mode for watching for changes and rebuild.
-
-```bash
-npx rslib build -w
 ```
 
 ### Environment variables
 
 Rslib supports injecting env variables or expressions into the code during build, which is helpful for distinguishing the running environment or replacing constants.
 
-You can see more details in [Rsbuild - Environment Variables](https://rsbuild.dev/guide/advanced/env-vars).
+You can see more details in [Rsbuild - Environment variables](https://rsbuild.dev/guide/advanced/env-vars).
 
 ::: note
 
@@ -66,93 +60,17 @@ You can see more details in [Rsbuild - Environment Variables](https://rsbuild.de
 
 :::
 
-#### Env mode
-
-Rslib supports reading `.env.[mode]` and `.env.[mode].local` files. You can specify the env mode using the `--env-mode <mode>` flag.
-
-For example, set the env mode as `test`:
-
-```bash
-npx rslib build --env-mode test
-```
-
-Rslib will then read the following files in sequence:
-
-- `.env`
-- `.env.local`
-- `.env.test`
-- `.env.test.local`
-
-:::tip
-
-The `--env-mode` option takes precedence over `process.env.NODE_ENV`.
-
-It is recommended to use `--env-mode` to set the env mode, and not to modify `process.env.NODE_ENV`.
-
-:::
-
-#### Env directory
-
-By default, the `.env` file is located in the root directory of the project. You can specify the env directory by using the `--env-dir <dir>` option in the CLI.
-
-For example, to specify the env directory as `config`:
-
-```bash
-npx rslib build --env-dir config
-```
-
-In this case, Rslib will read the `./config/.env` and other env files.
-
-##### Example
-
-For example, create a `.env` file and add the following contents:
-
-```shell title=".env"
-FOO=hello
-BAR=1
-```
-
-Then in the `rslib.config.ts` file, you can access the above env variables using `import.meta.env.[name]` or `process.env.[name]`:
-
-```ts title="rslib.config.ts"
-console.log(import.meta.env.FOO); // 'hello'
-console.log(import.meta.env.BAR); // '1'
-
-console.log(process.env.FOO); // 'hello'
-console.log(process.env.BAR); // '1'
-```
-
-Now, create a `.env.local` file and add the following contents:
-
-```shell title=".env.local"
-BAR=2
-```
-
-The value of `BAR` is overwritten to `'2'`:
-
-```ts title="rslib.config.ts"
-console.log(import.meta.env.BAR); // '2'
-console.log(process.env.BAR); // '2'
-```
-
 ## rslib inspect
 
 The `rslib inspect` command is used to view the Rsbuild config and Rspack config of the Rslib project.
 
-```text
-Usage: rslib inspect [options]
-
-inspect the Rsbuild / Rspack configs of Rslib projects
+```bash
+Usage:
+  $ rslib inspect
 
 Options:
-  -c --config <config>  specify the configuration file, can be a relative or absolute path
-  -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
-  --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
-  --env-dir <dir>       specify the directory to load `.env` files
-  --lib <id>            specify the library (repeatable, e.g. --lib esm --lib cjs)
   --output <output>     specify inspect content output path (default: ".rsbuild")
   --verbose             show full function definitions in output
-  -h, --help            display help for command
 ```
 
 When you run the command `npx rslib inspect` in the project root directory, the following files will be generated in the `dist/.rsbuild` directory of the project:
@@ -197,37 +115,3 @@ Inspect config succeed, open following files to view the content:
 The `rslib mf-dev` command is utilized to start Rsbuild dev server for the [Module Federation](/guide/advanced/module-federation) format.
 
 This enables you to develop and debug your mf format module within the host app.
-
-```text
-Usage: rslib mf-dev [options]
-
-start Rsbuild dev server of Module Federation format
-
-Options:
-  -c --config <config>  specify the configuration file, can be a relative or absolute path
-  -r --root <root>      specify the project root directory, can be an absolute path or a path relative to cwd
-  --env-mode <mode>     specify the env mode to load the `.env.[mode]` file
-  --env-dir <dir>       specify the directory to load `.env` files
-  --lib <id>            specify the library (repeatable, e.g. --lib esm --lib cjs)
-  -h, --help            display help for command
-```
-
-## Common options
-
-### Filter libraries
-
-Rslib provides the `--lib` option to run command for specified libraries.
-
-```bash
-# Only build the library with id `esm`
-npx rslib build --lib esm
-```
-
-The `--lib` option can be repeated to specify multiple libraries.
-
-```bash
-# Build the libraries with id `esm` and `cjs`
-npx rslib build --lib esm --lib cjs
-```
-
-> Check out the [lib.id](/config/lib/id) to learn how to get or set the library ID.
