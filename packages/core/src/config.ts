@@ -1780,7 +1780,7 @@ export const pruneEnvironments = (
   environments: Record<string, EnvironmentConfig>,
   libs?: string[],
 ): Record<string, EnvironmentConfig> => {
-  if (!libs) {
+  if (!libs || libs.length === 0) {
     return environments;
   }
 
