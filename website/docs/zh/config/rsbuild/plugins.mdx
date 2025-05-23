@@ -6,8 +6,10 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 Rslib 与 Rsbuild 共享同一套插件系统，因此你可以在 Rslib 中使用 Rsbuild 插件。
 
-:::tip
-目前部分插件还未适配 Rslib 的 [bundleless](/guide/basic/output-structure#bundle--bundleless) 模式，比如 Vue 插件和 Svelte 插件。因此，这些插件只能在 bundle 模式下使用。
+::: note
+
+目前部分插件还未适配 [bundleless](/guide/basic/output-structure#bundle--bundleless) 模式。例如，Svelte 插件目前只能在 bundle 模式下使用。
+
 :::
 
 ## 使用插件
