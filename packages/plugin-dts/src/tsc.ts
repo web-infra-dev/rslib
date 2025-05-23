@@ -2,7 +2,7 @@ import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import ts from 'typescript';
 import type { DtsRedirect } from './index';
-import { getTimeCost, processDtsFiles } from './utils';
+import { getTimeCost, processBundlelessDtsFiles } from './utils';
 
 const logPrefixTsc = color.dim('[tsc]');
 
@@ -47,16 +47,17 @@ async function handleDiagnosticsAndProcessFiles(
     diagnosticMessages.push(message);
   }
 
-  await processDtsFiles(
-    bundle,
-    declarationDir,
-    dtsExtension,
-    redirect,
-    configPath,
-    rootDir,
-    banner,
-    footer,
-  );
+  if (!bundle) {
+    await processBundlelessDtsFiles(
+      declarationDir,
+      dtsExtension,
+      redirect,
+      configPath,
+      rootDir,
+      banner,
+      footer,
+    );
+  }
 
   if (diagnosticMessages.length) {
     for (const message of diagnosticMessages) {
@@ -71,7 +72,8 @@ async function handleDiagnosticsAndProcessFiles(
 
 export async function emitDts(
   options: EmitDtsOptions,
-  onComplete: (isSuccess: boolean) => void,
+  bundleDtsFunc: () => Promise<void>,
+  resolveWatch: () => void,
   bundle = false,
   isWatch = false,
   build = false,
@@ -112,7 +114,7 @@ export async function emitDts(
     );
   };
 
-  const reportWatchStatusChanged: ts.WatchStatusReporter = async (
+  const reportWatchStatusChanged: ts.WatchStatusReporter = (
     diagnostic: ts.Diagnostic,
     _newLine: string,
     _options: ts.CompilerOptions,
@@ -129,39 +131,53 @@ export async function emitDts(
       logger.info(logPrefixTsc, message);
     }
 
+    const hasError = errorCount && errorCount > 0;
+
     // 6194: 0 errors or 2+ errors!
     if (diagnostic.code === 6194) {
-      if (errorCount === 0 || !errorCount) {
+      if (!hasError) {
         logger.info(logPrefixTsc, message);
-        onComplete(true);
       } else {
         logger.error(logPrefixTsc, message);
       }
-      await processDtsFiles(
-        bundle,
-        declarationDir,
-        dtsExtension,
-        redirect,
-        configPath,
-        rootDir,
-        banner,
-        footer,
-      );
+
+      if (bundle) {
+        if (hasError) {
+          resolveWatch();
+        } else {
+          bundleDtsFunc();
+        }
+      } else {
+        processBundlelessDtsFiles(
+          declarationDir,
+          dtsExtension,
+          redirect,
+          configPath,
+          rootDir,
+          banner,
+          footer,
+          resolveWatch,
+        );
+      }
     }
 
     // 6193: 1 error
     if (diagnostic.code === 6193) {
       logger.error(logPrefixTsc, message);
-      await processDtsFiles(
-        bundle,
-        declarationDir,
-        dtsExtension,
-        redirect,
-        configPath,
-        rootDir,
-        banner,
-        footer,
-      );
+      if (bundle) {
+        bundleDtsFunc();
+      } else {
+        processBundlelessDtsFiles(
+          declarationDir,
+          dtsExtension,
+          redirect,
+          configPath,
+          rootDir,
+          banner,
+          footer,
+          resolveWatch,
+        );
+      }
     }
   };
 
@@ -306,16 +322,17 @@ export async function emitDts(
 
       solutionBuilder.build();
 
-      await processDtsFiles(
-        bundle,
-        declarationDir,
-        dtsExtension,
-        redirect,
-        configPath,
-        rootDir,
-        banner,
-        footer,
-      );
+      if (!bundle) {
+        await processBundlelessDtsFiles(
+          declarationDir,
+          dtsExtension,
+          redirect,
+          configPath,
+          rootDir,
+          banner,
+          footer,
+        );
+      }
 
       if (errorNumber > 0) {
         throw new Error(
