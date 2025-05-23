@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { pluginSass } from '@rsbuild/plugin-sass';
+import { pluginAlgolia } from '@rspress/plugin-algolia';
 import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginRss } from '@rspress/plugin-rss';
 import {
@@ -16,6 +17,7 @@ const description = 'The Rsbuild-based library development tool';
 
 export default defineConfig({
   plugins: [
+    pluginAlgolia(),
     pluginFontOpenSans(),
     pluginLlms(),
     pluginRss({
