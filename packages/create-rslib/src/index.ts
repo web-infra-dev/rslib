@@ -14,7 +14,7 @@ import { type Lang, TEMPLATES, composeTemplateName } from './helpers';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-type TemplateName = 'react' | 'node';
+type TemplateName = 'react' | 'node' | 'vue';
 
 async function getTemplateName({ template }: Argv) {
   if (typeof template === 'string') {
@@ -31,9 +31,10 @@ async function getTemplateName({ template }: Argv) {
     await select({
       message: 'Select template',
       options: [
-        { value: 'node-dual', label: 'Node.js dual ESM/CJS package' },
         { value: 'node-esm', label: 'Node.js pure ESM package' },
+        { value: 'node-dual', label: 'Node.js dual ESM/CJS package' },
         { value: 'react', label: 'React' },
+        { value: 'vue', label: 'Vue' },
         // { value: 'universal', label: 'universal' }, // TODO: provide universal template in the future?
       ],
     }),
@@ -49,7 +50,8 @@ async function getTemplateName({ template }: Argv) {
     }),
   );
 
-  const supportStorybook = templateName === 'react';
+  const supportStorybook = templateName === 'react' || templateName === 'vue';
+  const supportVitest = templateName !== 'vue';
 
   type ExcludesFalse = <T>(x: T | false) => x is T;
   const tools = checkCancel<string[]>(
@@ -83,7 +85,7 @@ function mapESLintTemplate(templateName: string) {
 }
 
 create({
-  root: path.resolve(__dirname, '..'),
+  root: path.resolve(__dirname, '../'),
   name: 'rslib',
   templates: TEMPLATES.map(({ template, tools, lang }) =>
     composeTemplateName({ template, lang, tools }),

@@ -1,0 +1,28 @@
+{
+  "name": "rslib-vue-js",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch"
+  },
+  "devDependencies": {
+    "@rsbuild/plugin-vue": "^1.0.7",
+    "@rslib/core": "workspace:*",
+    "typescript": "^5.8.3",
+    "vue": "^3.2.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0"
+  }
+}
