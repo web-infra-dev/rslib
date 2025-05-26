@@ -13,7 +13,7 @@ test('correct read UMD name from CommonJS', async () => {
       version: '1.2.3',
     },
   };
-  const context = vm.createContext({
+  let context = vm.createContext({
     globalThis: mockGlobalThis,
   });
 
@@ -22,10 +22,12 @@ test('correct read UMD name from CommonJS', async () => {
   // @ts-expect-error
   expect(await mockGlobalThis.MyLibrary.fn('ok')).toBe('DEBUG:1.2.3/ok');
 
+  context = vm.createContext({
+    globalThis: mockGlobalThis,
+  });
+
   vm.runInContext(entries.umd1!, context);
 
   // @ts-expect-error
-  expect(await mockGlobalThis.MyLibrary1.MyLibrary2.fn('ok')).toBe(
-    'DEBUG:1.2.3/ok',
-  );
+  expect(await mockGlobalThis.MyLibrary.Utils.fn('ok')).toBe('DEBUG:1.2.3/ok');
 });

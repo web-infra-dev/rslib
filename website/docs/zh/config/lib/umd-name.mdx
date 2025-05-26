@@ -26,14 +26,14 @@ export default {
 };
 ```
 
-- 将 UMD 包挂载到 `global.MyLibrary1.MyLibrary2`。
+- 将 UMD 包挂载到 `global.MyLibrary.Utils`。
 
 ```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'umd',
-      umdName: ['MyLibrary1', 'MyLibrary2'], // [!code highlight]
+      umdName: ['MyLibrary', 'Utils'], // [!code highlight]
     },
   ],
 };

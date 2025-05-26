@@ -26,14 +26,14 @@ export default {
 };
 ```
 
-- Mount the UMD bundle to `global.MyLibrary1.MyLibrary2`.
+- Mount the UMD bundle to `global.MyLibrary.Utils`.
 
 ```ts title="rslib.config.ts"
 export default {
   lib: [
     {
       format: 'umd',
-      umdName: ['MyLibrary1', 'MyLibrary2'], // [!code highlight]
+      umdName: ['MyLibrary', 'Utils'], // [!code highlight]
     },
   ],
 };

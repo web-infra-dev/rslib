@@ -12,7 +12,7 @@ export default defineConfig({
       },
     }),
     generateBundleUmdConfig({
-      umdName: ['MyLibrary1', 'MyLibrary2'],
+      umdName: ['MyLibrary', 'Utils'],
       output: {
         distPath: {
           root: './dist/array',
