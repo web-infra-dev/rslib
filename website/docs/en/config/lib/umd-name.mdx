@@ -13,7 +13,7 @@ The module name of the UMD bundle must not conflict with the global variable nam
 
 ## Example
 
-- Mount the UMD bundle to `globalThis.MyLibrary`.
+- Mount the UMD bundle to `global.MyLibrary`.
 
 ```ts title="rslib.config.ts"
 export default {
@@ -26,7 +26,7 @@ export default {
 };
 ```
 
-- Mount the UMD bundle to `globalThis.MyLibrary1.MyLibrary2`.
+- Mount the UMD bundle to `global.MyLibrary1.MyLibrary2`.
 
 ```ts title="rslib.config.ts"
 export default {
