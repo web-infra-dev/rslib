@@ -297,7 +297,7 @@ export interface LibConfig extends EnvironmentConfig {
    * @defaultValue `undefined`
    * @see {@link https://lib.rsbuild.dev/config/lib/umd-name}
    */
-  umdName?: string;
+  umdName?: Rspack.LibraryName;
   /**
    * The base directory of the output files.
    * @defaultValue `undefined`

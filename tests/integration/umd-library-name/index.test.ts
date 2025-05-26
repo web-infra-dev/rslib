@@ -17,8 +17,15 @@ test('correct read UMD name from CommonJS', async () => {
     globalThis: mockGlobalThis,
   });
 
-  vm.runInContext(entries.umd, context);
+  vm.runInContext(entries.umd0!, context);
 
   // @ts-expect-error
   expect(await mockGlobalThis.MyLibrary.fn('ok')).toBe('DEBUG:1.2.3/ok');
+
+  vm.runInContext(entries.umd1!, context);
+
+  // @ts-expect-error
+  expect(await mockGlobalThis.MyLibrary1.MyLibrary2.fn('ok')).toBe(
+    'DEBUG:1.2.3/ok',
+  );
 });
