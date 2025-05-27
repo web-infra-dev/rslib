@@ -56,12 +56,10 @@ export default {
 
 ### dts.bundle
 
-- **类型：** `boolean`
+- **类型：** `boolean | { bundledPackages?: string[] }`
 - **默认值：** `false`
 
 是否打包类型声明文件。
-
-#### 示例
 
 如果你想要 [bundle 类型](/guide/advanced/dts#bundle-类型)，你需要：
 
@@ -87,9 +85,42 @@ export default {
 };
 ```
 
-#### 处理第三方依赖
+#### dts.bundle.bundledPackages
 
-当我们打包类型声明文件时，我们需要指定哪些第三方包的类型需要被打包，可以参考 [处理第三方依赖](/guide/advanced/third-party-deps) 文档了解更多关于 externals 相关的配置。
+- **类型：** `string[]`
+
+用于指定需要打包类型声明文件的依赖项，该配置将传递给 `@microsoft/api-extractor` 的 [bundledPackages](https://api-extractor.com/pages/configs/api-extractor_json/#bundledpackages) 配置项。
+
+默认情况下，Rslib 会根据以下配置确定需要外部化的依赖项，详见 [处理第三方依赖](/guide/advanced/third-party-deps)。
+
+- [autoExternal](/config/lib/auto-external) 配置
+- [output.externals](/config/rsbuild/output#outputexternals) 配置
+
+那些没有被外部化的直接依赖项（在 `package.json` 中声明）会被添加到 `bundledPackages` 中，这些包的类型声明文件将会被打包到最终的产物中。
+
+当默认行为不能满足需求时，可以通过 `dts.bundle.bundledPackages` 显式指定需要打包的依赖项。设置该配置后，将完全覆盖上述默认行为。
+
+该配置通常用于打包传递依赖项（即直接依赖的依赖）。假设项目直接依赖 `foo`，而 `foo` 又依赖 `bar`，如果需要同时打包 `foo` 和 `bar` 的类型声明文件，可以如下配置：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      dts: {
+        // [!code highlight:3]
+        bundle: {
+          bundledPackages: ['foo', 'bar'],
+        },
+      },
+    },
+  ],
+};
+```
+
+::: note
+`bundledPackages` 可以使用 [minimatch](https://www.npmjs.com/package/minimatch) 语法配置 glob 表达式，但仅会匹配 `package.json` 中已声明的直接依赖项。
+:::
 
 ### dts.distPath
 
