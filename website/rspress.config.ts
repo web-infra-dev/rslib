@@ -12,7 +12,7 @@ import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { defineConfig } from 'rspress/config';
 
-const siteUrl = 'https://lib.rsbuild.dev';
+const siteUrl = 'https://rslib.rs';
 const description = 'The Rsbuild-based library development tool';
 
 export default defineConfig({

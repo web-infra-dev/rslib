@@ -42,7 +42,7 @@ Rslib 基于 Rsbuild 实现，并完全复用 Rsbuild 的能力和生态系统�
 
 ## 📚 快速上手
 
-你可以参考 [快速上手](https://lib.rsbuild.dev/zh/guide/start/quick-start) 来开始体验 Rslib。
+你可以参考 [快速上手](https://rslib.rs/zh/guide/start/quick-start) 来开始体验 Rslib。
 
 ## 🦀 Rstack
 
