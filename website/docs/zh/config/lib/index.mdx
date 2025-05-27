@@ -15,7 +15,7 @@ interface LibConfig extends EnvironmentConfig {
   footer?: BannerAndFooter;
   shims?: Shims;
   dts?: Dts;
-  umdName?: string;
+  umdName?: Rspack.LibraryName;
 }
 
 interface RslibConfig extends RsbuildConfig {

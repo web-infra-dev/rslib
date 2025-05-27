@@ -565,7 +565,7 @@ const composeFormatConfig = ({
   format: Format;
   pkgJson: PkgJson;
   bundle?: boolean;
-  umdName?: string;
+  umdName?: Rspack.LibraryName;
 }): EnvironmentConfig => {
   const jsParserOptions = {
     cjs: {

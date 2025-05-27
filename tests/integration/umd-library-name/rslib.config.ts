@@ -5,6 +5,19 @@ export default defineConfig({
   lib: [
     generateBundleUmdConfig({
       umdName: 'MyLibrary',
+      output: {
+        distPath: {
+          root: './dist/string',
+        },
+      },
+    }),
+    generateBundleUmdConfig({
+      umdName: ['MyLibrary', 'Utils'],
+      output: {
+        distPath: {
+          root: './dist/array',
+        },
+      },
     }),
   ],
   source: {

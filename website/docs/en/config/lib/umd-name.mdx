@@ -1,6 +1,6 @@
 # lib.umdName
 
-- **Type:** `string`
+- **Type:** `string | string[] | { amd?: string, commonjs?: string, root?: string | string[] }`
 - **Default:** `undefined`
 
 The export name of the [UMD](/guide/basic/output-format#umd) bundle.
@@ -13,7 +13,7 @@ The module name of the UMD bundle must not conflict with the global variable nam
 
 ## Example
 
-The UMD bundle will be mounted to `global.MyLibrary`.
+- Mount the UMD bundle to `global.MyLibrary`.
 
 ```ts title="rslib.config.ts"
 export default {
@@ -21,6 +21,19 @@ export default {
     {
       format: 'umd',
       umdName: 'MyLibrary', // [!code highlight]
+    },
+  ],
+};
+```
+
+- Mount the UMD bundle to `global.MyLibrary.Utils`.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'umd',
+      umdName: ['MyLibrary', 'Utils'], // [!code highlight]
     },
   ],
 };
