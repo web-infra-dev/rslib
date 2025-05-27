@@ -42,7 +42,7 @@ The following diagram illustrates the relationship between Rslib and other tools
 
 ## 📚 Getting started
 
-To get started with Rslib, see the [Quick Start](https://rslib.rs/guide/start/quick-start).
+To get started with Rslib, see the [Quick start](https://rslib.rs/guide/start/quick-start).
 
 ## 🦀 Rstack
 
