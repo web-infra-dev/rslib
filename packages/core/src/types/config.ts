@@ -52,31 +52,31 @@ export type Dts =
       /**
        * Whether to bundle the declaration files.
        * @defaultValue `false`
-       * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsbundle}
+       * @see {@link https://rslib.rs/config/lib/dts#dtsbundle}
        */
       bundle?: boolean;
       /**
        * The output directory of declaration files.
-       * @defaultValue {@link https://lib.rsbuild.dev/config/lib/dts#default-value}
-       * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsdistpath}
+       * @defaultValue {@link https://rslib.rs/config/lib/dts#default-value}
+       * @see {@link https://rslib.rs/config/lib/dts#dtsdistpath}
        */
       distPath?: string;
       /**
        * Whether to generate declaration files with building the project references.
        * @defaultValue `false`
-       * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsbuild}
+       * @see {@link https://rslib.rs/config/lib/dts#dtsbuild}
        */
       build?: boolean;
       /**
        * Whether to abort the build process when an error occurs during declaration files generation.
        * @defaultValue `true`
-       * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsabortonerror}
+       * @see {@link https://rslib.rs/config/lib/dts#dtsabortonerror}
        */
       abortOnError?: boolean;
       /**
        * Whether to automatically set the declaration file extension based on the {@link format} option.
        * @defaultValue `false`
-       * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsautoextension}
+       * @see {@link https://rslib.rs/config/lib/dts#dtsautoextension}
        */
       autoExtension?: boolean;
     }
@@ -88,25 +88,25 @@ export type AutoExternal =
       /**
        * Whether to automatically externalize dependencies of type `dependencies`.
        * @defaultValue `true`
-       * @see {@link https://lib.rsbuild.dev/config/lib/auto-external#autoexternaldependencies}
+       * @see {@link https://rslib.rs/config/lib/auto-external#autoexternaldependencies}
        */
       dependencies?: boolean;
       /**
        * Whether to automatically externalize dependencies of type `optionalDependencies`.
        * @defaultValue `true`
-       * @see {@link https://lib.rsbuild.dev/config/lib/auto-external#autoexternaloptionaldependencies}
+       * @see {@link https://rslib.rs/config/lib/auto-external#autoexternaloptionaldependencies}
        */
       optionalDependencies?: boolean;
       /**
        * Whether to automatically externalize dependencies of type `peerDependencies`.
        * @defaultValue `true`
-       * @see {@link https://lib.rsbuild.dev/config/lib/auto-external#autoexternalpeerdependencies}
+       * @see {@link https://rslib.rs/config/lib/auto-external#autoexternalpeerdependencies}
        */
       peerDependencies?: boolean;
       /**
        * Whether to automatically externalize dependencies of type `devDependencies`.
        * @defaultValue `false`
-       * @see {@link https://lib.rsbuild.dev/config/lib/auto-external#autoexternaldevdependencies}
+       * @see {@link https://rslib.rs/config/lib/auto-external#autoexternaldevdependencies}
        */
       devDependencies?: boolean;
     };
@@ -120,37 +120,37 @@ export type BannerAndFooter = {
 export type Shims = {
   /**
    * Configure the shims for CommonJS output.
-   * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimscjs}
+   * @see {@link https://rslib.rs/config/lib/shims#shimscjs}
    */
   cjs?: {
     /**
      * Whether to inject shims for the `import.meta.url` in CommonJS output.
      * @defaultValue `true`
-     * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimscjsimportmetaurl}
+     * @see {@link https://rslib.rs/config/lib/shims#shimscjsimportmetaurl}
      */
     'import.meta.url'?: boolean;
   };
   /**
    * Configure the shims for ESM output.
-   * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimsesm}
+   * @see {@link https://rslib.rs/config/lib/shims#shimsesm}
    */
   esm?: {
     /**
      * Whether to inject shims for the global `__filename` of CommonJS in ESM output.
      * @defaultValue `false`
-     * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimsesm__filename}
+     * @see {@link https://rslib.rs/config/lib/shims#shimsesm__filename}
      */
     __filename?: boolean;
     /**
      * Whether to inject shims for the global `__dirname` of CommonJS in ESM output.
      * @defaultValue `false`
-     * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimsesm__dirname}
+     * @see {@link https://rslib.rs/config/lib/shims#shimsesm__dirname}
      */
     __dirname?: boolean;
     /**
      * Whether to inject shims for the global `require` of CommonJS in ESM output.
      * @defaultValue `false`
-     * @see {@link https://lib.rsbuild.dev/config/lib/shims#shimsesmrequire}
+     * @see {@link https://rslib.rs/config/lib/shims#shimsesmrequire}
      */
     require?: boolean;
   };
@@ -210,61 +210,61 @@ export interface LibConfig extends EnvironmentConfig {
   /**
    * The unique identifier of the library.
    * @defaultValue `undefined`
-   * @see {@link https://lib.rsbuild.dev/config/lib/id}
+   * @see {@link https://rslib.rs/config/lib/id}
    */
   id?: string;
   /**
    * Output format for the generated JavaScript files.
    * @defaultValue `'esm'`
-   * @see {@link https://lib.rsbuild.dev/config/lib/format}
+   * @see {@link https://rslib.rs/config/lib/format}
    */
   format?: Format;
   /**
    * Whether to bundle the library.
    * @defaultValue `true`
-   * @see {@link https://lib.rsbuild.dev/config/lib/bundle}
+   * @see {@link https://rslib.rs/config/lib/bundle}
    */
   bundle?: boolean;
   /**
    * Whether to automatically set the file extension based on {@link format} option in the JavaScript output files.
    * @defaultValue `true`
-   * @see {@link https://lib.rsbuild.dev/config/lib/auto-extension}
+   * @see {@link https://rslib.rs/config/lib/auto-extension}
    */
   autoExtension?: boolean;
   /**
    * Whether to automatically externalize dependencies of different dependency types and do not bundle them.
    * @defaultValue `true` when {@link format} is `cjs` or `esm`, `false` when {@link format} is `umd` or `mf`.
-   * @see {@link https://lib.rsbuild.dev/config/lib/auto-external}
+   * @see {@link https://rslib.rs/config/lib/auto-external}
    */
   autoExternal?: AutoExternal;
   /**
    * Configure the redirect of the import paths, applicable {@link bundle} is set to `false`.
    * @defaultValue `{}`
-   * @see {@link https://lib.rsbuild.dev/config/lib/redirect}
+   * @see {@link https://rslib.rs/config/lib/redirect}
    */
   redirect?: Redirect;
   /**
    * Configure the syntax to which JavaScript and CSS will be downgraded.
    * @defaultValue `'esnext'`
-   * @see {@link https://lib.rsbuild.dev/config/lib/syntax}
+   * @see {@link https://rslib.rs/config/lib/syntax}
    */
   syntax?: Syntax;
   /**
    * Whether to import SWC helper functions from `@swc/helpers` instead of inlining them.
    * @defaultValue `false`
-   * @see {@link https://lib.rsbuild.dev/config/lib/external-helpers}
+   * @see {@link https://rslib.rs/config/lib/external-helpers}
    */
   externalHelpers?: boolean;
   /**
    * Inject content into the top of each JavaScript, CSS or declaration file.
    * @defaultValue `{}`
-   * @see {@link https://lib.rsbuild.dev/config/lib/banner}
+   * @see {@link https://rslib.rs/config/lib/banner}
    */
   banner?: BannerAndFooter;
   /**
    * Inject content into the bottom of each JavaScript, CSS or declaration file.
    * @defaultValue `{}`
-   * @see {@link https://lib.rsbuild.dev/config/lib/footer}
+   * @see {@link https://rslib.rs/config/lib/footer}
    */
   footer?: BannerAndFooter;
   /**
@@ -283,25 +283,25 @@ export interface LibConfig extends EnvironmentConfig {
    *   },
    * };
    * ```
-   * @see {@link https://lib.rsbuild.dev/config/lib/shims}
+   * @see {@link https://rslib.rs/config/lib/shims}
    */
   shims?: Shims;
   /**
    * Configure the generation of the TypeScript declaration files.
    * @defaultValue `false`
-   * @see {@link https://lib.rsbuild.dev/config/lib/dts}
+   * @see {@link https://rslib.rs/config/lib/dts}
    */
   dts?: Dts;
   /**
    * The export name of the UMD bundle.
    * @defaultValue `undefined`
-   * @see {@link https://lib.rsbuild.dev/config/lib/umd-name}
+   * @see {@link https://rslib.rs/config/lib/umd-name}
    */
   umdName?: Rspack.LibraryName;
   /**
    * The base directory of the output files.
    * @defaultValue `undefined`
-   * @see {@link https://lib.rsbuild.dev/config/lib/out-base}
+   * @see {@link https://rslib.rs/config/lib/out-base}
    */
   outBase?: string;
   /**
@@ -328,7 +328,7 @@ interface RslibOutputConfig extends OutputConfig {
    * When minify is not specified, Rslib will use a sane default for minify options.
    * The default options will only perform dead code elimination and unused code elimination.
    *
-   * @see {@link https://lib.rsbuild.dev/config/rsbuild/output#outputminify}
+   * @see {@link https://rslib.rs/config/rsbuild/output#outputminify}
    */
   minify?: OutputConfig['minify'];
 }

@@ -8,7 +8,7 @@ An [Rsbuild plugin](https://www.npmjs.com/package/rsbuild-plugin-dts) to emit de
 
 ## Using in Rslib
 
-Read [Declaration files](https://lib.rsbuild.dev/guide/advanced/dts) and [lib.dts](https://lib.rsbuild.dev/config/lib/dts) for more details.
+Read [Declaration files](https://rslib.rs/guide/advanced/dts) and [lib.dts](https://rslib.rs/config/lib/dts) for more details.
 
 ## Using in Rsbuild
 
@@ -38,7 +38,7 @@ export default {
 
 Whether to bundle the declaration files.
 
-If you want to [bundle declaration files](https://lib.rsbuild.dev/guide/advanced/dts#bundle-declaration-files) files, you should:
+If you want to [bundle declaration files](https://rslib.rs/guide/advanced/dts#bundle-declaration-files) files, you should:
 
 1. Install `@microsoft/api-extractor` as a development dependency, which is the underlying tool used for bundling declaration files.
 
