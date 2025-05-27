@@ -114,4 +114,44 @@ export const TEMPLATES: Template[] = [
     lang: 'ts',
     tools: { storybook: 'storybook-react-ts', vitest: 'vitest-react-ts' },
   },
+  // vue-js
+  {
+    template: 'vue',
+    lang: 'js',
+  },
+  {
+    template: 'vue',
+    lang: 'js',
+    tools: { storybook: 'storybook-vue-js' },
+  },
+  {
+    template: 'vue',
+    lang: 'js',
+    tools: { vitest: 'vitest-vue-js' },
+  },
+  {
+    template: 'vue',
+    lang: 'js',
+    tools: { storybook: 'storybook-vue-js', vitest: 'vitest-vue-js' },
+  },
+  // vue-ts
+  {
+    template: 'vue',
+    lang: 'ts',
+  },
+  {
+    template: 'vue',
+    lang: 'ts',
+    tools: { storybook: 'storybook-vue-ts' },
+  },
+  {
+    template: 'vue',
+    lang: 'ts',
+    tools: { vitest: 'vitest-vue-ts' },
+  },
+  {
+    template: 'vue',
+    lang: 'ts',
+    tools: { storybook: 'storybook-vue-ts', vitest: 'vitest-vue-ts' },
+  },
 ] as const;
