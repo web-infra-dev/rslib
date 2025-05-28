@@ -400,6 +400,33 @@ describe('dts when bundle: true', () => {
 
     restore();
   });
+
+  test('override with bundledPackages', async () => {
+    const fixturePath = join(__dirname, 'bundle', 'bundled-packages');
+    const { entries } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    // default
+    expect(entries.esm0).toContain(
+      `import { Constructable } from '@vitest/utils';`,
+    );
+
+    // override empty array
+    expect(entries.esm1).toMatchInlineSnapshot(`
+      "
+      export * from "@vitest/expect";
+
+      export { }
+      "
+    `);
+
+    // override with bundledPackages
+    expect(entries.esm2).not.toContain(
+      `import { Constructable } from '@vitest/utils';`,
+    );
+  });
 });
 
 describe('dts when build: true', () => {

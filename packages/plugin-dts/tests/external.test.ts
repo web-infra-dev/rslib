@@ -105,4 +105,18 @@ describe('should calcBundledPackages correctly', () => {
 
     expect(result).toEqual([]);
   });
+
+  it('overrides with bundledPackages', () => {
+    vi.spyOn(fs, 'readFileSync').mockImplementation(() =>
+      JSON.stringify(commonPkgJson),
+    );
+
+    const result = calcBundledPackages({
+      autoExternal: true,
+      cwd: 'pkg/to/root',
+      overrideBundledPackages: ['foo', '@bar/*'],
+    });
+
+    expect(result).toEqual(['foo', '@bar/*']);
+  });
 });

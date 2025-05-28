@@ -19,11 +19,16 @@ const isObject = (obj: unknown): obj is Record<string, any> =>
 
 // use !externals
 export const calcBundledPackages = (options: {
-  autoExternal: DtsGenOptions['autoExternal'];
   cwd: string;
+  autoExternal: DtsGenOptions['autoExternal'];
   userExternals?: DtsGenOptions['userExternals'];
+  overrideBundledPackages?: string[];
 }): string[] => {
-  const { autoExternal, cwd, userExternals } = options;
+  const { cwd, autoExternal, userExternals, overrideBundledPackages } = options;
+
+  if (overrideBundledPackages) {
+    return overrideBundledPackages;
+  }
 
   let pkgJson: {
     dependencies?: Record<string, string>;
@@ -119,6 +124,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     dtsExtension = '.d.ts',
     autoExternal = true,
     userExternals,
+    apiExtractorOptions,
     banner,
     footer,
     redirect = {
@@ -213,9 +219,10 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
         banner,
         footer,
         bundledPackages: calcBundledPackages({
-          autoExternal,
           cwd,
+          autoExternal,
           userExternals,
+          overrideBundledPackages: apiExtractorOptions?.bundledPackages,
         }),
       });
     }

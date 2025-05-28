@@ -22,8 +22,12 @@ export type DtsRedirect = {
   extension?: boolean;
 };
 
+export type ApiExtractorOptions = {
+  bundledPackages?: string[];
+};
+
 export type PluginDtsOptions = {
-  bundle?: boolean;
+  bundle?: boolean | ApiExtractorOptions;
   distPath?: string;
   build?: boolean;
   abortOnError?: boolean;
@@ -46,7 +50,8 @@ export type DtsEntry = {
   path?: string;
 };
 
-export type DtsGenOptions = PluginDtsOptions & {
+export type DtsGenOptions = Omit<PluginDtsOptions, 'bundle'> & {
+  bundle: boolean;
   name: string;
   cwd: string;
   isWatch: boolean;
@@ -56,6 +61,7 @@ export type DtsGenOptions = PluginDtsOptions & {
   tsconfigPath: string;
   tsConfigResult: ts.ParsedCommandLine;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
+  apiExtractorOptions?: ApiExtractorOptions;
 };
 
 interface TaskResult {
@@ -71,7 +77,15 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
   name: PLUGIN_DTS_NAME,
 
   setup(api) {
-    options.bundle = options.bundle ?? false;
+    let apiExtractorOptions = {};
+
+    if (options.bundle && typeof options.bundle === 'object') {
+      apiExtractorOptions = {
+        ...options.bundle,
+      };
+    }
+
+    const bundle = !!options.bundle;
     options.abortOnError = options.abortOnError ?? true;
     options.build = options.build ?? false;
     options.redirect = options.redirect ?? {};
@@ -93,10 +107,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         // @microsoft/api-extractor only support single entry to bundle declaration files
         // see https://github.com/microsoft/rushstack/issues/1596#issuecomment-546790721
         // we support multiple entries by calling api-extractor multiple times
-        const dtsEntry = processSourceEntry(
-          options.bundle!,
-          config.source?.entry,
-        );
+        const dtsEntry = processSourceEntry(bundle, config.source?.entry);
 
         const cwd = api.context.rootPath;
         const tsconfigPath = ts.findConfigFile(
@@ -132,7 +143,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         }
 
         // clean .rslib temp folder
-        if (options.bundle) {
+        if (bundle) {
           await clearTempDeclarationDir(cwd);
         }
 
@@ -150,9 +161,11 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
 
         const dtsGenOptions: DtsGenOptions = {
           ...options,
+          bundle,
           dtsEntry,
           dtsEmitPath,
           userExternals: config.output.externals,
+          apiExtractorOptions,
           tsconfigPath,
           tsConfigResult,
           name: environment.name,

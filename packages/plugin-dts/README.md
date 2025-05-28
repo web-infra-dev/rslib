@@ -54,6 +54,33 @@ pluginDts({
 });
 ```
 
+#### bundle.bundledPackages
+
+- **Type:** `string[]`
+
+Specifies the dependencies whose declaration files should be bundled. This configuration is passed to the [bundledPackages](https://api-extractor.com/pages/configs/api-extractor_json/#bundledpackages) option of `@microsoft/api-extractor`.
+
+By default, `rsbuild-plugin-dts` determines externalized dependencies based on the following configurations.
+
+- [autoExternal](#autoexternal) configuration
+- [output.externals](https://rsbuild.rs/config/output/externals) configuration
+
+Direct dependencies (declared in `package.json`) that are not externalized will be automatically added to `bundledPackages`, and their declaration files will be bundled into the final output.
+
+When the default behavior does not meet the requirements, you can explicitly specify the dependencies whose declaration files need to be bundled through `bundle.bundledPackages`. After setting this configuration, the above default behavior will be completely overwritten.
+
+This is typically used for bundling transitive dependencies (dependencies of direct dependencies). For example, if the project directly depends on `foo`, and `foo` depends on `bar`, you can bundle both `foo` and `bar`'s declaration files as follows:
+
+```js
+pluginDts({
+  bundle: {
+    bundledPackages: ['foo', 'bar'],
+  },
+});
+```
+
+> `bundledPackages` can be specified with the [minimatch](https://www.npmjs.com/package/minimatch) syntax, but will only match the declared direct dependencies in `package.json`.
+
 ### distPath
 
 - **Type:** `string`
