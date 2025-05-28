@@ -32,7 +32,7 @@ export const pluginEsmRequireShim = (): RsbuildPlugin => ({
           // Just before minify stage, to perform tree shaking.
           stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE - 1,
           raw: true,
-          include: /\.(js|cjs)$/,
+          include: /\.(js|mjs)$/,
         }),
       );
     });
