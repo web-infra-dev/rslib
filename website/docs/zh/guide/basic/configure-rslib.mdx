@@ -62,7 +62,7 @@ export default {
 };
 ```
 
-Rslib 会在内部生成 Rsbuild 的 [environments](https://rsbuild.dev/zh/config/environments) 配置，请参考 [调试配置](#调试配置) 来查看最终生成的配置。
+Rslib 会在内部生成 Rsbuild 的 [environments](https://rsbuild.rs/zh/config/environments) 配置，请参考 [调试配置](#调试配置) 来查看最终生成的配置。
 
 你也可以在 [配置概览](/config/) 页面查看所有配置的详细介绍。
 
@@ -79,7 +79,7 @@ Rslib 会在内部生成 Rsbuild 的 [environments](https://rsbuild.dev/zh/confi
 
 我们推荐使用 `.mjs` 或 `.ts` 格式的配置文件，并从 `@rslib/core` 中导入 `defineConfig` 工具函数, 它提供了友好的 TypeScript 类型推导和自动补全，可以帮助你避免配置中的错误。
 
-比如在 `rslib.config.ts` 中，你可以定义 Rslib 的 [syntax](/config/lib/syntax) 配置和 Rsbuild 的 [output.target](https://rsbuild.dev/config/output/target#outputtarget) 配置：
+比如在 `rslib.config.ts` 中，你可以定义 Rslib 的 [syntax](/config/lib/syntax) 配置和 Rsbuild 的 [output.target](https://rsbuild.rs/config/output/target#outputtarget) 配置：
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
@@ -154,13 +154,13 @@ export default defineConfig({
 Rslib 允许你使用绝大部分的 Rsbuild 配置。目前不支持使用 `environments` 配置，因为该字段会在 Rslib 内部生成。
 
 - 参考 [Rsbuild 配置](/config/rsbuild/) 了解常用的 Rsbuild 配置。
-- 参考 [Rsbuild 文档](https://rsbuild.dev/config/index#config-overview) 了解所有 Rsbuild 配置。
+- 参考 [Rsbuild 文档](https://rsbuild.rs/config/index#config-overview) 了解所有 Rsbuild 配置。
 
 ## 配置 Rspack
 
 Rslib 基于 Rsbuild 构建，Rsbuild 支持直接修改 Rspack 配置对象，也支持通过 `rspack-chain` 修改 Rsbuild 内置的 Rspack 配置。这意味着你可以在 Rslib 项目中配置 Rspack 相关配置。
 
-详情请参考 [配置 Rspack](https://rsbuild.dev/guide/basic/configure-rspack)。
+详情请参考 [配置 Rspack](https://rsbuild.rs/guide/basic/configure-rspack)。
 
 ## 调试配置
 

@@ -23,7 +23,7 @@ import { PackageManagerTabs } from '@theme';
 
 开发 React 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。 这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。
 
-要编译 React（JSX 和 TSX），你需要注册 Rsbuild [React 插件](https://rsbuild.dev/zh/plugins/list/plugin-react)。该插件将自动添加 React 构建所需的配置。
+要编译 React（JSX 和 TSX），你需要注册 Rsbuild [React 插件](https://rsbuild.rs/zh/plugins/list/plugin-react)。该插件将自动添加 React 构建所需的配置。
 
 例如，在 `rslib.config.ts` 中注册:
 
@@ -52,7 +52,7 @@ React 引入了一个 [新的 JSX transform](https://legacy.reactjs.org/blog/202
 
 默认情况下，Rsbuild 使用新的 JSX 转换，即 `runtime: 'automatic'`。需要 React `16.14.0` 或更高版本。 `peerDependencies` 中应声明 `"react": ">=16.14.0"`。
 
-要更改 JSX transform，可以传递 [swcReactOptions](https://rsbuild.dev/zh/plugins/list/plugin-react#swcreactoptionsruntime) 给 React plugin. 比如要使用 classic runtime 时:
+要更改 JSX transform，可以传递 [swcReactOptions](https://rsbuild.rs/zh/plugins/list/plugin-react#swcreactoptionsruntime) 给 React plugin. 比如要使用 classic runtime 时:
 
 ```ts title="rslib.config.ts"
 import { pluginReact } from '@rsbuild/plugin-react';
@@ -113,5 +113,5 @@ export default defineConfig({
 
 ## 进一步了解
 
-- [Rsbuild React Plugin](https://rsbuild.dev/zh/plugins/list/plugin-react#swcreactoptionsruntime)
+- [Rsbuild React Plugin](https://rsbuild.rs/zh/plugins/list/plugin-react#swcreactoptionsruntime)
 - [SWC Compilation - jsc.transform.react](https://swc.rs/docs/configuration/compilation#jsctransformreact)

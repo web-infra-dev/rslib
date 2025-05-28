@@ -9,9 +9,9 @@ import { ImageAlt } from '../../../theme/components/ImageAlt';
 
 # Rspack 生态升级！全新库开发工具 Rslib 发布
 
-![banner](https://assets.rspack.dev/rslib/rslib-banner.png)
+![banner](https://assets.rspack.rs/rslib/rslib-banner.png)
 
-我们很高兴地向大家介绍 Rslib —— **一款基于 Rspack 的库开发工具**。Rslib 由字节跳动 Web Infra 团队开发，能够帮助开发者以简单直观的方式创建 JavaScript 库和 UI 组件库，并享受 [Rspack](https://rspack.dev/zh/) 和 [Rsbuild](https://rsbuild.dev/zh/) 带来的极致开发体验。
+我们很高兴地向大家介绍 Rslib —— **一款基于 Rspack 的库开发工具**。Rslib 由字节跳动 Web Infra 团队开发，能够帮助开发者以简单直观的方式创建 JavaScript 库和 UI 组件库，并享受 [Rspack](https://rspack.rs/zh/) 和 [Rsbuild](https://rsbuild.rs/zh/) 带来的极致开发体验。
 
 > 仓库地址：https://github.com/web-infra-dev/rslib
 
@@ -35,12 +35,12 @@ import { ImageAlt } from '../../../theme/components/ImageAlt';
 - **生态共享：** 库构建与应用构建配置统一，复用 Rspack 繁荣社区，推动统一工具链生态发展。
 - **性能优先：** 底层构建器基于 Rust 实现，具有良好的构建性能，提升开发者体验。
 
-为此，我们创建了 Rslib。**它基于 [Rsbuild](https://rsbuild.dev/zh/) 精心设计的配置和插件，使库开发者得以复用 webpack 和 Rspack 繁荣的知识和生态系统，为开发者提供了完备的库开发能力。**
+为此，我们创建了 Rslib。**它基于 [Rsbuild](https://rsbuild.rs/zh/) 精心设计的配置和插件，使库开发者得以复用 webpack 和 Rspack 繁荣的知识和生态系统，为开发者提供了完备的库开发能力。**
 
 我们希望 Rslib 能为库开发者提供更强大的能力，并成为 Rspack 生态中的重要组成部分，持续推动基于 Rspack 的统一工具链的发展。
 
 <img
-  src="https://assets.rspack.dev/others/assets/rslib/rslib-in-rstack.png"
+  src="https://assets.rspack.rs/others/assets/rslib/rslib-in-rstack.png"
   alt="Rslib 在 Rstack 生态中的位置"
   width="760"
   style={{ display: 'block', margin: '0 auto' }}
@@ -65,7 +65,7 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
   对于 TypeScript 类型声明文件（d.ts），除了支持基于 TypeScript Compiler API 生成 d.ts 文件及相关后处理，也支持基于 [@microsoft/api-extractor](https://www.npmjs.com/package/@microsoft/api-extractor) 对 d.ts 文件进行打包，适合处理依赖复杂的场景。
 
   <img
-    src="https://assets.rspack.dev/others/assets/rslib/multiple-formats-config.png"
+    src="https://assets.rspack.rs/others/assets/rslib/multiple-formats-config.png"
     alt="一个配置文件中包含多种格式"
     width="400"
     style={{ display: 'block', margin: '0 auto' }}
@@ -74,7 +74,7 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
   <ImageAlt>一个配置文件中包含多种格式</ImageAlt>
 
   <img
-    src="https://assets.rspack.dev/others/assets/rslib/simple-esm-output.png"
+    src="https://assets.rspack.rs/others/assets/rslib/simple-esm-output.png"
     alt="纯净的 ESM 产物"
     width="400"
     style={{ display: 'block', margin: '0 auto' }}
@@ -87,7 +87,7 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
   Rslib 支持在构建时选择打包（bundle）或仅做转换（bundleless）这两种常见的构建模式。对于 bundleless 场景，还支持了 [产物路径重定向](/config/lib/redirect) 功能，从而解决了常见的 JavaScript 和 d.ts 产物路径中别名替换以及 ESM 要求严格引用路径的问题。
 
   <img
-    src="https://assets.rspack.dev/rslib/rslib-bundleless-mode.png"
+    src="https://assets.rspack.rs/rslib/rslib-bundleless-mode.png"
     alt="bundleless 产物结构"
     width="760"
     style={{ display: 'block', margin: '0 auto' }}
@@ -102,7 +102,7 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
   借助 Rsbuild 的插件系统和生态，Rslib 可以直接复用 Sass、Less、Stylus、CSS Modules、Tailwind CSS 的解决方案。无论是在 bundle 还是 bundleless 的场景下，用户都可以像构建 web 应用一样，直接通过配置或安装相应插件来进行样式的处理。
 
   <img
-    src="https://assets.rspack.dev/others/assets/rslib/multiple-styles-config.png"
+    src="https://assets.rspack.rs/others/assets/rslib/multiple-styles-config.png"
     alt="支持多种样式解决方案"
     width="760"
     style={{ display: 'block', margin: '0 auto' }}
@@ -128,20 +128,20 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
 
 - **复用 Rsbuild 能力**
 
-  Rslib 可以复用 Rsbuild 的大部分配置，支持的高级功能包括但不限于：[引入路径转换](https://rsbuild.dev/zh/config/source/transform-import)，[内联样式](https://rsbuild.dev/zh/config/output/inline-styles)，[polyfill](https://rsbuild.dev/zh/config/output/polyfill) 等，在未来 Rslib 能持续享受 Rsbuild 迭代提供的更多能力。
+  Rslib 可以复用 Rsbuild 的大部分配置，支持的高级功能包括但不限于：[引入路径转换](https://rsbuild.rs/zh/config/source/transform-import)，[内联样式](https://rsbuild.rs/zh/config/output/inline-styles)，[polyfill](https://rsbuild.rs/zh/config/output/polyfill) 等，在未来 Rslib 能持续享受 Rsbuild 迭代提供的更多能力。
 
 - **共享 Rspack 和 Rsbuild 生态**
 
   基于 Rspack 和 Rsbuild 生态，Rslib 能复用一系列生态能力，包括但不限于：
 
-  - 使用 [Storybook](https://storybook.rsbuild.dev/guide/integrations/rslib.html) 直接读取 Rslib 的配置文件进行 UI 组件库开发调试。
-  - 使用 [Rsdoctor](https://rsdoctor.dev/) 进行构建性能及产物分析。
+  - 使用 [Storybook](https://storybook.rsbuild.rs/guide/integrations/rslib.html) 直接读取 Rslib 的配置文件进行 UI 组件库开发调试。
+  - 使用 [Rsdoctor](https://rsdoctor.rs/) 进行构建性能及产物分析。
   - 使用 [Node.js polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill) 插件开发跨运行时的库。
   - 使用 [ESLint 插件](https://github.com/rspack-contrib/rsbuild-plugin-eslint) 在开发时进行 ESLint 校验。
   - 使用 [publint 插件](https://github.com/rspack-contrib/rsbuild-plugin-publint) 检查开发的库的 package.json 是否配置正确。
 
   <img
-    src="https://assets.rspack.dev/others/assets/rslib/publint-screenshot.png"
+    src="https://assets.rspack.rs/others/assets/rslib/publint-screenshot.png"
     alt="使用 publint 检查 package.json 正确性"
     width="760"
     style={{ display: 'block', margin: '0 auto' }}
@@ -149,7 +149,7 @@ Rslib 提供了一套全面的库构建解决方案，涵盖了目前大部分�
 
   <ImageAlt>使用 publint 检查 package.json 的正确性</ImageAlt>
 
-  > 更多插件的信息请参考 [Rsbuild 插件总览](https://rsbuild.dev/zh/plugins/list/)。
+  > 更多插件的信息请参考 [Rsbuild 插件总览](https://rsbuild.rs/zh/plugins/list/)。
 
 ## 当前状态及版本演进
 

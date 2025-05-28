@@ -14,7 +14,7 @@ Currently, some plugins have not been adapted to the [bundleless](/guide/basic/o
 
 ## Using plugins
 
-You can register Rsbuild plugins in `rslib.config.*` using the `plugins` option, see [Rsbuild - plugins](https://rsbuild.dev/config/plugins).
+You can register Rsbuild plugins in `rslib.config.*` using the `plugins` option, see [Rsbuild - plugins](https://rsbuild.rs/config/plugins).
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
@@ -33,8 +33,8 @@ The following are official plugins that can be used in Rsbuild, and applicable t
 
 Plugins available for React:
 
-- [React Plugin](https://rsbuild.dev/plugins/list/plugin-react): Provides support for React.
-- [SVGR Plugin](https://rsbuild.dev/plugins/list/plugin-svgr): Support convert SVG to React components.
+- [React Plugin](https://rsbuild.rs/plugins/list/plugin-react): Provides support for React.
+- [SVGR Plugin](https://rsbuild.rs/plugins/list/plugin-svgr): Support convert SVG to React components.
 - [Styled Components Plugin](https://github.com/rsbuild-contrib/rsbuild-plugin-styled-components): Provide compile-time support for styled-components.
 
 ### For Vue
@@ -42,7 +42,7 @@ Plugins available for React:
 Plugins available for Vue:
 
 - [Vue Plugin](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue): Based on [unplugin-vue](https://github.com/unplugin/unplugin-vue), provides support for Vue 3 SFC (Single File Components).
-- [Vue Plugin](https://rsbuild.dev/plugins/list/plugin-vue): Based on [vue-loader](https://github.com/vuejs/vue-loader), provides support for Vue 3 SFC (Single File Components) (Recommend using the implementation based on [unplugin-vue](https://github.com/unplugin/unplugin-vue), as vue-loader is no longer maintained).
+- [Vue Plugin](https://rsbuild.rs/plugins/list/plugin-vue): Based on [vue-loader](https://github.com/vuejs/vue-loader), provides support for Vue 3 SFC (Single File Components) (Recommend using the implementation based on [unplugin-vue](https://github.com/unplugin/unplugin-vue), as vue-loader is no longer maintained).
 - [Vue JSX Plugin](https://github.com/rspack-contrib/rsbuild-plugin-vue-jsx): Provides support for Vue 3 JSX / TSX syntax.
 - [Vue2 Plugin](https://github.com/rspack-contrib/rsbuild-plugin-vue2): Provides support for Vue 2 SFC (Single File Components).
 - [Vue2 JSX Plugin](https://github.com/rspack-contrib/rsbuild-plugin-vue2-jsx): Provides support for Vue 2 JSX / TSX syntax.
@@ -51,28 +51,28 @@ Plugins available for Vue:
 
 Plugins available for Preact:
 
-- [Preact Plugin](https://rsbuild.dev/plugins/list/plugin-preact): Provides support for Preact.
+- [Preact Plugin](https://rsbuild.rs/plugins/list/plugin-preact): Provides support for Preact.
 
 ### For Svelte
 
 Plugins available for Svelte:
 
-- [Svelte Plugin](https://rsbuild.dev/plugins/list/plugin-svelte): Provides support for Svelte components (`.svelte` files).
+- [Svelte Plugin](https://rsbuild.rs/plugins/list/plugin-svelte): Provides support for Svelte components (`.svelte` files).
 
 ### For Solid
 
 Plugins available for Solid:
 
-- [Solid Plugin](https://rsbuild.dev/plugins/list/plugin-solid): Provides support for Solid.
+- [Solid Plugin](https://rsbuild.rs/plugins/list/plugin-solid): Provides support for Solid.
 
 ### Common
 
 The following are common framework-agnostic plugins:
 
-- [Babel Plugin](https://rsbuild.dev/plugins/list/plugin-babel): Provides support for Babel transpilation capabilities.
-- [Sass Plugin](https://rsbuild.dev/plugins/list/plugin-sass): Use Sass as the CSS preprocessor.
-- [Less Plugin](https://rsbuild.dev/plugins/list/plugin-less): Use Less as the CSS preprocessor.
-- [Stylus Plugin](https://rsbuild.dev/plugins/list/plugin-stylus): Use Stylus as the CSS preprocessor.
+- [Babel Plugin](https://rsbuild.rs/plugins/list/plugin-babel): Provides support for Babel transpilation capabilities.
+- [Sass Plugin](https://rsbuild.rs/plugins/list/plugin-sass): Use Sass as the CSS preprocessor.
+- [Less Plugin](https://rsbuild.rs/plugins/list/plugin-less): Use Less as the CSS preprocessor.
+- [Stylus Plugin](https://rsbuild.rs/plugins/list/plugin-stylus): Use Stylus as the CSS preprocessor.
 - [ESLint Plugin](https://github.com/rspack-contrib/rsbuild-plugin-eslint): Run ESLint checks during the compilation.
 - [Type Check Plugin](https://github.com/rspack-contrib/rsbuild-plugin-type-check): Run TypeScript type checker on a separate process.
 - [publint Plugin](https://github.com/rspack-contrib/rsbuild-plugin-publint): Run `publint` to lint npm packages after the build.

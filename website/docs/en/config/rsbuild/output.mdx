@@ -13,7 +13,7 @@ In Rslib, the default value for this option depends on [format](/config/lib/form
 - When `format` is `cjs` or `esm`, the default value is `"auto"`.
 - When `format` is `mf` or `umd`, the default value is `"/"`.
 
-When `output.assetPrefix` is set to `"auto"`, Rslib defaults to setting [importMode](https://rspack.dev/config/module#modulegeneratorassetimportmode) to `"preserve"`, which preserves the `import` or `require` statements for static assets in JavaScript files. Additionally, the static asset references in CSS files remain as relative paths, see [Import static assets](/guide/advanced/static-assets) for more details.
+When `output.assetPrefix` is set to `"auto"`, Rslib defaults to setting [importMode](https://rspack.rs/config/module#modulegeneratorassetimportmode) to `"preserve"`, which preserves the `import` or `require` statements for static assets in JavaScript files. Additionally, the static asset references in CSS files remain as relative paths, see [Import static assets](/guide/advanced/static-assets) for more details.
 
 When `output.assetPrefix` is set to a specific path, the static asset import statements in JavaScript files will no longer be preserved and will be replaced with URLs prefixed by that path. Additionally, the static asset paths in CSS files will be substituted with paths that include this prefix.
 
@@ -27,7 +27,7 @@ Whether to clean up all files under the output directory before the build starts
 
 ## output.copy <RsbuildDocBadge path="/config/output/copy" text="output.copy" />
 
-Copies the specified file or directory to the dist directory, implemented based on [rspack.CopyRspackPlugin](https://rspack.dev/plugins/rspack/copy-rspack-plugin).
+Copies the specified file or directory to the dist directory, implemented based on [rspack.CopyRspackPlugin](https://rspack.rs/plugins/rspack/copy-rspack-plugin).
 
 ## output.cssModules <RsbuildDocBadge path="/config/output/css-modules" text="output.cssModules" />
 
@@ -119,7 +119,7 @@ Configure how to handle the legal comment.
 
 ## output.manifest <RsbuildDocBadge path="/config/output/manifest" text="output.manifest" />
 
-Whether to generate a manifest file that contains information of all assets, and the mapping relationship between [entry module](https://rsbuild.dev/config/source/entry) and assets.
+Whether to generate a manifest file that contains information of all assets, and the mapping relationship between [entry module](https://rsbuild.rs/config/source/entry) and assets.
 
 ## output.minify <RsbuildDocBadge path="/config/output/minify" text="output.minify" />
 

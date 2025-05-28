@@ -137,7 +137,7 @@ MF 代表 Module Federation。<MF />
 
 IIFE 格式代表「立即调用函数表达式」，旨在浏览器中运行。将代码包裹在函数表达式中，可确保代码中的任何变量不会意外与全局作用域中的变量发生冲突。若你的入口点有需要在浏览器中作为全局变量暴露的导出内容，可通过全局名称设置来配置该全局变量的名称。
 
-在 IIFE 格式下，[output.globalObject](https://rspack.dev/zh/config/output#outputglobalobject) 默认设置为 [globalThis](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis)，源码中命中了 [externals](/config/rsbuild/output#outputexternals) 的 `import` 语句将被转换为通过 `globalThis` 上的属性访问，你可以覆盖 [output.globalObject](https://rspack.dev/zh/config/output#outputglobalobject) 为任意值。
+在 IIFE 格式下，[output.globalObject](https://rspack.rs/zh/config/output#outputglobalobject) 默认设置为 [globalThis](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis)，源码中命中了 [externals](/config/rsbuild/output#outputexternals) 的 `import` 语句将被转换为通过 `globalThis` 上的属性访问，你可以覆盖 [output.globalObject](https://rspack.rs/zh/config/output#outputglobalobject) 为任意值。
 
 指定 `iife` 格式时源码及对应产物如下:
 

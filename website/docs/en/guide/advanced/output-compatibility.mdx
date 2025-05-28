@@ -15,7 +15,7 @@ By default, the syntax is set to `ESNext`, which will only supports only the lat
 
 ## Polyfill
 
-Before dealing with compatibility issues, it is recommended that you understand the following background knowledge to better handle related issues. Check out the background knowledge on [syntax transpilation and API polyfill](https://rsbuild.dev/guide/advanced/browser-compatibility#syntax-downgrade-and-api-downgrade).
+Before dealing with compatibility issues, it is recommended that you understand the following background knowledge to better handle related issues. Check out the background knowledge on [syntax transpilation and API polyfill](https://rsbuild.rs/guide/advanced/browser-compatibility#syntax-downgrade-and-api-downgrade).
 
 ### Browser
 
@@ -25,7 +25,7 @@ Note that this plugin does not transform your code syntax, it only injects polyf
 
 #### Set up
 
-The polyfill relies on Babel to inject the polyfill code, so you need to install the [Rsbuild Babel plugin](https://rsbuild.dev/plugins/list/plugin-babel) and [babel-plugin-polyfill-corejs3](https://www.npmjs.com/package/babel-plugin-polyfill-corejs3) to inject the polyfill code.
+The polyfill relies on Babel to inject the polyfill code, so you need to install the [Rsbuild Babel plugin](https://rsbuild.rs/plugins/list/plugin-babel) and [babel-plugin-polyfill-corejs3](https://www.npmjs.com/package/babel-plugin-polyfill-corejs3) to inject the polyfill code.
 
 <PackageManagerTabs command="add @rsbuild/plugin-babel babel-plugin-polyfill-corejs3 -D" />
 

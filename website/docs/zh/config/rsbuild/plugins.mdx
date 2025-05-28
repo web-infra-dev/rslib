@@ -14,7 +14,7 @@ Rslib 与 Rsbuild 共享同一套插件系统，因此你可以在 Rslib 中使�
 
 ## 使用插件
 
-你可以在 `rslib.config.*` 中通过 `plugins` 选项来注册 Rsbuild 插件，详见 [Rsbuild - plugins](https://rsbuild.dev/zh/config/plugins)。
+你可以在 `rslib.config.*` 中通过 `plugins` 选项来注册 Rsbuild 插件，详见 [Rsbuild - plugins](https://rsbuild.rs/zh/config/plugins)。
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
@@ -33,8 +33,8 @@ export default defineConfig({
 
 适用于 React 的插件有：
 
-- [React 插件](https://rsbuild.dev/zh/plugins/list/plugin-react)：提供对 React 的支持。
-- [SVGR 插件](https://rsbuild.dev/zh/plugins/list/plugin-svgr)：支持将 SVG 图片转换为一个 React 组件使用。
+- [React 插件](https://rsbuild.rs/zh/plugins/list/plugin-react)：提供对 React 的支持。
+- [SVGR 插件](https://rsbuild.rs/zh/plugins/list/plugin-svgr)：支持将 SVG 图片转换为一个 React 组件使用。
 - [Styled Components 插件](https://github.com/rspack-contrib/rsbuild-plugin-styled-components)：提供对 styled-components 的编译时支持。
 
 ### Vue
@@ -42,7 +42,7 @@ export default defineConfig({
 适用于 Vue 的插件有：
 
 - [Vue 插件](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue)：基于 [unplugin-vue](https://github.com/unplugin/unplugin-vue) 实现的为 Vue 3 SFC（单文件组件）提供支持的插件。
-- [Vue 插件](https://rsbuild.dev/zh/plugins/list/plugin-vue)：基于 [vue-loader](https://github.com/vuejs/vue-loader) 实现的为 Vue 3 SFC（单文件组件）提供支持的插件（推荐使用基于 [unplugin-vue](https://github.com/unplugin/unplugin-vue) 的实现，vue-loader 已不再维护）。
+- [Vue 插件](https://rsbuild.rs/zh/plugins/list/plugin-vue)：基于 [vue-loader](https://github.com/vuejs/vue-loader) 实现的为 Vue 3 SFC（单文件组件）提供支持的插件（推荐使用基于 [unplugin-vue](https://github.com/unplugin/unplugin-vue) 的实现，vue-loader 已不再维护）。
 - [Vue JSX 插件](https://github.com/rspack-contrib/rsbuild-plugin-vue-jsx)：提供对 Vue 3 JSX / TSX 语法的支持。
 - [Vue 2 插件](https://github.com/rspack-contrib/rsbuild-plugin-vue2)：提供对 Vue 2 SFC（单文件组件）的支持。
 - [Vue 2 JSX 插件](https://github.com/rspack-contrib/rsbuild-plugin-vue2-jsx)：提供对 Vue 2 JSX / TSX 语法的支持。
@@ -51,28 +51,28 @@ export default defineConfig({
 
 适用于 Preact 的插件有：
 
-- [Preact 插件](https://rsbuild.dev/zh/plugins/list/plugin-preact)：提供对 Preact 的支持。
+- [Preact 插件](https://rsbuild.rs/zh/plugins/list/plugin-preact)：提供对 Preact 的支持。
 
 ### Svelte
 
 适用于 Svelte 的插件有：
 
-- [Svelte 插件](https://rsbuild.dev/zh/plugins/list/plugin-svelte)：提供对 Svelte 组件（`.svelte` 文件）的支持。
+- [Svelte 插件](https://rsbuild.rs/zh/plugins/list/plugin-svelte)：提供对 Svelte 组件（`.svelte` 文件）的支持。
 
 ### Solid
 
 适用于 Solid 的插件有：
 
-- [Solid 插件](https://rsbuild.dev/zh/plugins/list/plugin-solid)：提供对 Solid 的支持。
+- [Solid 插件](https://rsbuild.rs/zh/plugins/list/plugin-solid)：提供对 Solid 的支持。
 
 ### Common
 
 以下是与框架无关的通用插件：
 
-- [Babel 插件](https://rsbuild.dev/zh/plugins/list/plugin-babel)：提供对 Babel 转译能力的支持。
-- [Sass 插件](https://rsbuild.dev/zh/plugins/list/plugin-sass)：使用 Sass 作为 CSS 预处理器。
-- [Less 插件](https://rsbuild.dev/zh/plugins/list/plugin-less)：使用 Less 作为 CSS 预处理器。
-- [Stylus 插件](https://rsbuild.dev/zh/plugins/list/plugin-stylus)：使用 Stylus 作为 CSS 预处理器。
+- [Babel 插件](https://rsbuild.rs/zh/plugins/list/plugin-babel)：提供对 Babel 转译能力的支持。
+- [Sass 插件](https://rsbuild.rs/zh/plugins/list/plugin-sass)：使用 Sass 作为 CSS 预处理器。
+- [Less 插件](https://rsbuild.rs/zh/plugins/list/plugin-less)：使用 Less 作为 CSS 预处理器。
+- [Stylus 插件](https://rsbuild.rs/zh/plugins/list/plugin-stylus)：使用 Stylus 作为 CSS 预处理器。
 - [ESLint 插件](https://github.com/rspack-contrib/rsbuild-plugin-eslint)：用于在编译过程中运行 ESLint 检查。
 - [publint 插件](https://github.com/rspack-contrib/rsbuild-plugin-publint)：在构建后运行 `publint` 来检查 npm 包。
 - [Type Check 插件](https://github.com/rspack-contrib/rsbuild-plugin-type-check)：用于在单独的进程中运行 TypeScript 类型检查。

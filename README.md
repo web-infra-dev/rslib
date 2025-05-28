@@ -1,5 +1,5 @@
 <picture>
-  <img alt="Rslib Banner" src="https://assets.rspack.dev/rslib/rslib-banner.png">
+  <img alt="Rslib Banner" src="https://assets.rspack.rs/rslib/rslib-banner.png">
 </picture>
 
 # Rslib
@@ -14,7 +14,7 @@
 
 English | [简体中文](./README.zh-CN.md)
 
-Rslib is a library development tool that leverages the well-designed configurations and plugins of [Rsbuild](https://rsbuild.dev), empowering library developers to take advantage of the extensive knowledge and ecosystem of webpack and Rspack.
+Rslib is a library development tool that leverages the well-designed configurations and plugins of [Rsbuild](https://rsbuild.rs), empowering library developers to take advantage of the extensive knowledge and ecosystem of webpack and Rspack.
 
 Rslib aims to provide library developers with:
 
@@ -38,7 +38,7 @@ Rslib is implemented based on Rsbuild and fully reuses the capabilities and ecos
 
 The following diagram illustrates the relationship between Rslib and other tools in the ecosystem:
 
-<img src="https://assets.rspack.dev/rsbuild/assets/rspack-stack-layers.png" alt="Rspack stack layers" width="760" />
+<img src="https://assets.rspack.rs/rsbuild/assets/rspack-stack-layers.png" alt="Rspack stack layers" width="760" />
 
 ## 📚 Getting started
 

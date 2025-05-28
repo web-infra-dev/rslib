@@ -2,7 +2,7 @@
 
 默认情况下，Rslib 会将 SVG 图片当作静态资源处理。
 
-通过添加 [@rsbuild/plugin-svgr](https://rsbuild.dev/zh/plugins/list/plugin-svgr) 插件，Rslib 支持调用 [SVGR](https://react-svgr.com/)，将 SVG 图片转换为一个 React 组件使用。
+通过添加 [@rsbuild/plugin-svgr](https://rsbuild.rs/zh/plugins/list/plugin-svgr) 插件，Rslib 支持调用 [SVGR](https://react-svgr.com/)，将 SVG 图片转换为一个 React 组件使用。
 
 ## 快速开始
 
@@ -30,7 +30,7 @@ export default {
 
 ### Bundle 模式
 
-在 bundle 模式下，Rslib 支持 [@rsbuild/plugin-svgr](https://rsbuild.dev/zh/plugins/list/plugin-svgr) 下的所有用法，唯一的区别是当以 URL 形式使用 SVG 文件时，Rslib 会按照 [引用静态资源](/guide/advanced/static-assets) 在产物中对应保留静态资源的 `import` 语句。
+在 bundle 模式下，Rslib 支持 [@rsbuild/plugin-svgr](https://rsbuild.rs/zh/plugins/list/plugin-svgr) 下的所有用法，唯一的区别是当以 URL 形式使用 SVG 文件时，Rslib 会按照 [引用静态资源](/guide/advanced/static-assets) 在产物中对应保留静态资源的 `import` 语句。
 
 下面是一个使用示例：
 
@@ -50,8 +50,8 @@ console.log(logoURL);
 
 `@rsbuild/plugin-svgr` 也支持默认导入和混合导入等用法：
 
-- 通过 [svgrOptions.exportType](https://rsbuild.dev/zh/plugins/list/plugin-svgr#svgroptionsexporttype) 设置为 `'default'` 来启用默认导入。
-- 通过 [mixedImport](https://rsbuild.dev/zh/plugins/list/plugin-svgr#mixedimport) 选项来启用混合导入，从而同时使用默认导入和具名导入。
+- 通过 [svgrOptions.exportType](https://rsbuild.rs/zh/plugins/list/plugin-svgr#svgroptionsexporttype) 设置为 `'default'` 来启用默认导入。
+- 通过 [mixedImport](https://rsbuild.rs/zh/plugins/list/plugin-svgr#mixedimport) 选项来启用混合导入，从而同时使用默认导入和具名导入。
 
 ### Bundleless 模式
 
@@ -59,7 +59,7 @@ console.log(logoURL);
 
 #### 具名导入
 
-`@rsbuild/plugin-svgr` 支持具名导入 `ReactComponent` 来使用 SVGR，你需要设置 [svgrOptions.exportType](https://rsbuild.dev/zh/plugins/list/plugin-svgr#svgroptionsexporttype) 为 `'named'`：
+`@rsbuild/plugin-svgr` 支持具名导入 `ReactComponent` 来使用 SVGR，你需要设置 [svgrOptions.exportType](https://rsbuild.rs/zh/plugins/list/plugin-svgr#svgroptionsexporttype) 为 `'named'`：
 
 ```js
 pluginSvgr({
@@ -77,8 +77,8 @@ export const App = () => <Logo />;
 
 所有的 `.svg` 文件都会被转换成 React 组件，此时你可以：
 
-- 通过设置 [exclude](https://rsbuild.dev/zh/plugins/list/plugin-svgr#exclude) 来排除不需要转换的文件。
-- 通过 [svgrOptions.exportType](https://rsbuild.dev/zh/plugins/list/plugin-svgr#svgroptionsexporttype) 设置为 `'default'` 来修改为默认导出。
+- 通过设置 [exclude](https://rsbuild.rs/zh/plugins/list/plugin-svgr#exclude) 来排除不需要转换的文件。
+- 通过 [svgrOptions.exportType](https://rsbuild.rs/zh/plugins/list/plugin-svgr#svgroptionsexporttype) 设置为 `'default'` 来修改为默认导出。
 
 #### 混合导入
 
@@ -102,4 +102,4 @@ console.log(logoUrl); // -> string
 console.log(Logo); // -> React component
 ```
 
-更多信息可以参考 [mixedImport](https://rsbuild.dev/zh/plugins/list/plugin-svgr#mixedimport) 选项。
+更多信息可以参考 [mixedImport](https://rsbuild.rs/zh/plugins/list/plugin-svgr#mixedimport) 选项。

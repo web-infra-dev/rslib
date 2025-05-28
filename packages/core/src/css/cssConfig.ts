@@ -11,7 +11,7 @@ const require = createRequire(import.meta.url);
 
 export const RSLIB_CSS_ENTRY_FLAG = '__rslib_css__';
 
-// https://rsbuild.dev/config/output/css-modules#cssmodulesauto
+// https://rsbuild.rs/config/output/css-modules#cssmodulesauto
 export type CssLoaderOptionsAuto = CSSLoaderOptions['modules'] extends infer T
   ? T extends { auto?: any }
     ? T['auto']

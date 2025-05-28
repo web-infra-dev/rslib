@@ -52,8 +52,8 @@ export default defineConfig({
   title: 'Rslib',
   description:
     'Rslib is a library development tool that leverages the well-designed configurations and plugins of Rsbuild.',
-  icon: 'https://assets.rspack.dev/rslib/rslib-logo-192x192.png',
-  logo: 'https://assets.rspack.dev/rslib/rslib-logo-192x192.png',
+  icon: 'https://assets.rspack.rs/rslib/rslib-logo-192x192.png',
+  logo: 'https://assets.rspack.rs/rslib/rslib-logo-192x192.png',
   logoText: 'Rslib',
   markdown: {
     checkDeadLinks: true,
@@ -77,7 +77,7 @@ export default defineConfig({
         }
         return 'rslib-og-image.png';
       };
-      return `<meta property="og:image" content="https://assets.rspack.dev/rslib/${getOgImage()}">`;
+      return `<meta property="og:image" content="https://assets.rspack.rs/rslib/${getOgImage()}">`;
     },
   ],
   themeConfig: {
