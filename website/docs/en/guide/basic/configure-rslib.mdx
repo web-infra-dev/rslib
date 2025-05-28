@@ -62,7 +62,7 @@ export default {
 };
 ```
 
-Rslib will generate the [environments](https://rsbuild.dev/config/environments) configuration of Rsbuild internally, please refer to [Configuration Debug](#configuration-debug) to view the final generated configuration.
+Rslib will generate the [environments](https://rsbuild.rs/config/environments) configuration of Rsbuild internally, please refer to [Configuration Debug](#configuration-debug) to view the final generated configuration.
 
 You can also refer to the [Configuration Overview](/config/) page to view the detailed introduction of all configurations.
 
@@ -79,7 +79,7 @@ When you use the CLI of Rslib, Rslib will automatically read the configuration f
 
 We recommend using the `.mjs` or `.ts` format for the configuration file and importing the `defineConfig` utility function from `@rslib/core`. It provides friendly TypeScript type hints and autocompletion, which can help you avoid errors in the configuration.
 
-For example, in `rslib.config.ts`, you can define the Rslib [syntax](/config/lib/syntax) configuration and the Rsbuild [output.target](https://rsbuild.dev/config/output/target#outputtarget) configuration:
+For example, in `rslib.config.ts`, you can define the Rslib [syntax](/config/lib/syntax) configuration and the Rsbuild [output.target](https://rsbuild.rs/config/output/target#outputtarget) configuration:
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
@@ -154,13 +154,13 @@ export default defineConfig({
 Rslib allows you to use most of the Rsbuild configurations. Currently, the `environments` config is not supported because it is generated internally by Rslib.
 
 - Refer to [Rsbuild Configuration](/config/rsbuild/) for common Rsbuild configurations.
-- Refer to [Rsbuild Documentation](https://rsbuild.dev/config/index#config-overview) for all Rsbuild configurations.
+- Refer to [Rsbuild Documentation](https://rsbuild.rs/config/index#config-overview) for all Rsbuild configurations.
 
 ## Configure Rspack
 
 Rslib is built on top of Rsbuild and Rsbuild supports directly modifying the Rspack configuration object and also supports modifying the built-in Rspack configuration of Rsbuild through `rspack-chain`. This means you can configure Rspack related configurations in an Rslib project as well.
 
-For more details, refer to [Configure Rspack](https://rsbuild.dev/guide/basic/configure-rspack).
+For more details, refer to [Configure Rspack](https://rsbuild.rs/guide/basic/configure-rspack).
 
 ## Configuration debug
 

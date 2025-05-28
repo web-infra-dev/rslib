@@ -61,13 +61,13 @@ Not applicable, Rslib will provide a more simple unencapsulated build boilerplat
 
 Rslib could reuse the plugins from Rsbuild, which means the [official plugins](https://modernjs.dev/en/plugin/plugin-system/introduction.html#official-plugins) provided by Modern Module could be replaced by Rsbuild plugins.
 
-| Plugins                                | Status | Note                                                                          |
-| -------------------------------------- | ------ | ----------------------------------------------------------------------------- |
-| @modern-js/plugin-module-import        | 🟢     | Use https://rsbuild.dev/config/source/transform-import#sourcetransformimport. |
-| @modern-js/plugin-module-banner        | 🟢     | BannerPlugin.                                                                 |
-| @modern-js/plugin-module-node-polyfill | 🟢     | Use https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill.           |
-| @modern-js/plugin-module-polyfill      | ⚪️     | Use https://rsbuild.dev/config/output/polyfill#outputpolyfill.                |
-| @modern-js/plugin-module-babel         | 🟢     | Use https://rsbuild.dev/plugins/list/plugin-babel.                            |
-| @modern-js/plugin-module-vue           | ⚪️     | Use https://rsbuild.dev/plugins/list/plugin-vue.                              |
+| Plugins                                | Status | Note                                                                         |
+| -------------------------------------- | ------ | ---------------------------------------------------------------------------- |
+| @modern-js/plugin-module-import        | 🟢     | Use https://rsbuild.rs/config/source/transform-import#sourcetransformimport. |
+| @modern-js/plugin-module-banner        | 🟢     | BannerPlugin.                                                                |
+| @modern-js/plugin-module-node-polyfill | 🟢     | Use https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill.          |
+| @modern-js/plugin-module-polyfill      | ⚪️     | Use https://rsbuild.rs/config/output/polyfill#outputpolyfill.                |
+| @modern-js/plugin-module-babel         | 🟢     | Use https://rsbuild.rs/plugins/list/plugin-babel.                            |
+| @modern-js/plugin-module-vue           | ⚪️     | Use https://rsbuild.rs/plugins/list/plugin-vue.                              |
 
 ##

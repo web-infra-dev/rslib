@@ -1,5 +1,5 @@
 <picture>
-  <img alt="Rslib Banner" src="https://assets.rspack.dev/rslib/rslib-banner.png">
+  <img alt="Rslib Banner" src="https://assets.rspack.rs/rslib/rslib-banner.png">
 </picture>
 
 # rsbuild-plugin-dts
@@ -62,7 +62,7 @@ The output directory of declaration files. The default value follows the priorit
 
 1. The `distPath` value of the plugin options.
 2. The `declarationDir` value in the `tsconfig.json` file.
-3. The [output.distPath.root](https://rsbuild.dev/config/output/dist-path) value of Rsbuild configuration.
+3. The [output.distPath.root](https://rsbuild.rs/config/output/dist-path) value of Rsbuild configuration.
 
 ```js
 pluginDts({

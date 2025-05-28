@@ -12,7 +12,7 @@ type Props = {
 
 export function RsbuildDocBadge({ path, text, alt }: Props) {
   const langPrefix = useLang() === 'en' ? '' : '/zh';
-  const href = `https://rsbuild.dev${langPrefix}${path}`;
+  const href = `https://rsbuild.rs${langPrefix}${path}`;
 
   return (
     <Link
@@ -25,7 +25,7 @@ export function RsbuildDocBadge({ path, text, alt }: Props) {
         <img
           alt={alt || text}
           style={{ height: '18px', display: 'inline', pointerEvents: 'none' }}
-          src="https://assets.rspack.dev/rsbuild/rsbuild-logo.svg"
+          src="https://assets.rspack.rs/rsbuild/rsbuild-logo.svg"
         />
         {text}
       </Badge>

@@ -13,7 +13,7 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 - 当 `format` 为 `cjs` 或 `esm` 时，默认值为 `"auto"`。
 - 当 `format` 为 `mf` 或 `umd` 时，默认值为 `"/"`。
 
-当 `output.assetPrefix` 设置为 `"auto"` 时，Rslib 会自动将 [importMode](https://rspack.dev/zh/config/module#modulegeneratorassetimportmode) 设置为 `"preserve"`，以保留 JavaScript 文件中引用静态资源的 `import` 或 `require` 语句。同时，CSS 文件中的静态资源会保留相对引用路径，详情可以查看 [引用静态资源](/guide/advanced/static-assets)。
+当 `output.assetPrefix` 设置为 `"auto"` 时，Rslib 会自动将 [importMode](https://rspack.rs/zh/config/module#modulegeneratorassetimportmode) 设置为 `"preserve"`，以保留 JavaScript 文件中引用静态资源的 `import` 或 `require` 语句。同时，CSS 文件中的静态资源会保留相对引用路径，详情可以查看 [引用静态资源](/guide/advanced/static-assets)。
 
 当 `output.assetPrefix` 设置为具体的路径时，JavaScript 文件中引用静态资源的 `import` 或 `require` 语句会被替换为包含该前缀的 URL。同时，CSS 文件中的静态资源会被直接替换为带有该前缀的路径。
 
@@ -27,7 +27,7 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 ## output.copy <RsbuildDocBadge path="/config/output/copy" text="output.copy" />
 
-将指定的文件或目录拷贝到构建输出目录中，基于 [rspack.CopyRspackPlugin](https://rspack.dev/zh/plugins/rspack/copy-rspack-plugin) 实现。
+将指定的文件或目录拷贝到构建输出目录中，基于 [rspack.CopyRspackPlugin](https://rspack.rs/zh/plugins/rspack/copy-rspack-plugin) 实现。
 
 ## output.cssModules <RsbuildDocBadge path="/config/output/css-modules" text="output.cssModules" />
 
@@ -115,7 +115,7 @@ Rslib 默认会根据 [format](/config/lib/format) 设置 `output.filename.js` �
 
 ## output.manifest <RsbuildDocBadge path="/config/output/manifest" text="output.manifest" />
 
-是否生成 manifest 文件，该文件包含所有构建产物的信息、以及[入口模块](https://rsbuild.dev/zh/config/source/entry)与构建产物间的映射关系。
+是否生成 manifest 文件，该文件包含所有构建产物的信息、以及[入口模块](https://rsbuild.rs/zh/config/source/entry)与构建产物间的映射关系。
 
 ## output.minify <RsbuildDocBadge path="/config/output/minify" text="output.minify" />
 

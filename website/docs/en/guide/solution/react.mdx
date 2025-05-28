@@ -23,7 +23,7 @@ Then select `React` when prompted to "Select template".
 
 To develop a React library, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default, which differs from the default target of Rsbuild.
 
-To compile React (JSX and TSX), you need to register the Rsbuild [React Plugin](https://rsbuild.dev/plugins/list/plugin-react). The plugin will automatically add the necessary configuration for React builds.
+To compile React (JSX and TSX), you need to register the Rsbuild [React Plugin](https://rsbuild.rs/plugins/list/plugin-react). The plugin will automatically add the necessary configuration for React builds.
 
 For example, register in `rslib.config.ts`:
 
@@ -52,7 +52,7 @@ React introduced a [new JSX transform](https://legacy.reactjs.org/blog/2020/09/2
 
 By default, Rsbuild uses the new JSX transform, which is `runtime: 'automatic'`. It requires at least React `16.14.0` or higher. The `peerDependencies` should be declared as `"react": ">=16.14.0"`.
 
-To change the JSX transform, you can pass the [swcReactOptions](https://rsbuild.dev/plugins/list/plugin-react#swcreactoptionsruntime) option to the React plugin. For example, to use the classic runtime:
+To change the JSX transform, you can pass the [swcReactOptions](https://rsbuild.rs/plugins/list/plugin-react#swcreactoptionsruntime) option to the React plugin. For example, to use the classic runtime:
 
 ```ts title="rslib.config.ts"
 import { pluginReact } from '@rsbuild/plugin-react';
@@ -113,5 +113,5 @@ Read [Import SVGR](/guide/advanced/svgr-files) for more details.
 
 ## Further reading
 
-- [Rsbuild React Plugin](https://rsbuild.dev/plugins/list/plugin-react#swcreactoptionsruntime)
+- [Rsbuild React Plugin](https://rsbuild.rs/plugins/list/plugin-react#swcreactoptionsruntime)
 - [SWC Compilation - jsc.transform.react](https://swc.rs/docs/configuration/compilation#jsctransformreact)

@@ -29,8 +29,8 @@ Rslib CLI provides several common flags that can be used with all commands:
 | Flag                    | Description                                                                                                                                                 |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `-c, --config <config>` | Specify the configuration file, can be a relative or absolute path, see [Specify config file](/guide/basic/configure-rslib#specify-config-file)             |
-| `--env-dir <dir>`       | Specify the directory to load `.env` files, see [Rsbuild - Env directory](https://rsbuild.dev/guide/advanced/env-vars#env-directory)                        |
-| `--env-mode <mode>`     | Specify the env mode to load the `.env.[mode]` file, see [Rsbuild - Env mode](https://rsbuild.dev/guide/advanced/env-vars#env-mode)                         |
+| `--env-dir <dir>`       | Specify the directory to load `.env` files, see [Rsbuild - Env directory](https://rsbuild.rs/guide/advanced/env-vars#env-directory)                         |
+| `--env-mode <mode>`     | Specify the env mode to load the `.env.[mode]` file, see [Rsbuild - Env mode](https://rsbuild.rs/guide/advanced/env-vars#env-mode)                          |
 | `-h, --help`            | Display help for command                                                                                                                                    |
 | `--lib <id>`            | Specify the library to run commands (repeatable, e.g. `--lib esm --lib cjs`), see [lib.id](/config/lib/id) to learn how to get or set the ID of the library |
 | `-r, --root <root>`     | Specify the project root directory, can be an absolute path or a path relative to cwd                                                                       |
@@ -51,7 +51,7 @@ Options:
 
 Rslib supports injecting env variables or expressions into the code during build, which is helpful for distinguishing the running environment or replacing constants.
 
-You can see more details in [Rsbuild - Environment variables](https://rsbuild.dev/guide/advanced/env-vars).
+You can see more details in [Rsbuild - Environment variables](https://rsbuild.rs/guide/advanced/env-vars).
 
 ::: note
 

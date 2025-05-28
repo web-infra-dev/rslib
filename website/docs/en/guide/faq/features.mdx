@@ -118,7 +118,7 @@ export default {
 
 ### How to preserve module variables such as `__webpack_hash__` in the source code when generating outputs?
 
-Rslib based on Rspack will transform [module variables](https://rspack.dev/api/runtime-api/module-variables) like `__webpack_hash__`, `__webpack_nonce__`, `__webpack_public_path__`, etc. to runtime code containing `__webpack_require__` by default during build process. If you need to preserve these module variables in the outputs, you can configure [source.define](/config/rsbuild/source#sourcedefine) as follows:
+Rslib based on Rspack will transform [module variables](https://rspack.rs/api/runtime-api/module-variables) like `__webpack_hash__`, `__webpack_nonce__`, `__webpack_public_path__`, etc. to runtime code containing `__webpack_require__` by default during build process. If you need to preserve these module variables in the outputs, you can configure [source.define](/config/rsbuild/source#sourcedefine) as follows:
 
 1. Replace the module variables that need to be preserved in the source code with a unique name, such as `__webpack_hash__` with `WEBPACK_HASH`, `__webpack_nonce__` with `WEBPACK_NONCE`, `__webpack_public_path__` with `WEBPACK_PUBLIC_PATH`, etc.
 

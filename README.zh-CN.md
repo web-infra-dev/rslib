@@ -1,5 +1,5 @@
 <picture>
-  <img alt="Rslib Banner" src="https://assets.rspack.dev/rslib/rslib-banner.png">
+  <img alt="Rslib Banner" src="https://assets.rspack.rs/rslib/rslib-banner.png">
 </picture>
 
 # Rslib
@@ -14,7 +14,7 @@
 
 [English](./README.md) | 简体中文
 
-Rslib 是一个库开发工具，它基于 [Rsbuild](https://rsbuild.dev/zh) 精心设计的配置和插件，使库开发者得以复用 webpack 和 Rspack 繁荣的知识和生态系统。
+Rslib 是一个库开发工具，它基于 [Rsbuild](https://rsbuild.rs/zh) 精心设计的配置和插件，使库开发者得以复用 webpack 和 Rspack 繁荣的知识和生态系统。
 
 Rslib 旨在为库开发者提供：
 
@@ -38,7 +38,7 @@ Rslib 基于 Rsbuild 实现，并完全复用 Rsbuild 的能力和生态系统�
 
 下图说明了 Rsbuild 与生态中其他工具之间的关系：
 
-<img src="https://assets.rspack.dev/rsbuild/assets/rspack-stack-layers.png" alt="Rspack stack layers" width="760" />
+<img src="https://assets.rspack.rs/rsbuild/assets/rspack-stack-layers.png" alt="Rspack stack layers" width="760" />
 
 ## 📚 快速上手
 

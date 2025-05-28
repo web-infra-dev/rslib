@@ -47,7 +47,7 @@ const defaultEntry = {
 
 ## source.exclude <RsbuildDocBadge path="/config/source/exclude" text="source.exclude" />
 
-排除不需要被 [SWC](https://rsbuild.dev/zh/guide/configuration/swc) 转译的 JavaScript 或 TypeScript 文件。
+排除不需要被 [SWC](https://rsbuild.rs/zh/guide/configuration/swc) 转译的 JavaScript 或 TypeScript 文件。
 
 ::: note
 
@@ -55,7 +55,7 @@ const defaultEntry = {
 
 如果你希望某些文件不被打包到产物中，可以使用以下方法：
 
-- **bundle 模式**：使用 Rspack 的 [IgnorePlugin](https://rspack.dev/zh/plugins/webpack/ignore-plugin)。
+- **bundle 模式**：使用 Rspack 的 [IgnorePlugin](https://rspack.rs/zh/plugins/webpack/ignore-plugin)。
 - **bundleless 模式**：使用 `source.entry` 配置相应的 glob 表达式，参考 [设置入口](/config/lib/bundle#bundle-false)。
 
 :::

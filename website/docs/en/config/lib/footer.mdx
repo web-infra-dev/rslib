@@ -43,14 +43,14 @@ Inject content into the bottom of each declaration output file.
 
 ## Notice
 
-The footer content in JavaScript and CSS file is based on the [BannerPlugin](https://rspack.dev/plugins/webpack/banner-plugin) of Rspack. You should notice the following points:
+The footer content in JavaScript and CSS file is based on the [BannerPlugin](https://rspack.rs/plugins/webpack/banner-plugin) of Rspack. You should notice the following points:
 
 - `raw: true` is enabled by default, so the footer content will be injected as a raw string instead of wrapping in a comment. So if you want to inject a comment, you should add `/*` and `*/` or other comment syntax by yourself.
 - The `stage` option is set to the stage after the JavaScript and CSS files are optimized, thus preventing the footer content from being optimized away.
 
 ## Customize footer content
 
-If the above default settings cannot meet your requirements, you can customize the footer content through `tools.rspack.plugins` to add a [BannerPlugin](https://rspack.dev/plugins/webpack/banner-plugin) instance with the corresponding options.
+If the above default settings cannot meet your requirements, you can customize the footer content through `tools.rspack.plugins` to add a [BannerPlugin](https://rspack.rs/plugins/webpack/banner-plugin) instance with the corresponding options.
 
 ```ts title="rslib.config.ts"
 export default {
