@@ -1,4 +1,1 @@
-const ok = require != null && require('./ok.cjs');
-const okPath = require.resolve('./ok.cjs');
-
-export { ok, okPath };
+export const randomFile = require(process.env.RANDOM_FILE!);

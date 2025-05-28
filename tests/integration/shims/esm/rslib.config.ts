@@ -31,7 +31,7 @@ export default defineConfig({
       },
     }),
     generateBundleEsmConfig({
-      shims: { esm: { __dirname: true, __filename: true } },
+      shims: { esm: { __dirname: true, __filename: true, require: true } },
       syntax: 'esnext',
       source: {
         entry: {
