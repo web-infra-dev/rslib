@@ -63,7 +63,7 @@ Specifies the dependencies whose declaration files should be bundled. This confi
 By default, `rsbuild-plugin-dts` determines externalized dependencies based on the following configurations.
 
 - [autoExternal](#autoexternal) configuration
-- [output.externals](https://rsbuild.dev/config/output/externals) configuration
+- [output.externals](https://rsbuild.rs/config/output/externals) configuration
 
 Direct dependencies (declared in `package.json`) that are not externalized will be automatically added to `bundledPackages`, and their declaration files will be bundled into the final output.
 
