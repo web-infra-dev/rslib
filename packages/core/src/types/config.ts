@@ -59,8 +59,8 @@ export type Dts =
         | {
             /**
              * Specifies the dependencies whose declaration files should be bundled.
-             * @defaultValue {@link https://lib.rsbuild.dev/config/lib/dts#dtsbundlebundledpackages}
-             * @see {@link https://lib.rsbuild.dev/config/lib/dts#dtsbundlebundledpackages}
+             * @defaultValue {@link https://rslib.rs/config/lib/dts#dtsbundlebundledpackages}
+             * @see {@link https://rslib.rs/config/lib/dts#dtsbundlebundledpackages}
              */
             bundledPackages?: string[];
           };
