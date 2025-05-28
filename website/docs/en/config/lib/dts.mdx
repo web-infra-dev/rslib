@@ -9,7 +9,7 @@ overviewHeaders: [2, 3]
 ```ts
 type Dts =
   | {
-      bundle?: boolean;
+      bundle?: boolean | { bundledPackages?: string[] };
       distPath?: string;
       build?: boolean;
       abortOnError?: boolean;
