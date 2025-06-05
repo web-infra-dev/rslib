@@ -29,9 +29,6 @@ const config: StorybookConfig = {
     name: getAbsolutePath('storybook-vue3-rsbuild'),
     options: {},
   },
-  docs: {
-    autodocs: 'tag',
-  },
   typescript: {
     check: true,
   },

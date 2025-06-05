@@ -15,6 +15,7 @@ const config: StorybookConfig = {
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
+    '@storybook/addon-docs',
     '@storybook/addon-onboarding',
     '@storybook/addon-links',
     '@storybook/addon-essentials',
@@ -26,9 +27,6 @@ const config: StorybookConfig = {
   framework: {
     name: getAbsolutePath('storybook-vue3-rsbuild'),
     options: {},
-  },
-  docs: {
-    autodocs: 'tag',
   },
   typescript: {
     check: true,
