@@ -14,6 +14,7 @@ const config = {
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
+    '@storybook/addon-docs',
     '@storybook/addon-onboarding',
     '@storybook/addon-links',
     '@storybook/addon-essentials',
@@ -25,9 +26,6 @@ const config = {
   framework: {
     name: getAbsolutePath('storybook-react-rsbuild'),
     options: {},
-  },
-  docs: {
-    autodocs: 'tag',
   },
   typescript: {
     reactDocgen: 'react-docgen-typescript',
