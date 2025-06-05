@@ -163,7 +163,11 @@ describe('dts when bundle: false', () => {
     try {
       await buildAndGetResults({ fixturePath, type: 'dts' });
     } catch (err: any) {
-      expect(logs.map((log) => stripAnsi(log)).join('')).toMatchInlineSnapshot(
+      expect(
+        logs
+          .map((log) => stripAnsi(log))
+          .find((log) => log.includes('Failed to resolve tsconfig file')),
+      ).toMatchInlineSnapshot(
         `"error   Failed to resolve tsconfig file "<ROOT>/tests/integration/dts/bundle-false/tsconfig-path/path_not_exist/tsconfig.json" from <ROOT>/tests/integration/dts/bundle-false/tsconfig-path. Please ensure that the file exists."`,
       );
     }
