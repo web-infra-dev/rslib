@@ -1,14 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should external @swc/helpers when externalHelpers is true 1`] = `
-"import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check_f500f6c3__ from "@swc/helpers/_/_class_call_check";
-import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class_63e94838__ from "@swc/helpers/_/_create_class";
+"import { _ } from "@swc/helpers/_/_class_call_check";
+import { _ as _create_class_ } from "@swc/helpers/_/_create_class";
 var src_FOO = /*#__PURE__*/ function() {
     "use strict";
     function FOO() {
-        (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check_f500f6c3__._)(this, FOO);
+        _(this, FOO);
     }
-    (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class_63e94838__._)(FOO, [
+    _create_class_(FOO, [
         {
             key: "bar",
             get: function() {}
@@ -21,14 +21,14 @@ export { src_FOO as default };
 `;
 
 exports[`should external @swc/helpers when externalHelpers is true 2`] = `
-"import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check_f500f6c3__ from "@swc/helpers/_/_class_call_check";
-import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class_63e94838__ from "@swc/helpers/_/_create_class";
+"import { _ } from "@swc/helpers/_/_class_call_check";
+import { _ as _create_class_ } from "@swc/helpers/_/_create_class";
 var src_FOO = /*#__PURE__*/ function() {
     "use strict";
     function FOO() {
-        (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check_f500f6c3__._)(this, FOO);
+        _(this, FOO);
     }
-    (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class_63e94838__._)(FOO, [
+    _create_class_(FOO, [
         {
             key: "bar",
             get: function() {}
@@ -111,14 +111,14 @@ export { src_FOO as default };
 `;
 
 exports[`should respect user override externalHelpers config 2`] = `
-"import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check_f500f6c3__ from "@swc/helpers/_/_class_call_check";
-import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class_63e94838__ from "@swc/helpers/_/_create_class";
+"import { _ } from "@swc/helpers/_/_class_call_check";
+import { _ as _create_class_ } from "@swc/helpers/_/_create_class";
 var src_FOO = /*#__PURE__*/ function() {
     "use strict";
     function FOO() {
-        (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check_f500f6c3__._)(this, FOO);
+        _(this, FOO);
     }
-    (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class_63e94838__._)(FOO, [
+    _create_class_(FOO, [
         {
             key: "bar",
             get: function() {}

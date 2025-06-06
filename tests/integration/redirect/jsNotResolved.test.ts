@@ -13,11 +13,11 @@ test('redirect.js default', async () => {
   );
 
   expect(indexContent).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
-    import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
-    import * as __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__ from "./bar.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
-    const src = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"] + typeof __WEBPACK_EXTERNAL_MODULE_prettier__["default"].version);
+    "import external_lodash_default from "lodash";
+    import external_prettier_default from "prettier";
+    import external_bar_js_default from "./bar.js";
+    import external_foo_js_default from "./foo.js";
+    const src = external_lodash_default.toUpper(external_foo_js_default + external_bar_js_default + typeof external_prettier_default.version);
     export { src as default };
     "
   `);
@@ -34,11 +34,11 @@ test('redirect.js.path false', async () => {
   );
 
   expect(indexContent).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
-    import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
-    import * as __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__ from "./bar.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
-    const src = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"] + typeof __WEBPACK_EXTERNAL_MODULE_prettier__["default"].version);
+    "import external_lodash_default from "lodash";
+    import external_prettier_default from "prettier";
+    import external_bar_js_default from "./bar.js";
+    import external_foo_js_default from "./foo.js";
+    const src = external_lodash_default.toUpper(external_foo_js_default + external_bar_js_default + typeof external_prettier_default.version);
     export { src as default };
     "
   `);
@@ -55,11 +55,11 @@ test('redirect.js.extension: false', async () => {
   );
 
   expect(indexContent).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
-    import * as __WEBPACK_EXTERNAL_MODULE_prettier__ from "prettier";
-    import * as __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__ from "./bar.js";
-    import * as __WEBPACK_EXTERNAL_MODULE__foo_23da6eef__ from "./foo";
-    const src = __WEBPACK_EXTERNAL_MODULE_lodash__["default"].toUpper(__WEBPACK_EXTERNAL_MODULE__foo_23da6eef__["default"] + __WEBPACK_EXTERNAL_MODULE__bar_js_69b41beb__["default"] + typeof __WEBPACK_EXTERNAL_MODULE_prettier__["default"].version);
+    "import external_lodash_default from "lodash";
+    import external_prettier_default from "prettier";
+    import external_bar_js_default from "./bar.js";
+    import external_foo_default from "./foo";
+    const src = external_lodash_default.toUpper(external_foo_default + external_bar_js_default + typeof external_prettier_default.version);
     export { src as default };
     "
   `);

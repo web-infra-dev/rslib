@@ -49,8 +49,8 @@ console.info(React);
 The `react` code will not be bundled into the output:
 
 ```js title="dist/index.js"
-import * as __WEBPACK_EXTERNAL_MODULE_react__ from 'react';
-console.info(__WEBPACK_EXTERNAL_MODULE_react__['default']);
+import external_react_default from 'react';
+console.info(external_react_default);
 ```
 
 If you want to modify the default processing, you can use the following API:

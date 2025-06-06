@@ -30,8 +30,8 @@ test('resolve node protocol', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE_node_path_c5b9b54f__ from "node:path";
-    const { join } = __WEBPACK_EXTERNAL_MODULE_node_path_c5b9b54f__["default"];
+    "import external_node_path_default from "node:path";
+    const { join } = external_node_path_default;
     export { join };
     "
   `);

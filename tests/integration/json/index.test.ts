@@ -41,11 +41,11 @@ describe('JSON', async () => {
       /index\.js/,
     );
     expect(bundlelessPreserveJson).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE__foo_json_16d256d4__ from "./foo.json";
-    const src = __WEBPACK_EXTERNAL_MODULE__foo_json_16d256d4__.value + '1';
-    export { src as default };
-    "
-  `);
+      "import { value } from "./foo.json";
+      const src = value + '1';
+      export { src as default };
+      "
+    `);
 
     expect(
       readFileSync(
