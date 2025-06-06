@@ -13,7 +13,7 @@ describe('polyfill', async () => {
   test('should polyfill in ESM', async () => {
     expect(entries.esm0).not.toContain(globalPolyfillResult);
     expect(entries.esm0).toMatch(
-      /import \* as .* from "core-js-pure\/stable\/instance\/splice\.js"/,
+      /import splice_js_default from "core-js-pure\/stable\/instance\/splice.js"/,
     );
     const result = (await import(entryFiles.esm0!)).value;
     expect(result).toEqual(['1']);

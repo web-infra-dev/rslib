@@ -49,8 +49,8 @@ console.info(React);
 此时产物中不会包含 `react` 的代码:
 
 ```js title="dist/index.js"
-import * as __WEBPACK_EXTERNAL_MODULE_react__ from 'react';
-console.info(__WEBPACK_EXTERNAL_MODULE_react__['default']);
+import external_react_default from 'react';
+console.info(external_react_default);
 ```
 
 如果想要修改默认的处理方式，可以通过下面的 API 进行修改:

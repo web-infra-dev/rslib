@@ -8,9 +8,9 @@ describe('minify config', () => {
     const { entries } = await buildAndGetResults({ fixturePath });
     expect(entries.esm).toMatchInlineSnapshot(`
       "/*! For license information please see index.js.LICENSE.txt */
-      import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__ from "react/jsx-runtime";
+      import { jsx } from "react/jsx-runtime";
       /*! Legal Comment */ const foo = ()=>{};
-      const Button = ()=>/*#__PURE__*/ (0, __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__.jsx)('button', {});
+      const Button = ()=>/*#__PURE__*/ jsx('button', {});
       export { Button, foo };
       "
     `);
@@ -20,7 +20,7 @@ describe('minify config', () => {
     const fixturePath = join(__dirname, 'config/disabled');
     const { entries } = await buildAndGetResults({ fixturePath });
     expect(entries.esm).toMatchInlineSnapshot(`
-      "import * as __WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__ from "react/jsx-runtime";
+      "import { jsx } from "react/jsx-runtime";
 
       ;// CONCATENATED MODULE: external "react/jsx-runtime"
 
@@ -32,7 +32,7 @@ describe('minify config', () => {
           return bar();
       };
       // normal comment
-      const Button = ()=>/*#__PURE__*/ (0,__WEBPACK_EXTERNAL_MODULE_react_jsx_runtime_225474f2__.jsx)('button', {});
+      const Button = ()=>/*#__PURE__*/ jsx('button', {});
 
       export { Button, foo };
       "
@@ -43,9 +43,9 @@ describe('minify config', () => {
     const fixturePath = join(__dirname, 'config/enabled');
     const { entries } = await buildAndGetResults({ fixturePath });
     expect(entries.esm).toMatchInlineSnapshot(`
-    "/*! For license information please see index.js.LICENSE.txt */
-    import*as t from"react/jsx-runtime";/*! Legal Comment */let o=()=>{},r=()=>/*#__PURE__*/(0,t.jsx)("button",{});export{r as Button,o as foo};"
-  `);
+      "/*! For license information please see index.js.LICENSE.txt */
+      import{jsx as t}from"react/jsx-runtime";/*! Legal Comment */let o=()=>{},r=()=>/*#__PURE__*/t("button",{});export{r as Button,o as foo};"
+    `);
   });
 });
 

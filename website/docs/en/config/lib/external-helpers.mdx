@@ -95,14 +95,14 @@ Below is the output JavaScript file, the highlighted code is importing helper fu
 
 ```js title="index.js"
 // [!code highlight:2]
-import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__ from '@swc/helpers/_/_class_call_check';
-import * as __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__ from '@swc/helpers/_/_create_class';
+import { _ } from '@swc/helpers/_/_class_call_check';
+import { _ as _create_class_ } from '@swc/helpers/_/_create_class';
 var src_FOO = /*#__PURE__*/ (function () {
   'use strict';
   function FOO() {
-    (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_class_call_check__._)(this, FOO);
+    _(this, FOO);
   }
-  (0, __WEBPACK_EXTERNAL_MODULE__swc_helpers_create_class__._)(FOO, [
+  _create_class_(FOO, [
     {
       key: 'bar',
       get: function () {},

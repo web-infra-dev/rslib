@@ -19,11 +19,11 @@ test('auto externalize Node.js built-in modules when `output.target` is "node"',
   restore();
 
   for (const external of [
-    'import * as __WEBPACK_EXTERNAL_MODULE_fs__ from "fs"',
-    'import * as __WEBPACK_EXTERNAL_MODULE_node_assert_3e74d44e__ from "node:assert"',
-    'import * as __WEBPACK_EXTERNAL_MODULE_react__ from "react"',
     'import * as __WEBPACK_EXTERNAL_MODULE_bar__ from "bar"',
-    'module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("foo");',
+    'import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "node:module"',
+    'import external_fs_default from "fs"',
+    'import external_node_assert_default from "node:assert"',
+    'import external_react_default from "react"',
   ]) {
     expect(entries.esm).toContain(external);
   }
@@ -92,11 +92,11 @@ test('user externals', async () => {
   const { entries, contents } = await buildAndGetResults({ fixturePath });
   expect(entries.esm0).toMatchInlineSnapshot(
     `
-    "import * as __WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__ from "node:fs";
-    import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
-    import * as __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__ from "lodash/zip";
+    "import external_node_fs_default from "node:fs";
+    import external_lodash_default from "lodash";
+    import zip_default from "lodash/zip";
     const foo = 'foo';
-    console.log(__WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__["default"], __WEBPACK_EXTERNAL_MODULE_lodash__["default"].add, __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__["default"], foo);
+    console.log(external_node_fs_default, external_lodash_default.add, zip_default, foo);
     "
   `,
   );
@@ -104,11 +104,11 @@ test('user externals', async () => {
   expect(
     queryContent(contents.esm1!, 'index.js', { basename: true }).content,
   ).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__ from "node:fs";
-    import * as __WEBPACK_EXTERNAL_MODULE_lodash__ from "lodash";
-    import * as __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__ from "lodash/zip";
-    import * as __WEBPACK_EXTERNAL_MODULE__foo2_1d132755__ from "./foo2";
-    console.log(__WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__["default"], __WEBPACK_EXTERNAL_MODULE_lodash__["default"].add, __WEBPACK_EXTERNAL_MODULE_lodash_zip_41bf8b9e__["default"], __WEBPACK_EXTERNAL_MODULE__foo2_1d132755__.foo);
+    "import external_node_fs_default from "node:fs";
+    import external_lodash_default from "lodash";
+    import zip_default from "lodash/zip";
+    import { foo } from "./foo2";
+    console.log(external_node_fs_default, external_lodash_default.add, zip_default, foo);
     "
   `);
 });

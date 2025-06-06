@@ -111,12 +111,12 @@ describe('CJS shims', () => {
     const fixturePath = join(__dirname, 'cjs');
     const { entries } = await buildAndGetResults({ fixturePath });
     expect(entries.esm).toMatchInlineSnapshot(`
-      "import * as __WEBPACK_EXTERNAL_MODULE_node_module_ab9f2194__ from "node:module";
-      import * as __WEBPACK_EXTERNAL_MODULE_url__ from "url";
+      "import { createRequire } from "node:module";
+      import { fileURLToPath } from "url";
       const importMetaUrl = import.meta.url;
-      const src_require = (0, __WEBPACK_EXTERNAL_MODULE_node_module_ab9f2194__.createRequire)(import.meta.url);
+      const src_require = createRequire(import.meta.url);
       const requiredModule = src_require('./ok.cjs');
-      const src_filename = (0, __WEBPACK_EXTERNAL_MODULE_url__.fileURLToPath)(import.meta.url);
+      const src_filename = fileURLToPath(import.meta.url);
       console.log(src_filename);
       const src_module = null;
       export { src_filename as __filename, importMetaUrl, src_module as module, requiredModule };

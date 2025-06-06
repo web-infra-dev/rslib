@@ -41,8 +41,8 @@ test('format default to esm', async () => {
       "<ROOT>/tests/integration/format/default/dist/bundleless-esm/foo.js": "const foo = 'foo';
     export { foo };
     ",
-      "<ROOT>/tests/integration/format/default/dist/bundleless-esm/index.js": "import * as __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__ from "./foo.js";
-    const str = 'hello' + __WEBPACK_EXTERNAL_MODULE__foo_js_fdf5aa2d__.foo + ' world';
+      "<ROOT>/tests/integration/format/default/dist/bundleless-esm/index.js": "import { foo } from "./foo.js";
+    const str = 'hello' + foo + ' world';
     export { str };
     ",
     }
@@ -62,8 +62,8 @@ test('import.meta.url should be preserved', async () => {
     }
   `);
   expect(entries.esm).toMatchInlineSnapshot(`
-    "import * as __WEBPACK_EXTERNAL_MODULE_node_url_e96de089__ from "node:url";
-    const packageDirectory = __WEBPACK_EXTERNAL_MODULE_node_url_e96de089__["default"].fileURLToPath(new URL('.', import.meta.url));
+    "import external_node_url_default from "node:url";
+    const packageDirectory = external_node_url_default.fileURLToPath(new URL('.', import.meta.url));
     const foo = 'foo';
     export { foo, packageDirectory };
     "
