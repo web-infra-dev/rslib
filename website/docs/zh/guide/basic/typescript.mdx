@@ -40,6 +40,14 @@ export type { SomeType } from './types';
 /// <reference types="@rslib/core/types" />
 ```
 
+## 类型检查
+
+在进行 TypeScript 转译时，SWC 和 Babel 等工具不会执行类型检查。
+
+Rslib 提供了 [lib.dts](/config/lib/dts) 配置项用于生成 TypeScript 声明文件，生成过程中默认会进行类型检查。
+
+你可以在 `tsconfig.json` 文件中将 [noCheck](https://www.typescriptlang.org/tsconfig/#noCheck) 配置项设置为 `true` 来跳过类型检查。
+
 ## tsconfig.json 路径
 
 Rslib 默认从根目录下读取 `tsconfig.json` 文件。你可以使用 [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath) 配置一个自定义的 `tsconfig.json` 文件路径。
@@ -54,3 +62,9 @@ export default {
   },
 };
 ```
+
+## 装饰器版本
+
+默认情况下，Rslib 会使用 `2022-03` 版本的装饰器。
+
+如果在 `tsconfig.json` 中启用了 [experimentalDecorators](https://www.typescriptlang.org/tsconfig/#experimentalDecorators)，Rslib 会默认将 [source.decorators.version](/config/rsbuild/source#sourcedecorators) 设置为 `legacy` 来使用旧版本装饰器。

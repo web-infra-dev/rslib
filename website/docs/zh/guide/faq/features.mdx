@@ -95,6 +95,73 @@ export default {
 
 ## 类型声明文件生成
 
+### 如何避免生成某些文件的类型声明文件？
+
+如下所示，Rslib 在构建 JavaScript 产物时忽略了 `src/tests` 目录下的文件，但这些文件仍然会生成对应的类型声明文件。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    source: {
+      entry: {
+        index: ['src/**/*', '!src/tests/**/*'],
+      }
+    }
+  ],
+};
+```
+
+[source.entry](/config/lib/bundle#bundle-false) 设置的入口可以排除一些文件不生成对应的 JavaScript 产物，但无法排除生成对应的类型声明文件，这需要通过在 `tsconfig.json` 中设置 [include](https://www.typescriptlang.org/tsconfig/#include) 和 [exclude](https://www.typescriptlang.org/tsconfig/#exclude) 来实现，如下所示：
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // ...
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/tests/**/*"]
+}
+```
+
+如果你想保留对这些文件的类型提示与检查，但不生成对应的类型声明文件，可以通过 [extends](https://www.typescriptlang.org/tsconfig/#extends) 来继承一个基础的 `tsconfig.json`，然后覆盖 `include` 和 `exclude` 选项，如下所示：
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // ...
+  },
+  "include": ["src/**/*", "rslib.config.ts"]
+}
+```
+
+```json title="tsconfig.build.json"
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // ...
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/tests/**/*"]
+}
+```
+
+新增的 `tsconfig.build.json` 需要配置在 `rslib.config.ts` 中的 [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath) 选项中：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    source: {
+      entry: {
+        index: ['src/**/*', '!src/tests/**/*'],
+      }
+    }
+  ],
+  source: {
+    tsconfigPath: 'tsconfig.build.json',
+  },
+};
+```
+
 ### 如何在 `dts.bundle` 为 `true` 时额外排除指定的依赖？
 
 Rslib 通过 [rsbuild-plugin-dts](https://github.com/web-infra-dev/rslib/blob/main/packages/plugin-dts/README.md) 完成对类型声明文件的生成，该插件支持通过 [output.externals](/config/rsbuild/output#outputtarget) 进行配置，用于从打包后的类型声明文件中排除指定的依赖。

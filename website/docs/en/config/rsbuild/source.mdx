@@ -75,4 +75,10 @@ Transform the import path, which can be used to modularly import the subpath of 
 
 ## source.tsconfigPath <RsbuildDocBadge path="/config/source/tsconfig-path" text="source.tsconfigPath" />
 
-Configure a custom tsconfig.json file path to use, can be a relative or absolute path.
+Configure a custom `tsconfig.json` file path to use, can be a relative or absolute path.
+
+The `tsconfig.json` configuration file affects the following behavior of Rslib:
+
+- The `paths` field is used to configure [Path alias](/config/rsbuild/resolve#resolvealias).
+- The `experimentalDecorators` field is used to configure [Decorators version](/config/rsbuild/source#sourcedecorators).
+- Used to configure the effective scope, rules, and output directory during [TypeScript declaration file generation](/config/lib/dts).

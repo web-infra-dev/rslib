@@ -40,6 +40,14 @@ You can create a `src/env.d.ts` file to reference it:
 /// <reference types="@rslib/core/types" />
 ```
 
+## Type checking
+
+When transpiling TypeScript code using tools like SWC and Babel, type checking is not performed.
+
+Rslib provides the [lib.dts](/config/lib/dts) configuration item for generating TypeScript declaration files, and type checking is performed by default during the generation process.
+
+You can skip type checking by setting the [noCheck](https://www.typescriptlang.org/tsconfig/#noCheck) configuration item to `true` in the `tsconfig.json` file.
+
 ## tsconfig.json path
 
 Rslib by default reads the `tsconfig.json` file from the root directory. You can use [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath) to configure a custom `tsconfig.json` file path.
@@ -54,3 +62,9 @@ export default {
   },
 };
 ```
+
+## Decorators version
+
+By default, Rslib uses the `2022-03` version of the decorators.
+
+If [experimentalDecorators](https://www.typescriptlang.org/tsconfig/#experimentalDecorators) is enabled in `tsconfig.json`, Rslib will set [source.decorators.version](/config/rsbuild/source#sourcedecorators) to `legacy` to use the legacy decorators.
