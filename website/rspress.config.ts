@@ -10,6 +10,7 @@ import {
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
+import pluginSitemap from 'rspress-plugin-sitemap';
 import { defineConfig } from 'rspress/config';
 
 const siteUrl = 'https://rslib.rs';
@@ -44,6 +45,9 @@ export default defineConfig({
           },
         },
       ],
+    }),
+    pluginSitemap({
+      domain: siteUrl,
     }),
   ],
   root: path.join(__dirname, 'docs'),
