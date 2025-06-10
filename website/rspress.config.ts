@@ -138,7 +138,7 @@ export default defineConfig({
     dev: {
       lazyCompilation: true,
     },
-    source: {
+    resolve: {
       alias: {
         '@components': path.join(__dirname, '@components'),
         '@en': path.join(__dirname, 'docs/en'),

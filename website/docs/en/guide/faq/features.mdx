@@ -95,6 +95,73 @@ export default {
 
 ## Declaration files generation
 
+### How to avoid generating declaration files for certain files?
+
+As shown below, Rslib ignores the files under the `src/tests` directory when emitting JavaScript outputs, but these files still generate corresponding declaration files.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    source: {
+      entry: {
+        index: ['src/**/*', '!src/tests/**/*'],
+      }
+    }
+  ],
+};
+```
+
+The entry set by [source.entry](/config/lib/bundle#bundle-false) can exclude some files that do not generate corresponding JavaScript outputs, but cannot exclude the generation of corresponding declaration files. This needs to be achieved by setting [include](https://www.typescriptlang.org/tsconfig/#include) and [exclude](https://www.typescriptlang.org/tsconfig/#exclude) in `tsconfig.json`, as shown below:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // ...
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/tests/**/*"]
+}
+```
+
+If you want to keep type prompts and checking for these files, but do not generate corresponding declaration files, you can inherit a basic `tsconfig.json` by [extends](https://www.typescriptlang.org/tsconfig/#extends) and then override the `include` and `exclude` options as follows:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // ...
+  },
+  "include": ["src/**/*", "rslib.config.ts"]
+}
+```
+
+```json title="tsconfig.build.json"
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // ...
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/tests/**/*"]
+}
+```
+
+The newly added `tsconfig.build.json` needs to be configured in the [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath) option in `rslib.config.ts`:
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    source: {
+      entry: {
+        index: ['src/**/*', '!src/tests/**/*'],
+      }
+    }
+  ],
+  source: {
+    tsconfigPath: 'tsconfig.build.json',
+  },
+};
+```
+
 ### How to additionally exclude specified dependencies when `dts.bundle` is `true`?
 
 Rslib uses [rsbuild-plugin-dts](https://github.com/web-infra-dev/rslib/blob/main/packages/plugin-dts/README.md) to generate declaration files, which supports configuration via [output.externals](/config/rsbuild/output#outputtarget) for excluding certain dependencies from bundled declaration files.

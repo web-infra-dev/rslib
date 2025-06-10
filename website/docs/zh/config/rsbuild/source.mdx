@@ -70,4 +70,10 @@ const defaultEntry = {
 
 ## source.tsconfigPath <RsbuildDocBadge path="/config/source/tsconfig-path" text="source.tsconfigPath" />
 
-配置自定义的 tsconfig.json 文件路径，可以是相对路径或绝对路径。
+配置自定义的 `tsconfig.json` 文件路径，可以是相对路径或绝对路径。
+
+`tsconfig.json` 配置文件影响 Rslib 的以下行为：
+
+- `paths` 字段用于配置 [路径别名](/config/rsbuild/resolve#resolvealias)。
+- `experimentalDecorators` 字段用于配置 [装饰器语法](/config/rsbuild/source#sourcedecorators)。
+- 用于配置 [TypeScript 声明文件生成](/config/lib/dts) 时的生效范围、规则以及输出目录。
