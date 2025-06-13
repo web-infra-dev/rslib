@@ -76,8 +76,16 @@ The priority from highest to lowest of final output directory of declaration fil
 - The configuration option `declarationDir` in `tsconfig.json`
 - The configuration option [output.distPath.root](/config/rsbuild/output#outputdistpath)
 
-::: tip
+## Related configuration of declaration files
 
-You can refer to [lib.dts](/config/lib/dts) for more details about declaration files configuration.
-
-:::
+| Configuration item                                                  | Description                                                                                                            |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| [dts.bundle](/config/lib/dts#dtsbundle)                             | Whether to bundle the declaration files.                                                                               |
+| [dts.distPath](/config/lib/dts#dtsdistpath)                         | The output directory of declaration files.                                                                             |
+| [dts.build](/config/lib/dts#dtsbuild)                               | Whether to generate declaration files with building the project references.                                            |
+| [dts.abortOnError](/config/lib/dts#dtsabortonerror)                 | Whether to abort the build process when an error occurs during declaration files generation.                           |
+| [dts.autoExtension](/config/lib/dts#dtsautoextension)               | Whether to automatically set the declaration file extension based on the [format](/config/lib/format) option.          |
+| [banner.dts](/config/lib/banner#bannerdts)                          | Inject content into the top of each declaration output file.                                                           |
+| [footer.dts](/config/lib/footer#footerdts)                          | Inject content into the bottom of each declaration file.                                                               |
+| [redirect.dts.path](/config/lib/redirect#redirectdtspath)           | Whether to automatically redirect the import paths of TypeScript declaration output files.                             |
+| [redirect.dts.extension](/config/lib/redirect#redirectdtsextension) | Whether to automatically redirect the file extension to import paths based on the TypeScript declaration output files. |
