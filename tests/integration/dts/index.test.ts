@@ -82,6 +82,7 @@ describe('dts when bundle: false', () => {
       cwd: fixturePath,
       // do not show output in test console
       stdio: 'ignore',
+      shell: true,
     });
 
     expect(result.status).toBe(0);
@@ -255,6 +256,7 @@ describe('dts when bundle: true', () => {
       cwd: fixturePath,
       // do not show output in test console
       stdio: 'ignore',
+      shell: true,
     });
 
     expect(result.status).toBe(0);
@@ -519,6 +521,7 @@ describe('dts when build: true', () => {
       cwd: fixturePath,
       // do not show output in test console
       stdio: 'ignore',
+      shell: true,
     });
 
     expect(result.status).toBe(0);
@@ -534,6 +537,7 @@ describe('dts when build: true', () => {
       cwd: fixturePath,
       // do not show output in test console
       stdio: 'pipe',
+      shell: true,
     });
 
     const stdoutOutput = result.stdout ? result.stdout.toString() : '';
@@ -609,6 +613,7 @@ describe('dts when composite: true', () => {
       cwd: fixturePath,
       // do not show output in test console
       stdio: 'ignore',
+      shell: true,
     });
 
     expect(result.status).toBe(0);
