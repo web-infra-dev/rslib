@@ -10,7 +10,7 @@ test('transformImport with arco-design', async () => {
   for (const format of formats) {
     expect(Object.values(contents[format]!)[0]).toContain(
       format.startsWith('esm')
-        ? 'import button_default from "@arco-design/web-react/es/button"'
+        ? 'import es_button from "@arco-design/web-react/es/button"'
         : 'const button_namespaceObject = require("@arco-design/web-react/es/button")',
     );
     expect(Object.values(contents[format]!)[0]).toContain(
@@ -29,12 +29,12 @@ test('transformImport with lodash', async () => {
   for (const format of formats) {
     expect(Object.values(contents[format]!)[0]).toContain(
       format.startsWith('esm')
-        ? 'import get_default from "lodash/get"'
+        ? 'import get from "lodash/get"'
         : 'const get_namespaceObject = require("lodash/get")',
     );
     expect(Object.values(contents[format]!)[0]).toContain(
       format.startsWith('esm')
-        ? 'import add_default from "lodash/fp/add"'
+        ? 'import add from "lodash/fp/add"'
         : 'const add_namespaceObject = require("lodash/fp/add")',
     );
   }

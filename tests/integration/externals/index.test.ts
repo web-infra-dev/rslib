@@ -21,9 +21,9 @@ test('auto externalize Node.js built-in modules when `output.target` is "node"',
   for (const external of [
     'import * as __WEBPACK_EXTERNAL_MODULE_bar__ from "bar"',
     'import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "node:module"',
-    'import external_fs_default from "fs"',
-    'import external_node_assert_default from "node:assert"',
-    'import external_react_default from "react"',
+    'import fs from "fs"',
+    'import node_assert from "node:assert"',
+    'import react from "react"',
   ]) {
     expect(entries.esm).toContain(external);
   }
@@ -92,11 +92,11 @@ test('user externals', async () => {
   const { entries, contents } = await buildAndGetResults({ fixturePath });
   expect(entries.esm0).toMatchInlineSnapshot(
     `
-    "import external_node_fs_default from "node:fs";
-    import external_lodash_default from "lodash";
-    import zip_default from "lodash/zip";
+    "import node_fs from "node:fs";
+    import lodash from "lodash";
+    import zip from "lodash/zip";
     const foo = 'foo';
-    console.log(external_node_fs_default, external_lodash_default.add, zip_default, foo);
+    console.log(node_fs, lodash.add, zip, foo);
     "
   `,
   );
@@ -104,11 +104,11 @@ test('user externals', async () => {
   expect(
     queryContent(contents.esm1!, 'index.js', { basename: true }).content,
   ).toMatchInlineSnapshot(`
-    "import external_node_fs_default from "node:fs";
-    import external_lodash_default from "lodash";
-    import zip_default from "lodash/zip";
+    "import node_fs from "node:fs";
+    import lodash from "lodash";
+    import zip from "lodash/zip";
     import { foo } from "./foo2";
-    console.log(external_node_fs_default, external_lodash_default.add, zip_default, foo);
+    console.log(node_fs, lodash.add, zip, foo);
     "
   `);
 });

@@ -115,8 +115,8 @@ test('monorepo', async () => {
       basename: true,
     }).content,
   ).toMatchInlineSnapshot(`
-    "import external_bundle_false_monorepo_importee_test_default from "bundle-false-monorepo-importee-test";
-    const src = external_bundle_false_monorepo_importee_test_default;
+    "import bundle_false_monorepo_importee_test from "bundle-false-monorepo-importee-test";
+    const src = bundle_false_monorepo_importee_test;
     export { src as default };
     "
   `);

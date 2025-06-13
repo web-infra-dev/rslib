@@ -152,8 +152,8 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
       ]);
       export { Button as default };
       ",
-        "<ROOT>/tests/integration/vue/dist/bundleless/Button/index.js": "import external_Button_js_default from "./Button.js";
-      export { external_Button_js_default as default };
+        "<ROOT>/tests/integration/vue/dist/bundleless/Button/index.js": "import Button from "./Button.js";
+      export { Button as default };
       ",
         "<ROOT>/tests/integration/vue/dist/bundleless/Card.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
       const _00_2Fplugin_vue_2Fexport_helper = (sfc, props)=>{
@@ -195,9 +195,9 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
       ]);
       export { Card as default };
       ",
-        "<ROOT>/tests/integration/vue/dist/bundleless/index.js": "import index_js_default from "./Button/index.js";
-      import external_Card_js_default from "./Card.js";
-      export { index_js_default as Button, external_Card_js_default as Card };
+        "<ROOT>/tests/integration/vue/dist/bundleless/index.js": "import Button from "./Button/index.js";
+      import Card from "./Card.js";
+      export { Button, Card };
       ",
       }
     `);
