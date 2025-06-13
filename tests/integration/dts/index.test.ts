@@ -539,9 +539,7 @@ describe('dts when build: true', () => {
     const stdoutOutput = result.stdout ? result.stdout.toString() : '';
 
     expect(result.status).toBe(1);
-    expect(stdoutOutput).toContain(
-      'Please set declarationDir: "./dist/esm" in /Users/bytedance/codes/rslib/tests/integration/dts/build/tsconfig/tsconfig.json to keep it same as "dts.distPath" or "output.distPath.root" field in lib config.',
-    );
+    expect(stdoutOutput).toContain('Please set declarationDir: "./dist/esm"');
   });
 
   test('should clean dts dist files', async () => {
