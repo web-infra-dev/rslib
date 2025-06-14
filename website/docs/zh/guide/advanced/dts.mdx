@@ -76,8 +76,16 @@ import { PackageManagerTabs } from '@theme';
 - `tsconfig.json` 中的 `declarationDir` 配置项
 - [output.distPath.root](/config/rsbuild/output#outputdistpath) 配置项
 
-::: tip
+## 类型声明文件的相关配置
 
-你可以参考 [lib.dts](/config/lib/dts) 获取更多有关类型声明文件配置的详细信息。
-
-:::
+| 配置项                                                              | 描述说明                                                               |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| [dts.bundle](/config/lib/dts#dtsbundle)                             | 是否打包类型声明文件。                                                 |
+| [dts.distPath](/config/lib/dts#dtsdistpath)                         | 类型声明文件的输出目录。                                               |
+| [dts.build](/config/lib/dts#dtsbuild)                               | 是否在生成类型声明文件时构建项目的 references。                        |
+| [dts.abortOnError](/config/lib/dts#dtsabortonerror)                 | 当类型声明文件生成过程中出现错误时，是否中止构建过程。                 |
+| [dts.autoExtension](/config/lib/dts#dtsautoextension)               | 是否根据 [format](/config/lib/format) 选项自动设置类型声明文件扩展名。 |
+| [banner.dts](/config/lib/banner#bannerdts)                          | 在每个类型声明文件顶部注入内容。                                       |
+| [footer.dts](/config/lib/footer#footerdts)                          | 在每个类型声明文件底部注入内容。                                       |
+| [redirect.dts.path](/config/lib/redirect#redirectdtspath)           | 是否自动重定向类型声明文件中的导入路径。                               |
+| [redirect.dts.extension](/config/lib/redirect#redirectdtsextension) | 是否根据类型声明文件自动重定向文件扩展名到导入路径。                   |
