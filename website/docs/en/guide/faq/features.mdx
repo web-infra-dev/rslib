@@ -181,6 +181,16 @@ export default {
 };
 ```
 
+## Rsbuild plugin
+
+### Why does using `modifyRsbuildConfig` to modify the configuration does not take effect?
+
+Rslib internally generates Rsbuild's environments configurations, and each configuration item in the [lib](/config/lib) array corresponds to a specific environment configuration.
+
+[modifyRsbuildConfig](https://rsbuild.rs/plugins/dev/hooks#modifyrsbuildconfig) is a global hook that cannot be effective for configurations under a specific environment. It is usually used in Rslib to modify globally effective plugins, etc. Therefore, you need to use [modifyEnvironmentConfig](https://rsbuild.rs/plugins/dev/hooks#modifyenvironmentconfig) instead to modify the configuration of a specific environment.
+
+Refer to [Environment Plugin](https://rsbuild.rs/plugins/dev/#environment-plugin) to learn how to develop an Environment Plugin.
+
 ## Miscellaneous
 
 ### How to preserve module variables such as `__webpack_hash__` in the source code when generating outputs?
