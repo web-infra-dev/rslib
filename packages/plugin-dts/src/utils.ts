@@ -450,17 +450,23 @@ export function processSourceEntry(
     );
 
     if (entries.length === 0) {
-      throw new Error(
+      const noValidEntryError = new Error(
         `Can not find a valid entry for ${color.cyan('dts.bundle')} option, please check your entry config.`,
       );
+      // do not log the stack trace, it is not helpful for users
+      noValidEntryError.stack = '';
+      throw noValidEntryError;
     }
 
     return entries;
   }
 
-  throw new Error(
+  const error = new Error(
     '@microsoft/api-extractor only support entry of Record<string, string> type to bundle declaration files, please check your entry config.',
   );
+  // do not log the stack trace, it is not helpful for users
+  error.stack = '';
+  throw error;
 }
 
 // same as @rslib/core, we should extract into a single published package to share

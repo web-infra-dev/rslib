@@ -117,10 +117,12 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         );
 
         if (!tsconfigPath) {
-          logger.error(
+          const error = new Error(
             `Failed to resolve tsconfig file ${color.cyan(`"${config.source.tsconfigPath}"`)} from ${color.cyan(cwd)}. Please ensure that the file exists.`,
           );
-          throw new Error();
+          error.stack = '';
+          // do not log the stack trace, it is not helpful for users
+          throw error;
         }
 
         const tsConfigResult = loadTsconfig(tsconfigPath);
@@ -215,7 +217,10 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
       for (const result of promisesResult) {
         if (result.status === 'error') {
           if (options.abortOnError) {
-            throw new Error(result.errorMessage);
+            const error = new Error(result.errorMessage);
+            // do not log the stack trace, it is not helpful for users
+            error.stack = '';
+            throw error;
           }
           result.errorMessage && logger.error(result.errorMessage);
           logger.warn(

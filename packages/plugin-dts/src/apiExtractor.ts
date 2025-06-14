@@ -24,9 +24,12 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
   try {
     apiExtractor = await import('@microsoft/api-extractor');
   } catch {
-    throw new Error(
+    const error = new Error(
       `${color.cyan('@microsoft/api-extractor')} is required when ${color.cyan('dts.bundle')} is set to ${color.cyan('true')}, please make sure it is installed. You could check https://rslib.rs/guide/advanced/dts#how-to-generate-declaration-files-in-rslib for more details.`,
     );
+    // do not log the stack trace, it is not helpful for users
+    error.stack = '';
+    throw error;
   }
 
   const { Extractor, ExtractorConfig, ExtractorLogLevel } = apiExtractor!;
@@ -103,6 +106,9 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
       }),
     );
   } catch (e) {
-    throw new Error(`${logPrefixApiExtractor} ${e}`);
+    const error = new Error(`${logPrefixApiExtractor} ${e}`);
+    // do not log the stack trace, it is not helpful for users
+    error.stack = '';
+    throw error;
   }
 }
