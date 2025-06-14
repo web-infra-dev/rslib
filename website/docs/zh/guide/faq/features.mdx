@@ -181,6 +181,16 @@ export default {
 };
 ```
 
+## Rsbuild 插件
+
+### 为什么使用 `modifyRsbuildConfig` 修改配置不生效？
+
+Rslib 会在内部生成 Rsbuild 的 environments 配置，每一个 [lib](/config/lib/index) 数组中的配置项对应一个特定 environment 配置。
+
+[modifyRsbuildConfig](https://rsbuild.rs/zh/plugins/dev/hooks#modifyrsbuildconfig) 是一个全局 hook，无法对特定 environment 下的配置生效，在 Rslib 中通常用于修改全局生效的 plugins 等。因此需要使用 [modifyEnvironmentConfig](https://rsbuild.rs/zh/plugins/dev/hooks#modifyenvironmentconfig) 代替来修改特定 environment 的配置。
+
+参考 [Environment 插件](https://rsbuild.rs/zh/plugins/dev/#environment-插件) 了解如何开发一个 Environment 插件。
+
 ## 其他
 
 ### 如何在生成产物时保留源码中的 `__webpack_hash__` 等模块变量？
