@@ -33,7 +33,7 @@ test('0. default', async () => {
     /cjs\/module\/index\.cjs/,
   );
   expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import external_index_module_js_default from "./index.module.js";
+    "import index_module from "./index.module.js";
     "
   `);
   expect(cssModuleIndexCjs).toContain(
@@ -65,7 +65,7 @@ test('1. style.path: false', () => {
     /cjs\/module\/index\.cjs/,
   );
   expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import index_module_js_default from "@/module/index.module.js";
+    "import index_module from "@/module/index.module.js";
     "
   `);
   expect(cssModuleIndexCjs).toContain(
@@ -97,7 +97,7 @@ test('2. style.extension: false', async () => {
     /cjs\/module\/index\.cjs/,
   );
   expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import external_index_module_less_default from "./index.module.less";
+    "import index_module from "./index.module.less";
     "
   `);
   expect(cssModuleIndexCjs).toContain(
@@ -129,7 +129,7 @@ test('3. style.path: false, style.extension: false', async () => {
     /cjs\/module\/index\.cjs/,
   );
   expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import index_module_less_default from "@/module/index.module.less";
+    "import index_module from "@/module/index.module.less";
     "
   `);
   expect(cssModuleIndexCjs).toContain(

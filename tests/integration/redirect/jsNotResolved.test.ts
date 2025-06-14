@@ -13,11 +13,11 @@ test('redirect.js default', async () => {
   );
 
   expect(indexContent).toMatchInlineSnapshot(`
-    "import external_lodash_default from "lodash";
-    import external_prettier_default from "prettier";
-    import external_bar_js_default from "./bar.js";
-    import external_foo_js_default from "./foo.js";
-    const src = external_lodash_default.toUpper(external_foo_js_default + external_bar_js_default + typeof external_prettier_default.version);
+    "import lodash from "lodash";
+    import prettier from "prettier";
+    import bar from "./bar.js";
+    import foo from "./foo.js";
+    const src = lodash.toUpper(foo + bar + typeof prettier.version);
     export { src as default };
     "
   `);
@@ -34,11 +34,11 @@ test('redirect.js.path false', async () => {
   );
 
   expect(indexContent).toMatchInlineSnapshot(`
-    "import external_lodash_default from "lodash";
-    import external_prettier_default from "prettier";
-    import external_bar_js_default from "./bar.js";
-    import external_foo_js_default from "./foo.js";
-    const src = external_lodash_default.toUpper(external_foo_js_default + external_bar_js_default + typeof external_prettier_default.version);
+    "import lodash from "lodash";
+    import prettier from "prettier";
+    import bar from "./bar.js";
+    import foo from "./foo.js";
+    const src = lodash.toUpper(foo + bar + typeof prettier.version);
     export { src as default };
     "
   `);
@@ -55,11 +55,11 @@ test('redirect.js.extension: false', async () => {
   );
 
   expect(indexContent).toMatchInlineSnapshot(`
-    "import external_lodash_default from "lodash";
-    import external_prettier_default from "prettier";
-    import external_bar_js_default from "./bar.js";
-    import external_foo_default from "./foo";
-    const src = external_lodash_default.toUpper(external_foo_default + external_bar_js_default + typeof external_prettier_default.version);
+    "import lodash from "lodash";
+    import prettier from "prettier";
+    import bar from "./bar.js";
+    import foo from "./foo";
+    const src = lodash.toUpper(foo + bar + typeof prettier.version);
     export { src as default };
     "
   `);
