@@ -159,19 +159,13 @@ describe('dts when bundle: false', () => {
     const fixturePath = join(__dirname, 'bundle-false', 'tsconfig-path');
     await createTempFiles(fixturePath, false);
 
-    const { logs, restore } = proxyConsole();
     try {
       await buildAndGetResults({ fixturePath, type: 'dts' });
     } catch (err: any) {
-      expect(
-        logs
-          .map((log) => stripAnsi(log))
-          .find((log) => log.includes('Failed to resolve tsconfig file')),
-      ).toMatchInlineSnapshot(
-        `"error   Failed to resolve tsconfig file "<ROOT>/tests/integration/dts/bundle-false/tsconfig-path/path_not_exist/tsconfig.json" from <ROOT>/tests/integration/dts/bundle-false/tsconfig-path. Please ensure that the file exists."`,
+      expect(stripAnsi(err.message)).toMatchInlineSnapshot(
+        `"Failed to resolve tsconfig file "<ROOT>/tests/integration/dts/bundle-false/tsconfig-path/path_not_exist/tsconfig.json" from <ROOT>/tests/integration/dts/bundle-false/tsconfig-path. Please ensure that the file exists."`,
       );
     }
-    restore();
   });
 });
 
