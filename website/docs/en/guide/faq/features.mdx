@@ -185,7 +185,7 @@ export default {
 
 ### Why does using `modifyRsbuildConfig` to modify the configuration does not take effect?
 
-Rslib internally generates Rsbuild's environments configurations, and each configuration item in the [lib](/config/lib) array corresponds to a specific environment configuration.
+Rslib internally generates Rsbuild's environments configurations, and each configuration item in the [lib](/config/lib/index) array corresponds to a specific environment configuration.
 
 [modifyRsbuildConfig](https://rsbuild.rs/plugins/dev/hooks#modifyrsbuildconfig) is a global hook that cannot be effective for configurations under a specific environment. It is usually used in Rslib to modify globally effective plugins, etc. Therefore, you need to use [modifyEnvironmentConfig](https://rsbuild.rs/plugins/dev/hooks#modifyenvironmentconfig) instead to modify the configuration of a specific environment.
 
