@@ -87,7 +87,7 @@ In this way, we have completed the integration of Rslib Module as a producer. Af
 
 In the above example we added a new `format: 'mf'` , which will help you add an additional Module Federation product, while also configuring the format of `cjs` and `esm` , which does not conflict.
 
-However, if you want this Rslib Module to consume other producers at the same time, do not use the build configuration `remote` parameter, because in other formats, this may cause errors, please refer to the example below using the Module Federation runtime
+However, if you want this Rslib Module to consume other producers at the same time, do not use the build configuration `remote` parameter, because in other formats, this may cause errors, please refer to the example below using the Module Federation runtime.
 
 ## Develop MF remote module
 
@@ -313,6 +313,8 @@ This ensures that modules can be loaded as expected in multiple formats.
 
 ## FAQs
 
+### How to control the loading strategy of shared dependencies when the producer and consumer build patterns are different
+
 If the Rslib producer is built with build, this means that the `process.env.NODE_ENV` of the producer is `production` . If the consumer is started in dev mode at this time,
 due to the shared loading strategy of Module Federation being `version-first` by default, there may be problems loading into different modes of react and react-dom (e.g. react in development mode, react-dom in production mode).
 You can set up [shareStrategy](https://module-federation.io/configure/sharestrategy) at the consumer to solve this problem, but make sure you fully understand this configuration
@@ -322,6 +324,28 @@ pluginModuleFederation({
   // ...
   shareStrategy: 'loaded-first',
 }),
+```
+
+### How to make module federated outputs generate export of ES Modules
+
+If you want Rslib producers' module federated outputs to generate the export of ES Modules, you can additionally configure as follows:
+
+```ts title='rslib.config.ts'
+export default defineConfig({
+  lib: [
+    {
+      format: 'mf',
+      // ...
+      tools: {
+        rspack(config) {
+          config.experiments = {
+            outputModule: true,
+          };
+        },
+      },
+    },
+  ],
+});
 ```
 
 ## Examples
