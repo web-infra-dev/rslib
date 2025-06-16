@@ -119,11 +119,11 @@ Rslib 默认会根据 [format](/config/lib/format) 设置 `output.filename.js` �
 
 ## output.minify <RsbuildDocBadge path="/config/output/minify" text="output.minify" />
 
-用于设置是否在生产模式下开启代码压缩，或是配置压缩工具的选项。
+用于设置是否开启代码压缩，以及配置压缩工具的选项。
 
 在未指定 `output.minify` 时，Rslib 会使用一个合理的默认值。
 
-- 在 format 为 `esm`, `cjs` 以及 `umd` 时，只会执行死代码消除和未使用代码消除，默认值为：
+- 当 format 为 `esm` 或 `cjs` 时，仅会执行死代码消除和未使用代码消除，默认值为：
 
 ```ts
 export default defineConfig({
@@ -152,7 +152,17 @@ export default defineConfig({
 });
 ```
 
-- 在 format 为 `mf` 时，由于 MF 资源通过网络加载，这意味着它们不会被应用项目压缩。因此，需要在 Rslib 中对它们进行压缩。默认值为：
+- 当 format 为 `umd` 时，默认值同上，仅会执行死代码消除和未使用代码消除，这通常用于生成开发环境的 UMD 产物。如果需要生成体积尽可能小的生产环境的 UMD 产物，可以将 `output.minify` 设置为 true：
+
+```ts
+export default defineConfig({
+  output: {
+    minify: true,
+  },
+});
+```
+
+- 当 format 为 `mf` 时，由于 MF 资源通过网络加载，这意味着它们不会被应用项目压缩。因此，需要在 Rslib 中对它们进行压缩。默认值为：
 
 ```ts
 export default defineConfig({
