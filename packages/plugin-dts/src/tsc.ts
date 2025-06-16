@@ -63,9 +63,12 @@ async function handleDiagnosticsAndProcessFiles(
       logger.error(logPrefixTsc, message);
     }
 
-    throw new Error(
+    const error = new Error(
       `Failed to generate declaration files. ${color.gray(`(${name})`)}`,
     );
+    // do not log the stack trace, diagnostic messages are enough
+    error.stack = '';
+    throw error;
   }
 }
 
@@ -318,9 +321,12 @@ export async function emitDts(
       );
 
       if (errorNumber > 0) {
-        throw new Error(
+        const error = new Error(
           `Failed to generate declaration files. ${color.gray(`(${name})`)}`,
         );
+        // do not log the stack trace, diagnostic messages are enough
+        error.stack = '';
+        throw error;
       }
     }
 
