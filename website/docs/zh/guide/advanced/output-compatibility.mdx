@@ -7,11 +7,11 @@ import { PackageManagerTabs } from '@theme';
 
 ## 语法降级
 
-通过设置 [lib.syntax](/config/lib/syntax)，你可以选择 JavaScript 和 CSS 将被降级到的语法。你可以使用 [Browserslist](https://browsersl.ist/) 的查询语法。Rslib 还支持常见的 ECMAScript 版本号，例如 `ES2015`。
-
-Rslib 还支持使用 [.browserslistrc](https://github.com/browserslist/browserslist#config-file) 文件来设置。需要注意的是，[lib.syntax](/config/lib/syntax) 优先于 `.browserslistrc`。如果两者都存在，将使用 `lib.syntax`。
+在 Rslib 中，你可以通过设置 [lib.syntax](/config/lib/syntax) 来选择 JavaScript 和 CSS 将被降级到的语法。该配置支持直接设置 ECMAScript 版本，例如 `es2015`、`es2022` 等，也支持设置 [Browserslist](https://browsersl.ist/) 的查询语法，例如 `last 2 versions`、`> 1%`、`node >= 16`、`chrome >= 80` 等。
 
 默认情况下，syntax 被设置为 `ESNext`，这代表将仅支持主流浏览器（Chrome / Firefox / Edge / macOS Safari / iOS Safari）或 Node.js 的最新版本，具体取决于 [output.target](/config/rsbuild/output#outputtarget)。
+
+需要注意的是，Rslib 不会读取 Browserslist 的相关配置文件（例如 `.browserslistrc` 或 `package.json` 中的 `browserslist` 字段）。你可以通过设置 [output.overrideBrowserslist](/config/rsbuild/output#outputoverridebrowserslist) 进行覆盖，该配置比 [lib.syntax](/config/lib/syntax) 拥有更高的优先级。
 
 ## Polyfill
 
