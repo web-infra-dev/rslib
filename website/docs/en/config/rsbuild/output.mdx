@@ -123,11 +123,11 @@ Whether to generate a manifest file that contains information of all assets, and
 
 ## output.minify <RsbuildDocBadge path="/config/output/minify" text="output.minify" />
 
-Configure whether to enable code minification in production mode, or to configure minimizer options.
+Configure whether to enable code minification, or to configure minimizer options.
 
 When `output.minify` is not specified, Rslib will use a sane default value.
 
-- When format is `esm`, `cjs` and `umd`, only dead code elimination and unused code elimination will be performed. The default value is:
+- When format is `esm` or `cjs`, only dead code elimination and unused code elimination will be performed. The default value is:
 
 ```ts
 export default defineConfig({
@@ -152,6 +152,16 @@ export default defineConfig({
         },
       },
     },
+  },
+});
+```
+
+- When format is `umd`, the default value is the same as above, only dead code elimination and unused code elimination will be performed, which is usually used to generate UMD output for development. If you need to generate UMD output for production with the smallest possible bundle size, you can set `output.minify` to true:
+
+```ts
+export default defineConfig({
+  output: {
+    minify: true,
   },
 });
 ```
