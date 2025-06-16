@@ -87,7 +87,7 @@ export default defineConfig({
 
 在上面的例子中，我们添加了一个新的 `format: 'mf'` ，它将添加一个额外的模块联邦产物，同时还配置了 `cjs` 和 `esm` 的格式，它们是不冲突的。
 
-但是，如果你希望此 Rslib 模块同时消费其他生产者，请不要使用构建配置 `remote` 参数，因为在其他格式下，这可能会导致错误，请参考下面使用 Module Federation 运行时的示例
+但是，如果你希望此 Rslib 模块同时消费其他生产者，请不要使用构建配置 `remote` 参数，因为在其他格式下，这可能会导致错误，请参考下面使用 Module Federation 运行时的示例。
 
 ## 开发 MF 远程模块
 
@@ -313,6 +313,8 @@ export const Counter: React.FC = () => {
 
 ## FAQs
 
+### 生产者与消费者构建模式不同时如何控制共享依赖的加载策略
+
 如果 Rslib 生产者是用 build 构建的， 这意味着生产者中的 `process.env.NODE_ENV` 是 `production` 。如果这时消费者是使用的开发模式启动，由于模块联邦默认使用共享的加载策略，可能会有 react 和 react-dom 加载模式不一致的问题 (比如 react 在 development mode, react-dom 在 production mode)。
 你可以在消费者设置 [shareStrategy](https://module-federation.io/zh/configure/sharestrategy) 来解决这个问题，这需要你确保已经完全理解了这个配置。
 
@@ -321,6 +323,29 @@ pluginModuleFederation({
   // ...
   shareStrategy: 'loaded-first',
 }),
+```
+
+### 如何让模块联邦产物生成 ES modules 的导出
+
+如果你希望 Rslib 生产者的模块联邦产物生成 ES Modules 的导出，可以额外配置如下：
+
+```ts title='rslib.config.ts'
+export default defineConfig({
+  lib: [
+    {
+      format: 'mf',
+      // ...
+      // [!code highlight:7]
+      tools: {
+        rspack(config) {
+          config.experiments = {
+            outputModule: true,
+          };
+        },
+      },
+    },
+  ],
+});
 ```
 
 ## 示例
