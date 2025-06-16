@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join, normalize } from 'node:path';
 import stripAnsi from 'strip-ansi';
@@ -75,15 +76,16 @@ describe('dts when bundle: false', () => {
   });
 
   test('abortOnError: false', async () => {
-    const { restore } = proxyConsole();
     const fixturePath = join(__dirname, 'bundle-false', 'abort-on-error');
-    const { isSuccess } = await buildAndGetResults({
-      fixturePath,
-      type: 'dts',
-    });
-    restore();
 
-    expect(isSuccess).toBe(true);
+    const result = spawnSync('npx', ['rslib', 'build'], {
+      cwd: fixturePath,
+      // do not show output in test console
+      stdio: 'ignore',
+      shell: true,
+    });
+
+    expect(result.status).toBe(0);
   });
 
   test('autoExtension: true', async () => {
@@ -243,14 +245,15 @@ describe('dts when bundle: true', () => {
 
   test('abortOnError: false', async () => {
     const fixturePath = join(__dirname, 'bundle', 'abort-on-error');
-    const { restore } = proxyConsole();
-    const { isSuccess } = await buildAndGetResults({
-      fixturePath,
-      type: 'dts',
-    });
-    restore();
 
-    expect(isSuccess).toBe(true);
+    const result = spawnSync('npx', ['rslib', 'build'], {
+      cwd: fixturePath,
+      // do not show output in test console
+      stdio: 'ignore',
+      shell: true,
+    });
+
+    expect(result.status).toBe(0);
   });
 
   test('autoExtension: true', async () => {
@@ -507,14 +510,15 @@ describe('dts when build: true', () => {
 
   test('abortOnError: false', async () => {
     const fixturePath = join(__dirname, 'build', 'abort-on-error');
-    const { restore } = proxyConsole();
-    const { isSuccess } = await buildAndGetResults({
-      fixturePath,
-      type: 'dts',
-    });
-    restore();
 
-    expect(isSuccess).toBe(true);
+    const result = spawnSync('npx', ['rslib', 'build'], {
+      cwd: fixturePath,
+      // do not show output in test console
+      stdio: 'ignore',
+      shell: true,
+    });
+
+    expect(result.status).toBe(0);
 
     const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
     expect(existsSync(buildInfoPath)).toBeTruthy();
@@ -522,17 +526,18 @@ describe('dts when build: true', () => {
 
   test('tsconfig missing some fields - declarationDir or outDir', async () => {
     const fixturePath = join(__dirname, 'build', 'tsconfig');
-    try {
-      await buildAndGetResults({
-        fixturePath,
-        type: 'dts',
-      });
-    } catch (err: any) {
-      // not easy to proxy child process stdout
-      expect(err.message).toBe(
-        'Error occurred in esm declaration files generation.',
-      );
-    }
+
+    const result = spawnSync('npx', ['rslib', 'build'], {
+      cwd: fixturePath,
+      // do not show output in test console
+      stdio: 'pipe',
+      shell: true,
+    });
+
+    const stdoutOutput = result.stdout ? result.stdout.toString() : '';
+
+    expect(result.status).toBe(1);
+    expect(stdoutOutput).toContain('Please set declarationDir: "./dist/esm"');
   });
 
   test('should clean dts dist files', async () => {
@@ -597,14 +602,15 @@ describe('dts when composite: true', () => {
 
   test('abortOnError: false', async () => {
     const fixturePath = join(__dirname, 'composite', 'abort-on-error');
-    const { restore } = proxyConsole();
-    const { isSuccess } = await buildAndGetResults({
-      fixturePath,
-      type: 'dts',
-    });
-    restore();
 
-    expect(isSuccess).toBe(true);
+    const result = spawnSync('npx', ['rslib', 'build'], {
+      cwd: fixturePath,
+      // do not show output in test console
+      stdio: 'ignore',
+      shell: true,
+    });
+
+    expect(result.status).toBe(0);
 
     const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
     expect(existsSync(buildInfoPath)).toBeTruthy();
