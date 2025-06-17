@@ -98,10 +98,11 @@ export async function cssExternalHandler(
   let resolvedRequest = request;
 
   if (styleRedirectPath) {
-    const resolved = await redirectPath(resolvedRequest);
-    if (resolved) {
-      resolvedRequest = resolved;
+    const redirectedPath = await redirectPath(resolvedRequest);
+    if (redirectedPath === undefined) {
+      return callback(undefined, request);
     }
+    resolvedRequest = redirectedPath;
   }
 
   if (!isCssFile(resolvedRequest)) {

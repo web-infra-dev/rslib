@@ -159,10 +159,12 @@ test('should external 3rd packages CSS', async () => {
   expect(pkgIndexJs).toMatchInlineSnapshot(`
     "import "element-ui/lib/theme-chunk/index.css";
     import "element-ui/lib/theme-chunk/index";
+    import "third-party/index.module.scss";
     "
   `);
   expect(pkgIndexCjs).toContain(
     `require("element-ui/lib/theme-chunk/index.css");
-require("element-ui/lib/theme-chunk/index");`,
+require("element-ui/lib/theme-chunk/index");
+require("third-party/index.module.scss");`,
   );
 });
