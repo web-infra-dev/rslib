@@ -1,6 +1,6 @@
 // can not be resolved
 import lodash from 'lodash';
-// can be resolved, 3rd packages
+// can be resolved, 3rd party packages
 import merge from 'lodash.merge';
 // can be resolved but not specified -- phantom dependency
 import prettier from 'prettier';
