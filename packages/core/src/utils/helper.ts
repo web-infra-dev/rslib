@@ -2,9 +2,9 @@ import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import path, { isAbsolute, join } from 'node:path';
 import type { RsbuildPlugins } from '@rsbuild/core';
-import color from 'picocolors';
 
 import type { Format, LibConfig, PkgJson } from '../types';
+import { color } from './color';
 import { logger } from './logger';
 
 /**
@@ -241,8 +241,6 @@ export const isTTY = (type: 'stdin' | 'stdout' = 'stdout'): boolean => {
 export const isIntermediateOutputFormat = (format: Format): boolean => {
   return format === 'cjs' || format === 'esm';
 };
-
-export { color };
 
 const windowsSlashRegex = /\\/g;
 export function normalizeSlash(p: string): string {

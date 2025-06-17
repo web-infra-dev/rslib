@@ -23,12 +23,11 @@ import {
   SWC_HELPERS,
 } from './constant';
 import {
-  type CssLoaderOptionsAuto,
   RSLIB_CSS_ENTRY_FLAG,
   composeCssConfig,
   cssExternalHandler,
-  isCssGlobalFile,
 } from './css/cssConfig';
+import { type CssLoaderOptionsAuto, isCssGlobalFile } from './css/utils';
 import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
 import {
   pluginCjsImportMetaUrlShim,
@@ -58,11 +57,11 @@ import type {
   Shims,
   Syntax,
 } from './types';
+import { color } from './utils/color';
 import { getDefaultExtension } from './utils/extension';
 import {
   calcLongestCommonPath,
   checkMFPlugin,
-  color,
   getAbsolutePath,
   isEmptyObject,
   isIntermediateOutputFormat,

@@ -7,7 +7,7 @@
  */
 import path, { extname } from 'node:path';
 import type { Rspack } from '@rsbuild/core';
-import { type CssLoaderOptionsAuto, isCssModulesFile } from './cssConfig';
+import { type CssLoaderOptionsAuto, isCssModulesFile } from './utils';
 
 export const BASE_URI = 'webpack://';
 export const MODULE_TYPE = 'css/mini-extract';
