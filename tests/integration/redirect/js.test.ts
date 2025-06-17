@@ -21,11 +21,12 @@ test('redirect.js default', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import lodash from "lodash";
+    import lodash_merge from "lodash.merge";
     import prettier from "prettier";
     import { bar } from "./bar/index.js";
     import { foo } from "./foo.js";
     import { baz } from "./baz.js";
-    const src = lodash.toUpper(foo + bar + foo + bar + baz + typeof prettier.version);
+    const src = lodash.toUpper(lodash_merge(foo) + bar + foo + bar + baz + typeof prettier.version);
     export { src as default };
     "
   `);
@@ -45,13 +46,14 @@ test('redirect.js.path false', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import lodash from "lodash";
+    import lodash_merge from "lodash.merge";
     import prettier from "prettier";
     import { bar } from "@/bar";
     import { foo } from "@/foo";
     import { baz } from "~/baz";
     import { bar as external_bar_js_bar } from "./bar.js";
     import { foo as external_foo_js_foo } from "./foo.js";
-    const src = lodash.toUpper(external_foo_js_foo + external_bar_js_bar + foo + bar + baz + typeof prettier.version);
+    const src = lodash.toUpper(lodash_merge(external_foo_js_foo) + external_bar_js_bar + foo + bar + baz + typeof prettier.version);
     export { src as default };
     "
   `);
@@ -69,13 +71,14 @@ test('redirect.js.path with user override externals', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import lodash from "lodash";
+    import lodash_merge from "lodash.merge";
     import prettier from "prettier";
     import { bar } from "./others/bar/index.js";
     import { foo } from "./others/foo.js";
     import { baz } from "./baz.js";
     import { bar as index_js_bar } from "./bar/index.js";
     import { foo as external_foo_js_foo } from "./foo.js";
-    const src = lodash.toUpper(external_foo_js_foo + index_js_bar + foo + bar + baz + typeof prettier.version);
+    const src = lodash.toUpper(lodash_merge(external_foo_js_foo) + index_js_bar + foo + bar + baz + typeof prettier.version);
     export { src as default };
     "
   `);
@@ -101,13 +104,14 @@ test('redirect.js.path with user override alias', async () => {
 
   expect(indexContent).toMatchInlineSnapshot(`
     "import lodash from "lodash";
+    import lodash_merge from "lodash.merge";
     import prettier from "prettier";
     import { bar } from "./others/bar/index.js";
     import { foo } from "./others/foo.js";
     import { baz } from "./baz.js";
     import { bar as index_js_bar } from "./bar/index.js";
     import { foo as external_foo_js_foo } from "./foo.js";
-    const src = lodash.toUpper(external_foo_js_foo + index_js_bar + foo + bar + baz + typeof prettier.version);
+    const src = lodash.toUpper(lodash_merge(external_foo_js_foo) + index_js_bar + foo + bar + baz + typeof prettier.version);
     export { src as default };
     "
   `);
@@ -128,11 +132,12 @@ test('redirect.js.extension: false', async () => {
   );
   expect(indexContent).toMatchInlineSnapshot(`
     "import lodash from "lodash";
+    import lodash_merge from "lodash.merge";
     import prettier from "prettier";
     import { bar } from "./bar/index.ts";
     import { foo } from "./foo.ts";
     import { baz } from "./baz.ts";
-    const src = lodash.toUpper(foo + bar + foo + bar + baz + typeof prettier.version);
+    const src = lodash.toUpper(lodash_merge(foo) + bar + foo + bar + baz + typeof prettier.version);
     export { src as default };
     "
   `);
