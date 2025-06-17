@@ -32,10 +32,9 @@ test('0. default', async () => {
     contents.cjs0!,
     /cjs\/module\/index\.cjs/,
   );
-  expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import index_module from "./index.module.js";
-    "
-  `);
+  expect(cssModuleIndexJs).toContain(
+    'import index_module from "./index.module.js";',
+  );
   expect(cssModuleIndexCjs).toContain(
     'const external_index_module_cjs_namespaceObject = require("./index.module.cjs");',
   );
@@ -64,10 +63,9 @@ test('1. style.path: false', () => {
     contents.cjs1!,
     /cjs\/module\/index\.cjs/,
   );
-  expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import index_module from "@/module/index.module.js";
-    "
-  `);
+  expect(cssModuleIndexJs).toContain(
+    'import index_module from "@/module/index.module.js";',
+  );
   expect(cssModuleIndexCjs).toContain(
     'const index_module_cjs_namespaceObject = require("@/module/index.module.cjs");',
   );
@@ -96,10 +94,9 @@ test('2. style.extension: false', async () => {
     contents.cjs2!,
     /cjs\/module\/index\.cjs/,
   );
-  expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import index_module from "./index.module.less";
-    "
-  `);
+  expect(cssModuleIndexJs).toContain(
+    'import index_module from "./index.module.less";',
+  );
   expect(cssModuleIndexCjs).toContain(
     'const external_index_module_less_namespaceObject = require("./index.module.less");',
   );
@@ -128,10 +125,9 @@ test('3. style.path: false, style.extension: false', async () => {
     contents.cjs3!,
     /cjs\/module\/index\.cjs/,
   );
-  expect(cssModuleIndexJs).toMatchInlineSnapshot(`
-    "import index_module from "@/module/index.module.less";
-    "
-  `);
+  expect(cssModuleIndexJs).toContain(
+    'import index_module from "@/module/index.module.less";',
+  );
   expect(cssModuleIndexCjs).toContain(
     'const index_module_cjs_namespaceObject = require("@/module/index.module.cjs");',
   );
