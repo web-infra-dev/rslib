@@ -1,3 +1,3 @@
 import svg from './assets/logo.svg';
 
-svg;
+console.log('svg: ', svg);
