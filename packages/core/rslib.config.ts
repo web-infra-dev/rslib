@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { pluginPublint } from 'rsbuild-plugin-publint';
-import { defineConfig } from 'rslib';
+import { defineConfig, rspack } from 'rslib';
 
 const pluginFixDtsTypes: RsbuildPlugin = {
   name: 'fix-dts-types',
@@ -52,6 +52,11 @@ export default defineConfig({
       picocolors: '../compiled/picocolors/index.js',
       chokidar: '../compiled/chokidar/index.js',
       rslog: '../compiled/rslog/index.js',
+    },
+  },
+  tools: {
+    rspack: {
+      plugins: [new rspack.CircularDependencyRspackPlugin({})],
     },
   },
 });

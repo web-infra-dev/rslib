@@ -1,5 +1,6 @@
 import path from 'node:path';
-import { color, debounce, isTTY } from '../utils/helper';
+import { color } from '../utils/color';
+import { debounce, isTTY } from '../utils/helper';
 import { logger } from '../utils/logger';
 
 export async function watchFilesForRestart(

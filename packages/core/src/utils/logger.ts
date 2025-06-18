@@ -13,7 +13,7 @@
  * and important alerts that require attention.
  */
 import { type Logger, logger } from 'rslog';
-import { color } from './helper';
+import { color } from './color';
 
 export const isDebug = (): boolean => {
   if (!process.env.DEBUG) {

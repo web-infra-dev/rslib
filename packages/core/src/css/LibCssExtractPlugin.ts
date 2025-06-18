@@ -4,7 +4,7 @@ import {
   AUTO_PUBLIC_PATH,
   BASE_URI,
   SINGLE_DOT_PATH_SEGMENT,
-} from './libCssExtractLoader';
+} from './const';
 import { getUndoPath } from './utils';
 
 const pluginName = 'LIB_CSS_EXTRACT_PLUGIN';
