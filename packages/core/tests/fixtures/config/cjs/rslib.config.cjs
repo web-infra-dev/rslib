@@ -1,6 +1,6 @@
 const { defineConfig } = require('../../../../../core/src/config');
 
-module.exports = defineConfig((args) => ({
+module.exports = defineConfig((_args) => ({
   lib: [],
   source: {
     entry: {

@@ -23,7 +23,11 @@ export const composeTemplateName = ({
   template,
   tools,
   lang,
-}: { template: string; tools?: Record<string, string>; lang: Lang }) => {
+}: {
+  template: string;
+  tools?: Record<string, string>;
+  lang: Lang;
+}) => {
   return `[${template}]-[${(tools ? Object.keys(tools) : []).sort()}]-${lang}`;
 };
 
@@ -31,7 +35,11 @@ export function genTemplate({
   template,
   lang,
   tools,
-}: { template: string; lang: Lang; tools?: Record<string, string> }): void {
+}: {
+  template: string;
+  lang: Lang;
+  tools?: Record<string, string>;
+}): void {
   const toolKeys = tools ? Object.keys(tools) : [];
   const target = path.resolve(
     __dirname,

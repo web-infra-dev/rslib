@@ -1,5 +1,5 @@
 import { init, loadRemote } from '@module-federation/enhanced/runtime';
-import { Suspense, createElement, lazy } from 'react';
+import { createElement, lazy, Suspense } from 'react';
 import { CounterButton } from './CounterButton';
 import { useCounter } from './useCounter';
 

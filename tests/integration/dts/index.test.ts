@@ -660,9 +660,9 @@ describe('dts when composite: true', () => {
     expect(contents.esm).toMatchInlineSnapshot(`
       {
         "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/index.d.mts": "/*! hello banner dts composite*/
+      export * from './sum';
       export * from './utils/numbers';
       export * from './utils/strings';
-      export * from './sum';
 
       /*! hello banner dts composite*/
       ",

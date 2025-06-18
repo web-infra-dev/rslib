@@ -4,13 +4,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   type Argv,
-  type ESLintTemplateName,
   checkCancel,
   create,
+  type ESLintTemplateName,
   multiselect,
   select,
 } from 'create-rstack';
-import { type Lang, TEMPLATES, composeTemplateName } from './helpers';
+import { composeTemplateName, type Lang, TEMPLATES } from './helpers';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

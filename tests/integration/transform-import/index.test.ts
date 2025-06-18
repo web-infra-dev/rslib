@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { type FormatType, buildAndGetResults } from 'test-helper';
+import { buildAndGetResults, type FormatType } from 'test-helper';
 import { expect, test } from 'vitest';
 
 test('transformImport with arco-design', async () => {

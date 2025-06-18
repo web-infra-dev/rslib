@@ -1,6 +1,6 @@
 import { defineConfig } from '../../../../../core/src/config';
 
-export default defineConfig((args) => ({
+export default defineConfig((_args) => ({
   lib: [],
   source: {
     entry: {

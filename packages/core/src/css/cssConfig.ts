@@ -6,6 +6,7 @@ import {
   isCssFile,
   isCssModulesFile,
 } from './utils';
+
 const require = createRequire(import.meta.url);
 
 export const RSLIB_CSS_ENTRY_FLAG = '__rslib_css__';

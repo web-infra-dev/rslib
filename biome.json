@@ -1,21 +1,11 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": {
-    "enabled": true,
-    "include": [
-      "./**/*.js",
-      "./**/*.jsx",
-      "./**/*.ts",
-      "./**/*.tsx",
-      "./**/*.mjs",
-      "./**/*.mjsx",
-      "./**/*.cjs",
-      "./**/*.cjsx",
-      "./**/*.mts",
-      "./**/*.mtsx",
-      "./**/*.cts",
-      "./**/*.ctsx"
-    ]
+  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "vcs": {
     "enabled": true,
@@ -27,7 +17,12 @@
     "ignoreUnknown": true
   },
   "formatter": {
-    "ignore": ["**/.rslib/*", "./tests/e2e/react-component/public/umd/*"],
+    "includes": [
+      "**",
+      "!**/*.vue",
+      "!**/.rslib/**/*",
+      "!tests/e2e/react-component/public/umd/**/*"
+    ],
     "indentStyle": "space"
   },
   "javascript": {
@@ -48,10 +43,12 @@
   },
   "linter": {
     "enabled": true,
-    "ignore": [
-      "**/.rslib/*",
-      "./tests/integration/**/*/src/*",
-      "./tests/e2e/react-component/public/umd/*"
+    "includes": [
+      "**",
+      "!**/*.vue",
+      "!**/.rslib/**/*",
+      "!tests/integration/**/*/src/**/*",
+      "!tests/e2e/react-component/public/umd/**/*"
     ],
     "rules": {
       "recommended": true,
@@ -62,7 +59,17 @@
           "options": {
             "filenameCases": ["camelCase", "PascalCase", "export"]
           }
-        }
+        },
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error"
       },
       "suspicious": {
         "noExplicitAny": "off",
@@ -70,6 +77,12 @@
       },
       "performance": {
         "noDelete": "off"
+      },
+      "correctness": {
+        "useHookAtTopLevel": "off"
+      },
+      "nursery": {
+        "useUniqueElementIds": "off"
       }
     }
   }

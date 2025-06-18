@@ -40,7 +40,7 @@ export const calcBundledPackages = (options: {
   try {
     const content = fs.readFileSync(join(cwd, 'package.json'), 'utf-8');
     pkgJson = JSON.parse(content);
-  } catch (err) {
+  } catch (_err) {
     logger.warn(
       'The type of third-party packages will not be bundled due to read package.json failed',
     );

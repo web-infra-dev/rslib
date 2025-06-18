@@ -1,7 +1,7 @@
 import { platform } from 'node:os';
 import { join } from 'node:path';
 import fse from 'fs-extra';
-import { type GlobOptions, convertPathToPattern, glob } from 'tinyglobby';
+import { convertPathToPattern, type GlobOptions, glob } from 'tinyglobby';
 
 // tinyglobby only accepts posix path
 // https://github.com/SuperchupuDev/tinyglobby?tab=readme-ov-file#api
@@ -105,7 +105,7 @@ export const awaitFileChanges = async (file: string, content: string) => {
             fse.readFileSync(file, 'utf-8') !== oldContent &&
             fse.readFileSync(file, 'utf-8').includes(content)
           );
-        } catch (e) {
+        } catch (_e) {
           return false;
         }
       },

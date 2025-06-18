@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+
 const card = ref('Card!');
 </script>
 

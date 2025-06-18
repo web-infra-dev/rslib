@@ -1,6 +1,7 @@
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import type { StorybookConfig } from 'storybook-vue3-rsbuild';
+
 const require = createRequire(import.meta.url);
 
 /**

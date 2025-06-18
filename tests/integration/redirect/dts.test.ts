@@ -26,13 +26,13 @@ test('redirect.dts.path: true with redirect.dts.extension: false - default', asy
     import { defaultOptions } from './types.js';
     import sources = require('./logger');
     export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    export * from './foo';
+    export * from './logger';
     export type { Foo } from './types';
+    export * from '../../../compile/rslog';
     export type { Bar } from './types';
     export * from './foo';
-    export * from './foo';
     export * from './types';
-    export * from '../../../compile/rslog';
-    export * from './logger';
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/default/esm/logger.d.ts": "import type { Request } from 'express';
     import type { LoggerOptions } from './types';
@@ -74,13 +74,13 @@ test('redirect.dts.path: false with redirect.dts.extension: false', async () => 
     import { defaultOptions } from './types.js';
     import sources = require('@src/logger');
     export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    export * from '@src/foo';
+    export * from '@src/logger';
     export type { Foo } from '@src/types';
+    export * from 'rslog';
     export type { Bar } from 'types';
     export * from './foo';
-    export * from '@src/foo';
     export * from './types';
-    export * from 'rslog';
-    export * from '@src/logger';
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/logger.d.ts": "import type { Request } from 'express';
     import type { LoggerOptions } from './types';
@@ -122,13 +122,13 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
     import { defaultOptions } from './types.js';
     import sources = require('./logger.js');
     export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    export * from './foo/index.js';
+    export * from './logger.js';
     export type { Foo } from './types.js';
+    export * from '../../../compile/rslog';
     export type { Bar } from './types.js';
     export * from './foo/index.js';
-    export * from './foo/index.js';
     export * from './types.js';
-    export * from '../../../compile/rslog';
-    export * from './logger.js';
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/logger.d.ts": "import type { Request } from 'express';
     import type { LoggerOptions } from './types.js';
@@ -170,13 +170,13 @@ test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
     import { defaultOptions } from './types.js';
     import sources = require('@src/logger');
     export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    export * from '@src/foo';
+    export * from '@src/logger';
     export type { Foo } from '@src/types';
+    export * from 'rslog';
     export type { Bar } from 'types';
     export * from './foo/index.js';
-    export * from '@src/foo';
     export * from './types.js';
-    export * from 'rslog';
-    export * from '@src/logger';
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false-extension-true/esm/logger.d.ts": "import type { Request } from 'express';
     import type { LoggerOptions } from './types.js';
@@ -225,13 +225,13 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     import { defaultOptions } from './types.mjs';
     import sources = require('./logger.mjs');
     export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    export * from './foo/index.mjs';
+    export * from './logger.mjs';
     export type { Foo } from './types.mjs';
+    export * from '../../compile/rslog';
     export type { Bar } from './types.mjs';
     export * from './foo/index.mjs';
-    export * from './foo/index.mjs';
     export * from './types.mjs';
-    export * from '../../compile/rslog';
-    export * from './logger.mjs';
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/index.d.ts": "import { logRequest } from './logger.js';
     import { logger } from '../../compile/rslog';
@@ -240,13 +240,13 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     import { defaultOptions } from './types.js';
     import sources = require('./logger.js');
     export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+    export * from './foo/index.js';
+    export * from './logger.js';
     export type { Foo } from './types.js';
+    export * from '../../compile/rslog';
     export type { Bar } from './types.js';
     export * from './foo/index.js';
-    export * from './foo/index.js';
     export * from './types.js';
-    export * from '../../compile/rslog';
-    export * from './logger.js';
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/logger.d.mts": "import type { Request } from 'express';
     import type { LoggerOptions } from './types.mjs';

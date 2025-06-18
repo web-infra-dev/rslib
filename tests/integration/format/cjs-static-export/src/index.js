@@ -1,1 +1,1 @@
-export { foo, bar } from './value.js';
+export { bar, foo } from './value.js';
