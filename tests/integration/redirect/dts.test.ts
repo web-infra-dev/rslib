@@ -13,14 +13,14 @@ test('redirect.dts.path: true with redirect.dts.extension: false - default', asy
   expect(contents.esm0).toMatchInlineSnapshot(`
     {
       "<ROOT>/tests/integration/redirect/dts/dist/default/esm/foo/foo.d.ts": "import { logRequest } from '../logger';
-    import { logger } from '../../../../compile/rslog';
+    import { logger } from '../../../../compile/prebundle-pkg';
     import { logRequest as logRequest2 } from '../logger';
     export { logRequest, logRequest2, logger };
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/default/esm/foo/index.d.ts": "export type Barrel = string;
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/default/esm/index.d.ts": "import { logRequest } from './logger';
-    import { logger } from '../../../compile/rslog';
+    import { logger } from '../../../compile/prebundle-pkg';
     import type { Baz } from './';
     import type { LoggerOptions } from './types';
     import { defaultOptions } from './types.js';
@@ -29,7 +29,7 @@ test('redirect.dts.path: true with redirect.dts.extension: false - default', asy
     export * from './foo';
     export * from './logger';
     export type { Foo } from './types';
-    export * from '../../../compile/rslog';
+    export * from '../../../compile/prebundle-pkg';
     export type { Bar } from './types';
     export * from './foo';
     export * from './types';
@@ -61,14 +61,14 @@ test('redirect.dts.path: false with redirect.dts.extension: false', async () => 
   expect(contents.esm1).toMatchInlineSnapshot(`
     {
       "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/foo/foo.d.ts": "import { logRequest } from '@src/logger';
-    import { logger } from 'rslog';
+    import { logger } from 'prebundle-pkg';
     import { logRequest as logRequest2 } from '../logger';
     export { logRequest, logRequest2, logger };
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/foo/index.d.ts": "export type Barrel = string;
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/index.d.ts": "import { logRequest } from '@src/logger';
-    import { logger } from 'rslog';
+    import { logger } from 'prebundle-pkg';
     import type { Baz } from 'self-entry';
     import type { LoggerOptions } from './types';
     import { defaultOptions } from './types.js';
@@ -77,7 +77,7 @@ test('redirect.dts.path: false with redirect.dts.extension: false', async () => 
     export * from '@src/foo';
     export * from '@src/logger';
     export type { Foo } from '@src/types';
-    export * from 'rslog';
+    export * from 'prebundle-pkg';
     export type { Bar } from 'types';
     export * from './foo';
     export * from './types';
@@ -109,14 +109,14 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
   expect(contents.esm2).toMatchInlineSnapshot(`
     {
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/foo/foo.d.ts": "import { logRequest } from '../logger.js';
-    import { logger } from '../../../../compile/rslog';
+    import { logger } from '../../../../compile/prebundle-pkg';
     import { logRequest as logRequest2 } from '../logger.js';
     export { logRequest, logRequest2, logger };
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/foo/index.d.ts": "export type Barrel = string;
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/index.d.ts": "import { logRequest } from './logger.js';
-    import { logger } from '../../../compile/rslog';
+    import { logger } from '../../../compile/prebundle-pkg';
     import type { Baz } from './index.js';
     import type { LoggerOptions } from './types.js';
     import { defaultOptions } from './types.js';
@@ -125,7 +125,7 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
     export * from './foo/index.js';
     export * from './logger.js';
     export type { Foo } from './types.js';
-    export * from '../../../compile/rslog';
+    export * from '../../../compile/prebundle-pkg';
     export type { Bar } from './types.js';
     export * from './foo/index.js';
     export * from './types.js';
@@ -157,14 +157,14 @@ test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
   expect(contents.esm3).toMatchInlineSnapshot(`
     {
       "<ROOT>/tests/integration/redirect/dts/dist/path-false-extension-true/esm/foo/foo.d.ts": "import { logRequest } from '@src/logger';
-    import { logger } from 'rslog';
+    import { logger } from 'prebundle-pkg';
     import { logRequest as logRequest2 } from '../logger.js';
     export { logRequest, logRequest2, logger };
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false-extension-true/esm/foo/index.d.ts": "export type Barrel = string;
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false-extension-true/esm/index.d.ts": "import { logRequest } from '@src/logger';
-    import { logger } from 'rslog';
+    import { logger } from 'prebundle-pkg';
     import type { Baz } from 'self-entry';
     import type { LoggerOptions } from './types.js';
     import { defaultOptions } from './types.js';
@@ -173,7 +173,7 @@ test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
     export * from '@src/foo';
     export * from '@src/logger';
     export type { Foo } from '@src/types';
-    export * from 'rslog';
+    export * from 'prebundle-pkg';
     export type { Bar } from 'types';
     export * from './foo/index.js';
     export * from './types.js';
@@ -205,12 +205,12 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
   expect(contents.esm4).toMatchInlineSnapshot(`
     {
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/foo/foo.d.mts": "import { logRequest } from '../logger.mjs';
-    import { logger } from '../../../compile/rslog';
+    import { logger } from '../../../compile/prebundle-pkg';
     import { logRequest as logRequest2 } from '../logger.mjs';
     export { logRequest, logRequest2, logger };
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/foo/foo.d.ts": "import { logRequest } from '../logger.js';
-    import { logger } from '../../../compile/rslog';
+    import { logger } from '../../../compile/prebundle-pkg';
     import { logRequest as logRequest2 } from '../logger.js';
     export { logRequest, logRequest2, logger };
     ",
@@ -219,7 +219,7 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/foo/index.d.ts": "export type Barrel = string;
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/index.d.mts": "import { logRequest } from './logger.mjs';
-    import { logger } from '../../compile/rslog';
+    import { logger } from '../../compile/prebundle-pkg';
     import type { Baz } from './index.mjs';
     import type { LoggerOptions } from './types.mjs';
     import { defaultOptions } from './types.mjs';
@@ -228,13 +228,13 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     export * from './foo/index.mjs';
     export * from './logger.mjs';
     export type { Foo } from './types.mjs';
-    export * from '../../compile/rslog';
+    export * from '../../compile/prebundle-pkg';
     export type { Bar } from './types.mjs';
     export * from './foo/index.mjs';
     export * from './types.mjs';
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/index.d.ts": "import { logRequest } from './logger.js';
-    import { logger } from '../../compile/rslog';
+    import { logger } from '../../compile/prebundle-pkg';
     import type { Baz } from './index.js';
     import type { LoggerOptions } from './types.js';
     import { defaultOptions } from './types.js';
@@ -243,7 +243,7 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     export * from './foo/index.js';
     export * from './logger.js';
     export type { Foo } from './types.js';
-    export * from '../../compile/rslog';
+    export * from '../../compile/prebundle-pkg';
     export type { Bar } from './types.js';
     export * from './foo/index.js';
     export * from './types.js';

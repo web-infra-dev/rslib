@@ -1,5 +1,5 @@
 import { logRequest } from '@src/logger';
-import { logger } from 'rslog';
+import { logger } from 'prebundle-pkg';
 import type { Baz } from 'self-entry';
 import type { LoggerOptions } from './types';
 import { defaultOptions } from './types.js';
@@ -18,7 +18,7 @@ export {
 export * from '@src/foo';
 export * from '@src/logger';
 export type { Foo } from '@src/types';
-export * from 'rslog';
+export * from 'prebundle-pkg';
 export type { Bar } from 'types';
 export * from './foo';
 export * from './types';
