@@ -2,9 +2,9 @@
 
 exports[`dts when bundle: false > basic 3`] = `
 {
-  "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/index.d.ts": "export * from './utils/numbers';
+  "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/index.d.ts": "export * from './sum';
+export * from './utils/numbers';
 export * from './utils/strings';
-export * from './sum';
 ",
   "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/sum.d.ts": "export declare const numSum: number;
 export declare const strSum: string;

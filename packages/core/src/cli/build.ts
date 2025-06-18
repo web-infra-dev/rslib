@@ -1,4 +1,4 @@
-import { type RsbuildInstance, createRsbuild } from '@rsbuild/core';
+import { createRsbuild, type RsbuildInstance } from '@rsbuild/core';
 import { composeRsbuildEnvironments, pruneEnvironments } from '../config';
 import type { RslibConfig } from '../types/config';
 import type { BuildOptions } from './commands';

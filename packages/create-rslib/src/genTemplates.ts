@@ -1,4 +1,4 @@
-import { TEMPLATES, genTemplate } from './helpers';
+import { genTemplate, TEMPLATES } from './helpers';
 
 function main() {
   for (const template of TEMPLATES) {

@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
-import { TEMPLATES, composeTemplateName } from '../src/helpers';
+import { composeTemplateName, TEMPLATES } from '../src/helpers';
 import { createAndValidate } from './helper';
 
 const CASES_NODE_DUAL = [

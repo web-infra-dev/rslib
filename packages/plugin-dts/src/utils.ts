@@ -12,11 +12,11 @@ import path, {
   resolve,
 } from 'node:path';
 import { type NapiConfig, parseAsync } from '@ast-grep/napi';
-import { type RsbuildConfig, logger } from '@rsbuild/core';
+import { logger, type RsbuildConfig } from '@rsbuild/core';
 import MagicString from 'magic-string';
 import color from 'picocolors';
 import { convertPathToPattern, glob } from 'tinyglobby';
-import { type MatchPath, createMatchPath, loadConfig } from 'tsconfig-paths';
+import { createMatchPath, loadConfig, type MatchPath } from 'tsconfig-paths';
 import ts from 'typescript';
 import type { DtsEntry, DtsRedirect } from './index';
 

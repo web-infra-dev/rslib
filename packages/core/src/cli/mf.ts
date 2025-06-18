@@ -1,5 +1,5 @@
-import { createRsbuild } from '@rsbuild/core';
 import type { RsbuildInstance } from '@rsbuild/core';
+import { createRsbuild } from '@rsbuild/core';
 import { composeRsbuildEnvironments, pruneEnvironments } from '../config';
 import type { RslibConfig } from '../types';
 import type { CommonOptions } from './commands';

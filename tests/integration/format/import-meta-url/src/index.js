@@ -1,1 +1,1 @@
-export { packageDirectory, foo } from './value.js';
+export { foo, packageDirectory } from './value.js';

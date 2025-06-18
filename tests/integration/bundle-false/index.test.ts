@@ -52,9 +52,9 @@ test('basic', async () => {
     "import { mainFiles1 } from "./mainFiles1/index.js";
     import { added } from "./dep.js";
     export * from "./mainFiles2/index.js";
+    export * from "./sum.js";
     export * from "./utils/numbers.js";
     export * from "./utils/strings.js";
-    export * from "./sum.js";
     export { added, mainFiles1 };
     "
   `);

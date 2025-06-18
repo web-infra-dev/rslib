@@ -15,6 +15,7 @@ import {
 } from './const';
 
 import { type CssLoaderOptionsAuto, isCssModulesFile } from './utils';
+
 interface DependencyDescription {
   identifier: string;
   content: string;

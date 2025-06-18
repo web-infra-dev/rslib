@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noTemplateCurlyInString: test statements */
 import { join } from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 import { expect, test } from 'vitest';
@@ -88,7 +89,7 @@ test('require as expression', async () => {
   const { entries } = await buildAndGetResults({ fixturePath });
 
   const statements = [
-    'const lazyFn = (module, requireFn)=>{}',
+    'const lazyFn = (_module, _requireFn)=>{}',
     "lazyFn('./other.js', require)",
   ];
 

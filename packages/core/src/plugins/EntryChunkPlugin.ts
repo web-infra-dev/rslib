@@ -12,6 +12,7 @@ import {
   SHEBANG_PREFIX,
   SHEBANG_REGEX,
 } from '../constant';
+
 const require = createRequire(import.meta.url);
 
 const PLUGIN_NAME = 'rsbuild:lib-entry-chunk';

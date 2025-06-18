@@ -1,4 +1,4 @@
-import { type LibConfig, defineConfig } from '@rslib/core';
+import { defineConfig, type LibConfig } from '@rslib/core';
 import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 const bannerFooterConfig: LibConfig = {

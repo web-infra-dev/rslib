@@ -1,5 +1,6 @@
 import { pluginPublint } from 'rsbuild-plugin-publint';
 import { defineConfig } from 'rslib';
+
 const { execSync } = require('node:child_process');
 
 export default defineConfig({

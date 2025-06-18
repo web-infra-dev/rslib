@@ -1,6 +1,7 @@
 <script setup>
 import './style.less';
 import { ref } from 'vue';
+
 const button = ref('Button!');
 </script>
 

@@ -1,5 +1,5 @@
 import assert from 'node:assert';
-import { type Page, expect, test } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 import { dev } from 'test-helper/rsbuild';
 
 async function counterCompShouldWork(page: Page) {

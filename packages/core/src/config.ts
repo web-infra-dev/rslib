@@ -1,17 +1,17 @@
 import fs from 'node:fs';
 import path, { dirname, extname, isAbsolute, join } from 'node:path';
 import {
+  defineConfig as defineRsbuildConfig,
   type EnvironmentConfig,
+  loadConfig as loadRsbuildConfig,
+  mergeRsbuildConfig,
   type RsbuildConfig,
   type RsbuildEntry,
   type RsbuildPlugin,
   type RsbuildPlugins,
   type Rspack,
-  type ToolsConfig,
-  defineConfig as defineRsbuildConfig,
-  loadConfig as loadRsbuildConfig,
-  mergeRsbuildConfig,
   rspack,
+  type ToolsConfig,
 } from '@rsbuild/core';
 import { glob } from 'tinyglobby';
 import { composeAssetConfig } from './asset/assetConfig';
@@ -23,9 +23,9 @@ import {
   SWC_HELPERS,
 } from './constant';
 import {
-  RSLIB_CSS_ENTRY_FLAG,
   composeCssConfig,
   cssExternalHandler,
+  RSLIB_CSS_ENTRY_FLAG,
 } from './css/cssConfig';
 import { type CssLoaderOptionsAuto, isCssGlobalFile } from './css/utils';
 import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
@@ -254,7 +254,7 @@ const composeExternalsWarnConfig = (
     }
     // object
     else if (typeof externals === 'object') {
-      if (Object.prototype.hasOwnProperty.call(externals, request)) {
+      if (Object.hasOwn(externals, request)) {
         if (handleMatchedExternal(externals[request]!, request)) {
           callback(true, true);
         } else {
@@ -1277,7 +1277,7 @@ const composeBundlelessExternalConfig = (
                 // NOTE: If request is a phantom dependency, which means it can be resolved but not specified in dependencies or peerDependencies in package.json, the output will be incorrect to use when the package is published
                 // return the original request instead of the resolved request
                 return undefined;
-              } catch (e) {
+              } catch (_e) {
                 // catch error when request can not be resolved by resolver
                 // e.g. A react component library importing and using 'react' but while not defining
                 // it in devDependencies and peerDependencies. Preserve 'react' as-is if so.
@@ -1637,11 +1637,11 @@ export async function composeCreateRsbuildConfig(
   const constantRsbuildConfig = await createConstantRsbuildConfig();
   const {
     lib: libConfigsArray,
-    mode,
+    mode: _mode,
     root,
     plugins: sharedPlugins,
-    dev,
-    server,
+    dev: _dev,
+    server: _server,
     ...sharedRsbuildConfig
   } = rslibConfig;
 

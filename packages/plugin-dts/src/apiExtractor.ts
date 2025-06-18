@@ -20,7 +20,7 @@ export type BundleOptions = {
 };
 
 export async function bundleDts(options: BundleOptions): Promise<void> {
-  let apiExtractor: typeof ApiExtractor | undefined = undefined;
+  let apiExtractor: typeof ApiExtractor | undefined;
   try {
     apiExtractor = await import('@microsoft/api-extractor');
   } catch {

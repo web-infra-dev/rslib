@@ -125,7 +125,7 @@ export const readPackageJson = (rootPath: string): undefined | PkgJson => {
 
   try {
     return JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
-  } catch (err) {
+  } catch (_err) {
     logger.warn(`Failed to parse ${pkgJsonPath}, it might not be valid JSON`);
     return;
   }
