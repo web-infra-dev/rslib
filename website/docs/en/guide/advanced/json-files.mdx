@@ -105,6 +105,16 @@ export { __webpack_exports__items as items, __webpack_exports__name as name };
 
 </Tabs>
 
+### Use import attributes
+
+In bundle mode, Rslib supports [import attributes](https://github.com/tc39/proposal-import-attributes), and you can import JSON files through import attributes:
+
+```js title="index.js"
+import json from './example.json' with { type: 'json' };
+```
+
+In bundleless mode, when importing JSON files through import attributes, you need to ensure that references to the JSON files are preserved in the output, refer to [document](#bundleless) for configuration.
+
 ## YAML file
 
 [YAML](https://yaml.org/) is a data serialization language commonly used for writing configuration files.
