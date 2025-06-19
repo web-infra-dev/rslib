@@ -111,3 +111,18 @@ test('throw error when using mf with `bundle: false`', async () => {
     `[Error: When using "mf" format, "bundle" must be set to "true". Since the default value for "bundle" is "true", so you can either explicitly set it to "true" or remove the field entirely.]`,
   );
 });
+
+test("API plugin's api should be skipped in parser", async () => {
+  const fixturePath = path.resolve(__dirname, 'api-plugin');
+  const { entries } = await buildAndGetResults({
+    fixturePath,
+  });
+
+  expect(entries.esm).toMatchInlineSnapshot(`
+    "const c = require.cache;
+    export { c };
+    "
+  `);
+
+  expect(entries.cjs).toContain('const c = require.cache;');
+});
