@@ -578,6 +578,14 @@ const composeFormatConfig = ({
     },
   } as const;
 
+  // The built-in Rslib plugin will apply to all formats except the `mf` format.
+  // The `mf` format functions more like an application than a library and requires additional webpack runtime.
+  const plugins = [
+    new rspack.experiments.RslibPlugin({
+      interceptApiPlugin: true,
+    }),
+  ];
+
   switch (format) {
     case 'esm':
       return {
@@ -610,6 +618,7 @@ const composeFormatConfig = ({
             experiments: {
               outputModule: true,
             },
+            plugins,
           },
         },
       };
@@ -636,6 +645,7 @@ const composeFormatConfig = ({
               workerChunkLoading: 'async-node',
               wasmLoading: 'async-node',
             },
+            plugins,
           },
         },
       };
@@ -670,6 +680,7 @@ const composeFormatConfig = ({
             optimization: {
               nodeEnv: process.env.NODE_ENV,
             },
+            plugins,
           },
         },
       };
@@ -703,6 +714,7 @@ const composeFormatConfig = ({
             optimization: {
               nodeEnv: process.env.NODE_ENV,
             },
+            plugins,
           },
         },
       };
