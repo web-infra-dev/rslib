@@ -102,6 +102,16 @@ export { __webpack_exports__items as items, __webpack_exports__name as name };
 
 </Tabs>
 
+### 使用 import attributes
+
+在 bundle 模式下，Rslib 支持 [import attributes](https://github.com/tc39/proposal-import-attributes)，你可以通过 import attributes 来引入 JSON 文件：
+
+```js title="index.js"
+import json from './example.json' with { type: 'json' };
+```
+
+在 bundleless 模式下，通过 import attributes 引入 JSON 文件时，需要确保产物中保留对 JSON 文件的引用，参考 [文档](#bundleless) 进行配置。
+
 ## YAML 文件
 
 [YAML](https://yaml.org/) 是一种数据序列化语言，通常用于编写配置文件。
