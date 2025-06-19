@@ -26,7 +26,7 @@ export default defineConfig({
       feed: [
         {
           id: 'blog-rss',
-          test: '/blog',
+          test: /^\/blog\/.+/,
           title: 'Rslib Blog',
           language: 'en',
           output: {
@@ -36,7 +36,7 @@ export default defineConfig({
         },
         {
           id: 'blog-rss-zh',
-          test: '/zh/blog',
+          test: /^\/zh\/blog\/.+/,
           title: 'Rslib 博客',
           language: 'zh-CN',
           output: {
