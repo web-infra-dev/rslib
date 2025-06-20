@@ -267,11 +267,10 @@ export async function emitDts(
         createProgram,
       });
 
-      program.emit();
-
+      const emitResult = program.emit();
       const allDiagnostics = program
-        .getSemanticDiagnostics()
-        .concat(program.getConfigFileParsingDiagnostics());
+        .getConfigFileParsingDiagnostics()
+        .concat(emitResult.diagnostics);
 
       await handleDiagnosticsAndProcessFiles(
         allDiagnostics,
