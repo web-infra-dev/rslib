@@ -71,9 +71,6 @@ const updateConfigForTest = async (
   });
 
   const baseConfig: RsbuildConfig = {
-    dev: {
-      progressBar: false,
-    },
     server: {
       // make port random to avoid conflict
       port: await getRandomPort(),
