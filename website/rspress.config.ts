@@ -52,7 +52,6 @@ export default defineConfig({
   ],
   root: path.join(__dirname, 'docs'),
   lang: 'en',
-  base: '/',
   title: 'Rslib',
   description:
     'Rslib is a library development tool that leverages the well-designed configurations and plugins of Rsbuild.',
