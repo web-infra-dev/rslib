@@ -1,9 +1,9 @@
 import { exec, spawn } from 'node:child_process';
 import path from 'node:path';
 import { after } from 'node:test';
+import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
 import { awaitFileChanges, awaitFileExists } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 describe('build --watch command', async () => {
   test('basic', async () => {

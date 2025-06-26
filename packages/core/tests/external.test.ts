@@ -1,7 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, rs } from '@rstest/core';
 import { composeAutoExternalConfig } from '../src/config';
 
-vi.mock('rslog');
+rs.mock('rslog');
 
 describe('should composeAutoExternalConfig correctly', () => {
   it('autoExternal default value', () => {

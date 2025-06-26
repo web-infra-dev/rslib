@@ -1,7 +1,8 @@
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import stripAnsi from 'strip-ansi';
 import { buildAndGetResults, proxyConsole } from 'test-helper';
-import { expect, test } from 'vitest';
+
 import { composeModuleImportWarn } from '../../../packages/core/src/config';
 
 test('auto external default should works', async () => {

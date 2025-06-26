@@ -1,8 +1,8 @@
 import { join } from 'node:path';
-import { expect, it, vi } from 'vitest';
+import { expect, it, rs } from '@rstest/core';
 import { checkMFPlugin, readPackageJson } from '../src/utils/helper';
 
-vi.mock('rslog');
+rs.mock('rslog');
 
 it('readPackageJson correctly', async () => {
   expect(readPackageJson('path/to/root')).toBeUndefined();

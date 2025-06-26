@@ -1,7 +1,7 @@
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { expectFileContainContent } from 'test-helper/vitest';
-import { expect, test } from 'vitest';
+import { expectFileContainContent } from 'test-helper/rstest';
 
 test('should extract css with postcss-loader successfully in bundle', async () => {
   const fixturePath = join(__dirname, 'bundle');

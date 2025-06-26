@@ -1,6 +1,6 @@
 import vm from 'node:vm';
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('correct read UMD name from CommonJS', async () => {
   const fixturePath = __dirname;

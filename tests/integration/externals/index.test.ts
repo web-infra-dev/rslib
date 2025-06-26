@@ -1,7 +1,8 @@
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import stripAnsi from 'strip-ansi';
 import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
-import { expect, test } from 'vitest';
+
 import { composeModuleImportWarn } from '../../../packages/core/src/config';
 
 test('should fail to build when `output.target` is not "node"', async () => {

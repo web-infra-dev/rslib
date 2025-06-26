@@ -44,6 +44,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.0.4",
     "@changesets/cli": "^2.29.5",
+    "@rstest/core": "link:../rstest/packages/core",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.15.32",
     "check-dependency-version-consistency": "^5.0.1",
@@ -75,6 +76,7 @@
       "simple-git-hooks"
     ],
     "overrides": {
+      "@rstest/core": "link:../rstest/packages/core",
       "zx>@types/node": "-"
     }
   }

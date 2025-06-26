@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  '@rstest/core': link:../rstest/packages/core
   zx>@types/node: '-'
 
 importers:
@@ -17,6 +18,9 @@ importers:
       '@changesets/cli':
         specifier: ^2.29.5
         version: 2.29.5
+      '@rstest/core':
+        specifier: link:../rstest/packages/core
+        version: link:../rstest/packages/core
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4

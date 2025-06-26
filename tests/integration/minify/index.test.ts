@@ -1,6 +1,6 @@
 import { join } from 'node:path';
+import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 describe('minify config', () => {
   test('tree shaking is enabled by default, bar and baz should be shaken, some comments and annotations are preserved', async () => {

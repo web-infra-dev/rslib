@@ -1,7 +1,7 @@
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import stripAnsi from 'strip-ansi';
 import { buildAndGetResults } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('should throw error when lib array not exists or empty', async () => {
   const fixturePath = join(__dirname, 'lib-array');

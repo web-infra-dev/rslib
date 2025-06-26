@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import { join } from 'node:path';
+import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 const onlyStartsWith = (str: string, target: string) => {
   return str.split(target).length === 2 && str.startsWith(target);

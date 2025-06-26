@@ -1,6 +1,6 @@
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults, type FormatType } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('transformImport with arco-design', async () => {
   const fixturePath = join(__dirname, 'arco-design');
