@@ -1,7 +1,7 @@
 import { platform } from 'node:os';
 import { join } from 'node:path';
+import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 // '__file' path can't be normalized on win32.
 describe.runIf(platform() !== 'win32')('ESM', async () => {

@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join, normalize } from 'node:path';
+import { describe, expect, test } from '@rstest/core';
 import stripAnsi from 'strip-ansi';
 import {
   buildAndGetResults,
@@ -9,7 +10,6 @@ import {
   proxyConsole,
   queryContent,
 } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 describe('dts when bundle: false', () => {
   test('basic', async () => {

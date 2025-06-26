@@ -1,6 +1,6 @@
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('`Buffer` should be imported from polyfill when bundled', async () => {
   const fixturePath = join(__dirname, './bundle');

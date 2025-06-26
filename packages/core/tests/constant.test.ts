@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest';
+import { expect, test } from '@rstest/core';
 import {
   CSS_EXTENSIONS_PATTERN,
   DTS_EXTENSIONS_PATTERN,

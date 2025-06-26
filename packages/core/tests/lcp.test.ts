@@ -1,10 +1,10 @@
 import os from 'node:os';
+import { beforeEach, describe, expect, it, rs } from '@rstest/core';
 import { vol } from 'memfs';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { calcLongestCommonPath } from '../src/utils/helper';
 
-vi.mock('node:fs');
-vi.mock('node:fs/promises');
+rs.mock('node:fs');
+rs.mock('node:fs/promises');
 
 // LCP test mock will affect other tests
 describe('LCP calculate correctly', () => {

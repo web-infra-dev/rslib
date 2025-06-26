@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 describe('JSON', async () => {
   const fixturePath = join(__dirname, '.');

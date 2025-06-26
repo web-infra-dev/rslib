@@ -1,7 +1,7 @@
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import stripAnsi from 'strip-ansi';
 import { buildAndGetResults, proxyConsole } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('should not external @swc/helpers by default', async () => {
   const fixturePath = join(__dirname, 'default');

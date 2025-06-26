@@ -1,6 +1,6 @@
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('basic', async () => {
   const fixturePath = join(__dirname, 'basic');
@@ -59,8 +59,8 @@ test('basic', async () => {
     "
   `);
   expect(depContent).toMatchInlineSnapshot(`
-    "import { add } from "dep_add";
-    const added = add(1, 2);
+    "import dep_add from "dep_add";
+    const added = dep_add.add(1, 2);
     export { added };
     "
   `);

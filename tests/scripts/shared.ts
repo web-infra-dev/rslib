@@ -304,7 +304,6 @@ export async function buildAndGetResults({
       },
     };
   }
-
   const results = await getResults(rslibConfig, type);
   return {
     contents: results.contents,

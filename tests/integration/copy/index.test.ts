@@ -1,6 +1,6 @@
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults, generateFileTree } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('copy', async () => {
   const fixturePath = __dirname;
