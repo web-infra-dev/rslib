@@ -3,9 +3,11 @@ import { join } from 'node:path';
 import { describe } from 'node:test';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { startMFDevServer } from '@rslib/core';
-import fse, { existsSync } from 'fs-extra';
+import { expect, test } from '@rstest/core';
+import fse from 'fs-extra';
 import { awaitFileExists } from 'test-helper';
-import { expect, test } from 'vitest';
+
+const { existsSync } = fse;
 
 describe('mf-dev', () => {
   test('mf-dev --lib', async () => {
@@ -67,7 +69,7 @@ describe('mf-dev', () => {
           lib: [
             {
               format: 'mf',
-              plugins: [pluginModuleFederation({ name: 'test-not-exist' })],
+              plugins: [pluginModuleFederation({ name: 'test-not-exist' }, {})],
             },
           ],
         },

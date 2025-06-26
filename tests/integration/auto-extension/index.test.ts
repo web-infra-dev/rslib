@@ -1,10 +1,10 @@
 import { extname, join } from 'node:path';
+import { describe, expect, test } from '@rstest/core';
 import {
   buildAndGetResults,
   generateFileTree,
   queryContent,
 } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 describe('autoExtension: true', () => {
   test('generate .mjs in build artifacts with esm format when type is commonjs', async () => {

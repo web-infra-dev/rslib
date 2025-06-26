@@ -1,5 +1,5 @@
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('source.define', async () => {
   const fixturePath = __dirname;

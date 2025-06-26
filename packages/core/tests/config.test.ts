@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, rs, test } from '@rstest/core';
 import {
   composeCreateRsbuildConfig,
   composeRsbuildEnvironments,
@@ -8,7 +8,7 @@ import {
 } from '../src/config';
 import type { RslibConfig } from '../src/types/config';
 
-vi.mock('rslog');
+rs.mock('rslog');
 
 describe('Should load config file correctly', () => {
   test('Load config.js in cjs project', async () => {
@@ -182,7 +182,7 @@ describe('Should compose create Rsbuild config correctly', () => {
         },
         {
           format: 'mf',
-          plugins: [pluginModuleFederation({})],
+          plugins: [pluginModuleFederation({}, {})],
         },
       ],
       source: {

@@ -28,7 +28,15 @@ export default defineConfig({
     generateBundleEsmConfig({
       dts: {
         bundle: {
-          bundledPackages: ['@vitest/expect', '@vitest/utils'],
+          bundledPackages: [
+            '@reduxjs/toolkit',
+            '@standard-schema/spec',
+            '@standard-schema/utils',
+            'immer',
+            'redux',
+            'redux-thunk',
+            'reselect',
+          ],
         },
       },
       output: {

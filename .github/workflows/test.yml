@@ -121,7 +121,7 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: pnpm install && cd ./tests && pnpm playwright install chromium
 
-      - name: Integration Test (Vitest)
+      - name: Integration Test (Rstest)
         if: steps.changes.outputs.changed == 'true'
         run: pnpm run test:integration
 

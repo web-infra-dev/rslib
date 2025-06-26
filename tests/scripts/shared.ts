@@ -54,7 +54,7 @@ export function generateBundleMFConfig(
         root: './dist/mf',
       },
     },
-    plugins: [pluginModuleFederation(options)],
+    plugins: [pluginModuleFederation(options, {})],
   };
 
   return mergeConfig(mfBasicConfig, config)!;
@@ -304,7 +304,6 @@ export async function buildAndGetResults({
       },
     };
   }
-
   const results = await getResults(rslibConfig, type);
   return {
     contents: results.contents,

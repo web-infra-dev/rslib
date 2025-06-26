@@ -1,8 +1,8 @@
 import { execSync } from 'node:child_process';
 import path from 'node:path';
+import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
 import { buildAndGetResults, globContentJSON } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 describe('build command', async () => {
   test('basic', async () => {

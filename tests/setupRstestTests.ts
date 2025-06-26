@@ -1,7 +1,7 @@
 import path from 'node:path';
 import process from 'node:process';
+import { beforeEach, expect } from '@rstest/core';
 import { createSnapshotSerializer } from 'path-serializer';
-import { beforeEach, expect } from 'vitest';
 
 beforeEach(() => {
   // since our NODE_ENV injection logic is via cli, we need to

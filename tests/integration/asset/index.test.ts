@@ -1,6 +1,6 @@
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('set the size threshold to inline static assets', async () => {
   const fixturePath = join(__dirname, 'limit');

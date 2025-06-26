@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from '@rstest/core';
 import { composeTemplateName, TEMPLATES } from '../src/helpers';
 import { createAndValidate } from './helper';
 

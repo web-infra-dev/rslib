@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join, normalize } from 'node:path';
+import { describe, expect, test } from '@rstest/core';
 import stripAnsi from 'strip-ansi';
 import {
   buildAndGetResults,
@@ -9,7 +10,6 @@ import {
   proxyConsole,
   queryContent,
 } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 describe('dts when bundle: false', () => {
   test('basic', async () => {
@@ -410,23 +410,19 @@ describe('dts when bundle: true', () => {
     });
 
     // default
-    expect(entries.esm0).toContain(
-      `import { Constructable } from '@vitest/utils';`,
-    );
+    expect(entries.esm0).toContain(`import { Action } from 'redux';`);
 
     // override empty array
     expect(entries.esm1).toMatchInlineSnapshot(`
       "
-      export * from "@vitest/expect";
+      export * from "@reduxjs/toolkit";
 
       export { }
       "
     `);
 
     // override with bundledPackages
-    expect(entries.esm2).not.toContain(
-      `import { Constructable } from '@vitest/utils';`,
-    );
+    expect(entries.esm2).not.toContain(`import { Action } from 'redux';`);
   });
 });
 

@@ -1,9 +1,9 @@
 import { exec } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
 import { awaitFileExists, buildAndGetResults } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 describe('server config', async () => {
   test('basic config', async () => {

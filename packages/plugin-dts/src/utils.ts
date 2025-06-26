@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import fsP from 'node:fs/promises';
+
 import { platform } from 'node:os';
 import path, {
   basename,

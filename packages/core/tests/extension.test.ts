@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, rs } from '@rstest/core';
 import type { Format, PkgJson } from '../src/types';
 import { getDefaultExtension } from '../src/utils/extension';
 
@@ -8,7 +8,7 @@ type Options = {
   autoExtension: boolean;
 };
 
-vi.mock('rslog');
+rs.mock('rslog');
 
 describe('should get extension correctly', () => {
   it('autoExtension is false', () => {
