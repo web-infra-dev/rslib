@@ -1,6 +1,6 @@
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('should not generate js sourcemap by default', async () => {
   const fixturePath = join(__dirname, 'default');

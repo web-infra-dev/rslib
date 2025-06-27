@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import path, { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import vm from 'node:vm';
+import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 describe('ESM shims', async () => {
   const fixturePath = join(__dirname, 'esm');

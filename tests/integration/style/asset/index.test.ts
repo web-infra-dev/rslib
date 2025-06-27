@@ -1,6 +1,6 @@
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { expectFileContainContent } from 'test-helper/vitest';
-import { expect, test } from 'vitest';
+import { expectFileContainContent } from 'test-helper/rstest';
 
 test('should output css asset', async () => {
   const fixturePath = __dirname;

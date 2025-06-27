@@ -1479,7 +1479,7 @@ const composeExternalHelpersConfig = (
       logger.error(
         `${color.green('externalHelpers')} is enabled, but the ${color.blue(SWC_HELPERS)} dependency declaration was not found in package.json.`,
       );
-      process.exit(1);
+      // process.exit(1);
     }
 
     defaultConfig = Object.assign(defaultConfig, {

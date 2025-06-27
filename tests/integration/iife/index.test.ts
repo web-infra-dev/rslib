@@ -1,5 +1,5 @@
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { expect, test } from 'vitest';
 
 declare global {
   var globalHelper: any;
