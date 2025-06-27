@@ -50,14 +50,12 @@ shipping only ESM is the best choice for libraries that are intended to be used 
 The community is migrating to ESM, but there are still many projects using CJS. If you want to support both ESM and CJS, you can publish a dual package. For most library authors, offering dual formats is a safer and smoother way to access the best of both worlds. You could read antfu' blog post [Publish ESM and CJS packages](https://antfu.me/posts/publish-esm-and-cjs) for more details.
 
 - **Pros:**
-
   - Wider compatibility: Dual packages support both modern ESM environments and legacy CJS environments, ensuring broader usage across different ecosystems.
   - Gradual migration: Developers can gradually transition from CJS to ESM without breaking existing projects, allowing for smoother adoption of the new standard.
   - Flexibility for consumers: Users of the package can choose which module system best fits their project, providing flexibility in different build tools and environments.
   - Cross-runtime support: Dual packages can work in multiple runtimes, such as Node.js and browsers, without requiring additional bundling or transpilation.
 
 - **Cons:**
-
   - Increased complexity: Maintaining two module formats adds complexity to the build process, requiring additional configuration and testing to ensure both versions work correctly.
   - Dual package hazard: Mixing ESM and CJS can lead to issues such as broken instanceof checks or unexpected behavior when dependencies are loaded in different formats.
 
