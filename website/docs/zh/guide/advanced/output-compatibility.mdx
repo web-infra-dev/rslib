@@ -99,7 +99,6 @@ export default defineConfig({
 
 - 对于启用了 `bundle` 的项目，Node Polyfill 将被注入并包含在输出中。
 - 对于未启用 `bundle` 的项目，默认情况下不会注入 polyfill。为了避免在每个模块中内联 polyfill，模块需要被 external，并手动添加到依赖中，请按照以下步骤操作：
-
   1. 配置 `output.external` 和 `resolvedPolyfillToModules`，你可以从 [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill) 导入。这将 polyfill 模块 external 到已安装的 polyfill 依赖中。
   2. 安装使用的 polyfill 模块作为依赖。
 

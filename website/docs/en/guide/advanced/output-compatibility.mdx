@@ -99,7 +99,6 @@ export default defineConfig({
 
 - For projects with `bundle` enabled, the Node Polyfill will be injected and included in the output.
 - For projects with `bundle` disabled, polyfills are not injected into the output by default. To avoid inlining the polyfill in every module, the modules are externalized and need to be added to dependencies manually, follow these steps:
-
   1. Configure `output.external` with `resolvedPolyfillToModules`, which you can import from [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill). This will externalize the polyfill modules to the installed polyfill dependencies.
   2. Install used polyfill modules as dependencies.
 
