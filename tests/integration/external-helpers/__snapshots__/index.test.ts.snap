@@ -2,13 +2,13 @@
 
 exports[`should external @swc/helpers when externalHelpers is true 1`] = `
 "import { _ } from "@swc/helpers/_/_class_call_check";
-import { _ as _create_class_ } from "@swc/helpers/_/_create_class";
+import { _ as _create_class__ } from "@swc/helpers/_/_create_class";
 var src_FOO = /*#__PURE__*/ function() {
     "use strict";
     function FOO() {
         _(this, FOO);
     }
-    _create_class_(FOO, [
+    _create_class__(FOO, [
         {
             key: "bar",
             get: function() {}
@@ -22,13 +22,13 @@ export { src_FOO as default };
 
 exports[`should external @swc/helpers when externalHelpers is true 2`] = `
 "import { _ } from "@swc/helpers/_/_class_call_check";
-import { _ as _create_class_ } from "@swc/helpers/_/_create_class";
+import { _ as _create_class__ } from "@swc/helpers/_/_create_class";
 var src_FOO = /*#__PURE__*/ function() {
     "use strict";
     function FOO() {
         _(this, FOO);
     }
-    _create_class_(FOO, [
+    _create_class__(FOO, [
         {
             key: "bar",
             get: function() {}
@@ -112,13 +112,13 @@ export { src_FOO as default };
 
 exports[`should respect user override externalHelpers config 2`] = `
 "import { _ } from "@swc/helpers/_/_class_call_check";
-import { _ as _create_class_ } from "@swc/helpers/_/_create_class";
+import { _ as _create_class__ } from "@swc/helpers/_/_create_class";
 var src_FOO = /*#__PURE__*/ function() {
     "use strict";
     function FOO() {
         _(this, FOO);
     }
-    _create_class_(FOO, [
+    _create_class__(FOO, [
         {
             key: "bar",
             get: function() {}
