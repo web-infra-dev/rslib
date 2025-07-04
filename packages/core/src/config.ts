@@ -1777,10 +1777,7 @@ export async function composeRsbuildEnvironments(
         rspack: {
           experiments: {
             cache: {
-              version:
-                libId +
-                config.source?.entry?.index +
-                config.output?.distPath?.root,
+              version: libId,
             },
           },
         },
