@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from '@rstest/core';
 import type { PluginDtsOptions } from '../src/index';
 import { getDtsEmitPath } from '../src/utils';
 

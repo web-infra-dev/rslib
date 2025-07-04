@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import path, { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import vm from 'node:vm';
+import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { describe, expect, test } from 'vitest';
 
 describe('ESM shims', async () => {
   const fixturePath = join(__dirname, 'esm');
@@ -87,7 +87,7 @@ describe('CJS shims', () => {
   test('import.meta.url', async () => {
     const fixturePath = join(__dirname, 'cjs');
     const { entryFiles, entries } = await buildAndGetResults({ fixturePath });
-    // `module.require` is not available in Vitest runner context. Manually create a context to run the CJS code.
+    // `module.require` is not available in Rstest runner context. Manually create a context to run the CJS code.
     // As a temporary solution, we use `module.require` to avoid potential collision with module scope variable `require`.
     const cjsCode = entries.cjs;
     const context = vm.createContext({

@@ -1,6 +1,6 @@
 import path from 'node:path';
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('format default to esm', async () => {
   const fixturePath = path.resolve(__dirname, 'default');

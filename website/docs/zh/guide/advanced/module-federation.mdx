@@ -53,22 +53,25 @@ export default defineConfig({
         assetPrefix: 'http://localhost:3001/mf',
       },
       plugins: [
-        pluginModuleFederation({
-          name: 'rslib_provider',
-          exposes: {
-            // 这里添加 expose
-          },
-          // 此处无法添加 "remote"，因为你可能会在一次构建中构建 "esm" 或 "cjs" 产物。
-          // 如果你希望 Rslib 包使用远程模块，请参考下面。
-          shared: {
-            react: {
-              singleton: true,
+        pluginModuleFederation(
+          {
+            name: 'rslib_provider',
+            exposes: {
+              // 这里添加 expose
             },
-            'react-dom': {
-              singleton: true,
+            // 此处无法添加 "remote"，因为你可能会在一次构建中构建 "esm" 或 "cjs" 产物。
+            // 如果你希望 Rslib 包使用远程模块，请参考下面。
+            shared: {
+              react: {
+                singleton: true,
+              },
+              'react-dom': {
+                singleton: true,
+              },
             },
           },
-        }),
+          {},
+        ),
       ],
     },
   ],
@@ -126,23 +129,26 @@ export default defineConfig({
   plugins: [
     pluginReact(),
     // [!code highlight:17]
-    pluginModuleFederation({
-      name: 'rsbuild_host',
-      remotes: {
-        rslib: 'rslib@http://localhost:3001/mf/mf-manifest.json',
-      },
-      shared: {
-        react: {
-          singleton: true,
+    pluginModuleFederation(
+      {
+        name: 'rsbuild_host',
+        remotes: {
+          rslib: 'rslib@http://localhost:3001/mf/mf-manifest.json',
         },
-        'react-dom': {
-          singleton: true,
+        shared: {
+          react: {
+            singleton: true,
+          },
+          'react-dom': {
+            singleton: true,
+          },
         },
+        // 开启这个当 Rslib 产物为 'production' 模式， 但是宿主应用是 'development' 模式。
+        // 参考链接: https://rslib.rs/guide/advanced/module-federation#faqs
+        shareStrategy: 'loaded-first',
       },
-      // 开启这个当 Rslib 产物为 'production' 模式， 但是宿主应用是 'development' 模式。
-      // 参考链接: https://rslib.rs/guide/advanced/module-federation#faqs
-      shareStrategy: 'loaded-first',
-    }),
+      {},
+    ),
   ],
 });
 ```
@@ -321,7 +327,7 @@ export const Counter: React.FC = () => {
 pluginModuleFederation({
   // ...
   shareStrategy: 'loaded-first',
-}),
+}, {}),
 ```
 
 ### 如何让模块联邦产物生成 ES modules 的导出

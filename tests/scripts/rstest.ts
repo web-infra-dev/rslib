@@ -1,5 +1,5 @@
-// This file can only be imported by vitest test files
-import { expect } from 'vitest';
+// This file can only be imported by @rstest/core test files
+import { expect } from '@rstest/core';
 import { getFileBySuffix } from './shared';
 
 export function expectFileContainContent(

@@ -20,30 +20,34 @@ jobs:
         node-version: [20]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-        with:
-          fetch-depth: 10
-          ref: ${{ inputs.ref || 'main' }}
+      # just a dummy step
+      - name: Dummy Step
+        run: echo "TODO:\ Support benchmark in Rstest, this job is only a placeholder for the time being."
 
-      - name: Install pnpm
-        run: |
-          npm install -g corepack@latest --force
-          corepack enable
+      # - name: Checkout
+      #   uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      #   with:
+      #     fetch-depth: 10
+      #     ref: ${{ inputs.ref || 'main' }}
 
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+      # - name: Install pnpm
+      #   run: |
+      #     npm install -g corepack@latest --force
+      #     corepack enable
 
-      - name: Install Dependencies
-        run: pnpm install && cd ./tests && pnpm playwright install chromium
+      # - name: Setup Node.js ${{ matrix.node-version }}
+      #   uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      #   with:
+      #     node-version: ${{ matrix.node-version }}
+      #     cache: 'pnpm'
 
-      # only run benchmark in Ubuntu
-      - name: Benchmarks (Vitest)
-        uses: CodSpeedHQ/action@0010eb0ca6e89b80c88e8edaaa07cfe5f3e6664d # v3
-        with:
-          run: pnpm run test:benchmark
-          # token retrieved from the CodSpeed app at the previous step
-          token: ${{ secrets.CODSPEED_TOKEN }}
+      # - name: Install Dependencies
+      #   run: pnpm install && cd ./tests && pnpm playwright install chromium
+
+      # # only run benchmark in Ubuntu
+      # - name: Benchmarks (Rstest)
+      #   uses: CodSpeedHQ/action@0010eb0ca6e89b80c88e8edaaa07cfe5f3e6664d # v3
+      #   with:
+      #     run: pnpm run test:benchmark
+      #     # token retrieved from the CodSpeed app at the previous step
+      #     token: ${{ secrets.CODSPEED_TOKEN }}

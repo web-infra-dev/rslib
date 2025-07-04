@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  // Playwright test files with `.pw.` to distinguish from Vitest test files
+  // Playwright test files with `.pw.` to distinguish from Rstest test files
   testMatch: /.*pw.(test|spec).(js|ts|mjs)/,
   // Retry on CI
   retries: process.env.CI ? 3 : 0,

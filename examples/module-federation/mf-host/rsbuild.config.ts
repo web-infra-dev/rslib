@@ -5,22 +5,25 @@ import { pluginReact } from '@rsbuild/plugin-react';
 export default defineConfig({
   plugins: [
     pluginReact(),
-    pluginModuleFederation({
-      name: 'rsbuild_host',
-      remotes: {
-        rslib: 'rslib@http://localhost:3001/mf/mf-manifest.json',
-      },
-      shared: {
-        react: {
-          singleton: true,
+    pluginModuleFederation(
+      {
+        name: 'rsbuild_host',
+        remotes: {
+          rslib: 'rslib@http://localhost:3001/mf/mf-manifest.json',
         },
-        'react-dom': {
-          singleton: true,
+        shared: {
+          react: {
+            singleton: true,
+          },
+          'react-dom': {
+            singleton: true,
+          },
         },
+        // Enable this when the output of Rslib is build under 'production' mode, while the host app is 'development'.
+        // Reference: https://rslib.rs/guide/advanced/module-federation#faqs
+        shareStrategy: 'loaded-first',
       },
-      // Enable this when the output of Rslib is build under 'production' mode, while the host app is 'development'.
-      // Reference: https://rslib.rs/guide/advanced/module-federation#faqs
-      shareStrategy: 'loaded-first',
-    }),
+      {},
+    ),
   ],
 });

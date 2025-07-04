@@ -1,8 +1,9 @@
 import { exec } from 'node:child_process';
 import fs from 'node:fs';
 import { join } from 'node:path';
+import { expect, test } from '@rstest/core';
 import { awaitFileExists, buildAndGetResults } from 'test-helper';
-import { expect, test } from 'vitest';
+
 import { distIndex } from './basic/rslib.config';
 import { plugin1Path, plugin2Path } from './mf-dev/rslib.config';
 

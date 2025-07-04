@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from '@rstest/core';
 import type { EcmaScriptVersion } from '../src/types';
 import {
   ESX_TO_BROWSERSLIST,

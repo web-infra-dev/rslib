@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { logger } from '@rsbuild/core';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, rs } from '@rstest/core';
 import { calcBundledPackages } from '../src/dts';
 
 const commonPkgJson = {
@@ -18,7 +18,7 @@ const commonPkgJson = {
 
 describe('should calcBundledPackages correctly', () => {
   it('autoExternal is true', () => {
-    vi.spyOn(fs, 'readFileSync').mockImplementation(() =>
+    rs.spyOn(fs, 'readFileSync').mockImplementation(() =>
       JSON.stringify(commonPkgJson),
     );
 
@@ -31,7 +31,7 @@ describe('should calcBundledPackages correctly', () => {
   });
 
   it('autoExternal is object', () => {
-    vi.spyOn(fs, 'readFileSync').mockImplementation(() =>
+    rs.spyOn(fs, 'readFileSync').mockImplementation(() =>
       JSON.stringify(commonPkgJson),
     );
     const result = calcBundledPackages({
@@ -47,7 +47,7 @@ describe('should calcBundledPackages correctly', () => {
   });
 
   it('autoExternal is false', () => {
-    vi.spyOn(fs, 'readFileSync').mockImplementation(() =>
+    rs.spyOn(fs, 'readFileSync').mockImplementation(() =>
       JSON.stringify(commonPkgJson),
     );
     const result = calcBundledPackages({
@@ -59,7 +59,7 @@ describe('should calcBundledPackages correctly', () => {
   });
 
   it('autoExternal with user externals', () => {
-    vi.spyOn(fs, 'readFileSync').mockImplementation(() =>
+    rs.spyOn(fs, 'readFileSync').mockImplementation(() =>
       JSON.stringify({
         devDependencies: {
           baz: '1.0.0',
@@ -97,7 +97,7 @@ describe('should calcBundledPackages correctly', () => {
   });
 
   it('read package.json failed', () => {
-    vi.spyOn(logger, 'warn').mockImplementation(() => {});
+    rs.spyOn(logger, 'warn').mockImplementation(() => {});
     const result = calcBundledPackages({
       autoExternal: true,
       cwd: 'pkg/to/root',
@@ -107,7 +107,7 @@ describe('should calcBundledPackages correctly', () => {
   });
 
   it('overrides with bundledPackages', () => {
-    vi.spyOn(fs, 'readFileSync').mockImplementation(() =>
+    rs.spyOn(fs, 'readFileSync').mockImplementation(() =>
       JSON.stringify(commonPkgJson),
     );
 

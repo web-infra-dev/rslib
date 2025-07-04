@@ -1,3 +1,3 @@
-import { add } from 'dep_add';
+import depAdd from 'dep_add';
 
-export const added = add(1, 2);
+export const added = depAdd.add(1, 2);

@@ -1,7 +1,7 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { beforeEach, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test } from '@rstest/core';
 
 const localFile = path.join(__dirname, '.env.local');
 const prodLocalFile = path.join(__dirname, '.env.production.local');

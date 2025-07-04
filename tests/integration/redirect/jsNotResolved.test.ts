@@ -1,6 +1,6 @@
 import path from 'node:path';
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent } from 'test-helper';
-import { expect, test } from 'vitest';
 
 test('redirect.js default', async () => {
   const fixturePath = path.resolve(__dirname, './js-not-resolve');

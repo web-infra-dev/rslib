@@ -1,6 +1,7 @@
+// @ts-expect-error: placeholder for now.
+import { bench, describe } from '@rsbuild/core';
 import type { RslibConfig } from '@rslib/core';
 import { getCwdByExample, rslibBuild } from 'test-helper';
-import { bench, describe } from 'vitest';
 
 // Remove dts emitting before isolated declaration landed as it's out of our performance scope.
 const disableDts = (rslibConfig: RslibConfig) => {

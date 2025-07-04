@@ -1,8 +1,8 @@
 import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { expect } from '@rstest/core';
 import fse from 'fs-extra';
-import { expect } from 'vitest';
 
 export const decomposeTemplateName = (
   name: string,
