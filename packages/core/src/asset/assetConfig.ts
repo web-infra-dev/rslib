@@ -139,7 +139,9 @@ const pluginLibAsset = ({ bundle }: { bundle: boolean }): RsbuildPlugin => ({
           const rule = config.module
             .rule(CHAIN_ID.RULE.SVG)
             .oneOf(CHAIN_ID.ONE_OF.SVG);
-          rule.issuer([]);
+          rule.issuer({
+            not: CSS_EXTENSIONS_PATTERN,
+          });
         }
       }
 

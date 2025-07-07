@@ -36,6 +36,11 @@ export default defineConfig({
     // esm
     generateBundleEsmConfig({
       bundle: false,
+      source: {
+        entry: {
+          index: ['src', '!src/foo.css'],
+        },
+      },
       output: {
         distPath: {
           root: './dist/esm/bundleless-mixed',
@@ -50,6 +55,11 @@ export default defineConfig({
     // cjs
     generateBundleCjsConfig({
       bundle: false,
+      source: {
+        entry: {
+          index: ['src', '!src/foo.css'],
+        },
+      },
       output: {
         distPath: {
           root: './dist/cjs/bundleless-mixed',
@@ -65,6 +75,11 @@ export default defineConfig({
     // esm
     generateBundleEsmConfig({
       bundle: false,
+      source: {
+        entry: {
+          index: ['src', '!src/foo.css'],
+        },
+      },
       output: {
         distPath: {
           root: './dist/esm/bundleless-only-svgr',
@@ -82,6 +97,11 @@ export default defineConfig({
     // cjs
     generateBundleCjsConfig({
       bundle: false,
+      source: {
+        entry: {
+          index: ['src', '!src/foo.css'],
+        },
+      },
       output: {
         distPath: {
           root: './dist/cjs/bundleless-only-svgr',
@@ -93,6 +113,49 @@ export default defineConfig({
             exportType: 'default',
           },
           exclude: /logo2\.svg$/,
+        }),
+      ],
+    }),
+    // 3. bundleless svg in css
+    // esm
+    generateBundleEsmConfig({
+      bundle: false,
+      source: {
+        entry: {
+          index: ['src/foo.css'],
+        },
+      },
+      output: {
+        distPath: {
+          root: './dist/esm/bundleless-css-svg',
+        },
+      },
+      plugins: [
+        pluginSvgr({
+          svgrOptions: {
+            exportType: 'default',
+          },
+        }),
+      ],
+    }),
+    // cjs
+    generateBundleCjsConfig({
+      bundle: false,
+      source: {
+        entry: {
+          index: ['src/foo.css'],
+        },
+      },
+      output: {
+        distPath: {
+          root: './dist/cjs/bundleless-css-svg',
+        },
+      },
+      plugins: [
+        pluginSvgr({
+          svgrOptions: {
+            exportType: 'default',
+          },
         }),
       ],
     }),
