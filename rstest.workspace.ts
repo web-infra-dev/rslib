@@ -7,6 +7,7 @@ export const shared: RstestConfig = {
   globals: true,
   testEnvironment: 'node',
   testTimeout: 60_000,
+  hookTimeout: 50_000,
   restoreMocks: true,
   exclude: ['**/node_modules/**'],
 };
