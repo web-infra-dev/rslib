@@ -370,8 +370,9 @@ test('use json / yaml / toml', async () => {
 
 test('use svgr', async () => {
   const fixturePath = join(__dirname, 'svgr');
-  const { contents } = await buildAndGetResults({ fixturePath });
-
+  const { js, css } = await buildAndGetResults({ fixturePath, type: 'all' });
+  const contents = js.contents;
+  const cssContents = css.contents;
   // 0. bundle
   // esm
   const { content: indexJs } = queryContent(contents.esm0!, /index\.js/);
@@ -396,6 +397,7 @@ test('use svgr', async () => {
   );
 
   // 2. bundleless only svgr
+  // esm
   const { content: svgrLogoJs } = queryContent(
     contents.esm2!,
     /assets\/logo\.js/,
@@ -420,6 +422,27 @@ test('use svgr', async () => {
     /assets\/logo2\.cjs/,
   );
   expect(urlLogoCjs).toMatchSnapshot('should only contain url default export');
+
+  // 3. bundleless svg in css
+  // esm
+  const { content: cssEsm } = queryContent(cssContents.esm3!, /css-entry.css/);
+  expect(cssEsm).toMatchInlineSnapshot(`
+    ".logo {
+      background-image: url(./static/svg/logo.svg);
+    }
+
+    "
+  `);
+
+  // cjs
+  const { content: cssCjs } = queryContent(cssContents.cjs3!, /css-entry.css/);
+  expect(cssCjs).toMatchInlineSnapshot(`
+    ".logo {
+      background-image: url(./static/svg/logo.svg);
+    }
+
+    "
+  `);
 });
 
 test('use asset/source', async () => {
