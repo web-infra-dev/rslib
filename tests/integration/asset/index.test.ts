@@ -425,7 +425,7 @@ test('use svgr', async () => {
 
   // 3. bundleless svg in css
   // esm
-  const { content: cssEsm } = queryContent(cssContents.esm3!, /foo.css/);
+  const { content: cssEsm } = queryContent(cssContents.esm3!, /css-entry.css/);
   expect(cssEsm).toMatchInlineSnapshot(`
     ".logo {
       background-image: url(./static/svg/logo.svg);
@@ -435,7 +435,7 @@ test('use svgr', async () => {
   `);
 
   // cjs
-  const { content: cssCjs } = queryContent(cssContents.cjs3!, /foo.css/);
+  const { content: cssCjs } = queryContent(cssContents.cjs3!, /css-entry.css/);
   expect(cssCjs).toMatchInlineSnapshot(`
     ".logo {
       background-image: url(./static/svg/logo.svg);

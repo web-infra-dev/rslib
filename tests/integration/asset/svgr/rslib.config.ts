@@ -38,7 +38,7 @@ export default defineConfig({
       bundle: false,
       source: {
         entry: {
-          index: ['src', '!src/foo.css'],
+          index: ['src', '!src/css-entry.css'],
         },
       },
       output: {
@@ -57,7 +57,7 @@ export default defineConfig({
       bundle: false,
       source: {
         entry: {
-          index: ['src', '!src/foo.css'],
+          index: ['src', '!src/css-entry.css'],
         },
       },
       output: {
@@ -77,7 +77,7 @@ export default defineConfig({
       bundle: false,
       source: {
         entry: {
-          index: ['src', '!src/foo.css'],
+          index: ['src', '!src/css-entry.css'],
         },
       },
       output: {
@@ -99,7 +99,7 @@ export default defineConfig({
       bundle: false,
       source: {
         entry: {
-          index: ['src', '!src/foo.css'],
+          index: ['src', '!src/css-entry.css'],
         },
       },
       output: {
@@ -122,7 +122,7 @@ export default defineConfig({
       bundle: false,
       source: {
         entry: {
-          index: ['src/foo.css'],
+          index: ['src/css-entry.css'],
         },
       },
       output: {
@@ -143,7 +143,7 @@ export default defineConfig({
       bundle: false,
       source: {
         entry: {
-          index: ['src/foo.css'],
+          index: ['src/css-entry.css'],
         },
       },
       output: {
