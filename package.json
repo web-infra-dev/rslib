@@ -6,7 +6,7 @@
     "build:examples": "cross-env NX_DAEMON=false nx run-many -t build --projects @examples/* --parallel=10",
     "change": "changeset",
     "changeset": "changeset",
-    "check-dependency-version": "check-dependency-version-consistency .",
+    "check-dependency-version": "f() { check-dependency-version-consistency .; }; f",
     "check-spell": "pnpx cspell && heading-case",
     "format": "prettier . --write && biome check --write && heading-case --write",
     "generate-release-pr": "zx scripts/generateReleasePr.mjs",
