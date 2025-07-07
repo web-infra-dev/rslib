@@ -10,6 +10,9 @@ export default defineConfig({
       },
     }),
   ],
+  performance: {
+    buildCache: false,
+  },
   source: {
     entry: {
       index: '../__fixtures__/src/index.ts',

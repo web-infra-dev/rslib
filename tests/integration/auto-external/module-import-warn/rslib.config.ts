@@ -24,4 +24,7 @@ export default defineConfig({
       'e7',
     ],
   },
+  performance: {
+    buildCache: false,
+  },
 });
