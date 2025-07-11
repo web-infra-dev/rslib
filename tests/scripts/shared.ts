@@ -207,6 +207,7 @@ export async function getResults(
 const updateConfigForTest = (rslibConfig: RslibConfig) => {
   Object.assign(rslibConfig, {
     performance: {
+      ...rslibConfig.performance,
       // Do not print file size in tests
       printFileSize: false,
     },
