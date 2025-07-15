@@ -3,10 +3,11 @@
     "strict": true,
     "skipLibCheck": true,
     "paths": {
-      "*": ["./src/*"],
       "@src/*": ["./src/*"],
       "prebundle-pkg": ["./compile/prebundle-pkg"],
-      "self-entry": ["./src"]
+      "self-entry": ["./src"],
+      "express": ["./node_modules/express"],
+      "*": ["./src/*"]
     }
   },
   "include": ["src/**/*"]
