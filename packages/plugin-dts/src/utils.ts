@@ -307,11 +307,16 @@ export async function redirectDtsImports(
         '.mts',
         '.cjs',
         '.cts',
+        '.d.ts',
       ]);
 
       let redirectImportPath = importPath;
 
-      if (absoluteImportPath && redirect.path) {
+      if (
+        absoluteImportPath &&
+        !absoluteImportPath.includes('node_modules') &&
+        redirect.path
+      ) {
         const relativeRootDir = path.relative(
           normalize(rootDir),
           normalize(absoluteImportPath),
@@ -407,7 +412,12 @@ export async function processDtsFiles(
       return;
     }
 
-    const { absoluteBaseUrl, paths, mainFields, addMatchAll } = result;
+    const { absoluteBaseUrl, paths, addMatchAll } = result;
+    const mainFields: string[] = [];
+    /**
+     * resolve paths priorities:
+     * see https://github.com/jonaskello/tsconfig-paths/blob/098e066632f5b9f35c956803fe60d17ffc60b688/src/match-path-sync.ts#L18-L26
+     */
     matchPath = createMatchPath(
       absoluteBaseUrl,
       paths,
