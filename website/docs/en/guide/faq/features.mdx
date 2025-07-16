@@ -35,6 +35,41 @@ export default defineConfig({
 });
 ```
 
+## Static assets processing
+
+### How to skip the processing of static asset files in bundleless mode?
+
+In bundleless mode, Rslib transforms the source static asset file into a JavaScript file and a static asset file that is emitted according to [output.distPath](/config/rsbuild/output#outputdistpath) by default with preserving the `import` or `require` statements for static assets. To skip the above processing of static asset files, you need to:
+
+1. Set `source.entry` to remove static asset files from the entry.
+2. Set `output.copy` to copy static asset files to the output directory.
+3. Set `redirect.asset.extension` to `false` to disable the redirect behavior for the import path of static asset files.
+
+Below is an example of skipping the `.png` file processing. All `.png` files in `src` will be copied to the output directory and retained with consistent relative paths.
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    {
+      // ...
+      source: {
+        entry: {
+          index: ['./src/**', '!src/**/*.png'],
+        },
+      },
+      output: {
+        copy: [{ from: '**/*.png', context: path.join(__dirname, 'src') }],
+      },
+      redirect: {
+        asset: {
+          extension: false,
+        },
+      },
+    },
+  ],
+});
+```
+
 ## Code minification
 
 ### How to preserve all comments in the output files?
