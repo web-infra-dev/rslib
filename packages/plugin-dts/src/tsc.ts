@@ -216,14 +216,14 @@ export async function emitDts(
           ts.getConfigFileParsingDiagnostics(tsConfigResult),
       });
 
+      const preEmitDiagnostics = ts.getPreEmitDiagnostics(program);
       const emitResult = program.emit();
-
-      const allDiagnostics = ts
-        .getPreEmitDiagnostics(program)
-        .concat(emitResult.diagnostics);
+      const allDiagnostics = preEmitDiagnostics.concat(emitResult.diagnostics);
+      const sortAndDeduplicateDiagnostics =
+        ts.sortAndDeduplicateDiagnostics(allDiagnostics);
 
       await handleDiagnosticsAndProcessFiles(
-        allDiagnostics,
+        sortAndDeduplicateDiagnostics,
         configPath,
         bundle,
         declarationDir,
@@ -267,18 +267,24 @@ export async function emitDts(
         createProgram,
       });
 
-      const emitResult = program.emit();
-      const allDiagnostics = [
+      const allDiagnostics: ts.Diagnostic[] = [];
+      allDiagnostics.push(
         ...program.getConfigFileParsingDiagnostics(),
-        ...program.getOptionsDiagnostics(),
         ...program.getSyntacticDiagnostics(),
+        ...program.getOptionsDiagnostics(),
+        ...program.getGlobalDiagnostics(),
         ...program.getSemanticDiagnostics(),
         ...program.getDeclarationDiagnostics(),
-        ...emitResult.diagnostics,
-      ];
+      );
+
+      const emitResult = program.emit();
+      allDiagnostics.push(...emitResult.diagnostics);
+
+      const sortAndDeduplicateDiagnostics =
+        ts.sortAndDeduplicateDiagnostics(allDiagnostics);
 
       await handleDiagnosticsAndProcessFiles(
-        allDiagnostics,
+        sortAndDeduplicateDiagnostics,
         configPath,
         bundle,
         declarationDir,
