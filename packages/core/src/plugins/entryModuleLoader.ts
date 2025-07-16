@@ -11,6 +11,8 @@ function splitFromFirstLine(text: string): [string, string] {
 }
 
 const loader: Rspack.LoaderDefinition = function loader(source) {
+  console.log('🙇‍♀️', this._compilation.__rslib_entries);
+
   let result = source;
 
   const [firstLine1, rest] = splitFromFirstLine(result);

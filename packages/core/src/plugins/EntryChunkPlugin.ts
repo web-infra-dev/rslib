@@ -80,6 +80,8 @@ class EntryChunkPlugin {
         }
       }
 
+      compilation.__rslib_entries = entries;
+
       for (const name in entries) {
         const first = entries[name];
         if (!first) continue;
@@ -204,6 +206,21 @@ class EntryChunkPlugin {
 const entryModuleLoaderRsbuildPlugin = (): RsbuildPlugin => ({
   name: PLUGIN_NAME,
   setup(api) {
+    // api.onAfterCreateCompiler(({ compiler }) => {
+    //   // console.log('the compiler is ', compiler);
+    //   // compiler.hooks.make.tap(PLUGIN_NAME, (compilation) => {
+    //   //   const entries: Record<string, string> = {};
+    //   //   for (const [key, value] of compilation.entries) {
+    //   //     const firstDep = value.dependencies[0];
+    //   //     if (firstDep?.request) {
+    //   //       entries[key] = firstDep.request;
+    //   //     }
+    //   //   }
+
+    //   console.log('😋', compiler.hooks);
+    //   // });
+    // });
+
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
       config.module
         .rule(`Rslib:${CHAIN_ID.RULE.JS}-entry-loader`)
