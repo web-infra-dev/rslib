@@ -74,11 +74,13 @@ class EntryChunkPlugin {
     compiler.hooks.make.tap(PLUGIN_NAME, (compilation) => {
       const entries: Record<string, string> = {};
       for (const [key, value] of compilation.entries) {
+        console.log('💄', compilation.entries);
         const firstDep = value.dependencies[0];
         if (firstDep?.request) {
           entries[key] = firstDep.request;
         }
       }
+      compiler.__rslib_entries = entries;
 
       for (const name in entries) {
         const first = entries[name];
@@ -208,7 +210,6 @@ const entryModuleLoaderRsbuildPlugin = (): RsbuildPlugin => ({
       config.module
         .rule(`Rslib:${CHAIN_ID.RULE.JS}-entry-loader`)
         .test(config.module.rule(CHAIN_ID.RULE.JS).get('test'))
-        .issuer(/^$/)
         .use(LOADER_NAME)
         .loader(require.resolve('./entryModuleLoader.js'));
     });

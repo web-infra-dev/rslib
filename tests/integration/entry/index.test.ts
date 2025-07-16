@@ -66,9 +66,26 @@ test('multiple entry bundle', async () => {
     basename: true,
   });
   expect(index).toMatchInlineSnapshot(`
-    "const shared = 'shared';
-    const foo = 'foo' + shared;
-    const src_text = ()=>\`hello \${foo} \${shared}\`;
+    "var __webpack_modules__ = {
+        "./src/foo.ts": function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
+            var shared = __webpack_require__("./src/shared.ts");
+            shared.shared;
+        },
+        "./src/shared.ts": function() {}
+    };
+    var __webpack_module_cache__ = {};
+    function __webpack_require__(moduleId) {
+        var cachedModule = __webpack_module_cache__[moduleId];
+        if (void 0 !== cachedModule) return cachedModule.exports;
+        var module = __webpack_module_cache__[moduleId] = {
+            exports: {}
+        };
+        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        return module.exports;
+    }
+    var foo = __webpack_require__("./src/foo.ts");
+    var shared = __webpack_require__("./src/shared.ts");
+    const src_text = ()=>\`hello \${foo.foo} \${shared.shared}\`;
     export { src_text as text };
     "
   `);
@@ -77,8 +94,21 @@ test('multiple entry bundle', async () => {
     basename: true,
   });
   expect(foo).toMatchInlineSnapshot(`
-    "const shared = 'shared';
-    const foo = 'foo' + shared;
+    "var __webpack_modules__ = {
+        "./src/shared.ts": function() {}
+    };
+    var __webpack_module_cache__ = {};
+    function __webpack_require__(moduleId) {
+        var cachedModule = __webpack_module_cache__[moduleId];
+        if (void 0 !== cachedModule) return cachedModule.exports;
+        var module = __webpack_module_cache__[moduleId] = {
+            exports: {}
+        };
+        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        return module.exports;
+    }
+    var shared = __webpack_require__("./src/shared.ts");
+    const foo = 'foo' + shared.shared;
     export { foo };
     "
   `);

@@ -11,6 +11,14 @@ function splitFromFirstLine(text: string): [string, string] {
 }
 
 const loader: Rspack.LoaderDefinition = function loader(source) {
+  const isEntryFile = Object.values(
+    this._compiler?.__rslib_entries || {},
+  ).includes(this.resourcePath);
+
+  if (!isEntryFile) {
+    return source;
+  }
+
   let result = source;
 
   const [firstLine1, rest] = splitFromFirstLine(result);

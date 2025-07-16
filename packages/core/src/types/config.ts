@@ -362,3 +362,11 @@ export type RslibConfigExport =
   | RslibConfig
   | RslibConfigSyncFn
   | RslibConfigAsyncFn;
+
+declare module '@rsbuild/core' {
+  namespace Rspack {
+    interface Compiler {
+      __rslib_entries?: Record<string, string>;
+    }
+  }
+}
