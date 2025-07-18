@@ -167,12 +167,8 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       (!rawCompilerOptions.declarationDir ||
         normalize(rawCompilerOptions.declarationDir) !== resolvedDtsEmitPath)
     ) {
-      const info =
-        rawCompilerOptions.outDir && !rawCompilerOptions.declarationDir
-          ? 'outDir'
-          : 'declarationDir';
       throw Error(
-        `Please set ${info}: "${dtsEmitPath}" in ${color.underline(
+        `Please set "declarationDir": "${dtsEmitPath}" in ${color.underline(
           tsconfigPath,
         )} to keep it same as "dts.distPath" or "output.distPath.root" field in lib config.`,
       );

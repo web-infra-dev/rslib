@@ -533,7 +533,9 @@ describe('dts when build: true', () => {
     const stdoutOutput = result.stdout ? result.stdout.toString() : '';
 
     expect(result.status).toBe(1);
-    expect(stdoutOutput).toContain('Please set declarationDir: "./dist/esm"');
+    expect(stdoutOutput).toContain(
+      'Please set "declarationDir": "./dist/types"',
+    );
   });
 
   test('should clean dts dist files', async () => {
