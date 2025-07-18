@@ -8,6 +8,7 @@ export default defineConfig({
       dts: {
         bundle: false,
         build: true,
+        distPath: './dist/types',
       },
     }),
   ],
