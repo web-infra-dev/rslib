@@ -23,6 +23,11 @@ type StyleRedirect = {
   extension?: boolean;
 };
 
+type AssetRedirect = {
+  path?: boolean;
+  extension?: boolean;
+};
+
 type DtsRedirect = {
   path?: boolean;
   extension?: boolean;
@@ -31,7 +36,7 @@ type DtsRedirect = {
 type Redirect = {
   js?: JsRedirect;
   style?: StyleRedirect;
-  asset?: boolean;
+  asset?: AssetRedirect;
   dts?: DtsRedirect;
 };
 ```
@@ -48,7 +53,10 @@ const defaultRedirect = {
     path: true,
     extension: true,
   },
-  asset: true,
+  asset: {
+    path: true,
+    extension: true,
+  },
   dts: {
     path: true,
     extension: false,
@@ -187,6 +195,28 @@ import styles from './index.module.mjs'; // expected output
 
 Controls the redirect of the import paths of output asset files.
 
+### redirect.asset.path
+
+Whether to automatically redirect the import paths of asset output files.
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+When set to `true`, the relevant redirect rules are the same as [redirect.js.path](/config/lib/redirect#redirectjspath).
+
+When set to `false`, the original import path will remain unchanged.
+
+- **Example:**
+
+```ts
+import url from '@/assets/logo.svg'; // source code of './src/foo.ts' ↓
+import url from './assets/logo.svg'; // expected output of './dist/foo.js'
+```
+
+### redirect.asset.extension
+
+Whether to automatically redirect the file extension to import paths based on the asset output files.
+
 - **Type:** `boolean`
 - **Default:** `true`
 
@@ -197,9 +227,15 @@ When set to `false`, the file extension will remain unchanged from the original 
 - **Example:**
 
 ```ts
-import url from './assets/logo.svg'; // source code ↓
-import url from './assets/logo.mjs'; // expected output
+import url from './assets/logo.svg'; // source code of './src/foo.ts' ↓
+import url from './assets/logo.mjs'; // expected output of './dist/foo.mjs'
 ```
+
+::: note
+
+The way to import static assets in a JavaScript file and the corresponding output structure, please see [Import static assets](/guide/advanced/static-assets#import-assets-in-javascript-file).
+
+:::
 
 ## redirect.dts
 

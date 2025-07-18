@@ -1230,7 +1230,8 @@ const composeBundlelessExternalConfig = (
   const styleRedirectExtension = redirect.style?.extension ?? true;
   const jsRedirectPath = redirect.js?.path ?? true;
   const jsRedirectExtension = redirect.js?.extension ?? true;
-  const assetRedirect = redirect.asset ?? true;
+  const assetRedirectPath = redirect.asset?.path ?? true;
+  const assetRedirectExtension = redirect.asset?.extension ?? true;
 
   let resolver: RspackResolver | undefined;
 
@@ -1302,6 +1303,7 @@ const composeBundlelessExternalConfig = (
             if (issuer) {
               let resolvedRequest: string = request;
 
+              const redirectedPath = await redirectPath(resolvedRequest);
               const cssExternal = await cssExternalHandler(
                 resolvedRequest,
                 callback,
@@ -1309,7 +1311,7 @@ const composeBundlelessExternalConfig = (
                 cssModulesAuto,
                 styleRedirectPath,
                 styleRedirectExtension,
-                redirectPath,
+                redirectedPath,
                 issuer,
               );
 
@@ -1317,11 +1319,11 @@ const composeBundlelessExternalConfig = (
                 return cssExternal;
               }
 
+              if (redirectedPath === undefined) {
+                return callback(undefined, request);
+              }
+
               if (jsRedirectPath) {
-                const redirectedPath = await redirectPath(resolvedRequest);
-                if (redirectedPath === undefined) {
-                  return callback(undefined, request);
-                }
                 resolvedRequest = redirectedPath;
               }
 
@@ -1346,7 +1348,11 @@ const composeBundlelessExternalConfig = (
                   } else {
                     // 2. asset files, does not match jsExtensionsPattern, eg: ./foo.png -> ./foo.mjs
                     // non-js && non-css files
-                    if (assetRedirect) {
+                    resolvedRequest = assetRedirectPath
+                      ? redirectedPath
+                      : request;
+
+                    if (assetRedirectExtension) {
                       resolvedRequest = resolvedRequest.replace(
                         /\.[^.]+$/,
                         jsExtension,

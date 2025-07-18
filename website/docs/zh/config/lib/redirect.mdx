@@ -23,6 +23,11 @@ type StyleRedirect = {
   extension?: boolean;
 };
 
+type AssetRedirect = {
+  path?: boolean;
+  extension?: boolean;
+};
+
 type DtsRedirect = {
   path?: boolean;
   extension?: boolean;
@@ -31,7 +36,7 @@ type DtsRedirect = {
 type Redirect = {
   js?: JsRedirect;
   style?: StyleRedirect;
-  asset?: boolean;
+  asset?: AssetRedirect;
   dts?: DtsRedirect;
 };
 ```
@@ -48,7 +53,10 @@ const defaultRedirect = {
     path: true,
     extension: true,
   },
-  asset: true,
+  asset: {
+    path: true,
+    extension: true,
+  },
   dts: {
     path: true,
     extension: false,
@@ -187,6 +195,28 @@ import styles from './index.module.mjs'; // 预期生成的代码
 
 控制资源文件导入路径的重定向。
 
+### redirect.asset.path
+
+是否自动重定向资源文件的导入路径。
+
+- **类型:** `boolean`
+- **默认值:** `true`
+
+当设置为 `true` 时，相关重定向规则与 [redirect.js.path](/config/lib/redirect#redirectjspath) 相同。
+
+当设置为 `false` 时，将保持原始导入路径不变。
+
+- **示例：**
+
+```ts
+import url from '@/assets/logo.svg'; // './src/foo.ts' 的源码 ↓
+import url from './assets/logo.svg'; // './dist/foo.js' 预期生成的代码
+```
+
+### redirect.asset.extension
+
+是否根据资源产物文件自动重定向文件扩展名到导入路径。
+
 - **类型:** `boolean`
 - **默认值:** `true`
 
@@ -197,9 +227,15 @@ import styles from './index.module.mjs'; // 预期生成的代码
 - **示例：**
 
 ```ts
-import url from './assets/logo.svg'; // 源码 ↓
-import url from './assets/logo.mjs'; // 预期生成的代码
+import url from './assets/logo.svg'; // './src/foo.ts' 的源码 ↓
+import url from './assets/logo.mjs'; // './dist/foo.mjs' 预期生成的代码
 ```
+
+::: note
+
+在 JavaScript 文件中引用静态资源的方式及对应的产物结构，请查看 [引用静态资源](/guide/advanced/static-assets#在-JavaScript-文件中引用)。
+
+:::
 
 ## redirect.dts
 
