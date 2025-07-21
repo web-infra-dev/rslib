@@ -35,6 +35,41 @@ export default defineConfig({
 });
 ```
 
+## 静态资源处理
+
+### bundleless 模式如何跳过对静态资源文件的处理？
+
+在 bundleless 模式下，Rslib 默认会将静态资源文件转化为一个 JavaScript 文件和一个根据 [output.distPath](/config/rsbuild/output#outputdistpath) 输出的静态资源文件，并保留引用静态资源的 `import` 或 `require` 语句。跳过对静态资源文件的上述处理需要：
+
+1. 设置 `source.entry` 将静态资源文件从入口里移除。
+2. 设置 `output.copy` 将静态资源文件拷贝到产物目录。
+3. 设置 `redirect.asset.extension` 为 `false` 禁用对静态资源文件导入路径的重定向行为。
+
+下面是一个跳过 `.png` 文件处理的例子，`src` 里面所有的 `.png` 文件都会被拷贝到产物目录下并且保留一致的相对路径。
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    {
+      // ...
+      source: {
+        entry: {
+          index: ['./src/**', '!src/**/*.png'],
+        },
+      },
+      output: {
+        copy: [{ from: '**/*.png', context: path.join(__dirname, 'src') }],
+      },
+      redirect: {
+        asset: {
+          extension: false,
+        },
+      },
+    },
+  ],
+});
+```
+
 ## 代码压缩
 
 ### 如何保留产物文件代码中的注释？

@@ -20,7 +20,7 @@ export async function cssExternalHandler(
   auto: CssLoaderOptionsAuto,
   styleRedirectPath: boolean,
   styleRedirectExtension: boolean,
-  redirectPath: (request: string) => Promise<string | undefined>,
+  redirectedPath: string | undefined,
   issuer: string,
 ): Promise<false | void> {
   // cssExtract: do not external @rsbuild/core/compiled/css-loader/noSourceMaps.js, sourceMaps.js, api.mjs etc.
@@ -32,9 +32,8 @@ export async function cssExternalHandler(
   let resolvedRequest = request;
 
   if (styleRedirectPath) {
-    const redirectedPath = await redirectPath(resolvedRequest);
     if (redirectedPath === undefined) {
-      return callback(undefined, request);
+      return false;
     }
     resolvedRequest = redirectedPath;
   }
