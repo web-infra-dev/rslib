@@ -24,7 +24,10 @@ test('iife', async () => {
     "(()=>{
         "use strict";
         const external_globalHelper_namespaceObject = globalThis.globalHelper;
-        const addPrefix = (prefix, str, env)=>\`\${env}: \${prefix}\${str}\`;
+        const addPrefix = (prefix, str, env)=>{
+            console.log(import.meta.dirname);
+            return \`\${env}: \${prefix}\${str}\`;
+        };
         globalThis.addPrefix = (str)=>addPrefix(external_globalHelper_namespaceObject.helperName, str, "production");
     })();
     "

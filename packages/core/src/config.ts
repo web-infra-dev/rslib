@@ -695,6 +695,15 @@ const composeFormatConfig = ({
       }
 
       const config: EnvironmentConfig = {
+        output: {
+          minify: {
+            jsOptions: {
+              minimizerOptions: {
+                module: true,
+              },
+            },
+          },
+        },
         tools: {
           rspack: {
             module: {
