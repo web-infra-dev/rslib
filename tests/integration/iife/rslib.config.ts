@@ -6,6 +6,9 @@ export default defineConfig({
     generateBundleIifeConfig({
       output: {
         externals: ['globalHelper'],
+        filename: {
+          js: '[name].mjs',
+        },
       },
     }),
   ],
