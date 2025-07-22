@@ -15,7 +15,9 @@ test('iife', async () => {
 
   globalThis.globalHelper = { helperName: 'HELPER_NAME' };
   require(entryFiles.iife);
-  expect(globalThis.addPrefix('ok')).toBe('production: HELPER_NAMEok');
+  expect(globalThis.addPrefix('ok')).toMatchInlineSnapshot(
+    `"<ROOT>/tests/integration/iife/dist/iife - production: HELPER_NAMEok"`,
+  );
   delete process.env.NODE_ENV;
   delete globalThis.globalHelper;
 
@@ -24,10 +26,7 @@ test('iife', async () => {
     "(()=>{
         "use strict";
         const external_globalHelper_namespaceObject = globalThis.globalHelper;
-        const addPrefix = (prefix, str, env)=>{
-            console.log(import.meta.dirname);
-            return \`\${env}: \${prefix}\${str}\`;
-        };
+        const addPrefix = (prefix, str, env)=>\`\${import.meta.dirname} - \${env}: \${prefix}\${str}\`;
         globalThis.addPrefix = (str)=>addPrefix(external_globalHelper_namespaceObject.helperName, str, "production");
     })();
     "
