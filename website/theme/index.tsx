@@ -1,12 +1,12 @@
+import { Layout as BaseLayout } from '@rspress/core/theme';
 import {
   Search as PluginAlgoliaSearch,
   ZH_LOCALES,
 } from '@rspress/plugin-algolia/runtime';
 import { NavIcon } from '@rstack-dev/doc-ui/nav-icon';
-import { Layout as BaseLayout } from 'rspress/theme';
 import { HomeLayout } from './pages';
 import './index.scss';
-import { useLang } from 'rspress/runtime';
+import { useLang } from '@rspress/core/runtime';
 
 const Layout = () => {
   return <BaseLayout beforeNavTitle={<NavIcon />} />;
@@ -31,4 +31,4 @@ const Search = () => {
 
 export { Layout, HomeLayout, Search };
 
-export * from 'rspress/theme';
+export * from '@rspress/core/theme';
