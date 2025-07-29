@@ -138,7 +138,7 @@ pluginDts({
 
 ### alias
 
-- **Type:**` Record<string, string>`
+- **Type:** `Record<string, string>`
 - **Default:** `{}`
 
 Configure the path alias for declaration files.

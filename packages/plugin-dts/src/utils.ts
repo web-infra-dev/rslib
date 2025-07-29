@@ -57,18 +57,20 @@ export function mergeAliasWithTsConfigPaths(
 ): Record<string, string[]> {
   const mergedPaths: Record<string, string[]> = {};
 
-  if (paths) {
-    for (const [key, value] of Object.entries(paths)) {
-      if (Array.isArray(value) && value.length > 0) {
-        mergedPaths[key] = [...value];
-      }
-    }
-  }
-
   if (alias && typeof alias === 'object' && Object.keys(alias).length > 0) {
     for (const [key, value] of Object.entries(alias)) {
       if (typeof value === 'string' && value.trim()) {
         mergedPaths[key] = [value];
+      }
+    }
+  }
+
+  if (paths) {
+    for (const [key, value] of Object.entries(paths)) {
+      if (Array.isArray(value) && value.length > 0) {
+        if (!mergedPaths[key]) {
+          mergedPaths[key] = [...value];
+        }
       }
     }
   }
