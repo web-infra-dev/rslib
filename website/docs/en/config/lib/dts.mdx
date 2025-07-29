@@ -14,6 +14,7 @@ type Dts =
       build?: boolean;
       abortOnError?: boolean;
       autoExtension?: boolean;
+      alias?: Record<string, string>;
     }
   | boolean;
 ```
@@ -218,3 +219,29 @@ When `dts.autoExtension` is set to `true`, the declaration file extension will b
 It follows the same logic as [lib.autoExtension](/config/lib/auto-extension), but the default value is different since the declaration file extension may cause some issues with different module resolution strategies.
 
 :::
+
+### dts.alias
+
+- **Type:**` Record<string, string>`
+- **Default:** `{}`
+
+Configure the path alias for declaration files.
+
+`dts.alias` will be merged with `compilerOptions.paths` configured in `tsconfig.json` and `dts.alias` has a higher priority.
+
+In most cases, you don't need to use `dts.alias`, but consider using it when you need to use path alias only in declaration files without wanting to affect JavaScript outputs. For example, map the declaration file of `foo` to `./compiled/foo`.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      // [!code highlight:5]
+      dts: {
+        alias: {
+          foo: './compiled/foo',
+        },
+      },
+    },
+  ],
+};
+```

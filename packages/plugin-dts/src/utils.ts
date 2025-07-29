@@ -51,6 +51,31 @@ export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
   return configFileContent;
 }
 
+export function mergeAliasWithTsConfigPaths(
+  paths: Record<string, string[]> | undefined,
+  alias: Record<string, string> = {},
+): Record<string, string[]> {
+  const mergedPaths: Record<string, string[]> = {};
+
+  if (paths) {
+    for (const [key, value] of Object.entries(paths)) {
+      if (Array.isArray(value) && value.length > 0) {
+        mergedPaths[key] = [...value];
+      }
+    }
+  }
+
+  if (alias && typeof alias === 'object' && Object.keys(alias).length > 0) {
+    for (const [key, value] of Object.entries(alias)) {
+      if (typeof value === 'string' && value.trim()) {
+        mergedPaths[key] = [value];
+      }
+    }
+  }
+
+  return Object.keys(mergedPaths).length > 0 ? mergedPaths : {};
+}
+
 export const TEMP_FOLDER = '.rslib';
 export const TEMP_DTS_DIR: string = `${TEMP_FOLDER}/declarations`;
 
@@ -395,6 +420,7 @@ export async function processDtsFiles(
   redirect: DtsRedirect,
   tsconfigPath: string,
   rootDir: string,
+  paths: Record<string, string[]>,
   banner?: string,
   footer?: string,
 ): Promise<void> {
@@ -412,11 +438,11 @@ export async function processDtsFiles(
       return;
     }
 
-    const { absoluteBaseUrl, paths, addMatchAll } = result;
+    const { absoluteBaseUrl, addMatchAll } = result;
     const mainFields: string[] = [];
     /**
      * resolve paths priorities:
-     * see https://github.com/jonaskello/tsconfig-paths/blob/098e066632f5b9f35c956803fe60d17ffc60b688/src/match-path-sync.ts#L18-L26
+     * see https://github.com/jonaskello/tsconfig-paths/blob/098e066632f5b9f35c956803fe60d17ffc60b688/src/try-path.ts#L11-L17
      */
     matchPath = createMatchPath(
       absoluteBaseUrl,

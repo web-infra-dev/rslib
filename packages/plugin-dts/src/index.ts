@@ -32,6 +32,7 @@ export type PluginDtsOptions = {
   build?: boolean;
   abortOnError?: boolean;
   dtsExtension?: string;
+  alias?: Record<string, string>;
   autoExternal?:
     | boolean
     | {
@@ -91,6 +92,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
     options.redirect = options.redirect ?? {};
     options.redirect.path = options.redirect.path ?? true;
     options.redirect.extension = options.redirect.extension ?? false;
+    options.alias = options.alias ?? {};
 
     const dtsPromises: Promise<TaskResult>[] = [];
     let promisesResult: TaskResult[] = [];

@@ -136,6 +136,25 @@ pluginDts({
 });
 ```
 
+### alias
+
+- **Type:**` Record<string, string>`
+- **Default:** `{}`
+
+Configure the path alias for declaration files.
+
+`alias` will be merged with `compilerOptions.paths` configured in `tsconfig.json` and `alias` has a higher priority.
+
+In most cases, you don't need to use `alias`, but consider using it when you need to use path alias only in declaration files without wanting to affect JavaScript outputs. For example, map the declaration file of `foo` to `./compiled/foo`.
+
+```js
+pluginDts({
+  alias: {
+    foo: './compiled/foo',
+  },
+});
+```
+
 ### autoExternal
 
 - **Type:** `boolean`

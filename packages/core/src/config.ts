@@ -1416,6 +1416,7 @@ const composeDtsConfig = async (
         abortOnError: dts?.abortOnError,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
         autoExternal: getAutoExternalDefaultValue(format, autoExternal),
+        alias: dts?.alias,
         banner: banner?.dts,
         footer: footer?.dts,
         redirect: redirect?.dts,

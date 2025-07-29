@@ -723,6 +723,17 @@ importers:
 
   tests/integration/dts/bundle-false/abort-on-error: {}
 
+  tests/integration/dts/bundle-false/alias:
+    devDependencies:
+      '@types/express':
+        specifier: ^5.0.3
+        version: 5.0.3
+      express:
+        specifier: ^5.1.0
+        version: 5.1.0
+
+  tests/integration/dts/bundle-false/alias/compile/express: {}
+
   tests/integration/dts/bundle-false/auto-extension: {}
 
   tests/integration/dts/bundle-false/basic: {}

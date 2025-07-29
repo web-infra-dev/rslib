@@ -12,7 +12,11 @@ import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import type { DtsEntry, DtsGenOptions } from './index';
 import { emitDts } from './tsc';
-import { calcLongestCommonPath, ensureTempDeclarationDir } from './utils';
+import {
+  calcLongestCommonPath,
+  ensureTempDeclarationDir,
+  mergeAliasWithTsConfigPaths,
+} from './utils';
 
 const isObject = (obj: unknown): obj is Record<string, any> =>
   Object.prototype.toString.call(obj) === '[object Object]';
@@ -123,6 +127,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     isWatch,
     dtsExtension = '.d.ts',
     autoExternal = true,
+    alias = {},
     userExternals,
     apiExtractorOptions,
     banner,
@@ -134,6 +139,15 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   } = data;
   if (!isWatch) {
     logger.start(`generating declaration files... ${color.gray(`(${name})`)}`);
+  }
+
+  // merge alias and tsconfig paths
+  const paths = mergeAliasWithTsConfigPaths(
+    tsConfigResult.options.paths,
+    alias,
+  );
+  if (Object.keys(paths).length > 0) {
+    tsConfigResult.options.paths = paths;
   }
 
   const { options: rawCompilerOptions, fileNames } = tsConfigResult;
@@ -240,6 +254,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       dtsExtension,
       redirect,
       rootDir,
+      paths,
       banner,
       footer,
     },

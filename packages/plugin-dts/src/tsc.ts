@@ -21,6 +21,7 @@ export type EmitDtsOptions = {
   dtsExtension: string;
   rootDir: string;
   redirect: DtsRedirect;
+  paths: Record<string, string[]>;
   banner?: string;
   footer?: string;
 };
@@ -33,6 +34,7 @@ async function handleDiagnosticsAndProcessFiles(
   dtsExtension: string,
   redirect: DtsRedirect,
   rootDir: string,
+  paths: Record<string, string[]>,
   banner?: string,
   footer?: string,
   name?: string,
@@ -54,6 +56,7 @@ async function handleDiagnosticsAndProcessFiles(
     redirect,
     configPath,
     rootDir,
+    paths,
     banner,
     footer,
   );
@@ -89,6 +92,7 @@ export async function emitDts(
     rootDir,
     banner,
     footer,
+    paths,
     redirect,
   } = options;
   const {
@@ -147,6 +151,7 @@ export async function emitDts(
         redirect,
         configPath,
         rootDir,
+        paths,
         banner,
         footer,
       );
@@ -162,6 +167,7 @@ export async function emitDts(
         redirect,
         configPath,
         rootDir,
+        paths,
         banner,
         footer,
       );
@@ -230,6 +236,7 @@ export async function emitDts(
         dtsExtension,
         redirect,
         rootDir,
+        paths,
         banner,
         footer,
         name,
@@ -291,6 +298,7 @@ export async function emitDts(
         dtsExtension,
         redirect,
         rootDir,
+        paths,
         banner,
         footer,
         name,
@@ -326,6 +334,7 @@ export async function emitDts(
         redirect,
         configPath,
         rootDir,
+        paths,
         banner,
         footer,
       );
