@@ -1,1 +1,1 @@
-export {} from 'express';
+export {} from 'prebundle-pkg';

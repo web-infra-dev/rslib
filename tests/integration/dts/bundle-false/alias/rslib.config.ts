@@ -7,7 +7,7 @@ export default defineConfig({
       dts: {
         bundle: false,
         alias: {
-          express: './compile/express',
+          'prebundle-pkg': './compile/prebundle-pkg',
         },
       },
     }),
@@ -15,7 +15,7 @@ export default defineConfig({
       dts: {
         bundle: false,
         alias: {
-          express: './compile/express',
+          'prebundle-pkg': './compile/prebundle-pkg',
         },
       },
     }),
