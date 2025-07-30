@@ -613,7 +613,6 @@ const composeFormatConfig = ({
               },
               chunkLoading: 'import',
               workerChunkLoading: 'import',
-              wasmLoading: 'fetch',
             },
             experiments: {
               outputModule: true,
@@ -643,7 +642,6 @@ const composeFormatConfig = ({
               },
               chunkLoading: 'require',
               workerChunkLoading: 'async-node',
-              wasmLoading: 'async-node',
             },
             plugins,
           },
