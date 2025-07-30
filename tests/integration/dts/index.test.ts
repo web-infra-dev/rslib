@@ -169,6 +169,28 @@ describe('dts when bundle: false', () => {
       );
     }
   });
+
+  test('alias', async () => {
+    const fixturePath = join(__dirname, 'bundle-false', 'alias');
+    const { contents } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(contents.esm).toMatchInlineSnapshot(`
+      {
+        "<ROOT>/tests/integration/dts/bundle-false/alias/dist/esm/index.d.ts": "export {} from '../../compile/prebundle-pkg';
+      ",
+      }
+    `);
+
+    expect(contents.cjs).toMatchInlineSnapshot(`
+      {
+        "<ROOT>/tests/integration/dts/bundle-false/alias/dist/cjs/index.d.ts": "export {} from '../../compile/prebundle-pkg';
+      ",
+      }
+    `);
+  });
 });
 
 describe('dts when bundle: true', () => {

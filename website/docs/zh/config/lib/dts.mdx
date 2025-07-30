@@ -14,6 +14,7 @@ type Dts =
       build?: boolean;
       abortOnError?: boolean;
       autoExtension?: boolean;
+      alias?: Record<string, string>;
     }
   | boolean;
 ```
@@ -218,3 +219,29 @@ export default {
 这遵循与 [lib.autoExtension](/config/lib/auto-extension) 相同的逻辑，但默认值不同，因为类型声明文件扩展名可能会在不同的模块解析策略中造成一些问题。
 
 :::
+
+### dts.alias
+
+- **类型：** `Record<string, string>`
+- **默认值：** `{}`
+
+用于配置类型声明文件的路径别名。
+
+`dts.alias` 会与 `tsconfig.json` 中配置的 `compilerOptions.paths` 合并，且 `dts.alias` 具有更高的优先级。
+
+大部分情况下，你不需要使用 `dts.alias`，但当你需要在类型声明文件中使用路径别名却不希望影响 JavaScript 产物时，可以考虑使用它。比如，将 `foo` 的类型声明文件指向 `./compiled/foo`。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      // [!code highlight:5]
+      dts: {
+        alias: {
+          foo: './compiled/foo',
+        },
+      },
+    },
+  ],
+};
+```

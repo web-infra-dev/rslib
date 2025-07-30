@@ -88,6 +88,12 @@ export type Dts =
        * @see {@link https://rslib.rs/config/lib/dts#dtsautoextension}
        */
       autoExtension?: boolean;
+      /**
+       * Set the alias for declaration files, similar to the `compilerOptions.paths` option in `tsconfig.json`.
+       * @defaultValue `{}`
+       * @see {@link https://rslib.rs/config/lib/dts#dtsalias}
+       */
+      alias?: Record<string, string>;
     }
   | boolean;
 
