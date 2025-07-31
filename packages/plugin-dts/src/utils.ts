@@ -582,12 +582,12 @@ export async function cleanTsBuildInfoFile(
 ): Promise<void> {
   const tsconfigDir = dirname(tsconfigPath);
   const { outDir, rootDir, tsBuildInfoFile } = compilerOptions;
-  let tsbuildInfoFilePath = 'tsconfig.tsbuildinfo';
+  let tsbuildInfoFilePath: string;
 
   if (tsBuildInfoFile && isAbsolute(tsBuildInfoFile)) {
     tsbuildInfoFilePath = tsBuildInfoFile;
   } else {
-    tsbuildInfoFilePath = `${basename(
+    const defaultFileName = `${basename(
       tsconfigPath,
       '.json',
     )}${tsBuildInfoFile ?? '.tsbuildinfo'}`;
@@ -596,13 +596,13 @@ export async function cleanTsBuildInfoFile(
         tsbuildInfoFilePath = join(
           outDir,
           relative(resolve(tsconfigDir, rootDir), tsconfigDir),
-          tsbuildInfoFilePath,
+          defaultFileName,
         );
       } else {
-        tsbuildInfoFilePath = join(outDir, tsbuildInfoFilePath);
+        tsbuildInfoFilePath = join(outDir, defaultFileName);
       }
     } else {
-      tsbuildInfoFilePath = join(tsconfigDir, tsbuildInfoFilePath);
+      tsbuildInfoFilePath = join(tsconfigDir, defaultFileName);
     }
   }
 
