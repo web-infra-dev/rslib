@@ -17,4 +17,7 @@ export default defineConfig({
   output: {
     externals: ['bar', /^qux$/, 'quxx'],
   },
+  performance: {
+    buildCache: false,
+  },
 });
