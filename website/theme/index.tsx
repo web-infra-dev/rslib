@@ -1,6 +1,6 @@
 import {
+  getCustomMDXComponent as BaseGetCustomMDXComponent,
   Layout as BaseLayout,
-  getCustomMDXComponent as basicGetCustomMDXComponent,
 } from '@rspress/core/theme';
 import {
   Search as PluginAlgoliaSearch,
@@ -17,7 +17,7 @@ import {
 } from '@rspress/plugin-llms/runtime';
 
 export function getCustomMDXComponent() {
-  const { h1: H1, ...mdxComponents } = basicGetCustomMDXComponent();
+  const { h1: H1, ...mdxComponents } = BaseGetCustomMDXComponent();
 
   const MyH1 = ({ ...props }) => {
     return (
