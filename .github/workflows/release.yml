@@ -28,7 +28,7 @@ jobs:
     name: Release
     if: github.repository == 'web-infra-dev/rslib' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: production
+    environment: npm
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -47,12 +47,15 @@ jobs:
           node-version: 22
           cache: 'pnpm'
 
+      # Update npm to the latest version to enable OIDC
+      - name: Update npm
+        run: |
+          npm install -g npm@latest
+          npm --version
+
       - name: Install Dependencies
         run: pnpm install
 
       - name: Publish to npm
-        env:
-          NPM_TOKEN: ${{ secrets.RSLIB_NPM_TOKEN }}
         run: |
-          npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
           pnpm -r publish --tag ${{ github.event.inputs.npm_tag }} --publish-branch ${{ github.event.inputs.branch }}
