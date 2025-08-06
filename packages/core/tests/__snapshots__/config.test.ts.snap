@@ -157,9 +157,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "optimization": {
               "moduleIds": "named",
               "nodeEnv": false,
-              "splitChunks": {
-                "chunks": "async",
-              },
             },
             "resolve": {
               "extensionAlias": {
@@ -208,6 +205,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               "avoidEntryIife": true,
               "concatenateModules": true,
               "sideEffects": "flag",
+              "splitChunks": {
+                "chunks": "async",
+              },
             },
             "output": {
               "chunkFormat": "module",
@@ -434,9 +434,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "optimization": {
               "moduleIds": "named",
               "nodeEnv": false,
-              "splitChunks": {
-                "chunks": "async",
-              },
             },
             "resolve": {
               "extensionAlias": {
@@ -472,6 +469,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                   "requireResolve": false,
                   "worker": false,
                 },
+              },
+            },
+            "optimization": {
+              "splitChunks": {
+                "chunks": "async",
               },
             },
             "output": {
@@ -668,9 +670,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "optimization": {
               "moduleIds": "named",
               "nodeEnv": false,
-              "splitChunks": {
-                "chunks": "async",
-              },
             },
             "resolve": {
               "extensionAlias": {
@@ -898,9 +897,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "optimization": {
               "moduleIds": "named",
               "nodeEnv": false,
-              "splitChunks": {
-                "chunks": "async",
-              },
             },
             "resolve": {
               "extensionAlias": {
@@ -1085,9 +1081,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "optimization": {
               "moduleIds": "named",
               "nodeEnv": false,
-              "splitChunks": {
-                "chunks": "async",
-              },
             },
             "resolve": {
               "extensionAlias": {

@@ -513,10 +513,6 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
       htmlPlugin: false,
       rspack: {
         optimization: {
-          splitChunks: {
-            // Splitted "sync" chunks will make entry modules can't be inlined.
-            chunks: 'async',
-          },
           moduleIds: 'named',
           nodeEnv: false,
         },
@@ -604,6 +600,10 @@ const composeFormatConfig = ({
               concatenateModules: true,
               sideEffects: 'flag',
               avoidEntryIife: true,
+              splitChunks: {
+                // Splitted "sync" chunks will make entry modules can't be inlined.
+                chunks: 'async',
+              },
             },
             output: {
               module: true,
@@ -632,6 +632,12 @@ const composeFormatConfig = ({
                   ...jsParserOptions.cjs,
                   ...jsParserOptions.others,
                 },
+              },
+            },
+            optimization: {
+              splitChunks: {
+                // Splitted "sync" chunks will make entry modules can't be inlined.
+                chunks: 'async',
               },
             },
             output: {
