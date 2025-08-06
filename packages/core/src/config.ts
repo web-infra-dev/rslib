@@ -218,7 +218,8 @@ const composeExternalsWarnConfig = (
               asyncFlag = false;
               return;
             }
-            return next();
+            next();
+            return;
           }
 
           callback(matched, shouldWarn);
@@ -227,7 +228,8 @@ const composeExternalsWarnConfig = (
         do {
           asyncFlag = true;
           if (i >= externals.length) {
-            return callback(false);
+            callback(false);
+            return;
           }
           matchUserExternals(
             externals[i++],
@@ -308,7 +310,7 @@ export const composeAutoExternalConfig = (options: {
   const { bundle, format, pkgJson, userExternals } = options;
 
   // If bundle is false, autoExternal will be disabled
-  if (bundle === false) {
+  if (!bundle) {
     return {};
   }
 
@@ -352,7 +354,7 @@ export const composeAutoExternalConfig = (options: {
   )
     .reduce<string[]>((prev, type) => {
       if (externalOptions[type]) {
-        return pkgJson[type] ? prev.concat(Object.keys(pkgJson[type]!)) : prev;
+        return pkgJson[type] ? prev.concat(Object.keys(pkgJson[type])) : prev;
       }
       return prev;
     }, [])
@@ -654,7 +656,7 @@ const composeFormatConfig = ({
         },
       };
     case 'umd': {
-      if (bundle === false) {
+      if (!bundle) {
         throw new Error(
           'When using "umd" format, "bundle" must be set to "true". Since the default value for "bundle" is "true", so you can either explicitly set it to "true" or remove the field entirely.',
         );
@@ -692,7 +694,7 @@ const composeFormatConfig = ({
       return config;
     }
     case 'iife': {
-      if (bundle === false) {
+      if (!bundle) {
         throw new Error(
           'When using "iife" format, "bundle" must be set to "true". Since the default value for "bundle" is "true", so you can either explicitly set it to "true" or remove the field entirely.',
         );
@@ -735,7 +737,7 @@ const composeFormatConfig = ({
       return config;
     }
     case 'mf':
-      if (bundle === false) {
+      if (!bundle) {
         throw new Error(
           'When using "mf" format, "bundle" must be set to "true". Since the default value for "bundle" is "true", so you can either explicitly set it to "true" or remove the field entirely.',
         );
@@ -749,7 +751,7 @@ const composeFormatConfig = ({
           rspack: (config, { env }) => {
             config.output = {
               ...config.output,
-              uniqueName: pkgJson.name as string,
+              uniqueName: pkgJson.name,
             };
 
             config.optimization = {
@@ -1092,7 +1094,7 @@ const composeEntryConfig = async (
         } else {
           // Non-existed file.
           entryErrorReasons.push(
-            `Can't resolve the entry ${color.cyan(`"${entry}"`)} at the location ${color.cyan(`${entryAbsPath}`)}. Please ensure that the file exists.`,
+            `Can't resolve the entry ${color.cyan(`"${entry}"`)} at the location ${color.cyan(entryAbsPath)}. Please ensure that the file exists.`,
           );
         }
       }
@@ -1259,12 +1261,13 @@ const composeBundlelessExternalConfig = (
           async (data, callback) => {
             const { request, getResolve, context, contextInfo } = data;
             if (!request || !getResolve || !context || !contextInfo) {
-              return callback();
+              callback();
+              return;
             }
             const { issuer } = contextInfo;
 
             if (!resolver) {
-              resolver = (await getResolve()) as RspackResolver;
+              resolver = getResolve() as RspackResolver;
             }
 
             async function redirectPath(
@@ -1333,7 +1336,8 @@ const composeBundlelessExternalConfig = (
               }
 
               if (redirectedPath === undefined) {
-                return callback(undefined, request);
+                callback(undefined, request);
+                return;
               }
 
               if (jsRedirectPath) {
@@ -1380,7 +1384,8 @@ const composeBundlelessExternalConfig = (
                 }
               }
 
-              return callback(undefined, resolvedRequest);
+              callback(undefined, resolvedRequest);
+              return;
             }
 
             callback();

@@ -26,7 +26,8 @@ export async function cssExternalHandler(
   // cssExtract: do not external @rsbuild/core/compiled/css-loader/noSourceMaps.js, sourceMaps.js, api.mjs etc.
   // cssExtract would execute the result handled by css-loader with importModule, so we cannot external the "helper import" from css-loader
   if (/compiled\/css-loader\//.test(request)) {
-    return callback();
+    callback();
+    return;
   }
 
   let resolvedRequest = request;
@@ -41,7 +42,8 @@ export async function cssExternalHandler(
   if (!isCssFile(resolvedRequest)) {
     // cssExtract: do not external assets module import
     if (isCssFile(issuer)) {
-      return callback();
+      callback();
+      return;
     }
     return false;
   }
@@ -51,15 +53,14 @@ export async function cssExternalHandler(
   if (styleRedirectExtension) {
     const isCssModulesRequest = isCssModulesFile(resolvedRequest, auto);
     if (isCssModulesRequest) {
-      return callback(
-        undefined,
-        resolvedRequest.replace(/\.[^.]+$/, jsExtension),
-      );
+      callback(undefined, resolvedRequest.replace(/\.[^.]+$/, jsExtension));
+      return;
     }
-    return callback(undefined, resolvedRequest.replace(/\.[^.]+$/, '.css'));
+    callback(undefined, resolvedRequest.replace(/\.[^.]+$/, '.css'));
+    return;
   }
 
-  return callback(undefined, resolvedRequest);
+  callback(undefined, resolvedRequest);
 }
 
 const PLUGIN_NAME = 'rsbuild:lib-css';

@@ -23,5 +23,5 @@ export function prepareCli(): void {
     console.log();
   }
 
-  logger.greet(`  ${`Rslib v${RSLIB_VERSION}`}\n`);
+  logger.greet(`  Rslib v${RSLIB_VERSION}\n`);
 }
