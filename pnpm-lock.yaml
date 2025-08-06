@@ -17,6 +17,9 @@ importers:
       '@changesets/cli':
         specifier: ^2.29.5
         version: 2.29.5
+      '@rslint/core':
+        specifier: ^0.1.5
+        version: 0.1.5
       '@rstest/core':
         specifier: 0.1.1
         version: 0.1.1
@@ -2389,6 +2392,40 @@ packages:
         optional: true
       typescript:
         optional: true
+
+  '@rslint/core@0.1.5':
+    resolution: {integrity: sha512-GdfvGzAKCFNovCrva/LxJg2FLfdppsdTfqn0KeMrZ2CkS7DHw++0g8IgqeYOy3hzh66ZzEwlPKi/Fc4R9UvdSQ==}
+    hasBin: true
+
+  '@rslint/darwin-arm64@0.1.5':
+    resolution: {integrity: sha512-nov/aHPBK8lGdCxauEQCb5FGz1/dhIkeBjAqSaK49BUDNYo6KXTJa1PopxhQIHjDCLtr/88Y13sTjQVzUrmRQA==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@rslint/darwin-x64@0.1.5':
+    resolution: {integrity: sha512-L7X8D9QKTltOFAX6FGMpirf5AmZCFyHcOuQU53uqZqBz4EyjJHQZRY11NvDHRugci4GLv5IDUflzfWF5vOhQEA==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@rslint/linux-arm64@0.1.5':
+    resolution: {integrity: sha512-B69gQ/ggxCHwfM2ebcY6mephcqdJVUez+Gzvn9dNjtnd7T/tYWB3BydjqCQf240XS34NbxoBrbMsi9CHJVYZKw==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@rslint/linux-x64@0.1.5':
+    resolution: {integrity: sha512-STxfVa3u8rj+EYOgWhzDfueibQRPcUe8mF7QvcnfPe6Q5ElJRfInunyht5kfN/zGCs5qT0OS5kztgQJh8lfrkA==}
+    cpu: [x64]
+    os: [linux]
+
+  '@rslint/win32-arm64@0.1.5':
+    resolution: {integrity: sha512-VgLlKodV8JKpa3YpkEcq6qfW8LXeMWJa/2a8s7WxoD3jvJjk2P8SNt7noB87YvQauYYc8mZ33jcewfNMiCsayA==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@rslint/win32-x64@0.1.5':
+    resolution: {integrity: sha512-LgUS7u8M5/jkJtIdQl8qB4OT26wtVMAnWiCyJZoJR/+YxvGGLpVgqZlJFgfFNEzD/TJGt1MSdHhu0dabyc5qBw==}
+    cpu: [x64]
+    os: [win32]
 
   '@rspack/binding-darwin-arm64@1.4.11':
     resolution: {integrity: sha512-PrmBVhR8MC269jo6uQ+BMy1uwIDx0HAJYLQRQur8gXiehWabUBCRg/d4U9KR7rLzdaSScRyc5JWXR52T7/4MfA==}
@@ -8865,6 +8902,33 @@ snapshots:
     optionalDependencies:
       '@microsoft/api-extractor': 7.52.10(@types/node@22.17.0)
       typescript: 5.9.2
+
+  '@rslint/core@0.1.5':
+    optionalDependencies:
+      '@rslint/darwin-arm64': 0.1.5
+      '@rslint/darwin-x64': 0.1.5
+      '@rslint/linux-arm64': 0.1.5
+      '@rslint/linux-x64': 0.1.5
+      '@rslint/win32-arm64': 0.1.5
+      '@rslint/win32-x64': 0.1.5
+
+  '@rslint/darwin-arm64@0.1.5':
+    optional: true
+
+  '@rslint/darwin-x64@0.1.5':
+    optional: true
+
+  '@rslint/linux-arm64@0.1.5':
+    optional: true
+
+  '@rslint/linux-x64@0.1.5':
+    optional: true
+
+  '@rslint/win32-arm64@0.1.5':
+    optional: true
+
+  '@rslint/win32-x64@0.1.5':
+    optional: true
 
   '@rspack/binding-darwin-arm64@1.4.11':
     optional: true

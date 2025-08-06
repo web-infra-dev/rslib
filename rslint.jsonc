@@ -1,0 +1,31 @@
+[
+  {
+    "language": "javascript",
+    "languageOptions": {
+      "parserOptions": {
+        "project": [
+          "./packages/core/tsconfig.json",
+          "./packages/create-rslib/tsconfig.json",
+          "./packages/plugin-dts/tsconfig.json",
+        ],
+      },
+    },
+    "plugins": ["@typescript-eslint"],
+    // We should fix the corresponding code according to the following rules and gradually enable more rules.
+    "rules": {
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-type-assertion": "off",
+      "@typescript-eslint/require-await": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/restrict-template-expressions": "off",
+      "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/no-misused-promises": "off",
+      "@typescript-eslint/no-redundant-type-constituents": "off",
+      "@typescript-eslint/switch-exhaustiveness-check": "off",
+    },
+  },
+]

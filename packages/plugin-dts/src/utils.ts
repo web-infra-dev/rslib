@@ -41,7 +41,10 @@ export const JS_EXTENSIONS_PATTERN: RegExp = new RegExp(
 );
 
 export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
-  const configFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
+  const configFile = ts.readConfigFile(
+    tsconfigPath,
+    ts.sys.readFile.bind(ts.sys),
+  );
   const configFileContent = ts.parseJsonConfigFileContent(
     configFile.config,
     ts.sys,
@@ -148,7 +151,7 @@ export function getFileLoc(
     return `${color.cyan(diagnostic.file.fileName)}:${color.yellow(line + 1)}:${color.yellow(character + 1)}`;
   }
 
-  return `${color.cyan(configPath)}`;
+  return color.cyan(configPath);
 }
 
 export const prettyTime = (seconds: number): string => {
@@ -561,7 +564,7 @@ export const globDtsFiles = async (
   patterns: string[],
 ): Promise<string[]> => {
   const dtsFiles = await Promise.all(
-    patterns.map((pattern) =>
+    patterns.map(async (pattern) =>
       glob(convertPath(join(dir, pattern)), { absolute: true }),
     ),
   );
@@ -573,7 +576,9 @@ export async function cleanDtsFiles(dir: string): Promise<void> {
   const patterns = ['/**/*.d.ts', '/**/*.d.cts', '/**/*.d.mts'];
   const allFiles = await globDtsFiles(dir, patterns);
 
-  await Promise.all(allFiles.map((file) => fsP.rm(file, { force: true })));
+  await Promise.all(
+    allFiles.map(async (file) => fsP.rm(file, { force: true })),
+  );
 }
 
 export async function cleanTsBuildInfoFile(

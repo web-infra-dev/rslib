@@ -114,7 +114,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         const cwd = api.context.rootPath;
         const tsconfigPath = ts.findConfigFile(
           cwd,
-          ts.sys.fileExists,
+          ts.sys.fileExists.bind(ts.sys),
           config.source.tsconfigPath,
         );
 

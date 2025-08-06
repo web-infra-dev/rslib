@@ -95,7 +95,7 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
   const banner = options.banner;
   const footer = options.footer;
 
-  let { publicPath } = this._compilation!.outputOptions;
+  let { publicPath } = this._compilation.outputOptions;
 
   if (typeof options.publicPath === 'string') {
     // eslint-disable-next-line prefer-destructuring
@@ -212,8 +212,7 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
 
           const localsString = identifiers
             .map(
-              ([id, key]) =>
-                `\nvar ${id} = ${stringifyLocal(locals![key as string])};`,
+              ([id, key]) => `\nvar ${id} = ${stringifyLocal(locals[key!])};`,
             )
             .join('');
           const exportsString = `export { ${identifiers
@@ -282,7 +281,7 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
       }
       if (sourceMap) {
         const sourceMapPath = `${distFilepath}.map`;
-        m.set(sourceMapPath, `${sourceMap}`);
+        m.set(sourceMapPath, sourceMap);
         // Associate the source map with the CSS file
         const sourceMappingURL = `/*# sourceMappingURL=${cssFilename}.map */`;
         m.set(distFilepath, `${m.get(distFilepath)}\n${sourceMappingURL}`);

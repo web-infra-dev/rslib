@@ -8,7 +8,7 @@ const logPrefixTsc = color.dim('[tsc]');
 
 const formatHost: ts.FormatDiagnosticsHost = {
   getCanonicalFileName: (path) => path,
-  getCurrentDirectory: ts.sys.getCurrentDirectory,
+  getCurrentDirectory: ts.sys.getCurrentDirectory.bind(ts.sys),
   getNewLine: () => ts.sys.newLine,
 };
 

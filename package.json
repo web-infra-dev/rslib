@@ -10,7 +10,8 @@
     "check-spell": "pnpx cspell && heading-case",
     "format": "prettier . --write && biome check --write && heading-case --write",
     "generate-release-pr": "zx scripts/generateReleasePr.mjs",
-    "lint": "biome check . --diagnostic-level=warn && prettier . --check && pnpm run check-spell",
+    "lint": "biome check . --diagnostic-level=warn && prettier . --check && pnpm run check-spell && pnpm lint:type",
+    "lint:type": "rslint",
     "prebundle": "nx run-many -t prebundle",
     "prepare": "pnpm run build && simple-git-hooks",
     "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.1.3",
     "@changesets/cli": "^2.29.5",
+    "@rslint/core": "^0.1.5",
     "@rstest/core": "0.1.1",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.17.0",

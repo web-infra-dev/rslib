@@ -194,7 +194,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     : dtsEmitPath;
 
   let dtsEntries: Required<DtsEntry>[] = [];
-  if (bundle === true) {
+  if (bundle) {
     dtsEntries = dtsEntry
       .map((entryObj) => {
         const { name: entryName, path: entryPath } = entryObj;
@@ -204,7 +204,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
           : join(cwd, entryPath);
         const relativePath = relative(rootDir, dirname(entrySourcePath));
         const newPath = join(
-          declarationDir!,
+          declarationDir,
           relativePath,
           basename(entrySourcePath),
         ).replace(
@@ -217,7 +217,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   }
 
   const bundleDtsIfNeeded = async () => {
-    if (bundle === true) {
+    if (bundle) {
       const { bundleDts } = await import('./apiExtractor');
       await bundleDts({
         name,

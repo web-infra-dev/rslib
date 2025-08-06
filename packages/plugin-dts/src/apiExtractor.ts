@@ -32,7 +32,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     throw error;
   }
 
-  const { Extractor, ExtractorConfig, ExtractorLogLevel } = apiExtractor!;
+  const { Extractor, ExtractorConfig, ExtractorLogLevel } = apiExtractor;
   const {
     name,
     cwd,
@@ -53,7 +53,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
           relative(cwd, distPath),
           `${entry.name}${dtsExtension}`,
         );
-        const mainEntryPointFilePath = entry.path!.replace(/\?.*$/, '')!;
+        const mainEntryPointFilePath = entry.path!.replace(/\?.*$/, '');
         const internalConfig = {
           mainEntryPointFilePath,
           bundledPackages,
