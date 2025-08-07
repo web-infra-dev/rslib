@@ -1,9 +1,8 @@
-import { exec } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
-import { awaitFileExists, buildAndGetResults } from 'test-helper';
+import { awaitFileExists, buildAndGetResults, runCli } from 'test-helper';
 
 describe('server config', async () => {
   test('basic config', async () => {
@@ -24,7 +23,7 @@ describe('server config', async () => {
 
     fse.removeSync(distPath);
 
-    const childProcess = exec('npx rslib mf-dev', {
+    const childProcess = runCli('mf-dev', {
       cwd: fixturePath,
       env: {
         ...process.env,

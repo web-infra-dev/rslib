@@ -1,9 +1,14 @@
-import { exec, spawn } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { after } from 'node:test';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
-import { awaitFileChanges, awaitFileExists } from 'test-helper';
+import {
+  awaitFileChanges,
+  awaitFileExists,
+  rslibBinPath,
+  runCli,
+} from 'test-helper';
 
 describe('build --watch command', async () => {
   test('basic', async () => {
@@ -26,7 +31,7 @@ export default defineConfig({
   `,
     );
 
-    const process = exec(`npx rslib build --watch -c ${tempConfigFile}`, {
+    const process = runCli(`build --watch -c ${tempConfigFile}`, {
       cwd: __dirname,
     });
 
@@ -98,8 +103,8 @@ export default defineConfig({
     const distFoo2File = path.join(__dirname, 'dist/esm/foo2.js');
 
     const child = spawn(
-      'npx',
-      ['rslib', 'build', '--watch', '-c', tempConfigFile],
+      'node',
+      [rslibBinPath, 'build', '--watch', '-c', tempConfigFile],
       {
         cwd: __dirname,
         stdio: 'inherit',

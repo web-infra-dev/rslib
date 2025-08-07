@@ -1,13 +1,12 @@
-import { execSync } from 'node:child_process';
 import path from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
-import { buildAndGetResults, globContentJSON } from 'test-helper';
+import { buildAndGetResults, globContentJSON, runCliSync } from 'test-helper';
 
 describe('build command', async () => {
   test('basic', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
-    execSync('npx rslib build', {
+    runCliSync('build', {
       cwd: __dirname,
     });
 
@@ -23,7 +22,7 @@ describe('build command', async () => {
 
   test('--lib', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
-    execSync('npx rslib build --lib esm', {
+    runCliSync('build --lib esm', {
       cwd: __dirname,
     });
 
@@ -38,7 +37,7 @@ describe('build command', async () => {
 
   test('--lib multiple', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
-    execSync('npx rslib build --lib esm --lib cjs', {
+    runCliSync('build --lib esm --lib cjs', {
       cwd: __dirname,
     });
 
@@ -69,12 +68,9 @@ describe('build command', async () => {
 
   test('--config', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
-    execSync(
-      'npx rslib build --config ./custom-config/rslib.config.custom.ts',
-      {
-        cwd: __dirname,
-      },
-    );
+    runCliSync('build --config ./custom-config/rslib.config.custom.ts', {
+      cwd: __dirname,
+    });
 
     const files = await globContentJSON(path.join(__dirname, 'dist'));
     const fileNames = Object.keys(files).sort();
@@ -88,7 +84,7 @@ describe('build command', async () => {
 
   test('--root', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
-    execSync('npx rslib build --root custom-root', {
+    runCliSync('build --root custom-root', {
       cwd: __dirname,
     });
 

@@ -1,11 +1,10 @@
-import { exec, execSync } from 'node:child_process';
 import { join } from 'node:path';
 import { describe } from 'node:test';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { startMFDevServer } from '@rslib/core';
 import { expect, test } from '@rstest/core';
 import fse from 'fs-extra';
-import { awaitFileExists } from 'test-helper';
+import { awaitFileExists, runCli, runCliSync } from 'test-helper';
 
 const { existsSync } = fse;
 
@@ -19,7 +18,7 @@ describe('mf-dev', () => {
     fse.removeSync(distFolder);
     const distPath = join(distFolder, 'index.js');
 
-    const childProcess = exec('npx rslib mf-dev --lib mf0', {
+    const childProcess = runCli('mf-dev --lib mf0', {
       cwd: fixturePath,
       env: {
         ...process.env,
@@ -49,7 +48,7 @@ describe('mf-dev', () => {
     const distPath1 = join(distFolder1, 'index.js');
     const distPath2 = join(distFolder2, 'index.js');
 
-    const childProcess = exec('npx rslib mf-dev --lib mf1 --lib mf2', {
+    const childProcess = runCli('mf-dev --lib mf1 --lib mf2', {
       cwd: fixturePath,
     });
 
@@ -107,7 +106,7 @@ describe('mf build', () => {
     const distPath = join(fixturePath, 'dist/mf');
     const rspackConfigFile = join(distPath, '.rsbuild/rspack.config.mf.mjs');
 
-    execSync('npx rslib build', {
+    runCliSync('build', {
       cwd: fixturePath,
       env: {
         ...process.env,
