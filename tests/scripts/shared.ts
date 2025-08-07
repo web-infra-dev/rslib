@@ -1,4 +1,10 @@
 import assert from 'node:assert';
+import {
+  type ExecOptions,
+  type ExecSyncOptions,
+  exec,
+  execSync,
+} from 'node:child_process';
 import fs from 'node:fs';
 import { basename, dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,6 +19,19 @@ import { globContentJSON } from './helper';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+export const rslibBinPath = join(
+  __dirname,
+  '../node_modules/@rslib/core/bin/rslib.js',
+);
+
+export function runCliSync(command: string, options?: ExecSyncOptions) {
+  return execSync(`node ${rslibBinPath} ${command}`, options);
+}
+
+export function runCli(command: string, options?: ExecOptions) {
+  return exec(`node ${rslibBinPath} ${command}`, options);
+}
 
 export function getCwdByExample(exampleName: string) {
   return join(__dirname, '../../examples', exampleName);

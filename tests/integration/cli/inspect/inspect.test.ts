@@ -1,14 +1,13 @@
-import { execSync } from 'node:child_process';
 import path from 'node:path';
 import { describe } from 'node:test';
 import { expect, test } from '@rstest/core';
 import fse from 'fs-extra';
-import { globContentJSON } from 'test-helper';
+import { globContentJSON, runCliSync } from 'test-helper';
 
 describe('inspect command', async () => {
   test('basic', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
-    execSync('npx rslib inspect', {
+    runCliSync('inspect', {
       cwd: __dirname,
     });
 
@@ -41,7 +40,7 @@ describe('inspect command', async () => {
 
   test('--lib', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
-    execSync('npx rslib inspect --lib esm', {
+    runCliSync('inspect --lib esm', {
       cwd: __dirname,
     });
 
@@ -75,7 +74,7 @@ describe('inspect command', async () => {
 
   test('--lib multiple', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
-    execSync('npx rslib inspect --lib esm --lib cjs', {
+    runCliSync('inspect --lib esm --lib cjs', {
       cwd: __dirname,
     });
 
