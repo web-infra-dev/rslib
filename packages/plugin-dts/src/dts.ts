@@ -243,7 +243,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       try {
         await bundleDtsIfNeeded();
       } catch (e) {
-        logger.error((e as Error).message);
+        logger.error(e);
       }
     }
   };
