@@ -240,7 +240,11 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
 
   const onComplete = async (isSuccess: boolean) => {
     if (isSuccess) {
-      await bundleDtsIfNeeded();
+      try {
+        await bundleDtsIfNeeded();
+      } catch (e) {
+        logger.error(e);
+      }
     }
   };
 

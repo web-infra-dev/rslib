@@ -106,7 +106,9 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
       }),
     );
   } catch (e) {
-    const error = new Error(`${logPrefixApiExtractor} ${e}`);
+    const error = new Error(
+      `${logPrefixApiExtractor} ${e} ${color.gray(`(${name})`)}`,
+    );
     // do not log the stack trace, it is not helpful for users
     error.stack = '';
     throw error;
