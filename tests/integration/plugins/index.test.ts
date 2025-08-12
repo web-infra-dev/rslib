@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { join } from 'node:path';
 import { expect, test } from '@rstest/core';
-import { awaitFileExists, buildAndGetResults, runCli } from 'test-helper';
+import { buildAndGetResults, expectFile, runCli } from 'test-helper';
 
 import { distIndex } from './basic/rslib.config';
 import { plugin1Path, plugin2Path } from './mf-dev/rslib.config';
@@ -20,8 +20,8 @@ test('should merge plugins correctly', async () => {
     cwd: fixturePath,
   });
 
-  await awaitFileExists(plugin1Path);
-  await awaitFileExists(plugin2Path);
+  await expectFile(plugin1Path);
+  await expectFile(plugin2Path);
 
   const content1 = fs.readFileSync(plugin1Path, 'utf-8');
   const content2 = fs.readFileSync(plugin2Path, 'utf-8');

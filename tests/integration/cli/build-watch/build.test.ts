@@ -4,8 +4,8 @@ import { after } from 'node:test';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
 import {
-  awaitFileChanges,
-  awaitFileExists,
+  expectFile,
+  expectFileChanges,
   rslibBinPath,
   runCli,
 } from 'test-helper';
@@ -35,7 +35,7 @@ export default defineConfig({
       cwd: __dirname,
     });
 
-    await awaitFileExists(distEsmIndexFile);
+    await expectFile(distEsmIndexFile);
 
     fse.outputFileSync(
       tempConfigFile,
@@ -54,7 +54,7 @@ export default defineConfig({
   `,
     );
 
-    await awaitFileExists(dist1EsmIndexFile);
+    await expectFile(dist1EsmIndexFile);
 
     process.kill();
   });
@@ -111,12 +111,12 @@ export default defineConfig({
         shell: true,
       },
     );
-    await awaitFileExists(distIndexFile);
+    await expectFile(distIndexFile);
 
     fse.outputFileSync(srcFooFile, `export const foo = 'foo';`);
     fse.outputFileSync(srcFoo2File, `export const foo2 = 'foo2';`);
-    await awaitFileExists(distFooFile);
-    await awaitFileExists(distFoo2File);
+    await expectFile(distFooFile);
+    await expectFile(distFoo2File);
     const content1 = await fse.readFile(distFooFile, 'utf-8');
     expect(content1!).toMatchInlineSnapshot(`
       "const foo = 'foo';
@@ -135,9 +135,8 @@ export default defineConfig({
     fse.removeSync(srcIndexFile);
 
     // change
-    const wait = await awaitFileChanges(distFooFile, 'foo1');
     fse.outputFileSync(srcFooFile, `export const foo = 'foo1';`);
-    await wait();
+    await expectFileChanges(distFooFile, content1, 'foo1');
     const content3 = await fse.readFile(distFooFile, 'utf-8');
     expect(content3!).toMatchInlineSnapshot(`
       "const foo = 'foo1';

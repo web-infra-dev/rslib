@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
-import { awaitFileExists, buildAndGetResults, runCli } from 'test-helper';
+import { buildAndGetResults, expectFile, runCli } from 'test-helper';
 
 describe('server config', async () => {
   test('basic config', async () => {
@@ -31,7 +31,7 @@ describe('server config', async () => {
       },
     });
 
-    await awaitFileExists(doneFile);
+    await expectFile(doneFile);
 
     const rsbuildConfigContent = await fse.readFile(rsbuildConfigFile, 'utf-8');
     expect(rsbuildConfigContent).toContain('open: true');
