@@ -1,10 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { RsbuildPlugin } from '@rsbuild/core';
 import { pluginPublint } from 'rsbuild-plugin-publint';
-import { defineConfig, rspack } from 'rslib';
+import { defineConfig, type rsbuild, rspack } from 'rslib';
 
-const pluginFixDtsTypes: RsbuildPlugin = {
+const pluginFixDtsTypes: rsbuild.RsbuildPlugin = {
   name: 'fix-dts-types',
   setup(api) {
     api.onAfterBuild(() => {
@@ -29,7 +28,7 @@ export default defineConfig({
   lib: [
     {
       format: 'esm',
-      syntax: ['node 16'],
+      syntax: 'es2022',
       dts: {
         bundle: false,
         distPath: './dist-types',
