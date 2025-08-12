@@ -4,7 +4,7 @@ import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { startMFDevServer } from '@rslib/core';
 import { expect, test } from '@rstest/core';
 import fse from 'fs-extra';
-import { awaitFileExists, runCli, runCliSync } from 'test-helper';
+import { expectFile, runCli, runCliSync } from 'test-helper';
 
 const { existsSync } = fse;
 
@@ -26,7 +26,7 @@ describe('mf-dev', () => {
       },
     });
 
-    await awaitFileExists(distPath);
+    await expectFile(distPath);
 
     const rspackConfigContent = await fse.readFile(rspackConfigFile, 'utf-8');
     expect(rspackConfigContent).toContain(`nodeEnv: 'development'`);
@@ -52,8 +52,8 @@ describe('mf-dev', () => {
       cwd: fixturePath,
     });
 
-    await awaitFileExists(distPath1);
-    await awaitFileExists(distPath2);
+    await expectFile(distPath1);
+    await expectFile(distPath2);
 
     expect(existsSync(distPath1)).toBe(true);
     expect(existsSync(distPath2)).toBe(true);

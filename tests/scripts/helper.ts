@@ -1,5 +1,7 @@
+import fs from 'node:fs';
 import { platform } from 'node:os';
 import { join } from 'node:path';
+import { expect } from '@playwright/test';
 import fse from 'fs-extra';
 import { convertPathToPattern, type GlobOptions, glob } from 'tinyglobby';
 
@@ -62,60 +64,36 @@ export const proxyConsole = (
   };
 };
 
-export const waitFor = async (
-  fn: () => boolean,
-  {
-    maxChecks = 100,
-    interval = 20,
-  }: {
-    maxChecks?: number;
-    interval?: number;
-  } = {},
-) => {
-  let checks = 0;
-
-  while (checks < maxChecks) {
-    if (fn()) {
-      return true;
-    }
-    checks++;
-    await new Promise((resolve) => setTimeout(resolve, interval));
-  }
-
-  return false;
-};
-
-export const awaitFileExists = async (dir: string) => {
-  const result = await waitFor(() => fse.existsSync(dir), {
-    interval: 50,
-    maxChecks: 400,
-  });
-  if (!result) {
-    throw new Error(`awaitFileExists failed: ${dir}`);
-  }
-};
-
-export const awaitFileChanges = async (file: string, content: string) => {
-  const oldContent = await fse.readFile(file, 'utf-8');
-  return async () => {
-    const result = await waitFor(
-      () => {
-        try {
-          return (
-            fse.readFileSync(file, 'utf-8') !== oldContent &&
-            fse.readFileSync(file, 'utf-8').includes(content)
-          );
-        } catch (_e) {
-          return false;
-        }
-      },
-      { interval: 50 },
-    );
-
-    if (!result) {
-      throw new Error(`awaitFileChanges failed: ${file}`);
-    }
-
-    return result;
+/**
+ * A faster `expect.poll`
+ */
+export const expectPoll: (fn: () => boolean) => ReturnType<typeof expect.poll> =
+  (fn) => {
+    return expect.poll(fn, {
+      intervals: [20, 30, 40, 50, 60, 70, 80, 90, 100],
+    });
   };
+
+/**
+ * Expect a file to exist
+ */
+export const expectFile = (dir: string) =>
+  expectPoll(() => fs.existsSync(dir)).toBeTruthy();
+
+/**
+ * Expect a file to be changed and contain newContent
+ */
+export const expectFileChanges = async (
+  file: string,
+  oldContent: string,
+  newContent: string,
+) => {
+  await expectPoll(() => {
+    try {
+      const content = fse.readFileSync(file, 'utf-8');
+      return content !== oldContent && content.includes(newContent);
+    } catch {
+      return false;
+    }
+  }).toBeTruthy();
 };
