@@ -28,7 +28,7 @@ export default defineConfig({
   lib: [
     {
       format: 'esm',
-      syntax: 'es2022',
+      syntax: ['node 18.12.0'],
       dts: {
         bundle: false,
         distPath: './dist-types',
