@@ -10,13 +10,13 @@ describe('JSON', async () => {
   test('bundle', async () => {
     const { content: bundle } = queryContent(contents.esm0!, /index\.js/);
     expect(bundle).toMatchInlineSnapshot(`
-    "var foo_namespaceObject = {
-        S: "foo"
-    };
-    const src = foo_namespaceObject.S + '1';
-    export { src as default };
-    "
-  `);
+      "var foo_namespaceObject = {
+          U: "foo"
+      };
+      const src = foo_namespaceObject.U + '1';
+      export { src as default };
+      "
+    `);
     const bundleResult = await import(files.esm0![0]!);
     expect(bundleResult.default).toBe('foo1');
   });
