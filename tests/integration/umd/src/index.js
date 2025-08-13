@@ -1,3 +1,3 @@
-const { addPrefix } = require('./utils');
+import { addPrefix } from './utils.js';
 
-module.exports = (str) => addPrefix('DEBUG:', str, process.env.NODE_ENV);
+export default (str) => addPrefix('DEBUG:', str, process.env.NODE_ENV);
