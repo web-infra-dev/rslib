@@ -53,28 +53,40 @@ async function getTemplateName({ template }: Argv) {
   const supportStorybook = ['react', 'vue'].includes(templateName);
 
   type ExcludesFalse = <T>(x: T | false) => x is T;
-  const tools = checkCancel<string[]>(
-    await multiselect({
-      message:
-        'Select development tools (Use <space> to select, <enter> to continue)',
-      required: false,
-      options: [
-        supportStorybook && {
-          value: 'storybook',
-          label: 'Storybook',
-        },
-        { value: 'vitest', label: 'Vitest' },
-        // TODO: support Rspress Module doc in the future
-      ].filter(Boolean as any as ExcludesFalse),
-    }),
-  );
+
+  async function selectTools() {
+    const tools = checkCancel<string[]>(
+      await multiselect({
+        message:
+          'Select development tools (Use <space> to select, <enter> to continue)',
+        required: false,
+        options: [
+          supportStorybook && {
+            value: 'storybook',
+            label: 'Storybook',
+          },
+          { value: 'rstest', label: 'Rstest' },
+          { value: 'vitest', label: 'Vitest' },
+          // TODO: support Rspress Module doc in the future
+        ].filter(Boolean as any as ExcludesFalse),
+      }),
+    );
+
+    if (tools.includes('rstest') && tools.includes('vitest')) {
+      console.error(
+        'You selected both Rstest and Vitest for testing, you should only select one of them.',
+      );
+      return selectTools();
+    }
+    return tools;
+  }
+
+  const tools = await selectTools();
 
   return composeTemplateName({
     template: templateName,
     lang: language as Lang,
-    tools: Object.fromEntries(
-      tools.map((tool) => [tool, `vitest-${tool}-${language}`]),
-    ),
+    tools,
   });
 }
 
@@ -87,7 +99,7 @@ create({
   root: path.resolve(__dirname, '..'),
   name: 'rslib',
   templates: TEMPLATES.map(({ template, tools, lang }) =>
-    composeTemplateName({ template, lang, tools }),
+    composeTemplateName({ template, lang, tools: Object.keys(tools || {}) }),
   ),
   getTemplateName,
   mapESLintTemplate,
