@@ -7,6 +7,8 @@ import { createAndValidate } from './helper';
 const CASES_NODE_DUAL = [
   '[node-dual]-[]-js',
   '[node-dual]-[]-ts',
+  '[node-dual]-[rstest]-js',
+  '[node-dual]-[rstest]-ts',
   '[node-dual]-[vitest]-js',
   '[node-dual]-[vitest]-ts',
 ];
@@ -14,6 +16,8 @@ const CASES_NODE_DUAL = [
 const CASES_NODE_ESM = [
   '[node-esm]-[]-js',
   '[node-esm]-[]-ts',
+  '[node-esm]-[rstest]-js',
+  '[node-esm]-[rstest]-ts',
   '[node-esm]-[vitest]-js',
   '[node-esm]-[vitest]-ts',
 ];
@@ -21,27 +25,43 @@ const CASES_NODE_ESM = [
 const CASES_REACT = [
   '[react]-[]-js',
   '[react]-[]-ts',
+  '[react]-[rstest,storybook]-js',
+  '[react]-[rstest,storybook]-ts',
   '[react]-[storybook,vitest]-js',
   '[react]-[storybook,vitest]-ts',
   '[react]-[storybook]-js',
+  '[react]-[rstest]-js',
   '[react]-[vitest]-js',
   '[react]-[storybook]-ts',
+  '[react]-[rstest]-ts',
   '[react]-[vitest]-ts',
 ];
 
 const CASES_VUE = [
   '[vue]-[]-js',
   '[vue]-[]-ts',
+  '[vue]-[rstest,storybook]-js',
+  '[vue]-[rstest,storybook]-ts',
   '[vue]-[storybook,vitest]-js',
   '[vue]-[storybook,vitest]-ts',
   '[vue]-[storybook]-js',
   '[vue]-[storybook]-ts',
+  '[vue]-[rstest]-js',
+  '[vue]-[rstest]-ts',
   '[vue]-[vitest]-js',
   '[vue]-[vitest]-ts',
 ];
 
 test('exhaust all cases', () => {
-  expect(TEMPLATES.map(composeTemplateName).sort()).toEqual(
+  expect(
+    TEMPLATES.map((t) =>
+      composeTemplateName({
+        template: t.template,
+        lang: t.lang,
+        tools: Object.keys(t.tools || {}),
+      }),
+    ).sort(),
+  ).toEqual(
     [
       ...CASES_NODE_DUAL,
       ...CASES_NODE_ESM,

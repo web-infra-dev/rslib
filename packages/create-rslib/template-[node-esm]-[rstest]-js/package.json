@@ -1,0 +1,22 @@
+{
+  "name": "rslib-node-esm-js",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch",
+    "test": "rstest"
+  },
+  "devDependencies": {
+    "@rslib/core": "workspace:*",
+    "@rstest/core": "^0.1.3"
+  }
+}

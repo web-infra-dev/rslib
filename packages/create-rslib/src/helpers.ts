@@ -25,10 +25,10 @@ export const composeTemplateName = ({
   lang,
 }: {
   template: string;
-  tools?: Record<string, string>;
+  tools?: string[];
   lang: Lang;
 }) => {
-  return `[${template}]-[${(tools ? Object.keys(tools) : []).sort()}]-${lang}`;
+  return `[${template}]-[${(tools ? tools.sort() : []).join(',')}]-${lang}`;
 };
 
 export function genTemplate({
@@ -43,7 +43,7 @@ export function genTemplate({
   const toolKeys = tools ? Object.keys(tools) : [];
   const target = path.resolve(
     __dirname,
-    `../template-${composeTemplateName({ template, tools, lang })}`,
+    `../template-${composeTemplateName({ template, tools: toolKeys, lang })}`,
   );
   fs.rmSync(target, { recursive: true, force: true });
   const srcBase = getBase({ template, lang });
@@ -77,11 +77,15 @@ export const TEMPLATES: Template[] = [
   { template: 'node-dual', lang: 'ts' },
   { template: 'node-dual', lang: 'js', tools: { vitest: 'vitest-node-js' } },
   { template: 'node-dual', lang: 'ts', tools: { vitest: 'vitest-node-ts' } },
+  { template: 'node-dual', lang: 'js', tools: { rstest: 'rstest-node-js' } },
+  { template: 'node-dual', lang: 'ts', tools: { rstest: 'rstest-node-ts' } },
   // node-esm
   { template: 'node-esm', lang: 'js' },
   { template: 'node-esm', lang: 'ts' },
   { template: 'node-esm', lang: 'js', tools: { vitest: 'vitest-node-js' } },
   { template: 'node-esm', lang: 'ts', tools: { vitest: 'vitest-node-ts' } },
+  { template: 'node-esm', lang: 'js', tools: { rstest: 'rstest-node-js' } },
+  { template: 'node-esm', lang: 'ts', tools: { rstest: 'rstest-node-ts' } },
   // react-js
   {
     template: 'react',
@@ -100,7 +104,17 @@ export const TEMPLATES: Template[] = [
   {
     template: 'react',
     lang: 'js',
+    tools: { rstest: 'rstest-react-js' },
+  },
+  {
+    template: 'react',
+    lang: 'js',
     tools: { storybook: 'storybook-react-js', vitest: 'vitest-react-js' },
+  },
+  {
+    template: 'react',
+    lang: 'js',
+    tools: { storybook: 'storybook-react-js', rstest: 'rstest-react-js' },
   },
   // react-ts
   {
@@ -120,7 +134,17 @@ export const TEMPLATES: Template[] = [
   {
     template: 'react',
     lang: 'ts',
+    tools: { rstest: 'rstest-react-ts' },
+  },
+  {
+    template: 'react',
+    lang: 'ts',
     tools: { storybook: 'storybook-react-ts', vitest: 'vitest-react-ts' },
+  },
+  {
+    template: 'react',
+    lang: 'ts',
+    tools: { storybook: 'storybook-react-ts', rstest: 'rstest-react-ts' },
   },
   // vue-js
   {
@@ -140,7 +164,17 @@ export const TEMPLATES: Template[] = [
   {
     template: 'vue',
     lang: 'js',
+    tools: { rstest: 'rstest-vue-js' },
+  },
+  {
+    template: 'vue',
+    lang: 'js',
     tools: { storybook: 'storybook-vue-js', vitest: 'vitest-vue-js' },
+  },
+  {
+    template: 'vue',
+    lang: 'js',
+    tools: { storybook: 'storybook-vue-js', rstest: 'rstest-vue-js' },
   },
   // vue-ts
   {
@@ -160,6 +194,16 @@ export const TEMPLATES: Template[] = [
   {
     template: 'vue',
     lang: 'ts',
+    tools: { rstest: 'rstest-vue-ts' },
+  },
+  {
+    template: 'vue',
+    lang: 'ts',
     tools: { storybook: 'storybook-vue-ts', vitest: 'vitest-vue-ts' },
+  },
+  {
+    template: 'vue',
+    lang: 'ts',
+    tools: { storybook: 'storybook-vue-ts', rstest: 'rstest-vue-ts' },
   },
 ] as const;
