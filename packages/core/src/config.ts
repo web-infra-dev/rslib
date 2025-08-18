@@ -186,7 +186,7 @@ const composeExternalsWarnConfig = (
     if (Array.isArray(e)) {
       externals.push(...e);
     } else {
-      // @ts-ignore
+      // @ts-expect-error
       externals.push(e);
     }
   }
