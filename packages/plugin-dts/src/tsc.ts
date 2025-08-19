@@ -178,13 +178,42 @@ export async function emitDts(
     if (bundle) {
       return fileName;
     }
+
+    if (fileName.endsWith('.d.ts.map')) {
+      return fileName.replace(/\.d\.ts\.map$/, `${dtsExtension}.map`);
+    }
+
     return fileName.replace(/\.d\.ts$/, dtsExtension);
+  };
+
+  const updateDeclarationMapContent = (
+    fileName: string,
+    content: string,
+  ): string => {
+    if (bundle || !compilerOptions.declarationMap) {
+      return content;
+    }
+
+    if (fileName.endsWith('.d.ts')) {
+      return content.replace(
+        /(\/\/# sourceMappingURL=.+)\.d\.ts\.map/g,
+        `$1${dtsExtension}.map`,
+      );
+    }
+
+    if (fileName.endsWith('.d.ts.map')) {
+      return content.replace(/\.d\.ts/, dtsExtension);
+    }
+
+    return content;
   };
 
   const system: ts.System = {
     ...ts.sys,
     writeFile: (fileName, contents, writeByteOrderMark) => {
-      ts.sys.writeFile(renameDtsFile(fileName), contents, writeByteOrderMark);
+      const newFileName = renameDtsFile(fileName);
+      const newContents = updateDeclarationMapContent(fileName, contents);
+      ts.sys.writeFile(newFileName, newContents, writeByteOrderMark);
     },
   };
 
@@ -203,9 +232,11 @@ export async function emitDts(
           onError,
           sourceFiles,
         ) => {
+          const newFileName = renameDtsFile(fileName);
+          const newContents = updateDeclarationMapContent(fileName, contents);
           originHost.writeFile(
-            renameDtsFile(fileName),
-            contents,
+            newFileName,
+            newContents,
             writeByteOrderMark,
             onError,
             sourceFiles,
@@ -254,9 +285,11 @@ export async function emitDts(
           onError,
           sourceFiles,
         ) => {
+          const newFileName = renameDtsFile(fileName);
+          const newContents = updateDeclarationMapContent(fileName, contents);
           originHost.writeFile(
-            renameDtsFile(fileName),
-            contents,
+            newFileName,
+            newContents,
             writeByteOrderMark,
             onError,
             sourceFiles,
