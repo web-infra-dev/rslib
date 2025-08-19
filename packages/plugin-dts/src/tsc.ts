@@ -202,7 +202,7 @@ export async function emitDts(
     }
 
     if (fileName.endsWith('.d.ts.map')) {
-      return content.replace(/\.d\.ts/, dtsExtension);
+      return content.replace(/("file":"[^"]*)\.d\.ts"/g, `$1${dtsExtension}"`);
     }
 
     return content;
