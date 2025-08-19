@@ -191,6 +191,53 @@ describe('dts when bundle: false', () => {
       }
     `);
   });
+
+  test('declarationMap', async () => {
+    const fixturePath = join(__dirname, 'bundle-false', 'declaration-map');
+    const { files, contents } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle-false/declaration-map/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/declaration-map/dist/esm/index.d.ts.map",
+      ]
+    `);
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle-false/declaration-map/dist/cjs/index.d.cts",
+        "<ROOT>/tests/integration/dts/bundle-false/declaration-map/dist/cjs/index.d.cts.map",
+      ]
+    `);
+
+    const { content: indexDtsEsm } = queryContent(contents.esm, 'index.d.ts', {
+      basename: true,
+    });
+    const { content: indexDtsCjs } = queryContent(contents.cjs, 'index.d.cts', {
+      basename: true,
+    });
+    const { content: indexMapEsm } = queryContent(
+      contents.esm,
+      'index.d.ts.map',
+      {
+        basename: true,
+      },
+    );
+    const { content: indexMapCjs } = queryContent(
+      contents.cjs,
+      'index.d.cts.map',
+      {
+        basename: true,
+      },
+    );
+    expect(indexDtsEsm).toContain('//# sourceMappingURL=index.d.ts.map');
+    expect(indexDtsCjs).toContain('//# sourceMappingURL=index.d.cts.map');
+    expect(indexMapEsm).toContain('"file":"index.d.ts"');
+    expect(indexMapCjs).toContain('"file":"index.d.cts"');
+  });
 });
 
 describe('dts when bundle: true', () => {
@@ -597,6 +644,69 @@ describe('dts when build: true', () => {
     const esmBuildInfoPath = join(fixturePath, 'tsconfig.esm.tsbuildinfo');
     expect(existsSync(esmBuildInfoPath)).toBeTruthy();
   });
+
+  test('declarationMap', async () => {
+    const fixturePath = join(__dirname, 'build', 'declaration-map');
+    const { files, contents } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/build/declaration-map/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/build/declaration-map/dist/esm/index.d.ts.map",
+      ]
+    `);
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/build/declaration-map/dist/cjs/index.d.cts",
+        "<ROOT>/tests/integration/dts/build/declaration-map/dist/cjs/index.d.cts.map",
+      ]
+    `);
+
+    const { content: indexDtsEsm } = queryContent(contents.esm, 'index.d.ts', {
+      basename: true,
+    });
+    const { content: indexDtsCjs } = queryContent(contents.cjs, 'index.d.cts', {
+      basename: true,
+    });
+    const { content: indexMapEsm } = queryContent(
+      contents.esm,
+      'index.d.ts.map',
+      {
+        basename: true,
+      },
+    );
+    const { content: indexMapCjs } = queryContent(
+      contents.cjs,
+      'index.d.cts.map',
+      {
+        basename: true,
+      },
+    );
+    expect(indexDtsEsm).toContain('//# sourceMappingURL=index.d.ts.map');
+    expect(indexDtsCjs).toContain('//# sourceMappingURL=index.d.cts.map');
+    expect(indexMapEsm).toContain('"file":"index.d.ts"');
+    expect(indexMapCjs).toContain('"file":"index.d.cts"');
+
+    const referenceEsmDistPath = join(
+      fixturePath,
+      '../__references__/dist/index.d.ts',
+    );
+    const referenceCjsDistPath = join(
+      fixturePath,
+      '../__references__/dist/index.d.cts',
+    );
+    expect(existsSync(referenceEsmDistPath)).toBeTruthy();
+    expect(existsSync(referenceCjsDistPath)).toBeTruthy();
+
+    const esmBuildInfoPath = join(fixturePath, 'tsconfig.esm.tsbuildinfo');
+    const cjsBuildInfoPath = join(fixturePath, 'tsconfig.cjs.tsbuildinfo');
+    expect(existsSync(esmBuildInfoPath)).toBeTruthy();
+    expect(existsSync(cjsBuildInfoPath)).toBeTruthy();
+  });
 });
 
 describe('dts when composite: true', () => {
@@ -732,6 +842,56 @@ describe('dts when composite: true', () => {
         "<ROOT>/tests/integration/dts/composite/clean/dist-types/esm/utils/strings.d.ts",
       ]
     `);
+
+    const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
+    expect(existsSync(buildInfoPath)).toBeTruthy();
+  });
+
+  test('declarationMap', async () => {
+    const fixturePath = join(__dirname, 'composite', 'declaration-map');
+    const { files, contents } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/composite/declaration-map/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts/composite/declaration-map/dist/esm/index.d.ts.map",
+      ]
+    `);
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/composite/declaration-map/dist/cjs/index.d.cts",
+        "<ROOT>/tests/integration/dts/composite/declaration-map/dist/cjs/index.d.cts.map",
+      ]
+    `);
+
+    const { content: indexDtsEsm } = queryContent(contents.esm, 'index.d.ts', {
+      basename: true,
+    });
+    const { content: indexDtsCjs } = queryContent(contents.cjs, 'index.d.cts', {
+      basename: true,
+    });
+    const { content: indexMapEsm } = queryContent(
+      contents.esm,
+      'index.d.ts.map',
+      {
+        basename: true,
+      },
+    );
+    const { content: indexMapCjs } = queryContent(
+      contents.cjs,
+      'index.d.cts.map',
+      {
+        basename: true,
+      },
+    );
+    expect(indexDtsEsm).toContain('//# sourceMappingURL=index.d.ts.map');
+    expect(indexDtsCjs).toContain('//# sourceMappingURL=index.d.cts.map');
+    expect(indexMapEsm).toContain('"file":"index.d.ts"');
+    expect(indexMapCjs).toContain('"file":"index.d.cts"');
 
     const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
     expect(existsSync(buildInfoPath)).toBeTruthy();
