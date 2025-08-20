@@ -76,7 +76,7 @@ Options:
   );
   ```
 
-- `false`: the `import.meta.url` will be leave as is, which will cause a runtime error when running the output.
+- `false`: the `import.meta.url` will be left as is, which will cause a runtime error when running the output.
 
 ## shims.esm
 
@@ -110,7 +110,7 @@ Options:
   console.log(src_filename);
   ```
 
-- `false`: the `__filename` will be leave as is, which will cause a runtime error when running the output.
+- `false`: the `__filename` will be left as is, which will cause a runtime error when running the output.
 
 ### shims.esm.\_\_dirname
 
@@ -139,7 +139,7 @@ Options:
   console.log(src_dirname);
   ```
 
-- `false`: the `__dirname` will be leave as is, which will cause a runtime error when running the output.
+- `false`: the `__dirname` will be left as is, which will cause a runtime error when running the output.
 
 ### shims.esm.require
 
@@ -149,7 +149,7 @@ Whether to inject shims for the global `require` of CommonJS in ESM output.
 
 Options:
 
-- `true`: when [format](/config/lib/format) is `esm`, there will be a `require` that created by `createRequire` at the beginning of the output which can be accessed in source code like the global `require` like CommonJS.
+- `true`: when [format](/config/lib/format) is `esm`, there will be a `require` that is created by `createRequire` at the beginning of the output which can be accessed in source code like the global `require` like CommonJS.
 
   For example, given the following source code:
 
@@ -181,4 +181,4 @@ Options:
   lazyFn('./other.js', require);
   ```
 
-- `false`: the `require` will be leave as is, which will cause a runtime error when running the output.
+- `false`: the `require` will be left as is, which will cause a runtime error when running the output.
