@@ -96,6 +96,7 @@ const pluginLibCss = (
         CHAIN_ID.RULE.LESS,
         CHAIN_ID.RULE.STYLUS,
       ]) {
+        if (!config.module.rules.has(ruleId)) continue;
         const rule = config.module.rule(ruleId);
         if (rule.uses.has(CHAIN_ID.USE.MINI_CSS_EXTRACT)) {
           isUsingCssExtract = true;
