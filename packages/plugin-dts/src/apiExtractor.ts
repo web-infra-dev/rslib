@@ -95,19 +95,19 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
         );
 
         if (!extractorResult.succeeded) {
-          throw new Error(`API Extractor error. ${color.gray(`(${name})`)}`);
+          throw new Error(`API Extractor error. ${color.dim(`(${name})`)}`);
         }
 
         await addBannerAndFooter(untrimmedFilePath, banner, footer);
 
         logger.ready(
-          `declaration files bundled successfully: ${color.cyan(relative(cwd, untrimmedFilePath))} in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+          `declaration files bundled successfully: ${color.cyan(relative(cwd, untrimmedFilePath))} in ${getTimeCost(start)} ${color.dim(`(${name})`)}`,
         );
       }),
     );
   } catch (e) {
     const error = new Error(
-      `${logPrefixApiExtractor} ${e} ${color.gray(`(${name})`)}`,
+      `${logPrefixApiExtractor} ${e} ${color.dim(`(${name})`)}`,
     );
     // do not log the stack trace, it is not helpful for users
     error.stack = '';
