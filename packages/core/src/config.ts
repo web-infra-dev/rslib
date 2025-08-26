@@ -523,7 +523,7 @@ export function composePrintFileSizeConfig(
         }) => {
           let log = `${color.yellow(assets.length)} files generated in ${color.blue(distPath)} ${color.dim(`(${environmentName})`)}`;
           log += '\n';
-          log += `${color.magenta('Total size')}: ${color.cyan(`${(totalSize / 1000).toFixed(1)} kB`)}`;
+          log += `${color.magenta('Total size')}: ${(totalSize / 1000).toFixed(1)} kB`;
           if (target === 'web') {
             log += ` ${color.green(`(${(totalGzipSize / 1000).toFixed(1)} kB gzipped)`)}`;
           }
