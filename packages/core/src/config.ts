@@ -502,6 +502,39 @@ export function composeDecoratorsConfig(
   };
 }
 
+export function composePrintFileSizeConfig(
+  bundle: LibConfig['bundle'],
+  target: RsbuildConfigOutputTarget,
+): EnvironmentConfig {
+  if (bundle) {
+    return {};
+  }
+
+  // do not need to print detailed file size in bundleless mode
+  return {
+    performance: {
+      printFileSize: {
+        total: ({
+          environmentName,
+          distPath,
+          assets,
+          totalSize,
+          totalGzipSize,
+        }) => {
+          let log = `${color.yellow(assets.length)} files generated in ${color.blue(distPath)} ${color.dim(`(${environmentName})`)}`;
+          log += '\n';
+          log += `${color.magenta('Total size:')} ${(totalSize / 1000).toFixed(1)} kB`;
+          if (target === 'web') {
+            log += ` ${color.green(`(${(totalGzipSize / 1000).toFixed(1)} kB gzipped)`)}`;
+          }
+          return log;
+        },
+        detail: false,
+      },
+    },
+  };
+}
+
 export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> {
   // When the default configuration is inconsistent with rsbuild, remember to modify the type hints
   // see https://github.com/web-infra-dev/rslib/discussions/856
@@ -1633,6 +1666,7 @@ async function composeLibRsbuildConfig(
     compilerOptions,
     config.source?.decorators?.version,
   );
+  const printFileSizeConfig = composePrintFileSizeConfig(bundle, target);
 
   return mergeRsbuildConfig(
     formatConfig,
@@ -1662,6 +1696,7 @@ async function composeLibRsbuildConfig(
     dtsConfig,
     bannerFooterConfig,
     decoratorsConfig,
+    printFileSizeConfig,
   );
 }
 
