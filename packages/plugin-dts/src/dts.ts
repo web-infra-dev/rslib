@@ -138,7 +138,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     },
   } = data;
   if (!isWatch) {
-    logger.start(`generating declaration files... ${color.gray(`(${name})`)}`);
+    logger.start(`generating declaration files... ${color.dim(`(${name})`)}`);
   }
 
   // merge alias and tsconfig paths

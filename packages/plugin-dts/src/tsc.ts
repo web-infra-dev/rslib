@@ -67,7 +67,7 @@ async function handleDiagnosticsAndProcessFiles(
     }
 
     const error = new Error(
-      `Failed to generate declaration files. ${color.gray(`(${name})`)}`,
+      `Failed to generate declaration files. ${color.dim(`(${name})`)}`,
     );
     // do not log the stack trace, diagnostic messages are enough
     error.stack = '';
@@ -128,7 +128,7 @@ export async function emitDts(
     const message = `${ts.flattenDiagnosticMessageText(
       diagnostic.messageText,
       formatHost.getNewLine(),
-    )} ${color.gray(`(${name})`)}`;
+    )} ${color.dim(`(${name})`)}`;
 
     // 6031: File change detected. Starting incremental compilation...
     // 6032: Starting compilation in watch mode...
@@ -374,7 +374,7 @@ export async function emitDts(
 
       if (errorNumber > 0) {
         const error = new Error(
-          `Failed to generate declaration files. ${color.gray(`(${name})`)}`,
+          `Failed to generate declaration files. ${color.dim(`(${name})`)}`,
         );
         // do not log the stack trace, diagnostic messages are enough
         error.stack = '';
@@ -384,11 +384,11 @@ export async function emitDts(
 
     if (bundle) {
       logger.info(
-        `declaration files prepared in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+        `declaration files prepared in ${getTimeCost(start)} ${color.dim(`(${name})`)}`,
       );
     } else {
       logger.ready(
-        `declaration files generated in ${getTimeCost(start)} ${color.gray(`(${name})`)}`,
+        `declaration files generated in ${getTimeCost(start)} ${color.dim(`(${name})`)}`,
       );
     }
   } else {

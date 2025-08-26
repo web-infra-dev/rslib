@@ -379,6 +379,25 @@ export async function redirectDtsImports(
               extension,
             );
           }
+        } else {
+          // handle the case importPath is like './foo.bar', we need to check if './foo.bar.d.ts' exists
+          const candidatePath = await addExtension(
+            redirect,
+            dtsFile,
+            redirectImportPath,
+            extension,
+          );
+          // make sure the candidatePath exists, otherwise we may break the import, e.g. import 'foo.svg'
+          if (
+            await pathExists(
+              path.join(
+                dirname(dtsFile),
+                candidatePath.replace(/\.[^.]+$/, dtsExtension),
+              ),
+            )
+          ) {
+            redirectImportPath = candidatePath;
+          }
         }
       } else {
         if (
