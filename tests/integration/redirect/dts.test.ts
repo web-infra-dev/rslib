@@ -12,6 +12,10 @@ beforeAll(async () => {
 test('redirect.dts.path: true with redirect.dts.extension: false - default', async () => {
   expect(contents.esm0).toMatchInlineSnapshot(`
     {
+      "<ROOT>/tests/integration/redirect/dts/dist/default/esm/a.b/index.d.ts": "export declare const ab = "a.b";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/default/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/default/esm/foo/foo.d.ts": "import { logRequest } from '../logger';
     import { logger } from '../../../../compile/prebundle-pkg';
     import { logRequest as logRequest2 } from '../logger';
@@ -32,6 +36,8 @@ test('redirect.dts.path: true with redirect.dts.extension: false - default', asy
     export { Router } from 'express';
     export * from '../../../compile/prebundle-pkg';
     export type { Bar } from './types';
+    export * from './a.b';
+    export * from './bar.baz';
     export * from './foo';
     export * from './types';
     ",
@@ -61,6 +67,10 @@ test('redirect.dts.path: true with redirect.dts.extension: false - default', asy
 test('redirect.dts.path: false with redirect.dts.extension: false', async () => {
   expect(contents.esm1).toMatchInlineSnapshot(`
     {
+      "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/a.b/index.d.ts": "export declare const ab = "a.b";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/foo/foo.d.ts": "import { logRequest } from '@src/logger';
     import { logger } from 'prebundle-pkg';
     import { logRequest as logRequest2 } from '../logger';
@@ -81,6 +91,8 @@ test('redirect.dts.path: false with redirect.dts.extension: false', async () => 
     export { Router } from 'express';
     export * from 'prebundle-pkg';
     export type { Bar } from 'types';
+    export * from './a.b';
+    export * from './bar.baz';
     export * from './foo';
     export * from './types';
     ",
@@ -110,6 +122,10 @@ test('redirect.dts.path: false with redirect.dts.extension: false', async () => 
 test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
   expect(contents.esm2).toMatchInlineSnapshot(`
     {
+      "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/a.b/index.d.ts": "export declare const ab = "a.b";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/foo/foo.d.ts": "import { logRequest } from '../logger.js';
     import { logger } from '../../../../compile/prebundle-pkg';
     import { logRequest as logRequest2 } from '../logger.js';
@@ -130,6 +146,8 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
     export { Router } from 'express';
     export * from '../../../compile/prebundle-pkg';
     export type { Bar } from './types.js';
+    export * from './a.b/index.js';
+    export * from './bar.baz.js';
     export * from './foo/index.js';
     export * from './types.js';
     ",
@@ -159,6 +177,10 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
 test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
   expect(contents.esm3).toMatchInlineSnapshot(`
     {
+      "<ROOT>/tests/integration/redirect/dts/dist/path-false-extension-true/esm/a.b/index.d.ts": "export declare const ab = "a.b";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/path-false-extension-true/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false-extension-true/esm/foo/foo.d.ts": "import { logRequest } from '@src/logger';
     import { logger } from 'prebundle-pkg';
     import { logRequest as logRequest2 } from '../logger.js';
@@ -179,6 +201,8 @@ test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
     export { Router } from 'express';
     export * from 'prebundle-pkg';
     export type { Bar } from 'types';
+    export * from './a.b/index.js';
+    export * from './bar.baz.js';
     export * from './foo/index.js';
     export * from './types.js';
     ",
@@ -208,6 +232,14 @@ test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
 test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
   expect(contents.esm4).toMatchInlineSnapshot(`
     {
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/a.b/index.d.mts": "export declare const ab = "a.b";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/a.b/index.d.ts": "export declare const ab = "a.b";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/bar.baz.d.mts": "export declare const bar = "bar-baz";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/bar.baz.d.ts": "export declare const bar = "bar-baz";
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/foo/foo.d.mts": "import { logRequest } from '../logger.mjs';
     import { logger } from '../../../compile/prebundle-pkg';
     import { logRequest as logRequest2 } from '../logger.mjs';
@@ -235,6 +267,8 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     export { Router } from 'express';
     export * from '../../compile/prebundle-pkg';
     export type { Bar } from './types.mjs';
+    export * from './a.b/index.mjs';
+    export * from './bar.baz.mjs';
     export * from './foo/index.mjs';
     export * from './types.mjs';
     ",
@@ -251,6 +285,8 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     export { Router } from 'express';
     export * from '../../compile/prebundle-pkg';
     export type { Bar } from './types.js';
+    export * from './a.b/index.js';
+    export * from './bar.baz.js';
     export * from './foo/index.js';
     export * from './types.js';
     ",

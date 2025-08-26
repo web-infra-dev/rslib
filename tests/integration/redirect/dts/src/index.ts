@@ -21,5 +21,7 @@ export type { Foo } from '@src/types';
 export { Router } from 'express';
 export * from 'prebundle-pkg';
 export type { Bar } from 'types';
+export * from './a.b';
+export * from './bar.baz';
 export * from './foo';
 export * from './types';
