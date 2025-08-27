@@ -718,6 +718,10 @@ const composeFormatConfig = ({
             },
             optimization: {
               nodeEnv: process.env.NODE_ENV,
+              splitChunks: {
+                // sync chunk of umd can not be loaded without mounting on scripts
+                chunks: 'async',
+              },
             },
             plugins,
           },
