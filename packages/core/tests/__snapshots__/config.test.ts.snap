@@ -2201,7 +2201,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   optimization: {
     minimize: true,
-    splitChunks: false,
+    splitChunks: {
+      chunks: 'async'
+    },
     minimizer: [
       /* config.optimization.minimizer('js') */
       new SwcJsMinimizerRspackPlugin(
@@ -4154,6 +4156,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
             "optimization": {
               "nodeEnv": undefined,
+              "splitChunks": {
+                "chunks": "async",
+              },
             },
             "output": {
               "asyncChunks": false,
