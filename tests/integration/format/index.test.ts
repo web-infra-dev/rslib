@@ -136,3 +136,14 @@ test("API plugin's api should be skipped in parser", async () => {
   expect(entries.cjs).toContain('const e = require.include;');
   expect(entries.cjs).toContain('const f = require.onError;');
 });
+
+test('ESM interop should be correct', async () => {
+  const fixturePath = path.resolve(__dirname, 'esm-interop');
+  const { entryFiles } = await buildAndGetResults({
+    fixturePath,
+  });
+
+  const cjsOutput = await import(entryFiles.cjs);
+  expect(typeof cjsOutput.default.path1.basename).toBe('function');
+  expect(cjsOutput.default.path1).toBe(cjsOutput.default.path2);
+});

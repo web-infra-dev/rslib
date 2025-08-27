@@ -1,5 +1,6 @@
 import { join } from 'node:path';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+import { inspect } from '@rslib/core';
 import { describe, expect, rs, test } from '@rstest/core';
 import {
   composeCreateRsbuildConfig,
@@ -209,6 +210,12 @@ describe('Should compose create Rsbuild config correctly', () => {
     };
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
     expect(composedRsbuildConfig).toMatchSnapshot();
+
+    const rsbuildInstance = await inspect(rslibConfig);
+    const { rsbuildConfig, bundlerConfigs } =
+      await rsbuildInstance.inspectConfig();
+    expect(rsbuildConfig).toMatchSnapshot('inspected Rsbuild configs');
+    expect(bundlerConfigs).toMatchSnapshot('inspected Rspack configs');
   });
 });
 

@@ -4,4 +4,5 @@ import { shared } from '../../rstest.workspace';
 export default defineConfig({
   ...shared,
   name: 'unit',
+  setupFiles: ['./setupRstestTests.ts'],
 });

@@ -1,5 +1,3443 @@
 // Rstest Snapshot v1
 
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rsbuild configs 1`] = `
+"{
+  dev: {
+    hmr: true,
+    liveReload: true,
+    watchFiles: [
+      {
+        paths: [
+          '<WORKSPACE>/tsconfig.json'
+        ],
+        type: 'reload-server'
+      }
+    ],
+    assetPrefix: '/',
+    writeToDisk: false,
+    cliShortcuts: false,
+    client: {
+      path: '/rsbuild-hmr',
+      port: '',
+      host: '',
+      overlay: true,
+      reconnect: 100
+    },
+    lazyCompilation: {
+      imports: true,
+      entries: false
+    }
+  },
+  server: {
+    port: 3000,
+    host: '0.0.0.0',
+    open: false,
+    base: '/',
+    htmlFallback: 'index',
+    compress: true,
+    printUrls: true,
+    strictPort: false,
+    cors: {
+      origin: /^https?:\\/\\/(?:(?:[^:]+\\.)?localhost|127\\.0\\.0\\.1|\\[::1\\])(?::\\d+)?$/
+    },
+    middlewareMode: false
+  },
+  html: {
+    meta: {
+      charset: {
+        charset: 'UTF-8'
+      },
+      viewport: 'width=device-width, initial-scale=1.0'
+    },
+    title: 'Rsbuild App',
+    inject: 'head',
+    mountId: 'root',
+    crossorigin: false,
+    outputStructure: 'flat',
+    scriptLoading: 'defer'
+  },
+  resolve: {
+    alias: {
+      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers'
+    },
+    aliasStrategy: 'prefer-tsconfig',
+    extensions: [
+      '.ts',
+      '.tsx',
+      '.mjs',
+      '.js',
+      '.jsx',
+      '.json'
+    ]
+  },
+  source: {
+    define: {},
+    preEntry: [],
+    decorators: {
+      version: '2022-03'
+    },
+    tsconfigPath: '<WORKSPACE>/tsconfig.json'
+  },
+  output: {
+    target: 'web',
+    cleanDistPath: 'auto',
+    distPath: {
+      root: 'dist',
+      css: 'static/css',
+      svg: 'static/svg',
+      font: 'static/font',
+      html: './',
+      wasm: 'static/wasm',
+      image: 'static/image',
+      media: 'static/media',
+      assets: 'static/assets',
+      favicon: './'
+    },
+    assetPrefix: '/',
+    filename: {},
+    charset: 'utf8',
+    polyfill: 'off',
+    dataUriLimit: {
+      svg: 4096,
+      font: 4096,
+      image: 4096,
+      media: 4096,
+      assets: 4096
+    },
+    legalComments: 'linked',
+    injectStyles: false,
+    minify: true,
+    module: false,
+    manifest: false,
+    sourceMap: {
+      js: undefined,
+      css: false
+    },
+    filenameHash: true,
+    inlineScripts: false,
+    inlineStyles: false,
+    cssModules: {
+      auto: true,
+      namedExport: false,
+      exportGlobals: false,
+      exportLocalsConvention: 'camelCase'
+    },
+    emitAssets: true
+  },
+  tools: {
+    cssExtract: {
+      loaderOptions: {},
+      pluginOptions: {
+        ignoreOrder: true
+      }
+    }
+  },
+  security: {
+    nonce: '',
+    sri: {
+      enable: false
+    }
+  },
+  performance: {
+    profile: false,
+    printFileSize: true,
+    removeConsole: false,
+    removeMomentLocale: false,
+    chunkSplit: {
+      strategy: 'split-by-experience'
+    }
+  },
+  mode: 'production',
+  root: '<WORKSPACE>',
+  plugins: [
+    {
+      name: 'rsbuild:basic',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:entry',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:cache',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:target',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:output',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:resolve',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:file-size',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:clean-output',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:asset',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:html',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:app-icon',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:wasm',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:moment',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:node-addons',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:define',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:css',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:minimize',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:progress',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:swc',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:esm',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:externals',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:split-chunks',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:inline-chunk',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:rsdoctor',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:resource-hints',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:performance',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:bundle-analyzer',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:server',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:manifest',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:module-federation',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:rspack-profile',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:lazy-compilation',
+      apply: 'serve',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:sri',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:nonce',
+      setup() {}
+    }
+  ]
+}"
+`;
+
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack configs 1`] = `
+[
+  "{
+  target: [
+    'es2022',
+    'node'
+  ],
+  name: 'esm',
+  devtool: false,
+  context: '<WORKSPACE>',
+  mode: 'production',
+  infrastructureLogging: {
+    level: 'error'
+  },
+  watchOptions: {
+    aggregateTimeout: 0
+  },
+  experiments: {
+    lazyBarrel: true,
+    inlineEnum: true,
+    typeReexportsPresence: true,
+    rspackFuture: {
+      bundlerInfo: {
+        force: false
+      }
+    },
+    asyncWebAssembly: true,
+    outputModule: true
+  },
+  externals: [
+    function () { /* omitted long function */ },
+    /^@rsbuild\\/core($|\\/|\\\\)/,
+    /^rsbuild-plugin-dts($|\\/|\\\\)/,
+    /^tinyglobby($|\\/|\\\\)/,
+    /^@microsoft\\/api-extractor($|\\/|\\\\)/,
+    /^typescript($|\\/|\\\\)/,
+    '@rsbuild/core',
+    'rsbuild-plugin-dts',
+    'tinyglobby',
+    '@microsoft/api-extractor',
+    'typescript',
+    'assert',
+    'assert/strict',
+    'async_hooks',
+    'buffer',
+    'child_process',
+    'cluster',
+    'console',
+    'constants',
+    'crypto',
+    'dgram',
+    'diagnostics_channel',
+    'dns',
+    'dns/promises',
+    'domain',
+    'events',
+    'fs',
+    'fs/promises',
+    'http',
+    'http2',
+    'https',
+    'inspector',
+    'inspector/promises',
+    'module',
+    'net',
+    'os',
+    'path',
+    'path/posix',
+    'path/win32',
+    'perf_hooks',
+    'process',
+    'punycode',
+    'querystring',
+    'readline',
+    'readline/promises',
+    'repl',
+    'stream',
+    'stream/consumers',
+    'stream/promises',
+    'stream/web',
+    'string_decoder',
+    'sys',
+    'timers',
+    'timers/promises',
+    'tls',
+    'trace_events',
+    'tty',
+    'url',
+    'util',
+    'util/types',
+    'v8',
+    'vm',
+    'wasi',
+    'worker_threads',
+    'zlib',
+    /^node:/,
+    'pnpapi'
+  ],
+  output: {
+    path: '<WORKSPACE>/dist',
+    filename: '[name].js',
+    chunkFilename: '[name].js',
+    publicPath: 'auto',
+    pathinfo: false,
+    hashFunction: 'xxhash64',
+    library: {
+      type: 'modern-module'
+    },
+    assetModuleFilename: 'static/assets/[name][ext]',
+    webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
+    module: true,
+    chunkFormat: 'module',
+    chunkLoading: 'import',
+    workerChunkLoading: 'import'
+  },
+  resolve: {
+    tsConfig: {
+      configFile: '<WORKSPACE>/tsconfig.json',
+      references: 'auto'
+    },
+    alias: {
+      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers',
+      foo: 'foo/esm',
+      bar: 'bar'
+    },
+    extensionAlias: {
+      '.js': [
+        '.js',
+        '.ts',
+        '.tsx',
+        '.ts',
+        '.tsx',
+        '.js',
+        '.jsx',
+        '.ts',
+        '.tsx'
+      ],
+      '.jsx': [
+        '.jsx',
+        '.tsx',
+        '.tsx',
+        '.jsx'
+      ],
+      '.mjs': [
+        '.mts',
+        '.mjs'
+      ],
+      '.cjs': [
+        '.cts',
+        '.cjs'
+      ]
+    },
+    extensions: [
+      '.ts',
+      '.tsx',
+      '.mjs',
+      '.js',
+      '.jsx',
+      '.json'
+    ]
+  },
+  module: {
+    parser: {
+      javascript: {
+        exportsPresence: 'error',
+        typeReexportsPresence: 'tolerant',
+        importMeta: false,
+        importDynamic: false,
+        requireResolve: false,
+        requireDynamic: false,
+        requireAsExpression: false,
+        worker: false
+      }
+    },
+    rules: [
+      /* config.module.rule('mjs') */
+      {
+        test: /\\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      /* config.module.rule('css') */
+      {
+        test: /\\.css$/,
+        type: 'javascript/auto',
+        dependency: {
+          not: 'url'
+        },
+        resourceQuery: {
+          not: [
+            /[?&]raw(?:&|=|$)/,
+            /[?&]inline(?:&|=|$)/
+          ]
+        },
+        sideEffects: true,
+        use: [
+          /* config.module.rule('css').use('ignore-css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+          },
+          /* config.module.rule('css').use('css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+            options: {
+              importLoaders: 0,
+              modules: {
+                auto: true,
+                namedExport: false,
+                exportGlobals: false,
+                exportLocalsConvention: 'camelCase',
+                localIdentName: '[local]-[hash:base64:6]',
+                exportOnlyLocals: true
+              },
+              sourceMap: false
+            }
+          }
+        ],
+        resolve: {
+          preferRelative: true
+        }
+      },
+      /* config.module.rule('css-inline') */
+      {
+        test: /\\.css$/,
+        type: 'javascript/auto',
+        resourceQuery: /[?&]inline(?:&|=|$)/,
+        sideEffects: true,
+        use: [
+          /* config.module.rule('css-inline').use('css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+            options: {
+              importLoaders: 0,
+              modules: false,
+              sourceMap: false,
+              exportType: 'string'
+            }
+          }
+        ],
+        resolve: {
+          preferRelative: true
+        }
+      },
+      /* config.module.rule('css-raw') */
+      {
+        test: /\\.css$/,
+        type: 'asset/source',
+        resourceQuery: /[?&]raw(?:&|=|$)/
+      },
+      /* config.module.rule('js') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        dependency: {
+          not: 'url'
+        },
+        resourceQuery: {
+          not: /[?&]raw(?:&|=|$)/
+        },
+        parser: {
+          url: false
+        },
+        include: [
+          {
+            not: /[\\\\/]node_modules[\\\\/]/
+          },
+          /\\.(?:ts|tsx|jsx|mts|cts)$/
+        ],
+        use: [
+          /* config.module.rule('js').use('swc') */
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              jsc: {
+                externalHelpers: false,
+                parser: {
+                  tsx: false,
+                  syntax: 'typescript',
+                  decorators: true
+                },
+                experimental: {
+                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                  keepImportAttributes: true
+                },
+                output: {
+                  charset: 'utf8'
+                },
+                transform: {
+                  legacyDecorator: false,
+                  decoratorVersion: '2022-03'
+                }
+              },
+              isModule: 'unknown',
+              env: {
+                targets: [
+                  'last 1 node versions'
+                ]
+              },
+              rspackExperiments: {
+                collectTypeScriptInfo: {
+                  typeExports: true,
+                  exportedEnum: true
+                }
+              }
+            }
+          }
+        ]
+      },
+      /* config.module.rule('js-raw') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        type: 'asset/source',
+        resourceQuery: /[?&]raw(?:&|=|$)/
+      },
+      /* config.module.rule('js-data-uri') */
+      {
+        mimetype: {
+          or: [
+            'text/javascript',
+            'application/javascript'
+          ]
+        },
+        use: [
+          /* config.module.rule('js-data-uri').use('swc') */
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              jsc: {
+                externalHelpers: false,
+                parser: {
+                  tsx: false,
+                  syntax: 'typescript',
+                  decorators: true
+                },
+                experimental: {
+                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                  keepImportAttributes: true
+                },
+                output: {
+                  charset: 'utf8'
+                },
+                transform: {
+                  legacyDecorator: false,
+                  decoratorVersion: '2022-03'
+                }
+              },
+              isModule: 'unknown',
+              env: {
+                targets: [
+                  'last 1 node versions'
+                ]
+              },
+              rspackExperiments: {
+                collectTypeScriptInfo: {
+                  typeExports: true,
+                  exportedEnum: true
+                }
+              }
+            }
+          }
+        ],
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      /* config.module.rule('image') */
+      {
+        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur)$/i,
+        oneOf: [
+          /* config.module.rule('image').oneOf('image-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/image/[name][ext]'
+            }
+          },
+          /* config.module.rule('image').oneOf('image-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('image').oneOf('image-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('image').oneOf('image-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/image/[name][ext]',
+              importMode: 'preserve'
+            },
+            issuer: {
+              not: /\\.(css|sass|scss|less|styl|stylus)$/
+            }
+          },
+          /* config.module.rule('image').oneOf('image-asset-for-css') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/image/[name][ext]'
+            },
+            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
+          }
+        ]
+      },
+      /* config.module.rule('svg') */
+      {
+        test: /\\.svg$/i,
+        oneOf: [
+          /* config.module.rule('svg').oneOf('svg-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/svg/[name].svg'
+            }
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/svg/[name].svg',
+              importMode: 'preserve'
+            },
+            issuer: {
+              not: /\\.(css|sass|scss|less|styl|stylus)$/
+            }
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-for-css') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/svg/[name].svg'
+            },
+            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
+          },
+          /* config.module.rule('svg').oneOf('svg') */
+          {}
+        ]
+      },
+      /* config.module.rule('media') */
+      {
+        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+        oneOf: [
+          /* config.module.rule('media').oneOf('media-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/media/[name][ext]'
+            }
+          },
+          /* config.module.rule('media').oneOf('media-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('media').oneOf('media-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('media').oneOf('media-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/media/[name][ext]',
+              importMode: 'preserve'
+            },
+            issuer: {
+              not: /\\.(css|sass|scss|less|styl|stylus)$/
+            }
+          },
+          /* config.module.rule('media').oneOf('media-asset-for-css') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/media/[name][ext]'
+            },
+            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
+          }
+        ]
+      },
+      /* config.module.rule('font') */
+      {
+        test: /\\.(?:woff|woff2|eot|ttf|otf|ttc)$/i,
+        oneOf: [
+          /* config.module.rule('font').oneOf('font-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/font/[name][ext]'
+            }
+          },
+          /* config.module.rule('font').oneOf('font-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('font').oneOf('font-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('font').oneOf('font-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/font/[name][ext]',
+              importMode: 'preserve'
+            },
+            issuer: {
+              not: /\\.(css|sass|scss|less|styl|stylus)$/
+            }
+          },
+          /* config.module.rule('font').oneOf('font-asset-for-css') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/font/[name][ext]'
+            },
+            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
+          }
+        ]
+      },
+      /* config.module.rule('wasm') */
+      {
+        test: /\\.wasm$/,
+        dependency: 'url',
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/wasm/[contenthash:8].module.wasm'
+        }
+      },
+      /* config.module.rule('rsbuild-transform-0') */
+      {
+        test: /\\.node$/,
+        use: [
+          /* config.module.rule('rsbuild-transform-0').use('rsbuild-transform-0') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
+            options: {
+              id: 'rsbuild-transform-0',
+              getEnvironment: ()=>environment
+            }
+          }
+        ]
+      },
+      /* config.module.rule('Rslib:js-entry-loader') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        issuer: /^$/,
+        use: [
+          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
+          {
+            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
+          }
+        ]
+      }
+    ]
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      chunks: 'async'
+    },
+    minimizer: [
+      /* config.optimization.minimizer('js') */
+      new SwcJsMinimizerRspackPlugin(
+        {
+          minimizerOptions: {
+            format: {
+              asciiOnly: false,
+              comments: 'some',
+              preserve_annotations: true
+            },
+            mangle: false,
+            minify: false,
+            compress: {
+              defaults: false,
+              unused: true,
+              dead_code: true,
+              toplevel: true
+            }
+          },
+          extractComments: true
+        }
+      )
+    ],
+    moduleIds: 'named',
+    nodeEnv: false,
+    concatenateModules: true,
+    sideEffects: 'flag',
+    avoidEntryIife: true
+  },
+  plugins: [
+    /* config.plugin('RsbuildCorePlugin') */
+    {},
+    /* config.plugin('define') */
+    new DefinePlugin(
+      {
+        'import.meta.env.MODE': '"production"',
+        'import.meta.env.DEV': false,
+        'import.meta.env.PROD': true,
+        'import.meta.env.BASE_URL': '"/"',
+        'import.meta.env.ASSET_PREFIX': '"auto"',
+        'process.env.BASE_URL': '"/"',
+        'process.env.ASSET_PREFIX': '"auto"'
+      }
+    ),
+    {
+      affectedHooks: undefined,
+      name: 'RslibPlugin',
+      _args: [
+        {
+          interceptApiPlugin: true
+        }
+      ]
+    },
+    {
+      reactDirectives: {},
+      shimsInjectedAssets: new Set([]),
+      shebangChmod: 493,
+      shebangEntries: {},
+      shebangInjectedAssets: new Set([]),
+      enabledImportMetaUrlShim: false,
+      contextToWatch: null
+    }
+  ],
+  performance: {
+    hints: false
+  },
+  entry: {
+    index: [
+      './b.js',
+      '<WORKSPACE>/src/index.ts'
+    ]
+  },
+  node: {
+    __dirname: false,
+    __filename: false
+  },
+  externalsType: 'module-import'
+}",
+  "{
+  target: [
+    'es2022',
+    'node'
+  ],
+  name: 'cjs',
+  devtool: false,
+  context: '<WORKSPACE>',
+  mode: 'production',
+  infrastructureLogging: {
+    level: 'error'
+  },
+  watchOptions: {
+    aggregateTimeout: 0
+  },
+  experiments: {
+    lazyBarrel: true,
+    inlineEnum: true,
+    typeReexportsPresence: true,
+    rspackFuture: {
+      bundlerInfo: {
+        force: false
+      }
+    },
+    asyncWebAssembly: true
+  },
+  externals: [
+    /^@rsbuild\\/core($|\\/|\\\\)/,
+    /^rsbuild-plugin-dts($|\\/|\\\\)/,
+    /^tinyglobby($|\\/|\\\\)/,
+    /^@microsoft\\/api-extractor($|\\/|\\\\)/,
+    /^typescript($|\\/|\\\\)/,
+    '@rsbuild/core',
+    'rsbuild-plugin-dts',
+    'tinyglobby',
+    '@microsoft/api-extractor',
+    'typescript',
+    'assert',
+    'assert/strict',
+    'async_hooks',
+    'buffer',
+    'child_process',
+    'cluster',
+    'console',
+    'constants',
+    'crypto',
+    'dgram',
+    'diagnostics_channel',
+    'dns',
+    'dns/promises',
+    'domain',
+    'events',
+    'fs',
+    'fs/promises',
+    'http',
+    'http2',
+    'https',
+    'inspector',
+    'inspector/promises',
+    'module',
+    'net',
+    'os',
+    'path',
+    'path/posix',
+    'path/win32',
+    'perf_hooks',
+    'process',
+    'punycode',
+    'querystring',
+    'readline',
+    'readline/promises',
+    'repl',
+    'stream',
+    'stream/consumers',
+    'stream/promises',
+    'stream/web',
+    'string_decoder',
+    'sys',
+    'timers',
+    'timers/promises',
+    'tls',
+    'trace_events',
+    'tty',
+    'url',
+    'util',
+    'util/types',
+    'v8',
+    'vm',
+    'wasi',
+    'worker_threads',
+    'zlib',
+    /^node:/,
+    'pnpapi'
+  ],
+  output: {
+    path: '<WORKSPACE>/dist',
+    filename: '[name].cjs',
+    chunkFilename: '[name].cjs',
+    publicPath: 'auto',
+    pathinfo: false,
+    hashFunction: 'xxhash64',
+    library: {
+      type: 'commonjs-static'
+    },
+    assetModuleFilename: 'static/assets/[name][ext]',
+    webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
+    iife: false,
+    chunkFormat: 'commonjs',
+    chunkLoading: 'require',
+    workerChunkLoading: 'async-node'
+  },
+  resolve: {
+    tsConfig: {
+      configFile: '<WORKSPACE>/tsconfig.json',
+      references: 'auto'
+    },
+    alias: {
+      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers',
+      foo: 'foo',
+      bar: 'bar/cjs'
+    },
+    extensionAlias: {
+      '.js': [
+        '.js',
+        '.ts',
+        '.tsx',
+        '.ts',
+        '.tsx',
+        '.js',
+        '.jsx',
+        '.ts',
+        '.tsx'
+      ],
+      '.jsx': [
+        '.jsx',
+        '.tsx',
+        '.tsx',
+        '.jsx'
+      ],
+      '.mjs': [
+        '.mts',
+        '.mjs'
+      ],
+      '.cjs': [
+        '.cts',
+        '.cjs'
+      ]
+    },
+    extensions: [
+      '.ts',
+      '.tsx',
+      '.mjs',
+      '.js',
+      '.jsx',
+      '.json'
+    ]
+  },
+  module: {
+    parser: {
+      javascript: {
+        exportsPresence: 'error',
+        typeReexportsPresence: 'tolerant',
+        importMeta: false,
+        importDynamic: false,
+        requireResolve: false,
+        requireDynamic: false,
+        requireAsExpression: false,
+        worker: false
+      }
+    },
+    rules: [
+      /* config.module.rule('mjs') */
+      {
+        test: /\\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      /* config.module.rule('css') */
+      {
+        test: /\\.css$/,
+        type: 'javascript/auto',
+        dependency: {
+          not: 'url'
+        },
+        resourceQuery: {
+          not: [
+            /[?&]raw(?:&|=|$)/,
+            /[?&]inline(?:&|=|$)/
+          ]
+        },
+        sideEffects: true,
+        use: [
+          /* config.module.rule('css').use('ignore-css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+          },
+          /* config.module.rule('css').use('css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+            options: {
+              importLoaders: 0,
+              modules: {
+                auto: true,
+                namedExport: false,
+                exportGlobals: false,
+                exportLocalsConvention: 'camelCase',
+                localIdentName: '[local]-[hash:base64:6]',
+                exportOnlyLocals: true
+              },
+              sourceMap: false
+            }
+          }
+        ],
+        resolve: {
+          preferRelative: true
+        }
+      },
+      /* config.module.rule('css-inline') */
+      {
+        test: /\\.css$/,
+        type: 'javascript/auto',
+        resourceQuery: /[?&]inline(?:&|=|$)/,
+        sideEffects: true,
+        use: [
+          /* config.module.rule('css-inline').use('css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+            options: {
+              importLoaders: 0,
+              modules: false,
+              sourceMap: false,
+              exportType: 'string'
+            }
+          }
+        ],
+        resolve: {
+          preferRelative: true
+        }
+      },
+      /* config.module.rule('css-raw') */
+      {
+        test: /\\.css$/,
+        type: 'asset/source',
+        resourceQuery: /[?&]raw(?:&|=|$)/
+      },
+      /* config.module.rule('js') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        dependency: {
+          not: 'url'
+        },
+        resourceQuery: {
+          not: /[?&]raw(?:&|=|$)/
+        },
+        parser: {
+          url: false
+        },
+        include: [
+          {
+            not: /[\\\\/]node_modules[\\\\/]/
+          },
+          /\\.(?:ts|tsx|jsx|mts|cts)$/
+        ],
+        use: [
+          /* config.module.rule('js').use('swc') */
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              jsc: {
+                externalHelpers: false,
+                parser: {
+                  tsx: false,
+                  syntax: 'typescript',
+                  decorators: true
+                },
+                experimental: {
+                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                  keepImportAttributes: true
+                },
+                output: {
+                  charset: 'utf8'
+                },
+                transform: {
+                  legacyDecorator: false,
+                  decoratorVersion: '2022-03'
+                }
+              },
+              isModule: 'unknown',
+              env: {
+                targets: [
+                  'last 1 node versions'
+                ]
+              },
+              rspackExperiments: {
+                collectTypeScriptInfo: {
+                  typeExports: true,
+                  exportedEnum: true
+                }
+              }
+            }
+          }
+        ]
+      },
+      /* config.module.rule('js-raw') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        type: 'asset/source',
+        resourceQuery: /[?&]raw(?:&|=|$)/
+      },
+      /* config.module.rule('js-data-uri') */
+      {
+        mimetype: {
+          or: [
+            'text/javascript',
+            'application/javascript'
+          ]
+        },
+        use: [
+          /* config.module.rule('js-data-uri').use('swc') */
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              jsc: {
+                externalHelpers: false,
+                parser: {
+                  tsx: false,
+                  syntax: 'typescript',
+                  decorators: true
+                },
+                experimental: {
+                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                  keepImportAttributes: true
+                },
+                output: {
+                  charset: 'utf8'
+                },
+                transform: {
+                  legacyDecorator: false,
+                  decoratorVersion: '2022-03'
+                }
+              },
+              isModule: 'unknown',
+              env: {
+                targets: [
+                  'last 1 node versions'
+                ]
+              },
+              rspackExperiments: {
+                collectTypeScriptInfo: {
+                  typeExports: true,
+                  exportedEnum: true
+                }
+              }
+            }
+          }
+        ],
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      /* config.module.rule('image') */
+      {
+        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur)$/i,
+        oneOf: [
+          /* config.module.rule('image').oneOf('image-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/image/[name][ext]'
+            }
+          },
+          /* config.module.rule('image').oneOf('image-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('image').oneOf('image-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('image').oneOf('image-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/image/[name][ext]',
+              importMode: 'preserve'
+            },
+            issuer: {
+              not: /\\.(css|sass|scss|less|styl|stylus)$/
+            }
+          },
+          /* config.module.rule('image').oneOf('image-asset-for-css') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/image/[name][ext]'
+            },
+            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
+          }
+        ]
+      },
+      /* config.module.rule('svg') */
+      {
+        test: /\\.svg$/i,
+        oneOf: [
+          /* config.module.rule('svg').oneOf('svg-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/svg/[name].svg'
+            }
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/svg/[name].svg',
+              importMode: 'preserve'
+            },
+            issuer: {
+              not: /\\.(css|sass|scss|less|styl|stylus)$/
+            }
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-for-css') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/svg/[name].svg'
+            },
+            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
+          },
+          /* config.module.rule('svg').oneOf('svg') */
+          {}
+        ]
+      },
+      /* config.module.rule('media') */
+      {
+        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+        oneOf: [
+          /* config.module.rule('media').oneOf('media-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/media/[name][ext]'
+            }
+          },
+          /* config.module.rule('media').oneOf('media-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('media').oneOf('media-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('media').oneOf('media-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/media/[name][ext]',
+              importMode: 'preserve'
+            },
+            issuer: {
+              not: /\\.(css|sass|scss|less|styl|stylus)$/
+            }
+          },
+          /* config.module.rule('media').oneOf('media-asset-for-css') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/media/[name][ext]'
+            },
+            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
+          }
+        ]
+      },
+      /* config.module.rule('font') */
+      {
+        test: /\\.(?:woff|woff2|eot|ttf|otf|ttc)$/i,
+        oneOf: [
+          /* config.module.rule('font').oneOf('font-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/font/[name][ext]'
+            }
+          },
+          /* config.module.rule('font').oneOf('font-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('font').oneOf('font-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('font').oneOf('font-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/font/[name][ext]',
+              importMode: 'preserve'
+            },
+            issuer: {
+              not: /\\.(css|sass|scss|less|styl|stylus)$/
+            }
+          },
+          /* config.module.rule('font').oneOf('font-asset-for-css') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/font/[name][ext]'
+            },
+            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
+          }
+        ]
+      },
+      /* config.module.rule('wasm') */
+      {
+        test: /\\.wasm$/,
+        dependency: 'url',
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/wasm/[contenthash:8].module.wasm'
+        }
+      },
+      /* config.module.rule('rsbuild-transform-0') */
+      {
+        test: /\\.node$/,
+        use: [
+          /* config.module.rule('rsbuild-transform-0').use('rsbuild-transform-0') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
+            options: {
+              id: 'rsbuild-transform-0',
+              getEnvironment: ()=>environment
+            }
+          }
+        ]
+      },
+      /* config.module.rule('Rslib:js-entry-loader') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        issuer: /^$/,
+        use: [
+          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
+          {
+            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
+          }
+        ]
+      }
+    ]
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      chunks: 'async'
+    },
+    minimizer: [
+      /* config.optimization.minimizer('js') */
+      new SwcJsMinimizerRspackPlugin(
+        {
+          minimizerOptions: {
+            format: {
+              asciiOnly: false,
+              comments: 'some',
+              preserve_annotations: true
+            },
+            mangle: false,
+            minify: false,
+            compress: {
+              defaults: false,
+              unused: true,
+              dead_code: true,
+              toplevel: true
+            }
+          },
+          extractComments: true
+        }
+      )
+    ],
+    moduleIds: 'named',
+    nodeEnv: false
+  },
+  plugins: [
+    /* config.plugin('RsbuildCorePlugin') */
+    {},
+    /* config.plugin('define') */
+    new DefinePlugin(
+      {
+        'import.meta.env.MODE': '"production"',
+        'import.meta.env.DEV': false,
+        'import.meta.env.PROD': true,
+        'import.meta.env.BASE_URL': '"/"',
+        'import.meta.env.ASSET_PREFIX': '"auto"',
+        'process.env.BASE_URL': '"/"',
+        'process.env.ASSET_PREFIX': '"auto"',
+        'import.meta.url': '__rslib_import_meta_url__'
+      }
+    ),
+    {
+      affectedHooks: undefined,
+      name: 'RslibPlugin',
+      _args: [
+        {
+          interceptApiPlugin: true
+        }
+      ]
+    },
+    {
+      reactDirectives: {},
+      shimsInjectedAssets: new Set([]),
+      shebangChmod: 493,
+      shebangEntries: {},
+      shebangInjectedAssets: new Set([]),
+      enabledImportMetaUrlShim: true,
+      contextToWatch: null
+    }
+  ],
+  performance: {
+    hints: false
+  },
+  entry: {
+    index: [
+      './a.js',
+      './c.js',
+      './d.js',
+      '<WORKSPACE>/src/index.ts'
+    ]
+  },
+  externalsType: 'commonjs-import'
+}",
+  "{
+  target: [
+    'es2022',
+    'node'
+  ],
+  name: 'umd',
+  devtool: false,
+  context: '<WORKSPACE>',
+  mode: 'production',
+  infrastructureLogging: {
+    level: 'error'
+  },
+  watchOptions: {
+    aggregateTimeout: 0
+  },
+  experiments: {
+    lazyBarrel: true,
+    inlineEnum: true,
+    typeReexportsPresence: true,
+    rspackFuture: {
+      bundlerInfo: {
+        force: false
+      }
+    },
+    asyncWebAssembly: true
+  },
+  externals: [
+    'assert',
+    'assert/strict',
+    'async_hooks',
+    'buffer',
+    'child_process',
+    'cluster',
+    'console',
+    'constants',
+    'crypto',
+    'dgram',
+    'diagnostics_channel',
+    'dns',
+    'dns/promises',
+    'domain',
+    'events',
+    'fs',
+    'fs/promises',
+    'http',
+    'http2',
+    'https',
+    'inspector',
+    'inspector/promises',
+    'module',
+    'net',
+    'os',
+    'path',
+    'path/posix',
+    'path/win32',
+    'perf_hooks',
+    'process',
+    'punycode',
+    'querystring',
+    'readline',
+    'readline/promises',
+    'repl',
+    'stream',
+    'stream/consumers',
+    'stream/promises',
+    'stream/web',
+    'string_decoder',
+    'sys',
+    'timers',
+    'timers/promises',
+    'tls',
+    'trace_events',
+    'tty',
+    'url',
+    'util',
+    'util/types',
+    'v8',
+    'vm',
+    'wasi',
+    'worker_threads',
+    'zlib',
+    /^node:/,
+    'pnpapi'
+  ],
+  output: {
+    path: '<WORKSPACE>/dist',
+    filename: '[name].js',
+    chunkFilename: '[name].js',
+    publicPath: '/',
+    pathinfo: false,
+    hashFunction: 'xxhash64',
+    library: {
+      type: 'umd'
+    },
+    assetModuleFilename: 'static/assets/[name][ext]',
+    webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
+    asyncChunks: false
+  },
+  resolve: {
+    tsConfig: {
+      configFile: '<WORKSPACE>/tsconfig.json',
+      references: 'auto'
+    },
+    alias: {
+      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers',
+      foo: 'foo',
+      bar: 'bar'
+    },
+    extensionAlias: {
+      '.js': [
+        '.js',
+        '.ts',
+        '.tsx',
+        '.ts',
+        '.tsx',
+        '.js',
+        '.jsx',
+        '.ts',
+        '.tsx'
+      ],
+      '.jsx': [
+        '.jsx',
+        '.tsx',
+        '.tsx',
+        '.jsx'
+      ],
+      '.mjs': [
+        '.mts',
+        '.mjs'
+      ],
+      '.cjs': [
+        '.cts',
+        '.cjs'
+      ]
+    },
+    extensions: [
+      '.ts',
+      '.tsx',
+      '.mjs',
+      '.js',
+      '.jsx',
+      '.json'
+    ]
+  },
+  module: {
+    parser: {
+      javascript: {
+        exportsPresence: 'error',
+        typeReexportsPresence: 'tolerant',
+        importMeta: false
+      }
+    },
+    rules: [
+      /* config.module.rule('mjs') */
+      {
+        test: /\\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      /* config.module.rule('css') */
+      {
+        test: /\\.css$/,
+        type: 'javascript/auto',
+        dependency: {
+          not: 'url'
+        },
+        resourceQuery: {
+          not: [
+            /[?&]raw(?:&|=|$)/,
+            /[?&]inline(?:&|=|$)/
+          ]
+        },
+        sideEffects: true,
+        use: [
+          /* config.module.rule('css').use('ignore-css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+          },
+          /* config.module.rule('css').use('css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+            options: {
+              importLoaders: 0,
+              modules: {
+                auto: true,
+                namedExport: false,
+                exportGlobals: false,
+                exportLocalsConvention: 'camelCase',
+                localIdentName: '[local]-[hash:base64:6]',
+                exportOnlyLocals: true
+              },
+              sourceMap: false
+            }
+          }
+        ],
+        resolve: {
+          preferRelative: true
+        }
+      },
+      /* config.module.rule('css-inline') */
+      {
+        test: /\\.css$/,
+        type: 'javascript/auto',
+        resourceQuery: /[?&]inline(?:&|=|$)/,
+        sideEffects: true,
+        use: [
+          /* config.module.rule('css-inline').use('css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+            options: {
+              importLoaders: 0,
+              modules: false,
+              sourceMap: false,
+              exportType: 'string'
+            }
+          }
+        ],
+        resolve: {
+          preferRelative: true
+        }
+      },
+      /* config.module.rule('css-raw') */
+      {
+        test: /\\.css$/,
+        type: 'asset/source',
+        resourceQuery: /[?&]raw(?:&|=|$)/
+      },
+      /* config.module.rule('js') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        dependency: {
+          not: 'url'
+        },
+        resourceQuery: {
+          not: /[?&]raw(?:&|=|$)/
+        },
+        include: [
+          {
+            not: /[\\\\/]node_modules[\\\\/]/
+          },
+          /\\.(?:ts|tsx|jsx|mts|cts)$/
+        ],
+        use: [
+          /* config.module.rule('js').use('swc') */
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              jsc: {
+                externalHelpers: false,
+                parser: {
+                  tsx: false,
+                  syntax: 'typescript',
+                  decorators: true
+                },
+                experimental: {
+                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                  keepImportAttributes: true
+                },
+                output: {
+                  charset: 'utf8'
+                },
+                transform: {
+                  legacyDecorator: false,
+                  decoratorVersion: '2022-03'
+                }
+              },
+              isModule: 'unknown',
+              env: {
+                targets: [
+                  'last 1 node versions'
+                ]
+              },
+              rspackExperiments: {
+                collectTypeScriptInfo: {
+                  typeExports: true,
+                  exportedEnum: true
+                }
+              }
+            }
+          }
+        ]
+      },
+      /* config.module.rule('js-raw') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        type: 'asset/source',
+        resourceQuery: /[?&]raw(?:&|=|$)/
+      },
+      /* config.module.rule('js-data-uri') */
+      {
+        mimetype: {
+          or: [
+            'text/javascript',
+            'application/javascript'
+          ]
+        },
+        use: [
+          /* config.module.rule('js-data-uri').use('swc') */
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              jsc: {
+                externalHelpers: false,
+                parser: {
+                  tsx: false,
+                  syntax: 'typescript',
+                  decorators: true
+                },
+                experimental: {
+                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                  keepImportAttributes: true
+                },
+                output: {
+                  charset: 'utf8'
+                },
+                transform: {
+                  legacyDecorator: false,
+                  decoratorVersion: '2022-03'
+                }
+              },
+              isModule: 'unknown',
+              env: {
+                targets: [
+                  'last 1 node versions'
+                ]
+              },
+              rspackExperiments: {
+                collectTypeScriptInfo: {
+                  typeExports: true,
+                  exportedEnum: true
+                }
+              }
+            }
+          }
+        ],
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      /* config.module.rule('image') */
+      {
+        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur)$/i,
+        oneOf: [
+          /* config.module.rule('image').oneOf('image-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/image/[name][ext]'
+            }
+          },
+          /* config.module.rule('image').oneOf('image-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('image').oneOf('image-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('image').oneOf('image-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/image/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('svg') */
+      {
+        test: /\\.svg$/i,
+        oneOf: [
+          /* config.module.rule('svg').oneOf('svg-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/svg/[name].svg'
+            }
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/svg/[name].svg'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('media') */
+      {
+        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+        oneOf: [
+          /* config.module.rule('media').oneOf('media-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/media/[name][ext]'
+            }
+          },
+          /* config.module.rule('media').oneOf('media-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('media').oneOf('media-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('media').oneOf('media-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/media/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('font') */
+      {
+        test: /\\.(?:woff|woff2|eot|ttf|otf|ttc)$/i,
+        oneOf: [
+          /* config.module.rule('font').oneOf('font-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/font/[name][ext]'
+            }
+          },
+          /* config.module.rule('font').oneOf('font-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('font').oneOf('font-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('font').oneOf('font-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/font/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('wasm') */
+      {
+        test: /\\.wasm$/,
+        dependency: 'url',
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/wasm/[contenthash:8].module.wasm'
+        }
+      },
+      /* config.module.rule('rsbuild-transform-0') */
+      {
+        test: /\\.node$/,
+        use: [
+          /* config.module.rule('rsbuild-transform-0').use('rsbuild-transform-0') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
+            options: {
+              id: 'rsbuild-transform-0',
+              getEnvironment: ()=>environment
+            }
+          }
+        ]
+      },
+      /* config.module.rule('Rslib:js-entry-loader') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        issuer: /^$/,
+        use: [
+          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
+          {
+            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
+          }
+        ]
+      }
+    ]
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: false,
+    minimizer: [
+      /* config.optimization.minimizer('js') */
+      new SwcJsMinimizerRspackPlugin(
+        {
+          minimizerOptions: {
+            format: {
+              asciiOnly: false,
+              comments: 'some',
+              preserve_annotations: true
+            },
+            mangle: false,
+            minify: false,
+            compress: {
+              defaults: false,
+              unused: true,
+              dead_code: true,
+              toplevel: true
+            }
+          },
+          extractComments: true
+        }
+      )
+    ],
+    moduleIds: 'named',
+    nodeEnv: false
+  },
+  plugins: [
+    /* config.plugin('RsbuildCorePlugin') */
+    {},
+    /* config.plugin('define') */
+    new DefinePlugin(
+      {
+        'import.meta.env.MODE': '"production"',
+        'import.meta.env.DEV': false,
+        'import.meta.env.PROD': true,
+        'import.meta.env.BASE_URL': '"/"',
+        'import.meta.env.ASSET_PREFIX': '""',
+        'process.env.BASE_URL': '"/"',
+        'process.env.ASSET_PREFIX': '""'
+      }
+    ),
+    {
+      affectedHooks: undefined,
+      name: 'RslibPlugin',
+      _args: [
+        {
+          interceptApiPlugin: true
+        }
+      ]
+    },
+    {
+      reactDirectives: {},
+      shimsInjectedAssets: new Set([]),
+      shebangChmod: 493,
+      shebangEntries: {},
+      shebangInjectedAssets: new Set([]),
+      enabledImportMetaUrlShim: false,
+      contextToWatch: null
+    }
+  ],
+  performance: {
+    hints: false
+  },
+  entry: {
+    index: [
+      './a.js',
+      '<WORKSPACE>/src/index.ts'
+    ]
+  },
+  externalsType: 'umd'
+}",
+  "{
+  target: [
+    'es2022',
+    'node'
+  ],
+  name: 'iife',
+  devtool: false,
+  context: '<WORKSPACE>',
+  mode: 'production',
+  infrastructureLogging: {
+    level: 'error'
+  },
+  watchOptions: {
+    aggregateTimeout: 0
+  },
+  experiments: {
+    lazyBarrel: true,
+    inlineEnum: true,
+    typeReexportsPresence: true,
+    rspackFuture: {
+      bundlerInfo: {
+        force: false
+      }
+    },
+    asyncWebAssembly: true
+  },
+  externals: [
+    'assert',
+    'assert/strict',
+    'async_hooks',
+    'buffer',
+    'child_process',
+    'cluster',
+    'console',
+    'constants',
+    'crypto',
+    'dgram',
+    'diagnostics_channel',
+    'dns',
+    'dns/promises',
+    'domain',
+    'events',
+    'fs',
+    'fs/promises',
+    'http',
+    'http2',
+    'https',
+    'inspector',
+    'inspector/promises',
+    'module',
+    'net',
+    'os',
+    'path',
+    'path/posix',
+    'path/win32',
+    'perf_hooks',
+    'process',
+    'punycode',
+    'querystring',
+    'readline',
+    'readline/promises',
+    'repl',
+    'stream',
+    'stream/consumers',
+    'stream/promises',
+    'stream/web',
+    'string_decoder',
+    'sys',
+    'timers',
+    'timers/promises',
+    'tls',
+    'trace_events',
+    'tty',
+    'url',
+    'util',
+    'util/types',
+    'v8',
+    'vm',
+    'wasi',
+    'worker_threads',
+    'zlib',
+    /^node:/,
+    'pnpapi'
+  ],
+  output: {
+    path: '<WORKSPACE>/dist',
+    filename: '[name].js',
+    chunkFilename: '[name].js',
+    publicPath: '/',
+    pathinfo: false,
+    hashFunction: 'xxhash64',
+    library: {
+      type: 'modern-module'
+    },
+    assetModuleFilename: 'static/assets/[name][ext]',
+    webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
+    iife: true,
+    asyncChunks: false,
+    globalObject: 'globalThis'
+  },
+  resolve: {
+    tsConfig: {
+      configFile: '<WORKSPACE>/tsconfig.json',
+      references: 'auto'
+    },
+    alias: {
+      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers',
+      foo: 'foo',
+      bar: 'bar'
+    },
+    extensionAlias: {
+      '.js': [
+        '.js',
+        '.ts',
+        '.tsx',
+        '.ts',
+        '.tsx',
+        '.js',
+        '.jsx',
+        '.ts',
+        '.tsx'
+      ],
+      '.jsx': [
+        '.jsx',
+        '.tsx',
+        '.tsx',
+        '.jsx'
+      ],
+      '.mjs': [
+        '.mts',
+        '.mjs'
+      ],
+      '.cjs': [
+        '.cts',
+        '.cjs'
+      ]
+    },
+    extensions: [
+      '.ts',
+      '.tsx',
+      '.mjs',
+      '.js',
+      '.jsx',
+      '.json'
+    ]
+  },
+  module: {
+    parser: {
+      javascript: {
+        exportsPresence: 'error',
+        typeReexportsPresence: 'tolerant',
+        importMeta: false
+      }
+    },
+    rules: [
+      /* config.module.rule('mjs') */
+      {
+        test: /\\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      /* config.module.rule('css') */
+      {
+        test: /\\.css$/,
+        type: 'javascript/auto',
+        dependency: {
+          not: 'url'
+        },
+        resourceQuery: {
+          not: [
+            /[?&]raw(?:&|=|$)/,
+            /[?&]inline(?:&|=|$)/
+          ]
+        },
+        sideEffects: true,
+        use: [
+          /* config.module.rule('css').use('ignore-css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+          },
+          /* config.module.rule('css').use('css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+            options: {
+              importLoaders: 0,
+              modules: {
+                auto: true,
+                namedExport: false,
+                exportGlobals: false,
+                exportLocalsConvention: 'camelCase',
+                localIdentName: '[local]-[hash:base64:6]',
+                exportOnlyLocals: true
+              },
+              sourceMap: false
+            }
+          }
+        ],
+        resolve: {
+          preferRelative: true
+        }
+      },
+      /* config.module.rule('css-inline') */
+      {
+        test: /\\.css$/,
+        type: 'javascript/auto',
+        resourceQuery: /[?&]inline(?:&|=|$)/,
+        sideEffects: true,
+        use: [
+          /* config.module.rule('css-inline').use('css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+            options: {
+              importLoaders: 0,
+              modules: false,
+              sourceMap: false,
+              exportType: 'string'
+            }
+          }
+        ],
+        resolve: {
+          preferRelative: true
+        }
+      },
+      /* config.module.rule('css-raw') */
+      {
+        test: /\\.css$/,
+        type: 'asset/source',
+        resourceQuery: /[?&]raw(?:&|=|$)/
+      },
+      /* config.module.rule('js') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        dependency: {
+          not: 'url'
+        },
+        resourceQuery: {
+          not: /[?&]raw(?:&|=|$)/
+        },
+        include: [
+          {
+            not: /[\\\\/]node_modules[\\\\/]/
+          },
+          /\\.(?:ts|tsx|jsx|mts|cts)$/
+        ],
+        use: [
+          /* config.module.rule('js').use('swc') */
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              jsc: {
+                externalHelpers: false,
+                parser: {
+                  tsx: false,
+                  syntax: 'typescript',
+                  decorators: true
+                },
+                experimental: {
+                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                  keepImportAttributes: true
+                },
+                output: {
+                  charset: 'utf8'
+                },
+                transform: {
+                  legacyDecorator: false,
+                  decoratorVersion: '2022-03'
+                }
+              },
+              isModule: 'unknown',
+              env: {
+                targets: [
+                  'last 1 node versions'
+                ]
+              },
+              rspackExperiments: {
+                collectTypeScriptInfo: {
+                  typeExports: true,
+                  exportedEnum: true
+                }
+              }
+            }
+          }
+        ]
+      },
+      /* config.module.rule('js-raw') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        type: 'asset/source',
+        resourceQuery: /[?&]raw(?:&|=|$)/
+      },
+      /* config.module.rule('js-data-uri') */
+      {
+        mimetype: {
+          or: [
+            'text/javascript',
+            'application/javascript'
+          ]
+        },
+        use: [
+          /* config.module.rule('js-data-uri').use('swc') */
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              jsc: {
+                externalHelpers: false,
+                parser: {
+                  tsx: false,
+                  syntax: 'typescript',
+                  decorators: true
+                },
+                experimental: {
+                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                  keepImportAttributes: true
+                },
+                output: {
+                  charset: 'utf8'
+                },
+                transform: {
+                  legacyDecorator: false,
+                  decoratorVersion: '2022-03'
+                }
+              },
+              isModule: 'unknown',
+              env: {
+                targets: [
+                  'last 1 node versions'
+                ]
+              },
+              rspackExperiments: {
+                collectTypeScriptInfo: {
+                  typeExports: true,
+                  exportedEnum: true
+                }
+              }
+            }
+          }
+        ],
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      /* config.module.rule('image') */
+      {
+        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur)$/i,
+        oneOf: [
+          /* config.module.rule('image').oneOf('image-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/image/[name][ext]'
+            }
+          },
+          /* config.module.rule('image').oneOf('image-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('image').oneOf('image-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('image').oneOf('image-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/image/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('svg') */
+      {
+        test: /\\.svg$/i,
+        oneOf: [
+          /* config.module.rule('svg').oneOf('svg-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/svg/[name].svg'
+            }
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/svg/[name].svg'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('media') */
+      {
+        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+        oneOf: [
+          /* config.module.rule('media').oneOf('media-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/media/[name][ext]'
+            }
+          },
+          /* config.module.rule('media').oneOf('media-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('media').oneOf('media-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('media').oneOf('media-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/media/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('font') */
+      {
+        test: /\\.(?:woff|woff2|eot|ttf|otf|ttc)$/i,
+        oneOf: [
+          /* config.module.rule('font').oneOf('font-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/font/[name][ext]'
+            }
+          },
+          /* config.module.rule('font').oneOf('font-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('font').oneOf('font-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('font').oneOf('font-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/font/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('wasm') */
+      {
+        test: /\\.wasm$/,
+        dependency: 'url',
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/wasm/[contenthash:8].module.wasm'
+        }
+      },
+      /* config.module.rule('rsbuild-transform-0') */
+      {
+        test: /\\.node$/,
+        use: [
+          /* config.module.rule('rsbuild-transform-0').use('rsbuild-transform-0') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
+            options: {
+              id: 'rsbuild-transform-0',
+              getEnvironment: ()=>environment
+            }
+          }
+        ]
+      },
+      /* config.module.rule('Rslib:js-entry-loader') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        issuer: /^$/,
+        use: [
+          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
+          {
+            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
+          }
+        ]
+      }
+    ]
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: false,
+    minimizer: [
+      /* config.optimization.minimizer('js') */
+      new SwcJsMinimizerRspackPlugin(
+        {
+          minimizerOptions: {
+            format: {
+              asciiOnly: false,
+              comments: 'some',
+              preserve_annotations: true
+            },
+            module: true,
+            mangle: false,
+            minify: false,
+            compress: {
+              defaults: false,
+              unused: true,
+              dead_code: true,
+              toplevel: true
+            }
+          },
+          extractComments: true
+        }
+      )
+    ],
+    moduleIds: 'named',
+    nodeEnv: false
+  },
+  plugins: [
+    /* config.plugin('RsbuildCorePlugin') */
+    {},
+    /* config.plugin('define') */
+    new DefinePlugin(
+      {
+        'import.meta.env.MODE': '"production"',
+        'import.meta.env.DEV': false,
+        'import.meta.env.PROD': true,
+        'import.meta.env.BASE_URL': '"/"',
+        'import.meta.env.ASSET_PREFIX': '""',
+        'process.env.BASE_URL': '"/"',
+        'process.env.ASSET_PREFIX': '""'
+      }
+    ),
+    {
+      affectedHooks: undefined,
+      name: 'RslibPlugin',
+      _args: [
+        {
+          interceptApiPlugin: true
+        }
+      ]
+    },
+    {
+      reactDirectives: {},
+      shimsInjectedAssets: new Set([]),
+      shebangChmod: 493,
+      shebangEntries: {},
+      shebangInjectedAssets: new Set([]),
+      enabledImportMetaUrlShim: false,
+      contextToWatch: null
+    }
+  ],
+  performance: {
+    hints: false
+  },
+  entry: {
+    index: [
+      './a.js',
+      '<WORKSPACE>/src/index.ts'
+    ]
+  },
+  externalsType: 'global'
+}",
+  "{
+  target: [
+    'es2022',
+    'web'
+  ],
+  name: 'mf',
+  devtool: false,
+  context: '<WORKSPACE>',
+  mode: 'production',
+  infrastructureLogging: {
+    level: 'error'
+  },
+  watchOptions: {
+    aggregateTimeout: 0
+  },
+  experiments: {
+    lazyBarrel: true,
+    inlineEnum: true,
+    typeReexportsPresence: true,
+    rspackFuture: {
+      bundlerInfo: {
+        force: false
+      }
+    },
+    asyncWebAssembly: true
+  },
+  output: {
+    path: '<WORKSPACE>/dist',
+    filename: '[name].js',
+    chunkFilename: '[name].js',
+    publicPath: '/',
+    pathinfo: false,
+    hashFunction: 'xxhash64',
+    assetModuleFilename: 'static/assets/[name][ext]',
+    webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
+    uniqueName: '@rslib/core'
+  },
+  resolve: {
+    tsConfig: {
+      configFile: '<WORKSPACE>/tsconfig.json',
+      references: 'auto'
+    },
+    alias: {
+      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers',
+      foo: 'foo',
+      bar: 'bar'
+    },
+    extensionAlias: {
+      '.js': [
+        '.js',
+        '.ts',
+        '.tsx',
+        '.ts',
+        '.tsx',
+        '.js',
+        '.jsx',
+        '.ts',
+        '.tsx'
+      ],
+      '.jsx': [
+        '.jsx',
+        '.tsx',
+        '.tsx',
+        '.jsx'
+      ],
+      '.mjs': [
+        '.mts',
+        '.mjs'
+      ],
+      '.cjs': [
+        '.cts',
+        '.cjs'
+      ]
+    },
+    extensions: [
+      '.ts',
+      '.tsx',
+      '.mjs',
+      '.js',
+      '.jsx',
+      '.json'
+    ]
+  },
+  module: {
+    parser: {
+      javascript: {
+        exportsPresence: 'error',
+        typeReexportsPresence: 'tolerant'
+      }
+    },
+    rules: [
+      /* config.module.rule('mjs') */
+      {
+        test: /\\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      /* config.module.rule('css') */
+      {
+        test: /\\.css$/,
+        type: 'javascript/auto',
+        dependency: {
+          not: 'url'
+        },
+        resourceQuery: {
+          not: [
+            /[?&]raw(?:&|=|$)/,
+            /[?&]inline(?:&|=|$)/
+          ]
+        },
+        sideEffects: true,
+        use: [
+          /* config.module.rule('css').use('mini-css-extract') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rspack/core/dist/cssExtractLoader.js'
+          },
+          /* config.module.rule('css').use('css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+            options: {
+              importLoaders: 1,
+              modules: {
+                auto: true,
+                namedExport: false,
+                exportGlobals: false,
+                exportLocalsConvention: 'camelCase',
+                localIdentName: '[local]-[hash:base64:6]'
+              },
+              sourceMap: false
+            }
+          },
+          /* config.module.rule('css').use('lightningcss') */
+          {
+            loader: 'builtin:lightningcss-loader',
+            options: {
+              targets: [
+                'last 1 Chrome versions',
+                'last 1 Firefox versions',
+                'last 1 Edge versions',
+                'last 1 Safari versions',
+                'last 1 ios_saf versions',
+                'not dead'
+              ],
+              errorRecovery: true
+            }
+          }
+        ],
+        resolve: {
+          preferRelative: true
+        }
+      },
+      /* config.module.rule('css-inline') */
+      {
+        test: /\\.css$/,
+        type: 'javascript/auto',
+        resourceQuery: /[?&]inline(?:&|=|$)/,
+        sideEffects: true,
+        use: [
+          /* config.module.rule('css-inline').use('css') */
+          {
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+            options: {
+              importLoaders: 1,
+              modules: false,
+              sourceMap: false,
+              exportType: 'string'
+            }
+          },
+          /* config.module.rule('css-inline').use('lightningcss') */
+          {
+            loader: 'builtin:lightningcss-loader',
+            options: {
+              targets: [
+                'last 1 Chrome versions',
+                'last 1 Firefox versions',
+                'last 1 Edge versions',
+                'last 1 Safari versions',
+                'last 1 ios_saf versions',
+                'not dead'
+              ],
+              errorRecovery: true
+            }
+          }
+        ],
+        resolve: {
+          preferRelative: true
+        }
+      },
+      /* config.module.rule('css-raw') */
+      {
+        test: /\\.css$/,
+        type: 'asset/source',
+        resourceQuery: /[?&]raw(?:&|=|$)/
+      },
+      /* config.module.rule('js') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        dependency: {
+          not: 'url'
+        },
+        resourceQuery: {
+          not: /[?&]raw(?:&|=|$)/
+        },
+        include: [
+          {
+            not: /[\\\\/]node_modules[\\\\/]/
+          },
+          /\\.(?:ts|tsx|jsx|mts|cts)$/,
+          /@module-federation\\/webpack-bundler-runtime/,
+          /@module-federation\\/runtime/,
+          /@module-federation\\/runtime-core/,
+          /@module-federation\\/sdk/
+        ],
+        use: [
+          /* config.module.rule('js').use('swc') */
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              jsc: {
+                externalHelpers: false,
+                parser: {
+                  tsx: false,
+                  syntax: 'typescript',
+                  decorators: true
+                },
+                experimental: {
+                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                  keepImportAttributes: true
+                },
+                output: {
+                  charset: 'utf8'
+                },
+                transform: {
+                  legacyDecorator: false,
+                  decoratorVersion: '2022-03'
+                }
+              },
+              isModule: 'unknown',
+              env: {
+                targets: [
+                  'last 1 Chrome versions',
+                  'last 1 Firefox versions',
+                  'last 1 Edge versions',
+                  'last 1 Safari versions',
+                  'last 1 ios_saf versions',
+                  'not dead'
+                ],
+                mode: undefined
+              },
+              rspackExperiments: {
+                collectTypeScriptInfo: {
+                  typeExports: true,
+                  exportedEnum: true
+                }
+              }
+            }
+          }
+        ]
+      },
+      /* config.module.rule('js-raw') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        type: 'asset/source',
+        resourceQuery: /[?&]raw(?:&|=|$)/
+      },
+      /* config.module.rule('js-data-uri') */
+      {
+        mimetype: {
+          or: [
+            'text/javascript',
+            'application/javascript'
+          ]
+        },
+        use: [
+          /* config.module.rule('js-data-uri').use('swc') */
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              jsc: {
+                externalHelpers: false,
+                parser: {
+                  tsx: false,
+                  syntax: 'typescript',
+                  decorators: true
+                },
+                experimental: {
+                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                  keepImportAttributes: true
+                },
+                output: {
+                  charset: 'utf8'
+                },
+                transform: {
+                  legacyDecorator: false,
+                  decoratorVersion: '2022-03'
+                }
+              },
+              isModule: 'unknown',
+              env: {
+                targets: [
+                  'last 1 Chrome versions',
+                  'last 1 Firefox versions',
+                  'last 1 Edge versions',
+                  'last 1 Safari versions',
+                  'last 1 ios_saf versions',
+                  'not dead'
+                ],
+                mode: undefined
+              },
+              rspackExperiments: {
+                collectTypeScriptInfo: {
+                  typeExports: true,
+                  exportedEnum: true
+                }
+              }
+            }
+          }
+        ],
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      /* config.module.rule('image') */
+      {
+        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur)$/i,
+        oneOf: [
+          /* config.module.rule('image').oneOf('image-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/image/[name][ext]'
+            }
+          },
+          /* config.module.rule('image').oneOf('image-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('image').oneOf('image-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('image').oneOf('image-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/image/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('svg') */
+      {
+        test: /\\.svg$/i,
+        oneOf: [
+          /* config.module.rule('svg').oneOf('svg-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/svg/[name].svg'
+            }
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/svg/[name].svg'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('media') */
+      {
+        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+        oneOf: [
+          /* config.module.rule('media').oneOf('media-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/media/[name][ext]'
+            }
+          },
+          /* config.module.rule('media').oneOf('media-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('media').oneOf('media-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('media').oneOf('media-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/media/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('font') */
+      {
+        test: /\\.(?:woff|woff2|eot|ttf|otf|ttc)$/i,
+        oneOf: [
+          /* config.module.rule('font').oneOf('font-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /^\\?(__inline=false|url)$/,
+            generator: {
+              filename: 'static/font/[name][ext]'
+            }
+          },
+          /* config.module.rule('font').oneOf('font-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('font').oneOf('font-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('font').oneOf('font-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/font/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('wasm') */
+      {
+        test: /\\.wasm$/,
+        dependency: 'url',
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/wasm/[contenthash:8].module.wasm'
+        }
+      },
+      /* config.module.rule('Rslib:js-entry-loader') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        issuer: /^$/,
+        use: [
+          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
+          {
+            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
+          }
+        ]
+      }
+    ]
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {}
+    },
+    minimizer: [
+      /* config.optimization.minimizer('js') */
+      new SwcJsMinimizerRspackPlugin(
+        {
+          minimizerOptions: {
+            format: {
+              asciiOnly: false,
+              comments: 'some',
+              preserve_annotations: true
+            },
+            mangle: false,
+            minify: true,
+            compress: {
+              defaults: false,
+              unused: true,
+              dead_code: true,
+              toplevel: false
+            }
+          },
+          extractComments: true
+        }
+      )
+    ],
+    moduleIds: 'named',
+    nodeEnv: 'development'
+  },
+  plugins: [
+    /* config.plugin('mini-css-extract') */
+    new CssExtractRspackPlugin(
+      {
+        filename: '[name].css',
+        chunkFilename: '[name].css',
+        ignoreOrder: true
+      }
+    ),
+    /* config.plugin('RsbuildCorePlugin') */
+    {},
+    /* config.plugin('define') */
+    new DefinePlugin(
+      {
+        'import.meta.env.MODE': '"production"',
+        'import.meta.env.DEV': false,
+        'import.meta.env.PROD': true,
+        'import.meta.env.BASE_URL': '"/"',
+        'import.meta.env.ASSET_PREFIX': '""',
+        'process.env.BASE_URL': '"/"',
+        'process.env.ASSET_PREFIX': '""'
+      }
+    ),
+    {
+      reactDirectives: {},
+      shimsInjectedAssets: new Set([]),
+      shebangChmod: 493,
+      shebangEntries: {},
+      shebangInjectedAssets: new Set([]),
+      enabledImportMetaUrlShim: false,
+      contextToWatch: null
+    }
+  ],
+  performance: {
+    hints: false
+  },
+  entry: {
+    index: [
+      './a.js',
+      '<WORKSPACE>/src/index.ts'
+    ]
+  },
+  externalsType: 'global'
+}",
+]
+`;
+
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format 1`] = `
 [
   {
@@ -119,6 +3557,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "plugins": [
         {
           "name": "rsbuild:disable-url-parse",
+          "setup": [Function],
+        },
+        {
+          "name": "rsbuild:fix-js-module-type",
           "setup": [Function],
         },
         {
@@ -395,6 +3837,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           "setup": [Function],
         },
         {
+          "name": "rsbuild:fix-js-module-type",
+          "setup": [Function],
+        },
+        {
           "name": "rsbuild:lib-asset",
           "pre": [
             "rsbuild:svgr",
@@ -642,6 +4088,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       "plugins": [
         {
+          "name": "rsbuild:fix-js-module-type",
+          "setup": [Function],
+        },
+        {
           "name": "rsbuild:lib-entry-chunk",
           "setup": [Function],
         },
@@ -703,7 +4153,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               },
             },
             "optimization": {
-              "nodeEnv": "test",
+              "nodeEnv": undefined,
             },
             "output": {
               "asyncChunks": false,
@@ -869,6 +4319,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       "plugins": [
         {
+          "name": "rsbuild:fix-js-module-type",
+          "setup": [Function],
+        },
+        {
           "name": "rsbuild:lib-entry-chunk",
           "setup": [Function],
         },
@@ -930,7 +4384,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               },
             },
             "optimization": {
-              "nodeEnv": "test",
+              "nodeEnv": undefined,
             },
             "output": {
               "asyncChunks": false,
@@ -1048,6 +4502,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
       },
       "plugins": [
+        {
+          "name": "rsbuild:fix-js-module-type",
+          "setup": [Function],
+        },
         {
           "name": "rsbuild:lib-entry-chunk",
           "setup": [Function],
