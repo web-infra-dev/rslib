@@ -818,6 +818,16 @@ const disableUrlParseRsbuildPlugin = (): RsbuildPlugin => ({
   },
 });
 
+// Port https://github.com/web-infra-dev/rsbuild/pull/5955 before it merged into Rsbuild.
+const fixJsModuleTypePlugin = (): RsbuildPlugin => ({
+  name: 'rsbuild:fix-js-module-type',
+  setup(api) {
+    api.modifyBundlerChain((config, { CHAIN_ID }) => {
+      config.module.rule(CHAIN_ID.RULE.JS).delete('type');
+    });
+  },
+});
+
 const composeShimsConfig = (
   format: Format,
   shims?: Shims,
@@ -866,6 +876,7 @@ const composeShimsConfig = (
         plugins: [
           resolvedShims.esm.require && pluginEsmRequireShim(),
           disableUrlParseRsbuildPlugin(),
+          fixJsModuleTypePlugin(),
         ].filter(Boolean),
       };
       break;
@@ -875,12 +886,16 @@ const composeShimsConfig = (
         plugins: [
           resolvedShims.cjs['import.meta.url'] && pluginCjsImportMetaUrlShim(),
           disableUrlParseRsbuildPlugin(),
+          fixJsModuleTypePlugin(),
         ].filter(Boolean),
       };
       break;
     case 'umd':
     case 'iife':
     case 'mf':
+      rsbuildConfig = {
+        plugins: [fixJsModuleTypePlugin()],
+      };
       break;
     default:
       throw new Error(`Unsupported format: ${format}`);
