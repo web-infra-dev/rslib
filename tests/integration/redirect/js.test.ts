@@ -53,11 +53,11 @@ test('redirect.js.path false', async () => {
     import { bar } from "@/bar";
     import { foo } from "@/foo";
     import { baz } from "~/baz";
-    import { bar as external_bar_js_bar } from "./bar.js";
+    import { bar as index_js_bar } from "./bar/index.js";
     import { foo as external_foo_js_foo } from "./foo.js";
     export * from "./.hidden.js";
-    export * from "./.hidden-folder.js";
-    const src = lodash.toUpper(lodash_merge(external_foo_js_foo) + external_bar_js_bar + foo + bar + baz + typeof prettier.version);
+    export * from "./.hidden-folder/index.js";
+    const src = lodash.toUpper(lodash_merge(external_foo_js_foo) + index_js_bar + foo + bar + baz + typeof prettier.version);
     export { src as default };
     "
   `);
