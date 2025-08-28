@@ -21,9 +21,7 @@ test('basic', async () => {
     ]
   `);
 
-  const { path: esmIndexPath } = queryContent(contents.esm, 'index.js', {
-    basename: true,
-  });
+  const { path: esmIndexPath } = queryContent(contents.esm, /esm\/index\.js/);
 
   expect(await import(esmIndexPath)).toMatchInlineSnapshot(`
     {
@@ -43,9 +41,10 @@ test('basic', async () => {
     }
   `);
 
-  const { content: indexContent } = queryContent(contents.esm, 'index.js', {
-    basename: true,
-  });
+  const { content: indexContent } = queryContent(
+    contents.esm,
+    /esm\/index\.js/,
+  );
   const { content: depContent } = queryContent(contents.esm, 'dep.js', {
     basename: true,
   });
@@ -94,9 +93,7 @@ test('basic', async () => {
     ]
   `);
 
-  const { path: cjsIndexPath } = queryContent(contents.cjs, 'index.cjs', {
-    basename: true,
-  });
+  const { path: cjsIndexPath } = queryContent(contents.cjs, /cjs\/index\.cjs/);
 
   expect((await import(cjsIndexPath)).default).toMatchInlineSnapshot(`
     {
