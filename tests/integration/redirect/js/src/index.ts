@@ -12,6 +12,9 @@ import { baz } from '~/baz';
 import { bar } from './bar';
 import { foo } from './foo';
 
+export * from './.hidden';
+export * from './.hidden-folder';
+
 export default lodash.toUpper(
   merge(foo) + bar + foo2 + bar2 + baz + typeof prettier.version,
 );

@@ -1209,6 +1209,7 @@ const composeEntryConfig = async (
       const globEntryFiles = await glob(entryFiles, {
         cwd: root,
         absolute: true,
+        dot: true,
       });
 
       // Filter the glob resolved entry files based on the allowed extensions
@@ -1347,7 +1348,11 @@ const composeBundlelessExternalConfig = (
                   // Requests that fall through here cannot be matched by any other externals config ahead.
                   // Treat all these requests as relative import of source code. Node.js won't add the
                   // leading './' to the relative path resolved by `path.relative`. So add manually it here.
-                  if (resolvedRequest[0] !== '.') {
+                  // should include dot files like '.hidden.ts'
+                  if (
+                    !resolvedRequest.startsWith('./') &&
+                    !resolvedRequest.startsWith('../')
+                  ) {
                     resolvedRequest = `./${resolvedRequest}`;
                   }
                   return resolvedRequest;

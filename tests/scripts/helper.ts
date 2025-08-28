@@ -20,6 +20,7 @@ export const globContentJSON = async (
 ): Promise<Record<string, string>> => {
   const files = await glob(convertPath(join(path, '**/*')), {
     absolute: true,
+    dot: true,
     ...options,
   });
   const ret: Record<string, string> = {};
