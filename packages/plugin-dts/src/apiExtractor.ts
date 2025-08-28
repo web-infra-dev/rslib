@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { join, relative } from 'node:path';
 import type * as ApiExtractor from '@microsoft/api-extractor';
 import { logger } from '@rsbuild/core';
@@ -53,7 +54,15 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
           relative(cwd, distPath),
           `${entry.name}${dtsExtension}`,
         );
-        const mainEntryPointFilePath = entry.path!.replace(/\?.*$/, '');
+
+        const mainEntryPointFilePath = entry.path;
+
+        if (!fs.existsSync(mainEntryPointFilePath)) {
+          throw new Error(
+            `Declaration entry file ${color.underline(entry.path)} not found.\nPlease ensure that your tsconfig file ${color.underline(tsconfigPath)} is correctly configured to generate declaration files. If needed, a custom tsconfig can be specified using the ${color.cyan('source.tsconfigPath')} option.`,
+          );
+        }
+
         const internalConfig = {
           mainEntryPointFilePath,
           bundledPackages,
@@ -106,8 +115,9 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
       }),
     );
   } catch (e) {
+    const message = e instanceof Error ? e.message : e;
     const error = new Error(
-      `${logPrefixApiExtractor} ${e} ${color.dim(`(${name})`)}`,
+      `${logPrefixApiExtractor} ${message} ${color.dim(`(${name})`)}`,
     );
     // do not log the stack trace, it is not helpful for users
     error.stack = '';
