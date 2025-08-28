@@ -246,3 +246,12 @@ const windowsSlashRegex = /\\/g;
 export function normalizeSlash(p: string): string {
   return p.replace(windowsSlashRegex, '/');
 }
+
+export async function isDirectory(filePath: string): Promise<boolean> {
+  try {
+    const stat = await fsP.stat(filePath);
+    return stat.isDirectory();
+  } catch {
+    return false;
+  }
+}

@@ -63,6 +63,7 @@ import {
   calcLongestCommonPath,
   checkMFPlugin,
   getAbsolutePath,
+  isDirectory,
   isEmptyObject,
   isIntermediateOutputFormat,
   isObject,
@@ -1436,6 +1437,19 @@ const composeBundlelessExternalConfig = (
                 } else {
                   // 1. js files hit JS_EXTENSIONS_PATTERN,./foo ->./foo.mjs
                   if (jsRedirectExtension) {
+                    // If the import path refers to a directory,
+                    // it most likely actually refers to a `index.*` file due to Node's module resolution.
+                    // When redirect.js.path is set to false, index should still be added before adding extension.
+                    // When redirect.js.path is true, the resolver directly generate correct resolvedRequest with index appended.
+                    if (
+                      !jsRedirectPath &&
+                      (await isDirectory(
+                        join(dirname(issuer), resolvedRequest),
+                      ))
+                    ) {
+                      // This uses `/` instead of `path.join` here because `join` removes potential "./" prefixes
+                      resolvedRequest = `${resolvedRequest.replace(/\/+$/, '')}/index`;
+                    }
                     resolvedRequest = `${resolvedRequest}${jsExtension}`;
                   }
                 }
