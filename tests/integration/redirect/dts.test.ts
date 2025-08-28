@@ -12,6 +12,10 @@ beforeAll(async () => {
 test('redirect.dts.path: true with redirect.dts.extension: false - default', async () => {
   expect(contents.esm0).toMatchInlineSnapshot(`
     {
+      "<ROOT>/tests/integration/redirect/dts/dist/default/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/default/esm/.hidden.d.ts": "export declare const hidden = "This is a hidden file";
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/default/esm/a.b/index.d.ts": "export declare const ab = "a.b";
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/default/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
@@ -36,6 +40,8 @@ test('redirect.dts.path: true with redirect.dts.extension: false - default', asy
     export { Router } from 'express';
     export * from '../../../compile/prebundle-pkg';
     export type { Bar } from './types';
+    export * from './.hidden';
+    export * from './.hidden-folder';
     export * from './a.b';
     export * from './bar.baz';
     export * from './foo';
@@ -67,6 +73,10 @@ test('redirect.dts.path: true with redirect.dts.extension: false - default', asy
 test('redirect.dts.path: false with redirect.dts.extension: false', async () => {
   expect(contents.esm1).toMatchInlineSnapshot(`
     {
+      "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/.hidden.d.ts": "export declare const hidden = "This is a hidden file";
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/a.b/index.d.ts": "export declare const ab = "a.b";
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
@@ -91,6 +101,8 @@ test('redirect.dts.path: false with redirect.dts.extension: false', async () => 
     export { Router } from 'express';
     export * from 'prebundle-pkg';
     export type { Bar } from 'types';
+    export * from './.hidden';
+    export * from './.hidden-folder';
     export * from './a.b';
     export * from './bar.baz';
     export * from './foo';
@@ -122,6 +134,10 @@ test('redirect.dts.path: false with redirect.dts.extension: false', async () => 
 test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
   expect(contents.esm2).toMatchInlineSnapshot(`
     {
+      "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/.hidden.d.ts": "export declare const hidden = "This is a hidden file";
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/a.b/index.d.ts": "export declare const ab = "a.b";
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
@@ -146,6 +162,8 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
     export { Router } from 'express';
     export * from '../../../compile/prebundle-pkg';
     export type { Bar } from './types.js';
+    export * from './.hidden.js';
+    export * from './.hidden-folder/index.js';
     export * from './a.b/index.js';
     export * from './bar.baz.js';
     export * from './foo/index.js';
@@ -177,6 +195,10 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
 test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
   expect(contents.esm3).toMatchInlineSnapshot(`
     {
+      "<ROOT>/tests/integration/redirect/dts/dist/path-false-extension-true/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/path-false-extension-true/esm/.hidden.d.ts": "export declare const hidden = "This is a hidden file";
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false-extension-true/esm/a.b/index.d.ts": "export declare const ab = "a.b";
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/path-false-extension-true/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
@@ -201,6 +223,8 @@ test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
     export { Router } from 'express';
     export * from 'prebundle-pkg';
     export type { Bar } from 'types';
+    export * from './.hidden.js';
+    export * from './.hidden-folder/index.js';
     export * from './a.b/index.js';
     export * from './bar.baz.js';
     export * from './foo/index.js';
@@ -232,6 +256,14 @@ test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
 test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
   expect(contents.esm4).toMatchInlineSnapshot(`
     {
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/.hidden-folder/index.d.mts": "export declare const hiddenFolder = "This is a hidden folder";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/.hidden.d.mts": "export declare const hidden = "This is a hidden file";
+    ",
+      "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/.hidden.d.ts": "export declare const hidden = "This is a hidden file";
+    ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/a.b/index.d.mts": "export declare const ab = "a.b";
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/a.b/index.d.ts": "export declare const ab = "a.b";
@@ -267,6 +299,8 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     export { Router } from 'express';
     export * from '../../compile/prebundle-pkg';
     export type { Bar } from './types.mjs';
+    export * from './.hidden.mjs';
+    export * from './.hidden-folder/index.mjs';
     export * from './a.b/index.mjs';
     export * from './bar.baz.mjs';
     export * from './foo/index.mjs';
@@ -285,6 +319,8 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     export { Router } from 'express';
     export * from '../../compile/prebundle-pkg';
     export type { Bar } from './types.js';
+    export * from './.hidden.js';
+    export * from './.hidden-folder/index.js';
     export * from './a.b/index.js';
     export * from './bar.baz.js';
     export * from './foo/index.js';

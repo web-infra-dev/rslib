@@ -9,6 +9,8 @@ test('basic', async () => {
   // ESM
   expect(files.esm).toMatchInlineSnapshot(`
     [
+      "<ROOT>/tests/integration/bundle-false/basic/dist/esm/.hidden-folder/index.js",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/esm/.hidden.js",
       "<ROOT>/tests/integration/bundle-false/basic/dist/esm/dep.js",
       "<ROOT>/tests/integration/bundle-false/basic/dist/esm/index.js",
       "<ROOT>/tests/integration/bundle-false/basic/dist/esm/mainFiles1/index.js",
@@ -26,6 +28,8 @@ test('basic', async () => {
   expect(await import(esmIndexPath)).toMatchInlineSnapshot(`
     {
       "added": 3,
+      "hidden": "This is a hidden file",
+      "hiddenFolder": "This is a hidden folder",
       "mainFiles1": "mainFiles1",
       "mainFiles2": "mainFiles2",
       "num1": 1,
@@ -51,6 +55,8 @@ test('basic', async () => {
   expect(indexContent).toMatchInlineSnapshot(`
     "import { mainFiles1 } from "./mainFiles1/index.js";
     import { added } from "./dep.js";
+    export * from "./.hidden.js";
+    export * from "./.hidden-folder/index.js";
     export * from "./mainFiles2/index.js";
     export * from "./sum.js";
     export * from "./utils/numbers.js";
@@ -76,6 +82,8 @@ test('basic', async () => {
   // CJS
   expect(files.cjs).toMatchInlineSnapshot(`
     [
+      "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/.hidden-folder/index.cjs",
+      "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/.hidden.cjs",
       "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/dep.cjs",
       "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/index.cjs",
       "<ROOT>/tests/integration/bundle-false/basic/dist/cjs/mainFiles1/index.cjs",
@@ -93,6 +101,8 @@ test('basic', async () => {
   expect((await import(cjsIndexPath)).default).toMatchInlineSnapshot(`
     {
       "added": 3,
+      "hidden": "This is a hidden file",
+      "hiddenFolder": "This is a hidden folder",
       "mainFiles1": "mainFiles1",
       "mainFiles2": "mainFiles2",
       "num1": 1,

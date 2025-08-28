@@ -26,6 +26,8 @@ test('redirect.js default', async () => {
     import { bar } from "./bar/index.js";
     import { foo } from "./foo.js";
     import { baz } from "./baz.js";
+    export * from "./.hidden.js";
+    export * from "./.hidden-folder/index.js";
     const src = lodash.toUpper(lodash_merge(foo) + bar + foo + bar + baz + typeof prettier.version);
     export { src as default };
     "
@@ -53,6 +55,8 @@ test('redirect.js.path false', async () => {
     import { baz } from "~/baz";
     import { bar as external_bar_js_bar } from "./bar.js";
     import { foo as external_foo_js_foo } from "./foo.js";
+    export * from "./.hidden.js";
+    export * from "./.hidden-folder.js";
     const src = lodash.toUpper(lodash_merge(external_foo_js_foo) + external_bar_js_bar + foo + bar + baz + typeof prettier.version);
     export { src as default };
     "
@@ -78,6 +82,8 @@ test('redirect.js.path with user override externals', async () => {
     import { baz } from "./baz.js";
     import { bar as index_js_bar } from "./bar/index.js";
     import { foo as external_foo_js_foo } from "./foo.js";
+    export * from "./.hidden.js";
+    export * from "./.hidden-folder/index.js";
     const src = lodash.toUpper(lodash_merge(external_foo_js_foo) + index_js_bar + foo + bar + baz + typeof prettier.version);
     export { src as default };
     "
@@ -111,6 +117,8 @@ test('redirect.js.path with user override alias', async () => {
     import { baz } from "./baz.js";
     import { bar as index_js_bar } from "./bar/index.js";
     import { foo as external_foo_js_foo } from "./foo.js";
+    export * from "./.hidden.js";
+    export * from "./.hidden-folder/index.js";
     const src = lodash.toUpper(lodash_merge(external_foo_js_foo) + index_js_bar + foo + bar + baz + typeof prettier.version);
     export { src as default };
     "
@@ -137,6 +145,8 @@ test('redirect.js.extension: false', async () => {
     import { bar } from "./bar/index.ts";
     import { foo } from "./foo.ts";
     import { baz } from "./baz.ts";
+    export * from "./.hidden.ts";
+    export * from "./.hidden-folder/index.ts";
     const src = lodash.toUpper(lodash_merge(foo) + bar + foo + bar + baz + typeof prettier.version);
     export { src as default };
     "

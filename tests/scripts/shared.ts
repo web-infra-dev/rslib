@@ -378,6 +378,9 @@ export function queryContent(
 ): { path: string; content: string } {
   const useBasename = options?.basename ?? false;
   const matched = Object.entries(contents).find(([key]) => {
+    if (key.includes('.hidden')) {
+      return false;
+    }
     const toQueried = useBasename ? basename(key) : key;
     return typeof query === 'string'
       ? toQueried === query
