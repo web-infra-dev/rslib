@@ -1209,6 +1209,7 @@ const composeEntryConfig = async (
       const globEntryFiles = await glob(entryFiles, {
         cwd: root,
         absolute: true,
+        dot: true,
       });
 
       // Filter the glob resolved entry files based on the allowed extensions
