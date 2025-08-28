@@ -47,8 +47,8 @@ export type PluginDtsOptions = {
 };
 
 export type DtsEntry = {
-  name?: string;
-  path?: string;
+  name: string;
+  path: string;
 };
 
 export type DtsGenOptions = Omit<PluginDtsOptions, 'bundle'> & {
