@@ -189,6 +189,7 @@ describe('Should compose create Rsbuild config correctly', () => {
       source: {
         preEntry: './a.js',
       },
+      root: join(__dirname, '..'),
       resolve: {
         alias: {
           foo: 'foo',

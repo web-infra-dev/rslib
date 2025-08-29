@@ -1,5 +1,5 @@
 import { defineConfig } from '@rstest/core';
-import { shared } from '../../rstest.workspace';
+import { shared } from '../../rstest.config';
 
 export default defineConfig({
   ...shared,
