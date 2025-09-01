@@ -544,6 +544,7 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
       chunkSplit: {
         strategy: 'custom',
       },
+      buildCache: true,
     },
     tools: {
       htmlPlugin: false,
