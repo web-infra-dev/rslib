@@ -4,6 +4,8 @@ import { defineConfig } from '@rspress/core';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginRss } from '@rspress/plugin-rss';
+import { pluginSitemap } from '@rspress/plugin-sitemap';
+import { pluginTwoslash } from '@rspress/plugin-twoslash';
 import {
   transformerNotationDiff,
   transformerNotationHighlight,
@@ -11,7 +13,6 @@ import {
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
-import pluginSitemap from 'rspress-plugin-sitemap';
 
 const siteUrl = 'https://rslib.rs';
 const description = 'The Rsbuild-based library development tool';
@@ -21,6 +22,7 @@ export default defineConfig({
     pluginAlgolia(),
     pluginFontOpenSans(),
     pluginLlms(),
+    pluginTwoslash(),
     pluginRss({
       siteUrl,
       feed: [
@@ -47,7 +49,7 @@ export default defineConfig({
       ],
     }),
     pluginSitemap({
-      domain: siteUrl,
+      siteUrl,
     }),
   ],
   root: path.join(__dirname, 'docs'),
@@ -59,7 +61,6 @@ export default defineConfig({
   logo: 'https://assets.rspack.rs/rslib/rslib-logo-192x192.png',
   logoText: 'Rslib',
   markdown: {
-    checkDeadLinks: true,
     shiki: {
       transformers: [transformerNotationHighlight(), transformerNotationDiff()],
     },
@@ -138,9 +139,6 @@ export default defineConfig({
     ],
   },
   builderConfig: {
-    dev: {
-      lazyCompilation: true,
-    },
     resolve: {
       alias: {
         '@components': path.join(__dirname, '@components'),

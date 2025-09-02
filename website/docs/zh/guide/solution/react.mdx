@@ -27,7 +27,7 @@ import { PackageManagerTabs } from '@theme';
 
 例如，在 `rslib.config.ts` 中注册:
 
-```ts title="rslib.config.ts"
+```ts title="rslib.config.ts" twoslash
 import { defineConfig } from '@rslib/core';
 import { pluginReact } from '@rsbuild/plugin-react'; // [!code highlight]
 
@@ -54,7 +54,7 @@ React 引入了一个 [新的 JSX transform](https://legacy.reactjs.org/blog/202
 
 要更改 JSX transform，可以传递 [swcReactOptions](https://rsbuild.rs/zh/plugins/list/plugin-react#swcreactoptionsruntime) 给 React plugin. 比如要使用 classic runtime 时:
 
-```ts title="rslib.config.ts"
+```ts title="rslib.config.ts" twoslash
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
@@ -85,7 +85,7 @@ export default defineConfig({
 
 例如，当使用 [Emotion](https://emotion.sh/)，你可以设置 `importSource` 为 `'@emotion/react'`:
 
-```ts title="rslib.config.ts"
+```ts title="rslib.config.ts" twoslash
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
