@@ -4,6 +4,7 @@ import { defineConfig } from '@rspress/core';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginRss } from '@rspress/plugin-rss';
+import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { pluginTwoslash } from '@rspress/plugin-twoslash';
 import {
   transformerNotationDiff,
@@ -12,7 +13,6 @@ import {
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
-import pluginSitemap from 'rspress-plugin-sitemap';
 
 const siteUrl = 'https://rslib.rs';
 const description = 'The Rsbuild-based library development tool';
@@ -49,7 +49,7 @@ export default defineConfig({
       ],
     }),
     pluginSitemap({
-      domain: siteUrl,
+      siteUrl,
     }),
   ],
   root: path.join(__dirname, 'docs'),

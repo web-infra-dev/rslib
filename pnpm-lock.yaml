@@ -1153,6 +1153,9 @@ importers:
       '@rspress/plugin-rss':
         specifier: 2.0.0-beta.30
         version: 2.0.0-beta.30(@rspress/core@2.0.0-beta.30(@types/react@19.1.12))
+      '@rspress/plugin-sitemap':
+        specifier: 2.0.0-beta.30
+        version: 2.0.0-beta.30(@rspress/core@2.0.0-beta.30(@types/react@19.1.12))
       '@rspress/plugin-twoslash':
         specifier: 2.0.0-beta.30
         version: 2.0.0-beta.30(@rspress/core@2.0.0-beta.30(@types/react@19.1.12))(react@19.1.1)(typescript@5.9.2)
@@ -1186,9 +1189,6 @@ importers:
       rspress-plugin-font-open-sans:
         specifier: 1.0.3
         version: 1.0.3(@rspress/core@2.0.0-beta.30(@types/react@19.1.12))
-      rspress-plugin-sitemap:
-        specifier: ^1.2.1
-        version: 1.2.1
 
 packages:
 
@@ -2796,6 +2796,12 @@ packages:
 
   '@rspress/plugin-rss@2.0.0-beta.30':
     resolution: {integrity: sha512-BU1jvrWotUwycDQFPWYwq1Ms/5W6UFuslxOxSsMPWdPT4I1t8m9E+mV5PIfh0H/sk6Mp/uaaOGoOiAhFuWj1lw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      '@rspress/core': ^2.0.0-beta.30
+
+  '@rspress/plugin-sitemap@2.0.0-beta.30':
+    resolution: {integrity: sha512-h7tPpPWUaqErNVfqqILoxP6xldX1e09+oJc//lCE8i9/6nKjIblul0I1dGl9JlM17YMm6keUKzcSa1CZT5cdgA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@rspress/core': ^2.0.0-beta.30
@@ -6521,9 +6527,6 @@ packages:
     peerDependencies:
       '@rspress/core': ^2.0.0-beta.24 || ^2.0.0
 
-  rspress-plugin-sitemap@1.2.1:
-    resolution: {integrity: sha512-JMf2/SKerX3oiFuNaRAnPJxOtBl5hOF0qupK63Fh9CaTb6Mn440iximV+1V0fd/XeOhHlN0oLJPFUDrrkgkcwg==}
-
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
@@ -9468,6 +9471,10 @@ snapshots:
     dependencies:
       '@rspress/core': 2.0.0-beta.30(@types/react@19.1.12)
       feed: 4.2.2
+
+  '@rspress/plugin-sitemap@2.0.0-beta.30(@rspress/core@2.0.0-beta.30(@types/react@19.1.12))':
+    dependencies:
+      '@rspress/core': 2.0.0-beta.30(@types/react@19.1.12)
 
   '@rspress/plugin-twoslash@2.0.0-beta.30(@rspress/core@2.0.0-beta.30(@types/react@19.1.12))(react@19.1.1)(typescript@5.9.2)':
     dependencies:
@@ -13962,8 +13969,6 @@ snapshots:
   rspress-plugin-font-open-sans@1.0.3(@rspress/core@2.0.0-beta.30(@types/react@19.1.12)):
     dependencies:
       '@rspress/core': 2.0.0-beta.30(@types/react@19.1.12)
-
-  rspress-plugin-sitemap@1.2.1: {}
 
   run-parallel@1.2.0:
     dependencies:
