@@ -4,6 +4,7 @@ import { defineConfig } from '@rspress/core';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginRss } from '@rspress/plugin-rss';
+import { pluginTwoslash } from '@rspress/plugin-twoslash';
 import {
   transformerNotationDiff,
   transformerNotationHighlight,
@@ -21,6 +22,7 @@ export default defineConfig({
     pluginAlgolia(),
     pluginFontOpenSans(),
     pluginLlms(),
+    pluginTwoslash(),
     pluginRss({
       siteUrl,
       feed: [
@@ -59,7 +61,6 @@ export default defineConfig({
   logo: 'https://assets.rspack.rs/rslib/rslib-logo-192x192.png',
   logoText: 'Rslib',
   markdown: {
-    checkDeadLinks: true,
     shiki: {
       transformers: [transformerNotationHighlight(), transformerNotationDiff()],
     },
@@ -138,9 +139,6 @@ export default defineConfig({
     ],
   },
   builderConfig: {
-    dev: {
-      lazyCompilation: true,
-    },
     resolve: {
       alias: {
         '@components': path.join(__dirname, '@components'),

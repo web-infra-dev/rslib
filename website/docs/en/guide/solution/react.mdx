@@ -27,7 +27,7 @@ To compile React (JSX and TSX), you need to register the Rsbuild [React Plugin](
 
 For example, register in `rslib.config.ts`:
 
-```ts title="rslib.config.ts"
+```ts title="rslib.config.ts" twoslash
 import { defineConfig } from '@rslib/core';
 import { pluginReact } from '@rsbuild/plugin-react'; // [!code highlight]
 
@@ -54,7 +54,7 @@ By default, Rsbuild uses the new JSX transform, which is `runtime: 'automatic'`.
 
 To change the JSX transform, you can pass the [swcReactOptions](https://rsbuild.rs/plugins/list/plugin-react#swcreactoptionsruntime) option to the React plugin. For example, to use the classic runtime:
 
-```ts title="rslib.config.ts"
+```ts title="rslib.config.ts" twoslash
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
@@ -85,7 +85,7 @@ When `runtime` is set to `'automatic'`, you can specify the import path of the J
 
 For example, when using [Emotion](https://emotion.sh/), you can set `importSource` to `'@emotion/react'`:
 
-```ts title="rslib.config.ts"
+```ts title="rslib.config.ts" twoslash
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
