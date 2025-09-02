@@ -310,7 +310,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   experiments: {
     lazyBarrel: true,
-    inlineEnum: false,
+    inlineEnum: true,
     typeReexportsPresence: true,
     rspackFuture: {
       bundlerInfo: {
@@ -592,7 +592,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               rspackExperiments: {
                 collectTypeScriptInfo: {
                   typeExports: true,
-                  exportedEnum: false
+                  exportedEnum: true
                 }
               }
             }
@@ -646,7 +646,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               rspackExperiments: {
                 collectTypeScriptInfo: {
                   typeExports: true,
-                  exportedEnum: false
+                  exportedEnum: true
                 }
               }
             }
@@ -888,7 +888,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
             options: {
               id: 'rsbuild-transform-0',
-              getEnvironment: ()=>environment
+              getEnvironment: ()=>environmentContext
             }
           }
         ]
@@ -946,11 +946,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     /* config.plugin('define') */
     new DefinePlugin(
       {
-        'import.meta.env.MODE': '"production"',
-        'import.meta.env.DEV': false,
-        'import.meta.env.PROD': true,
-        'import.meta.env.BASE_URL': '"/"',
-        'import.meta.env.ASSET_PREFIX': '"auto"',
+        'import.meta.env': {
+          MODE: '"production"',
+          DEV: false,
+          PROD: true,
+          BASE_URL: '"/"',
+          ASSET_PREFIX: '"auto"'
+        },
         'process.env.BASE_URL': '"/"',
         'process.env.ASSET_PREFIX': '"auto"'
       }
@@ -1006,7 +1008,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   experiments: {
     lazyBarrel: true,
-    inlineEnum: false,
+    inlineEnum: true,
     typeReexportsPresence: true,
     rspackFuture: {
       bundlerInfo: {
@@ -1286,7 +1288,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               rspackExperiments: {
                 collectTypeScriptInfo: {
                   typeExports: true,
-                  exportedEnum: false
+                  exportedEnum: true
                 }
               }
             }
@@ -1340,7 +1342,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               rspackExperiments: {
                 collectTypeScriptInfo: {
                   typeExports: true,
-                  exportedEnum: false
+                  exportedEnum: true
                 }
               }
             }
@@ -1582,7 +1584,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
             options: {
               id: 'rsbuild-transform-0',
-              getEnvironment: ()=>environment
+              getEnvironment: ()=>environmentContext
             }
           }
         ]
@@ -1637,11 +1639,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     /* config.plugin('define') */
     new DefinePlugin(
       {
-        'import.meta.env.MODE': '"production"',
-        'import.meta.env.DEV': false,
-        'import.meta.env.PROD': true,
-        'import.meta.env.BASE_URL': '"/"',
-        'import.meta.env.ASSET_PREFIX': '"auto"',
+        'import.meta.env': {
+          MODE: '"production"',
+          DEV: false,
+          PROD: true,
+          BASE_URL: '"/"',
+          ASSET_PREFIX: '"auto"'
+        },
         'process.env.BASE_URL': '"/"',
         'process.env.ASSET_PREFIX': '"auto"',
         'import.meta.url': '__rslib_import_meta_url__'
@@ -1696,7 +1700,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   experiments: {
     lazyBarrel: true,
-    inlineEnum: false,
+    inlineEnum: true,
     typeReexportsPresence: true,
     rspackFuture: {
       bundlerInfo: {
@@ -1955,7 +1959,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               rspackExperiments: {
                 collectTypeScriptInfo: {
                   typeExports: true,
-                  exportedEnum: false
+                  exportedEnum: true
                 }
               }
             }
@@ -2009,7 +2013,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               rspackExperiments: {
                 collectTypeScriptInfo: {
                   typeExports: true,
-                  exportedEnum: false
+                  exportedEnum: true
                 }
               }
             }
@@ -2181,7 +2185,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
             options: {
               id: 'rsbuild-transform-0',
-              getEnvironment: ()=>environment
+              getEnvironment: ()=>environmentContext
             }
           }
         ]
@@ -2236,11 +2240,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     /* config.plugin('define') */
     new DefinePlugin(
       {
-        'import.meta.env.MODE': '"production"',
-        'import.meta.env.DEV': false,
-        'import.meta.env.PROD': true,
-        'import.meta.env.BASE_URL': '"/"',
-        'import.meta.env.ASSET_PREFIX': '""',
+        'import.meta.env': {
+          MODE: '"production"',
+          DEV: false,
+          PROD: true,
+          BASE_URL: '"/"',
+          ASSET_PREFIX: '""'
+        },
         'process.env.BASE_URL': '"/"',
         'process.env.ASSET_PREFIX': '""'
       }
@@ -2292,7 +2298,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   experiments: {
     lazyBarrel: true,
-    inlineEnum: false,
+    inlineEnum: true,
     typeReexportsPresence: true,
     rspackFuture: {
       bundlerInfo: {
@@ -2553,7 +2559,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               rspackExperiments: {
                 collectTypeScriptInfo: {
                   typeExports: true,
-                  exportedEnum: false
+                  exportedEnum: true
                 }
               }
             }
@@ -2607,7 +2613,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               rspackExperiments: {
                 collectTypeScriptInfo: {
                   typeExports: true,
-                  exportedEnum: false
+                  exportedEnum: true
                 }
               }
             }
@@ -2779,7 +2785,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
             options: {
               id: 'rsbuild-transform-0',
-              getEnvironment: ()=>environment
+              getEnvironment: ()=>environmentContext
             }
           }
         ]
@@ -2833,11 +2839,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     /* config.plugin('define') */
     new DefinePlugin(
       {
-        'import.meta.env.MODE': '"production"',
-        'import.meta.env.DEV': false,
-        'import.meta.env.PROD': true,
-        'import.meta.env.BASE_URL': '"/"',
-        'import.meta.env.ASSET_PREFIX': '""',
+        'import.meta.env': {
+          MODE: '"production"',
+          DEV: false,
+          PROD: true,
+          BASE_URL: '"/"',
+          ASSET_PREFIX: '""'
+        },
         'process.env.BASE_URL': '"/"',
         'process.env.ASSET_PREFIX': '""'
       }
@@ -2889,7 +2897,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   experiments: {
     lazyBarrel: true,
-    inlineEnum: false,
+    inlineEnum: true,
     typeReexportsPresence: true,
     rspackFuture: {
       bundlerInfo: {
@@ -3125,7 +3133,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               rspackExperiments: {
                 collectTypeScriptInfo: {
                   typeExports: true,
-                  exportedEnum: false
+                  exportedEnum: true
                 }
               }
             }
@@ -3185,7 +3193,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               rspackExperiments: {
                 collectTypeScriptInfo: {
                   typeExports: true,
-                  exportedEnum: false
+                  exportedEnum: true
                 }
               }
             }
@@ -3407,11 +3415,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     /* config.plugin('define') */
     new DefinePlugin(
       {
-        'import.meta.env.MODE': '"production"',
-        'import.meta.env.DEV': false,
-        'import.meta.env.PROD': true,
-        'import.meta.env.BASE_URL': '"/"',
-        'import.meta.env.ASSET_PREFIX': '""',
+        'import.meta.env': {
+          MODE: '"production"',
+          DEV: false,
+          PROD: true,
+          BASE_URL: '"/"',
+          ASSET_PREFIX: '""'
+        },
         'process.env.BASE_URL': '"/"',
         'process.env.ASSET_PREFIX': '""'
       }
