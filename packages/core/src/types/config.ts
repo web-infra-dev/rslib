@@ -101,7 +101,7 @@ export type Dts =
        */
       experiments?: {
         /**
-         * [Experimental] Whether to generate declaration files with the `tsgo` compiler.
+         * [Experimental] Whether to generate declaration files with `tsgo`.
          * @defaultValue `false`
          * @see {@link https://rslib.rs/config/lib/dts#dtsexperimentstsgo}
          */

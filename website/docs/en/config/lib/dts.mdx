@@ -15,6 +15,9 @@ type Dts =
       abortOnError?: boolean;
       autoExtension?: boolean;
       alias?: Record<string, string>;
+      experiments?: {
+        tsgo?: boolean;
+      };
     }
   | boolean;
 ```
@@ -216,7 +219,9 @@ When `dts.autoExtension` is set to `true`, the declaration file extension will b
 
 ::: note
 
-It follows the same logic as [lib.autoExtension](/config/lib/auto-extension), but the default value is different since the declaration file extension may cause some issues with different module resolution strategies.
+1. It follows the same logic as [lib.autoExtension](/config/lib/auto-extension), but the default value is different since the declaration file extension may cause some issues with different module resolution strategies.
+
+2. When [dts.experiments.tsgo](/config/lib/dts#dtsexperimentstsgo) is enabled, if the project also enables [dts.build](/config/lib/dts#dtsbuild) or emits declaration files with different extensions to the same directory, `dts.autoExtension` may not work correctly.
 
 :::
 
@@ -245,3 +250,42 @@ export default {
   ],
 };
 ```
+
+### dts.experiments
+
+- **Type:** `{ tsgo?: boolean }`
+- **Default:** `{}`
+
+Whether to enable experimental features.
+
+#### dts.experiments.tsgo
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Whether to generate declaration files with [tsgo](https://github.com/microsoft/typescript-go).
+
+To enable this option, you need to install [@typescript/native-preview](https://www.npmjs.com/package/@typescript/native-preview) as a development dependency.
+
+<PackageManagerTabs command="add @typescript/native-preview -D" />
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      dts: {
+        // [!code highlight:3]
+        experiments: {
+          tsgo: true,
+        },
+      },
+    },
+  ],
+};
+```
+
+::: note
+
+`tsgo` can provide faster generation of declaration files, especially for large projects. However, since `tsgo` is still experimental, there may be unresolved issues or limitations. Therefore, please make sure to thoroughly test it in your project before enabling this option.
+
+:::

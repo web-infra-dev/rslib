@@ -136,6 +136,8 @@ pluginDts({
 });
 ```
 
+> When [experiments.tsgo](#experimentstsgo) is enabled, if the project also enables [build](#build) or emits declaration files with different extensions to the same directory, `dtsExtension` may not work correctly.
+
 ### alias
 
 - **Type:** `Record<string, string>`
@@ -279,6 +281,40 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 ```
 
 - When set to `false`, the file extension will remain unchanged from the original import path in the rewritten import path of the output file (regardless of whether it is specified or specified as any value).
+
+### experiments
+
+- **Type:** `{ tsgo?: boolean }`
+- **Default:** `{}`
+
+Whether to enable experimental features.
+
+#### experiments.tsgo
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Whether to generate declaration files with [tsgo](https://github.com/microsoft/typescript-go).
+
+To enable this option, you need to:
+
+1. Install [@typescript/native-preview](https://www.npmjs.com/package/@typescript/native-preview) as a development dependency.
+
+```bash
+npm add @typescript/native-preview -D
+```
+
+2. Set `experiments.tsgo` to `true`.
+
+```js
+pluginDts({
+  experiments: {
+    tsgo: true,
+  },
+});
+```
+
+> `tsgo` can provide faster generation of declaration files, especially for large projects. However, since `tsgo` is still experimental, there may be unresolved issues or limitations. Therefore, please make sure to thoroughly test it in your project before enabling this option.
 
 ## Contributing
 

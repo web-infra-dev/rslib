@@ -40,23 +40,86 @@ Bundleless 类型为库中的每个模块生成单独的声明文件，就像 `t
 
 ## 如何在 Rslib 中生成类型声明文件
 
-Rslib 默认使用 [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) 生成 bundleless 类型，用 [API Extractor](https://api-extractor.com/) 生成 bundle 类型。
+Rslib 支持使用 [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) 和 [tsgo](https://github.com/microsoft/typescript-go) 两种方式来生成类型声明文件，并且支持使用 [API Extractor](https://api-extractor.com/) 将生成的类型声明文件打包。
 
-如果你想生成 bundleless 类型，可以：
+| 类型       | 支持方式                                | 说明     |
+| ---------- | --------------------------------------- | -------- |
+| bundleless | TypeScript Compiler API                 | 默认方式 |
+| bundleless | tsgo                                    |          |
+| bundle     | TypeScript Compiler API + API Extractor | 默认方式 |
+| bundle     | tsgo + API Extractor                    |          |
 
-- 设置 `dts: true` 或者 `dts: { bundle: false }` 在 Rslib 配置文件。
+### 生成 bundleless 类型
 
-如果你想生成 bundle 类型，可以：
+在 Rslib 配置文件中设置：
 
-1. 安装 `@microsoft/api-extractor` 作为 `devDependencies`, 这是用于打包类型声明文件的底层工具。
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      dts: true; // [!code highlight]
+      // 或者
+      // [!code highlight:3]
+      dts: {
+        bundle: false;
+      }
+    },
+  ],
+};
+```
+
+### 生成 bundle 类型
+
+1. 安装 `@microsoft/api-extractor` 作为 `devDependencies`，这是用于打包类型声明文件的底层工具。
 
 import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @microsoft/api-extractor -D" />
 
-2. 在 Rslib 配置文件中设置 `dts: { bundle: true }`。
+2. 在 Rslib 配置文件中设置：
 
-需要注意的是，Rslib 在生成类型声明文件的过程中，默认会强制设置 `tsconfig.json` 中的一些配置项以保证 [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) 能够仅生成类型声明文件。
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      // [!code highlight:3]
+      dts: {
+        bundle: true;
+      }
+    },
+  ],
+};
+```
+
+### 使用 tsgo 生成类型声明文件
+
+1. 安装 `@typescript/native-preview` 作为 `devDependencies`：
+
+<PackageManagerTabs command="add @typescript/native-preview -D" />
+
+2. 在 Rslib 配置文件中设置：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      dts: {
+        // [!code highlight:3]
+        experiments: {
+          tsgo: true,
+        },
+      },
+    },
+  ],
+};
+```
+
+### 注意事项
+
+Rslib 在生成类型声明文件的过程中，默认会强制设置 `tsconfig.json`
+中的一些配置项以保证 [TypeScript Compiler
+API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) 或 [tsgo](https://github.com/microsoft/typescript-go)
+能够仅生成类型声明文件。
 
 ```json
 {
@@ -76,15 +139,16 @@ import { PackageManagerTabs } from '@theme';
 
 ## 类型声明文件的相关配置
 
-| 配置项                                                              | 描述说明                                                               |
-| ------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| [dts.bundle](/config/lib/dts#dtsbundle)                             | 是否打包类型声明文件。                                                 |
-| [dts.distPath](/config/lib/dts#dtsdistpath)                         | 类型声明文件的输出目录。                                               |
-| [dts.build](/config/lib/dts#dtsbuild)                               | 是否在生成类型声明文件时构建项目的 project references。                |
-| [dts.abortOnError](/config/lib/dts#dtsabortonerror)                 | 当类型声明文件生成过程中出现错误时，是否中止构建过程。                 |
-| [dts.autoExtension](/config/lib/dts#dtsautoextension)               | 是否根据 [format](/config/lib/format) 选项自动设置类型声明文件扩展名。 |
-| [dts.alias](/config/lib/dts#dtsalias)                               | 类型声明文件的路径别名。                                               |
-| [banner.dts](/config/lib/banner#bannerdts)                          | 在每个类型声明文件顶部注入内容。                                       |
-| [footer.dts](/config/lib/footer#footerdts)                          | 在每个类型声明文件底部注入内容。                                       |
-| [redirect.dts.path](/config/lib/redirect#redirectdtspath)           | 是否自动重定向类型声明文件中的导入路径。                               |
-| [redirect.dts.extension](/config/lib/redirect#redirectdtsextension) | 是否根据类型声明文件自动重定向文件扩展名到导入路径。                   |
+| 配置项                                                              | 描述说明                                                                       |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| [dts.bundle](/config/lib/dts#dtsbundle)                             | 是否打包类型声明文件。                                                         |
+| [dts.distPath](/config/lib/dts#dtsdistpath)                         | 类型声明文件的输出目录。                                                       |
+| [dts.build](/config/lib/dts#dtsbuild)                               | 是否在生成类型声明文件时构建项目的 project references。                        |
+| [dts.abortOnError](/config/lib/dts#dtsabortonerror)                 | 当类型声明文件生成过程中出现错误时，是否中止构建过程。                         |
+| [dts.autoExtension](/config/lib/dts#dtsautoextension)               | 是否根据 [format](/config/lib/format) 选项自动设置类型声明文件扩展名。         |
+| [dts.alias](/config/lib/dts#dtsalias)                               | 类型声明文件的路径别名。                                                       |
+| [dts.experiments.tsgo](/config/lib/dts#dtsexperimentstsgo)          | 是否使用 [tsgo](https://github.com/microsoft/typescript-go) 生成类型声明文件。 |
+| [banner.dts](/config/lib/banner#bannerdts)                          | 在每个类型声明文件顶部注入内容。                                               |
+| [footer.dts](/config/lib/footer#footerdts)                          | 在每个类型声明文件底部注入内容。                                               |
+| [redirect.dts.path](/config/lib/redirect#redirectdtspath)           | 是否自动重定向类型声明文件中的导入路径。                                       |
+| [redirect.dts.extension](/config/lib/redirect#redirectdtsextension) | 是否根据类型声明文件自动重定向文件扩展名到导入路径。                           |
