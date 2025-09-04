@@ -1,10 +1,10 @@
 import { spawn } from 'node:child_process';
-import fs from 'node:fs';
+import fsP from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
-import ts from 'typescript';
+import type ts from 'typescript';
 import type { DtsRedirect } from './index';
 import type { EmitDtsOptions } from './tsc';
 import {
@@ -84,7 +84,7 @@ async function handleDiagnosticsAndProcessFiles(
     ]);
     await Promise.all(
       dtsFiles.map(async (file) => {
-        const contents = ts.sys.readFile(file) ?? '';
+        const contents = await fsP.readFile(file, 'utf8');
         const newFileName = renameDtsFile(file, dtsExtension, bundle);
         const newContents = updateDeclarationMapContent(
           file,
@@ -94,12 +94,8 @@ async function handleDiagnosticsAndProcessFiles(
           tsConfigResult.options.declarationMap,
         );
         if (file !== newFileName || contents !== newContents) {
-          ts.sys.writeFile(newFileName, newContents);
-          if (ts.sys.deleteFile) {
-            ts.sys.deleteFile(file);
-          } else {
-            fs.unlinkSync(file);
-          }
+          await fsP.writeFile(newFileName, newContents);
+          await fsP.unlink(file);
         }
       }),
     );
