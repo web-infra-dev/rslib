@@ -1,15 +1,8 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { join, normalize } from 'node:path';
+import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
-import stripAnsi from 'strip-ansi';
-import {
-  buildAndGetResults,
-  createTempFiles,
-  globContentJSON,
-  proxyConsole,
-  queryContent,
-} from 'test-helper';
+import { buildAndGetResults, createTempFiles, queryContent } from 'test-helper';
 
 describe('dts with tsgo when bundle: true', () => {
   test('basic', async () => {
