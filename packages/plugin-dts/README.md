@@ -304,6 +304,8 @@ To enable this option, you need to:
 npm add @typescript/native-preview -D
 ```
 
+> `@typescript/native-preview` requires Node.js 20.6.0 or higher.
+
 2. Set `experiments.tsgo` to `true`.
 
 ```js

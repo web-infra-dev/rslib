@@ -55,7 +55,8 @@ const generateTsgoArgs = (
   args.push('--emitDeclarationOnly');
 
   if (isWatch) {
-    // rebuild when watch since watch mode is proof-of-concept only currently in tsgo
+    // TODO: Enable watch mode when tsgo's watch support is ready.
+    // Currently, watch mode is proof-of-concept only.
     // args.push('--watch');
   }
 
@@ -155,7 +156,7 @@ export async function emitDtsTsgo(
       tsgoBinFile,
       [
         ...args,
-        /* Required parameter, use it stdout have color */
+        // Required parameter to enable colored stdout
         '--pretty',
       ],
       {
@@ -221,7 +222,7 @@ export async function emitDtsTsgo(
 
         resolve(hasErrors);
       } catch (error) {
-        reject(error);
+        reject(error instanceof Error ? error : new Error(String(error)));
       }
     });
   });
