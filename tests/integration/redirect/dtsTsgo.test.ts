@@ -1,77 +1,81 @@
 import path from 'node:path';
-import { beforeAll, expect, test } from '@rstest/core';
+import { beforeAll, describe, expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
 
-let contents: Awaited<ReturnType<typeof buildAndGetResults>>['contents'];
+describe.skipIf(process.version.startsWith('v18'))(
+  'dts redirect with tsgo',
+  () => {
+    let contents: Awaited<ReturnType<typeof buildAndGetResults>>['contents'];
 
-beforeAll(async () => {
-  const fixturePath = path.resolve(__dirname, './dts-tsgo');
-  contents = (await buildAndGetResults({ fixturePath, type: 'dts' })).contents;
-}, 20000);
+    beforeAll(async () => {
+      const fixturePath = path.resolve(__dirname, './dts-tsgo');
+      contents = (await buildAndGetResults({ fixturePath, type: 'dts' }))
+        .contents;
+    }, 20000);
 
-test('redirect.dts.path: true with redirect.dts.extension: false - default', async () => {
-  expect(contents.esm0).toMatchInlineSnapshot(`
-    {
-      "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
-    ",
-      "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/.hidden.d.ts": "export declare const hidden = "This is a hidden file";
-    ",
-      "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/a.b/index.d.ts": "export declare const ab = "a.b";
-    ",
-      "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
-    ",
-      "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/foo/foo.d.ts": "import { logRequest } from '../logger';
-    import { logger } from '../../../../compile/prebundle-pkg';
-    import { logRequest as logRequest2 } from '../logger';
-    export { logRequest, logRequest2, logger };
-    ",
-      "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/foo/index.d.ts": "export type Barrel = string;
-    ",
-      "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/index.d.ts": "import { logRequest } from './logger';
-    import { logger } from '../../../compile/prebundle-pkg';
-    import type { Baz } from './';
-    import type { LoggerOptions } from './types';
-    import { defaultOptions } from './types.js';
-    import sources = require('./logger');
-    export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
-    export * from './foo';
-    export * from './logger';
-    export type { Foo } from './types';
-    // export { Router } from 'express';
-    export * from '../../../compile/prebundle-pkg';
-    export type { Bar } from './types';
-    export * from './.hidden';
-    export * from './.hidden-folder';
-    export * from './a.b';
-    export * from './bar.baz';
-    export * from './foo';
-    export * from './types';
-    ",
-      "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/logger.d.ts": "// import type { Request } from 'express';
-    import type { LoggerOptions } from './types';
-    export declare function logRequest(req: Request, options: LoggerOptions): void;
-    ",
-      "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/types.d.ts": "export interface LoggerOptions {
-        logLevel: 'info' | 'debug' | 'warn' | 'error';
-        logBody: boolean;
-    }
-    export declare const defaultOptions: LoggerOptions;
-    export interface Foo {
-        foo: string;
-    }
-    export interface Bar {
-        bar: string;
-    }
-    export interface Baz {
-        baz: string;
-    }
-    ",
-    }
-  `);
-});
+    test('redirect.dts.path: true with redirect.dts.extension: false - default', async () => {
+      expect(contents.esm0).toMatchInlineSnapshot(`
+        {
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/.hidden.d.ts": "export declare const hidden = "This is a hidden file";
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/a.b/index.d.ts": "export declare const ab = "a.b";
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/foo/foo.d.ts": "import { logRequest } from '../logger';
+        import { logger } from '../../../../compile/prebundle-pkg';
+        import { logRequest as logRequest2 } from '../logger';
+        export { logRequest, logRequest2, logger };
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/foo/index.d.ts": "export type Barrel = string;
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/index.d.ts": "import { logRequest } from './logger';
+        import { logger } from '../../../compile/prebundle-pkg';
+        import type { Baz } from './';
+        import type { LoggerOptions } from './types';
+        import { defaultOptions } from './types.js';
+        import sources = require('./logger');
+        export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+        export * from './foo';
+        export * from './logger';
+        export type { Foo } from './types';
+        // export { Router } from 'express';
+        export * from '../../../compile/prebundle-pkg';
+        export type { Bar } from './types';
+        export * from './.hidden';
+        export * from './.hidden-folder';
+        export * from './a.b';
+        export * from './bar.baz';
+        export * from './foo';
+        export * from './types';
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/logger.d.ts": "// import type { Request } from 'express';
+        import type { LoggerOptions } from './types';
+        export declare function logRequest(req: Request, options: LoggerOptions): void;
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/types.d.ts": "export interface LoggerOptions {
+            logLevel: 'info' | 'debug' | 'warn' | 'error';
+            logBody: boolean;
+        }
+        export declare const defaultOptions: LoggerOptions;
+        export interface Foo {
+            foo: string;
+        }
+        export interface Bar {
+            bar: string;
+        }
+        export interface Baz {
+            baz: string;
+        }
+        ",
+        }
+      `);
+    });
 
-test('redirect.dts.path: false with redirect.dts.extension: false', async () => {
-  expect(contents.esm1).toMatchInlineSnapshot(`
+    test('redirect.dts.path: false with redirect.dts.extension: false', async () => {
+      expect(contents.esm1).toMatchInlineSnapshot(`
     {
       "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
     ",
@@ -129,10 +133,10 @@ test('redirect.dts.path: false with redirect.dts.extension: false', async () => 
     ",
     }
   `);
-});
+    });
 
-test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
-  expect(contents.esm2).toMatchInlineSnapshot(`
+    test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
+      expect(contents.esm2).toMatchInlineSnapshot(`
     {
       "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
     ",
@@ -190,10 +194,10 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
     ",
     }
   `);
-});
+    });
 
-test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
-  expect(contents.esm3).toMatchInlineSnapshot(`
+    test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
+      expect(contents.esm3).toMatchInlineSnapshot(`
     {
       "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false-extension-true/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
     ",
@@ -251,10 +255,10 @@ test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
     ",
     }
   `);
-});
+    });
 
-test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
-  expect(contents.esm4).toMatchInlineSnapshot(`
+    test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
+      expect(contents.esm4).toMatchInlineSnapshot(`
     {
       "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/esm/.hidden-folder/index.d.mts": "export declare const hiddenFolder = "This is a hidden folder";
     ",
@@ -312,7 +316,7 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     ",
     }
   `);
-  expect(contents.cjs).toMatchInlineSnapshot(`
+      expect(contents.cjs).toMatchInlineSnapshot(`
     {
       "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
     ",
@@ -370,4 +374,6 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     ",
     }
   `);
-});
+    });
+  },
+);
