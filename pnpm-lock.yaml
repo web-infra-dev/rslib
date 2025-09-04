@@ -732,6 +732,34 @@ importers:
 
   tests/integration/dts-tsgo/bundle-false/tsconfig-path: {}
 
+  tests/integration/dts-tsgo/bundle/abort-on-error: {}
+
+  tests/integration/dts-tsgo/bundle/absolute-entry: {}
+
+  tests/integration/dts-tsgo/bundle/auto-extension: {}
+
+  tests/integration/dts-tsgo/bundle/basic: {}
+
+  tests/integration/dts-tsgo/bundle/bundle-name: {}
+
+  tests/integration/dts-tsgo/bundle/bundled-packages:
+    devDependencies:
+      '@reduxjs/toolkit':
+        specifier: ^2.8.2
+        version: 2.8.2(react@19.1.1)
+
+  tests/integration/dts-tsgo/bundle/clean: {}
+
+  tests/integration/dts-tsgo/bundle/dist-path: {}
+
+  tests/integration/dts-tsgo/bundle/multiple-entries: {}
+
+  tests/integration/dts-tsgo/bundle/rootdir:
+    devDependencies:
+      '@types/chromecast-caf-sender':
+        specifier: ^1.0.11
+        version: 1.0.11
+
   tests/integration/dts/build/__references__: {}
 
   tests/integration/dts/build/abort-on-error: {}
