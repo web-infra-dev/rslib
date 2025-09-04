@@ -21,7 +21,7 @@ test('banner and footer should work in js, css and dts', async () => {
   const cssContents = Object.values(css.contents);
   const dtsContents = Object.values(dts.contents);
 
-  // There are 5 cases included:
+  // There are 5 cases included in both tsc and tsgo
   // 1. bundle esm
   // 2. bundle cjs
   // 3. bundleless esm
