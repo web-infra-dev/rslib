@@ -44,6 +44,9 @@ export type PluginDtsOptions = {
   banner?: string;
   footer?: string;
   redirect?: DtsRedirect;
+  experiments?: {
+    tsgo?: boolean;
+  };
 };
 
 export type DtsEntry = {
@@ -93,6 +96,8 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
     options.redirect.path = options.redirect.path ?? true;
     options.redirect.extension = options.redirect.extension ?? false;
     options.alias = options.alias ?? {};
+    options.experiments = options.experiments ?? {};
+    options.experiments.tsgo = options.experiments.tsgo ?? false;
 
     const dtsPromises: Promise<TaskResult>[] = [];
     let promisesResult: TaskResult[] = [];
@@ -100,7 +105,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
 
     api.onBeforeEnvironmentCompile(
       async ({ isWatch, isFirstCompile, environment }) => {
-        if (!isFirstCompile) {
+        if (!isFirstCompile && !options.experiments?.tsgo) {
           return;
         }
 

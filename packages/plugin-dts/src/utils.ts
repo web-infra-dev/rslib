@@ -584,7 +584,10 @@ export const globDtsFiles = async (
 ): Promise<string[]> => {
   const dtsFiles = await Promise.all(
     patterns.map(async (pattern) =>
-      glob(convertPath(join(dir, pattern)), { absolute: true }),
+      glob(convertPath(join(dir, pattern)), {
+        absolute: true,
+        dot: true,
+      }),
     ),
   );
 
@@ -661,4 +664,51 @@ export function warnIfOutside(
       );
     }
   }
+}
+
+/**
+ * Rename .d.ts and .d.ts.map files with corresponding extension
+ */
+export function renameDtsFile(
+  fileName: string,
+  dtsExtension: string,
+  bundle: boolean,
+): string {
+  if (bundle) {
+    return fileName;
+  }
+
+  if (fileName.endsWith('.d.ts.map')) {
+    return fileName.replace(/\.d\.ts\.map$/, `${dtsExtension}.map`);
+  }
+
+  return fileName.replace(/\.d\.ts$/, dtsExtension);
+}
+
+/**
+ * Update source map content for declaration files
+ */
+export function updateDeclarationMapContent(
+  fileName: string,
+  content: string,
+  dtsExtension: string,
+  bundle: boolean,
+  hasDeclarationMap = false,
+): string {
+  if (bundle || !hasDeclarationMap) {
+    return content;
+  }
+
+  if (fileName.endsWith('.d.ts')) {
+    return content.replace(
+      /(\/\/# sourceMappingURL=.+)\.d\.ts\.map/g,
+      `$1${dtsExtension}.map`,
+    );
+  }
+
+  if (fileName.endsWith('.d.ts.map')) {
+    return content.replace(/("file":"[^"]*)\.d\.ts"/g, `$1${dtsExtension}"`);
+  }
+
+  return content;
 }
