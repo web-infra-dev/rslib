@@ -77,18 +77,6 @@ async function handleDiagnosticsAndProcessFiles(
   footer?: string,
   name?: string,
 ): Promise<void> {
-  await processDtsFiles(
-    bundle,
-    declarationDir,
-    dtsExtension,
-    redirect,
-    configPath,
-    rootDir,
-    paths,
-    banner,
-    footer,
-  );
-
   if (!bundle) {
     const dtsFiles = await globDtsFiles(declarationDir, [
       '/**/*.d.ts',
@@ -116,6 +104,18 @@ async function handleDiagnosticsAndProcessFiles(
       }),
     );
   }
+
+  await processDtsFiles(
+    bundle,
+    declarationDir,
+    dtsExtension,
+    redirect,
+    configPath,
+    rootDir,
+    paths,
+    banner,
+    footer,
+  );
 
   if (hasErrors && !isWatch) {
     const error = new Error(

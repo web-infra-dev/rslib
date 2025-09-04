@@ -938,6 +938,21 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
+  tests/integration/redirect/dts-tsgo:
+    devDependencies:
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../../../packages/core
+      '@types/express':
+        specifier: ^5.0.3
+        version: 5.0.3
+      express:
+        specifier: ^5.1.0
+        version: 5.1.0
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+
   tests/integration/redirect/js:
     devDependencies:
       '@types/lodash':
