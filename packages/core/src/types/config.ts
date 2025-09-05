@@ -95,7 +95,8 @@ export type Dts =
        */
       alias?: Record<string, string>;
       /**
-       * [Experimental] Whether to generate declaration files with `tsgo`.
+       * Whether to generate declaration files with `tsgo`.
+       * @experimental
        * @defaultValue `false`
        * @see {@link https://rslib.rs/config/lib/dts#dtstsgo}
        */
