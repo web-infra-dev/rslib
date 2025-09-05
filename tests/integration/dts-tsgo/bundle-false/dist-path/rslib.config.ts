@@ -8,9 +8,7 @@ export default defineConfig({
       dts: {
         bundle: false,
         distPath: './dist/custom',
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
     generateBundleCjsConfig({

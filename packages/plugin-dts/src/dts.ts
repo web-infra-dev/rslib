@@ -135,11 +135,8 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       path: true,
       extension: false,
     },
-    experiments = {
-      tsgo: false,
-    },
+    tsgo,
   } = data;
-  const { tsgo } = experiments;
   if (!isWatch) {
     logger.start(`generating declaration files... ${color.dim(`(${name})`)}`);
   }

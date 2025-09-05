@@ -9,9 +9,7 @@ export default defineConfig({
         bundle: false,
         build: true,
         distPath: './dist/custom',
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],

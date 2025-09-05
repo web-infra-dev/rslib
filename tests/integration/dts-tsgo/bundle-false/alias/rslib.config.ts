@@ -9,9 +9,7 @@ export default defineConfig({
         alias: {
           'prebundle-pkg': './compile/prebundle-pkg',
         },
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
     generateBundleCjsConfig({
@@ -20,9 +18,7 @@ export default defineConfig({
         alias: {
           'prebundle-pkg': './compile/prebundle-pkg',
         },
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],

@@ -7,9 +7,7 @@ export default defineConfig({
       dts: {
         bundle: true,
         distPath: './dist/custom',
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],

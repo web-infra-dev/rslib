@@ -7,18 +7,14 @@ export default defineConfig({
       bundle: false,
       dts: {
         autoExtension: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
     generateBundleCjsConfig({
       bundle: false,
       dts: {
         autoExtension: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],

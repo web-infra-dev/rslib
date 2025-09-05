@@ -8,9 +8,7 @@ export default defineConfig({
       dts: {
         bundle: false,
         build: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],

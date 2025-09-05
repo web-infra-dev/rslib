@@ -6,9 +6,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       dts: {
         bundle: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       output: {
         distPath: {
@@ -21,9 +19,7 @@ export default defineConfig({
         bundle: {
           bundledPackages: [],
         },
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       output: {
         distPath: {
@@ -44,9 +40,7 @@ export default defineConfig({
             'reselect',
           ],
         },
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       output: {
         distPath: {

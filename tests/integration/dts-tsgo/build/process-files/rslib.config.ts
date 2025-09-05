@@ -15,9 +15,7 @@ export default defineConfig({
         bundle: false,
         build: true,
         autoExtension: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],

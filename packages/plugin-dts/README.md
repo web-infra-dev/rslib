@@ -136,7 +136,7 @@ pluginDts({
 });
 ```
 
-> When [experiments.tsgo](#experimentstsgo) is enabled, if the project also enables [build](#build) or emits declaration files with different extensions to the same directory, `dtsExtension` may not work correctly.
+> When [tsgo](#tsgo) is enabled, if the project also enables [build](#build) or emits declaration files with different extensions to the same directory, `dtsExtension` may not work correctly.
 
 ### alias
 
@@ -282,19 +282,14 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 
 - When set to `false`, the file extension will remain unchanged from the original import path in the rewritten import path of the output file (regardless of whether it is specified or specified as any value).
 
-### experiments
-
-- **Type:** `{ tsgo?: boolean }`
-- **Default:** `{}`
-
-Whether to enable experimental features.
-
-#### experiments.tsgo
+### tsgo
 
 - **Type:** `boolean`
 - **Default:** `false`
 
-Whether to generate declaration files with [tsgo](https://github.com/microsoft/typescript-go).
+Whether to generate declaration files with [tsgo](https://github.com/microsoft/typescript-go), which can provide faster generation of declaration files, especially for large projects.
+
+> This feature is currently an **experimental feature**. Since tsgo is still in the **experimental stage**, there may be some bugs and unresolved issues or limitations. So, make sure to fully test it in your project before enabling this option.
 
 To enable this option, you need to:
 
@@ -306,17 +301,21 @@ npm add @typescript/native-preview -D
 
 > `@typescript/native-preview` requires Node.js 20.6.0 or higher.
 
-2. Set `experiments.tsgo` to `true`.
+2. Set `tsgo` to `true`.
 
 ```js
 pluginDts({
-  experiments: {
-    tsgo: true,
-  },
+  tsgo: true,
 });
 ```
 
-> `tsgo` can provide faster generation of declaration files, especially for large projects. However, since `tsgo` is still experimental, there may be unresolved issues or limitations. Therefore, please make sure to thoroughly test it in your project before enabling this option.
+3. In order to ensure the consistency of local development, you need to install the corresponding [VS Code Preview Extension](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) and add the following configuration in the VS Code settings:
+
+```json
+{
+  "typescript.experimental.useTsgo": true
+}
+```
 
 ## Contributing
 

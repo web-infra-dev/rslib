@@ -7,9 +7,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       dts: {
         bundle: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],

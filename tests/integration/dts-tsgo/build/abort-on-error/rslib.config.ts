@@ -9,9 +9,7 @@ export default defineConfig({
         bundle: false,
         build: true,
         abortOnError: false,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],

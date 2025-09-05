@@ -98,9 +98,7 @@ export default defineConfig({
       },
       dts: {
         bundle: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       ...bannerFooterConfig,
     }),
@@ -113,9 +111,7 @@ export default defineConfig({
       },
       dts: {
         bundle: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       ...bannerFooterConfig,
     }),
@@ -129,9 +125,7 @@ export default defineConfig({
       bundle: false,
       dts: {
         bundle: false,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       source: {
         entry: {
@@ -150,9 +144,7 @@ export default defineConfig({
       bundle: false,
       dts: {
         bundle: false,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       source: {
         entry: {
@@ -171,9 +163,7 @@ export default defineConfig({
       },
       dts: {
         bundle: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       ...bannerFooterConfig,
     }),

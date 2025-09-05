@@ -95,18 +95,11 @@ export type Dts =
        */
       alias?: Record<string, string>;
       /**
-       * [Experimental] Whether to enable experimental features.
-       * @defaultValue `{}`
-       * @see {@link https://rslib.rs/config/lib/dts#dtsexperiments}
+       * [Experimental] Whether to generate declaration files with `tsgo`.
+       * @defaultValue `false`
+       * @see {@link https://rslib.rs/config/lib/dts#dtstsgo}
        */
-      experiments?: {
-        /**
-         * [Experimental] Whether to generate declaration files with `tsgo`.
-         * @defaultValue `false`
-         * @see {@link https://rslib.rs/config/lib/dts#dtsexperimentstsgo}
-         */
-        tsgo?: boolean;
-      };
+      tsgo?: boolean;
     }
   | boolean;
 

@@ -8,9 +8,7 @@ export default defineConfig({
       dts: {
         autoExtension: true,
         build: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       source: {
         tsconfigPath: './tsconfig.esm.json',
@@ -21,9 +19,7 @@ export default defineConfig({
       dts: {
         autoExtension: true,
         build: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       source: {
         tsconfigPath: './tsconfig.cjs.json',

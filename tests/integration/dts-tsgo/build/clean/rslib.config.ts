@@ -9,9 +9,7 @@ export default defineConfig({
         distPath: './dist-types/esm',
         bundle: false,
         build: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       source: {
         tsconfigPath: './tsconfig.esm.json',
@@ -23,9 +21,7 @@ export default defineConfig({
         distPath: './dist-types/cjs',
         bundle: false,
         build: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       source: {
         tsconfigPath: './tsconfig.cjs.json',

@@ -7,18 +7,14 @@ export default defineConfig({
       dts: {
         bundle: true,
         distPath: './dist-types/esm',
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
     generateBundleCjsConfig({
       dts: {
         bundle: true,
         distPath: './dist-types/cjs',
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],

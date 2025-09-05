@@ -6,9 +6,7 @@ export default defineConfig({
     // 0 - default - path: true extension: false
     generateBundleEsmConfig({
       dts: {
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       output: {
         distPath: {
@@ -19,9 +17,7 @@ export default defineConfig({
     // 1 - path: false extension: false
     generateBundleEsmConfig({
       dts: {
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       output: {
         distPath: {
@@ -37,9 +33,7 @@ export default defineConfig({
     // 2 - path: true extension: true
     generateBundleEsmConfig({
       dts: {
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       output: {
         distPath: {
@@ -55,9 +49,7 @@ export default defineConfig({
     // 3 - path: false extension: true
     generateBundleEsmConfig({
       dts: {
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
       output: {
         distPath: {
@@ -74,10 +66,8 @@ export default defineConfig({
     // 4 - extension: true with dts.autoExtension true
     generateBundleEsmConfig({
       dts: {
-        experiments: {
-          tsgo: true,
-        },
         autoExtension: true,
+        tsgo: true,
       },
       output: {
         distPath: {
@@ -93,10 +83,8 @@ export default defineConfig({
     // 5 - extension: true with dts.autoExtension true
     generateBundleCjsConfig({
       dts: {
-        experiments: {
-          tsgo: true,
-        },
         autoExtension: true,
+        tsgo: true,
       },
       output: {
         distPath: {

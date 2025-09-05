@@ -70,7 +70,7 @@ export default {
 
 ### 生成 bundle 类型
 
-1. 安装 `@microsoft/api-extractor` 作为 `devDependencies`，这是用于打包类型声明文件的底层工具。
+1. 安装 `@microsoft/api-extractor` 作为开发依赖，这是用于打包类型声明文件的底层工具。
 
 import { PackageManagerTabs } from '@theme';
 
@@ -93,7 +93,13 @@ export default {
 
 ### 使用 tsgo 生成类型声明文件
 
-1. 安装 `@typescript/native-preview` 作为 `devDependencies`：
+::: tip
+
+此功能目前为**实验性功能**。由于 tsgo 仍处于**实验阶段**，可能会存在一些 bug 以及未解决的问题或限制。因此，在启用该选项前，请确保在你的项目中进行充分测试。
+
+:::
+
+1. 安装 `@typescript/native-preview` 作为开发依赖：
 
 <PackageManagerTabs command="add @typescript/native-preview -D" />
 
@@ -110,14 +116,19 @@ export default {
   lib: [
     {
       dts: {
-        // [!code highlight:3]
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true, // [!code highlight]
       },
     },
   ],
 };
+```
+
+3. 为了保证本地开发的一致性，你需要安装对应的 [VS Code 预览版扩展](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview)，并在 VS Code 设置中添加如下配置：
+
+```json
+{
+  "typescript.experimental.useTsgo": true
+}
 ```
 
 ### 注意事项
@@ -153,7 +164,7 @@ API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) 或 [t
 | [dts.abortOnError](/config/lib/dts#dtsabortonerror)                 | 当类型声明文件生成过程中出现错误时，是否中止构建过程。                         |
 | [dts.autoExtension](/config/lib/dts#dtsautoextension)               | 是否根据 [format](/config/lib/format) 选项自动设置类型声明文件扩展名。         |
 | [dts.alias](/config/lib/dts#dtsalias)                               | 类型声明文件的路径别名。                                                       |
-| [dts.experiments.tsgo](/config/lib/dts#dtsexperimentstsgo)          | 是否使用 [tsgo](https://github.com/microsoft/typescript-go) 生成类型声明文件。 |
+| [dts.tsgo](/config/lib/dts#dtstsgo)                                 | 是否使用 [tsgo](https://github.com/microsoft/typescript-go) 生成类型声明文件。 |
 | [banner.dts](/config/lib/banner#bannerdts)                          | 在每个类型声明文件顶部注入内容。                                               |
 | [footer.dts](/config/lib/footer#footerdts)                          | 在每个类型声明文件底部注入内容。                                               |
 | [redirect.dts.path](/config/lib/redirect#redirectdtspath)           | 是否自动重定向类型声明文件中的导入路径。                                       |

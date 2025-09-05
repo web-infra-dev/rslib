@@ -1500,7 +1500,7 @@ const composeDtsConfig = async (
         banner: banner?.dts,
         footer: footer?.dts,
         redirect: redirect?.dts,
-        experiments: dts?.experiments,
+        tsgo: dts?.tsgo,
       }),
     ],
   };

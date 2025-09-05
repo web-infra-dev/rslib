@@ -8,9 +8,7 @@ export default defineConfig({
       dts: {
         bundle: false,
         abortOnError: false,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
     generateBundleCjsConfig({

@@ -7,9 +7,7 @@ export default defineConfig({
       dts: {
         bundle: true,
         autoExtension: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],

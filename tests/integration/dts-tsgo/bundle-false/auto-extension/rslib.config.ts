@@ -9,9 +9,7 @@ export default defineConfig({
         autoExtension: true,
         distPath: './dist/types/esm',
         bundle: false,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
     generateBundleCjsConfig({
@@ -20,9 +18,7 @@ export default defineConfig({
         autoExtension: true,
         distPath: './dist/types/cjs',
         bundle: false,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],

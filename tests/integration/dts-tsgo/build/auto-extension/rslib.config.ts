@@ -10,9 +10,7 @@ export default defineConfig({
         distPath: './dist/types',
         bundle: false,
         build: true,
-        experiments: {
-          tsgo: true,
-        },
+        tsgo: true,
       },
     }),
   ],
