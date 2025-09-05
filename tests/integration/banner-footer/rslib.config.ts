@@ -89,6 +89,84 @@ export default defineConfig({
       },
       ...bannerFooterConfig,
     }),
+    // bundle esm
+    generateBundleEsmConfig({
+      output: {
+        distPath: {
+          root: './dist/esm-tsgo/bundle',
+        },
+      },
+      dts: {
+        bundle: true,
+        tsgo: true,
+      },
+      ...bannerFooterConfig,
+    }),
+    // bundle cjs
+    generateBundleCjsConfig({
+      output: {
+        distPath: {
+          root: './dist/cjs-tsgo/bundle',
+        },
+      },
+      dts: {
+        bundle: true,
+        tsgo: true,
+      },
+      ...bannerFooterConfig,
+    }),
+    // bundleless esm
+    generateBundleEsmConfig({
+      output: {
+        distPath: {
+          root: './dist/esm-tsgo/bundleless',
+        },
+      },
+      bundle: false,
+      dts: {
+        bundle: false,
+        tsgo: true,
+      },
+      source: {
+        entry: {
+          index: ['./src/**'],
+        },
+      },
+      ...bannerFooterConfig,
+    }),
+    // bundleless cjs
+    generateBundleCjsConfig({
+      output: {
+        distPath: {
+          root: './dist/cjs-tsgo/bundleless',
+        },
+      },
+      bundle: false,
+      dts: {
+        bundle: false,
+        tsgo: true,
+      },
+      source: {
+        entry: {
+          index: ['./src/**'],
+        },
+      },
+      ...bannerFooterConfig,
+    }),
+    // bundle esm with minify enabled
+    generateBundleEsmConfig({
+      output: {
+        distPath: {
+          root: './dist/esm-tsgo/bundle-minify',
+        },
+        minify: true,
+      },
+      dts: {
+        bundle: true,
+        tsgo: true,
+      },
+      ...bannerFooterConfig,
+    }),
   ],
   source: {
     entry: {

@@ -1,0 +1,136 @@
+// Rstest Snapshot v1
+
+exports[`dts with tsgo when bundle: true > basic 3`] = `
+{
+  "cjs": "export declare const num1 = 1;
+
+export declare const num2 = 2;
+
+export declare const num3 = 3;
+
+export declare const numSum: number;
+
+export declare const str1 = "str1";
+
+export declare const str2 = "str2";
+
+export declare const str3 = "str3";
+
+export declare const strSum: string;
+
+export { }
+",
+  "esm": "export declare const num1 = 1;
+
+export declare const num2 = 2;
+
+export declare const num3 = 3;
+
+export declare const numSum: number;
+
+export declare const str1 = "str1";
+
+export declare const str2 = "str2";
+
+export declare const str3 = "str3";
+
+export declare const strSum: string;
+
+export { }
+",
+}
+`;
+
+exports[`dts with tsgo when bundle: true > multiple entries 3`] = `
+[
+  "export declare const num1 = 1;
+
+export declare const num2 = 2;
+
+export declare const num3 = 3;
+
+export declare const numSum: number;
+
+export declare const str1 = "str1";
+
+export declare const str2 = "str2";
+
+export declare const str3 = "str3";
+
+export declare const strSum: string;
+
+export { }
+",
+  "export declare const num1 = 1;
+
+export declare const num2 = 2;
+
+export declare const num3 = 3;
+
+export declare const numSum: number;
+
+export declare const str1 = "str1";
+
+export declare const str2 = "str2";
+
+export declare const str3 = "str3";
+
+export declare const strSum: string;
+
+export { }
+",
+  "export declare const numSum: number;
+
+export declare const strSum: string;
+
+export { }
+",
+  "export declare const numSum: number;
+
+export declare const strSum: string;
+
+export { }
+",
+]
+`;
+
+exports[`dts with tsgo when bundle: true > rootdir calculation should ignore declaration files 3`] = `
+{
+  "cjs": "export declare const num1 = 1;
+
+export declare const num2 = 2;
+
+export declare const num3 = 3;
+
+export declare const numSum: number;
+
+export declare const str1 = "str1";
+
+export declare const str2 = "str2";
+
+export declare const str3 = "str3";
+
+export declare const strSum: string;
+
+export { }
+",
+  "esm": "export declare const num1 = 1;
+
+export declare const num2 = 2;
+
+export declare const num3 = 3;
+
+export declare const numSum: number;
+
+export declare const str1 = "str1";
+
+export declare const str2 = "str2";
+
+export declare const str3 = "str3";
+
+export declare const strSum: string;
+
+export { }
+",
+}
+`;

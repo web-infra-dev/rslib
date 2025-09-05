@@ -11,7 +11,6 @@ import {
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import type { DtsEntry, DtsGenOptions } from './index';
-import { emitDts } from './tsc';
 import {
   calcLongestCommonPath,
   ensureTempDeclarationDir,
@@ -136,6 +135,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       path: true,
       extension: false,
     },
+    tsgo,
   } = data;
   if (!isWatch) {
     logger.start(`generating declaration files... ${color.dim(`(${name})`)}`);
@@ -248,7 +248,11 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     }
   };
 
-  await emitDts(
+  const emitDts = tsgo
+    ? await import('./tsgo').then((mod) => mod.emitDtsTsgo)
+    : await import('./tsc').then((mod) => mod.emitDtsTsc);
+
+  const hasError = await emitDts(
     {
       name,
       cwd,
@@ -268,8 +272,14 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     build,
   );
 
-  if (!isWatch) {
-    await bundleDtsIfNeeded();
+  if (tsgo) {
+    if (!hasError) {
+      await bundleDtsIfNeeded();
+    }
+  } else {
+    if (!isWatch) {
+      await bundleDtsIfNeeded();
+    }
   }
 }
 
