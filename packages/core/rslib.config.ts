@@ -31,6 +31,7 @@ export default defineConfig({
       syntax: ['node 18.12.0'],
       dts: {
         bundle: false,
+        tsgo: true,
         distPath: './dist-types',
       },
     },
