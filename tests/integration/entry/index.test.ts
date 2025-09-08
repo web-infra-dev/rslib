@@ -65,23 +65,25 @@ test('multiple entry bundle', async () => {
   const { content: index } = queryContent(contents.esm, 'index.js', {
     basename: true,
   });
+  // cspell:disable
   expect(index).toMatchInlineSnapshot(`
-    "const shared = 'shared';
-    const foo = 'foo' + shared;
-    const src_text = ()=>\`hello \${foo} \${shared}\`;
+    "const foo = "fooshared";
+    const src_text = ()=>\`hello \${foo} shared\`;
     export { src_text as text };
     "
   `);
+  // cspell:enable
 
   const { content: foo } = queryContent(contents.esm, 'foo.js', {
     basename: true,
   });
+  // cspell:disable
   expect(foo).toMatchInlineSnapshot(`
-    "const shared = 'shared';
-    const foo = 'foo' + shared;
+    "const foo = "fooshared";
     export { foo };
     "
   `);
+  // cspell:enable
 
   const { content: shared } = queryContent(contents.esm, 'shared.js', {
     basename: true,
