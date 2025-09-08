@@ -15,6 +15,7 @@ type Dts =
       abortOnError?: boolean;
       autoExtension?: boolean;
       alias?: Record<string, string>;
+      tsgo?: boolean;
     }
   | boolean;
 ```
@@ -216,7 +217,9 @@ export default {
 
 ::: note
 
-这遵循与 [lib.autoExtension](/config/lib/auto-extension) 相同的逻辑，但默认值不同，因为类型声明文件扩展名可能会在不同的模块解析策略中造成一些问题。
+1. 这遵循与 [lib.autoExtension](/config/lib/auto-extension) 相同的逻辑，但默认值不同，因为类型声明文件扩展名可能会在不同的模块解析策略中造成一些问题。
+
+2. 当开启 [dts.tsgo](/config/lib/dts#dtstsgo) 时，如果项目同时开启了 [dts.build](/config/lib/dts#dtsbuild) 或者将不同后缀的类型声明文件输出到同一目录，`dts.autoExtension` 无法正常生效。
 
 :::
 
@@ -244,4 +247,51 @@ export default {
     },
   ],
 };
+```
+
+### dts.tsgo
+
+- **类型：** `boolean`
+- **默认值：** `false`
+
+是否使用 [tsgo](https://github.com/microsoft/typescript-go) 生成类型声明文件。tsgo 可以提供更快的类型声明文件生成速度，尤其是对于大型项目。
+
+::: tip
+
+此功能目前为**实验性功能**。由于 tsgo 仍处于**实验阶段**，可能会存在一些 bug 以及未解决的问题或限制。因此，在启用该选项前，请确保在你的项目中进行充分测试。
+
+:::
+
+启用该选项，你需要：
+
+1. 安装 [@typescript/native-preview](https://www.npmjs.com/package/@typescript/native-preview) 作为开发依赖。
+
+<PackageManagerTabs command="add @typescript/native-preview -D" />
+
+::: tip 版本要求
+
+`@typescript/native-preview` 要求 Node.js 20.6.0 或更高版本。
+
+:::
+
+2. 在 Rslib 配置文件中设置：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      dts: {
+        tsgo: true, // [!code highlight]
+      },
+    },
+  ],
+};
+```
+
+3. 为了保证本地开发的一致性，你需要安装对应的 [VS Code 预览版扩展](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview)，并在 VS Code 设置中添加如下配置：
+
+```json title=".vscode/settings.json"
+{
+  "typescript.experimental.useTsgo": true
+}
 ```

@@ -2,7 +2,12 @@ import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import ts from 'typescript';
 import type { DtsRedirect } from './index';
-import { getTimeCost, processDtsFiles } from './utils';
+import {
+  getTimeCost,
+  processDtsFiles,
+  renameDtsFile,
+  updateDeclarationMapContent,
+} from './utils';
 
 const logPrefixTsc = color.dim('[tsc]');
 
@@ -75,7 +80,7 @@ async function handleDiagnosticsAndProcessFiles(
   }
 }
 
-export async function emitDts(
+export async function emitDtsTsc(
   options: EmitDtsOptions,
   onComplete: (isSuccess: boolean) => void,
   bundle = false,
@@ -174,45 +179,17 @@ export async function emitDts(
     }
   };
 
-  const renameDtsFile = (fileName: string): string => {
-    if (bundle) {
-      return fileName;
-    }
-
-    if (fileName.endsWith('.d.ts.map')) {
-      return fileName.replace(/\.d\.ts\.map$/, `${dtsExtension}.map`);
-    }
-
-    return fileName.replace(/\.d\.ts$/, dtsExtension);
-  };
-
-  const updateDeclarationMapContent = (
-    fileName: string,
-    content: string,
-  ): string => {
-    if (bundle || !compilerOptions.declarationMap) {
-      return content;
-    }
-
-    if (fileName.endsWith('.d.ts')) {
-      return content.replace(
-        /(\/\/# sourceMappingURL=.+)\.d\.ts\.map/g,
-        `$1${dtsExtension}.map`,
-      );
-    }
-
-    if (fileName.endsWith('.d.ts.map')) {
-      return content.replace(/("file":"[^"]*)\.d\.ts"/g, `$1${dtsExtension}"`);
-    }
-
-    return content;
-  };
-
   const system: ts.System = {
     ...ts.sys,
     writeFile: (fileName, contents, writeByteOrderMark) => {
-      const newFileName = renameDtsFile(fileName);
-      const newContents = updateDeclarationMapContent(fileName, contents);
+      const newFileName = renameDtsFile(fileName, dtsExtension, bundle);
+      const newContents = updateDeclarationMapContent(
+        fileName,
+        contents,
+        dtsExtension,
+        bundle,
+        compilerOptions.declarationMap,
+      );
       ts.sys.writeFile(newFileName, newContents, writeByteOrderMark);
     },
   };
@@ -232,8 +209,14 @@ export async function emitDts(
           onError,
           sourceFiles,
         ) => {
-          const newFileName = renameDtsFile(fileName);
-          const newContents = updateDeclarationMapContent(fileName, contents);
+          const newFileName = renameDtsFile(fileName, dtsExtension, bundle);
+          const newContents = updateDeclarationMapContent(
+            fileName,
+            contents,
+            dtsExtension,
+            bundle,
+            compilerOptions.declarationMap,
+          );
           originHost.writeFile(
             newFileName,
             newContents,
@@ -285,8 +268,14 @@ export async function emitDts(
           onError,
           sourceFiles,
         ) => {
-          const newFileName = renameDtsFile(fileName);
-          const newContents = updateDeclarationMapContent(fileName, contents);
+          const newFileName = renameDtsFile(fileName, dtsExtension, bundle);
+          const newContents = updateDeclarationMapContent(
+            fileName,
+            contents,
+            dtsExtension,
+            bundle,
+            compilerOptions.declarationMap,
+          );
           originHost.writeFile(
             newFileName,
             newContents,

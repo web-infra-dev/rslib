@@ -450,6 +450,9 @@ importers:
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
+      '@typescript/native-preview':
+        specifier: 7.0.0-dev.20250904.1
+        version: 7.0.0-dev.20250904.1
       rsbuild-plugin-publint:
         specifier: ^0.3.3
         version: 0.3.3(@rsbuild/core@1.5.3)
@@ -711,6 +714,68 @@ importers:
 
   tests/integration/directive/shebang: {}
 
+  tests/integration/dts-tsgo/build/__references__: {}
+
+  tests/integration/dts-tsgo/build/abort-on-error: {}
+
+  tests/integration/dts-tsgo/build/auto-extension: {}
+
+  tests/integration/dts-tsgo/build/basic: {}
+
+  tests/integration/dts-tsgo/build/clean: {}
+
+  tests/integration/dts-tsgo/build/declaration-map: {}
+
+  tests/integration/dts-tsgo/build/dist-path: {}
+
+  tests/integration/dts-tsgo/build/process-files: {}
+
+  tests/integration/dts-tsgo/bundle-false/abort-on-error: {}
+
+  tests/integration/dts-tsgo/bundle-false/alias: {}
+
+  tests/integration/dts-tsgo/bundle-false/auto-extension: {}
+
+  tests/integration/dts-tsgo/bundle-false/basic: {}
+
+  tests/integration/dts-tsgo/bundle-false/clean: {}
+
+  tests/integration/dts-tsgo/bundle-false/declaration-dir: {}
+
+  tests/integration/dts-tsgo/bundle-false/declaration-map: {}
+
+  tests/integration/dts-tsgo/bundle-false/dist-path: {}
+
+  tests/integration/dts-tsgo/bundle-false/tsconfig-path: {}
+
+  tests/integration/dts-tsgo/bundle/abort-on-error: {}
+
+  tests/integration/dts-tsgo/bundle/absolute-entry: {}
+
+  tests/integration/dts-tsgo/bundle/auto-extension: {}
+
+  tests/integration/dts-tsgo/bundle/basic: {}
+
+  tests/integration/dts-tsgo/bundle/bundle-name: {}
+
+  tests/integration/dts-tsgo/bundle/bundled-packages:
+    devDependencies:
+      '@reduxjs/toolkit':
+        specifier: ^2.8.2
+        version: 2.8.2(react@19.1.1)
+
+  tests/integration/dts-tsgo/bundle/clean: {}
+
+  tests/integration/dts-tsgo/bundle/dist-path: {}
+
+  tests/integration/dts-tsgo/bundle/multiple-entries: {}
+
+  tests/integration/dts-tsgo/bundle/rootdir:
+    devDependencies:
+      '@types/chromecast-caf-sender':
+        specifier: ^1.0.11
+        version: 1.0.11
+
   tests/integration/dts/build/__references__: {}
 
   tests/integration/dts/build/abort-on-error: {}
@@ -921,6 +986,21 @@ importers:
   tests/integration/redirect/asset: {}
 
   tests/integration/redirect/dts:
+    devDependencies:
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../../../packages/core
+      '@types/express':
+        specifier: ^5.0.3
+        version: 5.0.3
+      express:
+        specifier: ^5.1.0
+        version: 5.1.0
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+
+  tests/integration/redirect/dts-tsgo:
     devDependencies:
       '@rslib/core':
         specifier: workspace:*
@@ -3284,6 +3364,53 @@ packages:
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
+
+  '@typescript/native-preview-darwin-arm64@7.0.0-dev.20250904.1':
+    resolution: {integrity: sha512-1rt4DhERW1VM4OwWYVIrCp1k1S4kpZAxzbCnprNinVJInhHexY2K0FFD9IGXKWSRANHg/OmJRQYTEoDKM6pqNw==}
+    engines: {node: '>=20.6.0'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@typescript/native-preview-darwin-x64@7.0.0-dev.20250904.1':
+    resolution: {integrity: sha512-d2DMQnsXAkZDDk9bU/FhY/D74tbMAkboIGb+hq7kIIgOVcxOswhwLFZ/ajW/9NTesktz8Z14t40Ber+/Pny25A==}
+    engines: {node: '>=20.6.0'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@typescript/native-preview-linux-arm64@7.0.0-dev.20250904.1':
+    resolution: {integrity: sha512-+fv13RDSk+7wFYY846q5ig7X6G07JT7wbajk6p4rELXTIfS1c6gRHGhODETCfFVaPziP4IlvqyinNP8F8wc9uQ==}
+    engines: {node: '>=20.6.0'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@typescript/native-preview-linux-arm@7.0.0-dev.20250904.1':
+    resolution: {integrity: sha512-YyfTK1SGmfeDJv6G3vSmVxjM914Xio7O57NzRKOyEQnmBT5tdXTzeWgkjrUh1jE8wCUu0f0ZZ+xDTwgys+E2ug==}
+    engines: {node: '>=20.6.0'}
+    cpu: [arm]
+    os: [linux]
+
+  '@typescript/native-preview-linux-x64@7.0.0-dev.20250904.1':
+    resolution: {integrity: sha512-BjWJI42cUUilIyQHZpQQeSjC/Ifj/UaIf4oj6lRHDcg5qgLHWe5bAUxuNjE6i7wi+TTN9YxUvBDkMAcm/hI8wg==}
+    engines: {node: '>=20.6.0'}
+    cpu: [x64]
+    os: [linux]
+
+  '@typescript/native-preview-win32-arm64@7.0.0-dev.20250904.1':
+    resolution: {integrity: sha512-rPv/mVaneZTuFESk/zDg3dFiZjpdipVMcLaF10Ns1fIyWdZ0ja79Ufm1eCFbk8KFNEX2dEx+vFEvD9n4bhEneg==}
+    engines: {node: '>=20.6.0'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@typescript/native-preview-win32-x64@7.0.0-dev.20250904.1':
+    resolution: {integrity: sha512-+twwqKYEv5UdZX5FRaBo0bDQgw/uPQjU3hqaqaO0Dhp1Ou8Ce4oi5hgwauB1j29JwBbvOi9/yoEcjsjT2Wsaxw==}
+    engines: {node: '>=20.6.0'}
+    cpu: [x64]
+    os: [win32]
+
+  '@typescript/native-preview@7.0.0-dev.20250904.1':
+    resolution: {integrity: sha512-IzPzhumNsWsIg4Kmt0y+0b2BBtsvD17rDmKj78yNeU3AsuA6xignQ5eDkFtRmLdGPVZwa8Yg5zPcJRFln98Ocw==}
+    engines: {node: '>=20.6.0'}
+    hasBin: true
 
   '@typescript/vfs@1.6.1':
     resolution: {integrity: sha512-JwoxboBh7Oz1v38tPbkrZ62ZXNHAk9bJ7c9x0eI5zBfBnBYGhURdbnh7Z4smN/MV48Y5OCcZb58n972UtbazsA==}
@@ -10079,6 +10206,37 @@ snapshots:
   '@types/unist@2.0.11': {}
 
   '@types/unist@3.0.3': {}
+
+  '@typescript/native-preview-darwin-arm64@7.0.0-dev.20250904.1':
+    optional: true
+
+  '@typescript/native-preview-darwin-x64@7.0.0-dev.20250904.1':
+    optional: true
+
+  '@typescript/native-preview-linux-arm64@7.0.0-dev.20250904.1':
+    optional: true
+
+  '@typescript/native-preview-linux-arm@7.0.0-dev.20250904.1':
+    optional: true
+
+  '@typescript/native-preview-linux-x64@7.0.0-dev.20250904.1':
+    optional: true
+
+  '@typescript/native-preview-win32-arm64@7.0.0-dev.20250904.1':
+    optional: true
+
+  '@typescript/native-preview-win32-x64@7.0.0-dev.20250904.1':
+    optional: true
+
+  '@typescript/native-preview@7.0.0-dev.20250904.1':
+    optionalDependencies:
+      '@typescript/native-preview-darwin-arm64': 7.0.0-dev.20250904.1
+      '@typescript/native-preview-darwin-x64': 7.0.0-dev.20250904.1
+      '@typescript/native-preview-linux-arm': 7.0.0-dev.20250904.1
+      '@typescript/native-preview-linux-arm64': 7.0.0-dev.20250904.1
+      '@typescript/native-preview-linux-x64': 7.0.0-dev.20250904.1
+      '@typescript/native-preview-win32-arm64': 7.0.0-dev.20250904.1
+      '@typescript/native-preview-win32-x64': 7.0.0-dev.20250904.1
 
   '@typescript/vfs@1.6.1(typescript@5.9.2)':
     dependencies:

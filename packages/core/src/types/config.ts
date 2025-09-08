@@ -94,6 +94,13 @@ export type Dts =
        * @see {@link https://rslib.rs/config/lib/dts#dtsalias}
        */
       alias?: Record<string, string>;
+      /**
+       * Whether to generate declaration files with `tsgo`.
+       * @experimental
+       * @defaultValue `false`
+       * @see {@link https://rslib.rs/config/lib/dts#dtstsgo}
+       */
+      tsgo?: boolean;
     }
   | boolean;
 
