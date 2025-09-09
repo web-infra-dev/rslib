@@ -161,6 +161,8 @@ export default {
 
 Whether to generate declaration files with building the project references. This is equivalent to using the `--build` flag with the `tsc` command. See [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html) for more details.
 
+In scenarios where project references are configured but the referenced project is not built independently (such as source code development), this option needs to be enabled to ensure that the declaration files of referenced projects can be generated correctly.
+
 ::: note
 
 When this option is enabled, you must explicitly set `declarationDir` or `outDir` in `tsconfig.json` in order to meet the build requirements.
