@@ -31,6 +31,7 @@ export default defineConfig({
       syntax: ['node 18.12.0'],
       dts: {
         bundle: false,
+        // Only use tsgo in local dev for faster build, disable it in CI until it's more stable
         tsgo: !process.env.CI,
         distPath: './dist-types',
       },
