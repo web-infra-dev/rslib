@@ -161,7 +161,7 @@ export default {
 
 Whether to generate declaration files with building the project references. This is equivalent to using the `--build` flag with the `tsc` command. See [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html) for more details.
 
-When project references are configured but the referenced project is not built independently (such as source code development scenarios), this option needs to be enabled to ensure that the declaration files of referenced projects can be generated correctly.
+When the project references are configured but the referenced project has not been built separately (for example, the source code of other projects is directly referenced in monorepo, but the corresponding declaration file is missing in the project), this option needs to be enabled to ensure that the declaration files of referenced projects can be generated correctly, thereby ensuring the integrity of the type system.
 
 ::: note
 
