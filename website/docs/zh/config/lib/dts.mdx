@@ -161,6 +161,8 @@ export default {
 
 是否在生成类型声明文件时构建项目的 project references。这相当于在 `tsc` 命令中使用 `--build` 标志。更多详细信息请参考 [项目引用](https://www.typescriptlang.org/docs/handbook/project-references.html)。
 
+在配置了 project references 但被引用的项目尚未单独构建时（例如在 monorepo 中直接引用其他项目的源代码，但项目中缺少对应的类型声明文件），需要开启此选项，以确保能够正确生成依赖项目的类型声明，从而保障类型系统的完整性。
+
 ::: note
 
 当启用此选项时，你必须在 `tsconfig.json` 中显式设置 `declarationDir` 或 `outDir` 以满足构建要求。
