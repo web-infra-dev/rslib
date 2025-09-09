@@ -2,6 +2,7 @@ import { spawn } from 'node:child_process';
 import fsP from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
 import type ts from 'typescript';
@@ -29,7 +30,16 @@ const getTsgoBinPath = async (): Promise<string> => {
     './lib/getExePath.js',
   );
 
-  return import(libPath).then((mod) => {
+  // handle Windows paths
+  // On Windows, absolute paths must be valid file:// URLs
+  let fileUrl: string;
+  if (process.platform === 'win32') {
+    fileUrl = pathToFileURL(libPath).href;
+  } else {
+    fileUrl = libPath;
+  }
+
+  return import(fileUrl).then((mod) => {
     const getExePath = mod.default;
     return getExePath();
   });
