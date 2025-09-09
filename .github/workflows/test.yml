@@ -59,9 +59,25 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
+      # Special handling for Node.js 18: use Node.js 20 for tsgo dependency installation
+      - name: Setup Node.js 20 for dependency installation (Node 18 only)
+        if: steps.changes.outputs.changed == 'true' && matrix.node-version == 18
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
       - name: Install Dependencies
         if: steps.changes.outputs.changed == 'true'
         run: pnpm install
+
+      # Switch back to Node.js 18 after dependency installation
+      - name: Switch back to Node.js ${{ matrix.node-version }} (Node 18 only)
+        if: steps.changes.outputs.changed == 'true' && matrix.node-version == 18
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Type Check
         if: steps.changes.outputs.changed == 'true'
@@ -117,9 +133,25 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
+      # Special handling for Node.js 18: use Node.js 20 for tsgo dependency installation
+      - name: Setup Node.js 20 for dependency installation (Node 18 only)
+        if: steps.changes.outputs.changed == 'true' && matrix.node-version == 18
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
       - name: Install Dependencies
         if: steps.changes.outputs.changed == 'true'
         run: pnpm install && cd ./tests && pnpm playwright install chromium
+
+      # Switch back to Node.js 18 after dependency installation
+      - name: Switch back to Node.js ${{ matrix.node-version }} (Node 18 only)
+        if: steps.changes.outputs.changed == 'true' && matrix.node-version == 18
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Integration Test (Rstest)
         if: steps.changes.outputs.changed == 'true'
