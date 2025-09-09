@@ -161,7 +161,7 @@ export default {
 
 是否在生成类型声明文件时构建项目的 project references。这相当于在 `tsc` 命令中使用 `--build` 标志。更多详细信息请参考 [项目引用](https://www.typescriptlang.org/docs/handbook/project-references.html)。
 
-在配置了 project references 但被引用的项目未进行独立构建的场景中（例如源码开发），需要开启此选项，以确保依赖项目的类型声明文件能够正确生成。
+在配置了 project references 但被引用的项目未进行独立构建时（例如源码开发场景），需要开启此选项，以确保依赖项目的类型声明文件能够正确生成。
 
 ::: note
 
