@@ -393,7 +393,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   output: {
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
-    chunkFilename: '[name].js',
+    chunkFilename: '0~[name].js',
     publicPath: 'auto',
     pathinfo: false,
     hashFunction: 'xxhash64',
@@ -1091,7 +1091,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   output: {
     path: '<WORKSPACE>/dist',
     filename: '[name].cjs',
-    chunkFilename: '[name].cjs',
+    chunkFilename: '1~[name].cjs',
     publicPath: 'auto',
     pathinfo: false,
     hashFunction: 'xxhash64',
@@ -1775,7 +1775,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   output: {
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
-    chunkFilename: '[name].js',
+    chunkFilename: '2~[name].js',
     publicPath: '/',
     pathinfo: false,
     hashFunction: 'xxhash64',
@@ -2375,7 +2375,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   output: {
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
-    chunkFilename: '[name].js',
+    chunkFilename: '3~[name].js',
     publicPath: '/',
     pathinfo: false,
     hashFunction: 'xxhash64',
@@ -3674,6 +3674,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               },
             },
             "output": {
+              "chunkFilename": "0~[name].js",
               "chunkFormat": "module",
               "chunkLoading": "import",
               "library": {
@@ -3945,6 +3946,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               },
             },
             "output": {
+              "chunkFilename": "1~[name].cjs",
               "chunkFormat": "commonjs",
               "chunkLoading": "require",
               "iife": false,
@@ -4182,6 +4184,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
             "output": {
               "asyncChunks": false,
+              "chunkFilename": "2~[name].js",
               "library": {
                 "type": "umd",
               },
@@ -4413,6 +4416,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
             "output": {
               "asyncChunks": false,
+              "chunkFilename": "3~[name].js",
               "iife": true,
               "library": {
                 "type": "modern-module",
