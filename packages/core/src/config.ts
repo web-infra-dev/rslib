@@ -1093,6 +1093,26 @@ export const resolveEntryPath = (
 ): RsbuildEntry =>
   traverseEntryQuery(entries, (item) => path.resolve(root, item));
 
+const composeOutputConfig = (
+  multiCompilerIndex: number | null,
+  format: Format,
+  jsExtension: string,
+): EnvironmentConfig => {
+  if (typeof multiCompilerIndex === 'number' && format !== 'mf') {
+    return {
+      tools: {
+        rspack: {
+          output: {
+            chunkFilename: `${multiCompilerIndex}~[name]${jsExtension}`,
+          },
+        },
+      },
+    };
+  }
+
+  return {};
+};
+
 const composeEntryConfig = async (
   rawEntry: RsbuildConfigEntry,
   bundle: LibConfig['bundle'],
@@ -1604,6 +1624,7 @@ const composeExternalHelpersConfig = (
 
 async function composeLibRsbuildConfig(
   config: LibConfig,
+  multiCompilerIndex: number | null, // null means there's non multi-compiler
   root?: string,
   sharedPlugins?: RsbuildPlugins,
 ) {
@@ -1660,6 +1681,11 @@ async function composeLibRsbuildConfig(
     cssModulesAuto,
     config.outBase,
   );
+  const outputConfig = composeOutputConfig(
+    multiCompilerIndex,
+    format,
+    jsExtension,
+  );
   const { config: bundlelessExternalConfig } = composeBundlelessExternalConfig(
     jsExtension,
     redirect,
@@ -1709,6 +1735,7 @@ async function composeLibRsbuildConfig(
 
   return mergeRsbuildConfig(
     formatConfig,
+    outputConfig,
     shimsConfig,
     syntaxConfig,
     externalHelpersConfig,
@@ -1761,7 +1788,7 @@ export async function composeCreateRsbuildConfig(
     );
   }
 
-  const libConfigPromises = libConfigsArray.map(async (libConfig) => {
+  const libConfigPromises = libConfigsArray.map(async (libConfig, index) => {
     const userConfig = mergeRsbuildConfig<LibConfig>(
       sharedRsbuildConfig,
       libConfig,
@@ -1771,6 +1798,7 @@ export async function composeCreateRsbuildConfig(
     // configuration and Lib configuration in the settings.
     const libRsbuildConfig = await composeLibRsbuildConfig(
       userConfig,
+      libConfigsArray.length > 1 ? index : null,
       root,
       sharedPlugins,
     );
