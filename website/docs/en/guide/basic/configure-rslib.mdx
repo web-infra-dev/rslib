@@ -125,6 +125,26 @@ You can also abbreviate the `--config` option to `-c`:
 rslib build -c rslib.prod.config.mjs
 ```
 
+## Specify config loader
+
+When you use a configuration file with the `.ts`, `.mts`, and `.cts` extensions, Rslib will use [jiti](https://github.com/unjs/jiti) to load configuration files, providing interoperability between ESM and CommonJS. The behavior of module resolution differs slightly from the native behavior of Node.js.
+
+If your JavaScript runtime already natively supports TypeScript, you can use the `--config-loader native` option to use the Node.js native loader to load the configuration file. This can ensure that the module resolution behavior is consistent with the native behavior of Node.js and has better performance.
+
+For example, Node.js v22.6.0+ already natively supports TypeScript, you can use the following command to use the Node.js native loader to load the configuration file:
+
+```bash
+# Node.js >= v22.18.0
+# No need to set --experimental-strip-types
+npx rslib build --config-loader native
+
+# Node.js v22.6.0 - v22.17.0
+# Need to set --experimental-strip-types
+NODE_OPTIONS="--experimental-strip-types" npx rslib build --config-loader native
+```
+
+> See [Node.js - Running TypeScript Natively](https://nodejs.org/en/learn/typescript/run-natively#running-typescript-natively) for more details.
+
 ## Using environment variables
 
 In the configuration file, you can use Node.js environment variables such as `process.env.NODE_ENV` to dynamically set different configurations:

@@ -119,14 +119,18 @@ const resolveConfigPath = (root: string, customConfig?: string): string => {
   throw new Error(`${DEFAULT_CONFIG_NAME} not found in ${root}`);
 };
 
+export type ConfigLoader = 'jiti' | 'native';
+
 export async function loadConfig({
   cwd = process.cwd(),
   path,
   envMode,
+  loader,
 }: {
   cwd?: string;
   path?: string;
   envMode?: string;
+  loader?: ConfigLoader;
 }): Promise<{
   content: RslibConfig;
   filePath: string;
@@ -136,6 +140,7 @@ export async function loadConfig({
     cwd: dirname(configFilePath),
     path: configFilePath,
     envMode,
+    loader,
   });
 
   return { content: content as RslibConfig, filePath: configFilePath };

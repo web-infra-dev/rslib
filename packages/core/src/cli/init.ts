@@ -31,6 +31,7 @@ export async function init(options: CommonOptions): Promise<{
     cwd: root,
     path: options.config,
     envMode: options.envMode,
+    loader: options.configLoader,
   });
 
   config.source ||= {};

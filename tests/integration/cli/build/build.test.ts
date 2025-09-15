@@ -82,6 +82,27 @@ describe('build command', async () => {
     `);
   });
 
+  test('--config-loader', async () => {
+    // Skip Node.js <= 22.18
+    if (!process.features.typescript) {
+      return;
+    }
+
+    await fse.remove(path.join(__dirname, 'dist'));
+    runCliSync('build --config-loader native', {
+      cwd: __dirname,
+    });
+
+    const files = await globContentJSON(path.join(__dirname, 'dist'));
+    const fileNames = Object.keys(files).sort();
+    expect(fileNames).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/cli/build/dist/cjs/index.cjs",
+        "<ROOT>/tests/integration/cli/build/dist/esm/index.js",
+      ]
+    `);
+  });
+
   test('--root', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
     runCliSync('build --root custom-root', {
