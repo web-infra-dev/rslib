@@ -3,7 +3,8 @@ import { dirname, extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { logger, type RsbuildConfig, type RsbuildPlugin } from '@rsbuild/core';
 import color from 'picocolors';
-import ts from 'typescript';
+import type { ParsedCommandLine } from 'typescript';
+
 import {
   cleanDtsFiles,
   cleanTsBuildInfoFile,
@@ -11,6 +12,7 @@ import {
   getDtsEmitPath,
   loadTsconfig,
   processSourceEntry,
+  ts,
   warnIfOutside,
 } from './utils';
 
@@ -61,7 +63,7 @@ export type DtsGenOptions = Omit<PluginDtsOptions, 'bundle'> & {
   dtsEmitPath: string;
   build?: boolean;
   tsconfigPath: string;
-  tsConfigResult: ts.ParsedCommandLine;
+  tsConfigResult: ParsedCommandLine;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
   apiExtractorOptions?: ApiExtractorOptions;
 };

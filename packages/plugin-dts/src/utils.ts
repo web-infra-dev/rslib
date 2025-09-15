@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import fsP from 'node:fs/promises';
-
+import { createRequire } from 'node:module';
 import { platform } from 'node:os';
 import path, {
   basename,
@@ -12,14 +12,31 @@ import path, {
   relative,
   resolve,
 } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { type NapiConfig, parseAsync } from '@ast-grep/napi';
 import { logger, type RsbuildConfig } from '@rsbuild/core';
 import MagicString from 'magic-string';
 import color from 'picocolors';
 import { convertPathToPattern, glob } from 'tinyglobby';
 import { createMatchPath, loadConfig, type MatchPath } from 'tsconfig-paths';
-import ts from 'typescript';
+import type {
+  CompilerOptions,
+  Diagnostic,
+  ParsedCommandLine,
+} from 'typescript';
 import type { DtsEntry, DtsRedirect } from './index';
+
+const __filename = fileURLToPath(import.meta.url);
+const require = createRequire(__filename);
+
+/**
+ * Currently, typescript only provides a CJS bundle, so we use require to load it
+ * for better startup performance. If we use `import ts from 'typescript'`,
+ * Node.js will use `cjs-module-lexer` to parse it, which slows down startup time.
+ */
+const ts = require('typescript') as typeof import('typescript');
+
+export { ts };
 
 const JS_EXTENSIONS: string[] = [
   'js',
@@ -40,7 +57,7 @@ export const JS_EXTENSIONS_PATTERN: RegExp = new RegExp(
   `\\.(${JS_EXTENSIONS.join('|')})$`,
 );
 
-export function loadTsconfig(tsconfigPath: string): ts.ParsedCommandLine {
+export function loadTsconfig(tsconfigPath: string): ParsedCommandLine {
   const configFile = ts.readConfigFile(
     tsconfigPath,
     ts.sys.readFile.bind(ts.sys),
@@ -139,10 +156,7 @@ export async function clearTempDeclarationDir(cwd: string): Promise<void> {
   await emptyDir(dirPath);
 }
 
-export function getFileLoc(
-  diagnostic: ts.Diagnostic,
-  configPath: string,
-): string {
+export function getFileLoc(diagnostic: Diagnostic, configPath: string): string {
   if (diagnostic.file) {
     const { line, character } = ts.getLineAndCharacterOfPosition(
       diagnostic.file,
@@ -605,7 +619,7 @@ export async function cleanDtsFiles(dir: string): Promise<void> {
 
 export async function cleanTsBuildInfoFile(
   tsconfigPath: string,
-  compilerOptions: ts.CompilerOptions,
+  compilerOptions: CompilerOptions,
 ): Promise<void> {
   const tsconfigDir = dirname(tsconfigPath);
   const { outDir, rootDir, tsBuildInfoFile } = compilerOptions;
