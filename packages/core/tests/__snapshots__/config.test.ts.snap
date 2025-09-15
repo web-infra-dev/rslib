@@ -393,7 +393,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   output: {
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
-    chunkFilename: '[name].js',
+    chunkFilename: '0~[name].js',
     publicPath: 'auto',
     pathinfo: false,
     hashFunction: 'xxhash64',
@@ -1091,7 +1091,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   output: {
     path: '<WORKSPACE>/dist',
     filename: '[name].cjs',
-    chunkFilename: '[name].cjs',
+    chunkFilename: '1~[name].cjs',
     publicPath: 'auto',
     pathinfo: false,
     hashFunction: 'xxhash64',
@@ -1775,7 +1775,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   output: {
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
-    chunkFilename: '[name].js',
+    chunkFilename: '2~[name].js',
     publicPath: '/',
     pathinfo: false,
     hashFunction: 'xxhash64',
@@ -2375,7 +2375,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   output: {
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
-    chunkFilename: '[name].js',
+    chunkFilename: '3~[name].js',
     publicPath: '/',
     pathinfo: false,
     hashFunction: 'xxhash64',
@@ -2918,7 +2918,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   output: {
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
-    chunkFilename: '[name].js',
+    chunkFilename: '4~[name].js',
     publicPath: '/',
     pathinfo: false,
     hashFunction: 'xxhash64',
@@ -3696,6 +3696,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           [Function],
           {
+            "output": {
+              "chunkFilename": "0~[name].js",
+            },
+          },
+          {
             "target": [
               "node",
             ],
@@ -3967,6 +3972,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           [Function],
           {
+            "output": {
+              "chunkFilename": "1~[name].cjs",
+            },
+          },
+          {
             "target": [
               "node",
             ],
@@ -4200,6 +4210,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           [Function],
           {
+            "output": {
+              "chunkFilename": "2~[name].js",
+            },
+          },
+          {
             "target": [
               "node",
             ],
@@ -4432,6 +4447,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           [Function],
           {
+            "output": {
+              "chunkFilename": "3~[name].js",
+            },
+          },
+          {
             "target": [
               "node",
             ],
@@ -4590,6 +4610,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           [Function],
           [Function],
+          {
+            "output": {
+              "chunkFilename": "4~[name].js",
+            },
+          },
           {
             "target": [
               "web",

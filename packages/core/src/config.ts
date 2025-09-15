@@ -973,10 +973,11 @@ const composeExternalsConfig = (
   };
 };
 
-const composeAutoExtensionConfig = (
+const composeOutputFilenameConfig = (
   config: LibConfig,
   format: Format,
   autoExtension: boolean,
+  multiCompilerIndex: number | null,
   pkgJson?: PkgJson,
 ): {
   config: EnvironmentConfig;
@@ -998,9 +999,38 @@ const composeAutoExtensionConfig = (
     return filenameHash ? '.[contenthash:8]' : '';
   };
 
+  // Copied from https://github.com/web-infra-dev/rspack/blob/2efea8673f86a562559e26a9351680e8df4d9ae9/packages/rspack/src/config/defaults.ts#L667-L680.
+  const inferChunkFilename = (filename: string): string | undefined => {
+    if (typeof filename !== 'function') {
+      const hasName = filename.includes('[name]');
+      const hasId = filename.includes('[id]');
+      const hasChunkHash = filename.includes('[chunkhash]');
+      const hasContentHash = filename.includes('[contenthash]');
+      const multiCompilerPrefix =
+        typeof multiCompilerIndex === 'number' ? `${multiCompilerIndex}~` : '';
+      // Anything changing depending on chunk is fine
+
+      if (hasChunkHash || hasContentHash || hasName || hasId)
+        return filename.replace(
+          /(^|\/)([^/]*(?:\?|$))/,
+          `$1${multiCompilerPrefix}$2`,
+        );
+      // Otherwise prefix "[id]." in front of the basename to make it changing
+      return filename.replace(
+        /(^|\/)([^/]*(?:\?|$))/,
+        `$1${multiCompilerIndex}[id].$2`,
+      );
+    }
+
+    return undefined;
+  };
+
   const hash = getHash();
   const defaultJsFilename = `[name]${hash}${jsExtension}`;
   const userJsFilename = config.output?.filename?.js;
+  const defaultJsChunkFilename = inferChunkFilename(
+    (userJsFilename as string) ?? defaultJsFilename,
+  );
 
   // will be returned to use in redirect feature
   // only support string type for now since we can not get the return value of function
@@ -1009,15 +1039,25 @@ const composeAutoExtensionConfig = (
       ? extname(userJsFilename)
       : jsExtension;
 
-  const finalConfig = userJsFilename
-    ? {}
-    : {
+  const chunkFilename: RsbuildConfig = {
+    tools: {
+      rspack: {
+        output: {
+          chunkFilename: defaultJsChunkFilename,
+        },
+      },
+    },
+  };
+
+  const finalConfig: RsbuildConfig = userJsFilename
+    ? chunkFilename
+    : mergeRsbuildConfig(chunkFilename, {
         output: {
           filename: {
             js: defaultJsFilename,
           },
         },
-      };
+      });
 
   return {
     config: finalConfig,
@@ -1604,6 +1644,7 @@ const composeExternalHelpersConfig = (
 
 async function composeLibRsbuildConfig(
   config: LibConfig,
+  multiCompilerIndex: number | null, // null means there's non multi-compiler
   root?: string,
   sharedPlugins?: RsbuildPlugins,
 ) {
@@ -1649,10 +1690,16 @@ async function composeLibRsbuildConfig(
     config.output?.externals,
   );
   const {
-    config: autoExtensionConfig,
+    config: outputFilenameConfig,
     jsExtension,
     dtsExtension,
-  } = composeAutoExtensionConfig(config, format, autoExtension, pkgJson);
+  } = composeOutputFilenameConfig(
+    config,
+    format,
+    autoExtension,
+    multiCompilerIndex,
+    pkgJson,
+  );
   const { entryConfig, outBase } = await composeEntryConfig(
     config.source?.entry!,
     config.bundle,
@@ -1660,6 +1707,7 @@ async function composeLibRsbuildConfig(
     cssModulesAuto,
     config.outBase,
   );
+
   const { config: bundlelessExternalConfig } = composeBundlelessExternalConfig(
     jsExtension,
     redirect,
@@ -1709,10 +1757,11 @@ async function composeLibRsbuildConfig(
 
   return mergeRsbuildConfig(
     formatConfig,
+    // outputConfig,
     shimsConfig,
     syntaxConfig,
     externalHelpersConfig,
-    autoExtensionConfig,
+    outputFilenameConfig,
     targetConfig,
     // #region Externals configs
     // The order of the externals config should come in the following order:
@@ -1761,7 +1810,7 @@ export async function composeCreateRsbuildConfig(
     );
   }
 
-  const libConfigPromises = libConfigsArray.map(async (libConfig) => {
+  const libConfigPromises = libConfigsArray.map(async (libConfig, index) => {
     const userConfig = mergeRsbuildConfig<LibConfig>(
       sharedRsbuildConfig,
       libConfig,
@@ -1771,6 +1820,7 @@ export async function composeCreateRsbuildConfig(
     // configuration and Lib configuration in the settings.
     const libRsbuildConfig = await composeLibRsbuildConfig(
       userConfig,
+      libConfigsArray.length > 1 ? index : null,
       root,
       sharedPlugins,
     );
