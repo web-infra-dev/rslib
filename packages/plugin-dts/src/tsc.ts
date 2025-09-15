@@ -1,17 +1,27 @@
 import { logger } from '@rsbuild/core';
 import color from 'picocolors';
-import ts from 'typescript';
+import type {
+  CompilerHost,
+  CompilerOptions,
+  Diagnostic,
+  FormatDiagnosticsHost,
+  ParsedCommandLine,
+  Program,
+  System,
+  WatchStatusReporter,
+} from 'typescript';
 import type { DtsRedirect } from './index';
 import {
   getTimeCost,
   processDtsFiles,
   renameDtsFile,
+  ts,
   updateDeclarationMapContent,
 } from './utils';
 
 const logPrefixTsc = color.dim('[tsc]');
 
-const formatHost: ts.FormatDiagnosticsHost = {
+const formatHost: FormatDiagnosticsHost = {
   getCanonicalFileName: (path) => path,
   getCurrentDirectory: ts.sys.getCurrentDirectory.bind(ts.sys),
   getNewLine: () => ts.sys.newLine,
@@ -21,7 +31,7 @@ export type EmitDtsOptions = {
   name: string;
   cwd: string;
   configPath: string;
-  tsConfigResult: ts.ParsedCommandLine;
+  tsConfigResult: ParsedCommandLine;
   declarationDir: string;
   dtsExtension: string;
   rootDir: string;
@@ -32,7 +42,7 @@ export type EmitDtsOptions = {
 };
 
 async function handleDiagnosticsAndProcessFiles(
-  diagnostics: readonly ts.Diagnostic[],
+  diagnostics: readonly Diagnostic[],
   configPath: string,
   bundle: boolean,
   declarationDir: string,
@@ -117,17 +127,17 @@ export async function emitDtsTsc(
 
   const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
 
-  const reportDiagnostic = (diagnostic: ts.Diagnostic) => {
+  const reportDiagnostic = (diagnostic: Diagnostic) => {
     logger.error(
       logPrefixTsc,
       ts.formatDiagnosticsWithColorAndContext([diagnostic], formatHost),
     );
   };
 
-  const reportWatchStatusChanged: ts.WatchStatusReporter = async (
-    diagnostic: ts.Diagnostic,
+  const reportWatchStatusChanged: WatchStatusReporter = async (
+    diagnostic: Diagnostic,
     _newLine: string,
-    _options: ts.CompilerOptions,
+    _options: CompilerOptions,
     errorCount?: number,
   ) => {
     const message = `${ts.flattenDiagnosticMessageText(
@@ -179,7 +189,7 @@ export async function emitDtsTsc(
     }
   };
 
-  const system: ts.System = {
+  const system: System = {
     ...ts.sys,
     writeFile: (fileName, contents, writeByteOrderMark) => {
       const newFileName = renameDtsFile(fileName, dtsExtension, bundle);
@@ -198,9 +208,8 @@ export async function emitDtsTsc(
   if (!isWatch) {
     // normal build - npx tsc
     if (!build && !compilerOptions.composite) {
-      const originHost: ts.CompilerHost =
-        ts.createCompilerHost(compilerOptions);
-      const host: ts.CompilerHost = {
+      const originHost: CompilerHost = ts.createCompilerHost(compilerOptions);
+      const host: CompilerHost = {
         ...originHost,
         writeFile: (
           fileName,
@@ -227,7 +236,7 @@ export async function emitDtsTsc(
         },
       };
 
-      const program: ts.Program = ts.createProgram({
+      const program: Program = ts.createProgram({
         rootNames: fileNames,
         options: compilerOptions,
         projectReferences,
@@ -257,9 +266,9 @@ export async function emitDtsTsc(
       );
     } else if (!build && compilerOptions.composite) {
       // incremental build with composite true - npx tsc
-      const originHost: ts.CompilerHost =
+      const originHost: CompilerHost =
         ts.createIncrementalCompilerHost(compilerOptions);
-      const host: ts.CompilerHost = {
+      const host: CompilerHost = {
         ...originHost,
         writeFile: (
           fileName,
@@ -296,7 +305,7 @@ export async function emitDtsTsc(
         createProgram,
       });
 
-      const allDiagnostics: ts.Diagnostic[] = [];
+      const allDiagnostics: Diagnostic[] = [];
       allDiagnostics.push(
         ...program.getConfigFileParsingDiagnostics(),
         ...program.getSyntacticDiagnostics(),
