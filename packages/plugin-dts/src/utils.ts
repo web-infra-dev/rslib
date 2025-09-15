@@ -34,6 +34,7 @@ const require = createRequire(__filename);
  * for better startup performance. If we use `import ts from 'typescript'`,
  * Node.js will use `cjs-module-lexer` to parse it, which slows down startup time.
  */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const ts = require('typescript') as typeof import('typescript');
 
 export { ts };
