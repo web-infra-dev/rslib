@@ -3,7 +3,8 @@
   "compilerOptions": {
     "noEmit": true,
     "composite": true,
-    "allowJs": true
+    "allowJs": true,
+    "allowImportingTsExtensions": true
   },
   "include": [
     "e2e/**/*.ts",
@@ -11,8 +12,7 @@
     "integration/**/rslib.config.ts",
     "integration/**/rslib.config.js",
     "benchmark/**/*.ts",
-    "playwright.config.ts",
-    "scripts"
+    "playwright.config.ts"
   ],
   "exclude": ["**/node_modules", "**/.*/"],
   "references": [

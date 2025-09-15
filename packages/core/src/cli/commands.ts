@@ -1,5 +1,6 @@
 import type { RsbuildMode } from '@rsbuild/core';
 import cac, { type CAC } from 'cac';
+import type { ConfigLoader } from '../config';
 import { logger } from '../utils/logger';
 import { build } from './build';
 import { init } from './init';
@@ -13,6 +14,7 @@ export type CommonOptions = {
   envDir?: string;
   envMode?: string;
   lib?: string[];
+  configLoader?: ConfigLoader;
 };
 
 export type BuildOptions = CommonOptions & {
@@ -38,6 +40,13 @@ const applyCommonOptions = (cli: CAC) => {
     .option(
       '--env-mode <mode>',
       'specify the env mode to load the `.env.[mode]` file',
+    )
+    .option(
+      '--config-loader <loader>',
+      'Set the config file loader (jiti | native)',
+      {
+        default: 'jiti',
+      },
     )
     .option('--env-dir <dir>', 'specify the directory to load `.env` files')
     .option(
