@@ -19,5 +19,14 @@ export default defineConfig({
       index: ['./src/**'],
     },
   },
+  // externalize pre-bundled dependencies
+  output: {
+    externals: {
+      'magic-string': '../compiled/magic-string/index.js',
+      picocolors: '../compiled/picocolors/index.js',
+      tinyglobby: '../compiled/tinyglobby/index.js',
+      'tsconfig-paths': 'node-commonjs ../compiled/tsconfig-paths/index.js',
+    },
+  },
   plugins: [pluginPublint()],
 });

@@ -18,7 +18,8 @@ import { logger, type RsbuildConfig } from '@rsbuild/core';
 import MagicString from 'magic-string';
 import color from 'picocolors';
 import { convertPathToPattern, glob } from 'tinyglobby';
-import { createMatchPath, loadConfig, type MatchPath } from 'tsconfig-paths';
+import type { MatchPath } from 'tsconfig-paths';
+import * as tsconfigPaths from 'tsconfig-paths';
 import type {
   CompilerOptions,
   Diagnostic,
@@ -26,6 +27,7 @@ import type {
 } from 'typescript';
 import type { DtsEntry, DtsRedirect } from './index';
 
+const { createMatchPath, loadConfig } = tsconfigPaths;
 const __filename = fileURLToPath(import.meta.url);
 const require = createRequire(__filename);
 

@@ -7,7 +7,13 @@
     "isolatedDeclarations": true,
     "composite": true,
     "module": "ESNext",
-    "moduleResolution": "Bundler"
+    "moduleResolution": "Bundler",
+    "paths": {
+      "magic-string": ["./compiled/magic-string"],
+      "picocolors": ["./compiled/picocolors"],
+      "tinyglobby": ["./compiled/tinyglobby"],
+      "tsconfig-paths": ["./compiled/tsconfig-paths"]
+    }
   },
   "include": ["src"],
   "exclude": ["**/node_modules"]
