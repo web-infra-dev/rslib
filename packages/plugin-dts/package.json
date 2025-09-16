@@ -22,27 +22,30 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "compiled"
   ],
   "scripts": {
     "build": "rslib build",
     "dev": "rslib build --watch",
+    "prebundle": "prebundle",
     "test": "rstest"
   },
   "dependencies": {
-    "@ast-grep/napi": "0.37.0",
-    "magic-string": "^0.30.19",
-    "picocolors": "1.1.1",
-    "tinyglobby": "0.2.14",
-    "tsconfig-paths": "^4.2.0"
+    "@ast-grep/napi": "0.37.0"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.52.13",
     "@rsbuild/core": "~1.5.7",
     "@rslib/tsconfig": "workspace:*",
     "@typescript/native-preview": "7.0.0-dev.20250915.1",
+    "magic-string": "^0.30.19",
+    "picocolors": "1.1.1",
+    "prebundle": "1.4.2",
     "rsbuild-plugin-publint": "^0.3.3",
     "rslib": "npm:@rslib/core@0.13.2",
+    "tinyglobby": "0.2.14",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
   },
   "peerDependencies": {

@@ -48,6 +48,7 @@ export default defineConfig({
       RSLIB_VERSION: JSON.stringify(require('./package.json').version),
     },
   },
+  // externalize pre-bundled dependencies
   output: {
     externals: {
       picocolors: '../compiled/picocolors/index.js',
