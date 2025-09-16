@@ -12,6 +12,7 @@ export default {
     typescript: 'typescript',
   },
   dependencies: [
+    'tinyglobby',
     {
       name: 'chokidar',
       // strip sourcemap comment
