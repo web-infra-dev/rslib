@@ -53,6 +53,7 @@ export default defineConfig({
       picocolors: '../compiled/picocolors/index.js',
       chokidar: '../compiled/chokidar/index.js',
       rslog: '../compiled/rslog/index.js',
+      tinyglobby: '../compiled/tinyglobby/index.js',
     },
   },
   tools: {
