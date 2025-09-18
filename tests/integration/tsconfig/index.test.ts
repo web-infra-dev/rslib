@@ -6,8 +6,6 @@ test('tsconfig path', async () => {
   const { isSuccess, entries } = await buildAndGetResults({ fixturePath });
 
   expect(isSuccess).toBe(true);
-  expect(entries.esm).toContain(`console.info("foo");
-`);
-  expect(entries.cjs).toContain(`console.info("foo");
-`);
+  expect(entries.esm).toContain(`const foo = 'foo'`);
+  expect(entries.cjs).toContain(`const foo = 'foo'`);
 });

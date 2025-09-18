@@ -30,7 +30,8 @@ test('format default to esm', async () => {
   // cspell:disable
   expect(contents.esm0).toMatchInlineSnapshot(`
     {
-      "<ROOT>/tests/integration/format/default/dist/bundle-esm/index.js": "const str = "hellofoo world";
+      "<ROOT>/tests/integration/format/default/dist/bundle-esm/index.js": "const foo = 'foo';
+    const str = 'hello' + foo + ' world';
     export { str };
     ",
     }
