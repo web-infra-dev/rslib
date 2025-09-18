@@ -67,8 +67,9 @@ test('multiple entry bundle', async () => {
   });
   // cspell:disable
   expect(index).toMatchInlineSnapshot(`
-    "const foo = "fooshared";
-    const src_text = ()=>\`hello \${foo} shared\`;
+    "const shared = 'shared';
+    const foo = 'foo' + shared;
+    const src_text = ()=>\`hello \${foo} \${shared}\`;
     export { src_text as text };
     "
   `);
@@ -79,7 +80,8 @@ test('multiple entry bundle', async () => {
   });
   // cspell:disable
   expect(foo).toMatchInlineSnapshot(`
-    "const foo = "fooshared";
+    "const shared = 'shared';
+    const foo = 'foo' + shared;
     export { foo };
     "
   `);

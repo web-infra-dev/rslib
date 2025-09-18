@@ -96,7 +96,8 @@ test('user externals', async () => {
     "import node_fs from "node:fs";
     import lodash from "lodash";
     import zip from "lodash/zip";
-    console.log(node_fs, lodash.add, zip, "foo");
+    const foo = 'foo';
+    console.log(node_fs, lodash.add, zip, foo);
     "
   `,
   );
