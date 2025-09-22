@@ -19,7 +19,7 @@ export function RsbuildDocBadge({ path, text, alt }: Props) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="rspress-toc-exclude"
+      className="rspress-toc-exclude rp-not-doc"
     >
       <Badge type="info">
         <img
