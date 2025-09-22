@@ -34,6 +34,7 @@ Rslib CLI 提供了一些公共选项，可以用于所有命令：
 | `--env-mode <mode>`        | 指定 env 模式来加载 `.env.[mode]` 文件，详见 [Rsbuild - Env 模式](https://rsbuild.rs/zh/guide/advanced/env-vars#env-模式) |
 | `-h, --help`               | 显示命令帮助                                                                                                              |
 | `--lib <id>`               | 指定运行命令的库（可重复，例如：`--lib esm --lib cjs`），查看 [lib.id](/config/lib/id) 了解如何获取或设置库的 ID          |
+| `--log-level <level>`      | 指定日志级别（`info` \| `warn` \| `error` \| `silent`），详见 [logLevel](/config/rsbuild/log-level)                       |
 | `-r, --root <root>`        | 指定项目根目录，可以是绝对路径或者相对于 cwd 的路径                                                                       |
 
 ## rslib build

@@ -1,4 +1,4 @@
-import type { RsbuildMode } from '@rsbuild/core';
+import type { LogLevel, RsbuildMode } from '@rsbuild/core';
 import cac, { type CAC } from 'cac';
 import type { ConfigLoader } from '../config';
 import { logger } from '../utils/logger';
@@ -15,6 +15,7 @@ export type CommonOptions = {
   envMode?: string;
   lib?: string[];
   configLoader?: ConfigLoader;
+  logLevel?: LogLevel;
 };
 
 export type BuildOptions = CommonOptions & {
@@ -49,6 +50,10 @@ const applyCommonOptions = (cli: CAC) => {
       },
     )
     .option('--env-dir <dir>', 'specify the directory to load `.env` files')
+    .option(
+      '--log-level <level>',
+      'set the log level (info | warn | error | silent)',
+    )
     .option(
       '--lib <id>',
       'specify the library (repeatable, e.g. --lib esm --lib cjs)',

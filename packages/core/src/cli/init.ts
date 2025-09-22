@@ -44,6 +44,10 @@ export async function init(options: CommonOptions): Promise<{
     config.root = root;
   }
 
+  if (options.logLevel) {
+    config.logLevel = options.logLevel;
+  }
+
   return {
     config,
     configFilePath,
