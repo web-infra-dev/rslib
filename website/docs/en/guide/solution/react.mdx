@@ -45,7 +45,7 @@ export default defineConfig({
 
 ## JSX transform
 
-- **Type**: `'automatic' | 'classic'`
+- **Type**: `'automatic' | 'classic' | 'preserve'`
 - **Default**: `'automatic'`
 
 React introduced a [new JSX transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html) in version 17. This new transform removes the need to import `React` when using JSX.
@@ -70,6 +70,36 @@ export default defineConfig({
       // [!code highlight:3]
       swcReactOptions: {
         runtime: 'classic',
+      },
+    }),
+  ],
+});
+```
+
+When you need to keep native JSX in the build output, set the runtime to `'preserve'`. This mode retains JSX syntax so it can be processed later (for example by another bundler). Because the files stay unbundled, you must switch to bundleless mode by setting `bundle: false`.
+
+To emit `.jsx` files, configure the JS filename template while using the preserve runtime:
+
+```ts title="rslib.config.ts" twoslash
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+      format: 'esm',
+      output: {
+        filename: {
+          js: '[name].jsx', // [!code highlight]
+        },
+      },
+    },
+  ],
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'preserve',
       },
     }),
   ],
