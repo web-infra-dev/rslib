@@ -171,7 +171,7 @@ export async function getResults(
         ? /\.d.(ts|cts|mts)(\.map)?$/
         : type === 'css'
           ? /\.css(\.map)?$/
-          : /\.(js|cjs|mjs)(\.map)?$/;
+          : /\.(js|cjs|mjs|jsx)(\.map)?$/;
 
     const content: Record<string, string> = await globContentJSON(globFolder, {
       absolute: true,
