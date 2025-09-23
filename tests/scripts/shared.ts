@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import {
   type InspectConfigResult,
+  type LogLevel,
   mergeRsbuildConfig as mergeConfig,
 } from '@rsbuild/core';
 import type { Format, LibConfig, RslibConfig } from '@rslib/core';
@@ -223,14 +224,16 @@ export async function getResults(
   };
 }
 
-const updateConfigForTest = (rslibConfig: RslibConfig) => {
-  Object.assign(rslibConfig, {
-    performance: {
-      // Do not print file size in tests
-      printFileSize: false,
-    },
-  });
-};
+const updateConfigForTest =
+  (logLevel?: LogLevel) => (rslibConfig: RslibConfig) => {
+    Object.assign(rslibConfig, {
+      performance: {
+        // Do not print file size in tests
+        printFileSize: false,
+      },
+      logLevel,
+    });
+  };
 
 export async function rslibBuild({
   cwd,
@@ -258,6 +261,7 @@ export async function buildAndGetResults(options: {
   configPath?: string;
   type: 'all';
   lib?: string[];
+  logLevel?: LogLevel;
 }): Promise<{
   js: BuildResult;
   dts: BuildResult;
@@ -268,22 +272,25 @@ export async function buildAndGetResults(options: {
   configPath?: string;
   type?: 'js' | 'dts' | 'css';
   lib?: string[];
+  logLevel?: LogLevel;
 }): Promise<BuildResult>;
 export async function buildAndGetResults({
   fixturePath,
   configPath,
   type = 'js',
   lib,
+  logLevel = 'warn',
 }: {
   fixturePath: string;
   configPath?: string;
   type?: 'js' | 'dts' | 'css' | 'all';
   lib?: string[];
+  logLevel?: LogLevel;
 }) {
   const { rsbuildInstance, rslibConfig } = await rslibBuild({
     cwd: fixturePath,
     path: configPath,
-    modifyConfig: updateConfigForTest,
+    modifyConfig: updateConfigForTest(logLevel),
     lib,
   });
   const {

@@ -1,6 +1,5 @@
 import path from 'node:path';
-import { describe } from 'node:test';
-import { expect, test } from '@rstest/core';
+import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
 import { globContentJSON, runCliSync } from 'test-helper';
 

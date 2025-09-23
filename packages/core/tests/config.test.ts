@@ -208,6 +208,7 @@ describe('Should compose create Rsbuild config correctly', () => {
           },
         },
       },
+      logLevel: 'silent',
     };
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
     expect(composedRsbuildConfig).toMatchSnapshot();

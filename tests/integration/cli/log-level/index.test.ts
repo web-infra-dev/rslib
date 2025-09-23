@@ -1,6 +1,5 @@
-import { describe } from 'node:test';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
-import { expect, test } from '@rstest/core';
+import { describe, expect, test } from '@rstest/core';
 import { runCliSync } from 'test-helper';
 
 describe('log level', async () => {

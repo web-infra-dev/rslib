@@ -1,7 +1,6 @@
 import { spawn } from 'node:child_process';
 import path from 'node:path';
-import { after } from 'node:test';
-import { describe, expect, test } from '@rstest/core';
+import { describe, expect, onTestFinished, test } from '@rstest/core';
 import fse from 'fs-extra';
 import {
   expectFile,
@@ -107,7 +106,7 @@ export default defineConfig({
       [rslibBinPath, 'build', '--watch', '-c', tempConfigFile],
       {
         cwd: __dirname,
-        stdio: 'inherit',
+        stdio: 'pipe',
         shell: true,
       },
     );
@@ -144,7 +143,7 @@ export default defineConfig({
       "
     `);
 
-    after(() => {
+    onTestFinished(() => {
       child.kill();
     });
   });
