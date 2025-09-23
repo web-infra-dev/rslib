@@ -1,8 +1,7 @@
 import { join } from 'node:path';
-import { describe } from 'node:test';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { startMFDevServer } from '@rslib/core';
-import { expect, test } from '@rstest/core';
+import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
 import { expectFile, runCli, runCliSync } from 'test-helper';
 

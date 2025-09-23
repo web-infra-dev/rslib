@@ -165,7 +165,7 @@ test('validate entry and throw errors', async () => {
 test('duplicate entry in bundleless mode', async () => {
   const { logs, restore } = proxyConsole();
   const fixturePath = join(__dirname, 'duplicate');
-  await buildAndGetResults({ fixturePath });
+  await buildAndGetResults({ fixturePath, logLevel: 'info' });
 
   const logStrings = logs.map((log) => stripAnsi(log));
 
