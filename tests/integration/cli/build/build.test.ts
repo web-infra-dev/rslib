@@ -82,7 +82,7 @@ describe('build command', async () => {
     `);
   });
 
-  test('--config-loader', async () => {
+  test('should use Node.js native loader to load config', async () => {
     // Skip Node.js <= 22.18
     if (!process.features.typescript) {
       return;
@@ -99,6 +99,21 @@ describe('build command', async () => {
       [
         "<ROOT>/tests/integration/cli/build/dist/cjs/index.cjs",
         "<ROOT>/tests/integration/cli/build/dist/esm/index.js",
+      ]
+    `);
+  });
+
+  test('should fallback to jiti when --config-loader set to auto which is default strategy', async () => {
+    await fse.remove(path.join(__dirname, 'dist-auto'));
+    runCliSync('build --config rslib.config.auto.mts', {
+      cwd: __dirname,
+    });
+
+    const files = await globContentJSON(path.join(__dirname, 'dist-auto'));
+    const fileNames = Object.keys(files).sort();
+    expect(fileNames).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/cli/build/dist-auto/index.js",
       ]
     `);
   });
