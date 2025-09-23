@@ -119,7 +119,7 @@ const resolveConfigPath = (root: string, customConfig?: string): string => {
   throw new Error(`${DEFAULT_CONFIG_NAME} not found in ${root}`);
 };
 
-export type ConfigLoader = 'jiti' | 'native';
+export type ConfigLoader = 'auto' | 'jiti' | 'native';
 
 export async function loadConfig({
   cwd = process.cwd(),
