@@ -1,7 +1,12 @@
 import { type ChildProcess, fork } from 'node:child_process';
 import { dirname, extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { logger, type RsbuildConfig, type RsbuildPlugin } from '@rsbuild/core';
+import {
+  type LogLevel,
+  logger,
+  type RsbuildConfig,
+  type RsbuildPlugin,
+} from '@rsbuild/core';
 import color from 'picocolors';
 import type { ParsedCommandLine } from 'typescript';
 
@@ -66,6 +71,7 @@ export type DtsGenOptions = Omit<PluginDtsOptions, 'bundle'> & {
   tsConfigResult: ParsedCommandLine;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
   apiExtractorOptions?: ApiExtractorOptions;
+  loggerLevel: LogLevel;
 };
 
 interface TaskResult {
@@ -81,6 +87,9 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
   name: PLUGIN_DTS_NAME,
 
   setup(api) {
+    const loggerLevel = api.logger.level;
+    logger.level = loggerLevel;
+
     let apiExtractorOptions = {};
 
     if (options.bundle && typeof options.bundle === 'object') {
@@ -179,6 +188,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
           name: environment.name,
           cwd,
           isWatch,
+          loggerLevel: loggerLevel as LogLevel,
         };
 
         childProcess.send(dtsGenOptions);

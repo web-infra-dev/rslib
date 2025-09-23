@@ -73,7 +73,7 @@ import {
   pick,
   readPackageJson,
 } from './utils/helper';
-import { logger } from './utils/logger';
+import { isDebug, logger } from './utils/logger';
 import {
   ESX_TO_BROWSERSLIST,
   transformSyntaxToBrowserslist,
@@ -1804,8 +1804,13 @@ export async function composeCreateRsbuildConfig(
     plugins: sharedPlugins,
     dev: _dev,
     server: _server,
+    logLevel,
     ...sharedRsbuildConfig
   } = rslibConfig;
+  // debug mode should always verbose logs
+  if (logLevel && !isDebug()) {
+    logger.level = logLevel;
+  }
 
   if (!Array.isArray(libConfigsArray) || libConfigsArray.length === 0) {
     throw new Error(

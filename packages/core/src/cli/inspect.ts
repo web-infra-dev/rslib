@@ -1,6 +1,7 @@
 import { createRsbuild, type RsbuildInstance } from '@rsbuild/core';
 import { composeRsbuildEnvironments, pruneEnvironments } from '../config';
 import type { RslibConfig } from '../types/config';
+import { isDebug } from '../utils/logger';
 import type { InspectOptions } from './commands';
 
 export async function inspect(
@@ -16,6 +17,7 @@ export async function inspect(
       plugins: config.plugins,
       dev: config.dev,
       server: config.server,
+      logLevel: isDebug() ? 'info' : config.logLevel,
       environments: pruneEnvironments(environments, options.lib),
     },
   });

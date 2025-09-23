@@ -2,6 +2,7 @@ import type { RsbuildInstance } from '@rsbuild/core';
 import { createRsbuild } from '@rsbuild/core';
 import { composeRsbuildEnvironments, pruneEnvironments } from '../config';
 import type { RslibConfig } from '../types';
+import { isDebug } from '../utils/logger';
 import type { CommonOptions } from './commands';
 import { onBeforeRestart } from './restart';
 
@@ -53,6 +54,7 @@ async function initMFRsbuild(
       plugins: config.plugins,
       dev: config.dev,
       server: config.server,
+      logLevel: isDebug() ? 'info' : config.logLevel,
       environments: selectedEnvironments,
     },
   });

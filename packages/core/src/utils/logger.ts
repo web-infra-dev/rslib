@@ -21,7 +21,9 @@ export const isDebug = (): boolean => {
   }
 
   const values = process.env.DEBUG.toLocaleLowerCase().split(',');
-  return ['rslib', 'rs*', 'rstack', '*'].some((key) => values.includes(key));
+  return ['rslib', 'rsbuild', 'rs*', 'rstack', '*'].some((key) =>
+    values.includes(key),
+  );
 };
 
 // setup the logger level

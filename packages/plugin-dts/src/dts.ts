@@ -136,7 +136,10 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       extension: false,
     },
     tsgo,
+    loggerLevel,
   } = data;
+  logger.level = loggerLevel;
+
   if (!isWatch) {
     logger.start(`generating declaration files... ${color.dim(`(${name})`)}`);
   }
