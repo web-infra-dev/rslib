@@ -397,6 +397,8 @@ export function composeMinifyConfig(config: LibConfig): EnvironmentConfig {
         js: true,
         css: false,
         jsOptions: {
+          // Tweaked based on https://github.com/web-infra-dev/rspack/blob/e350b76163c976ee48da54c29bbb9d72153738d7/crates/rspack_plugin_swc_js_minimizer/src/lib.rs#L40.
+          test: /\.[cm]?jsx?(\?.*)?$/,
           minimizerOptions: {
             mangle: false,
             // MF assets are loaded over the network, which means they will not be compressed by the project. Therefore, minifying them is necessary.
@@ -837,6 +839,40 @@ const fixJsModuleTypePlugin = (): RsbuildPlugin => ({
     });
   },
 });
+
+const BundlePlugin = (): RsbuildPlugin => ({
+  name: 'rslib:bundle',
+  setup(api) {
+    api.onBeforeBuild({
+      order: 'post',
+      handler: ({ bundlerConfigs }) => {
+        if (bundlerConfigs) {
+          for (const config of bundlerConfigs) {
+            if (config?.module?.parser?.javascript?.jsx === true) {
+              throw new Error(
+                'Bundle mode does not support preserving JSX syntax. Set `bundle` to `false` or change the JSX runtime to `automatic` or `classic`.',
+              );
+            }
+          }
+        }
+      },
+    });
+  },
+});
+
+const composeBundleConfig = (
+  bundle: LibConfig['bundle'],
+): { rsbuildConfig: EnvironmentConfig } => {
+  if (bundle) {
+    return {
+      rsbuildConfig: {
+        plugins: [BundlePlugin()],
+      },
+    };
+  }
+
+  return { rsbuildConfig: {} };
+};
 
 const composeShimsConfig = (
   format: Format,
@@ -1676,6 +1712,7 @@ async function composeLibRsbuildConfig(
     redirect = {},
     umdName,
   } = config;
+  const { rsbuildConfig: bundleConfig } = composeBundleConfig(bundle);
   const { rsbuildConfig: shimsConfig, enabledShims } = composeShimsConfig(
     format,
     shims,
@@ -1761,6 +1798,7 @@ async function composeLibRsbuildConfig(
   const printFileSizeConfig = composePrintFileSizeConfig(bundle, target);
 
   return mergeRsbuildConfig(
+    bundleConfig,
     formatConfig,
     // outputConfig,
     shimsConfig,

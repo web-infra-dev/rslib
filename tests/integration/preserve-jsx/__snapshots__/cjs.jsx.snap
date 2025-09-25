@@ -1,0 +1,158 @@
+"use strict";
+var __webpack_modules__ = {
+    "./App1": function(module) {
+        module.exports = require("./App1.cjs");
+    }
+};
+var __webpack_module_cache__ = {};
+function __webpack_require__(moduleId) {
+    var cachedModule = __webpack_module_cache__[moduleId];
+    if (void 0 !== cachedModule) return cachedModule.exports;
+    var module = __webpack_module_cache__[moduleId] = {
+        exports: {}
+    };
+    __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+    return module.exports;
+}
+(()=>{
+    var getProto = Object.getPrototypeOf ? (obj)=>Object.getPrototypeOf(obj) : (obj)=>obj.__proto__;
+    var leafPrototypes;
+    __webpack_require__.t = function(value, mode) {
+        if (1 & mode) value = this(value);
+        if (8 & mode) return value;
+        if ('object' == typeof value && value) {
+            if (4 & mode && value.__esModule) return value;
+            if (16 & mode && 'function' == typeof value.then) return value;
+        }
+        var ns = Object.create(null);
+        __webpack_require__.r(ns);
+        var def = {};
+        leafPrototypes = leafPrototypes || [
+            null,
+            getProto({}),
+            getProto([]),
+            getProto(getProto)
+        ];
+        for(var current = 2 & mode && value; 'object' == typeof current && !~leafPrototypes.indexOf(current); current = getProto(current))Object.getOwnPropertyNames(current).forEach((key)=>{
+            def[key] = ()=>value[key];
+        });
+        def['default'] = ()=>value;
+        __webpack_require__.d(ns, def);
+        return ns;
+    };
+})();
+(()=>{
+    __webpack_require__.d = (exports1, definition)=>{
+        for(var key in definition)if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports1, key)) Object.defineProperty(exports1, key, {
+            enumerable: true,
+            get: definition[key]
+        });
+    };
+})();
+(()=>{
+    __webpack_require__.o = (obj, prop)=>Object.prototype.hasOwnProperty.call(obj, prop);
+})();
+(()=>{
+    __webpack_require__.r = (exports1)=>{
+        if ('undefined' != typeof Symbol && Symbol.toStringTag) Object.defineProperty(exports1, Symbol.toStringTag, {
+            value: 'Module'
+        });
+        Object.defineProperty(exports1, '__esModule', {
+            value: true
+        });
+    };
+})();
+var __webpack_exports__ = {};
+(()=>{
+    __webpack_require__.r(__webpack_exports__);
+    __webpack_require__.d(__webpack_exports__, {
+        default: ()=>Root
+    });
+    var external_App1_cjs_ = __webpack_require__("./App1");
+    const external_App2_cjs_namespaceObject = require("./App2.cjs");
+    const DynamicComponent = ()=>{
+        const Component = Math.random() > 0.5 ? external_App1_cjs_.App1A : external_App1_cjs_.App1C;
+        return Promise.resolve().then(__webpack_require__.t.bind(__webpack_require__, "./App1", 23)).then((mod)=>{
+            const Dynamic = mod[Component === external_App1_cjs_.App1A ? 'App1A' : 'App1C'];
+            return <Dynamic/>;
+        });
+    };
+    const SectionWithSpread = (props)=><section {...props}/>;
+    const spreadChildren = [
+        <span key="first">First</span>,
+        <span key="second">Second</span>
+    ];
+    function Root() {
+        return <>
+      <React.Fragment>
+        <>
+          <external_App1_cjs_.App1A/>
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <DynamicComponent/>
+          </React.Suspense>
+        </>
+      </React.Fragment>
+      <external_App1_cjs_.App1C>
+        {x ? <external_App1_cjs_.App1A>
+            <external_App1_cjs_.App1B>
+              <external_App2_cjs_namespaceObject.App2 props={external_App2_cjs_namespaceObject.app2Props}>
+                <external_App1_cjs_.App1C props={external_App1_cjs_.app1cProps}/>
+              </external_App2_cjs_namespaceObject.App2>
+            </external_App1_cjs_.App1B>
+          </external_App1_cjs_.App1A> : <external_App1_cjs_.App1B/>}
+      </external_App1_cjs_.App1C>
+      <external_App1_cjs_.App1C className="c"/>
+      <external_App1_cjs_.App1C className="app1c"></external_App1_cjs_.App1C>
+      <external_App1_cjs_.App1B/>
+      <NamespaceComponents.Button label="Namespace button" {...{
+            title: 'extra',
+            ['data-role']: 'primary'
+        }} data-count={3} icon={<external_App1_cjs_.App1A/>} fragmentContent={<>
+            <span>Nested</span>
+            <span>Fragment</span>
+          </>}/>
+      <div className="wrapper">
+        {[
+            <section key="namespace-import" data-index="0">
+            <external_App1_cjs_.App data-dynamic="registry" data-item="one"/>
+            <foo:bar value="namespaced"/>
+            <svg:path d="M0,0 L10,10" xlink:href="#one"/>
+            <span>{'item-one'.toUpperCase()}</span>
+            {}
+          </section>,
+            <section key="legacy-widget" data-index="1">
+            <external_App2_cjs_namespaceObject.App2 data-dynamic="registry" data-item="two" {...external_App2_cjs_namespaceObject.app2Props}/>
+            app2
+            <external_App2_cjs_namespaceObject.App2/>
+            <foo:bar value="namespaced-two"/>
+            <svg:path d="M10,10 L20,20" xlink:href="#two"/>
+            <external_App1_cjs_.App1A/>
+            {}
+          </section>,
+            <section key="external-app" data-index="2">
+            <external_App1_cjs_.App1A data-dynamic="registry" data-item="fallback"/>
+            <foo:bar value="namespaced-three"/>
+            <svg:path d="M20,20 L30,30" xlink:href="#three"/>
+            {(()=><NamespaceComponents.Button label="Inline child"/>)()}
+            {}
+          </section>
+        ]}
+        <group-container>{...spreadChildren}</group-container>
+        <text-block dangerouslySetInnerHTML={{
+            __html: '<strong>bold</strong>'
+        }}/>
+        <SectionWithSpread {...{
+            'data-testid': 'component-with-spread',
+            role: 'region'
+        }}/>
+      </div>
+    </>;
+    }
+})();
+exports["default"] = __webpack_exports__["default"];
+for(var __webpack_i__ in __webpack_exports__)if (-1 === [
+    "default"
+].indexOf(__webpack_i__)) exports[__webpack_i__] = __webpack_exports__[__webpack_i__];
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});

@@ -18,6 +18,8 @@ onlyBuiltDependencies:
 
 overrides:
   'zx>@types/node': '-'
+  '@rsbuild/core': 'link:../rsbuild/packages/core'
+  '@rsbuild/plugin-react': 'link:../rsbuild/packages/plugin-react'
 
 strictPeerDependencies: false
 autoInstallPeers: false
