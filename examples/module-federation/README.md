@@ -42,7 +42,7 @@ pnpm dev:remote
 2. Start the Rslib MF module
 
 ```bash
-pnpm dev:rslib
+pnpm dev:mf
 ```
 
 3. Start the host app
@@ -64,7 +64,7 @@ pnpm dev:remote
 2. Start the Rslib MF module
 
 ```bash
-pnpm dev:rslib
+pnpm dev:mf
 ```
 
 2. Start the host app
