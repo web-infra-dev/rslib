@@ -7,6 +7,7 @@ import {
   composeRsbuildEnvironments,
   loadConfig,
 } from '../src/config';
+import { init } from '../src/cli/init';
 import type { RslibConfig } from '../src/types/config';
 
 rs.mock('rslog');
@@ -146,6 +147,82 @@ describe('Should load config file correctly', () => {
         configFilePath,
       },
     });
+  });
+});
+
+describe('CLI options', () => {
+  test('`--format` overrides format defined in config file', async () => {
+    const fixtureDir = join(__dirname, 'fixtures/config/format');
+    const configFilePath = join(fixtureDir, 'rslib.config.ts');
+
+    const { config: defaultConfig } = await init({ config: configFilePath });
+    expect(defaultConfig.lib.map((lib) => lib.format)).toEqual(['esm', 'cjs']);
+
+    const { config: overriddenConfig } = await init({
+      config: configFilePath,
+      format: 'cjs',
+    });
+
+    expect(overriddenConfig.lib.map((lib) => lib.format)).toEqual([
+      'cjs',
+      'cjs',
+    ]);
+
+    const composed = await composeCreateRsbuildConfig(overriddenConfig);
+    expect(composed.map(({ format }) => format)).toEqual(['cjs', 'cjs']);
+  });
+
+  test('applies build CLI overrides for common flags', async () => {
+    const fixtureDir = join(__dirname, 'fixtures/config/cli-options');
+    const configFilePath = join(fixtureDir, 'rslib.config.ts');
+
+    const { config: overriddenConfig } = await init({
+      config: configFilePath,
+      entry: ['index=src/main.ts', 'utils=src/utils.ts'],
+      distPath: 'build',
+      bundle: false,
+      syntax: 'es2018',
+      target: 'node',
+      dts: true,
+      external: ['react', 'react-dom'],
+      minify: true,
+      clean: true,
+      autoExtension: false,
+      autoExternal: false,
+      tsconfig: 'tsconfig.build.json',
+    });
+
+    const lib = overriddenConfig.lib[0];
+
+    expect(overriddenConfig.source?.tsconfigPath).toBe('tsconfig.build.json');
+    expect(lib.bundle).toBe(false);
+    expect(lib.syntax).toBe('es2018');
+    expect(lib.dts).toBe(true);
+    expect(lib.autoExtension).toBe(false);
+    expect(lib.autoExternal).toBe(false);
+    expect(lib.outBase).toBe('build');
+    expect(lib.source?.entry).toEqual({
+      index: 'src/main.ts',
+      utils: 'src/utils.ts',
+    });
+    expect(lib.output?.target).toBe('node');
+    expect(lib.output?.minify).toBe(true);
+    expect(lib.output?.cleanDistPath).toBe(true);
+    expect(lib.output?.distPath?.root).toBe('./dist');
+    expect(lib.output?.externals).toEqual(['lodash', 'react', 'react-dom']);
+
+    const { config: bundleConfig } = await init({
+      config: configFilePath,
+      distPath: 'release',
+      bundle: true,
+      syntax: '["node 18","chrome 120"]',
+    });
+
+    const bundleLib = bundleConfig.lib[0];
+    expect(bundleLib.bundle).toBe(true);
+    expect(bundleLib.output?.distPath?.root).toBe('release');
+    expect(bundleLib.outBase).toBeUndefined();
+    expect(bundleLib.syntax).toEqual(['node 18', 'chrome 120']);
   });
 });
 

@@ -135,4 +135,36 @@ describe('build command', async () => {
       ]
     `);
   });
+
+  test('should throw error if config file is absent, but it should work if the future', async () => {
+    const fixturePath = path.join(__dirname, 'no-config');
+    await fse.remove(path.join(fixturePath, 'dist'));
+
+    expect(() =>
+      runCliSync('build --format cjs', {
+        cwd: fixturePath,
+      }),
+    ).toThrowError(/rslib\.config not found in.*cli\/build\/no-config/);
+  });
+
+  test('--format overrides config file setting', async () => {
+    const fixturePath = path.join(__dirname, 'format-override');
+    await fse.remove(path.join(fixturePath, 'dist'));
+
+    runCliSync('build --format esm', {
+      cwd: fixturePath,
+    });
+
+    const files = await globContentJSON(
+      path.join(fixturePath, 'dist/override'),
+    );
+    const fileNames = Object.keys(files).sort();
+    expect(fileNames).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/cli/build/format-override/dist/override/index.js",
+      ]
+    `);
+    const output = files[fileNames[0]!];
+    expect(output).toMatch(/export { .* }/);
+  });
 });
