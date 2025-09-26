@@ -1,9 +1,10 @@
 import type { LogLevel, RsbuildMode } from '@rsbuild/core';
 import cac, { type CAC } from 'cac';
 import type { ConfigLoader } from '../config';
+import type { Format } from '../types/config';
 import { logger } from '../utils/logger';
 import { build } from './build';
-import { init } from './init';
+import { initConfig } from './initConfig';
 import { inspect } from './inspect';
 import { startMFDevServer } from './mf';
 import { watchFilesForRestart } from './restart';
@@ -16,6 +17,19 @@ export type CommonOptions = {
   lib?: string[];
   configLoader?: ConfigLoader;
   logLevel?: LogLevel;
+  format?: Format;
+  entry?: string[];
+  distPath?: string;
+  bundle?: boolean;
+  syntax?: string;
+  target?: string;
+  dts?: boolean;
+  externals?: string[];
+  minify?: boolean;
+  clean?: boolean;
+  autoExtension?: boolean;
+  autoExternal?: boolean;
+  tsconfig?: string;
 };
 
 export type BuildOptions = CommonOptions & {
@@ -84,13 +98,45 @@ export function runCli(): void {
 
   buildCommand
     .option('-w, --watch', 'turn on watch mode, watch for changes and rebuild')
+    .option('--entry <entry>', 'set entry file or pattern (repeatable)', {
+      type: [String],
+      default: [],
+    })
+    .option('--dist-path <dir>', 'set output directory')
+    .option('--bundle', 'enable bundle mode (use --no-bundle to disable)')
+    .option(
+      '--format <format>',
+      'specify the output format (esm | cjs | umd | mf | iife)',
+    )
+    .option('--syntax <syntax>', 'set build syntax target (repeatable)')
+    .option('--target <target>', 'set runtime target (web | node)')
+    .option('--dts', 'emit declaration files (use --no-dts to disable)')
+    .option('--externals <pkg>', 'add package to externals (repeatable)', {
+      type: [String],
+      default: [],
+    })
+    .option('--minify', 'minify output (use --no-minify to disable)')
+    .option(
+      '--clean',
+      'clean output directory before build (use --no-clean to disable)',
+    )
+    .option(
+      '--auto-extension',
+      'control automatic extension redirect (use --no-auto-extension to disable)',
+    )
+    .option(
+      '--auto-external',
+      'control automatic dependency externalization (use --no-auto-external to disable)',
+    )
+    .option(
+      '--tsconfig <path>',
+      'use specific tsconfig (relative to project root)',
+    )
     .action(async (options: BuildOptions) => {
       try {
         const cliBuild = async () => {
-          const { config, watchFiles } = await init(options);
-
+          const { config, watchFiles } = await initConfig(options);
           await build(config, options);
-
           if (options.watch) {
             watchFilesForRestart(watchFiles, async () => {
               await cliBuild();
@@ -120,7 +166,7 @@ export function runCli(): void {
     .action(async (options: InspectOptions) => {
       try {
         // TODO: inspect should output Rslib's config
-        const { config } = await init(options);
+        const { config } = await initConfig(options);
         await inspect(config, {
           lib: options.lib,
           mode: options.mode,
@@ -137,7 +183,7 @@ export function runCli(): void {
   mfDevCommand.action(async (options: CommonOptions) => {
     try {
       const cliMfDev = async () => {
-        const { config, watchFiles } = await init(options);
+        const { config, watchFiles } = await initConfig(options);
         await startMFDevServer(config, {
           lib: options.lib,
         });

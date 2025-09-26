@@ -20,6 +20,8 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 ## source.entry <RsbuildDocBadge path="/config/source/entry" text="source.entry" />
 
+- **命令行：** `--entry <path>`（可重复，例如 `--entry index=src/index.ts` 或 `--entry src/index.ts`）
+
 用于设置构建的入口模块。
 
 在 Rslib 中，默认值为：
@@ -40,6 +42,8 @@ const defaultEntry = {
   index: 'src/**',
 };
 ```
+
+当未显式指定名称时，CLI 会自动使用 `index`、`entry2` 等占位名称。
 
 :::info
 参考 [lib.bundle](/config/lib/bundle#set-entry) 进一步了解如何为 bundle 和 bundleless 项目设置入口。
@@ -69,6 +73,8 @@ const defaultEntry = {
 转换 import 的路径，可以用于模块化引用三方包的子路径，能力类似于 [babel-plugin-import](https://npmjs.com/package/babel-plugin-import)。
 
 ## source.tsconfigPath <RsbuildDocBadge path="/config/source/tsconfig-path" text="source.tsconfigPath" />
+
+- **命令行：** `--tsconfig <path>`（例如 `--tsconfig tsconfig.build.json`）
 
 配置自定义的 `tsconfig.json` 文件路径，可以是相对路径或绝对路径。
 
