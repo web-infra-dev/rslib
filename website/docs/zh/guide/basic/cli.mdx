@@ -46,7 +46,20 @@ Usage:
   $ rslib build
 
 Options:
-  -w --watch            开启 watch 模式, 监听文件变更并重新构建
+  -w, --watch            开启 watch 模式，监听文件变更并重新构建
+  --entry <entry>        设置入口文件或模式（可重复），例如：--entry="src/*" 或 --entry="main=src/main.ts"
+  --dist-path <dir>      指定根输出目录
+  --bundle               启用打包模式（使用 --no-bundle 关闭）
+  --format <format>      指定输出格式（esm | cjs | umd | mf | iife）
+  --syntax <syntax>      指定语法目标，例如：--syntax=es2018 或 --syntax=["node 14", "Chrome 103"]
+  --target <target>      指定运行时目标（web | node）
+  --dts                  生成声明文件（使用 --no-dts 关闭）
+  --external <pkg>       将依赖加入 external（可重复）
+  --minify               压缩构建产物（使用 --no-minify 关闭）
+  --clean                构建前清理输出目录（使用 --no-clean 关闭）
+  --auto-extension       控制自动扩展名补全（使用 --no-auto-extension 关闭）
+  --auto-external        控制自动依赖 external 化（使用 --no-auto-external 关闭）
+  --tsconfig <path>      指定使用的 tsconfig（相对于项目根目录）
 ```
 
 ### 环境变量

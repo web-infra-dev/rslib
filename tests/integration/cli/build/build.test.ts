@@ -1,7 +1,13 @@
 import path from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
-import { buildAndGetResults, globContentJSON, runCliSync } from 'test-helper';
+import stripAnsi from 'strip-ansi';
+import {
+  buildAndGetResults,
+  extractRslibConfig,
+  globContentJSON,
+  runCliSync,
+} from 'test-helper';
 
 describe('build command', async () => {
   test('basic', async () => {
@@ -133,6 +139,87 @@ describe('build command', async () => {
         "<ROOT>/tests/integration/cli/build/custom-root/dist/root/index.cjs",
         "<ROOT>/tests/integration/cli/build/custom-root/dist/root/index.js",
       ]
+    `);
+  });
+
+  test('should throw error if config file is absent, but it should work if the future', async () => {
+    const fixturePath = path.join(__dirname, 'no-config');
+    await fse.remove(path.join(fixturePath, 'dist'));
+
+    expect(() =>
+      runCliSync('build --format cjs', {
+        cwd: fixturePath,
+      }),
+    ).toThrowError(/rslib\.config not found in.*cli\/build\/no-config/);
+  });
+
+  test('build options', async () => {
+    const fixturePath = path.join(__dirname, 'options');
+    await fse.remove(path.join(fixturePath, 'dist'));
+
+    const stdout = runCliSync(
+      'build ' +
+        '--entry="./src/*" ' +
+        '--dist-path=dist/ok ' +
+        '--no-bundle ' +
+        '--format=esm ' +
+        '--syntax=es2015 ' +
+        '--target=web ' +
+        '--dts=true ' +
+        '--external=./bar ' +
+        '--minify=false ' +
+        '--auto-extension=false',
+      {
+        cwd: fixturePath,
+        env: {
+          ...process.env,
+          DEBUG: 'rslib',
+        },
+      },
+    );
+
+    const rslibConfigText = stripAnsi(extractRslibConfig(stdout));
+    expect(rslibConfigText).toMatchInlineSnapshot(`
+      "{
+        lib: [
+          {
+            format: 'esm',
+            output: {
+              distPath: { root: 'dist/ok' },
+              target: 'web',
+              minify: false,
+              externals: [ './bar' ]
+            },
+            bundle: false,
+            dts: true,
+            autoExtension: 'false',
+            source: { entry: { index: './src/*' } },
+            syntax: 'es2015'
+          }
+        ],
+        _privateMeta: {
+          configFilePath: '<ROOT>/tests/integration/cli/build/options/rslib.config.ts'
+        },
+        source: { define: {} }
+      }"
+    `);
+
+    const files = await globContentJSON(path.join(fixturePath, 'dist'));
+    const fileNames = Object.keys(files).sort();
+    expect(fileNames).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/cli/build/options/dist/ok/foo.d.ts",
+        "<ROOT>/tests/integration/cli/build/options/dist/ok/foo.js",
+      ]
+    `);
+
+    expect(files[fileNames[1]!]).toMatchInlineSnapshot(`
+      "
+      ;// CONCATENATED MODULE: ./src/foo.ts
+      const foo = 1000;
+
+      export { foo };
+      "
     `);
   });
 });
