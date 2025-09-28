@@ -354,6 +354,7 @@ describe('minify', () => {
             "mangle": false,
             "minify": false,
           },
+          "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
         },
       }
     `);

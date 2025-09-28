@@ -45,14 +45,16 @@ export default defineConfig({
 
 ## JSX transform
 
-- **类型**: `'automatic' | 'classic'`
-- **默认值**: `'automatic'`
+- **类型：** `'automatic' | 'classic' | 'preserve'`
+- **默认值：** `'automatic'`
 
 React 引入了一个 [新的 JSX transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html) 在版本 17 中。这个新的 transform 在使用 JSX 时无需导入 `React`。
 
-默认情况下，Rsbuild 使用新的 JSX 转换，即 `runtime: 'automatic'`。需要 React `16.14.0` 或更高版本。 `peerDependencies` 中应声明 `"react": ">=16.14.0"`。
+默认情况下，Rslib 使用新的 JSX 转换，即 `runtime: 'automatic'`。这需要 React `16.14.0` 或更高版本，且 `peerDependencies` 中应声明 `"react": ">=16.14.0"`。
 
-要更改 JSX transform，可以传递 [swcReactOptions](https://rsbuild.rs/zh/plugins/list/plugin-react#swcreactoptionsruntime) 给 React plugin. 比如要使用 classic runtime 时:
+要更改 JSX transform，可以在 `@rsbuild/plugin-react` 中设置 [swcReactOptions](https://rsbuild.rs/zh/plugins/list/plugin-react#swcreactoptionsruntime) 选项。
+
+比如要使用 classic runtime 时：
 
 ```ts title="rslib.config.ts" twoslash
 import { pluginReact } from '@rsbuild/plugin-react';
@@ -70,6 +72,43 @@ export default defineConfig({
       // [!code highlight:3]
       swcReactOptions: {
         runtime: 'classic',
+      },
+    }),
+  ],
+});
+```
+
+当你希望在构建产物中保留原始 JSX 时，可以将 runtime 设置为 `'preserve'`。该模式可以保持 JSX 语法原样，不做任何转换，方便后续由其他打包工具处理。
+
+::: warning
+
+使用 `runtime: 'preserve'` 时，必须设置 `bundle: false` 启用 [bundleless 模式](/guide/basic/output-structure#bundle--bundleless) 使文件保持非打包状态。
+
+:::
+
+若要输出 `.jsx` 后缀的文件，可通过 [output.filename](/config/rsbuild/output#outputfilename) 配置 JS 文件名模版：
+
+```ts title="rslib.config.ts" twoslash
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+      format: 'esm',
+      // [!code highlight:5]
+      output: {
+        filename: {
+          js: '[name].jsx',
+        },
+      },
+    },
+  ],
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'preserve',
       },
     }),
   ],

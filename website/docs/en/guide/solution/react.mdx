@@ -45,14 +45,16 @@ export default defineConfig({
 
 ## JSX transform
 
-- **Type**: `'automatic' | 'classic'`
-- **Default**: `'automatic'`
+- **Type:** `'automatic' | 'classic' | 'preserve'`
+- **Default:** `'automatic'`
 
 React introduced a [new JSX transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html) in version 17. This new transform removes the need to import `React` when using JSX.
 
-By default, Rsbuild uses the new JSX transform, which is `runtime: 'automatic'`. It requires at least React `16.14.0` or higher. The `peerDependencies` should be declared as `"react": ">=16.14.0"`.
+By default, Rslib uses the new JSX transform, which is `runtime: 'automatic'`. It requires at least React `16.14.0` or higher and the `peerDependencies` should be specified as `"react": ">=16.14.0"`.
 
-To change the JSX transform, you can pass the [swcReactOptions](https://rsbuild.rs/plugins/list/plugin-react#swcreactoptionsruntime) option to the React plugin. For example, to use the classic runtime:
+To change the JSX transform, you can set the [swcReactOptions](https://rsbuild.rs/plugins/list/plugin-react#swcreactoptionsruntime) option in `@rsbuild/plugin-react`.
+
+For example, to use the classic runtime:
 
 ```ts title="rslib.config.ts" twoslash
 import { pluginReact } from '@rsbuild/plugin-react';
@@ -70,6 +72,43 @@ export default defineConfig({
       // [!code highlight:3]
       swcReactOptions: {
         runtime: 'classic',
+      },
+    }),
+  ],
+});
+```
+
+When you need to keep native JSX in the build output, you can set the runtime to `'preserve'` to leave JSX syntax unchanged without transforming it, which is useful for subsequent processing by other bundlers.
+
+::: warning
+
+When using `runtime: 'preserve'`, you must set `bundle: false` to enable [bundleless mode](/guide/basic/output-structure#bundle--bundleless) to keep files unbundled.
+
+:::
+
+To emit `.jsx` files, you can configure the JS filename template through [output.filename](/config/rsbuild/output#outputfilename) option:
+
+```ts title="rslib.config.ts" twoslash
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+      format: 'esm',
+      // [!code highlight:5]
+      output: {
+        filename: {
+          js: '[name].jsx',
+        },
+      },
+    },
+  ],
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'preserve',
       },
     }),
   ],

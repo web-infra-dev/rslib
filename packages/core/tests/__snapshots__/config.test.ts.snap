@@ -931,7 +931,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               toplevel: true
             }
           },
-          extractComments: true
+          extractComments: true,
+          test: /\\.[cm]?jsx?(\\?.*)?$/
         }
       )
     ],
@@ -1627,7 +1628,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               toplevel: true
             }
           },
-          extractComments: true
+          extractComments: true,
+          test: /\\.[cm]?jsx?(\\?.*)?$/
         }
       )
     ],
@@ -2230,7 +2232,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               toplevel: true
             }
           },
-          extractComments: true
+          extractComments: true,
+          test: /\\.[cm]?jsx?(\\?.*)?$/
         }
       )
     ],
@@ -2831,7 +2834,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               toplevel: true
             }
           },
-          extractComments: true
+          extractComments: true,
+          test: /\\.[cm]?jsx?(\\?.*)?$/
         }
       )
     ],
@@ -3401,7 +3405,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               toplevel: false
             }
           },
-          extractComments: true
+          extractComments: true,
+          test: /\\.[cm]?jsx?(\\?.*)?$/
         }
       )
     ],
@@ -3559,6 +3564,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               "mangle": false,
               "minify": false,
             },
+            "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
           },
         },
         "overrideBrowserslist": [
@@ -3572,6 +3578,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
       },
       "plugins": [
+        {
+          "name": "rslib:bundle",
+          "setup": [Function],
+        },
         {
           "name": "rsbuild:disable-url-parse",
           "setup": [Function],
@@ -3835,6 +3845,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               "mangle": false,
               "minify": false,
             },
+            "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
           },
         },
         "overrideBrowserslist": [
@@ -3848,6 +3859,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
       },
       "plugins": [
+        {
+          "name": "rslib:bundle",
+          "setup": [Function],
+        },
         {
           "name": "rsbuild:cjs-import-meta-url-shim",
           "setup": [Function],
@@ -4099,6 +4114,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               "mangle": false,
               "minify": false,
             },
+            "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
           },
         },
         "overrideBrowserslist": [
@@ -4112,6 +4128,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
       },
       "plugins": [
+        {
+          "name": "rslib:bundle",
+          "setup": [Function],
+        },
         {
           "name": "rsbuild:fix-js-module-type",
           "setup": [Function],
@@ -4338,6 +4358,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               "minify": false,
               "module": true,
             },
+            "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
           },
         },
         "overrideBrowserslist": [
@@ -4351,6 +4372,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
       },
       "plugins": [
+        {
+          "name": "rslib:bundle",
+          "setup": [Function],
+        },
         {
           "name": "rsbuild:fix-js-module-type",
           "setup": [Function],
@@ -4522,6 +4547,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               "mangle": false,
               "minify": true,
             },
+            "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
           },
         },
         "overrideBrowserslist": [
@@ -4540,6 +4566,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
       },
       "plugins": [
+        {
+          "name": "rslib:bundle",
+          "setup": [Function],
+        },
         {
           "name": "rsbuild:fix-js-module-type",
           "setup": [Function],
