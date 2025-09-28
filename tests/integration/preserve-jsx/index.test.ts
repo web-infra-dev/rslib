@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { expect, test } from '@rstest/core';
-import { buildAndGetResults, queryContent } from 'test-helper';
+import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
 
 test('JSX syntax should be preserved', async () => {
   const fixturePath = join(__dirname, 'default');
@@ -43,9 +43,17 @@ test('JSX syntax should be preserved', async () => {
 
 test('throw error when preserve JSX with bundle mode', async () => {
   const fixturePath = join(__dirname, 'forbid-bundle');
-  const build = buildAndGetResults({ fixturePath });
+  const { logs, restore } = proxyConsole();
 
-  await expect(build).rejects.toThrowError(
-    'Bundle mode does not support preserving JSX syntax. Set `bundle` to `false` or change the JSX runtime to `automatic` or `classic`.',
-  );
+  try {
+    await buildAndGetResults({ fixturePath });
+  } catch {
+    expect(logs).toMatchInlineSnapshot(`
+      [
+        "error   Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to \`automatic\` or \`classic\`. Check out https://rslib.rs/guide/solution/react#jsx-transform for more details.",
+      ]
+    `);
+  } finally {
+    restore();
+  }
 });

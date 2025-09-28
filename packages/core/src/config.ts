@@ -849,9 +849,14 @@ const BundlePlugin = (): RsbuildPlugin => ({
         if (bundlerConfigs) {
           for (const config of bundlerConfigs) {
             if (config?.module?.parser?.javascript?.jsx === true) {
-              throw new Error(
-                'Bundle mode does not support preserving JSX syntax. Set `bundle` to `false` or change the JSX runtime to `automatic` or `classic`.',
+              logger.error(
+                'Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to `automatic` or `classic`. Check out ' +
+                  color.green(
+                    'https://rslib.rs/guide/solution/react#jsx-transform',
+                  ) +
+                  ' for more details.',
               );
+              process.exit(1);
             }
           }
         }
