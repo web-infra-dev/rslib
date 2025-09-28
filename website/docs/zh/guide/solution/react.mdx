@@ -76,9 +76,15 @@ export default defineConfig({
 });
 ```
 
-当你希望在构建产物中保留原始 JSX 时，可以将 runtime 设置为 `'preserve'`。该模式会保留 JSX 语法，方便后续由其他打包工具处理。因为文件保持非打包状态，所以必须通过将 `bundle` 设为 `false` 启用 bundleless 模式。
+当你希望在构建产物中保留原始 JSX 时，可以将 runtime 设置为 `'preserve'`。该模式会保留 JSX 语法，方便后续由其他打包工具处理。
 
-若要输出 `.jsx` 后缀的文件，可在使用 preserve runtime 时配置 JS 文件名模版：
+::: warn
+
+因为文件保持非打包状态，所以必须通过将 `bundle` 设为 `false` 启用 bundleless 模式。
+
+:::
+
+若要输出 `.jsx` 后缀的文件，可通过 [output.filename](/config/rsbuild/output#outputfilename) 配置 JS 文件名模版：
 
 ```ts title="rslib.config.ts" twoslash
 import { pluginReact } from '@rsbuild/plugin-react';

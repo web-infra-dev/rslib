@@ -76,9 +76,15 @@ export default defineConfig({
 });
 ```
 
-When you need to keep native JSX in the build output, set the runtime to `'preserve'`. This mode retains JSX syntax so it can be processed later (for example by another bundler). Because the files stay unbundled, you must switch to bundleless mode by setting `bundle: false`.
+When you need to keep native JSX in the build output, set the runtime to `'preserve'`. This mode retains JSX syntax so it can be processed later (for example by another bundler).
 
-To emit `.jsx` files, configure the JS filename template while using the preserve runtime:
+::: warn
+
+Because the files stay unbundled, you must switch to bundleless mode by setting `bundle: false`.
+
+:::
+
+To emit `.jsx` files, configure the JS filename template through [output.filename](/config/rsbuild/output#outputfilename) while using the preserve runtime:
 
 ```ts title="rslib.config.ts" twoslash
 import { pluginReact } from '@rsbuild/plugin-react';
