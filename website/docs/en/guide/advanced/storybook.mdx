@@ -25,17 +25,19 @@ Using React as an example, at this step you need to:
 
 1. Install the dependencies for Storybook Rsbuild React framework. The essential ones include
    - [storybook](https://www.npmjs.com/package/storybook): The Storybook core.
-   - [@storybook/addon-essentials](https://www.npmjs.com/package/@storybook/addon-essentials): a curated collection of addons to bring out the best of Storybook.
+   - [@storybook/react](https://www.npmjs.com/package/@storybook/react): React renderer for Storybook.
+   - [@storybook/addon-docs](https://www.npmjs.com/package/@storybook/addon-docs): Documentation tooling for Storybook.
+   - [@storybook/addon-onboarding](https://www.npmjs.com/package/@storybook/addon-onboarding): Interactive onboarding experience for Storybook.
    - [@rsbuild/core](https://www.npmjs.com/package/@rsbuild/core): Storybook builder.
    - [storybook-addon-rslib](https://www.npmjs.com/package/storybook-addon-rslib): This addon will make Storybook Rsbuild could derive Rsbuild configuration from Rslib config file.
      The addon will automatically read the Rslib configuration and apply it to Storybook Rsbuild, ensuring that the configuration is unified. You can check the [storybook-addon-rslib](https://storybook.rsbuild.rs/guide/integrations/rslib.html) documentation for available options.
 
    <PackageManagerTabs
      command={{
-       npm: 'npm add storybook @storybook/addon-essentials@next storybook-addon-rslib @rsbuild/core -D',
-       yarn: 'yarn add storybook @storybook/addon-essentials@next storybook-addon-rslib @rsbuild/core -D',
-       pnpm: 'pnpm add storybook @storybook/addon-essentials@next storybook-addon-rslib @rsbuild/core -D',
-       bun: 'bun add storybook @storybook/addon-essentials@next storybook-addon-rslib @rsbuild/core -D',
+       npm: 'npm add storybook @storybook/react @storybook/addon-docs @storybook/addon-onboarding storybook-addon-rslib @rsbuild/core -D',
+       yarn: 'yarn add storybook @storybook/react @storybook/addon-docs @storybook/addon-onboarding storybook-addon-rslib @rsbuild/core -D',
+       pnpm: 'pnpm add storybook @storybook/react @storybook/addon-docs @storybook/addon-onboarding storybook-addon-rslib @rsbuild/core -D',
+       bun: 'bun add storybook @storybook/react @storybook/addon-docs @storybook/addon-onboarding storybook-addon-rslib @rsbuild/core -D',
      }}
    />
 
@@ -58,7 +60,11 @@ Using React as an example, at this step you need to:
        '../stories/**/*.mdx',
        '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
      ],
-     addons: ['@storybook/addon-essentials', 'storybook-addon-rslib'],
+     addons: [
+       '@storybook/addon-docs',
+       '@storybook/addon-onboarding',
+       'storybook-addon-rslib',
+     ],
      framework: 'storybook-react-rsbuild', // storybook-react-rsbuild for example
    };
    ```

@@ -20,5 +20,5 @@ This guide extends the repository instructions in `../../AGENTS.md`. Refer there
 
 - Add or update base files in `fragments/base/*` and tool overlays in `fragments/tools/*`; keep naming aligned with `src/helpers.ts`.
 - Update `TEMPLATES` in `src/helpers.ts` whenever you introduce a new template combination so the CLI prompts and tests remain exhaustive.
-- Treat `template-*` directories as generated output from `pnpm -C packages/create-rslib generate-templates`; keep changes reproducible by updating generators in `src/` or fragments under `fragments/` instead of editing the generated files directly.
+- Treat `template-*` directories as generated output from `pnpm -C packages/create-rslib generate-templates`, don't directly edit them; keep changes reproducible by updating generators in `src/` or fragments under `fragments/` instead of editing the generated files directly.
 - Keep dependency versions aligned across all `template-*` directories; when one template upgrades a shared dependency, update the others via fragments or generators to match.

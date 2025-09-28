@@ -25,17 +25,19 @@ import { Tab, Tabs } from '@rspress/core/theme';
 
 1. 安装 Storybook Rsbuild React 框架的依赖。必要的依赖包括
    - [storybook](https://www.npmjs.com/package/storybook)：Storybook core 包。
-   - [@storybook/addon-essentials](https://www.npmjs.com/package/@storybook/addon-essentials)：精选的插件集合，以充分发挥 Storybook 的作用。
+   - [@storybook/react](https://www.npmjs.com/package/@storybook/react)：React 渲染器。
+   - [@storybook/addon-docs](https://www.npmjs.com/package/@storybook/addon-docs)：用于生成文档。
+   - [@storybook/addon-onboarding](https://www.npmjs.com/package/@storybook/addon-onboarding)：Storybook 的交互式上手体验。
    - [@rsbuild/core](https://www.npmjs.com/package/@rsbuild/core)：Storybook 构建器。
    - [storybook-addon-rslib](https://www.npmjs.com/package/storybook-addon-rslib)：此插件将使 Storybook Rsbuild 能够从 Rslib 配置文件中继承 Rsbuild 配置。
      该插件将自动读取 Rslib 配置并将其应用于 Storybook Rsbuild，确保配置统一。你可以查看 [storybook-addon-rslib](https://storybook.rsbuild.rs/guide/integrations/rslib.html) 文档以了解可用选项。
 
    <PackageManagerTabs
      command={{
-       npm: 'npm add storybook @storybook/addon-essentials@next storybook-addon-rslib @rsbuild/core -D',
-       yarn: 'yarn add storybook @storybook/addon-essentials@next storybook-addon-rslib @rsbuild/core -D',
-       pnpm: 'pnpm add storybook @storybook/addon-essentials@next storybook-addon-rslib @rsbuild/core -D',
-       bun: 'bun add storybook @storybook/addon-essentials@next storybook-addon-rslib @rsbuild/core -D',
+       npm: 'npm add storybook @storybook/react @storybook/addon-docs @storybook/addon-onboarding storybook-addon-rslib @rsbuild/core -D',
+       yarn: 'yarn add storybook @storybook/react @storybook/addon-docs @storybook/addon-onboarding storybook-addon-rslib @rsbuild/core -D',
+       pnpm: 'pnpm add storybook @storybook/react @storybook/addon-docs @storybook/addon-onboarding storybook-addon-rslib @rsbuild/core -D',
+       bun: 'bun add storybook @storybook/react @storybook/addon-docs @storybook/addon-onboarding storybook-addon-rslib @rsbuild/core -D',
      }}
    />
 
@@ -58,7 +60,11 @@ import { Tab, Tabs } from '@rspress/core/theme';
        '../stories/**/*.mdx',
        '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
      ],
-     addons: ['@storybook/addon-essentials', 'storybook-addon-rslib'],
+     addons: [
+       '@storybook/addon-docs',
+       '@storybook/addon-onboarding',
+       'storybook-addon-rslib',
+     ],
      framework: 'storybook-react-rsbuild', // 例如 storybook-react-rsbuild
    };
    ```

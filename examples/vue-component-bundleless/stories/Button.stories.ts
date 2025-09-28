@@ -1,5 +1,5 @@
-import { fn } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/vue3';
+import { fn } from 'storybook/test';
 import Counter from '../dist/Counter';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
