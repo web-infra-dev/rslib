@@ -8,7 +8,7 @@ test('JSX syntax should be preserved', async () => {
   const { content: cjsContent } = queryContent(contents.cjs, 'Component1.cjs', {
     basename: true,
   });
-  await expect(cjsContent).toMatchFileSnapshot('./__snapshots__/cjs.jsx.snap');
+  await expect(cjsContent).toMatchSnapshot();
 
   const { content: esmContent } = queryContent(
     contents.esm0!,
@@ -28,7 +28,7 @@ test('JSX syntax should be preserved', async () => {
   // apart from the TS types, this tsx file is completely identical to a jsx file.
   // expect them to be the same after stripping the types.
   expect(esmContent).toBe(esmTsxContent);
-  await expect(esmContent).toMatchFileSnapshot('./__snapshots__/esm.jsx.snap');
+  await expect(esmContent).toMatchSnapshot();
 
   const { content: esmJsxContent } = queryContent(
     contents.esm1!,
@@ -37,10 +37,7 @@ test('JSX syntax should be preserved', async () => {
       basename: true,
     },
   );
-  await expect(esmJsxContent).toMatchFileSnapshot(
-    './__snapshots__/esm-jsx.jsx.snap',
-  );
-
+  await expect(esmJsxContent).toMatchSnapshot();
   await expect(esmContent.replace(/\.js"/g, '.jsx"')).toBe(esmJsxContent);
 });
 
