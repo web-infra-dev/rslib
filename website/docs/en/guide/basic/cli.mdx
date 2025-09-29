@@ -79,6 +79,7 @@ When you run the command `npx rslib inspect` in the project root directory, the 
 
 - `rsbuild.config.mjs`: Represents the Rsbuild configuration used during the build.
 - `rspack.config.web.mjs`: Represents the Rspack configuration used during the build.
+- `rslib.config.mjs`: Represents the final Rslib configuration after normalization.
 
 ```text
 ➜ npx rslib inspect
@@ -87,6 +88,7 @@ Inspect config succeed, open following files to view the content:
 
   - Rsbuild Config: /project/dist/.rsbuild/rsbuild.config.mjs
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
+  - Rslib Config: /project/dist/.rsbuild/rslib.config.mjs
 ```
 
 ### Verbose content
@@ -110,6 +112,7 @@ Inspect config succeed, open following files to view the content:
   - Rsbuild Config (cjs): /project/dist/.rsbuild/rsbuild.config.cjs.mjs
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
   - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
+  - Rslib Config: /project/dist/.rsbuild/rslib.config.mjs
 ```
 
 ## rslib mf-dev

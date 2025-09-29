@@ -27,6 +27,9 @@ export async function inspect(
     verbose: options.verbose,
     outputPath: options.output,
     writeToDisk: true,
+    extraConfigs: {
+      rslib: config,
+    },
   });
 
   return rsbuildInstance;

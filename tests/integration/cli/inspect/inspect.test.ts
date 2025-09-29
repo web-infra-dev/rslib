@@ -17,6 +17,7 @@ describe('inspect command', async () => {
       [
         "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rsbuild.config.cjs.mjs",
         "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rsbuild.config.esm.mjs",
+        "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rslib.config.mjs",
         "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rspack.config.cjs.mjs",
         "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rspack.config.esm.mjs",
       ]
@@ -52,6 +53,7 @@ describe('inspect command', async () => {
     expect(fileNames).toMatchInlineSnapshot(`
       [
         "<ROOT>/tests/integration/cli/inspect/dist/esm/.rsbuild/rsbuild.config.mjs",
+        "<ROOT>/tests/integration/cli/inspect/dist/esm/.rsbuild/rslib.config.mjs",
         "<ROOT>/tests/integration/cli/inspect/dist/esm/.rsbuild/rspack.config.esm.mjs",
       ]
     `);
@@ -85,6 +87,7 @@ describe('inspect command', async () => {
       [
         "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rsbuild.config.cjs.mjs",
         "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rsbuild.config.esm.mjs",
+        "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rslib.config.mjs",
         "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rspack.config.cjs.mjs",
         "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rspack.config.esm.mjs",
       ]
