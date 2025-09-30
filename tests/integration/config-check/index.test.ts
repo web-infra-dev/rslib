@@ -1,6 +1,6 @@
 import { join } from 'node:path';
+import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { expect, test } from '@rstest/core';
-import stripAnsi from 'strip-ansi';
 import { buildAndGetResults } from 'test-helper';
 
 test('should throw error when lib array not exists or empty', async () => {

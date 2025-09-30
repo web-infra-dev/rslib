@@ -1,6 +1,6 @@
 import { join } from 'node:path';
+import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { expect, test } from '@rstest/core';
-import stripAnsi from 'strip-ansi';
 import { buildAndGetResults, proxyConsole } from 'test-helper';
 
 test('should not external @swc/helpers by default', async () => {
