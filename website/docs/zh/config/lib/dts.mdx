@@ -221,7 +221,9 @@ export default {
 
 1. 这遵循与 [lib.autoExtension](/config/lib/auto-extension) 相同的逻辑，但默认值不同，因为类型声明文件扩展名可能会在不同的模块解析策略中造成一些问题。
 
-2. 当开启 [dts.tsgo](/config/lib/dts#dtstsgo) 时，如果项目同时开启了 [dts.build](/config/lib/dts#dtsbuild) 或者将不同后缀的类型声明文件输出到同一目录，`dts.autoExtension` 无法正常生效。
+2. 类型声明文件的导入路径扩展名重写由 [redirect.dts.extension](/config/lib/redirect#redirectdtsextension) 控制。
+
+3. 当开启 [dts.tsgo](/config/lib/dts#dtstsgo) 时，如果项目同时开启了 [dts.build](/config/lib/dts#dtsbuild) 或者将不同后缀的类型声明文件输出到同一目录，`dts.autoExtension` 无法正常生效。
 
 :::
 
