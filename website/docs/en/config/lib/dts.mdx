@@ -221,7 +221,9 @@ When `dts.autoExtension` is set to `true`, the declaration file extension will b
 
 1. It follows the same logic as [lib.autoExtension](/config/lib/auto-extension), but the default value is different since the declaration file extension may cause some issues with different module resolution strategies.
 
-2. When [dts.tsgo](/config/lib/dts#dtstsgo) is enabled, if the project also enables [dts.build](/config/lib/dts#dtsbuild) or emits declaration files with different extensions to the same directory, `dts.autoExtension` may not work correctly.
+2. Type declaration import extensions are controlled by the [redirect.dts.extension](/config/lib/redirect#redirectdtsextension) configuration.
+
+3. When [dts.tsgo](/config/lib/dts#dtstsgo) is enabled, if the project also enables [dts.build](/config/lib/dts#dtsbuild) or emits declaration files with different extensions to the same directory, `dts.autoExtension` may not work correctly.
 
 :::
 
