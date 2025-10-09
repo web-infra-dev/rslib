@@ -461,6 +461,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         typeReexportsPresence: 'tolerant',
         importMeta: false,
         importDynamic: false,
+        commonjs: {
+          exports: 'skipInEsm'
+        },
         requireResolve: false,
         requireDynamic: false,
         requireAsExpression: false,
@@ -1158,6 +1161,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         typeReexportsPresence: 'tolerant',
         importMeta: false,
         importDynamic: false,
+        commonjs: {
+          exports: 'skipInEsm'
+        },
         requireResolve: false,
         requireDynamic: false,
         requireAsExpression: false,
@@ -3658,6 +3664,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "module": {
               "parser": {
                 "javascript": {
+                  "commonjs": {
+                    "exports": "skipInEsm",
+                  },
                   "importDynamic": false,
                   "importMeta": false,
                   "requireAsExpression": false,
@@ -3944,6 +3953,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "module": {
               "parser": {
                 "javascript": {
+                  "commonjs": {
+                    "exports": "skipInEsm",
+                  },
                   "importDynamic": false,
                   "importMeta": false,
                   "requireAsExpression": false,
