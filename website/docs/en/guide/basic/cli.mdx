@@ -51,14 +51,33 @@ Options:
 
 ### Environment variables
 
-Rslib supports injecting env variables or expressions into the code during build, which is helpful for distinguishing the running environment or replacing constants.
+Rslib supports injecting environment variables or expressions into the code during the build, which is helpful for distinguishing running environments or replacing constants. You can see more details in [Rsbuild - Environment variables](https://rsbuild.rs/guide/advanced/env-vars).
 
-You can see more details in [Rsbuild - Environment variables](https://rsbuild.rs/guide/advanced/env-vars).
+By default, Rslib sets the `process.env.NODE_ENV` environment variable, which is always `'production'` during the build. If you need to distinguish watch mode to dynamically set different configurations, you can set as follows:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+const isWatch = process.argv.includes('--watch');
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+    },
+  ],
+  source: {
+    alias: {
+      '@request': isWatch ? './src/request.dev.js' : './src/request.prod.js',
+    },
+  },
+});
+```
 
 ::: note
 
-- If [format](/config/lib/format) is `esm` or `cjs`, `process.env.NODE_ENV` will be preserved in the build output.
-- If [format](/config/lib/format) is `mf` or `umd`, `process.env.NODE_ENV` will be replaced to ensure that the output can run in the browser.
+- If [format](/config/lib/format) is `esm` or `cjs`, `process.env.NODE_ENV` in source code will be preserved in the build output.
+- If [format](/config/lib/format) is `mf` or `umd`, `process.env.NODE_ENV` in source code will be replaced to ensure that the output can run in the browser.
 
 :::
 
