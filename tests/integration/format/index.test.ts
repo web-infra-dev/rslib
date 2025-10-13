@@ -113,32 +113,18 @@ test('throw error when using mf with `bundle: false`', async () => {
   );
 });
 
-test("API plugin's api should be skipped in parser", async () => {
-  const fixturePath = path.resolve(__dirname, 'api-plugin');
-  const { entries } = await buildAndGetResults({
+test('ESM interop should be correct', async () => {
+  const fixturePath = path.resolve(__dirname, 'esm-interop');
+  const { entryFiles } = await buildAndGetResults({
     fixturePath,
   });
 
-  expect(entries.esm).toMatchInlineSnapshot(`
-		"const a = require.cache;
-		const b = require.extensions;
-		const c = require.config;
-		const d = require.version;
-		const e = require.include;
-		const f = require.onError;
-		export { a, b, c, d, e, f };
-		"
-	`);
-
-  expect(entries.cjs).toContain('const a = require.cache;');
-  expect(entries.cjs).toContain('const b = require.extensions;');
-  expect(entries.cjs).toContain('const c = require.config;');
-  expect(entries.cjs).toContain('const d = require.version;');
-  expect(entries.cjs).toContain('const e = require.include;');
-  expect(entries.cjs).toContain('const f = require.onError;');
+  const cjsOutput = await import(entryFiles.cjs);
+  expect(typeof cjsOutput.default.path1.basename).toBe('function');
+  expect(cjsOutput.default.path1).toBe(cjsOutput.default.path2);
 });
 
-test('ESM interop should be correct', async () => {
+test('`module` should be correctly handled by `parserOptions.commonjs.exports = "skipInEsm"`', async () => {
   const fixturePath = path.resolve(__dirname, 'esm-interop');
   const { entryFiles } = await buildAndGetResults({
     fixturePath,

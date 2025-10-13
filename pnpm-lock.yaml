@@ -904,8 +904,6 @@ importers:
         specifier: ^4.17.20
         version: 4.17.20
 
-  tests/integration/format/api-plugin: {}
-
   tests/integration/format/cjs-static-export: {}
 
   tests/integration/format/default: {}
@@ -959,6 +957,18 @@ importers:
   tests/integration/output/chunkFileName-multi: {}
 
   tests/integration/output/chunkFileName-single: {}
+
+  tests/integration/parser-javascript/api-plugin: {}
+
+  tests/integration/parser-javascript/module: {}
+
+  tests/integration/parser-javascript/require/import-dynamic: {}
+
+  tests/integration/parser-javascript/require/require-as-expression: {}
+
+  tests/integration/parser-javascript/require/require-dynamic: {}
+
+  tests/integration/parser-javascript/require/require-resolve: {}
 
   tests/integration/plugins/basic: {}
 
@@ -1039,14 +1049,6 @@ importers:
   tests/integration/redirect/js-not-resolve: {}
 
   tests/integration/redirect/style: {}
-
-  tests/integration/require/import-dynamic: {}
-
-  tests/integration/require/require-as-expression: {}
-
-  tests/integration/require/require-dynamic: {}
-
-  tests/integration/require/require-resolve: {}
 
   tests/integration/resolve/data-url: {}
 

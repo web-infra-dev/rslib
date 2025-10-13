@@ -602,7 +602,7 @@ const composeFormatConfig = ({
   bundle?: boolean;
   umdName?: Rspack.LibraryName;
 }): EnvironmentConfig => {
-  const jsParserOptions = {
+  const jsParserOptions: Record<string, Rspack.JavascriptParserOptions> = {
     cjs: {
       requireResolve: false,
       requireDynamic: false,
@@ -611,11 +611,14 @@ const composeFormatConfig = ({
     esm: {
       importMeta: false,
       importDynamic: false,
+      commonjs: {
+        exports: 'skipInEsm',
+      },
     },
     others: {
       worker: false,
     },
-  } as const;
+  };
 
   // The built-in Rslib plugin will apply to all formats except the `mf` format.
   // The `mf` format functions more like an application than a library and requires additional webpack runtime.
