@@ -168,7 +168,7 @@ When using Node.js's native loader, please note the following limitations:
 
 ## Using environment variables
 
-In the configuration file, you can use Node.js environment variables such as `process.env.NODE_ENV` to dynamically set different configurations:
+In the configuration file, you can use Node.js environment variables to dynamically set different configurations:
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
@@ -181,10 +181,10 @@ export default defineConfig({
   ],
   source: {
     alias: {
-      '@request':
-        process.env.NODE_ENV === 'development'
-          ? './src/request.dev.js'
-          : './src/request.prod.js',
+      '@language':
+        process.env.LANGUAGE === 'en'
+          ? './src/language/en.js'
+          : './src/language/zh.js',
     },
   },
 });

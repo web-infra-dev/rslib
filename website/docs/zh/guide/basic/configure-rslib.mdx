@@ -168,7 +168,7 @@ Rslib 提供了三种配置文件加载方式：
 
 ## 使用环境变量
 
-在配置文件中，你可以使用 `process.env.NODE_ENV` 等 Node.js 环境变量，来动态写入不同的配置：
+在配置文件中，你可以使用 Node.js 环境变量，来动态写入不同的配置：
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
@@ -181,10 +181,10 @@ export default defineConfig({
   ],
   source: {
     alias: {
-      '@request':
-        process.env.NODE_ENV === 'development'
-          ? './src/request.dev.js'
-          : './src/request.prod.js',
+      '@language':
+        process.env.LANGUAGE === 'en'
+          ? './src/language/en.js'
+          : './src/language/zh.js',
     },
   },
 });
