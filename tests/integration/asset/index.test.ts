@@ -337,6 +337,13 @@ test('use json / yaml / toml', async () => {
   );
   expect(await import(jsonFile)).toMatchInlineSnapshot(`
     {
+      "default": {
+        "items": [
+          3,
+          4,
+        ],
+        "name": "named",
+      },
       "items": [
         3,
         4,
