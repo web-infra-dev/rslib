@@ -11,9 +11,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/enabled/esm0',
-        },
+        distPath: './dist/enabled/esm0',
       },
     }),
     generateBundleEsmConfig({
@@ -25,9 +23,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/enabled/esm1',
-        },
+        distPath: './dist/enabled/esm1',
       },
     }),
     generateBundleEsmConfig({
@@ -40,9 +36,7 @@ export default defineConfig({
       },
       output: {
         copy: [{ from: './src/ok.cjs' }],
-        distPath: {
-          root: './dist/enabled/esm2',
-        },
+        distPath: './dist/enabled/esm2',
       },
     }),
   ],

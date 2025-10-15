@@ -22,9 +22,7 @@ export default defineConfig({
           },
           {} as Record<string, string>,
         ),
-        distPath: {
-          root: './dist/esm/bundleless',
-        },
+        distPath: './dist/esm/bundleless',
       },
     }),
   ],

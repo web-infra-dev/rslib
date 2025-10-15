@@ -8,26 +8,20 @@ export default defineConfig({
       format: 'esm',
       dts: true,
       output: {
-        distPath: {
-          root: './dist/esm',
-        },
+        distPath: './dist/esm',
       },
     },
     {
       format: 'cjs',
       dts: true,
       output: {
-        distPath: {
-          root: './dist/cjs',
-        },
+        distPath: './dist/cjs',
       },
     },
     {
       format: 'mf',
       output: {
-        distPath: {
-          root: './dist/mf',
-        },
+        distPath: './dist/mf',
         assetPrefix: 'http://localhost:3001/mf',
       },
       dev: {

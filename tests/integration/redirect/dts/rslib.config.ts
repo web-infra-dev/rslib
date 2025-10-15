@@ -7,18 +7,14 @@ export default defineConfig({
     generateBundleEsmConfig({
       dts: true,
       output: {
-        distPath: {
-          root: './dist/default/esm',
-        },
+        distPath: './dist/default/esm',
       },
     }),
     // 1 - path: false extension: false
     generateBundleEsmConfig({
       dts: true,
       output: {
-        distPath: {
-          root: './dist/path-false/esm',
-        },
+        distPath: './dist/path-false/esm',
       },
       redirect: {
         dts: {
@@ -30,9 +26,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       dts: true,
       output: {
-        distPath: {
-          root: './dist/extension-true/esm',
-        },
+        distPath: './dist/extension-true/esm',
       },
       redirect: {
         dts: {
@@ -44,9 +38,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       dts: true,
       output: {
-        distPath: {
-          root: './dist/path-false-extension-true/esm',
-        },
+        distPath: './dist/path-false-extension-true/esm',
       },
       redirect: {
         dts: {
@@ -61,9 +53,7 @@ export default defineConfig({
         autoExtension: true,
       },
       output: {
-        distPath: {
-          root: './dist/auto-extension-true',
-        },
+        distPath: './dist/auto-extension-true',
       },
       redirect: {
         dts: {
@@ -77,9 +67,7 @@ export default defineConfig({
         autoExtension: true,
       },
       output: {
-        distPath: {
-          root: './dist/auto-extension-true',
-        },
+        distPath: './dist/auto-extension-true',
       },
       redirect: {
         dts: {

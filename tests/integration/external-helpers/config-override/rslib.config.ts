@@ -14,9 +14,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/1',
-        },
+        distPath: './dist/1',
       },
     }),
     generateBundleEsmConfig({
@@ -29,9 +27,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/2',
-        },
+        distPath: './dist/2',
       },
     }),
   ],

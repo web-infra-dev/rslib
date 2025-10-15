@@ -6,9 +6,7 @@ export default defineConfig({
     // bundle default
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/bundle-default',
-        },
+        distPath: './dist/bundle-default',
       },
     }),
     // bundleless default
@@ -20,9 +18,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/bundleless-default',
-        },
+        distPath: './dist/bundleless-default',
       },
     }),
     // bundleless preserve JSON
@@ -36,9 +32,7 @@ export default defineConfig({
       output: {
         copy: [{ from: './**/*.json', context: './src' }],
         externals: [/.*\.json$/],
-        distPath: {
-          root: './dist/bundleless-preserve-json',
-        },
+        distPath: './dist/bundleless-preserve-json',
       },
     }),
   ],

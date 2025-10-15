@@ -9,9 +9,7 @@ export default defineConfig({
       dts: true,
       format: 'esm',
       output: {
-        distPath: {
-          root: './dist/esm',
-        },
+        distPath: './dist/esm',
       },
     },
     {
@@ -19,9 +17,7 @@ export default defineConfig({
       dts: true,
       format: 'cjs',
       output: {
-        distPath: {
-          root: './dist/cjs',
-        },
+        distPath: './dist/cjs',
       },
     },
   ],

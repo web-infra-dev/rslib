@@ -10,9 +10,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/bundle/esm',
-        },
+        distPath: 'dist/bundle/esm',
       },
     }),
     generateBundleCjsConfig({
@@ -22,9 +20,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/bundle/cjs',
-        },
+        distPath: 'dist/bundle/cjs',
       },
     }),
     generateBundleEsmConfig({
@@ -35,9 +31,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/bundleless/esm',
-        },
+        distPath: 'dist/bundleless/esm',
       },
     }),
     generateBundleCjsConfig({
@@ -48,9 +42,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/bundleless/cjs',
-        },
+        distPath: 'dist/bundleless/cjs',
       },
     }),
   ],

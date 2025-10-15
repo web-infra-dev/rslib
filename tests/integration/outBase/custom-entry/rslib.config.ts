@@ -13,9 +13,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/esm0',
-        },
+        distPath: './dist/esm0',
       },
     }),
     // configured with relative outBase
@@ -28,9 +26,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/esm1',
-        },
+        distPath: './dist/esm1',
       },
     }),
     // configured with absolute outBase
@@ -43,9 +39,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/esm2',
-        },
+        distPath: './dist/esm2',
       },
     }),
   ],

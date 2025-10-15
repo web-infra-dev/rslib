@@ -9,9 +9,7 @@ export default defineConfig({
     // esm
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm/bundle-default',
-        },
+        distPath: './dist/esm/bundle-default',
       },
       plugins: [
         pluginSvgr({
@@ -22,9 +20,7 @@ export default defineConfig({
     // cjs
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: './dist/cjs/bundle-default',
-        },
+        distPath: './dist/cjs/bundle-default',
       },
       plugins: [
         pluginSvgr({
@@ -42,9 +38,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/esm/bundleless-mixed',
-        },
+        distPath: './dist/esm/bundleless-mixed',
       },
       plugins: [
         pluginSvgr({
@@ -61,9 +55,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/cjs/bundleless-mixed',
-        },
+        distPath: './dist/cjs/bundleless-mixed',
       },
       plugins: [
         pluginSvgr({
@@ -81,9 +73,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/esm/bundleless-only-svgr',
-        },
+        distPath: './dist/esm/bundleless-only-svgr',
       },
       plugins: [
         pluginSvgr({
@@ -103,9 +93,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/cjs/bundleless-only-svgr',
-        },
+        distPath: './dist/cjs/bundleless-only-svgr',
       },
       plugins: [
         pluginSvgr({
@@ -126,9 +114,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/esm/bundleless-css-svg',
-        },
+        distPath: './dist/esm/bundleless-css-svg',
       },
       plugins: [
         pluginSvgr({
@@ -147,9 +133,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/cjs/bundleless-css-svg',
-        },
+        distPath: './dist/cjs/bundleless-css-svg',
       },
       plugins: [
         pluginSvgr({

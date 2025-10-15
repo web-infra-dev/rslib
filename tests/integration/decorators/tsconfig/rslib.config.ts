@@ -5,16 +5,12 @@ export default defineConfig({
   lib: [
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm/legacy',
-        },
+        distPath: './dist/esm/legacy',
       },
     }),
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm/stage3',
-        },
+        distPath: './dist/esm/stage3',
       },
       source: {
         decorators: {

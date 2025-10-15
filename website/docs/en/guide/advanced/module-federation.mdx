@@ -37,13 +37,11 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     // ... other format
-    // [!code highlight:37]
+    // [!code highlight:33]
     {
       format: 'mf',
       output: {
-        distPath: {
-          root: './dist/mf',
-        },
+        distPath: './dist/mf',
         // for production, add online assetPrefix here
         assetPrefix: 'http://localhost:3001/mf',
       },

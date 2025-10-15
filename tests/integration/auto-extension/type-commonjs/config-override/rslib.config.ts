@@ -9,9 +9,7 @@ export default defineConfig({
         filename: {
           js: '[name].mjs',
         },
-        distPath: {
-          root: './dist/esm-override-filename',
-        },
+        distPath: './dist/esm-override-filename',
       },
     }),
     generateBundleCjsConfig({
@@ -19,26 +17,20 @@ export default defineConfig({
         filename: {
           js: '[name].[contenthash:8].js',
         },
-        distPath: {
-          root: './dist/cjs-override-filename',
-        },
+        distPath: './dist/cjs-override-filename',
       },
     }),
     generateBundleEsmConfig({
       autoExtension: false,
       output: {
         filenameHash: true,
-        distPath: {
-          root: './dist/esm-override-filename-hash',
-        },
+        distPath: './dist/esm-override-filename-hash',
       },
     }),
     generateBundleCjsConfig({
       output: {
         filenameHash: true,
-        distPath: {
-          root: './dist/cjs-override-filename-hash',
-        },
+        distPath: './dist/cjs-override-filename-hash',
       },
     }),
     generateBundleCjsConfig({
@@ -51,9 +43,7 @@ export default defineConfig({
             return 'bar-[name].js';
           },
         },
-        distPath: {
-          root: './dist/cjs-override-filename-function',
-        },
+        distPath: './dist/cjs-override-filename-function',
       },
       bundle: false,
       source: {

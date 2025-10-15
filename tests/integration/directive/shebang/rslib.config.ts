@@ -24,9 +24,7 @@ export default defineConfig({
       ...esmShared,
       shims: { esm: { __dirname: true, __filename: true } },
       output: {
-        distPath: {
-          root: './dist/bundle/esm0',
-        },
+        distPath: './dist/bundle/esm0',
       },
     }),
     generateBundleEsmConfig({
@@ -34,18 +32,14 @@ export default defineConfig({
       shims: { esm: { __dirname: true, __filename: true } },
       output: {
         minify: true,
-        distPath: {
-          root: './dist/bundle/esm1',
-        },
+        distPath: './dist/bundle/esm1',
       },
     }),
     generateBundleEsmConfig({
       ...esmSharedBundleFalse,
       shims: { esm: { __dirname: true, __filename: true } },
       output: {
-        distPath: {
-          root: './dist/bundle-false/esm0',
-        },
+        distPath: './dist/bundle-false/esm0',
       },
     }),
     generateBundleEsmConfig({
@@ -53,9 +47,7 @@ export default defineConfig({
       shims: { esm: { __dirname: true, __filename: true } },
       output: {
         minify: true,
-        distPath: {
-          root: './dist/bundle-false/esm1',
-        },
+        distPath: './dist/bundle-false/esm1',
       },
     }),
   ],

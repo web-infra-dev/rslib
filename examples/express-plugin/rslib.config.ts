@@ -6,18 +6,14 @@ export default defineConfig({
       format: 'esm',
       dts: true,
       output: {
-        distPath: {
-          root: './dist/esm',
-        },
+        distPath: './dist/esm',
       },
     },
     {
       format: 'cjs',
       dts: true,
       output: {
-        distPath: {
-          root: './dist/cjs',
-        },
+        distPath: './dist/cjs',
       },
     },
   ],

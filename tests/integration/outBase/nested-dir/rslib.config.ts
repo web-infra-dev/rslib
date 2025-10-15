@@ -8,9 +8,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/esm0',
-        },
+        distPath: './dist/esm0',
       },
     }),
     // configured with relative outBase
@@ -18,9 +16,7 @@ export default defineConfig({
       bundle: false,
       outBase: './src',
       output: {
-        distPath: {
-          root: './dist/esm1',
-        },
+        distPath: './dist/esm1',
       },
     }),
     // configured with absolute outBase
@@ -28,9 +24,7 @@ export default defineConfig({
       bundle: false,
       outBase: path.resolve(__dirname, 'src'),
       output: {
-        distPath: {
-          root: './dist/esm2',
-        },
+        distPath: './dist/esm2',
       },
     }),
   ],

@@ -6,25 +6,19 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/basic-esm',
-        },
+        distPath: './dist/basic-esm',
       },
     }),
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/basic-cjs',
-        },
+        distPath: './dist/basic-cjs',
       },
     }),
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/no-auto-extension-esm',
-        },
+        distPath: './dist/no-auto-extension-esm',
         filename: {
           js: '[name].mjs',
         },
@@ -34,9 +28,7 @@ export default defineConfig({
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/no-auto-extension-cjs',
-        },
+        distPath: './dist/no-auto-extension-cjs',
         filename: {
           js: '[name].cjs',
         },

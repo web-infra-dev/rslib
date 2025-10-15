@@ -19,9 +19,7 @@ export default defineConfig({
     // bundle esm
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm/bundle',
-        },
+        distPath: './dist/esm/bundle',
       },
       dts: {
         bundle: true,
@@ -31,9 +29,7 @@ export default defineConfig({
     // bundle cjs
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: './dist/cjs/bundle',
-        },
+        distPath: './dist/cjs/bundle',
       },
       dts: {
         bundle: true,
@@ -43,9 +39,7 @@ export default defineConfig({
     // bundleless esm
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm/bundleless',
-        },
+        distPath: './dist/esm/bundleless',
       },
       bundle: false,
       dts: {
@@ -61,9 +55,7 @@ export default defineConfig({
     // bundleless cjs
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: './dist/cjs/bundleless',
-        },
+        distPath: './dist/cjs/bundleless',
       },
       bundle: false,
       dts: {
@@ -79,9 +71,7 @@ export default defineConfig({
     // bundle esm with minify enabled
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm/bundle-minify',
-        },
+        distPath: './dist/esm/bundle-minify',
         minify: true,
       },
       dts: {
@@ -92,9 +82,7 @@ export default defineConfig({
     // bundle esm
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm-tsgo/bundle',
-        },
+        distPath: './dist/esm-tsgo/bundle',
       },
       dts: {
         bundle: true,
@@ -105,9 +93,7 @@ export default defineConfig({
     // bundle cjs
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: './dist/cjs-tsgo/bundle',
-        },
+        distPath: './dist/cjs-tsgo/bundle',
       },
       dts: {
         bundle: true,
@@ -118,9 +104,7 @@ export default defineConfig({
     // bundleless esm
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm-tsgo/bundleless',
-        },
+        distPath: './dist/esm-tsgo/bundleless',
       },
       bundle: false,
       dts: {
@@ -137,9 +121,7 @@ export default defineConfig({
     // bundleless cjs
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: './dist/cjs-tsgo/bundleless',
-        },
+        distPath: './dist/cjs-tsgo/bundleless',
       },
       bundle: false,
       dts: {
@@ -156,9 +138,7 @@ export default defineConfig({
     // bundle esm with minify enabled
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm-tsgo/bundle-minify',
-        },
+        distPath: './dist/esm-tsgo/bundle-minify',
         minify: true,
       },
       dts: {

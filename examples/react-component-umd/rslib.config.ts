@@ -11,9 +11,7 @@ export default defineConfig({
         externals: {
           react: 'React',
         },
-        distPath: {
-          root: './dist/umd',
-        },
+        distPath: './dist/umd',
       },
     },
   ],

@@ -10,17 +10,13 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/esm0',
-        },
+        distPath: 'dist/esm0',
       },
     }),
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/esm1',
-        },
+        distPath: 'dist/esm1',
         filename: {
           js: '[name].jsx',
         },

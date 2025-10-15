@@ -5,9 +5,7 @@ export default defineConfig({
   lib: [
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: './dist/cjs',
-        },
+        distPath: './dist/cjs',
         filename: {
           js: '[name].cjs',
         },

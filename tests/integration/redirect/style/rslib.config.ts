@@ -11,17 +11,13 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/default/esm',
-        },
+        distPath: 'dist/default/esm',
       },
     }),
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/default/cjs',
-        },
+        distPath: 'dist/default/cjs',
       },
     }),
 
@@ -34,9 +30,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/style-path-false/esm',
-        },
+        distPath: 'dist/style-path-false/esm',
       },
     }),
     generateBundleCjsConfig({
@@ -47,9 +41,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/style-path-false/cjs',
-        },
+        distPath: 'dist/style-path-false/cjs',
       },
     }),
     // 2. style.extension: false
@@ -67,9 +59,7 @@ export default defineConfig({
       },
       output: {
         copy: [{ from: './**/*.less', context: './src' }],
-        distPath: {
-          root: 'dist/style-extension-false/esm',
-        },
+        distPath: 'dist/style-extension-false/esm',
       },
     }),
     generateBundleCjsConfig({
@@ -86,9 +76,7 @@ export default defineConfig({
       },
       output: {
         copy: [{ from: './**/*.less', context: './src' }],
-        distPath: {
-          root: 'dist/style-extension-false/cjs',
-        },
+        distPath: 'dist/style-extension-false/cjs',
       },
     }),
 
@@ -109,9 +97,7 @@ export default defineConfig({
       },
       output: {
         copy: [{ from: './**/*.less', context: './src' }],
-        distPath: {
-          root: 'dist/style-path-extension-false/esm',
-        },
+        distPath: 'dist/style-path-extension-false/esm',
       },
     }),
     generateBundleCjsConfig({
@@ -128,9 +114,7 @@ export default defineConfig({
       },
       output: {
         copy: [{ from: './**/*.less', context: './src' }],
-        distPath: {
-          root: 'dist/style-path-extension-false/cjs',
-        },
+        distPath: 'dist/style-path-extension-false/cjs',
       },
     }),
   ],

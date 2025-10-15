@@ -12,9 +12,7 @@ export default defineConfig({
       bundle: false,
       output: {
         target: 'web',
-        distPath: {
-          root: 'dist/bundleless',
-        },
+        distPath: 'dist/bundleless',
       },
     }),
     // bundle, ESM
@@ -22,9 +20,7 @@ export default defineConfig({
       plugins: [pluginUnpluginVue()],
       output: {
         target: 'web',
-        distPath: {
-          root: 'dist/bundle',
-        },
+        distPath: 'dist/bundle',
       },
     }),
   ],

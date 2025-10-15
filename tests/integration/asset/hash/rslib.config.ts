@@ -8,9 +8,7 @@ export default defineConfig({
     // esm
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm/bundle',
-        },
+        distPath: './dist/esm/bundle',
         filename: {
           image: '[name].[contenthash:8][ext]',
         },
@@ -19,9 +17,7 @@ export default defineConfig({
     // cjs
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: './dist/cjs/bundle',
-        },
+        distPath: './dist/cjs/bundle',
         filename: {
           image: '[name].[contenthash:8][ext]',
         },
@@ -32,9 +28,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/esm/bundleless',
-        },
+        distPath: './dist/esm/bundleless',
         filename: {
           image: '[name].[contenthash:8][ext]',
         },
@@ -44,9 +38,7 @@ export default defineConfig({
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/cjs/bundleless',
-        },
+        distPath: './dist/cjs/bundleless',
         filename: {
           image: '[name].[contenthash:8][ext]',
         },

@@ -10,18 +10,14 @@ export default defineConfig({
     }),
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm/bundle',
-        },
+        distPath: './dist/esm/bundle',
         assetPrefix: '/public/path',
       },
     }),
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/esm/bundle-false',
-        },
+        distPath: './dist/esm/bundle-false',
         assetPrefix: '/public/path',
       },
     }),

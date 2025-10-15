@@ -7,18 +7,14 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/default/esm',
-        },
+        distPath: 'dist/default/esm',
       },
     }),
     // 1 js.path: false
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/js-path-false/esm',
-        },
+        distPath: 'dist/js-path-false/esm',
       },
       redirect: {
         js: {
@@ -30,9 +26,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/js-extension-false/esm',
-        },
+        distPath: 'dist/js-extension-false/esm',
       },
       redirect: {
         js: {

@@ -5,16 +5,12 @@ export default defineConfig({
   lib: [
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/custom',
-        },
+        distPath: './dist/custom',
       },
     }),
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: './dist/custom',
-        },
+        distPath: './dist/custom',
       },
     }),
   ],

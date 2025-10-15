@@ -7,17 +7,13 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/default/esm',
-        },
+        distPath: 'dist/default/esm',
       },
     }),
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/default/cjs',
-        },
+        distPath: 'dist/default/cjs',
       },
     }),
     // 1. redirect.asset.extension: false
@@ -29,9 +25,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/asset-extension-false/esm',
-        },
+        distPath: 'dist/asset-extension-false/esm',
       },
     }),
     generateBundleCjsConfig({
@@ -42,9 +36,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/asset-extension-false/cjs',
-        },
+        distPath: 'dist/asset-extension-false/cjs',
       },
     }),
     // 2. redirect.asset.path: false
@@ -56,9 +48,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/asset-path-false/esm',
-        },
+        distPath: 'dist/asset-path-false/esm',
       },
     }),
     generateBundleCjsConfig({
@@ -69,9 +59,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/asset-path-false/cjs',
-        },
+        distPath: 'dist/asset-path-false/cjs',
       },
     }),
     // 3. redirect.asset.extension: false + redirect.asset.path: false
@@ -84,9 +72,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/asset-false/esm',
-        },
+        distPath: 'dist/asset-false/esm',
       },
     }),
     generateBundleCjsConfig({
@@ -98,9 +84,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: 'dist/asset-false/cjs',
-        },
+        distPath: 'dist/asset-false/cjs',
       },
     }),
   ],

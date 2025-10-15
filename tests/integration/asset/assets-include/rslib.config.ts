@@ -10,9 +10,7 @@ export default defineConfig({
         assetsInclude: /\.txt/,
       },
       output: {
-        distPath: {
-          root: './dist/esm/bundle',
-        },
+        distPath: './dist/esm/bundle',
       },
     }),
     // 1. bundleless
@@ -23,9 +21,7 @@ export default defineConfig({
         assetsInclude: /\.txt/,
       },
       output: {
-        distPath: {
-          root: './dist/esm/bundleless',
-        },
+        distPath: './dist/esm/bundleless',
       },
     }),
   ],

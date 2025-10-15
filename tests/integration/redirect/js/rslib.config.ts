@@ -7,26 +7,20 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/default/esm',
-        },
+        distPath: 'dist/default/esm',
       },
     }),
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/default/cjs',
-        },
+        distPath: 'dist/default/cjs',
       },
     }),
     // 1 js.path: false
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/js-path-false/esm',
-        },
+        distPath: 'dist/js-path-false/esm',
       },
       redirect: {
         js: {
@@ -37,9 +31,7 @@ export default defineConfig({
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/js-path-false/cjs',
-        },
+        distPath: 'dist/js-path-false/cjs',
       },
       redirect: {
         js: {
@@ -51,9 +43,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/js-path-externals-override/esm',
-        },
+        distPath: 'dist/js-path-externals-override/esm',
         externals: {
           '@/foo': './others/foo.js',
           '@/bar': './others/bar/index.js',
@@ -63,9 +53,7 @@ export default defineConfig({
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/js-path-externals-override/cjs',
-        },
+        distPath: 'dist/js-path-externals-override/cjs',
         externals: {
           '@/foo': './others/foo.cjs',
           '@/bar': './others/bar/index.cjs',
@@ -83,9 +71,7 @@ export default defineConfig({
         aliasStrategy: 'prefer-alias',
       },
       output: {
-        distPath: {
-          root: 'dist/js-path-alias-override/esm',
-        },
+        distPath: 'dist/js-path-alias-override/esm',
       },
     }),
     generateBundleCjsConfig({
@@ -98,18 +84,14 @@ export default defineConfig({
         aliasStrategy: 'prefer-alias',
       },
       output: {
-        distPath: {
-          root: 'dist/js-path-alias-override/cjs',
-        },
+        distPath: 'dist/js-path-alias-override/cjs',
       },
     }),
     // 4 js.extension: false
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/js-extension-false/esm',
-        },
+        distPath: 'dist/js-extension-false/esm',
       },
       redirect: {
         js: {
@@ -120,9 +102,7 @@ export default defineConfig({
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: 'dist/js-extension-false/cjs',
-        },
+        distPath: 'dist/js-extension-false/cjs',
       },
       redirect: {
         js: {

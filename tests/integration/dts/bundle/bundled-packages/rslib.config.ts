@@ -8,9 +8,7 @@ export default defineConfig({
         bundle: true,
       },
       output: {
-        distPath: {
-          root: './dist/esm/default',
-        },
+        distPath: './dist/esm/default',
       },
     }),
     generateBundleEsmConfig({
@@ -20,9 +18,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/esm/override-empty-array',
-        },
+        distPath: './dist/esm/override-empty-array',
       },
     }),
     generateBundleEsmConfig({
@@ -40,9 +36,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/esm/override-array-string',
-        },
+        distPath: './dist/esm/override-array-string',
       },
     }),
   ],

@@ -7,16 +7,12 @@ export default defineConfig({
   lib: [
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: resolve(__dirname, 'dist/esm'),
-        },
+        distPath: resolve(__dirname, 'dist/esm'),
       },
     }),
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: resolve(__dirname, 'dist/cjs'),
-        },
+        distPath: resolve(__dirname, 'dist/cjs'),
       },
     }),
   ],
