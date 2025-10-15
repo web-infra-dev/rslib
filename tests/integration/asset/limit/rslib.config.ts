@@ -7,26 +7,20 @@ export default defineConfig({
     // esm
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm/bundle-default',
-        },
+        distPath: './dist/esm/bundle-default',
       },
     }),
     // cjs
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: './dist/cjs/bundle-default',
-        },
+        distPath: './dist/cjs/bundle-default',
       },
     }),
     // 1. bundle inline
     // esm
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm/bundle-inline',
-        },
+        distPath: './dist/esm/bundle-inline',
         dataUriLimit: {
           svg: 4096,
         },
@@ -35,9 +29,7 @@ export default defineConfig({
     // cjs
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: './dist/cjs/bundle-inline',
-        },
+        distPath: './dist/cjs/bundle-inline',
         dataUriLimit: {
           svg: 4096,
         },
@@ -48,18 +40,14 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/esm/bundleless-default',
-        },
+        distPath: './dist/esm/bundleless-default',
       },
     }),
     // cjs
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/cjs/bundleless-default',
-        },
+        distPath: './dist/cjs/bundleless-default',
       },
     }),
 
@@ -67,9 +55,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/esm/bundleless-inline',
-        },
+        distPath: './dist/esm/bundleless-inline',
         dataUriLimit: {
           svg: 4096,
         },
@@ -78,9 +64,7 @@ export default defineConfig({
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/cjs/bundleless-inline',
-        },
+        distPath: './dist/cjs/bundleless-inline',
         dataUriLimit: {
           svg: 4096,
         },

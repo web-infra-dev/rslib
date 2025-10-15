@@ -5,9 +5,7 @@ export default defineConfig({
   lib: [
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: `dist/${process.env.FOO}`,
-        },
+        distPath: `dist/${process.env.FOO}`,
       },
     }),
   ],

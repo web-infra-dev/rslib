@@ -19,9 +19,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/esm/bundle',
-        },
+        distPath: './dist/esm/bundle',
       },
     }),
     // 1. bundleless
@@ -34,9 +32,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist/esm/bundleless',
-        },
+        distPath: './dist/esm/bundleless',
       },
     }),
   ],

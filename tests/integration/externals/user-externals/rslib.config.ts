@@ -10,18 +10,14 @@ export default defineConfig({
     generateBundleEsmConfig({
       output: {
         externals: baseExternals,
-        distPath: {
-          root: 'dist/bundle',
-        },
+        distPath: 'dist/bundle',
       },
     }),
     generateBundleEsmConfig({
       bundle: false,
       output: {
         externals: { ...baseExternals, './foo': './foo2' },
-        distPath: {
-          root: 'dist/bundle-false',
-        },
+        distPath: 'dist/bundle-false',
       },
     }),
   ],

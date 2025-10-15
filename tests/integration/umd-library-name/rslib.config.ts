@@ -6,17 +6,13 @@ export default defineConfig({
     generateBundleUmdConfig({
       umdName: 'MyLibrary',
       output: {
-        distPath: {
-          root: './dist/string',
-        },
+        distPath: './dist/string',
       },
     }),
     generateBundleUmdConfig({
       umdName: ['MyLibrary', 'Utils'],
       output: {
-        distPath: {
-          root: './dist/array',
-        },
+        distPath: './dist/array',
       },
     }),
   ],

@@ -44,9 +44,7 @@ import { generateBundleEsmConfig } from 'test-helper';
 export default defineConfig({
   lib: [generateBundleEsmConfig({
    output: {
-      distPath: {
-        root: './dist-1/esm',
-      },
+      distPath: './dist-1/esm',
     },
   })],
 });

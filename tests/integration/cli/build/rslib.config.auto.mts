@@ -6,9 +6,7 @@ export default defineConfig({
   lib: [
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: distPathJson.distPath,
-        },
+        distPath: distPathJson.distPath,
       },
     }),
   ],

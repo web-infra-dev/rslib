@@ -5,31 +5,23 @@ export default defineConfig({
   lib: [
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: 'dist/esm-bundle',
-        },
+        distPath: 'dist/esm-bundle',
       },
     }),
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: 'dist/cjs-bundle',
-        },
+        distPath: 'dist/cjs-bundle',
       },
     }),
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: 'dist/esm-bundle-false',
-        },
+        distPath: 'dist/esm-bundle-false',
       },
       bundle: false,
     }),
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: 'dist/cjs-bundle-false',
-        },
+        distPath: 'dist/cjs-bundle-false',
       },
       bundle: false,
     }),

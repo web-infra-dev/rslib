@@ -6,35 +6,27 @@ export default defineConfig({
     // ESM
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/bundle-esm',
-        },
+        distPath: './dist/bundle-esm',
       },
     }),
     // CJS
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: './dist/bundle-cjs',
-        },
+        distPath: './dist/bundle-cjs',
       },
     }),
     // ESM bundleless
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/bundleless-esm',
-        },
+        distPath: './dist/bundleless-esm',
       },
     }),
     // CJS bundleless
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/bundleless-cjs',
-        },
+        distPath: './dist/bundleless-cjs',
       },
     }),
   ],

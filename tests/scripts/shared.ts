@@ -41,9 +41,7 @@ export function getCwdByExample(exampleName: string) {
 export function generateBundleEsmConfig(config: LibConfig = {}): LibConfig {
   const esmBasicConfig: LibConfig = {
     output: {
-      distPath: {
-        root: './dist/esm',
-      },
+      distPath: './dist/esm',
     },
   };
 
@@ -54,9 +52,7 @@ export function generateBundleCjsConfig(config: LibConfig = {}): LibConfig {
   const cjsBasicConfig: LibConfig = {
     format: 'cjs',
     output: {
-      distPath: {
-        root: './dist/cjs',
-      },
+      distPath: './dist/cjs',
     },
   };
 
@@ -70,9 +66,7 @@ export function generateBundleMFConfig(
   const mfBasicConfig: LibConfig = {
     format: 'mf',
     output: {
-      distPath: {
-        root: './dist/mf',
-      },
+      distPath: './dist/mf',
     },
     plugins: [pluginModuleFederation(options, {})],
   };
@@ -84,9 +78,7 @@ export function generateBundleUmdConfig(config: LibConfig = {}): LibConfig {
   const umdBasicConfig: LibConfig = {
     format: 'umd',
     output: {
-      distPath: {
-        root: './dist/umd',
-      },
+      distPath: './dist/umd',
     },
   };
 
@@ -97,9 +89,7 @@ export function generateBundleIifeConfig(config: LibConfig = {}): LibConfig {
   const iifeBasicConfig: LibConfig = {
     format: 'iife',
     output: {
-      distPath: {
-        root: './dist/iife',
-      },
+      distPath: './dist/iife',
     },
   };
 

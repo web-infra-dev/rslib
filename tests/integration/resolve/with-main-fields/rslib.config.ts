@@ -19,9 +19,7 @@ export default defineConfig({
     }),
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/node',
-        },
+        distPath: './dist/node',
       },
       source: {
         entry: {
@@ -31,9 +29,7 @@ export default defineConfig({
     }),
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/browser',
-        },
+        distPath: './dist/browser',
         target: 'web',
       },
       source: {

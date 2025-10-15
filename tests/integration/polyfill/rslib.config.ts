@@ -22,9 +22,7 @@ export default defineConfig({
   lib: [
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: 'dist/esm0',
-        },
+        distPath: 'dist/esm0',
       },
       plugins: [
         polyfillPlugin({
@@ -34,9 +32,7 @@ export default defineConfig({
     }),
     generateBundleCjsConfig({
       output: {
-        distPath: {
-          root: 'dist/cjs0',
-        },
+        distPath: 'dist/cjs0',
       },
       plugins: [
         polyfillPlugin({
@@ -46,9 +42,7 @@ export default defineConfig({
     }),
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: 'dist/esm1',
-        },
+        distPath: 'dist/esm1',
       },
       plugins: [
         polyfillPlugin({

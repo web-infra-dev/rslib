@@ -9,9 +9,7 @@ export default defineConfig({
     // esm
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/esm/bundle',
-        },
+        distPath: './dist/esm/bundle',
       },
       source: {
         entry: {
@@ -25,9 +23,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
       output: {
-        distPath: {
-          root: './dist/esm/bundleless',
-        },
+        distPath: './dist/esm/bundleless',
       },
       source: {
         entry: {

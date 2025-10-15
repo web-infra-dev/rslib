@@ -7,17 +7,13 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: true,
       output: {
-        distPath: {
-          root: './dist/esm/bundle',
-        },
+        distPath: './dist/esm/bundle',
       },
     }),
     generateBundleCjsConfig({
       bundle: true,
       output: {
-        distPath: {
-          root: './dist/cjs/bundle',
-        },
+        distPath: './dist/cjs/bundle',
       },
     }),
   ],

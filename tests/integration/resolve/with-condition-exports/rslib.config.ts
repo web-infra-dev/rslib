@@ -5,16 +5,12 @@ export default defineConfig({
   lib: [
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/node',
-        },
+        distPath: './dist/node',
       },
     }),
     generateBundleEsmConfig({
       output: {
-        distPath: {
-          root: './dist/browser',
-        },
+        distPath: './dist/browser',
         target: 'web',
       },
     }),

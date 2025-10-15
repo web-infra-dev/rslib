@@ -9,9 +9,7 @@ export default defineConfig({
       },
       {
         output: {
-          distPath: {
-            root: 'dist-mf0',
-          },
+          distPath: 'dist-mf0',
         },
       },
     ),
@@ -21,9 +19,7 @@ export default defineConfig({
       },
       {
         output: {
-          distPath: {
-            root: 'dist-mf1',
-          },
+          distPath: 'dist-mf1',
         },
       },
     ),
@@ -34,9 +30,7 @@ export default defineConfig({
       {
         id: 'mf2',
         output: {
-          distPath: {
-            root: 'dist-mf2',
-          },
+          distPath: 'dist-mf2',
         },
       },
     ),
