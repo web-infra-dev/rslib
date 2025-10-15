@@ -219,6 +219,51 @@ describe('Should compose create Rsbuild config correctly', () => {
     expect(rsbuildConfig).toMatchSnapshot('inspected Rsbuild configs');
     expect(bundlerConfigs).toMatchSnapshot('inspected Rspack configs');
   });
+
+  test('Merge output.distPath correctly', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+          output: {
+            distPath: 'dist/esm',
+          },
+        },
+        {
+          format: 'cjs',
+          output: {
+            distPath: {
+              root: 'dist/cjs',
+            },
+          },
+        },
+      ],
+    };
+
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
+    expect(
+      composedRsbuildConfig[0]?.config.output?.distPath,
+    ).toMatchInlineSnapshot(`
+      {
+        "css": "./",
+        "cssAsync": "./",
+        "js": "./",
+        "jsAsync": "./",
+        "root": "dist/esm",
+      }
+    `);
+    expect(
+      composedRsbuildConfig[1]?.config.output?.distPath,
+    ).toMatchInlineSnapshot(`
+      {
+        "css": "./",
+        "cssAsync": "./",
+        "js": "./",
+        "jsAsync": "./",
+        "root": "dist/cjs",
+      }
+    `);
+  });
 });
 
 describe('syntax', () => {
