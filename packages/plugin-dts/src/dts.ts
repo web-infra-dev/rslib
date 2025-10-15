@@ -187,7 +187,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       throw Error(
         `Please set "declarationDir": "${dtsEmitPath}" in ${color.underline(
           tsconfigPath,
-        )} to keep it same as "dts.distPath" or "output.distPath.root" field in lib config.`,
+        )} to keep it same as "dts.distPath" or "output.distPath" field in lib config.`,
       );
     }
   }

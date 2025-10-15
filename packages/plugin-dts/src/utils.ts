@@ -655,14 +655,14 @@ export async function cleanTsBuildInfoFile(
   }
 }
 
-// the priority of dtsEmitPath is dts.distPath > declarationDir > output.distPath.root
+// the priority of dtsEmitPath is dts.distPath > declarationDir > output.distPath > output.distPath.root
 // outDir is not considered since in multiple formats, the dts files may not in the same directory as the js files
 export function getDtsEmitPath(
   pathFromPlugin: string | undefined,
   declarationDir: string | undefined,
-  distPath: string,
+  distPathRoot: string,
 ): string {
-  return pathFromPlugin ?? declarationDir ?? distPath;
+  return pathFromPlugin ?? declarationDir ?? distPathRoot;
 }
 
 export function warnIfOutside(
