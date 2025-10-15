@@ -1251,8 +1251,8 @@ importers:
         specifier: 2.0.0-beta.34
         version: 2.0.0-beta.34(@rspress/core@2.0.0-beta.34(@types/react@19.2.2))
       '@rspress/plugin-twoslash':
-        specifier: 2.0.0-beta.30
-        version: 2.0.0-beta.30(@rspress/core@2.0.0-beta.34(@types/react@19.2.2))(react@19.2.0)(typescript@5.9.3)
+        specifier: 2.0.0-beta.34
+        version: 2.0.0-beta.34(@rspress/core@2.0.0-beta.34(@types/react@19.2.2))(react@19.2.0)(typescript@5.9.3)
       '@rstack-dev/doc-ui':
         specifier: 1.11.0
         version: 1.11.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -2983,11 +2983,11 @@ packages:
     peerDependencies:
       '@rspress/core': ^2.0.0-beta.34
 
-  '@rspress/plugin-twoslash@2.0.0-beta.30':
-    resolution: {integrity: sha512-JiwnLOUa/0m6+C7u7A7Sn/cClo/pzaUCDoubOBdEjjdTxFGMR06dZrkaapI21/P8NnuknOdCZP5Y4ML04bO7+g==}
+  '@rspress/plugin-twoslash@2.0.0-beta.34':
+    resolution: {integrity: sha512-QiFb+7pNKTicvdgvy0PUtSX7BeYpuTJNarq8WaqT6XVWzNHiCAF1atv+C/ccaA6vmFjXQquCyjiUVxkqRimNrg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      '@rspress/core': ^2.0.0-beta.30
+      '@rspress/core': ^2.0.0-beta.34
       react: '>=18.0.0'
 
   '@rspress/runtime@2.0.0-beta.34':
@@ -3050,9 +3050,6 @@ packages:
   '@selderee/plugin-htmlparser2@0.11.0':
     resolution: {integrity: sha512-P33hHGdldxGabLFjPPpaTxVolMrzrcegejx+0GxjrIb9Zv48D8yAIA/QTDR2dFl7Uz7urX8aX6+5bCZslr+gWQ==}
 
-  '@shikijs/core@3.12.1':
-    resolution: {integrity: sha512-j9+UDQ6M50xvaSR/e9lg212H0Fqxy3lYd39Q6YITYQxfrb5VYNUKPLZp4PN9f+YmRcdpyNAm3obn/tIZ2WkUWg==}
-
   '@shikijs/core@3.12.2':
     resolution: {integrity: sha512-L1Safnhra3tX/oJK5kYHaWmLEBJi1irASwewzY3taX5ibyXyMkkSDZlq01qigjryOBwrXSdFgTiZ3ryzSNeu7Q==}
 
@@ -3077,13 +3074,10 @@ packages:
   '@shikijs/transformers@3.13.0':
     resolution: {integrity: sha512-833lcuVzcRiG+fXvgslWsM2f4gHpjEgui1ipIknSizRuTgMkNZupiXE5/TVJ6eSYfhNBFhBZKkReKWO2GgYmqA==}
 
-  '@shikijs/twoslash@3.12.1':
-    resolution: {integrity: sha512-hDELTuDBqOfBgGrltbw0f0DEe65hg5q0HZSMdWpYD4nsWd7WHYSdj+UkGZHqRlWxplgDrwJnLwOH3rf/M/Fmog==}
+  '@shikijs/twoslash@3.13.0':
+    resolution: {integrity: sha512-OmNKNoZ8Hevt4VKQHfJL+hrsrqLSnW/Nz7RMutuBqXBCIYZWk80HnF9pcXEwRmy9MN0MGRmZCW2rDDP8K7Bxkw==}
     peerDependencies:
       typescript: '>=5.5.0'
-
-  '@shikijs/types@3.12.1':
-    resolution: {integrity: sha512-Is/p+1vTss22LIsGCJTmGrxu7ZC1iBL9doJFYLaZ4aI8d0VDXb7Mn0kBzhkc7pdsRpmUbQLQ5HXwNpa3H6F8og==}
 
   '@shikijs/types@3.12.2':
     resolution: {integrity: sha512-K5UIBzxCyv0YoxN3LMrKB9zuhp1bV+LgewxuVwHdl4Gz5oePoUFrr9EfgJlGlDeXCU1b/yhdnXeuRvAnz8HN8Q==}
@@ -9505,15 +9499,17 @@ snapshots:
     dependencies:
       '@rspress/core': 2.0.0-beta.34(@types/react@19.2.2)
 
-  '@rspress/plugin-twoslash@2.0.0-beta.30(@rspress/core@2.0.0-beta.34(@types/react@19.2.2))(react@19.2.0)(typescript@5.9.3)':
+  '@rspress/plugin-twoslash@2.0.0-beta.34(@rspress/core@2.0.0-beta.34(@types/react@19.2.2))(react@19.2.0)(typescript@5.9.3)':
     dependencies:
       '@floating-ui/dom': 1.7.4
       '@rspress/core': 2.0.0-beta.34(@types/react@19.2.2)
-      '@shikijs/twoslash': 3.12.1(typescript@5.9.3)
+      '@shikijs/twoslash': 3.13.0(typescript@5.9.3)
       mdast-util-from-markdown: 2.0.2
       mdast-util-gfm: 3.1.0
       mdast-util-to-hast: 13.2.0
+      picocolors: 1.1.1
       react: 19.2.0
+      twoslash: 0.3.4(typescript@5.9.3)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -9612,13 +9608,6 @@ snapshots:
       domhandler: 5.0.3
       selderee: 0.11.0
 
-  '@shikijs/core@3.12.1':
-    dependencies:
-      '@shikijs/types': 3.12.1
-      '@shikijs/vscode-textmate': 10.0.2
-      '@types/hast': 3.0.4
-      hast-util-to-html: 9.0.5
-
   '@shikijs/core@3.12.2':
     dependencies:
       '@shikijs/types': 3.12.2
@@ -9666,19 +9655,14 @@ snapshots:
       '@shikijs/core': 3.13.0
       '@shikijs/types': 3.13.0
 
-  '@shikijs/twoslash@3.12.1(typescript@5.9.3)':
+  '@shikijs/twoslash@3.13.0(typescript@5.9.3)':
     dependencies:
-      '@shikijs/core': 3.12.1
-      '@shikijs/types': 3.12.1
+      '@shikijs/core': 3.13.0
+      '@shikijs/types': 3.13.0
       twoslash: 0.3.4(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
-
-  '@shikijs/types@3.12.1':
-    dependencies:
-      '@shikijs/vscode-textmate': 10.0.2
-      '@types/hast': 3.0.4
 
   '@shikijs/types@3.12.2':
     dependencies:
