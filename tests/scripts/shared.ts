@@ -155,13 +155,17 @@ export async function getResults(
     key = currentFormatCount === 1 ? format : `${format}${currentFormatIndex}`;
 
     let globFolder = '';
+    const distPath =
+      typeof libConfig?.output?.distPath === 'string'
+        ? libConfig?.output?.distPath
+        : libConfig?.output?.distPath?.root!;
     if (type === 'js' || type === 'css') {
-      globFolder = libConfig?.output?.distPath?.root!;
+      globFolder = distPath;
     } else if (type === 'dts' && libConfig.dts !== false) {
       globFolder =
         libConfig.dts === true
-          ? libConfig?.output?.distPath?.root!
-          : (libConfig.dts?.distPath! ?? libConfig?.output?.distPath?.root!);
+          ? distPath
+          : (libConfig.dts?.distPath! ?? distPath);
     }
 
     if (!globFolder) continue;
