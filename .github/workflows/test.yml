@@ -54,7 +54,7 @@ jobs:
 
       - name: Setup Node.js ${{ matrix.node-version }}
         if: steps.changes.outputs.changed == 'true'
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -62,7 +62,7 @@ jobs:
       # Special handling for Node.js 18: use Node.js 20 for tsgo dependency installation
       - name: Setup Node.js 20 for dependency installation (Node 18 only)
         if: steps.changes.outputs.changed == 'true' && matrix.node-version == 18
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: 20
           cache: 'pnpm'
@@ -74,7 +74,7 @@ jobs:
       # Switch back to Node.js 18 after dependency installation
       - name: Switch back to Node.js ${{ matrix.node-version }} (Node 18 only)
         if: steps.changes.outputs.changed == 'true' && matrix.node-version == 18
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -128,7 +128,7 @@ jobs:
 
       - name: Setup Node.js ${{ matrix.node-version }}
         if: steps.changes.outputs.changed == 'true'
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -136,7 +136,7 @@ jobs:
       # Special handling for Node.js 18: use Node.js 20 for tsgo dependency installation
       - name: Setup Node.js 20 for dependency installation (Node 18 only)
         if: steps.changes.outputs.changed == 'true' && matrix.node-version == 18
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: 20
           cache: 'pnpm'
@@ -148,7 +148,7 @@ jobs:
       # Switch back to Node.js 18 after dependency installation
       - name: Switch back to Node.js ${{ matrix.node-version }} (Node 18 only)
         if: steps.changes.outputs.changed == 'true' && matrix.node-version == 18
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
