@@ -165,7 +165,7 @@ export async function getResults(
       globFolder =
         libConfig.dts === true
           ? distPath
-          : (libConfig.dts?.distPath! ?? distPath);
+          : (libConfig.dts?.distPath ?? distPath);
     }
 
     if (!globFolder) continue;
