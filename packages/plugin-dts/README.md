@@ -89,7 +89,7 @@ The output directory of declaration files. The default value follows the priorit
 
 1. The `distPath` value of the plugin options.
 2. The `declarationDir` value in the `tsconfig.json` file.
-3. The [output.distPath.root](https://rsbuild.rs/config/output/dist-path) value of Rsbuild configuration.
+3. The [output.distPath](https://rsbuild.rs/config/output/dist-path) or [output.distPath.root](https://rsbuild.rs/config/output/dist-path) value of Rsbuild configuration.
 
 ```js
 pluginDts({

@@ -144,10 +144,15 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         const { options: rawCompilerOptions } = tsConfigResult;
         const { declarationDir, outDir, composite, incremental } =
           rawCompilerOptions;
+        const distPathRoot =
+          typeof config.output?.distPath === 'string'
+            ? config.output?.distPath
+            : config.output?.distPath.root;
+
         const dtsEmitPath = getDtsEmitPath(
           options.distPath,
           declarationDir,
-          config.output?.distPath?.root,
+          distPathRoot,
         );
 
         // check whether declarationDir or outDir is outside from current project
