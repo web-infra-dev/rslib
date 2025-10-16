@@ -13,12 +13,19 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
   test('bundle', async () => {
     expect(js.contents.esm1).toMatchInlineSnapshot(`
       {
-        "<ROOT>/tests/integration/vue/dist/bundle/index.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
+        "<ROOT>/tests/integration/vue/dist/bundle/223.js": "import { __webpack_require__ } from "./runtime.js";
+      __webpack_require__.add({});
       const _00_2Fplugin_vue_2Fexport_helper = (sfc, props)=>{
           const target = sfc.__vccOpts || sfc;
           for (const [key, val] of props)target[key] = val;
           return target;
       };
+      export { _00_2Fplugin_vue_2Fexport_helper };
+      ",
+        "<ROOT>/tests/integration/vue/dist/bundle/index.js": "import { __webpack_require__ } from "./runtime.js";
+      import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
+      import { _00_2Fplugin_vue_2Fexport_helper } from "./223.js";
+      __webpack_require__.add({});
       const _sfc_main = {
           __name: 'Button',
           setup (__props, { expose: __expose }) {
@@ -85,22 +92,42 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
       ]);
       export { Button, Card };
       ",
+        "<ROOT>/tests/integration/vue/dist/bundle/runtime.js": "var __webpack_modules__ = {};
+      var __webpack_module_cache__ = {};
+      function __webpack_require__(moduleId) {
+          var cachedModule = __webpack_module_cache__[moduleId];
+          if (void 0 !== cachedModule) return cachedModule.exports;
+          var module = __webpack_module_cache__[moduleId] = {
+              exports: {}
+          };
+          __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+          return module.exports;
+      }
+      __webpack_require__.m = __webpack_modules__;
+      (()=>{
+          __webpack_require__.add = function(modules) {
+              Object.assign(__webpack_require__.m, modules);
+          };
+      })();
+      export { __webpack_require__ };
+      ",
       }
     `);
     expect(css.contents.esm1).toMatchInlineSnapshot(`
       {
-        "<ROOT>/tests/integration/vue/dist/bundle/index.css": ".button.component {
-        color: #428bca;
-        border-radius: .5rem;
-      }
-
-      .button {
+        "<ROOT>/tests/integration/vue/dist/bundle/223.css": ".button {
         font-weight: bold;
       }
 
       .card {
         color: red;
         font-weight: bold;
+      }
+
+      ",
+        "<ROOT>/tests/integration/vue/dist/bundle/index.css": ".button.component {
+        color: #428bca;
+        border-radius: .5rem;
       }
 
       ",

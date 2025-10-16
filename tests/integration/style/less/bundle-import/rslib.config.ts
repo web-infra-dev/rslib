@@ -21,6 +21,13 @@ export default defineConfig({
       index: '../__fixtures__/import/src/index.ts',
     },
   },
+  tools: {
+    rspack: {
+      optimization: {
+        splitChunks: false,
+      },
+    },
+  },
   output: {
     target: 'web',
   },

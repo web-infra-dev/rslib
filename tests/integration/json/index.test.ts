@@ -14,7 +14,7 @@ describe('JSON', async () => {
           U: "foo"
       };
       const src = foo_namespaceObject.U + '1';
-      export { src as default };
+      export default src;
       "
     `);
     const bundleResult = await import(files.esm0![0]!);

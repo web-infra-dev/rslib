@@ -241,6 +241,15 @@ export type Redirect = {
   dts?: DtsRedirect;
 };
 
+export type LibExperiments = {
+  /**
+   * Whether to enable Rspack advanced ESM output.
+   * @defaultValue `false`
+   * @see {@link https://rslib.rs/config/lib/experiments#experimentsadvancedesm}
+   */
+  advancedEsm?: boolean;
+};
+
 export interface LibConfig extends EnvironmentConfig {
   /**
    * The unique identifier of the library.
@@ -343,6 +352,12 @@ export interface LibConfig extends EnvironmentConfig {
    * @inheritdoc
    */
   output?: RslibOutputConfig;
+  /**
+   * Options for experimental features.
+   * @defaultValue `{}`
+   * @see {@link https://rslib.rs/config/lib/experiments}
+   */
+  experiments?: LibExperiments;
 }
 
 export type LibOnlyConfig = Omit<LibConfig, keyof EnvironmentConfig>;

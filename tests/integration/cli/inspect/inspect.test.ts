@@ -28,14 +28,14 @@ describe('inspect command', async () => {
       item.includes('rsbuild.config.esm.mjs'),
     );
     expect(rsbuildConfigEsm).toBeTruthy();
-    expect(files[rsbuildConfigEsm!]).toContain("type: 'modern-module'");
+    expect(files[rsbuildConfigEsm!]).toContain('concatenateModules: false');
 
     // esm rspack config
     const rspackConfigEsm = fileNames.find((item) =>
       item.includes('rspack.config.esm.mjs'),
     );
     expect(rspackConfigEsm).toBeTruthy();
-    expect(files[rspackConfigEsm!]).toContain("type: 'modern-module'");
+    expect(files[rspackConfigEsm!]).toContain('chunkFormat: false');
   });
 
   test('--lib', async () => {
@@ -63,14 +63,14 @@ describe('inspect command', async () => {
       item.includes('rsbuild.config.mjs'),
     );
     expect(rsbuildConfigEsm).toBeTruthy();
-    expect(files[rsbuildConfigEsm!]).toContain("type: 'modern-module'");
+    expect(files[rsbuildConfigEsm!]).toContain('chunkFormat: false');
 
     // esm rspack config
     const rspackConfigEsm = fileNames.find((item) =>
       item.includes('rspack.config.esm.mjs'),
     );
     expect(rspackConfigEsm).toBeTruthy();
-    expect(files[rspackConfigEsm!]).toContain("type: 'modern-module'");
+    expect(files[rspackConfigEsm!]).toContain('chunkFormat: false');
   });
 
   test('--lib multiple', async () => {

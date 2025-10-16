@@ -55,6 +55,7 @@ test('multiple entry bundle', async () => {
         "<ROOT>/tests/integration/entry/multiple/dist/cjs/shared.cjs",
       ],
       "esm": [
+        "<ROOT>/tests/integration/entry/multiple/dist/esm/359.js",
         "<ROOT>/tests/integration/entry/multiple/dist/esm/foo.js",
         "<ROOT>/tests/integration/entry/multiple/dist/esm/index.js",
         "<ROOT>/tests/integration/entry/multiple/dist/esm/shared.js",

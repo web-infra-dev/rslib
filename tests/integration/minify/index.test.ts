@@ -22,9 +22,7 @@ describe('minify config', () => {
     expect(entries.esm).toMatchInlineSnapshot(`
       "import { jsx } from "react/jsx-runtime";
 
-      ;// CONCATENATED MODULE: external "react/jsx-runtime"
 
-      ;// CONCATENATED MODULE: ../../__fixtures__/src/index.ts
       /*! Legal Comment */ 
       const foo = ()=>{};
       const bar = ()=>{};

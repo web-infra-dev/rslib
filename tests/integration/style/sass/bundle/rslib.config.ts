@@ -27,4 +27,11 @@ export default defineConfig({
   output: {
     target: 'web',
   },
+  tools: {
+    rspack: {
+      optimization: {
+        splitChunks: false,
+      },
+    },
+  },
 });

@@ -219,22 +219,10 @@ test('set the assets public path', async () => {
   // esm
   const { content: indexJs } = queryContent(contents.esm0!, /index\.js/);
   expect(indexJs).toMatchInlineSnapshot(`
-    "var __webpack_module_cache__ = {};
-    function __webpack_require__(moduleId) {
-        var cachedModule = __webpack_module_cache__[moduleId];
-        if (void 0 !== cachedModule) return cachedModule.exports;
-        var module = __webpack_module_cache__[moduleId] = {
-            exports: {}
-        };
-        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-        return module.exports;
-    }
-    (()=>{
-        __webpack_require__.p = "/public/path/";
-    })();
+    "import { __webpack_require__ } from "./runtime.js";
     const image_namespaceObject = __webpack_require__.p + "static/image/image.png";
     const src = image_namespaceObject;
-    export { src as default };
+    export default src;
     "
   `);
 
