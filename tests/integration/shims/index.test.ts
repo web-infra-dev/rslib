@@ -57,6 +57,24 @@ describe('ESM shims', async () => {
       "
     `);
   });
+
+  test('Node.js shims in mjs file', async () => {
+    for (const shim of [
+      'import { fileURLToPath as __webpack_fileURLToPath__ } from "node:url";',
+      'import { dirname as __webpack_dirname__ } from "node:path";',
+      'var node_dirname = __webpack_dirname__(__webpack_fileURLToPath__(import.meta.url));',
+      'var node_filename = __webpack_fileURLToPath__(import.meta.url);',
+    ]) {
+      expect(entries.esm3).toContain(shim);
+    }
+
+    const entry3Result = (await import(entryFiles.esm3!)).default();
+
+    expect(entry3Result.d1).toBe(path.dirname(entryFiles.esm3!));
+    expect(entry3Result.d1).toBe(entry3Result.d2);
+    expect(entry3Result.f1).toBe(entryFiles.esm3);
+    expect(entry3Result.f1).toBe(entry3Result.f2);
+  });
 });
 
 describe('ESM shims disabled', async () => {
@@ -68,9 +86,10 @@ describe('ESM shims disabled', async () => {
     });
 
     expect(entries.esm0).not.toContain('fileURLToPath');
+    expect(entries.esm1).not.toContain('fileURLToPath');
 
     const context = vm.createContext({});
-    const module = new vm.SourceTextModule(entries.esm1!, {
+    const module = new vm.SourceTextModule(entries.esm2!, {
       context,
     });
 
@@ -80,6 +99,8 @@ describe('ESM shims disabled', async () => {
 
     await module.link(linker);
     await expect(module.evaluate()).rejects.toThrow('require is not defined');
+
+    expect(entries.esm3).not.toContain('fileURLToPath');
   });
 });
 
