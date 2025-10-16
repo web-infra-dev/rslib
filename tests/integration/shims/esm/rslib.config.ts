@@ -4,7 +4,12 @@ import { generateBundleEsmConfig } from 'test-helper';
 export default defineConfig({
   lib: [
     generateBundleEsmConfig({
-      shims: { esm: { __dirname: true, __filename: true } },
+      shims: {
+        esm: {
+          __dirname: true,
+          __filename: true,
+        },
+      },
       source: {
         entry: {
           index: './src/index.ts',
@@ -15,7 +20,12 @@ export default defineConfig({
       },
     }),
     generateBundleEsmConfig({
-      shims: { esm: { __dirname: true, __filename: true } },
+      shims: {
+        esm: {
+          __dirname: true,
+          __filename: true,
+        },
+      },
       syntax: 'esnext',
       source: {
         entry: {
@@ -27,7 +37,11 @@ export default defineConfig({
       },
     }),
     generateBundleEsmConfig({
-      shims: { esm: { __dirname: true, __filename: true, require: true } },
+      shims: {
+        esm: {
+          require: true,
+        },
+      },
       syntax: 'esnext',
       source: {
         entry: {
@@ -35,8 +49,28 @@ export default defineConfig({
         },
       },
       output: {
-        copy: [{ from: './src/ok.cjs' }],
+        copy: [
+          {
+            from: './src/ok.cjs',
+          },
+        ],
         distPath: './dist/enabled/esm2',
+      },
+    }),
+    generateBundleEsmConfig({
+      shims: {
+        esm: {
+          __dirname: true,
+          __filename: true,
+        },
+      },
+      source: {
+        entry: {
+          index: './src/node.mjs',
+        },
+      },
+      output: {
+        distPath: './dist/enabled/esm3',
       },
     }),
   ],

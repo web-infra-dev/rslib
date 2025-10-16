@@ -596,11 +596,13 @@ const composeFormatConfig = ({
   bundle = true,
   umdName,
   pkgJson,
+  enabledShims,
 }: {
   format: Format;
   pkgJson: PkgJson;
   bundle?: boolean;
   umdName?: Rspack.LibraryName;
+  enabledShims: DeepRequired<Shims>;
 }): EnvironmentConfig => {
   const jsParserOptions: Record<string, Rspack.JavascriptParserOptions> = {
     cjs: {
@@ -625,6 +627,7 @@ const composeFormatConfig = ({
   const plugins = [
     new rspack.experiments.RslibPlugin({
       interceptApiPlugin: true,
+      forceNodeShims: enabledShims.esm.__dirname || enabledShims.esm.__filename,
     }),
   ];
 
@@ -1730,6 +1733,7 @@ async function composeLibRsbuildConfig(
     pkgJson: pkgJson!,
     bundle,
     umdName,
+    enabledShims,
   });
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,
