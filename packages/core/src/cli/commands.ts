@@ -1,7 +1,7 @@
 import type { LogLevel, RsbuildMode } from '@rsbuild/core';
 import cac, { type CAC } from 'cac';
 import type { ConfigLoader } from '../config';
-import type { Format } from '../types/config';
+import type { Format, Syntax } from '../types/config';
 import { logger } from '../utils/logger';
 import { build } from './build';
 import { initConfig } from './initConfig';
@@ -17,11 +17,15 @@ export type CommonOptions = {
   lib?: string[];
   configLoader?: ConfigLoader;
   logLevel?: LogLevel;
+};
+
+export type BuildOptions = CommonOptions & {
+  watch?: boolean;
   format?: Format;
   entry?: string[];
   distPath?: string;
   bundle?: boolean;
-  syntax?: string;
+  syntax?: Syntax;
   target?: string;
   dts?: boolean;
   externals?: string[];
@@ -30,10 +34,6 @@ export type CommonOptions = {
   autoExtension?: boolean;
   autoExternal?: boolean;
   tsconfig?: string;
-};
-
-export type BuildOptions = CommonOptions & {
-  watch?: boolean;
 };
 
 export type InspectOptions = CommonOptions & {

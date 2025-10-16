@@ -11,9 +11,7 @@ export default defineConfig({
       },
       format: 'cjs',
       output: {
-        distPath: {
-          root: './dist/override',
-        },
+        distPath: './dist/override',
       },
     },
   ],

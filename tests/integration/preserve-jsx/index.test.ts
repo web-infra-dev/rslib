@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { expect, test } from '@rstest/core';
 import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
 
@@ -48,7 +49,7 @@ test('throw error when preserve JSX with bundle mode', async () => {
   try {
     await buildAndGetResults({ fixturePath });
   } catch {
-    expect(logs).toMatchInlineSnapshot(`
+    expect(logs.map((l) => stripAnsi(l))).toMatchInlineSnapshot(`
       [
         "error   Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to \`automatic\` or \`classic\`. Check out https://rslib.rs/guide/solution/react#jsx-transform for more details.",
       ]

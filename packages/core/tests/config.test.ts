@@ -2,6 +2,7 @@ import { join } from 'node:path';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { inspect } from '@rslib/core';
 import { describe, expect, rs, test } from '@rstest/core';
+import type { BuildOptions } from '../src/cli/commands';
 import { initConfig } from '../src/cli/initConfig';
 import {
   composeCreateRsbuildConfig,
@@ -155,7 +156,7 @@ describe('CLI options', () => {
     const fixtureDir = join(__dirname, 'fixtures/config/cli-options');
     const configFilePath = join(fixtureDir, 'rslib.config.ts');
 
-    const { config } = await initConfig({
+    const options: BuildOptions = {
       config: configFilePath,
       entry: ['index=src/main.ts', 'utils=src/utils.ts'],
       distPath: 'build',
@@ -169,8 +170,9 @@ describe('CLI options', () => {
       autoExtension: false,
       autoExternal: false,
       tsconfig: 'tsconfig.build.json',
-    });
+    };
 
+    const { config } = await initConfig(options);
     expect(config).toMatchInlineSnapshot(`
       {
         "_privateMeta": {

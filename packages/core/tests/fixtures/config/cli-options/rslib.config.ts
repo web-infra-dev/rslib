@@ -10,9 +10,7 @@ export default defineConfig({
         },
       },
       output: {
-        distPath: {
-          root: './dist',
-        },
+        distPath: './dist',
         externals: ['lodash'],
         minify: false,
         cleanDistPath: 'auto',

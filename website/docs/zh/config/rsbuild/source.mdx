@@ -20,7 +20,11 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 ## source.entry <RsbuildDocBadge path="/config/source/entry" text="source.entry" />
 
-- **命令行：** `--entry <path>`（可重复，例如 `--entry index=src/index.ts` 或 `--entry src/index.ts`）
+- **命令行：** `--entry <path>`。可重复，例如 `--entry index=src/index.ts` 或 `--entry src/index.ts`。
+
+  命令行参数支持两种格式：
+  1. `key=value`：显式指定入口名称，例如 `--entry main=src/main.ts`
+  2. `value`：仅指定路径，此时会自动使用文件的 basename（不含扩展名）作为入口名称。例如 `--entry src/index.ts` 会生成名为 `index` 的入口。如果存在同名冲突，则会为所有冲突的入口添加数字后缀（从 0 开始），例如 `index0`、`index1`。
 
 用于设置构建的入口模块。
 
@@ -42,8 +46,6 @@ const defaultEntry = {
   index: 'src/**',
 };
 ```
-
-当未显式指定名称时，CLI 会自动使用 `index`、`entry2` 等占位名称。
 
 :::info
 参考 [lib.bundle](/config/lib/bundle#set-entry) 进一步了解如何为 bundle 和 bundleless 项目设置入口。

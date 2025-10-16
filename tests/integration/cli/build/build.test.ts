@@ -1,4 +1,3 @@
-import os from 'node:os';
 import path from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { describe, expect, test } from '@rstest/core';
@@ -186,7 +185,7 @@ describe('build command', async () => {
         lib: [
           {
             bundle: false,
-            source: { entry: { index: './src/*' } },
+            source: { entry: { '*': './src/*' } },
             format: 'esm',
             output: {
               distPath: { root: 'dist/ok' },

@@ -46,7 +46,20 @@ Usage:
   $ rslib build
 
 Options:
-  -w --watch            开启 watch 模式, 监听文件变更并重新构建
+  -w, --watch            开启 watch 模式，监听文件变更并重新构建
+  --entry <entry>        设置入口文件或匹配模式（可重复传递）
+  --dist-path <dir>      设置输出目录
+  --bundle               启用 bundle 模式（使用 --no-bundle 禁用）
+  --format <format>      指定输出格式（esm | cjs | umd | mf | iife）
+  --syntax <syntax>      指定构建语法目标（可重复传递）
+  --target <target>      指定运行时目标（web | node）
+  --dts                  生成声明文件（使用 --no-dts 禁用）
+  --externals <pkg>      将依赖加入 externals（可重复传递）
+  --minify               压缩输出（使用 --no-minify 禁用）
+  --clean                构建前清理输出目录（使用 --no-clean 禁用）
+  --auto-extension       控制自动补全扩展名重定向（使用 --no-auto-extension 禁用）
+  --auto-external        控制自动外部化依赖（使用 --no-auto-external 禁用）
+  --tsconfig <path>      使用指定的 tsconfig（相对于项目根目录）
 ```
 
 ### 环境变量

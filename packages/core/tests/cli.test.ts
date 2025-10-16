@@ -1,10 +1,6 @@
 import { describe, expect, test } from '@rstest/core';
 import type { CommonOptions } from '../src/cli/commands';
-import {
-  applyCliOptions,
-  parseEntryOption,
-  parseSyntaxOption,
-} from '../src/cli/initConfig';
+import { applyCliOptions, parseEntryOption } from '../src/cli/initConfig';
 import type { RslibConfig } from '../src/types';
 
 describe('parseEntryOption', () => {
@@ -14,7 +10,45 @@ describe('parseEntryOption', () => {
     expect(parseEntryOption(['', '   '])).toBeUndefined();
   });
 
-  test('parses named and positional entries with trimming', () => {
+  test('parses named entries with explicit keys', () => {
+    const result = parseEntryOption([
+      ' main = ./src/main.ts ',
+      'entry=./src/entry.ts',
+    ]);
+
+    expect(result).toEqual({
+      main: './src/main.ts',
+      entry: './src/entry.ts',
+    });
+  });
+
+  test('uses basename as key and handles conflicts with index suffix', () => {
+    const result = parseEntryOption([
+      './src/utils.ts', // unique basename
+      './src/extra.js', // unique basename
+      './components/Button.tsx', // unique basename
+      './src/index.ts', // conflicts with other index files
+      './pages/index.tsx', // conflicts with other index files
+      './lib/index.js', // conflicts with other index files
+      './src/home.ts', // conflicts with other home file
+      'custom=./pages/custom.tsx', // explicit key (not affected by conflicts)
+      './lib/home.js', // conflicts with other home file
+    ]);
+
+    expect(result).toEqual({
+      utils: './src/utils.ts',
+      extra: './src/extra.js',
+      Button: './components/Button.tsx',
+      index0: './src/index.ts',
+      index1: './pages/index.tsx',
+      index2: './lib/index.js',
+      home0: './src/home.ts',
+      custom: './pages/custom.tsx',
+      home1: './lib/home.js',
+    });
+  });
+
+  test('mixed named and unnamed entries with trimming', () => {
     const result = parseEntryOption([
       ' main = ./src/main.ts ',
       ' ./src/utils.ts ',
@@ -24,36 +58,10 @@ describe('parseEntryOption', () => {
 
     expect(result).toEqual({
       main: './src/main.ts',
-      index: './src/utils.ts',
+      utils: './src/utils.ts',
       entry: './src/entry.ts',
-      entry2: './src/extra.ts',
+      extra: './src/extra.ts',
     });
-  });
-});
-
-describe('parseSyntaxOption', () => {
-  test('returns undefined for missing or whitespace values', () => {
-    expect(parseSyntaxOption()).toBeUndefined();
-    expect(parseSyntaxOption('')).toBeUndefined();
-    expect(parseSyntaxOption('    ')).toBeUndefined();
-  });
-
-  test('returns the trimmed ECMAScript version when not a JSON array', () => {
-    expect(parseSyntaxOption(' es2020 ')).toBe('es2020');
-  });
-
-  test('parses JSON array syntax', () => {
-    expect(parseSyntaxOption('["chrome 120", "firefox 115"]')).toEqual([
-      'chrome 120',
-      'firefox 115',
-    ]);
-  });
-
-  test('throws descriptive error when JSON parsing fails', () => {
-    const parseInvalidSyntax = () => parseSyntaxOption('[invalid');
-    expect(parseInvalidSyntax).toThrowError(
-      /Failed to parse --syntax option "\[inv.*JSON array/,
-    );
   });
 });
 
@@ -98,7 +106,7 @@ describe('applyCliOptions', () => {
       bundle: false,
       tsconfig: './tsconfig.build.json',
       entry: [' main=src/main.ts ', ' src/utils.ts ', 'src/extra.ts'],
-      syntax: '["node 18"]',
+      syntax: ['node 18'],
       dts: true,
       autoExtension: false,
       autoExternal: false,
@@ -127,8 +135,8 @@ describe('applyCliOptions', () => {
     expect(lib.source?.tsconfigPath).toBe('./tsconfig.build.json');
     expect(lib.source?.entry).toEqual({
       main: 'src/main.ts',
-      index: 'src/utils.ts',
-      entry2: 'src/extra.ts',
+      utils: 'src/utils.ts',
+      extra: 'src/extra.ts',
     });
 
     expect(lib.output).toBe(outputBefore);

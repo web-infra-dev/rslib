@@ -2,15 +2,10 @@ import path from 'node:path';
 import util from 'node:util';
 import { loadEnv, type RsbuildEntry } from '@rsbuild/core';
 import { loadConfig } from '../config';
-import type {
-  EcmaScriptVersion,
-  RsbuildConfigOutputTarget,
-  RslibConfig,
-  Syntax,
-} from '../types';
+import type { RsbuildConfigOutputTarget, RslibConfig } from '../types';
 import { getAbsolutePath } from '../utils/helper';
 import { logger } from '../utils/logger';
-import type { CommonOptions } from './commands';
+import type { BuildOptions, CommonOptions } from './commands';
 import { onBeforeRestart } from './restart';
 
 const getEnvDir = (cwd: string, envDir?: string) => {
@@ -23,67 +18,49 @@ const getEnvDir = (cwd: string, envDir?: string) => {
 export const parseEntryOption = (
   entries?: string[],
 ): Record<string, string> | undefined => {
-  if (!entries || entries.length === 0) {
-    return undefined;
-  }
+  if (!entries?.length) return undefined;
 
-  const parsed: Record<string, string> = {};
-  let unnamedIndex = 0;
+  const entryList: { key: string; value: string; explicit: boolean }[] = [];
 
   for (const rawEntry of entries) {
     const value = rawEntry?.trim();
-    if (!value) {
-      continue;
-    }
+    if (!value) continue;
 
     const equalIndex = value.indexOf('=');
     if (equalIndex > -1) {
       const name = value.slice(0, equalIndex).trim();
       const entryPath = value.slice(equalIndex + 1).trim();
       if (name && entryPath) {
-        parsed[name] = entryPath;
+        entryList.push({ key: name, value: entryPath, explicit: true });
         continue;
       }
     }
 
-    unnamedIndex += 1;
-    const key = unnamedIndex === 1 ? 'index' : `entry${unnamedIndex}`;
-    parsed[key] = value;
+    const basename = path.basename(value, path.extname(value));
+    entryList.push({ key: basename, value, explicit: false });
   }
 
-  return Object.keys(parsed).length === 0 ? undefined : parsed;
+  const keyCount: Record<string, number> = {};
+  for (const { key, explicit } of entryList) {
+    if (!explicit) keyCount[key] = (keyCount[key] ?? 0) + 1;
+  }
+
+  const keyIndex: Record<string, number> = {};
+  const parsed: Record<string, string> = {};
+
+  for (const { key, value, explicit } of entryList) {
+    const needsIndex = !explicit && (keyCount[key] ?? 0) > 1;
+    const finalKey = needsIndex ? `${key}${keyIndex[key] ?? 0}` : key;
+    if (needsIndex) keyIndex[key] = (keyIndex[key] ?? 0) + 1;
+    parsed[finalKey] = value;
+  }
+
+  return Object.keys(parsed).length ? parsed : undefined;
 };
-
-// export const parseSyntaxOption = (syntax?: string): Syntax | undefined => {
-//   if (!syntax) {
-//     return undefined;
-//   }
-
-//   const trimmed = syntax.trim();
-//   if (!trimmed) {
-//     return undefined;
-//   }
-
-//   if (trimmed.startsWith('[')) {
-//     try {
-//       const parsed = JSON.parse(trimmed);
-//       if (Array.isArray(parsed)) {
-//         return parsed;
-//       }
-//     } catch (e) {
-//       const reason = e instanceof Error ? e.message : String(e);
-//       throw new Error(
-//         `Failed to parse --syntax option "${trimmed}" as JSON array: ${reason}`,
-//       );
-//     }
-//   }
-
-//   return trimmed as EcmaScriptVersion;
-// };
 
 export const applyCliOptions = (
   config: RslibConfig,
-  options: CommonOptions,
+  options: BuildOptions,
   root: string,
 ): void => {
   if (options.root) config.root = root;
@@ -101,7 +78,7 @@ export const applyCliOptions = (
       lib.source ||= {};
       lib.source.entry = entry as RsbuildEntry;
     }
-    const syntax = options.syntax as Syntax | undefined;
+    const syntax = options.syntax;
     if (syntax !== undefined) lib.syntax = syntax;
     if (options.dts !== undefined) lib.dts = options.dts;
     if (options.autoExtension !== undefined)
