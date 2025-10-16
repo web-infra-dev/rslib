@@ -119,7 +119,7 @@ describe('CJS shims', () => {
       const src_filename = fileURLToPath(import.meta.url);
       console.log(src_filename);
       const src_module = null;
-      export { src_filename as __filename, importMetaUrl, src_module as module, requiredModule };
+      export { importMetaUrl, requiredModule, src_filename as __filename, src_module as module };
       "
     `);
   });

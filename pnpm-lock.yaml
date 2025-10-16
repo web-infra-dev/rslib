@@ -106,7 +106,7 @@ importers:
         version: 19.2.2
       '@types/react-dom':
         specifier: ^19.2.1
-        version: 19.2.1(@types/react@19.2.2)
+        version: 19.2.2(@types/react@19.2.2)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -173,7 +173,7 @@ importers:
         version: 19.2.2
       '@types/react-dom':
         specifier: ^19.2.1
-        version: 19.2.1(@types/react@19.2.2)
+        version: 19.2.2(@types/react@19.2.2)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -275,7 +275,7 @@ importers:
         version: link:../../packages/core
       rsbuild-plugin-unplugin-vue:
         specifier: ^0.1.0
-        version: 0.1.0(@rsbuild/core@1.5.17)(@types/node@22.18.10)(jiti@2.6.1)(lightningcss@1.30.1)(sass-embedded@1.90.0)(sass@1.90.0)(stylus@0.64.0)(terser@5.43.1)(tsx@4.20.6)(vue@3.5.22(typescript@5.9.3))(yaml@2.6.1)
+        version: 0.1.0(@rsbuild/core@1.5.13)(@types/node@22.18.10)(jiti@2.6.1)(lightningcss@1.30.1)(sass-embedded@1.90.0)(sass@1.90.0)(stylus@0.64.0)(terser@5.43.1)(tsx@4.20.6)(vue@3.5.22(typescript@5.9.3))(yaml@2.6.1)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -400,7 +400,7 @@ importers:
         version: 11.3.2
       rsbuild-plugin-publint:
         specifier: ^0.3.3
-        version: 0.3.3(@rsbuild/core@1.5.17)
+        version: 0.3.3(@rsbuild/core@1.5.13)
       rslib:
         specifier: npm:@rslib/core@0.15.0
         version: '@rslib/core@0.15.0(@microsoft/api-extractor@7.53.1(@types/node@22.18.10))(@typescript/native-preview@7.0.0-dev.20251012.1)(typescript@5.9.3)'
@@ -512,7 +512,7 @@ importers:
         version: 19.2.2
       '@types/react-dom':
         specifier: ^19.2.1
-        version: 19.2.1(@types/react@19.2.2)
+        version: 19.2.2(@types/react@19.2.2)
       fs-extra:
         specifier: ^11.3.2
         version: 11.3.2
@@ -1267,7 +1267,7 @@ importers:
         version: 19.2.2
       '@types/react-dom':
         specifier: ^19.2.1
-        version: 19.2.1(@types/react@19.2.2)
+        version: 19.2.2(@types/react@19.2.2)
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -2563,8 +2563,8 @@ packages:
     engines: {node: '>=18.12.0'}
     hasBin: true
 
-  '@rsbuild/core@1.5.17':
-    resolution: {integrity: sha512-tHa4puv+pEooQvSewu/K5sm270nkVPcP07Ioz1c+fbFCrFpiZWV5XumgznilS80097glUrieN+9xTbIHGXjThQ==}
+  '@rsbuild/core@1.5.13':
+    resolution: {integrity: sha512-P+TCvZCVpBYZ3GDdnzR/tZKicE41khJIqIRlJYnEc9dwUfX1/eqRf8lA8yrsbB5iZbSfj1iOoH1N25cCQ3hhuA==}
     engines: {node: '>=18.12.0'}
     hasBin: true
 
@@ -3472,8 +3472,8 @@ packages:
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
 
-  '@types/react-dom@19.2.1':
-    resolution: {integrity: sha512-/EEvYBdT3BflCWvTMO7YkYBHVE9Ci6XdqZciZANQgKpaiDRGOLIlRo91jbTNRQjgPFWVaRxcYc0luVNFitz57A==}
+  '@types/react-dom@19.2.2':
+    resolution: {integrity: sha512-9KQPoO6mZCi7jcIStSnlOWn2nEF3mNmyr3rIAsGnAbQKYbRLyqmeSc39EVgtxXVia+LMT8j3knZLAZAh+xLmrw==}
     peerDependencies:
       '@types/react': ^19.2.0
 
@@ -9009,12 +9009,12 @@ snapshots:
       core-js: 3.45.1
       jiti: 2.6.1
 
-  '@rsbuild/core@1.5.17':
+  '@rsbuild/core@1.5.13':
     dependencies:
       '@rspack/core': 1.5.8(@swc/helpers@0.5.17)
       '@rspack/lite-tapable': 1.0.1
       '@swc/helpers': 0.5.17
-      core-js: 3.46.0
+      core-js: 3.45.1
       jiti: 2.6.1
 
   '@rsbuild/core@1.6.0-beta.0':
@@ -9083,9 +9083,9 @@ snapshots:
     transitivePeerDependencies:
       - preact
 
-  '@rsbuild/plugin-react@1.4.1(@rsbuild/core@1.5.17)':
+  '@rsbuild/plugin-react@1.4.1(@rsbuild/core@1.5.13)':
     dependencies:
-      '@rsbuild/core': 1.5.17
+      '@rsbuild/core': 1.5.13
       '@rspack/plugin-react-refresh': 1.5.1(react-refresh@0.17.0)
       react-refresh: 0.17.0
     transitivePeerDependencies:
@@ -9185,8 +9185,8 @@ snapshots:
 
   '@rslib/core@0.15.0(@microsoft/api-extractor@7.53.1(@types/node@22.18.10))(@typescript/native-preview@7.0.0-dev.20251012.1)(typescript@5.9.3)':
     dependencies:
-      '@rsbuild/core': 1.5.17
-      rsbuild-plugin-dts: 0.15.0(@microsoft/api-extractor@7.53.1(@types/node@22.18.10))(@rsbuild/core@1.5.17)(@typescript/native-preview@7.0.0-dev.20251012.1)(typescript@5.9.3)
+      '@rsbuild/core': 1.5.13
+      rsbuild-plugin-dts: 0.15.0(@microsoft/api-extractor@7.53.1(@types/node@22.18.10))(@rsbuild/core@1.5.13)(@typescript/native-preview@7.0.0-dev.20251012.1)(typescript@5.9.3)
     optionalDependencies:
       '@microsoft/api-extractor': 7.53.1(@types/node@22.18.10)
       typescript: 5.9.3
@@ -9396,8 +9396,8 @@ snapshots:
     dependencies:
       '@mdx-js/mdx': 3.1.1
       '@mdx-js/react': 3.1.1(@types/react@19.2.2)(react@19.2.0)
-      '@rsbuild/core': 1.5.17
-      '@rsbuild/plugin-react': 1.4.1(@rsbuild/core@1.5.17)
+      '@rsbuild/core': 1.5.13
+      '@rsbuild/plugin-react': 1.4.1(@rsbuild/core@1.5.13)
       '@rspress/mdx-rs': 0.6.6
       '@rspress/runtime': 2.0.0-beta.34
       '@rspress/shared': 2.0.0-beta.34
@@ -9524,7 +9524,7 @@ snapshots:
 
   '@rspress/shared@2.0.0-beta.34':
     dependencies:
-      '@rsbuild/core': 1.5.17
+      '@rsbuild/core': 1.5.13
       '@shikijs/rehype': 3.12.2
       gray-matter: 4.0.3
       lodash-es: 4.17.21
@@ -10072,7 +10072,7 @@ snapshots:
 
   '@types/range-parser@1.2.7': {}
 
-  '@types/react-dom@19.2.1(@types/react@19.2.2)':
+  '@types/react-dom@19.2.2(@types/react@19.2.2)':
     dependencies:
       '@types/react': 19.2.2
 
@@ -13627,10 +13627,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.15.0(@microsoft/api-extractor@7.53.1(@types/node@22.18.10))(@rsbuild/core@1.5.17)(@typescript/native-preview@7.0.0-dev.20251012.1)(typescript@5.9.3):
+  rsbuild-plugin-dts@0.15.0(@microsoft/api-extractor@7.53.1(@types/node@22.18.10))(@rsbuild/core@1.5.13)(@typescript/native-preview@7.0.0-dev.20251012.1)(typescript@5.9.3):
     dependencies:
       '@ast-grep/napi': 0.37.0
-      '@rsbuild/core': 1.5.17
+      '@rsbuild/core': 1.5.13
     optionalDependencies:
       '@microsoft/api-extractor': 7.53.1(@types/node@22.18.10)
       '@typescript/native-preview': 7.0.0-dev.20251012.1
@@ -13651,12 +13651,12 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.6.0-beta.0
 
-  rsbuild-plugin-publint@0.3.3(@rsbuild/core@1.5.17):
+  rsbuild-plugin-publint@0.3.3(@rsbuild/core@1.5.13):
     dependencies:
       picocolors: 1.1.1
       publint: 0.3.12
     optionalDependencies:
-      '@rsbuild/core': 1.5.17
+      '@rsbuild/core': 1.5.13
 
   rsbuild-plugin-publint@0.3.3(@rsbuild/core@1.6.0-beta.0):
     dependencies:
@@ -13665,11 +13665,11 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.6.0-beta.0
 
-  rsbuild-plugin-unplugin-vue@0.1.0(@rsbuild/core@1.5.17)(@types/node@22.18.10)(jiti@2.6.1)(lightningcss@1.30.1)(sass-embedded@1.90.0)(sass@1.90.0)(stylus@0.64.0)(terser@5.43.1)(tsx@4.20.6)(vue@3.5.22(typescript@5.9.3))(yaml@2.6.1):
+  rsbuild-plugin-unplugin-vue@0.1.0(@rsbuild/core@1.5.13)(@types/node@22.18.10)(jiti@2.6.1)(lightningcss@1.30.1)(sass-embedded@1.90.0)(sass@1.90.0)(stylus@0.64.0)(terser@5.43.1)(tsx@4.20.6)(vue@3.5.22(typescript@5.9.3))(yaml@2.6.1):
     dependencies:
       unplugin-vue: 6.2.0(@types/node@22.18.10)(jiti@2.6.1)(lightningcss@1.30.1)(sass-embedded@1.90.0)(sass@1.90.0)(stylus@0.64.0)(terser@5.43.1)(tsx@4.20.6)(vue@3.5.22(typescript@5.9.3))(yaml@2.6.1)
     optionalDependencies:
-      '@rsbuild/core': 1.5.17
+      '@rsbuild/core': 1.5.13
     transitivePeerDependencies:
       - '@types/node'
       - jiti

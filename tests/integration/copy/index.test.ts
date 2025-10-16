@@ -10,6 +10,7 @@ test('copy', async () => {
   expect(fileTree).toMatchInlineSnapshot(`
     {
       "index.js": "<ROOT>/tests/integration/copy/dist/esm/index.js",
+      "runtime.js": "<ROOT>/tests/integration/copy/dist/esm/runtime.js",
       "temp-1": {
         "b.png": "<ROOT>/tests/integration/copy/dist/esm/temp-1/b.png",
       },

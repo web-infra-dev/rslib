@@ -7,6 +7,9 @@ export default defineConfig({
     {
       format: 'esm',
       dts: true,
+      experiments: {
+        advancedEsm: true,
+      },
       output: {
         distPath: './dist/esm',
       },

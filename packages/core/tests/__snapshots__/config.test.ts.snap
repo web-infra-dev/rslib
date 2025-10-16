@@ -951,6 +951,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     nodeEnv: false,
     concatenateModules: true,
     sideEffects: 'flag',
+    runtimeChunk: undefined,
     avoidEntryIife: true
   },
   plugins: [
@@ -975,7 +976,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       name: 'RslibPlugin',
       _args: [
         {
-          interceptApiPlugin: true
+          interceptApiPlugin: true,
+          forceNodeShims: true
         }
       ]
     },
@@ -1673,7 +1675,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       name: 'RslibPlugin',
       _args: [
         {
-          interceptApiPlugin: true
+          interceptApiPlugin: true,
+          forceNodeShims: true
         }
       ]
     },
@@ -2276,7 +2279,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       name: 'RslibPlugin',
       _args: [
         {
-          interceptApiPlugin: true
+          interceptApiPlugin: true,
+          forceNodeShims: true
         }
       ]
     },
@@ -2878,7 +2882,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       name: 'RslibPlugin',
       _args: [
         {
-          interceptApiPlugin: true
+          interceptApiPlugin: true,
+          forceNodeShims: true
         }
       ]
     },
@@ -3020,7 +3025,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         use: [
           /* config.module.rule('css').use('mini-css-extract') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rspack/core/dist/cssExtractLoader.js'
+            loader: '/Users/bytedance/libs/rspack-esm-lib-plugin/packages/rspack/dist/cssExtractLoader.js'
           },
           /* config.module.rule('css').use('css') */
           {
@@ -3690,6 +3695,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "optimization": {
               "avoidEntryIife": true,
               "concatenateModules": true,
+              "runtimeChunk": undefined,
               "sideEffects": "flag",
               "splitChunks": {
                 "chunks": "async",
@@ -3708,6 +3714,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               RslibPlugin {
                 "_args": [
                   {
+                    "forceNodeShims": true,
                     "interceptApiPlugin": true,
                   },
                 ],
@@ -3990,6 +3997,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               RslibPlugin {
                 "_args": [
                   {
+                    "forceNodeShims": true,
                     "interceptApiPlugin": true,
                   },
                 ],
@@ -4233,6 +4241,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               RslibPlugin {
                 "_args": [
                   {
+                    "forceNodeShims": true,
                     "interceptApiPlugin": true,
                   },
                 ],
@@ -4475,6 +4484,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               RslibPlugin {
                 "_args": [
                   {
+                    "forceNodeShims": true,
                     "interceptApiPlugin": true,
                   },
                 ],

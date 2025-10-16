@@ -51,7 +51,7 @@ describe('should respect output.filename.js and output.filenameHash to override 
 
     // override output.filenameHash
     expect(entryFiles.esm1).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/esm-override-filename-hash/index.b4545719.js"`,
+      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/esm-override-filename-hash/index.582aad58.js"`,
     );
     expect(entryFiles.cjs1).toMatchInlineSnapshot(
       `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename-hash/index.c8a12fd0.js"`,
@@ -80,13 +80,13 @@ describe('should respect output.filename.js and output.filenameHash to override 
 
     // override output.filename.js
     expect(entryFiles.esm0).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename/index.b4545719.js"`,
+      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename/index.582aad58.js"`,
     );
     expect(extname(entryFiles.cjs0!)).toEqual('.cjs');
 
     // override output.filenameHash
     expect(entryFiles.esm1).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename-hash/index.b4545719.js"`,
+      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename-hash/index.582aad58.js"`,
     );
     expect(entryFiles.cjs1).toMatchInlineSnapshot(
       `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/cjs-override-filename-hash/index.c8a12fd0.js"`,

@@ -15,7 +15,32 @@ test('new Worker(new URL(...)) should be preserved', async () => {
     });
     export { worker };
     ",
-      "<ROOT>/tests/integration/worker/dist/esm/worker.js": "console.log('Hello from worker', self.name);
+      "<ROOT>/tests/integration/worker/dist/esm/runtime.js": "var __webpack_modules__ = {};
+    var __webpack_module_cache__ = {};
+    function __webpack_require__(moduleId) {
+        var cachedModule = __webpack_module_cache__[moduleId];
+        if (void 0 !== cachedModule) return cachedModule.exports;
+        var module = __webpack_module_cache__[moduleId] = {
+            exports: {}
+        };
+        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        return module.exports;
+    }
+    __webpack_require__.m = __webpack_modules__;
+    (()=>{
+        __webpack_require__.add = function(modules) {
+            Object.assign(__webpack_require__.m, modules);
+        };
+    })();
+    export { __webpack_require__ };
+    ",
+      "<ROOT>/tests/integration/worker/dist/esm/worker.js": "import { __webpack_require__ } from "./runtime.js";
+    __webpack_require__.add({
+        "./src/worker.ts": function() {
+            console.log('Hello from worker', self.name);
+        }
+    });
+    __webpack_require__("./src/worker.ts");
     ",
     }
   `);

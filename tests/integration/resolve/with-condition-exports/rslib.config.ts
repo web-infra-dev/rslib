@@ -23,4 +23,11 @@ export default defineConfig({
       entry4: ['./entry4.ts'],
     },
   },
+  tools: {
+    rspack: {
+      optimization: {
+        splitChunks: false,
+      },
+    },
+  },
 });

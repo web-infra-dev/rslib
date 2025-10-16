@@ -596,11 +596,13 @@ const composeFormatConfig = ({
   bundle = true,
   umdName,
   pkgJson,
+  advancedEsm,
 }: {
   format: Format;
   pkgJson: PkgJson;
   bundle?: boolean;
   umdName?: Rspack.LibraryName;
+  advancedEsm: boolean;
 }): EnvironmentConfig => {
   const jsParserOptions: Record<string, Rspack.JavascriptParserOptions> = {
     cjs: {
@@ -620,13 +622,17 @@ const composeFormatConfig = ({
     },
   };
 
+  const experimentalEsmOutput = bundle && format === 'esm' && advancedEsm;
+
   // The built-in Rslib plugin will apply to all formats except the `mf` format.
   // The `mf` format functions more like an application than a library and requires additional webpack runtime.
   const plugins = [
     new rspack.experiments.RslibPlugin({
       interceptApiPlugin: true,
+      forceNodeShims: true,
     }),
-  ];
+    experimentalEsmOutput && new rspack.experiments.EsmLibraryPlugin(),
+  ].filter(Boolean);
 
   switch (format) {
     case 'esm':
@@ -643,8 +649,10 @@ const composeFormatConfig = ({
               },
             },
             optimization: {
-              concatenateModules: true,
+              // experimentalEsmOutput don't need concatenateModules
+              concatenateModules: !experimentalEsmOutput,
               sideEffects: 'flag',
+              runtimeChunk: experimentalEsmOutput ? 'single' : undefined,
               avoidEntryIife: true,
               splitChunks: {
                 // Splitted "sync" chunks will make entry modules can't be inlined.
@@ -653,10 +661,12 @@ const composeFormatConfig = ({
             },
             output: {
               module: true,
-              chunkFormat: 'module',
-              library: {
-                type: 'modern-module',
-              },
+              chunkFormat: experimentalEsmOutput ? false : 'module',
+              library: experimentalEsmOutput
+                ? undefined
+                : {
+                    type: 'modern-module',
+                  },
               chunkLoading: 'import',
               workerChunkLoading: 'import',
             },
@@ -1719,7 +1729,9 @@ async function composeLibRsbuildConfig(
     externalHelpers = false,
     redirect = {},
     umdName,
+    experiments,
   } = config;
+  const advancedEsm = experiments?.advancedEsm;
   const { rsbuildConfig: bundleConfig } = composeBundleConfig(bundle);
   const { rsbuildConfig: shimsConfig, enabledShims } = composeShimsConfig(
     format,
@@ -1730,6 +1742,7 @@ async function composeLibRsbuildConfig(
     pkgJson: pkgJson!,
     bundle,
     umdName,
+    advancedEsm: advancedEsm ?? false,
   });
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,
@@ -1929,6 +1942,7 @@ export async function composeCreateRsbuildConfig(
           shims: true,
           umdName: true,
           outBase: true,
+          experiments: true,
         }),
       ),
     };
