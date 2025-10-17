@@ -23,6 +23,8 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 ## output.cleanDistPath <RsbuildDocBadge path="/config/output/clean-dist-path" text="output.cleanDistPath" />
 
+- **命令行：** `--clean` / `--no-clean`
+
 是否在构建开始前清理产物目录下的所有文件（产物目录默认为 `dist`）。
 
 ## output.copy <RsbuildDocBadge path="/config/output/copy" text="output.copy" />
@@ -40,6 +42,8 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 默认会将 `output.dataUriLimit` 设置为 `0`，不内联任何静态资源，以便于应用侧的构建工具处理和优化。
 
 ## output.distPath <RsbuildDocBadge path="/config/output/dist-path" text="output.distPath" />
+
+- **命令行：** `--dist-path <dir>`（例如 `--dist-path output`）
 
 设置构建产物的输出目录，Rsbuild 会根据产物的类型输出到对应的子目录下。
 
@@ -66,6 +70,8 @@ const defaultDistPath = {
 是否将 CSS 输出到产物中。
 
 ## output.externals <RsbuildDocBadge path="/config/output/externals" text="output.externals" />
+
+- **命令行：** `--externals <pkg>`（可重复，例如 `--externals react --externals react-dom`）
 
 在构建时，防止将代码中某些 `import` 的依赖包打包到 bundle 中，而是在运行时再去从外部获取这些依赖。
 
@@ -118,6 +124,8 @@ Rslib 默认会根据 [format](/config/lib/format) 设置 `output.filename.js` �
 是否生成 manifest 文件，该文件包含所有构建产物的信息、以及[入口模块](https://rsbuild.rs/zh/config/source/entry)与构建产物间的映射关系。
 
 ## output.minify <RsbuildDocBadge path="/config/output/minify" text="output.minify" />
+
+- **命令行：** `--minify` / `--no-minify`
 
 用于设置是否开启代码压缩，以及配置压缩工具的选项。
 
@@ -218,6 +226,8 @@ Rsbuild 的 `output.polyfill` 会将 polyfills 注入到全局作用域中，这
 用于设置是否生成 source map 文件，以及生成哪一种格式的 source map。
 
 ## output.target <RsbuildDocBadge path="/config/output/target" text="output.target" />
+
+- **命令行：** `--target <target>`（例如 `--target web`）
 
 用于设置 Rsbuild 的构建产物类型。
 

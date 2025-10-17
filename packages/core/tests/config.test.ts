@@ -2,6 +2,8 @@ import { join } from 'node:path';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { inspect } from '@rslib/core';
 import { describe, expect, rs, test } from '@rstest/core';
+import type { BuildOptions } from '../src/cli/commands';
+import { initConfig } from '../src/cli/initConfig';
 import {
   composeCreateRsbuildConfig,
   composeRsbuildEnvironments,
@@ -146,6 +148,69 @@ describe('Should load config file correctly', () => {
         configFilePath,
       },
     });
+  });
+});
+
+describe('CLI options', () => {
+  test('applies build CLI overrides for common flags', async () => {
+    const fixtureDir = join(__dirname, 'fixtures/config/cli-options');
+    const configFilePath = join(fixtureDir, 'rslib.config.ts');
+
+    const options: BuildOptions = {
+      config: configFilePath,
+      entry: ['index=src/main.ts', 'utils=src/utils.ts'],
+      distPath: 'build',
+      bundle: false,
+      syntax: 'es2018',
+      target: 'node',
+      dts: true,
+      externals: ['react', 'react-dom'],
+      minify: true,
+      clean: true,
+      autoExtension: false,
+      autoExternal: false,
+      tsconfig: 'tsconfig.build.json',
+    };
+
+    const { config } = await initConfig(options);
+    expect(config).toMatchInlineSnapshot(`
+      {
+        "_privateMeta": {
+          "configFilePath": "<WORKSPACE>/tests/fixtures/config/cli-options/rslib.config.ts",
+        },
+        "lib": [
+          {
+            "autoExtension": false,
+            "autoExternal": false,
+            "bundle": false,
+            "dts": true,
+            "output": {
+              "cleanDistPath": true,
+              "distPath": {
+                "root": "build",
+              },
+              "externals": [
+                "react",
+                "react-dom",
+              ],
+              "minify": true,
+              "target": "node",
+            },
+            "source": {
+              "entry": {
+                "index": "src/main.ts",
+                "utils": "src/utils.ts",
+              },
+              "tsconfigPath": "tsconfig.build.json",
+            },
+            "syntax": "es2018",
+          },
+        ],
+        "source": {
+          "define": {},
+        },
+      }
+    `);
   });
 });
 

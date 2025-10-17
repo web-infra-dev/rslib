@@ -27,6 +27,8 @@ Whether to clean up all files under the output directory before the build starts
 
 ## output.copy <RsbuildDocBadge path="/config/output/copy" text="output.copy" />
 
+- **CLI:** `--clean` / `--no-clean`
+
 Copies the specified file or directory to the dist directory, implemented based on [rspack.CopyRspackPlugin](https://rspack.rs/plugins/rspack/copy-rspack-plugin).
 
 ## output.cssModules <RsbuildDocBadge path="/config/output/css-modules" text="output.cssModules" />
@@ -40,6 +42,8 @@ Set the size threshold to inline static assets such as images and fonts.
 When [format](/config/lib/format) is set to `cjs` or `esm`, Rslib defaults to setting `output.dataUriLimit` to `0`, without inlining any static assets, so that build tools on the application side can handle and optimize them.
 
 ## output.distPath <RsbuildDocBadge path="/config/output/dist-path" text="output.distPath" />
+
+- **CLI:** `--dist-path <dir>` (e.g. `--dist-path output`)
 
 Set the directory of the dist files. Rsbuild will output files to the corresponding subdirectory according to the file type.
 
@@ -70,6 +74,8 @@ const defaultDistPath = {
 Whether to emit CSS to the output bundles.
 
 ## output.externals <RsbuildDocBadge path="/config/output/externals" text="output.externals" />
+
+- **CLI:** `--externals <pkg>` (repeatable, e.g. `--externals react --externals react-dom`)
 
 At build time, prevent some `import` dependencies from being packed into bundles in your code, and instead fetch them externally at runtime.
 
@@ -122,6 +128,8 @@ Configure how to handle the legal comment.
 Whether to generate a manifest file that contains information of all assets, and the mapping relationship between [entry module](https://rsbuild.rs/config/source/entry) and assets.
 
 ## output.minify <RsbuildDocBadge path="/config/output/minify" text="output.minify" />
+
+- **CLI:** `--minify` / `--no-minify`
 
 Configure whether to enable code minification, or to configure minimizer options.
 
@@ -222,6 +230,8 @@ Rsbuild's `output.polyfill` injects polyfills into the global scope, which can u
 Used to set whether to generate source map files, and which format of source map to generate.
 
 ## output.target <RsbuildDocBadge path="/config/output/target" text="output.target" />
+
+- **CLI:** `--target <target>` (e.g. `--target web`)
 
 Setting the build target of Rsbuild.
 

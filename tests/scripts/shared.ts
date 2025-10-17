@@ -1,5 +1,6 @@
 import assert from 'node:assert';
 import {
+  type ExecException,
   type ExecOptions,
   type ExecSyncOptions,
   exec,
@@ -27,7 +28,17 @@ export const rslibBinPath = join(
 );
 
 export function runCliSync(command: string, options?: ExecSyncOptions) {
-  return execSync(`node ${rslibBinPath} ${command}`, options);
+  try {
+    const stdout = execSync(`node ${rslibBinPath} ${command}`, options);
+    return stdout.toString();
+  } catch (error) {
+    const execError = error as ExecException;
+    const stderr = execError?.stderr?.toString();
+    const stdout = execError?.stdout?.toString();
+    const message = stderr?.trim() || stdout?.trim() || execError?.message;
+
+    throw new Error(message ?? 'Command failed', { cause: error });
+  }
 }
 
 export function runCli(command: string, options?: ExecOptions) {
@@ -36,6 +47,35 @@ export function runCli(command: string, options?: ExecOptions) {
 
 export function getCwdByExample(exampleName: string) {
   return join(__dirname, '../../examples', exampleName);
+}
+
+export function extractRslibConfig(log: string): string {
+  const markerPattern = /Rslib config used to generate Rsbuild environments/;
+  const lines = log.split(/\r?\n/);
+  const markerIndex = lines.findIndex((line) => markerPattern.test(line));
+
+  if (markerIndex === -1) {
+    return '';
+  }
+
+  const startIndex = markerIndex + 2;
+
+  if (startIndex >= lines.length || lines[startIndex] !== '{') {
+    return '';
+  }
+
+  let endIndex = startIndex + 1;
+
+  while (endIndex < lines.length && lines[endIndex] !== '}') {
+    endIndex += 1;
+  }
+
+  if (endIndex >= lines.length) {
+    return '';
+  }
+
+  const configText = lines.slice(startIndex, endIndex + 1).join('\n');
+  return configText;
 }
 
 export function generateBundleEsmConfig(config: LibConfig = {}): LibConfig {

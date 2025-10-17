@@ -46,7 +46,20 @@ Usage:
   $ rslib build
 
 Options:
-  -w --watch            turn on watch mode, watch for changes and rebuild
+  -w, --watch            turn on watch mode, watch for changes and rebuild
+  --entry <entry>        set entry file or pattern (repeatable)
+  --dist-path <dir>      set output directory
+  --bundle               enable bundle mode (use --no-bundle to disable)
+  --format <format>      specify the output format (esm | cjs | umd | mf | iife)
+  --syntax <syntax>      set build syntax target (repeatable)
+  --target <target>      set runtime target (web | node)
+  --dts                  emit declaration files (use --no-dts to disable)
+  --externals <pkg>      add package to externals (repeatable)
+  --minify               minify output (use --no-minify to disable)
+  --clean                clean output directory before build (use --no-clean to disable)
+  --auto-extension       control automatic extension redirect (use --no-auto-extension to disable)
+  --auto-external        control automatic dependency externalization (use --no-auto-external to disable)
+  --tsconfig <path>      use specific tsconfig (relative to project root)
 ```
 
 ### Environment variables
