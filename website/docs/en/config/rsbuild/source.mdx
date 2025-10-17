@@ -24,7 +24,7 @@ Replaces variables in your code with other values or expressions at compile time
 - **CLI:** `--entry <path>` (repeatable, e.g., `--entry index=src/index.ts` or `--entry src/index.ts`)
 
   The CLI argument supports two formats:
-  1. `key=value`: Explicitly specify the entry name, e.g., `--entry main=src/main.ts`
+  1. `key=value`: Explicitly specify the entry name, e.g., `--entry main=src/main.ts`.
   2. `value`: Only specify the path, in which case the basename of the file (without extension) will be automatically used as the entry name. For example, `--entry src/index.ts` will generate an entry named `index`. If there are name conflicts, numeric suffixes (starting from 0) will be added to all conflicting entries, e.g., `index0`, `index1`.
 
 Used to set the entry modules for building.
