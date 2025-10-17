@@ -23,7 +23,7 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 - **命令行：** `--entry <path>`（可重复，例如 `--entry index=src/index.ts` 或 `--entry src/index.ts`）
 
   命令行参数支持两种格式：
-  1. `key=value`：显式指定入口名称，例如 `--entry main=src/main.ts`
+  1. `key=value`：显式指定入口名称，例如 `--entry main=src/main.ts`。
   2. `value`：仅指定路径，此时会自动使用文件的 basename（不含扩展名）作为入口名称。例如 `--entry src/index.ts` 会生成名为 `index` 的入口。如果存在同名冲突，则会为所有冲突的入口添加数字后缀（从 0 开始），例如 `index0`、`index1`。
 
 用于设置构建的入口模块。
