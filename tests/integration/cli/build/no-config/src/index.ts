@@ -1,1 +1,1 @@
-export const withoutConfig = 'works';
+export const withoutConfig = 1_000;
