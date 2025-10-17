@@ -2,7 +2,11 @@ import path from 'node:path';
 import util from 'node:util';
 import { loadEnv, type RsbuildEntry } from '@rsbuild/core';
 import { loadConfig } from '../config';
-import type { RsbuildConfigOutputTarget, RslibConfig } from '../types';
+import type {
+  LibConfig,
+  RsbuildConfigOutputTarget,
+  RslibConfig,
+} from '../types';
 import { getAbsolutePath } from '../utils/helper';
 import { logger } from '../utils/logger';
 import type { BuildOptions, CommonOptions } from './commands';
@@ -85,16 +89,16 @@ export const applyCliOptions = (
       lib.autoExtension = options.autoExtension;
     if (options.autoExternal !== undefined)
       lib.autoExternal = options.autoExternal;
-    const output = lib.output ?? {};
+    lib.output ??= {};
     if (options.target !== undefined)
-      output.target = options.target as RsbuildConfigOutputTarget;
-    if (options.minify !== undefined) output.minify = options.minify;
-    if (options.clean !== undefined) output.cleanDistPath = options.clean;
+      lib.output.target = options.target as RsbuildConfigOutputTarget;
+    if (options.minify !== undefined) lib.output.minify = options.minify;
+    if (options.clean !== undefined) lib.output.cleanDistPath = options.clean;
     const externals = options.externals?.filter(Boolean) ?? [];
-    if (externals.length > 0) output.externals = externals;
+    if (externals.length > 0) lib.output.externals = externals;
     if (options.distPath) {
-      output.distPath = {
-        ...(typeof output.distPath === 'object' ? output.distPath : {}),
+      lib.output.distPath = {
+        ...(typeof lib.output.distPath === 'object' ? lib.output.distPath : {}),
         root: options.distPath,
       };
     }
@@ -103,7 +107,7 @@ export const applyCliOptions = (
 
 export async function initConfig(options: CommonOptions): Promise<{
   config: RslibConfig;
-  configFilePath: string;
+  configFilePath?: string;
   watchFiles: string[];
 }> {
   const cwd = process.cwd();
@@ -122,6 +126,13 @@ export async function initConfig(options: CommonOptions): Promise<{
     loader: options.configLoader,
   });
 
+  if (configFilePath === undefined) {
+    config.lib = [{} satisfies LibConfig];
+    logger.debug(
+      'No config file found. Falling back to CLI options for the default library.',
+    );
+  }
+
   config.source ||= {};
   config.source.define = {
     ...envs.publicVars,
@@ -136,6 +147,6 @@ export async function initConfig(options: CommonOptions): Promise<{
   return {
     config,
     configFilePath,
-    watchFiles: [configFilePath, ...envs.filePaths],
+    watchFiles: [configFilePath, ...envs.filePaths].filter(Boolean) as string[],
   };
 }
