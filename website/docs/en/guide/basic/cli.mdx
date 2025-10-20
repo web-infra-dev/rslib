@@ -62,6 +62,10 @@ Options:
   --tsconfig <path>      use specific tsconfig (relative to project root)
 ```
 
+:::note
+If the [Rslib configuration file](/guide/basic/configure-rslib#configuration-file) is not present in your project, the CLI will automatically use the default configuration containing only a single [lib](/config/lib/) and apply all build options from the command line. You can add a configuration file once you need a more complex configuration or want to build outputs in multiple formats.
+:::
+
 ### Environment variables
 
 Rslib supports injecting environment variables or expressions into the code during the build, which is helpful for distinguishing running environments or replacing constants. You can see more details in [Rsbuild - Environment variables](https://rsbuild.rs/guide/advanced/env-vars).

@@ -99,7 +99,10 @@ const findConfig = (basePath: string): string | undefined => {
   );
 };
 
-const resolveConfigPath = (root: string, customConfig?: string): string => {
+const resolveConfigPath = (
+  root: string,
+  customConfig?: string,
+): string | undefined => {
   if (customConfig) {
     const customConfigPath = isAbsolute(customConfig)
       ? customConfig
@@ -115,8 +118,7 @@ const resolveConfigPath = (root: string, customConfig?: string): string => {
   if (configFilePath) {
     return configFilePath;
   }
-
-  throw new Error(`${DEFAULT_CONFIG_NAME} not found in ${root}`);
+  return undefined;
 };
 
 export type ConfigLoader = 'auto' | 'jiti' | 'native';
@@ -133,9 +135,17 @@ export async function loadConfig({
   loader?: ConfigLoader;
 }): Promise<{
   content: RslibConfig;
-  filePath: string;
+  filePath?: string;
 }> {
   const configFilePath = resolveConfigPath(cwd, path);
+  if (!configFilePath) {
+    return {
+      content: {
+        lib: [],
+      },
+      filePath: undefined,
+    };
+  }
   const { content } = await loadRsbuildConfig({
     cwd: dirname(configFilePath),
     path: configFilePath,

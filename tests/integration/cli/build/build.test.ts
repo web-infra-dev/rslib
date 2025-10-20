@@ -142,15 +142,22 @@ describe('build command', async () => {
     `);
   });
 
-  test('should throw error if config file is absent, but it should work if the future', async () => {
+  test('should build when config file is absent', async () => {
     const fixturePath = path.join(__dirname, 'no-config');
     await fse.remove(path.join(fixturePath, 'dist'));
 
-    expect(() =>
-      runCliSync('build --format cjs', {
-        cwd: fixturePath,
-      }),
-    ).toThrowError(/rslib\.config not found in.*cli[\\/]build[\\/]no-config/);
+    runCliSync('build --dist-path=dist/a --syntax=es2015', {
+      cwd: fixturePath,
+    });
+
+    const files = await globContentJSON(path.join(fixturePath, 'dist'));
+    expect(files).toMatchInlineSnapshot(`
+      {
+        "<ROOT>/tests/integration/cli/build/no-config/dist/a/index.js": "const withoutConfig = 1000;
+      export { withoutConfig };
+      ",
+      }
+    `);
   });
 
   test('build options', async () => {
