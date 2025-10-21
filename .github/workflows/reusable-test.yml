@@ -1,0 +1,97 @@
+name: Reusable Test
+
+on:
+  workflow_call:
+    inputs:
+      runner:
+        required: true
+        type: string
+      node-version:
+        required: true
+        type: string
+      task:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ${{ inputs.runner }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        with:
+          fetch-depth: 1
+
+      - name: Git config
+        if: ${{ inputs.runner == 'windows-latest' }}
+        shell: bash
+        run: |
+          git config --system core.longpaths true
+
+      - name: Install pnpm
+        run: |
+          npm install -g corepack@latest --force
+          corepack enable
+
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        id: changes
+        with:
+          predicate-quantifier: 'every'
+          filters: |
+            changed:
+              - "!**/*.md"
+              - "!**/*.mdx"
+              - "!**/_meta.json"
+              - "!**/dictionary.txt"
+
+      - name: Setup Node.js ${{ inputs.node-version }}
+        if: ${{ steps.changes.outputs.changed == 'true' }}
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: 'pnpm'
+
+      # Special handling for Node.js 18: use Node.js 22 for tsgo dependency installation
+      - name: Setup Node.js 22 for dependency installation (Node 18 only)
+        if: ${{ steps.changes.outputs.changed == 'true' && inputs.node-version == '18' }}
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        if: ${{ steps.changes.outputs.changed == 'true' }}
+        run: pnpm install
+
+      - name: Install Playwright browsers (only for e2e)
+        if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'e2e' }}
+        run: |
+          cd ./tests || exit 0
+          pnpm playwright install chromium
+
+      # Switch back to Node.js 18 after dependency installation
+      - name: Switch back to Node.js ${{ inputs.node-version }} (Node 18 only)
+        if: ${{ steps.changes.outputs.changed == 'true' && inputs.node-version == '18' }}
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: 'pnpm'
+
+      - name: Type Check
+        if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'ut' }}
+        run: pnpm run type-check
+
+      - name: Unit Test
+        if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'ut' }}
+        run: pnpm run test:unit
+
+      - name: Integration Test (Rstest)
+        if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'integration' }}
+        run: pnpm run test:integration
+
+      - name: E2E Test (Playwright)
+        if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'e2e' }}
+        run: pnpm run test:e2e
