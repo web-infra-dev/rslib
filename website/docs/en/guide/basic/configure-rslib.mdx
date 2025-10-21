@@ -62,7 +62,7 @@ export default {
 };
 ```
 
-Rslib will generate the [environments](https://rsbuild.rs/config/environments) configuration of Rsbuild internally, please refer to [Configuration Debug](#configuration-debug) to view the final generated configuration.
+Rslib will generate the [environments](https://rsbuild.rs/config/environments) configuration of Rsbuild internally, you can run [rslib inspect](/guide/basic/cli#rslib-inspect) command to view the final generated configuration.
 
 You can also refer to the [Configuration Overview](/config/) page to view the detailed introduction of all configurations.
 
@@ -203,15 +203,15 @@ Rslib is built on top of Rsbuild and Rsbuild supports directly modifying the Rsp
 
 For more details, refer to [Configure Rspack](https://rsbuild.rs/guide/basic/configure-rspack).
 
-## Configuration debug
+## Debug mode
 
-You can enable Rslib's debug mode by adding the `DEBUG=rsbuild` environment variable when executing a build. It will display the final Rsbuild/Rspack configuration after processing by Rslib.
+You can add the `DEBUG=rsbuild` environment variable when building to enable Rslib's debug mode.
 
 ```bash
 DEBUG=rsbuild pnpm build
 ```
 
-In debug mode, Rslib will write the Rsbuild / Rspack config to the dist directory, which is convenient for developers to view and debug.
+In debug mode, Rslib will output additional log information and write the final Rsbuild config and Rspack config after processing by Rslib to the output directory, making it convenient for developers to view and debug.
 
 Here is an example of a library that sets both CJS and ESM formats:
 
@@ -222,9 +222,11 @@ Inspect config succeed, open following files to view the content:
   - Rsbuild Config (cjs): /project/dist/.rsbuild/rsbuild.config.cjs.mjs
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
   - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
-  - Rslib Config: /project/dist/.rsbuild/rslib.config.mjs
 ```
 
 - Open the generated `/dist/.rsbuild/rsbuild.config.esm.mjs` file to see the complete content of the Rsbuild config.
 - Open the generated `/dist/.rsbuild/rspack.config.esm.mjs` file to see the complete content of the Rspack config.
-- Open the generated `/dist/.rsbuild/rslib.config.mjs` file to see the complete content of the Rslib config.
+
+::: info
+If you want to view the normalized Rslib configuration, you need to run [rslib inspect](/guide/basic/cli#rslib-inspect) command.
+:::
