@@ -109,10 +109,10 @@ class EntryChunkPlugin {
         const isJs = JS_EXTENSIONS_PATTERN.test(filename);
         if (!isJs) return;
 
+        this.shimsInjectedAssets.add(filename);
+
         const name = chunk.name;
         if (!name) return;
-
-        this.shimsInjectedAssets.add(filename);
 
         const shebangEntry = this.shebangEntries[name];
         if (shebangEntry) {

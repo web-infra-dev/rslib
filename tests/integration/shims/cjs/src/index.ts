@@ -4,6 +4,11 @@ const importMetaUrl = import.meta.url;
 const require = createRequire(import.meta.url);
 const requiredModule = require('./ok.cjs');
 
+const dynamicImportMetaUrl = async () => {
+  const { dynamic } = await import('./dynamic');
+  return dynamic;
+};
+
 // https://github.com/web-infra-dev/rslib/issues/425
 import { fileURLToPath } from 'url';
 
@@ -13,4 +18,4 @@ console.log(__filename);
 // https://github.com/web-infra-dev/rslib/pull/399
 export const module = null;
 
-export { importMetaUrl, requiredModule, __filename };
+export { importMetaUrl, requiredModule, dynamicImportMetaUrl, __filename };

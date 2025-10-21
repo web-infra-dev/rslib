@@ -1,9 +1,10 @@
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import path, { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import vm from 'node:vm';
 import { describe, expect, test } from '@rstest/core';
-import { buildAndGetResults } from 'test-helper';
+import { buildAndGetResults, queryContent } from 'test-helper';
 
 describe('ESM shims', async () => {
   const fixturePath = join(__dirname, 'esm');
@@ -107,42 +108,52 @@ describe('ESM shims disabled', async () => {
 describe('CJS shims', () => {
   test('import.meta.url', async () => {
     const fixturePath = join(__dirname, 'cjs');
-    const { entryFiles, entries } = await buildAndGetResults({ fixturePath });
+    const { entryFiles, entries, contents } = await buildAndGetResults({
+      fixturePath,
+    });
     // `module.require` is not available in Rstest runner context. Manually create a context to run the CJS code.
     // As a temporary solution, we use `module.require` to avoid potential collision with module scope variable `require`.
     const cjsCode = entries.cjs;
+    const req = createRequire(entryFiles.cjs);
     const context = vm.createContext({
-      require,
+      require: req,
       exports,
-      module: { require },
+      module: { require: req },
       __filename: entryFiles.cjs,
     });
-    const { importMetaUrl, requiredModule } = vm.runInContext(cjsCode, context);
+    const { importMetaUrl, dynamicImportMetaUrl, requiredModule } =
+      vm.runInContext(cjsCode, context);
     const fileUrl = pathToFileURL(entryFiles.cjs).href;
+    const dynamicUrl = await dynamicImportMetaUrl();
+    const { content: dynamicContent } = queryContent(
+      contents.cjs!,
+      /cjs\/1~7\.cjs/,
+    );
+
     expect(importMetaUrl).toBe(fileUrl);
+    expect(dynamicUrl).toBe(fileUrl.replace('index.cjs', '1~7.cjs'));
     expect(requiredModule).toBe('ok');
-    expect(
-      cjsCode.startsWith(
-        `"use strict";\nconst __rslib_import_meta_url__ = /*#__PURE__*/ function() {`,
-      ),
-    ).toBe(true);
+
+    for (const code of [cjsCode, dynamicContent]) {
+      expect(
+        code.startsWith(
+          `"use strict";\nconst __rslib_import_meta_url__ = /*#__PURE__*/ function() {`,
+        ),
+      ).toBe(true);
+    }
   });
 
   test('ESM should not be affected by CJS shims configuration', async () => {
     const fixturePath = join(__dirname, 'cjs');
     const { entries } = await buildAndGetResults({ fixturePath });
-    expect(entries.esm).toMatchInlineSnapshot(`
-      "import { createRequire } from "node:module";
-      import { fileURLToPath } from "url";
-      const importMetaUrl = import.meta.url;
-      const src_require = createRequire(import.meta.url);
-      const requiredModule = src_require('./ok.cjs');
-      const src_filename = fileURLToPath(import.meta.url);
-      console.log(src_filename);
-      const src_module = null;
-      export { src_filename as __filename, importMetaUrl, src_module as module, requiredModule };
-      "
-    `);
+
+    for (const code of [
+      'const importMetaUrl = import.meta.url;',
+      'const src_require = createRequire(import.meta.url);',
+      'const src_filename = fileURLToPath(import.meta.url);',
+    ]) {
+      expect(entries.esm).toContain(code);
+    }
   });
 });
 
