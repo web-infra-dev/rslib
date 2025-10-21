@@ -8,7 +8,12 @@ exports[`should downgrade class private method by default 1`] = `
     #bar() {}
 }
 function foo(options = {}) {
-    console.log(options);
+    const a = {};
+    const b = {
+        ...a,
+        b: 1
+    };
+    console.log(options, b);
 }
 export { Foo, foo };
 "
@@ -26,6 +31,48 @@ function _class_private_method_init(obj, privateSet) {
     _check_private_redeclaration(obj, privateSet);
     privateSet.add(obj);
 }
+function _define_property(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
+function _object_spread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = null != arguments[i] ? arguments[i] : {};
+        var ownKeys = Object.keys(source);
+        if ("function" == typeof Object.getOwnPropertySymbols) ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+        }));
+        ownKeys.forEach(function(key) {
+            _define_property(target, key, source[key]);
+        });
+    }
+    return target;
+}
+function src_ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _object_spread_props(target, source) {
+    source = null != source ? source : {};
+    if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    else src_ownKeys(Object(source)).forEach(function(key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+    return target;
+}
 var _bar = /*#__PURE__*/ new WeakSet();
 class Foo {
     constructor(){
@@ -35,8 +82,12 @@ class Foo {
 }
 function bar() {}
 function foo() {
-    let options = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
-    console.log(options);
+    var options = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+    var a = {};
+    var b = _object_spread_props(_object_spread({}, a), {
+        b: 1
+    });
+    console.log(options, b);
 }
 export { Foo, foo };
 "
@@ -50,7 +101,12 @@ exports[`should downgrade class private method with output.syntax config 2`] = `
     #bar() {}
 }
 function foo(options = {}) {
-    console.log(options);
+    const a = {};
+    const b = {
+        ...a,
+        b: 1
+    };
+    console.log(options, b);
 }
 export { Foo, foo };
 "
