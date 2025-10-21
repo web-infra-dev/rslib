@@ -62,7 +62,7 @@ export default {
 };
 ```
 
-Rslib 会在内部生成 Rsbuild 的 [environments](https://rsbuild.rs/zh/config/environments) 配置，请参考 [调试配置](#调试配置) 来查看最终生成的配置。
+Rslib 会在内部生成 Rsbuild 的 [environments](https://rsbuild.rs/zh/config/environments) 配置，可以运行 [rslib inspect](/guide/basic/cli#rslib-inspect) 命令来查看最终生成的配置。
 
 你也可以在 [配置概览](/config/) 页面查看所有配置的详细介绍。
 
@@ -203,15 +203,15 @@ Rslib 基于 Rsbuild 构建，Rsbuild 支持直接修改 Rspack 配置对象，�
 
 详情请参考 [配置 Rspack](https://rsbuild.rs/guide/basic/configure-rspack)。
 
-## 调试配置
+## 调试模式
 
-在执行构建时，你可以通过添加 `DEBUG=rsbuild` 环境变量来启用 Rslib 的调试模式，它会在 Rslib 处理后显示最终的 Rsbuild 和 Rspack 配置。
+你可以在执行构建时添加 `DEBUG=rsbuild` 环境变量来开启 Rslib 的调试模式。
 
 ```bash
 DEBUG=rsbuild pnpm build
 ```
 
-在调试模式下，Rslib 会将 Rsbuild 和 Rspack 配置写入到 `dist` 目录下，方便开发者查看和调试。
+在调试模式下，Rslib 会输出一些额外的日志信息，并将内部经过 Rslib 处理最终生成的 Rsbuild 配置和 Rspack 配置写入到产物目录下，便于开发者查看和调试。
 
 以下是一个例子，这个库设置了 CJS 和 ESM 两种输出格式：
 
@@ -222,9 +222,11 @@ Inspect config succeed, open following files to view the content:
   - Rsbuild Config (cjs): /project/dist/.rsbuild/rsbuild.config.cjs.mjs
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
   - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
-  - Rslib Config: /project/dist/.rsbuild/rslib.config.mjs
 ```
 
 - 打开生成的 `/dist/.rsbuild/rsbuild.config.esm.mjs` 文件，即可查看 Rsbuild 配置的完整内容。
 - 打开生成的 `/dist/.rsbuild/rspack.config.esm.mjs` 文件，即可查看 Rspack 配置的完整内容。
-- 打开生成的 `/dist/.rsbuild/rslib.config.mjs` 文件，即可查看 Rslib 配置的完整内容。
+
+::: info
+如果你想查看归一化后的 Rslib 配置，需要运行 [rslib inspect](/guide/basic/cli#rslib-inspect) 命令。
+:::
