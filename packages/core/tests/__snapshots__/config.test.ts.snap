@@ -3118,10 +3118,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             not: /[\\\\/]node_modules[\\\\/]/
           },
           /\\.(?:ts|tsx|jsx|mts|cts)$/,
-          /@module-federation\\/webpack-bundler-runtime/,
-          /@module-federation\\/runtime/,
-          /@module-federation\\/runtime-core/,
-          /@module-federation\\/sdk/
+          /@module-federation[\\\\/]/
         ],
         use: [
           /* config.module.rule('js').use('swc') */
