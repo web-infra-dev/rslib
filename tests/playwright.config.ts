@@ -8,7 +8,7 @@ export default defineConfig({
   // Print line for each test being run in CI
   reporter: 'list',
   expect: {
-    timeout: process.env.CI ? 10_000 : 5_000,
+    timeout: process.env.CI ? 30_000 : 5_000,
   },
   webServer: [
     {

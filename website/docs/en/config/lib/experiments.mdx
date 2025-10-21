@@ -1,0 +1,28 @@
+# lib.experiments
+
+Used to enable some Rslib experimental features.
+
+## experiments.advancedEsm
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Controls whether to enable Rspack experimental ESM output. When enabled, it emits ESM output that is high-quality, more friendly to static analysis, and supports code splitting.
+
+:::info
+Currently this option only takes effect in bundle mode when format is `'esm'`.
+:::
+
+```js title="rslib.config.js"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      bundle: true,
+      experiments: {
+        advancedEsm: true,
+      },
+    },
+  ],
+};
+```

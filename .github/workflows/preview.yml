@@ -3,7 +3,9 @@ name: Preview Release
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - beta
   workflow_dispatch:
 
 permissions:
