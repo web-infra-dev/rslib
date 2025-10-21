@@ -7,5 +7,7 @@ export class Foo {
 }
 
 export function foo(options: unknown = {}): void {
-  console.log(options);
+  const a = {};
+  const b = { ...a, b: 1 };
+  console.log(options, b);
 }

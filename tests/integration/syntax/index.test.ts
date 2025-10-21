@@ -18,9 +18,11 @@ test('should downgrade class private method with output.syntax config', async ()
 
   expect(entries.esm0).toMatchSnapshot();
   expect(entries.esm0).not.toContain('#bar');
+  expect(entries.esm0).not.toContain('...a');
 
   expect(entries.esm1).toMatchSnapshot();
   expect(entries.esm1).toContain('#bar');
+  expect(entries.esm1).toContain('...a');
 
   expect(entries.cjs0).toContain('#bar');
   expect(entries.cjs0).toContain('()=>{'); // test webpack runtime arrow function

@@ -153,7 +153,7 @@ describe('build command', async () => {
     const files = await globContentJSON(path.join(fixturePath, 'dist'));
     expect(files).toMatchInlineSnapshot(`
       {
-        "<ROOT>/tests/integration/cli/build/no-config/dist/a/index.js": "const withoutConfig = 1000;
+        "<ROOT>/tests/integration/cli/build/no-config/dist/a/index.js": "var withoutConfig = 1000;
       export { withoutConfig };
       ",
       }
