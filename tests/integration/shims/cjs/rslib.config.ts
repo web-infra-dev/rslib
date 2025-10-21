@@ -6,12 +6,18 @@ export default defineConfig({
     generateBundleEsmConfig(),
     generateBundleCjsConfig({
       shims: {
-        cjs: { 'import.meta.url': true },
+        cjs: {
+          'import.meta.url': true,
+        },
       },
     }),
   ],
   output: {
-    copy: [{ from: 'src/ok.cjs' }],
+    copy: [
+      {
+        from: 'src/ok.cjs',
+      },
+    ],
   },
   source: {
     entry: {
