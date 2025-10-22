@@ -36,7 +36,7 @@ function __webpack_require__(moduleId) {
             getProto([]),
             getProto(getProto)
         ];
-        for(var current = 2 & mode && value; 'object' == typeof current && !~leafPrototypes.indexOf(current); current = getProto(current))Object.getOwnPropertyNames(current).forEach((key)=>{
+        for(var current = 2 & mode && value; ('object' == typeof current || 'function' == typeof current) && !~leafPrototypes.indexOf(current); current = getProto(current))Object.getOwnPropertyNames(current).forEach((key)=>{
             def[key] = ()=>value[key];
         });
         def['default'] = ()=>value;
