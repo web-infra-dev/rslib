@@ -2,33 +2,6 @@
 
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rsbuild configs 1`] = `
 "{
-  dev: {
-    hmr: true,
-    liveReload: true,
-    browserLogs: true,
-    watchFiles: [
-      {
-        paths: [
-          '<WORKSPACE>/tsconfig.json'
-        ],
-        type: 'reload-server'
-      }
-    ],
-    assetPrefix: '/',
-    writeToDisk: false,
-    cliShortcuts: false,
-    client: {
-      path: '/rsbuild-hmr',
-      port: '',
-      host: '',
-      overlay: true,
-      reconnect: 100
-    },
-    lazyCompilation: {
-      imports: true,
-      entries: false
-    }
-  },
   server: {
     port: 3000,
     host: '0.0.0.0',
@@ -86,6 +59,57 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     tsconfigPath: '<WORKSPACE>/tsconfig.json'
   },
+  tools: {
+    cssExtract: {
+      loaderOptions: {},
+      pluginOptions: {
+        ignoreOrder: true
+      }
+    }
+  },
+  security: {
+    nonce: '',
+    sri: {
+      enable: false
+    }
+  },
+  performance: {
+    profile: false,
+    printFileSize: true,
+    removeConsole: false,
+    removeMomentLocale: false,
+    chunkSplit: {
+      strategy: 'split-by-experience'
+    }
+  },
+  mode: 'production',
+  dev: {
+    hmr: true,
+    liveReload: true,
+    browserLogs: true,
+    watchFiles: [
+      {
+        paths: [
+          '<WORKSPACE>/tsconfig.json'
+        ],
+        type: 'reload-server'
+      }
+    ],
+    assetPrefix: '/',
+    writeToDisk: false,
+    cliShortcuts: false,
+    client: {
+      path: '/rsbuild-hmr',
+      port: '',
+      host: '',
+      overlay: true,
+      reconnect: 100
+    },
+    lazyCompilation: {
+      imports: true,
+      entries: false
+    }
+  },
   output: {
     target: 'web',
     cleanDistPath: 'auto',
@@ -132,30 +156,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     emitAssets: true
   },
-  tools: {
-    cssExtract: {
-      loaderOptions: {},
-      pluginOptions: {
-        ignoreOrder: true
-      }
-    }
-  },
-  security: {
-    nonce: '',
-    sri: {
-      enable: false
-    }
-  },
-  performance: {
-    profile: false,
-    printFileSize: true,
-    removeConsole: false,
-    removeMomentLocale: false,
-    chunkSplit: {
-      strategy: 'split-by-experience'
-    }
-  },
-  mode: 'production',
   root: '<WORKSPACE>',
   plugins: [
     {
@@ -318,7 +318,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    lazyBarrel: true,
     inlineEnum: true,
     inlineConst: true,
     typeReexportsPresence: true,
@@ -1021,7 +1020,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    lazyBarrel: true,
     inlineEnum: true,
     inlineConst: true,
     typeReexportsPresence: true,
@@ -1718,7 +1716,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    lazyBarrel: true,
     inlineEnum: true,
     inlineConst: true,
     typeReexportsPresence: true,
@@ -2320,7 +2317,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    lazyBarrel: true,
     inlineEnum: true,
     inlineConst: true,
     typeReexportsPresence: true,
@@ -2923,7 +2919,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    lazyBarrel: true,
     inlineEnum: true,
     inlineConst: true,
     typeReexportsPresence: true,
@@ -3481,6 +3476,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
 [
   {
     "config": {
+      "dev": undefined,
       "output": {
         "assetPrefix": "auto",
         "dataUriLimit": 0,
@@ -3767,6 +3763,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   {
     "config": {
+      "dev": undefined,
       "output": {
         "assetPrefix": "auto",
         "dataUriLimit": 0,
@@ -4050,6 +4047,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   {
     "config": {
+      "dev": undefined,
       "output": {
         "distPath": {
           "css": "./",
@@ -4294,6 +4292,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   {
     "config": {
+      "dev": undefined,
       "output": {
         "distPath": {
           "css": "./",

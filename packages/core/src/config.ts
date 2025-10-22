@@ -1905,16 +1905,6 @@ export async function composeCreateRsbuildConfig(
     userConfig.output ??= {};
     delete userConfig.output.externals;
 
-    // Convert output.distPath to an object to ensure it merges correctly with the built-in constant config
-    if (
-      userConfig.output.distPath &&
-      typeof userConfig.output.distPath === 'string'
-    ) {
-      userConfig.output.distPath = {
-        root: userConfig.output.distPath,
-      };
-    }
-
     const config: RsbuildConfigWithLibInfo = {
       format: libConfig.format ?? 'esm',
       // The merge order represents the priority of the configuration
