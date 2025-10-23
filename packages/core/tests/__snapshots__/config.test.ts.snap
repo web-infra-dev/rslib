@@ -18,7 +18,6 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     aggregateTimeout: 0
   },
   experiments: {
-    lazyBarrel: true,
     inlineEnum: true,
     inlineConst: true,
     typeReexportsPresence: true,
@@ -677,7 +676,9 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
         }
       ]
     },
-    {},
+    {
+      options: undefined
+    },
     {
       reactDirectives: {},
       shimsInjectedAssets: new Set([]),
@@ -3725,7 +3726,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         use: [
           /* config.module.rule('css').use('mini-css-extract') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rspack/core/dist/cssExtractLoader.js'
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rspack-canary/core/dist/cssExtractLoader.js'
           },
           /* config.module.rule('css').use('css') */
           {
