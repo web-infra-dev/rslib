@@ -1,0 +1,28 @@
+# lib.experiments
+
+用于开启 Rslib 的一些实验性的功能。
+
+## experiments.advancedEsm
+
+- **类型：** `boolean`
+- **默认值：** `false`
+
+控制是否启用 Rspack 实验性的 ESM 输出。开启后会生成高质量、对静态分析更友好并且支持代码分割的 ESM 输出。
+
+:::info
+目前该选项仅在 bundle 模式下且 format 为 `'esm'` 时生效。
+:::
+
+```js title="rslib.config.js"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      bundle: true,
+      experiments: {
+        advancedEsm: true,
+      },
+    },
+  ],
+};
+```
