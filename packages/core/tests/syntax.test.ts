@@ -7,23 +7,21 @@ import {
 } from '../src/utils/syntax';
 
 const compareSemver = (a: string, b: string) => {
-  const [aMajor, aMinor, aPatch] = a.split('.').map(Number) as [
-    number,
-    number,
-    number,
-  ];
-  const [bMajor, bMinor, bPatch] = b.split('.').map(Number) as [
-    number,
-    number,
-    number,
-  ];
+  const extract = (v: string) => {
+    const parts = String(v)
+      .split('.')
+      .map((p) => {
+        return Number(p);
+      });
+    while (parts.length < 3) parts.push(0);
+    return parts.slice(0, 3) as [number, number, number];
+  };
 
-  if (aMajor !== bMajor) {
-    return aMajor - bMajor;
-  }
-  if (aMinor !== bMinor) {
-    return aMinor - bMinor;
-  }
+  const [aMajor, aMinor, aPatch] = extract(a);
+  const [bMajor, bMinor, bPatch] = extract(b);
+
+  if (aMajor !== bMajor) return aMajor - bMajor;
+  if (aMinor !== bMinor) return aMinor - bMinor;
   return aPatch - bPatch;
 };
 
@@ -74,12 +72,12 @@ describe('transformSyntaxToBrowserslist', () => {
       transformSyntaxToBrowserslist('es2015', 'web'),
     ).toMatchInlineSnapshot(`
       [
-        "chrome >= 51.0.0",
-        "edge >= 15.0.0",
-        "firefox >= 54.0.0",
-        "safari >= 10.0.0",
-        "opera >= 38.0.0",
-        "samsung >= 5.0.0",
+        "chrome >= 51",
+        "edge >= 79",
+        "firefox >= 53",
+        "ios >= 16.3",
+        "node >= 6.5",
+        "safari >= 16.3",
       ]
     `);
 
@@ -87,12 +85,12 @@ describe('transformSyntaxToBrowserslist', () => {
       transformSyntaxToBrowserslist('es2018', 'web'),
     ).toMatchInlineSnapshot(`
       [
-        "chrome >= 64.0.0",
-        "edge >= 79.0.0",
-        "firefox >= 78.0.0",
-        "safari >= 16.4.0",
-        "opera >= 51.0.0",
-        "samsung >= 8.2.0",
+        "chrome >= 64",
+        "edge >= 79",
+        "firefox >= 78",
+        "ios >= 16.3",
+        "node >= 10",
+        "safari >= 16.3",
       ]
     `);
 
@@ -147,14 +145,12 @@ describe('transformSyntaxToBrowserslist', () => {
     ).toMatchInlineSnapshot(`
       [
         "Chrome 123",
-        "chrome >= 5.0.0",
-        "edge >= 12.0.0",
-        "firefox >= 2.0.0",
-        "ie >= 9.0.0",
-        "ios >= 6.0.0",
-        "node >= 0.4.0",
-        "opera >= 10.10.0",
-        "safari >= 3.1.0",
+        "chrome >= 13",
+        "edge >= 12",
+        "firefox >= 2",
+        "ios >= 6",
+        "node >= 0.6",
+        "safari >= 5.1",
       ]
     `);
 

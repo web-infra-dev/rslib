@@ -419,12 +419,12 @@ describe('syntax', () => {
       composedRsbuildConfig[0]!.config.output?.overrideBrowserslist,
     ).toMatchInlineSnapshot(`
       [
-        "chrome >= 51.0.0",
-        "edge >= 15.0.0",
-        "firefox >= 54.0.0",
-        "safari >= 10.0.0",
-        "opera >= 38.0.0",
-        "samsung >= 5.0.0",
+        "chrome >= 51",
+        "edge >= 79",
+        "firefox >= 53",
+        "ios >= 16.3",
+        "node >= 6.5",
+        "safari >= 16.3",
       ]
     `);
   });
