@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pluginPublint } from 'rsbuild-plugin-publint';
 import { defineConfig, type rsbuild, rspack } from 'rslib';
+import packageJson from './package.json' with { type: 'json' };
 
 const pluginFixDtsTypes: rsbuild.RsbuildPlugin = {
   name: 'fix-dts-types',
@@ -45,7 +46,7 @@ export default defineConfig({
       entryModuleLoader: './src/plugins/entryModuleLoader.ts',
     },
     define: {
-      RSLIB_VERSION: JSON.stringify(require('./package.json').version),
+      RSLIB_VERSION: JSON.stringify(packageJson.version),
     },
   },
   // externalize pre-bundled dependencies
