@@ -5,7 +5,7 @@ import { defineConfig, type rsbuild, rspack } from 'rslib';
 import packageJson from './package.json' with { type: 'json' };
 
 const pluginFixDtsTypes: rsbuild.RsbuildPlugin = {
-  name: 'fix-dts-types',
+  name: 'fix-dts-types-1',
   setup(api) {
     api.onAfterBuild(() => {
       const typesDir = path.join(process.cwd(), 'dist-types');
