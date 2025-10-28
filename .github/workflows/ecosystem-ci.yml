@@ -20,7 +20,7 @@ permissions:
 jobs:
   changes:
     runs-on: ubuntu-latest
-    if: github.repository == 'web-infra-dev/rsbuild' && github.event_name != 'workflow_dispatch'
+    if: github.repository == 'web-infra-dev/rslib' && github.event_name != 'workflow_dispatch'
     outputs:
       changed: ${{ steps.changes.outputs.changed }}
     steps:
