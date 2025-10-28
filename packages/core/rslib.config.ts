@@ -1,3 +1,4 @@
+// 2
 import fs from 'node:fs';
 import path from 'node:path';
 import { pluginPublint } from 'rsbuild-plugin-publint';
