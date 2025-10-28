@@ -66,6 +66,6 @@ jobs:
           github-token: ${{ secrets.REPO_RSLIB_ECO_CI_GITHUB_TOKEN }}
           ecosystem-owner: web-infra-dev
           ecosystem-repo: rslib
-          workflow-file: rslib-ecosystem-ci-selected.yml
+          workflow-file: rslib-ecosystem-ci-from-commit.yml
           client-payload: '{"commitSHA":"${{ github.sha }}","updateComment":true,"repo":"web-infra-dev/rslib","suite":"-","suiteRefType":"precoded","suiteRef":"precoded"}'
           result-heading: Rslib Ecosystem CI
