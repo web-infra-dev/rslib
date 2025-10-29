@@ -1,4 +1,4 @@
-// 24567
+// 245678
 import fs from 'node:fs';
 import path from 'node:path';
 import { pluginPublint } from 'rsbuild-plugin-publint';
