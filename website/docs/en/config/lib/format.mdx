@@ -9,6 +9,11 @@ Specify the output format for the generated JavaScript output files.
 For different output formats, Rslib uses the following default value of [output.library.type](https://rspack.rs/config/output#outputlibrarytype) provided by Rspack:
 
 - `esm`：[modern-module](https://rspack.rs/config/output#type-modern-module)
+
+::: info
+You can enable Rspack experimental ESM output by setting [lib.experiments.advancedEsm](/config/lib/experiments#experimentsadvancedesm) to emit ESM output that is high-quality, more friendly to static analysis, and supports code splitting.
+:::
+
 - `cjs`：[commonjs-static](https://rspack.rs/config/output#type-commonjs-static)
 - `umd`：[umd](https://rspack.rs/config/output#type-umd)
 - `iife`: [modern-module](https://rspack.rs/config/output#type-modern-module) with [output.iife](https://rspack.rs/config/output#outputiife) enabled.

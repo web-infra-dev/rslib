@@ -1,1 +1,3 @@
-export const shared = 'shared';
+export const shared = (str: string) => {
+  return 'shared-' + str;
+};

@@ -39,6 +39,17 @@ jobs:
       node-version: ${{ matrix.node-version }}
       task: integration
 
+  integration-advanced-esm:
+    strategy:
+      matrix:
+        runner: [ubuntu-latest, windows-latest]
+        node-version: [22]
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      runner: ${{ matrix.runner }}
+      node-version: ${{ matrix.node-version }}
+      task: integration-advanced-esm
+
   e2e:
     strategy:
       matrix:

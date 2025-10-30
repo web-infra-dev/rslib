@@ -19,7 +19,25 @@ describe('minify config', () => {
   test('minify is disabled, nothing will be stripped', async () => {
     const fixturePath = join(__dirname, 'config/disabled');
     const { entries } = await buildAndGetResults({ fixturePath });
-    expect(entries.esm).toMatchInlineSnapshot(`
+    if (process.env.ADVANCED_ESM) {
+      expect(entries.esm).toMatchInlineSnapshot(`
+        "import { jsx } from "react/jsx-runtime";
+
+
+        /*! Legal Comment */ 
+        const foo = ()=>{};
+        const bar = ()=>{};
+        const baz = ()=>{
+            return bar();
+        };
+        // normal comment
+        const Button = ()=>/*#__PURE__*/ jsx('button', {});
+
+        export { Button, foo };
+        "
+      `);
+    } else {
+      expect(entries.esm).toMatchInlineSnapshot(`
       "import { jsx } from "react/jsx-runtime";
 
       ;// CONCATENATED MODULE: external "react/jsx-runtime"
@@ -37,6 +55,7 @@ describe('minify config', () => {
       export { Button, foo };
       "
     `);
+    }
   });
 
   test('minify is enabled, only preserve some comments and annotations', async () => {

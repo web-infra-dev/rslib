@@ -83,6 +83,9 @@ export function generateBundleEsmConfig(config: LibConfig = {}): LibConfig {
     output: {
       distPath: './dist/esm',
     },
+    experiments: {
+      advancedEsm: process.env.ADVANCED_ESM === '1',
+    },
   };
 
   return mergeConfig(esmBasicConfig, config)!;

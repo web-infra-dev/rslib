@@ -1,3 +1,3 @@
 import { shared } from './shared';
 
-export const foo = 'foo' + shared;
+export const foo = shared('foo');
