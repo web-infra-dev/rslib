@@ -2,8 +2,8 @@ name: Ecosystem CI
 
 on:
   push:
-    # TODO: change to `main` after testing.
-    branches: [ci-test]
+    # TODO: remove `ci-test` after testing.
+    branches: ['main', 'ci-test']
 
   workflow_dispatch:
     inputs:
@@ -28,7 +28,6 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 1
-
       - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
         id: changes
         with:
