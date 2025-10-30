@@ -8,7 +8,6 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     'node'
   ],
   name: 'esm',
-  devtool: false,
   context: '<WORKSPACE>',
   mode: 'production',
   infrastructureLogging: {
@@ -29,6 +28,7 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     asyncWebAssembly: true,
     outputModule: true
   },
+  devtool: false,
   externals: [
     function () { /* omitted long function */ },
     /^@rsbuild\\/core($|\\/|\\\\)/,
@@ -97,6 +97,7 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     'pnpapi'
   ],
   output: {
+    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '[name].js',
@@ -577,6 +578,17 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
           }
         ]
       },
+      /* config.module.rule('json') */
+      {
+        test: /\\.json$/i,
+        oneOf: [
+          /* config.module.rule('json').oneOf('json-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          }
+        ]
+      },
       /* config.module.rule('wasm') */
       {
         test: /\\.wasm$/,
@@ -792,7 +804,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   dev: {
     hmr: true,
     liveReload: true,
-    browserLogs: true,
+    browserLogs: {
+      stackTrace: 'summary'
+    },
     watchFiles: [
       {
         paths: [
@@ -870,6 +884,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     {
       name: 'rsbuild:entry',
+      setup() {}
+    },
+    {
+      name: 'rsbuild:source-map',
       setup() {}
     },
     {
@@ -1014,7 +1032,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'node'
   ],
   name: 'esm',
-  devtool: false,
   context: '<WORKSPACE>',
   mode: 'production',
   infrastructureLogging: {
@@ -1035,6 +1052,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     asyncWebAssembly: true,
     outputModule: true
   },
+  devtool: false,
   externals: [
     function () { /* omitted long function */ },
     /^@rsbuild\\/core($|\\/|\\\\)/,
@@ -1103,6 +1121,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
+    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '0~[name].js',
@@ -1587,6 +1606,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           }
         ]
       },
+      /* config.module.rule('json') */
+      {
+        test: /\\.json$/i,
+        oneOf: [
+          /* config.module.rule('json').oneOf('json-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          }
+        ]
+      },
       /* config.module.rule('wasm') */
       {
         test: /\\.wasm$/,
@@ -1717,7 +1747,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'node'
   ],
   name: 'cjs',
-  devtool: false,
   context: '<WORKSPACE>',
   mode: 'production',
   infrastructureLogging: {
@@ -1737,6 +1766,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     asyncWebAssembly: true
   },
+  devtool: false,
   externals: [
     /^@rsbuild\\/core($|\\/|\\\\)/,
     /^rsbuild-plugin-dts($|\\/|\\\\)/,
@@ -1804,6 +1834,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
+    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
     path: '<WORKSPACE>/dist',
     filename: '[name].cjs',
     chunkFilename: '1~[name].cjs',
@@ -2288,6 +2319,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           }
         ]
       },
+      /* config.module.rule('json') */
+      {
+        test: /\\.json$/i,
+        oneOf: [
+          /* config.module.rule('json').oneOf('json-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          }
+        ]
+      },
       /* config.module.rule('wasm') */
       {
         test: /\\.wasm$/,
@@ -2413,7 +2455,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'node'
   ],
   name: 'umd',
-  devtool: false,
   context: '<WORKSPACE>',
   mode: 'production',
   infrastructureLogging: {
@@ -2433,6 +2474,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     asyncWebAssembly: true
   },
+  devtool: false,
   externals: [
     'assert',
     'assert/strict',
@@ -2492,6 +2534,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
+    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '2~[name].js',
@@ -2892,6 +2935,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           }
         ]
       },
+      /* config.module.rule('json') */
+      {
+        test: /\\.json$/i,
+        oneOf: [
+          /* config.module.rule('json').oneOf('json-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          }
+        ]
+      },
       /* config.module.rule('wasm') */
       {
         test: /\\.wasm$/,
@@ -3014,7 +3068,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'node'
   ],
   name: 'iife',
-  devtool: false,
   context: '<WORKSPACE>',
   mode: 'production',
   infrastructureLogging: {
@@ -3034,6 +3087,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     asyncWebAssembly: true
   },
+  devtool: false,
   externals: [
     'assert',
     'assert/strict',
@@ -3093,6 +3147,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
+    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '3~[name].js',
@@ -3495,6 +3550,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           }
         ]
       },
+      /* config.module.rule('json') */
+      {
+        test: /\\.json$/i,
+        oneOf: [
+          /* config.module.rule('json').oneOf('json-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          }
+        ]
+      },
       /* config.module.rule('wasm') */
       {
         test: /\\.wasm$/,
@@ -3616,7 +3682,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'web'
   ],
   name: 'mf',
-  devtool: false,
   context: '<WORKSPACE>',
   mode: 'production',
   infrastructureLogging: {
@@ -3636,7 +3701,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     asyncWebAssembly: true
   },
+  devtool: false,
   output: {
+    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '4~[name].js',
@@ -3726,7 +3793,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         use: [
           /* config.module.rule('css').use('mini-css-extract') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rspack-canary/core/dist/cssExtractLoader.js'
+            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rspack/core/dist/cssExtractLoader.js'
           },
           /* config.module.rule('css').use('css') */
           {
@@ -4072,6 +4139,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             generator: {
               filename: 'static/font/[name][ext]'
             }
+          }
+        ]
+      },
+      /* config.module.rule('json') */
+      {
+        test: /\\.json$/i,
+        oneOf: [
+          /* config.module.rule('json').oneOf('json-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
           }
         ]
       },
