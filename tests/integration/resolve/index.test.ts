@@ -14,14 +14,31 @@ test('resolve data url', async () => {
   `);
 });
 
-// TODO: false module path is different from linux and windows
-// EXTERNAL MODULE: <ROOT>/rslib/e2e/cases/resolve/false/./browser-false/util (ignored)
-test.todo('resolve false', async () => {
+test('resolve false', async () => {
   const fixturePath = join(__dirname, 'false');
   const { entries, isSuccess } = await buildAndGetResults({ fixturePath });
 
   expect(isSuccess).toBeTruthy();
-  expect(entries.esm).toMatchSnapshot();
+  if (process.env.ADVANCED_ESM) {
+    expect(entries.esm).toMatchInlineSnapshot(`
+      "import { __webpack_require__ } from "./runtime.js";
+      __webpack_require__.add({
+          "?b5d4": function() {}
+      });
+      const util_ignored_ = __webpack_require__("?b5d4");
+      var util_ignored__default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
+      console.log('foo:', util_ignored__default());
+      console.log('bar: ', "bar");
+      "
+    `);
+  } else {
+    expect(
+      entries.esm,
+    ).toContain(`var util_ignored_ = __webpack_require__("?b5d4");
+var util_ignored_default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
+console.log('foo:', util_ignored_default());
+console.log('bar: ', "bar");`);
+  }
 });
 
 test('resolve node protocol', async () => {
@@ -29,12 +46,21 @@ test('resolve node protocol', async () => {
   const { entries, isSuccess } = await buildAndGetResults({ fixturePath });
 
   expect(isSuccess).toBeTruthy();
-  expect(entries.esm).toMatchInlineSnapshot(`
+  if (process.env.ADVANCED_ESM) {
+    expect(entries.esm).toMatchInlineSnapshot(`
+      "import node_path from "node:path";
+      const { join: join } = node_path;
+      export { join };
+      "
+    `);
+  } else {
+    expect(entries.esm).toMatchInlineSnapshot(`
     "import node_path from "node:path";
     const { join } = node_path;
     export { join };
     "
   `);
+  }
 });
 
 test('resolve with condition exports', async () => {
@@ -74,10 +100,17 @@ test('resolve with main fields', async () => {
   const results = Object.values(contents);
 
   expect(isSuccess).toBeTruthy();
-  expect(Object.values(results[0]!)[0]).toMatchInlineSnapshot(`
-    "console.log(1);
-    "
-  `);
+  if (process.env.ADVANCED_ESM) {
+    expect(Object.values(results[0]!)[0]).toMatchInlineSnapshot(`
+      "console.log(1);
+      "
+    `);
+  } else {
+    expect(Object.values(results[0]!)[0]).toMatchInlineSnapshot(`
+      "console.log(1);
+      "
+    `);
+  }
   expect(Object.values(results[1]!)[0]).toContain('main');
   expect(Object.values(results[2]!)[0]).toContain('browser');
 });

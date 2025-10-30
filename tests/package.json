@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "test": "rstest",
+    "test:advanced-esm": "cross-env ADVANCED_ESM=1 rstest",
     "test:benchmark": "rstest bench",
     "test:e2e": "playwright test --pass-with-no-tests",
     "type-check": "tsc --noEmit"

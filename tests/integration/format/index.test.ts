@@ -134,3 +134,17 @@ test('`module` should be correctly handled by `parserOptions.commonjs.exports = 
   expect(typeof cjsOutput.default.path1.basename).toBe('function');
   expect(cjsOutput.default.path1).toBe(cjsOutput.default.path2);
 });
+
+test.skipIf(!process.env.ADVANCED_ESM)(
+  'ESM with eval should export correctly',
+  async () => {
+    const fixturePath = path.resolve(__dirname, 'esm-eval');
+    const { entryFiles } = await buildAndGetResults({
+      fixturePath,
+    });
+
+    const esmOutput = await import(entryFiles.esm);
+    expect(esmOutput.evalFunc()).toBe(1);
+    expect(esmOutput.foo).toBe('foo');
+  },
+);

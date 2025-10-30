@@ -92,6 +92,10 @@ jobs:
         if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'integration' }}
         run: pnpm run test:integration
 
+      - name: Integration Test with Advanced ESM (Rstest)
+        if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'integration-advanced-esm' }}
+        run: pnpm run test:integration:advanced-esm
+
       - name: E2E Test (Playwright)
         if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'e2e' }}
         run: pnpm run test:e2e

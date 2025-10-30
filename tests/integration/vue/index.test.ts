@@ -11,7 +11,105 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
     type: 'all',
   });
   test('bundle', async () => {
-    expect(js.contents.esm1).toMatchInlineSnapshot(`
+    if (process.env.ADVANCED_ESM) {
+      expect(js.contents.esm1).toMatchInlineSnapshot(`
+        {
+          "<ROOT>/tests/integration/vue/dist/bundle/index.js": "import "./runtime.js";
+        import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
+        const _00_2Fplugin_vue_2Fexport_helper = (sfc, props)=>{
+            const target = sfc.__vccOpts || sfc;
+            for (const [key, val] of props)target[key] = val;
+            return target;
+        };
+        const _sfc_main = {
+            __name: 'Button',
+            setup (__props, { expose: __expose }) {
+                __expose();
+                const button = ref('Button!');
+                const __returned__ = {
+                    button,
+                    ref: ref
+                };
+                Object.defineProperty(__returned__, '__isScriptSetup', {
+                    enumerable: false,
+                    value: true
+                });
+                return __returned__;
+            }
+        };
+        const _hoisted_1 = {
+            class: "component button"
+        };
+        function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+            return openBlock(), createElementBlock("p", _hoisted_1, toDisplayString($setup.button), 1);
+        }
+        const Button = /*#__PURE__*/ _00_2Fplugin_vue_2Fexport_helper(_sfc_main, [
+            [
+                'render',
+                _sfc_render
+            ],
+            [
+                '__file',
+                "<ROOT>/tests/integration/vue/src/Button/Button.vue"
+            ]
+        ]);
+        const Card_sfc_main = {
+            __name: 'Card',
+            setup (__props, { expose: __expose }) {
+                __expose();
+                const card = ref('Card!');
+                const __returned__ = {
+                    card,
+                    ref: ref
+                };
+                Object.defineProperty(__returned__, '__isScriptSetup', {
+                    enumerable: false,
+                    value: true
+                });
+                return __returned__;
+            }
+        };
+        const Card_hoisted_1 = {
+            class: "component card"
+        };
+        function Card_sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+            return openBlock(), createElementBlock("p", Card_hoisted_1, toDisplayString($setup.card), 1);
+        }
+        const Card = /*#__PURE__*/ _00_2Fplugin_vue_2Fexport_helper(Card_sfc_main, [
+            [
+                'render',
+                Card_sfc_render
+            ],
+            [
+                '__file',
+                "<ROOT>/tests/integration/vue/src/Card.vue"
+            ]
+        ]);
+        export { Button, Card };
+        ",
+          "<ROOT>/tests/integration/vue/dist/bundle/runtime.js": "var __webpack_modules__ = {};
+        var __webpack_module_cache__ = {};
+        function __webpack_require__(moduleId) {
+            var cachedModule = __webpack_module_cache__[moduleId];
+            if (void 0 !== cachedModule) return cachedModule.exports;
+            var module = __webpack_module_cache__[moduleId] = {
+                exports: {}
+            };
+            __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+            return module.exports;
+        }
+        __webpack_require__.m = __webpack_modules__;
+        (()=>{
+            __webpack_require__.add = function(modules) {
+                Object.assign(__webpack_require__.m, modules);
+            };
+        })();
+        export { __webpack_require__ };
+        ",
+        }
+      `);
+    } else {
+      expect(js.contents.esm1).toMatchInlineSnapshot(`
       {
         "<ROOT>/tests/integration/vue/dist/bundle/index.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
       const _00_2Fplugin_vue_2Fexport_helper = (sfc, props)=>{
@@ -87,6 +185,8 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
       ",
       }
     `);
+    }
+
     expect(css.contents.esm1).toMatchInlineSnapshot(`
       {
         "<ROOT>/tests/integration/vue/dist/bundle/index.css": ".button.component {
