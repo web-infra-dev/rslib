@@ -51,7 +51,6 @@ jobs:
           ecosystem-repo: rslib
           workflow-file: rslib-ecosystem-ci-selected.yml
           client-payload: '{"ref":"${{ github.event.inputs.branch }}","repo":"web-infra-dev/rslib","suite":"-","suiteRefType":"precoded","suiteRef":"precoded"}'
-          result-heading: Rslib Ecosystem CI
           branch: ${{ github.event.inputs.branch }}
   ecosystem_ci_per_commit:
     name: Run ecosystem CI per commit
@@ -67,4 +66,3 @@ jobs:
           ecosystem-repo: rslib
           workflow-file: rslib-ecosystem-ci-from-commit.yml
           client-payload: '{"commitSHA":"${{ github.sha }}","updateComment":true,"repo":"web-infra-dev/rslib","suite":"-","suiteRefType":"precoded","suiteRef":"precoded"}'
-          result-heading: Rslib Ecosystem CI
