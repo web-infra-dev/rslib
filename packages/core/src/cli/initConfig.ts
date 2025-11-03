@@ -12,6 +12,15 @@ import { logger } from '../utils/logger';
 import type { BuildOptions, CommonOptions } from './commands';
 import { onBeforeRestart } from './restart';
 
+const shouldPrintSerializedRslibConfig = (): boolean => {
+  if (!process.env.DEBUG) {
+    return false;
+  }
+
+  const values = process.env.DEBUG.toLocaleLowerCase().split(',');
+  return ['rslib'].some((key) => values.includes(key));
+};
+
 const getEnvDir = (cwd: string, envDir?: string) => {
   if (envDir) {
     return path.isAbsolute(envDir) ? envDir : path.resolve(cwd, envDir);
@@ -141,8 +150,11 @@ export async function initConfig(options: CommonOptions): Promise<{
 
   applyCliOptions(config, options, root);
 
-  logger.debug('Rslib config used to generate Rsbuild environments:');
-  logger.debug(`\n${util.inspect(config, { depth: null, colors: true })}`);
+  // only debug serialized rslib config when DEBUG=rslib
+  if (shouldPrintSerializedRslibConfig()) {
+    logger.debug('Rslib config used to generate Rsbuild environments:');
+    logger.debug(`\n${util.inspect(config, { depth: null, colors: true })}`);
+  }
 
   return {
     config,
