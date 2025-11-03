@@ -1,5 +1,7 @@
+import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 
+const require = createRequire(import.meta.url);
 /**
  * This function is used to resolve the absolute path of a package.
  * It is needed in projects that use Yarn PnP or are set up within a monorepo.
