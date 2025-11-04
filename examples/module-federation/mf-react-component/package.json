@@ -1,15 +1,16 @@
 {
   "name": "@examples/mf-react-component",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/cjs/index.d.ts",
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
     }
   },
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.mjs",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
   "types": "./dist/cjs/index.d.ts",
   "scripts": {
     "build": "rslib build",

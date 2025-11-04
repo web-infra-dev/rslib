@@ -1,8 +1,9 @@
 {
   "name": "@examples/react-component-bundle-false",
   "private": true,
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.mjs",
+  "type": "module",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
   "types": "./dist/cjs/index.d.ts",
   "scripts": {
     "build": "rslib build"
