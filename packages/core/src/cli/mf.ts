@@ -48,7 +48,7 @@ async function initMFRsbuild(
 
   const rsbuildInstance = await createRsbuild({
     callerName: 'rslib',
-    rsbuildConfig: {
+    config: {
       mode: 'development',
       root: config.root,
       plugins: config.plugins,
