@@ -11,7 +11,7 @@ export async function inspect(
   const { environments } = await composeRsbuildEnvironments(config);
   const rsbuildInstance = await createRsbuild({
     callerName: 'rslib',
-    rsbuildConfig: {
+    config: {
       mode: 'production',
       root: config.root,
       plugins: config.plugins,
