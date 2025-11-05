@@ -21,7 +21,7 @@ test('resolve false', async () => {
   expect(isSuccess).toBeTruthy();
   if (process.env.ADVANCED_ESM) {
     expect(entries.esm).toMatchInlineSnapshot(`
-      "import { __webpack_require__ } from "./runtime.js";
+      "import { __webpack_require__ } from "./rslib-runtime.js";
       __webpack_require__.add({
           "?b5d4": function() {}
       });

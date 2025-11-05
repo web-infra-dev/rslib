@@ -658,7 +658,9 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     nodeEnv: false,
     concatenateModules: false,
     sideEffects: true,
-    runtimeChunk: 'single',
+    runtimeChunk: {
+      name: 'rslib-runtime'
+    },
     avoidEntryIife: true
   },
   plugins: [
