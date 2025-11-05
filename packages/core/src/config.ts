@@ -664,7 +664,11 @@ const composeFormatConfig = ({
               // experimentalEsmOutput don't need concatenateModules
               concatenateModules: !experimentalEsmOutput,
               sideEffects: experimentalEsmOutput ? true : 'flag',
-              runtimeChunk: experimentalEsmOutput ? 'single' : undefined,
+              runtimeChunk: experimentalEsmOutput
+                ? {
+                    name: 'rslib-runtime',
+                  }
+                : undefined,
               avoidEntryIife: true,
               splitChunks: {
                 // Splitted "sync" chunks will make entry modules can't be inlined.
