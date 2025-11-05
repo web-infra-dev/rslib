@@ -713,6 +713,9 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     __dirname: false,
     __filename: false
   },
+  externalsPresets: {
+    node: false
+  },
   externalsType: 'module-import'
 }",
 ]
@@ -1739,6 +1742,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     __dirname: false,
     __filename: false
   },
+  externalsPresets: {
+    node: false
+  },
   externalsType: 'module-import'
 }",
   "{
@@ -2447,6 +2453,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       '<WORKSPACE>/src/index.ts'
     ]
   },
+  externalsPresets: {
+    node: false
+  },
   externalsType: 'commonjs-import'
 }",
   "{
@@ -3059,6 +3068,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       './a.js',
       '<WORKSPACE>/src/index.ts'
     ]
+  },
+  externalsPresets: {
+    node: false
   },
   externalsType: 'umd'
 }",
@@ -3673,6 +3685,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       './a.js',
       '<WORKSPACE>/src/index.ts'
     ]
+  },
+  externalsPresets: {
+    node: false
   },
   externalsType: 'global'
 }",
@@ -4507,6 +4522,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
           },
           {
+            "externalsPresets": {
+              "node": false,
+            },
             "target": [
               "node",
             ],
@@ -4791,6 +4809,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
           },
           {
+            "externalsPresets": {
+              "node": false,
+            },
             "target": [
               "node",
             ],
@@ -5036,6 +5057,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
           },
           {
+            "externalsPresets": {
+              "node": false,
+            },
             "target": [
               "node",
             ],
@@ -5280,6 +5304,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
           },
           {
+            "externalsPresets": {
+              "node": false,
+            },
             "target": [
               "node",
             ],

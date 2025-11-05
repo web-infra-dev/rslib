@@ -1642,6 +1642,9 @@ const composeTargetConfig = (
         config: {
           tools: {
             rspack: {
+              externalsPresets: {
+                node: false,
+              },
               target: ['node'],
             },
           },
