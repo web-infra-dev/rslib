@@ -27,7 +27,10 @@ test('`Buffer` should be aliased to polyfill packages when bundle is disabled', 
 
   for (const content of bufferContents) {
     expect(content).toContain(
-      'module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("buffer")',
+      'const __WEBPACK_EXTERNAL_createRequire_require = __WEBPACK_EXTERNAL_createRequire(import.meta.url);',
+    );
+    expect(content).toContain(
+      'module.exports = __WEBPACK_EXTERNAL_createRequire_require("buffer");',
     );
   }
 

@@ -97,7 +97,7 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     'pnpapi'
   ],
   output: {
-    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '[name].js',
@@ -723,6 +723,35 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
 
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rsbuild configs 1`] = `
 "{
+  dev: {
+    hmr: true,
+    liveReload: true,
+    browserLogs: {
+      stackTrace: 'summary'
+    },
+    watchFiles: [
+      {
+        paths: [
+          '<WORKSPACE>/tsconfig.json'
+        ],
+        type: 'reload-server'
+      }
+    ],
+    assetPrefix: '/',
+    writeToDisk: false,
+    cliShortcuts: false,
+    client: {
+      path: '/rsbuild-hmr',
+      port: '',
+      host: '',
+      overlay: true,
+      reconnect: 100
+    },
+    lazyCompilation: {
+      imports: true,
+      entries: false
+    }
+  },
   server: {
     port: 3000,
     host: '0.0.0.0',
@@ -756,7 +785,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     mountId: 'root',
     crossorigin: false,
     outputStructure: 'flat',
-    scriptLoading: 'defer'
+    scriptLoading: 'defer',
+    implementation: 'js'
   },
   resolve: {
     alias: {
@@ -779,59 +809,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       version: '2022-03'
     },
     tsconfigPath: '<WORKSPACE>/tsconfig.json'
-  },
-  tools: {
-    cssExtract: {
-      loaderOptions: {},
-      pluginOptions: {
-        ignoreOrder: true
-      }
-    }
-  },
-  security: {
-    nonce: '',
-    sri: {
-      enable: false
-    }
-  },
-  performance: {
-    profile: false,
-    printFileSize: true,
-    removeConsole: false,
-    removeMomentLocale: false,
-    chunkSplit: {
-      strategy: 'split-by-experience'
-    }
-  },
-  mode: 'production',
-  dev: {
-    hmr: true,
-    liveReload: true,
-    browserLogs: {
-      stackTrace: 'summary'
-    },
-    watchFiles: [
-      {
-        paths: [
-          '<WORKSPACE>/tsconfig.json'
-        ],
-        type: 'reload-server'
-      }
-    ],
-    assetPrefix: '/',
-    writeToDisk: false,
-    cliShortcuts: false,
-    client: {
-      path: '/rsbuild-hmr',
-      port: '',
-      host: '',
-      overlay: true,
-      reconnect: 100
-    },
-    lazyCompilation: {
-      imports: true,
-      entries: false
-    }
   },
   output: {
     target: 'web',
@@ -879,6 +856,30 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     emitAssets: true
   },
+  tools: {
+    cssExtract: {
+      loaderOptions: {},
+      pluginOptions: {
+        ignoreOrder: true
+      }
+    }
+  },
+  security: {
+    nonce: '',
+    sri: {
+      enable: false
+    }
+  },
+  performance: {
+    profile: false,
+    printFileSize: true,
+    removeConsole: false,
+    removeMomentLocale: false,
+    chunkSplit: {
+      strategy: 'split-by-experience'
+    }
+  },
+  mode: 'production',
   root: '<WORKSPACE>',
   plugins: [
     {
@@ -1124,7 +1125,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
-    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '0~[name].js',
@@ -1840,7 +1841,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
-    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].cjs',
     chunkFilename: '1~[name].cjs',
@@ -2543,7 +2544,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
-    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '2~[name].js',
@@ -3159,7 +3160,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
-    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '3~[name].js',
@@ -3718,7 +3719,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   devtool: false,
   output: {
-    devtoolModuleFilenameTemplate: ({ absoluteResourcePath })=>absoluteResourcePath,
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '4~[name].js',
@@ -4276,7 +4277,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
 [
   {
     "config": {
-      "dev": undefined,
       "output": {
         "assetPrefix": "auto",
         "dataUriLimit": 0,
@@ -4567,7 +4567,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   {
     "config": {
-      "dev": undefined,
       "output": {
         "assetPrefix": "auto",
         "dataUriLimit": 0,
@@ -4854,7 +4853,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   {
     "config": {
-      "dev": undefined,
       "output": {
         "distPath": {
           "css": "./",
@@ -5102,7 +5100,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   {
     "config": {
-      "dev": undefined,
       "output": {
         "distPath": {
           "css": "./",
