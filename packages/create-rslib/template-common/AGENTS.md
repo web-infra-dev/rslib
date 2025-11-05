@@ -5,6 +5,7 @@ You are an expert in JavaScript, Rspack, Rsbuild, Rslib, and library development
 ## Commands
 
 - `npm run build` - Build the library for production
+- `npm run dev` - Turn on watch mode, watch for changes and rebuild the library
 
 ## Docs
 
