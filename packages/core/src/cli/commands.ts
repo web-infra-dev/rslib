@@ -209,6 +209,14 @@ export function runCli(): void {
     sections.shift();
 
     for (const section of sections) {
+      // Fix the command usage
+      if (section.title === 'Usage') {
+        section.body = section.body.replace(
+          '$ rslib',
+          color.yellow('$ rslib [command] [options]'),
+        );
+      }
+
       // Fix the build command name
       if (section.title === 'Commands') {
         section.body = section.body.replace(
