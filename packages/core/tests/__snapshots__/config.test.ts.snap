@@ -1030,9 +1030,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
 }"
 `;
 
-exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack configs 1`] = `
-[
-  "{
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack config - 0 esm 1`] = `
+"{
   target: [
     'es2022',
     'node'
@@ -1749,8 +1748,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     node: false
   },
   externalsType: 'module-import'
-}",
-  "{
+}"
+`;
+
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack config - 1 cjs 1`] = `
+"{
   target: [
     'es2022',
     'node'
@@ -2460,8 +2462,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     node: false
   },
   externalsType: 'commonjs-import'
-}",
-  "{
+}"
+`;
+
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack config - 2 umd 1`] = `
+"{
   target: [
     'es2022',
     'node'
@@ -3076,8 +3081,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     node: false
   },
   externalsType: 'umd'
-}",
-  "{
+}"
+`;
+
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack config - 3 iife 1`] = `
+"{
   target: [
     'es2022',
     'node'
@@ -3693,8 +3701,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     node: false
   },
   externalsType: 'global'
-}",
-  "{
+}"
+`;
+
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack config - 4 mf 1`] = `
+"{
   target: [
     'es2022',
     'web'
@@ -3724,7 +3735,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
-    chunkFilename: '4~[name].js',
+    chunkFilename: '[name].js',
     publicPath: '/',
     pathinfo: false,
     hashFunction: 'xxhash64',
@@ -4271,1249 +4282,1250 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   externalsType: 'global'
-}",
-]
+}"
 `;
 
-exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format 1`] = `
-[
-  {
-    "config": {
-      "output": {
-        "assetPrefix": "auto",
-        "dataUriLimit": 0,
-        "distPath": {
-          "css": "./",
-          "cssAsync": "./",
-          "js": "./",
-          "jsAsync": "./",
-        },
-        "externals": [
-          [Function],
-          /\\^@rsbuild\\\\/core\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-          /\\^rsbuild-plugin-dts\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-          /\\^@microsoft\\\\/api-extractor\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-          /\\^typescript\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-          "@rsbuild/core",
-          "rsbuild-plugin-dts",
-          "@microsoft/api-extractor",
-          "typescript",
-          "assert",
-          "assert/strict",
-          "async_hooks",
-          "buffer",
-          "child_process",
-          "cluster",
-          "console",
-          "constants",
-          "crypto",
-          "dgram",
-          "diagnostics_channel",
-          "dns",
-          "dns/promises",
-          "domain",
-          "events",
-          "fs",
-          "fs/promises",
-          "http",
-          "http2",
-          "https",
-          "inspector",
-          "inspector/promises",
-          "module",
-          "net",
-          "os",
-          "path",
-          "path/posix",
-          "path/win32",
-          "perf_hooks",
-          "process",
-          "punycode",
-          "querystring",
-          "readline",
-          "readline/promises",
-          "repl",
-          "stream",
-          "stream/consumers",
-          "stream/promises",
-          "stream/web",
-          "string_decoder",
-          "sys",
-          "timers",
-          "timers/promises",
-          "tls",
-          "trace_events",
-          "tty",
-          "url",
-          "util",
-          "util/types",
-          "v8",
-          "vm",
-          "wasi",
-          "worker_threads",
-          "zlib",
-          /\\^node:/,
-          "pnpapi",
-        ],
-        "filename": {
-          "js": "[name].js",
-        },
-        "filenameHash": false,
-        "minify": {
-          "css": false,
-          "js": true,
-          "jsOptions": {
-            "minimizerOptions": {
-              "compress": {
-                "dead_code": true,
-                "defaults": false,
-                "toplevel": true,
-                "unused": true,
-              },
-              "format": {
-                "comments": "some",
-                "preserve_annotations": true,
-              },
-              "mangle": false,
-              "minify": false,
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > rsbuild config - 0 esm 1`] = `
+{
+  "config": {
+    "output": {
+      "assetPrefix": "auto",
+      "dataUriLimit": 0,
+      "distPath": {
+        "css": "./",
+        "cssAsync": "./",
+        "js": "./",
+        "jsAsync": "./",
+      },
+      "externals": [
+        [Function],
+        /\\^@rsbuild\\\\/core\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+        /\\^rsbuild-plugin-dts\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+        /\\^@microsoft\\\\/api-extractor\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+        /\\^typescript\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+        "@rsbuild/core",
+        "rsbuild-plugin-dts",
+        "@microsoft/api-extractor",
+        "typescript",
+        "assert",
+        "assert/strict",
+        "async_hooks",
+        "buffer",
+        "child_process",
+        "cluster",
+        "console",
+        "constants",
+        "crypto",
+        "dgram",
+        "diagnostics_channel",
+        "dns",
+        "dns/promises",
+        "domain",
+        "events",
+        "fs",
+        "fs/promises",
+        "http",
+        "http2",
+        "https",
+        "inspector",
+        "inspector/promises",
+        "module",
+        "net",
+        "os",
+        "path",
+        "path/posix",
+        "path/win32",
+        "perf_hooks",
+        "process",
+        "punycode",
+        "querystring",
+        "readline",
+        "readline/promises",
+        "repl",
+        "stream",
+        "stream/consumers",
+        "stream/promises",
+        "stream/web",
+        "string_decoder",
+        "sys",
+        "timers",
+        "timers/promises",
+        "tls",
+        "trace_events",
+        "tty",
+        "url",
+        "util",
+        "util/types",
+        "v8",
+        "vm",
+        "wasi",
+        "worker_threads",
+        "zlib",
+        /\\^node:/,
+        "pnpapi",
+      ],
+      "filename": {
+        "js": "[name].js",
+      },
+      "filenameHash": false,
+      "minify": {
+        "css": false,
+        "js": true,
+        "jsOptions": {
+          "minimizerOptions": {
+            "compress": {
+              "dead_code": true,
+              "defaults": false,
+              "toplevel": true,
+              "unused": true,
             },
-            "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
+            "format": {
+              "comments": "some",
+              "preserve_annotations": true,
+            },
+            "mangle": false,
+            "minify": false,
+          },
+          "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
+        },
+      },
+      "overrideBrowserslist": [
+        "last 1 node versions",
+      ],
+      "target": "node",
+    },
+    "performance": {
+      "chunkSplit": {
+        "strategy": "custom",
+      },
+    },
+    "plugins": [
+      {
+        "name": "rslib:bundle",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:disable-url-parse",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:fix-js-module-type",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:lib-asset",
+        "pre": [
+          "rsbuild:svgr",
+        ],
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:lib-entry-chunk",
+        "setup": [Function],
+      },
+    ],
+    "resolve": {
+      "alias": {
+        "bar": "bar",
+        "foo": "foo/esm",
+      },
+    },
+    "source": {
+      "entry": {},
+      "preEntry": "./b.js",
+    },
+    "tools": {
+      "htmlPlugin": false,
+      "rspack": [
+        {
+          "experiments": {
+            "rspackFuture": {
+              "bundlerInfo": {
+                "force": false,
+              },
+            },
+          },
+          "optimization": {
+            "moduleIds": "named",
+            "nodeEnv": false,
+          },
+          "resolve": {
+            "extensionAlias": {
+              ".cjs": [
+                ".cts",
+                ".cjs",
+              ],
+              ".js": [
+                ".ts",
+                ".tsx",
+                ".js",
+                ".jsx",
+              ],
+              ".jsx": [
+                ".tsx",
+                ".jsx",
+              ],
+              ".mjs": [
+                ".mts",
+                ".mjs",
+              ],
+            },
           },
         },
-        "overrideBrowserslist": [
-          "last 1 node versions",
-        ],
-        "target": "node",
-      },
-      "performance": {
-        "chunkSplit": {
-          "strategy": "custom",
-        },
-      },
-      "plugins": [
         {
-          "name": "rslib:bundle",
-          "setup": [Function],
-        },
-        {
-          "name": "rsbuild:disable-url-parse",
-          "setup": [Function],
-        },
-        {
-          "name": "rsbuild:fix-js-module-type",
-          "setup": [Function],
-        },
-        {
-          "name": "rsbuild:lib-asset",
-          "pre": [
-            "rsbuild:svgr",
+          "experiments": {
+            "outputModule": true,
+          },
+          "module": {
+            "parser": {
+              "javascript": {
+                "commonjs": {
+                  "exports": "skipInEsm",
+                },
+                "importDynamic": false,
+                "importMeta": false,
+                "requireAsExpression": false,
+                "requireDynamic": false,
+                "requireResolve": false,
+                "worker": false,
+              },
+            },
+          },
+          "node": {
+            "__dirname": false,
+            "__filename": false,
+          },
+          "optimization": {
+            "avoidEntryIife": true,
+            "concatenateModules": true,
+            "runtimeChunk": undefined,
+            "sideEffects": "flag",
+            "splitChunks": {
+              "chunks": "async",
+            },
+          },
+          "output": {
+            "chunkFormat": "module",
+            "chunkLoading": "import",
+            "library": {
+              "type": "modern-module",
+            },
+            "module": true,
+            "workerChunkLoading": "import",
+          },
+          "plugins": [
+            RslibPlugin {
+              "_args": [
+                {
+                  "forceNodeShims": false,
+                  "interceptApiPlugin": true,
+                },
+              ],
+              "affectedHooks": undefined,
+              "name": "RslibPlugin",
+            },
           ],
-          "setup": [Function],
+        },
+        [Function],
+        {
+          "output": {
+            "chunkFilename": "0~[name].js",
+          },
         },
         {
-          "name": "rsbuild:lib-entry-chunk",
-          "setup": [Function],
-        },
-      ],
-      "resolve": {
-        "alias": {
-          "bar": "bar",
-          "foo": "foo/esm",
-        },
-      },
-      "source": {
-        "entry": {},
-        "preEntry": "./b.js",
-      },
-      "tools": {
-        "htmlPlugin": false,
-        "rspack": [
-          {
-            "experiments": {
-              "rspackFuture": {
-                "bundlerInfo": {
-                  "force": false,
-                },
-              },
-            },
-            "optimization": {
-              "moduleIds": "named",
-              "nodeEnv": false,
-            },
-            "resolve": {
-              "extensionAlias": {
-                ".cjs": [
-                  ".cts",
-                  ".cjs",
-                ],
-                ".js": [
-                  ".ts",
-                  ".tsx",
-                  ".js",
-                  ".jsx",
-                ],
-                ".jsx": [
-                  ".tsx",
-                  ".jsx",
-                ],
-                ".mjs": [
-                  ".mts",
-                  ".mjs",
-                ],
-              },
-            },
+          "externalsPresets": {
+            "node": false,
           },
-          {
-            "experiments": {
-              "outputModule": true,
-            },
-            "module": {
-              "parser": {
-                "javascript": {
-                  "commonjs": {
-                    "exports": "skipInEsm",
-                  },
-                  "importDynamic": false,
-                  "importMeta": false,
-                  "requireAsExpression": false,
-                  "requireDynamic": false,
-                  "requireResolve": false,
-                  "worker": false,
-                },
-              },
-            },
-            "node": {
-              "__dirname": false,
-              "__filename": false,
-            },
-            "optimization": {
-              "avoidEntryIife": true,
-              "concatenateModules": true,
-              "runtimeChunk": undefined,
-              "sideEffects": "flag",
-              "splitChunks": {
-                "chunks": "async",
-              },
-            },
-            "output": {
-              "chunkFormat": "module",
-              "chunkLoading": "import",
-              "library": {
-                "type": "modern-module",
-              },
-              "module": true,
-              "workerChunkLoading": "import",
-            },
-            "plugins": [
-              RslibPlugin {
-                "_args": [
-                  {
-                    "forceNodeShims": false,
-                    "interceptApiPlugin": true,
-                  },
-                ],
-                "affectedHooks": undefined,
-                "name": "RslibPlugin",
-              },
-            ],
-          },
-          [Function],
-          {
-            "output": {
-              "chunkFilename": "0~[name].js",
-            },
-          },
-          {
-            "externalsPresets": {
-              "node": false,
-            },
-            "target": [
-              "node",
-            ],
-          },
-          {
-            "externalsType": "module-import",
-          },
-          {
-            "plugins": [
-              EntryChunkPlugin {
-                "contextToWatch": null,
-                "enabledImportMetaUrlShim": false,
-                "reactDirectives": {},
-                "shebangChmod": 493,
-                "shebangEntries": {},
-                "shebangInjectedAssets": Set {},
-                "shimsInjectedAssets": Set {},
-              },
-            ],
-          },
-          {
-            "resolve": {
-              "extensionAlias": {
-                ".js": [
-                  ".ts",
-                  ".tsx",
-                ],
-              },
-            },
-          },
-        ],
-        "swc": {
-          "jsc": {
-            "externalHelpers": false,
-          },
-        },
-      },
-    },
-    "format": "esm",
-  },
-  {
-    "config": {
-      "output": {
-        "assetPrefix": "auto",
-        "dataUriLimit": 0,
-        "distPath": {
-          "css": "./",
-          "cssAsync": "./",
-          "js": "./",
-          "jsAsync": "./",
-        },
-        "externals": [
-          /\\^@rsbuild\\\\/core\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-          /\\^rsbuild-plugin-dts\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-          /\\^@microsoft\\\\/api-extractor\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-          /\\^typescript\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-          "@rsbuild/core",
-          "rsbuild-plugin-dts",
-          "@microsoft/api-extractor",
-          "typescript",
-          "assert",
-          "assert/strict",
-          "async_hooks",
-          "buffer",
-          "child_process",
-          "cluster",
-          "console",
-          "constants",
-          "crypto",
-          "dgram",
-          "diagnostics_channel",
-          "dns",
-          "dns/promises",
-          "domain",
-          "events",
-          "fs",
-          "fs/promises",
-          "http",
-          "http2",
-          "https",
-          "inspector",
-          "inspector/promises",
-          "module",
-          "net",
-          "os",
-          "path",
-          "path/posix",
-          "path/win32",
-          "perf_hooks",
-          "process",
-          "punycode",
-          "querystring",
-          "readline",
-          "readline/promises",
-          "repl",
-          "stream",
-          "stream/consumers",
-          "stream/promises",
-          "stream/web",
-          "string_decoder",
-          "sys",
-          "timers",
-          "timers/promises",
-          "tls",
-          "trace_events",
-          "tty",
-          "url",
-          "util",
-          "util/types",
-          "v8",
-          "vm",
-          "wasi",
-          "worker_threads",
-          "zlib",
-          /\\^node:/,
-          "pnpapi",
-        ],
-        "filename": {
-          "js": "[name].cjs",
-        },
-        "filenameHash": false,
-        "minify": {
-          "css": false,
-          "js": true,
-          "jsOptions": {
-            "minimizerOptions": {
-              "compress": {
-                "dead_code": true,
-                "defaults": false,
-                "toplevel": true,
-                "unused": true,
-              },
-              "format": {
-                "comments": "some",
-                "preserve_annotations": true,
-              },
-              "mangle": false,
-              "minify": false,
-            },
-            "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
-          },
-        },
-        "overrideBrowserslist": [
-          "last 1 node versions",
-        ],
-        "target": "node",
-      },
-      "performance": {
-        "chunkSplit": {
-          "strategy": "custom",
-        },
-      },
-      "plugins": [
-        {
-          "name": "rslib:bundle",
-          "setup": [Function],
-        },
-        {
-          "name": "rsbuild:cjs-import-meta-url-shim",
-          "setup": [Function],
-        },
-        {
-          "name": "rsbuild:disable-url-parse",
-          "setup": [Function],
-        },
-        {
-          "name": "rsbuild:fix-js-module-type",
-          "setup": [Function],
-        },
-        {
-          "name": "rsbuild:lib-asset",
-          "pre": [
-            "rsbuild:svgr",
+          "target": [
+            "node",
           ],
-          "setup": [Function],
         },
         {
-          "name": "rsbuild:lib-entry-chunk",
-          "setup": [Function],
+          "externalsType": "module-import",
+        },
+        {
+          "plugins": [
+            EntryChunkPlugin {
+              "contextToWatch": null,
+              "enabledImportMetaUrlShim": false,
+              "reactDirectives": {},
+              "shebangChmod": 493,
+              "shebangEntries": {},
+              "shebangInjectedAssets": Set {},
+              "shimsInjectedAssets": Set {},
+            },
+          ],
+        },
+        {
+          "resolve": {
+            "extensionAlias": {
+              ".js": [
+                ".ts",
+                ".tsx",
+              ],
+            },
+          },
         },
       ],
-      "resolve": {
-        "alias": {
-          "bar": "bar/cjs",
-          "foo": "foo",
-        },
-      },
-      "source": {
-        "entry": {},
-        "preEntry": [
-          "./a.js",
-          "./c.js",
-          "./d.js",
-        ],
-      },
-      "tools": {
-        "htmlPlugin": false,
-        "rspack": [
-          {
-            "experiments": {
-              "rspackFuture": {
-                "bundlerInfo": {
-                  "force": false,
-                },
-              },
-            },
-            "optimization": {
-              "moduleIds": "named",
-              "nodeEnv": false,
-            },
-            "resolve": {
-              "extensionAlias": {
-                ".cjs": [
-                  ".cts",
-                  ".cjs",
-                ],
-                ".js": [
-                  ".ts",
-                  ".tsx",
-                  ".js",
-                  ".jsx",
-                ],
-                ".jsx": [
-                  ".tsx",
-                  ".jsx",
-                ],
-                ".mjs": [
-                  ".mts",
-                  ".mjs",
-                ],
-              },
-            },
-          },
-          {
-            "module": {
-              "parser": {
-                "javascript": {
-                  "commonjs": {
-                    "exports": "skipInEsm",
-                  },
-                  "importDynamic": false,
-                  "importMeta": false,
-                  "requireAsExpression": false,
-                  "requireDynamic": false,
-                  "requireResolve": false,
-                  "worker": false,
-                },
-              },
-            },
-            "optimization": {
-              "splitChunks": {
-                "chunks": "async",
-              },
-            },
-            "output": {
-              "chunkFormat": "commonjs",
-              "chunkLoading": "require",
-              "iife": false,
-              "library": {
-                "type": "commonjs-static",
-              },
-              "workerChunkLoading": "async-node",
-            },
-            "plugins": [
-              RslibPlugin {
-                "_args": [
-                  {
-                    "forceNodeShims": false,
-                    "interceptApiPlugin": true,
-                  },
-                ],
-                "affectedHooks": undefined,
-                "name": "RslibPlugin",
-              },
-            ],
-          },
-          [Function],
-          {
-            "output": {
-              "chunkFilename": "1~[name].cjs",
-            },
-          },
-          {
-            "externalsPresets": {
-              "node": false,
-            },
-            "target": [
-              "node",
-            ],
-          },
-          {
-            "externalsType": "commonjs-import",
-          },
-          {
-            "plugins": [
-              EntryChunkPlugin {
-                "contextToWatch": null,
-                "enabledImportMetaUrlShim": true,
-                "reactDirectives": {},
-                "shebangChmod": 493,
-                "shebangEntries": {},
-                "shebangInjectedAssets": Set {},
-                "shimsInjectedAssets": Set {},
-              },
-            ],
-          },
-          {
-            "resolve": {
-              "extensionAlias": {
-                ".js": [
-                  ".ts",
-                  ".tsx",
-                ],
-              },
-            },
-          },
-        ],
-        "swc": {
-          "jsc": {
-            "externalHelpers": false,
-          },
+      "swc": {
+        "jsc": {
+          "externalHelpers": false,
         },
       },
     },
-    "format": "cjs",
   },
-  {
-    "config": {
-      "output": {
-        "distPath": {
-          "css": "./",
-          "cssAsync": "./",
-          "js": "./",
-          "jsAsync": "./",
-        },
-        "externals": [
-          "assert",
-          "assert/strict",
-          "async_hooks",
-          "buffer",
-          "child_process",
-          "cluster",
-          "console",
-          "constants",
-          "crypto",
-          "dgram",
-          "diagnostics_channel",
-          "dns",
-          "dns/promises",
-          "domain",
-          "events",
-          "fs",
-          "fs/promises",
-          "http",
-          "http2",
-          "https",
-          "inspector",
-          "inspector/promises",
-          "module",
-          "net",
-          "os",
-          "path",
-          "path/posix",
-          "path/win32",
-          "perf_hooks",
-          "process",
-          "punycode",
-          "querystring",
-          "readline",
-          "readline/promises",
-          "repl",
-          "stream",
-          "stream/consumers",
-          "stream/promises",
-          "stream/web",
-          "string_decoder",
-          "sys",
-          "timers",
-          "timers/promises",
-          "tls",
-          "trace_events",
-          "tty",
-          "url",
-          "util",
-          "util/types",
-          "v8",
-          "vm",
-          "wasi",
-          "worker_threads",
-          "zlib",
-          /\\^node:/,
-          "pnpapi",
-        ],
-        "filename": {
-          "js": "[name].js",
-        },
-        "filenameHash": false,
-        "minify": {
-          "css": false,
-          "js": true,
-          "jsOptions": {
-            "minimizerOptions": {
-              "compress": {
-                "dead_code": true,
-                "defaults": false,
-                "toplevel": true,
-                "unused": true,
-              },
-              "format": {
-                "comments": "some",
-                "preserve_annotations": true,
-              },
-              "mangle": false,
-              "minify": false,
+  "format": "esm",
+}
+`;
+
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > rsbuild config - 1 cjs 1`] = `
+{
+  "config": {
+    "output": {
+      "assetPrefix": "auto",
+      "dataUriLimit": 0,
+      "distPath": {
+        "css": "./",
+        "cssAsync": "./",
+        "js": "./",
+        "jsAsync": "./",
+      },
+      "externals": [
+        /\\^@rsbuild\\\\/core\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+        /\\^rsbuild-plugin-dts\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+        /\\^@microsoft\\\\/api-extractor\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+        /\\^typescript\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
+        "@rsbuild/core",
+        "rsbuild-plugin-dts",
+        "@microsoft/api-extractor",
+        "typescript",
+        "assert",
+        "assert/strict",
+        "async_hooks",
+        "buffer",
+        "child_process",
+        "cluster",
+        "console",
+        "constants",
+        "crypto",
+        "dgram",
+        "diagnostics_channel",
+        "dns",
+        "dns/promises",
+        "domain",
+        "events",
+        "fs",
+        "fs/promises",
+        "http",
+        "http2",
+        "https",
+        "inspector",
+        "inspector/promises",
+        "module",
+        "net",
+        "os",
+        "path",
+        "path/posix",
+        "path/win32",
+        "perf_hooks",
+        "process",
+        "punycode",
+        "querystring",
+        "readline",
+        "readline/promises",
+        "repl",
+        "stream",
+        "stream/consumers",
+        "stream/promises",
+        "stream/web",
+        "string_decoder",
+        "sys",
+        "timers",
+        "timers/promises",
+        "tls",
+        "trace_events",
+        "tty",
+        "url",
+        "util",
+        "util/types",
+        "v8",
+        "vm",
+        "wasi",
+        "worker_threads",
+        "zlib",
+        /\\^node:/,
+        "pnpapi",
+      ],
+      "filename": {
+        "js": "[name].cjs",
+      },
+      "filenameHash": false,
+      "minify": {
+        "css": false,
+        "js": true,
+        "jsOptions": {
+          "minimizerOptions": {
+            "compress": {
+              "dead_code": true,
+              "defaults": false,
+              "toplevel": true,
+              "unused": true,
             },
-            "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
+            "format": {
+              "comments": "some",
+              "preserve_annotations": true,
+            },
+            "mangle": false,
+            "minify": false,
+          },
+          "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
+        },
+      },
+      "overrideBrowserslist": [
+        "last 1 node versions",
+      ],
+      "target": "node",
+    },
+    "performance": {
+      "chunkSplit": {
+        "strategy": "custom",
+      },
+    },
+    "plugins": [
+      {
+        "name": "rslib:bundle",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:cjs-import-meta-url-shim",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:disable-url-parse",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:fix-js-module-type",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:lib-asset",
+        "pre": [
+          "rsbuild:svgr",
+        ],
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:lib-entry-chunk",
+        "setup": [Function],
+      },
+    ],
+    "resolve": {
+      "alias": {
+        "bar": "bar/cjs",
+        "foo": "foo",
+      },
+    },
+    "source": {
+      "entry": {},
+      "preEntry": [
+        "./a.js",
+        "./c.js",
+        "./d.js",
+      ],
+    },
+    "tools": {
+      "htmlPlugin": false,
+      "rspack": [
+        {
+          "experiments": {
+            "rspackFuture": {
+              "bundlerInfo": {
+                "force": false,
+              },
+            },
+          },
+          "optimization": {
+            "moduleIds": "named",
+            "nodeEnv": false,
+          },
+          "resolve": {
+            "extensionAlias": {
+              ".cjs": [
+                ".cts",
+                ".cjs",
+              ],
+              ".js": [
+                ".ts",
+                ".tsx",
+                ".js",
+                ".jsx",
+              ],
+              ".jsx": [
+                ".tsx",
+                ".jsx",
+              ],
+              ".mjs": [
+                ".mts",
+                ".mjs",
+              ],
+            },
           },
         },
-        "overrideBrowserslist": [
-          "last 1 node versions",
-        ],
-        "target": "node",
-      },
-      "performance": {
-        "chunkSplit": {
-          "strategy": "custom",
-        },
-      },
-      "plugins": [
         {
-          "name": "rslib:bundle",
-          "setup": [Function],
+          "module": {
+            "parser": {
+              "javascript": {
+                "commonjs": {
+                  "exports": "skipInEsm",
+                },
+                "importDynamic": false,
+                "importMeta": false,
+                "requireAsExpression": false,
+                "requireDynamic": false,
+                "requireResolve": false,
+                "worker": false,
+              },
+            },
+          },
+          "optimization": {
+            "splitChunks": {
+              "chunks": "async",
+            },
+          },
+          "output": {
+            "chunkFormat": "commonjs",
+            "chunkLoading": "require",
+            "iife": false,
+            "library": {
+              "type": "commonjs-static",
+            },
+            "workerChunkLoading": "async-node",
+          },
+          "plugins": [
+            RslibPlugin {
+              "_args": [
+                {
+                  "forceNodeShims": false,
+                  "interceptApiPlugin": true,
+                },
+              ],
+              "affectedHooks": undefined,
+              "name": "RslibPlugin",
+            },
+          ],
+        },
+        [Function],
+        {
+          "output": {
+            "chunkFilename": "1~[name].cjs",
+          },
         },
         {
-          "name": "rsbuild:fix-js-module-type",
-          "setup": [Function],
+          "externalsPresets": {
+            "node": false,
+          },
+          "target": [
+            "node",
+          ],
         },
         {
-          "name": "rsbuild:lib-entry-chunk",
-          "setup": [Function],
+          "externalsType": "commonjs-import",
+        },
+        {
+          "plugins": [
+            EntryChunkPlugin {
+              "contextToWatch": null,
+              "enabledImportMetaUrlShim": true,
+              "reactDirectives": {},
+              "shebangChmod": 493,
+              "shebangEntries": {},
+              "shebangInjectedAssets": Set {},
+              "shimsInjectedAssets": Set {},
+            },
+          ],
+        },
+        {
+          "resolve": {
+            "extensionAlias": {
+              ".js": [
+                ".ts",
+                ".tsx",
+              ],
+            },
+          },
         },
       ],
-      "resolve": {
-        "alias": {
-          "bar": "bar",
-          "foo": "foo",
-        },
-      },
-      "source": {
-        "entry": {},
-        "preEntry": "./a.js",
-      },
-      "tools": {
-        "htmlPlugin": false,
-        "rspack": [
-          {
-            "experiments": {
-              "rspackFuture": {
-                "bundlerInfo": {
-                  "force": false,
-                },
-              },
-            },
-            "optimization": {
-              "moduleIds": "named",
-              "nodeEnv": false,
-            },
-            "resolve": {
-              "extensionAlias": {
-                ".cjs": [
-                  ".cts",
-                  ".cjs",
-                ],
-                ".js": [
-                  ".ts",
-                  ".tsx",
-                  ".js",
-                  ".jsx",
-                ],
-                ".jsx": [
-                  ".tsx",
-                  ".jsx",
-                ],
-                ".mjs": [
-                  ".mts",
-                  ".mjs",
-                ],
-              },
-            },
-          },
-          {
-            "module": {
-              "parser": {
-                "javascript": {
-                  "importMeta": false,
-                },
-              },
-            },
-            "optimization": {
-              "nodeEnv": undefined,
-              "splitChunks": {
-                "chunks": "async",
-              },
-            },
-            "output": {
-              "asyncChunks": false,
-              "library": {
-                "type": "umd",
-              },
-            },
-            "plugins": [
-              RslibPlugin {
-                "_args": [
-                  {
-                    "forceNodeShims": false,
-                    "interceptApiPlugin": true,
-                  },
-                ],
-                "affectedHooks": undefined,
-                "name": "RslibPlugin",
-              },
-            ],
-          },
-          [Function],
-          {
-            "output": {
-              "chunkFilename": "2~[name].js",
-            },
-          },
-          {
-            "externalsPresets": {
-              "node": false,
-            },
-            "target": [
-              "node",
-            ],
-          },
-          {
-            "externalsType": "umd",
-          },
-          {
-            "plugins": [
-              EntryChunkPlugin {
-                "contextToWatch": null,
-                "enabledImportMetaUrlShim": false,
-                "reactDirectives": {},
-                "shebangChmod": 493,
-                "shebangEntries": {},
-                "shebangInjectedAssets": Set {},
-                "shimsInjectedAssets": Set {},
-              },
-            ],
-          },
-          {
-            "resolve": {
-              "extensionAlias": {
-                ".js": [
-                  ".ts",
-                  ".tsx",
-                ],
-              },
-            },
-          },
-        ],
-        "swc": {
-          "jsc": {
-            "externalHelpers": false,
-          },
+      "swc": {
+        "jsc": {
+          "externalHelpers": false,
         },
       },
     },
-    "format": "umd",
   },
-  {
-    "config": {
-      "output": {
-        "distPath": {
-          "css": "./",
-          "cssAsync": "./",
-          "js": "./",
-          "jsAsync": "./",
-        },
-        "externals": [
-          "assert",
-          "assert/strict",
-          "async_hooks",
-          "buffer",
-          "child_process",
-          "cluster",
-          "console",
-          "constants",
-          "crypto",
-          "dgram",
-          "diagnostics_channel",
-          "dns",
-          "dns/promises",
-          "domain",
-          "events",
-          "fs",
-          "fs/promises",
-          "http",
-          "http2",
-          "https",
-          "inspector",
-          "inspector/promises",
-          "module",
-          "net",
-          "os",
-          "path",
-          "path/posix",
-          "path/win32",
-          "perf_hooks",
-          "process",
-          "punycode",
-          "querystring",
-          "readline",
-          "readline/promises",
-          "repl",
-          "stream",
-          "stream/consumers",
-          "stream/promises",
-          "stream/web",
-          "string_decoder",
-          "sys",
-          "timers",
-          "timers/promises",
-          "tls",
-          "trace_events",
-          "tty",
-          "url",
-          "util",
-          "util/types",
-          "v8",
-          "vm",
-          "wasi",
-          "worker_threads",
-          "zlib",
-          /\\^node:/,
-          "pnpapi",
-        ],
-        "filename": {
-          "js": "[name].js",
-        },
-        "filenameHash": false,
-        "minify": {
-          "css": false,
-          "js": true,
-          "jsOptions": {
-            "minimizerOptions": {
-              "compress": {
-                "dead_code": true,
-                "defaults": false,
-                "toplevel": true,
-                "unused": true,
-              },
-              "format": {
-                "comments": "some",
-                "preserve_annotations": true,
-              },
-              "mangle": false,
-              "minify": false,
-              "module": true,
+  "format": "cjs",
+}
+`;
+
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > rsbuild config - 2 umd 1`] = `
+{
+  "config": {
+    "output": {
+      "distPath": {
+        "css": "./",
+        "cssAsync": "./",
+        "js": "./",
+        "jsAsync": "./",
+      },
+      "externals": [
+        "assert",
+        "assert/strict",
+        "async_hooks",
+        "buffer",
+        "child_process",
+        "cluster",
+        "console",
+        "constants",
+        "crypto",
+        "dgram",
+        "diagnostics_channel",
+        "dns",
+        "dns/promises",
+        "domain",
+        "events",
+        "fs",
+        "fs/promises",
+        "http",
+        "http2",
+        "https",
+        "inspector",
+        "inspector/promises",
+        "module",
+        "net",
+        "os",
+        "path",
+        "path/posix",
+        "path/win32",
+        "perf_hooks",
+        "process",
+        "punycode",
+        "querystring",
+        "readline",
+        "readline/promises",
+        "repl",
+        "stream",
+        "stream/consumers",
+        "stream/promises",
+        "stream/web",
+        "string_decoder",
+        "sys",
+        "timers",
+        "timers/promises",
+        "tls",
+        "trace_events",
+        "tty",
+        "url",
+        "util",
+        "util/types",
+        "v8",
+        "vm",
+        "wasi",
+        "worker_threads",
+        "zlib",
+        /\\^node:/,
+        "pnpapi",
+      ],
+      "filename": {
+        "js": "[name].js",
+      },
+      "filenameHash": false,
+      "minify": {
+        "css": false,
+        "js": true,
+        "jsOptions": {
+          "minimizerOptions": {
+            "compress": {
+              "dead_code": true,
+              "defaults": false,
+              "toplevel": true,
+              "unused": true,
             },
-            "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
+            "format": {
+              "comments": "some",
+              "preserve_annotations": true,
+            },
+            "mangle": false,
+            "minify": false,
+          },
+          "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
+        },
+      },
+      "overrideBrowserslist": [
+        "last 1 node versions",
+      ],
+      "target": "node",
+    },
+    "performance": {
+      "chunkSplit": {
+        "strategy": "custom",
+      },
+    },
+    "plugins": [
+      {
+        "name": "rslib:bundle",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:fix-js-module-type",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:lib-entry-chunk",
+        "setup": [Function],
+      },
+    ],
+    "resolve": {
+      "alias": {
+        "bar": "bar",
+        "foo": "foo",
+      },
+    },
+    "source": {
+      "entry": {},
+      "preEntry": "./a.js",
+    },
+    "tools": {
+      "htmlPlugin": false,
+      "rspack": [
+        {
+          "experiments": {
+            "rspackFuture": {
+              "bundlerInfo": {
+                "force": false,
+              },
+            },
+          },
+          "optimization": {
+            "moduleIds": "named",
+            "nodeEnv": false,
+          },
+          "resolve": {
+            "extensionAlias": {
+              ".cjs": [
+                ".cts",
+                ".cjs",
+              ],
+              ".js": [
+                ".ts",
+                ".tsx",
+                ".js",
+                ".jsx",
+              ],
+              ".jsx": [
+                ".tsx",
+                ".jsx",
+              ],
+              ".mjs": [
+                ".mts",
+                ".mjs",
+              ],
+            },
           },
         },
-        "overrideBrowserslist": [
-          "last 1 node versions",
-        ],
-        "target": "node",
-      },
-      "performance": {
-        "chunkSplit": {
-          "strategy": "custom",
-        },
-      },
-      "plugins": [
         {
-          "name": "rslib:bundle",
-          "setup": [Function],
+          "module": {
+            "parser": {
+              "javascript": {
+                "importMeta": false,
+              },
+            },
+          },
+          "optimization": {
+            "nodeEnv": undefined,
+            "splitChunks": {
+              "chunks": "async",
+            },
+          },
+          "output": {
+            "asyncChunks": false,
+            "library": {
+              "type": "umd",
+            },
+          },
+          "plugins": [
+            RslibPlugin {
+              "_args": [
+                {
+                  "forceNodeShims": false,
+                  "interceptApiPlugin": true,
+                },
+              ],
+              "affectedHooks": undefined,
+              "name": "RslibPlugin",
+            },
+          ],
+        },
+        [Function],
+        {
+          "output": {
+            "chunkFilename": "2~[name].js",
+          },
         },
         {
-          "name": "rsbuild:fix-js-module-type",
-          "setup": [Function],
+          "externalsPresets": {
+            "node": false,
+          },
+          "target": [
+            "node",
+          ],
         },
         {
-          "name": "rsbuild:lib-entry-chunk",
-          "setup": [Function],
+          "externalsType": "umd",
+        },
+        {
+          "plugins": [
+            EntryChunkPlugin {
+              "contextToWatch": null,
+              "enabledImportMetaUrlShim": false,
+              "reactDirectives": {},
+              "shebangChmod": 493,
+              "shebangEntries": {},
+              "shebangInjectedAssets": Set {},
+              "shimsInjectedAssets": Set {},
+            },
+          ],
+        },
+        {
+          "resolve": {
+            "extensionAlias": {
+              ".js": [
+                ".ts",
+                ".tsx",
+              ],
+            },
+          },
         },
       ],
-      "resolve": {
-        "alias": {
-          "bar": "bar",
-          "foo": "foo",
-        },
-      },
-      "source": {
-        "entry": {},
-        "preEntry": "./a.js",
-      },
-      "tools": {
-        "htmlPlugin": false,
-        "rspack": [
-          {
-            "experiments": {
-              "rspackFuture": {
-                "bundlerInfo": {
-                  "force": false,
-                },
-              },
-            },
-            "optimization": {
-              "moduleIds": "named",
-              "nodeEnv": false,
-            },
-            "resolve": {
-              "extensionAlias": {
-                ".cjs": [
-                  ".cts",
-                  ".cjs",
-                ],
-                ".js": [
-                  ".ts",
-                  ".tsx",
-                  ".js",
-                  ".jsx",
-                ],
-                ".jsx": [
-                  ".tsx",
-                  ".jsx",
-                ],
-                ".mjs": [
-                  ".mts",
-                  ".mjs",
-                ],
-              },
-            },
-          },
-          {
-            "module": {
-              "parser": {
-                "javascript": {
-                  "importMeta": false,
-                },
-              },
-            },
-            "optimization": {
-              "nodeEnv": undefined,
-            },
-            "output": {
-              "asyncChunks": false,
-              "iife": true,
-              "library": {
-                "type": "modern-module",
-              },
-            },
-            "plugins": [
-              RslibPlugin {
-                "_args": [
-                  {
-                    "forceNodeShims": false,
-                    "interceptApiPlugin": true,
-                  },
-                ],
-                "affectedHooks": undefined,
-                "name": "RslibPlugin",
-              },
-            ],
-          },
-          [Function],
-          {
-            "output": {
-              "chunkFilename": "3~[name].js",
-            },
-          },
-          {
-            "externalsPresets": {
-              "node": false,
-            },
-            "target": [
-              "node",
-            ],
-          },
-          {
-            "externalsType": "global",
-            "output": {
-              "globalObject": "globalThis",
-            },
-          },
-          {
-            "plugins": [
-              EntryChunkPlugin {
-                "contextToWatch": null,
-                "enabledImportMetaUrlShim": false,
-                "reactDirectives": {},
-                "shebangChmod": 493,
-                "shebangEntries": {},
-                "shebangInjectedAssets": Set {},
-                "shimsInjectedAssets": Set {},
-              },
-            ],
-          },
-          {
-            "resolve": {
-              "extensionAlias": {
-                ".js": [
-                  ".ts",
-                  ".tsx",
-                ],
-              },
-            },
-          },
-        ],
-        "swc": {
-          "jsc": {
-            "externalHelpers": false,
-          },
+      "swc": {
+        "jsc": {
+          "externalHelpers": false,
         },
       },
     },
-    "format": "iife",
   },
-  {
-    "config": {
-      "dev": {
-        "writeToDisk": true,
+  "format": "umd",
+}
+`;
+
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > rsbuild config - 3 iife 1`] = `
+{
+  "config": {
+    "output": {
+      "distPath": {
+        "css": "./",
+        "cssAsync": "./",
+        "js": "./",
+        "jsAsync": "./",
       },
-      "output": {
-        "distPath": {
-          "css": "./",
-          "cssAsync": "./",
-          "js": "./",
-          "jsAsync": "./",
-        },
-        "filename": {
-          "js": "[name].js",
-        },
-        "filenameHash": false,
-        "minify": {
-          "css": false,
-          "js": true,
-          "jsOptions": {
-            "minimizerOptions": {
-              "compress": {
-                "dead_code": true,
-                "defaults": false,
-                "toplevel": false,
-                "unused": true,
-              },
-              "format": {
-                "comments": "some",
-                "preserve_annotations": true,
-              },
-              "mangle": false,
-              "minify": true,
+      "externals": [
+        "assert",
+        "assert/strict",
+        "async_hooks",
+        "buffer",
+        "child_process",
+        "cluster",
+        "console",
+        "constants",
+        "crypto",
+        "dgram",
+        "diagnostics_channel",
+        "dns",
+        "dns/promises",
+        "domain",
+        "events",
+        "fs",
+        "fs/promises",
+        "http",
+        "http2",
+        "https",
+        "inspector",
+        "inspector/promises",
+        "module",
+        "net",
+        "os",
+        "path",
+        "path/posix",
+        "path/win32",
+        "perf_hooks",
+        "process",
+        "punycode",
+        "querystring",
+        "readline",
+        "readline/promises",
+        "repl",
+        "stream",
+        "stream/consumers",
+        "stream/promises",
+        "stream/web",
+        "string_decoder",
+        "sys",
+        "timers",
+        "timers/promises",
+        "tls",
+        "trace_events",
+        "tty",
+        "url",
+        "util",
+        "util/types",
+        "v8",
+        "vm",
+        "wasi",
+        "worker_threads",
+        "zlib",
+        /\\^node:/,
+        "pnpapi",
+      ],
+      "filename": {
+        "js": "[name].js",
+      },
+      "filenameHash": false,
+      "minify": {
+        "css": false,
+        "js": true,
+        "jsOptions": {
+          "minimizerOptions": {
+            "compress": {
+              "dead_code": true,
+              "defaults": false,
+              "toplevel": true,
+              "unused": true,
             },
-            "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
+            "format": {
+              "comments": "some",
+              "preserve_annotations": true,
+            },
+            "mangle": false,
+            "minify": false,
+            "module": true,
+          },
+          "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
+        },
+      },
+      "overrideBrowserslist": [
+        "last 1 node versions",
+      ],
+      "target": "node",
+    },
+    "performance": {
+      "chunkSplit": {
+        "strategy": "custom",
+      },
+    },
+    "plugins": [
+      {
+        "name": "rslib:bundle",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:fix-js-module-type",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:lib-entry-chunk",
+        "setup": [Function],
+      },
+    ],
+    "resolve": {
+      "alias": {
+        "bar": "bar",
+        "foo": "foo",
+      },
+    },
+    "source": {
+      "entry": {},
+      "preEntry": "./a.js",
+    },
+    "tools": {
+      "htmlPlugin": false,
+      "rspack": [
+        {
+          "experiments": {
+            "rspackFuture": {
+              "bundlerInfo": {
+                "force": false,
+              },
+            },
+          },
+          "optimization": {
+            "moduleIds": "named",
+            "nodeEnv": false,
+          },
+          "resolve": {
+            "extensionAlias": {
+              ".cjs": [
+                ".cts",
+                ".cjs",
+              ],
+              ".js": [
+                ".ts",
+                ".tsx",
+                ".js",
+                ".jsx",
+              ],
+              ".jsx": [
+                ".tsx",
+                ".jsx",
+              ],
+              ".mjs": [
+                ".mts",
+                ".mjs",
+              ],
+            },
           },
         },
-        "overrideBrowserslist": [
-          "last 1 Chrome versions",
-          "last 1 Firefox versions",
-          "last 1 Edge versions",
-          "last 1 Safari versions",
-          "last 1 ios_saf versions",
-          "not dead",
-        ],
-        "target": "web",
-      },
-      "performance": {
-        "chunkSplit": {
-          "strategy": "custom",
-        },
-      },
-      "plugins": [
         {
-          "name": "rslib:bundle",
-          "setup": [Function],
+          "module": {
+            "parser": {
+              "javascript": {
+                "importMeta": false,
+              },
+            },
+          },
+          "optimization": {
+            "nodeEnv": undefined,
+          },
+          "output": {
+            "asyncChunks": false,
+            "iife": true,
+            "library": {
+              "type": "modern-module",
+            },
+          },
+          "plugins": [
+            RslibPlugin {
+              "_args": [
+                {
+                  "forceNodeShims": false,
+                  "interceptApiPlugin": true,
+                },
+              ],
+              "affectedHooks": undefined,
+              "name": "RslibPlugin",
+            },
+          ],
+        },
+        [Function],
+        {
+          "output": {
+            "chunkFilename": "3~[name].js",
+          },
         },
         {
-          "name": "rsbuild:fix-js-module-type",
-          "setup": [Function],
+          "externalsPresets": {
+            "node": false,
+          },
+          "target": [
+            "node",
+          ],
         },
         {
-          "name": "rsbuild:lib-entry-chunk",
-          "setup": [Function],
+          "externalsType": "global",
+          "output": {
+            "globalObject": "globalThis",
+          },
         },
         {
-          "name": "rsbuild:module-federation-enhanced",
-          "setup": [Function],
+          "plugins": [
+            EntryChunkPlugin {
+              "contextToWatch": null,
+              "enabledImportMetaUrlShim": false,
+              "reactDirectives": {},
+              "shebangChmod": 493,
+              "shebangEntries": {},
+              "shebangInjectedAssets": Set {},
+              "shimsInjectedAssets": Set {},
+            },
+          ],
+        },
+        {
+          "resolve": {
+            "extensionAlias": {
+              ".js": [
+                ".ts",
+                ".tsx",
+              ],
+            },
+          },
         },
       ],
-      "resolve": {
-        "alias": {
-          "bar": "bar",
-          "foo": "foo",
-        },
-      },
-      "source": {
-        "entry": {},
-        "preEntry": "./a.js",
-      },
-      "tools": {
-        "htmlPlugin": false,
-        "rspack": [
-          {
-            "experiments": {
-              "rspackFuture": {
-                "bundlerInfo": {
-                  "force": false,
-                },
-              },
-            },
-            "optimization": {
-              "moduleIds": "named",
-              "nodeEnv": false,
-            },
-            "resolve": {
-              "extensionAlias": {
-                ".cjs": [
-                  ".cts",
-                  ".cjs",
-                ],
-                ".js": [
-                  ".ts",
-                  ".tsx",
-                  ".js",
-                  ".jsx",
-                ],
-                ".jsx": [
-                  ".tsx",
-                  ".jsx",
-                ],
-                ".mjs": [
-                  ".mts",
-                  ".mjs",
-                ],
-              },
-            },
-          },
-          [Function],
-          [Function],
-          {
-            "output": {
-              "chunkFilename": "4~[name].js",
-            },
-          },
-          {
-            "target": [
-              "web",
-            ],
-          },
-          {
-            "externalsType": "global",
-          },
-          {
-            "plugins": [
-              EntryChunkPlugin {
-                "contextToWatch": null,
-                "enabledImportMetaUrlShim": false,
-                "reactDirectives": {},
-                "shebangChmod": 493,
-                "shebangEntries": {},
-                "shebangInjectedAssets": Set {},
-                "shimsInjectedAssets": Set {},
-              },
-            ],
-          },
-          {
-            "resolve": {
-              "extensionAlias": {
-                ".js": [
-                  ".ts",
-                  ".tsx",
-                ],
-              },
-            },
-          },
-        ],
-        "swc": {
-          "jsc": {
-            "externalHelpers": false,
-          },
+      "swc": {
+        "jsc": {
+          "externalHelpers": false,
         },
       },
     },
-    "format": "mf",
   },
-]
+  "format": "iife",
+}
+`;
+
+exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > rsbuild config - 4 mf 1`] = `
+{
+  "config": {
+    "dev": {
+      "writeToDisk": true,
+    },
+    "output": {
+      "distPath": {
+        "css": "./",
+        "cssAsync": "./",
+        "js": "./",
+        "jsAsync": "./",
+      },
+      "filenameHash": false,
+      "minify": {
+        "css": false,
+        "js": true,
+        "jsOptions": {
+          "minimizerOptions": {
+            "compress": {
+              "dead_code": true,
+              "defaults": false,
+              "toplevel": false,
+              "unused": true,
+            },
+            "format": {
+              "comments": "some",
+              "preserve_annotations": true,
+            },
+            "mangle": false,
+            "minify": true,
+          },
+          "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
+        },
+      },
+      "overrideBrowserslist": [
+        "last 1 Chrome versions",
+        "last 1 Firefox versions",
+        "last 1 Edge versions",
+        "last 1 Safari versions",
+        "last 1 ios_saf versions",
+        "not dead",
+      ],
+      "target": "web",
+    },
+    "performance": {
+      "chunkSplit": {
+        "strategy": "custom",
+      },
+    },
+    "plugins": [
+      {
+        "name": "rslib:bundle",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:fix-js-module-type",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:lib-entry-chunk",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:module-federation-enhanced",
+        "setup": [Function],
+      },
+    ],
+    "resolve": {
+      "alias": {
+        "bar": "bar",
+        "foo": "foo",
+      },
+    },
+    "source": {
+      "entry": {},
+      "preEntry": "./a.js",
+    },
+    "tools": {
+      "htmlPlugin": false,
+      "rspack": [
+        {
+          "experiments": {
+            "rspackFuture": {
+              "bundlerInfo": {
+                "force": false,
+              },
+            },
+          },
+          "optimization": {
+            "moduleIds": "named",
+            "nodeEnv": false,
+          },
+          "resolve": {
+            "extensionAlias": {
+              ".cjs": [
+                ".cts",
+                ".cjs",
+              ],
+              ".js": [
+                ".ts",
+                ".tsx",
+                ".js",
+                ".jsx",
+              ],
+              ".jsx": [
+                ".tsx",
+                ".jsx",
+              ],
+              ".mjs": [
+                ".mts",
+                ".mjs",
+              ],
+            },
+          },
+        },
+        [Function],
+        [Function],
+        {
+          "target": [
+            "web",
+          ],
+        },
+        {
+          "externalsType": "global",
+        },
+        {
+          "plugins": [
+            EntryChunkPlugin {
+              "contextToWatch": null,
+              "enabledImportMetaUrlShim": false,
+              "reactDirectives": {},
+              "shebangChmod": 493,
+              "shebangEntries": {},
+              "shebangInjectedAssets": Set {},
+              "shimsInjectedAssets": Set {},
+            },
+          ],
+        },
+        {
+          "resolve": {
+            "extensionAlias": {
+              ".js": [
+                ".ts",
+                ".tsx",
+              ],
+            },
+          },
+        },
+      ],
+      "swc": {
+        "jsc": {
+          "externalHelpers": false,
+        },
+      },
+    },
+  },
+  "format": "mf",
+}
 `;

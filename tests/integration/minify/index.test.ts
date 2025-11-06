@@ -74,7 +74,7 @@ describe('minify config (mf)', () => {
     const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
     // biome-ignore format: snapshot
     expect(mfExposeEntry).toMatchInlineSnapshot(`
-      "/*! For license information please see __federation_expose_default_export.js.LICENSE.txt */
+      "/*! For license information please see __federation_expose_default_export.81c80bb4.js.LICENSE.txt */
       "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["525"],{5:function(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{Button:()=>Button,foo:()=>foo});var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button",{})}}]);"
     `);
   });
