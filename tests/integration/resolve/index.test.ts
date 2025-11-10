@@ -23,9 +23,9 @@ test('resolve false', async () => {
     expect(entries.esm).toMatchInlineSnapshot(`
       "import { __webpack_require__ } from "./rslib-runtime.js";
       __webpack_require__.add({
-          "?b5d4": function() {}
+          "?27ce": function() {}
       });
-      const util_ignored_ = __webpack_require__("?b5d4");
+      const util_ignored_ = __webpack_require__("?27ce");
       var util_ignored__default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
       console.log('foo:', util_ignored__default());
       console.log('bar: ', "bar");
@@ -34,7 +34,7 @@ test('resolve false', async () => {
   } else {
     expect(
       entries.esm,
-    ).toContain(`var util_ignored_ = __webpack_require__("?b5d4");
+    ).toContain(`var util_ignored_ = __webpack_require__("?27ce");
 var util_ignored_default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
 console.log('foo:', util_ignored_default());
 console.log('bar: ', "bar");`);

@@ -56,7 +56,7 @@ test('multiple entry bundle', async () => {
           "<ROOT>/tests/integration/entry/multiple/dist/cjs/shared.cjs",
         ],
         "esm": [
-          "<ROOT>/tests/integration/entry/multiple/dist/esm/359.js",
+          "<ROOT>/tests/integration/entry/multiple/dist/esm/994.js",
           "<ROOT>/tests/integration/entry/multiple/dist/esm/foo.js",
           "<ROOT>/tests/integration/entry/multiple/dist/esm/index.js",
           "<ROOT>/tests/integration/entry/multiple/dist/esm/shared.js",
@@ -86,7 +86,7 @@ test('multiple entry bundle', async () => {
   // cspell:disable
   if (process.env.ADVANCED_ESM) {
     expect(index).toMatchInlineSnapshot(`
-      "import { shared } from "./359.js";
+      "import { shared } from "./994.js";
       const foo = shared('foo');
       const src_text = ()=>\`\${foo} \${shared('index')}\`;
       export { src_text as text };
@@ -109,7 +109,7 @@ test('multiple entry bundle', async () => {
   // cspell:disable
   if (process.env.ADVANCED_ESM) {
     expect(foo).toMatchInlineSnapshot(`
-      "import { shared } from "./359.js";
+      "import { shared } from "./994.js";
       const foo = shared('foo');
       export { foo };
       "

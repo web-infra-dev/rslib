@@ -23,6 +23,12 @@ expect.addSnapshotSerializer(
       escapeDoubleQuotes: false,
       transformCLR: false,
     },
+    replace: [
+      {
+        match: /@rspack(?:-canary)?\/core/g,
+        mark: '<RSPACK_CORE>',
+      },
+    ],
   }),
 );
 
