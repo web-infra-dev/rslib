@@ -127,11 +127,11 @@ describe('CJS shims', () => {
     const dynamicUrl = await dynamicImportMetaUrl();
     const { content: dynamicContent } = queryContent(
       contents.cjs!,
-      /cjs\/1~7\.cjs/,
+      /cjs\/1~368\.cjs/,
     );
 
     expect(importMetaUrl).toBe(fileUrl);
-    expect(dynamicUrl).toBe(fileUrl.replace('index.cjs', '1~7.cjs'));
+    expect(dynamicUrl).toBe(fileUrl.replace('index.cjs', '1~368.cjs'));
     expect(requiredModule).toBe('ok');
 
     for (const code of [cjsCode, dynamicContent]) {
