@@ -1,79 +1,94 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
-import { composeTemplateName, TEMPLATES } from '../src/helpers';
-import { createAndValidate } from './helper';
+import { composeTemplateName, type Lang, TEMPLATES } from '../src/helpers';
+import { createAndValidate, type TemplateCase } from './helper';
 
-const CASES_NODE_DUAL = [
-  '[node-dual]-[]-js',
-  '[node-dual]-[]-ts',
-  '[node-dual]-[rstest]-js',
-  '[node-dual]-[rstest]-ts',
-  '[node-dual]-[vitest]-js',
-  '[node-dual]-[vitest]-ts',
+const createCase = (
+  template: string,
+  lang: Lang,
+  tools: string[] = [],
+): TemplateCase => ({
+  template,
+  lang,
+  tools,
+  label: composeTemplateName({ template, lang, tools }),
+});
+
+const CASES_NODE_DUAL: TemplateCase[] = [
+  createCase('node-dual', 'js'),
+  createCase('node-dual', 'ts'),
+  createCase('node-dual', 'js', ['rstest']),
+  createCase('node-dual', 'ts', ['rstest']),
+  createCase('node-dual', 'js', ['vitest']),
+  createCase('node-dual', 'ts', ['vitest']),
 ];
 
-const CASES_NODE_ESM = [
-  '[node-esm]-[]-js',
-  '[node-esm]-[]-ts',
-  '[node-esm]-[rstest]-js',
-  '[node-esm]-[rstest]-ts',
-  '[node-esm]-[vitest]-js',
-  '[node-esm]-[vitest]-ts',
+const CASES_NODE_ESM: TemplateCase[] = [
+  createCase('node-esm', 'js'),
+  createCase('node-esm', 'ts'),
+  createCase('node-esm', 'js', ['rstest']),
+  createCase('node-esm', 'ts', ['rstest']),
+  createCase('node-esm', 'js', ['vitest']),
+  createCase('node-esm', 'ts', ['vitest']),
 ];
 
-const CASES_REACT = [
-  '[react]-[]-js',
-  '[react]-[]-ts',
-  '[react]-[rstest,storybook]-js',
-  '[react]-[rstest,storybook]-ts',
-  '[react]-[storybook,vitest]-js',
-  '[react]-[storybook,vitest]-ts',
-  '[react]-[storybook]-js',
-  '[react]-[rstest]-js',
-  '[react]-[vitest]-js',
-  '[react]-[storybook]-ts',
-  '[react]-[rstest]-ts',
-  '[react]-[vitest]-ts',
+const CASES_REACT: TemplateCase[] = [
+  createCase('react', 'js'),
+  createCase('react', 'ts'),
+  createCase('react', 'js', ['rstest', 'storybook']),
+  createCase('react', 'ts', ['rstest', 'storybook']),
+  createCase('react', 'js', ['storybook', 'vitest']),
+  createCase('react', 'ts', ['storybook', 'vitest']),
+  createCase('react', 'js', ['storybook']),
+  createCase('react', 'js', ['rstest']),
+  createCase('react', 'js', ['vitest']),
+  createCase('react', 'ts', ['storybook']),
+  createCase('react', 'ts', ['rstest']),
+  createCase('react', 'ts', ['vitest']),
 ];
 
-const CASES_VUE = [
-  '[vue]-[]-js',
-  '[vue]-[]-ts',
-  '[vue]-[rstest,storybook]-js',
-  '[vue]-[rstest,storybook]-ts',
-  '[vue]-[storybook,vitest]-js',
-  '[vue]-[storybook,vitest]-ts',
-  '[vue]-[storybook]-js',
-  '[vue]-[storybook]-ts',
-  '[vue]-[rstest]-js',
-  '[vue]-[rstest]-ts',
-  '[vue]-[vitest]-js',
-  '[vue]-[vitest]-ts',
+const CASES_VUE: TemplateCase[] = [
+  createCase('vue', 'js'),
+  createCase('vue', 'ts'),
+  createCase('vue', 'js', ['rstest', 'storybook']),
+  createCase('vue', 'ts', ['rstest', 'storybook']),
+  createCase('vue', 'js', ['storybook', 'vitest']),
+  createCase('vue', 'ts', ['storybook', 'vitest']),
+  createCase('vue', 'js', ['storybook']),
+  createCase('vue', 'ts', ['storybook']),
+  createCase('vue', 'js', ['rstest']),
+  createCase('vue', 'ts', ['rstest']),
+  createCase('vue', 'js', ['vitest']),
+  createCase('vue', 'ts', ['vitest']),
 ];
+
+const ALL_CASES = [
+  ...CASES_NODE_DUAL,
+  ...CASES_NODE_ESM,
+  ...CASES_REACT,
+  ...CASES_VUE,
+];
+
+const BASE_NODE_ESM_JS = createCase('node-esm', 'js');
+const REACT_VITEST_JS = createCase('react', 'js', ['vitest']);
+const NODE_DUAL_RSTEST_TS = createCase('node-dual', 'ts', ['rstest']);
 
 test('exhaust all cases', () => {
-  expect(
-    TEMPLATES.map((t) =>
-      composeTemplateName({
-        template: t.template,
-        lang: t.lang,
-        tools: Object.keys(t.tools || {}),
-      }),
-    ).sort(),
-  ).toEqual(
-    [
-      ...CASES_NODE_DUAL,
-      ...CASES_NODE_ESM,
-      ...CASES_REACT,
-      ...CASES_VUE,
-    ].sort(),
-  );
+  const expected = ALL_CASES.map((item) => item.label).sort();
+  const actual = TEMPLATES.map((t) =>
+    composeTemplateName({
+      template: t.template,
+      lang: t.lang,
+      tools: Object.keys(t.tools || {}),
+    }),
+  ).sort();
+  expect(actual).toEqual(expected);
 });
 
 describe('node-dual', () => {
   for (const c of CASES_NODE_DUAL) {
-    test(`should create ${c} project as expected`, async () => {
+    test(`should create ${c.label} project as expected`, async () => {
       createAndValidate(__dirname, c);
     });
   }
@@ -81,7 +96,7 @@ describe('node-dual', () => {
 
 describe('node-esm', () => {
   for (const c of CASES_NODE_ESM) {
-    test(`should create ${c} project as expected`, async () => {
+    test(`should create ${c.label} project as expected`, async () => {
       createAndValidate(__dirname, c);
     });
   }
@@ -89,7 +104,7 @@ describe('node-esm', () => {
 
 describe('react', () => {
   for (const c of CASES_REACT) {
-    test(`should create ${c} project as expected`, async () => {
+    test(`should create ${c.label} project as expected`, async () => {
       createAndValidate(__dirname, c);
     });
   }
@@ -97,13 +112,13 @@ describe('react', () => {
 
 describe('custom path to create', () => {
   test('should allow to create project in sub dir', async () => {
-    createAndValidate(__dirname, '[node-esm]-[]-js', {
+    createAndValidate(__dirname, BASE_NODE_ESM_JS, {
       name: 'test-temp-dir/rslib-project',
     });
   });
 
   test('should allow to create project in relative dir', async () => {
-    createAndValidate(__dirname, '[node-esm]-[]-js', {
+    createAndValidate(__dirname, BASE_NODE_ESM_JS, {
       name: './test-temp-relative-dir',
     });
   });
@@ -113,7 +128,7 @@ describe('linter and formatter', () => {
   test('should create project with eslint as expected', async () => {
     const { dir, pkgJson, clean } = createAndValidate(
       __dirname,
-      '[node-esm]-[]-js',
+      BASE_NODE_ESM_JS,
       {
         name: 'test-temp-eslint',
         tools: ['eslint'],
@@ -128,7 +143,7 @@ describe('linter and formatter', () => {
   test('should create project with prettier as expected', async () => {
     const { dir, pkgJson, clean } = createAndValidate(
       __dirname,
-      '[node-esm]-[]-js',
+      BASE_NODE_ESM_JS,
       {
         name: 'test-temp-prettier',
         tools: ['prettier'],
@@ -143,7 +158,7 @@ describe('linter and formatter', () => {
   test('should create project with eslint and prettier as expected', async () => {
     const { dir, pkgJson, clean } = createAndValidate(
       __dirname,
-      '[node-esm]-[]-js',
+      BASE_NODE_ESM_JS,
       {
         name: 'test-temp-eslint-prettier',
         tools: ['eslint', 'prettier'],
@@ -160,7 +175,7 @@ describe('linter and formatter', () => {
   test('should create project with biome as expected', async () => {
     const { dir, pkgJson, clean } = createAndValidate(
       __dirname,
-      '[node-esm]-[]-js',
+      BASE_NODE_ESM_JS,
       {
         name: 'test-temp-eslint',
         tools: ['biome'],
@@ -169,6 +184,58 @@ describe('linter and formatter', () => {
     );
     expect(pkgJson.devDependencies['@biomejs/biome']).toBeTruthy();
     expect(existsSync(join(dir, 'biome.json'))).toBeTruthy();
+    clean();
+  });
+});
+
+describe('template with multiple tools via CLI', () => {
+  test('should create react-js project with vitest (--tools) and eslint (--tools)', async () => {
+    const { dir, pkgJson, clean } = createAndValidate(
+      __dirname,
+      REACT_VITEST_JS,
+      {
+        name: 'test-temp-react-vitest-eslint',
+        tools: ['eslint'],
+        clean: false,
+      },
+    );
+
+    // Check vitest setup
+    expect(pkgJson.devDependencies.vitest).toBeTruthy();
+    expect(existsSync(join(dir, 'vitest.config.js'))).toBeTruthy();
+    expect(existsSync(join(dir, 'tests/index.test.jsx'))).toBeTruthy();
+
+    // Check eslint setup
+    expect(pkgJson.devDependencies.eslint).toBeTruthy();
+    expect(existsSync(join(dir, 'eslint.config.mjs'))).toBeTruthy();
+
+    // Check base react setup
+    expect(pkgJson.devDependencies.react).toBeTruthy();
+    expect(pkgJson.devDependencies['@rslib/core']).toBeTruthy();
+
+    clean();
+  });
+
+  test('should create node-dual-ts project with rstest (--tools) and prettier (--tools)', async () => {
+    const { dir, pkgJson, clean } = createAndValidate(
+      __dirname,
+      NODE_DUAL_RSTEST_TS,
+      {
+        name: 'test-temp-node-rstest-prettier',
+        tools: ['prettier'],
+        clean: false,
+      },
+    );
+
+    // Check rstest setup
+    expect(pkgJson.devDependencies['@rstest/core']).toBeTruthy();
+    expect(existsSync(join(dir, 'rstest.config.ts'))).toBeTruthy();
+    expect(existsSync(join(dir, 'tests/index.test.ts'))).toBeTruthy();
+
+    // Check prettier setup
+    expect(pkgJson.devDependencies.prettier).toBeTruthy();
+    expect(existsSync(join(dir, '.prettierrc'))).toBeTruthy();
+
     clean();
   });
 });
