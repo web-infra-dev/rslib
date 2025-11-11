@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import path from 'node:path';
+import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { describe, expect, onTestFinished, test } from '@rstest/core';
 import fse from 'fs-extra';
 import {
@@ -53,7 +54,11 @@ export default defineConfig({
 
     await expectFile(dist1EsmIndexFile);
 
-    process.kill();
+    expect(stripAnsi(process.stdout())).toContain(
+      'build complete, watching for changes',
+    );
+
+    process.child.kill();
   });
 });
 

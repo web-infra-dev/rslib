@@ -23,7 +23,7 @@ describe('server config', async () => {
 
     fse.removeSync(distPath);
 
-    const childProcess = runCli('mf-dev', {
+    const { child: childProcess } = runCli('mf-dev', {
       cwd: fixturePath,
       env: {
         ...process.env,

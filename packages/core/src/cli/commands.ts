@@ -1,4 +1,4 @@
-import type { LogLevel, RsbuildMode } from '@rsbuild/core';
+import type { LogLevel, RsbuildMode, RsbuildPlugin } from '@rsbuild/core';
 import cac, { type CAC } from 'cac';
 import type { ConfigLoader } from '../config';
 import type { Format, Syntax } from '../types/config';
@@ -139,12 +139,25 @@ export function runCli(): void {
       try {
         const cliBuild = async () => {
           const { config, watchFiles } = await initConfig(options);
-          await build(config, options);
+
           if (options.watch) {
+            config.plugins = config.plugins || [];
+            config.plugins.push({
+              name: 'rslib:on-after-build',
+              setup(api) {
+                api.onAfterBuild(({ isFirstCompile }) => {
+                  if (isFirstCompile) {
+                    logger.success('build complete, watching for changes...');
+                  }
+                });
+              },
+            } satisfies RsbuildPlugin);
+
             watchFilesForRestart(watchFiles, async () => {
               await cliBuild();
             });
           }
+          await build(config, options);
         };
 
         await cliBuild();

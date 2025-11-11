@@ -17,7 +17,7 @@ describe('mf-dev', () => {
     fse.removeSync(distFolder);
     const distPath = join(distFolder, 'index.js');
 
-    const childProcess = runCli('mf-dev --lib mf0', {
+    const { child: childProcess } = runCli('mf-dev --lib mf0', {
       cwd: fixturePath,
       env: {
         ...process.env,
@@ -47,7 +47,7 @@ describe('mf-dev', () => {
     const distPath1 = join(distFolder1, 'index.js');
     const distPath2 = join(distFolder2, 'index.js');
 
-    const childProcess = runCli('mf-dev --lib mf1 --lib mf2', {
+    const { child: childProcess } = runCli('mf-dev --lib mf1 --lib mf2', {
       cwd: fixturePath,
     });
 

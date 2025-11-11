@@ -16,7 +16,7 @@ test('should run shared plugins only once', async () => {
 
 test('should merge plugins correctly', async () => {
   const fixturePath = join(__dirname, 'mf-dev');
-  const childProcess = runCli('mf-dev', {
+  const { child: childProcess } = runCli('mf-dev', {
     cwd: fixturePath,
   });
 
