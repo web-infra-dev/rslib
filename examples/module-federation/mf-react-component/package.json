@@ -1,15 +1,16 @@
 {
   "name": "@examples/mf-react-component",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/cjs/index.d.ts",
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
     }
   },
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.mjs",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
   "types": "./dist/cjs/index.d.ts",
   "scripts": {
     "build": "rslib build",
@@ -18,18 +19,18 @@
     "storybook": "storybook dev -p 6006"
   },
   "devDependencies": {
-    "@module-federation/enhanced": "^0.21.1",
-    "@module-federation/rsbuild-plugin": "^0.21.1",
-    "@module-federation/storybook-addon": "^4.0.33",
-    "@rsbuild/plugin-react": "^1.4.1",
+    "@module-federation/enhanced": "^0.21.3",
+    "@module-federation/rsbuild-plugin": "^0.21.3",
+    "@module-federation/storybook-addon": "^4.0.35",
+    "@rsbuild/plugin-react": "^1.4.2",
     "@rslib/core": "workspace:*",
     "@types/react": "^19.2.2",
     "http-server": "^14.1.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "storybook": "^9.1.15",
-    "storybook-addon-rslib": "^2.1.2",
-    "storybook-react-rsbuild": "^2.1.2"
+    "storybook": "^9.1.16",
+    "storybook-addon-rslib": "^2.1.4",
+    "storybook-react-rsbuild": "^2.1.4"
   },
   "peerDependencies": {
     "react": "*"

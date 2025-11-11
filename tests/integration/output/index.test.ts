@@ -18,8 +18,8 @@ describe('output config', () => {
       const esm0BaseNames = (files.esm0 ?? []).map((p) => basename(p));
       const esm1BaseNames = (files.esm1 ?? []).map((p) => basename(p));
 
-      expect(esm0BaseNames.some((n) => /^0~188\.js$/.test(n))).toBeTruthy();
-      expect(esm1BaseNames.some((n) => /^1~188\.js$/.test(n))).toBeTruthy();
+      expect(esm0BaseNames.some((n) => /^0~159\.js$/.test(n))).toBeTruthy();
+      expect(esm1BaseNames.some((n) => /^1~159\.js$/.test(n))).toBeTruthy();
     });
 
     test('should prefix index for multi-compiler builds (with filename)', async () => {
@@ -41,10 +41,10 @@ describe('output config', () => {
       const esm1BaseNames = (files.esm1 ?? []).map((p) => basename(p));
 
       expect(
-        esm0BaseNames.some((n) => /^0~188\.\w+\.js$/.test(n)),
+        esm0BaseNames.some((n) => /^0~159\.\w+\.js$/.test(n)),
       ).toBeTruthy();
       expect(
-        esm1BaseNames.some((n) => /^1~188\.\w+\.js$/.test(n)),
+        esm1BaseNames.some((n) => /^1~159\.\w+\.js$/.test(n)),
       ).toBeTruthy();
     });
 
@@ -64,13 +64,13 @@ describe('output config', () => {
       );
 
       expect(
-        files.esm0!.some((n) => /static1\/js\/0~188\.js$/.test(n)),
+        files.esm0!.some((n) => /static1\/js\/0~159\.js$/.test(n)),
       ).toBeTruthy();
       expect(
         files.esm0!.some((n) => /static1\/js\/lib1\.js$/.test(n)),
       ).toBeTruthy();
       expect(
-        files.esm0!.some((n) => /static2\/js\/1~188\.\w+\.js$/.test(n)),
+        files.esm0!.some((n) => /static2\/js\/1~159\.\w+\.js$/.test(n)),
       ).toBeTruthy();
       expect(
         files.esm0!.some((n) => /static2\/js\/lib2\.\w+\.js$/.test(n)),

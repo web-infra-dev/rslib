@@ -2,6 +2,7 @@ import type { LogLevel, RsbuildMode } from '@rsbuild/core';
 import cac, { type CAC } from 'cac';
 import type { ConfigLoader } from '../config';
 import type { Format, Syntax } from '../types/config';
+import { color } from '../utils/color';
 import { logger } from '../utils/logger';
 import { build } from './build';
 import { initConfig } from './initConfig';
@@ -42,6 +43,8 @@ export type InspectOptions = CommonOptions & {
   verbose?: boolean;
 };
 
+export type MfDevOptions = CommonOptions;
+
 const applyCommonOptions = (cli: CAC) => {
   cli
     .option(
@@ -81,12 +84,12 @@ const applyCommonOptions = (cli: CAC) => {
 export function runCli(): void {
   const cli = cac('rslib');
 
-  cli.help();
   cli.version(RSLIB_VERSION);
 
   applyCommonOptions(cli);
 
-  const buildCommand = cli.command('build', 'build the library for production');
+  const buildDescription = `build the library for production ${color.dim('(default if no command is given)')}`;
+  const buildCommand = cli.command('', buildDescription).alias('build');
   const inspectCommand = cli.command(
     'inspect',
     'inspect the Rsbuild / Rspack configs of Rslib projects',
@@ -180,7 +183,7 @@ export function runCli(): void {
       }
     });
 
-  mfDevCommand.action(async (options: CommonOptions) => {
+  mfDevCommand.action(async (options: MfDevOptions) => {
     try {
       const cliMfDev = async () => {
         const { config, watchFiles } = await initConfig(options);
@@ -198,6 +201,37 @@ export function runCli(): void {
       logger.error('Failed to start mf-dev.');
       logger.error(err);
       process.exit(1);
+    }
+  });
+
+  cli.help((sections) => {
+    // remove the default version log as we already log it in greeting
+    sections.shift();
+
+    for (const section of sections) {
+      // Fix the command usage
+      if (section.title === 'Usage') {
+        section.body = section.body.replace(
+          '$ rslib',
+          color.yellow('$ rslib [command] [options]'),
+        );
+      }
+
+      // Fix the build command name
+      if (section.title === 'Commands') {
+        section.body = section.body.replace(
+          `         ${buildDescription}`,
+          `build    ${buildDescription}`,
+        );
+      }
+
+      // Simplify the help output for sub-commands
+      if (section.title?.startsWith('For more info')) {
+        section.title = color.dim('  For details on a sub-command, run');
+        section.body = color.dim('  $ rslib <command> -h');
+      } else {
+        section.title = color.cyan(section.title);
+      }
     }
   });
 

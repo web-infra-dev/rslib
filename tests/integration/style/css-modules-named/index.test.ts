@@ -20,7 +20,7 @@ test('should extract css-modules named export successfully in bundle', async () 
   `);
   if (process.env.ADVANCED_ESM) {
     expect(js.entries.esm).toMatchInlineSnapshot(`
-      "import "./runtime.js";
+      "import "./rslib-runtime.js";
       var _1 = "content-wrapper-iNtwbA";
       const src_button = _1;
       export { src_button as button };

@@ -26,6 +26,22 @@ describe('build command', async () => {
     `);
   });
 
+  test('without any sub-command', async () => {
+    await fse.remove(path.join(__dirname, 'dist'));
+    runCliSync('', {
+      cwd: __dirname,
+    });
+
+    const files = await globContentJSON(path.join(__dirname, 'dist'));
+    const fileNames = Object.keys(files).sort();
+    expect(fileNames).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/cli/build/dist/cjs/index.cjs",
+        "<ROOT>/tests/integration/cli/build/dist/esm/index.js",
+      ]
+    `);
+  });
+
   test('--lib', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
     runCliSync('build --lib esm', {

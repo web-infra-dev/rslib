@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
@@ -133,6 +134,22 @@ test('`module` should be correctly handled by `parserOptions.commonjs.exports = 
   const cjsOutput = await import(entryFiles.cjs);
   expect(typeof cjsOutput.default.path1.basename).toBe('function');
   expect(cjsOutput.default.path1).toBe(cjsOutput.default.path2);
+});
+
+test('MF output should include hash', async () => {
+  const fixturePath = path.resolve(__dirname, 'mf');
+  await buildAndGetResults({
+    fixturePath,
+  });
+  const distDir = path.join(fixturePath, 'dist/mf');
+  const files = fs.readdirSync(distDir);
+
+  expect(files.length).toBe(3);
+  expect(files.some((file) => /^index\.[a-f0-9]{8}\.js$/.test(file))).toBe(
+    true,
+  );
+  expect(files).toContain('mf-manifest.json');
+  expect(files).toContain('mf-stats.json');
 });
 
 test.skipIf(!process.env.ADVANCED_ESM)(

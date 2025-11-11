@@ -15,15 +15,17 @@
 import { type Logger, logger } from 'rslog';
 import { color } from './color';
 
-export const isDebug = (): boolean => {
+export const isDebugKey = (keys: string[]): boolean => {
   if (!process.env.DEBUG) {
     return false;
   }
 
   const values = process.env.DEBUG.toLocaleLowerCase().split(',');
-  return ['rslib', 'rsbuild', 'rs*', 'rstack', '*'].some((key) =>
-    values.includes(key),
-  );
+  return keys.some((key) => values.includes(key));
+};
+
+export const isDebug = (): boolean => {
+  return isDebugKey(['rslib', 'rsbuild', 'rs*', 'rstack', '*']);
 };
 
 // setup the logger level

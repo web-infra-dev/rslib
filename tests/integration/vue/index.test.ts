@@ -14,7 +14,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
     if (process.env.ADVANCED_ESM) {
       expect(js.contents.esm1).toMatchInlineSnapshot(`
         {
-          "<ROOT>/tests/integration/vue/dist/bundle/index.js": "import "./runtime.js";
+          "<ROOT>/tests/integration/vue/dist/bundle/index.js": "import "./rslib-runtime.js";
         import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
         const _00_2Fplugin_vue_2Fexport_helper = (sfc, props)=>{
             const target = sfc.__vccOpts || sfc;
@@ -87,7 +87,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
         ]);
         export { Button, Card };
         ",
-          "<ROOT>/tests/integration/vue/dist/bundle/runtime.js": "var __webpack_modules__ = {};
+          "<ROOT>/tests/integration/vue/dist/bundle/rslib-runtime.js": "var __webpack_modules__ = {};
         var __webpack_module_cache__ = {};
         function __webpack_require__(moduleId) {
             var cachedModule = __webpack_module_cache__[moduleId];

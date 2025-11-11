@@ -1,6 +1,6 @@
 {
   "name": "@rslib/core",
-  "version": "0.16.1",
+  "version": "0.17.1",
   "description": "The Rsbuild-based library development tool.",
   "homepage": "https://rslib.rs",
   "bugs": {
@@ -43,22 +43,22 @@
     "type-check": "tsc --noEmit && tsc --noEmit -p tests"
   },
   "dependencies": {
-    "@rsbuild/core": "1.6.0-beta.1",
+    "@rsbuild/core": "~1.6.3",
     "rsbuild-plugin-dts": "workspace:*"
   },
   "devDependencies": {
-    "@module-federation/rsbuild-plugin": "^0.21.1",
+    "@module-federation/rsbuild-plugin": "^0.21.3",
     "@rslib/tsconfig": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "cac": "^6.7.14",
     "chokidar": "^4.0.3",
     "fs-extra": "^11.3.2",
-    "memfs": "^4.49.0",
+    "memfs": "^4.50.0",
     "path-serializer": "0.5.1",
     "picocolors": "1.1.1",
-    "prebundle": "1.4.2",
+    "prebundle": "1.5.0",
     "rsbuild-plugin-publint": "^0.3.3",
-    "rslib": "npm:@rslib/core@0.16.1",
+    "rslib": "npm:@rslib/core@0.17.1",
     "rslog": "^1.3.0",
     "tinyglobby": "0.2.14",
     "tsconfck": "3.1.6",

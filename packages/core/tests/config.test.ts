@@ -276,13 +276,24 @@ describe('Should compose create Rsbuild config correctly', () => {
       logLevel: 'silent',
     };
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
-    expect(composedRsbuildConfig).toMatchSnapshot();
+    const formats = ['esm', 'cjs', 'umd', 'iife', 'mf'];
+    composedRsbuildConfig.forEach((bundlerConfig, index) => {
+      expect(bundlerConfig).toMatchSnapshot(
+        `rsbuild config - ${index} ${formats[index]}`,
+      );
+    });
 
     const rsbuildInstance = await inspect(rslibConfig);
     const { rsbuildConfig, bundlerConfigs } =
       await rsbuildInstance.inspectConfig();
+
     expect(rsbuildConfig).toMatchSnapshot('inspected Rsbuild configs');
-    expect(bundlerConfigs).toMatchSnapshot('inspected Rspack configs');
+
+    bundlerConfigs.forEach((bundlerConfig, index) => {
+      expect(bundlerConfig).toMatchSnapshot(
+        `inspected Rspack config - ${index} ${formats[index]}`,
+      );
+    });
   });
 
   test('Merge output.distPath correctly', async () => {

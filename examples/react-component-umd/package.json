@@ -1,13 +1,14 @@
 {
   "name": "@examples/react-component-umd",
   "private": true,
+  "type": "module",
   "main": "./dist/umd/index.js",
   "unpkg": "./dist/umd/index.js",
   "scripts": {
     "build": "rslib build"
   },
   "devDependencies": {
-    "@rsbuild/plugin-react": "^1.4.1",
+    "@rsbuild/plugin-react": "^1.4.2",
     "@rsbuild/plugin-sass": "^1.4.0",
     "@rslib/core": "workspace:*",
     "@types/react": "^19.2.2",

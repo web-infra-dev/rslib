@@ -590,7 +590,6 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
     },
     output: {
       target: 'node',
-      filenameHash: false,
       distPath: {
         js: './',
         jsAsync: './',
@@ -649,6 +648,9 @@ const composeFormatConfig = ({
   switch (format) {
     case 'esm':
       return {
+        output: {
+          filenameHash: false,
+        },
         tools: {
           rspack: {
             module: {
@@ -664,7 +666,11 @@ const composeFormatConfig = ({
               // experimentalEsmOutput don't need concatenateModules
               concatenateModules: !experimentalEsmOutput,
               sideEffects: experimentalEsmOutput ? true : 'flag',
-              runtimeChunk: experimentalEsmOutput ? 'single' : undefined,
+              runtimeChunk: experimentalEsmOutput
+                ? {
+                    name: 'rslib-runtime',
+                  }
+                : undefined,
               avoidEntryIife: true,
               splitChunks: {
                 // Splitted "sync" chunks will make entry modules can't be inlined.
@@ -689,6 +695,9 @@ const composeFormatConfig = ({
       };
     case 'cjs':
       return {
+        output: {
+          filenameHash: false,
+        },
         tools: {
           rspack: {
             module: {
@@ -727,6 +736,9 @@ const composeFormatConfig = ({
       }
 
       const config: EnvironmentConfig = {
+        output: {
+          filenameHash: false,
+        },
         tools: {
           rspack: {
             module: {
@@ -770,6 +782,7 @@ const composeFormatConfig = ({
 
       const config: EnvironmentConfig = {
         output: {
+          filenameHash: false,
           minify: {
             jsOptions: {
               minimizerOptions: {
@@ -1129,7 +1142,8 @@ const composeOutputFilenameConfig = (
       });
 
   return {
-    config: finalConfig,
+    // Do not modify MF's output hash configuration.
+    config: format === 'mf' ? {} : finalConfig,
     jsExtension: finalJsExtension,
     dtsExtension,
   };
@@ -1642,6 +1656,9 @@ const composeTargetConfig = (
         config: {
           tools: {
             rspack: {
+              externalsPresets: {
+                node: false,
+              },
               target: ['node'],
             },
           },
@@ -1774,6 +1791,7 @@ async function composeLibRsbuildConfig(
     multiCompilerIndex,
     pkgJson,
   );
+
   const { entryConfig, outBase } = await composeEntryConfig(
     config.source?.entry!,
     config.bundle,

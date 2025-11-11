@@ -11,4 +11,8 @@ export const shared: RstestConfig = {
 
 export default defineConfig({
   projects: ['packages/*', 'tests'],
+  pool: {
+    // Leave some workers available for DTS tests to spawn sub processes
+    maxWorkers: '80%',
+  },
 });

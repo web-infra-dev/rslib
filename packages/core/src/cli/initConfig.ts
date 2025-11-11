@@ -8,7 +8,7 @@ import type {
   RslibConfig,
 } from '../types';
 import { getAbsolutePath } from '../utils/helper';
-import { logger } from '../utils/logger';
+import { isDebugKey, logger } from '../utils/logger';
 import type { BuildOptions, CommonOptions } from './commands';
 import { onBeforeRestart } from './restart';
 
@@ -141,8 +141,11 @@ export async function initConfig(options: CommonOptions): Promise<{
 
   applyCliOptions(config, options, root);
 
-  logger.debug('Rslib config used to generate Rsbuild environments:');
-  logger.debug(`\n${util.inspect(config, { depth: null, colors: true })}`);
+  // only debug serialized rslib config when DEBUG=rslib
+  if (isDebugKey(['rslib'])) {
+    logger.debug('Rslib config used to generate Rsbuild environments:');
+    logger.debug(`\n${util.inspect(config, { depth: null, colors: true })}`);
+  }
 
   return {
     config,
