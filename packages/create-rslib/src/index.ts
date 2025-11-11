@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   type Argv,
+  BUILTIN_TOOLS,
   checkCancel,
   create,
   type ESLintTemplateName,
@@ -16,15 +17,20 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 type TemplateName = 'react' | 'node' | 'vue';
 
-async function getTemplateName({ template }: Argv) {
-  if (typeof template === 'string') {
-    const pair = template.split('-');
-    const lang = pair[pair.length - 1];
-    if (lang && ['js', 'ts'].includes(lang)) {
-      return template;
-    }
-    // default to ts
-    return `${template}-ts`;
+async function getTemplateName(argv: Argv) {
+  if (typeof argv.template === 'string') {
+    const pair = argv.template.split('-');
+    const lang = pair[pair.length - 1] ?? 'ts';
+    const rest = pair.slice(0, pair.length - 1).join('-');
+    const tools = (
+      typeof argv.tools === 'string' ? [argv.tools] : (argv.tools ?? [])
+    ).filter((tool) => !BUILTIN_TOOLS.includes(tool));
+
+    return composeTemplateName({
+      template: rest,
+      lang: lang as Lang,
+      tools,
+    });
   }
 
   const templateName = checkCancel<TemplateName>(
