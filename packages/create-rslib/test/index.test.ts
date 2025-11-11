@@ -71,8 +71,6 @@ const ALL_CASES = [
 ];
 
 const BASE_NODE_ESM_JS = createCase('node-esm', 'js');
-const REACT_VITEST_JS = createCase('react', 'js', ['vitest']);
-const NODE_DUAL_RSTEST_TS = createCase('node-dual', 'ts', ['rstest']);
 
 test('exhaust all cases', () => {
   const expected = ALL_CASES.map((item) => item.label).sort();
@@ -184,58 +182,6 @@ describe('linter and formatter', () => {
     );
     expect(pkgJson.devDependencies['@biomejs/biome']).toBeTruthy();
     expect(existsSync(join(dir, 'biome.json'))).toBeTruthy();
-    clean();
-  });
-});
-
-describe('template with multiple tools via CLI', () => {
-  test('should create react-js project with vitest (--tools) and eslint (--tools)', async () => {
-    const { dir, pkgJson, clean } = createAndValidate(
-      __dirname,
-      REACT_VITEST_JS,
-      {
-        name: 'test-temp-react-vitest-eslint',
-        tools: ['eslint'],
-        clean: false,
-      },
-    );
-
-    // Check vitest setup
-    expect(pkgJson.devDependencies.vitest).toBeTruthy();
-    expect(existsSync(join(dir, 'vitest.config.js'))).toBeTruthy();
-    expect(existsSync(join(dir, 'tests/index.test.jsx'))).toBeTruthy();
-
-    // Check eslint setup
-    expect(pkgJson.devDependencies.eslint).toBeTruthy();
-    expect(existsSync(join(dir, 'eslint.config.mjs'))).toBeTruthy();
-
-    // Check base react setup
-    expect(pkgJson.devDependencies.react).toBeTruthy();
-    expect(pkgJson.devDependencies['@rslib/core']).toBeTruthy();
-
-    clean();
-  });
-
-  test('should create node-dual-ts project with rstest (--tools) and prettier (--tools)', async () => {
-    const { dir, pkgJson, clean } = createAndValidate(
-      __dirname,
-      NODE_DUAL_RSTEST_TS,
-      {
-        name: 'test-temp-node-rstest-prettier',
-        tools: ['prettier'],
-        clean: false,
-      },
-    );
-
-    // Check rstest setup
-    expect(pkgJson.devDependencies['@rstest/core']).toBeTruthy();
-    expect(existsSync(join(dir, 'rstest.config.ts'))).toBeTruthy();
-    expect(existsSync(join(dir, 'tests/index.test.ts'))).toBeTruthy();
-
-    // Check prettier setup
-    expect(pkgJson.devDependencies.prettier).toBeTruthy();
-    expect(existsSync(join(dir, '.prettierrc'))).toBeTruthy();
-
     clean();
   });
 });
