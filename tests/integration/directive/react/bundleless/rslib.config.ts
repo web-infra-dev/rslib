@@ -12,7 +12,16 @@ export default defineConfig({
     generateBundleCjsConfig({
       bundle: false,
       output: {
-        minify: true,
+        minify: {
+          jsOptions: {
+            minimizerOptions: {
+              compress: {
+                // `directives` option is required to keep `"use strict"` in the output files.
+                directives: false,
+              },
+            },
+          },
+        },
         distPath: './dist/cjs',
       },
     }),

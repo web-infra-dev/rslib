@@ -59,7 +59,7 @@ describe('shebang', async () => {
       expect(foo!.includes('#!')).toBe(false);
     });
 
-    test.todo('shebang commented by JS parser should be striped', async () => {
+    test('shebang commented by JS parser should be striped', async () => {
       const { content: index } = queryContent(contents.esm3!, 'index.js', {
         basename: true,
       });
@@ -98,24 +98,24 @@ describe('react', async () => {
       const { content: foo } = queryContent(contents.esm!, 'foo.js', {
         basename: true,
       });
-      expect(onlyStartsWith(foo!, `'use client';`)).toBe(true);
+      expect(onlyStartsWith(foo!, `"use client";`)).toBe(true);
 
       const { content: bar } = queryContent(contents.esm!, 'bar.js', {
         basename: true,
       });
-      expect(onlyStartsWith(bar!, `'use server';`)).toBe(true);
+      expect(onlyStartsWith(bar!, `"use server";`)).toBe(true);
     });
 
     test('React directive at the beginning even if minified', async () => {
       const { content: foo } = queryContent(contents.cjs!, 'foo.cjs', {
         basename: true,
       });
-      expect(onlyStartsWith(foo!, `'use client';`)).toBe(true);
+      expect(onlyStartsWith(foo!, `"use strict";"use client";`)).toBe(true);
 
       const { content: bar } = queryContent(contents.cjs!, 'bar.cjs', {
         basename: true,
       });
-      expect(onlyStartsWith(bar!, `'use server';`)).toBe(true);
+      expect(onlyStartsWith(bar!, `"use strict";"use server";`)).toBe(true);
     });
   });
 });
