@@ -42,7 +42,24 @@ export function runCliSync(command: string, options?: ExecSyncOptions) {
 }
 
 export function runCli(command: string, options?: ExecOptions) {
-  return exec(`node ${rslibBinPath} ${command}`, options);
+  const child = exec(`node ${rslibBinPath} ${command}`, options);
+
+  let stdout = '';
+  let stderr = '';
+
+  child.stdout?.on('data', (data) => {
+    stdout += data.toString();
+  });
+
+  child.stderr?.on('data', (data) => {
+    stderr += data.toString();
+  });
+
+  return {
+    child,
+    stdout: () => stdout,
+    stderr: () => stderr,
+  };
 }
 
 export function getCwdByExample(exampleName: string) {
