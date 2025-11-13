@@ -92,8 +92,8 @@ describe('minify config (mf)', () => {
         Button: () => (Button),
         foo: () => (foo)
       });
-      /* ESM import */var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(491);
-      /* ESM import */var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+      /* import */var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(491);
+      /* import */var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
       /*! Legal Comment */ 
       const foo = ()=>{};
       const bar = ()=>{};

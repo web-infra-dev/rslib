@@ -204,7 +204,6 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 0,
               modules: {
                 auto: true,
                 namedExport: false,
@@ -213,7 +212,8 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
                 localIdentName: '[local]-[hash:base64:6]',
                 exportOnlyLocals: true
               },
-              sourceMap: false
+              sourceMap: false,
+              importLoaders: 0
             }
           }
         ],
@@ -232,10 +232,20 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 0,
               modules: false,
               sourceMap: false,
-              exportType: 'string'
+              exportType: 'string',
+              importLoaders: 1
+            }
+          },
+          /* config.module.rule('css-inline').use('lightningcss') */
+          {
+            loader: 'builtin:lightningcss-loader',
+            options: {
+              targets: [
+                'last 1 node versions'
+              ],
+              errorRecovery: true
             }
           }
         ],
@@ -1237,7 +1247,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 0,
               modules: {
                 auto: true,
                 namedExport: false,
@@ -1246,7 +1255,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 localIdentName: '[local]-[hash:base64:6]',
                 exportOnlyLocals: true
               },
-              sourceMap: false
+              sourceMap: false,
+              importLoaders: 0
             }
           }
         ],
@@ -1265,10 +1275,25 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 0,
               modules: false,
               sourceMap: false,
-              exportType: 'string'
+              exportType: 'string',
+              importLoaders: 1
+            }
+          },
+          /* config.module.rule('css-inline').use('lightningcss') */
+          {
+            loader: 'builtin:lightningcss-loader',
+            options: {
+              targets: [
+                'last 1 Chrome versions',
+                'last 1 Firefox versions',
+                'last 1 Edge versions',
+                'last 1 Safari versions',
+                'last 1 ios_saf versions',
+                'not dead'
+              ],
+              errorRecovery: true
             }
           }
         ],
@@ -1956,7 +1981,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 0,
               modules: {
                 auto: true,
                 namedExport: false,
@@ -1965,7 +1989,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 localIdentName: '[local]-[hash:base64:6]',
                 exportOnlyLocals: true
               },
-              sourceMap: false
+              sourceMap: false,
+              importLoaders: 0
             }
           }
         ],
@@ -1984,10 +2009,25 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 0,
               modules: false,
               sourceMap: false,
-              exportType: 'string'
+              exportType: 'string',
+              importLoaders: 1
+            }
+          },
+          /* config.module.rule('css-inline').use('lightningcss') */
+          {
+            loader: 'builtin:lightningcss-loader',
+            options: {
+              targets: [
+                'last 1 Chrome versions',
+                'last 1 Firefox versions',
+                'last 1 Edge versions',
+                'last 1 Safari versions',
+                'last 1 ios_saf versions',
+                'not dead'
+              ],
+              errorRecovery: true
             }
           }
         ],
@@ -2651,7 +2691,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 0,
               modules: {
                 auto: true,
                 namedExport: false,
@@ -2660,7 +2699,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 localIdentName: '[local]-[hash:base64:6]',
                 exportOnlyLocals: true
               },
-              sourceMap: false
+              sourceMap: false,
+              importLoaders: 0
             }
           }
         ],
@@ -2679,10 +2719,25 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 0,
               modules: false,
               sourceMap: false,
-              exportType: 'string'
+              exportType: 'string',
+              importLoaders: 1
+            }
+          },
+          /* config.module.rule('css-inline').use('lightningcss') */
+          {
+            loader: 'builtin:lightningcss-loader',
+            options: {
+              targets: [
+                'last 1 Chrome versions',
+                'last 1 Firefox versions',
+                'last 1 Edge versions',
+                'last 1 Safari versions',
+                'last 1 ios_saf versions',
+                'not dead'
+              ],
+              errorRecovery: true
             }
           }
         ],
@@ -3272,7 +3327,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 0,
               modules: {
                 auto: true,
                 namedExport: false,
@@ -3281,7 +3335,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 localIdentName: '[local]-[hash:base64:6]',
                 exportOnlyLocals: true
               },
-              sourceMap: false
+              sourceMap: false,
+              importLoaders: 0
             }
           }
         ],
@@ -3300,10 +3355,25 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 0,
               modules: false,
               sourceMap: false,
-              exportType: 'string'
+              exportType: 'string',
+              importLoaders: 1
+            }
+          },
+          /* config.module.rule('css-inline').use('lightningcss') */
+          {
+            loader: 'builtin:lightningcss-loader',
+            options: {
+              targets: [
+                'last 1 Chrome versions',
+                'last 1 Firefox versions',
+                'last 1 Edge versions',
+                'last 1 Safari versions',
+                'last 1 ios_saf versions',
+                'not dead'
+              ],
+              errorRecovery: true
             }
           }
         ],
@@ -3828,7 +3898,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 1,
               modules: {
                 auto: true,
                 namedExport: false,
@@ -3836,7 +3905,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 exportLocalsConvention: 'camelCase',
                 localIdentName: '[local]-[hash:base64:6]'
               },
-              sourceMap: false
+              sourceMap: false,
+              importLoaders: 1
             }
           },
           /* config.module.rule('css').use('lightningcss') */
@@ -3870,10 +3940,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
             options: {
-              importLoaders: 1,
               modules: false,
               sourceMap: false,
-              exportType: 'string'
+              exportType: 'string',
+              importLoaders: 1
             }
           },
           /* config.module.rule('css-inline').use('lightningcss') */
