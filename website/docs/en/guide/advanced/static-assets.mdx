@@ -212,8 +212,37 @@ When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the
 
 Once static assets are imported, they will automatically be output to the build output directory. You can:
 
-- Modify the filename of the outputs through [output.filename](/config/rsbuild/output#outputfilename).
-- Change the output path of the outputs through [output.distPath](/config/rsbuild/output#outputdistpath).
+- Modify the filename of the outputs through [output.filename](/config/rsbuild/output#outputfilename). For example, add a hash value to the filename of the outputs, which is usually used when there are files with the same name to avoid filename conflicts.
+
+```ts title="rslib.config.ts"
+export default {
+  output: {
+    filename: {
+      svg: '[name].[contenthash:8].svg',
+      font: '[name].[contenthash:8][ext]',
+      image: '[name].[contenthash:8][ext]',
+      media: '[name].[contenthash:8][ext]',
+      assets: '[name].[contenthash:8][ext]',
+    },
+  },
+};
+```
+
+- Change the output path of the outputs through [output.distPath](/config/rsbuild/output#outputdistpath). For example, emit static assets output to the `dist/resource` directory.
+
+```ts title="rslib.config.ts"
+export default {
+  output: {
+    distPath: {
+      svg: 'resource/svg',
+      font: 'resource/font',
+      image: 'resource/image',
+      media: 'resource/media',
+      assets: 'resource/assets',
+    },
+  },
+};
+```
 
 ## Type declaration
 
