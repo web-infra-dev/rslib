@@ -25,10 +25,23 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
         force: false
       }
     },
+    cache: {
+      type: 'persistent',
+      version: 'esm-development',
+      storage: {
+        type: 'filesystem',
+        directory: '<WORKSPACE>/node_modules/.cache/rspack'
+      },
+      buildDependencies: [
+        '<WORKSPACE>/package.json',
+        '<WORKSPACE>/tsconfig.json'
+      ]
+    },
     asyncWebAssembly: true,
     outputModule: true
   },
   devtool: false,
+  cache: true,
   externals: [
     function () { /* omitted long function */ },
     /^@rsbuild\\/core($|\\/|\\\\)/,
@@ -1064,10 +1077,23 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         force: false
       }
     },
+    cache: {
+      type: 'persistent',
+      version: 'esm-development',
+      storage: {
+        type: 'filesystem',
+        directory: '<WORKSPACE>/node_modules/.cache/rspack'
+      },
+      buildDependencies: [
+        '<WORKSPACE>/package.json',
+        '<WORKSPACE>/tsconfig.json'
+      ]
+    },
     asyncWebAssembly: true,
     outputModule: true
   },
   devtool: false,
+  cache: true,
   externals: [
     function () { /* omitted long function */ },
     /^@rsbuild\\/core($|\\/|\\\\)/,
@@ -1800,9 +1826,22 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         force: false
       }
     },
+    cache: {
+      type: 'persistent',
+      version: 'cjs-development',
+      storage: {
+        type: 'filesystem',
+        directory: '<WORKSPACE>/node_modules/.cache/rspack'
+      },
+      buildDependencies: [
+        '<WORKSPACE>/package.json',
+        '<WORKSPACE>/tsconfig.json'
+      ]
+    },
     asyncWebAssembly: true
   },
   devtool: false,
+  cache: true,
   externals: [
     /^@rsbuild\\/core($|\\/|\\\\)/,
     /^rsbuild-plugin-dts($|\\/|\\\\)/,
@@ -2529,9 +2568,22 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         force: false
       }
     },
+    cache: {
+      type: 'persistent',
+      version: 'umd-development',
+      storage: {
+        type: 'filesystem',
+        directory: '<WORKSPACE>/node_modules/.cache/rspack'
+      },
+      buildDependencies: [
+        '<WORKSPACE>/package.json',
+        '<WORKSPACE>/tsconfig.json'
+      ]
+    },
     asyncWebAssembly: true
   },
   devtool: false,
+  cache: true,
   externals: [
     'assert',
     'assert/strict',
@@ -3163,9 +3215,22 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         force: false
       }
     },
+    cache: {
+      type: 'persistent',
+      version: 'iife-development',
+      storage: {
+        type: 'filesystem',
+        directory: '<WORKSPACE>/node_modules/.cache/rspack'
+      },
+      buildDependencies: [
+        '<WORKSPACE>/package.json',
+        '<WORKSPACE>/tsconfig.json'
+      ]
+    },
     asyncWebAssembly: true
   },
   devtool: false,
+  cache: true,
   externals: [
     'assert',
     'assert/strict',
@@ -3798,9 +3863,22 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         force: false
       }
     },
+    cache: {
+      type: 'persistent',
+      version: 'mf-development',
+      storage: {
+        type: 'filesystem',
+        directory: '<WORKSPACE>/node_modules/.cache/rspack'
+      },
+      buildDependencies: [
+        '<WORKSPACE>/package.json',
+        '<WORKSPACE>/tsconfig.json'
+      ]
+    },
     asyncWebAssembly: true
   },
   devtool: false,
+  cache: true,
   output: {
     devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     path: '<WORKSPACE>/dist',
@@ -4465,6 +4543,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "target": "node",
     },
     "performance": {
+      "buildCache": true,
       "chunkSplit": {
         "strategy": "custom",
       },
@@ -4757,6 +4836,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "target": "node",
     },
     "performance": {
+      "buildCache": true,
       "chunkSplit": {
         "strategy": "custom",
       },
@@ -5036,6 +5116,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "target": "node",
     },
     "performance": {
+      "buildCache": true,
       "chunkSplit": {
         "strategy": "custom",
       },
@@ -5287,6 +5368,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "target": "node",
     },
     "performance": {
+      "buildCache": true,
       "chunkSplit": {
         "strategy": "custom",
       },
@@ -5485,6 +5567,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "target": "web",
     },
     "performance": {
+      "buildCache": true,
       "chunkSplit": {
         "strategy": "custom",
       },

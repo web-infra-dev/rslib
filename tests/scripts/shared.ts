@@ -282,8 +282,11 @@ const updateConfigForTest =
   (logLevel?: LogLevel) => (rslibConfig: RslibConfig) => {
     Object.assign(rslibConfig, {
       performance: {
+        ...rslibConfig.performance,
         // Do not print file size in tests
         printFileSize: false,
+        // Do not use build cache in tests
+        buildCache: false,
       },
       logLevel,
     });
