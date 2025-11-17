@@ -102,6 +102,6 @@ export default defineConfig({
   1. 配置 `output.external` 和 `resolvedPolyfillToModules`，你可以从 [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill) 导入。这将 polyfill 模块 external 到已安装的 polyfill 依赖中。
   2. 安装使用的 polyfill 模块作为依赖。
 
-  通过以下步骤，每个 polyfill 模块的使用将被替换为 `externals` 字段中的相应模块。更多详细信息，请查看 <SourceCode href="https://github.com/web-infra-dev/rslib/blob/main/tests/integration/node-polyfill/bundle-false/rslib.config.ts" /> 的示例。
+  通过以上步骤，每个 polyfill 模块的使用将被替换为 `externals` 字段中的相应模块。更多详细信息，请查看 <SourceCode href="https://github.com/web-infra-dev/rslib/blob/main/tests/integration/node-polyfill/bundle-false/rslib.config.ts" /> 的示例。
 
 更多详细信息，请查看 [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill) 文档，所有配置均适用于 Rslib。

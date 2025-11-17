@@ -16,8 +16,25 @@ import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 
 const siteUrl = 'https://rslib.rs';
 const description = 'The Rsbuild-based library development tool';
+const descriptionZh = '基于 Rsbuild 的库构建工具';
 
 export default defineConfig({
+  title: 'Rslib',
+  description:
+    'Rslib is a library development tool that leverages the well-designed configurations and plugins of Rsbuild.',
+  lang: 'en',
+  icon: 'https://assets.rspack.rs/rslib/rslib-logo-192x192.png',
+  logo: 'https://assets.rspack.rs/rslib/rslib-logo-192x192.png',
+  logoText: 'Rslib',
+  root: path.join(__dirname, 'docs'),
+  markdown: {
+    shiki: {
+      transformers: [transformerNotationHighlight(), transformerNotationDiff()],
+    },
+  },
+  search: {
+    codeBlocks: true,
+  },
   plugins: [
     pluginAlgolia(),
     pluginFontOpenSans(),
@@ -52,22 +69,6 @@ export default defineConfig({
       siteUrl,
     }),
   ],
-  root: path.join(__dirname, 'docs'),
-  lang: 'en',
-  title: 'Rslib',
-  description:
-    'Rslib is a library development tool that leverages the well-designed configurations and plugins of Rsbuild.',
-  icon: 'https://assets.rspack.rs/rslib/rslib-logo-192x192.png',
-  logo: 'https://assets.rspack.rs/rslib/rslib-logo-192x192.png',
-  logoText: 'Rslib',
-  markdown: {
-    shiki: {
-      transformers: [transformerNotationHighlight(), transformerNotationDiff()],
-    },
-  },
-  search: {
-    codeBlocks: true,
-  },
   route: {
     cleanUrls: true,
     // exclude document fragments from routes
@@ -102,39 +103,22 @@ export default defineConfig({
         content: 'https://discord.gg/XsaKEEk4mW',
       },
     ],
+    editLink: {
+      docRepoBaseUrl:
+        'https://github.com/web-infra-dev/rslib/tree/main/website/docs',
+    },
     locales: [
       {
         lang: 'en',
         label: 'English',
         title: 'Rslib',
         description,
-        editLink: {
-          docRepoBaseUrl:
-            'https://github.com/web-infra-dev/rslib/tree/main/website/docs',
-          text: '📝 Edit this page on GitHub',
-        },
       },
       {
         lang: 'zh',
         label: '简体中文',
         title: 'Rslib',
-        outlineTitle: '目录',
-        prevPageText: '上一页',
-        nextPageText: '下一页',
-        searchPlaceholderText: '搜索文档',
-        searchNoResultsText: '无法找到相关搜索结果',
-        searchSuggestedQueryText: '请使用不同的关键字重试',
-        description: '基于 Rsbuild 的库构建工具',
-        overview: {
-          filterNameText: '过滤',
-          filterPlaceholderText: '输入关键词',
-          filterNoResultText: '未找到匹配的 API',
-        },
-        editLink: {
-          docRepoBaseUrl:
-            'https://github.com/web-infra-dev/rslib/tree/main/website/docs',
-          text: '📝 在 GitHub 上编辑此页',
-        },
+        description: descriptionZh,
       },
     ],
   },
