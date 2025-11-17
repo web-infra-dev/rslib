@@ -102,6 +102,6 @@ export default defineConfig({
   1. Configure `output.external` with `resolvedPolyfillToModules`, which you can import from [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill). This will externalize the polyfill modules to the installed polyfill dependencies.
   2. Install used polyfill modules as dependencies.
 
-  With the following steps, every usage of the polyfill module will be replaced by the corresponding module in the `externals` field. Checkout the <SourceCode href="https://github.com/web-infra-dev/rslib/blob/main/tests/integration/node-polyfill/bundle-false/rslib.config.ts" /> of the example for more details.
+  With the above steps, every usage of the polyfill module will be replaced by the corresponding module in the `externals` field. Checkout the <SourceCode href="https://github.com/web-infra-dev/rslib/blob/main/tests/integration/node-polyfill/bundle-false/rslib.config.ts" /> of the example for more details.
 
 Check out the documentation of [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill), all the configurations are applicable for Rslib.
