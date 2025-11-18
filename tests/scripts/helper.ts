@@ -109,11 +109,11 @@ export const expectFileWithContent = (
 export const expectLog = (child: ChildProcess, log: string) =>
   new Promise<void>((resolve) => {
     const listener = (chunk: Buffer) => {
-      console.log('chunk: ', chunk);
       if (stripAnsi(chunk.toString()).includes(log)) {
         resolve();
       }
     };
+
     child.stdout?.on('data', listener);
     child.stderr?.on('data', listener);
   });
