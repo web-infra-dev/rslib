@@ -1,6 +1,8 @@
+import type { ChildProcess } from 'node:child_process';
 import fs from 'node:fs';
 import { platform } from 'node:os';
 import { join } from 'node:path';
+import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { expect } from '@playwright/test';
 import fse from 'fs-extra';
 import { convertPathToPattern, type GlobOptions, glob } from 'tinyglobby';
@@ -100,3 +102,21 @@ export const expectFileWithContent = (
       return false;
     }
   }).toBeTruthy();
+
+/**
+ * Expect log output from child process
+ */
+export const expectLog = (child: ChildProcess, log: string) =>
+  new Promise<void>((resolve) => {
+    const listener = (chunk: Buffer) => {
+      console.log('chunk: ', chunk);
+      if (stripAnsi(chunk.toString()).includes(log)) {
+        resolve();
+      }
+    };
+    child.stdout?.on('data', listener);
+    child.stderr?.on('data', listener);
+  });
+
+export const expectBuildEnd = (child: ChildProcess) =>
+  expectLog(child, 'built in');

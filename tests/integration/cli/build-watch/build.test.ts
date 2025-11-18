@@ -1,12 +1,11 @@
-import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { describe, expect, onTestFinished, test } from '@rstest/core';
 import fse from 'fs-extra';
 import {
+  expectBuildEnd,
   expectFile,
   expectFileWithContent,
-  rslibBinPath,
   runCli,
 } from 'test-helper';
 
@@ -90,6 +89,10 @@ export default defineConfig({
       index: ['./test-temp-src/**'],
     },
   },
+  performance: {
+    buildCache: false,
+    printFileSize: false,
+  },
 });
 `,
     );
@@ -101,20 +104,17 @@ export default defineConfig({
     const distFooFile = path.join(__dirname, 'dist/esm/foo.js');
     const distFoo2File = path.join(__dirname, 'dist/esm/foo2.js');
 
-    const child = spawn(
-      'node',
-      [rslibBinPath, 'build', '--watch', '-c', tempConfigFile],
-      {
-        cwd: __dirname,
-        stdio: 'pipe',
-        shell: true,
-      },
-    );
+    const { child } = runCli(`build --watch -c ${tempConfigFile}`, {
+      cwd: __dirname,
+    });
     await expectFileWithContent(distIndexFile, 'index');
 
     fse.outputFileSync(srcFooFile, `export const foo = 'foo';`);
-    fse.outputFileSync(srcFoo2File, `export const foo2 = 'foo2';`);
+    await expectBuildEnd(child);
     await expectFileWithContent(distFooFile, `'foo'`);
+
+    fse.outputFileSync(srcFoo2File, `export const foo2 = 'foo2';`);
+    await expectBuildEnd(child);
     await expectFileWithContent(distFoo2File, 'foo2');
 
     const content1 = await fse.readFile(distFooFile, 'utf-8');
@@ -136,6 +136,7 @@ export default defineConfig({
 
     // change
     fse.outputFileSync(srcFooFile, `export const foo1 = 'foo1';`);
+    await expectBuildEnd(child);
     await expectFileWithContent(distFooFile, 'foo1');
     const content3 = await fse.readFile(distFooFile, 'utf-8');
     expect(content3!).toMatchInlineSnapshot(`
