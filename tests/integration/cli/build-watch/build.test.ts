@@ -1,12 +1,11 @@
-import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { describe, expect, onTestFinished, test } from '@rstest/core';
 import fse from 'fs-extra';
 import {
+  expectBuildEnd,
   expectFile,
-  expectFileChanges,
-  rslibBinPath,
+  expectFileWithContent,
   runCli,
 } from 'test-helper';
 
@@ -91,8 +90,9 @@ export default defineConfig({
     },
   },
   performance: {
+    buildCache: false,
     printFileSize: false,
-  }
+  },
 });
 `,
     );
@@ -104,21 +104,19 @@ export default defineConfig({
     const distFooFile = path.join(__dirname, 'dist/esm/foo.js');
     const distFoo2File = path.join(__dirname, 'dist/esm/foo2.js');
 
-    const child = spawn(
-      'node',
-      [rslibBinPath, 'build', '--watch', '-c', tempConfigFile],
-      {
-        cwd: __dirname,
-        stdio: 'pipe',
-        shell: true,
-      },
-    );
-    await expectFile(distIndexFile);
+    const { child } = runCli(`build --watch -c ${tempConfigFile}`, {
+      cwd: __dirname,
+    });
+    await expectFileWithContent(distIndexFile, 'index');
 
     fse.outputFileSync(srcFooFile, `export const foo = 'foo';`);
+    await expectBuildEnd(child);
+    await expectFileWithContent(distFooFile, `'foo'`);
+
     fse.outputFileSync(srcFoo2File, `export const foo2 = 'foo2';`);
-    await expectFile(distFooFile);
-    await expectFile(distFoo2File);
+    await expectBuildEnd(child);
+    await expectFileWithContent(distFoo2File, 'foo2');
+
     const content1 = await fse.readFile(distFooFile, 'utf-8');
     expect(content1!).toMatchInlineSnapshot(`
       "const foo = 'foo';
@@ -137,12 +135,13 @@ export default defineConfig({
     fse.removeSync(srcIndexFile);
 
     // change
-    fse.outputFileSync(srcFooFile, `export const foo = 'foo1';`);
-    await expectFileChanges(distFooFile, content1, 'foo1');
+    fse.outputFileSync(srcFooFile, `export const foo1 = 'foo1';`);
+    await expectBuildEnd(child);
+    await expectFileWithContent(distFooFile, 'foo1');
     const content3 = await fse.readFile(distFooFile, 'utf-8');
     expect(content3!).toMatchInlineSnapshot(`
-      "const foo = 'foo1';
-      export { foo };
+      "const foo1 = 'foo1';
+      export { foo1 };
       "
     `);
 
