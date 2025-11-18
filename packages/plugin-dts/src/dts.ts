@@ -286,6 +286,11 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   }
 }
 
+// Gracefully shutdown on disconnect when panic
+process.on('disconnect', () => {
+  process.exit();
+});
+
 process.on('message', async (data: DtsGenOptions) => {
   if (!data.cwd) {
     return;
