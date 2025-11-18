@@ -1,20 +1,23 @@
-# Lib configurations
+# Overview
 
 - **Type:**
 
 ```ts
 interface LibConfig extends EnvironmentConfig {
-  format?: Format;
-  bundle?: boolean;
   autoExtension?: boolean;
   autoExternal?: AutoExternal;
-  redirect?: Redirect;
-  syntax?: Syntax;
-  externalHelpers?: boolean;
   banner?: BannerAndFooter;
-  footer?: BannerAndFooter;
-  shims?: Shims;
+  bundle?: boolean;
   dts?: Dts;
+  experiments?: { advancedEsm?: boolean };
+  externalHelpers?: boolean;
+  footer?: BannerAndFooter;
+  format?: Format;
+  id?: string;
+  outBase?: string;
+  redirect?: Redirect;
+  shims?: Shims;
+  syntax?: Syntax;
   umdName?: Rspack.LibraryName;
 }
 
