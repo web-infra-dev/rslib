@@ -90,9 +90,6 @@ export default defineConfig({
       index: ['./test-temp-src/**'],
     },
   },
-  performance: {
-    printFileSize: false,
-  }
 });
 `,
     );
@@ -116,8 +113,8 @@ export default defineConfig({
     await expectFileWithContent(distIndexFile, 'index');
 
     fse.outputFileSync(srcFooFile, `export const foo = 'foo';`);
-    await expectFileWithContent(distFooFile, `'foo'`);
     fse.outputFileSync(srcFoo2File, `export const foo2 = 'foo2';`);
+    await expectFileWithContent(distFooFile, `'foo'`);
     await expectFileWithContent(distFoo2File, 'foo2');
 
     const content1 = await fse.readFile(distFooFile, 'utf-8');
