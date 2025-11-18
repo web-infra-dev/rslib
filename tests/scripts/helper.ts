@@ -83,19 +83,20 @@ export const expectFile = (dir: string) =>
   expectPoll(() => fs.existsSync(dir)).toBeTruthy();
 
 /**
- * Expect a file to be changed and contain newContent
+ * Expect a file to exist and include specified content
  */
-export const expectFileChanges = async (
-  file: string,
-  oldContent: string,
-  newContent: string,
-) => {
-  await expectPoll(() => {
+export const expectFileWithContent = (
+  filePath: string,
+  expectedContent: string,
+) =>
+  expectPoll(() => {
     try {
-      const content = fse.readFileSync(file, 'utf-8');
-      return content !== oldContent && content.includes(newContent);
+      if (!fs.existsSync(filePath)) {
+        return false;
+      }
+      const content = fs.readFileSync(filePath, 'utf-8');
+      return content.includes(expectedContent);
     } catch {
       return false;
     }
   }).toBeTruthy();
-};

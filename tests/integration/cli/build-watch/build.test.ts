@@ -5,7 +5,7 @@ import { describe, expect, onTestFinished, test } from '@rstest/core';
 import fse from 'fs-extra';
 import {
   expectFile,
-  expectFileChanges,
+  expectFileWithContent,
   rslibBinPath,
   runCli,
 } from 'test-helper';
@@ -113,12 +113,13 @@ export default defineConfig({
         shell: true,
       },
     );
-    await expectFile(distIndexFile);
+    await expectFileWithContent(distIndexFile, 'index');
 
     fse.outputFileSync(srcFooFile, `export const foo = 'foo';`);
     fse.outputFileSync(srcFoo2File, `export const foo2 = 'foo2';`);
-    await expectFile(distFooFile);
-    await expectFile(distFoo2File);
+    await expectFileWithContent(distFooFile, `'foo'`);
+    await expectFileWithContent(distFoo2File, 'foo2');
+
     const content1 = await fse.readFile(distFooFile, 'utf-8');
     expect(content1!).toMatchInlineSnapshot(`
       "const foo = 'foo';
@@ -137,12 +138,12 @@ export default defineConfig({
     fse.removeSync(srcIndexFile);
 
     // change
-    fse.outputFileSync(srcFooFile, `export const foo = 'foo1';`);
-    await expectFileChanges(distFooFile, content1, 'foo1');
+    fse.outputFileSync(srcFooFile, `export const foo1 = 'foo1';`);
+    await expectFileWithContent(distFooFile, 'foo1');
     const content3 = await fse.readFile(distFooFile, 'utf-8');
     expect(content3!).toMatchInlineSnapshot(`
-      "const foo = 'foo1';
-      export { foo };
+      "const foo1 = 'foo1';
+      export { foo1 };
       "
     `);
 
