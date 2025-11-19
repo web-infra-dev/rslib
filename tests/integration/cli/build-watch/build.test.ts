@@ -80,9 +80,6 @@ export default defineConfig({
     generateBundleEsmConfig({
       bundle: false,
     }),
-    generateBundleCjsConfig({
-      bundle: false,
-    }),
   ],
   source: {
     entry: {
