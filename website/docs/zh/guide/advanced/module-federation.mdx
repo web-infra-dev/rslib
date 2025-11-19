@@ -29,7 +29,7 @@ import { PackageManagerTabs } from '@theme';
 
 然后在 `rslib.config.ts` 中注册插件:
 
-```ts title='rslib.config.ts'
+```ts title="rslib.config.ts" twoslash
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
@@ -114,10 +114,9 @@ Rslib 支持宿主应用和 Rslib 模块联邦项目同时开发。
 
 #### 2. 启动宿主应用
 
-设置宿主应用消费 Rslib 的模块联邦库。查看[@module-federation/rsbuild-plugin
-](https://www.npmjs.com/package/@module-federation/rsbuild-plugin) 获取更多信息。
+设置宿主应用消费 Rslib 的模块联邦库。查看 [@module-federation/rsbuild-plugin](https://www.npmjs.com/package/@module-federation/rsbuild-plugin) 获取更多信息。
 
-```ts title="rsbuild.config.ts"
+```ts title="rsbuild.config.ts" twoslash
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';

@@ -29,7 +29,7 @@ import { PackageManagerTabs } from '@theme';
 
 Then register the plugin in the `rslib.config.ts` file:
 
-```ts title='rslib.config.ts'
+```ts title="rslib.config.ts" twoslash
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
@@ -118,7 +118,7 @@ with Hot Module Replacement (HMR).
 Set up the host app to consume the Rslib Module Federation library. Check out the [@module-federation/rsbuild-plugin
 ](https://www.npmjs.com/package/@module-federation/rsbuild-plugin) for more information.
 
-```ts title="rsbuild.config.ts"
+```ts title="rsbuild.config.ts" twoslash
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
