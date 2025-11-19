@@ -145,6 +145,7 @@ export default defineConfig({
           minify: false,
           compress: {
             defaults: false,
+            directives: false,
             unused: true,
             dead_code: true,
             toplevel: true,
@@ -185,6 +186,7 @@ export default defineConfig({
           minify: true,
           compress: {
             defaults: false,
+            directives: false,
             unused: true,
             dead_code: true,
             // 避免 remoteEntry 的全局变量被 tree-shaking

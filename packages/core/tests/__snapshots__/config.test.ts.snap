@@ -634,17 +634,6 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
             }
           }
         ]
-      },
-      /* config.module.rule('Rslib:js-entry-loader') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        issuer: /^$/,
-        use: [
-          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
-          {
-            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
-          }
-        ]
       }
     ]
   },
@@ -666,6 +655,7 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
             mangle: false,
             minify: false,
             compress: {
+              directives: false,
               defaults: false,
               unused: true,
               dead_code: true,
@@ -717,11 +707,7 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
       options: undefined
     },
     {
-      reactDirectives: {},
       shimsInjectedAssets: new Set([]),
-      shebangChmod: 493,
-      shebangEntries: {},
-      shebangInjectedAssets: new Set([]),
       enabledImportMetaUrlShim: false,
       contextToWatch: null
     }
@@ -1727,6 +1713,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             mangle: false,
             minify: false,
             compress: {
+              directives: false,
               defaults: false,
               unused: true,
               dead_code: true,
@@ -1773,11 +1760,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       ]
     },
     {
-      reactDirectives: {},
       shimsInjectedAssets: new Set([]),
-      shebangChmod: 493,
-      shebangEntries: {},
-      shebangInjectedAssets: new Set([]),
       enabledImportMetaUrlShim: false,
       contextToWatch: null
     }
@@ -2474,6 +2457,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             mangle: false,
             minify: false,
             compress: {
+              directives: false,
               defaults: false,
               unused: true,
               dead_code: true,
@@ -2517,11 +2501,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       ]
     },
     {
-      reactDirectives: {},
       shimsInjectedAssets: new Set([]),
-      shebangChmod: 493,
-      shebangEntries: {},
-      shebangInjectedAssets: new Set([]),
       enabledImportMetaUrlShim: true,
       contextToWatch: null
     }
@@ -3124,6 +3104,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             mangle: false,
             minify: false,
             compress: {
+              directives: false,
               defaults: false,
               unused: true,
               dead_code: true,
@@ -3166,11 +3147,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       ]
     },
     {
-      reactDirectives: {},
       shimsInjectedAssets: new Set([]),
-      shebangChmod: 493,
-      shebangEntries: {},
-      shebangInjectedAssets: new Set([]),
       enabledImportMetaUrlShim: false,
       contextToWatch: null
     }
@@ -3772,6 +3749,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             mangle: false,
             minify: false,
             compress: {
+              directives: false,
               defaults: false,
               unused: true,
               dead_code: true,
@@ -3814,11 +3792,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       ]
     },
     {
-      reactDirectives: {},
       shimsInjectedAssets: new Set([]),
-      shebangChmod: 493,
-      shebangEntries: {},
-      shebangInjectedAssets: new Set([]),
       enabledImportMetaUrlShim: false,
       contextToWatch: null
     }
@@ -4371,6 +4345,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             mangle: false,
             minify: true,
             compress: {
+              directives: false,
               defaults: false,
               unused: true,
               dead_code: true,
@@ -4411,11 +4386,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       }
     ),
     {
-      reactDirectives: {},
       shimsInjectedAssets: new Set([]),
-      shebangChmod: 493,
-      shebangEntries: {},
-      shebangInjectedAssets: new Set([]),
       enabledImportMetaUrlShim: false,
       contextToWatch: null
     }
@@ -4524,6 +4495,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "compress": {
               "dead_code": true,
               "defaults": false,
+              "directives": false,
               "toplevel": true,
               "unused": true,
             },
@@ -4697,10 +4669,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             EntryChunkPlugin {
               "contextToWatch": null,
               "enabledImportMetaUrlShim": false,
-              "reactDirectives": {},
-              "shebangChmod": 493,
-              "shebangEntries": {},
-              "shebangInjectedAssets": Set {},
               "shimsInjectedAssets": Set {},
             },
           ],
@@ -4817,6 +4785,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "compress": {
               "dead_code": true,
               "defaults": false,
+              "directives": false,
               "toplevel": true,
               "unused": true,
             },
@@ -4987,10 +4956,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             EntryChunkPlugin {
               "contextToWatch": null,
               "enabledImportMetaUrlShim": true,
-              "reactDirectives": {},
-              "shebangChmod": 493,
-              "shebangEntries": {},
-              "shebangInjectedAssets": Set {},
               "shimsInjectedAssets": Set {},
             },
           ],
@@ -5097,6 +5062,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "compress": {
               "dead_code": true,
               "defaults": false,
+              "directives": false,
               "toplevel": true,
               "unused": true,
             },
@@ -5238,10 +5204,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             EntryChunkPlugin {
               "contextToWatch": null,
               "enabledImportMetaUrlShim": false,
-              "reactDirectives": {},
-              "shebangChmod": 493,
-              "shebangEntries": {},
-              "shebangInjectedAssets": Set {},
               "shimsInjectedAssets": Set {},
             },
           ],
@@ -5348,6 +5310,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "compress": {
               "dead_code": true,
               "defaults": false,
+              "directives": false,
               "toplevel": true,
               "unused": true,
             },
@@ -5491,10 +5454,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             EntryChunkPlugin {
               "contextToWatch": null,
               "enabledImportMetaUrlShim": false,
-              "reactDirectives": {},
-              "shebangChmod": 493,
-              "shebangEntries": {},
-              "shebangInjectedAssets": Set {},
               "shimsInjectedAssets": Set {},
             },
           ],
@@ -5543,6 +5502,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "compress": {
               "dead_code": true,
               "defaults": false,
+              "directives": false,
               "toplevel": false,
               "unused": true,
             },
@@ -5653,10 +5613,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             EntryChunkPlugin {
               "contextToWatch": null,
               "enabledImportMetaUrlShim": false,
-              "reactDirectives": {},
-              "shebangChmod": 493,
-              "shebangEntries": {},
-              "shebangInjectedAssets": Set {},
               "shimsInjectedAssets": Set {},
             },
           ],

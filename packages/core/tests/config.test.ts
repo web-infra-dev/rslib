@@ -484,6 +484,7 @@ describe('minify', () => {
             "compress": {
               "dead_code": true,
               "defaults": false,
+              "directives": false,
               "toplevel": true,
               "unused": true,
             },

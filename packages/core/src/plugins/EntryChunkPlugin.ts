@@ -1,4 +1,3 @@
-import { chmodSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import {
   type EnvironmentConfig,
@@ -6,12 +5,7 @@ import {
   type Rspack,
   rspack,
 } from '@rsbuild/core';
-import {
-  JS_EXTENSIONS_PATTERN,
-  REACT_DIRECTIVE_REGEX,
-  SHEBANG_PREFIX,
-  SHEBANG_REGEX,
-} from '../constant';
+import { JS_EXTENSIONS_PATTERN } from '../constant';
 
 const require = createRequire(import.meta.url);
 
@@ -25,25 +19,8 @@ const IMPORT_META_URL_SHIM = `const __rslib_import_meta_url__ = /*#__PURE__*/ (f
 })();
 `;
 
-const matchFirstLine = (source: string, regex: RegExp): string | false => {
-  const lineBreakPos = source.match(/(\r\n|\n)/);
-  const firstLineContent = source.slice(0, lineBreakPos?.index);
-  const matched = regex.exec(firstLineContent);
-  if (!matched) {
-    return false;
-  }
-
-  return matched[0];
-};
-
 class EntryChunkPlugin {
-  private reactDirectives: Record<string, string> = {};
-
   private shimsInjectedAssets: Set<string> = new Set();
-
-  private shebangChmod = 0o755;
-  private shebangEntries: Record<string, string> = {};
-  private shebangInjectedAssets: Set<string> = new Set();
 
   private enabledImportMetaUrlShim: boolean;
   private contextToWatch: string | null = null;
@@ -72,57 +49,11 @@ class EntryChunkPlugin {
     });
 
     compiler.hooks.make.tap(PLUGIN_NAME, (compilation) => {
-      const entries: Record<string, string> = {};
-      for (const [key, value] of compilation.entries) {
-        const firstDep = value.dependencies[0];
-        if (firstDep?.request) {
-          entries[key] = firstDep.request;
-        }
-      }
-
-      for (const name in entries) {
-        const first = entries[name];
-        if (!first) continue;
-        const filename = first.split('?')[0]!;
-        const isJs = JS_EXTENSIONS_PATTERN.test(filename);
-        if (!isJs) continue;
-        const content = compiler.inputFileSystem!.readFileSync!(filename, {
-          encoding: 'utf-8',
-        });
-        // Shebang
-        if (content.startsWith(SHEBANG_PREFIX)) {
-          const shebangMatch = matchFirstLine(content, SHEBANG_REGEX);
-          if (shebangMatch) {
-            this.shebangEntries[name] = shebangMatch;
-          }
-        }
-        // React directive
-        const reactDirective = matchFirstLine(content, REACT_DIRECTIVE_REGEX);
-        if (reactDirective) {
-          this.reactDirectives[name] = reactDirective;
-        }
-      }
-    });
-
-    compiler.hooks.make.tap(PLUGIN_NAME, (compilation) => {
-      compilation.hooks.chunkAsset.tap(PLUGIN_NAME, (chunk, filename) => {
+      compilation.hooks.chunkAsset.tap(PLUGIN_NAME, (_chunk, filename) => {
         const isJs = JS_EXTENSIONS_PATTERN.test(filename);
         if (!isJs) return;
 
         this.shimsInjectedAssets.add(filename);
-
-        const name = chunk.name;
-        if (!name) return;
-
-        const shebangEntry = this.shebangEntries[name];
-        if (shebangEntry) {
-          this.shebangEntries[filename] = shebangEntry;
-        }
-
-        const reactDirective = this.reactDirectives[name];
-        if (reactDirective) {
-          this.reactDirectives[filename] = reactDirective;
-        }
       });
     });
 
@@ -158,45 +89,6 @@ class EntryChunkPlugin {
           });
         }
       });
-
-      compilation.hooks.processAssets.tap(
-        {
-          name: PLUGIN_NAME,
-          // Just after minify stage, to avoid from being minified.
-          stage: rspack.Compilation.PROCESS_ASSETS_STAGE_DEV_TOOLING - 1,
-        },
-        (assets) => {
-          const chunkAsset = Object.keys(assets);
-          for (const name of chunkAsset) {
-            const shebangValue = this.shebangEntries[name];
-            const reactDirectiveValue = this.reactDirectives[name];
-
-            if (shebangValue || reactDirectiveValue) {
-              compilation.updateAsset(name, (old) => {
-                const replaceSource = new rspack.sources.ReplaceSource(old);
-                // Shebang
-                if (shebangValue) {
-                  replaceSource.insert(0, `${shebangValue}\n`);
-                  this.shebangInjectedAssets.add(name);
-                }
-
-                // React directives
-                if (reactDirectiveValue) {
-                  replaceSource.insert(0, `${reactDirectiveValue}\n`);
-                }
-
-                return replaceSource;
-              });
-            }
-          }
-        },
-      );
-    });
-
-    compiler.hooks.assetEmitted.tap(PLUGIN_NAME, (file, { targetPath }) => {
-      if (this.shebangInjectedAssets.has(file)) {
-        chmodSync(targetPath, this.shebangChmod);
-      }
     });
   }
 }
@@ -217,13 +109,15 @@ const entryModuleLoaderRsbuildPlugin = (): RsbuildPlugin => ({
 
 export const composeEntryChunkConfig = ({
   enabledImportMetaUrlShim,
+  useLoader,
   contextToWatch = null,
 }: {
+  useLoader: boolean;
   enabledImportMetaUrlShim: boolean;
   contextToWatch: string | null;
 }): EnvironmentConfig => {
   return {
-    plugins: [entryModuleLoaderRsbuildPlugin()],
+    plugins: useLoader ? [entryModuleLoaderRsbuildPlugin()] : [],
     tools: {
       rspack: {
         plugins: [

@@ -56,6 +56,7 @@ test('multiple entry bundle', async () => {
           "<ROOT>/tests/integration/entry/multiple/dist/cjs/shared.cjs",
         ],
         "esm": [
+          "<ROOT>/tests/integration/entry/multiple/dist/esm/447.js",
           "<ROOT>/tests/integration/entry/multiple/dist/esm/994.js",
           "<ROOT>/tests/integration/entry/multiple/dist/esm/foo.js",
           "<ROOT>/tests/integration/entry/multiple/dist/esm/index.js",
@@ -86,8 +87,8 @@ test('multiple entry bundle', async () => {
   // cspell:disable
   if (process.env.ADVANCED_ESM) {
     expect(index).toMatchInlineSnapshot(`
-      "import { shared } from "./994.js";
-      const foo = shared('foo');
+      "import { foo } from "./447.js";
+      import { shared } from "./994.js";
       const src_text = ()=>\`\${foo} \${shared('index')}\`;
       export { src_text as text };
       "
@@ -109,9 +110,7 @@ test('multiple entry bundle', async () => {
   // cspell:disable
   if (process.env.ADVANCED_ESM) {
     expect(foo).toMatchInlineSnapshot(`
-      "import { shared } from "./994.js";
-      const foo = shared('foo');
-      export { foo };
+      "export { foo } from "./447.js";
       "
     `);
   } else {
@@ -127,11 +126,19 @@ test('multiple entry bundle', async () => {
   const { content: shared } = queryContent(contents.esm, 'shared.js', {
     basename: true,
   });
-  expect(shared).toMatchInlineSnapshot(`
-    "const shared = (str)=>'shared-' + str;
-    export { shared };
-    "
-  `);
+
+  if (process.env.ADVANCED_ESM) {
+    expect(shared).toMatchInlineSnapshot(`
+        "export { shared } from "./994.js";
+        "
+        `);
+  } else {
+    expect(shared).toMatchInlineSnapshot(`
+        "const shared = (str)=>'shared-' + str;
+        export { shared };
+        "
+      `);
+  }
 });
 
 test('glob entry bundleless', async () => {

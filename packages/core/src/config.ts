@@ -414,6 +414,7 @@ export function composeMinifyConfig(config: LibConfig): EnvironmentConfig {
             // MF assets are loaded over the network, which means they will not be compressed by the project. Therefore, minifying them is necessary.
             minify: format === 'mf',
             compress: {
+              directives: false,
               defaults: false,
               unused: true,
               dead_code: true,
@@ -1831,6 +1832,7 @@ async function composeLibRsbuildConfig(
   const assetConfig = composeAssetConfig(bundle, format);
 
   const entryChunkConfig = composeEntryChunkConfig({
+    useLoader: advancedEsm !== true,
     enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
     contextToWatch: outBase,
   });
