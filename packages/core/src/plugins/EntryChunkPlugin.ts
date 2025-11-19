@@ -72,13 +72,17 @@ class EntryChunkPlugin {
           compilation.updateAsset(name, (old) => {
             const oldSource = old.source().toString();
             const replaceSource = new rspack.sources.ReplaceSource(old);
-            if (
-              oldSource.startsWith('use strict;') ||
-              oldSource.startsWith('"use strict";')
+
+            if (oldSource.startsWith('#!')) {
+              const firstLineEnd = oldSource.indexOf('\n');
+              replaceSource.insert(firstLineEnd + 1, IMPORT_META_URL_SHIM);
+            } else if (
+              oldSource.startsWith("'use strict'") ||
+              oldSource.startsWith('"use strict"')
             ) {
               replaceSource.replace(
                 0,
-                11, // 'use strict;'.length,
+                11,
                 `"use strict";\n${IMPORT_META_URL_SHIM}`,
               );
             } else {
