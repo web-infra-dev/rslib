@@ -39,7 +39,9 @@ export default defineConfig({
     pluginAlgolia(),
     pluginFontOpenSans(),
     pluginLlms(),
-    pluginTwoslash(),
+    pluginTwoslash({
+      cache: false,
+    }),
     pluginRss({
       siteUrl,
       feed: [
