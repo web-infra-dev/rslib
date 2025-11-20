@@ -2425,17 +2425,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             }
           }
         ]
-      },
-      /* config.module.rule('Rslib:js-entry-loader') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        issuer: /^$/,
-        use: [
-          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
-          {
-            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
-          }
-        ]
       }
     ]
   },
@@ -3070,17 +3059,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               id: 'rsbuild-transform-0',
               getEnvironment: ()=>environmentContext
             }
-          }
-        ]
-      },
-      /* config.module.rule('Rslib:js-entry-loader') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        issuer: /^$/,
-        use: [
-          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
-          {
-            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
           }
         ]
       }
@@ -4312,17 +4290,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         generator: {
           filename: 'static/wasm/[contenthash:8].module.wasm'
         }
-      },
-      /* config.module.rule('Rslib:js-entry-loader') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        issuer: /^$/,
-        use: [
-          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
-          {
-            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
-          }
-        ]
       }
     ]
   },
@@ -4834,10 +4801,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         ],
         "setup": [Function],
       },
-      {
-        "name": "rsbuild:lib-entry-chunk",
-        "setup": [Function],
-      },
     ],
     "resolve": {
       "alias": {
@@ -5094,10 +5057,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       {
         "name": "rsbuild:fix-js-module-type",
-        "setup": [Function],
-      },
-      {
-        "name": "rsbuild:lib-entry-chunk",
         "setup": [Function],
       },
     ],
@@ -5539,10 +5498,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       {
         "name": "rsbuild:fix-js-module-type",
-        "setup": [Function],
-      },
-      {
-        "name": "rsbuild:lib-entry-chunk",
         "setup": [Function],
       },
       {

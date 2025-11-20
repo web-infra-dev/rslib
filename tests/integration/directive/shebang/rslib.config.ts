@@ -1,5 +1,5 @@
 import { defineConfig } from '@rslib/core';
-import { generateBundleEsmConfig } from 'test-helper';
+import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 const esmShared = {
   source: {
@@ -20,6 +20,11 @@ const esmSharedBundleFalse = {
 
 export default defineConfig({
   lib: [
+    generateBundleCjsConfig({
+      output: {
+        distPath: './dist/bundle/cjs0',
+      },
+    }),
     generateBundleEsmConfig({
       ...esmShared,
       shims: { esm: { __dirname: true, __filename: true } },
