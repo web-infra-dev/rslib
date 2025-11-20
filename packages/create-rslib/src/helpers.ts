@@ -1,7 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { copyFolder } from 'create-rstack';
+import {
+  collectAgentsFiles,
+  copyFolder,
+  mergeAgentsFiles,
+} from 'create-rstack';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,15 +57,25 @@ export function genTemplate({
     isMergePackageJson: true,
   });
 
+  const agentsMdSearchDirs = [];
+
   if (tools) {
     for (const tool of toolKeys) {
       const toolDir = getTool({ toolDir: tools[tool]! });
+      agentsMdSearchDirs.push(toolDir);
       copyFolder({
         from: toolDir,
         to: target,
         isMergePackageJson: true,
       });
     }
+  }
+
+  if (agentsMdSearchDirs.length > 1) {
+    const agentsFiles = collectAgentsFiles(agentsMdSearchDirs);
+    const mergedAgents = mergeAgentsFiles(agentsFiles);
+    const agentsPath = path.join(target, 'AGENTS.md');
+    fs.writeFileSync(agentsPath, `${mergedAgents}\n`);
   }
 }
 
