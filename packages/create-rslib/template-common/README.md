@@ -5,7 +5,7 @@
 Install the dependencies:
 
 ```bash
-pnpm install
+{{ packageManager }} install
 ```
 
 ## Get started
@@ -13,11 +13,11 @@ pnpm install
 Build the library:
 
 ```bash
-pnpm build
+{{ packageManager }} run build
 ```
 
 Build the library in watch mode:
 
 ```bash
-pnpm dev
+{{ packageManager }} run dev
 ```

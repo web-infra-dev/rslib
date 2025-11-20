@@ -26,10 +26,11 @@
     "dev": "rslib build --watch",
     "generate-templates": "pnpm tsx ./src/genTemplates.ts",
     "start": "node ./dist/index.js",
-    "test": "rstest"
+    "test": "rstest",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "create-rstack": "1.7.7"
+    "create-rstack": "1.7.9"
   },
   "devDependencies": {
     "@rslib/tsconfig": "workspace:*",
