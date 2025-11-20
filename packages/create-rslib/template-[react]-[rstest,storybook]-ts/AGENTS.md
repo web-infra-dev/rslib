@@ -2,4 +2,4 @@
 
 ### Storybook
 
-- Run `npm run storybook` to start the Storybook dev server
+- Run `{{ packageManager }} run storybook` to start the Storybook dev server
