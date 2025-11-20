@@ -51,7 +51,6 @@ export function genTemplate({
     from: srcBase,
     to: target,
     isMergePackageJson: true,
-    packageManager: '{{ packageManager }}',
   });
 
   if (tools) {
@@ -61,7 +60,6 @@ export function genTemplate({
         from: toolDir,
         to: target,
         isMergePackageJson: true,
-        packageManager: '{{ packageManager }}',
       });
     }
   }
