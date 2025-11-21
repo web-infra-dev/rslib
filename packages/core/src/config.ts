@@ -1418,6 +1418,7 @@ const composeBundlelessExternalConfig = (
   cssModulesAuto: CssLoaderOptionsAuto,
   bundle: boolean,
   outBase: string | null,
+  pkgJson?: PkgJson,
 ): {
   config: EnvironmentConfig;
   resolvedJsRedirect?: DeepRequired<JsRedirect>;
@@ -1432,6 +1433,60 @@ const composeBundlelessExternalConfig = (
   const assetRedirectExtension = redirect.asset?.extension ?? true;
 
   let resolver: RspackResolver | undefined;
+  const devDependencyNames = new Set(
+    Object.keys(pkgJson?.devDependencies ?? {}),
+  );
+  const warnedDevDependencies = new Set<string>();
+
+  const devDependencyList = Array.from(devDependencyNames);
+
+  const matchDevDependency = (request: string): string | undefined => {
+    if (!request || devDependencyList.length === 0) {
+      return undefined;
+    }
+
+    for (const name of devDependencyList) {
+      if (request === name || request.startsWith(`${name}/`)) {
+        return name;
+      }
+    }
+
+    return undefined;
+  };
+
+  const warnDevDependency = (request: string, issuer?: string) => {
+    const matched = matchDevDependency(request);
+    if (!matched || warnedDevDependencies.has(matched)) {
+      return;
+    }
+
+    // Only warn when we have an issuer and outBase is a string and the issuer
+    // is located inside the outBase (root) directory. Otherwise skip warning.
+    if (!issuer || typeof outBase !== 'string') {
+      return;
+    }
+
+    const normalizedIssuer = normalizeSlash(issuer);
+    const normalizedOutBase = normalizeSlash(outBase);
+    const isIssuerInsideOutBase =
+      normalizedIssuer === normalizedOutBase ||
+      normalizedIssuer.startsWith(`${normalizedOutBase}/`);
+
+    if (!isIssuerInsideOutBase) {
+      return;
+    }
+
+    warnedDevDependencies.add(matched);
+
+    const relativeSource = normalizeSlash(path.relative(outBase, issuer));
+    const sourceInfo = relativeSource
+      ? ` from ${color.green(relativeSource)}`
+      : '';
+
+    logger.warn(
+      `The externalized request ${color.green(`"${request}"`)}${sourceInfo} is declared in ${color.blue('"devDependencies"')} in package.json. Bundleless mode does not include devDependencies in the output, consider moving it to ${color.blue('"dependencies"')} or ${color.blue('"peerDependencies"')}.`,
+    );
+  };
 
   return {
     resolvedJsRedirect: {
@@ -1505,6 +1560,7 @@ const composeBundlelessExternalConfig = (
             // Prevent from externalizing entry modules here.
             if (issuer) {
               let resolvedRequest: string = request;
+              warnDevDependency(request, issuer);
 
               const redirectedPath = await redirectPath(resolvedRequest);
               const cssExternal = await cssExternalHandler(
@@ -1812,6 +1868,7 @@ async function composeLibRsbuildConfig(
     cssModulesAuto,
     bundle,
     outBase,
+    pkgJson,
   );
   const {
     config: targetConfig,
