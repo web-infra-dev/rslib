@@ -182,7 +182,7 @@ test('validate entry and throw errors', async () => {
   try {
     await buildAndGetResults({
       fixturePath,
-      configPath: 'nonExistingFile.config.ts',
+      configPath: 'bundleNonExistingFile.config.ts',
     });
   } catch (e) {
     errMsg = (e as AggregateError).errors.join('\n\n');
@@ -190,6 +190,19 @@ test('validate entry and throw errors', async () => {
 
   expect(stripAnsi(errMsg)).toMatchInlineSnapshot(
     `"Error: Can't resolve the entry "./src/main.ts" at the location <ROOT>/tests/integration/entry/validate/src/main.ts. Please ensure that the file exists."`,
+  );
+
+  try {
+    await buildAndGetResults({
+      fixturePath,
+      configPath: 'bundlelessNonExistingFile.config.ts',
+    });
+  } catch (e) {
+    errMsg = (e as Error).message;
+  }
+
+  expect(stripAnsi(errMsg)).toMatchInlineSnapshot(
+    `"No entry files matching ./src/non-existing-file.ts, ./non-existing-folder/**/*. Please ensure the entry pattern in source.entry is correct and points to valid source files."`,
   );
 
   try {
