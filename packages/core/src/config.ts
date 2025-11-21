@@ -1344,7 +1344,11 @@ const composeEntryConfig = async (
       });
 
       if (resolvedEntryFiles.length === 0) {
-        throw new Error(`Cannot find ${resolvedEntryFiles}`);
+        const error = new Error(
+          `No entry files matching ${entryFiles.map((file) => color.cyan(file)).join(', ')}. Please ensure the entry pattern in ${color.cyan('source.entry')} is correct and points to valid source files.`,
+        );
+        error.stack = '';
+        throw error;
       }
 
       const outBase = await resolveOutBase(resolvedEntryFiles);
