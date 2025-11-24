@@ -465,14 +465,24 @@ export async function createTempFiles(
   const tempDirEsm = join(fixturePath, 'dist-types', 'esm');
   const tempFileCjs = join(tempDirCjs, 'tempFile.d.ts');
   const tempFileEsm = join(tempDirEsm, 'tempFile.d.ts');
+  const tempFileMapCjs = join(tempDirCjs, 'tempFile.d.ts.map');
+  const tempFileMapEsm = join(tempDirEsm, 'tempFile.d.ts.map');
 
   await fs.promises.mkdir(tempDirCjs, { recursive: true });
   await fs.promises.mkdir(tempDirEsm, { recursive: true });
 
   await fs.promises.writeFile(tempFileCjs, 'console.log("temp file for cjs");');
   await fs.promises.writeFile(tempFileEsm, 'console.log("temp file for esm");');
+  await fs.promises.writeFile(
+    tempFileMapCjs,
+    'console.log("temp map file for cjs");',
+  );
+  await fs.promises.writeFile(
+    tempFileMapEsm,
+    'console.log("temp map file for esm");',
+  );
 
-  checkFile.push(tempFileCjs, tempFileEsm);
+  checkFile.push(tempFileCjs, tempFileEsm, tempFileMapCjs, tempFileMapEsm);
 
   if (bundle) {
     const tempDirRslib = join(fixturePath, '.rslib', 'declarations', 'cjs');
