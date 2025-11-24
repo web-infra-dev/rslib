@@ -159,7 +159,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         warnIfOutside(cwd, declarationDir, 'declarationDir');
         warnIfOutside(cwd, outDir, 'outDir');
 
-        // clean dts files
+        // clean dts files and maps
         if (config.output.cleanDistPath !== false) {
           await cleanDtsFiles(dtsEmitPath);
         }

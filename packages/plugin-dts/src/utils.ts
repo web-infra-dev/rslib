@@ -612,7 +612,14 @@ export const globDtsFiles = async (
 };
 
 export async function cleanDtsFiles(dir: string): Promise<void> {
-  const patterns = ['/**/*.d.ts', '/**/*.d.cts', '/**/*.d.mts'];
+  const patterns = [
+    '/**/*.d.ts',
+    '/**/*.d.cts',
+    '/**/*.d.mts',
+    '/**/*.d.ts.map',
+    '/**/*.d.cts.map',
+    '/**/*.d.mts.map',
+  ];
   const allFiles = await globDtsFiles(dir, patterns);
 
   await Promise.all(
