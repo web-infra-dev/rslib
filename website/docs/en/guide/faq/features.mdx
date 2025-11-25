@@ -199,11 +199,9 @@ export default {
 
 ### How to additionally exclude specified dependencies when `dts.bundle` is `true`?
 
-Rslib uses [rsbuild-plugin-dts](https://github.com/web-infra-dev/rslib/blob/main/packages/plugin-dts/README.md) to generate declaration files, which supports configuration via [output.externals](/config/rsbuild/output#outputtarget) for excluding certain dependencies from bundled declaration files.
+Rslib uses [rsbuild-plugin-dts](https://github.com/web-infra-dev/rslib/blob/main/packages/plugin-dts/README.md) to generate declaration files, which supports configuration via [output.externals](/config/rsbuild/output#outputexternals) for excluding certain dependencies from bundled declaration files.
 
-For example, a typical React component library often does not declare `@types/react` in `peerDependencies` but only in `devDependencies`. Following the [autoExternal](/config/lib/auto-external) logic for dependency handling, Rslib will attempt to bundle `@types/react` into the declaration output files during the build. However, in practice, a component library should not bundle `@types/react`.
-
-In this scenario, you can configure [output.externals](/config/rsbuild/output#outputtarget) to exclude `@types/react`.
+For example, if `@types/foo` is only declared in `devDependencies`, according to the dependency handling logic of [autoExternal](/config/lib/auto-external), Rslib will try to bundle `@types/foo` into the declaration output files during the build. In this case, you can exclude `@types/foo` by configuring [output.externals](/config/rsbuild/output#outputexternals).
 
 ```ts title="rslib.config.ts"
 export default {
@@ -211,10 +209,12 @@ export default {
     // ...
   ],
   output: {
-    externals: ['@types/react'],
+    externals: ['@types/foo'],
   },
 };
 ```
+
+In addition, if you only want to specify a few dependencies to be bundled into the declaration output files, you can configure [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) to achieve this. All other dependencies not in this configuration will be excluded.
 
 ## Rsbuild plugin
 

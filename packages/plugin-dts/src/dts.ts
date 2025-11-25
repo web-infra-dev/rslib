@@ -20,6 +20,8 @@ import {
 const isObject = (obj: unknown): obj is Record<string, any> =>
   Object.prototype.toString.call(obj) === '[object Object]';
 
+export const DEFAULT_EXCLUDED_PACKAGES: string[] = ['@types/react'];
+
 // use !externals
 export const calcBundledPackages = (options: {
   cwd: string;
@@ -110,7 +112,11 @@ export const calcBundledPackages = (options: {
       !externals.some((e) => (typeof e === 'string' ? d === e : e.test(d))),
   );
 
-  return Array.from(new Set(bundledPackages));
+  const filteredBundledPackages = Array.from(new Set(bundledPackages)).filter(
+    (pkg) => !DEFAULT_EXCLUDED_PACKAGES.includes(pkg),
+  );
+
+  return filteredBundledPackages;
 };
 
 export async function generateDts(data: DtsGenOptions): Promise<void> {
