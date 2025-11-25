@@ -1,25 +1,5 @@
 // Rstest Snapshot v1
 
-exports[`dts when bundle: false > basic 3`] = `
-{
-  "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/index.d.ts": "export * from './sum';
-export * from './utils/numbers';
-export * from './utils/strings';
-",
-  "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/sum.d.ts": "export declare const numSum: number;
-export declare const strSum: string;
-",
-  "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/utils/numbers.d.ts": "export declare const num1 = 1;
-export declare const num2 = 2;
-export declare const num3 = 3;
-",
-  "<ROOT>/tests/integration/dts/bundle-false/basic/dist/esm/utils/strings.d.ts": "export declare const str1 = "str1";
-export declare const str2 = "str2";
-export declare const str3 = "str3";
-",
-}
-`;
-
 exports[`dts when bundle: true > basic 3`] = `
 {
   "cjs": "export declare const num1 = 1;

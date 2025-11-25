@@ -8,7 +8,7 @@ describe.skipIf(process.version.startsWith('v18'))(
   'dts with tsgo when bundle: true',
   () => {
     test('basic', async () => {
-      const fixturePath = join(__dirname, 'bundle', 'basic');
+      const fixturePath = join(__dirname, 'basic');
       const { files, entries } = await buildAndGetResults({
         fixturePath,
         type: 'dts',
@@ -34,7 +34,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('distPath', async () => {
-      const fixturePath = join(__dirname, 'bundle', 'dist-path');
+      const fixturePath = join(__dirname, 'dist-path');
       const { files } = await buildAndGetResults({
         fixturePath,
         type: 'dts',
@@ -50,7 +50,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('abortOnError: false', async () => {
-      const fixturePath = join(__dirname, 'bundle', 'abort-on-error');
+      const fixturePath = join(__dirname, 'abort-on-error');
 
       const result = spawnSync('npx', ['rslib', 'build'], {
         cwd: fixturePath,
@@ -63,7 +63,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('autoExtension: true', async () => {
-      const fixturePath = join(__dirname, 'bundle', 'auto-extension');
+      const fixturePath = join(__dirname, 'auto-extension');
       const { files } = await buildAndGetResults({
         fixturePath,
         type: 'dts',
@@ -79,7 +79,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('bundleName -- set source.entry', async () => {
-      const fixturePath = join(__dirname, 'bundle', 'bundle-name');
+      const fixturePath = join(__dirname, 'bundle-name');
       const { files } = await buildAndGetResults({
         fixturePath,
         type: 'dts',
@@ -95,7 +95,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('entry is an absolute path', async () => {
-      const fixturePath = join(__dirname, 'bundle', 'absolute-entry');
+      const fixturePath = join(__dirname, 'absolute-entry');
       const { files } = await buildAndGetResults({
         fixturePath,
         type: 'dts',
@@ -111,7 +111,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('rootdir calculation should ignore declaration files', async () => {
-      const fixturePath = join(__dirname, 'bundle', 'rootdir');
+      const fixturePath = join(__dirname, 'rootdir');
       const { files, entries } = await buildAndGetResults({
         fixturePath,
         type: 'dts',
@@ -133,7 +133,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('should clean dts dist files and .rslib folder', async () => {
-      const fixturePath = join(__dirname, 'bundle', 'clean');
+      const fixturePath = join(__dirname, 'clean');
 
       const checkFiles = await createTempFiles(fixturePath, true);
 
@@ -157,7 +157,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('multiple entries', async () => {
-      const fixturePath = join(__dirname, 'bundle', 'multiple-entries');
+      const fixturePath = join(__dirname, 'multiple-entries');
       const { files, contents } = await buildAndGetResults({
         fixturePath,
         type: 'dts',
@@ -194,7 +194,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('override with bundledPackages', async () => {
-      const fixturePath = join(__dirname, 'bundle', 'bundled-packages');
+      const fixturePath = join(__dirname, 'bundled-packages');
       const { entries } = await buildAndGetResults({
         fixturePath,
         type: 'dts',
