@@ -1,7 +1,15 @@
 import fs from 'node:fs';
 import { logger } from '@rsbuild/core';
 import { describe, expect, it, rs } from '@rstest/core';
-import { calcBundledPackages } from '../src/dts';
+import { calcBundledPackages, DEFAULT_EXCLUDED_PACKAGES } from '../src/dts';
+
+const defaultExcludePackages = DEFAULT_EXCLUDED_PACKAGES.reduce(
+  (acc: Record<string, string>, cur: string) => {
+    acc[cur] = '1.0.0';
+    return acc;
+  },
+  {},
+);
 
 const commonPkgJson = {
   dependencies: {
@@ -13,6 +21,7 @@ const commonPkgJson = {
   devDependencies: {
     baz: '1.0.0',
     bar: '1.0.0',
+    ...defaultExcludePackages,
   },
 };
 
@@ -65,6 +74,7 @@ describe('should calcBundledPackages correctly', () => {
           baz: '1.0.0',
           bar: '1.0.0',
           react: '1.0.0',
+          ...defaultExcludePackages,
         },
       }),
     );

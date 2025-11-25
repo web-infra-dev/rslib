@@ -199,11 +199,9 @@ export default {
 
 ### 如何在 `dts.bundle` 为 `true` 时额外排除指定的依赖？
 
-Rslib 通过 [rsbuild-plugin-dts](https://github.com/web-infra-dev/rslib/blob/main/packages/plugin-dts/README.md) 完成对类型声明文件的生成，该插件支持通过 [output.externals](/config/rsbuild/output#outputtarget) 进行配置，用于从打包后的类型声明文件中排除指定的依赖。
+Rslib 通过 [rsbuild-plugin-dts](https://github.com/web-infra-dev/rslib/blob/main/packages/plugin-dts/README.md) 生成类型声明文件，该插件支持通过 [output.externals](/config/rsbuild/output#outputexternals) 配置，从打包后的类型声明文件中排除指定的依赖。
 
-举个例子：常见的 React 组件库通常不会将 `@types/react` 声明在 `peerDependencies` 中，而是仅声明在 `devDependencies`，按照 [autoExternal](/config/lib/auto-external) 处理依赖的逻辑，在打包时 Rslib 会尝试将 `@types/react` 一同打包进类型声明文件产物中，但在实践中组件库并不应该打包 `@types/react`。
-
-此时可以通过配置 [output.externals](/config/rsbuild/output#outputtarget) 来排除 `@types/react`。
+举个例子，若 `@types/foo` 仅声明在 `devDependencies` 中，按照 [autoExternal](/config/lib/auto-external) 处理依赖的逻辑，在打包时 Rslib 会尝试将 `@types/foo` 一同打包进类型声明文件产物中，此时可以通过配置 [output.externals](/config/rsbuild/output#outputexternals) 来排除 `@types/foo`。
 
 ```ts title="rslib.config.ts"
 export default {
@@ -211,10 +209,12 @@ export default {
     // ...
   ],
   output: {
-    externals: ['@types/react'],
+    externals: ['@types/foo'],
   },
 };
 ```
+
+此外，如果只想指定某几个依赖项打包进类型声明文件产物中，可以通过配置 [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) 来实现，不在该配置中的所有其他依赖项都会被排除。
 
 ## Rsbuild 插件
 
