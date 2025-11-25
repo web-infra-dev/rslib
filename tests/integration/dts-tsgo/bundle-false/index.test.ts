@@ -14,7 +14,7 @@ describe.skipIf(process.version.startsWith('v18'))(
   'dts with tsgo when bundle: false',
   () => {
     test('basic', async () => {
-      const fixturePath = join(__dirname, 'bundle-false', 'basic');
+      const fixturePath = join(__dirname, 'basic');
       const { files, contents } = await buildAndGetResults({
         fixturePath,
         type: 'dts',
@@ -42,7 +42,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('distPath', async () => {
-      const fixturePath = join(__dirname, 'bundle-false', 'dist-path');
+      const fixturePath = join(__dirname, 'dist-path');
       const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });
 
       expect(files.esm).toMatchInlineSnapshot(`
@@ -56,7 +56,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('abortOnError: false', async () => {
-      const fixturePath = join(__dirname, 'bundle-false', 'abort-on-error');
+      const fixturePath = join(__dirname, 'abort-on-error');
 
       const result = spawnSync('npx', ['rslib', 'build'], {
         cwd: fixturePath,
@@ -69,7 +69,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('autoExtension: true', async () => {
-      const fixturePath = join(__dirname, 'bundle-false', 'auto-extension');
+      const fixturePath = join(__dirname, 'auto-extension');
       const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });
 
       expect(files.esm).toMatchInlineSnapshot(`
@@ -92,7 +92,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('should use declarationDir when not set dts.distPath', async () => {
-      const fixturePath = join(__dirname, 'bundle-false', 'declaration-dir');
+      const fixturePath = join(__dirname, 'declaration-dir');
       const distTypesPath = join(fixturePath, 'dist-types');
 
       await buildAndGetResults({ fixturePath, type: 'dts' });
@@ -113,7 +113,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('should clean dts dist files', async () => {
-      const fixturePath = join(__dirname, 'bundle-false', 'clean');
+      const fixturePath = join(__dirname, 'clean');
 
       const checkFiles = await createTempFiles(fixturePath, false);
 
@@ -143,7 +143,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('should emit error when tsconfig not found', async () => {
-      const fixturePath = join(__dirname, 'bundle-false', 'tsconfig-path');
+      const fixturePath = join(__dirname, 'tsconfig-path');
       await createTempFiles(fixturePath, false);
 
       try {
@@ -156,7 +156,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('alias', async () => {
-      const fixturePath = join(__dirname, 'bundle-false', 'alias');
+      const fixturePath = join(__dirname, 'alias');
       const { contents } = await buildAndGetResults({
         fixturePath,
         type: 'dts',
@@ -178,7 +178,7 @@ describe.skipIf(process.version.startsWith('v18'))(
     });
 
     test('declarationMap', async () => {
-      const fixturePath = join(__dirname, 'bundle-false', 'declaration-map');
+      const fixturePath = join(__dirname, 'declaration-map');
       const { files, contents } = await buildAndGetResults({
         fixturePath,
         type: 'dts',
