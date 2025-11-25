@@ -20,11 +20,11 @@ test('auto externalize Node.js built-in modules when `output.target` is "node"',
   restore();
 
   for (const external of [
-    'import * as __WEBPACK_EXTERNAL_MODULE_bar__ from "bar"',
-    'import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "node:module"',
-    'import fs from "fs"',
-    'import node_assert from "node:assert"',
-    'import react from "react"',
+    'import * as __rspack_external_bar from "bar";',
+    'import { createRequire as __rspack_createRequire } from "node:module";',
+    'import node_assert from "node:assert";',
+    'import fs from "fs";',
+    'import react from "react";',
   ]) {
     expect(entries.esm).toContain(external);
   }
@@ -48,8 +48,9 @@ test('should get warn when use require in ESM', async () => {
   const issuer = join(fixturePath, 'src/index.ts');
 
   for (const external of [
-    'import * as __WEBPACK_EXTERNAL_MODULE_bar__ from "bar";',
-    'import * as __WEBPACK_EXTERNAL_MODULE_foo__ from "foo";',
+    'import * as __rspack_external_bar from "bar";',
+    'import * as __rspack_external_foo from "foo";',
+    'import * as __rspack_external_qux from "qux";',
   ]) {
     expect(entries.esm).toContain(external);
   }

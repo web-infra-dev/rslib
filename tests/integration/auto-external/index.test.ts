@@ -86,7 +86,7 @@ test('should get warn when use require in ESM', async () => {
 
   for (const item of shouldWarn) {
     expect(entries.esm).toContain(
-      `import * as __WEBPACK_EXTERNAL_MODULE_${item}__ from "${item}"`,
+      `import * as __rspack_external_${item} from "${item}"`,
     );
   }
 
