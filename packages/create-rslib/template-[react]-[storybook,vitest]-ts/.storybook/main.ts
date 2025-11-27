@@ -1,7 +1,5 @@
-import { createRequire } from 'node:module';
-import { dirname, join } from 'node:path';
-
-const require = createRequire(import.meta.url);
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import type { StorybookConfig } from 'storybook-react-rsbuild';
 
@@ -9,9 +7,14 @@ import type { StorybookConfig } from 'storybook-react-rsbuild';
  * This function is used to resolve the absolute path of a package.
  * It is needed in projects that use Yarn PnP or are set up within a monorepo.
  */
-function getAbsolutePath(value: string): any {
-  return dirname(require.resolve(join(value, 'package.json')));
-}
+const getAbsolutePath = (value: string): any => {
+  return resolve(
+    fileURLToPath(
+      new URL(import.meta.resolve(`${value}/package.json`, import.meta.url)),
+    ),
+    '..',
+  );
+};
 
 const config: StorybookConfig = {
   stories: [

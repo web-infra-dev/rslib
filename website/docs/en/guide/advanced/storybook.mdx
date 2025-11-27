@@ -7,8 +7,16 @@ import { Tab, Tabs } from '@rspress/core/theme';
 
 [storybook-rsbuild](https://github.com/rspack-contrib/storybook-rsbuild) is the Rsbuild powered Storybook builder, and provided the framework integration for React, Vue3 and vanilla JavaScript. The coherent Rsbuild system could make Storybook use an unified configuration with Rslib.
 
-:::tip
-You can create a new project with Storybook by using [create-rslib](/guide/start/quick-start#creating-an-rslib-project).
+:::info Storybook Rsbuild version map
+
+The table below shows how Storybook Rsbuild matches Storybook versions. If you are on Storybook v9 or earlier, follow the [official migration guide](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#from-version-9x-to-1000) to upgrade to the latest release.
+
+| Storybook                              | Storybook Rsbuild                                                                        |
+| -------------------------------------- | ---------------------------------------------------------------------------------------- |
+| [v10](https://storybook.js.org/docs/)  | [^3.0.0](https://storybook.rsbuild.rs)                                                   |
+| [v9](https://storybook.js.org/docs/9/) | [^2.0.0](https://storybook-v2.rsbuild.rs)                                                |
+| [v8](https://storybook.js.org/docs/8/) | [^1.0.0](https://github.com/rspack-contrib/storybook-rsbuild/tree/v1/website/docs/guide) |
+
 :::
 
 ## Getting started
@@ -16,6 +24,10 @@ You can create a new project with Storybook by using [create-rslib](/guide/start
 ### Setup a Rslib project
 
 This is the prerequisite for setting up Storybook. You need to have a Rslib project with components that you want to showcase in Storybook, check out [Solution](/guide/solution/) to setup a Rslib project.
+
+:::tip
+You can create a new project with Storybook already wired up via [create-rslib](/guide/start/quick-start#creating-an-rslib-project), without manual setup.
+:::
 
 ### Add Storybook to project
 
