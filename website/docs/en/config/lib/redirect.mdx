@@ -85,7 +85,7 @@ Whether to automatically redirect the import paths of JavaScript output files.
 - **Type:** `boolean`
 - **Default:** `true`
 
-When set to `true`, [resolve.alias](/config/rsbuild/resolve#resolvealias) and [resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) will take effect and applied in the rewritten import path of the output file. For TypeScript projects, just configure [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) in the `tsconfig.json` file.
+When set to `true`, [resolve.alias](/config/rsbuild/resolve#resolvealias) and [resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) will take effect in the output file, and the import path of the output file will be rewritten. For TypeScript projects, just configure [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) in the `tsconfig.json` file.
 
 When set to `false`, the import path will not be effected by [resolve.alias](/config/rsbuild/resolve#resolvealias), [resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) and `tsconfig.json`.
 
@@ -103,14 +103,14 @@ import { foo } from '../foo.js'; // expected output './dist/utils/index.js'
 
 ### redirect.js.extension
 
-Whether to automatically redirect the file extension to import paths based on the JavaScript output files.
+Whether to automatically redirect the file extension of import paths based on the JavaScript output files.
 
 - **Type:** `boolean`
 - **Default:** `true`
 
-When set to `true`, the file extension will automatically be added to the rewritten import path of the output file, regardless of the original extension or whether it is specified in the import path.
+When set to `true`, the file extension of import paths in JavaScript output files that can be resolved correctly will be automatically completed or replaced.
 
-When set to `false`, the file extension will remain unchanged from the original import path in the rewritten import path of the output file (regardless of whether it is specified or specified as any value).
+When set to `false`, import paths will retain their original file extensions.
 
 :::note
 The extension of the JavaScript output file is related to the [autoExtension](/config/lib/auto-extension#libautoextension) configuration.
@@ -167,7 +167,7 @@ import styles from '../foo.css'; // expected output of './dist/utils/index.js'
 
 ### redirect.style.extension
 
-Whether to automatically redirect the file extension to import paths based on the style output files.
+Whether to automatically redirect the file extension of import paths based on the style output files.
 
 - **Type:** `boolean`
 - **Default:** `true`
@@ -215,7 +215,7 @@ import url from './assets/logo.svg'; // expected output of './dist/foo.js'
 
 ### redirect.asset.extension
 
-Whether to automatically redirect the file extension to import paths based on the asset output files.
+Whether to automatically redirect the file extension of import paths based on the asset output files.
 
 - **Type:** `boolean`
 - **Default:** `true`
@@ -266,14 +266,14 @@ import { foo } from '../foo'; // expected output './dist/utils/index.d.ts'
 
 ### redirect.dts.extension
 
-Whether to automatically redirect the file extension to import paths based on the TypeScript declaration output files.
+Whether to automatically redirect the file extension of import paths based on the TypeScript declaration output files.
 
 - **Type:** `boolean`
 - **Default:** `false`
 
-When set to `true`, the import paths in declaration files will be redirected to the corresponding JavaScript extension which can be resolved to corresponding declaration file.
+When set to `true`, the file extension of the import path in the declaration file will be automatically completed or replaced with the corresponding JavaScript file extension that can be resolved to the corresponding declaration file.
 
-When set to `false`, the file extension will remain unchanged from the original import path in the rewritten import path of the output file (regardless of whether it is specified or specified as any value).
+When set to `false`, import paths will retain their original file extensions.
 
 :::note
 The extension of the TypeScript declaration file is related to the [dts.autoExtension](/config/lib/dts#dtsautoextension) configuration.
@@ -281,7 +281,7 @@ The extension of the TypeScript declaration file is related to the [dts.autoExte
 
 - **Example:**
 
-For the `.d.mts` declaration file, in some scenarios, the full extension of the module import path is needed to load correctly.
+When loading a module with `moduleResolution: 'nodenext'`, the import path needs to include the full file extension. Rslib will automatically add the corresponding file extension based on the actual JavaScript output file.
 
 ```ts
 import { foo } from './foo'; // source code of './src/bar.ts' ↓
