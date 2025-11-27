@@ -233,7 +233,7 @@ const defaultRedirect = {
 };
 ```
 
-Controls the redirect of the import paths of output TypeScript declaration files.
+Controls the redirect of the import paths of TypeScript declaration output files.
 
 ```js
 pluginDts({
@@ -269,9 +269,9 @@ import { foo } from '../foo'; // expected output './dist/utils/index.d.ts'
 - **Type:** `boolean`
 - **Default:** `false`
 
-Whether to automatically redirect the file extension to import paths based on the TypeScript declaration output files.
+Whether to automatically redirect the file extension of import paths based on the TypeScript declaration output files.
 
-- When set to `true`, the import paths in declaration files will be redirected to the corresponding JavaScript extension which can be resolved to corresponding declaration file. The extension of the declaration output file is related to the `dtsExtension` configuration.
+- When set to `true`, the file extension of the import path in the declaration file will be automatically completed or replaced with the corresponding JavaScript file extension that can be resolved to the corresponding declaration file. The extension of the declaration output file is related to the `dtsExtension` configuration.
 
 ```ts
 // `dtsExtension` is set to `.d.mts`
@@ -282,7 +282,7 @@ import { foo } from './foo.ts'; // source code of './src/bar.ts' ↓
 import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 ```
 
-- When set to `false`, the file extension will remain unchanged from the original import path in the rewritten import path of the output file (regardless of whether it is specified or specified as any value).
+- When set to `false`, import paths will retain their original file extensions.
 
 ### tsgo
 

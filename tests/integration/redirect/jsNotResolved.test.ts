@@ -16,8 +16,10 @@ test('redirect.js default', async () => {
     "import lodash from "lodash";
     import prettier from "prettier";
     import bar from "./bar.js";
-    import foo from "./foo.js";
-    const src = lodash.toUpper(foo + bar + typeof prettier.version);
+    import foo from "./foo";
+    import foo_0 from "./foo.node";
+    import foo_node from "./foo.node.js";
+    const src = lodash.toUpper(foo + foo_0 + foo_node + bar + typeof prettier.version);
     export { src as default };
     "
   `);
@@ -37,8 +39,10 @@ test('redirect.js.path false', async () => {
     "import lodash from "lodash";
     import prettier from "prettier";
     import bar from "./bar.js";
-    import foo from "./foo.js";
-    const src = lodash.toUpper(foo + bar + typeof prettier.version);
+    import foo from "./foo";
+    import foo_0 from "./foo.node";
+    import foo_node from "./foo.node.js";
+    const src = lodash.toUpper(foo + foo_0 + foo_node + bar + typeof prettier.version);
     export { src as default };
     "
   `);
@@ -59,7 +63,9 @@ test('redirect.js.extension: false', async () => {
     import prettier from "prettier";
     import bar from "./bar.js";
     import foo from "./foo";
-    const src = lodash.toUpper(foo + bar + typeof prettier.version);
+    import foo_0 from "./foo.node";
+    import foo_node from "./foo.node.js";
+    const src = lodash.toUpper(foo + foo_0 + foo_node + bar + typeof prettier.version);
     export { src as default };
     "
   `);
