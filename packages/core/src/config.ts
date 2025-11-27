@@ -1549,24 +1549,20 @@ const composeBundlelessExternalConfig = (
               // If data.request already have an extension, we replace it with new extension
               // This may result in a change in semantics,
               // user should use copy to keep origin file or use another separate entry to deal this
-              if (resolvedRequest.startsWith('.')) {
+              if (resolvedRequest.startsWith('.') && isResolved) {
                 const ext = extname(resolvedRequest);
 
                 if (ext) {
                   // 1. js files hit JS_EXTENSIONS_PATTERN, ./foo.ts -> ./foo.mjs
                   if (JS_EXTENSIONS_PATTERN.test(resolvedRequest)) {
-                    if (isResolved) {
-                      resolvedRequest = resolvedRequest.replace(
-                        /\.[^.]+$/,
-                        jsRedirectExtension
-                          ? jsExtension
-                          : JS_EXTENSIONS_PATTERN.test(originExtension)
-                            ? originExtension
-                            : '',
-                      );
-                    } else {
-                      resolvedRequest = request;
-                    }
+                    resolvedRequest = resolvedRequest.replace(
+                      /\.[^.]+$/,
+                      jsRedirectExtension
+                        ? jsExtension
+                        : JS_EXTENSIONS_PATTERN.test(originExtension)
+                          ? originExtension
+                          : '',
+                    );
                   } else {
                     // 2. asset files, does not match jsExtensionsPattern, eg: ./foo.png -> ./foo.mjs
                     // non-js && non-css files
@@ -1574,7 +1570,7 @@ const composeBundlelessExternalConfig = (
                       ? redirectedPath
                       : request;
 
-                    if (assetRedirectExtension && isResolved) {
+                    if (assetRedirectExtension) {
                       resolvedRequest = resolvedRequest.replace(
                         /\.[^.]+$/,
                         jsExtension,
@@ -1583,7 +1579,7 @@ const composeBundlelessExternalConfig = (
                   }
                 } else {
                   // 1. js files hit JS_EXTENSIONS_PATTERN,./foo ->./foo.mjs
-                  if (jsRedirectExtension && isResolved) {
+                  if (jsRedirectExtension) {
                     // If the import path refers to a directory,
                     // it most likely actually refers to a `index.*` file due to Node's module resolution.
                     // When redirect.js.path is set to false, index should still be added before adding extension.
