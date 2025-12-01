@@ -223,7 +223,7 @@ import styles from './index.module.mjs'; // 预期生成的代码
 
 - **示例：**
 
-默认情况下，在 `tsconfig.json` 中将 `compilerOptions.paths` 设置为 `{ "@/*": ["src/*"] }` 时，资源文件的导入路径将被重定向到正确的相对路径，扩展名将被重写为对应的 JavaScript 产物文件扩展名。
+默认情况下，在 `tsconfig.json` 中将 `compilerOptions.paths` 设置为 `{ "@/*": ["src/*"] }` 时，资源文件的导入路径将被重定向到正确的相对路径，其扩展名将被重写为对应的 JavaScript 产物文件扩展名。
 
 ```ts
 import url from '@/assets/logo.svg'; // './src/foo.ts' 的源码 ↓
@@ -243,7 +243,7 @@ import url from './assets/logo.mjs'; // './dist/foo.mjs' 预期生成的代码
 
 - **示例：**
 
-在 `tsconfig.json` 中将 `compilerOptions.paths` 设置为 `{ "@/*": ["src/*"] }` 时，资源文件的导入路径将被重定向到正确的相对路径并
+在 `tsconfig.json` 中将 `compilerOptions.paths` 设置为 `{ "@/*": ["src/*"] }` 时，资源文件的导入路径将被重定向到正确的相对路径。
 
 ```ts
 import url from '@/assets/logo.svg'; // './src/foo.ts' 的源码 ↓
