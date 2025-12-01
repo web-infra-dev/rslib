@@ -72,9 +72,21 @@ In bundleless mode, there are often needs such as using aliases or automatically
 
 Controls the redirect of the import paths of output JavaScript files.
 
+- **Example:**
+
+By default, when set `compilerOptions.paths` to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the import path for the JavaScript output file will be redirected to the correct relative path and the corresponding file extension will be added:
+
+```ts
+import { foo } from '@/foo'; // source code of './src/bar.ts' ↓
+import { foo } from './foo.mjs'; // expected output of './dist/bar.mjs'
+
+import { foo } from '@/foo'; // source code of './src/utils/index.ts' ↓
+import { foo } from '../foo.mjs'; // expected output of './dist/utils/index.mjs'
+```
+
 :::warning
 
-When [output.externals](/config/rsbuild/output#outputexternals) is configured and a request is matched, neither `redirect.js.path` nor `redirect.js.extension` will take effect, and the final rewritten request path will be entirely controlled by [output.externals](/config/rsbuild/output#outputexternals).
+When [output.externals](/config/rsbuild/output#outputexternals) is configured and a request is matched, neither `redirect.js.path` nor `redirect.js.extension` will take effect, and the final redirected request path will be entirely controlled by [output.externals](/config/rsbuild/output#outputexternals).
 
 :::
 
@@ -85,32 +97,32 @@ Whether to automatically redirect the import paths of JavaScript output files.
 - **Type:** `boolean`
 - **Default:** `true`
 
-When set to `true`, [resolve.alias](/config/rsbuild/resolve#resolvealias) and [resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) will take effect and applied in the rewritten import path of the output file. For TypeScript projects, just configure [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) in the `tsconfig.json` file.
+When set to `true`, [resolve.alias](/config/rsbuild/resolve#resolvealias) and [resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) will take effect in the output file, and the import path of the output file will be redirected. For TypeScript projects, just configure [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) in the `tsconfig.json` file.
 
 When set to `false`, the import path will not be effected by [resolve.alias](/config/rsbuild/resolve#resolvealias), [resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) and `tsconfig.json`.
 
 - **Example:**
 
-When set `compilerOptions.paths` to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the output file will be redirected to the correct relative path:
+When set `compilerOptions.paths` to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the import path for the JavaScript output file will be redirected to the correct relative path:
 
 ```ts
 import { foo } from '@/foo'; // source code of './src/bar.ts' ↓
-import { foo } from './foo.js'; // expected output of './dist/bar.js'
+import { foo } from './foo'; // expected output of './dist/bar.js'
 
 import { foo } from '@/foo'; // source code of './src/utils/index.ts' ↓
-import { foo } from '../foo.js'; // expected output './dist/utils/index.js'
+import { foo } from '../foo'; // expected output './dist/utils/index.js'
 ```
 
 ### redirect.js.extension
 
-Whether to automatically redirect the file extension to import paths based on the JavaScript output files.
+Whether to automatically redirect the file extension of import paths based on the JavaScript output files.
 
 - **Type:** `boolean`
 - **Default:** `true`
 
-When set to `true`, the file extension will automatically be added to the rewritten import path of the output file, regardless of the original extension or whether it is specified in the import path.
+When set to `true`, the file extension of import paths in JavaScript output files that can be resolved correctly will be automatically completed or replaced.
 
-When set to `false`, the file extension will remain unchanged from the original import path in the rewritten import path of the output file (regardless of whether it is specified or specified as any value).
+When set to `false`, import paths will retain their original file extensions.
 
 :::note
 The extension of the JavaScript output file is related to the [autoExtension](/config/lib/auto-extension#libautoextension) configuration.
@@ -132,6 +144,18 @@ import { foo } from './foo.mjs'; // expected output './dist/utils/index.mjs'
 
 Controls the redirect of the import paths of output style files.
 
+- **Example:**
+
+By default, when `compilerOptions.paths` is set to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the import paths of style output files will be redirected to the correct relative paths. Additionally, when importing [CSS Modules](/config/rsbuild/output#outputcssmodules), the file extension will be rewritten to the corresponding JavaScript output file extension.
+
+```ts
+import '@/foo.css'; // source code of './src/bar.ts' ↓
+import './foo.css'; // expected output of './dist/bar.js'
+
+import styles from '@/foo.module.less'; // source code of './src/baz.ts' ↓
+import styles from './foo.module.mjs'; // expected output of './dist/baz.mjs'
+```
+
 ### redirect.style.path
 
 Whether to automatically redirect the import paths of style output files.
@@ -144,6 +168,8 @@ When set to `true`, the relevant redirect rules are the same as [redirect.js.pat
 When set to `false`, the original import path will remain unchanged.
 
 - **Example:**
+
+When set `compilerOptions.paths` to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the import path for the style output file will be redirected to the correct relative path.
 
 When importing normal style files:
 
@@ -167,15 +193,15 @@ import styles from '../foo.css'; // expected output of './dist/utils/index.js'
 
 ### redirect.style.extension
 
-Whether to automatically redirect the file extension to import paths based on the style output files.
+Whether to automatically redirect the file extension of import paths based on the style output files.
 
 - **Type:** `boolean`
 - **Default:** `true`
 
 When set to `true`:
 
-- When importing a normal style file, the path will be rewritten to `.css`.
-- When importing [CSS Modules](/config/rsbuild/output#outputcssmodules), the path will be rewritten to the corresponding JavaScript output file.
+- When importing a normal style file, the path will be redirected to `.css`.
+- When importing [CSS Modules](/config/rsbuild/output#outputcssmodules), the file extension will be redirected to the corresponding JavaScript output file extension.
 
 When set to `false`, the file extension will remain unchanged from the original import path.
 
@@ -195,6 +221,15 @@ import styles from './index.module.mjs'; // expected output
 
 Controls the redirect of the import paths of output asset files.
 
+- **Example:**
+
+By default, when `compilerOptions.paths` is set to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the import paths of asset files will be redirected to the correct relative paths, and the file extensions will be rewritten to the corresponding JavaScript output file extensions.
+
+```ts
+import url from '@/assets/logo.svg'; // source code of './src/foo.ts' ↓
+import url from './assets/logo.mjs'; // expected output of './dist/foo.mjs'
+```
+
 ### redirect.asset.path
 
 Whether to automatically redirect the import paths of asset output files.
@@ -208,6 +243,8 @@ When set to `false`, the original import path will remain unchanged.
 
 - **Example:**
 
+When set `compilerOptions.paths` to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the import path for the asset file will be redirected to the correct relative path:
+
 ```ts
 import url from '@/assets/logo.svg'; // source code of './src/foo.ts' ↓
 import url from './assets/logo.svg'; // expected output of './dist/foo.js'
@@ -215,12 +252,12 @@ import url from './assets/logo.svg'; // expected output of './dist/foo.js'
 
 ### redirect.asset.extension
 
-Whether to automatically redirect the file extension to import paths based on the asset output files.
+Whether to automatically redirect the file extension of import paths based on the asset output files.
 
 - **Type:** `boolean`
 - **Default:** `true`
 
-When set to `true`, the paths of imported asset files will be redirected to the corresponding JavaScript output file.
+When set to `true`, the file extension of imported asset files will be redirected to the corresponding JavaScript output file extension.
 
 When set to `false`, the file extension will remain unchanged from the original import path.
 
@@ -241,6 +278,15 @@ The way to import static assets in a JavaScript file and the corresponding outpu
 
 Controls the redirect of the import paths of output TypeScript declaration files.
 
+- **Example:**
+
+By default, when `compilerOptions.paths` is set to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the import path in the declaration output file will be redirected to the correct relative path:
+
+```ts
+import { foo } from '@/foo'; // source code of './src/bar.ts' ↓
+import { foo } from './foo'; // expected output of './dist/bar.d.ts'
+```
+
 ### redirect.dts.path
 
 Whether to automatically redirect the import paths of TypeScript declaration output files.
@@ -254,7 +300,7 @@ When set to `false`, the original import path will remain unchanged.
 
 - **Example:**
 
-When `compilerOptions.paths` is set to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the declaration output file will be redirected to the correct relative path:
+When `compilerOptions.paths` is set to `{ "@/*": ["src/*"] }` in `tsconfig.json`, the import path in the declaration output file will be redirected to the correct relative path:
 
 ```ts
 import { foo } from '@/foo'; // source code of './src/bar.ts' ↓
@@ -266,14 +312,14 @@ import { foo } from '../foo'; // expected output './dist/utils/index.d.ts'
 
 ### redirect.dts.extension
 
-Whether to automatically redirect the file extension to import paths based on the TypeScript declaration output files.
+Whether to automatically redirect the file extension of import paths based on the TypeScript declaration output files.
 
 - **Type:** `boolean`
 - **Default:** `false`
 
-When set to `true`, the import paths in declaration files will be redirected to the corresponding JavaScript extension which can be resolved to corresponding declaration file.
+When set to `true`, the file extension of the import path in the declaration file will be automatically completed or replaced with the corresponding JavaScript file extension that can be resolved to the corresponding declaration file.
 
-When set to `false`, the file extension will remain unchanged from the original import path in the rewritten import path of the output file (regardless of whether it is specified or specified as any value).
+When set to `false`, import paths will retain their original file extensions.
 
 :::note
 The extension of the TypeScript declaration file is related to the [dts.autoExtension](/config/lib/dts#dtsautoextension) configuration.
@@ -281,7 +327,7 @@ The extension of the TypeScript declaration file is related to the [dts.autoExte
 
 - **Example:**
 
-For the `.d.mts` declaration file, in some scenarios, the full extension of the module import path is needed to load correctly.
+When loading a module with `moduleResolution: 'nodenext'`, the import path needs to include the full file extension. Rslib will automatically add the corresponding file extension based on the actual JavaScript output file.
 
 ```ts
 import { foo } from './foo'; // source code of './src/bar.ts' ↓
