@@ -1448,6 +1448,7 @@ const composeBundlelessExternalConfig = (
               return;
             }
             const { issuer } = contextInfo;
+            const originExtension = extname(request);
 
             if (!resolver) {
               resolver = getResolve() as RspackResolver;
@@ -1455,7 +1456,7 @@ const composeBundlelessExternalConfig = (
 
             async function redirectPath(
               request: string,
-            ): Promise<string | undefined> {
+            ): Promise<{ path?: string; isResolved: boolean }> {
               try {
                 let resolvedRequest = request;
                 // use resolver to resolve the request
@@ -1485,11 +1486,17 @@ const composeBundlelessExternalConfig = (
                   ) {
                     resolvedRequest = `./${resolvedRequest}`;
                   }
-                  return resolvedRequest;
+                  return {
+                    path: resolvedRequest,
+                    isResolved: true,
+                  };
                 }
                 // NOTE: If request is a phantom dependency, which means it can be resolved but not specified in dependencies or peerDependencies in package.json, the output will be incorrect to use when the package is published
                 // return the original request instead of the resolved request
-                return undefined;
+                return {
+                  path: undefined,
+                  isResolved: true,
+                };
               } catch (_e) {
                 // catch error when request can not be resolved by resolver
                 // e.g. A react component library importing and using 'react' but while not defining
@@ -1497,7 +1504,11 @@ const composeBundlelessExternalConfig = (
                 logger.debug(
                   `Failed to resolve module ${color.green(`"${request}"`)} from ${color.green(issuer)}. If it's an npm package, consider adding it to dependencies or peerDependencies in package.json to make it externalized.`,
                 );
-                return request;
+                // return origin request instead of undefined for cssExternalHandler
+                return {
+                  path: request,
+                  isResolved: false,
+                };
               }
             }
 
@@ -1506,7 +1517,8 @@ const composeBundlelessExternalConfig = (
             if (issuer) {
               let resolvedRequest: string = request;
 
-              const redirectedPath = await redirectPath(resolvedRequest);
+              const { path: redirectedPath, isResolved } =
+                await redirectPath(resolvedRequest);
               const cssExternal = await cssExternalHandler(
                 resolvedRequest,
                 callback,
@@ -1537,18 +1549,20 @@ const composeBundlelessExternalConfig = (
               // If data.request already have an extension, we replace it with new extension
               // This may result in a change in semantics,
               // user should use copy to keep origin file or use another separate entry to deal this
-              if (resolvedRequest.startsWith('.')) {
+              if (resolvedRequest.startsWith('.') && isResolved) {
                 const ext = extname(resolvedRequest);
 
                 if (ext) {
                   // 1. js files hit JS_EXTENSIONS_PATTERN, ./foo.ts -> ./foo.mjs
                   if (JS_EXTENSIONS_PATTERN.test(resolvedRequest)) {
-                    if (jsRedirectExtension) {
-                      resolvedRequest = resolvedRequest.replace(
-                        /\.[^.]+$/,
-                        jsExtension,
-                      );
-                    }
+                    resolvedRequest = resolvedRequest.replace(
+                      /\.[^.]+$/,
+                      jsRedirectExtension
+                        ? jsExtension
+                        : JS_EXTENSIONS_PATTERN.test(originExtension)
+                          ? originExtension
+                          : '',
+                    );
                   } else {
                     // 2. asset files, does not match jsExtensionsPattern, eg: ./foo.png -> ./foo.mjs
                     // non-js && non-css files
@@ -1569,7 +1583,7 @@ const composeBundlelessExternalConfig = (
                     // If the import path refers to a directory,
                     // it most likely actually refers to a `index.*` file due to Node's module resolution.
                     // When redirect.js.path is set to false, index should still be added before adding extension.
-                    // When redirect.js.path is true, the resolver directly generate correct resolvedRequest with index appended.
+                    // When redirect.js.path is set to true, the resolver directly generates correct resolvedRequest with index appended.
                     if (
                       !jsRedirectPath &&
                       (await isDirectory(
