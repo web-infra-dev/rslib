@@ -237,26 +237,40 @@ async function addExtension(
   redirect: DtsRedirect,
   dtsFile: string,
   path: string,
-  extension: string,
+  jsExtension: string,
+  dtsExtension: string,
 ): Promise<string> {
   if (!redirect.extension) {
     return path;
   }
 
-  let redirectPath = path;
-
-  // Only add extension if redirectPath is an absolute or relative path
-  if (!isAbsolute(redirectPath) && !redirectPath.startsWith('.')) {
-    return redirectPath;
+  // Only add extension if path is an absolute or relative path
+  if (!isAbsolute(path) && !path.startsWith('.')) {
+    return path;
   }
+
+  const candidatePaths = [];
 
   // If the import path refers to a directory, it most likely actually refers to a `index.*` file due to Node's module resolution
-  if (await isDirectory(join(dirname(dtsFile), redirectPath))) {
+  if (await isDirectory(join(dirname(dtsFile), path))) {
     // This uses `/` instead of `path.join` here because `join` removes potential "./" prefixes
-    redirectPath = `${redirectPath.replace(/\/+$/, '')}/index`;
+    candidatePaths.push(`${path.replace(/\/+$/, '')}/index`);
   }
 
-  return `${redirectPath}${extension}`;
+  candidatePaths.push(path);
+
+  // make sure the candidatePath exists, otherwise we may break the import, e.g. import 'foo.svg', import '../foo/index'
+  for (const candidatePath of candidatePaths) {
+    if (
+      await pathExists(
+        join(dirname(dtsFile), `${candidatePath}${dtsExtension}`),
+      )
+    ) {
+      return `${candidatePath}${jsExtension}`;
+    }
+  }
+
+  return path;
 }
 
 export async function redirectDtsImports(
@@ -334,7 +348,7 @@ export async function redirectDtsImports(
       e: matchNode.range().end.index,
     };
   });
-  const extension = dtsExtension
+  const jsExtension = dtsExtension
     .replace(/\.d\.ts$/, '.js')
     .replace(/\.d\.cts$/, '.cjs')
     .replace(/\.d\.mts$/, '.mjs');
@@ -393,28 +407,18 @@ export async function redirectDtsImports(
           if (redirect.extension) {
             redirectImportPath = redirectImportPath.replace(
               /\.[^.]+$/,
-              extension,
+              jsExtension,
             );
           }
         } else {
           // handle the case importPath is like './foo.bar', we need to check if './foo.bar.d.ts' exists
-          const candidatePath = await addExtension(
+          redirectImportPath = await addExtension(
             redirect,
             dtsFile,
             redirectImportPath,
-            extension,
+            jsExtension,
+            dtsExtension,
           );
-          // make sure the candidatePath exists, otherwise we may break the import, e.g. import 'foo.svg'
-          if (
-            await pathExists(
-              path.join(
-                dirname(dtsFile),
-                candidatePath.replace(/\.[^.]+$/, dtsExtension),
-              ),
-            )
-          ) {
-            redirectImportPath = candidatePath;
-          }
         }
       } else {
         if (
@@ -425,7 +429,8 @@ export async function redirectDtsImports(
             redirect,
             dtsFile,
             redirectImportPath,
-            extension,
+            jsExtension,
+            dtsExtension,
           );
         }
 
@@ -434,7 +439,8 @@ export async function redirectDtsImports(
             redirect,
             dtsFile,
             redirectImportPath,
-            extension,
+            jsExtension,
+            dtsExtension,
           );
         }
       }

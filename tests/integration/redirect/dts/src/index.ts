@@ -25,5 +25,6 @@ export * from './.hidden';
 export * from './.hidden-folder';
 export * from './a.b';
 export * from './bar.baz';
+export * from './config';
 export * from './foo';
 export * from './types';
