@@ -43,7 +43,6 @@ test('redirect.dts.path: true with redirect.dts.extension: false - default', asy
     export type { Foo } from './types';
     export { Router } from 'express';
     export * from '../../../compile/prebundle-pkg';
-    export type * from '../../../compile/prebundle-types';
     export type { Bar } from './types';
     export * from './.hidden';
     export * from './.hidden-folder';
@@ -110,7 +109,6 @@ test('redirect.dts.path: false with redirect.dts.extension: false', async () => 
     export type { Foo } from '@src/types';
     export { Router } from 'express';
     export * from 'prebundle-pkg';
-    export type * from 'prebundle-types';
     export type { Bar } from 'types';
     export * from './.hidden';
     export * from './.hidden-folder';
@@ -177,7 +175,6 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
     export type { Foo } from './types.js';
     export { Router } from 'express';
     export * from '../../../compile/prebundle-pkg';
-    export type * from '../../../compile/prebundle-types';
     export type { Bar } from './types.js';
     export * from './.hidden.js';
     export * from './.hidden-folder/index.js';
@@ -244,7 +241,6 @@ test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
     export type { Foo } from '@src/types';
     export { Router } from 'express';
     export * from 'prebundle-pkg';
-    export type * from 'prebundle-types';
     export type { Bar } from 'types';
     export * from './.hidden.js';
     export * from './.hidden-folder/index.js';
@@ -330,7 +326,6 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     export type { Foo } from './types.mjs';
     export { Router } from 'express';
     export * from '../../compile/prebundle-pkg';
-    export type * from '../../compile/prebundle-types';
     export type { Bar } from './types.mjs';
     export * from './.hidden.mjs';
     export * from './.hidden-folder/index.mjs';
@@ -352,7 +347,6 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     export type { Foo } from './types.js';
     export { Router } from 'express';
     export * from '../../compile/prebundle-pkg';
-    export type * from '../../compile/prebundle-types';
     export type { Bar } from './types.js';
     export * from './.hidden.js';
     export * from './.hidden-folder/index.js';

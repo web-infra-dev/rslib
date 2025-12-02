@@ -20,7 +20,6 @@ export * from '@src/logger';
 export type { Foo } from '@src/types';
 export * from 'prebundle-pkg';
 // export { Router } from 'express';
-export type * from 'prebundle-types';
 export type { Bar } from 'types';
 export * from './.hidden';
 export * from './.hidden-folder';

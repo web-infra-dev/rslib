@@ -259,7 +259,7 @@ async function addExtension(
 
   candidatePaths.push(path);
 
-  // make sure the candidatePath exists, otherwise we may break the import, e.g. import 'foo.svg', import '../compile/prebundle-types'
+  // make sure the candidatePath exists, otherwise we may break the import, e.g. import 'foo.svg', import '../foo/index'
   for (const candidatePath of candidatePaths) {
     if (
       await pathExists(

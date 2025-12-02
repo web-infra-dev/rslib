@@ -46,7 +46,6 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from './logger';
         export type { Foo } from './types';
         export * from '../../../compile/prebundle-pkg';
-        export type * from '../../../compile/prebundle-types';
         export type { Bar } from './types';
         export * from './.hidden';
         export * from './.hidden-folder';
@@ -111,7 +110,6 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from '@src/logger';
         export type { Foo } from '@src/types';
         export * from 'prebundle-pkg';
-        export type * from 'prebundle-types';
         export type { Bar } from 'types';
         export * from './.hidden';
         export * from './.hidden-folder';
@@ -176,7 +174,6 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from './logger.js';
         export type { Foo } from './types.js';
         export * from '../../../compile/prebundle-pkg';
-        export type * from '../../../compile/prebundle-types';
         export type { Bar } from './types.js';
         export * from './.hidden.js';
         export * from './.hidden-folder/index.js';
@@ -241,7 +238,6 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from '@src/logger';
         export type { Foo } from '@src/types';
         export * from 'prebundle-pkg';
-        export type * from 'prebundle-types';
         export type { Bar } from 'types';
         export * from './.hidden.js';
         export * from './.hidden-folder/index.js';
@@ -306,7 +302,6 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from './logger.mjs';
         export type { Foo } from './types.mjs';
         export * from '../../../compile/prebundle-pkg';
-        export type * from '../../../compile/prebundle-types';
         export type { Bar } from './types.mjs';
         export * from './.hidden.mjs';
         export * from './.hidden-folder/index.mjs';
@@ -368,7 +363,6 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from './logger.js';
         export type { Foo } from './types.js';
         export * from '../../../compile/prebundle-pkg';
-        export type * from '../../../compile/prebundle-types';
         export type { Bar } from './types.js';
         export * from './.hidden.js';
         export * from './.hidden-folder/index.js';
