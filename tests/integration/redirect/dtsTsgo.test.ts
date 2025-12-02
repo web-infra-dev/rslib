@@ -24,6 +24,10 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
         ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/config.d.ts": "export * from './config/load';
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/config/load.d.ts": "export declare const loadConfig: () => void;
+        ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/foo/foo.d.ts": "import { logRequest } from '../logger';
         import { logger } from '../../../../compile/prebundle-pkg';
         import { logRequest as logRequest2 } from '../logger';
@@ -42,11 +46,13 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from './logger';
         export type { Foo } from './types';
         export * from '../../../compile/prebundle-pkg';
+        export type * from '../../../compile/prebundle-types';
         export type { Bar } from './types';
         export * from './.hidden';
         export * from './.hidden-folder';
         export * from './a.b';
         export * from './bar.baz';
+        export * from './config';
         export * from './foo';
         export * from './types';
         ",
@@ -83,6 +89,10 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
         ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false/esm/config.d.ts": "export * from './config/load';
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false/esm/config/load.d.ts": "export declare const loadConfig: () => void;
+        ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false/esm/foo/foo.d.ts": "import { logRequest } from '@src/logger';
         import { logger } from 'prebundle-pkg';
         import { logRequest as logRequest2 } from '../logger';
@@ -101,11 +111,13 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from '@src/logger';
         export type { Foo } from '@src/types';
         export * from 'prebundle-pkg';
+        export type * from 'prebundle-types';
         export type { Bar } from 'types';
         export * from './.hidden';
         export * from './.hidden-folder';
         export * from './a.b';
         export * from './bar.baz';
+        export * from './config';
         export * from './foo';
         export * from './types';
         ",
@@ -142,6 +154,10 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
         ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/config.d.ts": "export * from './config/load.js';
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/config/load.d.ts": "export declare const loadConfig: () => void;
+        ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/foo/foo.d.ts": "import { logRequest } from '../logger.js';
         import { logger } from '../../../../compile/prebundle-pkg';
         import { logRequest as logRequest2 } from '../logger.js';
@@ -160,11 +176,13 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from './logger.js';
         export type { Foo } from './types.js';
         export * from '../../../compile/prebundle-pkg';
+        export type * from '../../../compile/prebundle-types';
         export type { Bar } from './types.js';
         export * from './.hidden.js';
         export * from './.hidden-folder/index.js';
         export * from './a.b/index.js';
         export * from './bar.baz.js';
+        export * from './config.js';
         export * from './foo/index.js';
         export * from './types.js';
         ",
@@ -201,6 +219,10 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false-extension-true/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
         ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false-extension-true/esm/config.d.ts": "export * from './config/load.js';
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false-extension-true/esm/config/load.d.ts": "export declare const loadConfig: () => void;
+        ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false-extension-true/esm/foo/foo.d.ts": "import { logRequest } from '@src/logger';
         import { logger } from 'prebundle-pkg';
         import { logRequest as logRequest2 } from '../logger.js';
@@ -219,11 +241,13 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from '@src/logger';
         export type { Foo } from '@src/types';
         export * from 'prebundle-pkg';
+        export type * from 'prebundle-types';
         export type { Bar } from 'types';
         export * from './.hidden.js';
         export * from './.hidden-folder/index.js';
         export * from './a.b/index.js';
         export * from './bar.baz.js';
+        export * from './config.js';
         export * from './foo/index.js';
         export * from './types.js';
         ",
@@ -260,6 +284,10 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/esm/bar.baz.d.mts": "export declare const bar = "bar-baz";
         ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/esm/config.d.mts": "export * from './config/load.mjs';
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/esm/config/load.d.mts": "export declare const loadConfig: () => void;
+        ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/esm/foo/foo.d.mts": "import { logRequest } from '../logger.mjs';
         import { logger } from '../../../../compile/prebundle-pkg';
         import { logRequest as logRequest2 } from '../logger.mjs';
@@ -278,11 +306,13 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from './logger.mjs';
         export type { Foo } from './types.mjs';
         export * from '../../../compile/prebundle-pkg';
+        export type * from '../../../compile/prebundle-types';
         export type { Bar } from './types.mjs';
         export * from './.hidden.mjs';
         export * from './.hidden-folder/index.mjs';
         export * from './a.b/index.mjs';
         export * from './bar.baz.mjs';
+        export * from './config.mjs';
         export * from './foo/index.mjs';
         export * from './types.mjs';
         ",
@@ -316,6 +346,10 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/bar.baz.d.ts": "export declare const bar = "bar-baz";
         ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/config.d.ts": "export * from './config/load.js';
+        ",
+          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/config/load.d.ts": "export declare const loadConfig: () => void;
+        ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/foo/foo.d.ts": "import { logRequest } from '../logger.js';
         import { logger } from '../../../../compile/prebundle-pkg';
         import { logRequest as logRequest2 } from '../logger.js';
@@ -334,11 +368,13 @@ describe.skipIf(process.version.startsWith('v18'))(
         export * from './logger.js';
         export type { Foo } from './types.js';
         export * from '../../../compile/prebundle-pkg';
+        export type * from '../../../compile/prebundle-types';
         export type { Bar } from './types.js';
         export * from './.hidden.js';
         export * from './.hidden-folder/index.js';
         export * from './a.b/index.js';
         export * from './bar.baz.js';
+        export * from './config.js';
         export * from './foo/index.js';
         export * from './types.js';
         ",

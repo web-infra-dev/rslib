@@ -18,12 +18,14 @@ export {
 export * from '@src/foo';
 export * from '@src/logger';
 export type { Foo } from '@src/types';
-// export { Router } from 'express';
 export * from 'prebundle-pkg';
+// export { Router } from 'express';
+export type * from 'prebundle-types';
 export type { Bar } from 'types';
 export * from './.hidden';
 export * from './.hidden-folder';
 export * from './a.b';
 export * from './bar.baz';
+export * from './config';
 export * from './foo';
 export * from './types';
