@@ -74,8 +74,8 @@ describe('minify config (mf)', () => {
     const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
     // biome-ignore format: snapshot
     expect(mfExposeEntry).toMatchInlineSnapshot(`
-      "/*! For license information please see __federation_expose_default_export.96e881a8.js.LICENSE.txt */
-      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["525"],{510:function(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{Button:()=>Button,foo:()=>foo});var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{})}}]);"
+      "/*! For license information please see __federation_expose_default_export.686c2729.js.LICENSE.txt */
+      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["525"],{510(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{Button:()=>Button,foo:()=>foo});var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{})}}]);"
     `);
   });
 
@@ -86,7 +86,7 @@ describe('minify config (mf)', () => {
     expect(mfExposeEntry).toMatchInlineSnapshot(`
       ""use strict";
       (globalThis["disable_minify"] = globalThis["disable_minify"] || []).push([["525"], {
-      510: (function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+      510(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.r(__webpack_exports__);
       __webpack_require__.d(__webpack_exports__, {
         Button: () => (Button),
@@ -104,7 +104,7 @@ describe('minify config (mf)', () => {
       const Button = ()=>/*#__PURE__*/ (0,react_jsx_runtime__rspack_import_0.jsx)('button', {});
 
 
-      }),
+      },
 
       }]);"
     `);

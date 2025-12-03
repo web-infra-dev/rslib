@@ -23,7 +23,7 @@ test('resolve false', async () => {
     expect(entries.esm).toMatchInlineSnapshot(`
       "import { __webpack_require__ } from "./rslib-runtime.js";
       __webpack_require__.add({
-          "?27ce": function() {}
+          "?27ce" () {}
       });
       const util_ignored_ = __webpack_require__("?27ce");
       var util_ignored__default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
