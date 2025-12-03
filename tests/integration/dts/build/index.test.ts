@@ -108,10 +108,10 @@ describe('dts when build: true', () => {
       shell: true,
     });
 
-    const stdoutOutput = result.stdout ? result.stdout.toString() : '';
+    const stdoutErrorOutput = result.stderr ? result.stderr.toString() : '';
 
     expect(result.status).toBe(1);
-    expect(stdoutOutput).toContain(
+    expect(stdoutErrorOutput).toContain(
       'Please set "declarationDir": "./dist/types"',
     );
   });

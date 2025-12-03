@@ -207,7 +207,7 @@ test('asset in bundleless', async () => {
   expect(Object.values(contents.cjs)[0]).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        "./src/assets/image.png": function(module) {
+        "./src/assets/image.png" (module) {
             module.exports = require("../static/image/image.png");
         }
     };
@@ -223,9 +223,9 @@ test('asset in bundleless', async () => {
     }
     var __webpack_exports__ = __webpack_require__("./src/assets/image.png");
     exports["default"] = __webpack_exports__["default"];
-    for(var __webpack_i__ in __webpack_exports__)if (-1 === [
+    for(var __rspack_i in __webpack_exports__)if (-1 === [
         "default"
-    ].indexOf(__webpack_i__)) exports[__webpack_i__] = __webpack_exports__[__webpack_i__];
+    ].indexOf(__rspack_i)) exports[__rspack_i] = __webpack_exports__[__rspack_i];
     Object.defineProperty(exports, '__esModule', {
         value: true
     });
@@ -234,7 +234,7 @@ test('asset in bundleless', async () => {
   expect(Object.values(contents.cjs)[1]).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        "./src/assets/logo.svg": function(module) {
+        "./src/assets/logo.svg" (module) {
             module.exports = require("../static/svg/logo.svg");
         }
     };
@@ -250,9 +250,9 @@ test('asset in bundleless', async () => {
     }
     var __webpack_exports__ = __webpack_require__("./src/assets/logo.svg");
     exports["default"] = __webpack_exports__["default"];
-    for(var __webpack_i__ in __webpack_exports__)if (-1 === [
+    for(var __rspack_i in __webpack_exports__)if (-1 === [
         "default"
-    ].indexOf(__webpack_i__)) exports[__webpack_i__] = __webpack_exports__[__webpack_i__];
+    ].indexOf(__rspack_i)) exports[__rspack_i] = __webpack_exports__[__rspack_i];
     Object.defineProperty(exports, '__esModule', {
         value: true
     });
