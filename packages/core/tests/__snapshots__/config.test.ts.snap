@@ -5118,9 +5118,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           "optimization": {
             "nodeEnv": undefined,
-            "splitChunks": {
-              "chunks": "async",
-            },
+            "splitChunks": false,
           },
           "output": {
             "asyncChunks": false,
@@ -5367,6 +5365,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           "optimization": {
             "nodeEnv": undefined,
+            "splitChunks": false,
           },
           "output": {
             "asyncChunks": false,
