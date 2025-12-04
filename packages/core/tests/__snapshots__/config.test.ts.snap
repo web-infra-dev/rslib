@@ -3066,9 +3066,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   optimization: {
     minimize: true,
-    splitChunks: {
-      chunks: 'async'
-    },
+    splitChunks: false,
     minimizer: [
       /* config.optimization.minimizer('js') */
       new SwcJsMinimizerRspackPlugin(
