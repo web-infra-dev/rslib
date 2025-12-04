@@ -25,12 +25,6 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Git config
-        if: ${{ inputs.runner == 'windows-latest' }}
-        shell: bash
-        run: |
-          git config --system core.longpaths true
-
       - name: Install pnpm
         run: |
           npm install -g corepack@latest --force
