@@ -1,5 +1,5 @@
 import { useLang } from '@rspress/core/runtime';
-import { type Group, OverviewGroup } from '@rspress/core/theme';
+import { type Group, OverviewGroup } from '@rspress/core/theme-original';
 import { useI18nUrl } from './utils';
 
 export default function Overview() {

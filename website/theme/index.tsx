@@ -1,7 +1,7 @@
 import {
   getCustomMDXComponent as BaseGetCustomMDXComponent,
   Layout as BaseLayout,
-} from '@rspress/core/theme';
+} from '@rspress/core/theme-original';
 import {
   Search as PluginAlgoliaSearch,
   ZH_LOCALES,
@@ -59,4 +59,4 @@ const Search = () => {
 
 export { Layout, HomeLayout, Search };
 
-export * from '@rspress/core/theme';
+export * from '@rspress/core/theme-original';
