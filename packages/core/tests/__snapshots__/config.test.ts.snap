@@ -756,7 +756,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       port: '',
       host: '',
       overlay: true,
-      reconnect: 100
+      reconnect: 100,
+      logLevel: 'silent'
     },
     lazyCompilation: {
       imports: true,
@@ -890,6 +891,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       strategy: 'split-by-experience'
     }
   },
+  logLevel: 'silent',
   mode: 'production',
   root: '<WORKSPACE>',
   plugins: [
@@ -1034,8 +1036,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       name: 'rsbuild:nonce',
       setup() {}
     }
-  ],
-  logLevel: 'silent'
+  ]
 }"
 `;
 
