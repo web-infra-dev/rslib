@@ -1,4 +1,4 @@
-import { Link } from '@rspress/core/theme';
+import { Link } from '@rspress/core/theme-original';
 import styles from './Step.module.scss';
 import { useUrl } from './utils';
 
