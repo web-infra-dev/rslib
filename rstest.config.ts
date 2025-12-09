@@ -7,6 +7,9 @@ export const shared: RstestConfig = {
   testTimeout: 60_000,
   hookTimeout: 50_000,
   restoreMocks: true,
+  output: {
+    module: true,
+  },
 };
 
 export default defineConfig({
