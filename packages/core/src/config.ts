@@ -540,7 +540,7 @@ export function composePrintFileSizeConfig(
           totalSize,
           totalGzipSize,
         }) => {
-          let log = `${color.yellow(assets.length)} files generated in ${color.cyan(distPath)}, total: ${(totalSize / 1000).toFixed(1)} kB`;
+          let log = `${color.yellow(assets.length)} files generated in ${color.cyan(distPath)}, ${color.magenta('total:')} ${(totalSize / 1000).toFixed(1)} kB`;
           if (target === 'web') {
             log += ` ${color.green(`(${(totalGzipSize / 1000).toFixed(1)} kB gzipped)`)}`;
           }
