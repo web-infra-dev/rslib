@@ -1334,6 +1334,7 @@ const composeEntryConfig = async (
         cwd: root,
         absolute: true,
         dot: true,
+        ignore: ['**/.DS_Store', '**/Thumbs.db'],
       });
 
       // Filter the glob resolved entry files based on the allowed extensions
