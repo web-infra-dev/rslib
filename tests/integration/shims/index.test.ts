@@ -117,7 +117,7 @@ describe('CJS shims', () => {
     const req = createRequire(entryFiles.cjs);
     const context = vm.createContext({
       require: req,
-      exports,
+      exports: {},
       module: { require: req },
       __filename: entryFiles.cjs,
     });
