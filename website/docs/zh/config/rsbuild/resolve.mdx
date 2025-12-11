@@ -6,7 +6,7 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 ## resolve.aliasStrategy <RsbuildDocBadge path="/config/resolve/alias-strategy" text="resolve.aliasStrategy" />
 
-控制 `resolve.alias` 选项与 `tsconfig.json` 中的 `paths` 选项的优先级。
+设置路径别名解析的策略，用于控制 `tsconfig.json` 中的 `paths` 选项与 [resolve.alias](/config/rsbuild/resolve#resolvealias) 选项之间的优先级关系。
 
 ## resolve.alias <RsbuildDocBadge path="/config/resolve/alias" text="resolve.alias" />
 
@@ -52,8 +52,12 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
   此时，代码 `import { useState } from 'react'` 将被替换为 `import { useState } from 'preact/compat'`。
 
 ::: note
-在 bundleless 模式下，由于没有打包这个概念，所有模块都会被外部化，Rslib 会自动根据 `resolve.alias` 或 `tsconfig.json` 中 [compilerOptions.paths](https://www.typescriptlang.org/tsconfig/#paths) 配置的映射关系，对最终解析到 [outBase](../lib/out-base) 目录下的模块进行转换。
+在 bundleless 模式下，由于没有打包这个概念，所有模块都会被外部化，Rslib 会自动根据 `resolve.alias` 或 `tsconfig.json` 中 [compilerOptions.paths](https://www.typescriptlang.org/tsconfig/#paths) 配置的映射关系，对最终解析到 [outBase](/config/lib/out-base) 目录下的模块进行转换。
 :::
+
+## resolve.conditionNames <RsbuildDocBadge path="/config/resolve/condition-names" text="resolve.conditionNames" />
+
+指定用于匹配包 [exports 字段](https://nodejs.org/api/packages.html#packages_exports) 入口点的 condition names（条件名称）。
 
 ## resolve.dedupe <RsbuildDocBadge path="/config/resolve/dedupe" text="resolve.dedupe" />
 
@@ -62,3 +66,7 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 ## resolve.extensions <RsbuildDocBadge path="/config/resolve/extensions" text="resolve.extensions" />
 
 自动添加导入文件的扩展名。这意味着你可以导入文件，而不需要显式地写它们的扩展名。
+
+## resolve.mainFields <RsbuildDocBadge path="/config/resolve/main-fields" text="resolve.mainFields" />
+
+控制用于定位包入口文件的 package.json 字段优先级。Rspack 在解析 npm 包入口时，会按该列表的顺序依次尝试这些字段。
