@@ -235,7 +235,7 @@ export default {
 
 用于配置类型声明文件的路径别名。
 
-`dts.alias` 会与 `tsconfig.json` 中配置的 `compilerOptions.paths` 合并，且 `dts.alias` 具有更高的优先级。
+在 `dts.alias` 中配置的路径别名，其相对路径应基于 `tsconfig.json` 中 `compilerOptions.baseUrl` 所指定的目录。这些别名会与 `compilerOptions.paths` 进行合并，且 `dts.alias` 的优先级更高。
 
 大部分情况下，你不需要使用 `dts.alias`，但当你需要在类型声明文件中使用路径别名却不希望影响 JavaScript 产物时，可以考虑使用它。比如，将 `foo` 的类型声明文件指向 `./compiled/foo`。
 
@@ -252,6 +252,13 @@ export default {
     },
   ],
 };
+```
+
+此时，当 [redirect.dts.path](/config/lib/redirect#redirectdtspath) 开启时，类型声明文件中对 `foo` 的导入路径将会被重定向为 `./compiled/foo`。
+
+```diff title="index.d.ts"
+- export * from 'foo';
++ export * from './compiled/foo';
 ```
 
 ### dts.tsgo
