@@ -6,7 +6,7 @@ Options for module resolution.
 
 ## resolve.aliasStrategy <RsbuildDocBadge path="/config/resolve/alias-strategy" text="resolve.aliasStrategy" />
 
-Control the priority between the `resolve.alias` option and the `paths` option in `tsconfig.json`.
+Set the strategy for path alias resolution, to control the priority relationship between the paths option in `tsconfig.json` and the [resolve.alias](/config/rsbuild/resolve#resolvealias) option.
 
 ## resolve.alias <RsbuildDocBadge path="/config/resolve/alias" text="resolve.alias" />
 
@@ -52,8 +52,12 @@ It is worth noting that in bundle mode, both `resolve.alias` and [output.externa
   Now, the code `import { useState } from 'react'` will be replaced with `import { useState } from 'preact/compat'`.
 
 ::: note
-In bundleless mode, since there is no bundling concept, all modules will be externalized. Rslib will automatically transform the modules resolved to the [outBase](../lib/out-base) directory based on the mappings configured in `resolve.alias` or [compilerOptions.paths](https://www.typescriptlang.org/tsconfig/#paths) in `tsconfig.json`.
+In bundleless mode, since there is no bundling concept, all modules will be externalized. Rslib will automatically transform the modules resolved to the [outBase](/config/lib/out-base) directory based on the mappings configured in `resolve.alias` or [compilerOptions.paths](https://www.typescriptlang.org/tsconfig/#paths) in `tsconfig.json`.
 :::
+
+## resolve.conditionNames <RsbuildDocBadge path="/config/resolve/condition-names" text="resolve.conditionNames" />
+
+Specifies the condition names used to match entry points in the [exports field](https://nodejs.org/api/packages.html#packages_exports) of a package.
 
 ## resolve.dedupe <RsbuildDocBadge path="/config/resolve/dedupe" text="resolve.dedupe" />
 
@@ -62,3 +66,7 @@ Force Rsbuild to resolve the specified packages from project root, which is usef
 ## resolve.extensions <RsbuildDocBadge path="/config/resolve/extensions" text="resolve.extensions" />
 
 Automatically resolve file extensions when importing modules. This means you can import files without explicitly writing their extensions.
+
+## resolve.mainFields <RsbuildDocBadge path="/config/resolve/main-fields" text="resolve.mainFields" />
+
+Controls the priority of fields in a package.json used to locate a package's entry file. It is the ordered list of package.json fields Rspack will try when resolving an npm package's entry point.
