@@ -147,7 +147,7 @@ pluginDts({
 
 Configure the path alias for declaration files.
 
-`alias` will be merged with `compilerOptions.paths` configured in `tsconfig.json` and `alias` has a higher priority.
+The relative path of the path alias configured in `alias` should be based on the directory specified by `compilerOptions.baseUrl` in `tsconfig.json`. These aliases will be merged with `compilerOptions.paths`, and `alias` has a higher priority.
 
 In most cases, you don't need to use `alias`, but consider using it when you need to use path alias only in declaration files without wanting to affect JavaScript outputs. For example, map the declaration file of `foo` to `./compiled/foo`.
 
@@ -157,6 +157,13 @@ pluginDts({
     foo: './compiled/foo',
   },
 });
+```
+
+At this time, when [redirect.path](#redirectpath) is enabled, the import path of `foo` in the declaration file will be redirected to `./compiled/foo`.
+
+```diff
+- export * from 'foo';
++ export * from './compiled/foo';
 ```
 
 ### autoExternal
