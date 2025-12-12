@@ -1,7 +1,7 @@
 import type { LogLevel, RsbuildMode, RsbuildPlugin } from '@rsbuild/core';
 import cac, { type CAC } from 'cac';
 import type { ConfigLoader } from '../config';
-import type { Format, Syntax } from '../types/config';
+import type { Format, Syntax } from '../types';
 import { color } from '../utils/color';
 import { logger } from '../utils/logger';
 import { build } from './build';
@@ -9,6 +9,8 @@ import { initConfig } from './initConfig';
 import { inspect } from './inspect';
 import { startMFDevServer } from './mf';
 import { watchFilesForRestart } from './restart';
+
+export const RSPACK_BUILD_ERROR = 'Rspack build failed.';
 
 export type CommonOptions = {
   root?: string;
@@ -81,11 +83,12 @@ const applyCommonOptions = (cli: CAC) => {
     );
 };
 
-export function runCli(): void {
+export function setupCommands(): void {
   const cli = cac('rslib');
 
   cli.version(RSLIB_VERSION);
 
+  // Apply common options to all commands
   applyCommonOptions(cli);
 
   const buildDescription = `build the library for production ${color.dim('(default if no command is given)')}`;
@@ -162,7 +165,11 @@ export function runCli(): void {
 
         await cliBuild();
       } catch (err) {
-        logger.error('Failed to build.');
+        const isRspackError =
+          err instanceof Error && err.message === RSPACK_BUILD_ERROR;
+        if (!isRspackError) {
+          logger.error('Failed to build.');
+        }
         if (err instanceof AggregateError) {
           for (const error of err.errors) {
             logger.error(error);

@@ -1,8 +1,12 @@
+/**
+ * The methods and types exported from this file are considered as
+ * the public API of @rslib/core.
+ */
+
+export { runCLI } from './cli';
 export { build } from './cli/build';
-export { runCli } from './cli/commands';
 export { inspect } from './cli/inspect';
 export { startMFDevServer } from './cli/mf';
-export { prepareCli } from './cli/prepare';
 export {
   composeCreateRsbuildConfig as unstable_composeCreateRsbuildConfig,
   defineConfig,
