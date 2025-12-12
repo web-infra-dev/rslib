@@ -11,7 +11,7 @@ export const plugin2Path = path.resolve(__dirname, 'dist/mf/plugin2.txt');
 const testPlugin1: RsbuildPlugin = {
   name: 'test1',
   setup(api) {
-    api.onDevCompileDone(() => {
+    api.onAfterDevCompile(() => {
       fs.writeFileSync(plugin1Path, `plugin1 count: ${++count}`);
     });
   },
@@ -20,7 +20,7 @@ const testPlugin1: RsbuildPlugin = {
 const testPlugin2: RsbuildPlugin = {
   name: 'test2',
   setup(api) {
-    api.onDevCompileDone(() => {
+    api.onAfterDevCompile(() => {
       fs.writeFileSync(plugin2Path, 'plugin2');
     });
   },
