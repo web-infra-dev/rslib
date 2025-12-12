@@ -6,7 +6,7 @@ import { generateBundleMFConfig } from 'test-helper';
 
 const distPath = join(__dirname, 'dist/mf');
 
-const afterDevCompileDonePlugin: RsbuildPlugin = {
+const afterDevCompilePlugin: RsbuildPlugin = {
   name: 'dev-done',
   setup(api) {
     api.onAfterDevCompile(() => {
@@ -21,5 +21,5 @@ export default defineConfig({
     port: 3011,
     open: false,
   },
-  plugins: [afterDevCompileDonePlugin],
+  plugins: [afterDevCompilePlugin],
 });
