@@ -122,6 +122,7 @@ export const calcBundledPackages = (options: {
 export async function generateDts(data: DtsGenOptions): Promise<void> {
   const {
     bundle,
+    abortOnError,
     dtsEntry,
     dtsEmitPath,
     tsconfigPath,
@@ -269,6 +270,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       tsConfigResult,
       declarationDir,
       dtsExtension,
+      abortOnError,
       redirect,
       rootDir,
       paths,
@@ -282,7 +284,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   );
 
   if (tsgo) {
-    if (!hasError) {
+    if (!hasError || !abortOnError) {
       await bundleDtsIfNeeded();
     }
   } else {

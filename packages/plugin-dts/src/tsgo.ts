@@ -74,6 +74,7 @@ const generateTsgoArgs = (
 };
 
 async function handleDiagnosticsAndProcessFiles(
+  abortOnError: boolean | undefined,
   isWatch: boolean,
   hasErrors: boolean,
   tsConfigResult: ts.ParsedCommandLine,
@@ -124,7 +125,7 @@ async function handleDiagnosticsAndProcessFiles(
     footer,
   );
 
-  if (hasErrors && !isWatch) {
+  if (hasErrors && !isWatch && abortOnError) {
     const error = new Error(
       `Failed to generate declaration files. ${color.dim(`(${name})`)}`,
     );
@@ -143,6 +144,7 @@ export async function emitDtsTsgo(
 ): Promise<boolean> {
   const start = Date.now();
   const {
+    abortOnError,
     configPath,
     tsConfigResult,
     declarationDir,
@@ -203,6 +205,7 @@ export async function emitDtsTsgo(
         }
 
         await handleDiagnosticsAndProcessFiles(
+          abortOnError,
           isWatch,
           hasErrors,
           tsConfigResult,

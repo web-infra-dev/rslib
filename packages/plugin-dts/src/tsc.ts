@@ -28,6 +28,7 @@ const formatHost: FormatDiagnosticsHost = {
 };
 
 export type EmitDtsOptions = {
+  abortOnError: boolean | undefined;
   name: string;
   cwd: string;
   configPath: string;
@@ -42,6 +43,7 @@ export type EmitDtsOptions = {
 };
 
 async function handleDiagnosticsAndProcessFiles(
+  abortOnError: boolean | undefined,
   diagnostics: readonly Diagnostic[],
   configPath: string,
   bundle: boolean,
@@ -81,12 +83,14 @@ async function handleDiagnosticsAndProcessFiles(
       logger.error(logPrefixTsc, message);
     }
 
-    const error = new Error(
-      `Failed to generate declaration files. ${color.dim(`(${name})`)}`,
-    );
-    // do not log the stack trace, diagnostic messages are enough
-    error.stack = '';
-    throw error;
+    if (abortOnError) {
+      const error = new Error(
+        `Failed to generate declaration files. ${color.dim(`(${name})`)}`,
+      );
+      // do not log the stack trace, diagnostic messages are enough
+      error.stack = '';
+      throw error;
+    }
   }
 }
 
@@ -99,6 +103,7 @@ export async function emitDtsTsc(
 ): Promise<void> {
   const start = Date.now();
   const {
+    abortOnError,
     configPath,
     tsConfigResult,
     declarationDir,
@@ -252,6 +257,7 @@ export async function emitDtsTsc(
         ts.sortAndDeduplicateDiagnostics(allDiagnostics);
 
       await handleDiagnosticsAndProcessFiles(
+        abortOnError,
         sortAndDeduplicateDiagnostics,
         configPath,
         bundle,
@@ -322,6 +328,7 @@ export async function emitDtsTsc(
         ts.sortAndDeduplicateDiagnostics(allDiagnostics);
 
       await handleDiagnosticsAndProcessFiles(
+        abortOnError,
         sortAndDeduplicateDiagnostics,
         configPath,
         bundle,
@@ -370,7 +377,7 @@ export async function emitDtsTsc(
         footer,
       );
 
-      if (errorNumber > 0) {
+      if (errorNumber > 0 && abortOnError) {
         const error = new Error(
           `Failed to generate declaration files. ${color.dim(`(${name})`)}`,
         );
