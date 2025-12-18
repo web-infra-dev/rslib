@@ -46,7 +46,7 @@ describe('should respect output.filename.js and output.filenameHash to override 
     // override output.filename.js
     expect(extname(entryFiles.esm0!)).toEqual('.mjs');
     expect(entryFiles.cjs0).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename/index.ac9daf69.js"`,
+      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename/index.a4fcc622.js"`,
     );
 
     // override output.filenameHash
@@ -60,7 +60,7 @@ describe('should respect output.filename.js and output.filenameHash to override 
       );
     }
     expect(entryFiles.cjs1).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename-hash/index.ac9daf69.js"`,
+      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename-hash/index.a4fcc622.js"`,
     );
 
     // override different file types with function
@@ -107,7 +107,7 @@ describe('should respect output.filename.js and output.filenameHash to override 
       );
     }
     expect(entryFiles.cjs1).toMatchInlineSnapshot(
-      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/cjs-override-filename-hash/index.ac9daf69.js"`,
+      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/cjs-override-filename-hash/index.a4fcc622.js"`,
     );
 
     // override different file types with function
