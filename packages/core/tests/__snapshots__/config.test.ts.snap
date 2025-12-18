@@ -17,9 +17,6 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     aggregateTimeout: 0
   },
   experiments: {
-    inlineEnum: true,
-    inlineConst: true,
-    typeReexportsPresence: true,
     rspackFuture: {
       bundlerInfo: {
         force: false
@@ -173,7 +170,6 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     parser: {
       javascript: {
         exportsPresence: 'error',
-        inlineConst: true,
         typeReexportsPresence: 'tolerant',
         importMeta: false,
         importDynamic: false,
@@ -638,6 +634,7 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     ]
   },
   optimization: {
+    inlineExports: true,
     minimize: true,
     splitChunks: {
       chunks: 'async'
@@ -1056,9 +1053,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    inlineEnum: true,
-    inlineConst: true,
-    typeReexportsPresence: true,
     rspackFuture: {
       bundlerInfo: {
         force: false
@@ -1216,7 +1210,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     parser: {
       javascript: {
         exportsPresence: 'error',
-        inlineConst: true,
         typeReexportsPresence: 'tolerant',
         importMeta: false,
         importDynamic: false,
@@ -1697,6 +1690,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
+    inlineExports: true,
     minimize: true,
     splitChunks: {
       chunks: 'async'
@@ -1802,9 +1796,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    inlineEnum: true,
-    inlineConst: true,
-    typeReexportsPresence: true,
     rspackFuture: {
       bundlerInfo: {
         force: false
@@ -1960,7 +1951,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     parser: {
       javascript: {
         exportsPresence: 'error',
-        inlineConst: true,
         typeReexportsPresence: 'tolerant',
         importMeta: false,
         importDynamic: false,
@@ -2430,6 +2420,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
+    inlineExports: true,
     minimize: true,
     splitChunks: {
       chunks: 'async'
@@ -2530,9 +2521,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    inlineEnum: true,
-    inlineConst: true,
-    typeReexportsPresence: true,
     rspackFuture: {
       bundlerInfo: {
         force: false
@@ -2677,7 +2665,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     parser: {
       javascript: {
         exportsPresence: 'error',
-        inlineConst: true,
         typeReexportsPresence: 'tolerant',
         importMeta: false
       }
@@ -3066,6 +3053,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
+    inlineExports: true,
     minimize: true,
     splitChunks: false,
     minimizer: [
@@ -3161,9 +3149,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    inlineEnum: true,
-    inlineConst: true,
-    typeReexportsPresence: true,
     rspackFuture: {
       bundlerInfo: {
         force: false
@@ -3310,7 +3295,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     parser: {
       javascript: {
         exportsPresence: 'error',
-        inlineConst: true,
         typeReexportsPresence: 'tolerant',
         importMeta: false
       }
@@ -3710,6 +3694,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
+    inlineExports: true,
     minimize: true,
     splitChunks: false,
     minimizer: [
@@ -3806,9 +3791,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    inlineEnum: true,
-    inlineConst: true,
-    typeReexportsPresence: true,
     rspackFuture: {
       bundlerInfo: {
         force: false
@@ -3892,7 +3874,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     parser: {
       javascript: {
         exportsPresence: 'error',
-        inlineConst: true,
         typeReexportsPresence: 'tolerant'
       }
     },
@@ -4293,6 +4274,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
+    inlineExports: true,
     minimize: true,
     splitChunks: {
       chunks: 'all',
