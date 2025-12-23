@@ -104,6 +104,16 @@ describe('build command', async () => {
     `);
   });
 
+  test('--config 404 config file', () => {
+    expect(() => {
+      runCliSync('build --config ./custom-not-found.config.js', {
+        cwd: __dirname,
+        // only capture stderr output
+        stdio: ['ignore', 'ignore', 'pipe'],
+      });
+    }).toThrowError(/Cannot find config file: .*custom-not-found.config.js/);
+  });
+
   test('should use Node.js native loader to load config', async () => {
     // Skip Node.js <= 22.18
     if (!process.features.typescript) {
