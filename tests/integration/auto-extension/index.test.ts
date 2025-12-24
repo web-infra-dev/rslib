@@ -52,7 +52,7 @@ describe('should respect output.filename.js and output.filenameHash to override 
     // override output.filenameHash
     if (process.env.ADVANCED_ESM) {
       expect(entryFiles.esm1).toMatchInlineSnapshot(
-        `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/esm-override-filename-hash/index.51786615.js"`,
+        `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/esm-override-filename-hash/index.3ac7e0ff.js"`,
       );
     } else {
       expect(entryFiles.esm1).toMatchInlineSnapshot(
@@ -87,7 +87,7 @@ describe('should respect output.filename.js and output.filenameHash to override 
     // override output.filename.js
     if (process.env.ADVANCED_ESM) {
       expect(entryFiles.esm0).toMatchInlineSnapshot(
-        `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename/index.51786615.js"`,
+        `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename/index.3ac7e0ff.js"`,
       );
     } else {
       expect(entryFiles.esm0).toMatchInlineSnapshot(
@@ -99,7 +99,7 @@ describe('should respect output.filename.js and output.filenameHash to override 
     // override output.filenameHash
     if (process.env.ADVANCED_ESM) {
       expect(entryFiles.esm1).toMatchInlineSnapshot(
-        `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename-hash/index.51786615.js"`,
+        `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename-hash/index.3ac7e0ff.js"`,
       );
     } else {
       expect(entryFiles.esm1).toMatchInlineSnapshot(

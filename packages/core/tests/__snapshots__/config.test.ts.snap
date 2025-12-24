@@ -107,7 +107,7 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     'pnpapi'
   ],
   output: {
-    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+    devtoolModuleFilenameTemplate: '[relative-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '[name].js',
@@ -634,7 +634,6 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     ]
   },
   optimization: {
-    inlineExports: true,
     minimize: true,
     splitChunks: {
       chunks: 'async'
@@ -1143,7 +1142,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
-    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+    devtoolModuleFilenameTemplate: '[relative-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '0~[name].js',
@@ -1690,7 +1689,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
-    inlineExports: true,
     minimize: true,
     splitChunks: {
       chunks: 'async'
@@ -1884,7 +1882,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
-    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+    devtoolModuleFilenameTemplate: '[relative-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].cjs',
     chunkFilename: '1~[name].cjs',
@@ -2420,7 +2418,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
-    inlineExports: true,
     minimize: true,
     splitChunks: {
       chunks: 'async'
@@ -2601,7 +2598,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
-    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+    devtoolModuleFilenameTemplate: '[relative-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '2~[name].js',
@@ -3053,7 +3050,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
-    inlineExports: true,
     minimize: true,
     splitChunks: false,
     minimizer: [
@@ -3229,7 +3225,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'pnpapi'
   ],
   output: {
-    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+    devtoolModuleFilenameTemplate: '[relative-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '3~[name].js',
@@ -3694,7 +3690,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
-    inlineExports: true,
     minimize: true,
     splitChunks: false,
     minimizer: [
@@ -3813,7 +3808,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   devtool: false,
   cache: true,
   output: {
-    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+    devtoolModuleFilenameTemplate: '[relative-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '[name].js',
@@ -4274,7 +4269,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
-    inlineExports: true,
     minimize: true,
     splitChunks: {
       chunks: 'all',
