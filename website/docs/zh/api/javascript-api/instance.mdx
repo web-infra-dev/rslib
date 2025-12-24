@@ -80,6 +80,36 @@ Rslib 实例中归一化的 Rsbuild 配置对象。
 type Config = RsbuildConfig;
 ```
 
+## rslib.onAfterCreateRsbuild
+
+在创建内部 Rsbuild 实例后调用。你可以通过此方法访问或调用 Rsbuild 实例的属性和方法。
+
+- **类型：**
+
+```ts
+type OnAfterCreateRsbuildFn = (params: {
+  rsbuild: RsbuildInstance;
+}) => void | Promise<void>;
+
+function onAfterCreateRsbuild(callback: OnAfterCreateRsbuildFn): void;
+```
+
+- **示例：**
+
+```ts
+const rslib = await createRslib();
+
+rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+  rsbuild.onAfterBuild(() => {
+    console.log('build done');
+  });
+});
+
+await rslib.build();
+```
+
+Rsbuild 实例对象上所有的属性和方法可以查看 [Rsbuild instance](https://rsbuild.rs/zh/api/javascript-api/instance) 文档。
+
 ## rslib.build
 
 执行生产模式构建。该方法会生成用于生产环境的构建产物，并将其输出到构建输出目录。

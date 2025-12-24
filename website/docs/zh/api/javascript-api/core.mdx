@@ -33,17 +33,12 @@ type CreateRslibOptions = {
   cwd?: string;
   config?: RslibConfig | (() => Promise<RslibConfig>);
   loadEnv?: boolean | LoadEnvOptions;
-  onAfterCreateRsbuild?: (params: {
-    rsbuild: RsbuildInstance;
-    config: RslibConfig;
-  }) => void | Promise<void>;
 };
 ```
 
 - `cwd`：当前执行构建的根路径，默认值为 `process.cwd()`
 - `config`：Rslib 配置对象。参考 [配置总览](/config/) 查看所有可用的配置项。
 - `loadEnv`：是否调用 [loadEnv](/api/javascript-api/core#loadenv) 方法来加载环境变量，并通过 [source.define](/config/rsbuild/source#sourcedefine) 定义为全局变量。
-- `onAfterCreateRsbuild`：在创建 Rsbuild 实例后调用的回调函数，可以在这里对 Rsbuild 实例进行一些自定义操作。
 
 ### 异步加载配置
 
@@ -84,22 +79,6 @@ const rslib = await createRslib({
 const rslib = await createRslib({
   loadEnv: {
     prefixes: ['PUBLIC_', 'REACT_COMPS_'],
-  },
-});
-```
-
-### 修改 Rsbuild 实例
-
-`createRslib` 的 `onAfterCreateRsbuild` 选项允许你在 Rsbuild 实例创建后对其实例进行修改，例如调用一些 Rsbuild API。
-
-Rsbuild 实例对象上所有的属性和方法可以查看 [Rsbuild instance](https://rsbuild.rs/zh/api/javascript-api/instance) 文档。
-
-```ts
-const rslib = await createRslib({
-  onAfterCreateRsbuild: ({ rsbuild, config }) => {
-    rsbuild.onAfterBuild(() => {
-      console.log(config);
-    });
   },
 });
 ```

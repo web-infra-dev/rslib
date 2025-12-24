@@ -29,6 +29,7 @@ export type {
   InspectConfigResult,
   LibConfig,
   LibExperiments,
+  OnAfterCreateRsbuildFn,
   Redirect,
   RslibConfig,
   RslibContext,

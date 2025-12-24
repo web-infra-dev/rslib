@@ -90,6 +90,11 @@ export type RslibInstance = {
    */
   context: Readonly<RslibContext>;
   /**
+   * Register a callback that will be called after creating the internal Rsbuild instance.
+   * You can use this to access or call the properties and methods of the Rsbuild instance.
+   */
+  onAfterCreateRsbuild(callback: OnAfterCreateRsbuildFn): void;
+  /**
    * Perform a production mode build. This method will generate the outputs
    * for production and emit them to the output directory.
    */
@@ -116,6 +121,13 @@ export type RslibInstance = {
   ): Promise<StartServerResult>;
 };
 
+export type OnAfterCreateRsbuildFn = (params: {
+  /**
+   * The Rsbuild instance.
+   */
+  rsbuild: RsbuildInstance;
+}) => void | Promise<void>;
+
 export type CreateRslibOptions = {
   /**
    * The root path of current project.
@@ -133,12 +145,4 @@ export type CreateRslibOptions = {
    * @default false
    */
   loadEnv?: boolean | LoadEnvOptions;
-  /**
-   * A hook that will be called after creating the internal Rsbuild instance.
-   * You can use this to access or call the properties and methods of the Rsbuild instance.
-   */
-  onAfterCreateRsbuild?: (params: {
-    rsbuild: RsbuildInstance;
-    config: RslibConfig;
-  }) => void | Promise<void>;
 };

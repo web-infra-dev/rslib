@@ -80,6 +80,36 @@ Normalized Rsbuild configuration object in Rslib instance.
 type Config = RsbuildConfig;
 ```
 
+## rslib.onAfterCreateRsbuild
+
+Called after the internal Rsbuild instance is created. You can access or call the properties and methods of the Rsbuild instance through this method.
+
+- **Type:**
+
+```ts
+type OnAfterCreateRsbuildFn = (params: {
+  rsbuild: RsbuildInstance;
+}) => void | Promise<void>;
+
+function onAfterCreateRsbuild(callback: OnAfterCreateRsbuildFn): void;
+```
+
+- **Example:**
+
+```ts
+const rslib = await createRslib();
+
+rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+  rsbuild.onAfterBuild(() => {
+    console.log('build done');
+  });
+});
+
+await rslib.build();
+```
+
+All properties and methods on the Rsbuild instance object can be viewed in the [Rsbuild instance](https://rsbuild.rs/api/javascript-api/instance) document.
+
 ## rslib.build
 
 Runs a production build, generating production outputs and writing them to the output directory.
