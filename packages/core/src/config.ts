@@ -110,7 +110,9 @@ const resolveConfigPath = (
     if (fs.existsSync(customConfigPath)) {
       return customConfigPath;
     }
-    logger.warn(`Cannot find config file: ${color.dim(customConfigPath)}\n`);
+    throw new Error(
+      `${color.dim('[rslib:loadConfig]')} Cannot find config file: ${color.dim(customConfigPath)}`,
+    );
   }
 
   const configFilePath = findConfig(join(root, DEFAULT_CONFIG_NAME));
