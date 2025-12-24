@@ -2,114 +2,6 @@
 
 本章节介绍了 Rslib 实例对象上所有的属性和方法。
 
-## rslib.context
-
-`rslib.context` 是一个只读对象，提供一些上下文信息，可以通过 Rslib 实例的 `context` 属性访问：
-
-```ts
-import { createRslib } from '@rslib/core';
-
-const rslib = createRslib({
-  // ...
-});
-
-console.log(rslib.context);
-```
-
-### context.version
-
-当前使用的 `@rslib/core` 版本。
-
-- **类型：**
-
-```ts
-type Version = string;
-```
-
-### context.rootPath
-
-当前执行构建的根路径，对应调用 [createRslib](/api/javascript-api/core#createrslib) 时传入的 `cwd` 选项。
-
-- **类型：**
-
-```ts
-type RootPath = string;
-```
-
-### context.action
-
-当前的动作类型。
-
-- **类型：**
-
-```ts
-type Action = 'build' | 'mf-dev' | 'inspect';
-```
-
-`context.action` 在运行 CLI 命令或调用 Rslib 实例方法时设置：
-
-- `build`: 当运行 [rslib build](/guide/basic/cli#rslib-build) 或 [rslib.build()](/api/javascript-api/instance#rslibbuild) 时设置。
-- `mf-dev`: 当运行 [rslib mf-dev](/guide/basic/cli#rslib-mf-dev) 或 [rslib.startMFDevServer()](/api/javascript-api/instance#rslibstartmfdevserver) 时设置。
-- `inspect`: 当运行 [rslib inspect](/guide/basic/cli#rslib-inspect) 或 [rslib.inspectConfig()](/api/javascript-api/instance#rslibinspectconfig) 时设置。
-
-- **示例：**
-
-```ts
-if (rslib.context.action === 'build') {
-  // do something
-}
-```
-
-### context.config
-
-Rslib 实例中归一化的 Rslib 配置对象。
-
-- **类型：**
-
-```ts
-type Config = RslibConfig;
-```
-
-### context.rsbuildConfig
-
-Rslib 实例中归一化的 Rsbuild 配置对象。
-
-- **类型：**
-
-```ts
-type Config = RsbuildConfig;
-```
-
-## rslib.onAfterCreateRsbuild
-
-在创建内部 Rsbuild 实例后调用。你可以通过此方法访问或调用 Rsbuild 实例的属性和方法。
-
-- **类型：**
-
-```ts
-type OnAfterCreateRsbuildFn = (params: {
-  rsbuild: RsbuildInstance;
-}) => void | Promise<void>;
-
-function onAfterCreateRsbuild(callback: OnAfterCreateRsbuildFn): void;
-```
-
-- **示例：**
-
-```ts
-const rslib = await createRslib();
-
-rslib.onAfterCreateRsbuild(({ rsbuild }) => {
-  rsbuild.onAfterBuild(() => {
-    console.log('build done');
-  });
-});
-
-await rslib.build();
-```
-
-Rsbuild 实例对象上所有的属性和方法可以查看 [Rsbuild instance](https://rsbuild.rs/zh/api/javascript-api/instance) 文档。
-
 ## rslib.build
 
 执行生产模式构建。该方法会生成用于生产环境的构建产物，并将其输出到构建输出目录。
@@ -421,3 +313,53 @@ await rslib.inspectConfig({
   outputPath: path.join(__dirname, 'custom-dir'),
 });
 ```
+
+## rslib.getRslibConfig
+
+获取 Rslib 配置。
+
+- **类型：**
+
+```ts
+function getRslibConfig(): Readonly<RslibConfig>;
+```
+
+- **示例：**
+
+```ts
+import { createRslib } from '@rslib/core';
+
+const rslib = await createRslib();
+const config = rslib.getRslibConfig();
+console.log(config.lib);
+```
+
+## rslib.onAfterCreateRsbuild
+
+在创建内部 Rsbuild 实例后调用。你可以通过此方法访问或调用 Rsbuild 实例的属性和方法。
+
+- **类型：**
+
+```ts
+type OnAfterCreateRsbuildFn = (params: {
+  rsbuild: RsbuildInstance;
+}) => void | Promise<void>;
+
+function onAfterCreateRsbuild(callback: OnAfterCreateRsbuildFn): void;
+```
+
+- **示例：**
+
+```ts
+const rslib = await createRslib();
+
+rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+  rsbuild.onAfterBuild(() => {
+    console.log('build done');
+  });
+});
+
+await rslib.build();
+```
+
+Rsbuild 实例对象上所有的属性和方法可以查看 [Rsbuild instance](https://rsbuild.rs/zh/api/javascript-api/instance) 文档。

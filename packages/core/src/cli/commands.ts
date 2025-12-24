@@ -147,12 +147,9 @@ export function setupCommands(): void {
           const rslib = await init(options);
 
           if (options.watch) {
-            watchFilesForRestart(
-              getWatchFilesForRestart(rslib.context),
-              async () => {
-                await cliBuild();
-              },
-            );
+            watchFilesForRestart(getWatchFilesForRestart(rslib), async () => {
+              await cliBuild();
+            });
           }
 
           const buildInstance = await rslib.build(options);
@@ -212,12 +209,9 @@ export function setupCommands(): void {
           lib: options.lib,
         });
 
-        watchFilesForRestart(
-          getWatchFilesForRestart(rslib.context),
-          async () => {
-            await cliMfDev();
-          },
-        );
+        watchFilesForRestart(getWatchFilesForRestart(rslib), async () => {
+          await cliMfDev();
+        });
       };
 
       await cliMfDev();

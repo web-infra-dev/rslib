@@ -17,7 +17,7 @@ describe('rslib.build', async () => {
       },
     });
 
-    expect(rslib.context.rootPath).toMatchInlineSnapshot(
+    expect(rslib.getRslibConfig().root).toMatchInlineSnapshot(
       `"<ROOT>/tests/integration/javascript-api/build"`,
     );
 
@@ -64,14 +64,14 @@ describe('rslib.build', async () => {
     });
     await result1.close();
 
-    await expectFile(join(rslib.context.rootPath, 'dist-cjs/index.js'));
+    await expectFile(join(rslib.getRslibConfig().root!, 'dist-cjs/index.js'));
 
     const result2 = await rslib.build({
       lib: ['new-esm'],
     });
     await result2.close();
 
-    await expectFile(join(rslib.context.rootPath, 'dist-esm1/index.js'));
+    await expectFile(join(rslib.getRslibConfig().root!, 'dist-esm1/index.js'));
   });
 
   test('should not load env by default', async () => {

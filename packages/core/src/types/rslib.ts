@@ -1,7 +1,6 @@
 import type {
   BuildResult,
   LoadEnvOptions,
-  RsbuildConfig,
   InspectConfigResult as RsbuildInspectConfigResult,
   RsbuildInstance,
   RsbuildMode,
@@ -51,33 +50,6 @@ export type InspectConfigOptions = CommonOptions & {
 
 export type StartMFDevServerOptions = CommonOptions;
 
-export type ActionType = 'build' | 'mf-dev' | 'inspect';
-
-/** The public context */
-export type RslibContext = {
-  /** The Rslib core version. */
-  version: string;
-  /** The root path of current project. */
-  rootPath: string;
-  /**
-   * The current action type.
-   * - build: will be set when running `rslib build` or `rslib.build()`
-   * - inspect: will be set when running `rslib inspect` or `rslib.inspectConfig()`
-   * - mf-dev: will be set when running `rslib mf-dev` or `rslib.startMFDevServer()`
-   */
-  action?: ActionType;
-  /** The normalized Rslib configurations in current Rslib instance. */
-  config: RslibConfig;
-  /** The normalized Rsbuild config used in current Rslib instance. */
-  rsbuildConfig?: RsbuildConfig;
-};
-
-/** The inner context */
-export type InternalContext = RslibContext & {
-  /** List of files being watched in watch mode. */
-  watchFiles?: string[];
-};
-
 export type { BuildResult, StartServerResult };
 
 export type InspectConfigResult = {
@@ -86,9 +58,9 @@ export type InspectConfigResult = {
 
 export type RslibInstance = {
   /**
-   * A read-only object that provides some context information.
+   * Get the resolved Rslib configuration.
    */
-  context: Readonly<RslibContext>;
+  getRslibConfig(): Readonly<RslibConfig>;
   /**
    * Register a callback that will be called after creating the internal Rsbuild instance.
    * You can use this to access or call the properties and methods of the Rsbuild instance.

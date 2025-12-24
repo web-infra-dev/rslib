@@ -2,7 +2,6 @@ import util from 'node:util';
 import {
   createRsbuild,
   type EnvironmentConfig,
-  type LoadEnvResult,
   loadEnv,
   type RsbuildInstance,
   type RsbuildPlugin,
@@ -16,7 +15,6 @@ import type {
   CreateRslibOptions,
   InspectConfigOptions,
   InspectConfigResult,
-  InternalContext,
   OnAfterCreateRsbuildFn,
   RslibInstance,
   StartMFDevServerOptions,
@@ -69,27 +67,6 @@ const applyDebugInspectConfigPlugin = (
   });
 };
 
-export function createContext(
-  options: CreateRslibOptions,
-  config: RslibConfig,
-  envs: LoadEnvResult | null,
-): InternalContext {
-  const cwd = options.cwd || process.cwd();
-  const rootPath = config.root ? ensureAbsolutePath(cwd, config.root) : cwd;
-  const envFilePaths = envs ? envs.filePaths : [];
-  const watchFiles = [
-    config._privateMeta?.configFilePath,
-    ...envFilePaths,
-  ].filter(Boolean) as string[];
-
-  return {
-    version: RSLIB_VERSION,
-    rootPath,
-    config,
-    watchFiles,
-  };
-}
-
 /**
  * Create an Rslib instance.
  */
@@ -117,8 +94,13 @@ export async function createRslib(
     };
   }
 
-  const context = createContext(options, config, envs);
-  config.root = context.rootPath;
+  const cwd = options.cwd || process.cwd();
+  config.root = config.root ? ensureAbsolutePath(cwd, config.root) : cwd;
+
+  // attach envFilePaths to config._privateMeta for watch files
+  if (config._privateMeta) {
+    config._privateMeta.envFilePaths = envs ? envs.filePaths : [];
+  }
 
   const onAfterCreateRsbuildCallbacks: OnAfterCreateRsbuildFn[] = [];
 
@@ -162,8 +144,6 @@ export async function createRslib(
   const build = async (
     buildOptions: BuildOptions = {},
   ): Promise<BuildResult> => {
-    context.action = 'build';
-
     if (!getNodeEnv()) {
       setNodeEnv('production');
     }
@@ -194,16 +174,12 @@ export async function createRslib(
       watch: buildOptions.watch,
     });
 
-    context.rsbuildConfig = rsbuildInstance.getNormalizedConfig();
-
     return buildResult;
   };
 
   const inspectConfig = async (
     inspectOptions: InspectConfigOptions = {},
   ): Promise<InspectConfigResult> => {
-    context.action = 'inspect';
-
     if (inspectOptions.mode) {
       setNodeEnv(inspectOptions.mode);
     } else if (!getNodeEnv()) {
@@ -228,8 +204,6 @@ export async function createRslib(
       },
     });
 
-    context.rsbuildConfig = rsbuildInstance.getNormalizedConfig();
-
     const rawRslibConfig = util.inspect(config, {
       depth: null,
     });
@@ -243,8 +217,6 @@ export async function createRslib(
   const startMFDevServer = async (
     mfOptions: StartMFDevServerOptions = {},
   ): Promise<StartServerResult> => {
-    context.action = 'mf-dev';
-
     if (!getNodeEnv()) {
       setNodeEnv('development');
     }
@@ -285,15 +257,17 @@ export async function createRslib(
 
     const startDevServer = await rsbuildInstance.startDevServer();
 
-    context.rsbuildConfig = rsbuildInstance.getNormalizedConfig();
-
     onBeforeRestart(startDevServer.server.close);
 
     return startDevServer;
   };
 
+  const getRslibConfig = () => {
+    return config;
+  };
+
   const rslib: RslibInstance = {
-    context,
+    getRslibConfig,
     onAfterCreateRsbuild,
     build,
     inspectConfig,
