@@ -1,13 +1,17 @@
 import path from 'node:path';
-import type { InternalContext } from './types';
+import type { RslibInstance } from './types';
 import { color } from './utils/color';
 import { debounce, isTTY } from './utils/helper';
 import { logger } from './utils/logger';
 
 export function getWatchFilesForRestart(
-  context: unknown,
+  rslib: RslibInstance,
 ): string[] | undefined {
-  return (context as InternalContext).watchFiles;
+  const meta = rslib.getRslibConfig()._privateMeta;
+  if (!meta) {
+    return undefined;
+  }
+  return [meta.configFilePath, ...(meta.envFilePaths || [])].filter(Boolean);
 }
 
 export async function watchFilesForRestart(

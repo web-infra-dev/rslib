@@ -303,11 +303,12 @@ describe('CLI options', () => {
     };
 
     const rslib = await init(options);
-    const { config } = rslib.context;
+    const config = rslib.getRslibConfig();
     expect(config).toMatchInlineSnapshot(`
       {
         "_privateMeta": {
           "configFilePath": "<WORKSPACE>/tests/fixtures/config/cli-options/rslib.config.ts",
+          "envFilePaths": [],
         },
         "lib": [
           {

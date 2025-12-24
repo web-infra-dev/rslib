@@ -2,114 +2,6 @@
 
 This section describes all the properties and methods on the Rslib instance object.
 
-## rslib.context
-
-`rslib.context` is a read-only object that provides some context information, which can be accessed through the `context` property of the Rslib instance:
-
-```ts
-import { createRslib } from '@rslib/core';
-
-const rslib = createRslib({
-  // ...
-});
-
-console.log(rslib.context);
-```
-
-### context.version
-
-The version of `@rslib/core` currently in use.
-
-- **Type:**
-
-```ts
-type Version = string;
-```
-
-### context.rootPath
-
-The root path of the current build, corresponding to the `cwd` option of the [createRslib](/api/javascript-api/core#createrslib) method.
-
-- **Type:**
-
-```ts
-type RootPath = string;
-```
-
-### context.action
-
-The current action type.
-
-- **Type:**
-
-```ts
-type Action = 'build' | 'mf-dev' | 'inspect';
-```
-
-`context.action` is set when running CLI commands or calling Rslib instance methods:
-
-- `build`: set when running [rslib build](/guide/basic/cli#rslib-build) or [rslib.build()](/api/javascript-api/instance#rslibbuild).
-- `mf-dev`: set when running [rslib mf-dev](/guide/basic/cli#rslib-mf-dev) or [rslib.startMFDevServer()](/api/javascript-api/instance#rslibstartmfdevserver).
-- `inspect`: set when running [rslib inspect](/guide/basic/cli#rslib-inspect) or [rslib.inspectConfig()](/api/javascript-api/instance#rslibinspectconfig).
-
-- **Example:**
-
-```ts
-if (rslib.context.action === 'build') {
-  // do something
-}
-```
-
-### context.config
-
-Normalized Rslib configuration object in Rslib instance.
-
-- **Type:**
-
-```ts
-type Config = RslibConfig;
-```
-
-### context.rsbuildConfig
-
-Normalized Rsbuild configuration object in Rslib instance.
-
-- **Type:**
-
-```ts
-type Config = RsbuildConfig;
-```
-
-## rslib.onAfterCreateRsbuild
-
-Called after the internal Rsbuild instance is created. You can access or call the properties and methods of the Rsbuild instance through this method.
-
-- **Type:**
-
-```ts
-type OnAfterCreateRsbuildFn = (params: {
-  rsbuild: RsbuildInstance;
-}) => void | Promise<void>;
-
-function onAfterCreateRsbuild(callback: OnAfterCreateRsbuildFn): void;
-```
-
-- **Example:**
-
-```ts
-const rslib = await createRslib();
-
-rslib.onAfterCreateRsbuild(({ rsbuild }) => {
-  rsbuild.onAfterBuild(() => {
-    console.log('build done');
-  });
-});
-
-await rslib.build();
-```
-
-All properties and methods on the Rsbuild instance object can be viewed in the [Rsbuild instance](https://rsbuild.rs/api/javascript-api/instance) document.
-
 ## rslib.build
 
 Runs a production build, generating production outputs and writing them to the output directory.
@@ -424,3 +316,53 @@ await rslib.inspectConfig({
   outputPath: path.join(__dirname, 'custom-dir'),
 });
 ```
+
+## rslib.getRslibConfig
+
+Get the Rslib config.
+
+- **Type:**
+
+```ts
+function getRslibConfig(): Readonly<RslibConfig>;
+```
+
+- **Example:**
+
+```ts
+import { createRslib } from '@rslib/core';
+
+const rslib = await createRslib();
+const config = rslib.getRslibConfig();
+console.log(config.lib);
+```
+
+## rslib.onAfterCreateRsbuild
+
+Called after the internal Rsbuild instance is created. You can access or call the properties and methods of the Rsbuild instance through this method.
+
+- **Type:**
+
+```ts
+type OnAfterCreateRsbuildFn = (params: {
+  rsbuild: RsbuildInstance;
+}) => void | Promise<void>;
+
+function onAfterCreateRsbuild(callback: OnAfterCreateRsbuildFn): void;
+```
+
+- **Example:**
+
+```ts
+const rslib = await createRslib();
+
+rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+  rsbuild.onAfterBuild(() => {
+    console.log('build done');
+  });
+});
+
+await rslib.build();
+```
+
+All properties and methods on the Rsbuild instance object can be viewed in the [Rsbuild instance](https://rsbuild.rs/api/javascript-api/instance) document.

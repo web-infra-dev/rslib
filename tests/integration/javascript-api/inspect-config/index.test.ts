@@ -112,3 +112,32 @@ describe('rslib.inspectConfig', async () => {
     expect(result2.bundlerConfigs.length).toBe(2);
   });
 });
+
+describe('rslib.getRslibConfig', async () => {
+  test('returns the resolved Rslib configuration', async () => {
+    const rslib = await createRslib({
+      cwd: import.meta.dirname,
+      config: {
+        lib: [
+          {
+            format: 'esm',
+          },
+          {
+            format: 'cjs',
+          },
+        ],
+        logLevel: 'silent',
+      },
+    });
+
+    const config = rslib.getRslibConfig();
+
+    expect(config).not.toBeUndefined();
+    expect(config.lib).toHaveLength(2);
+    expect(config.lib![0]?.format).toBe('esm');
+    expect(config.lib![1]?.format).toBe('cjs');
+    expect(config.root).toMatchInlineSnapshot(
+      `"<ROOT>/tests/integration/javascript-api/inspect-config"`,
+    );
+  });
+});

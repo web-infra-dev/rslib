@@ -32,7 +32,6 @@ export type {
   OnAfterCreateRsbuildFn,
   Redirect,
   RslibConfig,
-  RslibContext,
   RslibInstance,
   Shims,
   StartMFDevServerOptions,
