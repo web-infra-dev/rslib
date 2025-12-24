@@ -10,6 +10,8 @@ import { inspect } from './inspect';
 import { startMFDevServer } from './mf';
 import { watchFilesForRestart } from './restart';
 
+export const RSPACK_BUILD_ERROR = 'Rspack build failed.';
+
 export type CommonOptions = {
   root?: string;
   config?: string;
@@ -162,7 +164,11 @@ export function runCli(): void {
 
         await cliBuild();
       } catch (err) {
-        logger.error('Failed to build.');
+        const isRspackError =
+          err instanceof Error && err.message === RSPACK_BUILD_ERROR;
+        if (!isRspackError) {
+          logger.error('Failed to build.');
+        }
         if (err instanceof AggregateError) {
           for (const error of err.errors) {
             logger.error(error);
