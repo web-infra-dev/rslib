@@ -10,6 +10,19 @@ function initNodeEnv() {
   }
 }
 
+function showGreeting() {
+  // Ensure consistent spacing before the greeting message.
+  // Different package managers handle output formatting differently - some automatically
+  // add a blank line before command output, while others do not.
+  const { npm_execpath, npm_lifecycle_event, NODE_RUN_SCRIPT_NAME } =
+    process.env;
+  const isNpx = npm_lifecycle_event === 'npx';
+  const isBun = npm_execpath?.includes('.bun');
+  const isNodeRun = Boolean(NODE_RUN_SCRIPT_NAME);
+  const prefix = isNpx || isBun || isNodeRun ? '\n' : '';
+  logger.greet(`${prefix}Rslib v${RSLIB_VERSION}\n`);
+}
+
 // ensure log level is set before any log is printed
 function setupLogLevel() {
   const logLevelIndex = process.argv.findIndex(
@@ -29,17 +42,5 @@ export function prepareCli(): void {
 
   initNodeEnv();
   setupLogLevel();
-
-  // Print a blank line to keep the greet log nice.
-  // Some package managers automatically output a blank line, some do not.
-  const { npm_execpath } = process.env;
-  if (
-    !npm_execpath ||
-    npm_execpath.includes('npx-cli.js') ||
-    npm_execpath.includes('.bun')
-  ) {
-    logger.log();
-  }
-
-  logger.greet(`  Rslib v${RSLIB_VERSION}\n`);
+  showGreeting();
 }
