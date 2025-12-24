@@ -1,0 +1,396 @@
+# Rslib instance
+
+This section describes all the properties and methods on the Rslib instance object.
+
+## rslib.context
+
+`rslib.context` is a read-only object that provides some context information, which can be accessed through the `context` property of the Rslib instance:
+
+```ts
+import { createRslib } from '@rslib/core';
+
+const rslib = createRslib({
+  // ...
+});
+
+console.log(rslib.context);
+```
+
+### context.version
+
+The version of `@rslib/core` currently in use.
+
+- **Type:**
+
+```ts
+type Version = string;
+```
+
+### context.rootPath
+
+The root path of the current build, corresponding to the `cwd` option of the [createRslib](/api/javascript-api/core#createrslib) method.
+
+- **Type:**
+
+```ts
+type RootPath = string;
+```
+
+### context.action
+
+The current action type.
+
+- **Type:**
+
+```ts
+type Action = 'build' | 'mf-dev' | 'inspect';
+```
+
+`context.action` is set when running CLI commands or calling Rslib instance methods:
+
+- `build`: set when running [rslib build](/guide/basic/cli#rslib-build) or [rslib.build()](/api/javascript-api/instance#rslibbuild).
+- `mf-dev`: set when running [rslib mf-dev](/guide/basic/cli#rslib-mf-dev) or [rslib.startMFDevServer()](/api/javascript-api/instance#rslibstartmfdevserver).
+- `inspect`: set when running [rslib inspect](/guide/basic/cli#rslib-inspect) or [rslib.inspectConfig()](/api/javascript-api/instance#rslibinspectconfig).
+
+- **Example:**
+
+```ts
+if (rslib.context.action === 'build') {
+  // do something
+}
+```
+
+### context.config
+
+Normalized Rslib configuration object in Rslib instance.
+
+- **Type:**
+
+```ts
+type Config = RslibConfig;
+```
+
+### context.rsbuildConfig
+
+Normalized Rsbuild configuration object in Rslib instance.
+
+- **Type:**
+
+```ts
+type Config = RsbuildConfig;
+```
+
+## rslib.build
+
+Runs a production build, generating production outputs and writing them to the output directory.
+
+- **Type:**
+
+```ts
+type BuildOptions = {
+  /**
+   * Specify library id
+   */
+  lib?: string[];
+  /**
+   * Whether to watch for file changes and rebuild.
+   *
+   * @default false
+   */
+  watch?: boolean;
+};
+
+function Build(options?: BuildOptions): Promise<{
+  /**
+   * Rspack's [stats](https://rspack.rs/api/javascript-api/stats) object.
+   */
+  stats?: Rspack.Stats | Rspack.MultiStats;
+  /**
+   * Close the build and call the `onCloseBuild` hook.
+   * In watch mode, this method will stop watching.
+   */
+  close: () => Promise<void>;
+}>;
+```
+
+- **Example:**
+
+```ts
+// Example 1: run build
+await rslib.build();
+
+// Example 2: run build of a specified library id
+await rslib.build({
+  lib: ['esm'],
+});
+
+// Example 3: build and get all assets
+const { stats } = await rslib.build();
+
+if (stats) {
+  const { assets } = stats.toJson({
+    // exclude unused fields to improve performance
+    all: false,
+    assets: true,
+  });
+  console.log(assets);
+}
+```
+
+### Run specified library
+
+You can specify the library to build using the `lib` option. If this option is not specified, all libraries will be built.
+
+> See [lib.id](/config/lib/id) to learn how to get or set the ID of the library.
+
+```ts
+await rslib.build({
+  lib: ['cjs', 'esm'],
+});
+```
+
+### Watch file changes
+
+To watch file changes and re-build, set the `watch` option to `true`.
+
+```ts
+await rslib.build({
+  watch: true,
+});
+```
+
+### Close build
+
+`rslib.build()` returns a `close()` method that stops the build process.
+
+In watch mode, calling the `close()` method will stop watching:
+
+```ts
+const buildResult = await rslib.build({
+  watch: true,
+});
+await buildResult.close();
+```
+
+In non-watch mode, also call the `close()` method to end the build, which triggers the [onCloseBuild](https://rsbuild.rs/plugins/dev/hooks#onclosebuild) hook of Rsbuild for cleanup operations.
+
+```ts
+const buildResult = await rslib.build();
+await buildResult.close();
+```
+
+### Stats object
+
+In non-watch mode, `rslib.build()` returns an Rspack [stats](https://rspack.rs/api/javascript-api/stats) object.
+
+For example, use the `stats.toJson()` method to get asset information:
+
+```ts
+const result = await rslib.build();
+const { stats } = result;
+
+if (stats) {
+  const { assets } = stats.toJson({
+    // exclude unused fields to improve performance
+    all: false,
+    assets: true,
+  });
+  console.log(assets);
+}
+```
+
+## rslib.startMFDevServer
+
+Start the dev server for the [Module Federation](/guide/advanced/module-federation) format library. This method will:
+
+1. Start a dev server to serve your application
+2. Watch for file changes and trigger recompilation
+
+- **Type:**
+
+```ts
+type StartMFDevServerOptions = {
+  /**
+   * Specify library id
+   */
+  lib?: string[];
+};
+
+type StartServerResult = {
+  /**
+   * The URLs that server is listening on.
+   */
+  urls: string[];
+  /**
+   * The actual port used by the server.
+   */
+  port: number;
+  server: {
+    /**
+     * Close the server.
+     * In development mode, this will call the `onCloseDevServer` hook.
+     */
+    close: () => Promise<void>;
+  };
+};
+
+function startMFDevServer(
+  options?: StartMFDevServerOptions,
+): Promise<StartServerResult>;
+```
+
+- **Example:**
+
+Start dev server:
+
+```ts
+// Start dev server
+await rslib.startMFDevServer();
+
+// Start dev server of a specified library id
+await rslib.startMFDevServer({
+  lib: ['entry1'],
+});
+```
+
+`startMFDevServer` returns these parameters:
+
+- `urls`: URLs to access dev server.
+- `port`: The actual listening port number.
+- `server`: Server instance object.
+
+```ts
+const { port } = await rslib.startMFDevServer();
+console.log(port); // 3000
+```
+
+### Run specified library
+
+You can specify the library to start dev server using the `lib` option.
+
+> See [lib.id](/config/lib/id) to learn how to get or set the ID of the library.
+
+```ts
+await rslib.startMFDevServer({
+  lib: ['entry1'],
+});
+```
+
+### Close server
+
+Call the `close()` method to close the dev server, trigger the [onCloseDevServer](https://rsbuild.rs/plugins/dev/hooks#onclosedevserver) hook of Rsbuild, and perform cleanup operations.
+
+```ts
+const { server } = await rslib.startMFDevServer();
+await server.close();
+```
+
+## rslib.inspectConfig
+
+Inspects and debugs Rslib's internal configurations. It provides access to:
+
+- The resolved Rslib configuration
+- The resolved Rsbuild configuration
+- The environment-specific Rsbuild configurations
+- The generated Rspack configurations
+
+The method serializes these configurations to strings and optionally writes them to disk for inspection.
+
+- **Type:**
+
+```ts
+type InspectConfigOptions = {
+  /**
+   * Specify library id
+   */
+  lib?: string[];
+  /**
+   * Inspect the config in the specified mode.
+   * Available options: 'development' or 'production'.
+   * @default 'production'
+   */
+  mode?: RsbuildMode;
+  /**
+   * Enables verbose mode to display the complete function
+   * content in the configuration.
+   * @default false
+   */
+  verbose?: boolean;
+  /**
+   * Specify the output path for inspection results.
+   * @default 'output.distPath.root'
+   */
+  outputPath?: string;
+  /**
+   * Whether to write the inspection results to disk.
+   * @default false
+   */
+  writeToDisk?: boolean;
+};
+
+function inspectConfig(options?: InspectConfigOptions): Promise<{
+  rslibConfig: string;
+  rsbuildConfig: string;
+  bundlerConfigs: string[];
+  environmentConfigs: string[];
+  origin: {
+    rsbuildConfig: RsbuildConfig;
+    environmentConfigs: Record<string, EnvironmentConfig>;
+    bundlerConfigs: Rspack.Configuration[];
+  };
+}>;
+```
+
+:::tip
+
+To view the configurations during the build process, use [debug mode](/guide/basic/configure-rslib#debug-mode), or obtain them through Rsbuild hooks such as [onBeforeBuild](https://rsbuild.rs/api/javascript-api/instance#rsbuildonbeforebuild), [onBeforeCreateCompiler](https://rsbuild.rs/api/javascript-api/instance#rsbuildonbeforecreatecompiler) in Rsbuild plugins.
+
+:::
+
+- **Example:**
+
+Get the content of configs in string format:
+
+```ts
+const { rslibConfig, rsbuildConfig, bundlerConfigs } =
+  await rslib.inspectConfig();
+
+console.log(rslibConfig, rsbuildConfig, bundlerConfigs);
+```
+
+Write the config content to disk:
+
+```ts
+await rslib.inspectConfig({
+  writeToDisk: true,
+});
+```
+
+可以通过 `lib` 参数指定需要查看配置的库 id。如果不指定该参数，则会输出所有配置。
+
+### Run specified library
+
+You can specify the library to inspect configurations using the `lib` option. If this option is not specified, all libraries will be inspected.
+
+> See [lib.id](/config/lib/id) to learn how to get or set the ID of the library.
+
+```ts
+await rslib.inspectConfig({
+  lib: ['cjs', 'esm'],
+});
+```
+
+### Output path
+
+You can set the output path using `outputPath`. The default value is [output.distPath.root](/config/rsbuild/output#outputdistpath).
+
+If `outputPath` is a relative path, it will be concatenated relative to the value of `output.distPath.root`. You can also set `outputPath` to an absolute path, in which case the files will be written directly to that path. For example:
+
+```ts
+import path from 'node:path';
+
+await rslib.inspectConfig({
+  writeToDisk: true,
+  outputPath: path.join(__dirname, 'custom-dir'),
+});
+```

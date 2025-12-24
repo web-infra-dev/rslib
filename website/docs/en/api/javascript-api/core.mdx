@@ -1,0 +1,288 @@
+# Rslib core
+
+This chapter introduces some of the core methods provided by Rslib.
+
+## createRslib
+
+Create an [Rslib instance](/api/javascript-api/instance).
+
+- **Type:**
+
+```ts
+function createRslib(options?: CreateRslibOptions): Promise<RslibInstance>;
+```
+
+- **Example:**
+
+```ts
+import { createRslib } from '@rslib/core';
+
+const rslib = await createRslib({
+  config: {
+    // Rslib configuration
+  },
+});
+```
+
+### Options
+
+The first parameter of `createRslib` is an `options` object with the following properties:
+
+```ts
+type CreateRslibOptions = {
+  cwd?: string;
+  config?: RslibConfig | (() => Promise<RslibConfig>);
+  loadEnv?: boolean | LoadEnvOptions;
+  onAfterCreateRsbuild?: (params: {
+    rsbuild: RsbuildInstance;
+    config: RslibConfig;
+  }) => void | Promise<void>;
+};
+```
+
+- `cwd`: The root path of the current build, defaults to `process.cwd()`.
+- `config`: Rslib configuration object. Refer to [Configuration overview](/config/) for all available configuration options.
+- `loadEnv`: Whether to call the [loadEnv](/api/javascript-api/core#loadenv) method to load environment variables and define them as global variables via [source.define](/config/rsbuild/source#sourcedefine).
+- `onAfterCreateRsbuild`: The callback function called after creating the Rsbuild instance, where you can perform some custom operations on the Rsbuild instance.
+
+### Load configuration async
+
+`config` can also be an async function for dynamically loading Rslib configuration and performing custom operations.
+
+```ts
+import { createRslib, loadConfig } from '@rslib/core';
+
+const rslib = await createRslib({
+  config: async () => {
+    const { content } = await loadConfig();
+    someFunctionToUpdateConfig(content);
+    return content;
+  },
+});
+```
+
+### Load environment variables
+
+The `loadEnv` option in `createRslib` calls the [loadEnv](/api/javascript-api/core#loadenv) method to load environment variables:
+
+```ts
+const rslib = await createRslib({
+  loadEnv: true,
+});
+```
+
+Setting `loadEnv: true` automatically completes these steps:
+
+1. Call the `loadEnv` method to load environment variables.
+2. Add [source.define](/config/rsbuild/source#sourcedefine) configuration, defining the `publicVars` returned by `loadEnv` as global variables.
+3. Watch the `.env` file for changes, restart build or restart the dev server when the file changes, and invalidate the build cache.
+4. Automatically call the `cleanup` method returned by `loadEnv` when closing the build or dev server.
+
+You can also pass in the options of the [loadEnv](/api/javascript-api/core#loadenv) method, for example:
+
+```ts
+const rslib = await createRslib({
+  loadEnv: {
+    prefixes: ['PUBLIC_', 'REACT_COMPS_'],
+  },
+});
+```
+
+### Modify Rsbuild instance
+
+The `onAfterCreateRsbuild` option of `createRslib` allows you to modify the Rsbuild instance after it is created, such as calling some Rsbuild APIs.
+
+All properties and methods on the Rsbuild instance object can be viewed in the [Rsbuild instance](https://rsbuild.rs/api/javascript-api/instance) document.
+
+```ts
+const rslib = await createRslib({
+  onAfterCreateRsbuild: ({ rsbuild, config }) => {
+    rsbuild.onAfterBuild(() => {
+      console.log(config);
+    });
+  },
+});
+```
+
+## loadConfig
+
+Load Rslib configuration file.
+
+- **Type:**
+
+```ts
+function loadConfig(params?: {
+  // Default is process.cwd()
+  cwd?: string;
+  // Specify the configuration file (relative or absolute path)
+  path?: string;
+  meta?: Record<string, unknown>;
+  envMode?: string;
+  loader?: 'auto' | 'jiti' | 'native';
+}): Promise<{
+  content: RslibConfig;
+  filePath: string | null;
+}>;
+```
+
+- **Example:**
+
+```ts
+import { loadConfig } from '@rslib/core';
+
+// load `rslib.config.*` file by default
+const { content } = await loadConfig();
+
+console.log(content); // -> Rslib config object
+
+const rslib = await createRslib({
+  config: content,
+});
+```
+
+If the Rslib config file does not exist in the cwd directory, the return value of the loadConfig method is `{ content: {}, filePath: null }`.
+
+### Specify the configuration file
+
+Use the `path` option to load the `my-config.ts` configuration file:
+
+```ts
+import { join } from 'node:path';
+import { loadConfig } from '@rslib/core';
+
+const { content } = await loadConfig({
+  path: join(__dirname, 'my-config.ts'),
+});
+```
+
+### Passing meta object
+
+Load the configuration file and pass in a custom meta object:
+
+```ts
+import { join } from 'node:path';
+import { loadConfig } from '@rslib/core';
+
+const { content } = await loadConfig({
+  meta: {
+    foo: 'bar',
+  },
+});
+```
+
+In the `defineConfig` configuration function, you can access the `foo` variable through the `meta` object:
+
+```ts title="rslib.config.ts"
+export default defineConfig(({ meta }) => {
+  console.log(meta.foo); // bar
+  return config;
+});
+```
+
+## loadEnv
+
+Load the [.env](https://rsbuild.rs/guide/advanced/env-vars#env-file) file and return all environment variables starting with the specified prefixes.
+
+The usage is the same as Rsbuild, see [loadEnv -- Rsbuild](https://rsbuild.rs/api/javascript-api/core#loadenv) for details.
+
+:::tip
+
+- Rslib CLI will automatically call the `loadEnv()` method. If you are using the Rslib CLI, you can set the `mode` parameter through the `--env-mode` option.
+- The `loadEnv` option in [createRslib](#createrslib) will help you call the `loadEnv()` method and handle related operations.
+
+:::
+
+## mergeRslibConfig
+
+Used to merge multiple Rslib configuration objects.
+
+The `mergeRslibConfig` function takes multiple configuration objects as parameters. It deep merges each configuration object, automatically combining multiple function values into an array of sequentially executed functions, and returns a merged configuration object.
+
+- **Type:**
+
+```ts
+function mergeRslibConfig(
+  ...configs: (RslibConfigWithOptionalLib | undefined)[]
+): RslibConfigWithOptionalLib;
+```
+
+### Basic example
+
+```ts
+import { mergeRslibConfig } from '@rslib/core';
+
+const config1 = {
+  lib: [
+    {
+      format: 'esm',
+    },
+  ],
+};
+const config2 = {
+  output: {
+    target: 'web',
+  },
+};
+
+const mergedConfig = mergeRslibConfig(config1, config2);
+
+console.log(mergedConfig);
+```
+
+### Merge rules
+
+Same as [mergeRsbuildConfig](https://rsbuild.rs/api/javascript-api/core#merge-rules).
+
+## rspack
+
+If you need to access the API or plugins exported by [@rspack/core](https://npmjs.com/package/@rspack/core), you can directly import the `rspack` object from `@rslib/core` without installing the `@rspack/core` package separately.
+
+- **Type:** `Rspack`
+- **Example:**
+
+```ts
+// the same as `import { rspack } from '@rspack/core'`
+import { rspack } from '@rslib/core';
+
+console.log(rspack.rspackVersion); // a.b.c
+console.log(rspack.util.createHash);
+console.log(rspack.BannerPlugin);
+```
+
+:::tip
+
+- Refer to [Rspack plugins](https://rspack.rs/plugins/) and [Rspack JavaScript API](https://rspack.rs/api/javascript-api/) to learn more about the available Rspack APIs.
+- It's not recommended to manually install the `@rspack/core` package, as it may conflict with the version that Rslib depends on.
+
+:::
+
+## rsbuild
+
+If you need to access the API exported by [@rsbuild/core](https://npmjs.com/package/@rsbuild/core), you can directly import the `rsbuild` object from `@rslib/core` without installing the `@rsbuild/core` package separately.
+
+- **Example:**
+
+```ts
+import { rsbuild } from '@rslib/core';
+
+console.log(rsbuild.version);
+```
+
+:::tip
+
+Refer to [Rsbuild core](https://rsbuild.rs/api/javascript-api/core) for available Rsbuild APIs.
+
+:::
+
+## version
+
+The version of `@rslib/core` currently in use.
+
+- **Type:** `string`
+- **Example:**
+
+```ts
+import { version } from '@rslib/core';
+
+console.log(version); // 0.19.0
+```

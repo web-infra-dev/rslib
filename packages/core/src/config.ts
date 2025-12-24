@@ -1,9 +1,8 @@
 import fs from 'node:fs';
-import path, { dirname, extname, isAbsolute, join } from 'node:path';
+import path, { dirname, extname, join } from 'node:path';
 import {
   defineConfig as defineRsbuildConfig,
   type EnvironmentConfig,
-  loadConfig as loadRsbuildConfig,
   mergeRsbuildConfig,
   type RsbuildConfig,
   type RsbuildEntry,
@@ -16,8 +15,6 @@ import {
 import { glob } from 'tinyglobby';
 import { composeAssetConfig } from './asset/assetConfig';
 import {
-  DEFAULT_CONFIG_EXTENSIONS,
-  DEFAULT_CONFIG_NAME,
   DTS_EXTENSIONS_PATTERN,
   JS_EXTENSIONS_PATTERN,
   SWC_HELPERS,
@@ -50,9 +47,6 @@ import type {
   RsbuildConfigOutputTarget,
   RsbuildConfigWithLibInfo,
   RslibConfig,
-  RslibConfigAsyncFn,
-  RslibConfigExport,
-  RslibConfigSyncFn,
   RspackResolver,
   Shims,
   Syntax,
@@ -62,7 +56,6 @@ import { getDefaultExtension } from './utils/extension';
 import {
   calcLongestCommonPath,
   checkMFPlugin,
-  getAbsolutePath,
   isDirectory,
   isEmptyObject,
   isIntermediateOutputFormat,
@@ -80,83 +73,6 @@ import {
   transformSyntaxToRspackTarget,
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
-
-/**
- * This function helps you to autocomplete configuration types.
- * It accepts a Rslib config object, or a function that returns a config.
- */
-export function defineConfig(config: RslibConfig): RslibConfig;
-export function defineConfig(config: RslibConfigSyncFn): RslibConfigSyncFn;
-export function defineConfig(config: RslibConfigAsyncFn): RslibConfigAsyncFn;
-export function defineConfig(config: RslibConfigExport): RslibConfigExport;
-export function defineConfig(config: RslibConfigExport) {
-  return config;
-}
-
-const findConfig = (basePath: string): string | undefined => {
-  return DEFAULT_CONFIG_EXTENSIONS.map((ext) => basePath + ext).find(
-    fs.existsSync,
-  );
-};
-
-const resolveConfigPath = (
-  root: string,
-  customConfig?: string,
-): string | undefined => {
-  if (customConfig) {
-    const customConfigPath = isAbsolute(customConfig)
-      ? customConfig
-      : join(root, customConfig);
-    if (fs.existsSync(customConfigPath)) {
-      return customConfigPath;
-    }
-    throw new Error(
-      `${color.dim('[rslib:loadConfig]')} Cannot find config file: ${color.dim(customConfigPath)}`,
-    );
-  }
-
-  const configFilePath = findConfig(join(root, DEFAULT_CONFIG_NAME));
-
-  if (configFilePath) {
-    return configFilePath;
-  }
-  return undefined;
-};
-
-export type ConfigLoader = 'auto' | 'jiti' | 'native';
-
-export async function loadConfig({
-  cwd = process.cwd(),
-  path,
-  envMode,
-  loader,
-}: {
-  cwd?: string;
-  path?: string;
-  envMode?: string;
-  loader?: ConfigLoader;
-}): Promise<{
-  content: RslibConfig;
-  filePath?: string;
-}> {
-  const configFilePath = resolveConfigPath(cwd, path);
-  if (!configFilePath) {
-    return {
-      content: {
-        lib: [],
-      },
-      filePath: undefined,
-    };
-  }
-  const { content } = await loadRsbuildConfig({
-    cwd: dirname(configFilePath),
-    path: configFilePath,
-    envMode,
-    loader,
-  });
-
-  return { content: content as RslibConfig, filePath: configFilePath };
-}
 
 // Match logic is derived from https://github.com/webpack/webpack/blob/94aba382eccf3de1004d235045d4462918dfdbb7/lib/ExternalModuleFactoryPlugin.js#L89-L158
 const handleMatchedExternal = (
@@ -1751,16 +1667,14 @@ const composeExternalHelpersConfig = (
 async function composeLibRsbuildConfig(
   config: LibConfig,
   multiCompilerIndex: number | null, // null means there's non multi-compiler
-  root?: string,
+  root = process.cwd(),
   sharedPlugins?: RsbuildPlugins,
 ) {
   checkMFPlugin(config, sharedPlugins);
 
-  // Get the absolute path of the root directory to align with Rsbuild's default behavior
-  const rootPath = root ? getAbsolutePath(process.cwd(), root) : process.cwd();
-  const pkgJson = readPackageJson(rootPath);
+  const pkgJson = readPackageJson(root);
   const { compilerOptions } = await loadTsconfig(
-    rootPath,
+    root,
     config.source?.tsconfigPath,
   );
   const cssModulesAuto = config.output?.cssModules?.auto ?? true;
@@ -1815,7 +1729,7 @@ async function composeLibRsbuildConfig(
   const { entryConfig, outBase } = await composeEntryConfig(
     config.source?.entry!,
     config.bundle,
-    rootPath,
+    root,
     cssModulesAuto,
     config.outBase,
   );
