@@ -1,13 +1,20 @@
 import path from 'node:path';
-import { color } from '../utils/color';
-import { debounce, isTTY } from '../utils/helper';
-import { logger } from '../utils/logger';
+import type { InternalContext } from './types';
+import { color } from './utils/color';
+import { debounce, isTTY } from './utils/helper';
+import { logger } from './utils/logger';
+
+export function getWatchFilesForRestart(
+  context: unknown,
+): string[] | undefined {
+  return (context as InternalContext).watchFiles;
+}
 
 export async function watchFilesForRestart(
-  files: string[],
+  files: string[] | undefined,
   restart: () => Promise<void>,
 ): Promise<void> {
-  if (!files.length) {
+  if (!files || !files.length) {
     return;
   }
 
@@ -65,7 +72,7 @@ const beforeRestart = async ({
 
   if (filePath) {
     const filename = path.basename(filePath);
-    logger.info(`restart because ${color.yellow(filename)} is changed.\n`);
+    logger.info(`restarting as ${color.yellow(filename)} is changed\n`);
   } else {
     logger.info('restarting...\n');
   }

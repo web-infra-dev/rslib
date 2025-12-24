@@ -16,7 +16,7 @@ import {
   mergeRsbuildConfig as mergeConfig,
 } from '@rsbuild/core';
 import type { Format, LibConfig, RslibConfig } from '@rslib/core';
-import { build, loadConfig } from '@rslib/core';
+import { createRslib, loadConfig } from '@rslib/core';
 import { globContentJSON } from './helper.ts';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -64,35 +64,6 @@ export function runCli(command: string, options?: ExecOptions) {
 
 export function getCwdByExample(exampleName: string) {
   return join(__dirname, '../../examples', exampleName);
-}
-
-export function extractRslibConfig(log: string): string {
-  const markerPattern = /Rslib config used to generate Rsbuild environments/;
-  const lines = log.split(/\r?\n/);
-  const markerIndex = lines.findIndex((line) => markerPattern.test(line));
-
-  if (markerIndex === -1) {
-    return '';
-  }
-
-  const startIndex = markerIndex + 2;
-
-  if (startIndex >= lines.length || lines[startIndex] !== '{') {
-    return '';
-  }
-
-  let endIndex = startIndex + 1;
-
-  while (endIndex < lines.length && lines[endIndex] !== '}') {
-    endIndex += 1;
-  }
-
-  if (endIndex >= lines.length) {
-    return '';
-  }
-
-  const configText = lines.slice(startIndex, endIndex + 1).join('\n');
-  return configText;
 }
 
 export function generateBundleEsmConfig(config: LibConfig = {}): LibConfig {
@@ -309,8 +280,14 @@ export async function rslibBuild({
   });
   modifyConfig?.(rslibConfig);
   process.chdir(cwd);
-  const rsbuildInstance = await build(rslibConfig, { lib });
-  return { rsbuildInstance, rslibConfig };
+  const rslib = await createRslib({
+    cwd,
+    config: rslibConfig,
+  });
+  const buildResult = await rslib.build({
+    lib,
+  });
+  return { rslib, buildResult, rslibConfig };
 }
 
 export async function buildAndGetResults(options: {
@@ -344,7 +321,7 @@ export async function buildAndGetResults({
   lib?: string[];
   logLevel?: LogLevel;
 }) {
-  const { rsbuildInstance, rslibConfig } = await rslibBuild({
+  const { rslib, buildResult, rslibConfig } = await rslibBuild({
     cwd: fixturePath,
     path: configPath,
     modifyConfig: updateConfigForTest(logLevel),
@@ -352,7 +329,7 @@ export async function buildAndGetResults({
   });
   const {
     origin: { bundlerConfigs, rsbuildConfig },
-  } = await rsbuildInstance.inspectConfig({ verbose: true });
+  } = await rslib.inspectConfig({ verbose: true });
   if (type === 'all') {
     const jsResults = await getResults(rslibConfig, 'js');
     const dtsResults = await getResults(rslibConfig, 'dts');
@@ -365,7 +342,7 @@ export async function buildAndGetResults({
         entryFiles: jsResults.entryFiles,
         rspackConfig: bundlerConfigs,
         rsbuildConfig: rsbuildConfig,
-        isSuccess: Boolean(rsbuildInstance),
+        isSuccess: Boolean(buildResult),
       },
       dts: {
         contents: dtsResults.contents,
@@ -374,7 +351,7 @@ export async function buildAndGetResults({
         entryFiles: dtsResults.entryFiles,
         rspackConfig: bundlerConfigs,
         rsbuildConfig: rsbuildConfig,
-        isSuccess: Boolean(rsbuildInstance),
+        isSuccess: Boolean(buildResult),
       },
       css: {
         contents: cssResults.contents,
@@ -383,7 +360,7 @@ export async function buildAndGetResults({
         entryFiles: cssResults.entryFiles,
         rspackConfig: bundlerConfigs,
         rsbuildConfig: rsbuildConfig,
-        isSuccess: Boolean(rsbuildInstance),
+        isSuccess: Boolean(buildResult),
       },
     };
   }
@@ -396,7 +373,7 @@ export async function buildAndGetResults({
     mfExposeEntry: results.mfExposeEntry,
     rspackConfig: bundlerConfigs,
     rsbuildConfig: rsbuildConfig,
-    isSuccess: Boolean(rsbuildInstance),
+    isSuccess: Boolean(buildResult),
   };
 }
 

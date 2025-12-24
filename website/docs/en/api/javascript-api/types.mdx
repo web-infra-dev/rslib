@@ -1,0 +1,123 @@
+# Rslib types
+
+This section describes some of the type definitions provided by the Rslib.
+
+## RslibInstance
+
+The type of Rslib instance, corresponding to the return value of the [createRslib](/api/javascript-api/core#createrslib) method.
+
+```ts
+import type { RslibInstance } from '@rslib/core';
+
+let rslib: RslibInstance;
+```
+
+## RslibConfig
+
+The type of Rslib configuration.
+
+```ts
+import type { RslibConfig } from '@rslib/core';
+
+const config: RslibConfig = {
+  // ...
+};
+```
+
+You can also import the type definitions of each field in the Rslib config:
+
+```ts
+import type {
+  AutoExternal,
+  BannerAndFooter,
+  Dts,
+  Format,
+  LibConfig,
+  Redirect,
+  Shims,
+  Syntax,
+} from '@rslib/core';
+```
+
+## RslibContext
+
+The type of the [context property](/api/javascript-api/instance#rslibcontext) in the Rslib instance.
+
+```ts
+import type { RslibContext } from '@rslib/core';
+
+const context: RslibContext = rslib.context;
+```
+
+## RsbuildPlugin
+
+Defines the structure and behavior of an Rsbuild plugin.
+
+Rsbuild plugins provide a standardized way to extend build functionality through lifecycle hooks and configuration modifications.
+
+```ts
+import type { RsbuildPlugin } from '@rslib/core';
+
+const myPlugin: RsbuildPlugin = {
+  name: 'my-plugin',
+  setup() {},
+};
+```
+
+## CreateRslibOptions
+
+The param type of [createRslib](/api/javascript-api/core#createrslib) method.
+
+```ts
+import type { CreateRslibOptions } from '@rslib/core';
+```
+
+## BuildOptions
+
+The param type of [rslib.build](/api/javascript-api/instance#rslibbuild) method.
+
+```ts
+import type { BuildOptions } from '@rslib/core';
+```
+
+## StartMFDevServerOptions
+
+The param type of [rslib.startMFDevServer](/api/javascript-api/instance#rslibstartmfdevserver) method.
+
+```ts
+import type { StartMFDevServerOptions } from '@rslib/core';
+```
+
+## InspectConfigOptions
+
+The param type of [rslib.inspectConfig](/api/javascript-api/instance#rslibinspectconfig) method.
+
+```ts
+import type { InspectConfigOptions } from '@rslib/core';
+```
+
+## Rspack
+
+Includes all types exported by `@rspack/core`, such as `Rspack.Configuration`.
+
+```ts
+import type { Rspack } from '@rslib/core';
+
+const rspackConfig: Rspack.Configuration = {};
+```
+
+## Rsbuild
+
+Includes all types exported by `@rsbuild/core`, such as `Rsbuild.ToolsConfig`.
+
+See [@rsbuild/core - src/index.ts](https://github.com/web-infra-dev/rsbuild/blob/main/packages/core/src/index.ts) for all exported types of Rsbuild.
+
+```ts
+import type { Rsbuild } from '@rslib/core';
+
+const rsbuildConfig: Rsbuild.ToolsConfig = {};
+```
+
+## Others
+
+See [@rslib/core - src/index.ts](https://github.com/web-infra-dev/rslib/blob/main/packages/core/src/index.ts) for all exported types.

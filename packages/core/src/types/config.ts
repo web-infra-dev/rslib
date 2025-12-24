@@ -390,16 +390,3 @@ export interface RslibConfig extends RsbuildConfig {
    */
   output?: RslibOutputConfig;
 }
-
-export type ConfigParams = {
-  env: string;
-  command: string;
-  envMode?: string;
-};
-
-export type RslibConfigSyncFn = (env: ConfigParams) => RslibConfig;
-export type RslibConfigAsyncFn = (env: ConfigParams) => Promise<RslibConfig>;
-export type RslibConfigExport =
-  | RslibConfig
-  | RslibConfigSyncFn
-  | RslibConfigAsyncFn;

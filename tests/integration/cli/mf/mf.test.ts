@@ -1,6 +1,5 @@
 import { join } from 'node:path';
-import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
-import { startMFDevServer } from '@rslib/core';
+import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
 import { expectFile, runCli, runCliSync } from 'test-helper';
@@ -61,39 +60,32 @@ describe('mf-dev', () => {
   });
 
   test('mf-dev --lib should error when lib not found', async () => {
+    const fixturePath = join(__dirname, 'dev-error');
     try {
-      await startMFDevServer(
+      runCliSync(
+        'mf-dev --config rslib.config.libNotExist.ts --lib not-exist',
         {
-          lib: [
-            {
-              format: 'mf',
-              plugins: [pluginModuleFederation({ name: 'test-not-exist' }, {})],
-            },
-          ],
-        },
-        {
-          lib: ['not-exist'],
+          cwd: fixturePath,
+          stdio: 'pipe',
         },
       );
     } catch (error) {
-      expect((error as Error).message).toMatchInlineSnapshot(
-        `"No mf format found in libs "not-exist", please check your config to ensure that the mf format is enabled correctly."`,
+      expect(stripAnsi((error as Error).message)).toContain(
+        `No mf format found in libs "not-exist", please check your config to ensure that the mf format is enabled correctly.`,
       );
     }
   });
 
   test('mf-dev should error when no mf format', async () => {
+    const fixturePath = join(__dirname, 'dev-error');
     try {
-      await startMFDevServer({
-        lib: [
-          {
-            format: 'esm',
-          },
-        ],
+      runCliSync('mf-dev --config rslib.config.noFormat.ts', {
+        cwd: fixturePath,
+        stdio: 'pipe',
       });
     } catch (error) {
-      expect((error as Error).message).toMatchInlineSnapshot(
-        `"No mf format found in your config, please check your config to ensure that the mf format is enabled correctly."`,
+      expect(stripAnsi((error as Error).message)).toContain(
+        'No mf format found in your config, please check your config to ensure that the mf format is enabled correctly.',
       );
     }
   });

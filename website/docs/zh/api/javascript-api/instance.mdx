@@ -1,0 +1,393 @@
+# Rslib instance
+
+本章节介绍了 Rslib 实例对象上所有的属性和方法。
+
+## rslib.context
+
+`rslib.context` 是一个只读对象，提供一些上下文信息，可以通过 Rslib 实例的 `context` 属性访问：
+
+```ts
+import { createRslib } from '@rslib/core';
+
+const rslib = createRslib({
+  // ...
+});
+
+console.log(rslib.context);
+```
+
+### context.version
+
+当前使用的 `@rslib/core` 版本。
+
+- **类型：**
+
+```ts
+type Version = string;
+```
+
+### context.rootPath
+
+当前执行构建的根路径，对应调用 [createRslib](/api/javascript-api/core#createrslib) 时传入的 `cwd` 选项。
+
+- **类型：**
+
+```ts
+type RootPath = string;
+```
+
+### context.action
+
+当前的动作类型。
+
+- **类型：**
+
+```ts
+type Action = 'build' | 'mf-dev' | 'inspect';
+```
+
+`context.action` 在运行 CLI 命令或调用 Rslib 实例方法时设置：
+
+- `build`: 当运行 [rslib build](/guide/basic/cli#rslib-build) 或 [rslib.build()](/api/javascript-api/instance#rslibbuild) 时设置。
+- `mf-dev`: 当运行 [rslib mf-dev](/guide/basic/cli#rslib-mf-dev) 或 [rslib.startMFDevServer()](/api/javascript-api/instance#rslibstartmfdevserver) 时设置。
+- `inspect`: 当运行 [rslib inspect](/guide/basic/cli#rslib-inspect) 或 [rslib.inspectConfig()](/api/javascript-api/instance#rslibinspectconfig) 时设置。
+
+- **示例：**
+
+```ts
+if (rslib.context.action === 'build') {
+  // do something
+}
+```
+
+### context.config
+
+Rslib 实例中归一化的 Rslib 配置对象。
+
+- **类型：**
+
+```ts
+type Config = RslibConfig;
+```
+
+### context.rsbuildConfig
+
+Rslib 实例中归一化的 Rsbuild 配置对象。
+
+- **类型：**
+
+```ts
+type Config = RsbuildConfig;
+```
+
+## rslib.build
+
+执行生产模式构建。该方法会生成用于生产环境的构建产物，并将其输出到构建输出目录。
+
+- **类型：**
+
+```ts
+type BuildOptions = {
+  /**
+   * 指定库 id
+   */
+  lib?: string[];
+  /**
+   * 是否监听文件变化并重新构建
+   *
+   * @default false
+   */
+  watch?: boolean;
+};
+
+function Build(options?: BuildOptions): Promise<{
+  /**
+   * Rspack 的 [stats](https://rspack.rs/zh/api/javascript-api/stats) 对象。
+   */
+  stats?: Rspack.Stats | Rspack.MultiStats;
+  /**
+   * 关闭构建并调用 `onCloseBuild` 钩子。
+   * 在监听模式下，此方法将停止监听。
+   */
+  close: () => Promise<void>;
+}>;
+```
+
+- **示例：**
+
+```ts
+// Example 1: run build
+await rslib.build();
+
+// Example 2: run build of a specified library id
+await rslib.build({
+  lib: ['esm'],
+});
+
+// Example 3: build and get all assets
+const { stats } = await rslib.build();
+
+if (stats) {
+  const { assets } = stats.toJson({
+    // 排除不需要的字段以提高性能
+    all: false,
+    assets: true,
+  });
+  console.log(assets);
+}
+```
+
+### 运行指定的库
+
+可以通过 `lib` 参数指定需要构建的库 id。如果不指定该参数，则会构建所有库。
+
+> 查看 [lib.id](/config/lib/id) 了解如何获取或设置库的 ID。
+
+```ts
+await rslib.build({
+  lib: ['cjs', 'esm'],
+});
+```
+
+### 监听文件变化
+
+如果需要自动监听文件变化并重新执行构建，可以将 `watch` 参数设置为 `true`。
+
+```ts
+await rslib.build({
+  watch: true,
+});
+```
+
+### 结束构建
+
+`rslib.build()` 返回一个 `close()` 方法，用于结束本次构建。
+
+在 watch 模式下，调用 `close()` 方法将会结束监听：
+
+```ts
+const buildResult = await rslib.build({
+  watch: true,
+});
+await buildResult.close();
+```
+
+在非 watch 模式下，你也应该调用 `close()` 方法来结束构建，这会触发 Rsbuild 的 [onCloseBuild](https://rsbuild.rs/zh/plugins/dev/hooks#onclosebuild) 钩子，执行清理操作。
+
+```ts
+const buildResult = await rslib.build();
+await buildResult.close();
+```
+
+### Stats 对象
+
+在非 watch 模式下，`rslib.build()` 会返回一个 Rspack 的 [stats](https://rspack.rs/zh/api/javascript-api/stats) 对象。
+
+例如，使用 `stats.toJson()` 方法获取所有 assets 信息：
+
+```ts
+const result = await rslib.build();
+const { stats } = result;
+
+if (stats) {
+  const { assets } = stats.toJson({
+    // 排除不需要的字段以提高性能
+    all: false,
+    assets: true,
+  });
+  console.log(assets);
+}
+```
+
+## rslib.startMFDevServer
+
+为 [Module Federation](/guide/advanced/module-federation) 格式的库启动 dev server。该方法会：
+
+1. 启动一个开发服务器，用于运行你的库
+2. 自动监听文件变化并触发重新编译
+
+- **类型：**
+
+```ts
+type StartMFDevServerOptions = {
+  /**
+   * 指定库 id
+   */
+  lib?: string[];
+};
+
+type StartServerResult = {
+  /**
+   * 服务器监听的 URLs
+   */
+  urls: string[];
+  /**
+   * 服务器实际使用的端口号
+   */
+  port: number;
+  server: {
+    /**
+     * 关闭服务器
+     * 在开发模式下，此方法会调用 `onCloseDevServer` 钩子
+     */
+    close: () => Promise<void>;
+  };
+};
+
+function startMFDevServer(
+  options?: StartMFDevServerOptions,
+): Promise<StartServerResult>;
+```
+
+- **示例：**
+
+启动 dev server：
+
+```ts
+// Start dev server
+await rslib.startMFDevServer();
+
+// Start dev server of a specified library id
+await rslib.startMFDevServer({
+  lib: ['entry1'],
+});
+```
+
+`startMFDevServer` 会返回以下参数：
+
+- `urls`：访问 dev server 的 URLs
+- `port` 实际监听的端口号
+- `server`：Server 实例对象
+
+```ts
+const { port } = await rslib.startMFDevServer();
+console.log(port); // 3000
+```
+
+### 运行指定的库
+
+可以通过 `lib` 参数指定需要启动 dev server 的库 id。
+
+> 查看 [lib.id](/config/lib/id) 了解如何获取或设置库的 ID。
+
+```ts
+await rslib.startMFDevServer({
+  lib: ['entry1'],
+});
+```
+
+### 关闭 server
+
+调用 `close()` 方法会关闭开发服务器，触发 Rsbuild 的 [onCloseDevServer](https://rsbuild.rs/zh/plugins/dev/hooks#onclosedevserver) 钩子，并执行必要的清理操作。
+
+```ts
+const { server } = await rslib.startMFDevServer();
+await server.close();
+```
+
+## rslib.inspectConfig
+
+检查和调试 Rslib 的内部配置。它允许你访问：
+
+- 解析后的 Rslib 配置
+- 解析后的 Rsbuild 配置
+- 特定 environment 的 Rsbuild 配置
+- 生成的 Rspack 配置
+
+该方法将这些配置序列化为字符串，并支持写入磁盘以进行检查。
+
+- **类型：**
+
+```ts
+type InspectConfigOptions = {
+  /**
+   * 指定库 id
+   */
+  lib?: string[];
+  /**
+   * 检查指定 mode 下的配置
+   * 可选值：'development' 或 'production'
+   * @default 'production'
+   */
+  mode?: RsbuildMode;
+  /**
+   * 启用详细模式，显示配置中函数的完整内容
+   * @default false
+   */
+  verbose?: boolean;
+  /**
+   * 指定检查结果的输出路径
+   * @default 'output.distPath.root'
+   */
+  outputPath?: string;
+  /**
+   * 是否将检查结果写入磁盘
+   * @default false
+   */
+  writeToDisk?: boolean;
+};
+
+function inspectConfig(options?: InspectConfigOptions): Promise<{
+  rslibConfig: string;
+  rsbuildConfig: string;
+  bundlerConfigs: string[];
+  environmentConfigs: string[];
+  origin: {
+    rsbuildConfig: RsbuildConfig;
+    environmentConfigs: Record<string, EnvironmentConfig>;
+    bundlerConfigs: Rspack.Configuration[];
+  };
+}>;
+```
+
+:::tip
+
+如果你需要在构建过程中查看配置，可以使用 [调试模式](/guide/basic/configure-rslib#调试模式)，也可以通过 Rsbuild 的 [onBeforeBuild](https://rsbuild.rs/zh/api/javascript-api/instance#rsbuildonbeforebuild)、[onBeforeCreateCompiler](https://rsbuild.rs/zh/api/javascript-api/instance#rsbuildonbeforecreatecompiler) 等 hooks 在 Rsbuild 插件中获取。
+
+:::
+
+- **示例：**
+
+拿到字符串格式的 configs 内容：
+
+```ts
+const { rslibConfig, rsbuildConfig, bundlerConfigs } =
+  await rslib.inspectConfig();
+
+console.log(rslibConfig, rsbuildConfig, bundlerConfigs);
+```
+
+直接将配置内容写入到磁盘上：
+
+```ts
+await rslib.inspectConfig({
+  writeToDisk: true,
+});
+```
+
+### 运行指定的库
+
+可以通过 `lib` 参数指定需要查看配置的库 id。如果不指定该参数，则会输出所有配置。
+
+> 查看 [lib.id](/config/lib/id) 了解如何获取或设置库的 ID。
+
+```ts
+await rslib.inspectConfig({
+  lib: ['cjs', 'esm'],
+});
+```
+
+### 输出路径
+
+你可以通过 `outputPath` 来设置输出目录，默认为 [output.distPath.root](/config/rsbuild/output#outputdistpath) 的值。
+
+当 `outputPath` 是一个相对路径时，会相对于 `output.distPath.root` 的值进行拼接。你也可以将 `outputPath` 设置为一个绝对路径，此时会直接将文件写入到该路径下。比如：
+
+```ts
+import path from 'node:path';
+
+await rslib.inspectConfig({
+  writeToDisk: true,
+  outputPath: path.join(__dirname, 'custom-dir'),
+});
+```
