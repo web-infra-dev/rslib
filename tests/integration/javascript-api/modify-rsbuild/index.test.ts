@@ -16,11 +16,12 @@ describe('onAfterCreateRsbuild', async () => {
         ],
         logLevel: 'silent',
       },
-      onAfterCreateRsbuild: ({ rsbuild }) => {
-        rsbuild.onAfterBuild(() => {
-          afterBuildCalled++;
-        });
-      },
+    });
+
+    rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+      rsbuild.onAfterBuild(() => {
+        afterBuildCalled++;
+      });
     });
 
     const result = await rslib.build();
@@ -51,9 +52,10 @@ describe('onAfterCreateRsbuild', async () => {
         ],
         logLevel: 'silent',
       },
-      onAfterCreateRsbuild: ({ rsbuild }) => {
-        rsbuild.addPlugins([afterBuildPlugin]);
-      },
+    });
+
+    rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+      rsbuild.addPlugins([afterBuildPlugin]);
     });
 
     const result = await rslib.build();
@@ -73,11 +75,12 @@ describe('onAfterCreateRsbuild', async () => {
         ],
         logLevel: 'silent',
       },
-      onAfterCreateRsbuild: ({ rsbuild }) => {
-        rsbuild.modifyRsbuildConfig((config) => {
-          config.mode = 'none';
-        });
-      },
+    });
+
+    rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+      rsbuild.modifyRsbuildConfig((config) => {
+        config.mode = 'none';
+      });
     });
 
     const { origin } = await rslib.inspectConfig();
@@ -95,14 +98,15 @@ describe('onAfterCreateRsbuild', async () => {
         ],
         logLevel: 'silent',
       },
-      onAfterCreateRsbuild: ({ rsbuild }) => {
-        rsbuild.modifyRsbuildConfig((config) => {
-          config.mode = 'development';
-        });
-        rsbuild.modifyEnvironmentConfig((config) => {
-          config.mode = 'none';
-        });
-      },
+    });
+
+    rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+      rsbuild.modifyRsbuildConfig((config) => {
+        config.mode = 'development';
+      });
+      rsbuild.modifyEnvironmentConfig((config) => {
+        config.mode = 'none';
+      });
     });
 
     const { origin } = await rslib.inspectConfig();

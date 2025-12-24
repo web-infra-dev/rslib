@@ -17,6 +17,7 @@ import type {
   InspectConfigOptions,
   InspectConfigResult,
   InternalContext,
+  OnAfterCreateRsbuildFn,
   RslibInstance,
   StartMFDevServerOptions,
   StartServerResult,
@@ -119,6 +120,12 @@ export async function createRslib(
   const context = createContext(options, config, envs);
   config.root = context.rootPath;
 
+  const onAfterCreateRsbuildCallbacks: OnAfterCreateRsbuildFn[] = [];
+
+  const onAfterCreateRsbuild = (callback: OnAfterCreateRsbuildFn): void => {
+    onAfterCreateRsbuildCallbacks.push(callback);
+  };
+
   const createRsbuildInstance = async (
     options: CreateRslibOptions,
     mode: 'development' | 'production',
@@ -145,7 +152,9 @@ export async function createRslib(
 
     applyDebugInspectConfigPlugin(rsbuildInstance, config);
 
-    await options.onAfterCreateRsbuild?.({ rsbuild: rsbuildInstance, config });
+    for (const callback of onAfterCreateRsbuildCallbacks) {
+      await callback({ rsbuild: rsbuildInstance });
+    }
 
     return rsbuildInstance;
   };
@@ -285,6 +294,7 @@ export async function createRslib(
 
   const rslib: RslibInstance = {
     context,
+    onAfterCreateRsbuild,
     build,
     inspectConfig,
     startMFDevServer,

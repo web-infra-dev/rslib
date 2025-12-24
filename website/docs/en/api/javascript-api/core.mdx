@@ -33,17 +33,12 @@ type CreateRslibOptions = {
   cwd?: string;
   config?: RslibConfig | (() => Promise<RslibConfig>);
   loadEnv?: boolean | LoadEnvOptions;
-  onAfterCreateRsbuild?: (params: {
-    rsbuild: RsbuildInstance;
-    config: RslibConfig;
-  }) => void | Promise<void>;
 };
 ```
 
 - `cwd`: The root path of the current build, defaults to `process.cwd()`.
 - `config`: Rslib configuration object. Refer to [Configuration overview](/config/) for all available configuration options.
 - `loadEnv`: Whether to call the [loadEnv](/api/javascript-api/core#loadenv) method to load environment variables and define them as global variables via [source.define](/config/rsbuild/source#sourcedefine).
-- `onAfterCreateRsbuild`: The callback function called after creating the Rsbuild instance, where you can perform some custom operations on the Rsbuild instance.
 
 ### Load configuration async
 
@@ -84,22 +79,6 @@ You can also pass in the options of the [loadEnv](/api/javascript-api/core#loade
 const rslib = await createRslib({
   loadEnv: {
     prefixes: ['PUBLIC_', 'REACT_COMPS_'],
-  },
-});
-```
-
-### Modify Rsbuild instance
-
-The `onAfterCreateRsbuild` option of `createRslib` allows you to modify the Rsbuild instance after it is created, such as calling some Rsbuild APIs.
-
-All properties and methods on the Rsbuild instance object can be viewed in the [Rsbuild instance](https://rsbuild.rs/api/javascript-api/instance) document.
-
-```ts
-const rslib = await createRslib({
-  onAfterCreateRsbuild: ({ rsbuild, config }) => {
-    rsbuild.onAfterBuild(() => {
-      console.log(config);
-    });
   },
 });
 ```
