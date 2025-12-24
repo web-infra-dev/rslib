@@ -78,7 +78,8 @@ const applyCommonOptions = (cli: CAC) => {
         type: [String],
         default: [],
       },
-    );
+    )
+    .option('--no-env', 'Disable loading of `.env` files');
 };
 
 export function runCli(): void {
