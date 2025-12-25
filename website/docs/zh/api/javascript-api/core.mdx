@@ -210,7 +210,94 @@ console.log(mergedConfig);
 
 ### 合并规则
 
-与 [mergeRsbuildConfig](https://rsbuild.rs/zh/api/javascript-api/core#合并规则) 相同。
+对于 [lib](/config/lib) 对象数组中的每一项，会根据 [id](/config/lib/id) 字段处理合并：
+
+- 具有相同 `id` 的对象进行深度合并
+- 没有 `id` 的对象会追加到结果数组末尾
+- 有 `id` 的对象按首次出现的顺序排列
+
+其他配置字段的合并规则与 [mergeRsbuildConfig](https://rsbuild.rs/zh/api/javascript-api/core#合并规则) 相同。
+
+```ts
+import { mergeRslibConfig } from '@rslib/core';
+
+const config1: RslibConfig = {
+  lib: [
+    {
+      format: 'iife',
+    },
+    {
+      id: 'esm',
+      format: 'esm',
+      syntax: 'es2020',
+      resolve: {
+        alias: {
+          A: 'a',
+        },
+      },
+      output: {
+        externals: ['pkg1'],
+      },
+    },
+    {
+      id: 'cjs',
+      format: 'cjs',
+    },
+  ],
+};
+
+const config2: RslibConfig = {
+  lib: [
+    {
+      id: 'esm',
+      syntax: 'es2021',
+      output: {
+        externals: ['pkg2'],
+      },
+      resolve: {
+        alias: {
+          B: 'b',
+        },
+      },
+    },
+    {
+      format: 'umd',
+    },
+  ],
+};
+
+const mergedConfig = mergeRslibConfig(config1, config2);
+
+console.log(mergedConfig);
+// {
+//   lib: [
+//     {
+//       format: 'esm',
+//       id: 'esm',
+//       output: {
+//         externals: ['pkg1', 'pkg2'],
+//       },
+//       resolve: {
+//         alias: {
+//           A: 'a',
+//           B: 'b',
+//         },
+//       },
+//       syntax: 'es2021',
+//     },
+//     {
+//       format: 'cjs',
+//       id: 'cjs',
+//     },
+//     {
+//       format: 'iife',
+//     },
+//     {
+//       format: 'umd',
+//     },
+//   ],
+// }
+```
 
 ## rspack
 

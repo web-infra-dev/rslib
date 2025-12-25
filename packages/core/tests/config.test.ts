@@ -163,7 +163,7 @@ describe('Should merge Rslib config correctly', () => {
           format: 'esm',
           syntax: 'es2020',
           output: {
-            externals: ['react'],
+            externals: ['pkg1'],
           },
         },
         {
@@ -188,7 +188,7 @@ describe('Should merge Rslib config correctly', () => {
           format: 'cjs',
           syntax: 'es2018',
           output: {
-            externals: ['vue'],
+            externals: ['pkg2'],
           },
         },
       ],
@@ -212,7 +212,7 @@ describe('Should merge Rslib config correctly', () => {
             "format": "esm",
             "output": {
               "externals": [
-                "react",
+                "pkg1",
               ],
             },
             "syntax": "es2020",
@@ -225,7 +225,7 @@ describe('Should merge Rslib config correctly', () => {
             "format": "cjs",
             "output": {
               "externals": [
-                "vue",
+                "pkg2",
               ],
             },
             "syntax": "es2018",
@@ -275,6 +275,89 @@ describe('Should merge Rslib config correctly', () => {
         "output": {
           "target": "web",
         },
+      }
+    `);
+  });
+
+  test('merge libs with same id', async () => {
+    const config1: RslibConfig = {
+      lib: [
+        {
+          format: 'iife',
+        },
+        {
+          id: 'esm',
+          format: 'esm',
+          syntax: 'es2020',
+          resolve: {
+            alias: {
+              A: 'a',
+            },
+          },
+          output: {
+            externals: ['pkg1'],
+          },
+        },
+        {
+          id: 'cjs',
+          format: 'cjs',
+        },
+      ],
+    };
+
+    const config2: RslibConfig = {
+      lib: [
+        {
+          id: 'esm',
+          syntax: 'es2021',
+          output: {
+            externals: ['pkg2'],
+          },
+          resolve: {
+            alias: {
+              B: 'b',
+            },
+          },
+        },
+        {
+          format: 'umd',
+        },
+      ],
+    };
+
+    const merged = mergeRslibConfig(config1, config2);
+
+    expect(merged).toMatchInlineSnapshot(`
+      {
+        "lib": [
+          {
+            "format": "esm",
+            "id": "esm",
+            "output": {
+              "externals": [
+                "pkg1",
+                "pkg2",
+              ],
+            },
+            "resolve": {
+              "alias": {
+                "A": "a",
+                "B": "b",
+              },
+            },
+            "syntax": "es2021",
+          },
+          {
+            "format": "cjs",
+            "id": "cjs",
+          },
+          {
+            "format": "iife",
+          },
+          {
+            "format": "umd",
+          },
+        ],
       }
     `);
   });
