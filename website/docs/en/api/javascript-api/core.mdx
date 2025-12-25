@@ -210,7 +210,94 @@ console.log(mergedConfig);
 
 ### Merge rules
 
-Same as [mergeRsbuildConfig](https://rsbuild.rs/api/javascript-api/core#merge-rules).
+For each item in the [lib](/config/lib) object array, the merge is processed based on the [id](/config/lib/id) field:
+
+- Objects with the same `id` are deeply merged
+- Objects without `id` will be appended to the end of the result array
+- Objects with `id` are sorted in order of first occurrence
+
+Other configuration fields follow the same merge rules as [mergeRsbuildConfig](https://rsbuild.rs/api/javascript-api/core#merge-rules).
+
+```ts
+import { mergeRslibConfig } from '@rslib/core';
+
+const config1: RslibConfig = {
+  lib: [
+    {
+      format: 'iife',
+    },
+    {
+      id: 'esm',
+      format: 'esm',
+      syntax: 'es2020',
+      resolve: {
+        alias: {
+          A: 'a',
+        },
+      },
+      output: {
+        externals: ['pkg1'],
+      },
+    },
+    {
+      id: 'cjs',
+      format: 'cjs',
+    },
+  ],
+};
+
+const config2: RslibConfig = {
+  lib: [
+    {
+      id: 'esm',
+      syntax: 'es2021',
+      output: {
+        externals: ['pkg2'],
+      },
+      resolve: {
+        alias: {
+          B: 'b',
+        },
+      },
+    },
+    {
+      format: 'umd',
+    },
+  ],
+};
+
+const mergedConfig = mergeRslibConfig(config1, config2);
+
+console.log(mergedConfig);
+// {
+//   lib: [
+//     {
+//       format: 'esm',
+//       id: 'esm',
+//       output: {
+//         externals: ['pkg1', 'pkg2'],
+//       },
+//       resolve: {
+//         alias: {
+//           A: 'a',
+//           B: 'b',
+//         },
+//       },
+//       syntax: 'es2021',
+//     },
+//     {
+//       format: 'cjs',
+//       id: 'cjs',
+//     },
+//     {
+//       format: 'iife',
+//     },
+//     {
+//       format: 'umd',
+//     },
+//   ],
+// }
+```
 
 ## rspack
 
