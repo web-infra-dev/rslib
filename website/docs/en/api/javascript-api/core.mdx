@@ -196,6 +196,9 @@ const config1 = {
       format: 'esm',
     },
   ],
+  output: {
+    target: 'node',
+  },
 };
 const config2 = {
   output: {
@@ -206,6 +209,16 @@ const config2 = {
 const mergedConfig = mergeRslibConfig(config1, config2);
 
 console.log(mergedConfig);
+// {
+//   lib: [
+//     {
+//       format: 'esm',
+//     },
+//   ],
+//   output: {
+//     target: 'web',
+//   },
+// }
 ```
 
 ### Merge rules

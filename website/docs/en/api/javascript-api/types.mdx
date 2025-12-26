@@ -6,7 +6,7 @@ This section describes some of the type definitions provided by the Rslib.
 
 The type of Rslib instance, corresponding to the return value of the [createRslib](/api/javascript-api/core#createrslib) method.
 
-```ts
+```ts twoslash
 import type { RslibInstance } from '@rslib/core';
 
 let rslib: RslibInstance;
@@ -16,17 +16,21 @@ let rslib: RslibInstance;
 
 The type of Rslib configuration.
 
-```ts
+```ts twoslash
 import type { RslibConfig } from '@rslib/core';
 
 const config: RslibConfig = {
-  // ...
+  lib: [
+    {
+      format: 'esm',
+    },
+  ],
 };
 ```
 
 You can also import the type definitions of each field in the Rslib config:
 
-```ts
+```ts twoslash
 import type {
   AutoExternal,
   BannerAndFooter,
@@ -45,7 +49,7 @@ Defines the structure and behavior of an Rsbuild plugin.
 
 Rsbuild plugins provide a standardized way to extend build functionality through lifecycle hooks and configuration modifications.
 
-```ts
+```ts twoslash
 import type { RsbuildPlugin } from '@rslib/core';
 
 const myPlugin: RsbuildPlugin = {
@@ -58,7 +62,7 @@ const myPlugin: RsbuildPlugin = {
 
 The param type of [createRslib](/api/javascript-api/core#createrslib) method.
 
-```ts
+```ts twoslash
 import type { CreateRslibOptions } from '@rslib/core';
 ```
 
@@ -66,7 +70,7 @@ import type { CreateRslibOptions } from '@rslib/core';
 
 The param type of [rslib.build](/api/javascript-api/instance#rslibbuild) method.
 
-```ts
+```ts twoslash
 import type { BuildOptions } from '@rslib/core';
 ```
 
@@ -74,7 +78,7 @@ import type { BuildOptions } from '@rslib/core';
 
 The param type of [rslib.startMFDevServer](/api/javascript-api/instance#rslibstartmfdevserver) method.
 
-```ts
+```ts twoslash
 import type { StartMFDevServerOptions } from '@rslib/core';
 ```
 
@@ -82,7 +86,7 @@ import type { StartMFDevServerOptions } from '@rslib/core';
 
 The param type of [rslib.inspectConfig](/api/javascript-api/instance#rslibinspectconfig) method.
 
-```ts
+```ts twoslash
 import type { InspectConfigOptions } from '@rslib/core';
 ```
 
@@ -90,7 +94,7 @@ import type { InspectConfigOptions } from '@rslib/core';
 
 Includes all types exported by `@rspack/core`, such as `Rspack.Configuration`.
 
-```ts
+```ts twoslash
 import type { Rspack } from '@rslib/core';
 
 const rspackConfig: Rspack.Configuration = {};
@@ -102,7 +106,7 @@ Includes all types exported by `@rsbuild/core`, such as `Rsbuild.ToolsConfig`.
 
 See [@rsbuild/core - src/index.ts](https://github.com/web-infra-dev/rsbuild/blob/main/packages/core/src/index.ts) for all exported types of Rsbuild.
 
-```ts
+```ts twoslash
 import type { Rsbuild } from '@rslib/core';
 
 const rsbuildConfig: Rsbuild.ToolsConfig = {};
