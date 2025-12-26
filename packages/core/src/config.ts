@@ -1764,7 +1764,7 @@ async function composeLibRsbuildConfig(
   const assetConfig = composeAssetConfig(bundle, format);
 
   const entryChunkConfig = composeEntryChunkConfig({
-    useLoader: !advancedEsm && (format === 'esm' || format === 'iife'),
+    useLoader: format === 'iife' || (format === 'esm' && !advancedEsm),
     enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
     contextToWatch: outBase,
   });
