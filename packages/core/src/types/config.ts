@@ -244,7 +244,7 @@ export type Redirect = {
 export type LibExperiments = {
   /**
    * Whether to enable Rspack advanced ESM output.
-   * @defaultValue `false`
+   * @defaultValue `true`
    * @see {@link https://rslib.rs/config/lib/experiments#experimentsadvancedesm}
    */
   advancedEsm?: boolean;

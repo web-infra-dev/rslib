@@ -5,13 +5,15 @@ Used to enable some Rslib experimental features.
 ## experiments.advancedEsm
 
 - **Type:** `boolean`
-- **Default:** `false`
+- **Default:** `true`
 
 Controls whether to enable Rspack experimental ESM output. When enabled, it emits ESM output that is high-quality, more friendly to static analysis, and supports code splitting.
 
 :::info
 Currently this option only takes effect in bundle mode when format is `'esm'`.
 :::
+
+If you need to disable this feature, you can set it to `false`:
 
 ```js title="rslib.config.ts"
 export default {
@@ -20,7 +22,7 @@ export default {
       format: 'esm',
       bundle: true,
       experiments: {
-        advancedEsm: true,
+        advancedEsm: false,
       },
     },
   ],

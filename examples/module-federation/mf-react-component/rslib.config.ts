@@ -10,9 +10,6 @@ export default defineConfig({
       output: {
         distPath: './dist/esm',
       },
-      experiments: {
-        advancedEsm: true,
-      },
     },
     {
       format: 'cjs',
