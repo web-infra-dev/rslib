@@ -1,16 +1,16 @@
 import path from 'node:path';
-import util from 'node:util';
-import { loadEnv, type RsbuildEntry } from '@rsbuild/core';
-import { loadConfig } from '../config';
+import type { RsbuildEntry } from '@rsbuild/core';
+import { createRslib } from '../createRslib';
+import { loadConfig as baseLoadConfig } from '../loadConfig';
 import type {
   LibConfig,
   RsbuildConfigOutputTarget,
   RslibConfig,
+  RslibInstance,
 } from '../types';
-import { getAbsolutePath } from '../utils/helper';
-import { isDebugKey, logger } from '../utils/logger';
+import { ensureAbsolutePath } from '../utils/helper';
+import { logger } from '../utils/logger';
 import type { BuildOptions, CommonOptions } from './commands';
-import { onBeforeRestart } from './restart';
 
 const getEnvDir = (cwd: string, envDir?: string) => {
   if (envDir) {
@@ -67,8 +67,13 @@ export const applyCliOptions = (
   options: BuildOptions,
   root: string,
 ): void => {
-  if (options.root) config.root = root;
-  if (options.logLevel) config.logLevel = options.logLevel;
+  if (options.root) {
+    config.root = root;
+  }
+
+  if (options.logLevel) {
+    config.logLevel = options.logLevel;
+  }
 
   for (const lib of config.lib) {
     if (options.format !== undefined) lib.format = options.format;
@@ -105,51 +110,39 @@ export const applyCliOptions = (
   }
 };
 
-export async function initConfig(options: CommonOptions): Promise<{
-  config: RslibConfig;
-  configFilePath?: string;
-  watchFiles: string[];
-}> {
-  const cwd = process.cwd();
-  const root = options.root ? getAbsolutePath(cwd, options.root) : cwd;
-  const envs = loadEnv({
-    cwd: getEnvDir(root, options.envDir),
-    mode: options.envMode,
-  });
-
-  onBeforeRestart(envs.cleanup);
-
-  const { content: config, filePath: configFilePath } = await loadConfig({
+const loadConfig = async (options: CommonOptions, root: string) => {
+  const { content: config, filePath: configFilePath } = await baseLoadConfig({
     cwd: root,
     path: options.config,
     envMode: options.envMode,
     loader: options.configLoader,
   });
 
-  if (configFilePath === undefined) {
+  if (configFilePath === null) {
     config.lib = [{} satisfies LibConfig];
-    logger.debug(
-      'No config file found. Falling back to CLI options for the default library.',
-    );
+    logger.debug('Falling back to CLI options for the default library.');
   }
-
-  config.source ||= {};
-  config.source.define = {
-    ...envs.publicVars,
-    ...config.source.define,
-  };
 
   applyCliOptions(config, options, root);
 
-  // only debug serialized rslib config when DEBUG=rslib
-  if (isDebugKey(['rslib'])) {
-    logger.debug('Rslib config used to generate Rsbuild environments:');
-    logger.debug(`\n${util.inspect(config, { depth: null, colors: true })}`);
-  }
+  return config;
+};
 
-  return {
-    config,
-    configFilePath,
-    watchFiles: [configFilePath, ...envs.filePaths].filter(Boolean) as string[],
-  };
+export async function init(options: CommonOptions): Promise<RslibInstance> {
+  const cwd = process.cwd();
+  const root = options.root ? ensureAbsolutePath(cwd, options.root) : cwd;
+
+  const rslib = await createRslib({
+    cwd: root,
+    config: () => loadConfig(options, root),
+    loadEnv:
+      options.env === false
+        ? false
+        : {
+            cwd: getEnvDir(root, options.envDir),
+            mode: options.envMode,
+          },
+  });
+
+  return rslib;
 }

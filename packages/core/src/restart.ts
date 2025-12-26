@@ -1,13 +1,24 @@
 import path from 'node:path';
-import { color } from '../utils/color';
-import { debounce, isTTY } from '../utils/helper';
-import { logger } from '../utils/logger';
+import type { RslibInstance } from './types';
+import { color } from './utils/color';
+import { debounce, isTTY } from './utils/helper';
+import { logger } from './utils/logger';
+
+export function getWatchFilesForRestart(
+  rslib: RslibInstance,
+): string[] | undefined {
+  const meta = rslib.getRslibConfig()._privateMeta;
+  if (!meta) {
+    return undefined;
+  }
+  return [meta.configFilePath, ...(meta.envFilePaths || [])].filter(Boolean);
+}
 
 export async function watchFilesForRestart(
-  files: string[],
+  files: string[] | undefined,
   restart: () => Promise<void>,
 ): Promise<void> {
-  if (!files.length) {
+  if (!files || !files.length) {
     return;
   }
 
@@ -65,7 +76,7 @@ const beforeRestart = async ({
 
   if (filePath) {
     const filename = path.basename(filePath);
-    logger.info(`restart because ${color.yellow(filename)} is changed.\n`);
+    logger.info(`restarting as ${color.yellow(filename)} is changed\n`);
   } else {
     logger.info('restarting...\n');
   }

@@ -109,7 +109,7 @@ export async function calcLongestCommonPath(
   return lca;
 }
 
-export function getAbsolutePath(base: string, filepath: string): string {
+export function ensureAbsolutePath(base: string, filepath: string): string {
   return isAbsolute(filepath) ? filepath : join(base, filepath);
 }
 
@@ -255,3 +255,11 @@ export async function isDirectory(filePath: string): Promise<boolean> {
     return false;
   }
 }
+
+export const isFunction = (func: unknown): func is (...args: any[]) => any =>
+  typeof func === 'function';
+
+export const getNodeEnv = (): string => process.env.NODE_ENV || '';
+export const setNodeEnv = (env: string): void => {
+  process.env.NODE_ENV = env;
+};

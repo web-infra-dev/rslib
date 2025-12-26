@@ -205,10 +205,10 @@ Rslib 基于 Rsbuild 构建，Rsbuild 支持直接修改 Rspack 配置对象，�
 
 ## 调试模式
 
-你可以在执行构建时添加 `DEBUG=rsbuild` 环境变量来开启 Rslib 的调试模式。
+你可以在执行构建时添加 `DEBUG=rslib` 环境变量来开启 Rslib 的调试模式。
 
 ```bash
-DEBUG=rsbuild pnpm build
+DEBUG=rslib pnpm build
 ```
 
 在调试模式下，Rslib 会输出一些额外的日志信息，并将内部经过 Rslib 处理最终生成的 Rsbuild 配置和 Rspack 配置写入到产物目录下，便于开发者查看和调试。
@@ -222,11 +222,9 @@ Inspect config succeed, open following files to view the content:
   - Rsbuild Config (cjs): /project/dist/.rsbuild/rsbuild.config.cjs.mjs
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
   - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
+  - Rslib Config: /project/dist/.rsbuild/rslib.config.mjs
 ```
 
 - 打开生成的 `/dist/.rsbuild/rsbuild.config.esm.mjs` 文件，即可查看 Rsbuild 配置的完整内容。
 - 打开生成的 `/dist/.rsbuild/rspack.config.esm.mjs` 文件，即可查看 Rspack 配置的完整内容。
-
-::: info
-如果你想查看归一化后的 Rslib 配置，可以在执行构建时添加 `DEBUG=rslib` 环境变量或运行 [rslib inspect](/guide/basic/cli#rslib-inspect) 命令。
-:::
+- 打开生成的 `/dist/.rsbuild/rslib.config.mjs` 文件，即可查看 Rslib 配置的完整内容。

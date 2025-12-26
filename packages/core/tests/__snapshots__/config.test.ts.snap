@@ -24,7 +24,7 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     },
     cache: {
       type: 'persistent',
-      version: 'esm-development',
+      version: 'esm-production',
       storage: {
         type: 'filesystem',
         directory: '<WORKSPACE>/node_modules/.cache/rspack'
@@ -1059,7 +1059,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     cache: {
       type: 'persistent',
-      version: 'esm-development',
+      version: 'esm-production',
       storage: {
         type: 'filesystem',
         directory: '<WORKSPACE>/node_modules/.cache/rspack'
@@ -1682,7 +1682,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         use: [
           /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
           {
-            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
+            loader: '<WORKSPACE>/src/plugins/entryModuleLoader.ts'
           }
         ]
       }
@@ -1801,7 +1801,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     cache: {
       type: 'persistent',
-      version: 'cjs-development',
+      version: 'cjs-production',
       storage: {
         type: 'filesystem',
         directory: '<WORKSPACE>/node_modules/.cache/rspack'
@@ -2525,7 +2525,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     cache: {
       type: 'persistent',
-      version: 'umd-development',
+      version: 'umd-production',
       storage: {
         type: 'filesystem',
         directory: '<WORKSPACE>/node_modules/.cache/rspack'
@@ -3078,7 +3078,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       )
     ],
     moduleIds: 'named',
-    nodeEnv: false
+    nodeEnv: 'production'
   },
   plugins: [
     /* config.plugin('RsbuildCorePlugin') */
@@ -3152,7 +3152,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     cache: {
       type: 'persistent',
-      version: 'iife-development',
+      version: 'iife-production',
       storage: {
         type: 'filesystem',
         directory: '<WORKSPACE>/node_modules/.cache/rspack'
@@ -3683,7 +3683,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         use: [
           /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
           {
-            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
+            loader: '<WORKSPACE>/src/plugins/entryModuleLoader.ts'
           }
         ]
       }
@@ -3719,7 +3719,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       )
     ],
     moduleIds: 'named',
-    nodeEnv: false
+    nodeEnv: 'production'
   },
   plugins: [
     /* config.plugin('RsbuildCorePlugin') */
@@ -3793,7 +3793,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     cache: {
       type: 'persistent',
-      version: 'mf-development',
+      version: 'mf-production',
       storage: {
         type: 'filesystem',
         directory: '<WORKSPACE>/node_modules/.cache/rspack'
@@ -4299,8 +4299,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         }
       )
     ],
-    moduleIds: 'named',
-    nodeEnv: 'development'
+    moduleIds: 'deterministic',
+    nodeEnv: 'production'
   },
   plugins: [
     /* config.plugin('mini-css-extract') */

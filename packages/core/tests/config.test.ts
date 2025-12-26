@@ -1,14 +1,18 @@
 import { join } from 'node:path';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
-import { inspect } from '@rslib/core';
 import { describe, expect, rs, test } from '@rstest/core';
 import type { BuildOptions } from '../src/cli/commands';
-import { initConfig } from '../src/cli/initConfig';
+import { init } from '../src/cli/init';
 import {
   composeCreateRsbuildConfig,
   composeRsbuildEnvironments,
-  loadConfig,
 } from '../src/config';
+import { createRslib } from '../src/createRslib';
+import { loadConfig } from '../src/loadConfig';
+import {
+  mergeRslibConfig,
+  type RslibConfigWithOptionalLib,
+} from '../src/mergeConfig';
 import type { RslibConfig } from '../src/types/config';
 
 rs.mock('rslog');
@@ -151,12 +155,221 @@ describe('Should load config file correctly', () => {
   });
 });
 
+describe('Should merge Rslib config correctly', () => {
+  test('merge different libs and globals configuration', async () => {
+    const config1: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+          syntax: 'es2020',
+          output: {
+            externals: ['pkg1'],
+          },
+        },
+        {
+          format: 'esm',
+          syntax: 'es6',
+        },
+      ],
+      output: {
+        target: 'node',
+      },
+      source: {
+        define: {
+          __DEV__: 'true',
+          FOO: '"a"',
+        },
+      },
+    };
+
+    const config2: RslibConfig = {
+      lib: [
+        {
+          format: 'cjs',
+          syntax: 'es2018',
+          output: {
+            externals: ['pkg2'],
+          },
+        },
+      ],
+      output: {
+        target: 'web',
+      },
+      source: {
+        define: {
+          FOO: '"b"',
+          BAR: '"c"',
+        },
+      },
+    };
+
+    const merged = mergeRslibConfig(config1, config2);
+
+    expect(merged).toMatchInlineSnapshot(`
+      {
+        "lib": [
+          {
+            "format": "esm",
+            "output": {
+              "externals": [
+                "pkg1",
+              ],
+            },
+            "syntax": "es2020",
+          },
+          {
+            "format": "esm",
+            "syntax": "es6",
+          },
+          {
+            "format": "cjs",
+            "output": {
+              "externals": [
+                "pkg2",
+              ],
+            },
+            "syntax": "es2018",
+          },
+        ],
+        "output": {
+          "target": "web",
+        },
+        "source": {
+          "define": {
+            "BAR": ""c"",
+            "FOO": ""b"",
+            "__DEV__": "true",
+          },
+        },
+      }
+    `);
+  });
+
+  test('merge without lib field', async () => {
+    const config1: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+        },
+      ],
+      output: {
+        target: 'node',
+      },
+    };
+
+    const config2: RslibConfigWithOptionalLib = {
+      output: {
+        target: 'web',
+      },
+    };
+
+    const merged = mergeRslibConfig(config1, config2);
+
+    expect(merged).toMatchInlineSnapshot(`
+      {
+        "lib": [
+          {
+            "format": "esm",
+          },
+        ],
+        "output": {
+          "target": "web",
+        },
+      }
+    `);
+  });
+
+  test('merge libs with same id', async () => {
+    const config1: RslibConfig = {
+      lib: [
+        {
+          format: 'iife',
+        },
+        {
+          id: 'esm',
+          format: 'esm',
+          syntax: 'es2020',
+          resolve: {
+            alias: {
+              A: 'a',
+            },
+          },
+          output: {
+            externals: ['pkg1'],
+          },
+        },
+        {
+          id: 'cjs',
+          format: 'cjs',
+        },
+      ],
+    };
+
+    const config2: RslibConfig = {
+      lib: [
+        {
+          id: 'esm',
+          syntax: 'es2021',
+          output: {
+            externals: ['pkg2'],
+          },
+          resolve: {
+            alias: {
+              B: 'b',
+            },
+          },
+        },
+        {
+          format: 'umd',
+        },
+      ],
+    };
+
+    const merged = mergeRslibConfig(config1, config2);
+
+    expect(merged).toMatchInlineSnapshot(`
+      {
+        "lib": [
+          {
+            "format": "esm",
+            "id": "esm",
+            "output": {
+              "externals": [
+                "pkg1",
+                "pkg2",
+              ],
+            },
+            "resolve": {
+              "alias": {
+                "A": "a",
+                "B": "b",
+              },
+            },
+            "syntax": "es2021",
+          },
+          {
+            "format": "cjs",
+            "id": "cjs",
+          },
+          {
+            "format": "iife",
+          },
+          {
+            "format": "umd",
+          },
+        ],
+      }
+    `);
+  });
+});
+
 describe('CLI options', () => {
   test('applies build CLI overrides for common flags', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/cli-options');
     const configFilePath = join(fixtureDir, 'rslib.config.ts');
 
     const options: BuildOptions = {
+      root: join(__dirname, '..'),
       config: configFilePath,
       entry: ['index=src/main.ts', 'utils=src/utils.ts'],
       distPath: 'build',
@@ -172,11 +385,13 @@ describe('CLI options', () => {
       tsconfig: 'tsconfig.build.json',
     };
 
-    const { config } = await initConfig(options);
+    const rslib = await init(options);
+    const config = rslib.getRslibConfig();
     expect(config).toMatchInlineSnapshot(`
       {
         "_privateMeta": {
           "configFilePath": "<WORKSPACE>/tests/fixtures/config/cli-options/rslib.config.ts",
+          "envFilePaths": [],
         },
         "lib": [
           {
@@ -206,6 +421,7 @@ describe('CLI options', () => {
             "syntax": "es2018",
           },
         ],
+        "root": "<WORKSPACE>",
         "source": {
           "define": {},
         },
@@ -283,9 +499,10 @@ describe('Should compose create Rsbuild config correctly', () => {
       );
     });
 
-    const rsbuildInstance = await inspect(rslibConfig);
-    const { rsbuildConfig, bundlerConfigs } =
-      await rsbuildInstance.inspectConfig();
+    const rslib = await createRslib({
+      config: rslibConfig,
+    });
+    const { rsbuildConfig, bundlerConfigs } = await rslib.inspectConfig();
 
     expect(rsbuildConfig).toMatchSnapshot('inspected Rsbuild configs');
 
@@ -354,8 +571,11 @@ describe('Should compose create Rsbuild config correctly', () => {
       root: join(__dirname, '..'),
     };
 
-    const rsbuildInstance = await inspect(rslibConfig);
-    const { bundlerConfigs } = await rsbuildInstance.inspectConfig();
+    const rslib = await createRslib({
+      config: rslibConfig,
+    });
+    const inspectConfigResult = await rslib.inspectConfig();
+    const { bundlerConfigs } = inspectConfigResult;
     expect(bundlerConfigs).toMatchSnapshot(
       'experiment.advancedEsm Rspack configs',
     );

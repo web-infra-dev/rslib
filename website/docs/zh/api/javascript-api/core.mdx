@@ -1,0 +1,367 @@
+# Rslib core
+
+本章节介绍了 Rslib 提供的一些核心方法。
+
+## createRslib
+
+创建一个 [Rslib 实例对象](/api/javascript-api/instance)。
+
+- **类型：**
+
+```ts
+function createRslib(options?: CreateRslibOptions): Promise<RslibInstance>;
+```
+
+- **示例：**
+
+```ts
+import { createRslib } from '@rslib/core';
+
+const rslib = await createRslib({
+  config: {
+    // Rslib 配置
+  },
+});
+```
+
+### 选项
+
+`createRslib` 的第一个参数是一个 `options` 对象，你可以传入以下选项：
+
+```ts
+type CreateRslibOptions = {
+  cwd?: string;
+  config?: RslibConfig | (() => Promise<RslibConfig>);
+  loadEnv?: boolean | LoadEnvOptions;
+};
+```
+
+- `cwd`：当前执行构建的根路径，默认值为 `process.cwd()`
+- `config`：Rslib 配置对象。参考 [配置总览](/config/) 查看所有可用的配置项。
+- `loadEnv`：是否调用 [loadEnv](/api/javascript-api/core#loadenv) 方法来加载环境变量，并通过 [source.define](/config/rsbuild/source#sourcedefine) 定义为全局变量。
+
+### 异步加载配置
+
+`config` 也可以是一个异步函数，你可以通过该函数来动态加载 Rslib 配置，并进行一些自定义操作。
+
+```ts
+import { createRslib, loadConfig } from '@rslib/core';
+
+const rslib = await createRslib({
+  config: async () => {
+    const { content } = await loadConfig();
+    someFunctionToUpdateConfig(content);
+    return content;
+  },
+});
+```
+
+### 加载环境变量
+
+`createRslib` 的 `loadEnv` 选项可以帮助你调用 [loadEnv](/api/javascript-api/core#loadenv) 方法来加载环境变量：
+
+```ts
+const rslib = await createRslib({
+  loadEnv: true,
+});
+```
+
+传入 `loadEnv: true` 会自动完成如下步骤：
+
+1. 调用 `loadEnv` 方法来加载环境变量。
+2. 添加 [source.define](/config/rsbuild/source#sourcedefine) 配置，将 `loadEnv` 返回的 `publicVars` 定义为全局变量。
+3. 监听 `.env` 文件的变化，在文件变化时重新构建或重新启动开发服务器，并使构建缓存失效。
+4. 在关闭构建或开发服务器时，自动调用 `loadEnv` 返回的 `cleanup` 方法来清除环境变量。
+
+你也可以传入 [loadEnv](/api/javascript-api/core#loadenv) 方法的选项，比如：
+
+```ts
+const rslib = await createRslib({
+  loadEnv: {
+    prefixes: ['PUBLIC_', 'REACT_COMPS_'],
+  },
+});
+```
+
+## loadConfig
+
+加载 Rslib 配置文件。
+
+- **类型：**
+
+```ts
+function loadConfig(params?: {
+  // 默认为 process.cwd()
+  cwd?: string;
+  // 指定配置文件路径，可以为相对路径或绝对路径
+  path?: string;
+  meta?: Record<string, unknown>;
+  envMode?: string;
+  loader?: 'auto' | 'jiti' | 'native';
+}): Promise<{
+  content: RslibConfig;
+  filePath: string | null;
+}>;
+```
+
+- **示例：**
+
+```ts
+import { loadConfig } from '@rslib/core';
+
+// 默认加载 `rslib.config.*` 配置文件
+const { content } = await loadConfig();
+
+console.log(content); // -> Rslib 配置对象
+
+const rslib = await createRslib({
+  config: content,
+});
+```
+
+如果 cwd 目录下不存在 Rslib 配置文件，loadConfig 方法的返回值为 `{ content: {}, filePath: null }`。
+
+### 指定配置文件
+
+使用 `path` 选项加载 `my-config.ts` 配置文件：
+
+```ts
+import { join } from 'node:path';
+import { loadConfig } from '@rslib/core';
+
+const { content } = await loadConfig({
+  path: join(__dirname, 'my-config.ts'),
+});
+```
+
+### 传入 meta 对象
+
+加载配置文件，并传入自定义的 meta 对象：
+
+```ts
+import { join } from 'node:path';
+import { loadConfig } from '@rslib/core';
+
+const { content } = await loadConfig({
+  meta: {
+    foo: 'bar',
+  },
+});
+```
+
+在 `defineConfig` 定义的配置函数中，你可以通过 `meta` 对象访问到 `foo` 变量：
+
+```ts title="rslib.config.ts"
+export default defineConfig(({ meta }) => {
+  console.log(meta.foo); // bar
+  return config;
+});
+```
+
+## loadEnv
+
+加载 [.env](https://rsbuild.rs/zh/guide/advanced/env-vars#env-文件) 文件，并返回所有以 `prefixes` 开头的环境变量。
+
+用法与 Rsbuild 相同，详见 [loadEnv -- Rsbuild](https://rsbuild.rs/zh/api/javascript-api/core#loadenv)。
+
+:::tip
+
+- Rslib CLI 会自动调用 `loadEnv()` 方法，如果你在使用 Rslib CLI，可以通过 `--env-mode` 选项来设置 `mode` 参数。
+- [createRslib](#createrslib) 的 `loadEnv` 选项会帮助你调用 `loadEnv()` 方法，并处理相关操作。
+
+:::
+
+## mergeRslibConfig
+
+用于合并多份 Rslib 配置对象。
+
+`mergeRslibConfig` 函数接收多个配置对象作为参数，它会将每一个配置对象进行深层合并，自动将多个函数项合并为顺序执行的函数数组，返回一个合并后的配置对象。
+
+- **类型：**
+
+```ts
+function mergeRslibConfig(
+  ...configs: (RslibConfigWithOptionalLib | undefined)[]
+): RslibConfigWithOptionalLib;
+```
+
+### 基础示例
+
+```ts
+import { mergeRslibConfig } from '@rslib/core';
+
+const config1 = {
+  lib: [
+    {
+      format: 'esm',
+    },
+  ],
+  output: {
+    target: 'node',
+  },
+};
+const config2 = {
+  output: {
+    target: 'web',
+  },
+};
+
+const mergedConfig = mergeRslibConfig(config1, config2);
+
+console.log(mergedConfig);
+// {
+//   lib: [
+//     {
+//       format: 'esm',
+//     },
+//   ],
+//   output: {
+//     target: 'web',
+//   },
+// }
+```
+
+### 合并规则
+
+对于 [lib](/config/lib) 对象数组中的每一项，会根据 [id](/config/lib/id) 字段处理合并：
+
+- 具有相同 `id` 的对象进行深度合并
+- 没有 `id` 的对象会追加到结果数组末尾
+- 有 `id` 的对象按首次出现的顺序排列
+
+其他配置字段的合并规则与 [mergeRsbuildConfig](https://rsbuild.rs/zh/api/javascript-api/core#合并规则) 相同。
+
+```ts
+import { mergeRslibConfig } from '@rslib/core';
+
+const config1: RslibConfig = {
+  lib: [
+    {
+      format: 'iife',
+    },
+    {
+      id: 'esm',
+      format: 'esm',
+      syntax: 'es2020',
+      resolve: {
+        alias: {
+          A: 'a',
+        },
+      },
+      output: {
+        externals: ['pkg1'],
+      },
+    },
+    {
+      id: 'cjs',
+      format: 'cjs',
+    },
+  ],
+};
+
+const config2: RslibConfig = {
+  lib: [
+    {
+      id: 'esm',
+      syntax: 'es2021',
+      output: {
+        externals: ['pkg2'],
+      },
+      resolve: {
+        alias: {
+          B: 'b',
+        },
+      },
+    },
+    {
+      format: 'umd',
+    },
+  ],
+};
+
+const mergedConfig = mergeRslibConfig(config1, config2);
+
+console.log(mergedConfig);
+// {
+//   lib: [
+//     {
+//       format: 'esm',
+//       id: 'esm',
+//       output: {
+//         externals: ['pkg1', 'pkg2'],
+//       },
+//       resolve: {
+//         alias: {
+//           A: 'a',
+//           B: 'b',
+//         },
+//       },
+//       syntax: 'es2021',
+//     },
+//     {
+//       format: 'cjs',
+//       id: 'cjs',
+//     },
+//     {
+//       format: 'iife',
+//     },
+//     {
+//       format: 'umd',
+//     },
+//   ],
+// }
+```
+
+## rspack
+
+如果你需要访问 [@rspack/core](https://npmjs.com/package/@rspack/core) 导出的 API 或插件，可以直接从 `@rslib/core` 中引用 `rspack` 对象，无须额外安装 `@rspack/core` 包。
+
+- **类型：** `Rspack`
+- **示例：**
+
+```ts
+// the same as `import { rspack } from '@rspack/core'`
+import { rspack } from '@rslib/core';
+
+console.log(rspack.rspackVersion); // a.b.c
+console.log(rspack.util.createHash);
+console.log(rspack.BannerPlugin);
+```
+
+:::tip
+
+- 参考 [Rspack 插件](https://rspack.rs/zh/plugins/) 和 [Rspack JavaScript API](https://rspack.rs/zh/api/javascript-api/) 了解可用的 Rspack API。
+- 不推荐手动安装 `@rspack/core` 包，因为这可能与 Rslib 依赖的版本不一致。
+
+:::
+
+## rsbuild
+
+如果你需要访问 [@rsbuild/core](https://npmjs.com/package/@rsbuild/core) 导出的 API，可以直接从 `@rslib/core` 中引用 `rsbuild` 对象，无须额外安装 `@rsbuild/core` 包。
+
+- **示例：**
+
+```ts
+import { rsbuild } from '@rslib/core';
+
+console.log(rsbuild.version);
+```
+
+:::tip
+
+参考 [Rsbuild core](https://rsbuild.rs/zh/api/javascript-api/core) 了解可用的 Rsbuild API。
+
+:::
+
+## version
+
+当前使用的 `@rslib/core` 的版本。
+
+- **类型：** `string`
+- **示例：**
+
+```ts
+import { version } from '@rslib/core';
+
+console.log(version); // 0.19.0
+```
