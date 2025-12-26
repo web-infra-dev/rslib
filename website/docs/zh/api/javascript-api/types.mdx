@@ -6,7 +6,7 @@
 
 Rslib 实例的类型，对应 [createRslib](/api/javascript-api/core#createrslib) 方法的返回值。
 
-```ts
+```ts twoslash
 import type { RslibInstance } from '@rslib/core';
 
 let rslib: RslibInstance;
@@ -16,17 +16,21 @@ let rslib: RslibInstance;
 
 Rslib 配置的类型。
 
-```ts
+```ts twoslash
 import type { RslibConfig } from '@rslib/core';
 
 const config: RslibConfig = {
-  // ...
+  lib: [
+    {
+      format: 'esm',
+    },
+  ],
 };
 ```
 
 你也可以引用 Rslib 配置中各个字段的类型定义：
 
-```ts
+```ts twoslash
 import type {
   AutoExternal,
   BannerAndFooter,
@@ -45,7 +49,7 @@ import type {
 
 Rsbuild 插件提供了一种标准化的方式，通过生命周期钩子和修改配置来扩展构建能力。
 
-```ts
+```ts twoslash
 import type { RsbuildPlugin } from '@rslib/core';
 
 const myPlugin: RsbuildPlugin = {
@@ -58,7 +62,7 @@ const myPlugin: RsbuildPlugin = {
 
 [createRslib](/api/javascript-api/core#createrslib) 方法的入参类型。
 
-```ts
+```ts twoslash
 import type { CreateRslibOptions } from '@rslib/core';
 ```
 
@@ -66,7 +70,7 @@ import type { CreateRslibOptions } from '@rslib/core';
 
 [rslib.build](/api/javascript-api/instance#rslibbuild) 方法的入参类型。
 
-```ts
+```ts twoslash
 import type { BuildOptions } from '@rslib/core';
 ```
 
@@ -74,7 +78,7 @@ import type { BuildOptions } from '@rslib/core';
 
 [rslib.startMFDevServer](/api/javascript-api/instance#rslibstartmfdevserver) 方法的入参类型。
 
-```ts
+```ts twoslash
 import type { StartMFDevServerOptions } from '@rslib/core';
 ```
 
@@ -82,7 +86,7 @@ import type { StartMFDevServerOptions } from '@rslib/core';
 
 [rslib.inspectConfig](/api/javascript-api/instance#rslibinspectconfig) 方法的入参类型。
 
-```ts
+```ts twoslash
 import type { InspectConfigOptions } from '@rslib/core';
 ```
 
@@ -90,7 +94,7 @@ import type { InspectConfigOptions } from '@rslib/core';
 
 包含 `@rspack/core` 导出的所有类型，比如 `Rspack.Configuration`。
 
-```ts
+```ts twoslash
 import type { Rspack } from '@rslib/core';
 
 const rspackConfig: Rspack.Configuration = {};
@@ -102,7 +106,7 @@ const rspackConfig: Rspack.Configuration = {};
 
 查看 [@rsbuild/core - src/index.ts](https://github.com/web-infra-dev/rsbuild/blob/main/packages/core/src/index.ts) 了解 Rsbuild 所有导出的类型。
 
-```ts
+```ts twoslash
 import type { Rsbuild } from '@rslib/core';
 
 const rsbuildConfig: Rsbuild.ToolsConfig = {};
