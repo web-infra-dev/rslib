@@ -341,13 +341,13 @@ describe('Should compose create Rsbuild config correctly', () => {
     `);
   });
 
-  test('Enable experiment.advancedEsm in esm format', async () => {
+  test('Disable experiment.advancedEsm in esm format', async () => {
     const rslibConfig: RslibConfig = {
       lib: [
         {
           format: 'esm',
           experiments: {
-            advancedEsm: true,
+            advancedEsm: false,
           },
         },
       ],
@@ -357,7 +357,7 @@ describe('Should compose create Rsbuild config correctly', () => {
     const rsbuildInstance = await inspect(rslibConfig);
     const { bundlerConfigs } = await rsbuildInstance.inspectConfig();
     expect(bundlerConfigs).toMatchSnapshot(
-      'experiment.advancedEsm Rspack configs',
+      'experiment.advancedEsm: false Rspack configs',
     );
   });
 });
