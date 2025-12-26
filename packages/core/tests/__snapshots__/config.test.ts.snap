@@ -3675,6 +3675,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             }
           }
         ]
+      },
+      /* config.module.rule('Rslib:js-entry-loader') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        issuer: /^$/,
+        use: [
+          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
+          {
+            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
+          }
+        ]
       }
     ]
   },
@@ -5265,6 +5276,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       {
         "name": "rsbuild:fix-js-module-type",
+        "setup": [Function],
+      },
+      {
+        "name": "rsbuild:lib-entry-chunk",
         "setup": [Function],
       },
     ],
