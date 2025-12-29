@@ -21,8 +21,8 @@ importers:
         specifier: ^0.1.14
         version: 0.1.14
       '@rstest/adapter-rslib':
-        specifier: ^0.1.0
-        version: 0.1.0(@rslib/core@0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^0.1.1
+        version: 0.1.1(@rslib/core@0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(typescript@5.9.3))(typescript@5.9.3)
       '@rstest/core':
         specifier: ^0.7.7
         version: 0.7.7
@@ -3141,10 +3141,10 @@ packages:
   '@rstack-dev/doc-ui@1.12.2':
     resolution: {integrity: sha512-4C+tfhODxCp81ohCik9baOdbhYGNFqdwcwQMAESncF0YX3EawdNCORI1E26DqkY/F3ggfKG4qOlEAu+oOxrPxg==}
 
-  '@rstest/adapter-rslib@0.1.0':
-    resolution: {integrity: sha512-eDM1C3wQcEi/rA+QqBd+3XGrJ/GJx/Zf2QQlLmCJFzqhXZEVgN5zmpzcIrtm2hmwOZLkvXJcA9UT/B7s0uYXgA==}
+  '@rstest/adapter-rslib@0.1.1':
+    resolution: {integrity: sha512-R63E/DrtG4ol9wffAxgeq9ze6/Dm9wms0S6grm8maXAQ7qLooza/CTj4AH6aXeEjbpb64hfRGZy8VmZh9+fCfg==}
     peerDependencies:
-      '@rslib/core': ^0.18.6
+      '@rslib/core': '>=0.18.6'
       typescript: ^5
     peerDependenciesMeta:
       typescript:
@@ -9897,7 +9897,7 @@ snapshots:
       - react
       - react-dom
 
-  '@rstest/adapter-rslib@0.1.0(@rslib/core@0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(typescript@5.9.3))(typescript@5.9.3)':
+  '@rstest/adapter-rslib@0.1.1(@rslib/core@0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@rslib/core': 0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)
     optionalDependencies:
