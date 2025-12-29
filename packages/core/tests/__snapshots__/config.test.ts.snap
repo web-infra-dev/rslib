@@ -1,6 +1,6 @@
 // Rstest Snapshot v1
 
-exports[`Should compose create Rsbuild config correctly > Enable experiment.advancedEsm in esm format > experiment.advancedEsm Rspack configs 1`] = `
+exports[`Should compose create Rsbuild config correctly > Disable experiment.advancedEsm in esm format > experiment.advancedEsm: false Rspack configs 1`] = `
 [
   "{
   target: [
@@ -120,7 +120,7 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     assetModuleFilename: 'static/assets/[name][ext]',
     webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
     module: true,
-    chunkFormat: false,
+    chunkFormat: 'module',
     chunkLoading: 'import',
     workerChunkLoading: 'import'
   },
@@ -630,6 +630,17 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
             }
           }
         ]
+      },
+      /* config.module.rule('Rslib:js-entry-loader') */
+      {
+        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+        issuer: /^$/,
+        use: [
+          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
+          {
+            loader: '<WORKSPACE>/src/plugins/entryModuleLoader.ts'
+          }
+        ]
       }
     ]
   },
@@ -665,11 +676,9 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
     ],
     moduleIds: 'named',
     nodeEnv: false,
-    concatenateModules: false,
-    sideEffects: true,
-    runtimeChunk: {
-      name: 'rslib-runtime'
-    },
+    concatenateModules: true,
+    sideEffects: 'flag',
+    runtimeChunk: undefined,
     avoidEntryIife: true
   },
   plugins: [
@@ -698,9 +707,6 @@ exports[`Should compose create Rsbuild config correctly > Enable experiment.adva
           forceNodeShims: false
         }
       ]
-    },
-    {
-      options: undefined
     },
     {
       shimsInjectedAssets: new Set([]),
@@ -1155,7 +1161,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     assetModuleFilename: 'static/assets/[name][ext]',
     webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
     module: true,
-    chunkFormat: 'module',
+    chunkFormat: false,
     chunkLoading: 'import',
     workerChunkLoading: 'import'
   },
@@ -1674,17 +1680,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             }
           }
         ]
-      },
-      /* config.module.rule('Rslib:js-entry-loader') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        issuer: /^$/,
-        use: [
-          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
-          {
-            loader: '<WORKSPACE>/src/plugins/entryModuleLoader.ts'
-          }
-        ]
       }
     ]
   },
@@ -1720,9 +1715,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ],
     moduleIds: 'named',
     nodeEnv: false,
-    concatenateModules: true,
-    sideEffects: 'flag',
-    runtimeChunk: undefined,
+    concatenateModules: false,
+    sideEffects: true,
+    runtimeChunk: {
+      name: 'rslib-runtime'
+    },
     avoidEntryIife: true
   },
   plugins: [
@@ -1751,6 +1748,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           forceNodeShims: false
         }
       ]
+    },
+    {
+      options: undefined
     },
     {
       shimsInjectedAssets: new Set([]),
@@ -4482,10 +4482,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         ],
         "setup": [Function],
       },
-      {
-        "name": "rsbuild:lib-entry-chunk",
-        "setup": [Function],
-      },
     ],
     "resolve": {
       "alias": {
@@ -4560,15 +4556,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           "optimization": {
             "avoidEntryIife": true,
-            "concatenateModules": true,
-            "runtimeChunk": undefined,
-            "sideEffects": "flag",
+            "concatenateModules": false,
+            "runtimeChunk": {
+              "name": "rslib-runtime",
+            },
+            "sideEffects": true,
             "splitChunks": {
               "chunks": "async",
             },
           },
           "output": {
-            "chunkFormat": "module",
+            "chunkFormat": false,
             "chunkLoading": "import",
             "library": {
               "type": "modern-module",
@@ -4586,6 +4584,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               ],
               "affectedHooks": undefined,
               "name": "RslibPlugin",
+            },
+            EsmLibraryPlugin {
+              "options": undefined,
             },
           ],
         },

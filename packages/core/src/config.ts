@@ -1692,7 +1692,7 @@ async function composeLibRsbuildConfig(
     umdName,
     experiments,
   } = config;
-  const advancedEsm = experiments?.advancedEsm;
+  const advancedEsm = experiments?.advancedEsm ?? true;
   const { rsbuildConfig: bundleConfig } = composeBundleConfig(bundle);
   const { rsbuildConfig: shimsConfig, enabledShims } = composeShimsConfig(
     format,
@@ -1704,7 +1704,7 @@ async function composeLibRsbuildConfig(
     bundle,
     umdName,
     enabledShims,
-    advancedEsm: advancedEsm ?? false,
+    advancedEsm,
   });
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,
@@ -1764,7 +1764,7 @@ async function composeLibRsbuildConfig(
   const assetConfig = composeAssetConfig(bundle, format);
 
   const entryChunkConfig = composeEntryChunkConfig({
-    useLoader: advancedEsm !== true && (format === 'esm' || format === 'iife'),
+    useLoader: format === 'iife' || (format === 'esm' && !advancedEsm),
     enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
     contextToWatch: outBase,
   });

@@ -5,13 +5,15 @@
 ## experiments.advancedEsm
 
 - **类型：** `boolean`
-- **默认值：** `false`
+- **默认值：** `true`
 
 控制是否启用 Rspack 实验性的 ESM 输出。开启后会生成高质量、对静态分析更友好并且支持代码分割的 ESM 输出。
 
 :::info
 目前该选项仅在 bundle 模式下且 format 为 `'esm'` 时生效。
 :::
+
+如果需要禁用该功能，可以将其设置为 `false`：
 
 ```js title="rslib.config.ts"
 export default {
@@ -20,9 +22,16 @@ export default {
       format: 'esm',
       bundle: true,
       experiments: {
-        advancedEsm: true,
+        advancedEsm: false,
       },
     },
   ],
 };
 ```
+
+### 版本历史
+
+| 版本    | 变更内容                     |
+| ------- | ---------------------------- |
+| v0.17.0 | 新增该选项                   |
+| v0.19.0 | 默认值由 `false` 改为 `true` |
