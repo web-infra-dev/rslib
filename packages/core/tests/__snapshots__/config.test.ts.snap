@@ -3683,7 +3683,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         use: [
           /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
           {
-            loader: '<WORKSPACE>/dist/entryModuleLoader.js'
+            loader: '<WORKSPACE>/src/plugins/entryModuleLoader.ts'
           }
         ]
       }
