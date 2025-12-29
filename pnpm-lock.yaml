@@ -20,6 +20,9 @@ importers:
       '@rslint/core':
         specifier: ^0.1.14
         version: 0.1.14
+      '@rstest/adapter-rslib':
+        specifier: ^0.1.0
+        version: 0.1.0(@rslib/core@0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(typescript@5.9.3))(typescript@5.9.3)
       '@rstest/core':
         specifier: ^0.7.7
         version: 0.7.7
@@ -380,8 +383,8 @@ importers:
         specifier: ^0.3.3
         version: 0.3.3(@rsbuild/core@1.7.0-beta.2)
       rslib:
-        specifier: npm:@rslib/core@0.18.6
-        version: '@rslib/core@0.18.6(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)'
+        specifier: npm:@rslib/core@0.19.0
+        version: '@rslib/core@0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)'
       rslog:
         specifier: ^1.3.2
         version: 1.3.2
@@ -417,8 +420,8 @@ importers:
         specifier: ^0.3.3
         version: 0.3.3(@rsbuild/core@1.6.15)
       rslib:
-        specifier: npm:@rslib/core@0.18.6
-        version: '@rslib/core@0.18.6(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)'
+        specifier: npm:@rslib/core@0.19.0
+        version: '@rslib/core@0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)'
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -457,8 +460,8 @@ importers:
         specifier: ^0.3.3
         version: 0.3.3(@rsbuild/core@1.7.0-beta.2)
       rslib:
-        specifier: npm:@rslib/core@0.18.6
-        version: '@rslib/core@0.18.6(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)'
+        specifier: npm:@rslib/core@0.19.0
+        version: '@rslib/core@0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)'
       tinyglobby:
         specifier: 0.2.14
         version: 0.2.14
@@ -2852,8 +2855,8 @@ packages:
       '@rsbuild/core':
         optional: true
 
-  '@rslib/core@0.18.6':
-    resolution: {integrity: sha512-mMjfmtXRPHOCzO1A8KcAQckIHi/vA+qOHT/zK4M8Nnr5h1eAO6HIEN7AvJdgbIf5YXsVH6bXonrXdAwwP0gHow==}
+  '@rslib/core@0.19.0':
+    resolution: {integrity: sha512-t94QnZGU8YSn5xQ8vNqxIpee5Mo+S77SEVA/0Tjft0I0dLmU6GZHeYAmoztNfWLudSUl4KrvilnxGPlySMdPvw==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     peerDependencies:
@@ -3137,6 +3140,15 @@ packages:
 
   '@rstack-dev/doc-ui@1.12.2':
     resolution: {integrity: sha512-4C+tfhODxCp81ohCik9baOdbhYGNFqdwcwQMAESncF0YX3EawdNCORI1E26DqkY/F3ggfKG4qOlEAu+oOxrPxg==}
+
+  '@rstest/adapter-rslib@0.1.0':
+    resolution: {integrity: sha512-eDM1C3wQcEi/rA+QqBd+3XGrJ/GJx/Zf2QQlLmCJFzqhXZEVgN5zmpzcIrtm2hmwOZLkvXJcA9UT/B7s0uYXgA==}
+    peerDependencies:
+      '@rslib/core': ^0.18.6
+      typescript: ^5
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   '@rstest/core@0.7.7':
     resolution: {integrity: sha512-WZSTMcgdrg6BVEZSP6XP0Bl4Ng+riaTmIuJrW4QPGOOefFXxVpPjQ4p1NpMZQAGOVf9qK2jxH+fus0X3/SpNDA==}
@@ -6718,8 +6730,8 @@ packages:
     resolution: {integrity: sha512-nLTrUKm2UyiL7rlhapu/Zl45FwNgkZGaCpZbIHajDYgwlJCOzLSk+cIPAnsEqV955GjILJnKbdQC1nVPz+gAYQ==}
     engines: {node: '>= 18'}
 
-  rsbuild-plugin-dts@0.18.6:
-    resolution: {integrity: sha512-E0KxiXxY5T3D+DjMMQS3/DMlNwjzNp1xEYyH68gwI7Ptm3a1ChawvlZ1DqVW5m8NWkdbCbcAyazwOnDD3yVOLQ==}
+  rsbuild-plugin-dts@0.19.0:
+    resolution: {integrity: sha512-5NkHONFDMBXv0qr1voHQigVhPmqai2icbJtckXJSCrpSTAJO0eXkGsHNVR8QvnsZEZWXL+KsIgNEJ7C8tYginQ==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       '@microsoft/api-extractor': ^7
@@ -9573,10 +9585,10 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.7.0-beta.2
 
-  '@rslib/core@0.18.6(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)':
+  '@rslib/core@0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)':
     dependencies:
       '@rsbuild/core': 1.7.0-beta.2
-      rsbuild-plugin-dts: 0.18.6(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@rsbuild/core@1.7.0-beta.2)(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)
+      rsbuild-plugin-dts: 0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@rsbuild/core@1.7.0-beta.2)(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)
     optionalDependencies:
       '@microsoft/api-extractor': 7.55.2(@types/node@24.10.4)
       typescript: 5.9.3
@@ -9884,6 +9896,12 @@ snapshots:
       - '@emotion/is-prop-valid'
       - react
       - react-dom
+
+  '@rstest/adapter-rslib@0.1.0(@rslib/core@0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(typescript@5.9.3))(typescript@5.9.3)':
+    dependencies:
+      '@rslib/core': 0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3)
+    optionalDependencies:
+      typescript: 5.9.3
 
   '@rstest/core@0.7.7':
     dependencies:
@@ -14127,7 +14145,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.18.6(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@rsbuild/core@1.7.0-beta.2)(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3):
+  rsbuild-plugin-dts@0.19.0(@microsoft/api-extractor@7.55.2(@types/node@24.10.4))(@rsbuild/core@1.7.0-beta.2)(@typescript/native-preview@7.0.0-dev.20251228.1)(typescript@5.9.3):
     dependencies:
       '@ast-grep/napi': 0.37.0
       '@rsbuild/core': 1.7.0-beta.2

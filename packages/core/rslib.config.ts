@@ -30,9 +30,6 @@ export default defineConfig({
     {
       format: 'esm',
       syntax: ['node 18.12.0'],
-      experiments: {
-        advancedEsm: true,
-      },
       dts: {
         bundle: false,
         // Only use tsgo in local dev for faster build, disable it in CI until it's more stable

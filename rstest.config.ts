@@ -4,7 +4,6 @@ import {
   type RsbuildPlugin,
   type RstestConfig,
 } from '@rstest/core';
-import packageJson from './packages/core/package.json' with { type: 'json' };
 
 const replaceLoaderUrlPlugin: RsbuildPlugin = {
   name: 'replace-loader-url',
@@ -29,11 +28,6 @@ export const shared: RstestConfig = {
   restoreMocks: true,
   output: {
     module: true,
-  },
-  source: {
-    define: {
-      RSLIB_VERSION: JSON.stringify(packageJson.version),
-    },
   },
   plugins: [replaceLoaderUrlPlugin],
 };
