@@ -8,9 +8,6 @@ export default defineConfig({
     {
       format: 'esm',
       syntax: ['node 18.12.0'],
-      experiments: {
-        advancedEsm: true,
-      },
     },
   ],
   plugins: [
