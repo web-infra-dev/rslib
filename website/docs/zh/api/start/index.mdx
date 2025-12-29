@@ -1,0 +1,59 @@
+# JavaScript API
+
+Rslib 提供了一整套 JavaScript API，以便于开发者在 JavaScript 或 TypeScript 代码中直接使用 Rslib 的功能。
+
+Rslib 的 JavaScript API 可以在 Node.js、Deno 或 Bun 中使用。
+
+:::tip 版本要求
+v0.19.0 及以上版本。
+:::
+
+## 接入示例
+
+下面是接入 Rslib JavaScript API 的基本示例。
+
+### 1. 安装 Rslib
+
+你需要安装 `@rslib/core` 包：
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs command="add @rslib/core -D" />
+
+### 2. 创建 Rslib 实例
+
+你可以调用 [createRslib](/api/javascript-api/core#createrslib) 方法来创建一个 Rslib 实例对象：
+
+```ts
+import { createRslib } from '@rslib/core';
+
+const rslib = await createRslib();
+```
+
+`createRslib` 方法提供了一些选项，你可以在 [API - createRslib](/api/javascript-api/core#createrslib) 中进一步了解。
+
+### 3. 调用 Rslib 实例方法
+
+Rslib 实例提供了一些实例方法，你可以根据实际场景来进行使用。
+
+例如，在构建产物时，可以使用 [rslib.build](/api/javascript-api/instance#rslibbuild) 方法，调用后会构建出生产模式产物。
+
+```ts
+await rslib.build();
+```
+
+:::tip
+
+关于 Rslib 实例方法的更多介绍，请阅读 [Rslib instance](/api/javascript-api/instance) 章节。
+
+:::
+
+通过以上三个步骤，你已经了解了 Rslib 基本的使用方法。接下来你可以通过 Rslib 配置以及 [Rsbuild 插件](https://rsbuild.rs/zh/plugins/dev/) 来对构建流程进行定制。
+
+## 导出格式
+
+Rslib 仅提供 ES modules 格式的导出：
+
+```js title="index.mjs"
+import { createRslib } from '@rslib/core';
+```

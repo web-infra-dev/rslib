@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@rstest/core';
 import type { CommonOptions } from '../src/cli/commands';
-import { applyCliOptions, parseEntryOption } from '../src/cli/initConfig';
+import { applyCliOptions, parseEntryOption } from '../src/cli/init';
 import type { RslibConfig } from '../src/types';
 
 describe('parseEntryOption', () => {

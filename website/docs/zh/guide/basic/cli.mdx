@@ -19,7 +19,7 @@ Usage:
 Commands:
   build    构建用于生产环境的产物（未指定命令时默认执行）
   inspect  检查 Rslib 项目的 Rsbuild 配置和 Rspack 配置
-  mf-dev   为 Module Federation 格式的库启用 Rsbuild 开发服务器
+  mf-dev   为 Module Federation 格式的库启动 Rsbuild 开发服务器
 ```
 
 ## 公共选项
@@ -35,6 +35,7 @@ Rslib CLI 提供了一些公共选项，可以用于所有命令：
 | `-h, --help`               | 显示命令帮助                                                                                                              |
 | `--lib <id>`               | 指定运行命令的库（可重复，例如：`--lib esm --lib cjs`），查看 [lib.id](/config/lib/id) 了解如何获取或设置库的 ID          |
 | `--log-level <level>`      | 指定日志级别（`info` \| `warn` \| `error` \| `silent`），详见 [logLevel](/config/rsbuild/log-level)                       |
+| `--no-env`                 | 禁用 `.env` 文件的加载                                                                                                    |
 | `-r, --root <root>`        | 指定项目根目录，可以是绝对路径或者相对于 cwd 的路径                                                                       |
 
 ## rslib build
@@ -153,6 +154,6 @@ Inspect config succeed, open following files to view the content:
 
 ## rslib mf-dev
 
-`rslib mf-dev` 命令用于为 [Module Federation](/guide/advanced/module-federation) 格式的库启用 Rsbuild 开发服务器。
+`rslib mf-dev` 命令用于为 [Module Federation](/guide/advanced/module-federation) 格式的库启动 Rsbuild 开发服务器。
 
 这允许你在 host 应用中访问和调试 mf 格式的模块。

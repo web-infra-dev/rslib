@@ -1,10 +1,11 @@
 import type { LogLevel } from '@rsbuild/core';
 import { isDebug, logger } from '../utils/logger';
+import { setupCommands } from './commands';
 
 function initNodeEnv() {
   if (!process.env.NODE_ENV) {
     const command = process.argv[2] ?? '';
-    process.env.NODE_ENV = ['build'].includes(command)
+    process.env.NODE_ENV = ['build', 'inspect'].includes(command)
       ? 'production'
       : 'development';
   }
@@ -36,11 +37,18 @@ function setupLogLevel() {
   }
 }
 
-export function prepareCli(): void {
+export function runCLI(): void {
   // make it easier to identify the process via activity monitor or other tools
   process.title = 'rslib-node';
 
   initNodeEnv();
   setupLogLevel();
   showGreeting();
+
+  try {
+    setupCommands();
+  } catch (err) {
+    logger.error('Failed to start Rslib CLI.');
+    logger.error(err);
+  }
 }

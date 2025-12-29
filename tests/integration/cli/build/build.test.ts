@@ -1,13 +1,7 @@
-import path from 'node:path';
-import { stripVTControlCharacters as stripAnsi } from 'node:util';
+import path, { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
-import {
-  buildAndGetResults,
-  extractRslibConfig,
-  globContentJSON,
-  runCliSync,
-} from 'test-helper';
+import { buildAndGetResults, globContentJSON, runCliSync } from 'test-helper';
 
 describe('build command', async () => {
   test('basic', async () => {
@@ -104,7 +98,7 @@ describe('build command', async () => {
     `);
   });
 
-  test('--config 404 config file', () => {
+  test('--config file not exists', () => {
     expect(() => {
       runCliSync('build --config ./custom-not-found.config.js', {
         cwd: __dirname,
@@ -204,7 +198,7 @@ describe('build command', async () => {
       '--auto-extension=false',
     ].join(' ');
 
-    const stdout = runCliSync(command, {
+    runCliSync(command, {
       cwd: fixturePath,
       env: {
         ...process.env,
@@ -212,29 +206,49 @@ describe('build command', async () => {
       },
     });
 
-    const rslibConfigText = stripAnsi(extractRslibConfig(stdout));
+    const rslibConfigPath = join(
+      fixturePath,
+      'dist/ok/.rsbuild/rslib.config.mjs',
+    );
+
+    const rslibConfigText = await fse.readFile(rslibConfigPath, 'utf-8');
     expect(rslibConfigText).toMatchInlineSnapshot(`
-      "{
+      "export default {
         lib: [
           {
             bundle: false,
-            source: { entry: { '*': './src/*' } },
+            source: {
+              entry: {
+                '*': './src/*'
+              }
+            },
             format: 'esm',
             output: {
-              distPath: { root: 'dist/ok' },
+              distPath: {
+                root: 'dist/ok'
+              },
               target: 'web',
               minify: false,
-              externals: [ './bar' ]
+              externals: [
+                './bar'
+              ]
             },
-            syntax: [ 'node 14', 'Chrome 103' ],
+            syntax: [
+              'node 14',
+              'Chrome 103'
+            ],
             dts: true,
             autoExtension: 'false'
           }
         ],
         _privateMeta: {
-          configFilePath: '<ROOT>/tests/integration/cli/build/options/rslib.config.ts'
+          configFilePath: '<ROOT>/tests/integration/cli/build/options/rslib.config.ts',
+          envFilePaths: []
         },
-        source: { define: {} }
+        source: {
+          define: {}
+        },
+        root: '<ROOT>/tests/integration/cli/build/options'
       }"
     `);
 
@@ -242,11 +256,15 @@ describe('build command', async () => {
     const fileNames = Object.keys(files).sort();
     expect(fileNames).toMatchInlineSnapshot(`
       [
+        "<ROOT>/tests/integration/cli/build/options/dist/ok/.rsbuild/rsbuild.config.mjs",
+        "<ROOT>/tests/integration/cli/build/options/dist/ok/.rsbuild/rslib.config.mjs",
+        "<ROOT>/tests/integration/cli/build/options/dist/ok/.rsbuild/rspack.config.esm.mjs",
         "<ROOT>/tests/integration/cli/build/options/dist/ok/foo.d.ts",
         "<ROOT>/tests/integration/cli/build/options/dist/ok/foo.js",
       ]
     `);
-    const output = files[fileNames[1]!];
+    // foo.js
+    const output = files[fileNames[4]!];
     expect(output).toMatch(/export { .* }/);
   });
 });
