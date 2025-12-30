@@ -6,9 +6,9 @@ import { PackageManagerTabs, Tab, Tabs } from '@theme';
 
 Using Rstest will bring a seamless testing experience to your Rslib project.
 
-## Quick Start
+## Quick start
 
-### New Project
+### New project
 
 You can use Rslib to create a new Rslib + Rstest project. Just add the `--tools rstest` flag when creating the project:
 
@@ -16,7 +16,7 @@ You can use Rslib to create a new Rslib + Rstest project. Just add the `--tools 
 npx create-rslib --dir my-project --template react-ts --tools rstest
 ```
 
-### Existing Project
+### Existing project
 
 To add Rstest to an existing Rslib project, simply install the `@rstest/core` package as a development dependency and add the Rstest command to the npm scripts in your package.json:
 
@@ -70,7 +70,7 @@ export default defineConfig({
 
 In the configuration file, you can specify test file matching patterns, set the test environment, configure code coverage, etc. For detailed information on all available configuration options, please refer to the [Rstest documentation](https://rstest.rs/config).
 
-## Reusing Rslib Configuration
+## Reusing Rslib configuration
 
 `@rstest/adapter-rslib` is the official adapter provided by Rstest that allows Rstest to automatically inherit the configuration from your existing Rslib configuration file. This ensures that the test environment is consistent with the build configuration, avoiding duplicate configuration.
 
