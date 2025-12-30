@@ -1,0 +1,85 @@
+import { PackageManagerTabs } from '@theme';
+
+# 使用 Rstest
+
+[Rstest](https://rstest.rs) 是一个基于 Rspack 的测试框架，它为 Rspack 生态提供了全面、一流的支持，你可以使用同一套配置进行开发与测试。
+
+使用 Rstest 将为你的 Rslib 项目带来无缝的测试体验。
+
+## 快速开始
+
+### 新项目
+
+你可以使用 Rslib 创建一个新的 Rslib + Rstest 项目。只需在创建项目时添加 `--tools rstest` 标志：
+
+```bash
+npx create-rslib --dir my-project --template react-ts --tools rstest
+```
+
+### 已有项目
+
+要将 Rstest 添加到现有的 Rslib 项目中，只需安装 `@rstest/core` 包作为开发依赖，并在 package.json 的 npm scripts 中添加 Rstest 命令：
+
+<PackageManagerTabs command="add -D @rstest/core" />
+
+```json title="package.json"
+{
+  "scripts": {
+    "test": "rstest"
+  }
+}
+```
+
+完成以上步骤后，你可以在项目中创建测试文件并使用 Rstest 的 API 编写测试，并通过 `npm test` 命令运行测试。
+
+例如，创建一个 `sum.test.ts` 文件，内容如下：
+
+```ts title="test/sum.test.ts"
+import { test, expect } from '@rstest/core';
+import { sum } from '../src/sum';
+
+test('sum', () => {
+  expect(sum(1, 2)).toBe(3);
+});
+```
+
+此时，你可以运行 `npm test` 命令来执行测试。Rstest 输出如下：
+
+```
+ ✓ test/sum.test.ts (1)
+
+ Test Files 1 passed
+      Tests 1 passed
+   Duration 71ms (build 20ms, tests 51ms)
+```
+
+## 配置 Rstest
+
+Rstest 提供了多种配置选项，可以通过在项目根目录创建 `rstest.config.ts` 文件来进行配置。以下是一个示例配置文件：
+
+```ts title="rstest.config.ts"
+import { defineConfig } from '@rstest/core';
+
+export default defineConfig({
+  include: ['test/**/*.test.ts'],
+  testEnvironment: 'node',
+});
+```
+
+你可以在配置文件中指定测试文件的匹配模式、设置测试环境、配置代码覆盖率等。有关所有可用配置选项的详细信息，请参阅 [Rstest 文档](https://rstest.rs/config)。
+
+## 复用 Rslib 配置
+
+`@rstest/adapter-rslib` 是 Rstest 官方提供的适配器，允许 Rstest 自动继承现有 Rslib 配置文件中的配置。这样可以确保测试环境与构建配置一致，避免重复配置。
+
+```ts title="rstest.config.ts"
+import { defineConfig } from '@rstest/core';
+import { withRslibConfig } from '@rstest/adapter-rslib';
+
+export default defineConfig({
+  extends: withRslibConfig(),
+  // 额外的 rstest 特定配置
+});
+```
+
+关于 `withRslibConfig` 函数的更多信息，请参阅 [Rstest 文档](https://rstest.rs/zh/guide/integration/rslib#%E5%A4%8D%E7%94%A8-rslib-%E9%85%8D%E7%BD%AE)。

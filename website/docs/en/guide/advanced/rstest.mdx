@@ -1,0 +1,85 @@
+import { PackageManagerTabs } from '@theme';
+
+# Using Rstest
+
+[Rstest](https://rstest.rs) is a test framework based on Rspack that provides comprehensive, first-class support for the Rspack ecosystem, you can use the same set of configurations for both development and testing.
+
+Using Rstest will bring a seamless testing experience to your Rslib project.
+
+## Quick start
+
+### New project
+
+You can use Rslib to create a new Rslib + Rstest project. Just add the `--tools rstest` flag when creating the project:
+
+```bash
+npx create-rslib --dir my-project --template react-ts --tools rstest
+```
+
+### Existing project
+
+To add Rstest to an existing Rslib project, simply install the `@rstest/core` package as a development dependency and add the Rstest command to the npm scripts in your package.json:
+
+<PackageManagerTabs command="add -D @rstest/core" />
+
+```json title="package.json"
+{
+  "scripts": {
+    "test": "rstest"
+  }
+}
+```
+
+After completing the above steps, you can create test files in your project, write tests using the Rstest API, and run the tests with the `npm test` command.
+
+For example, create a `sum.test.ts` file with the following content:
+
+```ts title="test/sum.test.ts"
+import { test, expect } from '@rstest/core';
+import { sum } from '../src/sum';
+
+test('sum', () => {
+  expect(sum(1, 2)).toBe(3);
+});
+```
+
+Now, you can run the `npm test` command to execute the tests. Rstest will output the following:
+
+```
+ ✓ test/sum.test.ts (1)
+
+ Test Files 1 passed
+      Tests 1 passed
+   Duration 71ms (build 20ms, tests 51ms)
+```
+
+## Configuring Rstest
+
+Rstest provides various configuration options that can be set by creating an `rstest.config.ts` file in the root of your project. Here is an example configuration file:
+
+```ts title="rstest.config.ts"
+import { defineConfig } from '@rstest/core';
+
+export default defineConfig({
+  include: ['test/**/*.test.ts'],
+  testEnvironment: 'node',
+});
+```
+
+In the configuration file, you can specify test file matching patterns, set the test environment, configure code coverage, etc. For detailed information on all available configuration options, please refer to the [Rstest documentation](https://rstest.rs/config).
+
+## Reusing Rslib configuration
+
+`@rstest/adapter-rslib` is the official adapter provided by Rstest that allows Rstest to automatically inherit the configuration from your existing Rslib configuration file. This ensures that the test environment is consistent with the build configuration, avoiding duplicate configuration.
+
+```ts title="rstest.config.ts"
+import { defineConfig } from '@rstest/core';
+import { withRslibConfig } from '@rstest/adapter-rslib';
+
+export default defineConfig({
+  extends: withRslibConfig(),
+  // Additional rstest-specific configuration
+});
+```
+
+For more information about the `withRslibConfig` function, please refer to the [Rstest documentation](https://rstest.rs/guide/integration/rslib#reusing-rslib-configuration).
