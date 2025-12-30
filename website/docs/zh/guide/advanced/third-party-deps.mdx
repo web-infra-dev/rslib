@@ -25,32 +25,32 @@
 
 ### 示例
 
-如果项目依赖了 `react`。
+如果项目依赖了 `foo`。
 
 ```json title="package.json"
 {
   "dependencies": {
-    "react": "^18"
+    "foo": "^1.0.0"
   },
   // 或
   "peerDependencies": {
-    "react": "^18"
+    "foo": "^1.0.0"
   }
 }
 ```
 
-当在源代码中使用 `react` 依赖时：
+当在源代码中使用 `foo` 依赖时：
 
 ```tsx title="src/index.ts"
-import React from 'react';
-console.info(React);
+import foo from 'foo';
+console.info(foo);
 ```
 
-此时产物中不会包含 `react` 的代码:
+此时产物中不会包含 `foo` 的代码:
 
 ```js title="dist/index.js"
-import external_react_default from 'react';
-console.info(external_react_default);
+import foo from 'foo';
+console.info(foo);
 ```
 
 如果想要修改默认的处理方式，可以通过下面的 API 进行修改:
