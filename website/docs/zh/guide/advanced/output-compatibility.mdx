@@ -75,11 +75,11 @@ export default defineConfig({
 通常，我们不需要在浏览器侧使用 Node 库。然而，在某些情况下，代码将在 Node 侧和浏览器侧运行，Node Polyfill 提供了这些 Node 库的浏览器版本 polyfill。
 :::
 
-通过使用 [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill)，Node 核心库的 polyfill 会自动注入到浏览器侧，允许你在浏览器侧使用这些模块。
+通过使用 [@rsbuild/plugin-node-polyfill](https://github.com/rstackjs/rsbuild-plugin-node-polyfill)，Node 核心库的 polyfill 会自动注入到浏览器侧，允许你在浏览器侧使用这些模块。
 
 #### 设置
 
-Rslib 使用 [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill) 提供 Node Polyfill 功能。
+Rslib 使用 [@rsbuild/plugin-node-polyfill](https://github.com/rstackjs/rsbuild-plugin-node-polyfill) 提供 Node Polyfill 功能。
 
 <PackageManagerTabs command="add @rsbuild/plugin-node-polyfill -D" />
 
@@ -99,9 +99,9 @@ export default defineConfig({
 
 - 对于启用了 `bundle` 的项目，Node Polyfill 将被注入并包含在输出中。
 - 对于未启用 `bundle` 的项目，默认情况下不会注入 polyfill。为了避免在每个模块中内联 polyfill，模块需要被 external，并手动添加到依赖中，请按照以下步骤操作：
-  1. 配置 `output.external` 和 `resolvedPolyfillToModules`，你可以从 [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill) 导入。这将 polyfill 模块 external 到已安装的 polyfill 依赖中。
+  1. 配置 `output.external` 和 `resolvedPolyfillToModules`，你可以从 [@rsbuild/plugin-node-polyfill](https://github.com/rstackjs/rsbuild-plugin-node-polyfill) 导入。这将 polyfill 模块 external 到已安装的 polyfill 依赖中。
   2. 安装使用的 polyfill 模块作为依赖。
 
   通过以上步骤，每个 polyfill 模块的使用将被替换为 `externals` 字段中的相应模块。更多详细信息，请查看 <SourceCode href="https://github.com/web-infra-dev/rslib/blob/main/tests/integration/node-polyfill/bundle-false/rslib.config.ts" /> 的示例。
 
-更多详细信息，请查看 [@rsbuild/plugin-node-polyfill](https://github.com/rspack-contrib/rsbuild-plugin-node-polyfill) 文档，所有配置均适用于 Rslib。
+更多详细信息，请查看 [@rsbuild/plugin-node-polyfill](https://github.com/rstackjs/rsbuild-plugin-node-polyfill) 文档，所有配置均适用于 Rslib。

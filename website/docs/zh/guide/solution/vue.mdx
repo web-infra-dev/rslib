@@ -1,6 +1,6 @@
 # Vue
 
-在本文档中，你将学习如何使用 Rslib 构建 Vue 组件库，你可在 [示例](https://github.com/rspack-contrib/rstack-examples/tree/main/rslib) 中查看 Vue 相关演示项目。
+在本文档中，你将学习如何使用 Rslib 构建 Vue 组件库，你可在 [示例](https://github.com/rstackjs/rstack-examples/tree/main/rslib) 中查看 Vue 相关演示项目。
 
 ::: note
 
@@ -31,7 +31,7 @@ import { PackageManagerTabs } from '@theme';
 
 开发 Vue 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。 这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。
 
-要编译 Vue（.vue 单文件组件），你需要注册基于 [unplugin-vue](https://github.com/unplugin/unplugin-vue) 实现的 [rsbuild-plugin-unplugin-vue](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) 插件。该插件将自动添加 Vue 构建所需的配置。
+要编译 Vue（.vue 单文件组件），你需要注册基于 [unplugin-vue](https://github.com/unplugin/unplugin-vue) 实现的 [rsbuild-plugin-unplugin-vue](https://github.com/rstackjs/rsbuild-plugin-unplugin-vue) 插件。该插件将自动添加 Vue 构建所需的配置。
 
 例如，在 `rslib.config.ts` 中注册:
 
@@ -52,7 +52,7 @@ export default defineConfig({
 ```
 
 ::: note
-目前 [rsbuild-plugin-unplugin-vue](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) 插件还不支持打包 Vue SFC [scoped CSS](https://vuejs.org/api/sfc-css-features#scoped-css) 样式，你可以选择 Less、Sass 等样式解决方案
+目前 [rsbuild-plugin-unplugin-vue](https://github.com/rstackjs/rsbuild-plugin-unplugin-vue) 插件还不支持打包 Vue SFC [scoped CSS](https://vuejs.org/api/sfc-css-features#scoped-css) 样式，你可以选择 Less、Sass 等样式解决方案
 :::
 
-更多配置可以参考 [rsbuild-plugin-unplugin-vue](https://github.com/rspack-contrib/rsbuild-plugin-unplugin-vue) 插件文档。
+更多配置可以参考 [rsbuild-plugin-unplugin-vue](https://github.com/rstackjs/rsbuild-plugin-unplugin-vue) 插件文档。
