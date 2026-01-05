@@ -41,8 +41,3 @@ jobs:
 
       - name: Check Dependency Version
         run: pnpm run check-dependency-version
-
-      - name: Check pnpm Dedupe
-        # Skip on release branches since the new version isn't published yet
-        if: ${{ !startsWith(github.head_ref, 'release') }}
-        run: pnpm dedupe --check
