@@ -2,7 +2,6 @@ import path from 'node:path';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { defineConfig } from '@rspress/core';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
-import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginRss } from '@rspress/plugin-rss';
 import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { pluginTwoslash } from '@rspress/plugin-twoslash';
@@ -35,10 +34,10 @@ export default defineConfig({
   search: {
     codeBlocks: true,
   },
+  llms: true,
   plugins: [
     pluginAlgolia(),
     pluginFontOpenSans(),
-    pluginLlms(),
     pluginTwoslash({
       cache: false,
     }),
