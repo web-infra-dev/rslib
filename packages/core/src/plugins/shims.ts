@@ -17,8 +17,8 @@ export const pluginCjsImportMetaUrlShim = (): RsbuildPlugin => ({
 });
 
 const requireShim = `// Rslib ESM shims
-import { createRequire } from "node:module";
-const require = /*#__PURE__*/ createRequire(import.meta.url);
+import __rslib_shim_module__ from "node:module";
+const require = /*#__PURE__*/ __rslib_shim_module__.createRequire(import.meta.url);
 `;
 
 export const pluginEsmRequireShim = (): RsbuildPlugin => ({
