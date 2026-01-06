@@ -168,10 +168,8 @@ Options:
   the ESM output will be transformed to:
 
   ```js
-  import __rslib_shim_module__ from 'module';
-  const require = /*#__PURE__*/ __rslib_shim_module__.createRequire(
-    import.meta.url,
-  );
+  import { createRequire } from 'node:module';
+  const require = /*#__PURE__*/ createRequire(import.meta.url);
   // dynamic require
   require(SOME_VALUE_IN_RUNTIME);
   // require.resolve
