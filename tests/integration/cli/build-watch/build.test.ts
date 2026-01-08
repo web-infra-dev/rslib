@@ -54,7 +54,7 @@ export default defineConfig({
     await expectFile(dist1EsmIndexFile);
 
     expect(stripAnsi(process.stdout())).toContain(
-      'build complete, watching for changes',
+      'build completed, watching for changes',
     );
 
     process.child.kill();

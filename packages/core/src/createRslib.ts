@@ -153,9 +153,13 @@ export async function createRslib(
       config.plugins.push({
         name: 'rslib:on-after-build',
         setup(api) {
-          api.onAfterBuild(({ isFirstCompile }) => {
+          api.onAfterBuild(({ isFirstCompile, stats }) => {
             if (isFirstCompile) {
-              logger.success('build complete, watching for changes...');
+              stats?.hasErrors()
+                ? logger.error(
+                    'build completed with errors, watching for changes...',
+                  )
+                : logger.success('build completed, watching for changes...');
             }
           });
         },
