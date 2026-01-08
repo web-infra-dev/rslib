@@ -107,7 +107,9 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
     options.alias = options.alias ?? {};
     options.tsgo = options.tsgo ?? false;
 
-    let dtsPromise: Promise<TaskResult>;
+    let dtsPromise: Promise<TaskResult> = Promise.resolve({
+      status: 'success',
+    });
     let promiseResult: TaskResult;
     let childProcesses: ChildProcess[] = [];
 
@@ -221,9 +223,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
           return;
         }
 
-        if (dtsPromise) {
-          promiseResult = await dtsPromise;
-        }
+        promiseResult = await dtsPromise;
       },
       // Set the order to 'pre' to ensure that when declaration files of multiple formats are generated simultaneously,
       // all errors are thrown together before exiting the process.
@@ -235,7 +235,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         return;
       }
 
-      if (promiseResult?.status === 'error') {
+      if (promiseResult.status === 'error') {
         if (options.abortOnError) {
           const error = new Error(promiseResult.errorMessage);
           // do not log the stack trace, it is not helpful for users
