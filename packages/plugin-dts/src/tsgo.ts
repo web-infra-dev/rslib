@@ -183,7 +183,7 @@ export async function emitDtsTsgo(
       for (const line of lines) {
         if (line.trim()) {
           // Reset color for each line to avoid color bleed
-          console.log(color.reset(`${logPrefixTsgo} ${line}`));
+          logger.log(color.reset(`${logPrefixTsgo} ${line}`));
         }
       }
     });
