@@ -107,7 +107,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
     options.alias = options.alias ?? {};
     options.tsgo = options.tsgo ?? false;
 
-    const dtsPromises: Promise<TaskResult>[] = [];
+    let dtsPromise: Promise<TaskResult>;
     let promisesResult: TaskResult[] = [];
     let childProcesses: ChildProcess[] = [];
 
@@ -198,22 +198,20 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
 
         childProcess.send(dtsGenOptions);
 
-        dtsPromises.push(
-          new Promise<TaskResult>((resolve) => {
-            childProcess.on('message', (message) => {
-              if (message === 'success') {
-                resolve({
-                  status: 'success',
-                });
-              } else if (message === 'error') {
-                resolve({
-                  status: 'error',
-                  errorMessage: `Error occurred in ${environment.name} declaration files generation.`,
-                });
-              }
-            });
-          }),
-        );
+        dtsPromise = new Promise<TaskResult>((resolve) => {
+          childProcess.on('message', (message) => {
+            if (message === 'success') {
+              resolve({
+                status: 'success',
+              });
+            } else if (message === 'error') {
+              resolve({
+                status: 'error',
+                errorMessage: `Error occurred in ${environment.name} declaration files generation.`,
+              });
+            }
+          });
+        });
       },
     );
 
@@ -223,7 +221,9 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
           return;
         }
 
-        promisesResult = await Promise.all(dtsPromises);
+        if (dtsPromise) {
+          promisesResult = [await dtsPromise];
+        }
       },
       // Set the order to 'pre' to ensure that when declaration files of multiple formats are generated simultaneously,
       // all errors are thrown together before exiting the process.
