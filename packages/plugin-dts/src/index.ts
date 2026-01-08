@@ -107,8 +107,10 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
     options.alias = options.alias ?? {};
     options.tsgo = options.tsgo ?? false;
 
-    const dtsPromises: Promise<TaskResult>[] = [];
-    let promisesResult: TaskResult[] = [];
+    let dtsPromise: Promise<TaskResult> = Promise.resolve({
+      status: 'success',
+    });
+    let promiseResult: TaskResult;
     let childProcesses: ChildProcess[] = [];
 
     api.onBeforeEnvironmentCompile(
@@ -198,22 +200,20 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
 
         childProcess.send(dtsGenOptions);
 
-        dtsPromises.push(
-          new Promise<TaskResult>((resolve) => {
-            childProcess.on('message', (message) => {
-              if (message === 'success') {
-                resolve({
-                  status: 'success',
-                });
-              } else if (message === 'error') {
-                resolve({
-                  status: 'error',
-                  errorMessage: `Error occurred in ${environment.name} declaration files generation.`,
-                });
-              }
-            });
-          }),
-        );
+        dtsPromise = new Promise<TaskResult>((resolve) => {
+          childProcess.on('message', (message) => {
+            if (message === 'success') {
+              resolve({
+                status: 'success',
+              });
+            } else if (message === 'error') {
+              resolve({
+                status: 'error',
+                errorMessage: `Error occurred in ${environment.name} declaration files generation.`,
+              });
+            }
+          });
+        });
       },
     );
 
@@ -223,7 +223,7 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
           return;
         }
 
-        promisesResult = await Promise.all(dtsPromises);
+        promiseResult = await dtsPromise;
       },
       // Set the order to 'pre' to ensure that when declaration files of multiple formats are generated simultaneously,
       // all errors are thrown together before exiting the process.
@@ -235,19 +235,17 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
         return;
       }
 
-      for (const result of promisesResult) {
-        if (result.status === 'error') {
-          if (options.abortOnError) {
-            const error = new Error(result.errorMessage);
-            // do not log the stack trace, it is not helpful for users
-            error.stack = '';
-            throw error;
-          }
-          result.errorMessage && logger.error(result.errorMessage);
-          logger.warn(
-            'With `abortOnError` configuration currently disabled, type errors will not fail the build, but proper type declaration output cannot be guaranteed.',
-          );
+      if (promiseResult.status === 'error') {
+        if (options.abortOnError) {
+          const error = new Error(promiseResult.errorMessage);
+          // do not log the stack trace, it is not helpful for users
+          error.stack = '';
+          throw error;
         }
+        promiseResult.errorMessage && logger.error(promiseResult.errorMessage);
+        logger.warn(
+          'With `abortOnError` configuration currently disabled, type errors will not fail the build, but proper type declaration output cannot be guaranteed.',
+        );
       }
     });
 
