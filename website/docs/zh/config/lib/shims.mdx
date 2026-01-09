@@ -92,7 +92,19 @@ const defaultShims = {
 
 - `true`：当 [format](/config/lib/format) 为 `cjs` 时，源代码中的 `import.meta.dirname` 将被替换为当前模块的 `__dirname`。
 
-- `false`：`import.meta.dirname` 将保持原样，这将会导致运行时错误（在 Node.js < 20.11.0 或 < 21.2.0 中）。
+  例如，给定以下源代码：
+
+  ```js
+  console.log(import.meta.dirname);
+  ```
+
+  将被转换为以下 CJS 产物代码：
+
+  ```js
+  console.log(__dirname);
+  ```
+
+- `false`：`import.meta.dirname` 将保持原样，这将会导致运行时错误。
 
 ### shims.cjs['import.meta.filename']
 
@@ -104,7 +116,19 @@ const defaultShims = {
 
 - `true`：当 [format](/config/lib/format) 为 `cjs` 时，源代码中的 `import.meta.filename` 将被替换为当前模块的 `__filename`。
 
-- `false`：`import.meta.filename` 将保持原样，这将会导致运行时错误（在 Node.js < 20.11.0 或 < 21.2.0 中）。
+  例如，给定以下源代码：
+
+  ```js
+  console.log(import.meta.filename);
+  ```
+
+  将被转换为以下 CJS 产物代码：
+
+  ```js
+  console.log(__filename);
+  ```
+
+- `false`：`import.meta.filename` 将保持原样，这将会导致运行时错误。
 
 ## shims.esm
 

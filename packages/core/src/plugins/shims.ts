@@ -12,19 +12,18 @@ export const pluginCjsShims = (enabledShims: {
   name: 'rsbuild:cjs-shims',
   setup(api) {
     api.modifyEnvironmentConfig((config) => {
-      const define: Record<string, string> = { ...config.source.define };
-
-      if (enabledShims['import.meta.url']) {
-        define['import.meta.url'] = '__rslib_import_meta_url__';
-      }
-      if (enabledShims['import.meta.dirname']) {
-        define['import.meta.dirname'] = '__dirname';
-      }
-      if (enabledShims['import.meta.filename']) {
-        define['import.meta.filename'] = '__filename';
-      }
-
-      config.source.define = define;
+      config.source.define = {
+        ...config.source.define,
+        ...(enabledShims['import.meta.url'] && {
+          'import.meta.url': '__rslib_import_meta_url__',
+        }),
+        ...(enabledShims['import.meta.dirname'] && {
+          'import.meta.dirname': '__dirname',
+        }),
+        ...(enabledShims['import.meta.filename'] && {
+          'import.meta.filename': '__filename',
+        }),
+      };
     });
   },
 });

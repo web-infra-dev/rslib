@@ -92,7 +92,19 @@ Options:
 
 - `true`: when [format](/config/lib/format) is `cjs`, the `import.meta.dirname` in source code will be replaced with the `__dirname` of the current module.
 
-- `false`: the `import.meta.dirname` will be left as is, which will cause a runtime error when running the output in Node.js < 20.11.0 or < 21.2.0.
+  For example, given the following source code:
+
+  ```js
+  console.log(import.meta.dirname);
+  ```
+
+  the CJS output will be transformed to:
+
+  ```js
+  console.log(__dirname);
+  ```
+
+- `false`: the `import.meta.dirname` will be left as is, which will cause a runtime error when running the output.
 
 ### shims.cjs['import.meta.filename']
 
@@ -104,7 +116,19 @@ Options:
 
 - `true`: when [format](/config/lib/format) is `cjs`, the `import.meta.filename` in source code will be replaced with the `__filename` of the current module.
 
-- `false`: the `import.meta.filename` will be left as is, which will cause a runtime error when running the output in Node.js < 20.11.0 or < 21.2.0.
+  For example, given the following source code:
+
+  ```js
+  console.log(import.meta.filename);
+  ```
+
+  the CJS output will be transformed to:
+
+  ```js
+  console.log(__filename);
+  ```
+
+- `false`: the `import.meta.filename` will be left as is, which will cause a runtime error when running the output.
 
 ## shims.esm
 
