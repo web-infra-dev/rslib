@@ -26,10 +26,7 @@ import {
 } from './css/cssConfig';
 import { type CssLoaderOptionsAuto, isCssGlobalFile } from './css/utils';
 import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
-import {
-  pluginCjsImportMetaUrlShim,
-  pluginEsmRequireShim,
-} from './plugins/shims';
+import { pluginCjsShims, pluginEsmRequireShim } from './plugins/shims';
 import type {
   AutoExternal,
   BannerAndFooter,
@@ -839,6 +836,8 @@ const composeShimsConfig = (
   const resolvedShims = {
     cjs: {
       'import.meta.url': shims?.cjs?.['import.meta.url'] ?? true,
+      'import.meta.dirname': shims?.cjs?.['import.meta.dirname'] ?? true,
+      'import.meta.filename': shims?.cjs?.['import.meta.filename'] ?? true,
     },
     esm: {
       __filename: shims?.esm?.__filename ?? false,
@@ -853,6 +852,8 @@ const composeShimsConfig = (
         ? resolvedShims.cjs
         : {
             'import.meta.url': false,
+            'import.meta.dirname': false,
+            'import.meta.filename': false,
           },
     esm:
       format === 'esm'
@@ -888,7 +889,7 @@ const composeShimsConfig = (
     case 'cjs':
       rsbuildConfig = {
         plugins: [
-          resolvedShims.cjs['import.meta.url'] && pluginCjsImportMetaUrlShim(),
+          pluginCjsShims(resolvedShims.cjs),
           disableUrlParseRsbuildPlugin(),
           fixJsModuleTypePlugin(),
         ].filter(Boolean),

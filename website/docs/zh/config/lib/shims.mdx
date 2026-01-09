@@ -10,6 +10,8 @@ overviewHeaders: [2, 3]
 type Shims = {
   cjs?: {
     'import.meta.url'?: boolean;
+    'import.meta.dirname'?: boolean;
+    'import.meta.filename'?: boolean;
   };
   esm?: {
     __filename?: boolean;
@@ -25,6 +27,8 @@ type Shims = {
 const defaultShims = {
   cjs: {
     'import.meta.url': true,
+    'import.meta.dirname': true,
+    'import.meta.filename': true,
   },
   esm: {
     __filename: false,
@@ -77,6 +81,30 @@ const defaultShims = {
   ```
 
 - `false`：`import.meta.url` 将保持原样，这将会导致运行时错误。
+
+### shims.cjs['import.meta.dirname']
+
+是否在 CommonJS 产物为 `import.meta.dirname` 注入 shims。
+
+- **默认值：** `true`
+
+选项：
+
+- `true`：当 [format](/config/lib/format) 为 `cjs` 时，源代码中的 `import.meta.dirname` 将被替换为当前模块的 `__dirname`。
+
+- `false`：`import.meta.dirname` 将保持原样，这将会导致运行时错误（在 Node.js < 20.11.0 或 < 21.2.0 中）。
+
+### shims.cjs['import.meta.filename']
+
+是否在 CommonJS 产物为 `import.meta.filename` 注入 shims。
+
+- **默认值：** `true`
+
+选项：
+
+- `true`：当 [format](/config/lib/format) 为 `cjs` 时，源代码中的 `import.meta.filename` 将被替换为当前模块的 `__filename`。
+
+- `false`：`import.meta.filename` 将保持原样，这将会导致运行时错误（在 Node.js < 20.11.0 或 < 21.2.0 中）。
 
 ## shims.esm
 

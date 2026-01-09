@@ -120,9 +120,15 @@ describe('CJS shims', () => {
       exports: {},
       module: { require: req },
       __filename: entryFiles.cjs,
+      __dirname: path.dirname(entryFiles.cjs),
     });
-    const { importMetaUrl, dynamicImportMetaUrl, requiredModule } =
-      vm.runInContext(cjsCode, context);
+    const {
+      importMetaUrl,
+      dynamicImportMetaUrl,
+      requiredModule,
+      importMetaDirname,
+      importMetaFilename,
+    } = vm.runInContext(cjsCode, context);
     const fileUrl = pathToFileURL(entryFiles.cjs).href;
     const dynamicUrl = await dynamicImportMetaUrl();
     const { content: dynamicContent } = queryContent(
@@ -133,6 +139,8 @@ describe('CJS shims', () => {
     expect(importMetaUrl).toBe(fileUrl);
     expect(dynamicUrl).toBe(fileUrl.replace('index.cjs', '1~368.cjs'));
     expect(requiredModule).toBe('ok');
+    expect(importMetaDirname).toBe(path.dirname(entryFiles.cjs));
+    expect(importMetaFilename).toBe(entryFiles.cjs);
 
     for (const code of [cjsCode, dynamicContent]) {
       expect(
