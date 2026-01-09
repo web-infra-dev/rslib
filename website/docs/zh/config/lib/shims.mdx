@@ -10,6 +10,8 @@ overviewHeaders: [2, 3]
 type Shims = {
   cjs?: {
     'import.meta.url'?: boolean;
+    'import.meta.dirname'?: boolean;
+    'import.meta.filename'?: boolean;
   };
   esm?: {
     __filename?: boolean;
@@ -25,6 +27,8 @@ type Shims = {
 const defaultShims = {
   cjs: {
     'import.meta.url': true,
+    'import.meta.dirname': true,
+    'import.meta.filename': true,
   },
   esm: {
     __filename: false,
@@ -77,6 +81,54 @@ const defaultShims = {
   ```
 
 - `false`：`import.meta.url` 将保持原样，这将会导致运行时错误。
+
+### shims.cjs['import.meta.dirname']
+
+是否在 CommonJS 产物为 `import.meta.dirname` 注入 shims。
+
+- **默认值：** `true`
+
+选项：
+
+- `true`：当 [format](/config/lib/format) 为 `cjs` 时，源代码中的 `import.meta.dirname` 将被替换为 `__dirname`。
+
+  例如，给定以下源代码：
+
+  ```js
+  console.log(import.meta.dirname);
+  ```
+
+  将被转换为以下 CJS 产物代码：
+
+  ```js
+  console.log(__dirname);
+  ```
+
+- `false`：`import.meta.dirname` 将保持原样，这将会导致运行时错误。
+
+### shims.cjs['import.meta.filename']
+
+是否在 CommonJS 产物为 `import.meta.filename` 注入 shims。
+
+- **默认值：** `true`
+
+选项：
+
+- `true`：当 [format](/config/lib/format) 为 `cjs` 时，源代码中的 `import.meta.filename` 将被替换为 `__filename`。
+
+  例如，给定以下源代码：
+
+  ```js
+  console.log(import.meta.filename);
+  ```
+
+  将被转换为以下 CJS 产物代码：
+
+  ```js
+  console.log(__filename);
+  ```
+
+- `false`：`import.meta.filename` 将保持原样，这将会导致运行时错误。
 
 ## shims.esm
 

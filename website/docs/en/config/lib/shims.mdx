@@ -10,6 +10,8 @@ overviewHeaders: [2, 3]
 type Shims = {
   cjs?: {
     'import.meta.url'?: boolean;
+    'import.meta.dirname'?: boolean;
+    'import.meta.filename'?: boolean;
   };
   esm?: {
     __filename?: boolean;
@@ -25,6 +27,8 @@ type Shims = {
 const defaultShims = {
   cjs: {
     'import.meta.url': true,
+    'import.meta.dirname': true,
+    'import.meta.filename': true,
   },
   esm: {
     __filename: false,
@@ -77,6 +81,54 @@ Options:
   ```
 
 - `false`: the `import.meta.url` will be left as is, which will cause a runtime error when running the output.
+
+### shims.cjs['import.meta.dirname']
+
+Whether to inject shims for the `import.meta.dirname` in CommonJS output.
+
+- **Default:** `true`
+
+Options:
+
+- `true`: when [format](/config/lib/format) is `cjs`, the `import.meta.dirname` in source code will be replaced with the `__dirname`.
+
+  For example, given the following source code:
+
+  ```js
+  console.log(import.meta.dirname);
+  ```
+
+  the CJS output will be transformed to:
+
+  ```js
+  console.log(__dirname);
+  ```
+
+- `false`: the `import.meta.dirname` will be left as is, which will cause a runtime error when running the output.
+
+### shims.cjs['import.meta.filename']
+
+Whether to inject shims for the `import.meta.filename` in CommonJS output.
+
+- **Default:** `true`
+
+Options:
+
+- `true`: when [format](/config/lib/format) is `cjs`, the `import.meta.filename` in source code will be replaced with the `__filename`.
+
+  For example, given the following source code:
+
+  ```js
+  console.log(import.meta.filename);
+  ```
+
+  the CJS output will be transformed to:
+
+  ```js
+  console.log(__filename);
+  ```
+
+- `false`: the `import.meta.filename` will be left as is, which will cause a runtime error when running the output.
 
 ## shims.esm
 

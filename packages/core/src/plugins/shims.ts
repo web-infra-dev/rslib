@@ -4,13 +4,25 @@ import { type RsbuildPlugin, rspack } from '@rsbuild/core';
 // - Replace `import.meta.url` with `importMetaUrl`.
 // - Inject `importMetaUrl` to the end of the module (can't inject at the beginning because of `"use strict";`).
 // This is a short-term solution, and we hope to provide built-in polyfills like `node.__filename` on Rspack side.
-export const pluginCjsImportMetaUrlShim = (): RsbuildPlugin => ({
-  name: 'rsbuild:cjs-import-meta-url-shim',
+export const pluginCjsShims = (enabledShims: {
+  'import.meta.url'?: boolean;
+  'import.meta.dirname'?: boolean;
+  'import.meta.filename'?: boolean;
+}): RsbuildPlugin => ({
+  name: 'rsbuild:cjs-shims',
   setup(api) {
     api.modifyEnvironmentConfig((config) => {
       config.source.define = {
         ...config.source.define,
-        'import.meta.url': '__rslib_import_meta_url__',
+        ...(enabledShims['import.meta.url'] && {
+          'import.meta.url': '__rslib_import_meta_url__',
+        }),
+        ...(enabledShims['import.meta.dirname'] && {
+          'import.meta.dirname': '__dirname',
+        }),
+        ...(enabledShims['import.meta.filename'] && {
+          'import.meta.filename': '__filename',
+        }),
       };
     });
   },

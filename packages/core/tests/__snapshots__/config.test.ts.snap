@@ -2453,7 +2453,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
         'process.env.BASE_URL': '"/"',
         'process.env.ASSET_PREFIX': '"auto"',
-        'import.meta.url': '__rslib_import_meta_url__'
+        'import.meta.url': '__rslib_import_meta_url__',
+        'import.meta.dirname': '__dirname',
+        'import.meta.filename': '__filename'
       }
     ),
     {
@@ -4735,7 +4737,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "setup": [Function],
       },
       {
-        "name": "rsbuild:cjs-import-meta-url-shim",
+        "name": "rsbuild:cjs-shims",
         "setup": [Function],
       },
       {

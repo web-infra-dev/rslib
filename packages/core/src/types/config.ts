@@ -151,6 +151,18 @@ export type Shims = {
      * @see {@link https://rslib.rs/config/lib/shims#shimscjsimportmetaurl}
      */
     'import.meta.url'?: boolean;
+    /**
+     * Whether to inject shims for the `import.meta.dirname` in CommonJS output.
+     * @defaultValue `true`
+     * @see {@link https://rslib.rs/config/lib/shims#shimscjsimportmetadirname}
+     */
+    'import.meta.dirname'?: boolean;
+    /**
+     * Whether to inject shims for the `import.meta.filename` in CommonJS output.
+     * @defaultValue `true`
+     * @see {@link https://rslib.rs/config/lib/shims#shimscjsimportmetafilename}
+     */
+    'import.meta.filename'?: boolean;
   };
   /**
    * Configure the shims for ESM output.
@@ -319,6 +331,8 @@ export interface LibConfig extends EnvironmentConfig {
    * const defaultShims = {
    *   cjs: {
    *     'import.meta.url': true,
+   *     'import.meta.dirname': true,
+   *     'import.meta.filename': true,
    *   },
    *   esm: {
    *     __filename: false,
