@@ -216,6 +216,32 @@ export default {
 
 In addition, if you only want to specify a few dependencies to be bundled into the declaration output files, you can configure [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) to achieve this. All other dependencies not in this configuration will be excluded.
 
+### Why does the directory structure of the declaration files not meet expectations?
+
+The directory structure of the declaration files is related to the `rootDir` configuration in `tsconfig.json`. If `rootDir` is not configured explicitly, TypeScript will automatically infer it, which may cause the output structure to be inconsistent with your expectations.
+
+For example, assuming your project structure is as follows, when `composite` is set to `true`, TypeScript will automatically infer `rootDir` as the project root directory, and the declaration files will be output to `dist/src/index.d.ts`.
+
+```
+.
+├── dist
+│   └── src
+│       └── index.d.ts
+├── src
+│   └── index.ts
+└── tsconfig.json
+```
+
+You can explicitly set `rootDir` to `'./src'` in `tsconfig.json` to ensure that declaration files are output to the expected `dist/index.d.ts`.
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "rootDir": "./src"
+  }
+}
+```
+
 ## Rsbuild plugin
 
 ### Why does using `modifyRsbuildConfig` to modify the configuration does not take effect?

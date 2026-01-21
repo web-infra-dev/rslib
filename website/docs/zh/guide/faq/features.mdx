@@ -216,6 +216,32 @@ export default {
 
 此外，如果只想指定某几个依赖项打包进类型声明文件产物中，可以通过配置 [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) 来实现，不在该配置中的所有其他依赖项都会被排除。
 
+### 为什么类型声明文件的目录结构不符合预期？
+
+类型声明文件的目录结构与 `tsconfig.json` 中的 `rootDir` 配置有关，如果未显式配置 `rootDir`，TypeScript 会进行自动推断，这可能导致输出结构与你的预期不符。
+
+例如，假设你的项目结构如下，当 `composite` 设置为 `true` 时，TypeScript 会将 `rootDir` 自动推断为项目根目录，此时类型声明文件会输出到 `dist/src/index.d.ts`。
+
+```
+.
+├── dist
+│   └── src
+│       └── index.d.ts
+├── src
+│   └── index.ts
+└── tsconfig.json
+```
+
+你可以在 `tsconfig.json` 中显式设置 `rootDir` 为 `'./src'`，以确保类型声明文件输出到预期的 `dist/index.d.ts`。
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "rootDir": "./src"
+  }
+}
+```
+
 ## Rsbuild 插件
 
 ### 为什么使用 `modifyRsbuildConfig` 修改配置不生效？
