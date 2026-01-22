@@ -50,5 +50,6 @@ export function runCLI(): void {
   } catch (err) {
     logger.error('Failed to start Rslib CLI.');
     logger.error(err);
+    process.exit(1);
   }
 }
