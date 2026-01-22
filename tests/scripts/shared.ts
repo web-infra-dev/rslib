@@ -1,6 +1,5 @@
 import assert from 'node:assert';
 import {
-  type ExecException,
   type ExecOptions,
   type ExecSyncOptions,
   exec,

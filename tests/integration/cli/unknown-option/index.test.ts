@@ -7,7 +7,7 @@ describe('unknown option', () => {
       runCliSync('build --unknown-option', {
         stdio: ['ignore', 'ignore', 'pipe'],
       });
-      throw new Error('execCliSync was expected to throw but did not.');
+      throw new Error('expected to throw but did not.');
     } catch (error: unknown) {
       const err = error as { status?: number; message: string };
       expect(err.status).toBe(1);
