@@ -1,6 +1,5 @@
 import assert from 'node:assert';
 import {
-  type ExecException,
   type ExecOptions,
   type ExecSyncOptions,
   exec,
@@ -28,17 +27,8 @@ export const rslibBinPath = join(
 );
 
 export function runCliSync(command: string, options?: ExecSyncOptions) {
-  try {
-    const stdout = execSync(`node ${rslibBinPath} ${command}`, options);
-    return stdout.toString();
-  } catch (error) {
-    const execError = error as ExecException;
-    const stderr = execError?.stderr?.toString();
-    const stdout = execError?.stdout?.toString();
-    const message = stderr?.trim() || stdout?.trim() || execError?.message;
-
-    throw new Error(message ?? 'Command failed', { cause: error });
-  }
+  const stdout = execSync(`node ${rslibBinPath} ${command}`, options);
+  return stdout.toString();
 }
 
 export function runCli(command: string, options?: ExecOptions) {
