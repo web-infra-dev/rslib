@@ -113,3 +113,24 @@ test('user externals', async () => {
     "
   `);
 });
+
+test('warn when bundleless external depends on devDependencies', async () => {
+  const fixturePath = join(__dirname, 'dev-dependency-warning');
+  const { logs, restore } = proxyConsole();
+
+  await buildAndGetResults({ fixturePath });
+
+  restore();
+  const warnLogs = logs.map((log) => stripAnsi(String(log)));
+  console.log(warnLogs);
+  const jsMatchingLog = warnLogs.filter(
+    (log) =>
+      log.includes('The externalized request "left-pad/lib" from index.ts is declared in "devDependencies" in package.json. Bundleless mode does not include devDependencies in the output, consider moving it to "dependencies" or "peerDependencies".')
+  );
+  expect(jsMatchingLog.length).toBe(1);
+  const cssMatchingLog = warnLogs.filter(
+    (log) =>
+      log.includes('The externalized request "normalize.css" from index.ts is declared in "devDependencies" in package.json. Bundleless mode does not include devDependencies in the output, consider moving it to "dependencies" or "peerDependencies".')
+  );
+  expect(cssMatchingLog.length).toBe(1);
+});
