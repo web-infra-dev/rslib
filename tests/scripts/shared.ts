@@ -31,7 +31,11 @@ export function runCliSync(
   command: string | string[],
   options?: SpawnSyncOptions,
 ) {
-  const args = Array.isArray(command) ? command : command.split(' ');
+  // Note: when `command` is a string, this simple split does not support quoted
+  // arguments with spaces. Use the array form (`string[]`) for such cases.
+  const args = Array.isArray(command)
+    ? command
+    : command.split(' ').filter((arg) => arg.length > 0);
   const result = spawnSync('node', [rslibBinPath, ...args], {
     ...options,
   });
