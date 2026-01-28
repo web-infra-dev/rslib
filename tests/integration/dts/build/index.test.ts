@@ -89,7 +89,6 @@ describe('dts when build: true', () => {
       cwd: fixturePath,
       // do not show output in test console
       stdio: 'ignore',
-      shell: true,
     });
 
     expect(result.status).toBe(0);
@@ -105,7 +104,6 @@ describe('dts when build: true', () => {
       cwd: fixturePath,
       // do not show output in test console
       stdio: 'pipe',
-      shell: true,
     });
 
     const stdoutErrorOutput = result.stderr ? result.stderr.toString() : '';
