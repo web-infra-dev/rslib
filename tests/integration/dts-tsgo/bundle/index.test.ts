@@ -1,8 +1,12 @@
-import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
-import { buildAndGetResults, createTempFiles, queryContent } from 'test-helper';
+import {
+  buildAndGetResults,
+  createTempFiles,
+  queryContent,
+  runCliSync,
+} from 'test-helper';
 
 describe.skipIf(process.version.startsWith('v18'))(
   'dts with tsgo when bundle: true',
@@ -52,14 +56,13 @@ describe.skipIf(process.version.startsWith('v18'))(
     test('abortOnError: false', async () => {
       const fixturePath = join(__dirname, 'abort-on-error');
 
-      const result = spawnSync('npx', ['rslib', 'build'], {
+      const { status } = runCliSync('build', {
         cwd: fixturePath,
         // do not show output in test console
         stdio: 'ignore',
-        shell: true,
       });
 
-      expect(result.status).toBe(0);
+      expect(status).toBe(0);
     });
 
     test('autoExtension: true', async () => {

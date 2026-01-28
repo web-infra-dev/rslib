@@ -99,13 +99,16 @@ describe('build command', async () => {
   });
 
   test('--config file not exists', () => {
-    expect(() => {
-      runCliSync('build --config ./custom-not-found.config.js', {
+    const { stderr, status } = runCliSync(
+      'build --config ./custom-not-found.config.js',
+      {
         cwd: __dirname,
         // only capture stderr output
         stdio: ['ignore', 'ignore', 'pipe'],
-      });
-    }).toThrowError(/Cannot find config file: .*custom-not-found.config.js/);
+      },
+    );
+    expect(stderr).toContain('Cannot find config file');
+    expect(status).toBe(1);
   });
 
   test('should use Node.js native loader to load config', async () => {
@@ -186,17 +189,18 @@ describe('build command', async () => {
 
     const command = [
       'build',
-      '--entry="./src/*"',
+      '--entry=./src/*',
       '--dist-path=dist/ok',
       '--no-bundle',
       '--format=esm',
-      '--syntax="node 14" --syntax="Chrome 103"',
+      '--syntax=node 14',
+      '--syntax=Chrome 103',
       '--target=web',
       '--dts=true',
       '--externals=./bar',
       '--minify=false',
       '--auto-extension=false',
-    ].join(' ');
+    ];
 
     runCliSync(command, {
       cwd: fixturePath,

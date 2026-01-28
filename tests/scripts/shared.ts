@@ -1,13 +1,14 @@
 import assert from 'node:assert';
 import {
   type ExecOptions,
-  type ExecSyncOptions,
   exec,
-  execSync,
+  type SpawnSyncOptions,
+  spawnSync,
 } from 'node:child_process';
 import fs from 'node:fs';
 import { basename, dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import {
   type InspectConfigResult,
@@ -26,9 +27,20 @@ export const rslibBinPath = join(
   '../node_modules/@rslib/core/bin/rslib.js',
 );
 
-export function runCliSync(command: string, options?: ExecSyncOptions) {
-  const stdout = execSync(`node ${rslibBinPath} ${command}`, options);
-  return stdout.toString();
+export function runCliSync(
+  command: string | string[],
+  options?: SpawnSyncOptions,
+) {
+  const args = Array.isArray(command) ? command : command.split(' ');
+  const result = spawnSync('node', [rslibBinPath, ...args], {
+    ...options,
+  });
+
+  return {
+    status: result.status,
+    stdout: stripAnsi(result.stdout?.toString() || ''),
+    stderr: stripAnsi(result.stderr?.toString() || ''),
+  };
 }
 
 export function runCli(command: string, options?: ExecOptions) {

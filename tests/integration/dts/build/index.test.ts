@@ -1,8 +1,12 @@
-import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
-import { buildAndGetResults, createTempFiles, queryContent } from 'test-helper';
+import {
+  buildAndGetResults,
+  createTempFiles,
+  queryContent,
+  runCliSync,
+} from 'test-helper';
 
 describe('dts when build: true', () => {
   test('basic', async () => {
@@ -85,14 +89,13 @@ describe('dts when build: true', () => {
   test('abortOnError: false', async () => {
     const fixturePath = join(__dirname, 'abort-on-error');
 
-    const result = spawnSync('npx', ['rslib', 'build'], {
+    const { status } = runCliSync('build', {
       cwd: fixturePath,
       // do not show output in test console
       stdio: 'ignore',
-      shell: true,
     });
 
-    expect(result.status).toBe(0);
+    expect(status).toBe(0);
 
     const buildInfoPath = join(fixturePath, 'tsconfig.tsbuildinfo');
     expect(existsSync(buildInfoPath)).toBeTruthy();
@@ -101,19 +104,14 @@ describe('dts when build: true', () => {
   test('tsconfig missing some fields - declarationDir or outDir', async () => {
     const fixturePath = join(__dirname, 'tsconfig');
 
-    const result = spawnSync('npx', ['rslib', 'build'], {
+    const { stderr, status } = runCliSync('build', {
       cwd: fixturePath,
       // do not show output in test console
       stdio: 'pipe',
-      shell: true,
     });
 
-    const stdoutErrorOutput = result.stderr ? result.stderr.toString() : '';
-
-    expect(result.status).toBe(1);
-    expect(stdoutErrorOutput).toContain(
-      'Please set "declarationDir": "./dist/types"',
-    );
+    expect(status).toBe(1);
+    expect(stderr).toContain('Please set "declarationDir": "./dist/types"');
   });
 
   test('should clean dts dist files', async () => {
