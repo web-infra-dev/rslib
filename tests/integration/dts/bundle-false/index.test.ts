@@ -1,4 +1,3 @@
-import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
@@ -8,6 +7,7 @@ import {
   createTempFiles,
   globContentJSON,
   queryContent,
+  runCliSync,
 } from 'test-helper';
 
 describe('dts when bundle: false', () => {
@@ -77,14 +77,13 @@ describe('dts when bundle: false', () => {
   test('abortOnError: false', async () => {
     const fixturePath = join(__dirname, 'abort-on-error');
 
-    const result = spawnSync('npx', ['rslib', 'build'], {
+    const { status } = runCliSync('build', {
       cwd: fixturePath,
       // do not show output in test console
       stdio: 'ignore',
-      shell: true,
     });
 
-    expect(result.status).toBe(0);
+    expect(status).toBe(0);
   });
 
   test('autoExtension: true', async () => {
