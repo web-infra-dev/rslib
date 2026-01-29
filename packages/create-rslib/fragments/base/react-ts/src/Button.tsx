@@ -1,11 +1,24 @@
 import './button.css';
 
-interface ButtonProps {
+export interface ButtonProps {
+  /**
+   * Whether the button is primary
+   * @default false
+   */
   primary?: boolean;
+  /**
+   * Background color of the button
+   */
   backgroundColor?: string;
+  /**
+   * Size of Button
+   * @default 'medium'
+   */
   size?: 'small' | 'medium' | 'large';
+  /**
+   * Label of the button
+   */
   label: string;
-  onClick?: () => void;
 }
 
 export const Button = ({

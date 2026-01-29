@@ -57,6 +57,7 @@ async function getTemplateName(argv: Argv) {
   );
 
   const supportStorybook = ['react', 'vue'].includes(templateName);
+  const supportRspress = ['react'].includes(templateName);
 
   type ExcludesFalse = <T>(x: T | false) => x is T;
 
@@ -67,13 +68,16 @@ async function getTemplateName(argv: Argv) {
           'Select development tools (Use <space> to select, <enter> to continue)',
         required: false,
         options: [
+          supportRspress && {
+            value: 'rspress',
+            label: 'Rspress',
+          },
           supportStorybook && {
             value: 'storybook',
             label: 'Storybook',
           },
           { value: 'rstest', label: 'Rstest' },
           { value: 'vitest', label: 'Vitest' },
-          // TODO: support Rspress Module doc in the future
         ].filter(Boolean as any as ExcludesFalse),
       }),
     );

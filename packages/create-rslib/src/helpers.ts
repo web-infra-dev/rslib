@@ -130,6 +130,44 @@ export const TEMPLATES: Template[] = [
     lang: 'js',
     tools: { storybook: 'storybook-react-js', rstest: 'rstest-react-js' },
   },
+  {
+    template: 'react',
+    lang: 'js',
+    tools: { rspress: 'rspress-react-js' },
+  },
+  {
+    template: 'react',
+    lang: 'js',
+    tools: { rspress: 'rspress-react-js', storybook: 'storybook-react-js' },
+  },
+  {
+    template: 'react',
+    lang: 'js',
+    tools: { rspress: 'rspress-react-js', vitest: 'vitest-react-js' },
+  },
+  {
+    template: 'react',
+    lang: 'js',
+    tools: { rspress: 'rspress-react-js', rstest: 'rstest-react-js' },
+  },
+  {
+    template: 'react',
+    lang: 'js',
+    tools: {
+      rspress: 'rspress-react-js',
+      storybook: 'storybook-react-js',
+      vitest: 'vitest-react-js',
+    },
+  },
+  {
+    template: 'react',
+    lang: 'js',
+    tools: {
+      rspress: 'rspress-react-js',
+      storybook: 'storybook-react-js',
+      rstest: 'rstest-react-js',
+    },
+  },
   // react-ts
   {
     template: 'react',
@@ -159,6 +197,44 @@ export const TEMPLATES: Template[] = [
     template: 'react',
     lang: 'ts',
     tools: { storybook: 'storybook-react-ts', rstest: 'rstest-react-ts' },
+  },
+  {
+    template: 'react',
+    lang: 'ts',
+    tools: { rspress: 'rspress-react-ts' },
+  },
+  {
+    template: 'react',
+    lang: 'ts',
+    tools: { rspress: 'rspress-react-ts', storybook: 'storybook-react-ts' },
+  },
+  {
+    template: 'react',
+    lang: 'ts',
+    tools: { rspress: 'rspress-react-ts', vitest: 'vitest-react-ts' },
+  },
+  {
+    template: 'react',
+    lang: 'ts',
+    tools: { rspress: 'rspress-react-ts', rstest: 'rstest-react-ts' },
+  },
+  {
+    template: 'react',
+    lang: 'ts',
+    tools: {
+      rspress: 'rspress-react-ts',
+      storybook: 'storybook-react-ts',
+      vitest: 'vitest-react-ts',
+    },
+  },
+  {
+    template: 'react',
+    lang: 'ts',
+    tools: {
+      rspress: 'rspress-react-ts',
+      storybook: 'storybook-react-ts',
+      rstest: 'rstest-react-ts',
+    },
   },
   // vue-js
   {
