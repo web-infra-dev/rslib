@@ -6,5 +6,5 @@
 
 ### Rspress
 
-- Run `{{ packageManager }} run docs:dev` to start Rspress documentation development server
-- Run `{{ packageManager }} run docs:build` to build the documentation for production
+- Run `{{ packageManager }} run doc` to start the Rspress documentation dev server
+- Run `{{ packageManager }} run doc:build` to build the documentation
