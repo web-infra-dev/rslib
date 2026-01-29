@@ -19,6 +19,10 @@ export interface ButtonProps {
    * Label of the button
    */
   label: string;
+  /**
+   * Optional click handler
+   */
+  onClick?: () => void;
 }
 
 export const Button = ({
