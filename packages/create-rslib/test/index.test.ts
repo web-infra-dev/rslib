@@ -46,6 +46,18 @@ const CASES_REACT: TemplateCase[] = [
   createCase('react', 'ts', ['storybook']),
   createCase('react', 'ts', ['rstest']),
   createCase('react', 'ts', ['vitest']),
+  createCase('react', 'js', ['rspress']),
+  createCase('react', 'ts', ['rspress']),
+  createCase('react', 'js', ['rspress', 'storybook']),
+  createCase('react', 'ts', ['rspress', 'storybook']),
+  createCase('react', 'js', ['rspress', 'vitest']),
+  createCase('react', 'ts', ['rspress', 'vitest']),
+  createCase('react', 'js', ['rspress', 'rstest']),
+  createCase('react', 'ts', ['rspress', 'rstest']),
+  createCase('react', 'js', ['rspress', 'rstest', 'storybook']),
+  createCase('react', 'ts', ['rspress', 'rstest', 'storybook']),
+  createCase('react', 'js', ['rspress', 'storybook', 'vitest']),
+  createCase('react', 'ts', ['rspress', 'storybook', 'vitest']),
 ];
 
 const CASES_VUE: TemplateCase[] = [
