@@ -1,7 +1,3 @@
-## Docs
-
-- Storybook: https://storybook.js.org/docs
-
 ## Tools
 
 ### Storybook

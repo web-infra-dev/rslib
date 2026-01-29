@@ -1,6 +1,6 @@
 ## Docs
 
-- Rspress: https://rspress.dev/
+- Rspress: https://rspress.rs/llms.txt
 
 ## Tools
 

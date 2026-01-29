@@ -65,24 +65,7 @@ function mapESLintTemplate(templateName: string): ESLintTemplateName {
   return `vanilla-${language}` as ESLintTemplateName;
 }
 
-function mapRstestTemplate(templateName: string): string {
-  if (templateName.startsWith('react-')) {
-    return templateName;
-  }
-  if (templateName.startsWith('vue-')) {
-    return templateName;
-  }
-  if (templateName.startsWith('node-dual-')) {
-    return templateName.replace('node-dual-', 'node-');
-  }
-  if (templateName.startsWith('node-esm-')) {
-    return templateName.replace('node-esm-', 'node-');
-  }
-  const language = templateName.split('-').pop();
-  return `node-${language}`;
-}
-
-function mapVitestTemplate(templateName: string): string {
+function mapTestingToolTemplate(templateName: string): string {
   if (templateName.startsWith('react-')) {
     return templateName;
   }
@@ -170,7 +153,7 @@ create({
       value: 'rstest',
       label: 'Rstest - testing',
       action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
-        const rstestTemplate = mapRstestTemplate(templateName);
+        const rstestTemplate = mapTestingToolTemplate(templateName);
         const toolFolder = path.join(__dirname, '..', 'template-rstest');
         const subFolder = path.join(toolFolder, rstestTemplate);
 
@@ -186,7 +169,7 @@ create({
       value: 'vitest',
       label: 'Vitest - testing',
       action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
-        const vitestTemplate = mapVitestTemplate(templateName);
+        const vitestTemplate = mapTestingToolTemplate(templateName);
         const toolFolder = path.join(__dirname, '..', 'template-vitest');
         const subFolder = path.join(toolFolder, vitestTemplate);
 
