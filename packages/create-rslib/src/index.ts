@@ -82,23 +82,6 @@ function mapTestingToolTemplate(templateName: string): string {
   return `node-${language}`;
 }
 
-function mapStorybookTemplate(templateName: string): string | null {
-  if (templateName.startsWith('react-')) {
-    return templateName;
-  }
-  if (templateName.startsWith('vue-')) {
-    return templateName;
-  }
-  return null;
-}
-
-function mapRspressTemplate(templateName: string): string | null {
-  if (templateName.startsWith('react-')) {
-    return templateName;
-  }
-  return null;
-}
-
 create({
   root: path.resolve(__dirname, '..'),
   name: 'rslib',
@@ -110,15 +93,10 @@ create({
       value: 'rspress',
       label: 'Rspress - documentation',
       order: 'pre',
+      when: (templateName) => templateName.startsWith('react'),
       action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
-        const rspressTemplate = mapRspressTemplate(templateName);
-        if (!rspressTemplate) {
-          throw new Error(
-            `Rspress is only supported for React templates, but got "${templateName}".`,
-          );
-        }
         const toolFolder = path.join(__dirname, '..', 'template-rspress');
-        const subFolder = path.join(toolFolder, rspressTemplate);
+        const subFolder = path.join(toolFolder, templateName);
 
         copyFolder({
           from: subFolder,
@@ -131,15 +109,11 @@ create({
     {
       value: 'storybook',
       label: 'Storybook - component development',
+      when: (templateName) =>
+        templateName.startsWith('react') || templateName.startsWith('vue'),
       action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
-        const storybookTemplate = mapStorybookTemplate(templateName);
-        if (!storybookTemplate) {
-          throw new Error(
-            `Storybook is only supported for React and Vue templates, but got "${templateName}".`,
-          );
-        }
         const toolFolder = path.join(__dirname, '..', 'template-storybook');
-        const subFolder = path.join(toolFolder, storybookTemplate);
+        const subFolder = path.join(toolFolder, templateName);
 
         copyFolder({
           from: subFolder,
