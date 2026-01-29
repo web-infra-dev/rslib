@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
-import { composeTemplateName, type Lang, TEMPLATES } from '../src/helpers';
+import { type Lang, TEMPLATES } from '../src/index';
 import { createAndValidate, type TemplateCase } from './helper';
 
 const createCase = (
@@ -12,7 +12,7 @@ const createCase = (
   template,
   lang,
   tools,
-  label: composeTemplateName({ template, lang, tools }),
+  label: `${template}-${lang}${tools.length ? `-${tools.sort().join('-')}` : ''}`,
 });
 
 const CASES_NODE_DUAL: TemplateCase[] = [
@@ -75,24 +75,21 @@ const CASES_VUE: TemplateCase[] = [
   createCase('vue', 'ts', ['vitest']),
 ];
 
-const ALL_CASES = [
-  ...CASES_NODE_DUAL,
-  ...CASES_NODE_ESM,
-  ...CASES_REACT,
-  ...CASES_VUE,
-];
-
 const BASE_NODE_ESM_JS = createCase('node-esm', 'js');
 
-test('exhaust all cases', () => {
-  const expected = ALL_CASES.map((item) => item.label).sort();
-  const actual = TEMPLATES.map((t) =>
-    composeTemplateName({
-      template: t.template,
-      lang: t.lang,
-      tools: Object.keys(t.tools || {}),
-    }),
-  ).sort();
+// Test that all base templates are available
+test('should have all base templates', () => {
+  const expected = [
+    'node-dual-js',
+    'node-dual-ts',
+    'node-esm-js',
+    'node-esm-ts',
+    'react-js',
+    'react-ts',
+    'vue-js',
+    'vue-ts',
+  ].sort();
+  const actual = [...TEMPLATES].sort();
   expect(actual).toEqual(expected);
 });
 
@@ -114,6 +111,14 @@ describe('node-esm', () => {
 
 describe('react', () => {
   for (const c of CASES_REACT) {
+    test(`should create ${c.label} project as expected`, async () => {
+      createAndValidate(__dirname, c);
+    });
+  }
+});
+
+describe('vue', () => {
+  for (const c of CASES_VUE) {
     test(`should create ${c.label} project as expected`, async () => {
       createAndValidate(__dirname, c);
     });

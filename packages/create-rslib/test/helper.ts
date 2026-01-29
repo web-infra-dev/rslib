@@ -3,15 +3,22 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { expect } from '@rstest/core';
 import fse from 'fs-extra';
-import type { Lang } from '../src/helpers';
+import type { Lang } from '../src/index';
 
 export const expectPackageJson = (
   pkgJson: Record<string, any>,
   name: string,
+  template: string,
+  lang: Lang,
 ) => {
   expect(pkgJson.name).toBe(name);
   expect(pkgJson.scripts.dev).toBe('rslib build --watch');
-  expect(pkgJson.scripts.build).toBe('rslib build');
+  // Vue TS template has additional vue-tsc check
+  if (template === 'vue' && lang === 'ts') {
+    expect(pkgJson.scripts.build).toBe('rslib build && vue-tsc');
+  } else {
+    expect(pkgJson.scripts.build).toBe('rslib build');
+  }
   expect(pkgJson.devDependencies['@rslib/core']).toBeTruthy();
 };
 
@@ -57,7 +64,12 @@ export const createAndValidate = (
   execSync(command, { cwd });
 
   const pkgJson = fse.readJSONSync(path.join(dir, 'package.json'));
-  expectPackageJson(pkgJson, path.basename(name));
+  expectPackageJson(
+    pkgJson,
+    path.basename(name),
+    templateCase.template,
+    templateCase.lang,
+  );
 
   // tsconfig
   if (templateCase.lang === 'ts') {
@@ -67,9 +79,15 @@ export const createAndValidate = (
 
   // tool - Vitest
   if (templateCase.tools.includes('vitest')) {
+    // Determine the correct test file extension
+    const testFileExt =
+      templateCase.template === 'react'
+        ? `${templateCase.lang}x`
+        : templateCase.lang;
+
     for (const file of [
       `vitest.config.${templateCase.lang}`,
-      `tests/index.test.${templateCase.lang}${templateCase.template === 'react' ? 'x' : ''}`,
+      `tests/index.test.${testFileExt}`,
     ]) {
       expect(existsSync(path.join(dir, file))).toBeTruthy();
     }
@@ -88,11 +106,14 @@ export const createAndValidate = (
       expect(existsSync(path.join(dir, file))).toBeTruthy();
     }
 
-    for (const dep of [
-      'storybook',
-      'storybook-react-rsbuild',
-      'storybook-addon-rslib',
-    ]) {
+    const storybookDeps = ['storybook', 'storybook-addon-rslib'];
+    if (templateCase.template === 'react') {
+      storybookDeps.push('storybook-react-rsbuild');
+    } else if (templateCase.template === 'vue') {
+      storybookDeps.push('storybook-vue3-rsbuild');
+    }
+
+    for (const dep of storybookDeps) {
       expect(pkgJson.devDependencies[dep]).toBeTruthy();
     }
   }
