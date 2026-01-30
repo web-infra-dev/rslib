@@ -111,6 +111,15 @@ describe('parseTemplateName', () => {
     expect(parseTemplateName('node-dual')).toBe('node-dual-ts');
     expect(parseTemplateName('node-esm')).toBe('node-esm-ts');
   });
+
+  test('should throw error when input is just a language suffix', () => {
+    expect(() => parseTemplateName('ts')).toThrow(
+      'Invalid template name: "ts". Template name cannot be just a language suffix.',
+    );
+    expect(() => parseTemplateName('js')).toThrow(
+      'Invalid template name: "js". Template name cannot be just a language suffix.',
+    );
+  });
 });
 
 describe('node-dual', () => {

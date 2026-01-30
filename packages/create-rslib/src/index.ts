@@ -38,9 +38,14 @@ export function parseTemplateName(template: string): string {
   const lastPart = pair[pair.length - 1];
   // Check if the last part is a valid language suffix
   if (lastPart === 'ts' || lastPart === 'js') {
-    const language = lastPart;
     const rest = pair.slice(0, pair.length - 1).join('-');
-    return `${rest}-${language}`;
+    // Handle edge case where input is just "ts" or "js"
+    if (!rest) {
+      throw new Error(
+        `Invalid template name: "${template}". Template name cannot be just a language suffix.`,
+      );
+    }
+    return `${rest}-${lastPart}`;
   }
   // No language suffix provided, default to 'ts'
   return `${template}-ts`;
