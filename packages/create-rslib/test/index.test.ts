@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import { type Lang, TEMPLATES } from '../src/index';
@@ -193,6 +193,33 @@ describe('linter and formatter', () => {
     );
     expect(pkgJson.devDependencies['@biomejs/biome']).toBeTruthy();
     expect(existsSync(join(dir, 'biome.json'))).toBeTruthy();
+    clean();
+  });
+});
+
+describe('rspress template', () => {
+  test('should replace {{ packageName }} placeholder in template files', async () => {
+    const templateCase = createCase('react', 'ts', ['rspress']);
+    const projectName = 'test-temp-rspress-placeholder';
+    const { dir, clean } = createAndValidate(__dirname, templateCase, {
+      name: projectName,
+      clean: false,
+    });
+
+    // Verify docs/Button.mdx has the actual package name, not the placeholder
+    const buttonMdxPath = join(dir, 'docs/Button.mdx');
+    expect(existsSync(buttonMdxPath)).toBeTruthy();
+    const buttonMdxContent = readFileSync(buttonMdxPath, 'utf-8');
+    expect(buttonMdxContent).not.toContain('{{ packageName }}');
+    expect(buttonMdxContent).toContain(`from '${projectName}'`);
+
+    // Verify tsconfig.json has the actual package name in paths
+    const tsconfigPath = join(dir, 'tsconfig.json');
+    expect(existsSync(tsconfigPath)).toBeTruthy();
+    const tsconfigContent = readFileSync(tsconfigPath, 'utf-8');
+    expect(tsconfigContent).not.toContain('{{ packageName }}');
+    expect(tsconfigContent).toContain(`"${projectName}"`);
+
     clean();
   });
 });
