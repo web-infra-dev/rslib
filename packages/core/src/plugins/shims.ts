@@ -30,7 +30,7 @@ export const pluginCjsShims = (enabledShims: {
 
 const requireShim = `// Rslib ESM shims
 import __rslib_shim_module__ from "node:module";
-const require = /*#__PURE__*/ __rslib_shim_module__.createRequire(import.meta.url);
+const require = /*#__PURE__*/ __rslib_shim_module__.createRequire(/*#__PURE__*/ (() => import.meta.url)());
 `;
 
 export const pluginEsmRequireShim = (): RsbuildPlugin => ({
