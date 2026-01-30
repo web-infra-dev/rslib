@@ -93,7 +93,7 @@ create({
       value: 'rspress',
       label: 'Rspress - documentation',
       order: 'pre',
-      when: (templateName) => templateName.startsWith('react'),
+      when: (templateName) => templateName.startsWith('react-ts'),
       action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
         const toolFolder = path.join(__dirname, '..', 'template-rspress');
         const subFolder = path.join(toolFolder, templateName);
