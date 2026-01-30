@@ -52,7 +52,7 @@ describe('ESM shims', async () => {
   test('require', async () => {
     expect(entries.esm2).toMatchInlineSnapshot(`
       "import __rslib_shim_module__ from "node:module";
-      const require = /*#__PURE__*/ __rslib_shim_module__.createRequire(/*#__PURE__*/ (() => import.meta.url)());
+      const require = /*#__PURE__*/ __rslib_shim_module__.createRequire(/*#__PURE__*/ (()=>import.meta.url)());
       const randomFile = require(process.env.RANDOM_FILE);
       export { randomFile };
       "
