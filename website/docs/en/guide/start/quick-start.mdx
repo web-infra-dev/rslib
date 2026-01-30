@@ -23,7 +23,7 @@ nvm use --lts
 
 ## Creating an Rslib project
 
-You can use the [`create-rslib`](https://www.npmjs.com/package/create-rslib) to create a new Rslib project. Run the following command:
+Use [`create-rslib`](https://www.npmjs.com/package/create-rslib) to create a new Rslib project. Run the following command:
 
 import { PackageManagerTabs } from '@theme';
 
@@ -33,14 +33,21 @@ import { PackageManagerTabs } from '@theme';
     yarn: 'yarn create rslib',
     pnpm: 'pnpm create rslib@latest',
     bun: 'bun create rslib@latest',
+    deno: 'deno init --npm rslib@latest',
   }}
 />
 
-Then follow the prompts to complete the operation.
+Follow the prompts step by step. During the creation process, you can choose whether to add optional tools such as TypeScript, ESLint, etc.
+
+After creating the project, do the following:
+
+- Run `git init` to initialize a Git repository.
+- Run `npm install` (or your package manager's install command) to install dependencies.
+- Run `npm run dev` to start watch mode and begin development.
 
 ### Templates
 
-`create-rslib` is a tool for quickly creating Rslib projects. When creating a project, you can choose from the following templates:
+When creating a project, you can choose from the following templates provided by `create-rslib`:
 
 | Template                     | Description                  |
 | ---------------------------- | ---------------------------- |
@@ -49,33 +56,23 @@ Then follow the prompts to complete the operation.
 | React                        | React component library      |
 | Vue                          | Vue component library        |
 
-Each template supports both JavaScript and TypeScript, along with optional development tools, formatters, and linters.
-
-### Development tools
-
-`create-rslib` can help you set up some commonly used development tools, including [Rstest](https://rstest.rs/), [Vitest](https://vitest.dev/), [Storybook](https://storybook.js.org/). You can use the arrow keys and the space bar to make your selections. If you don't need these tools, you can simply press Enter to skip.
-
-- Rstest and Vitest are available for all templates, it will be adapted based on the template's selection.
-- Storybook is available for web targeted templates (React, Vue), it will be adapted based on the template's selection.
-
-```text
-◆  Select development tools (Use <space> to select, <enter> to continue)
-│  ◻ Storybook
-│  ◻ Rstest
-│  ◻ Vitest
-└
-```
-
 ### Optional tools
 
-`create-rslib` can help you set up some commonly used linter and formatter tools, including [Biome](https://biomejs.dev/), [ESLint](https://eslint.org/), and [prettier](https://prettier.io/). You can use the arrow keys and the space bar to make your selections. If you don't need these tools, you can simply press Enter to skip.
+`create-rslib` can help you set up some commonly used tools, including [Biome](https://biomejs.dev/), [ESLint](https://eslint.org/), [Prettier](https://prettier.io/), [Rspress](https://rspress.rs/), [Storybook](https://storybook.js.org/), [Rstest](https://rstest.rs/) and [Vitest](https://vitest.dev/). Use the arrow keys to navigate and the space bar to select. Press Enter without selecting anything to skip these tools.
+
+- Rspress is available for React + TypeScript template, used for generating component documentation sites.
+- Storybook is available for web targeted templates (React, Vue), used for component development and preview.
+- Rstest / Vitest are available for all templates, used for testing.
 
 ```text
 ◆  Select additional tools (Use <space> to select, <enter> to continue)
-│  ◻ Add Biome for code linting and formatting
-│  ◻ Add ESLint for code linting
-│  ◻ Add Prettier for code formatting
-└
+│  ◻ Biome - linting & formatting
+│  ◻ ESLint - linting
+│  ◻ Prettier - formatting
+│  ◻ Rspress - documentation
+│  ◻ Storybook - component development
+│  ◻ Rstest - testing
+│  ◻ Vitest - testing
 ```
 
 :::tip
@@ -84,7 +81,7 @@ Biome provides similar linting and formatting features to ESLint and Prettier. I
 
 ### Current directory
 
-If you need to create a project in the current directory, you can set the target folder to `.`:
+To create a project in the current directory, set the target folder to `.`:
 
 ```text
 ◆  Create Rslib Project
@@ -96,31 +93,41 @@ If you need to create a project in the current directory, you can set the target
 │  Continue and override files
 ```
 
-### Quick creation
+### Non-interactive mode
 
-[create-rslib](https://www.npmjs.com/package/create-rslib) provides some CLI flags. By setting these CLI flags, you can skip the interactive selection steps and create the project with one command.
+[create-rslib](https://www.npmjs.com/package/create-rslib) supports a non-interactive mode via command-line options. This mode skips prompts and creates the project directly, which is useful for scripts, CI, and automation.
 
-For example, to create a React + TypeScript + Storybook + Biome project in the `my-project` directory with one command:
+For example, the following command creates a React project in the `my-project` directory:
 
 ```bash
-npx create-rslib --dir my-project --template react-ts --tools storybook --tools biome
+npx -y create-rslib@latest my-project --template react
 
 # Using abbreviations
-npx create-rslib -d my-project -t react-ts --tools storybook --tools biome
+npx -y create-rslib@latest my-project -t react
+
+# Specify multiple tools
+npx -y create-rslib@latest my-project -t react --tools rstest,biome
 ```
 
-All the CLI flags of `create-rslib`:
+All CLI flags supported by `create-rslib`:
 
 ```text
-Usage: create-rslib [options]
+Usage: create-rslib [dir] [options]
 
 Options:
 
-  -h, --help       display help for command
-  -d, --dir        create project in specified directory
-  -t, --template   specify the template to use
-  --tools          select additional tools (biome, eslint, prettier)
-  --override       override files in target directory
+  -h, --help            display help for command
+  -d, --dir <dir>       create project in specified directory
+  -t, --template <tpl>  specify the template to use
+  --tools <tool>        add additional tools, comma separated
+  --override            override files in target directory
+  --packageName <name>  specify the package name
+
+Available templates:
+  node-dual-js, node-dual-ts, node-esm-js, node-esm-ts, react-js, react-ts, vue-js, vue-ts
+
+Optional tools:
+  biome, eslint, prettier, rspress, storybook, rstest, vitest
 ```
 
 ## Migrate from existing projects

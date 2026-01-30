@@ -23,7 +23,7 @@ nvm use --lts
 
 ## 创建 Rslib 项目
 
-你可以使用 [`create-rslib`](https://www.npmjs.com/package/create-rslib) 创建一个 Rslib 项目。运行以下命令：
+使用 [create-rslib](https://www.npmjs.com/package/create-rslib) 来创建一个 Rslib 项目，运行以下命令：
 
 import { PackageManagerTabs } from '@theme';
 
@@ -33,58 +33,55 @@ import { PackageManagerTabs } from '@theme';
     yarn: 'yarn create rslib',
     pnpm: 'pnpm create rslib@latest',
     bun: 'bun create rslib@latest',
+    deno: 'deno init --npm rslib@latest',
   }}
 />
 
-然后按照提示操作即可。
+按照提示一步步操作即可。在创建过程中，你可以选择是否需要 TypeScript、ESLint 等额外的工具。
+
+在创建完成后，你可以执行以下步骤：
+
+- 执行 `git init` 来初始化 Git 仓库。
+- 执行 `npm install`（或其他包管理器的 install 命令）安装 npm 依赖。
+- 执行 `npm run dev` 启动监听模式开始开发。
 
 ### 模板
 
-`create-rslib` 是一个快速创建 Rslib 项目的工具。创建项目时，你可以选择以下模板：
+在创建项目时，你可以选择 `create-rslib` 提供的下列模板：
 
-| Template                     | Description                  |
-| ---------------------------- | ---------------------------- |
-| Node.js dual ESM/CJS package | Node.js dual ESM/CJS package |
-| Node.js pure ESM package     | Node.js pure ESM package     |
-| React                        | React component library      |
-| Vue                          | Vue component library        |
-
-每个模板都支持 JavaScript 和 TypeScript，以及可选的开发工具、格式化程序和 linter。
-
-### 开发工具
-
-`create-rslib` 可以帮助你设置一些常用的开发工具，包括 [Rstest](https://rstest.rs/)、[Vitest](https://vitest.dev/)、[Storybook](https://storybook.js.org/)。你可以使用方向键和空格键进行选择。如果你不需要这些工具，只需按 Enter 跳过即可。
-
-- Rstest / Vitest 适用于所有模板，它将根据模板的选择进行调整。
-- Storybook 可用于 Web 目标模板 (React、Vue)，它将根据模板的选择进行调整。
-
-```text
-◆  Select development tools (Use <space> to select, <enter> to continue)
-│  ◻ Storybook
-│  ◻ Rstest
-│  ◻ Vitest
-└
-```
+| 模板                         | 描述                      |
+| ---------------------------- | ------------------------- |
+| Node.js dual ESM/CJS package | Node.js 双格式 ESM/CJS 包 |
+| Node.js pure ESM package     | Node.js 纯 ESM 包         |
+| React                        | React 组件库              |
+| Vue                          | Vue 组件库                |
 
 ### 可选工具
 
-`create-rslib` 可以帮助你设置一些常用的代码检查和格式化工具，包括 [Biome](https://biomejs.dev/)、[ESLint](https://eslint.org/) 和 [prettier](https://prettier.io/)。你可以使用箭头键和空格键进行选择。如果你不需要这些工具，按 Enter 跳过即可。
+`create-rslib` 能够帮助你设置一些常用的工具，包括 [Biome](https://biomejs.dev/)、[ESLint](https://eslint.org/)、[Prettier](https://prettier.io/)、[Rspress](https://rspress.rs/)、[Storybook](https://storybook.js.org/)、[Rstest](https://rstest.rs/) 和 [Vitest](https://vitest.dev/)，你可以使用上下箭头和空格进行选择。如果你不需要这些工具，可以直接按回车跳过。
+
+- Rspress 可用于 React + TypeScript 模板，用于生成组件文档站点。
+- Storybook 可用于 Web 目标模板（React、Vue），用于组件开发和预览。
+- Rstest / Vitest 适用于所有模板，用于测试。
 
 ```text
 ◆  Select additional tools (Use <space> to select, <enter> to continue)
-│  ◻ Add Biome for code linting and formatting
-│  ◻ Add ESLint for code linting
-│  ◻ Add Prettier for code formatting
-└
+│  ◻ Biome - linting & formatting
+│  ◻ ESLint - linting
+│  ◻ Prettier - formatting
+│  ◻ Rspress - documentation
+│  ◻ Storybook - component development
+│  ◻ Rstest - testing
+│  ◻ Vitest - testing
 ```
 
 :::tip
-Biome 提供与 ESLint 和 Prettier 类似的代码检查和格式化功能。如果你选择 Biome，通常也不需要选择 ESLint 或 Prettier。
+Biome 提供与 ESLint 和 Prettier 相似的代码检查和格式化功能。如果你选择了 Biome，通常就不需要再选择 ESLint 或 Prettier 了。
 :::
 
 ### 当前目录
 
-如果需要在当前目录下创建项目，可以将目标文件夹设置为 `.`：
+如果你需要在当前目录下创建项目，可以将 target folder 设置为 `.`：
 
 ```text
 ◆  Create Rslib Project
@@ -96,31 +93,41 @@ Biome 提供与 ESLint 和 Prettier 类似的代码检查和格式化功能。�
 │  Continue and override files
 ```
 
-### 快速生成
+### 非交互模式
 
-[create-rslib](https://www.npmjs.com/package/create-rslib) 提供了一些 CLI 选项。通过设置这些 CLI 选项，你可以跳过交互式的选择步骤，一键创建项目。
+[create-rslib](https://www.npmjs.com/package/create-rslib) 支持通过命令行选项进入非交互模式。使用该模式可以跳过所有提示，直接创建项目，适合脚本、CI 以及 coding agents 等自动化场景。
 
-比如，一键创建 React + TypeScript + Storybook + Biome 的项目到 `my-project`：
+例如，以下命令将在 `my-project` 目录中创建一个 React 项目：
 
 ```bash
-npx create-rslib --dir my-project --template react-ts --tools storybook --tools biome
+npx -y create-rslib@latest my-project --template react
 
 # 使用缩写
-npx create-rslib -d my-project -t react-ts --tools storybook --tools biome
+npx -y create-rslib@latest my-project -t react
+
+# 指定多个 tools
+npx -y create-rslib@latest my-project -t react --tools rstest,biome
 ```
 
-`create-rslib` 的完整的 CLI 选项如下：
+`create-rslib` 完整的 CLI 选项如下：
 
 ```text
-Usage: create-rslib [options]
+Usage: create-rslib [dir] [options]
 
 Options:
 
-  -h, --help       display help for command
-  -d, --dir        create project in specified directory
-  -t, --template   specify the template to use
-  --tools          select additional tools (biome, eslint, prettier)
-  --override       override files in target directory
+  -h, --help            display help for command
+  -d, --dir <dir>       create project in specified directory
+  -t, --template <tpl>  specify the template to use
+  --tools <tool>        add additional tools, comma separated
+  --override            override files in target directory
+  --packageName <name>  specify the package name
+
+Available templates:
+  node-dual-js, node-dual-ts, node-esm-js, node-esm-ts, react-js, react-ts, vue-js, vue-ts
+
+Optional tools:
+  biome, eslint, prettier, rspress, storybook, rstest, vitest
 ```
 
 ## 从现有项目迁移
