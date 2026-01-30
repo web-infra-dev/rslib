@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -82,6 +83,27 @@ function mapTestingToolTemplate(templateName: string): string {
   return `node-${language}`;
 }
 
+function getPackageName(distFolder: string): string {
+  const pkgPath = path.join(distFolder, 'package.json');
+  const pkgContent = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+  return pkgContent.name;
+}
+
+function replacePackageNamePlaceholder(
+  distFolder: string,
+  files: string[],
+  packageName: string,
+): void {
+  for (const file of files) {
+    const filePath = path.join(distFolder, file);
+    if (fs.existsSync(filePath)) {
+      const content = fs.readFileSync(filePath, 'utf-8');
+      const replaced = content.replace(/\{\{ packageName \}\}/g, packageName);
+      fs.writeFileSync(filePath, replaced);
+    }
+  }
+}
+
 create({
   root: path.resolve(__dirname, '..'),
   name: 'rslib',
@@ -103,6 +125,14 @@ create({
           to: distFolder,
           isMergePackageJson: true,
         });
+
+        const packageName = getPackageName(distFolder);
+        replacePackageNamePlaceholder(
+          distFolder,
+          ['docs/Button.mdx', 'tsconfig.json'],
+          packageName,
+        );
+
         addAgentsMdSearchDirs(toolFolder);
       },
     },
