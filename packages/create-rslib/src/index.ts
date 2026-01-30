@@ -28,12 +28,32 @@ export const TEMPLATES: string[] = [
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Parse template input string and return the full template name with language suffix.
+ * If the input already ends with a valid language suffix (ts/js), use it as-is.
+ * Otherwise, append '-ts' as the default language.
+ */
+export function parseTemplateName(template: string): string {
+  const pair = template.split('-');
+  const lastPart = pair[pair.length - 1];
+  // Check if the last part is a valid language suffix
+  if (lastPart === 'ts' || lastPart === 'js') {
+    const rest = pair.slice(0, pair.length - 1).join('-');
+    // Handle edge case where input is just "ts" or "js"
+    if (!rest) {
+      throw new Error(
+        `Invalid template name: "${template}". Template name cannot be just a language suffix.`,
+      );
+    }
+    return `${rest}-${lastPart}`;
+  }
+  // No language suffix provided, default to 'ts'
+  return `${template}-ts`;
+}
+
 async function getTemplateName({ template }: Argv) {
   if (typeof template === 'string') {
-    const pair = template.split('-');
-    const language = pair[pair.length - 1] ?? 'ts';
-    const rest = pair.slice(0, pair.length - 1).join('-');
-    return `${rest}-${language}`;
+    return parseTemplateName(template);
   }
 
   const templateName = checkCancel<string>(
@@ -114,7 +134,6 @@ create({
     {
       value: 'rspress',
       label: 'Rspress - documentation',
-      order: 'pre',
       when: (templateName) => templateName.startsWith('react-ts'),
       action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
         const toolFolder = path.join(__dirname, '..', 'template-rspress');
