@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
-import { type Lang, TEMPLATES } from '../src/index';
+import { type Lang, parseTemplateName, TEMPLATES } from '../src/index';
 import { createAndValidate, type TemplateCase } from './helper';
 
 const createCase = (
@@ -85,6 +85,32 @@ test('should have all base templates', () => {
   ].sort();
   const actual = [...TEMPLATES].sort();
   expect(actual).toEqual(expected);
+});
+
+describe('parseTemplateName', () => {
+  test('should handle template with language suffix', () => {
+    expect(parseTemplateName('react-ts')).toBe('react-ts');
+    expect(parseTemplateName('react-js')).toBe('react-js');
+    expect(parseTemplateName('vue-ts')).toBe('vue-ts');
+    expect(parseTemplateName('vue-js')).toBe('vue-js');
+  });
+
+  test('should handle template without language suffix and default to ts', () => {
+    expect(parseTemplateName('react')).toBe('react-ts');
+    expect(parseTemplateName('vue')).toBe('vue-ts');
+  });
+
+  test('should handle multi-segment template with language suffix', () => {
+    expect(parseTemplateName('node-dual-ts')).toBe('node-dual-ts');
+    expect(parseTemplateName('node-dual-js')).toBe('node-dual-js');
+    expect(parseTemplateName('node-esm-ts')).toBe('node-esm-ts');
+    expect(parseTemplateName('node-esm-js')).toBe('node-esm-js');
+  });
+
+  test('should handle multi-segment template without language suffix and default to ts', () => {
+    expect(parseTemplateName('node-dual')).toBe('node-dual-ts');
+    expect(parseTemplateName('node-esm')).toBe('node-esm-ts');
+  });
 });
 
 describe('node-dual', () => {
