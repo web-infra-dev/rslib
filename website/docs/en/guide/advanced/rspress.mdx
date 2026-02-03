@@ -1,0 +1,135 @@
+import { PackageManagerTabs } from '@theme';
+
+# Using Rspress
+
+[Rspress](https://rspress.rs/) is a Rspack-based static site generator, ideal for building demos and API docs for component libraries. With [plugin-preview](https://rspress.rs/plugin/plugin-preview) and [plugin-api-docgen](https://rspress.rs/plugin/api-docgen), you can reuse Rslib source and typings to preview components and view APIs in one site.
+
+:::info
+When using `create-rslib`, choose the React + TypeScript template and enable the extra tool **“Rspress - documentation”** to auto-generate docs folder, scripts, and Rspress config—no manual setup needed.
+:::
+
+> The template bundles `rsbuild-plugin-workspace-dev`; starting the Rspress dev server also runs Rslib watch to keep previews aligned with your build config.
+
+## Quick start
+
+### Create a Rslib project
+
+Prepare a Rslib project with components; see [Solutions](/guide/solution/).
+
+:::tip
+If you run `pnpm dlx create-rslib` / `npm create rslib`, select React + TS and enable **Rspress - documentation** to auto-add the scripts, `rspress.config.ts`, `docs/Button.mdx`, and placeholder replacement.
+:::
+
+### Add Rspress to an existing project
+
+1. Install deps:
+
+   <PackageManagerTabs
+     command={{
+       npm: 'npm add @rspress/core @rspress/plugin-api-docgen @rspress/plugin-preview rsbuild-plugin-workspace-dev -D',
+       yarn: 'yarn add @rspress/core @rspress/plugin-api-docgen @rspress/plugin-preview rsbuild-plugin-workspace-dev -D',
+       pnpm: 'pnpm add @rspress/core @rspress/plugin-api-docgen @rspress/plugin-preview rsbuild-plugin-workspace-dev -D',
+       bun: 'bun add @rspress/core @rspress/plugin-api-docgen @rspress/plugin-preview rsbuild-plugin-workspace-dev -D',
+     }}
+   />
+
+2. Add scripts in `package.json`:
+
+   ```json title="package.json"
+   {
+     "scripts": {
+       "doc": "rspress dev",
+       "doc:build": "rspress build",
+       "doc:preview": "rspress preview"
+     }
+   }
+   ```
+
+3. Create `rspress.config.ts` to share the workspace with Rslib and generate previews & API:
+
+   ```ts title="rspress.config.ts"
+   import * as path from 'node:path';
+   import { defineConfig } from '@rspress/core';
+   import { pluginApiDocgen } from '@rspress/plugin-api-docgen';
+   import { pluginPreview } from '@rspress/plugin-preview';
+   import { pluginWorkspaceDev } from 'rsbuild-plugin-workspace-dev';
+
+   export default defineConfig({
+     root: path.join(__dirname, 'docs'),
+     title: 'Component Library Docs',
+     lang: 'en',
+     builderConfig: {
+       plugins: [
+         pluginWorkspaceDev({
+           startCurrent: true, // run current package dev/watch when docs start
+         }),
+       ],
+     },
+     plugins: [
+       pluginApiDocgen({
+         entries: {
+           Button: './src/Button.tsx',
+         },
+         apiParseTool: 'react-docgen-typescript',
+       }),
+       pluginPreview(),
+     ],
+   });
+   ```
+
+4. Add doc examples under `docs/` (sample `docs/Button.mdx`):
+
+   ````mdx title="docs/Button.mdx"
+   # Button
+
+   ## Size
+
+   ```jsx preview
+   import { Button } from '@your-scope/your-package';
+
+   export default () => <Button size="medium" label="Click me" />;
+   ```
+   ````
+
+   ## Background
+
+   ```jsx preview
+   import { Button } from '@your-scope/your-package';
+
+   export default () => <Button backgroundColor="red" label="Red" />;
+   ```
+
+   ## API
+
+   <API moduleName="Button" />
+   ```
+
+   Add component entry paths to `pluginApiDocgen.entries` to auto-generate API tables. `preview` code blocks use `plugin-preview` for live demos.
+
+### Develop & build
+
+- Start docs (also watches current package):
+
+  ```bash
+  pnpm doc
+  ```
+
+- Build static site:
+
+  ```bash
+  pnpm doc:build
+  ```
+
+- Preview built site:
+
+  ```bash
+  pnpm doc:preview
+  ```
+
+## References
+
+- Rspress docs & plugins: <https://rspress.rs/>
+- Rslib + Rspress template example: `packages/create-rslib/template-rspress/react-ts`
+- `rsbuild-plugin-workspace-dev`: <https://www.npmjs.com/package/rsbuild-plugin-workspace-dev>
+- `@rspress/plugin-api-docgen`: <https://rspress.rs/plugin/api-docgen>
+- `@rspress/plugin-preview`: <https://rspress.rs/plugin/plugin-preview>

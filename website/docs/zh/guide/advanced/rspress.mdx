@@ -1,0 +1,135 @@
+import { PackageManagerTabs } from '@theme';
+
+# 使用 Rspress
+
+[Rspress](https://rspress.rs/) 是基于 Rspack 的静态站点生成器，适合为组件库生成演示与 API 文档。借助 [plugin-preview](https://rspress.rs/plugin/plugin-preview) 和 [plugin-api-docgen](https://rspress.rs/plugin/api-docgen)，可以直接复用 Rslib 的源码与类型，在一个站点中同时预览组件与查看 API。
+
+:::info
+使用 `create-rslib` 时，选择 React + TypeScript 模板并勾选额外工具 **“Rspress - documentation”**，会自动生成文档目录、脚本和 Rspress 配置，无需手动搭建。
+:::
+
+> 模板内置了 `rsbuild-plugin-workspace-dev`，启动 Rspress 开发服务器时会自动运行 Rslib 的 watch，保证文档预览与构建配置一致。
+
+## 快速开始
+
+### 创建一个 Rslib 项目
+
+先准备包含组件的 Rslib 项目，可参考 [解决方案](/guide/solution/)。
+
+:::tip
+如果使用 `pnpm dlx create-rslib`/`npm create rslib`，在向导里选择 React + TS 模板并启用 **Rspress - documentation**，会自动添加下方的脚本、`rspress.config.ts`、`docs/Button.mdx` 与占位符替换。
+:::
+
+### 在现有项目中添加 Rspress
+
+1. 安装依赖：
+
+   <PackageManagerTabs
+     command={{
+       npm: 'npm add @rspress/core @rspress/plugin-api-docgen @rspress/plugin-preview rsbuild-plugin-workspace-dev -D',
+       yarn: 'yarn add @rspress/core @rspress/plugin-api-docgen @rspress/plugin-preview rsbuild-plugin-workspace-dev -D',
+       pnpm: 'pnpm add @rspress/core @rspress/plugin-api-docgen @rspress/plugin-preview rsbuild-plugin-workspace-dev -D',
+       bun: 'bun add @rspress/core @rspress/plugin-api-docgen @rspress/plugin-preview rsbuild-plugin-workspace-dev -D',
+     }}
+   />
+
+2. 在 `package.json` 增加脚本：
+
+   ```json title="package.json"
+   {
+     "scripts": {
+       "doc": "rspress dev",
+       "doc:build": "rspress build",
+       "doc:preview": "rspress preview"
+     }
+   }
+   ```
+
+3. 创建 `rspress.config.ts`，让文档与 Rslib 复用同一工作区并生成示例与 API：
+
+   ```ts title="rspress.config.ts"
+   import * as path from 'node:path';
+   import { defineConfig } from '@rspress/core';
+   import { pluginApiDocgen } from '@rspress/plugin-api-docgen';
+   import { pluginPreview } from '@rspress/plugin-preview';
+   import { pluginWorkspaceDev } from 'rsbuild-plugin-workspace-dev';
+
+   export default defineConfig({
+     root: path.join(__dirname, 'docs'),
+     title: '组件库文档',
+     lang: 'zh',
+     builderConfig: {
+       plugins: [
+         pluginWorkspaceDev({
+           startCurrent: true, // 启动文档时同时跑当前包的 dev/watch，保持产物最新
+         }),
+       ],
+     },
+     plugins: [
+       pluginApiDocgen({
+         entries: {
+           Button: './src/Button.tsx',
+         },
+         apiParseTool: 'react-docgen-typescript',
+       }),
+       pluginPreview(),
+     ],
+   });
+   ```
+
+4. 在 `docs/` 添加文档示例（可参考模板中的 `docs/Button.mdx`）：
+
+   ````mdx title="docs/Button.mdx"
+   # Button
+
+   ## 大小
+
+   ```jsx preview
+   import { Button } from '@your-scope/your-package';
+
+   export default () => <Button size="medium" label="Click me" />;
+   ```
+   ````
+
+   ## 背景色
+
+   ```jsx preview
+   import { Button } from '@your-scope/your-package';
+
+   export default () => <Button backgroundColor="red" label="Red" />;
+   ```
+
+   ## API
+
+   <API moduleName="Button" />
+   ```
+
+   将需要出 API 的组件路径填入 `pluginApiDocgen.entries`，即可自动生成 API 表。`preview` 代码块由 `plugin-preview` 提供实时预览。
+
+### 本地开发与构建
+
+- 启动文档（同时 watch 当前包）：
+
+  ```bash
+  pnpm doc
+  ```
+
+- 产出静态站点：
+
+  ```bash
+  pnpm doc:build
+  ```
+
+- 预览构建结果：
+
+  ```bash
+  pnpm doc:preview
+  ```
+
+## 参考
+
+- Rspress 文档与插件：<https://rspress.rs/>
+- Rslib + Rspress 模板示例：`packages/create-rslib/template-rspress/react-ts`
+- `rsbuild-plugin-workspace-dev`：<https://www.npmjs.com/package/rsbuild-plugin-workspace-dev>
+- `@rspress/plugin-api-docgen`：<https://rspress.rs/plugin/api-docgen>
+- `@rspress/plugin-preview`：<https://rspress.rs/plugin/plugin-preview>
