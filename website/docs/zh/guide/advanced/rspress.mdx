@@ -1,0 +1,172 @@
+import { PackageManagerTabs } from '@theme';
+import { Steps } from '@rspress/core/theme';
+
+# 使用 Rspress
+
+[Rspress](https://rspress.rs/) 是基于 Rspack 的静态站点生成器，适合为组件库项目提供预览和搭建 API 文档。借助 [plugin-preview](https://rspress.rs/plugin/plugin-preview) 和 [plugin-api-docgen](https://rspress.rs/plugin/api-docgen)。
+
+## 新项目
+
+:::info
+使用 `create-rslib` 时，选择 React + TypeScript 模板并勾选额外工具 **“Rspress - documentation”**，会自动生成文档目录、脚本和 Rspress 配置，无需手动搭建。
+:::
+
+执行 `npm create rslib@latest` 并选中 Rspress，会生成下方的文件结构：
+
+```tree
+├── docs
+│   └── index.mdx
+├── src
+│   └── Button.tsx
+├── package.json
+├── tsconfig.json
+├── rslib.config.ts
+└── rspress.config.ts
+```
+
+模板中内置了 [rsbuild-plugin-workspace-dev](https://github.com/rstackjs/rsbuild-plugin-workspace-dev) 插件，可在启动 Rspress 开发服务器的同时启动 Rslib 的 watch 模式。
+
+运行 `npm run doc` 启动 Rspress 的开发服务器对 Rslib 组件库进行预览：
+
+```json title="package.json"
+{
+  "scripts": {
+    "dev": "rslib build --watch",
+    "doc": "rspress dev" // 执行该命令，会同时执行 dev 脚本
+  }
+}
+```
+
+## 已有项目
+
+如果你在使用 Rslib 开发组件库，可以按照以下步骤为现有项目添加 Rspress 文档支持：
+
+<Steps>
+
+### 安装依赖
+
+<PackageManagerTabs command="add @rspress/core @rspress/plugin-api-docgen @rspress/plugin-preview rsbuild-plugin-workspace-dev -D" />
+
+### 在 `package.json` 增加脚本
+
+```json title="package.json"
+{
+  "name": "@your-scope/your-package",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "rslib build --watch",
+    "build": "rslib build",
+    "doc": "rspress dev", // [!code highlight]
+    "doc:build": "rspress build", // [!code highlight]
+    "doc:preview": "rspress preview" // [!code highlight]
+  }
+}
+```
+
+### 创建 `rspress.config.ts`
+
+增加 Rspress 组件库预览相关的 plugin，比如 [plugin-preview](https://rspress.rs/plugin/plugin-preview) 和 [plugin-api-docgen](https://rspress.rs/plugin/api-docgen)。
+
+```ts title="rspress.config.ts"
+import * as path from 'node:path';
+import { defineConfig } from '@rspress/core';
+import { pluginApiDocgen } from '@rspress/plugin-api-docgen';
+import { pluginPreview } from '@rspress/plugin-preview';
+import { pluginWorkspaceDev } from 'rsbuild-plugin-workspace-dev';
+
+export default defineConfig({
+  root: path.join(__dirname, 'docs'),
+  title: '组件库文档',
+  lang: 'zh',
+  builderConfig: {
+    plugins: [
+      pluginWorkspaceDev({
+        startCurrent: true, // 启动文档时同时跑当前包的 dev，保持产物最新
+      }),
+    ],
+  },
+  plugins: [
+    pluginApiDocgen({
+      entries: {
+        Button: './src/Button.tsx',
+      },
+      apiParseTool: 'react-docgen-typescript',
+    }),
+    pluginPreview(),
+  ],
+});
+```
+
+### 通过包名引入产物
+
+在 `tsconfig.json` 中用 `paths` 指向当前包，或在 `package.json` 将自身依赖声明为 `"workspace:*"`，让 `plugin-preview` 可以索引到当前项目，文档开发者和用户使用组件方式一致。
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "paths": {
+      // [!code highlight:1]
+      "@your-scope/your-package": ["."] // 指向当前目录
+    }
+  },
+  "include": ["src", "docs", "rspress.config.ts", "rslib.config.ts"]
+}
+```
+
+:::tip
+
+在 [plugin-preview](https://rspress.rs/plugin/plugin-preview) 中，我们更推荐使用包名导入组件的产物，而不是相对路径导入源码。这样可以确保预览环境和用户使用环境一致。
+
+如果你的项目中使用 `exports` 字段，我们更推荐使用 `"workspace:*"` ：
+
+```json title="package.json"
+{
+  "name": "@your-scope/your-package",
+  "version": "0.1.0",
+  "dependencies": {
+    // [!code highlight:1]
+    "@your-scope/your-package": "workspace:*" // 声明自身依赖为 workspace
+  }
+}
+```
+
+这种方式不需要修改 `tsconfig.json`，且能更好地支持多入口导出。
+
+:::
+
+### 示例
+
+在 `docs/` 添加文档示例（可参考模板中的 `docs/Button.mdx`）：
+
+````mdx title="docs/Button.mdx"
+# Button
+
+## 大小
+
+```jsx preview
+import { Button } from '@your-scope/your-package';
+
+export default () => <Button size="medium" label="Click me" />;
+```
+
+## 背景色
+
+```jsx preview
+import { Button } from '@your-scope/your-package';
+
+export default () => <Button backgroundColor="red" label="Red" />;
+```
+
+## API
+
+<API moduleName="Button" />
+````
+
+</Steps>
+
+## 参考
+
+- [Rspress 文档与插件](https://rspress.rs/)
+- [`rsbuild-plugin-workspace-dev`](https://www.npmjs.com/package/rsbuild-plugin-workspace-dev)
+- [`@rspress/plugin-api-docgen`](https://rspress.rs/plugin/api-docgen)
+- [`@rspress/plugin-preview`](https://rspress.rs/plugin/plugin-preview)

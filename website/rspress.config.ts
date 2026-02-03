@@ -11,6 +11,7 @@ import {
 } from '@shikijs/transformers';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
+import pluginFileTree from 'rspress-plugin-file-tree';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 
 const siteUrl = 'https://rslib.rs';
@@ -41,6 +42,7 @@ export default defineConfig({
     pluginTwoslash({
       cache: false,
     }),
+    pluginFileTree(),
     pluginRss({
       siteUrl,
       feed: [
