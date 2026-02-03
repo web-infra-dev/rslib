@@ -24,20 +24,18 @@ import { Steps } from '@rspress/core/theme';
 └── rspress.config.ts
 ```
 
-模板中内置了 [rsbuild-plugin-workspace-dev](https://github.com/rstackjs/rsbuild-plugin-workspace-dev) 插件，可在启动 Rspress 开发服务器的同时自动运行 Rslib 的 watch 命令。
+模板中内置了 [rsbuild-plugin-workspace-dev](https://github.com/rstackjs/rsbuild-plugin-workspace-dev) 插件，可在启动 Rspress 开发服务器的同时启动 Rslib 的 watch 模式。
 
-直接运行 `npm run doc` 启动 Rspress 的开发服务器对 Rslib 组件库进行预览：
+运行 `npm run doc` 启动 Rspress 的开发服务器对 Rslib 组件库进行预览：
 
 ```json title="package.json"
 {
   "scripts": {
     "dev": "rslib build --watch",
-    "doc": "rspress dev" // 执行该命令
+    "doc": "rspress dev" // 执行该命令，会同时执行 dev 脚本
   }
 }
 ```
-
-先准备包含组件的 Rslib 项目，可参考 [解决方案](/guide/solution/)。
 
 ## 已有项目
 
@@ -83,7 +81,7 @@ export default defineConfig({
   builderConfig: {
     plugins: [
       pluginWorkspaceDev({
-        startCurrent: true, // 启动文档时同时跑当前包的 dev/watch，保持产物最新
+        startCurrent: true, // 启动文档时同时跑当前包的 dev，保持产物最新
       }),
     ],
   },
