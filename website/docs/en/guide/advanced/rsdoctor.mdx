@@ -1,0 +1,67 @@
+import { PackageManagerTabs } from '@theme';
+
+# Use Rsdoctor
+
+[Rsdoctor](https://rsdoctor.rs/) is a build analyzer tailored for the Rspack ecosystem.
+
+Rsdoctor aims to be a one-stop, intelligent build analyzer that makes the build process transparent, predictable, and optimizable through visualization and smart analysis, helping teams pinpoint bottlenecks, improve performance, and raise engineering quality.
+
+Use Rsdoctor to debug build outputs or the build process.
+
+## Quick start
+
+In an Rslib project, enable Rsdoctor as follows:
+
+1. Install the Rsdoctor plugin:
+
+<PackageManagerTabs command="add @rsdoctor/rspack-plugin -D" />
+
+2. Set the `RSDOCTOR=true` environment variable before running the CLI command:
+
+```json title="package.json"
+{
+  "scripts": {
+    "build:rsdoctor": "RSDOCTOR=true rslib build"
+  }
+}
+```
+
+Because Windows does not support this syntax, you can use [cross-env](https://npmjs.com/package/cross-env) to set environment variables across different systems:
+
+```json title="package.json"
+{
+  "scripts": {
+    "build:rsdoctor": "cross-env RSDOCTOR=true rslib build"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.0"
+  }
+}
+```
+
+After running these scripts, Rslib automatically registers the Rsdoctor plugin and opens the build analysis page when the build finishes. See the [Rsdoctor documentation](https://rsdoctor.rs/) for all features.
+
+## Options
+
+To configure the [options](https://rsdoctor.rs/config/options/options) exposed by the Rsdoctor plugin, manually register the plugin:
+
+```ts title="rslib.config.ts"
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    // ...lib configuration
+  ],
+  tools: {
+    rspack: {
+      plugins: [
+        process.env.RSDOCTOR === 'true' &&
+          new RsdoctorRspackPlugin({
+            // plugin options
+          }),
+      ],
+    },
+  },
+});
+```
