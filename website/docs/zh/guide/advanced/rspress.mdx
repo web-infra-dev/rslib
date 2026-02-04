@@ -3,7 +3,7 @@ import { Steps } from '@rspress/core/theme';
 
 # 使用 Rspress
 
-[Rspress](https://rspress.rs/) 是基于 Rspack 的静态站点生成器，适合为组件库项目提供预览和搭建 API 文档。借助 [plugin-preview](https://rspress.rs/plugin/plugin-preview) 和 [plugin-api-docgen](https://rspress.rs/plugin/api-docgen)。
+[Rspress](https://rspress.rs/) 是基于 Rspack 的静态站点生成器，适合为组件库项目提供预览和搭建 API 文档。借助 [plugin-preview](https://rspress.rs/zh/plugin/official-plugins/preview) 和 [plugin-api-docgen](https://rspress.rs/zh/plugin/official-plugins/api-docgen)。
 
 ## 新项目
 
@@ -65,7 +65,7 @@ import { Steps } from '@rspress/core/theme';
 
 ### 创建 `rspress.config.ts`
 
-增加 Rspress 组件库预览相关的 plugin，比如 [plugin-preview](https://rspress.rs/plugin/plugin-preview) 和 [plugin-api-docgen](https://rspress.rs/plugin/api-docgen)。
+增加 Rspress 组件库预览相关的 plugin，比如 [plugin-preview](https://rspress.rs/zh/plugin/official-plugins/preview) 和 [plugin-api-docgen](https://rspress.rs/zh/plugin/official-plugins/api-docgen)。
 
 ```ts title="rspress.config.ts"
 import * as path from 'node:path';
@@ -115,7 +115,7 @@ export default defineConfig({
 
 :::tip
 
-在 [plugin-preview](https://rspress.rs/plugin/plugin-preview) 中，我们更推荐使用包名导入组件的产物，而不是相对路径导入源码。这样可以确保预览环境和用户使用环境一致。
+在 [plugin-preview](https://rspress.rs/zh/plugin/official-plugins/preview) 中，我们更推荐使用包名导入组件的产物，而不是相对路径导入源码。这样可以确保预览环境和用户使用环境一致。
 
 如果你的项目中使用 `exports` 字段，我们更推荐使用 `"workspace:*"` ：
 
@@ -168,5 +168,5 @@ export default () => <Button backgroundColor="red" label="Red" />;
 
 - [Rspress 文档与插件](https://rspress.rs/)
 - [`rsbuild-plugin-workspace-dev`](https://www.npmjs.com/package/rsbuild-plugin-workspace-dev)
-- [`@rspress/plugin-api-docgen`](https://rspress.rs/plugin/api-docgen)
-- [`@rspress/plugin-preview`](https://rspress.rs/plugin/plugin-preview)
+- [`@rspress/plugin-api-docgen`](https://rspress.rs/zh/plugin/official-plugins/api-docgen)
+- [`@rspress/plugin-preview`](https://rspress.rs/zh/plugin/official-plugins/preview)
