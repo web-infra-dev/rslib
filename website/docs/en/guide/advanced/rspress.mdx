@@ -3,7 +3,7 @@ import { Steps } from '@rspress/core/theme';
 
 # Use Rspress
 
-[Rspress](https://rspress.rs/) is a Rspack-based static site generator, ideal for building demos and API docs for component libraries. With [plugin-preview](https://rspress.rs/plugin/plugin-preview) and [plugin-api-docgen](https://rspress.rs/plugin/api-docgen), you can reuse Rslib sources and typings to preview components and view APIs in one site.
+[Rspress](https://rspress.rs/) is a Rspack-based static site generator, ideal for building demos and API docs for component libraries. With [plugin-preview](https://rspress.rs/plugin/official-plugins/preview) and [plugin-api-docgen](https://rspress.rs/plugin/official-plugins/api-docgen), you can reuse Rslib sources and typings to preview components and view APIs in one site.
 
 ## New project
 
@@ -65,7 +65,7 @@ If you are using Rslib to build a component library, follow these steps to add R
 
 ### Create `rspress.config.ts`
 
-Add preview-related plugins like [plugin-preview](https://rspress.rs/plugin/plugin-preview) and [plugin-api-docgen](https://rspress.rs/plugin/api-docgen).
+Add preview-related plugins like [plugin-preview](https://rspress.rs/plugin/official-plugins/preview) and [plugin-api-docgen](https://rspress.rs/plugin/official-plugins/api-docgen).
 
 ```ts title="rspress.config.ts"
 import * as path from 'node:path';
@@ -115,7 +115,7 @@ Set `paths` in `tsconfig.json` to point to your package, or declare your package
 
 :::tip
 
-In [plugin-preview](https://rspress.rs/plugin/plugin-preview), we recommend importing component outputs by package name rather than relative paths. This keeps the preview environment consistent with how users consume the library.
+In [plugin-preview](https://rspress.rs/plugin/official-plugins/preview), we recommend importing component outputs by package name rather than relative paths. This keeps the preview environment consistent with how users consume the library.
 
 If your project uses the `exports` field, we recommend `"workspace:*"` instead:
 
@@ -168,5 +168,5 @@ export default () => <Button backgroundColor="red" label="Red" />;
 
 - [Rspress docs & plugins](https://rspress.rs/)
 - [`rsbuild-plugin-workspace-dev`](https://www.npmjs.com/package/rsbuild-plugin-workspace-dev)
-- [`@rspress/plugin-api-docgen`](https://rspress.rs/plugin/api-docgen)
-- [`@rspress/plugin-preview`](https://rspress.rs/plugin/plugin-preview)
+- [`@rspress/plugin-api-docgen`](https://rspress.rs/plugin/official-plugins/api-docgen)
+- [`@rspress/plugin-preview`](https://rspress.rs/plugin/official-plugins/preview)
