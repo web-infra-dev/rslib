@@ -12,7 +12,7 @@ export class LibSvgrPatchPlugin implements Rspack.RspackPluginInstance {
       compilation.hooks.processAssets.tap(this.name, (assets) => {
         const isEsm = Boolean(compilation.options.output.module);
         const chunkAsset = Object.keys(assets).filter((name) =>
-          /js$/.test(name),
+          name.endsWith('js'),
         );
         for (const name of chunkAsset) {
           compilation.updateAsset(name, (old) => {

@@ -20,10 +20,10 @@ const IMPORT_META_URL_SHIM = `const __rslib_import_meta_url__ = /*#__PURE__*/ (f
 `;
 
 class EntryChunkPlugin {
-  private shimsInjectedAssets: Set<string> = new Set();
+  private readonly shimsInjectedAssets: Set<string> = new Set();
 
-  private enabledImportMetaUrlShim: boolean;
-  private contextToWatch: string | null = null;
+  private readonly enabledImportMetaUrlShim: boolean;
+  private readonly contextToWatch: string | null = null;
 
   constructor({
     enabledImportMetaUrlShim = true,
