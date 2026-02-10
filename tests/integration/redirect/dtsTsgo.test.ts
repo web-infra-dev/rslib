@@ -40,7 +40,7 @@ describe.skipIf(process.version.startsWith('v18'))(
         import type { Baz } from './';
         import type { LoggerOptions } from './types';
         import { defaultOptions } from './types.js';
-        import sources = require('./logger');
+        type sources = typeof import('./logger');
         export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
         export * from './foo';
         export * from './logger';
@@ -104,7 +104,7 @@ describe.skipIf(process.version.startsWith('v18'))(
         import type { Baz } from 'self-entry';
         import type { LoggerOptions } from './types';
         import { defaultOptions } from './types.js';
-        import sources = require('@src/logger');
+        type sources = typeof import('@src/logger');
         export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
         export * from '@src/foo';
         export * from '@src/logger';
@@ -168,7 +168,7 @@ describe.skipIf(process.version.startsWith('v18'))(
         import type { Baz } from './index.js';
         import type { LoggerOptions } from './types.js';
         import { defaultOptions } from './types.js';
-        import sources = require('./logger.js');
+        type sources = typeof import('./logger.js');
         export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
         export * from './foo/index.js';
         export * from './logger.js';
@@ -232,7 +232,7 @@ describe.skipIf(process.version.startsWith('v18'))(
         import type { Baz } from 'self-entry';
         import type { LoggerOptions } from './types.js';
         import { defaultOptions } from './types.js';
-        import sources = require('@src/logger');
+        type sources = typeof import('@src/logger');
         export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
         export * from '@src/foo';
         export * from '@src/logger';
@@ -296,7 +296,7 @@ describe.skipIf(process.version.startsWith('v18'))(
         import type { Baz } from './index.mjs';
         import type { LoggerOptions } from './types.mjs';
         import { defaultOptions } from './types.mjs';
-        import sources = require('./logger.mjs');
+        type sources = typeof import('./logger.mjs');
         export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
         export * from './foo/index.mjs';
         export * from './logger.mjs';
@@ -357,7 +357,7 @@ describe.skipIf(process.version.startsWith('v18'))(
         import type { Baz } from './index.js';
         import type { LoggerOptions } from './types.js';
         import { defaultOptions } from './types.js';
-        import sources = require('./logger.js');
+        type sources = typeof import('./logger.js');
         export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
         export * from './foo/index.js';
         export * from './logger.js';
