@@ -1135,13 +1135,13 @@ export const resolveEntryPath = (
   traverseEntryQuery(entries, (item) => path.resolve(root, item));
 
 const composeEntryConfig = async (
-  rawEntry: RsbuildConfigEntry,
+  rawEntry: RsbuildConfigEntry | undefined,
   bundle: LibConfig['bundle'],
   root: string,
   cssModulesAuto: CssLoaderOptionsAuto,
   userOutBase?: string,
 ): Promise<{ entryConfig: EnvironmentConfig; outBase: string | null }> => {
-  let entries: RsbuildConfigEntry = rawEntry;
+  let entries = rawEntry;
 
   if (!entries) {
     // In bundle mode, return directly to let Rsbuild apply default entry to './src/index.ts'
@@ -1728,7 +1728,7 @@ async function composeLibRsbuildConfig(
   );
 
   const { entryConfig, outBase } = await composeEntryConfig(
-    config.source?.entry!,
+    config.source?.entry,
     config.bundle,
     root,
     cssModulesAuto,
