@@ -188,21 +188,5 @@ create({
         addAgentsMdSearchDirs(toolFolder);
       },
     },
-    {
-      value: 'vitest',
-      label: 'Vitest - testing',
-      action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
-        const vitestTemplate = mapTestingToolTemplate(templateName);
-        const toolFolder = path.join(__dirname, '..', 'template-vitest');
-        const subFolder = path.join(toolFolder, vitestTemplate);
-
-        copyFolder({
-          from: subFolder,
-          to: distFolder,
-          isMergePackageJson: true,
-        });
-        addAgentsMdSearchDirs(toolFolder);
-      },
-    },
   ],
 });

@@ -77,26 +77,6 @@ export const createAndValidate = (
     expect(existsSync(path.join(dir, 'tsconfig.json'))).toBeTruthy();
   }
 
-  // tool - Vitest
-  if (templateCase.tools.includes('vitest')) {
-    // Determine the correct test file extension
-    const testFileExt =
-      templateCase.template === 'react'
-        ? `${templateCase.lang}x`
-        : templateCase.lang;
-
-    for (const file of [
-      `vitest.config.${templateCase.lang}`,
-      `tests/index.test.${testFileExt}`,
-    ]) {
-      expect(existsSync(path.join(dir, file))).toBeTruthy();
-    }
-    expect(pkgJson.devDependencies.vitest).toBeTruthy();
-    if (templateCase.template === 'react') {
-      expect(pkgJson.devDependencies['@testing-library/react']).toBeTruthy();
-    }
-  }
-
   // tool - Storybook
   if (templateCase.tools.includes('storybook')) {
     for (const file of [

@@ -20,8 +20,6 @@ const CASES_NODE_DUAL: TemplateCase[] = [
   createCase('node-dual', 'ts'),
   createCase('node-dual', 'js', ['rstest']),
   createCase('node-dual', 'ts', ['rstest']),
-  createCase('node-dual', 'js', ['vitest']),
-  createCase('node-dual', 'ts', ['vitest']),
 ];
 
 const CASES_NODE_ESM: TemplateCase[] = [
@@ -29,8 +27,6 @@ const CASES_NODE_ESM: TemplateCase[] = [
   createCase('node-esm', 'ts'),
   createCase('node-esm', 'js', ['rstest']),
   createCase('node-esm', 'ts', ['rstest']),
-  createCase('node-esm', 'js', ['vitest']),
-  createCase('node-esm', 'ts', ['vitest']),
 ];
 
 const CASES_REACT: TemplateCase[] = [
@@ -38,20 +34,14 @@ const CASES_REACT: TemplateCase[] = [
   createCase('react', 'ts'),
   createCase('react', 'js', ['rstest', 'storybook']),
   createCase('react', 'ts', ['rstest', 'storybook']),
-  createCase('react', 'js', ['storybook', 'vitest']),
-  createCase('react', 'ts', ['storybook', 'vitest']),
   createCase('react', 'js', ['storybook']),
   createCase('react', 'js', ['rstest']),
-  createCase('react', 'js', ['vitest']),
   createCase('react', 'ts', ['storybook']),
   createCase('react', 'ts', ['rstest']),
-  createCase('react', 'ts', ['vitest']),
   createCase('react', 'ts', ['rspress']),
   createCase('react', 'ts', ['rspress', 'storybook']),
-  createCase('react', 'ts', ['rspress', 'vitest']),
   createCase('react', 'ts', ['rspress', 'rstest']),
   createCase('react', 'ts', ['rspress', 'rstest', 'storybook']),
-  createCase('react', 'ts', ['rspress', 'storybook', 'vitest']),
 ];
 
 const CASES_VUE: TemplateCase[] = [
@@ -59,14 +49,10 @@ const CASES_VUE: TemplateCase[] = [
   createCase('vue', 'ts'),
   createCase('vue', 'js', ['rstest', 'storybook']),
   createCase('vue', 'ts', ['rstest', 'storybook']),
-  createCase('vue', 'js', ['storybook', 'vitest']),
-  createCase('vue', 'ts', ['storybook', 'vitest']),
   createCase('vue', 'js', ['storybook']),
   createCase('vue', 'ts', ['storybook']),
   createCase('vue', 'js', ['rstest']),
   createCase('vue', 'ts', ['rstest']),
-  createCase('vue', 'js', ['vitest']),
-  createCase('vue', 'ts', ['vitest']),
 ];
 
 const BASE_NODE_ESM_JS = createCase('node-esm', 'js');
