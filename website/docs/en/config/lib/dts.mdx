@@ -166,7 +166,8 @@ When the project references are configured but the referenced project has not be
 
 ::: note
 
-When this option is enabled, you must explicitly set `declarationDir` or `outDir` in `tsconfig.json` in order to meet the build requirements.
+- This option can only be used when [dts.bundle](/config/lib/dts#dtsbundle) is `false`.
+- When this option is enabled, `declarationDir` or `outDir` needs to be explicitly set in `tsconfig.json` to meet build requirements.
 
 :::
 

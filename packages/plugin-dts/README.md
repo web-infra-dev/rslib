@@ -106,7 +106,7 @@ Whether to generate declaration files with building the project references. This
 
 When the project references are configured but the referenced project has not been built separately (for example, the source code of other projects is directly referenced in monorepo, but the corresponding declaration file is missing in the project), this option needs to be enabled to ensure that the declaration files of referenced projects can be generated correctly, thereby ensuring the integrity of the type system.
 
-When this option is enabled, you must explicitly set `declarationDir` or `outDir` in `tsconfig.json` in order to meet the build requirements.
+This option can only be used when [bundle](#bundle) is `false`. And when this option is enabled, `declarationDir` or `outDir` needs to be explicitly set in `tsconfig.json` to meet build requirements.
 
 ### abortOnError
 
