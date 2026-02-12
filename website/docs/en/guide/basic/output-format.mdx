@@ -17,17 +17,13 @@ Library authors need to carefully consider which module formats to support. Let'
 
 - **CommonJS**: <CJS />
 
-### What is the dilemma of ESM / CJS
+::: tip
 
-> The following references are from [Node Modules at War: Why CommonJS and ES Modules Can't Get Along](https://redfin.engineering/node-modules-at-war-why-commonjs-and-es-modules-cant-get-along-9617135eeca1).
+Read the [Node.js Package Configuration Guide](https://nodejs.github.io/package-examples/) to learn more about ESM and CJS, including file structure, `package.json` configuration, module interoperability, and best practices.
 
-1. You can't `require()` ESM scripts; you can only import ESM scripts, like this: `import {foo} from 'foo'`
-2. CJS scripts can't use static `import` statements like the one above.
-3. ESM scripts can `import` CJS scripts, but only by using the **default import** syntax `import _ from 'lodash'`, not the **named import** syntax `import {shuffle} from 'lodash'`, which is a hassle if the CJS script uses named exports. (Except, sometimes, unpredictibly, Node can figure out what you meant!)
-4. ESM scripts can `require()` CJS scripts, even with named exports, but it's typically not worth the trouble, because it requires even more boilerplate, and, worst of all, bundlers like Webpack and Rollup don't/won't know how to work with ESM scripts that use `require()`.
-5. CJS is the default; you have to opt-in to ESM mode. You can opt-in to ESM mode by renaming your script from `.js` to `.mjs`. Alternately, you can set `"type": "module"` in `package.json`, and then you can opt-out of ESM by renaming scripts from `.js` to `.cjs`. (You can even tweak just an individual subdirectory by putting a one-line `{"type": "module"}` `package.json` file in there.)
+:::
 
-### When to support which format?
+### Choose module formats
 
 For different shapes of libraries, the choice of module format may vary. Here are two common scenarios:
 
