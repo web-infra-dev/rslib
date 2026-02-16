@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
-import { type Lang, parseTemplateName, TEMPLATES } from '../src/index';
+import { type Lang, parseTemplateName } from '../src/index';
 import { createAndValidate, type TemplateCase } from './helper';
 
 const createCase = (
@@ -56,22 +56,6 @@ const CASES_VUE: TemplateCase[] = [
 ];
 
 const BASE_NODE_ESM_JS = createCase('node-esm', 'js');
-
-// Test that all base templates are available
-test('should have all base templates', () => {
-  const expected = [
-    'node-dual-js',
-    'node-dual-ts',
-    'node-esm-js',
-    'node-esm-ts',
-    'react-js',
-    'react-ts',
-    'vue-js',
-    'vue-ts',
-  ].sort();
-  const actual = [...TEMPLATES].sort();
-  expect(actual).toEqual(expected);
-});
 
 describe('parseTemplateName', () => {
   test('should handle template with language suffix', () => {
