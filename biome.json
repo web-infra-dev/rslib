@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "assist": {
+    "includes": ["!**/*.scss"],
     "actions": {
       "source": {
         "organizeImports": "on"
@@ -83,7 +84,16 @@
       },
       "correctness": {
         "useHookAtTopLevel": "off",
-        "useUniqueElementIds": "off"
+        "useUniqueElementIds": "off",
+        "noUnknownPseudoClass": {
+          "level": "error",
+          "options": {
+            "ignore": ["global"]
+          }
+        }
+      },
+      "complexity": {
+        "noImportantStyles": "off"
       }
     }
   }
