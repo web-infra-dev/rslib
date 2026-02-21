@@ -1,0 +1,452 @@
+import { Tabs, Tab, PackageManagerTabs } from '@theme';
+
+# CSS
+
+Rslib 对 CSS 提供开箱即用的支持，包括 CSS Modules、CSS 预处理器、PostCSS、CSS 内联、Lightning CSS 和 CSS 压缩。
+
+Rslib 也提供了多个配置项，允许自定义 CSS 文件的处理规则。
+
+## 引用 CSS
+
+在 JavaScript 文件中，可以直接通过 `import` 引用 CSS 文件。
+
+```js title="src/index.js"
+import './index.css';
+```
+
+需要注意的是，Rslib 的 [output.target](/config/rsbuild/output#outputtarget) 默认值为 `'node'`，如果你需要处理 CSS 样式，需要将其设置为 `'web'`。
+
+```ts title="rslib.config.ts"
+export default {
+  output: {
+    target: 'web',
+  },
+};
+```
+
+在 [format](/config/lib/format) 为 `'cjs'` 或 `'esm'` 时，Rslib 会根据 [bundle](/config/lib/bundle) 配置对 CSS 应用不同的处理方式。
+
+### Bundle 模式
+
+在 `bundle` 模式下（默认行为），Rslib 会将 CSS 进行打包，输出的 JavaScript 文件中不会保留引用 CSS 的 `import` 语句。
+
+这是社区库开发的常见做法，对服务端渲染（SSR）更加友好，避免在 Node.js 环境中加载 CSS 文件可能导致的解析错误。同时，使用者可以通过配置 `babel-plugin-import` 等插件来实现样式的按需加载。
+
+如果你希望保留引用 CSS 的 `import` 语句，可以使用以下几种方式：
+
+1. **使用 banner**：配置 [banner.js](/config/lib/banner#bannerjs) 在输出的 JavaScript 文件头部添加 `import './index.css';`。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      banner: {
+        js: "import './index.css';",
+      },
+    },
+  ],
+};
+```
+
+2. **内联样式**：开启 [output.injectStyles](/config/rsbuild/output#outputinjectstyles) 将 CSS 直接注入到 JavaScript 运行时中。
+
+3. **使用 bundleless 模式**：将 [bundle](/config/lib/bundle) 设置为 `false`，保留源码的文件结构和引用关系。
+
+### Bundleless 模式
+
+在 `bundleless` 模式下（[bundle](/config/lib/bundle) 设置为 `false`），Rslib 会保留源码的文件结构和引用关系。这意味着输出的 JavaScript 文件中会保留引用 CSS 的 `import` 语句。这种方式对构建工具更加友好，便于实现 Tree Shaking 和样式按需加载。
+
+下面是一个使用示例，假设源码如下：
+
+<Tabs>
+  <Tab label="src/index.ts">
+
+```tsx
+import './index.css';
+```
+
+  </Tab>
+  <Tab label="src/index.css">
+
+```css
+.title {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+
+会根据配置文件中的 [产物结构](/guide/basic/output-structure) 配置，输出如下产物：
+
+<Tabs>
+<Tab label="bundle">
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```tsx
+// CSS import is removed
+```
+
+  </Tab>
+  <Tab label="dist/index.css">
+
+```css
+.title {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+</Tab>
+
+<Tab label="bundleless">
+
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```tsx
+import './index.css';
+```
+
+  </Tab>
+  <Tab label="dist/index.css">
+
+```css
+.title {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+</Tab>
+</Tabs>
+
+## CSS Modules
+
+Rslib 默认支持使用 CSS Modules，无需添加额外的配置。我们约定使用 `[name].module.css` 文件名来启用 CSS Modules。
+
+以下样式文件会被视为 CSS Modules：
+
+- `*.module.css`
+- `*.module.less`
+- `*.module.sass`
+- `*.module.scss`
+- `*.module.styl`
+- `*.module.stylus`
+
+阅读 [CSS Modules](https://rsbuild.rs/zh/guide/styling/css-modules) 章节来了解 CSS Modules 的完整用法。
+
+假设源码如下：
+
+<Tabs>
+  <Tab label="src/index.ts">
+
+```tsx
+import styles from './index.module.css';
+
+console.log(styles.title);
+```
+
+  </Tab>
+  <Tab label="src/index.module.css">
+
+```css
+.title {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+
+会输出如下产物：
+
+<Tabs>
+<Tab label="bundle">
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```js
+const index_module = {
+  title: 'title-aQjbKQ',
+};
+console.log(index_module.title);
+```
+
+  </Tab>
+  <Tab label="dist/index.css">
+
+```css
+.title-aQjbKQ {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+</Tab>
+
+<Tab label="bundleless">
+
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```js
+import index_module from './index.module.mjs';
+console.log(index_module.title);
+```
+
+  </Tab>
+  <Tab label="dist/index.module.mjs">
+
+```js
+import './index_module.css';
+const index_module = {
+  title: 'title-aQjbKQ',
+};
+export { index_module as default };
+```
+
+  </Tab>
+    <Tab label="dist/index_module.css">
+
+```css
+.title-aQjbKQ {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+</Tab>
+</Tabs>
+
+## CSS 预处理器
+
+Rslib 通过插件来支持社区流行的 CSS 预处理器，包括 Sass、Less 和 Stylus，使用方式请参考：
+
+- [Sass 插件](https://rsbuild.rs/zh/plugins/list/plugin-sass)
+- [Less 插件](https://rsbuild.rs/zh/plugins/list/plugin-less)
+- [Stylus 插件](https://rsbuild.rs/zh/plugins/list/plugin-stylus)
+
+以 Sass 插件为例，你可以通过如下的命令安装插件:
+
+<PackageManagerTabs command="add @rsbuild/plugin-sass -D" />
+
+然后在 `rslib.config.ts` 文件中注册插件：
+
+```ts title="rslib.config.ts"
+import { pluginSass } from '@rsbuild/plugin-sass';
+
+export default {
+  plugins: [pluginSass()],
+};
+```
+
+注册插件后，你可以在代码中引入 `*.scss`，`*.sass`，`*.module.scss` 或 `*.module.sass` 文件，无须添加其他配置。
+
+## PostCSS
+
+Rslib 支持通过 [PostCSS](https://postcss.org/) 来转换 CSS 代码。你可以通过以下方式来配置 PostCSS：
+
+### 配置文件
+
+Rslib 使用 [postcss-load-config](https://github.com/postcss/postcss-load-config) 来加载当前项目根目录下的 PostCSS 配置文件，比如 `postcss.config.cjs`：
+
+```js title="postcss.config.cjs"
+module.exports = {
+  'postcss-px-to-viewport': {
+    viewportWidth: 375,
+  },
+};
+```
+
+`postcss-load-config` 支持多种文件格式，包括但不限于以下文件名：
+
+- postcss.config.js
+- postcss.config.mjs
+- postcss.config.cjs
+- postcss.config.ts
+- ...
+
+### tools.postcss
+
+你也可以通过 [tools.postcss](/config/rsbuild/tools#toolspostcss) 选项来配置 postcss-loader，该选项支持通过函数来修改内置配置，比如：
+
+```ts title="rslib.config.ts"
+export default {
+  tools: {
+    postcss: (opts) => {
+      const viewportPlugin = require('postcss-px-to-viewport')({
+        viewportWidth: 375,
+      });
+      opts.postcssOptions.plugins.push(viewportPlugin);
+    },
+  },
+};
+```
+
+### 配置优先级
+
+- 当你同时配置 `postcss.config.js` 文件和 `tools.postcss` 选项时，两者都会生效，并且 `tools.postcss` 的优先级更高。
+- 如果项目中没有 `postcss.config.js` 文件，也没有配置 `tools.postcss` 选项，Rslib 将不会注册 `postcss-loader`。
+
+## Tailwind CSS
+
+### Tailwind CSS v4
+
+Rslib 内置支持 PostCSS，你可以通过 PostCSS 插件来在 Rslib 中接入 [Tailwind CSS v4](https://tailwindcss.com/)。以下是接入 Tailwind CSS v4 的步骤：
+
+1. 安装 `tailwindcss` 和 `@tailwindcss/postcss` 包：
+
+<PackageManagerTabs command="add tailwindcss @tailwindcss/postcss -D" />
+
+2. 通过 [postcss.config.mjs](https://npmjs.com/package/postcss-loader#config) 或 [tools.postcss](/config/rsbuild/tools#toolspostcss) 来注册 Tailwind CSS 的 PostCSS 插件。
+
+```js title="postcss.config.mjs"
+export default {
+  plugins: {
+    '@tailwindcss/postcss': {},
+  },
+};
+```
+
+3. 在 CSS 入口文件中添加 `@import` 指令，引入 Tailwind CSS。
+
+```css title="src/index.css"
+@import 'tailwindcss';
+```
+
+:::tip
+Tailwind CSS v4 不能与 Sass、Less 或 Stylus 等 CSS 预处理器一起使用，你需要将 `@tailwind` 指令放在 `.css` 文件的开头，详见 [Tailwind CSS - Compatibility](https://tailwindcss.com/docs/compatibility#sass-less-and-stylus)。
+:::
+
+4. 在任意组件或 HTML 中使用 Tailwind 的 utility classes，比如：
+
+```html
+<h1 class="text-3xl font-bold underline">Hello world!</h1>
+```
+
+更多用法请参考 [Tailwind CSS 文档](https://tailwindcss.com/)。
+
+### Tailwind CSS v3
+
+参考 [使用 Tailwind CSS v3](https://rsbuild.rs/zh/guide/styling/tailwindcss-v3)。
+
+## 内联 CSS
+
+默认情况下（[bundle](/config/lib/bundle) 为 `true` 时），Rslib 会把 CSS 提取为独立的 `.css` 文件，并输出到构建产物目录。
+
+如果你希望将样式内联到 JS 文件中，可以将 [output.injectStyles](/config/rsbuild/output#outputinjectstyles) 设置为 `true` 来禁用 CSS 提取逻辑。当浏览器请求到 JS 文件后，JS 将动态地向 HTML 插入 `<style>` 标签，以此加载 CSS 样式。
+
+```ts title="rslib.config.ts"
+export default {
+  output: {
+    injectStyles: true,
+  },
+};
+```
+
+这将会增大你的 JS Bundle 体积，因此通常情况下，不太建议禁用 CSS 提取逻辑。
+
+## 从 node_modules 引用
+
+Rslib 支持引用 node_modules 里的 CSS 文件。
+
+- 在 JS 文件中引用：
+
+```ts title="src/index.js"
+/* 引用 normalize.css */
+/* https://github.com/necolas/normalize.css */
+import 'normalize.css';
+```
+
+- 在 CSS 文件中引用：
+
+```css title="src/index.css"
+@import 'normalize.css';
+
+body {
+  /* */
+}
+```
+
+- 在 Sass 和 Less 文件中，也允许添加 `~` 前缀来解析 node_modules 里的样式文件，但这是一个**废弃的特性**，建议从代码中移除 `~` 前缀。
+
+```scss title="src/index.scss"
+@import '~normalize.css';
+```
+
+## 查询参数
+
+::: info
+
+查询参数仅在 [bundle](/config/lib/bundle) 设置为 `true` 时生效。
+
+:::
+
+### inline
+
+Rslib 支持通过 `?inline` 查询参数引用 CSS 文件编译后的内容，并将其作为字符串导入到 JavaScript 中。
+
+```js
+import inlineCss from './style.css?inline';
+
+console.log(inlineCss); // 编译后的 CSS 内容
+```
+
+使用 `import "*.css?inline"` 的行为如下：
+
+- 获取 CSS 文件编译后的文本内容，经过 Lightning CSS、PostCSS 和 CSS 预处理器的处理
+- 内容会作为字符串内联到最终的 JavaScript 包中
+- 不会生成单独的 CSS 文件
+
+:::tip
+
+Sass、Less 和 Stylus 插件也支持 `?inline` 查询参数。
+
+:::
+
+### raw
+
+Rslib 支持通过 `?raw` 查询参数引用 CSS 文件的原始内容，并将其作为字符串导入到 JavaScript 中。
+
+```ts title="src/index.js"
+import rawCss from './style.css?raw';
+
+console.log(rawCss); // 输出 CSS 文件的原始内容
+```
+
+使用 `import "*.css?raw"` 的行为如下：
+
+- 获取 CSS 文件的原始文本内容，不经过任何预处理或编译
+- 内容会作为字符串内联到最终的 JavaScript 包中
+- 不会生成单独的 CSS 文件
+
+:::tip
+
+- Sass、Less 和 Stylus 插件也支持 `?raw` 查询参数。
+
+:::
+
+## Lightning CSS
+
+:::tip
+
+[Lightning CSS](https://lightningcss.dev) 是一个基于 Rust 编写的高性能 CSS 解析、转译和压缩工具。它支持将许多现代的 CSS 特性解析并转化为指定浏览器支持的语法，并提供更好的压缩比例。
+
+:::
+
+Rslib 使用 Rspack 内置的 [lightningcss-loader](https://rspack.rs/zh/guide/features/builtin-lightningcss-loader) 来转换 CSS 代码，它会自动读取项目中的 [syntax](/config/lib/syntax) 配置，并将 CSS 代码转换为目标浏览器支持的语法。
+
+更多信息可以查看 [Lightning CSS](https://rsbuild.rs/zh/guide/styling/css-usage#lightning-css)。
+
+## CSS 压缩
+
+Rslib 默认会开启 Rspack 内置的 [LightningCssMinimizerRspackPlugin](https://rspack.rs/zh/plugins/rspack/lightning-css-minimizer-rspack-plugin) 插件，将 CSS 资源压缩。
+
+- 你可以通过 [output.minify](/config/rsbuild/output#outputminify) 选项来禁用 CSS 压缩，或是自定义 `LightningCssMinimizerRspackPlugin` 的选项。
+- 你可以通过 [@rsbuild/plugin-css-minimizer](https://github.com/rstackjs/rsbuild-plugin-css-minimizer) 来自定义 CSS 压缩工具，切换到 [cssnano](https://github.com/cssnano/cssnano) 或是其他 CSS 压缩器。

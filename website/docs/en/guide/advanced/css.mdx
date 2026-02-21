@@ -1,0 +1,454 @@
+import { Tabs, Tab, PackageManagerTabs } from '@theme';
+
+# CSS
+
+Rslib provides out-of-the-box support for CSS, including CSS Modules, CSS preprocessors, PostCSS, CSS inlining, Lightning CSS, and CSS compression.
+
+Rslib also provides several configurations to customize CSS file processing.
+
+## Import CSS
+
+You can import CSS files directly in JavaScript files.
+
+```js title="src/index.js"
+import './index.css';
+```
+
+You should note that the default value of Rslib's [output.target](/config/rsbuild/output#outputtarget) is `'node'`. If you need to handle CSS styles, you need to set it to `'web'`.
+
+```ts title="rslib.config.ts"
+export default {
+  output: {
+    target: 'web',
+  },
+};
+```
+
+When [format](/config/lib/format) is `'cjs'` or `'esm'`, Rslib will apply different processing methods to CSS based on the [bundle](/config/lib/bundle) configuration.
+
+### Bundle mode
+
+In `bundle` mode (default behavior), Rslib will bundle the CSS into a separate file and will not preserve the `import` statement referencing the CSS in the output JavaScript file.
+
+This is a common practice for community library development, which is friendlier to Server-Side Rendering (SSR) and avoids parsing errors caused by loading CSS files in the Node.js environment. At the same time, users can import styles on-demand by configuring plugins such as `babel-plugin-import`.
+
+If you want to preserve the `import` statement referencing the CSS, you can use the following methods:
+
+1. **Use banner**: Configure [banner.js](/config/lib/banner#bannerjs) to add `import './index.css';` to the top of the output JavaScript file.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      banner: {
+        js: "import './index.css';",
+      },
+    },
+  ],
+};
+```
+
+2. **Inline styles**: Enable [output.injectStyles](/config/rsbuild/output#outputinjectstyles) to inject CSS directly into the JavaScript runtime.
+
+3. **Use bundleless mode**: Set [bundle](/config/lib/bundle) to `false` to preserve the source code file structure and reference relationships.
+
+### Bundleless mode
+
+In `bundleless` mode ([bundle](/config/lib/bundle) set to `false`), Rslib will preserve the source code file structure and reference relationships. This means that the `import` statement referencing the CSS will be preserved in the output JavaScript file. This method is friendlier to build tools and facilitates Tree Shaking and on-demand importing of styles.
+
+Here is an example usage, assuming the source code is as follows:
+
+<Tabs>
+  <Tab label="src/index.ts">
+
+```tsx
+import './index.css';
+```
+
+  </Tab>
+  <Tab label="src/index.css">
+
+```css
+.title {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+
+Based on the [output structure](/guide/basic/output-structure) configuration in the config file, the output will be as follows:
+
+<Tabs>
+<Tab label="bundle">
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```tsx
+// CSS import is removed
+```
+
+  </Tab>
+  <Tab label="dist/index.css">
+
+```css
+.title {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+</Tab>
+
+<Tab label="bundleless">
+
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```tsx
+import './index.css';
+```
+
+  </Tab>
+  <Tab label="dist/index.css">
+
+```css
+.title {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+</Tab>
+</Tabs>
+
+## CSS Modules
+
+Rslib supports CSS Modules by default without additional configuration. Our convention is to use the `[name].module.css` filename to enable CSS Modules.
+
+The following style files are considered CSS Modules:
+
+- `*.module.css`
+- `*.module.less`
+- `*.module.sass`
+- `*.module.scss`
+- `*.module.styl`
+- `*.module.stylus`
+
+Read the [CSS Modules](https://rsbuild.rs/guide/styling/css-modules) chapter to understand the complete usage of CSS Modules.
+
+Assuming the source code is as follows:
+
+<Tabs>
+  <Tab label="src/index.ts">
+
+```tsx
+import styles from './index.module.css';
+
+console.log(styles.title);
+```
+
+  </Tab>
+  <Tab label="src/index.module.css">
+
+```css
+.title {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+
+The output will be as follows:
+
+<Tabs>
+<Tab label="bundle">
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```js
+const index_module = {
+  title: 'title-aQjbKQ',
+};
+console.log(index_module.title);
+```
+
+  </Tab>
+  <Tab label="dist/index.css">
+
+```css
+.title-aQjbKQ {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+</Tab>
+
+<Tab label="bundleless">
+
+<Tabs>
+  <Tab label="dist/index.mjs">
+
+```js
+import index_module from './index.module.mjs';
+console.log(index_module.title);
+```
+
+  </Tab>
+  <Tab label="dist/index.module.mjs">
+
+```js
+import './index_module.css';
+const index_module = {
+  title: 'title-aQjbKQ',
+};
+export { index_module as default };
+```
+
+  </Tab>
+    <Tab label="dist/index_module.css">
+
+```css
+.title-aQjbKQ {
+  color: red;
+}
+```
+
+  </Tab>
+</Tabs>
+</Tab>
+</Tabs>
+
+## CSS preprocessors
+
+Rslib supports popular CSS preprocessors through plugins, including Sass, Less, and Stylus. See how to use them:
+
+- [Sass Plugin](https://rsbuild.rs/plugins/list/plugin-sass)
+- [Less Plugin](https://rsbuild.rs/plugins/list/plugin-less)
+- [Stylus Plugin](https://rsbuild.rs/plugins/list/plugin-stylus)
+
+Taking the Sass plugin as an example, you can install the plugin via the following command:
+
+<PackageManagerTabs command="add @rsbuild/plugin-sass -D" />
+
+Then register the plugin in the `rslib.config.ts` file:
+
+```ts title="rslib.config.ts"
+import { pluginSass } from '@rsbuild/plugin-sass';
+
+export default {
+  plugins: [pluginSass()],
+};
+```
+
+After registering the plugin, you can import `*.scss`, `*.sass`, `*.module.scss`, or `*.module.sass` files in your code without adding other configurations.
+
+## PostCSS
+
+Rslib supports transforming CSS code through [PostCSS](https://postcss.org/). You can configure PostCSS in the following ways:
+
+### Configuration file
+
+Rslib uses [postcss-load-config](https://github.com/postcss/postcss-load-config) to load the PostCSS configuration file in the root directory of the current project, such as postcss.config.cjs:
+
+```js title="postcss.config.cjs"
+module.exports = {
+  'postcss-px-to-viewport': {
+    viewportWidth: 375,
+  },
+};
+```
+
+`postcss-load-config` supports multiple file formats, including but not limited to the following file names:
+
+- postcss.config.js
+- postcss.config.mjs
+- postcss.config.cjs
+- postcss.config.ts
+- ...
+
+### tools.postcss
+
+You can also configure the postcss-loader through [tools.postcss](/config/rsbuild/tools#toolspostcss) option, which supports modifying the built-in configuration through a function, for example:
+
+```ts title="rslib.config.ts"
+export default {
+  tools: {
+    postcss: (opts) => {
+      const viewportPlugin = require('postcss-px-to-viewport')({
+        viewportWidth: 375,
+      });
+      opts.postcssOptions.plugins.push(viewportPlugin);
+    },
+  },
+};
+```
+
+### Configuration priority
+
+- When you configure both the `postcss.config.js` file and the `tools.postcss` option, both will take effect, and the `tools.postcss` option will take precedence.
+- If there is no `postcss.config.js` file in the project and the `tools.postcss` option is not configured, Rslib will not register `postcss-loader`.
+
+## Tailwind CSS
+
+### Tailwind CSS v4
+
+Rslib has built-in support for PostCSS, and you can integrate [Tailwind CSS v4](https://tailwindcss.com/) in Rslib via PostCSS plugins. Here are the steps to integrate Tailwind CSS v4:
+
+1. Install `tailwindcss` and `@tailwindcss/postcss` packages:
+
+<PackageManagerTabs command="add tailwindcss @tailwindcss/postcss -D" />
+
+2. Register the Tailwind CSS PostCSS plugin via [postcss.config.mjs](https://npmjs.com/package/postcss-loader#config) or [tools.postcss](/config/rsbuild/tools#toolspostcss).
+
+```js title="postcss.config.mjs"
+export default {
+  plugins: {
+    '@tailwindcss/postcss': {},
+  },
+};
+```
+
+3. Add an `@import` to your CSS entry file that imports Tailwind CSS.
+
+```css title="src/index.css"
+@import 'tailwindcss';
+```
+
+:::tip
+
+Tailwind CSS v4 cannot be used with CSS preprocessors like Sass, Less, or Stylus. You need to place the `@tailwind` directive at the beginning of the `.css` file. See [Tailwind CSS - Compatibility](https://tailwindcss.com/docs/compatibility#sass-less-and-stylus).
+
+:::
+
+4. Use Tailwind's utility classes in any component or HTML, for example:
+
+```html
+<h1 class="text-3xl font-bold underline">Hello world!</h1>
+```
+
+For more usage, please refer to the [Tailwind CSS Documentation](https://tailwindcss.com/).
+
+### Tailwind CSS v3
+
+Refer to [Use Tailwind CSS v3](https://rsbuild.rs/guide/styling/tailwindcss-v3).
+
+## Inline CSS files
+
+By default (when [bundle](/config/lib/bundle) is `true`), Rslib will extract CSS into a separate `.css` file and output it to the dist directory.
+
+To inline styles into your JS file, set [output.injectStyles](/config/rsbuild/output#outputinjectstyles) to `true` to disable CSS extraction logic. When the JS file is requested by the browser, JS dynamically inserts the `<style>` tag into the Html to load the CSS styles.
+
+```ts title="rslib.config.ts"
+export default {
+  output: {
+    injectStyles: true,
+  },
+};
+```
+
+This will increase the size of your JS Bundle, so it is usually not recommended to disable the CSS extraction.
+
+## Import from node_modules
+
+Rslib supports importing CSS files from `node_modules`.
+
+- Import in a JS file:
+
+```ts title="src/index.js"
+/* Import normalize.css */
+/* https://github.com/necolas/normalize.css */
+import 'normalize.css';
+```
+
+- Import in a CSS file:
+
+```css title="src/index.css"
+@import 'normalize.css';
+
+body {
+  /* */
+}
+```
+
+- In Sass and Less files, it is also allowed to add the `~` prefix to resolve style files in `node_modules`. However, this is a **deprecated feature** and it is recommended to remove the `~` prefix from the code.
+
+```scss title="src/index.scss"
+@import '~normalize.css';
+```
+
+## Query parameters
+
+::: info
+
+Query parameters only take effect when [bundle](/config/lib/bundle) is set to `true`.
+
+:::
+
+### inline
+
+Rslib supports importing compiled CSS files as strings in JavaScript by using the `?inline` query parameter.
+
+```js
+import inlineCss from './style.css?inline';
+
+console.log(inlineCss); // Compiled CSS content
+```
+
+Using `import "*.css?inline"` has the following behaviors:
+
+- Get the compiled text content of the CSS file, processed by Lightning CSS, PostCSS and CSS preprocessors
+- The content will be inlined into the final JavaScript bundle
+- No separate CSS file will be generated
+
+:::tip
+
+Sass, Less, and Stylus plugins also support the `?inline` query parameter.
+
+:::
+
+### raw
+
+Rslib supports importing raw CSS files as strings in JavaScript by using the `?raw` query parameter.
+
+```ts title="src/index.js"
+import rawCss from './style.css?raw';
+
+console.log(rawCss); // Output the raw content of the CSS file
+```
+
+Using import `"*.css?raw"` has the following behaviors:
+
+- Get the raw text content of the CSS file, without any preprocessing or compilation
+- The content of the CSS file will be inlined into the final JavaScript bundle
+- No separate CSS file will be generated
+
+:::tip
+
+- Sass, Less, and Stylus plugins also support the `?raw` query parameter.
+
+:::
+
+## Lightning CSS
+
+:::tip
+
+[Lightning CSS](https://lightningcss.dev) is a high-performance CSS parser, transformer and minifier written in Rust. It supports parsing and transforming many modern CSS features into syntax supported by target browsers, and delivers better compression ratios.
+
+:::
+
+Rslib uses Rspack's built-in [lightningcss-loader](https://rspack.rs/guide/features/builtin-lightningcss-loader) to transform CSS code. It automatically reads the [syntax](/config/lib/syntax) configuration in the project and converts CSS code to syntax supported by target browsers.
+
+For more information, see [Lightning CSS](https://rsbuild.rs/guide/styling/css-usage#lightning-css).
+
+## CSS minification
+
+Rslib enables Rspack's built-in [LightningCssMinimizerRspackPlugin](https://rspack.rs/plugins/rspack/lightning-css-minimizer-rspack-plugin) by default to minify CSS assets.
+
+- You can disable CSS minification using the [output.minify](/config/rsbuild/output#outputminify) option or customize the options of `LightningCssMinimizerRspackPlugin`.
+- You can use [@rsbuild/plugin-css-minimizer](https://github.com/rstackjs/rsbuild-plugin-css-minimizer) to customize the CSS minimizer, switching to [cssnano](https://github.com/cssnano/cssnano) or another CSS minimizer.
