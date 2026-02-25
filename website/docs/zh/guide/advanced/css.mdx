@@ -213,7 +213,7 @@ export { index_module as default };
 ```
 
   </Tab>
-    <Tab label="dist/index_module.css">
+  <Tab label="dist/index_module.css">
 
 ```css
 .title-aQjbKQ {
@@ -260,8 +260,10 @@ Rslib 使用 [postcss-load-config](https://github.com/postcss/postcss-load-confi
 
 ```js title="postcss.config.cjs"
 module.exports = {
-  'postcss-px-to-viewport': {
-    viewportWidth: 375,
+  plugins: {
+    'postcss-px-to-viewport': {
+      viewportWidth: 375,
+    },
   },
 };
 ```
@@ -323,7 +325,9 @@ export default {
 ```
 
 :::tip
-Tailwind CSS v4 不能与 Sass、Less 或 Stylus 等 CSS 预处理器一起使用，你需要将 `@tailwind` 指令放在 `.css` 文件的开头，详见 [Tailwind CSS - Compatibility](https://tailwindcss.com/docs/compatibility#sass-less-and-stylus)。
+
+Tailwind CSS v4 不能与 Sass、Less 或 Stylus 等 CSS 预处理器一起使用，你需要将 `@import 'tailwindcss';` 语句放在 `.css` 文件的开头，详见 [Tailwind CSS - Compatibility](https://tailwindcss.com/docs/compatibility#sass-less-and-stylus)。
+
 :::
 
 4. 在任意组件或 HTML 中使用 Tailwind 的 utility classes，比如：
@@ -430,7 +434,7 @@ console.log(rawCss); // 输出 CSS 文件的原始内容
 
 :::tip
 
-- Sass、Less 和 Stylus 插件也支持 `?raw` 查询参数。
+Sass、Less 和 Stylus 插件也支持 `?raw` 查询参数。
 
 :::
 

@@ -213,7 +213,7 @@ export { index_module as default };
 ```
 
   </Tab>
-    <Tab label="dist/index_module.css">
+  <Tab label="dist/index_module.css">
 
 ```css
 .title-aQjbKQ {
@@ -260,8 +260,10 @@ Rslib uses [postcss-load-config](https://github.com/postcss/postcss-load-config)
 
 ```js title="postcss.config.cjs"
 module.exports = {
-  'postcss-px-to-viewport': {
-    viewportWidth: 375,
+  plugins: {
+    'postcss-px-to-viewport': {
+      viewportWidth: 375,
+    },
   },
 };
 ```
@@ -324,7 +326,7 @@ export default {
 
 :::tip
 
-Tailwind CSS v4 cannot be used with CSS preprocessors like Sass, Less, or Stylus. You need to place the `@tailwind` directive at the beginning of the `.css` file. See [Tailwind CSS - Compatibility](https://tailwindcss.com/docs/compatibility#sass-less-and-stylus).
+Tailwind CSS v4 cannot be used with CSS preprocessors like Sass, Less, or Stylus. When using Tailwind v4, make sure the `@import 'tailwindcss';` statement appears at the beginning of a plain `.css` file so that it can be processed correctly. See [Tailwind CSS - Compatibility](https://tailwindcss.com/docs/compatibility#sass-less-and-stylus).
 
 :::
 
@@ -344,7 +346,7 @@ Refer to [Use Tailwind CSS v3](https://rsbuild.rs/guide/styling/tailwindcss-v3).
 
 By default (when [bundle](/config/lib/bundle) is `true`), Rslib will extract CSS into a separate `.css` file and output it to the dist directory.
 
-To inline styles into your JS file, set [output.injectStyles](/config/rsbuild/output#outputinjectstyles) to `true` to disable CSS extraction logic. When the JS file is requested by the browser, JS dynamically inserts the `<style>` tag into the Html to load the CSS styles.
+To inline styles into your JS file, set [output.injectStyles](/config/rsbuild/output#outputinjectstyles) to `true` to disable CSS extraction logic. When the JS file is requested by the browser, JS dynamically inserts the `<style>` tag into the HTML to load the CSS styles.
 
 ```ts title="rslib.config.ts"
 export default {
@@ -432,7 +434,7 @@ Using import `"*.css?raw"` has the following behaviors:
 
 :::tip
 
-- Sass, Less, and Stylus plugins also support the `?raw` query parameter.
+Sass, Less, and Stylus plugins also support the `?raw` query parameter.
 
 :::
 
