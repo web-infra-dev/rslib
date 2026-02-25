@@ -83,8 +83,9 @@ export default {
 <Tabs>
   <Tab label="src/index.ts">
 
-```tsx
+```ts
 import './index.css';
+export const component = () => {};
 ```
 
   </Tab>
@@ -106,8 +107,9 @@ import './index.css';
 <Tabs>
   <Tab label="dist/index.mjs">
 
-```tsx
-// CSS import is removed
+```js
+const component = () => {};
+export { component };
 ```
 
   </Tab>
@@ -128,8 +130,10 @@ import './index.css';
 <Tabs>
   <Tab label="dist/index.mjs">
 
-```tsx
+```js
 import './index.css';
+const component = () => {};
+export { component };
 ```
 
   </Tab>

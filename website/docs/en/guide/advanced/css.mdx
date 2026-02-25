@@ -83,8 +83,9 @@ Here is an example usage, assuming the source code is as follows:
 <Tabs>
   <Tab label="src/index.ts">
 
-```tsx
+```ts
 import './index.css';
+export const component = () => {};
 ```
 
   </Tab>
@@ -106,8 +107,9 @@ Based on the [output structure](/guide/basic/output-structure) configuration in 
 <Tabs>
   <Tab label="dist/index.mjs">
 
-```tsx
-// CSS import is removed
+```js
+const component = () => {};
+export { component };
 ```
 
   </Tab>
@@ -128,8 +130,10 @@ Based on the [output structure](/guide/basic/output-structure) configuration in 
 <Tabs>
   <Tab label="dist/index.mjs">
 
-```tsx
+```js
 import './index.css';
+const component = () => {};
+export { component };
 ```
 
   </Tab>
