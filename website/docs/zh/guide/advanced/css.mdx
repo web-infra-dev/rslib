@@ -30,7 +30,7 @@ export default {
 
 在 `bundle` 模式下（默认行为），Rslib 会将 CSS 进行打包，输出的 JavaScript 文件中不会保留引用 CSS 的 `import` 语句。
 
-这是社区库开发的常见做法，对服务端渲染（SSR）更加友好，避免在 Node.js 环境中加载 CSS 文件可能导致的解析错误。同时，使用者可以通过配置 `babel-plugin-import` 等插件来实现样式的按需加载。
+这是社区库开发的常见做法，对服务端渲染（SSR）更加友好，避免在 Node.js 环境中加载 CSS 文件可能导致的解析错误。同时，对于使用该库的上游应用，可以通过相关插件或配置（如 Rsbuild 的 [source.transformImport](https://rsbuild.rs/zh/config/source/transform-import)）来实现样式的按需加载。
 
 如果你希望保留引用 CSS 的 `import` 语句，可以使用以下几种方式：
 

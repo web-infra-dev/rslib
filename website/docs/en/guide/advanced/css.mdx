@@ -30,7 +30,7 @@ When [format](/config/lib/format) is `'cjs'` or `'esm'`, Rslib will apply differ
 
 In `bundle` mode (default behavior), Rslib will bundle the CSS into a separate file and will not preserve the `import` statement referencing the CSS in the output JavaScript file.
 
-This is a common practice for community library development, which is friendlier to Server-Side Rendering (SSR) and avoids parsing errors caused by loading CSS files in the Node.js environment. At the same time, users can import styles on-demand by configuring plugins such as `babel-plugin-import`.
+This is a common practice for community library development, which is friendlier to Server-Side Rendering (SSR) and avoids parsing errors caused by loading CSS files in the Node.js environment. Furthermore, for upstream applications using the library, on-demand style importing can be achieved through relevant plugins or configurations, such as Rsbuild's [source.transformImport](https://rsbuild.rs/config/source/transform-import).
 
 If you want to preserve the `import` statement referencing the CSS, you can use the following methods:
 
