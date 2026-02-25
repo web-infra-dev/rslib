@@ -48,7 +48,27 @@ export default {
 };
 ```
 
-更复杂的场景可以直接使用 Rspack 的 [BannerPlugin](/config/lib/banner#自定义-Banner-内容) 来实现。
+对于更复杂的场景，例如存在代码拆分产生多个 chunk 文件时，可以使用 Rspack 的 [BannerPlugin](https://rspack.rs/zh/plugins/webpack/banner-plugin) 来精确控制哪些模块需要添加 banner，避免在所有 chunk 中都添加。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      tools: {
+        rspack: {
+          plugins: [
+            new rspack.BannerPlugin({
+              banner: "import './index.css';",
+              raw: true,
+              test: /^index\.js$/,
+            }),
+          ],
+        },
+      },
+    },
+  ],
+};
+```
 
 2. **内联样式**：开启 [output.injectStyles](/config/rsbuild/output#outputinjectstyles) 将 CSS 直接注入到 JavaScript 运行时中。
 

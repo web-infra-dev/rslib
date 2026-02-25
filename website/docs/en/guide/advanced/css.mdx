@@ -48,7 +48,27 @@ export default {
 };
 ```
 
-For more complex scenarios, you can directly use Rspack's [BannerPlugin](/config/lib/banner#customize-banner-content) to achieve this.
+For more complex scenarios, such as when code splitting generates multiple chunk files, you can use Rspack's [BannerPlugin](https://rspack.rs/plugins/webpack/banner-plugin) to precisely control which modules need to add a banner, avoiding adding it to all chunks.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      tools: {
+        rspack: {
+          plugins: [
+            new rspack.BannerPlugin({
+              banner: "import './index.css';",
+              raw: true,
+              test: /^index\.js$/,
+            }),
+          ],
+        },
+      },
+    },
+  ],
+};
+```
 
 2. **Inline styles**: Enable [output.injectStyles](/config/rsbuild/output#outputinjectstyles) to inject CSS directly into the JavaScript runtime.
 
