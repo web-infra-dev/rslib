@@ -48,6 +48,8 @@ export default {
 };
 ```
 
+更复杂的场景可以直接使用 Rspack 的 [BannerPlugin](/config/lib/banner#自定义-Banner-内容) 来实现。
+
 2. **内联样式**：开启 [output.injectStyles](/config/rsbuild/output#outputinjectstyles) 将 CSS 直接注入到 JavaScript 运行时中。
 
 3. **使用 bundleless 模式**：将 [bundle](/config/lib/bundle) 设置为 `false`，保留源码的文件结构和引用关系。

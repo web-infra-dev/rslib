@@ -48,6 +48,8 @@ export default {
 };
 ```
 
+For more complex scenarios, you can directly use Rspack's [BannerPlugin](/config/lib/banner#customize-banner-content) to achieve this.
+
 2. **Inline styles**: Enable [output.injectStyles](/config/rsbuild/output#outputinjectstyles) to inject CSS directly into the JavaScript runtime.
 
 3. **Use bundleless mode**: Set [bundle](/config/lib/bundle) to `false` to preserve the source code file structure and reference relationships.
