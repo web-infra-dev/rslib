@@ -446,7 +446,14 @@ Rslib 使用 Rspack 内置的 [lightningcss-loader](https://rspack.rs/zh/guide/f
 
 ## CSS 压缩
 
-Rslib 默认会开启 Rspack 内置的 [LightningCssMinimizerRspackPlugin](https://rspack.rs/zh/plugins/rspack/lightning-css-minimizer-rspack-plugin) 插件，将 CSS 资源压缩。
+Rslib 默认关闭了 CSS 压缩（即 `output.minify.css` 默认为 `false`）。
 
-- 你可以通过 [output.minify](/config/rsbuild/output#outputminify) 选项来禁用 CSS 压缩，或是自定义 `LightningCssMinimizerRspackPlugin` 的选项。
-- 你可以通过 [@rsbuild/plugin-css-minimizer](https://github.com/rstackjs/rsbuild-plugin-css-minimizer) 来自定义 CSS 压缩工具，切换到 [cssnano](https://github.com/cssnano/cssnano) 或是其他 CSS 压缩器。
+如果你需要开启 CSS 压缩，可以通过 [output.minify](/config/rsbuild/output#outputminify) 选项将 `output.minify.css` 设置为 `true`。此时，Rslib 会使用 Rspack 内置的 [LightningCssMinimizerRspackPlugin](https://rspack.rs/zh/plugins/rspack/lightning-css-minimizer-rspack-plugin) 插件来压缩 CSS 资源。
+
+::: note
+
+需要注意的是，你配置的 `output.minify` 选项会完全覆盖 Rslib 的默认配置，详见 [output.minify](/config/rsbuild/output#outputminify) 的文档说明。
+
+:::
+
+此外，你也可以通过 [@rsbuild/plugin-css-minimizer](https://github.com/rstackjs/rsbuild-plugin-css-minimizer) 来自定义 CSS 压缩工具，切换到 [cssnano](https://github.com/cssnano/cssnano) 或是其他 CSS 压缩器。
