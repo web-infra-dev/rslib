@@ -1,4 +1,4 @@
-# 引用 SVGR
+# SVGR
 
 默认情况下，Rslib 会将 SVG 图片当作静态资源处理。
 
@@ -30,7 +30,7 @@ export default {
 
 ### Bundle 模式
 
-在 bundle 模式下，Rslib 支持 [@rsbuild/plugin-svgr](https://rsbuild.rs/zh/plugins/list/plugin-svgr) 下的所有用法，唯一的区别是当以 URL 形式使用 SVG 文件时，Rslib 会按照 [引用静态资源](/guide/advanced/static-assets) 在产物中对应保留静态资源的 `import` 语句。
+在 bundle 模式下，Rslib 支持 [@rsbuild/plugin-svgr](https://rsbuild.rs/zh/plugins/list/plugin-svgr) 下的所有用法，唯一的区别是当以 URL 形式使用 SVG 文件时，Rslib 会按照 [静态资源](/guide/advanced/static-assets) 在产物中对应保留静态资源的 `import` 语句。
 
 下面是一个使用示例：
 
