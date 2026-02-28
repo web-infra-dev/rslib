@@ -2,7 +2,7 @@
   "name": "rslib-monorepo",
   "private": true,
   "scripts": {
-    "build": "pnpm --filter \"!@examples/*\" --filter \"!rslib-website\" run build",
+    "build": "pnpm --filter \"./packages/*\" run build",
     "build:examples": "pnpm --filter \"@examples/*\" run build",
     "change": "changeset",
     "changeset": "changeset",
