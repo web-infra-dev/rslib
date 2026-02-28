@@ -32,7 +32,7 @@ What this will do:
 
 - Install all dependencies.
 - Create symlinks between packages in the monorepo
-- Run the prepare script to build all packages, powered by [nx](https://nx.dev/).
+- Run the prepare script to build all packages.
 
 ## Making changes and building
 
@@ -48,10 +48,10 @@ git checkout -b MY_BRANCH_NAME
 
 ### Build the package
 
-Use [nx build](https://nx.dev/nx-api/nx/documents/run) to build the package you want to change:
+Use pnpm to build a specific package:
 
 ```sh
-npx nx build @rslib/core
+pnpm --filter @rslib/core run build
 ```
 
 Build all packages:
@@ -63,7 +63,7 @@ pnpm run build
 You can also use the watch mode to automatically rebuild the package when you make changes:
 
 ```sh
-npx nx build @rslib/core --watch
+pnpm --filter @rslib/core run build --watch
 ```
 
 ## Testing

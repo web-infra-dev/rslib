@@ -13,7 +13,7 @@
 - `packages/plugin-dts` (`rsbuild-plugin-dts`): provides the `dts` configuration hook (e.g., `{ dts: { bundle: true } }`).
 - `packages/create-rslib` (`create-rslib`): scaffolds new projects via `pnpm dlx create-rslib` or `npx create-rslib`.
 - Tests live in `packages/*/tests` (unit) and `tests/` (`integration`, `e2e`, `benchmark`); examples in `examples/`.
-- Key configuration files: `nx.json`, `biome.json`, `.prettierrc.json`, `rslint.jsonc`, `pnpm-workspace.yaml`.
+- Key configuration files: `biome.json`, `.prettierrc.json`, `rslint.jsonc`, `pnpm-workspace.yaml`.
 
 ## Build, test, and development commands
 
@@ -50,4 +50,3 @@
 ## Security & configuration tips
 
 - Do not commit build artifacts (`dist/`, `compiled/`).
-- Nx caching is enabled; scripts use `NX_DAEMON=false` for reproducible CI.
