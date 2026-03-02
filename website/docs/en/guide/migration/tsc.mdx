@@ -1,0 +1,170 @@
+# tsc
+
+This section introduces how to migrate a project using `tsc` (TypeScript Compiler) to Rslib.
+
+## Installing dependencies
+
+First, you need to add Rslib's core dependency.
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs command="add @rslib/core -D" />
+
+## Updating npm scripts
+
+Next, you need to update the npm scripts in your `package.json` to use Rslib's CLI commands instead of `tsc`.
+
+```diff title="package.json"
+{
+  "scripts": {
+-   "build": "tsc",
+-   "dev": "tsc --watch"
++   "build": "rslib build",
++   "dev": "rslib build --watch"
+  }
+}
+```
+
+## Create configuration file
+
+Create an Rslib configuration file `rslib.config.ts` in the same directory as `package.json`.
+
+To match the behavior of `tsc`, set `bundle: false` to enable bundleless mode. You can also configure `format` according to the required output format:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+    },
+  ],
+});
+```
+
+## Configuration migration
+
+Here is a mapping of common `tsc` compiler options (usually in `tsconfig.json`) to Rslib configurations:
+
+| tsc (`compilerOptions`)                                                   | Rslib                                                         |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| [declaration](https://www.typescriptlang.org/tsconfig/#declaration)       | [lib.dts](/config/lib/dts)                                    |
+| [declarationDir](https://www.typescriptlang.org/tsconfig/#declarationDir) | [lib.dts.distPath](/config/lib/dts#dtsdistpath)               |
+| [outDir](https://www.typescriptlang.org/tsconfig/#outDir)                 | [output.distPath.root](/config/rsbuild/output#outputdistpath) |
+| [module](https://www.typescriptlang.org/tsconfig/#module)                 | [lib.format](/config/lib/format)                              |
+| [target](https://www.typescriptlang.org/tsconfig/#target)                 | [lib.syntax](/config/lib/syntax)                              |
+
+You do not need to migrate the `compilerOptions.paths` configuration. Rslib automatically recognizes the path aliases in `tsconfig.json`.
+
+## CLI option migration
+
+- `-p`: For projects using a custom tsconfig file (e.g., `tsc -p tsconfig.build.json`), you can configure it via [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath).
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+    },
+  ],
+  source: {
+    tsconfigPath: 'tsconfig.build.json',
+  },
+});
+```
+
+- `-b`: If the original project uses TypeScript's Project References (i.e. `tsc -b`), it can be supported in Rslib by configuring `dts: { build: true }`. It should be noted that `build: true` only takes effect on the generation of type declaration files (`.d.ts`) and will not affect the compilation of JS outputs.
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+      dts: {
+        build: true,
+      },
+    },
+  ],
+});
+```
+
+## Handling JSX
+
+For projects containing JSX, you can choose different configurations depending on whether you need to transform JSX syntax.
+
+If you need to transform JSX (e.g., using `"jsx": "react-jsx"` in `tsconfig.json`), you can use the `@rsbuild/plugin-react` to support React compilation and set `output.target` to `'web'`.
+
+First, install the plugin:
+
+<PackageManagerTabs command="add @rsbuild/plugin-react -D" />
+
+Then, register the plugin in `rslib.config.ts` and configure `output.target`:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+    },
+  ],
+  output: {
+    target: 'web',
+  },
+  plugins: [pluginReact()],
+});
+```
+
+If you need to preserve JSX (e.g., using `"jsx": "preserve"` in `tsconfig.json`), you can use the `@rsbuild/plugin-react` plugin and set `runtime: 'preserve'`. In addition, you need to configure `output.filename.js` to set the output file extension to `.jsx` to avoid JSX syntax errors.
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+      output: {
+        filename: {
+          js: '[name].jsx',
+        },
+      },
+    },
+  ],
+  output: {
+    target: 'web',
+  },
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'preserve',
+      },
+    }),
+  ],
+});
+```
+
+## Validating results
+
+After completing the above steps, you have finished the basic migration from tsc to Rslib. You can now run the `npm run build` command to build the artifacts and verify that the directory structure and extensions of the artifacts are consistent with those before the migration.
+
+If you encounter issues during the build process, please debug according to the error logs. You can also enable [debug mode](/guide/basic/configure-rslib#debug-mode) to view the final configurations generated by Rslib, or check the `tsconfig.json` configuration to see if any required configurations have not been migrated to Rslib.
+
+## Contents supplement
+
+The current document only covers part of the migration process. If you find suitable content to add, feel free to contribute to the documentation via a pull request 🤝.
+
+> The documentation for Rslib can be found in the [rslib/website](https://github.com/web-infra-dev/rslib/tree/main/website) directory.

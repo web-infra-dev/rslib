@@ -1,0 +1,170 @@
+# tsc
+
+本章节介绍如何将使用 `tsc` (TypeScript Compiler) 的项目迁移到 Rslib。
+
+## 安装依赖
+
+首先，你需要添加 Rslib 的核心依赖。
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs command="add @rslib/core -D" />
+
+## 更新 npm 脚本
+
+接下来，你需要更新 `package.json` 中的 npm 脚本，以使用 Rslib 的 CLI 命令替代 `tsc`。
+
+```diff title="package.json"
+{
+  "scripts": {
+-   "build": "tsc",
+-   "dev": "tsc --watch"
++   "build": "rslib build",
++   "dev": "rslib build --watch"
+  }
+}
+```
+
+## 创建配置文件
+
+在 `package.json` 所在的同一目录中创建一个 Rslib 配置文件 `rslib.config.ts`。
+
+为了匹配 `tsc` 的行为，设置 `bundle: false` 以启用 [bundleless 模式](/guide/basic/output-structure#bundle--bundleless)。同时，你可以根据需要的产物输出格式配置 `format`：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+    },
+  ],
+});
+```
+
+## 配置迁移
+
+以下是常见的 `tsc` 编译选项（通常在 `tsconfig.json` 中）对应的 Rslib 配置：
+
+| tsc (`compilerOptions`)                                                   | Rslib                                                         |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| [declaration](https://www.typescriptlang.org/tsconfig/#declaration)       | [lib.dts](/config/lib/dts)                                    |
+| [declarationDir](https://www.typescriptlang.org/tsconfig/#declarationDir) | [lib.dts.distPath](/config/lib/dts#dtsdistpath)               |
+| [outDir](https://www.typescriptlang.org/tsconfig/#outDir)                 | [output.distPath.root](/config/rsbuild/output#outputdistpath) |
+| [module](https://www.typescriptlang.org/tsconfig/#module)                 | [lib.format](/config/lib/format)                              |
+| [target](https://www.typescriptlang.org/tsconfig/#target)                 | [lib.syntax](/config/lib/syntax)                              |
+
+你不需要迁移 `compilerOptions.paths` 配置，Rslib 会自动识别 `tsconfig.json` 中的路径别名。
+
+## CLI 选项迁移
+
+- `-p`：对于使用了自定义的 tsconfig 文件（例如 `tsc -p tsconfig.build.json`）的项目，可以通过 [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath) 进行配置。
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+    },
+  ],
+  source: {
+    tsconfigPath: 'tsconfig.build.json',
+  },
+});
+```
+
+- `-b`：如果原项目使用了 TypeScript 的 Project References（即 `tsc -b`），在 Rslib 中可以通过配置 `dts: { build: true }` 来支持。需要注意的是，`build: true` 仅对类型声明文件（`.d.ts`）的生成生效，不会影响 JS 产物的编译。
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+      dts: {
+        build: true,
+      },
+    },
+  ],
+});
+```
+
+## JSX 处理
+
+对于包含 JSX 的项目，你可以根据是否需要转换 JSX 语法来选择不同的配置。
+
+如果需要转换 JSX（例如在 `tsconfig.json` 中使用了 `"jsx": "react-jsx"`），你可以使用 `@rsbuild/plugin-react` 插件来支持 React 编译，并将 `output.target` 设置为 `'web'`。
+
+首先，安装该插件：
+
+<PackageManagerTabs command="add @rsbuild/plugin-react -D" />
+
+然后，在 `rslib.config.ts` 中注册插件，并配置 `output.target`：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+    },
+  ],
+  output: {
+    target: 'web',
+  },
+  plugins: [pluginReact()],
+});
+```
+
+如果需要保留 JSX（例如在 `tsconfig.json` 中使用了 `"jsx": "preserve"`），你可以使用 `@rsbuild/plugin-react` 插件并设置 `runtime: 'preserve'`。此外，还需要通过配置 `output.filename.js` 将输出文件的后缀设为 `.jsx`，以避免 JSX 语法报错。
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+      output: {
+        filename: {
+          js: '[name].jsx',
+        },
+      },
+    },
+  ],
+  output: {
+    target: 'web',
+  },
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'preserve',
+      },
+    }),
+  ],
+});
+```
+
+## 验证结果
+
+完成以上步骤后，你已经完成了从 tsc 到 Rslib 的基本迁移，此时可以执行 `npm run build` 命令来构建出产物，并验证产物的目录结构与扩展名与迁移前保持一致。
+
+如果在构建过程中发现问题，请根据错误日志进行调试。你也可以开启[调试模式](/guide/basic/configure-rslib#调试模式)查看 Rslib 生成的最终配置，或者对照 `tsconfig.json` 检查是否有一些必须的配置未被迁移。
+
+## 内容补充
+
+当前文档仅包含部分迁移过程。如果你发现合适的内容需要添加，请随时通过 pull request 贡献文档 🤝。
+
+> Rslib 的文档位于 [rslib/website](https://github.com/web-infra-dev/rslib/tree/main/website) 目录中。
