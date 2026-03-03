@@ -5,7 +5,7 @@ export default defineConfig({
   lib: [
     {
       format: 'esm',
-      syntax: ['node 18.12.0'],
+      syntax: ['es2023'],
     },
   ],
   plugins: [pluginPublint()],
