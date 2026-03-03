@@ -48,7 +48,7 @@ Keep commits focused — one logical change per commit.
 
 ## Step 3 — Create a Pull Request
 
-Analyze the changes in this branch and write with following template in `.github/PULL_REQUEST_TEMPLATE.md`. The PR description should include a detailed description that explains:
+Analyze the changes in this branch and write with following template in `.github/PULL_REQUEST_TEMPLATE.md`. The PR should include a detailed description that explains:
 
 - What changes were made
 - Why they were made

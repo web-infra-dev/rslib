@@ -44,7 +44,7 @@
 
 ## Commit & pull request guidelines
 
-See `.agents/skills/create-pr/SKILL.md` for the full branching, commit message, and PR creation workflow.
+See [`.agents/skills/create-pr/SKILL.md`](.agents/skills/create-pr/SKILL.md) for the full branching, commit message, and PR creation workflow.
 
 ## Security & configuration tips
 
