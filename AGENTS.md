@@ -44,8 +44,7 @@
 
 ## Commit & pull request guidelines
 
-- Conventional Commits (e.g., `fix(dts): ...`); keep commits focused; run lint + tests.
-- User-facing changes need a Changeset (`pnpm changeset`); PRs should include description, linked issues, and doc/example updates when needed.
+See `.agents/skills/create-pr/SKILL.md` for the full branching, commit message, and PR creation workflow.
 
 ## Security & configuration tips
 
