@@ -1,6 +1,8 @@
 ---
 name: create-pr
 description: Guides creating a pull request in the Rslib repository, covering branch naming conventions, commit message format, and how to write and open a PR. Use this skill when the user wants to create a PR or needs to know the conventions for branching and committing in Rslib.
+metadata:
+  internal: true
 ---
 
 # Create a Pull Request
@@ -56,3 +58,9 @@ Analyze the changes in this branch and write with following template in `.github
 - Any important implementation details
 
 Open the PR with GitHub CLI, the title must follow Conventional Commits format. For a draft PR, add `--draft`.
+
+Do not prompt the user for confirmation, just run the command:
+
+```bash
+gh pr create --title "<title>" --body "<body>" --base main
+```
