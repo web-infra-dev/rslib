@@ -54,14 +54,6 @@ jobs:
           node-version: ${{ inputs.node-version }}
           cache: 'pnpm'
 
-      # Special handling for Node.js 18: use Node.js 22 for tsgo dependency installation
-      - name: Setup Node.js 22 for dependency installation (Node 18 only)
-        if: ${{ steps.changes.outputs.changed == 'true' && inputs.node-version == '18' }}
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
-        with:
-          node-version: 22
-          cache: 'pnpm'
-
       - name: Install Dependencies
         if: ${{ steps.changes.outputs.changed == 'true' }}
         run: pnpm install
@@ -71,14 +63,6 @@ jobs:
         run: |
           cd ./tests || exit 0
           pnpm playwright install chromium
-
-      # Switch back to Node.js 18 after dependency installation
-      - name: Switch back to Node.js ${{ inputs.node-version }} (Node 18 only)
-        if: ${{ steps.changes.outputs.changed == 'true' && inputs.node-version == '18' }}
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
-        with:
-          node-version: ${{ inputs.node-version }}
-          cache: 'pnpm'
 
       - name: Type Check
         if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'ut' }}

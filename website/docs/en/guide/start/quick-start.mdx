@@ -1,25 +1,21 @@
 # Quick start
 
-## Setup environment
+## Environment preparation
 
-Before getting started, you will need to install [Node.js](https://nodejs.org/) >= 18.12.0, it is recommended to use the Node.js LTS version.
+Rslib supports using [Node.js](https://nodejs.org/), [Deno](https://deno.com/), or [Bun](https://bun.sh/) as the JavaScript runtime.
 
-Check the current Node.js version with the following command:
+Use one of the following installation guides to set up a runtime:
 
-```bash
-node -v
-```
+- [Install Node.js](https://nodejs.org/en/download)
+- [Install Bun](https://bun.com/docs/installation)
+- [Install Deno](https://docs.deno.com/runtime/getting_started/installation/)
 
-If you do not have Node.js installed in current environment, or the installed version is too low, you can use [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm) to install.
+:::tip Version requirements
 
-Here is an example of how to install via nvm:
+- Rslib >= 0.20 requires Node.js version 20.19+, 22.12+.
+- Rslib < 0.20 requires Node.js 18.12.0 or higher.
 
-```bash
-# Install Node.js LTS
-nvm install --lts
-# Switch to Node.js LTS
-nvm use --lts
-```
+:::
 
 ## Creating an Rslib project
 

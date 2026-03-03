@@ -2,19 +2,17 @@ import path from 'node:path';
 import { beforeAll, describe, expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
 
-describe.skipIf(process.version.startsWith('v18'))(
-  'dts redirect with tsgo',
-  () => {
-    let contents: Awaited<ReturnType<typeof buildAndGetResults>>['contents'];
+describe('dts redirect with tsgo', () => {
+  let contents: Awaited<ReturnType<typeof buildAndGetResults>>['contents'];
 
-    beforeAll(async () => {
-      const fixturePath = path.resolve(__dirname, './dts-tsgo');
-      contents = (await buildAndGetResults({ fixturePath, type: 'dts' }))
-        .contents;
-    }, 20000);
+  beforeAll(async () => {
+    const fixturePath = path.resolve(__dirname, './dts-tsgo');
+    contents = (await buildAndGetResults({ fixturePath, type: 'dts' }))
+      .contents;
+  }, 20000);
 
-    test('redirect.dts.path: true with redirect.dts.extension: false - default', async () => {
-      expect(contents.esm0).toMatchInlineSnapshot(`
+  test('redirect.dts.path: true with redirect.dts.extension: false - default', async () => {
+    expect(contents.esm0).toMatchInlineSnapshot(`
         {
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/default/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
         ",
@@ -75,10 +73,10 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
         }
       `);
-    });
+  });
 
-    test('redirect.dts.path: false with redirect.dts.extension: false', async () => {
-      expect(contents.esm1).toMatchInlineSnapshot(`
+  test('redirect.dts.path: false with redirect.dts.extension: false', async () => {
+    expect(contents.esm1).toMatchInlineSnapshot(`
         {
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
         ",
@@ -139,10 +137,10 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
         }
       `);
-    });
+  });
 
-    test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
-      expect(contents.esm2).toMatchInlineSnapshot(`
+  test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
+    expect(contents.esm2).toMatchInlineSnapshot(`
         {
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
         ",
@@ -203,10 +201,10 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
         }
       `);
-    });
+  });
 
-    test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
-      expect(contents.esm3).toMatchInlineSnapshot(`
+  test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
+    expect(contents.esm3).toMatchInlineSnapshot(`
         {
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/path-false-extension-true/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
         ",
@@ -267,10 +265,10 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
         }
       `);
-    });
+  });
 
-    test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
-      expect(contents.esm4).toMatchInlineSnapshot(`
+  test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
+    expect(contents.esm4).toMatchInlineSnapshot(`
         {
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/esm/.hidden-folder/index.d.mts": "export declare const hiddenFolder = "This is a hidden folder";
         ",
@@ -331,7 +329,7 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
         }
       `);
-      expect(contents.cjs).toMatchInlineSnapshot(`
+    expect(contents.cjs).toMatchInlineSnapshot(`
         {
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
         ",
@@ -392,6 +390,5 @@ describe.skipIf(process.version.startsWith('v18'))(
         ",
         }
       `);
-    });
-  },
-);
+  });
+});

@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         runner: [ubuntu-latest, windows-latest]
-        node-version: [22]
+        node-version: [24]
     uses: ./.github/workflows/reusable-test.yml
     with:
       runner: ${{ matrix.runner }}
@@ -27,11 +27,8 @@ jobs:
   integration:
     strategy:
       matrix:
-        runner: [ubuntu-latest]
-        node-version: [18, 22]
-        include:
-          - runner: windows-latest
-            node-version: 22
+        runner: [ubuntu-latest, windows-latest]
+        node-version: [24]
 
     uses: ./.github/workflows/reusable-test.yml
     with:
@@ -43,7 +40,7 @@ jobs:
     strategy:
       matrix:
         runner: [ubuntu-latest, windows-latest]
-        node-version: [22]
+        node-version: [24]
     uses: ./.github/workflows/reusable-test.yml
     with:
       runner: ${{ matrix.runner }}
@@ -53,11 +50,8 @@ jobs:
   e2e:
     strategy:
       matrix:
-        runner: [ubuntu-latest]
-        node-version: [18, 22]
-        include:
-          - runner: windows-latest
-            node-version: 22
+        runner: [ubuntu-latest, windows-latest]
+        node-version: [24]
     uses: ./.github/workflows/reusable-test.yml
     with:
       runner: ${{ matrix.runner }}
