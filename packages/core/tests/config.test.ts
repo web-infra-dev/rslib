@@ -52,7 +52,7 @@ describe('Should load config file correctly', () => {
     });
   });
 
-  test('Load config.ts in cjs project', async () => {
+  test('Load config.mts in cjs project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/cjs');
     const configFilePath = join(fixtureDir, 'rslib.config.mts');
     const { content: config } = await loadConfig({ path: configFilePath });
