@@ -1182,7 +1182,9 @@ const composeEntryConfig = async (
           // Existed file.
         }
       } else {
-        if (isDirLike) {
+        const isGlobLike = entry.startsWith('!') || /[*?[{\]}]/.test(entry);
+
+        if (isDirLike || isGlobLike) {
           // Non-existed dir.
           entryErrorReasons.push(dirError);
         } else {
