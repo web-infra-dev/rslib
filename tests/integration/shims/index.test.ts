@@ -137,7 +137,7 @@ describe('CJS shims', () => {
     );
 
     expect(importMetaUrl).toBe(fileUrl);
-    expect(dynamicUrl).toBe(fileUrl.replace('index.cjs', '1~368.cjs'));
+    expect(dynamicUrl).toBe(fileUrl.replace('index.cjs', '1~290.cjs'));
     expect(requiredModule).toBe('ok');
     expect(importMetaDirname).toBe(path.dirname(entryFiles.cjs));
     expect(importMetaFilename).toBe(entryFiles.cjs);

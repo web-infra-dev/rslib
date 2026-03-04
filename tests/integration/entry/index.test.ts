@@ -47,98 +47,55 @@ test('multiple entry bundle', async () => {
   const fixturePath = join(__dirname, 'multiple');
   const { files, contents } = await buildAndGetResults({ fixturePath });
 
-  if (process.env.ADVANCED_ESM) {
-    expect(files).toMatchInlineSnapshot(`
-      {
-        "cjs": [
-          "<ROOT>/tests/integration/entry/multiple/dist/cjs/foo.cjs",
-          "<ROOT>/tests/integration/entry/multiple/dist/cjs/index.cjs",
-          "<ROOT>/tests/integration/entry/multiple/dist/cjs/shared.cjs",
-        ],
-        "esm": [
-          "<ROOT>/tests/integration/entry/multiple/dist/esm/447.js",
-          "<ROOT>/tests/integration/entry/multiple/dist/esm/994.js",
-          "<ROOT>/tests/integration/entry/multiple/dist/esm/foo.js",
-          "<ROOT>/tests/integration/entry/multiple/dist/esm/index.js",
-          "<ROOT>/tests/integration/entry/multiple/dist/esm/shared.js",
-        ],
-      }
-    `);
-  } else {
-    expect(files).toMatchInlineSnapshot(`
-      {
-        "cjs": [
-          "<ROOT>/tests/integration/entry/multiple/dist/cjs/foo.cjs",
-          "<ROOT>/tests/integration/entry/multiple/dist/cjs/index.cjs",
-          "<ROOT>/tests/integration/entry/multiple/dist/cjs/shared.cjs",
-        ],
-        "esm": [
-          "<ROOT>/tests/integration/entry/multiple/dist/esm/foo.js",
-          "<ROOT>/tests/integration/entry/multiple/dist/esm/index.js",
-          "<ROOT>/tests/integration/entry/multiple/dist/esm/shared.js",
-        ],
-      }
-    `);
-  }
+  expect(files).toMatchInlineSnapshot(`
+    {
+      "cjs": [
+        "<ROOT>/tests/integration/entry/multiple/dist/cjs/foo.cjs",
+        "<ROOT>/tests/integration/entry/multiple/dist/cjs/index.cjs",
+        "<ROOT>/tests/integration/entry/multiple/dist/cjs/shared.cjs",
+      ],
+      "esm": [
+        "<ROOT>/tests/integration/entry/multiple/dist/esm/foo.js",
+        "<ROOT>/tests/integration/entry/multiple/dist/esm/index.js",
+        "<ROOT>/tests/integration/entry/multiple/dist/esm/shared.js",
+      ],
+    }
+  `);
 
   const { content: index } = queryContent(contents.esm, 'index.js', {
     basename: true,
   });
   // cspell:disable
-  if (process.env.ADVANCED_ESM) {
-    expect(index).toMatchInlineSnapshot(`
-      "import { foo } from "./447.js";
-      import { shared } from "./994.js";
-      const src_text = ()=>\`\${foo} \${shared('index')}\`;
-      export { src_text as text };
-      "
-    `);
-  } else {
-    expect(index).toMatchInlineSnapshot(`
-      "const shared = (str)=>'shared-' + str;
-      const foo = shared('foo');
-      const src_text = ()=>\`\${foo} \${shared('index')}\`;
-      export { src_text as text };
-      "
-    `);
-  }
+  expect(index).toMatchInlineSnapshot(`
+    "import { foo } from "./foo.js";
+    import { shared } from "./shared.js";
+    const src_text = ()=>\`\${foo} \${shared('index')}\`;
+    export { src_text as text };
+    "
+  `);
   // cspell:enable
 
   const { content: foo } = queryContent(contents.esm, 'foo.js', {
     basename: true,
   });
   // cspell:disable
-  if (process.env.ADVANCED_ESM) {
-    expect(foo).toMatchInlineSnapshot(`
-      "export { foo } from "./447.js";
-      "
-    `);
-  } else {
-    expect(foo).toMatchInlineSnapshot(`
-      "const shared = (str)=>'shared-' + str;
-      const foo = shared('foo');
-      export { foo };
-      "
-    `);
-  }
+  expect(foo).toMatchInlineSnapshot(`
+    "import { shared } from "./shared.js";
+    const foo = shared('foo');
+    export { foo };
+    "
+  `);
   // cspell:enable
 
   const { content: shared } = queryContent(contents.esm, 'shared.js', {
     basename: true,
   });
 
-  if (process.env.ADVANCED_ESM) {
-    expect(shared).toMatchInlineSnapshot(`
-        "export { shared } from "./994.js";
-        "
-        `);
-  } else {
-    expect(shared).toMatchInlineSnapshot(`
-        "const shared = (str)=>'shared-' + str;
-        export { shared };
-        "
-      `);
-  }
+  expect(shared).toMatchInlineSnapshot(`
+    "const shared = (str)=>'shared-' + str;
+    export { shared };
+    "
+  `);
 });
 
 test('glob entry bundleless', async () => {

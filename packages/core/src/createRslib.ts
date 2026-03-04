@@ -18,7 +18,7 @@ import type {
   OnAfterCreateRsbuildFn,
   RslibInstance,
   StartMFDevServerOptions,
-  StartServerResult,
+  StartDevServerResult,
 } from './types/rslib';
 import {
   ensureAbsolutePath,
@@ -220,7 +220,7 @@ export async function createRslib(
 
   const startMFDevServer = async (
     mfOptions: StartMFDevServerOptions = {},
-  ): Promise<StartServerResult> => {
+  ): Promise<StartDevServerResult> => {
     if (!getNodeEnv()) {
       setNodeEnv('development');
     }

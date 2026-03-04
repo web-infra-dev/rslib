@@ -37,12 +37,12 @@ test('set the size threshold to inline static assets', async () => {
   expect(indexJs2).toMatchInlineSnapshot(`
     "import logo from "./assets/logo.js";
     const src = logo;
-    export { src as default };
+    export default src;
     "
   `);
   expect(logoJs2).toMatchInlineSnapshot(`
     "import logo_namespaceObject from "../static/svg/logo.svg";
-    export { logo_namespaceObject as default };
+    export default logo_namespaceObject;
     "
   `);
   // cjs
@@ -106,7 +106,7 @@ test('set the assets filename with hash', async () => {
   );
   expect(imageJs1).toMatchInlineSnapshot(`
     "import image_namespaceObject from "../static/image/image.c74653c1.png";
-    export { image_namespaceObject as default };
+    export default image_namespaceObject;
     "
   `);
   // cjs
@@ -166,7 +166,7 @@ test('set the assets output path', async () => {
   );
   expect(imageJs1).toMatchInlineSnapshot(`
     "import image_namespaceObject from "../assets/bundleless/image.png";
-    export { image_namespaceObject as default };
+    export default image_namespaceObject;
     "
   `);
   // cjs
@@ -218,16 +218,15 @@ test('set the assets public path', async () => {
   // 2. bundle
   // esm
   const { content: indexJs } = queryContent(contents.esm0!, /index\.js/);
-  if (process.env.ADVANCED_ESM) {
-    const { content: runtimeJs } = queryContent(contents.esm0!, /runtime\.js/);
-    expect(indexJs).toMatchInlineSnapshot(`
+  const { content: runtimeJs } = queryContent(contents.esm0!, /runtime\.js/);
+  expect(indexJs).toMatchInlineSnapshot(`
       "import { __webpack_require__ } from "./rslib-runtime.js";
       const image_namespaceObject = __webpack_require__.p + "static/image/image.png";
       const src = image_namespaceObject;
       export default src;
       "
     `);
-    expect(runtimeJs).toMatchInlineSnapshot(`
+  expect(runtimeJs).toMatchInlineSnapshot(`
       "var __webpack_module_cache__ = {};
       function __webpack_require__(moduleId) {
           var cachedModule = __webpack_module_cache__[moduleId];
@@ -249,27 +248,6 @@ test('set the assets public path', async () => {
       export { __webpack_require__ };
       "
     `);
-  } else {
-    expect(indexJs).toMatchInlineSnapshot(`
-      "var __webpack_module_cache__ = {};
-      function __webpack_require__(moduleId) {
-          var cachedModule = __webpack_module_cache__[moduleId];
-          if (void 0 !== cachedModule) return cachedModule.exports;
-          var module = __webpack_module_cache__[moduleId] = {
-              exports: {}
-          };
-          __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-          return module.exports;
-      }
-      (()=>{
-          __webpack_require__.p = "/public/path/";
-      })();
-      const image_namespaceObject = __webpack_require__.p + "static/image/image.png";
-      const src = image_namespaceObject;
-      export { src as default };
-      "
-    `);
-  }
 
   // 3. bundleless
   // esm
@@ -278,21 +256,9 @@ test('set the assets public path', async () => {
     /assets\/image\.js/,
   );
   expect(imageJs).toMatchInlineSnapshot(`
-    "var __webpack_module_cache__ = {};
-    function __webpack_require__(moduleId) {
-        var cachedModule = __webpack_module_cache__[moduleId];
-        if (void 0 !== cachedModule) return cachedModule.exports;
-        var module = __webpack_module_cache__[moduleId] = {
-            exports: {}
-        };
-        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-        return module.exports;
-    }
-    (()=>{
-        __webpack_require__.p = "/public/path/";
-    })();
+    "import { __webpack_require__ } from "../rslib-runtime.js";
     const image_namespaceObject = __webpack_require__.p + "static/image/image.png";
-    export { image_namespaceObject as default };
+    export default image_namespaceObject;
     "
   `);
 });

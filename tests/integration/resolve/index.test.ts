@@ -19,8 +19,7 @@ test('resolve false', async () => {
   const { entries, isSuccess } = await buildAndGetResults({ fixturePath });
 
   expect(isSuccess).toBeTruthy();
-  if (process.env.ADVANCED_ESM) {
-    expect(entries.esm).toMatchInlineSnapshot(`
+  expect(entries.esm).toMatchInlineSnapshot(`
       "import { __webpack_require__ } from "./rslib-runtime.js";
       __webpack_require__.add({
           "?27ce" () {}
@@ -31,14 +30,6 @@ test('resolve false', async () => {
       console.log('bar: ', "bar");
       "
     `);
-  } else {
-    expect(
-      entries.esm,
-    ).toContain(`var util_ignored_ = __webpack_require__("?27ce");
-var util_ignored_default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
-console.log('foo:', util_ignored_default());
-console.log('bar: ', "bar");`);
-  }
 });
 
 test('resolve node protocol', async () => {
@@ -46,21 +37,12 @@ test('resolve node protocol', async () => {
   const { entries, isSuccess } = await buildAndGetResults({ fixturePath });
 
   expect(isSuccess).toBeTruthy();
-  if (process.env.ADVANCED_ESM) {
-    expect(entries.esm).toMatchInlineSnapshot(`
+  expect(entries.esm).toMatchInlineSnapshot(`
       "import node_path from "node:path";
       const { join: join } = node_path;
       export { join };
       "
     `);
-  } else {
-    expect(entries.esm).toMatchInlineSnapshot(`
-    "import node_path from "node:path";
-    const { join } = node_path;
-    export { join };
-    "
-  `);
-  }
 });
 
 test('resolve with condition exports', async () => {
@@ -100,17 +82,10 @@ test('resolve with main fields', async () => {
   const results = Object.values(contents);
 
   expect(isSuccess).toBeTruthy();
-  if (process.env.ADVANCED_ESM) {
-    expect(Object.values(results[0]!)[0]).toMatchInlineSnapshot(`
+  expect(Object.values(results[0]!)[0]).toMatchInlineSnapshot(`
       "console.log(1);
       "
     `);
-  } else {
-    expect(Object.values(results[0]!)[0]).toMatchInlineSnapshot(`
-      "console.log(1);
-      "
-    `);
-  }
   expect(Object.values(results[1]!)[0]).toContain('main');
   expect(Object.values(results[2]!)[0]).toContain('browser');
 });

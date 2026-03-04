@@ -77,9 +77,6 @@ export function generateBundleEsmConfig(config: LibConfig = {}): LibConfig {
     output: {
       distPath: './dist/esm',
     },
-    experiments: {
-      advancedEsm: process.env.ADVANCED_ESM === '1',
-    },
   };
 
   return mergeConfig(esmBasicConfig, config)!;
@@ -136,7 +133,7 @@ export function generateBundleIifeConfig(config: LibConfig = {}): LibConfig {
 export type FormatType = Format | `${Format}${number}`;
 type FilePath = string;
 
-type BuildResult = {
+export type BuildResult = {
   files: Record<FormatType, FilePath[]>;
   contents: Record<FormatType, Record<FilePath, string>>;
   entries: Record<FormatType, string>;

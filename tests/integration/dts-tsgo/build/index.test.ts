@@ -74,7 +74,7 @@ describe('dts with tsgo when build: true', () => {
 
     expect(contents.esm).toMatchInlineSnapshot(`
       {
-        "<ROOT>/tests/integration/dts-tsgo/build/process-files/dist/esm/index.d.mts": "/*! hello banner dts build*/
+        "<ROOT>/tests/integration/dts-tsgo/build/process-files/dist/esm/index.d.ts": "/*! hello banner dts build*/
       export declare const num1 = 1;
 
       /*! hello banner dts build*/

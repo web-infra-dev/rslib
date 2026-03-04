@@ -17,7 +17,7 @@ test('throw error when using UMD with `bundle: false`', async () => {
   const fixturePath = __dirname;
   const build = buildAndGetResults({
     fixturePath,
-    configPath: './rslibBundleFalse.config.ts',
+    configPath: './rslibBundleFalse.config.mts',
   });
 
   await expect(build).rejects.toThrowErrorMatchingInlineSnapshot(

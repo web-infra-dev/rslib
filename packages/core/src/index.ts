@@ -35,7 +35,7 @@ export type {
   RslibInstance,
   Shims,
   StartMFDevServerOptions,
-  StartServerResult,
+  StartDevServerResult,
   Syntax,
 } from './types';
 

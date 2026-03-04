@@ -143,7 +143,6 @@ alert(version);
 ```js title="IIFE 产物"
 (
   () => {
-    'use strict';
     const external_parent_sdk_namespaceObject = globalThis['parent-sdk'];
     alert(external_parent_sdk_namespaceObject.version);
   },

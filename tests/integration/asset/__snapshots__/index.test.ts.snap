@@ -8,7 +8,7 @@ console.log(draft_namespaceObject);
 
 exports[`use asset/source 2`] = `
 "const draft_namespaceObject = "this is a txt file\\nthis is a txt file\\n";
-export { draft_namespaceObject as default };
+export default draft_namespaceObject;
 "
 `;
 
@@ -20,7 +20,7 @@ console.log(draft_namespaceObject);
 
 exports[`use source.assetInclude 2`] = `
 "import draft_namespaceObject from "../static/assets/draft.txt";
-export { draft_namespaceObject as default };
+export default draft_namespaceObject;
 "
 `;
 
@@ -50,7 +50,8 @@ const SvgLogo = (props)=>/*#__PURE__*/ jsx("svg", {
         })
     });
 const logo = __rslib_svgr_url__0__;
-export { SvgLogo as ReactComponent, logo as default };
+export default logo;
+export { SvgLogo as ReactComponent };
 "
 `;
 
@@ -145,7 +146,7 @@ const SvgLogo = (props)=>/*#__PURE__*/ jsx("svg", {
         })
     });
 const logo = SvgLogo;
-export { logo as default };
+export default logo;
 "
 `;
 
@@ -214,7 +215,7 @@ Object.defineProperty(exports, '__esModule', {
 
 exports[`use svgr > should only contain url default export 1`] = `
 "import logo2_namespaceObject from "../static/svg/logo2.svg";
-export { logo2_namespaceObject as default };
+export default logo2_namespaceObject;
 "
 `;
 

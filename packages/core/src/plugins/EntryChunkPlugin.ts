@@ -1,16 +1,7 @@
-import { createRequire } from 'node:module';
-import {
-  type EnvironmentConfig,
-  type RsbuildPlugin,
-  type Rspack,
-  rspack,
-} from '@rsbuild/core';
+import { type EnvironmentConfig, type Rspack, rspack } from '@rsbuild/core';
 import { JS_EXTENSIONS_PATTERN } from '../constant';
 
-const require = createRequire(import.meta.url);
-
 const PLUGIN_NAME = 'rsbuild:lib-entry-chunk';
-const LOADER_NAME = 'rsbuild:lib-entry-module';
 const IMPORT_META_URL_SHIM = `const __rslib_import_meta_url__ = /*#__PURE__*/ (function () {
   return typeof document === 'undefined'
     ? new (require('url'.replace('', '')).URL)('file:' + __filename).href
@@ -97,31 +88,14 @@ class EntryChunkPlugin {
   }
 }
 
-const entryModuleLoaderRsbuildPlugin = (): RsbuildPlugin => ({
-  name: PLUGIN_NAME,
-  setup(api) {
-    api.modifyBundlerChain((config, { CHAIN_ID }) => {
-      config.module
-        .rule(`Rslib:${CHAIN_ID.RULE.JS}-entry-loader`)
-        .test(config.module.rule(CHAIN_ID.RULE.JS).get('test'))
-        .issuer(/^$/)
-        .use(LOADER_NAME)
-        .loader(require.resolve('./entryModuleLoader.js'));
-    });
-  },
-});
-
 export const composeEntryChunkConfig = ({
   enabledImportMetaUrlShim,
-  useLoader,
   contextToWatch = null,
 }: {
-  useLoader: boolean;
   enabledImportMetaUrlShim: boolean;
   contextToWatch: string | null;
 }): EnvironmentConfig => {
   return {
-    plugins: useLoader ? [entryModuleLoaderRsbuildPlugin()] : [],
     tools: {
       rspack: {
         plugins: [

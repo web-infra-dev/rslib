@@ -66,7 +66,7 @@ test('should render example "react-component-bundle" successfully', async ({
   page,
 }) => {
   const rsbuild = await dev({
-    cwd: __dirname,
+    cwd: import.meta.dirname,
     page,
     environment: ['bundle'],
   });
@@ -81,7 +81,7 @@ test('should render example "react-component-bundle-false" successfully', async 
   page,
 }) => {
   const rsbuild = await dev({
-    cwd: __dirname,
+    cwd: import.meta.dirname,
     page,
     environment: ['bundleFalse'],
   });
@@ -96,7 +96,7 @@ test('should render example "react-component-umd" successfully', async ({
   page,
 }) => {
   const rsbuild = await dev({
-    cwd: __dirname,
+    cwd: import.meta.dirname,
     page,
     environment: ['umd'],
   });
