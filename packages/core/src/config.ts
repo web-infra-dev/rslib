@@ -679,6 +679,7 @@ const composeFormatConfig = ({
 
       const config: EnvironmentConfig = {
         output: {
+          module: false,
           filenameHash: false,
           minify: {
             jsOptions: {

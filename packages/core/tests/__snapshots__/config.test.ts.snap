@@ -2411,10 +2411,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     /^node:/,
     'pnpapi'
   ],
-  node: {
-    __dirname: false,
-    __filename: false
-  },
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
     path: '<WORKSPACE>/dist',
@@ -2429,10 +2425,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     assetModuleFilename: 'static/assets/[name][ext]',
     webassemblyModuleFilename: 'static/wasm/[contenthash:10].module.wasm',
-    module: true,
-    chunkFormat: 'module',
-    chunkLoading: 'import',
-    workerChunkLoading: 'import',
     iife: true,
     asyncChunks: false,
     globalObject: 'globalThis'
@@ -4390,6 +4382,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
         },
       },
+      "module": false,
       "overrideBrowserslist": [
         "last 1 node versions",
       ],
