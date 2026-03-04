@@ -90,17 +90,20 @@ const pluginLibCss = (
 
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
       let isUsingCssExtract = false;
-      for (const ruleId of [
-        CHAIN_ID.RULE.CSS,
-        CHAIN_ID.RULE.SASS,
-        CHAIN_ID.RULE.LESS,
-        CHAIN_ID.RULE.STYLUS,
-      ]) {
+
+      for (const [ruleId, oneOfId] of [
+        [CHAIN_ID.RULE.CSS, CHAIN_ID.ONE_OF.CSS_MAIN],
+        [CHAIN_ID.RULE.SASS, 'sass'],
+        [CHAIN_ID.RULE.LESS, 'less'],
+        [CHAIN_ID.RULE.STYLUS, 'stylus'],
+      ] as const) {
         if (!config.module.rules.has(ruleId)) continue;
-        const rule = config.module.rule(ruleId);
-        if (rule.uses.has(CHAIN_ID.USE.MINI_CSS_EXTRACT)) {
+        const mainRule = config.module.rule(ruleId).oneOfs.get(oneOfId);
+        if (!mainRule) continue;
+
+        if (mainRule.uses.has(CHAIN_ID.USE.MINI_CSS_EXTRACT)) {
           isUsingCssExtract = true;
-          rule
+          mainRule
             .use(CHAIN_ID.USE.MINI_CSS_EXTRACT)
             .loader(require.resolve('./libCssExtractLoader.js'))
             .options({

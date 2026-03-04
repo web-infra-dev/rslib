@@ -256,6 +256,7 @@ export type Redirect = {
 export type LibExperiments = {
   /**
    * Whether to enable Rspack advanced ESM output.
+   * @deprecated The advanced ESM output is now the default output for ESM format and this option has no effect. It will be removed in a future major version.
    * @defaultValue `true`
    * @see {@link https://rslib.rs/config/lib/experiments#experimentsadvancedesm}
    */

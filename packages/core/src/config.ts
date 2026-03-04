@@ -485,13 +485,6 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
           moduleIds: 'named',
           nodeEnv: false,
         },
-        experiments: {
-          rspackFuture: {
-            bundlerInfo: {
-              force: false,
-            },
-          },
-        },
         // TypeScript-specific behavior: if the extension is ".js" or ".jsx", try replacing it with ".ts" or ".tsx"
         // see https://github.com/web-infra-dev/rslib/issues/41
         resolve: {
@@ -522,14 +515,12 @@ const composeFormatConfig = ({
   umdName,
   pkgJson,
   enabledShims,
-  advancedEsm,
 }: {
   format: Format;
   pkgJson: PkgJson;
   bundle?: boolean;
   umdName?: Rspack.LibraryName;
   enabledShims: DeepRequired<Shims>;
-  advancedEsm: boolean;
 }): EnvironmentConfig => {
   const jsParserOptions: Record<string, Rspack.JavascriptParserOptions> = {
     cjs: {
@@ -549,8 +540,6 @@ const composeFormatConfig = ({
     },
   };
 
-  const experimentalEsmOutput = bundle && format === 'esm' && advancedEsm;
-
   // The built-in Rslib plugin will apply to all formats except the `mf` format.
   // The `mf` format functions more like an application than a library and requires additional webpack runtime.
   const plugins = [
@@ -558,7 +547,6 @@ const composeFormatConfig = ({
       interceptApiPlugin: true,
       forceNodeShims: enabledShims.esm.__dirname || enabledShims.esm.__filename,
     }),
-    experimentalEsmOutput && new rspack.experiments.EsmLibraryPlugin(),
   ].filter(Boolean);
 
   switch (format) {
@@ -579,14 +567,11 @@ const composeFormatConfig = ({
               },
             },
             optimization: {
-              // experimentalEsmOutput don't need concatenateModules
-              concatenateModules: !experimentalEsmOutput,
-              sideEffects: experimentalEsmOutput ? true : 'flag',
-              runtimeChunk: experimentalEsmOutput
-                ? {
-                    name: 'rslib-runtime',
-                  }
-                : undefined,
+              concatenateModules: false,
+              sideEffects: true,
+              runtimeChunk: {
+                name: 'rslib-runtime',
+              },
               avoidEntryIife: true,
               splitChunks: {
                 // Splitted "sync" chunks will make entry modules can't be inlined.
@@ -595,15 +580,12 @@ const composeFormatConfig = ({
             },
             output: {
               module: true,
-              chunkFormat: experimentalEsmOutput ? false : 'module',
+              chunkFormat: false,
               library: {
                 type: 'modern-module',
               },
               chunkLoading: 'import',
               workerChunkLoading: 'import',
-            },
-            experiments: {
-              outputModule: true,
             },
             plugins,
           },
@@ -612,6 +594,7 @@ const composeFormatConfig = ({
     case 'cjs':
       return {
         output: {
+          module: false,
           filenameHash: false,
         },
         tools: {
@@ -653,6 +636,7 @@ const composeFormatConfig = ({
 
       const config: EnvironmentConfig = {
         output: {
+          module: false,
           filenameHash: false,
         },
         tools: {
@@ -717,7 +701,7 @@ const composeFormatConfig = ({
               iife: true,
               asyncChunks: false,
               library: {
-                type: 'modern-module',
+                type: 'module',
               },
             },
             optimization: {
@@ -773,9 +757,12 @@ const disableUrlParseRsbuildPlugin = (): RsbuildPlugin => ({
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
       // Fix for https://github.com/web-infra-dev/rslib/issues/499.
       // Prevent parsing and try bundling `new URL()` in ESM format.
-      config.module.rule(CHAIN_ID.RULE.JS).parser({
-        url: false,
-      });
+      config.module
+        .rule(CHAIN_ID.RULE.JS)
+        .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
+        .parser({
+          url: false,
+        });
     });
   },
 });
@@ -785,7 +772,10 @@ const fixJsModuleTypePlugin = (): RsbuildPlugin => ({
   name: 'rsbuild:fix-js-module-type',
   setup(api) {
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
-      config.module.rule(CHAIN_ID.RULE.JS).delete('type');
+      config.module
+        .rule(CHAIN_ID.RULE.JS)
+        .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
+        .delete('type');
     });
   },
 });
@@ -1693,9 +1683,7 @@ async function composeLibRsbuildConfig(
     externalHelpers = false,
     redirect = {},
     umdName,
-    experiments,
   } = config;
-  const advancedEsm = experiments?.advancedEsm ?? true;
   const { rsbuildConfig: bundleConfig } = composeBundleConfig(bundle);
   const { rsbuildConfig: shimsConfig, enabledShims } = composeShimsConfig(
     format,
@@ -1707,7 +1695,6 @@ async function composeLibRsbuildConfig(
     bundle,
     umdName,
     enabledShims,
-    advancedEsm,
   });
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,
@@ -1767,7 +1754,6 @@ async function composeLibRsbuildConfig(
   const assetConfig = composeAssetConfig(bundle, format);
 
   const entryChunkConfig = composeEntryChunkConfig({
-    useLoader: format === 'iife' || (format === 'esm' && !advancedEsm),
     enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
     contextToWatch: outBase,
   });

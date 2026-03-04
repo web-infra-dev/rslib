@@ -21,7 +21,7 @@ test('`Buffer` should be aliased to polyfill packages when bundle is disabled', 
 
   const bufferContents = Object.entries(contents.esm)
     .filter(([filename]) => {
-      return /buffer\d\.js$/.test(filename);
+      return /{1-9}\d\.js$/.test(filename);
     })
     .map(([_, content]) => content);
 

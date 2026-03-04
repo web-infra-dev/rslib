@@ -52,15 +52,14 @@ test('basic', async () => {
     basename: true,
   });
   expect(indexContent).toMatchInlineSnapshot(`
-    "import { mainFiles1 } from "./mainFiles1/index.js";
-    import { added } from "./dep.js";
-    export * from "./.hidden.js";
+    "export * from "./.hidden.js";
     export * from "./.hidden-folder/index.js";
     export * from "./mainFiles2/index.js";
     export * from "./sum.js";
     export * from "./utils/numbers.js";
     export * from "./utils/strings.js";
-    export { added, mainFiles1 };
+    export { mainFiles1 } from "./mainFiles1/index.js";
+    export { added } from "./dep.js";
     "
   `);
   expect(depContent).toMatchInlineSnapshot(`
@@ -124,7 +123,7 @@ test('monorepo', async () => {
   ).toMatchInlineSnapshot(`
     "import bundle_false_monorepo_importee_test from "bundle-false-monorepo-importee-test";
     const src = bundle_false_monorepo_importee_test;
-    export { src as default };
+    export default src;
     "
   `);
 });
@@ -196,12 +195,12 @@ test('asset in bundleless', async () => {
 
   expect(Object.values(contents.esm)[0]).toMatchInlineSnapshot(`
     "import image_namespaceObject from "../static/image/image.png";
-    export { image_namespaceObject as default };
+    export default image_namespaceObject;
     "
   `);
   expect(Object.values(contents.esm)[1]).toMatchInlineSnapshot(`
     "import logo_namespaceObject from "../static/svg/logo.svg";
-    export { logo_namespaceObject as default };
+    export default logo_namespaceObject;
     "
   `);
   expect(Object.values(contents.cjs)[0]).toMatchInlineSnapshot(`

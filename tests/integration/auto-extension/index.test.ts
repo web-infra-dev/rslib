@@ -50,15 +50,9 @@ describe('should respect output.filename.js and output.filenameHash to override 
     );
 
     // override output.filenameHash
-    if (process.env.ADVANCED_ESM) {
-      expect(entryFiles.esm1).toMatchInlineSnapshot(
-        `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/esm-override-filename-hash/index.3ac7e0ff.js"`,
-      );
-    } else {
-      expect(entryFiles.esm1).toMatchInlineSnapshot(
-        `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/esm-override-filename-hash/index.b4545719.js"`,
-      );
-    }
+    expect(entryFiles.esm1).toMatchInlineSnapshot(
+      `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/esm-override-filename-hash/index.3ac7e0ff.js"`,
+    );
     expect(entryFiles.cjs1).toMatchInlineSnapshot(
       `"<ROOT>/tests/integration/auto-extension/type-commonjs/config-override/dist/cjs-override-filename-hash/index.a4fcc622.js"`,
     );
@@ -85,27 +79,15 @@ describe('should respect output.filename.js and output.filenameHash to override 
     const { entryFiles } = await buildAndGetResults({ fixturePath });
 
     // override output.filename.js
-    if (process.env.ADVANCED_ESM) {
-      expect(entryFiles.esm0).toMatchInlineSnapshot(
-        `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename/index.3ac7e0ff.js"`,
-      );
-    } else {
-      expect(entryFiles.esm0).toMatchInlineSnapshot(
-        `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename/index.b4545719.js"`,
-      );
-    }
+    expect(entryFiles.esm0).toMatchInlineSnapshot(
+      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename/index.3ac7e0ff.js"`,
+    );
     expect(extname(entryFiles.cjs0!)).toEqual('.cjs');
 
     // override output.filenameHash
-    if (process.env.ADVANCED_ESM) {
-      expect(entryFiles.esm1).toMatchInlineSnapshot(
-        `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename-hash/index.3ac7e0ff.js"`,
-      );
-    } else {
-      expect(entryFiles.esm1).toMatchInlineSnapshot(
-        `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename-hash/index.b4545719.js"`,
-      );
-    }
+    expect(entryFiles.esm1).toMatchInlineSnapshot(
+      `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/esm-override-filename-hash/index.3ac7e0ff.js"`,
+    );
     expect(entryFiles.cjs1).toMatchInlineSnapshot(
       `"<ROOT>/tests/integration/auto-extension/type-module/config-override/dist/cjs-override-filename-hash/index.a4fcc622.js"`,
     );

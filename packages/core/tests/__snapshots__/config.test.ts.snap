@@ -1,735 +1,5 @@
 // Rstest Snapshot v1
 
-exports[`Should compose create Rsbuild config correctly > Disable experiment.advancedEsm in esm format > experiment.advancedEsm: false Rspack configs 1`] = `
-[
-  "{
-  target: [
-    'es2022',
-    'node'
-  ],
-  name: 'esm',
-  context: '<WORKSPACE>',
-  mode: 'production',
-  infrastructureLogging: {
-    level: 'error'
-  },
-  watchOptions: {
-    aggregateTimeout: 0
-  },
-  experiments: {
-    rspackFuture: {
-      bundlerInfo: {
-        force: false
-      }
-    },
-    cache: {
-      type: 'persistent',
-      version: 'esm-production',
-      storage: {
-        type: 'filesystem',
-        directory: '<WORKSPACE>/node_modules/.cache/rspack'
-      },
-      buildDependencies: [
-        '<WORKSPACE>/package.json',
-        '<WORKSPACE>/tsconfig.json'
-      ]
-    },
-    asyncWebAssembly: true,
-    outputModule: true
-  },
-  devtool: false,
-  cache: true,
-  externals: [
-    function () { /* omitted long function */ },
-    /^@rsbuild\\/core($|\\/|\\\\)/,
-    /^rsbuild-plugin-dts($|\\/|\\\\)/,
-    /^@microsoft\\/api-extractor($|\\/|\\\\)/,
-    /^typescript($|\\/|\\\\)/,
-    '@rsbuild/core',
-    'rsbuild-plugin-dts',
-    '@microsoft/api-extractor',
-    'typescript',
-    'assert',
-    'assert/strict',
-    'async_hooks',
-    'buffer',
-    'child_process',
-    'cluster',
-    'console',
-    'constants',
-    'crypto',
-    'dgram',
-    'diagnostics_channel',
-    'dns',
-    'dns/promises',
-    'domain',
-    'events',
-    'fs',
-    'fs/promises',
-    'http',
-    'http2',
-    'https',
-    'inspector',
-    'inspector/promises',
-    'module',
-    'net',
-    'os',
-    'path',
-    'path/posix',
-    'path/win32',
-    'perf_hooks',
-    'process',
-    'punycode',
-    'querystring',
-    'readline',
-    'readline/promises',
-    'repl',
-    'stream',
-    'stream/consumers',
-    'stream/promises',
-    'stream/web',
-    'string_decoder',
-    'sys',
-    'timers',
-    'timers/promises',
-    'tls',
-    'trace_events',
-    'tty',
-    'url',
-    'util',
-    'util/types',
-    'v8',
-    'vm',
-    'wasi',
-    'worker_threads',
-    'zlib',
-    /^node:/,
-    'pnpapi'
-  ],
-  output: {
-    devtoolModuleFilenameTemplate: '[relative-resource-path]',
-    path: '<WORKSPACE>/dist',
-    filename: '[name].js',
-    chunkFilename: '[name].js',
-    publicPath: 'auto',
-    pathinfo: false,
-    hashFunction: 'xxhash64',
-    library: {
-      type: 'modern-module'
-    },
-    assetModuleFilename: 'static/assets/[name][ext]',
-    webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
-    module: true,
-    chunkFormat: 'module',
-    chunkLoading: 'import',
-    workerChunkLoading: 'import'
-  },
-  resolve: {
-    tsConfig: {
-      configFile: '<WORKSPACE>/tsconfig.json',
-      references: 'auto'
-    },
-    alias: {
-      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers'
-    },
-    extensionAlias: {
-      '.js': [
-        '.js',
-        '.ts',
-        '.tsx',
-        '.ts',
-        '.tsx',
-        '.js',
-        '.jsx'
-      ],
-      '.jsx': [
-        '.jsx',
-        '.tsx',
-        '.tsx',
-        '.jsx'
-      ],
-      '.mjs': [
-        '.mts',
-        '.mjs'
-      ],
-      '.cjs': [
-        '.cts',
-        '.cjs'
-      ]
-    },
-    extensions: [
-      '.ts',
-      '.tsx',
-      '.mjs',
-      '.js',
-      '.jsx',
-      '.json'
-    ]
-  },
-  module: {
-    parser: {
-      javascript: {
-        exportsPresence: 'error',
-        typeReexportsPresence: 'tolerant',
-        importMeta: false,
-        importDynamic: false,
-        commonjs: {
-          exports: 'skipInEsm'
-        },
-        requireResolve: false,
-        requireDynamic: false,
-        requireAsExpression: false,
-        worker: false
-      }
-    },
-    rules: [
-      /* config.module.rule('mjs') */
-      {
-        test: /\\.m?js/,
-        resolve: {
-          fullySpecified: false
-        }
-      },
-      /* config.module.rule('css') */
-      {
-        test: /\\.css$/,
-        type: 'javascript/auto',
-        dependency: {
-          not: 'url'
-        },
-        resourceQuery: {
-          not: [
-            /[?&]raw(?:&|=|$)/,
-            /[?&]inline(?:&|=|$)/
-          ]
-        },
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css').use('ignore-css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
-          },
-          /* config.module.rule('css').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: {
-                auto: true,
-                namedExport: false,
-                exportGlobals: false,
-                exportLocalsConvention: 'camelCase',
-                localIdentName: '[local]-[hash:base64:6]',
-                exportOnlyLocals: true
-              },
-              sourceMap: false,
-              importLoaders: 0
-            }
-          }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-inline') */
-      {
-        test: /\\.css$/,
-        type: 'javascript/auto',
-        resourceQuery: /[?&]inline(?:&|=|$)/,
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css-inline').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: false,
-              sourceMap: false,
-              exportType: 'string',
-              importLoaders: 1
-            }
-          },
-          /* config.module.rule('css-inline').use('lightningcss') */
-          {
-            loader: 'builtin:lightningcss-loader',
-            options: {
-              targets: [
-                'last 1 node versions'
-              ],
-              errorRecovery: true
-            }
-          }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-raw') */
-      {
-        test: /\\.css$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
-      },
-      /* config.module.rule('js') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        dependency: {
-          not: 'url'
-        },
-        resourceQuery: {
-          not: /[?&]raw(?:&|=|$)/
-        },
-        parser: {
-          url: false
-        },
-        include: [
-          {
-            not: /[\\\\/]node_modules[\\\\/]/
-          },
-          /\\.(?:ts|tsx|jsx|mts|cts)$/
-        ],
-        use: [
-          /* config.module.rule('js').use('swc') */
-          {
-            loader: 'builtin:swc-loader',
-            options: {
-              jsc: {
-                externalHelpers: false,
-                parser: {
-                  tsx: false,
-                  syntax: 'typescript',
-                  decorators: true
-                },
-                experimental: {
-                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
-                  keepImportAttributes: true
-                },
-                output: {
-                  charset: 'utf8'
-                },
-                transform: {
-                  legacyDecorator: false,
-                  decoratorVersion: '2022-03'
-                }
-              },
-              isModule: 'unknown',
-              env: {
-                targets: [
-                  'last 1 node versions'
-                ]
-              },
-              collectTypeScriptInfo: {
-                typeExports: true,
-                exportedEnum: true
-              }
-            }
-          }
-        ]
-      },
-      /* config.module.rule('js-raw') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
-      },
-      /* config.module.rule('js-data-uri') */
-      {
-        mimetype: {
-          or: [
-            'text/javascript',
-            'application/javascript'
-          ]
-        },
-        use: [
-          /* config.module.rule('js-data-uri').use('swc') */
-          {
-            loader: 'builtin:swc-loader',
-            options: {
-              jsc: {
-                externalHelpers: false,
-                parser: {
-                  tsx: false,
-                  syntax: 'typescript',
-                  decorators: true
-                },
-                experimental: {
-                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
-                  keepImportAttributes: true
-                },
-                output: {
-                  charset: 'utf8'
-                },
-                transform: {
-                  legacyDecorator: false,
-                  decoratorVersion: '2022-03'
-                }
-              },
-              isModule: 'unknown',
-              env: {
-                targets: [
-                  'last 1 node versions'
-                ]
-              },
-              collectTypeScriptInfo: {
-                typeExports: true,
-                exportedEnum: true
-              }
-            }
-          }
-        ],
-        resolve: {
-          fullySpecified: false
-        }
-      },
-      /* config.module.rule('image') */
-      {
-        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur)$/i,
-        oneOf: [
-          /* config.module.rule('image').oneOf('image-asset-url') */
-          {
-            type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
-            generator: {
-              filename: 'static/image/[name][ext]'
-            }
-          },
-          /* config.module.rule('image').oneOf('image-asset-inline') */
-          {
-            type: 'asset/inline',
-            resourceQuery: /[?&]inline(?:&|=|$)/
-          },
-          /* config.module.rule('image').oneOf('image-asset-raw') */
-          {
-            type: 'asset/source',
-            resourceQuery: /[?&]raw(?:&|=|$)/
-          },
-          /* config.module.rule('image').oneOf('image-asset') */
-          {
-            type: 'asset',
-            parser: {
-              dataUrlCondition: {
-                maxSize: 0
-              }
-            },
-            generator: {
-              filename: 'static/image/[name][ext]',
-              importMode: 'preserve'
-            },
-            issuer: {
-              not: /\\.(css|sass|scss|less|styl|stylus)$/
-            }
-          },
-          /* config.module.rule('image').oneOf('image-asset-for-css') */
-          {
-            type: 'asset',
-            parser: {
-              dataUrlCondition: {
-                maxSize: 0
-              }
-            },
-            generator: {
-              filename: 'static/image/[name][ext]'
-            },
-            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
-          }
-        ]
-      },
-      /* config.module.rule('svg') */
-      {
-        test: /\\.svg$/i,
-        oneOf: [
-          /* config.module.rule('svg').oneOf('svg-asset-url') */
-          {
-            type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
-            generator: {
-              filename: 'static/svg/[name].svg'
-            }
-          },
-          /* config.module.rule('svg').oneOf('svg-asset-inline') */
-          {
-            type: 'asset/inline',
-            resourceQuery: /[?&]inline(?:&|=|$)/
-          },
-          /* config.module.rule('svg').oneOf('svg-asset-raw') */
-          {
-            type: 'asset/source',
-            resourceQuery: /[?&]raw(?:&|=|$)/
-          },
-          /* config.module.rule('svg').oneOf('svg-asset') */
-          {
-            type: 'asset',
-            parser: {
-              dataUrlCondition: {
-                maxSize: 0
-              }
-            },
-            generator: {
-              filename: 'static/svg/[name].svg',
-              importMode: 'preserve'
-            },
-            issuer: {
-              not: /\\.(css|sass|scss|less|styl|stylus)$/
-            }
-          },
-          /* config.module.rule('svg').oneOf('svg-asset-for-css') */
-          {
-            type: 'asset',
-            parser: {
-              dataUrlCondition: {
-                maxSize: 0
-              }
-            },
-            generator: {
-              filename: 'static/svg/[name].svg'
-            },
-            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
-          },
-          /* config.module.rule('svg').oneOf('svg') */
-          {}
-        ]
-      },
-      /* config.module.rule('media') */
-      {
-        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
-        oneOf: [
-          /* config.module.rule('media').oneOf('media-asset-url') */
-          {
-            type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
-            generator: {
-              filename: 'static/media/[name][ext]'
-            }
-          },
-          /* config.module.rule('media').oneOf('media-asset-inline') */
-          {
-            type: 'asset/inline',
-            resourceQuery: /[?&]inline(?:&|=|$)/
-          },
-          /* config.module.rule('media').oneOf('media-asset-raw') */
-          {
-            type: 'asset/source',
-            resourceQuery: /[?&]raw(?:&|=|$)/
-          },
-          /* config.module.rule('media').oneOf('media-asset') */
-          {
-            type: 'asset',
-            parser: {
-              dataUrlCondition: {
-                maxSize: 0
-              }
-            },
-            generator: {
-              filename: 'static/media/[name][ext]',
-              importMode: 'preserve'
-            },
-            issuer: {
-              not: /\\.(css|sass|scss|less|styl|stylus)$/
-            }
-          },
-          /* config.module.rule('media').oneOf('media-asset-for-css') */
-          {
-            type: 'asset',
-            parser: {
-              dataUrlCondition: {
-                maxSize: 0
-              }
-            },
-            generator: {
-              filename: 'static/media/[name][ext]'
-            },
-            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
-          }
-        ]
-      },
-      /* config.module.rule('font') */
-      {
-        test: /\\.(?:woff|woff2|eot|ttf|otf|ttc)$/i,
-        oneOf: [
-          /* config.module.rule('font').oneOf('font-asset-url') */
-          {
-            type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
-            generator: {
-              filename: 'static/font/[name][ext]'
-            }
-          },
-          /* config.module.rule('font').oneOf('font-asset-inline') */
-          {
-            type: 'asset/inline',
-            resourceQuery: /[?&]inline(?:&|=|$)/
-          },
-          /* config.module.rule('font').oneOf('font-asset-raw') */
-          {
-            type: 'asset/source',
-            resourceQuery: /[?&]raw(?:&|=|$)/
-          },
-          /* config.module.rule('font').oneOf('font-asset') */
-          {
-            type: 'asset',
-            parser: {
-              dataUrlCondition: {
-                maxSize: 0
-              }
-            },
-            generator: {
-              filename: 'static/font/[name][ext]',
-              importMode: 'preserve'
-            },
-            issuer: {
-              not: /\\.(css|sass|scss|less|styl|stylus)$/
-            }
-          },
-          /* config.module.rule('font').oneOf('font-asset-for-css') */
-          {
-            type: 'asset',
-            parser: {
-              dataUrlCondition: {
-                maxSize: 0
-              }
-            },
-            generator: {
-              filename: 'static/font/[name][ext]'
-            },
-            issuer: /\\.(css|sass|scss|less|styl|stylus)$/
-          }
-        ]
-      },
-      /* config.module.rule('json') */
-      {
-        test: /\\.json$/i,
-        oneOf: [
-          /* config.module.rule('json').oneOf('json-asset-raw') */
-          {
-            type: 'asset/source',
-            resourceQuery: /[?&]raw(?:&|=|$)/
-          }
-        ]
-      },
-      /* config.module.rule('wasm') */
-      {
-        test: /\\.wasm$/,
-        dependency: 'url',
-        type: 'asset/resource',
-        generator: {
-          filename: 'static/wasm/[contenthash:8].module.wasm'
-        }
-      },
-      /* config.module.rule('rsbuild-transform-0') */
-      {
-        test: /\\.node$/,
-        use: [
-          /* config.module.rule('rsbuild-transform-0').use('rsbuild-transform-0') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
-            options: {
-              id: 'rsbuild-transform-0',
-              getEnvironment: ()=>environmentContext
-            }
-          }
-        ]
-      },
-      /* config.module.rule('Rslib:js-entry-loader') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        issuer: /^$/,
-        use: [
-          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
-          {
-            loader: '<WORKSPACE>/src/plugins/entryModuleLoader.ts'
-          }
-        ]
-      }
-    ]
-  },
-  optimization: {
-    minimize: true,
-    splitChunks: {
-      chunks: 'async'
-    },
-    minimizer: [
-      /* config.optimization.minimizer('js') */
-      new SwcJsMinimizerRspackPlugin(
-        {
-          minimizerOptions: {
-            format: {
-              asciiOnly: false,
-              comments: 'some',
-              preserve_annotations: true
-            },
-            mangle: false,
-            minify: false,
-            compress: {
-              directives: false,
-              defaults: false,
-              unused: true,
-              dead_code: true,
-              toplevel: true
-            }
-          },
-          extractComments: true,
-          test: /\\.[cm]?jsx?(\\?.*)?$/
-        }
-      )
-    ],
-    moduleIds: 'named',
-    nodeEnv: false,
-    concatenateModules: true,
-    sideEffects: 'flag',
-    runtimeChunk: undefined,
-    avoidEntryIife: true
-  },
-  plugins: [
-    /* config.plugin('RsbuildCorePlugin') */
-    {},
-    /* config.plugin('define') */
-    new DefinePlugin(
-      {
-        'import.meta.env': {
-          MODE: '"production"',
-          DEV: false,
-          PROD: true,
-          BASE_URL: '"/"',
-          ASSET_PREFIX: '"auto"'
-        },
-        'process.env.BASE_URL': '"/"',
-        'process.env.ASSET_PREFIX': '"auto"'
-      }
-    ),
-    {
-      affectedHooks: undefined,
-      name: 'RslibPlugin',
-      _args: [
-        {
-          interceptApiPlugin: true,
-          forceNodeShims: false
-        }
-      ]
-    },
-    {
-      shimsInjectedAssets: new Set([]),
-      enabledImportMetaUrlShim: false,
-      contextToWatch: null
-    }
-  ],
-  performance: {
-    hints: false
-  },
-  entry: {
-    index: [
-      '<WORKSPACE>/src/index.ts'
-    ]
-  },
-  node: {
-    __dirname: false,
-    __filename: false
-  },
-  externalsPresets: {
-    node: false
-  },
-  externalsType: 'module-import'
-}",
-]
-`;
-
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rsbuild configs 1`] = `
 "{
   dev: {
@@ -764,7 +34,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   server: {
     port: 3000,
-    host: '0.0.0.0',
+    host: 'localhost',
     open: false,
     base: '/',
     htmlFallback: 'index',
@@ -779,7 +49,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       {
         name: '<WORKSPACE>/public',
         copyOnBuild: 'auto',
-        watch: false
+        watch: false,
+        ignore: []
       }
     ]
   },
@@ -848,8 +119,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     },
     legalComments: 'linked',
     injectStyles: false,
-    minify: true,
-    module: false,
     manifest: false,
     sourceMap: {
       js: undefined,
@@ -880,14 +149,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       enable: false
     }
   },
+  splitChunks: {},
   performance: {
-    profile: false,
     printFileSize: true,
-    removeConsole: false,
-    removeMomentLocale: false,
-    chunkSplit: {
-      strategy: 'split-by-experience'
-    }
+    removeConsole: false
   },
   logLevel: 'silent',
   mode: 'production',
@@ -938,15 +203,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       setup() {}
     },
     {
-      name: 'rsbuild:app-icon',
+      name: 'rsbuild:appIcon',
       setup() {}
     },
     {
       name: 'rsbuild:wasm',
-      setup() {}
-    },
-    {
-      name: 'rsbuild:moment',
       setup() {}
     },
     {
@@ -998,14 +259,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       setup() {}
     },
     {
-      name: 'rsbuild:performance',
-      setup() {}
-    },
-    {
-      name: 'rsbuild:bundle-analyzer',
-      setup() {}
-    },
-    {
       name: 'rsbuild:server',
       setup() {}
     },
@@ -1053,29 +306,19 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   watchOptions: {
     aggregateTimeout: 0
   },
-  experiments: {
-    rspackFuture: {
-      bundlerInfo: {
-        force: false
-      }
-    },
-    cache: {
-      type: 'persistent',
-      version: 'esm-production',
-      storage: {
-        type: 'filesystem',
-        directory: '<WORKSPACE>/node_modules/.cache/rspack'
-      },
-      buildDependencies: [
-        '<WORKSPACE>/package.json',
-        '<WORKSPACE>/tsconfig.json'
-      ]
-    },
-    asyncWebAssembly: true,
-    outputModule: true
-  },
   devtool: false,
-  cache: true,
+  cache: {
+    type: 'persistent',
+    version: 'esm-production',
+    storage: {
+      type: 'filesystem',
+      directory: '<WORKSPACE>/node_modules/.cache/rspack'
+    },
+    buildDependencies: [
+      '<WORKSPACE>/package.json',
+      '<WORKSPACE>/tsconfig.json'
+    ]
+  },
   externals: [
     function () { /* omitted long function */ },
     /^@rsbuild\\/core($|\\/|\\\\)/,
@@ -1143,19 +386,24 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     /^node:/,
     'pnpapi'
   ],
+  node: {
+    __dirname: false,
+    __filename: false
+  },
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '0~[name].js',
     publicPath: 'auto',
-    pathinfo: false,
-    hashFunction: 'xxhash64',
+    bundlerInfo: {
+      force: false
+    },
     library: {
       type: 'modern-module'
     },
     assetModuleFilename: 'static/assets/[name][ext]',
-    webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
+    webassemblyModuleFilename: 'static/wasm/[contenthash:10].module.wasm',
     module: true,
     chunkFormat: false,
     chunkLoading: 'import',
@@ -1210,7 +458,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   module: {
     parser: {
       javascript: {
-        exportsPresence: 'error',
         typeReexportsPresence: 'tolerant',
         importMeta: false,
         importDynamic: false,
@@ -1234,85 +481,80 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       /* config.module.rule('css') */
       {
         test: /\\.css$/,
-        type: 'javascript/auto',
         dependency: {
           not: 'url'
         },
-        resourceQuery: {
-          not: [
-            /[?&]raw(?:&|=|$)/,
-            /[?&]inline(?:&|=|$)/
-          ]
-        },
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css').use('ignore-css') */
+        oneOf: [
+          /* config.module.rule('css').oneOf('css-inline') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
-          },
-          /* config.module.rule('css').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: {
-                auto: true,
-                namedExport: false,
-                exportGlobals: false,
-                exportLocalsConvention: 'camelCase',
-                localIdentName: '[local]-[hash:base64:6]',
-                exportOnlyLocals: true
+            resourceQuery: /[?&]inline(?:&|=|$)/,
+            sideEffects: true,
+            use: [
+              /* config.module.rule('css').oneOf('css-inline').use('css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: false,
+                  sourceMap: false,
+                  exportType: 'string',
+                  importLoaders: 1
+                }
               },
-              sourceMap: false,
-              importLoaders: 0
-            }
-          }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-inline') */
-      {
-        test: /\\.css$/,
-        type: 'javascript/auto',
-        resourceQuery: /[?&]inline(?:&|=|$)/,
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css-inline').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: false,
-              sourceMap: false,
-              exportType: 'string',
-              importLoaders: 1
+              /* config.module.rule('css').oneOf('css-inline').use('lightningcss') */
+              {
+                loader: 'builtin:lightningcss-loader',
+                options: {
+                  targets: [
+                    'last 1 Chrome versions',
+                    'last 1 Firefox versions',
+                    'last 1 Edge versions',
+                    'last 1 Safari versions',
+                    'last 1 ios_saf versions',
+                    'not dead'
+                  ],
+                  errorRecovery: true
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
             }
           },
-          /* config.module.rule('css-inline').use('lightningcss') */
+          /* config.module.rule('css').oneOf('css-raw') */
           {
-            loader: 'builtin:lightningcss-loader',
-            options: {
-              targets: [
-                'last 1 Chrome versions',
-                'last 1 Firefox versions',
-                'last 1 Edge versions',
-                'last 1 Safari versions',
-                'last 1 ios_saf versions',
-                'not dead'
-              ],
-              errorRecovery: true
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('css').oneOf('css') */
+          {
+            sideEffects: true,
+            use: [
+              /* config.module.rule('css').oneOf('css').use('ignore-css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+              },
+              /* config.module.rule('css').oneOf('css').use('css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  },
+                  sourceMap: false,
+                  importLoaders: 0
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
             }
           }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-raw') */
-      {
-        test: /\\.css$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
+        ]
       },
       /* config.module.rule('js') */
       {
@@ -1320,61 +562,62 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         dependency: {
           not: 'url'
         },
-        resourceQuery: {
-          not: /[?&]raw(?:&|=|$)/
-        },
-        parser: {
-          url: false
-        },
         include: [
           {
             not: /[\\\\/]node_modules[\\\\/]/
           },
           /\\.(?:ts|tsx|jsx|mts|cts)$/
         ],
-        use: [
-          /* config.module.rule('js').use('swc') */
+        oneOf: [
+          /* config.module.rule('js').oneOf('js-raw') */
           {
-            loader: 'builtin:swc-loader',
-            options: {
-              jsc: {
-                externalHelpers: false,
-                parser: {
-                  tsx: false,
-                  syntax: 'typescript',
-                  decorators: true
-                },
-                experimental: {
-                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
-                  keepImportAttributes: true
-                },
-                output: {
-                  charset: 'utf8'
-                },
-                transform: {
-                  legacyDecorator: false,
-                  decoratorVersion: '2022-03'
+            resourceQuery: /[?&]raw(?:&|=|$)/,
+            type: 'asset/source'
+          },
+          /* config.module.rule('js').oneOf('js') */
+          {
+            parser: {
+              url: false
+            },
+            use: [
+              /* config.module.rule('js').oneOf('js').use('swc') */
+              {
+                loader: 'builtin:swc-loader',
+                options: {
+                  jsc: {
+                    externalHelpers: false,
+                    parser: {
+                      tsx: false,
+                      syntax: 'typescript',
+                      decorators: true
+                    },
+                    experimental: {
+                      cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                      keepImportAttributes: true
+                    },
+                    output: {
+                      charset: 'utf8'
+                    },
+                    transform: {
+                      legacyDecorator: false,
+                      decoratorVersion: '2022-03'
+                    }
+                  },
+                  isModule: 'unknown',
+                  env: {
+                    targets: [
+                      'last 1 node versions'
+                    ]
+                  },
+                  collectTypeScriptInfo: {
+                    typeExports: true,
+                    exportedEnum: true
+                  }
                 }
-              },
-              isModule: 'unknown',
-              env: {
-                targets: [
-                  'last 1 node versions'
-                ]
-              },
-              collectTypeScriptInfo: {
-                typeExports: true,
-                exportedEnum: true
               }
-            }
+            ]
           }
         ]
-      },
-      /* config.module.rule('js-raw') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
       },
       /* config.module.rule('js-data-uri') */
       {
@@ -1432,7 +675,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/image/[name][ext]'
             }
@@ -1485,7 +728,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('svg').oneOf('svg-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/svg/[name].svg'
             }
@@ -1540,7 +783,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/media/[name][ext]'
             }
@@ -1593,7 +836,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('font').oneOf('font-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/font/[name][ext]'
             }
@@ -1656,7 +899,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         dependency: 'url',
         type: 'asset/resource',
         generator: {
-          filename: 'static/wasm/[contenthash:8].module.wasm'
+          filename: 'static/wasm/[contenthash:10].module.wasm'
         }
       },
       /* config.module.rule('rsbuild-transform-0') */
@@ -1742,9 +985,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       ]
     },
     {
-      options: undefined
-    },
-    {
       shimsInjectedAssets: new Set([]),
       enabledImportMetaUrlShim: false,
       contextToWatch: null
@@ -1758,10 +998,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       './b.js',
       '<WORKSPACE>/src/index.ts'
     ]
-  },
-  node: {
-    __dirname: false,
-    __filename: false
   },
   externalsPresets: {
     node: false
@@ -1785,28 +1021,19 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   watchOptions: {
     aggregateTimeout: 0
   },
-  experiments: {
-    rspackFuture: {
-      bundlerInfo: {
-        force: false
-      }
-    },
-    cache: {
-      type: 'persistent',
-      version: 'cjs-production',
-      storage: {
-        type: 'filesystem',
-        directory: '<WORKSPACE>/node_modules/.cache/rspack'
-      },
-      buildDependencies: [
-        '<WORKSPACE>/package.json',
-        '<WORKSPACE>/tsconfig.json'
-      ]
-    },
-    asyncWebAssembly: true
-  },
   devtool: false,
-  cache: true,
+  cache: {
+    type: 'persistent',
+    version: 'cjs-production',
+    storage: {
+      type: 'filesystem',
+      directory: '<WORKSPACE>/node_modules/.cache/rspack'
+    },
+    buildDependencies: [
+      '<WORKSPACE>/package.json',
+      '<WORKSPACE>/tsconfig.json'
+    ]
+  },
   externals: [
     /^@rsbuild\\/core($|\\/|\\\\)/,
     /^rsbuild-plugin-dts($|\\/|\\\\)/,
@@ -1879,13 +1106,14 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     filename: '[name].cjs',
     chunkFilename: '1~[name].cjs',
     publicPath: 'auto',
-    pathinfo: false,
-    hashFunction: 'xxhash64',
+    bundlerInfo: {
+      force: false
+    },
     library: {
       type: 'commonjs-static'
     },
     assetModuleFilename: 'static/assets/[name][ext]',
-    webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
+    webassemblyModuleFilename: 'static/wasm/[contenthash:10].module.wasm',
     iife: false,
     chunkFormat: 'commonjs',
     chunkLoading: 'require',
@@ -1940,7 +1168,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   module: {
     parser: {
       javascript: {
-        exportsPresence: 'error',
         typeReexportsPresence: 'tolerant',
         importMeta: false,
         importDynamic: false,
@@ -1964,85 +1191,80 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       /* config.module.rule('css') */
       {
         test: /\\.css$/,
-        type: 'javascript/auto',
         dependency: {
           not: 'url'
         },
-        resourceQuery: {
-          not: [
-            /[?&]raw(?:&|=|$)/,
-            /[?&]inline(?:&|=|$)/
-          ]
-        },
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css').use('ignore-css') */
+        oneOf: [
+          /* config.module.rule('css').oneOf('css-inline') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
-          },
-          /* config.module.rule('css').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: {
-                auto: true,
-                namedExport: false,
-                exportGlobals: false,
-                exportLocalsConvention: 'camelCase',
-                localIdentName: '[local]-[hash:base64:6]',
-                exportOnlyLocals: true
+            resourceQuery: /[?&]inline(?:&|=|$)/,
+            sideEffects: true,
+            use: [
+              /* config.module.rule('css').oneOf('css-inline').use('css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: false,
+                  sourceMap: false,
+                  exportType: 'string',
+                  importLoaders: 1
+                }
               },
-              sourceMap: false,
-              importLoaders: 0
-            }
-          }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-inline') */
-      {
-        test: /\\.css$/,
-        type: 'javascript/auto',
-        resourceQuery: /[?&]inline(?:&|=|$)/,
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css-inline').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: false,
-              sourceMap: false,
-              exportType: 'string',
-              importLoaders: 1
+              /* config.module.rule('css').oneOf('css-inline').use('lightningcss') */
+              {
+                loader: 'builtin:lightningcss-loader',
+                options: {
+                  targets: [
+                    'last 1 Chrome versions',
+                    'last 1 Firefox versions',
+                    'last 1 Edge versions',
+                    'last 1 Safari versions',
+                    'last 1 ios_saf versions',
+                    'not dead'
+                  ],
+                  errorRecovery: true
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
             }
           },
-          /* config.module.rule('css-inline').use('lightningcss') */
+          /* config.module.rule('css').oneOf('css-raw') */
           {
-            loader: 'builtin:lightningcss-loader',
-            options: {
-              targets: [
-                'last 1 Chrome versions',
-                'last 1 Firefox versions',
-                'last 1 Edge versions',
-                'last 1 Safari versions',
-                'last 1 ios_saf versions',
-                'not dead'
-              ],
-              errorRecovery: true
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('css').oneOf('css') */
+          {
+            sideEffects: true,
+            use: [
+              /* config.module.rule('css').oneOf('css').use('ignore-css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+              },
+              /* config.module.rule('css').oneOf('css').use('css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  },
+                  sourceMap: false,
+                  importLoaders: 0
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
             }
           }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-raw') */
-      {
-        test: /\\.css$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
+        ]
       },
       /* config.module.rule('js') */
       {
@@ -2050,61 +1272,62 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         dependency: {
           not: 'url'
         },
-        resourceQuery: {
-          not: /[?&]raw(?:&|=|$)/
-        },
-        parser: {
-          url: false
-        },
         include: [
           {
             not: /[\\\\/]node_modules[\\\\/]/
           },
           /\\.(?:ts|tsx|jsx|mts|cts)$/
         ],
-        use: [
-          /* config.module.rule('js').use('swc') */
+        oneOf: [
+          /* config.module.rule('js').oneOf('js-raw') */
           {
-            loader: 'builtin:swc-loader',
-            options: {
-              jsc: {
-                externalHelpers: false,
-                parser: {
-                  tsx: false,
-                  syntax: 'typescript',
-                  decorators: true
-                },
-                experimental: {
-                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
-                  keepImportAttributes: true
-                },
-                output: {
-                  charset: 'utf8'
-                },
-                transform: {
-                  legacyDecorator: false,
-                  decoratorVersion: '2022-03'
+            resourceQuery: /[?&]raw(?:&|=|$)/,
+            type: 'asset/source'
+          },
+          /* config.module.rule('js').oneOf('js') */
+          {
+            parser: {
+              url: false
+            },
+            use: [
+              /* config.module.rule('js').oneOf('js').use('swc') */
+              {
+                loader: 'builtin:swc-loader',
+                options: {
+                  jsc: {
+                    externalHelpers: false,
+                    parser: {
+                      tsx: false,
+                      syntax: 'typescript',
+                      decorators: true
+                    },
+                    experimental: {
+                      cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                      keepImportAttributes: true
+                    },
+                    output: {
+                      charset: 'utf8'
+                    },
+                    transform: {
+                      legacyDecorator: false,
+                      decoratorVersion: '2022-03'
+                    }
+                  },
+                  isModule: 'unknown',
+                  env: {
+                    targets: [
+                      'last 1 node versions'
+                    ]
+                  },
+                  collectTypeScriptInfo: {
+                    typeExports: true,
+                    exportedEnum: true
+                  }
                 }
-              },
-              isModule: 'unknown',
-              env: {
-                targets: [
-                  'last 1 node versions'
-                ]
-              },
-              collectTypeScriptInfo: {
-                typeExports: true,
-                exportedEnum: true
               }
-            }
+            ]
           }
         ]
-      },
-      /* config.module.rule('js-raw') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
       },
       /* config.module.rule('js-data-uri') */
       {
@@ -2162,7 +1385,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/image/[name][ext]'
             }
@@ -2215,7 +1438,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('svg').oneOf('svg-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/svg/[name].svg'
             }
@@ -2270,7 +1493,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/media/[name][ext]'
             }
@@ -2323,7 +1546,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('font').oneOf('font-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/font/[name][ext]'
             }
@@ -2386,7 +1609,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         dependency: 'url',
         type: 'asset/resource',
         generator: {
-          filename: 'static/wasm/[contenthash:8].module.wasm'
+          filename: 'static/wasm/[contenthash:10].module.wasm'
         }
       },
       /* config.module.rule('rsbuild-transform-0') */
@@ -2507,28 +1730,19 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   watchOptions: {
     aggregateTimeout: 0
   },
-  experiments: {
-    rspackFuture: {
-      bundlerInfo: {
-        force: false
-      }
-    },
-    cache: {
-      type: 'persistent',
-      version: 'umd-production',
-      storage: {
-        type: 'filesystem',
-        directory: '<WORKSPACE>/node_modules/.cache/rspack'
-      },
-      buildDependencies: [
-        '<WORKSPACE>/package.json',
-        '<WORKSPACE>/tsconfig.json'
-      ]
-    },
-    asyncWebAssembly: true
-  },
   devtool: false,
-  cache: true,
+  cache: {
+    type: 'persistent',
+    version: 'umd-production',
+    storage: {
+      type: 'filesystem',
+      directory: '<WORKSPACE>/node_modules/.cache/rspack'
+    },
+    buildDependencies: [
+      '<WORKSPACE>/package.json',
+      '<WORKSPACE>/tsconfig.json'
+    ]
+  },
   externals: [
     'assert',
     'assert/strict',
@@ -2593,13 +1807,14 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     filename: '[name].js',
     chunkFilename: '2~[name].js',
     publicPath: '/',
-    pathinfo: false,
-    hashFunction: 'xxhash64',
+    bundlerInfo: {
+      force: false
+    },
     library: {
       type: 'umd'
     },
     assetModuleFilename: 'static/assets/[name][ext]',
-    webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
+    webassemblyModuleFilename: 'static/wasm/[contenthash:10].module.wasm',
     asyncChunks: false
   },
   resolve: {
@@ -2651,7 +1866,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   module: {
     parser: {
       javascript: {
-        exportsPresence: 'error',
         typeReexportsPresence: 'tolerant',
         importMeta: false
       }
@@ -2667,85 +1881,80 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       /* config.module.rule('css') */
       {
         test: /\\.css$/,
-        type: 'javascript/auto',
         dependency: {
           not: 'url'
         },
-        resourceQuery: {
-          not: [
-            /[?&]raw(?:&|=|$)/,
-            /[?&]inline(?:&|=|$)/
-          ]
-        },
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css').use('ignore-css') */
+        oneOf: [
+          /* config.module.rule('css').oneOf('css-inline') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
-          },
-          /* config.module.rule('css').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: {
-                auto: true,
-                namedExport: false,
-                exportGlobals: false,
-                exportLocalsConvention: 'camelCase',
-                localIdentName: '[local]-[hash:base64:6]',
-                exportOnlyLocals: true
+            resourceQuery: /[?&]inline(?:&|=|$)/,
+            sideEffects: true,
+            use: [
+              /* config.module.rule('css').oneOf('css-inline').use('css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: false,
+                  sourceMap: false,
+                  exportType: 'string',
+                  importLoaders: 1
+                }
               },
-              sourceMap: false,
-              importLoaders: 0
-            }
-          }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-inline') */
-      {
-        test: /\\.css$/,
-        type: 'javascript/auto',
-        resourceQuery: /[?&]inline(?:&|=|$)/,
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css-inline').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: false,
-              sourceMap: false,
-              exportType: 'string',
-              importLoaders: 1
+              /* config.module.rule('css').oneOf('css-inline').use('lightningcss') */
+              {
+                loader: 'builtin:lightningcss-loader',
+                options: {
+                  targets: [
+                    'last 1 Chrome versions',
+                    'last 1 Firefox versions',
+                    'last 1 Edge versions',
+                    'last 1 Safari versions',
+                    'last 1 ios_saf versions',
+                    'not dead'
+                  ],
+                  errorRecovery: true
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
             }
           },
-          /* config.module.rule('css-inline').use('lightningcss') */
+          /* config.module.rule('css').oneOf('css-raw') */
           {
-            loader: 'builtin:lightningcss-loader',
-            options: {
-              targets: [
-                'last 1 Chrome versions',
-                'last 1 Firefox versions',
-                'last 1 Edge versions',
-                'last 1 Safari versions',
-                'last 1 ios_saf versions',
-                'not dead'
-              ],
-              errorRecovery: true
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('css').oneOf('css') */
+          {
+            sideEffects: true,
+            use: [
+              /* config.module.rule('css').oneOf('css').use('ignore-css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+              },
+              /* config.module.rule('css').oneOf('css').use('css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  },
+                  sourceMap: false,
+                  importLoaders: 0
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
             }
           }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-raw') */
-      {
-        test: /\\.css$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
+        ]
       },
       /* config.module.rule('js') */
       {
@@ -2753,58 +1962,59 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         dependency: {
           not: 'url'
         },
-        resourceQuery: {
-          not: /[?&]raw(?:&|=|$)/
-        },
         include: [
           {
             not: /[\\\\/]node_modules[\\\\/]/
           },
           /\\.(?:ts|tsx|jsx|mts|cts)$/
         ],
-        use: [
-          /* config.module.rule('js').use('swc') */
+        oneOf: [
+          /* config.module.rule('js').oneOf('js-raw') */
           {
-            loader: 'builtin:swc-loader',
-            options: {
-              jsc: {
-                externalHelpers: false,
-                parser: {
-                  tsx: false,
-                  syntax: 'typescript',
-                  decorators: true
-                },
-                experimental: {
-                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
-                  keepImportAttributes: true
-                },
-                output: {
-                  charset: 'utf8'
-                },
-                transform: {
-                  legacyDecorator: false,
-                  decoratorVersion: '2022-03'
+            resourceQuery: /[?&]raw(?:&|=|$)/,
+            type: 'asset/source'
+          },
+          /* config.module.rule('js').oneOf('js') */
+          {
+            use: [
+              /* config.module.rule('js').oneOf('js').use('swc') */
+              {
+                loader: 'builtin:swc-loader',
+                options: {
+                  jsc: {
+                    externalHelpers: false,
+                    parser: {
+                      tsx: false,
+                      syntax: 'typescript',
+                      decorators: true
+                    },
+                    experimental: {
+                      cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                      keepImportAttributes: true
+                    },
+                    output: {
+                      charset: 'utf8'
+                    },
+                    transform: {
+                      legacyDecorator: false,
+                      decoratorVersion: '2022-03'
+                    }
+                  },
+                  isModule: 'unknown',
+                  env: {
+                    targets: [
+                      'last 1 node versions'
+                    ]
+                  },
+                  collectTypeScriptInfo: {
+                    typeExports: true,
+                    exportedEnum: true
+                  }
                 }
-              },
-              isModule: 'unknown',
-              env: {
-                targets: [
-                  'last 1 node versions'
-                ]
-              },
-              collectTypeScriptInfo: {
-                typeExports: true,
-                exportedEnum: true
               }
-            }
+            ]
           }
         ]
-      },
-      /* config.module.rule('js-raw') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
       },
       /* config.module.rule('js-data-uri') */
       {
@@ -2862,7 +2072,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/image/[name][ext]'
             }
@@ -2898,7 +2108,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('svg').oneOf('svg-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/svg/[name].svg'
             }
@@ -2934,7 +2144,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/media/[name][ext]'
             }
@@ -2970,7 +2180,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('font').oneOf('font-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/font/[name][ext]'
             }
@@ -3016,7 +2226,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         dependency: 'url',
         type: 'asset/resource',
         generator: {
-          filename: 'static/wasm/[contenthash:8].module.wasm'
+          filename: 'static/wasm/[contenthash:10].module.wasm'
         }
       },
       /* config.module.rule('rsbuild-transform-0') */
@@ -3130,28 +2340,19 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   watchOptions: {
     aggregateTimeout: 0
   },
-  experiments: {
-    rspackFuture: {
-      bundlerInfo: {
-        force: false
-      }
-    },
-    cache: {
-      type: 'persistent',
-      version: 'iife-production',
-      storage: {
-        type: 'filesystem',
-        directory: '<WORKSPACE>/node_modules/.cache/rspack'
-      },
-      buildDependencies: [
-        '<WORKSPACE>/package.json',
-        '<WORKSPACE>/tsconfig.json'
-      ]
-    },
-    asyncWebAssembly: true
-  },
   devtool: false,
-  cache: true,
+  cache: {
+    type: 'persistent',
+    version: 'iife-production',
+    storage: {
+      type: 'filesystem',
+      directory: '<WORKSPACE>/node_modules/.cache/rspack'
+    },
+    buildDependencies: [
+      '<WORKSPACE>/package.json',
+      '<WORKSPACE>/tsconfig.json'
+    ]
+  },
   externals: [
     'assert',
     'assert/strict',
@@ -3210,19 +2411,28 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     /^node:/,
     'pnpapi'
   ],
+  node: {
+    __dirname: false,
+    __filename: false
+  },
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '3~[name].js',
     publicPath: '/',
-    pathinfo: false,
-    hashFunction: 'xxhash64',
+    bundlerInfo: {
+      force: false
+    },
     library: {
-      type: 'modern-module'
+      type: 'module'
     },
     assetModuleFilename: 'static/assets/[name][ext]',
-    webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
+    webassemblyModuleFilename: 'static/wasm/[contenthash:10].module.wasm',
+    module: true,
+    chunkFormat: 'module',
+    chunkLoading: 'import',
+    workerChunkLoading: 'import',
     iife: true,
     asyncChunks: false,
     globalObject: 'globalThis'
@@ -3276,7 +2486,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   module: {
     parser: {
       javascript: {
-        exportsPresence: 'error',
         typeReexportsPresence: 'tolerant',
         importMeta: false
       }
@@ -3292,85 +2501,80 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       /* config.module.rule('css') */
       {
         test: /\\.css$/,
-        type: 'javascript/auto',
         dependency: {
           not: 'url'
         },
-        resourceQuery: {
-          not: [
-            /[?&]raw(?:&|=|$)/,
-            /[?&]inline(?:&|=|$)/
-          ]
-        },
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css').use('ignore-css') */
+        oneOf: [
+          /* config.module.rule('css').oneOf('css-inline') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
-          },
-          /* config.module.rule('css').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: {
-                auto: true,
-                namedExport: false,
-                exportGlobals: false,
-                exportLocalsConvention: 'camelCase',
-                localIdentName: '[local]-[hash:base64:6]',
-                exportOnlyLocals: true
+            resourceQuery: /[?&]inline(?:&|=|$)/,
+            sideEffects: true,
+            use: [
+              /* config.module.rule('css').oneOf('css-inline').use('css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: false,
+                  sourceMap: false,
+                  exportType: 'string',
+                  importLoaders: 1
+                }
               },
-              sourceMap: false,
-              importLoaders: 0
-            }
-          }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-inline') */
-      {
-        test: /\\.css$/,
-        type: 'javascript/auto',
-        resourceQuery: /[?&]inline(?:&|=|$)/,
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css-inline').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: false,
-              sourceMap: false,
-              exportType: 'string',
-              importLoaders: 1
+              /* config.module.rule('css').oneOf('css-inline').use('lightningcss') */
+              {
+                loader: 'builtin:lightningcss-loader',
+                options: {
+                  targets: [
+                    'last 1 Chrome versions',
+                    'last 1 Firefox versions',
+                    'last 1 Edge versions',
+                    'last 1 Safari versions',
+                    'last 1 ios_saf versions',
+                    'not dead'
+                  ],
+                  errorRecovery: true
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
             }
           },
-          /* config.module.rule('css-inline').use('lightningcss') */
+          /* config.module.rule('css').oneOf('css-raw') */
           {
-            loader: 'builtin:lightningcss-loader',
-            options: {
-              targets: [
-                'last 1 Chrome versions',
-                'last 1 Firefox versions',
-                'last 1 Edge versions',
-                'last 1 Safari versions',
-                'last 1 ios_saf versions',
-                'not dead'
-              ],
-              errorRecovery: true
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('css').oneOf('css') */
+          {
+            sideEffects: true,
+            use: [
+              /* config.module.rule('css').oneOf('css').use('ignore-css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+              },
+              /* config.module.rule('css').oneOf('css').use('css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  },
+                  sourceMap: false,
+                  importLoaders: 0
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
             }
           }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-raw') */
-      {
-        test: /\\.css$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
+        ]
       },
       /* config.module.rule('js') */
       {
@@ -3378,58 +2582,59 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         dependency: {
           not: 'url'
         },
-        resourceQuery: {
-          not: /[?&]raw(?:&|=|$)/
-        },
         include: [
           {
             not: /[\\\\/]node_modules[\\\\/]/
           },
           /\\.(?:ts|tsx|jsx|mts|cts)$/
         ],
-        use: [
-          /* config.module.rule('js').use('swc') */
+        oneOf: [
+          /* config.module.rule('js').oneOf('js-raw') */
           {
-            loader: 'builtin:swc-loader',
-            options: {
-              jsc: {
-                externalHelpers: false,
-                parser: {
-                  tsx: false,
-                  syntax: 'typescript',
-                  decorators: true
-                },
-                experimental: {
-                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
-                  keepImportAttributes: true
-                },
-                output: {
-                  charset: 'utf8'
-                },
-                transform: {
-                  legacyDecorator: false,
-                  decoratorVersion: '2022-03'
+            resourceQuery: /[?&]raw(?:&|=|$)/,
+            type: 'asset/source'
+          },
+          /* config.module.rule('js').oneOf('js') */
+          {
+            use: [
+              /* config.module.rule('js').oneOf('js').use('swc') */
+              {
+                loader: 'builtin:swc-loader',
+                options: {
+                  jsc: {
+                    externalHelpers: false,
+                    parser: {
+                      tsx: false,
+                      syntax: 'typescript',
+                      decorators: true
+                    },
+                    experimental: {
+                      cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                      keepImportAttributes: true
+                    },
+                    output: {
+                      charset: 'utf8'
+                    },
+                    transform: {
+                      legacyDecorator: false,
+                      decoratorVersion: '2022-03'
+                    }
+                  },
+                  isModule: 'unknown',
+                  env: {
+                    targets: [
+                      'last 1 node versions'
+                    ]
+                  },
+                  collectTypeScriptInfo: {
+                    typeExports: true,
+                    exportedEnum: true
+                  }
                 }
-              },
-              isModule: 'unknown',
-              env: {
-                targets: [
-                  'last 1 node versions'
-                ]
-              },
-              collectTypeScriptInfo: {
-                typeExports: true,
-                exportedEnum: true
               }
-            }
+            ]
           }
         ]
-      },
-      /* config.module.rule('js-raw') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
       },
       /* config.module.rule('js-data-uri') */
       {
@@ -3487,7 +2692,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/image/[name][ext]'
             }
@@ -3523,7 +2728,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('svg').oneOf('svg-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/svg/[name].svg'
             }
@@ -3559,7 +2764,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/media/[name][ext]'
             }
@@ -3595,7 +2800,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('font').oneOf('font-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/font/[name][ext]'
             }
@@ -3641,7 +2846,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         dependency: 'url',
         type: 'asset/resource',
         generator: {
-          filename: 'static/wasm/[contenthash:8].module.wasm'
+          filename: 'static/wasm/[contenthash:10].module.wasm'
         }
       },
       /* config.module.rule('rsbuild-transform-0') */
@@ -3655,17 +2860,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               id: 'rsbuild-transform-0',
               getEnvironment: ()=>environmentContext
             }
-          }
-        ]
-      },
-      /* config.module.rule('Rslib:js-entry-loader') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        issuer: /^$/,
-        use: [
-          /* config.module.rule('Rslib:js-entry-loader').use('rsbuild:lib-entry-module') */
-          {
-            loader: '<WORKSPACE>/src/plugins/entryModuleLoader.ts'
           }
         ]
       }
@@ -3767,38 +2961,30 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   watchOptions: {
     aggregateTimeout: 0
   },
-  experiments: {
-    rspackFuture: {
-      bundlerInfo: {
-        force: false
-      }
-    },
-    cache: {
-      type: 'persistent',
-      version: 'mf-production',
-      storage: {
-        type: 'filesystem',
-        directory: '<WORKSPACE>/node_modules/.cache/rspack'
-      },
-      buildDependencies: [
-        '<WORKSPACE>/package.json',
-        '<WORKSPACE>/tsconfig.json'
-      ]
-    },
-    asyncWebAssembly: true
-  },
   devtool: false,
-  cache: true,
+  cache: {
+    type: 'persistent',
+    version: 'mf-production',
+    storage: {
+      type: 'filesystem',
+      directory: '<WORKSPACE>/node_modules/.cache/rspack'
+    },
+    buildDependencies: [
+      '<WORKSPACE>/package.json',
+      '<WORKSPACE>/tsconfig.json'
+    ]
+  },
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '[name].js',
     publicPath: '/',
-    pathinfo: false,
-    hashFunction: 'xxhash64',
+    bundlerInfo: {
+      force: false
+    },
     assetModuleFilename: 'static/assets/[name][ext]',
-    webassemblyModuleFilename: 'static/wasm/[contenthash:8].module.wasm',
+    webassemblyModuleFilename: 'static/wasm/[contenthash:10].module.wasm',
     uniqueName: '@rslib/core'
   },
   resolve: {
@@ -3850,7 +3036,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   module: {
     parser: {
       javascript: {
-        exportsPresence: 'error',
         typeReexportsPresence: 'tolerant'
       }
     },
@@ -3865,108 +3050,100 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       /* config.module.rule('css') */
       {
         test: /\\.css$/,
-        type: 'javascript/auto',
         dependency: {
           not: 'url'
         },
-        resourceQuery: {
-          not: [
-            /[?&]raw(?:&|=|$)/,
-            /[?&]inline(?:&|=|$)/
-          ]
-        },
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css').use('mini-css-extract') */
+        oneOf: [
+          /* config.module.rule('css').oneOf('css-inline') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/<RSPACK_CORE>/dist/cssExtractLoader.js'
-          },
-          /* config.module.rule('css').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: {
-                auto: true,
-                namedExport: false,
-                exportGlobals: false,
-                exportLocalsConvention: 'camelCase',
-                localIdentName: '[local]-[hash:base64:6]'
+            resourceQuery: /[?&]inline(?:&|=|$)/,
+            sideEffects: true,
+            use: [
+              /* config.module.rule('css').oneOf('css-inline').use('css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: false,
+                  sourceMap: false,
+                  exportType: 'string',
+                  importLoaders: 1
+                }
               },
-              sourceMap: false,
-              importLoaders: 1
+              /* config.module.rule('css').oneOf('css-inline').use('lightningcss') */
+              {
+                loader: 'builtin:lightningcss-loader',
+                options: {
+                  targets: [
+                    'last 1 Chrome versions',
+                    'last 1 Firefox versions',
+                    'last 1 Edge versions',
+                    'last 1 Safari versions',
+                    'last 1 ios_saf versions',
+                    'not dead'
+                  ],
+                  errorRecovery: true
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
             }
           },
-          /* config.module.rule('css').use('lightningcss') */
+          /* config.module.rule('css').oneOf('css-raw') */
           {
-            loader: 'builtin:lightningcss-loader',
-            options: {
-              targets: [
-                'last 1 Chrome versions',
-                'last 1 Firefox versions',
-                'last 1 Edge versions',
-                'last 1 Safari versions',
-                'last 1 ios_saf versions',
-                'not dead'
-              ],
-              errorRecovery: true
-            }
-          }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-inline') */
-      {
-        test: /\\.css$/,
-        type: 'javascript/auto',
-        resourceQuery: /[?&]inline(?:&|=|$)/,
-        sideEffects: true,
-        use: [
-          /* config.module.rule('css-inline').use('css') */
-          {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
-            options: {
-              modules: false,
-              sourceMap: false,
-              exportType: 'string',
-              importLoaders: 1
-            }
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
           },
-          /* config.module.rule('css-inline').use('lightningcss') */
+          /* config.module.rule('css').oneOf('css') */
           {
-            loader: 'builtin:lightningcss-loader',
-            options: {
-              targets: [
-                'last 1 Chrome versions',
-                'last 1 Firefox versions',
-                'last 1 Edge versions',
-                'last 1 Safari versions',
-                'last 1 ios_saf versions',
-                'not dead'
-              ],
-              errorRecovery: true
+            sideEffects: true,
+            use: [
+              /* config.module.rule('css').oneOf('css').use('mini-css-extract') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/<RSPACK_CORE>/dist/cssExtractLoader.js'
+              },
+              /* config.module.rule('css').oneOf('css').use('css') */
+              {
+                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]'
+                  },
+                  sourceMap: false,
+                  importLoaders: 1
+                }
+              },
+              /* config.module.rule('css').oneOf('css').use('lightningcss') */
+              {
+                loader: 'builtin:lightningcss-loader',
+                options: {
+                  targets: [
+                    'last 1 Chrome versions',
+                    'last 1 Firefox versions',
+                    'last 1 Edge versions',
+                    'last 1 Safari versions',
+                    'last 1 ios_saf versions',
+                    'not dead'
+                  ],
+                  errorRecovery: true
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
             }
           }
-        ],
-        resolve: {
-          preferRelative: true
-        }
-      },
-      /* config.module.rule('css-raw') */
-      {
-        test: /\\.css$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
+        ]
       },
       /* config.module.rule('js') */
       {
         test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
         dependency: {
           not: 'url'
-        },
-        resourceQuery: {
-          not: /[?&]raw(?:&|=|$)/
         },
         include: [
           {
@@ -3975,54 +3152,58 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /\\.(?:ts|tsx|jsx|mts|cts)$/,
           /@module-federation[\\\\/]/
         ],
-        use: [
-          /* config.module.rule('js').use('swc') */
+        oneOf: [
+          /* config.module.rule('js').oneOf('js-raw') */
           {
-            loader: 'builtin:swc-loader',
-            options: {
-              jsc: {
-                externalHelpers: false,
-                parser: {
-                  tsx: false,
-                  syntax: 'typescript',
-                  decorators: true
-                },
-                experimental: {
-                  cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
-                  keepImportAttributes: true
-                },
-                output: {
-                  charset: 'utf8'
-                },
-                transform: {
-                  legacyDecorator: false,
-                  decoratorVersion: '2022-03'
+            resourceQuery: /[?&]raw(?:&|=|$)/,
+            type: 'asset/source'
+          },
+          /* config.module.rule('js').oneOf('js') */
+          {
+            use: [
+              /* config.module.rule('js').oneOf('js').use('swc') */
+              {
+                loader: 'builtin:swc-loader',
+                options: {
+                  jsc: {
+                    externalHelpers: false,
+                    parser: {
+                      tsx: false,
+                      syntax: 'typescript',
+                      decorators: true
+                    },
+                    experimental: {
+                      cacheRoot: '<WORKSPACE>/node_modules/.cache/.swc',
+                      keepImportAttributes: true
+                    },
+                    output: {
+                      charset: 'utf8'
+                    },
+                    transform: {
+                      legacyDecorator: false,
+                      decoratorVersion: '2022-03'
+                    }
+                  },
+                  isModule: 'unknown',
+                  env: {
+                    targets: [
+                      'last 1 Chrome versions',
+                      'last 1 Firefox versions',
+                      'last 1 Edge versions',
+                      'last 1 Safari versions',
+                      'last 1 ios_saf versions',
+                      'not dead'
+                    ]
+                  },
+                  collectTypeScriptInfo: {
+                    typeExports: true,
+                    exportedEnum: true
+                  }
                 }
-              },
-              isModule: 'unknown',
-              env: {
-                targets: [
-                  'last 1 Chrome versions',
-                  'last 1 Firefox versions',
-                  'last 1 Edge versions',
-                  'last 1 Safari versions',
-                  'last 1 ios_saf versions',
-                  'not dead'
-                ]
-              },
-              collectTypeScriptInfo: {
-                typeExports: true,
-                exportedEnum: true
               }
-            }
+            ]
           }
         ]
-      },
-      /* config.module.rule('js-raw') */
-      {
-        test: /\\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
-        type: 'asset/source',
-        resourceQuery: /[?&]raw(?:&|=|$)/
       },
       /* config.module.rule('js-data-uri') */
       {
@@ -4085,7 +3266,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/image/[name][ext]'
             }
@@ -4121,7 +3302,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('svg').oneOf('svg-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/svg/[name].svg'
             }
@@ -4157,7 +3338,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/media/[name][ext]'
             }
@@ -4193,7 +3374,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('font').oneOf('font-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?(__inline=false|url)$/,
+            resourceQuery: /^\\?url$/,
             generator: {
               filename: 'static/font/[name][ext]'
             }
@@ -4239,7 +3420,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         dependency: 'url',
         type: 'asset/resource',
         generator: {
-          filename: 'static/wasm/[contenthash:8].module.wasm'
+          filename: 'static/wasm/[contenthash:10].module.wasm'
         }
       }
     ]
@@ -4473,13 +3654,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
-          "experiments": {
-            "rspackFuture": {
-              "bundlerInfo": {
-                "force": false,
-              },
-            },
-          },
           "optimization": {
             "moduleIds": "named",
             "nodeEnv": false,
@@ -4508,9 +3682,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
         },
         {
-          "experiments": {
-            "outputModule": true,
-          },
           "module": {
             "parser": {
               "javascript": {
@@ -4560,9 +3731,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               ],
               "affectedHooks": undefined,
               "name": "RslibPlugin",
-            },
-            EsmLibraryPlugin {
-              "options": undefined,
             },
           ],
         },
@@ -4718,6 +3886,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
         },
       },
+      "module": false,
       "overrideBrowserslist": [
         "last 1 node versions",
       ],
@@ -4772,13 +3941,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
-          "experiments": {
-            "rspackFuture": {
-              "bundlerInfo": {
-                "force": false,
-              },
-            },
-          },
           "optimization": {
             "moduleIds": "named",
             "nodeEnv": false,
@@ -4991,6 +4153,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           "test": /\\\\\\.\\[cm\\]\\?jsx\\?\\(\\\\\\?\\.\\*\\)\\?\\$/,
         },
       },
+      "module": false,
       "overrideBrowserslist": [
         "last 1 node versions",
       ],
@@ -5026,13 +4189,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
-          "experiments": {
-            "rspackFuture": {
-              "bundlerInfo": {
-                "force": false,
-              },
-            },
-          },
           "optimization": {
             "moduleIds": "named",
             "nodeEnv": false,
@@ -5254,10 +4410,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "name": "rsbuild:fix-js-module-type",
         "setup": [Function],
       },
-      {
-        "name": "rsbuild:lib-entry-chunk",
-        "setup": [Function],
-      },
     ],
     "resolve": {
       "alias": {
@@ -5273,13 +4425,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
-          "experiments": {
-            "rspackFuture": {
-              "bundlerInfo": {
-                "force": false,
-              },
-            },
-          },
           "optimization": {
             "moduleIds": "named",
             "nodeEnv": false,
@@ -5323,7 +4468,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "asyncChunks": false,
             "iife": true,
             "library": {
-              "type": "modern-module",
+              "type": "module",
             },
           },
           "plugins": [
@@ -5470,13 +4615,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
-          "experiments": {
-            "rspackFuture": {
-              "bundlerInfo": {
-                "force": false,
-              },
-            },
-          },
           "optimization": {
             "moduleIds": "named",
             "nodeEnv": false,

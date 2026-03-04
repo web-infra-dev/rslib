@@ -4,7 +4,7 @@ import type {
   InspectConfigResult as RsbuildInspectConfigResult,
   RsbuildInstance,
   RsbuildMode,
-  StartServerResult,
+  StartDevServerResult,
 } from '@rsbuild/core';
 import type { RslibConfig } from './config';
 
@@ -50,7 +50,7 @@ export type InspectConfigOptions = CommonOptions & {
 
 export type StartMFDevServerOptions = CommonOptions;
 
-export type { BuildResult, StartServerResult };
+export type { BuildResult, StartDevServerResult };
 
 export type InspectConfigResult = {
   rslibConfig: string;
@@ -90,7 +90,7 @@ export type RslibInstance = {
    */
   startMFDevServer(
     options?: StartMFDevServerOptions,
-  ): Promise<StartServerResult>;
+  ): Promise<StartDevServerResult>;
 };
 
 export type OnAfterCreateRsbuildFn = (params: {

@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "test": "rstest",
-    "test:advanced-esm": "cross-env ADVANCED_ESM=1 rstest",
     "test:benchmark": "rstest bench",
     "test:e2e": "playwright test --pass-with-no-tests",
     "type-check": "tsc --noEmit"
@@ -17,7 +16,7 @@
     "@codspeed/vitest-plugin": "^4.0.1",
     "@module-federation/rsbuild-plugin": "^0.24.1",
     "@playwright/test": "1.58.2",
-    "@rsbuild/core": "~1.7.3",
+    "@rsbuild/core": "2.0.0-beta.7",
     "@rsbuild/plugin-less": "^1.6.0",
     "@rsbuild/plugin-react": "^1.4.5",
     "@rsbuild/plugin-sass": "^1.5.0",

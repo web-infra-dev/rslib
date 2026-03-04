@@ -145,23 +145,20 @@ test('MF output should include hash', async () => {
   const files = fs.readdirSync(distDir);
 
   expect(files.length).toBe(3);
-  expect(files.some((file) => /^index\.[a-f0-9]{8}\.js$/.test(file))).toBe(
+  expect(files.some((file) => /^index\.[a-f0-9]{10}\.js$/.test(file))).toBe(
     true,
   );
   expect(files).toContain('mf-manifest.json');
   expect(files).toContain('mf-stats.json');
 });
 
-test.skipIf(!process.env.ADVANCED_ESM)(
-  'ESM with eval should export correctly',
-  async () => {
-    const fixturePath = path.resolve(__dirname, 'esm-eval');
-    const { entryFiles } = await buildAndGetResults({
-      fixturePath,
-    });
+test('ESM with eval should export correctly', async () => {
+  const fixturePath = path.resolve(__dirname, 'esm-eval');
+  const { entryFiles } = await buildAndGetResults({
+    fixturePath,
+  });
 
-    const esmOutput = await import(entryFiles.esm);
-    expect(esmOutput.evalFunc()).toBe(1);
-    expect(esmOutput.foo).toBe('foo');
-  },
-);
+  const esmOutput = await import(entryFiles.esm);
+  expect(esmOutput.evalFunc()).toBe(1);
+  expect(esmOutput.foo).toBe('foo');
+});

@@ -54,7 +54,7 @@ describe('Should load config file correctly', () => {
 
   test('Load config.ts in cjs project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/cjs');
-    const configFilePath = join(fixtureDir, 'rslib.config.ts');
+    const configFilePath = join(fixtureDir, 'rslib.config.mts');
     const { content: config } = await loadConfig({ path: configFilePath });
     expect(config).toEqual({
       lib: [],
@@ -556,29 +556,6 @@ describe('Should compose create Rsbuild config correctly', () => {
         "root": "dist/cjs",
       }
     `);
-  });
-
-  test('Disable experiment.advancedEsm in esm format', async () => {
-    const rslibConfig: RslibConfig = {
-      lib: [
-        {
-          format: 'esm',
-          experiments: {
-            advancedEsm: false,
-          },
-        },
-      ],
-      root: join(__dirname, '..'),
-    };
-
-    const rslib = await createRslib({
-      config: rslibConfig,
-    });
-    const inspectConfigResult = await rslib.inspectConfig();
-    const { bundlerConfigs } = inspectConfigResult;
-    expect(bundlerConfigs).toMatchSnapshot(
-      'experiment.advancedEsm: false Rspack configs',
-    );
   });
 });
 

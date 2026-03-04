@@ -24,7 +24,6 @@ test('iife', async () => {
   expect(entries.iife).toMatchInlineSnapshot(
     `
     "(()=>{
-        "use strict";
         const external_globalHelper_namespaceObject = globalThis.globalHelper;
         const addPrefix = (prefix, str, env)=>\`\${import.meta.url} - \${env}: \${prefix}\${str}\`;
         globalThis.addPrefix = (str)=>addPrefix(external_globalHelper_namespaceObject.helperName, str, "production");

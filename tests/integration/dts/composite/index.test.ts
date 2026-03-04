@@ -87,27 +87,27 @@ describe('dts when composite: true', () => {
 
     expect(contents.esm).toMatchInlineSnapshot(`
       {
-        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/index.d.mts": "/*! hello banner dts composite*/
+        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/index.d.ts": "/*! hello banner dts composite*/
       export * from './sum';
       export * from './utils/numbers';
       export * from './utils/strings';
 
       /*! hello banner dts composite*/
       ",
-        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/sum.d.mts": "/*! hello banner dts composite*/
+        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/sum.d.ts": "/*! hello banner dts composite*/
       export declare const numSum: number;
       export declare const strSum: string;
 
       /*! hello banner dts composite*/
       ",
-        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/utils/numbers.d.mts": "/*! hello banner dts composite*/
+        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/utils/numbers.d.ts": "/*! hello banner dts composite*/
       export declare const num1 = 1;
       export declare const num2 = 2;
       export declare const num3 = 3;
 
       /*! hello banner dts composite*/
       ",
-        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/utils/strings.d.mts": "/*! hello banner dts composite*/
+        "<ROOT>/tests/integration/dts/composite/process-files/dist/esm/utils/strings.d.ts": "/*! hello banner dts composite*/
       export declare const str1 = "str1";
       export declare const str2 = "str2";
       export declare const str3 = "str3";
