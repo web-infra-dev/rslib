@@ -6,7 +6,7 @@ export default defineConfig({
     generateBundleEsmConfig({
       source: {
         entry: {
-          index: ['./src', '!./src/ignored'],
+          index: ['./src', '!./src/ignored', '!src/404/**/*.md'],
         },
       },
     }),

@@ -176,7 +176,9 @@ test('validate entry and throw errors', async () => {
   expect(stripAnsi(errMsg)).toMatchInlineSnapshot(`
     "Error: Glob pattern "./src" is not supported when "bundle" is "true", considering "bundle" to "false" to use bundleless mode, or specify a file entry to bundle. See https://rslib.rs/guide/basic/output-structure for more details.
 
-    Error: Glob pattern "!./src/ignored" is not supported when "bundle" is "true", considering "bundle" to "false" to use bundleless mode, or specify a file entry to bundle. See https://rslib.rs/guide/basic/output-structure for more details."
+    Error: Glob pattern "!./src/ignored" is not supported when "bundle" is "true", considering "bundle" to "false" to use bundleless mode, or specify a file entry to bundle. See https://rslib.rs/guide/basic/output-structure for more details.
+    
+    Error: Glob pattern "!src/404/**/*.md" is not supported when "bundle" is "true", considering "bundle" to "false" to use bundleless mode, or specify a file entry to bundle. See https://rslib.rs/guide/basic/output-structure for more details."
   `);
 
   try {
