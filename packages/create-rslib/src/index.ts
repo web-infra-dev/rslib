@@ -28,7 +28,6 @@ export const TEMPLATES: string[] = [
 ];
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-export { parseTemplateName };
 
 async function getTemplateName({ template }: Argv) {
   if (typeof template === 'string') {
