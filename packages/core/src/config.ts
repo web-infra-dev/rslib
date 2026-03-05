@@ -987,7 +987,7 @@ const composeOutputFilenameConfig = (
     if (typeof filenameHash === 'string') {
       return filenameHash ? `.[${filenameHash}]` : '';
     }
-    return filenameHash ? '.[contenthash:8]' : '';
+    return filenameHash ? '.[contenthash:10]' : '';
   };
 
   // Copied from https://github.com/web-infra-dev/rspack/blob/2efea8673f86a562559e26a9351680e8df4d9ae9/packages/rspack/src/config/defaults.ts#L667-L680.

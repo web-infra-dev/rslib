@@ -10,7 +10,7 @@ export default defineConfig({
       output: {
         distPath: './dist/esm/bundle',
         filename: {
-          image: '[name].[contenthash:8][ext]',
+          image: '[name].[contenthash:10][ext]',
         },
       },
     }),
@@ -19,7 +19,7 @@ export default defineConfig({
       output: {
         distPath: './dist/cjs/bundle',
         filename: {
-          image: '[name].[contenthash:8][ext]',
+          image: '[name].[contenthash:10][ext]',
         },
       },
     }),
@@ -30,7 +30,7 @@ export default defineConfig({
       output: {
         distPath: './dist/esm/bundleless',
         filename: {
-          image: '[name].[contenthash:8][ext]',
+          image: '[name].[contenthash:10][ext]',
         },
       },
     }),
@@ -40,7 +40,7 @@ export default defineConfig({
       output: {
         distPath: './dist/cjs/bundleless',
         filename: {
-          image: '[name].[contenthash:8][ext]',
+          image: '[name].[contenthash:10][ext]',
         },
       },
     }),

@@ -4,7 +4,7 @@ import { generateBundleEsmConfig } from 'test-helper';
 export default defineConfig({
   output: {
     filename: {
-      js: 'static/js/[name].[contenthash:8].js',
+      js: 'static/js/[name].[contenthash:10].js',
     },
   },
   lib: [

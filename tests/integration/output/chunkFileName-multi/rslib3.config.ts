@@ -23,7 +23,7 @@ export default defineConfig({
       },
       output: {
         filename: {
-          js: 'static2/js/[name].[contenthash:8].js',
+          js: 'static2/js/[name].[contenthash:10].js',
         },
       },
     }),

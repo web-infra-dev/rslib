@@ -31,10 +31,10 @@ describe('output config', () => {
 
       expect(rspackConfig.length).toBeGreaterThanOrEqual(2);
       expect(rspackConfig[0]!.output?.chunkFilename).toBe(
-        'static/js/0~[name].[contenthash:8].js',
+        'static/js/0~[name].[contenthash:10].js',
       );
       expect(rspackConfig[1]!.output?.chunkFilename).toBe(
-        'static/js/1~[name].[contenthash:8].js',
+        'static/js/1~[name].[contenthash:10].js',
       );
 
       const esm0BaseNames = (files.esm0 ?? []).map((p) => basename(p));
@@ -60,7 +60,7 @@ describe('output config', () => {
         'static1/js/0~[name].js',
       );
       expect(rspackConfig[1]!.output?.chunkFilename).toBe(
-        'static2/js/1~[name].[contenthash:8].js',
+        'static2/js/1~[name].[contenthash:10].js',
       );
 
       expect(
