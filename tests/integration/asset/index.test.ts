@@ -90,12 +90,12 @@ test('set the assets filename with hash', async () => {
   // esm
   const { content: indexJs0 } = queryContent(contents.esm0!, /index\.js/);
   expect(indexJs0).toContain(
-    'import image_namespaceObject from "./static/image/image.c74653c1.png";',
+    'import image_namespaceObject from "./static/image/image.c74653c171.png";',
   );
   // cjs
   const { content: indexCjs0 } = queryContent(contents.cjs0!, /index\.cjs/);
   expect(indexCjs0).toContain(
-    'const image_namespaceObject = require("./static/image/image.c74653c1.png");',
+    'const image_namespaceObject = require("./static/image/image.c74653c171.png");',
   );
 
   // 1. bundleless default
@@ -105,7 +105,7 @@ test('set the assets filename with hash', async () => {
     /assets\/image\.js/,
   );
   expect(imageJs1).toMatchInlineSnapshot(`
-    "import image_namespaceObject from "../static/image/image.c74653c1.png";
+    "import image_namespaceObject from "../static/image/image.c74653c171.png";
     export default image_namespaceObject;
     "
   `);
@@ -118,7 +118,7 @@ test('set the assets filename with hash', async () => {
     ""use strict";
     var __webpack_modules__ = {
         "./src/assets/image.png" (module) {
-            module.exports = require("../static/image/image.c74653c1.png");
+            module.exports = require("../static/image/image.c74653c171.png");
         }
     };
     var __webpack_module_cache__ = {};

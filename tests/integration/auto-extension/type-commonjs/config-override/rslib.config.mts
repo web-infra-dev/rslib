@@ -15,7 +15,7 @@ export default defineConfig({
     generateBundleCjsConfig({
       output: {
         filename: {
-          js: '[name].[contenthash:8].js',
+          js: '[name].[contenthash:10].js',
         },
         distPath: './dist/cjs-override-filename',
       },
