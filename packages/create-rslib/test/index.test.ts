@@ -1,7 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
-import { type Lang, parseTemplateName } from '../src/index';
+import type { Lang } from '../src/index';
+import { parseTemplateName } from '../src/parseTemplateName';
 import { createAndValidate, type TemplateCase } from './helper';
 
 const createCase = (
