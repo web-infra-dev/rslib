@@ -1,3 +1,5 @@
+import { PackageManagerTabs } from '@theme';
+
 # tsc
 
 This section introduces how to migrate a project using `tsc` (TypeScript Compiler) to Rslib.
@@ -6,17 +8,16 @@ This section introduces how to migrate a project using `tsc` (TypeScript Compile
 
 If you are using a Coding Agent that supports Skills, install the [migrate-to-rslib](https://github.com/rstackjs/agent-skills#migrate-to-rslib) skill to help with the migration process.
 
-```bash
-npx skills add rstackjs/agent-skills --skill migrate-to-rslib
-```
+<PackageManagerTabs
+  command="skills add rstackjs/agent-skills --skill migrate-to-rslib"
+  dlx
+/>
 
 After installation, let the Coding Agent guide you through the migration process.
 
 ## Installing dependencies
 
 First, you need to add Rslib's core dependency.
-
-import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @rslib/core -D" />
 

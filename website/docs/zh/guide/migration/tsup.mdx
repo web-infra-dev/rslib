@@ -1,3 +1,5 @@
+import { PackageManagerTabs } from '@theme';
+
 # tsup
 
 本章节介绍如何将使用 tsup 的项目迁移到 Rslib。
@@ -6,17 +8,16 @@
 
 如果你在使用支持 Skills 的 Coding Agent，可以安装 [migrate-to-rslib](https://github.com/rstackjs/agent-skills#migrate-to-rslib) 技能来辅助完成迁移流程。
 
-```bash
-npx skills add rstackjs/agent-skills --skill migrate-to-rslib
-```
+<PackageManagerTabs
+  command="skills add rstackjs/agent-skills --skill migrate-to-rslib"
+  dlx
+/>
 
 安装后，让 Coding Agent 协助完成迁移即可。
 
 ## 安装依赖
 
 首先，你需要将 tsup 的 npm 依赖替换为 Rslib 的依赖。
-
-import { PackageManagerTabs } from '@theme';
 
 - 移除 tsup:
 
