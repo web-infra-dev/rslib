@@ -50,18 +50,23 @@ Keep commits focused — one logical change per commit.
 
 ## Step 3 — Create a Pull Request
 
-Analyze the changes in this branch and write with following template in `.github/PULL_REQUEST_TEMPLATE.md`.
+Analyze the changes in this branch and write a concise PR description based on `.github/PULL_REQUEST_TEMPLATE.md`.
 
-In the `Summary` section, start with a few concise sentences covering the core change, its background and motivation, and its impact.
+Default style requirements:
 
-- Avoid enumerating every code change in detail.
-- Avoid mentioning documentation, test, or lockfile changes.
-- If there are other important implementation details that need to be elaborated, expand on them with a bullet list afterward.
+- Keep the `Summary` short: 1-4 sentences total, do not enumerate low-level file changes.
+- In `Summary`, always describe the core change. If applicable, also mention motivation/background and user-facing impact.
+- Use appropriate line breaks and blank lines between points to keep the summary easy to read.
+- Add a short bullet list when extra implementation detail is truly necessary.
+- Add code blocks for technical details or examples if needed.
+- Do not mention test, documentation, or lockfile changes in the narrative.
 
-Open the PR with GitHub CLI, the title must follow Conventional Commits format. For a draft PR, add `--draft`.
+Open the PR with GitHub CLI. The title must follow Conventional Commits format.
 
 Do not prompt the user for confirmation, just run the command:
 
 ```bash
 gh pr create --title "<title>" --body "<body>" --base main
 ```
+
+For a draft PR, add `--draft`.
