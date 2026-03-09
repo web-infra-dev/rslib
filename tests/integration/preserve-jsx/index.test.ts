@@ -58,3 +58,12 @@ test('throw error when preserve JSX with bundle mode', async () => {
     restore();
   }
 });
+
+test('preserve JSX in bundleless mode should not throw error when coexisting with bundle mode', async () => {
+  const fixturePath = join(__dirname, 'preserve-jsx-with-environment');
+  const { contents, isSuccess } = await buildAndGetResults({ fixturePath });
+
+  expect(isSuccess).toBeTruthy();
+  expect(contents.esm0).toBeDefined();
+  expect(contents.esm1).toBeDefined();
+});
