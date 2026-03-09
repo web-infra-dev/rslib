@@ -784,22 +784,18 @@ const fixJsModuleTypePlugin = (): RsbuildPlugin => ({
 const BundlePlugin = (): RsbuildPlugin => ({
   name: 'rslib:bundle',
   setup(api) {
-    api.onBeforeBuild({
+    api.onBeforeEnvironmentCompile({
       order: 'post',
-      handler: ({ bundlerConfigs }) => {
-        if (bundlerConfigs) {
-          for (const config of bundlerConfigs) {
-            if (config?.module?.parser?.javascript?.jsx === true) {
-              logger.error(
-                'Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to `automatic` or `classic`. Check out ' +
-                  color.green(
-                    'https://rslib.rs/guide/solution/react#jsx-transform',
-                  ) +
-                  ' for more details.',
-              );
-              process.exit(1);
-            }
-          }
+      handler: ({ bundlerConfig }) => {
+        if (bundlerConfig?.module?.parser?.javascript?.jsx === true) {
+          logger.error(
+            'Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to `automatic` or `classic`. Check out ' +
+              color.green(
+                'https://rslib.rs/guide/solution/react#jsx-transform',
+              ) +
+              ' for more details.',
+          );
+          process.exit(1);
         }
       },
     });
