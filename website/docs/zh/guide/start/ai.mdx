@@ -1,0 +1,77 @@
+# AI
+
+为了帮助 AI 更全面地了解 Rslib 的功能、配置与最佳实践，从而在日常开发和问题排查过程中提供更准确的帮助，Rslib 提供了以下能力：
+
+- **[llms.txt](#llmstxt)**
+- **[Markdown 文档](#markdown-文档)**
+- **[AGENTS.md](#agentsmd)**
+- **[Agent Skills](#agent-skills)**
+
+## llms.txt
+
+[llms.txt](https://llmstxt.org/) 是一种帮助 LLM 发现和使用项目文档的标准规范。Rslib 遵循该规范，发布了文档的结构化索引文件。
+
+```
+https://rslib.rs/llms.txt
+```
+
+你可以将上述 URL 直接提供给 AI（例如粘贴到对话框或写入上下文配置文件中），AI 即可通过该文件索引获取完整、最新的 Rslib 文档内容，从而在回答问题和生成代码时给出更准确的结果。
+
+## Markdown 文档
+
+Rslib 文档的每个页面都提供对应的 `.md` 纯文本版本，可直接作为上下文提供给 AI。你可以在文档任意页面的标题下方点击「复制 Markdown」或 「复制 Markdown 链接」按钮，获取该页面对应的 Markdown 文件内容或链接。
+
+```
+https://rslib.rs/guide/start/index.md
+```
+
+将 Markdown 链接或内容提供给 AI，即可让其精确了解某一具体章节的内容，适合在针对性问题排查或查阅特定内容时使用。
+
+## AGENTS.md
+
+使用 [create-rslib](https://www.npmjs.com/package/create-rslib) 创建新项目时，生成的项目中会包含一个 `AGENTS.md` 文件。该文件遵循 [AGENTS.md](https://agents.md/) 规范，向 Agents 提供项目的关键信息。
+
+生成的 `AGENTS.md` 示例内容如下：
+
+```markdown wrapCode
+# AGENTS.md
+
+You are an expert in JavaScript, Rspack, Rsbuild, Rslib, and library development. You write maintainable, performant, and accessible code.
+
+## Commands
+
+- `npm run build` - Build the library for production
+- `npm run dev` - Turn on watch mode, watch for changes and rebuild the library
+
+## Docs
+
+- Rslib: https://rslib.rs/llms.txt
+- Rsbuild: https://rsbuild.rs/llms.txt
+- Rspack: https://rspack.rs/llms.txt
+```
+
+你也可以根据项目的实际情况进行修改，添加更多关于项目结构、整体架构等多方面的信息，以便 Agents 更好地理解你的项目。
+
+## Agent Skills
+
+Agent Skills 是可安装到 Agent 中的领域知识包，能够让 Agent 在特定场景下更准确、更专业地给出建议或执行操作。
+
+我们在 [rstackjs/agent-skills](https://github.com/rstackjs/agent-skills) 仓库中为 Rstack 生态提供了许多 Skills，其中关于 Rslib 的 Skills 包括：
+
+- [rslib-best-practices](https://github.com/rstackjs/agent-skills#rslib-best-practices)：Rslib 相关的最佳实践。
+- [migrate-to-rslib](https://github.com/rstackjs/agent-skills#migrate-to-rslib)：将现有的 tsc、tsup 项目迁移到 Rslib。
+
+在支持 Skills 的 Coding Agent 中，可以通过以下命令使用 [skills](https://www.npmjs.com/package/skills) 包安装指定的 Skill：
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command="skills add rstackjs/agent-skills --skill migrate-to-rslib"
+  dlx
+/>
+
+安装完成后，用自然语言输入相关提示词即可触发对应 Skill，例如：
+
+```
+帮我把这个 tsc 项目迁移到 Rslib
+```
