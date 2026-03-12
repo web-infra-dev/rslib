@@ -40,7 +40,6 @@ Rslib uses [Conventional Commits](https://www.conventionalcommits.org/):
 - `core` — `packages/core`
 - `dts` — `packages/plugin-dts`
 - `create-rslib` — `packages/create-rslib`
-- `docs` — website / documentation
 - `examples` — examples directory
 - `deps` — dependency updates
 
