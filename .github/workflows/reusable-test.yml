@@ -58,12 +58,6 @@ jobs:
         if: ${{ steps.changes.outputs.changed == 'true' }}
         run: pnpm install
 
-      - name: Install Playwright browsers (only for e2e)
-        if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'e2e' }}
-        run: |
-          cd ./tests || exit 0
-          pnpm playwright install chromium
-
       - name: Type Check
         if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'ut' }}
         run: pnpm run type-check

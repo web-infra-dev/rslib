@@ -1,14 +1,19 @@
 import { defineConfig } from '@playwright/test';
 
+const isCI = Boolean(process.env.CI);
+
 export default defineConfig({
   // Playwright test files with `.pw.` to distinguish from Rstest test files
   testMatch: /.*pw.(test|spec).(js|ts|mjs)/,
   // Retry on CI
-  retries: process.env.CI ? 3 : 0,
+  retries: isCI ? 3 : 0,
   // Print line for each test being run in CI
   reporter: 'list',
+  use: {
+    channel: isCI ? 'chrome' : undefined,
+  },
   expect: {
-    timeout: process.env.CI ? 30_000 : 5_000,
+    timeout: isCI ? 30_000 : 5_000,
   },
   webServer: [
     {
