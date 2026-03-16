@@ -157,14 +157,14 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/config/load.d.ts": "export declare const loadConfig: () => void;
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/foo/foo.d.ts": "import { logRequest } from '../logger.js';
-    import { logger } from '../../../../compile/prebundle-pkg';
+    import { logger } from '../../../../compile/prebundle-pkg/index.js';
     import { logRequest as logRequest2 } from '../logger.js';
     export { logRequest, logRequest2, logger };
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/foo/index.d.ts": "export type Barrel = string;
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/extension-true/esm/index.d.ts": "import { logRequest } from './logger.js';
-    import { logger } from '../../../compile/prebundle-pkg';
+    import { logger } from '../../../compile/prebundle-pkg/index.js';
     import type { Baz } from './index.js';
     import type { LoggerOptions } from './types.js';
     import { defaultOptions } from './types.js';
@@ -174,7 +174,7 @@ test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
     export * from './logger.js';
     export type { Foo } from './types.js';
     export { Router } from 'express';
-    export * from '../../../compile/prebundle-pkg';
+    export * from '../../../compile/prebundle-pkg/index.js';
     export type { Bar } from './types.js';
     export * from './.hidden.js';
     export * from './.hidden-folder/index.js';
@@ -301,12 +301,12 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/config/load.d.ts": "export declare const loadConfig: () => void;
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/foo/foo.d.mts": "import { logRequest } from '../logger.mjs';
-    import { logger } from '../../../compile/prebundle-pkg';
+    import { logger } from '../../../compile/prebundle-pkg/index.js';
     import { logRequest as logRequest2 } from '../logger.mjs';
     export { logRequest, logRequest2, logger };
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/foo/foo.d.ts": "import { logRequest } from '../logger.js';
-    import { logger } from '../../../compile/prebundle-pkg';
+    import { logger } from '../../../compile/prebundle-pkg/index.js';
     import { logRequest as logRequest2 } from '../logger.js';
     export { logRequest, logRequest2, logger };
     ",
@@ -315,7 +315,7 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/foo/index.d.ts": "export type Barrel = string;
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/index.d.mts": "import { logRequest } from './logger.mjs';
-    import { logger } from '../../compile/prebundle-pkg';
+    import { logger } from '../../compile/prebundle-pkg/index.js';
     import type { Baz } from './index.mjs';
     import type { LoggerOptions } from './types.mjs';
     import { defaultOptions } from './types.mjs';
@@ -325,7 +325,7 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     export * from './logger.mjs';
     export type { Foo } from './types.mjs';
     export { Router } from 'express';
-    export * from '../../compile/prebundle-pkg';
+    export * from '../../compile/prebundle-pkg/index.js';
     export type { Bar } from './types.mjs';
     export * from './.hidden.mjs';
     export * from './.hidden-folder/index.mjs';
@@ -336,7 +336,7 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     export * from './types.mjs';
     ",
       "<ROOT>/tests/integration/redirect/dts/dist/auto-extension-true/index.d.ts": "import { logRequest } from './logger.js';
-    import { logger } from '../../compile/prebundle-pkg';
+    import { logger } from '../../compile/prebundle-pkg/index.js';
     import type { Baz } from './index.js';
     import type { LoggerOptions } from './types.js';
     import { defaultOptions } from './types.js';
@@ -346,7 +346,7 @@ test('redirect.dts.extension: true with dts.autoExtension: true', async () => {
     export * from './logger.js';
     export type { Foo } from './types.js';
     export { Router } from 'express';
-    export * from '../../compile/prebundle-pkg';
+    export * from '../../compile/prebundle-pkg/index.js';
     export type { Bar } from './types.js';
     export * from './.hidden.js';
     export * from './.hidden-folder/index.js';

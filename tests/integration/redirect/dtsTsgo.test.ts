@@ -141,66 +141,66 @@ describe('dts redirect with tsgo', () => {
 
   test('redirect.dts.path: true with redirect.dts.extension: true', async () => {
     expect(contents.esm2).toMatchInlineSnapshot(`
-        {
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/.hidden.d.ts": "export declare const hidden = "This is a hidden file";
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/a.b/index.d.ts": "export declare const ab = "a.b";
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/config.d.ts": "export * from './config/load.js';
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/config/load.d.ts": "export declare const loadConfig: () => void;
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/foo/foo.d.ts": "import { logRequest } from '../logger.js';
-        import { logger } from '../../../../compile/prebundle-pkg';
-        import { logRequest as logRequest2 } from '../logger.js';
-        export { logRequest, logRequest2, logger };
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/foo/index.d.ts": "export type Barrel = string;
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/index.d.ts": "import { logRequest } from './logger.js';
-        import { logger } from '../../../compile/prebundle-pkg';
-        import type { Baz } from './index.js';
-        import type { LoggerOptions } from './types.js';
-        import { defaultOptions } from './types.js';
-        type sources = typeof import('./logger.js');
-        export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
-        export * from './foo/index.js';
-        export * from './logger.js';
-        export type { Foo } from './types.js';
-        export * from '../../../compile/prebundle-pkg';
-        export type { Bar } from './types.js';
-        export * from './.hidden.js';
-        export * from './.hidden-folder/index.js';
-        export * from './a.b/index.js';
-        export * from './bar.baz.js';
-        export * from './config.js';
-        export * from './foo/index.js';
-        export * from './types.js';
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/logger.d.ts": "import type { LoggerOptions } from './types.js';
-        export declare function logRequest(req: Request, options: LoggerOptions): void;
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/types.d.ts": "export interface LoggerOptions {
-            logLevel: 'info' | 'debug' | 'warn' | 'error';
-            logBody: boolean;
-        }
-        export declare const defaultOptions: LoggerOptions;
-        export interface Foo {
-            foo: string;
-        }
-        export interface Bar {
-            bar: string;
-        }
-        export interface Baz {
-            baz: string;
-        }
-        ",
-        }
-      `);
+      {
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/.hidden.d.ts": "export declare const hidden = "This is a hidden file";
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/a.b/index.d.ts": "export declare const ab = "a.b";
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/bar.baz.d.ts": "export declare const bar = "bar-baz";
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/config.d.ts": "export * from './config/load.js';
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/config/load.d.ts": "export declare const loadConfig: () => void;
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/foo/foo.d.ts": "import { logRequest } from '../logger.js';
+      import { logger } from '../../../../compile/prebundle-pkg/index.js';
+      import { logRequest as logRequest2 } from '../logger.js';
+      export { logRequest, logRequest2, logger };
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/foo/index.d.ts": "export type Barrel = string;
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/index.d.ts": "import { logRequest } from './logger.js';
+      import { logger } from '../../../compile/prebundle-pkg/index.js';
+      import type { Baz } from './index.js';
+      import type { LoggerOptions } from './types.js';
+      import { defaultOptions } from './types.js';
+      type sources = typeof import('./logger.js');
+      export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+      export * from './foo/index.js';
+      export * from './logger.js';
+      export type { Foo } from './types.js';
+      export * from '../../../compile/prebundle-pkg/index.js';
+      export type { Bar } from './types.js';
+      export * from './.hidden.js';
+      export * from './.hidden-folder/index.js';
+      export * from './a.b/index.js';
+      export * from './bar.baz.js';
+      export * from './config.js';
+      export * from './foo/index.js';
+      export * from './types.js';
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/logger.d.ts": "import type { LoggerOptions } from './types.js';
+      export declare function logRequest(req: Request, options: LoggerOptions): void;
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/extension-true/esm/types.d.ts": "export interface LoggerOptions {
+          logLevel: 'info' | 'debug' | 'warn' | 'error';
+          logBody: boolean;
+      }
+      export declare const defaultOptions: LoggerOptions;
+      export interface Foo {
+          foo: string;
+      }
+      export interface Bar {
+          bar: string;
+      }
+      export interface Baz {
+          baz: string;
+      }
+      ",
+      }
+    `);
   });
 
   test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
@@ -283,14 +283,14 @@ describe('dts redirect with tsgo', () => {
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/esm/config/load.d.mts": "export declare const loadConfig: () => void;
         ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/esm/foo/foo.d.mts": "import { logRequest } from '../logger.mjs';
-        import { logger } from '../../../../compile/prebundle-pkg';
+        import { logger } from '../../../../compile/prebundle-pkg/index.js';
         import { logRequest as logRequest2 } from '../logger.mjs';
         export { logRequest, logRequest2, logger };
         ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/esm/foo/index.d.mts": "export type Barrel = string;
         ",
           "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/esm/index.d.mts": "import { logRequest } from './logger.mjs';
-        import { logger } from '../../../compile/prebundle-pkg';
+        import { logger } from '../../../compile/prebundle-pkg/index.js';
         import type { Baz } from './index.mjs';
         import type { LoggerOptions } from './types.mjs';
         import { defaultOptions } from './types.mjs';
@@ -299,7 +299,7 @@ describe('dts redirect with tsgo', () => {
         export * from './foo/index.mjs';
         export * from './logger.mjs';
         export type { Foo } from './types.mjs';
-        export * from '../../../compile/prebundle-pkg';
+        export * from '../../../compile/prebundle-pkg/index.js';
         export type { Bar } from './types.mjs';
         export * from './.hidden.mjs';
         export * from './.hidden-folder/index.mjs';
@@ -330,65 +330,65 @@ describe('dts redirect with tsgo', () => {
         }
       `);
     expect(contents.cjs).toMatchInlineSnapshot(`
-        {
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/.hidden.d.ts": "export declare const hidden = "This is a hidden file";
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/a.b/index.d.ts": "export declare const ab = "a.b";
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/bar.baz.d.ts": "export declare const bar = "bar-baz";
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/config.d.ts": "export * from './config/load.js';
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/config/load.d.ts": "export declare const loadConfig: () => void;
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/foo/foo.d.ts": "import { logRequest } from '../logger.js';
-        import { logger } from '../../../../compile/prebundle-pkg';
-        import { logRequest as logRequest2 } from '../logger.js';
-        export { logRequest, logRequest2, logger };
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/foo/index.d.ts": "export type Barrel = string;
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/index.d.ts": "import { logRequest } from './logger.js';
-        import { logger } from '../../../compile/prebundle-pkg';
-        import type { Baz } from './index.js';
-        import type { LoggerOptions } from './types.js';
-        import { defaultOptions } from './types.js';
-        type sources = typeof import('./logger.js');
-        export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
-        export * from './foo/index.js';
-        export * from './logger.js';
-        export type { Foo } from './types.js';
-        export * from '../../../compile/prebundle-pkg';
-        export type { Bar } from './types.js';
-        export * from './.hidden.js';
-        export * from './.hidden-folder/index.js';
-        export * from './a.b/index.js';
-        export * from './bar.baz.js';
-        export * from './config.js';
-        export * from './foo/index.js';
-        export * from './types.js';
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/logger.d.ts": "import type { LoggerOptions } from './types.js';
-        export declare function logRequest(req: Request, options: LoggerOptions): void;
-        ",
-          "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/types.d.ts": "export interface LoggerOptions {
-            logLevel: 'info' | 'debug' | 'warn' | 'error';
-            logBody: boolean;
-        }
-        export declare const defaultOptions: LoggerOptions;
-        export interface Foo {
-            foo: string;
-        }
-        export interface Bar {
-            bar: string;
-        }
-        export interface Baz {
-            baz: string;
-        }
-        ",
-        }
-      `);
+      {
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/.hidden-folder/index.d.ts": "export declare const hiddenFolder = "This is a hidden folder";
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/.hidden.d.ts": "export declare const hidden = "This is a hidden file";
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/a.b/index.d.ts": "export declare const ab = "a.b";
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/bar.baz.d.ts": "export declare const bar = "bar-baz";
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/config.d.ts": "export * from './config/load.js';
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/config/load.d.ts": "export declare const loadConfig: () => void;
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/foo/foo.d.ts": "import { logRequest } from '../logger.js';
+      import { logger } from '../../../../compile/prebundle-pkg/index.js';
+      import { logRequest as logRequest2 } from '../logger.js';
+      export { logRequest, logRequest2, logger };
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/foo/index.d.ts": "export type Barrel = string;
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/index.d.ts": "import { logRequest } from './logger.js';
+      import { logger } from '../../../compile/prebundle-pkg/index.js';
+      import type { Baz } from './index.js';
+      import type { LoggerOptions } from './types.js';
+      import { defaultOptions } from './types.js';
+      type sources = typeof import('./logger.js');
+      export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+      export * from './foo/index.js';
+      export * from './logger.js';
+      export type { Foo } from './types.js';
+      export * from '../../../compile/prebundle-pkg/index.js';
+      export type { Bar } from './types.js';
+      export * from './.hidden.js';
+      export * from './.hidden-folder/index.js';
+      export * from './a.b/index.js';
+      export * from './bar.baz.js';
+      export * from './config.js';
+      export * from './foo/index.js';
+      export * from './types.js';
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/logger.d.ts": "import type { LoggerOptions } from './types.js';
+      export declare function logRequest(req: Request, options: LoggerOptions): void;
+      ",
+        "<ROOT>/tests/integration/redirect/dts-tsgo/dist/auto-extension-true/cjs/types.d.ts": "export interface LoggerOptions {
+          logLevel: 'info' | 'debug' | 'warn' | 'error';
+          logBody: boolean;
+      }
+      export declare const defaultOptions: LoggerOptions;
+      export interface Foo {
+          foo: string;
+      }
+      export interface Bar {
+          bar: string;
+      }
+      export interface Baz {
+          baz: string;
+      }
+      ",
+      }
+    `);
   });
 });
