@@ -260,13 +260,34 @@ async function addExtension(
   candidatePaths.push(path);
 
   // make sure the candidatePath exists, otherwise we may break the import, e.g. import 'foo.svg', import '../foo/index'
+  const dtsCandidates =
+    dtsExtension === '.d.mts' || dtsExtension === '.d.cts'
+      ? [
+          {
+            dtsExtension,
+            jsExtension,
+          },
+          {
+            dtsExtension: '.d.ts',
+            jsExtension: '.js',
+          },
+        ]
+      : [
+          {
+            dtsExtension,
+            jsExtension,
+          },
+        ];
+
   for (const candidatePath of candidatePaths) {
-    if (
-      await pathExists(
-        join(dirname(dtsFile), `${candidatePath}${dtsExtension}`),
-      )
-    ) {
-      return `${candidatePath}${jsExtension}`;
+    for (const candidate of dtsCandidates) {
+      if (
+        await pathExists(
+          join(dirname(dtsFile), `${candidatePath}${candidate.dtsExtension}`),
+        )
+      ) {
+        return `${candidatePath}${candidate.jsExtension}`;
+      }
     }
   }
 
@@ -401,6 +422,16 @@ export async function redirectDtsImports(
       }
 
       const ext = extname(redirectImportPath);
+      // Add `/index` or a JS extension for:
+      // 1. original relative imports like `./foo`
+      // 2. original absolute imports like `/root/project/foo`
+      // 3. imports rewritten by `redirect.path`, e.g.
+      //    `prebundle-pkg` -> `../../../compile/prebundle-pkg`
+      // Do not touch untouched bare package specifiers like `react`.
+      const shouldAddExtension =
+        redirectImportPath !== importPath ||
+        importPath.startsWith('.') ||
+        isAbsolute(importPath);
 
       if (ext) {
         if (JS_EXTENSIONS_PATTERN.test(redirectImportPath)) {
@@ -420,29 +451,14 @@ export async function redirectDtsImports(
             dtsExtension,
           );
         }
-      } else {
-        if (
-          absoluteImportPath &&
-          normalize(absoluteImportPath).startsWith(normalize(rootDir))
-        ) {
-          redirectImportPath = await addExtension(
-            redirect,
-            dtsFile,
-            redirectImportPath,
-            jsExtension,
-            dtsExtension,
-          );
-        }
-
-        if (!absoluteImportPath && importPath.startsWith('.')) {
-          redirectImportPath = await addExtension(
-            redirect,
-            dtsFile,
-            redirectImportPath,
-            jsExtension,
-            dtsExtension,
-          );
-        }
+      } else if (shouldAddExtension) {
+        redirectImportPath = await addExtension(
+          redirect,
+          dtsFile,
+          redirectImportPath,
+          jsExtension,
+          dtsExtension,
+        );
       }
 
       const normalizedRedirectImportPath = redirectImportPath
