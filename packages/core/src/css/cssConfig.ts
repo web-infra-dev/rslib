@@ -22,7 +22,7 @@ export async function cssExternalHandler(
   styleRedirectExtension: boolean,
   redirectedPath: string | undefined,
   issuer: string,
-): Promise<false | void> {
+): Promise<false | undefined> {
   // cssExtract: do not external @rsbuild/core/compiled/css-loader/noSourceMaps.js, sourceMaps.js, api.mjs etc.
   // cssExtract would execute the result handled by css-loader with importModule, so we cannot external the "helper import" from css-loader
   if (/compiled\/css-loader\//.test(request)) {
@@ -61,6 +61,7 @@ export async function cssExternalHandler(
   }
 
   callback(undefined, resolvedRequest);
+  return;
 }
 
 const PLUGIN_NAME = 'rsbuild:lib-css';
