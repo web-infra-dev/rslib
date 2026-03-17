@@ -14,11 +14,6 @@ export default {
   dependencies: [
     'tinyglobby',
     {
-      name: 'chokidar',
-      // strip sourcemap comment
-      prettier: true,
-    },
-    {
       name: 'rslog',
       dtsOnly: true,
     },
