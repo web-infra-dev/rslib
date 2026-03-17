@@ -124,9 +124,14 @@ const pluginLibCss = (
               );
 
         for (const matchedRuleId of matchedRuleIds) {
+          if (!config.module.rules.has(matchedRuleId)) {
+            continue;
+          }
+
           const mainRule = config.module
             .rule(matchedRuleId)
             .oneOfs.get(oneOfId);
+
           if (!mainRule) continue;
 
           if (mainRule.uses.has(CHAIN_ID.USE.MINI_CSS_EXTRACT)) {
