@@ -55,7 +55,6 @@ export default defineConfig({
   // externalize pre-bundled dependencies
   output: {
     externals: {
-      picocolors: '../compiled/picocolors/index.js',
       tinyglobby: '../compiled/tinyglobby/index.js',
     },
   },

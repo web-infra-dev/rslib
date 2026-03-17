@@ -12,11 +12,11 @@ import path, {
   relative,
   resolve,
 } from 'node:path';
+import { styleText } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { type NapiConfig, parseAsync } from '@ast-grep/napi';
 import { logger, type RsbuildConfig } from '@rsbuild/core';
 import MagicString from 'magic-string';
-import color from 'picocolors';
 import { convertPathToPattern, glob } from 'tinyglobby';
 import type { MatchPath } from 'tsconfig-paths';
 import * as tsconfigPaths from 'tsconfig-paths';
@@ -40,6 +40,25 @@ const require = createRequire(__filename);
 const ts = require('typescript') as typeof import('typescript');
 
 export { ts };
+
+type ColorFn = (text: string | number) => string;
+type ColorMap = Record<
+  'bold' | 'cyan' | 'dim' | 'reset' | 'underline' | 'yellow',
+  ColorFn
+>;
+const createStyler =
+  (style: Parameters<typeof styleText>[0]): ColorFn =>
+  (text) =>
+    styleText(style, String(text));
+
+export const color: ColorMap = {
+  bold: createStyler('bold'),
+  cyan: createStyler('cyan'),
+  dim: createStyler('dim'),
+  reset: createStyler('reset'),
+  underline: createStyler('underline'),
+  yellow: createStyler('yellow'),
+};
 
 const JS_EXTENSIONS: string[] = [
   'js',

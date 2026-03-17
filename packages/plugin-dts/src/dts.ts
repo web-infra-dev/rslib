@@ -9,10 +9,10 @@ import {
   resolve,
 } from 'node:path';
 import { logger } from '@rsbuild/core';
-import color from 'picocolors';
 import type { DtsEntry, DtsGenOptions } from './index';
 import {
   calcLongestCommonPath,
+  color,
   ensureTempDeclarationDir,
   mergeAliasWithTsConfigPaths,
 } from './utils';

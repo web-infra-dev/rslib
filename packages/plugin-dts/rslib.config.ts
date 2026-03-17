@@ -23,7 +23,6 @@ export default defineConfig({
   output: {
     externals: {
       'magic-string': '../compiled/magic-string/index.js',
-      picocolors: '../compiled/picocolors/index.js',
       tinyglobby: '../compiled/tinyglobby/index.js',
       'tsconfig-paths': 'node-commonjs ../compiled/tsconfig-paths/index.js',
     },

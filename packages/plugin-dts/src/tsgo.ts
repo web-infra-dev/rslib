@@ -4,11 +4,11 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { logger } from '@rsbuild/core';
-import color from 'picocolors';
 import type ts from 'typescript';
 import type { DtsRedirect } from './index';
 import type { EmitDtsOptions } from './tsc';
 import {
+  color,
   getTimeCost,
   globDtsFiles,
   processDtsFiles,
