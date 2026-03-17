@@ -4,7 +4,7 @@ import { beforeAll, describe, expect, test } from '@rstest/core';
 import { buildAndGetResults, type BuildResult } from 'test-helper';
 
 // '__file' path can't be normalized on win32.
-describe.runIf(platform() !== 'win32').skip('ESM', async () => {
+describe.runIf(platform() !== 'win32')('ESM', async () => {
   let jsResult: BuildResult;
   let cssResult: BuildResult;
 
@@ -140,13 +140,16 @@ describe.runIf(platform() !== 'win32').skip('ESM', async () => {
   test('bundleless', async () => {
     expect(jsResult.contents.esm0).toMatchInlineSnapshot(`
       {
-        "<ROOT>/tests/integration/vue/dist/bundleless/Button/Button.js": "import "./style.css";
-      import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
-      const _00_2Fplugin_vue_2Fexport_helper = (sfc, props)=>{
+        "<ROOT>/tests/integration/vue/dist/bundleless/544.js": "const _00_2Fplugin_vue_2Fexport_helper = (sfc, props)=>{
           const target = sfc.__vccOpts || sfc;
           for (const [key, val] of props)target[key] = val;
           return target;
       };
+      export { _00_2Fplugin_vue_2Fexport_helper };
+      ",
+        "<ROOT>/tests/integration/vue/dist/bundleless/Button/Button.js": "import "./style.css";
+      import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
+      import { _00_2Fplugin_vue_2Fexport_helper } from "../544.js";
       const _sfc_main = {
           __name: 'Button',
           setup (__props, { expose: __expose }) {
@@ -179,17 +182,12 @@ describe.runIf(platform() !== 'win32').skip('ESM', async () => {
               "<ROOT>/tests/integration/vue/src/Button/Button.vue"
           ]
       ]);
-      export { Button as default };
+      export default Button;
       ",
-        "<ROOT>/tests/integration/vue/dist/bundleless/Button/index.js": "import Button from "./Button.js";
-      export { Button as default };
+        "<ROOT>/tests/integration/vue/dist/bundleless/Button/index.js": "export { default } from "./Button.js";
       ",
         "<ROOT>/tests/integration/vue/dist/bundleless/Card.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
-      const _00_2Fplugin_vue_2Fexport_helper = (sfc, props)=>{
-          const target = sfc.__vccOpts || sfc;
-          for (const [key, val] of props)target[key] = val;
-          return target;
-      };
+      import { _00_2Fplugin_vue_2Fexport_helper } from "./544.js";
       const _sfc_main = {
           __name: 'Card',
           setup (__props, { expose: __expose }) {
@@ -222,11 +220,10 @@ describe.runIf(platform() !== 'win32').skip('ESM', async () => {
               "<ROOT>/tests/integration/vue/src/Card.vue"
           ]
       ]);
-      export { Card as default };
+      export default Card;
       ",
-        "<ROOT>/tests/integration/vue/dist/bundleless/index.js": "import Button from "./Button/index.js";
-      import Card from "./Card.js";
-      export { Button, Card };
+        "<ROOT>/tests/integration/vue/dist/bundleless/index.js": "export { default as Button } from "./Button/index.js";
+      export { default as Card } from "./Card.js";
       ",
       }
     `);

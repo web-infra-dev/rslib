@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "pnpm --filter \"./packages/*\" run build",
-    "build:examples": "pnpm --filter \"@examples/*\" --filter \"!@examples/vue-component-*\" run build",
+    "build:examples": "pnpm --filter \"@examples/*\" run build",
     "change": "changeset",
     "changeset": "changeset",
     "check-dependency-version": "check-dependency-version-consistency . && echo",
