@@ -32,6 +32,10 @@ export default defineConfig({
       syntax: ['es2023'],
       dts: {
         bundle: false,
+        // alias to pre-bundled types as they are public API
+        alias: {
+          rslog: './compiled/rslog',
+        },
         // Only use tsgo in local dev for faster build, disable it in CI until it's more stable
         tsgo: !process.env.CI,
         distPath: './dist-types',
@@ -53,7 +57,6 @@ export default defineConfig({
     externals: {
       picocolors: '../compiled/picocolors/index.js',
       chokidar: '../compiled/chokidar/index.js',
-      rslog: '../compiled/rslog/index.js',
       tinyglobby: '../compiled/tinyglobby/index.js',
     },
   },
