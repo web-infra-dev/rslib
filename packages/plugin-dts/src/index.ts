@@ -7,13 +7,13 @@ import {
   type RsbuildConfig,
   type RsbuildPlugin,
 } from '@rsbuild/core';
-import color from 'picocolors';
 import type { ParsedCommandLine } from 'typescript';
 
 import {
   cleanDtsFiles,
   cleanTsBuildInfoFile,
   clearTempDeclarationDir,
+  color,
   getDtsEmitPath,
   loadTsconfig,
   processSourceEntry,

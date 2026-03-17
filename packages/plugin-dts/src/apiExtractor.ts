@@ -2,9 +2,8 @@ import fs from 'node:fs';
 import { join, relative } from 'node:path';
 import type * as ApiExtractor from '@microsoft/api-extractor';
 import { logger } from '@rsbuild/core';
-import color from 'picocolors';
 import type { DtsEntry } from './index';
-import { addBannerAndFooter, getTimeCost } from './utils';
+import { addBannerAndFooter, color, getTimeCost } from './utils';
 
 const logPrefixApiExtractor = color.dim('[api-extractor]');
 

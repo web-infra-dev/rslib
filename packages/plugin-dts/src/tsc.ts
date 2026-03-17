@@ -1,5 +1,4 @@
 import { logger } from '@rsbuild/core';
-import color from 'picocolors';
 import type {
   CompilerHost,
   CompilerOptions,
@@ -12,6 +11,7 @@ import type {
 } from 'typescript';
 import type { DtsRedirect } from './index';
 import {
+  color,
   getTimeCost,
   processDtsFiles,
   renameDtsFile,

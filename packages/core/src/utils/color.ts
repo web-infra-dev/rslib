@@ -1,2 +1,1 @@
-import color from 'picocolors';
-export { color };
+export { color } from 'rslog';
