@@ -66,6 +66,23 @@ export async function cssExternalHandler(
 
 const PLUGIN_NAME = 'rsbuild:lib-css';
 
+// When multiple sass / less / stylus plugins are registered, rsbuild appends
+// an incrementing numeric suffix to the generated rule id, e.g. less-1, sass-2.
+const isPreprocessorRule = (
+  preprocessRuleId: string,
+  toMatchRuleId: string,
+) => {
+  if (preprocessRuleId === toMatchRuleId) {
+    return true;
+  }
+
+  if (new RegExp(`^${preprocessRuleId}-\\d+$`).test(toMatchRuleId)) {
+    return true;
+  }
+
+  return false;
+};
+
 // 1. replace CssExtractPlugin.loader with libCssExtractLoader
 // 2. replace CssExtractPlugin with LibCssExtractPlugin
 const pluginLibCss = (
@@ -91,6 +108,7 @@ const pluginLibCss = (
 
     api.modifyBundlerChain((config, { CHAIN_ID }) => {
       let isUsingCssExtract = false;
+      const ruleIds = Object.keys(config.module.rules.entries());
 
       for (const [ruleId, oneOfId] of [
         [CHAIN_ID.RULE.CSS, CHAIN_ID.ONE_OF.CSS_MAIN],
@@ -98,21 +116,31 @@ const pluginLibCss = (
         [CHAIN_ID.RULE.LESS, 'less'],
         [CHAIN_ID.RULE.STYLUS, 'stylus'],
       ] as const) {
-        if (!config.module.rules.has(ruleId)) continue;
-        const mainRule = config.module.rule(ruleId).oneOfs.get(oneOfId);
-        if (!mainRule) continue;
+        const matchedRuleIds =
+          ruleId === CHAIN_ID.RULE.CSS
+            ? [ruleId]
+            : ruleIds.filter((currentRuleId) =>
+                isPreprocessorRule(ruleId, currentRuleId),
+              );
 
-        if (mainRule.uses.has(CHAIN_ID.USE.MINI_CSS_EXTRACT)) {
-          isUsingCssExtract = true;
-          mainRule
-            .use(CHAIN_ID.USE.MINI_CSS_EXTRACT)
-            .loader(require.resolve('./libCssExtractLoader.js'))
-            .options({
-              rootDir,
-              auto,
-              banner,
-              footer,
-            });
+        for (const matchedRuleId of matchedRuleIds) {
+          const mainRule = config.module
+            .rule(matchedRuleId)
+            .oneOfs.get(oneOfId);
+          if (!mainRule) continue;
+
+          if (mainRule.uses.has(CHAIN_ID.USE.MINI_CSS_EXTRACT)) {
+            isUsingCssExtract = true;
+            mainRule
+              .use(CHAIN_ID.USE.MINI_CSS_EXTRACT)
+              .loader(require.resolve('./libCssExtractLoader.js'))
+              .options({
+                rootDir,
+                auto,
+                banner,
+                footer,
+              });
+          }
         }
       }
 
