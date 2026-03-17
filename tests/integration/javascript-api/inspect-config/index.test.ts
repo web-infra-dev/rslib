@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+import { pluginSass } from '@rsbuild/plugin-sass';
 import { createRslib } from '@rslib/core';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
@@ -110,6 +111,52 @@ describe('rslib.inspectConfig', async () => {
     expect(result2.rslibConfig).not.toBeUndefined();
     expect(result2.environmentConfigs.length).toBe(2);
     expect(result2.bundlerConfigs.length).toBe(2);
+  });
+
+  test('should inspect numbered sass rules in bundleless config', async () => {
+    const rslib = await createRslib({
+      cwd: import.meta.dirname,
+      config: {
+        lib: [
+          {
+            format: 'esm',
+            bundle: false,
+          },
+        ],
+        plugins: [
+          pluginSass({ include: /\.module\.scss$/ }),
+          pluginSass({ include: /\.scss$/ }),
+        ],
+        output: {
+          target: 'web',
+        },
+        logLevel: 'silent',
+      },
+    });
+
+    const { bundlerConfigs } = await rslib.inspectConfig();
+    const matches = Array.from(
+      bundlerConfigs[0]!.matchAll(
+        /config\.module\.rule\('(sass(?:-\d+)?)'\)\.oneOf\('sass'\)\.use\('mini-css-extract'\)[\s\S]*?loader: '([^']*libCssExtractLoader\.js)'/g,
+      ),
+      ([, ruleId, loader]) => ({
+        ruleId,
+        loader,
+      }),
+    );
+
+    expect(matches).toMatchInlineSnapshot(`
+      [
+        {
+          "loader": "<ROOT>/packages/core/dist/libCssExtractLoader.js",
+          "ruleId": "sass",
+        },
+        {
+          "loader": "<ROOT>/packages/core/dist/libCssExtractLoader.js",
+          "ruleId": "sass-1",
+        },
+      ]
+    `);
   });
 });
 
