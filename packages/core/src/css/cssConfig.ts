@@ -66,8 +66,8 @@ export async function cssExternalHandler(
 
 const PLUGIN_NAME = 'rsbuild:lib-css';
 
-// When multiple sass / less / stylus plugins are registered, rsbuild appends
-// an incrementing numeric suffix to the generated rule id, e.g. less-1, sass-2.
+// When multiple sass / less plugins are registered, rsbuild appends an
+// incrementing numeric suffix to the generated rule id, e.g. less-1, sass-2.
 const isPreprocessorRule = (
   preprocessRuleId: string,
   toMatchRuleId: string,
