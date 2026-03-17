@@ -22,7 +22,7 @@ export async function watchFilesForRestart(
     return;
   }
 
-  const chokidar = await import('chokidar');
+  const { default: chokidar } = await import('chokidar');
 
   const watcher = chokidar.watch(files, {
     ignoreInitial: true,
