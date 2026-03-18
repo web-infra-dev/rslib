@@ -1236,7 +1236,9 @@ const composeEntryConfig = async (
       }
 
       // Turn entries in array into each separate entry.
-      const { glob } = await import('tinyglobby');
+      const { glob } = await import(
+        /* webpackChunkName: "tinyglobby" */ 'tinyglobby'
+      );
       const globEntryFiles = await glob(entryFiles, {
         cwd: root,
         absolute: true,
