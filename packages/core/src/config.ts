@@ -12,7 +12,6 @@ import {
   rspack,
   type ToolsConfig,
 } from '@rsbuild/core';
-import { glob } from 'tinyglobby';
 import { composeAssetConfig } from './asset/assetConfig';
 import {
   DTS_EXTENSIONS_PATTERN,
@@ -1237,6 +1236,7 @@ const composeEntryConfig = async (
       }
 
       // Turn entries in array into each separate entry.
+      const { glob } = await import('tinyglobby');
       const globEntryFiles = await glob(entryFiles, {
         cwd: root,
         absolute: true,
