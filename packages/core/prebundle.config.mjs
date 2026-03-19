@@ -10,7 +10,6 @@ export default {
     typescript: 'typescript',
   },
   dependencies: [
-    'tinyglobby',
     {
       name: 'rslog',
       dtsOnly: true,

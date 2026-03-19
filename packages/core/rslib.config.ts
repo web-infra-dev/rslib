@@ -52,12 +52,6 @@ export default defineConfig({
       RSLIB_VERSION: JSON.stringify(packageJson.version),
     },
   },
-  // externalize pre-bundled dependencies
-  output: {
-    externals: {
-      tinyglobby: '../compiled/tinyglobby/index.js',
-    },
-  },
   tools: {
     rspack: {
       plugins: [new rspack.CircularDependencyRspackPlugin({})],
