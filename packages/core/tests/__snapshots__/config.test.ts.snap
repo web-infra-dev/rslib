@@ -71,7 +71,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   resolve: {
     alias: {
-      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers'
+      '@swc/helpers': '<PNPM_INNER>/@swc/helpers'
     },
     aliasStrategy: 'prefer-tsconfig',
     extensions: [
@@ -415,7 +415,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       references: 'auto'
     },
     alias: {
-      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers',
+      '@swc/helpers': '<PNPM_INNER>/@swc/helpers',
       foo: 'foo/esm',
       bar: 'bar'
     },
@@ -492,7 +492,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css-inline').use('css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
                 options: {
                   modules: false,
                   sourceMap: false,
@@ -531,11 +531,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
                 options: {
                   modules: {
                     auto: true,
@@ -908,7 +908,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         use: [
           /* config.module.rule('rsbuild-transform-0').use('rsbuild-transform-0') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
+            loader: '<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
             options: {
               id: 'rsbuild-transform-0',
               getEnvironment: ()=>environmentContext
@@ -1125,7 +1125,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       references: 'auto'
     },
     alias: {
-      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers',
+      '@swc/helpers': '<PNPM_INNER>/@swc/helpers',
       foo: 'foo',
       bar: 'bar/cjs'
     },
@@ -1202,7 +1202,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css-inline').use('css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
                 options: {
                   modules: false,
                   sourceMap: false,
@@ -1241,11 +1241,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
                 options: {
                   modules: {
                     auto: true,
@@ -1618,7 +1618,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         use: [
           /* config.module.rule('rsbuild-transform-0').use('rsbuild-transform-0') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
+            loader: '<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
             options: {
               id: 'rsbuild-transform-0',
               getEnvironment: ()=>environmentContext
@@ -1823,7 +1823,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       references: 'auto'
     },
     alias: {
-      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers',
+      '@swc/helpers': '<PNPM_INNER>/@swc/helpers',
       foo: 'foo',
       bar: 'bar'
     },
@@ -1892,7 +1892,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css-inline').use('css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
                 options: {
                   modules: false,
                   sourceMap: false,
@@ -1931,11 +1931,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
                 options: {
                   modules: {
                     auto: true,
@@ -2235,7 +2235,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         use: [
           /* config.module.rule('rsbuild-transform-0').use('rsbuild-transform-0') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
+            loader: '<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
             options: {
               id: 'rsbuild-transform-0',
               getEnvironment: ()=>environmentContext
@@ -2435,7 +2435,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       references: 'auto'
     },
     alias: {
-      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers',
+      '@swc/helpers': '<PNPM_INNER>/@swc/helpers',
       foo: 'foo',
       bar: 'bar'
     },
@@ -2504,7 +2504,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css-inline').use('css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
                 options: {
                   modules: false,
                   sourceMap: false,
@@ -2543,11 +2543,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
                 options: {
                   modules: {
                     auto: true,
@@ -2847,7 +2847,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         use: [
           /* config.module.rule('rsbuild-transform-0').use('rsbuild-transform-0') */
           {
-            loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
+            loader: '<PNPM_INNER>/@rsbuild/core/dist/transformRawLoader.mjs',
             options: {
               id: 'rsbuild-transform-0',
               getEnvironment: ()=>environmentContext
@@ -2985,7 +2985,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       references: 'auto'
     },
     alias: {
-      '@swc/helpers': '<ROOT>/node_modules/<PNPM_INNER>/@swc/helpers',
+      '@swc/helpers': '<PNPM_INNER>/@swc/helpers',
       foo: 'foo',
       bar: 'bar'
     },
@@ -3053,7 +3053,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css-inline').use('css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
                 options: {
                   modules: false,
                   sourceMap: false,
@@ -3092,11 +3092,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('mini-css-extract') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/<RSPACK_CORE>/dist/cssExtractLoader.js'
+                loader: '<PNPM_INNER>/<RSPACK_CORE>/dist/cssExtractLoader.js'
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
-                loader: '<ROOT>/node_modules/<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
                 options: {
                   modules: {
                     auto: true,

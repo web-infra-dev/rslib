@@ -28,7 +28,7 @@ class LibCssExtractPlugin implements Rspack.RspackPluginInstance {
     compiler.hooks.make.tap(pluginName, (compilation) => {
       compilation.hooks.processAssets.tap(pluginName, (assets) => {
         const chunkAsset = Object.keys(assets).filter((name) =>
-          /\.css/.test(name),
+          name.includes('.css'),
         );
         for (const name of chunkAsset) {
           compilation.updateAsset(name, (old) => {

@@ -1930,7 +1930,7 @@ export async function composeRsbuildEnvironments(
 
     let index = 0;
     let candidateId = nextDefaultId(format, index);
-    while (usedIds.indexOf(candidateId) !== -1) {
+    while (usedIds.includes(candidateId)) {
       candidateId = nextDefaultId(format, ++index);
     }
     usedIds.push(candidateId);
