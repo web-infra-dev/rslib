@@ -464,7 +464,14 @@ describe('Should compose create Rsbuild config correctly', () => {
         },
         {
           format: 'mf',
-          plugins: [pluginModuleFederation({}, {})],
+          plugins: [
+            pluginModuleFederation(
+              {
+                name: 'test-mf',
+              },
+              {},
+            ),
+          ],
         },
       ],
       source: {
