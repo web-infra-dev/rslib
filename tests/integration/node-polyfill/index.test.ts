@@ -27,9 +27,9 @@ test('`Buffer` should be aliased to polyfill packages when bundle is disabled', 
 
   expect(bufferContents).toMatchInlineSnapshot(`
     [
-      "import { createRequire as __rspack_createRequire } from "node:module";
+      "import { __webpack_require__ } from "./rslib-runtime.js";
+    import { createRequire as __rspack_createRequire } from "node:module";
     const __rspack_createRequire_require = __rspack_createRequire(import.meta.url);
-    import { __webpack_require__ } from "./rslib-runtime.js";
     __webpack_require__.add({
         "<ROOT>/node_modules/<PNPM_INNER>/buffer/index.js" (module) {
             module.exports = __rspack_createRequire_require("buffer");

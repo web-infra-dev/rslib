@@ -19,8 +19,7 @@ test('should extract css-modules named export successfully in bundle', async () 
     "
   `);
   expect(js.entries.esm).toMatchInlineSnapshot(`
-    "import "./rslib-runtime.js";
-    var _1 = "content-wrapper-iNtwbA";
+    "var _1 = "content-wrapper-iNtwbA";
     const src_button = _1;
     export { src_button as button };
     "
