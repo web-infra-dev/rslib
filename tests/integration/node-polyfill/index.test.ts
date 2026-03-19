@@ -31,7 +31,7 @@ test('`Buffer` should be aliased to polyfill packages when bundle is disabled', 
     import { createRequire as __rspack_createRequire } from "node:module";
     const __rspack_createRequire_require = __rspack_createRequire(import.meta.url);
     __webpack_require__.add({
-        "<ROOT>/node_modules/<PNPM_INNER>/buffer/index.js" (module) {
+        "<PNPM_INNER>/buffer/index.js" (module) {
             module.exports = __rspack_createRequire_require("buffer");
         }
     });
