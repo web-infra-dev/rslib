@@ -51,10 +51,9 @@ describe('minify config (mf)', () => {
   test('minify is enabled by default in mf format, bar and baz should be shaken, some comments and annotations are preserved', async () => {
     const fixturePath = join(__dirname, 'mf/default');
     const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
-    // biome-ignore format: snapshot
     expect(mfExposeEntry).toMatchInlineSnapshot(`
-      "/*! LICENSE: __federation_expose_default_export.5f5ba42263.js.LICENSE.txt */
-      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["525"],{804(__unused_rspack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{Button:()=>Button,foo:()=>foo});var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{})}}]);"
+      "/*! LICENSE: __federation_expose_default_export.27f16ed45b.js.LICENSE.txt */
+      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["525"],{2804(__unused_rspack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{Button:()=>Button,foo:()=>foo});var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{})}}]);"
     `);
   });
 
@@ -65,7 +64,7 @@ describe('minify config (mf)', () => {
     expect(mfExposeEntry).toMatchInlineSnapshot(`
       ""use strict";
       (globalThis["disable_minify"] = globalThis["disable_minify"] || []).push([["525"], {
-      804(__unused_rspack_module, __webpack_exports__, __webpack_require__) {
+      2804(__unused_rspack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.r(__webpack_exports__);
       __webpack_require__.d(__webpack_exports__, {
         Button: () => (Button),

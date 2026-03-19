@@ -1,6 +1,7 @@
 {
   "name": "rslib-monorepo",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "pnpm --filter \"./packages/*\" run build",
     "build:examples": "pnpm --filter \"@examples/*\" run build",
