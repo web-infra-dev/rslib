@@ -31,6 +31,7 @@ let astGrepNapi: typeof import('@ast-grep/napi') | undefined;
 
 const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
   if (!astGrepNapi) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     astGrepNapi = require('@ast-grep/napi') as typeof import('@ast-grep/napi');
   }
 
@@ -42,6 +43,7 @@ const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
  * for better startup performance. If we use `import ts from 'typescript'`,
  * Node.js will use `cjs-module-lexer` to parse it, which slows down startup time.
  */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const ts = require('typescript') as typeof import('typescript');
 
 export { ts };
