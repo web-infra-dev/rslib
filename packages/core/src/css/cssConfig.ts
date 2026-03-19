@@ -25,7 +25,7 @@ export async function cssExternalHandler(
 ): Promise<false | undefined> {
   // cssExtract: do not external @rsbuild/core/compiled/css-loader/noSourceMaps.js, sourceMaps.js, api.mjs etc.
   // cssExtract would execute the result handled by css-loader with importModule, so we cannot external the "helper import" from css-loader
-  if (/compiled\/css-loader\//.test(request)) {
+  if (request.includes('compiled/css-loader/')) {
     callback();
     return;
   }
@@ -99,7 +99,7 @@ const pluginLibCss = (
       { stage: 'additional' }, // deleteAsset as soon as possible for small perf
       ({ assets, compilation }) => {
         for (const key of Object.keys(assets)) {
-          if (key.match(RSLIB_CSS_ENTRY_FLAG)) {
+          if (RegExp(RSLIB_CSS_ENTRY_FLAG).exec(key)) {
             compilation.deleteAsset(key);
           }
         }
