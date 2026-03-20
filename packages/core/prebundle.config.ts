@@ -1,10 +1,9 @@
-// @ts-check
+import type { Config } from 'prebundle';
 
 /**
- * Tip: please add the prebundled packages to `tsconfig.json#paths`.
+ * Tip: remember to add the prebundled packages to `tsconfig.json#paths` or `dts.alias`
  */
 
-/** @type {import('prebundle').Config} */
 export default {
   externals: {
     typescript: 'typescript',
@@ -15,4 +14,4 @@ export default {
       dtsOnly: true,
     },
   ],
-};
+} satisfies Config;
