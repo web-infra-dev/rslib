@@ -13,13 +13,11 @@ import path, {
   resolve,
 } from 'node:path';
 import { styleText } from 'node:util';
-import { fileURLToPath } from 'node:url';
-import { type NapiConfig, parseAsync } from '@ast-grep/napi';
 import { logger, type RsbuildConfig } from '@rsbuild/core';
-import MagicString from 'magic-string';
 import { convertPathToPattern, glob } from 'tinyglobby';
-import type { MatchPath } from 'tsconfig-paths';
-import * as tsconfigPaths from 'tsconfig-paths';
+import { type MatchPath, createMatchPath, loadConfig } from 'tsconfig-paths';
+import MagicString from 'magic-string';
+import type { NapiConfig } from '@ast-grep/napi';
 import type {
   CompilerOptions,
   Diagnostic,
@@ -27,9 +25,18 @@ import type {
 } from 'typescript';
 import type { DtsEntry, DtsRedirect } from './index';
 
-const { createMatchPath, loadConfig } = tsconfigPaths;
-const __filename = fileURLToPath(import.meta.url);
-const require = createRequire(__filename);
+const require = createRequire(import.meta.url);
+
+let astGrepNapi: typeof import('@ast-grep/napi') | undefined;
+
+const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
+  if (!astGrepNapi) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    astGrepNapi = require('@ast-grep/napi') as typeof import('@ast-grep/napi');
+  }
+
+  return astGrepNapi;
+};
 
 /**
  * Currently, typescript only provides a CJS bundle, so we use require to load it
@@ -323,6 +330,7 @@ export async function redirectDtsImports(
 ): Promise<void> {
   const content = await fsP.readFile(dtsFile, 'utf-8');
   const code = new MagicString(content);
+  const { parseAsync } = loadAstGrepNapi();
   const sgNode = (await parseAsync('typescript', content)).root();
   const matcher: NapiConfig = {
     rule: {

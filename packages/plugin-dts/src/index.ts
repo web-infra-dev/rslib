@@ -1,6 +1,5 @@
 import { type ChildProcess, fork } from 'node:child_process';
-import { dirname, extname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { extname, join } from 'node:path';
 import {
   type LogLevel,
   logger,
@@ -20,9 +19,6 @@ import {
   ts,
   warnIfOutside,
 } from './utils';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 export type DtsRedirect = {
   path?: boolean;
@@ -176,10 +172,14 @@ export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
           await cleanTsBuildInfoFile(tsconfigPath, rawCompilerOptions);
         }
 
-        const jsExtension = extname(__filename);
-        const childProcess = fork(join(__dirname, `./dts${jsExtension}`), [], {
-          stdio: 'inherit',
-        });
+        const jsExtension = extname(import.meta.filename);
+        const childProcess = fork(
+          join(import.meta.dirname, `./dts${jsExtension}`),
+          [],
+          {
+            stdio: 'inherit',
+          },
+        );
 
         childProcesses.push(childProcess);
 

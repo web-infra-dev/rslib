@@ -22,13 +22,17 @@ const isObject = (obj: unknown): obj is Record<string, any> =>
 
 export const DEFAULT_EXCLUDED_PACKAGES: string[] = ['@types/react'];
 
-// use !externals
-export const calcBundledPackages = (options: {
+type CalculateBundledPackagesOptions = {
   cwd: string;
   autoExternal: DtsGenOptions['autoExternal'];
   userExternals?: DtsGenOptions['userExternals'];
   overrideBundledPackages?: string[];
-}): string[] => {
+};
+
+// use !externals
+export const calcBundledPackages = (
+  options: CalculateBundledPackagesOptions,
+): string[] => {
   const { cwd, autoExternal, userExternals, overrideBundledPackages } = options;
 
   if (overrideBundledPackages) {

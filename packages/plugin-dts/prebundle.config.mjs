@@ -9,12 +9,5 @@ export default {
   externals: {
     typescript: 'typescript',
   },
-  dependencies: [
-    {
-      name: 'tinyglobby',
-      ignoreDts: true,
-    },
-    'magic-string',
-    'tsconfig-paths',
-  ],
+  dependencies: ['tsconfig-paths'],
 };
