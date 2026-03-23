@@ -231,12 +231,12 @@ export function debounce<T extends (...args: any[]) => void>(
 /**
  * Check if running in a TTY context
  */
-export const isTTY = (type: 'stdin' | 'stdout' = 'stdout'): boolean => {
+export function isTTY(type: 'stdin' | 'stdout' = 'stdout'): boolean {
   return (
     (type === 'stdin' ? process.stdin.isTTY : process.stdout.isTTY) &&
     !process.env.CI
   );
-};
+}
 
 export const isIntermediateOutputFormat = (format: Format): boolean => {
   return format === 'cjs' || format === 'esm';
