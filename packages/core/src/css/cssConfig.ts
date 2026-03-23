@@ -158,13 +158,13 @@ const pluginLibCss = (
   },
 });
 
-export const composeCssConfig = (
+export function composeCssConfig(
   rootDir: string | null,
   auto: CssLoaderOptionsAuto,
   bundle = true,
   banner?: string,
   footer?: string,
-): EnvironmentConfig => {
+): EnvironmentConfig {
   if (bundle || rootDir === null) {
     return {};
   }
@@ -179,4 +179,4 @@ export const composeCssConfig = (
       },
     },
   };
-};
+}
