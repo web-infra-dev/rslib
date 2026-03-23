@@ -61,7 +61,24 @@ exports[`decorators default to 2022-03 1`] = `
                 desc.set.call(this, v);
             };
         }
-        ctx.access = get && set ? {
+        if (get) {
+            var originalGet = get;
+            get = function(target) {
+                if (0 === arguments.length) target = this;
+                return originalGet.call(target);
+            };
+        }
+        if (set) {
+            var originalSet = set;
+            set = function(target, value) {
+                if (1 === arguments.length) {
+                    value = target;
+                    target = this;
+                }
+                return originalSet.call(target, value);
+            };
+        }
+        if (isPrivate) ctx.access = get && set ? {
             get: get,
             set: set
         } : get ? {
@@ -69,11 +86,25 @@ exports[`decorators default to 2022-03 1`] = `
         } : {
             set: set
         };
-        try {
-            return dec(value, ctx);
-        } finally{
-            decoratorFinishedRef.v = true;
+        else {
+            var has = function(target) {
+                return name in target;
+            };
+            ctx.access = get && set ? {
+                has: has,
+                get: get,
+                set: set
+            } : get ? {
+                has: has,
+                get: get
+            } : {
+                has: has,
+                set: set
+            };
         }
+        var newValue = dec(value, ctx);
+        decoratorFinishedRef.v = true;
+        return newValue;
     }
     function assertNotFinished(decoratorFinishedRef, fnName) {
         if (decoratorFinishedRef.v) throw new Error("attempted to call " + fnName + " after decoration was finished");
@@ -249,16 +280,13 @@ exports[`decorators default to 2022-03 1`] = `
                 var decoratorFinishedRef = {
                     v: false
                 };
-                try {
-                    var nextNewClass = classDecs[i](newClass, {
-                        kind: "class",
-                        name: name,
-                        addInitializer: createAddInitializerMethod(initializers, decoratorFinishedRef),
-                        metadata
-                    });
-                } finally{
-                    decoratorFinishedRef.v = true;
-                }
+                var nextNewClass = classDecs[i](newClass, {
+                    kind: "class",
+                    name: name,
+                    addInitializer: createAddInitializerMethod(initializers, decoratorFinishedRef),
+                    metadata
+                });
+                decoratorFinishedRef.v = true;
                 if (void 0 !== nextNewClass) {
                     assertValidReturnValue(10, nextNewClass);
                     newClass = nextNewClass;
@@ -301,8 +329,8 @@ function src_enhancer(name) {
         target.prototype.name = name;
     };
 }
-let _Person;
 _dec = src_enhancer('rslib');
+let _Person;
 class Person {
     static{
         ({ c: [_Person, _initClass] } = _apply_decs_2203_r(this, [], [
@@ -411,7 +439,24 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
                 desc.set.call(this, v);
             };
         }
-        ctx.access = get && set ? {
+        if (get) {
+            var originalGet = get;
+            get = function(target) {
+                if (0 === arguments.length) target = this;
+                return originalGet.call(target);
+            };
+        }
+        if (set) {
+            var originalSet = set;
+            set = function(target, value) {
+                if (1 === arguments.length) {
+                    value = target;
+                    target = this;
+                }
+                return originalSet.call(target, value);
+            };
+        }
+        if (isPrivate) ctx.access = get && set ? {
             get: get,
             set: set
         } : get ? {
@@ -419,11 +464,25 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
         } : {
             set: set
         };
-        try {
-            return dec(value, ctx);
-        } finally{
-            decoratorFinishedRef.v = true;
+        else {
+            var has = function(target) {
+                return name in target;
+            };
+            ctx.access = get && set ? {
+                has: has,
+                get: get,
+                set: set
+            } : get ? {
+                has: has,
+                get: get
+            } : {
+                has: has,
+                set: set
+            };
         }
+        var newValue = dec(value, ctx);
+        decoratorFinishedRef.v = true;
+        return newValue;
     }
     function assertNotFinished(decoratorFinishedRef, fnName) {
         if (decoratorFinishedRef.v) throw new Error("attempted to call " + fnName + " after decoration was finished");
@@ -599,16 +658,13 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
                 var decoratorFinishedRef = {
                     v: false
                 };
-                try {
-                    var nextNewClass = classDecs[i](newClass, {
-                        kind: "class",
-                        name: name,
-                        addInitializer: createAddInitializerMethod(initializers, decoratorFinishedRef),
-                        metadata
-                    });
-                } finally{
-                    decoratorFinishedRef.v = true;
-                }
+                var nextNewClass = classDecs[i](newClass, {
+                    kind: "class",
+                    name: name,
+                    addInitializer: createAddInitializerMethod(initializers, decoratorFinishedRef),
+                    metadata
+                });
+                decoratorFinishedRef.v = true;
                 if (void 0 !== nextNewClass) {
                     assertValidReturnValue(10, nextNewClass);
                     newClass = nextNewClass;
@@ -651,8 +707,8 @@ function src_enhancer(name) {
         target.prototype.name = name;
     };
 }
-let _Person;
 _dec = src_enhancer('rslib');
+let _Person;
 class Person {
     static{
         ({ c: [_Person, _initClass] } = _apply_decs_2203_r(this, [], [
