@@ -79,7 +79,9 @@ export const PLUGIN_DTS_NAME = 'rsbuild:dts';
 
 // use ts compiler API to generate bundleless dts
 // use ts compiler API and api-extractor to generate dts bundle
-export const pluginDts = (options: PluginDtsOptions = {}): RsbuildPlugin => ({
+export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
+  options = {},
+) => ({
   name: PLUGIN_DTS_NAME,
 
   setup(api) {
