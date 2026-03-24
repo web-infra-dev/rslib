@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
     "lib": ["DOM", "ES2022"],
     "jsx": "preserve",
     "skipLibCheck": true,
@@ -10,13 +11,11 @@
     "emitDeclarationOnly": true,
 
     /* modules */
-    "module": "ESNext",
     "isolatedModules": true,
     "resolveJsonModule": true,
     "moduleResolution": "bundler",
 
     /* type checking */
-    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },

@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "baseUrl": ".",
     "declaration": true,
     "emitDeclarationOnly": true,
     "esModuleInterop": true,
@@ -9,11 +8,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "rootDir": "src",
-    "skipLibCheck": true,
-    "strict": true
+    "skipLibCheck": true
   },
   "exclude": ["**/node_modules"],
   "include": ["src"]

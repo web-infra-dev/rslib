@@ -1,17 +1,15 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
     "target": "esnext",
-    "module": "esnext",
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "baseUrl": "./src",
+    "moduleResolution": "bundler",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"],
