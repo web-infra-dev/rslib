@@ -510,6 +510,7 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
 
 const composeFormatConfig = ({
   format,
+  target,
   bundle = true,
   umdName,
   pkgJson,
@@ -518,6 +519,7 @@ const composeFormatConfig = ({
   sourceEntry,
 }: {
   format: Format;
+  target: RsbuildConfigOutputTarget;
   pkgJson: PkgJson;
   bundle?: boolean;
   umdName?: Rspack.LibraryName;
@@ -549,6 +551,7 @@ const composeFormatConfig = ({
     new rspack.experiments.RslibPlugin({
       interceptApiPlugin: true,
       forceNodeShims: enabledShims.esm.__dirname || enabledShims.esm.__filename,
+      externalEsmNodeBuiltin: format === 'esm' && target === 'node',
     }),
   ].filter(Boolean);
 
@@ -1634,14 +1637,16 @@ const composeTargetConfig = (
           },
         },
         target: 'node',
-        externalsConfig: {
-          output: {
-            // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
-            // Simply override the built-in modules to make them external.
-            // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
-            externals: nodeBuiltInModules,
-          },
-        },
+        externalsConfig:
+          format === 'esm'
+            ? {}
+            : {
+                output: {
+                  // For non-ESM Node.js outputs, keep built-in modules externalized.
+                  // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
+                  externals: nodeBuiltInModules,
+                },
+              },
       };
     // TODO: Support `neutral` target, however Rsbuild don't list it as an option in the target field.
     // case 'neutral':
@@ -1727,8 +1732,14 @@ async function composeLibRsbuildConfig(
     format,
     shims,
   );
+  const {
+    config: targetConfig,
+    externalsConfig: targetExternalsConfig,
+    target,
+  } = composeTargetConfig(config.output?.target, format);
   const formatConfig = composeFormatConfig({
     format,
+    target,
     pkgJson: pkgJson!,
     bundle,
     umdName,
@@ -1771,11 +1782,6 @@ async function composeLibRsbuildConfig(
     bundle,
     outBase,
   );
-  const {
-    config: targetConfig,
-    externalsConfig: targetExternalsConfig,
-    target,
-  } = composeTargetConfig(config.output?.target, format);
   const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
   const autoExternalConfig = composeAutoExternalConfig({
     bundle,

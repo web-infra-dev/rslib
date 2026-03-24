@@ -40,6 +40,16 @@ test('auto externalize Node.js built-in modules when `output.target` is "node"',
   }
 });
 
+test('should preserve CommonJS node built-in semantics in ESM output', async () => {
+  const fixturePath = join(__dirname, 'esm-node-builtin');
+  const { entryFiles } = await buildAndGetResults({ fixturePath });
+
+  const esmOutput = await import(entryFiles.esm);
+
+  expect(typeof esmOutput.SendStream).toBe('function');
+  expect(esmOutput.sendStreamPrototypeIsInherited).toBe(true);
+});
+
 test('should get warn when use require in ESM', async () => {
   const { logs, restore } = proxyConsole();
   const fixturePath = join(__dirname, 'module-import-warn');
