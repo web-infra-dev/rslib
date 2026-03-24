@@ -218,20 +218,14 @@ test('set the assets public path', async () => {
   // 2. bundle
   // esm
   const { content: indexJs } = queryContent(contents.esm0!, /index\.js/);
-  const { content: runtimeJs } = queryContent(contents.esm0!, /runtime\.js/);
   expect(indexJs).toMatchInlineSnapshot(`
-      "import { __webpack_require__ } from "./rslib-runtime.js";
-      const image_namespaceObject = __webpack_require__.p + "static/image/image.png";
-      const src = image_namespaceObject;
-      export default src;
-      "
-    `);
-  expect(runtimeJs).toMatchInlineSnapshot(`
     "var __webpack_require__ = {};
     (()=>{
         __webpack_require__.p = "/public/path/";
     })();
-    export { __webpack_require__ };
+    const image_namespaceObject = __webpack_require__.p + "static/image/image.png";
+    const src = image_namespaceObject;
+    export default src;
     "
   `);
 

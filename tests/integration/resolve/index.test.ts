@@ -20,16 +20,52 @@ test('resolve false', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
-      "import { __webpack_require__ } from "./rslib-runtime.js";
-      __webpack_require__.add({
-          "?27ce" () {}
-      });
-      const util_ignored_ = __webpack_require__("?27ce");
-      var util_ignored__default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
-      console.log('foo:', util_ignored__default());
-      console.log('bar: ', "bar");
-      "
-    `);
+    "var __webpack_modules__ = {};
+    var __webpack_module_cache__ = {};
+    function __webpack_require__(moduleId) {
+        var cachedModule = __webpack_module_cache__[moduleId];
+        if (void 0 !== cachedModule) return cachedModule.exports;
+        var module = __webpack_module_cache__[moduleId] = {
+            exports: {}
+        };
+        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        return module.exports;
+    }
+    __webpack_require__.m = __webpack_modules__;
+    (()=>{
+        __webpack_require__.n = (module)=>{
+            var getter = module && module.__esModule ? ()=>module['default'] : ()=>module;
+            __webpack_require__.d(getter, {
+                a: getter
+            });
+            return getter;
+        };
+    })();
+    (()=>{
+        __webpack_require__.d = (exports, definition)=>{
+            for(var key in definition)if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) Object.defineProperty(exports, key, {
+                enumerable: true,
+                get: definition[key]
+            });
+        };
+    })();
+    (()=>{
+        __webpack_require__.add = function(modules) {
+            Object.assign(__webpack_require__.m, modules);
+        };
+    })();
+    (()=>{
+        __webpack_require__.o = (obj, prop)=>Object.prototype.hasOwnProperty.call(obj, prop);
+    })();
+    __webpack_require__.add({
+        "?27ce" () {}
+    });
+    const util_ignored_ = __webpack_require__("?27ce");
+    var util_ignored__default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
+    console.log('foo:', util_ignored__default());
+    console.log('bar: ', "bar");
+    "
+  `);
 });
 
 test('resolve node protocol', async () => {
@@ -54,15 +90,15 @@ test('resolve with condition exports', async () => {
 
   expect(isSuccess).toBeTruthy();
 
-  expect(nodeResults[0]).toContain('lib1 mjs');
-  expect(nodeResults[1]).toContain('lib2 module');
-  expect(nodeResults[2]).toContain('node');
-  expect(nodeResults[3]).toContain('lib1 cjs');
+  expect(nodeResults[1]).toContain('lib1 mjs');
+  expect(nodeResults[2]).toContain('lib2 module');
+  expect(nodeResults[3]).toContain('node');
+  expect(nodeResults[4]).toContain('lib1 cjs');
 
-  expect(browserResults[0]).toContain('lib1 mjs');
-  expect(browserResults[1]).toContain('lib2 module');
-  expect(browserResults[2]).toContain('browser');
-  expect(browserResults[3]).toContain('lib1 cjs');
+  expect(browserResults[1]).toContain('lib1 mjs');
+  expect(browserResults[2]).toContain('lib2 module');
+  expect(browserResults[3]).toContain('browser');
+  expect(browserResults[4]).toContain('lib1 cjs');
 });
 
 test('resolve with js extensions', async () => {
