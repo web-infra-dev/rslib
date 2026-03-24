@@ -23,6 +23,8 @@ describe('minify config', () => {
       "import { jsx } from "react/jsx-runtime";
 
 
+
+
       /*! Legal Comment */ 
       const foo = ()=>{};
       const bar = ()=>{};

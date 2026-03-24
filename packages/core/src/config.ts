@@ -514,12 +514,16 @@ const composeFormatConfig = ({
   umdName,
   pkgJson,
   enabledShims,
+  multiCompilerIndex,
+  sourceEntry,
 }: {
   format: Format;
   pkgJson: PkgJson;
   bundle?: boolean;
   umdName?: Rspack.LibraryName;
   enabledShims: DeepRequired<Shims>;
+  multiCompilerIndex: number | null;
+  sourceEntry?: RsbuildConfigEntry;
 }): EnvironmentConfig => {
   const jsParserOptions: Record<string, Rspack.JavascriptParserOptions> = {
     cjs: {
@@ -568,9 +572,11 @@ const composeFormatConfig = ({
             optimization: {
               concatenateModules: false,
               sideEffects: true,
-              runtimeChunk: {
-                name: 'rslib-runtime',
-              },
+              runtimeChunk: getRuntimeChunkConfig({
+                bundle,
+                multiCompilerIndex,
+                sourceEntry,
+              }),
               avoidEntryIife: true,
               splitChunks: {
                 // Splitted "sync" chunks will make entry modules can't be inlined.
@@ -800,6 +806,39 @@ const BundlePlugin = (): RsbuildPlugin => ({
     });
   },
 });
+
+const RSLIB_RUNTIME_CHUNK_NAME = 'rslib-runtime';
+
+const getMultiCompilerRuntimeChunkName = (
+  multiCompilerIndex: number | null,
+): string =>
+  typeof multiCompilerIndex === 'number'
+    ? `${multiCompilerIndex}~${RSLIB_RUNTIME_CHUNK_NAME}`
+    : RSLIB_RUNTIME_CHUNK_NAME;
+
+export const getRuntimeChunkConfig = ({
+  bundle,
+  multiCompilerIndex,
+  sourceEntry,
+}: {
+  bundle: boolean;
+  multiCompilerIndex: number | null;
+  sourceEntry?: RsbuildConfigEntry;
+}): NonNullable<Rspack.Configuration['optimization']>['runtimeChunk'] => {
+  if (!bundle) {
+    return {
+      name: RSLIB_RUNTIME_CHUNK_NAME,
+    };
+  }
+
+  if (!sourceEntry || Object.keys(sourceEntry).length <= 1) {
+    return undefined;
+  }
+
+  return {
+    name: getMultiCompilerRuntimeChunkName(multiCompilerIndex),
+  };
+};
 
 const composeBundleConfig = (
   bundle: LibConfig['bundle'],
@@ -1694,6 +1733,8 @@ async function composeLibRsbuildConfig(
     bundle,
     umdName,
     enabledShims,
+    multiCompilerIndex,
+    sourceEntry: config.source?.entry,
   });
   const externalHelpersConfig = composeExternalHelpersConfig(
     externalHelpers,

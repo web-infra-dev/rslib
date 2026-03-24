@@ -6,6 +6,7 @@ import { init } from '../src/cli/init';
 import {
   composeCreateRsbuildConfig,
   composeRsbuildEnvironments,
+  getRuntimeChunkConfig,
 } from '../src/config';
 import { createRslib } from '../src/createRslib';
 import { loadConfig } from '../src/loadConfig';
@@ -563,6 +564,83 @@ describe('Should compose create Rsbuild config correctly', () => {
         "root": "dist/cjs",
       }
     `);
+  });
+});
+
+describe('runtimeChunk', () => {
+  test('defaults to rslib-runtime for bundleless esm', async () => {
+    expect(
+      getRuntimeChunkConfig({
+        bundle: false,
+        multiCompilerIndex: null,
+      }),
+    ).toEqual({
+      name: 'rslib-runtime',
+    });
+  });
+
+  test('defaults to undefined for single-entry bundled esm', async () => {
+    expect(
+      getRuntimeChunkConfig({
+        bundle: true,
+        multiCompilerIndex: null,
+        sourceEntry: {
+          index: './src/index.ts',
+        },
+      }),
+    ).toBeUndefined();
+  });
+
+  test('returns runtime chunk for multiple entries without multi-compiler', async () => {
+    expect(
+      getRuntimeChunkConfig({
+        bundle: true,
+        multiCompilerIndex: null,
+        sourceEntry: {
+          index: './src/index.ts',
+          cli: './src/cli/index.ts',
+        },
+      }),
+    ).toEqual({
+      name: 'rslib-runtime',
+    });
+  });
+
+  test('returns prefixed runtime chunk for multiple entries with multi-compiler', async () => {
+    expect(
+      getRuntimeChunkConfig({
+        bundle: true,
+        multiCompilerIndex: 0,
+        sourceEntry: {
+          foo: './src/foo.ts',
+          bar: './src/bar.ts',
+        },
+      }),
+    ).toEqual({
+      name: '0~rslib-runtime',
+    });
+    expect(
+      getRuntimeChunkConfig({
+        bundle: true,
+        multiCompilerIndex: 1,
+        sourceEntry: {
+          foo: './src/foo.ts',
+          bar: './src/bar.ts',
+        },
+      }),
+    ).toEqual({
+      name: '1~rslib-runtime',
+    });
+  });
+
+  test('returns undefined when source.entry is not provided', async () => {
+    expect(
+      getRuntimeChunkConfig({
+        bundle: true,
+        multiCompilerIndex: null,
+        sourceEntry: undefined,
+      }),
+    ).toBeUndefined();
   });
 });
 
