@@ -1,7 +1,8 @@
 import type { JSX, ReactNode } from 'react';
 import type { App1ButtonProps, App1CProps, App1Namespace } from './App1';
-import * as NamespaceImportApp3 from './App3';
+import * as NamespaceImportApp1 from './App1';
 import { App1A, App1C, App1C as C } from './App1';
+import { App3A, App3C, App3C as C3 } from './App3';
 import type { AsyncComponentLoader } from './App2';
 import { App2, app2Props } from './App2';
 
@@ -49,19 +50,22 @@ export default function Root(): JSX.Element {
       <C>
         {x ? (
           <App1A>
-            <NamespaceImportApp3.App1B>
+            <NamespaceImportApp1.App1B>
               <App2 props={app2Props}>
-                <C props={NamespaceImportApp3.app1cProps as App1CProps} />
+                <C props={NamespaceImportApp1.app1cProps as App1CProps} />
               </App2>
-            </NamespaceImportApp3.App1B>
+            </NamespaceImportApp1.App1B>
           </App1A>
         ) : (
-          <NamespaceImportApp3.App1B />
+          <NamespaceImportApp1.App1B />
         )}
       </C>
       <C className="c" />
       <App1C className="app1c"></App1C>
-      <NamespaceImportApp3.App1B />
+      <NamespaceImportApp1.App1B />
+      <C3 className="app3c">
+        <App3A data-dynamic="registry" data-item="app3" />
+      </C3>
       <NamespaceComponents.Button
         label="Namespace button"
         {...{ title: 'extra', ['data-role']: 'primary' }}
@@ -77,7 +81,7 @@ export default function Root(): JSX.Element {
       <div className="wrapper">
         {[
           <section key="namespace-import" data-index="0">
-            <NamespaceImportApp3.App data-dynamic="registry" data-item="one" />
+            <NamespaceImportApp1.App data-dynamic="registry" data-item="one" />
             <foo:bar value="namespaced" />
             <svg:path d="M0,0 L10,10" xlink:href="#one" />
             <span>{'item-one'.toUpperCase()}</span>
