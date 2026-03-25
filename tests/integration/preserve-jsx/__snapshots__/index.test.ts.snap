@@ -30,8 +30,8 @@ __webpack_require__.d(__webpack_exports__, {
     default: ()=>Root
 });
 const external_App1_namespaceObject = require("./App1");
-require("./App3");
 const external_App2_namespaceObject = require("./App2");
+require("./App3");
 const DynamicComponent = ()=>{
     const Component = Math.random() > 0.5 ? external_App1_namespaceObject.App1A : external_App1_namespaceObject.App1C;
     return import("./App1").then((mod)=>{
@@ -67,7 +67,7 @@ function Root() {
       <external_App1_namespaceObject.App1C className="app1c"></external_App1_namespaceObject.App1C>
       <external_App1_namespaceObject.App1B/>
       <external_App3_namespaceObject.App3C className="app3c">
-        <external_App3_namespaceObject.App3A data-dynamic="registry" data-item="app3"/>
+        <external_App3_namespaceObject.App3 data-dynamic="registry" data-item="app3"/>
       </external_App3_namespaceObject.App3C>
       <NamespaceComponents.Button label="Namespace button" {...{
         title: 'extra',
@@ -124,8 +124,8 @@ Object.defineProperty(exports, '__esModule', {
 `;
 
 exports[`JSX syntax should be preserved 2`] = `
-"import { App3A, App3C } from "./App3";
-import { App2, app2Props } from "./App2";
+"import { App2, app2Props } from "./App2";
+import { App3, App3C } from "./App3";
 import * as __rspack_external__App1_cd1629a5 from "./App1";
 const DynamicComponent = ()=>{
     const Component = Math.random() > 0.5 ? __rspack_external__App1_cd1629a5.App1A : __rspack_external__App1_cd1629a5.App1C;
@@ -162,7 +162,7 @@ function Root() {
       <__rspack_external__App1_cd1629a5.App1C className="app1c"></__rspack_external__App1_cd1629a5.App1C>
       <__rspack_external__App1_cd1629a5.App1B/>
       <App3C className="app3c">
-        <App3A data-dynamic="registry" data-item="app3"/>
+        <App3 data-dynamic="registry" data-item="app3"/>
       </App3C>
       <NamespaceComponents.Button label="Namespace button" {...{
         title: 'extra',
@@ -213,8 +213,8 @@ export default Root;
 `;
 
 exports[`JSX syntax should be preserved 3`] = `
-"import { App3A, App3C } from "./App3";
-import { App2, app2Props } from "./App2";
+"import { App2, app2Props } from "./App2";
+import { App3, App3C } from "./App3";
 import * as __rspack_external__App1_cd1629a5 from "./App1";
 const DynamicComponent = ()=>{
     const Component = Math.random() > 0.5 ? __rspack_external__App1_cd1629a5.App1A : __rspack_external__App1_cd1629a5.App1C;
@@ -251,7 +251,7 @@ function Root() {
       <__rspack_external__App1_cd1629a5.App1C className="app1c"></__rspack_external__App1_cd1629a5.App1C>
       <__rspack_external__App1_cd1629a5.App1B/>
       <App3C className="app3c">
-        <App3A data-dynamic="registry" data-item="app3"/>
+        <App3 data-dynamic="registry" data-item="app3"/>
       </App3C>
       <NamespaceComponents.Button label="Namespace button" {...{
         title: 'extra',
