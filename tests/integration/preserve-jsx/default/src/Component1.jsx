@@ -1,6 +1,7 @@
 import * as NamespaceImportApp1 from './App1';
 import { App1A, App1C, App1C as C } from './App1';
 import { App2, app2Props } from './App2';
+import { App3, App3C as C3 } from './App3';
 
 const DynamicComponent = () => {
   const Component = Math.random() > 0.5 ? App1A : App1C;
@@ -52,6 +53,9 @@ export default function Root() {
       <C className="c" />
       <App1C className="app1c"></App1C>
       <NamespaceImportApp1.App1B />
+      <C3 className="app3c">
+        <App3 data-dynamic="registry" data-item="app3" />
+      </C3>
       <NamespaceComponents.Button
         label="Namespace button"
         {...{ title: 'extra', ['data-role']: 'primary' }}
