@@ -2807,19 +2807,6 @@ packages:
       typescript:
         optional: true
 
-  '@rslib/core@0.20.1':
-    resolution: {integrity: sha512-5Mw9HvMCBNkyvzyxeMpxuOBYhtoZ+lwlm/d966JtH9eGesV8QGRNNZiC1axlZVO490kOTfMpbfbSt74XRCn/2A==}
-    engines: {node: ^20.19.0 || >=22.12.0}
-    hasBin: true
-    peerDependencies:
-      '@microsoft/api-extractor': ^7
-      typescript: ^5 || ^6
-    peerDependenciesMeta:
-      '@microsoft/api-extractor':
-        optional: true
-      typescript:
-        optional: true
-
   '@rslint/core@0.3.2':
     resolution: {integrity: sha512-DH7kD6H+DK323dQq9qEE+lUwvKB9ZiZGrHvcesh9nkvHapNCT3ocQk2MNyB0cSx88WGiCqk2Okv1iIK17NGBGA==}
     hasBin: true
@@ -6620,22 +6607,6 @@ packages:
       typescript:
         optional: true
 
-  rsbuild-plugin-dts@0.20.1:
-    resolution: {integrity: sha512-V3cQ/hh8XpkZIYFmokGlk0OLsSSuttpeGgiSjNVRFsXsKxQUG1B8GhLDJ4wVKSZGAiRjZdQu+e96Y5QF6Ra/og==}
-    engines: {node: ^20.19.0 || >=22.12.0}
-    peerDependencies:
-      '@microsoft/api-extractor': ^7
-      '@rsbuild/core': ^1.0.0 || ^2.0.0-0
-      '@typescript/native-preview': 7.x
-      typescript: ^5 || ^6
-    peerDependenciesMeta:
-      '@microsoft/api-extractor':
-        optional: true
-      '@typescript/native-preview':
-        optional: true
-      typescript:
-        optional: true
-
   rsbuild-plugin-google-analytics@1.0.5:
     resolution: {integrity: sha512-1qSMjmH3HBNMIyrRjBFHQKmTdL86VNc42HjL3z25z4k4n+N7+cl9UvpD5ou3G6YAn1jNJ2GS2pia+PKNyaTzmg==}
     peerDependencies:
@@ -9677,18 +9648,6 @@ snapshots:
       rsbuild-plugin-dts: 0.20.1(@microsoft/api-extractor@7.57.7(@types/node@25.2.0))(@rsbuild/core@2.0.0-beta.10(@module-federation/runtime-tools@2.2.3))(@typescript/native-preview@7.0.0-dev.20260322.1)(typescript@6.0.2)
     optionalDependencies:
       '@microsoft/api-extractor': 7.57.7(@types/node@25.2.0)
-      typescript: 6.0.2
-    transitivePeerDependencies:
-      - '@module-federation/runtime-tools'
-      - '@typescript/native-preview'
-      - core-js
-
-  '@rslib/core@0.20.1(@microsoft/api-extractor@7.57.7(@types/node@24.12.0))(@module-federation/runtime-tools@2.2.3)(typescript@6.0.2)':
-    dependencies:
-      '@rsbuild/core': 2.0.0-beta.10(@module-federation/runtime-tools@2.2.3)
-      rsbuild-plugin-dts: 0.20.1(@microsoft/api-extractor@7.57.7(@types/node@24.12.0))(@rsbuild/core@2.0.0-beta.10(@module-federation/runtime-tools@2.2.3))(typescript@6.0.2)
-    optionalDependencies:
-      '@microsoft/api-extractor': 7.57.7(@types/node@24.12.0)
       typescript: 6.0.2
     transitivePeerDependencies:
       - '@module-federation/runtime-tools'
@@ -14140,14 +14099,6 @@ snapshots:
     optionalDependencies:
       '@microsoft/api-extractor': 7.57.7(@types/node@25.2.0)
       '@typescript/native-preview': 7.0.0-dev.20260322.1
-      typescript: 6.0.2
-
-  rsbuild-plugin-dts@0.20.1(@microsoft/api-extractor@7.57.7(@types/node@24.12.0))(@rsbuild/core@2.0.0-beta.10(@module-federation/runtime-tools@2.2.3))(typescript@6.0.2):
-    dependencies:
-      '@ast-grep/napi': 0.37.0
-      '@rsbuild/core': 2.0.0-beta.10(@module-federation/runtime-tools@2.2.3)
-    optionalDependencies:
-      '@microsoft/api-extractor': 7.57.7(@types/node@24.12.0)
       typescript: 6.0.2
 
   rsbuild-plugin-google-analytics@1.0.5(@rsbuild/core@2.0.0-beta.10(@module-federation/runtime-tools@2.2.3)):
