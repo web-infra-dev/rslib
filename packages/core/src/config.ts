@@ -1447,7 +1447,7 @@ const composeBundlelessExternalConfig = (
                   path: undefined,
                   isResolved: true,
                 };
-              } catch (_e) {
+              } catch {
                 // catch error when request can not be resolved by resolver
                 // e.g. A react component library importing and using 'react' but while not defining
                 // it in devDependencies and peerDependencies. Preserve 'react' as-is if so.
