@@ -4,7 +4,7 @@ description: 'Use the Rslib CLI for build, inspect, watch mode, config selection
 
 # CLI
 
-Rslib comes with a lightweight CLI that includes commands such as [rslib build](#rslib-build) and [rslib inspect](#rslib-inspect).
+Rslib comes with a lightweight CLI that includes commands such as [rslib](#rslib) and [rslib inspect](#rslib-inspect).
 
 ## All commands
 
@@ -42,13 +42,13 @@ Rslib CLI provides several common flags that can be used with all commands:
 | `--no-env`                 | Disable loading of `.env` files                                                                                                                             |
 | `-r, --root <root>`        | Specify the project root directory, can be an absolute path or a path relative to cwd                                                                       |
 
-## rslib build
+## rslib
 
-The `rslib build` command will build the outputs for production in the `dist/` directory by default.
+The `rslib` command will build the outputs for production in the `dist/` directory by default. `rslib build` is an alias for the `rslib` command.
 
 ```bash
 Usage:
-  $ rslib build
+  $ rslib
 
 Options:
   -w, --watch            turn on watch mode, watch for changes and rebuild

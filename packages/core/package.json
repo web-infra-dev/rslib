@@ -36,8 +36,8 @@
     "types.d.ts"
   ],
   "scripts": {
-    "build": "rslib build",
-    "dev": "rslib build --watch",
+    "build": "rslib",
+    "dev": "rslib --watch",
     "prebundle": "prebundle",
     "test": "rstest",
     "type-check": "tsc --noEmit && tsc --noEmit -p tests"

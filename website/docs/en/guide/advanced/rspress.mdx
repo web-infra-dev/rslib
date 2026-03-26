@@ -35,7 +35,7 @@ Run `npm run doc` to start the Rspress dev server and preview your Rslib compone
 ```json title="package.json"
 {
   "scripts": {
-    "dev": "rslib build --watch",
+    "dev": "rslib --watch",
     "doc": "rspress dev" // run this, it also runs the dev script
   }
 }
@@ -58,8 +58,8 @@ If you are using Rslib to build a component library, follow these steps to add R
   "name": "@your-scope/your-package",
   "version": "0.1.0",
   "scripts": {
-    "dev": "rslib build --watch",
-    "build": "rslib build",
+    "dev": "rslib --watch",
+    "build": "rslib",
     "doc": "rspress dev", // [!code highlight]
     "doc:build": "rspress build", // [!code highlight]
     "doc:preview": "rspress preview" // [!code highlight]

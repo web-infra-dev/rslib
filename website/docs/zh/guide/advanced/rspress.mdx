@@ -35,7 +35,7 @@ import { Steps } from '@rspress/core/theme';
 ```json title="package.json"
 {
   "scripts": {
-    "dev": "rslib build --watch",
+    "dev": "rslib --watch",
     "doc": "rspress dev" // 执行该命令，会同时执行 dev 脚本
   }
 }
@@ -58,8 +58,8 @@ import { Steps } from '@rspress/core/theme';
   "name": "@your-scope/your-package",
   "version": "0.1.0",
   "scripts": {
-    "dev": "rslib build --watch",
-    "build": "rslib build",
+    "dev": "rslib --watch",
+    "build": "rslib",
     "doc": "rspress dev", // [!code highlight]
     "doc:build": "rspress build", // [!code highlight]
     "doc:preview": "rspress preview" // [!code highlight]

@@ -18,8 +18,8 @@ import { PackageManagerTabs } from '@theme';
 - 将 `types` 字段从 `./dist/types/index.d.ts` 改为 `./dist/index.d.ts`
 - 将 `module` 字段从 `./dist/es/index.js` 改为 `./dist/index.js`
 - 移除 `prepare`, `build:watch`, `reset`, `change`, `bump`, `pre`, `change-status`, `gen-release-note`, `release`, `new`, `upgrade` 脚本
-- 将 `build` 脚本从 `modern build` 改为 `rslib build`
-- 将 `dev` 脚本从 `modern dev` 改为 `rslib build --watch`
+- 将 `build` 脚本从 `modern build` 改为 `rslib`
+- 将 `dev` 脚本从 `modern dev` 改为 `rslib --watch`
 - 将 `lint` 脚本名称改为 `check` 并保持其值
 - 添加一个新脚本 `format` 并设置其值为 `biome format --write`
 - 添加一个新脚本 `test` 并设置其值为 `vitest run`
@@ -49,9 +49,9 @@ import { PackageManagerTabs } from '@theme';
   "types": "./dist/index.d.ts",
   "files": ["dist"],
   "scripts": {
-    "build": "rslib build",
+    "build": "rslib",
     "check": "biome check --write",
-    "dev": "rslib build --watch",
+    "dev": "rslib --watch",
     "format": "biome format --write",
     "test": "vitest run"
   },

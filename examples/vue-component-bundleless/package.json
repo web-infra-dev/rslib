@@ -6,9 +6,9 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rslib build && vue-tsc",
+    "build": "rslib && vue-tsc",
     "build:storybook": "storybook build",
-    "dev": "rslib build --watch",
+    "dev": "rslib --watch",
     "storybook": "storybook dev",
     "test": "vitest run"
   },
