@@ -4,7 +4,8 @@ import { setupCommands } from './commands';
 
 function initNodeEnv() {
   if (!process.env.NODE_ENV) {
-    const command = process.argv[2] ?? '';
+    // defaults to build mode
+    const command = process.argv[2] ?? 'build';
     process.env.NODE_ENV = ['build', 'inspect'].includes(command)
       ? 'production'
       : 'development';
