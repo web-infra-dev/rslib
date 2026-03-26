@@ -13,8 +13,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "rslib build && vue-tsc",
-    "dev": "rslib build --watch"
+    "build": "rslib && vue-tsc",
+    "dev": "rslib --watch"
   },
   "devDependencies": {
     "@rslib/core": "workspace:*",

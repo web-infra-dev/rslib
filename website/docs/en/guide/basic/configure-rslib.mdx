@@ -118,7 +118,7 @@ For example, if you need to use the `rslib.prod.config.mjs` file when running `b
 ```json title="package.json"
 {
   "scripts": {
-    "build": "rslib build --config rslib.prod.config.mjs"
+    "build": "rslib --config rslib.prod.config.mjs"
   }
 }
 ```
@@ -126,7 +126,7 @@ For example, if you need to use the `rslib.prod.config.mjs` file when running `b
 You can also abbreviate the `--config` option to `-c`:
 
 ```bash
-rslib build -c rslib.prod.config.mjs
+rslib -c rslib.prod.config.mjs
 ```
 
 ## Specify config loader
@@ -141,11 +141,11 @@ Rslib provides three ways to load configuration files:
   ```bash
   # Node.js >= v22.18.0
   # No need to set --experimental-strip-types
-  npx rslib build --config-loader native
+  npx rslib --config-loader native
 
   # Node.js v22.6.0 - v22.17.1
   # Need to set --experimental-strip-types
-  NODE_OPTIONS="--experimental-strip-types" npx rslib build --config-loader native
+  NODE_OPTIONS="--experimental-strip-types" npx rslib --config-loader native
   ```
 
 - `auto`(Default): Use Node.js's native loader to load configuration files first, fallback to using jiti if it fails.

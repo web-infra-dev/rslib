@@ -18,8 +18,8 @@ You can create a new Rslib project by following the [Quick start](/guide/start/q
 - Change the `types` field from `./dist/types/index.d.ts` to `./dist/index.d.ts`
 - Change the `module` field from `./dist/es/index.js` to `./dist/index.js`
 - Remove the scripts fields `prepare`, `build:watch`, `reset`, `change`, `bump`, `pre`, `change-status`, `gen-release-note`, `release`, `new`, `upgrade`
-- Change the script `build` from `modern build` to `rslib build`
-- Change the script `dev` from `modern dev` to `rslib build --watch`
+- Change the script `build` from `modern build` to `rslib`
+- Change the script `dev` from `modern dev` to `rslib --watch`
 - Change the script `lint` name to `check` and keep the value
 - Add a new script `format` with the value `biome format --write`
 - Add the script `test` with the value `vitest run`
@@ -49,9 +49,9 @@ Your `package.json` should look something like this:
   "types": "./dist/index.d.ts",
   "files": ["dist"],
   "scripts": {
-    "build": "rslib build",
+    "build": "rslib",
     "check": "biome check --write",
-    "dev": "rslib build --watch",
+    "dev": "rslib --watch",
     "format": "biome format --write",
     "test": "vitest run"
   },

@@ -9,7 +9,7 @@
 ## Project structure & module organization
 
 - Monorepo via the `pnpm` workspace.
-- `packages/core` (`@rslib/core`): CLI entry (`rslib build`, `--watch`) and programmatic helpers (`build`, `defineConfig`, `loadConfig`).
+- `packages/core` (`@rslib/core`): CLI entry (`rslib`, `--watch`) and programmatic helpers (`build`, `defineConfig`, `loadConfig`).
 - `packages/plugin-dts` (`rsbuild-plugin-dts`): provides the `dts` configuration hook (e.g., `{ dts: { bundle: true } }`).
 - `packages/create-rslib` (`create-rslib`): scaffolds new projects via `pnpm dlx create-rslib` or `npx create-rslib`.
 - Tests live in `packages/*/tests` (unit) and `tests/` (`integration`, `e2e`, `benchmark`); examples in `examples/`.

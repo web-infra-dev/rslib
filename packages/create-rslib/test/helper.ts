@@ -12,12 +12,12 @@ export const expectPackageJson = (
   lang: Lang,
 ) => {
   expect(pkgJson.name).toBe(name);
-  expect(pkgJson.scripts.dev).toBe('rslib build --watch');
+  expect(pkgJson.scripts.dev).toBe('rslib --watch');
   // Vue TS template has additional vue-tsc check
   if (template === 'vue' && lang === 'ts') {
-    expect(pkgJson.scripts.build).toBe('rslib build && vue-tsc');
+    expect(pkgJson.scripts.build).toBe('rslib && vue-tsc');
   } else {
-    expect(pkgJson.scripts.build).toBe('rslib build');
+    expect(pkgJson.scripts.build).toBe('rslib');
   }
   expect(pkgJson.devDependencies['@rslib/core']).toBeTruthy();
 };

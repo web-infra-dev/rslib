@@ -25,7 +25,7 @@ In an Rslib project, enable Rsdoctor as follows:
 ```json title="package.json"
 {
   "scripts": {
-    "build:rsdoctor": "RSDOCTOR=true rslib build"
+    "build:rsdoctor": "RSDOCTOR=true rslib"
   }
 }
 ```
@@ -35,7 +35,7 @@ Because Windows does not support this syntax, you can use [cross-env](https://np
 ```json title="package.json"
 {
   "scripts": {
-    "build:rsdoctor": "cross-env RSDOCTOR=true rslib build"
+    "build:rsdoctor": "cross-env RSDOCTOR=true rslib"
   },
   "devDependencies": {
     "cross-env": "^7.0.0"

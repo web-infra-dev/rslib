@@ -13,7 +13,7 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/cjs/index.d.ts",
   "scripts": {
-    "build": "rslib build",
+    "build": "rslib",
     "dev": "rslib mf-dev",
     "serve": "pnpm build & http-server -p 3001 ./dist/ --cors",
     "storybook": "storybook dev -p 6006"
