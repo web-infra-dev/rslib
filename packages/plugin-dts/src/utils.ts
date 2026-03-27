@@ -275,7 +275,7 @@ async function addExtension(
     return path;
   }
 
-  const candidatePaths = [];
+  const candidatePaths: string[] = [];
 
   // If the import path refers to a directory, it most likely actually refers to a `index.*` file due to Node's module resolution
   if (await isDirectory(join(dirname(dtsFile), path))) {
@@ -407,7 +407,7 @@ export async function redirectDtsImports(
     if (!importPath) continue;
 
     try {
-      const absoluteImportPath = matchPath(importPath, undefined, undefined, [
+      let absoluteImportPath = matchPath(importPath, undefined, undefined, [
         '.jsx',
         '.tsx',
         '.js',
@@ -420,6 +420,12 @@ export async function redirectDtsImports(
       ]);
 
       let redirectImportPath = importPath;
+
+      // `tsconfig-paths` strips only the last extension segment from `.d.ts`
+      // probes, so a match like `.../types.d.ts` comes back as `../types.d`.
+      if (absoluteImportPath?.endsWith('.d')) {
+        absoluteImportPath = absoluteImportPath.slice(0, -2);
+      }
 
       if (
         absoluteImportPath &&

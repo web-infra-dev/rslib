@@ -18,6 +18,7 @@ export {
 export * from '@src/foo';
 export * from '@src/logger';
 export type { Foo } from '@src/types';
+export type { TypesValue } from 'types-pkg';
 export { Router } from 'express';
 export * from 'prebundle-pkg';
 export type { Bar } from 'types';
