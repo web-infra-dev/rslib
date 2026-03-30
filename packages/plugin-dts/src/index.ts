@@ -258,7 +258,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
             childProcess.kill();
             // mute kill error, such as: kill EPERM error on windows
             // https://github.com/nodejs/node/issues/51766
-          } catch (_err) {
+          } catch {
             // do nothing
           }
         }
