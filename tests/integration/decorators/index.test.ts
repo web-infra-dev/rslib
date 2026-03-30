@@ -19,3 +19,10 @@ test('decorators with experimentalDecorators in tsconfig', async () => {
   // use 2022-03 if config source.decorators
   expect(entries.esm1).toMatchSnapshot();
 });
+
+test('decorators support 2023-11 config', async () => {
+  const fixturePath = join(__dirname, '2023-11');
+  const { entries } = await buildAndGetResults({ fixturePath });
+
+  expect(entries.esm).toMatchSnapshot();
+});
