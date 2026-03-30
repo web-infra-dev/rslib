@@ -33,6 +33,10 @@ Rslib has the following features:
 - **Declaration file generation**: Including isolated declarations.
 - **Advanced features**: Module Federation, asset compression, PostCSS, Lightning CSS, and more.
 
+## 📚 Documentation
+
+- [Rslib docs](https://rslib.rs)
+
 ## 🎯 Ecosystem
 
 Rslib is implemented based on Rsbuild and fully reuses the capabilities and ecosystem of Rsbuild.
@@ -62,6 +66,7 @@ Rstack is a unified JavaScript toolchain centered on Rspack, with high performan
 ## 🔗 Links
 
 - [awesome-rstack](https://github.com/rstackjs/awesome-rstack): A curated list of awesome things related to Rstack.
+- [agent-skills](https://github.com/rstackjs/agent-skills): A collection of Agent Skills for Rstack.
 - [rstack-examples](https://github.com/rstackjs/rstack-examples): Examples for Rstack.
 - [storybook-rsbuild](https://github.com/rstackjs/storybook-rsbuild): Storybook builder powered by Rsbuild.
 - [rsbuild-plugin-template](https://github.com/rstackjs/rsbuild-plugin-template): Use this template to create your own Rsbuild plugin.
@@ -88,18 +93,12 @@ This repo has adopted the ByteDance Open Source Code of Conduct. Please check [C
 
 Come and chat with us on [Discord](https://discord.gg/7uHaPXcVyV)! The Rstack team and users are active there, and we're always looking for contributions.
 
-## 🌟 Quality
-
-Rslib uses [Web Infra QoS](https://web-infra-qos.netlify.app?product=rslib&metrics=bundle-size) to observe the trend of key metrics, such as bundle size, compile speed and install size.
-
 ## 🙏 Credits
 
 Some of the implementations of Rslib have drawn inspiration from outstanding projects in the community. We would like to express our gratitude to them:
 
 - [esbuild](https://github.com/evanw/esbuild), created by [Evan Wallace](https://github.com/evanw).
 - [tsup](https://github.com/egoist/tsup), created by [EGOIST](https://github.com/egoist).
-
-This Rslib website is powered by [Netlify](https://www.netlify.com/).
 
 ## 📖 License
 
