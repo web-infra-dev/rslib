@@ -337,6 +337,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
+    devtoolFallbackModuleFilenameTemplate: '[relative-resource-path]?[hash]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '0~[name].js',
@@ -1046,6 +1047,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   ],
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
+    devtoolFallbackModuleFilenameTemplate: '[relative-resource-path]?[hash]',
     path: '<WORKSPACE>/dist',
     filename: '[name].cjs',
     chunkFilename: '1~[name].cjs',
@@ -1748,6 +1750,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   ],
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
+    devtoolFallbackModuleFilenameTemplate: '[relative-resource-path]?[hash]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '2~[name].js',
@@ -2359,6 +2362,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   ],
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
+    devtoolFallbackModuleFilenameTemplate: '[relative-resource-path]?[hash]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '3~[name].js',
@@ -2915,6 +2919,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
+    devtoolFallbackModuleFilenameTemplate: '[relative-resource-path]?[hash]',
     path: '<WORKSPACE>/dist',
     filename: '[name].js',
     chunkFilename: '[name].js',
