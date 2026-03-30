@@ -4,21 +4,19 @@ import { color } from './utils/color';
 import { debounce, isTTY } from './utils/helper';
 import { logger } from './utils/logger';
 
-export function getWatchFilesForRestart(
-  rslib: RslibInstance,
-): string[] | undefined {
+export function getWatchFilesForRestart(rslib: RslibInstance): string[] {
   const meta = rslib.getRslibConfig()._privateMeta;
   if (!meta) {
-    return undefined;
+    return [];
   }
   return [meta.configFilePath, ...(meta.envFilePaths || [])].filter(Boolean);
 }
 
 export async function watchFilesForRestart(
-  files: string[] | undefined,
+  files: string[],
   restart: () => Promise<void>,
 ): Promise<void> {
-  if (!files || !files.length) {
+  if (!files.length) {
     return;
   }
 
