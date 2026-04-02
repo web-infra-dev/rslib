@@ -24,6 +24,7 @@ import {
   RSLIB_CSS_ENTRY_FLAG,
 } from './css/cssConfig';
 import { type CssLoaderOptionsAuto, isCssGlobalFile } from './css/utils';
+import { composeExeConfig } from './exe';
 import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
 import { pluginCjsShims, pluginEsmRequireShim } from './plugins/shims';
 import type {
@@ -1726,7 +1727,9 @@ async function composeLibRsbuildConfig(
     externalHelpers = false,
     redirect = {},
     umdName,
+    experiments = {},
   } = config;
+  const hasExe = Boolean(experiments.exe);
   const { rsbuildConfig: bundleConfig } = composeBundleConfig(bundle);
   const { rsbuildConfig: shimsConfig, enabledShims } = composeShimsConfig(
     format,
@@ -1747,14 +1750,12 @@ async function composeLibRsbuildConfig(
     multiCompilerIndex,
     sourceEntry: config.source?.entry,
   });
+  const userExternals = hasExe ? undefined : config.output?.externals;
   const externalHelpersConfig = composeExternalHelpersConfig(
-    externalHelpers,
+    hasExe ? false : externalHelpers,
     pkgJson,
   );
-  const userExternalsConfig = composeExternalsConfig(
-    format,
-    config.output?.externals,
-  );
+  const userExternalsConfig = composeExternalsConfig(format, userExternals);
   const {
     config: outputFilenameConfig,
     jsExtension,
@@ -1774,6 +1775,14 @@ async function composeLibRsbuildConfig(
     cssModulesAuto,
     config.outBase,
   );
+  const { config: exeConfig } = composeExeConfig({
+    bundle,
+    exe: experiments.exe,
+    format,
+    root,
+    sourceEntry: entryConfig.source?.entry,
+    target,
+  });
 
   const { config: bundlelessExternalConfig } = composeBundlelessExternalConfig(
     jsExtension,
@@ -1786,9 +1795,9 @@ async function composeLibRsbuildConfig(
   const autoExternalConfig = composeAutoExternalConfig({
     bundle,
     format,
-    autoExternal,
+    autoExternal: hasExe ? false : autoExternal,
     pkgJson,
-    userExternals: config.output?.externals,
+    userExternals,
   });
   const cssConfig = composeCssConfig(
     outBase,
@@ -1848,6 +1857,7 @@ async function composeLibRsbuildConfig(
     bannerFooterConfig,
     decoratorsConfig,
     printFileSizeConfig,
+    exeConfig,
   );
 }
 
