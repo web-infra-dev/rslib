@@ -15,11 +15,9 @@ import {
   normalizeNodeVersion,
 } from './version';
 
-const normalizeTargetsInput = (exe?: ExeOptions): ExeTargetInput[] => {
-  if (!exe) {
-    return [];
-  }
+type EnabledExeOptions = Exclude<ExeOptions, false | undefined>;
 
+const normalizeTargetsInput = (exe: EnabledExeOptions): ExeTargetInput[] => {
   if (exe === true) {
     return [{}];
   }
@@ -28,7 +26,7 @@ const normalizeTargetsInput = (exe?: ExeOptions): ExeTargetInput[] => {
 };
 
 export const resolveExeTargets = (
-  exe?: ExeOptions,
+  exe: EnabledExeOptions,
   root: string = process.cwd(),
 ): NormalizedExeTarget[] => {
   const currentPlatform = getCurrentExePlatform();
@@ -156,13 +154,13 @@ export const composeExeConfig = ({
   sourceEntry,
   target,
 }: ComposeExeConfigOptions): ComposedExeConfig => {
-  const normalizedTargets = resolveExeTargets(exe, root);
-
-  if (normalizedTargets.length === 0) {
+  if (!exe) {
     return {
       config: {},
     };
   }
+
+  const normalizedTargets = resolveExeTargets(exe, root);
 
   validateExeTargets({
     bundle,

@@ -175,6 +175,14 @@ For string targets, Rslib treats the value as a custom Node.js executable path. 
 
 This also means that when multiple targets are enabled, the version resolved from a custom binary path affects the suffix of the final output file name.
 
+:::info macOS target signing
+
+`darwin` targets are only signed automatically when the build itself runs on macOS.
+
+If you generate a macOS executable on Linux or Windows, the output remains unsigned. In most cases, you need to sign it on macOS before it can run normally.
+
+:::
+
 Here is an example that generates executables for multiple platforms in a single build:
 
 ```ts title="rslib.config.ts"

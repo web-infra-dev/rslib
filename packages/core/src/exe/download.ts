@@ -1,5 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+import type { ReadableStream as WebReadableStream } from 'node:stream/web';
 import type { ExeArch, ExePlatform } from '../types';
 import type { NormalizedExeTarget, ResolvedExeTarget } from './types';
 import { readBinaryVersion, runCommand } from './utils';
@@ -56,9 +59,23 @@ const downloadArchive = async (url: string, archivePath: string) => {
     );
   }
 
-  const arrayBuffer = await response.arrayBuffer();
+  if (!response.body) {
+    throw new Error(
+      `Failed to download "${url}" for "experiments.exe": response body is empty.`,
+    );
+  }
+
   await fs.promises.mkdir(path.dirname(archivePath), { recursive: true });
-  await fs.promises.writeFile(archivePath, Buffer.from(arrayBuffer));
+
+  try {
+    await pipeline(
+      Readable.fromWeb(response.body as WebReadableStream<Uint8Array>),
+      fs.createWriteStream(archivePath),
+    );
+  } catch (error) {
+    await fs.promises.rm(archivePath, { force: true });
+    throw error;
+  }
 };
 
 const extractArchive = async ({

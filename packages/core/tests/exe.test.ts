@@ -45,6 +45,33 @@ const withSupportedNodeRuntime = async <T>(fn: () => Promise<T>) => {
   }
 };
 
+const withUnsupportedExeHost = async <T>(fn: () => Promise<T>) => {
+  const originalPlatform = process.platform;
+  const originalArch = process.arch;
+
+  Object.defineProperty(process, 'platform', {
+    value: 'freebsd',
+    configurable: true,
+  });
+  Object.defineProperty(process, 'arch', {
+    value: 'riscv64',
+    configurable: true,
+  });
+
+  try {
+    return await fn();
+  } finally {
+    Object.defineProperty(process, 'platform', {
+      value: originalPlatform,
+      configurable: true,
+    });
+    Object.defineProperty(process, 'arch', {
+      value: originalArch,
+      configurable: true,
+    });
+  }
+};
+
 describe('experiments.exe', () => {
   test('should detect supported Node.js versions', () => {
     expect(isExeSupportedNodeVersion('25.7.0')).toBe(true);
@@ -123,6 +150,16 @@ describe('experiments.exe', () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: "experiments.exe" requires "bundle" to be "true".]`,
     );
+  });
+
+  test('should not validate host exe capabilities when exe is disabled', async () => {
+    await expect(
+      withUnsupportedExeHost(() =>
+        composeTestRslibConfig({
+          format: 'esm',
+        }),
+      ),
+    ).resolves.toBeTruthy();
   });
 
   test('should resolve outputPath separately from fileName', () => {

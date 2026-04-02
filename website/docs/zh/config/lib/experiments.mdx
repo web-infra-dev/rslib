@@ -175,6 +175,14 @@ type ExeTarget = {
 
 这也意味着在开启多个 target 时，自定义二进制文件解析出来的版本也会影响最终产物的文件名后缀。
 
+:::info macOS target 签名
+
+只有当构建本身运行在 macOS 上时，Rslib 才会自动为 `darwin` target 生成可执行文件签名。
+
+如果你在 Linux 或 Windows 上生成 macOS 可执行文件，产物会保持未签名状态。大多数情况下，需要先在 macOS 上完成签名后才能正常运行。
+
+:::
+
 下面是在一次构建中同时生成多个平台的可执行文件的示例：
 
 ```ts title="rslib.config.ts"

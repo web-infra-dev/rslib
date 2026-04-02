@@ -7,7 +7,7 @@ export default defineConfig({
   name: 'integration',
   setupFiles: ['./setupRstestTests.ts'],
   include: ['./integration/**/*.test.ts'],
-  exclude: ['**/node_modules/**'],
+  exclude: ['**/node_modules/**', './integration/exe/*.test.ts'],
   // TODO: Support benchmark in Rstest.
   // benchmark: {
   //   include: ['./benchmark/**/*.bench.ts'],
