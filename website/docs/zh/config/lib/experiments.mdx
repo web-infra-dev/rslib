@@ -155,6 +155,8 @@ export default {
 - **类型：**
 
 ```ts
+type ExeTargets = Array<string | ExeTarget>;
+
 type ExeTarget = {
   platform?: 'darwin' | 'linux' | 'win32';
   arch?: 'x64' | 'arm64';
@@ -162,18 +164,12 @@ type ExeTarget = {
 };
 ```
 
-指定可执行文件生成目标。每个元素可以是：
+指定要生成的可执行文件目标列表。每个元素支持两种形式：
 
-- 字符串形式的 Node.js 可执行文件路径
-- 包含 `platform`、`arch` 和可选 `nodeVersion` 的对象
+- 字符串形式：表示一个自定义 Node.js 可执行文件路径。Rslib 会读取该二进制文件的真实版本，校验它不低于最低要求，并使用相同版本来执行 `--build-sea`。
+- 对象形式：用于声明目标 `platform`、`arch` 和 `nodeVersion`。Rslib 会根据这些信息自动解析或下载对应的官方 Node.js 可执行文件。`nodeVersion` 同时兼容 `'25.9.0'` 和 `'v25.9.0'` 两种写法。未配置的字段会分别回退到当前平台、当前架构和当前 Node.js 版本。
 
 默认情况下，Rslib 使用当前的 `process.execPath` 作为可执行文件路径。
-
-对于对象形式的 target，Rslib 会为目标 `platform` 和 `arch` 下载官方 Node.js 可执行文件。如果没有配置 `nodeVersion`，Rslib 会使用当前的 Node.js 版本。
-
-对于字符串形式的 target，Rslib 会把它当作一个自定义 Node.js 可执行文件路径。Rslib 会读取该二进制文件的真实版本，校验它不低于最低要求，并使用相同版本来执行 `--build-sea`。
-
-这也意味着在开启多个 target 时，自定义二进制文件解析出来的版本也会影响最终产物的文件名后缀。
 
 :::info macOS target 签名
 
@@ -183,7 +179,7 @@ type ExeTarget = {
 
 :::
 
-下面是在一次构建中同时生成多个平台的可执行文件的示例：
+下面是一个在一次构建中同时生成多个平台可执行文件的示例：
 
 ```ts title="rslib.config.ts"
 export default {

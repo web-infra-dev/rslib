@@ -334,6 +334,25 @@ describe('experiments.exe', () => {
     expect(targets[0]?.nodeVersion).toBe('v25.7.0');
   });
 
+  test('should accept nodeVersion with a leading v', async () => {
+    const targets = await withSupportedNodeRuntime(async () =>
+      resolveExeTargets(
+        {
+          targets: [
+            {
+              platform: 'linux',
+              arch: 'x64',
+              nodeVersion: 'v25.7.0',
+            },
+          ],
+        },
+        process.cwd(),
+      ),
+    );
+
+    expect(targets[0]?.nodeVersion).toBe('v25.7.0');
+  });
+
   test('should reject multiple source entries', async () => {
     await expect(
       composeTestRslibConfig({

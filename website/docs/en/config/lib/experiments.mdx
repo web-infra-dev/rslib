@@ -155,6 +155,8 @@ export default {
 - **Type:**
 
 ```ts
+type ExeTargets = Array<string | ExeTarget>;
+
 type ExeTarget = {
   platform?: 'darwin' | 'linux' | 'win32';
   arch?: 'x64' | 'arm64';
@@ -162,18 +164,12 @@ type ExeTarget = {
 };
 ```
 
-Specify executable generation targets. Each item can be:
+Specify the list of executable targets to generate. Each item supports one of the following forms:
 
-- A string path to a Node.js executable
-- An object containing `platform`, `arch`, and optional `nodeVersion`
+- String form: a custom Node.js executable path. Rslib reads the actual binary version, validates that it meets the minimum requirement, and uses the same version for `--build-sea`.
+- Object form: declares the target `platform`, `arch`, and `nodeVersion`. Rslib resolves or downloads the matching official Node.js executable automatically. `nodeVersion` accepts both `'25.9.0'` and `'v25.9.0'`. Omitted fields fall back to the current platform, current architecture, and current Node.js version.
 
 By default, Rslib uses the current `process.execPath` as the executable path.
-
-For object targets, Rslib downloads the official Node.js executable for the target `platform` and `arch`. If `nodeVersion` is omitted, Rslib uses the current Node.js version.
-
-For string targets, Rslib treats the value as a custom Node.js executable path. Rslib reads the actual binary version, validates that it is not lower than the minimum required version, and uses the same version for `--build-sea`.
-
-This also means that when multiple targets are enabled, the version resolved from a custom binary path affects the suffix of the final output file name.
 
 :::info macOS target signing
 

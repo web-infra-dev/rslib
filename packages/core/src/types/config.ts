@@ -160,6 +160,7 @@ export type ExeTarget = {
   arch?: ExeArch;
   /**
    * The Node.js version used for both `--build-sea` and the target executable.
+   * Accepts both `'25.9.0'` and `'v25.9.0'` formats.
    * @defaultValue Current Node.js version
    */
   nodeVersion?: string;
