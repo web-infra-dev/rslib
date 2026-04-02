@@ -40,7 +40,7 @@ jobs:
     strategy:
       matrix:
         runner: [ubuntu-latest, windows-latest]
-        node-version: ['25.7.0']
+        node-version: ['25']
 
     uses: ./.github/workflows/reusable-test.yml
     with:

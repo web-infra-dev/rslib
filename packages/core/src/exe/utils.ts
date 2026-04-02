@@ -147,7 +147,7 @@ export const resolveExecutableOutputPath = ({
   }
 
   const normalizedFileName =
-    target.platform === 'win32' && !rawFileName.endsWith('.exe')
+    target.platform === 'win32' && !rawFileName.toLowerCase().endsWith('.exe')
       ? `${rawFileName}.exe`
       : rawFileName;
 
