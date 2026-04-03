@@ -1,5 +1,5 @@
 ---
-description: 'Set up a runtime, create a project with create-rslib, choose templates and tools, and start using Rslib quickly.'
+description: 'Set up a runtime, create a project with create-rslib, choose templates, tools, and skills, and start using Rslib quickly.'
 ---
 
 # Quick start
@@ -37,7 +37,7 @@ import { PackageManagerTabs } from '@theme';
   }}
 />
 
-Follow the prompts step by step. During the creation process, you can choose whether to add optional tools such as TypeScript, ESLint, etc.
+Follow the prompts step by step. During project creation, you can choose a template, language, optional tools, and optional skills.
 
 After creating the project, do the following:
 
@@ -78,6 +78,19 @@ When creating a project, you can choose from the following templates provided by
 Biome provides similar linting and formatting features to ESLint and Prettier. If you select Biome, you typically won't need to choose ESLint or Prettier as well.
 :::
 
+### Optional skills
+
+`create-rslib` can also install optional skills for coding agents that support Skills. Currently, it provides `rslib-best-practices`, which gives agents Rslib-specific best practices for configuration, workflows, and common project setup decisions.
+
+Use the arrow keys to navigate and the space bar to select. Press Enter without selecting anything to skip.
+
+```text
+◆  Select optional skills (Use <space> to select, <enter> to continue)
+│  ◻ Rslib best practices
+```
+
+For more details about Agent Skills and other AI-related capabilities, see [AI](/guide/start/ai).
+
 ### Current directory
 
 To create a project in the current directory, set the target folder to `.`:
@@ -106,6 +119,9 @@ npx -y create-rslib@latest my-project -t react
 
 # Specify multiple tools
 npx -y create-rslib@latest my-project -t react --tools rstest,biome
+
+# Install an optional skill for coding agents
+npx -y create-rslib@latest my-project -t react --skill rslib-best-practices
 ```
 
 All CLI flags supported by `create-rslib`:
@@ -119,6 +135,7 @@ Options:
   -d, --dir <dir>       create project in specified directory
   -t, --template <tpl>  specify the template to use
   --tools <tool>        add additional tools, comma separated
+  --skill <skill>       add optional skills, comma separated
   --override            override files in target directory
   --packageName <name>  specify the package name
 
@@ -127,6 +144,9 @@ Available templates:
 
 Optional tools:
   biome, eslint, prettier, rspress, storybook, rstest
+
+Optional skills:
+  rslib-best-practices
 ```
 
 ## Migrate from existing projects
