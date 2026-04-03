@@ -3,7 +3,11 @@ import { describe, expect, test } from '@rstest/core';
 import { composeCreateRsbuildConfig } from '../src/config';
 import { resolveExeTargets } from '../src/exe';
 import { resolveTargetBinaries } from '../src/exe/download';
-import { resolveExecutableOutputPath } from '../src/exe/utils';
+import {
+  formatBinarySize,
+  isJavaScriptOutputFile,
+  resolveExecutableOutputPath,
+} from '../src/exe/utils';
 import {
   assertSupportedExeRuntime,
   assertSupportedExeNodeVersion,
@@ -79,6 +83,15 @@ describe('experiments.exe', () => {
     expect(isExeSupportedNodeVersion('26.0.0')).toBe(true);
     expect(isExeSupportedNodeVersion('25.6.9')).toBe(false);
     expect(isExeSupportedNodeVersion('24.9.0')).toBe(false);
+  });
+
+  test('should only treat emitted JavaScript files as executable entries', () => {
+    expect(isJavaScriptOutputFile('index.js')).toBe(true);
+    expect(isJavaScriptOutputFile('index.cjs')).toBe(true);
+    expect(isJavaScriptOutputFile('index.mjs')).toBe(true);
+    expect(isJavaScriptOutputFile('index.jsx')).toBe(true);
+    expect(isJavaScriptOutputFile('index.js.map')).toBe(false);
+    expect(isJavaScriptOutputFile('index.css')).toBe(false);
   });
 
   test('should normalize boolean exe to the current target', async () => {
@@ -225,6 +238,14 @@ describe('experiments.exe', () => {
     expect(resolved).toBe(
       path.join('/project/dist/esm', 'hello-win32-x64-v25.8.0.exe'),
     );
+  });
+
+  test('should format executable sizes with decimal units', () => {
+    expect(formatBinarySize(999)).toBe('999 B');
+    expect(formatBinarySize(1000)).toBe('1.0 kB');
+    expect(formatBinarySize(1024)).toBe('1.0 kB');
+    expect(formatBinarySize(1_000_000)).toBe('1.0 MB');
+    expect(formatBinarySize(1_048_576)).toBe('1.0 MB');
   });
 
   test('should not append .exe twice for win32 executable outputs', () => {

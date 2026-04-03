@@ -5,16 +5,16 @@ import { color } from '../utils/color';
 import type { CommandResult, NormalizedExeTarget } from './types';
 
 export const isJavaScriptOutputFile = (file: string): boolean => {
-  return /\.(cjs|mjs|js|jsx)$/.test(file) && !file.endsWith('.map');
+  return /\.(cjs|mjs|js|jsx)$/.test(file);
 };
 
 export const formatBinarySize = (size: number): string => {
-  if (size >= 1024 * 1024) {
-    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  if (size >= 1000 * 1000) {
+    return `${(size / (1000 * 1000)).toFixed(1)} MB`;
   }
 
-  if (size >= 1024) {
-    return `${(size / 1024).toFixed(1)} kB`;
+  if (size >= 1000) {
+    return `${(size / 1000).toFixed(1)} kB`;
   }
 
   return `${size} B`;

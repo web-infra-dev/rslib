@@ -94,17 +94,47 @@ type ExeOptions =
 
 启用 `experiments.exe` 时，需要保证：
 
-- `format` 为 `'esm'` 或 `'cjs'`
-- `output.target` 为 `'node'`
-- `bundle` 为 `true`
-- `source.entry` 中仅有单个入口
+- [`format`](/config/lib/format) 为 `'esm'` 或 `'cjs'`
+- [`output.target`](/config/rsbuild/output#outputtarget) 为 `'node'`
+- [`bundle`](/config/lib/bundle) 为 `true`
+- [`source.entry`](/config/rsbuild/source#sourceentry) 中仅有单个入口
 
 开启 `experiments.exe` 后，Rslib 还会：
 
 - 禁用代码拆分
-- 忽略 `autoExternal`、`output.externals`、`externalHelpers` 等配置，将所有模块直接打包进可执行文件
+- 忽略 [`autoExternal`](/config/lib/auto-external)、[`output.externals`](/config/rsbuild/output#outputexternals)、[`externalHelpers`](/config/lib/external-helpers) 等配置，将所有模块直接打包进可执行文件
 
-### experiments.exe.fileName
+### 布尔类型
+
+你可以将 `experiments.exe` 设置为 `true`，以默认行为启用可执行文件生成功能。
+
+在这种模式下，Rslib 会使用当前的 `process.execPath` 作为可执行文件模板，并将生成的可执行文件输出到当前 JavaScript 产物的输出目录中。
+
+这意味着生成的可执行文件会默认使用：
+
+- 当前宿主环境的 `platform`（`process.platform`）
+- 当前宿主环境的 `arch`（`process.arch`）
+- 当前 Node.js 版本（`process.version`）
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: true,
+      },
+    },
+  ],
+};
+```
+
+如果你想禁用该功能，可以将 `experiments.exe` 设置为 `false`，或者不配置该选项。
+
+### 对象类型
+
+如果你想自定义可执行文件的生成行为，可以将 `experiments.exe` 配置为一个对象。
+
+#### experiments.exe.fileName
 
 - **类型：** `string`
 
@@ -128,7 +158,7 @@ export default {
 };
 ```
 
-### experiments.exe.outputPath
+#### experiments.exe.outputPath
 
 - **类型：** `string`
 
@@ -150,7 +180,7 @@ export default {
 };
 ```
 
-### experiments.exe.targets
+#### experiments.exe.targets
 
 - **类型：**
 
@@ -166,10 +196,8 @@ type ExeTarget = {
 
 指定要生成的可执行文件目标列表。每个元素支持两种形式：
 
-- 字符串形式：表示一个自定义 Node.js 可执行文件路径。Rslib 会读取该二进制文件的真实版本，校验它不低于最低要求，并使用相同版本来执行 `--build-sea`。
-- 对象形式：用于声明目标 `platform`、`arch` 和 `nodeVersion`。Rslib 会根据这些信息自动解析或下载对应的官方 Node.js 可执行文件。`nodeVersion` 同时兼容 `'25.9.0'` 和 `'v25.9.0'` 两种写法。未配置的字段会分别回退到当前平台、当前架构和当前 Node.js 版本。
-
-默认情况下，Rslib 使用当前的 `process.execPath` 作为可执行文件路径。
+- 字符串形式：表示一个自定义 Node.js 可执行文件路径。Rslib 会直接使用这个二进制文件作为可执行文件模板，并在 `--build-sea` 时使用与其版本一致、且当前宿主机可运行的 Node.js 二进制。
+- 对象形式：用于声明目标 `platform`、`arch` 和 `nodeVersion`。`nodeVersion` 同时兼容 `'25.9.0'` 和 `'v25.9.0'` 两种写法。Rslib 会根据这些信息自动解析或下载对应的官方 Node.js 可执行文件；未配置的字段会回退到当前宿主环境。如果没有配置 `targets`，或者将其配置为空数组，则会回退为与布尔类型相同的默认行为。
 
 :::info macOS target 签名
 
@@ -209,7 +237,7 @@ export default {
 };
 ```
 
-### experiments.exe.seaOptions
+#### experiments.exe.seaOptions
 
 - **类型：**
 

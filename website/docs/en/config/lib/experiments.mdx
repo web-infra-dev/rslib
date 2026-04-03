@@ -51,7 +51,7 @@ export default {
 
 Use [Node.js Single Executable Application](https://nodejs.org/api/single-executable-applications.html) to package the generated JavaScript output into an executable file.
 
-This feature allows the distribution of a Node.js application conveniently to a system that does not have Node.js installed.
+This feature allows you to conveniently distribute a Node.js application to systems without Node.js installed.
 
 - **Type:**
 
@@ -94,17 +94,47 @@ type ExeOptions =
 
 To enable `experiments.exe`, make sure that:
 
-- `format` is `'esm'` or `'cjs'`
-- `output.target` is `'node'`
-- `bundle` is `true`
-- There is only one entry in `source.entry`
+- [`format`](/config/lib/format) is `'esm'` or `'cjs'`
+- [`output.target`](/config/rsbuild/output#outputtarget) is `'node'`
+- [`bundle`](/config/lib/bundle) is `true`
+- There is only one entry in [`source.entry`](/config/rsbuild/source#sourceentry)
 
 After enabling `experiments.exe`, Rslib will also:
 
 - Disable code splitting
-- Ignore `autoExternal`, `output.externals`, `externalHelpers`, and related options, and bundle all modules directly into the executable
+- Ignore [`autoExternal`](/config/lib/auto-external), [`output.externals`](/config/rsbuild/output#outputexternals), [`externalHelpers`](/config/lib/external-helpers), and related options, and bundle all modules directly into the executable
 
-### experiments.exe.fileName
+### Boolean type
+
+You can set `experiments.exe` to `true` to enable executable generation with the default behavior.
+
+In this mode, Rslib uses the current `process.execPath` as the executable template and outputs the generated executable to the current JavaScript output directory.
+
+This means the generated executable uses:
+
+- The current host `platform` (`process.platform`)
+- The current host `arch` (`process.arch`)
+- The current Node.js version (`process.version`)
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: true,
+      },
+    },
+  ],
+};
+```
+
+If you want to disable this feature, you can set `experiments.exe` to `false` or leave it unspecified.
+
+### Object type
+
+If you want to customize executable generation, you can set `experiments.exe` to an object.
+
+#### experiments.exe.fileName
 
 - **Type:** `string`
 
@@ -128,7 +158,7 @@ export default {
 };
 ```
 
-### experiments.exe.outputPath
+#### experiments.exe.outputPath
 
 - **Type:** `string`
 
@@ -150,7 +180,7 @@ export default {
 };
 ```
 
-### experiments.exe.targets
+#### experiments.exe.targets
 
 - **Type:**
 
@@ -166,10 +196,8 @@ type ExeTarget = {
 
 Specify the list of executable targets to generate. Each item supports one of the following forms:
 
-- String form: a custom Node.js executable path. Rslib reads the actual binary version, validates that it meets the minimum requirement, and uses the same version for `--build-sea`.
-- Object form: declares the target `platform`, `arch`, and `nodeVersion`. Rslib resolves or downloads the matching official Node.js executable automatically. `nodeVersion` accepts both `'25.9.0'` and `'v25.9.0'`. Omitted fields fall back to the current platform, current architecture, and current Node.js version.
-
-By default, Rslib uses the current `process.execPath` as the executable path.
+- String form: a custom Node.js executable path. Rslib uses this binary as the executable template, and uses a host-runnable Node.js binary with the same version for `--build-sea`.
+- Object form: declares the target `platform`, `arch`, and `nodeVersion`. `nodeVersion` accepts both `'25.9.0'` and `'v25.9.0'`. Rslib resolves or downloads the matching official Node.js executable automatically. Omitted fields fall back to the current host environment. If `targets` is not specified, or is an empty array, it falls back to the same default behavior as the boolean form.
 
 :::info macOS target signing
 
@@ -209,7 +237,7 @@ export default {
 };
 ```
 
-### experiments.exe.seaOptions
+#### experiments.exe.seaOptions
 
 - **Type:**
 
