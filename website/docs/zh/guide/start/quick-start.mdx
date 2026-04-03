@@ -1,5 +1,5 @@
 ---
-description: '完成运行时准备，使用 create-rslib 创建项目，选择模板与工具，并快速开始使用 Rslib。'
+description: '完成运行时准备，使用 create-rslib 创建项目，选择模板、工具与技能，并快速开始使用 Rslib。'
 ---
 
 # 快速上手
@@ -37,7 +37,7 @@ import { PackageManagerTabs } from '@theme';
   }}
 />
 
-按照提示一步步操作即可。在创建过程中，你可以选择是否需要 TypeScript、ESLint 等额外的工具。
+按照提示一步步操作即可。在创建过程中，你可以选择模板、语言、可选工具，以及供 Coding Agents 使用的可选技能。
 
 在创建完成后，你可以执行以下步骤：
 
@@ -78,6 +78,19 @@ import { PackageManagerTabs } from '@theme';
 Biome 提供与 ESLint 和 Prettier 相似的代码检查和格式化功能。如果你选择了 Biome，通常就不需要再选择 ESLint 或 Prettier 了。
 :::
 
+### 可选技能
+
+`create-rslib` 也支持为支持 Skills 的 Coding Agents 安装可选技能。目前提供的技能是 `rslib-best-practices`，用于为 Agents 提供 Rslib 配置、工作流和常见项目设置方面的最佳实践。
+
+你可以使用上下箭头和空格进行选择。如果不需要这些技能，可以直接按回车跳过。
+
+```text
+◆  Select optional skills (Use <space> to select, <enter> to continue)
+│  ◻ Rslib best practices
+```
+
+关于 Agent Skills 和其他 AI 相关能力的更多介绍，可参考 [AI](/guide/start/ai)。
+
 ### 当前目录
 
 如果你需要在当前目录下创建项目，可以将 target folder 设置为 `.`：
@@ -106,6 +119,9 @@ npx -y create-rslib@latest my-project -t react
 
 # 指定多个 tools
 npx -y create-rslib@latest my-project -t react --tools rstest,biome
+
+# 为 Coding Agents 安装可选 skill
+npx -y create-rslib@latest my-project -t react --skill rslib-best-practices
 ```
 
 `create-rslib` 完整的 CLI 选项如下：
@@ -119,6 +135,7 @@ Options:
   -d, --dir <dir>       create project in specified directory
   -t, --template <tpl>  specify the template to use
   --tools <tool>        add additional tools, comma separated
+  --skill <skill>       add optional skills, comma separated
   --override            override files in target directory
   --packageName <name>  specify the package name
 
@@ -127,6 +144,9 @@ Available templates:
 
 Optional tools:
   biome, eslint, prettier, rspress, storybook, rstest
+
+Optional skills:
+  rslib-best-practices
 ```
 
 ## 从现有项目迁移
