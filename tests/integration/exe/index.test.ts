@@ -5,8 +5,8 @@ import { describe, expect, onTestFinished, test } from '@rstest/core';
 import fse from 'fs-extra';
 import {
   buildAndGetResults,
-  expectBuildEnd,
   expectFile,
+  expectFileUpdated,
   expectPoll,
   runCli,
 } from 'test-helper';
@@ -189,13 +189,17 @@ export default defineConfig({
         ['arg1', 'arg2'],
         'watch-cjs-v1:arg1|arg2',
       );
+      const initialExecutableMtimeMs = fs.statSync(executablePath).mtimeMs;
 
       await fse.outputFile(
         tempSrcFile,
         `console.log('watch-cjs-v2:' + process.argv.slice(2).join('|'));`,
       );
 
-      await expectBuildEnd(child);
+      // Wait for the executable file itself to be rewritten before executing it
+      // again. Polling the old `.exe` during rebuild is much flakier on Windows,
+      // where the running binary can temporarily block the replacement.
+      await expectFileUpdated(executablePath, initialExecutableMtimeMs);
       await expectExecutableOutput(
         executablePath,
         ['arg1', 'arg2'],
