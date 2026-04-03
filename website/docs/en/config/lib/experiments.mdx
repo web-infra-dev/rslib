@@ -194,18 +194,27 @@ type ExeTarget = {
 };
 ```
 
-Specify the list of executable targets to generate. Each item supports one of the following forms:
+Specify the list of executable targets to generate. Each item supports one of the following types:
 
-- String form: a custom Node.js executable path. Rslib uses this binary as the executable template, and uses a host-runnable Node.js binary with the same version for `--build-sea`.
-- Object form: declares the target `platform`, `arch`, and `nodeVersion`. `nodeVersion` accepts both `'25.9.0'` and `'v25.9.0'`. Rslib resolves or downloads the matching official Node.js executable automatically. Omitted fields fall back to the current host environment. If `targets` is not specified, or is an empty array, it falls back to the same default behavior as the boolean form.
+- **String type:** a custom Node.js executable path. Rslib uses this binary as the executable template, and uses a host-runnable Node.js binary with the same version for `--build-sea`.
 
-:::info macOS target signing
+Here is an example that uses a custom Node.js binary path:
 
-`darwin` targets are only signed automatically when the build itself runs on macOS.
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: {
+          targets: ['./custom-node/bin/node'],
+        },
+      },
+    },
+  ],
+};
+```
 
-If you generate a macOS executable on Linux or Windows, the output remains unsigned. In most cases, you need to sign it on macOS before it can run normally.
-
-:::
+- **Object type:** declares the target `platform`, `arch`, and `nodeVersion`. `nodeVersion` accepts both `'25.9.0'` and `'v25.9.0'`. Rslib resolves or downloads the matching official Node.js executable automatically. Omitted fields fall back to the current host environment. If `targets` is not specified, or is an empty array, it falls back to the same default behavior as the boolean form.
 
 Here is an example that generates executables for multiple platforms in a single build:
 
@@ -215,7 +224,6 @@ export default {
     {
       experiments: {
         exe: {
-          fileName: 'hello',
           targets: [
             {
               platform: 'linux',
@@ -236,6 +244,14 @@ export default {
   ],
 };
 ```
+
+:::info macOS target signing
+
+`darwin` targets are only signed automatically when the build itself runs on macOS.
+
+If you generate a macOS executable on Linux or Windows, the output remains unsigned. In most cases, you need to sign it on macOS before it can run normally.
+
+:::
 
 #### experiments.exe.seaOptions
 

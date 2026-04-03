@@ -194,18 +194,27 @@ type ExeTarget = {
 };
 ```
 
-指定要生成的可执行文件目标列表。每个元素支持两种形式：
+指定要生成的可执行文件目标列表。每个元素支持以下两种类型：
 
-- 字符串形式：表示一个自定义 Node.js 可执行文件路径。Rslib 会直接使用这个二进制文件作为可执行文件模板，并在 `--build-sea` 时使用与其版本一致、且当前宿主机可运行的 Node.js 二进制。
-- 对象形式：用于声明目标 `platform`、`arch` 和 `nodeVersion`。`nodeVersion` 同时兼容 `'25.9.0'` 和 `'v25.9.0'` 两种写法。Rslib 会根据这些信息自动解析或下载对应的官方 Node.js 可执行文件；未配置的字段会回退到当前宿主环境。如果没有配置 `targets`，或者将其配置为空数组，则会回退为与布尔类型相同的默认行为。
+- **字符串类型：**表示一个自定义 Node.js 可执行文件路径。Rslib 会直接使用这个二进制文件作为可执行文件模板，并在 `--build-sea` 时使用与其版本一致、且当前宿主机可运行的 Node.js 二进制。
 
-:::info macOS target 签名
+下面是一个使用自定义 Node.js 二进制路径的示例：
 
-只有当构建本身运行在 macOS 上时，Rslib 才会自动为 `darwin` target 生成可执行文件签名。
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: {
+          targets: ['./custom-node/bin/node'],
+        },
+      },
+    },
+  ],
+};
+```
 
-如果你在 Linux 或 Windows 上生成 macOS 可执行文件，产物会保持未签名状态。大多数情况下，需要先在 macOS 上完成签名后才能正常运行。
-
-:::
+- **对象类型：**用于声明目标 `platform`、`arch` 和 `nodeVersion`。`nodeVersion` 同时兼容 `'25.9.0'` 和 `'v25.9.0'` 两种写法。Rslib 会根据这些信息自动解析或下载对应的官方 Node.js 可执行文件；未配置的字段会回退到当前宿主环境。如果没有配置 `targets`，或者将其配置为空数组，则会回退为与布尔类型相同的默认行为。
 
 下面是一个在一次构建中同时生成多个平台可执行文件的示例：
 
@@ -215,7 +224,6 @@ export default {
     {
       experiments: {
         exe: {
-          fileName: 'hello',
           targets: [
             {
               platform: 'linux',
@@ -236,6 +244,14 @@ export default {
   ],
 };
 ```
+
+:::info macOS target 签名
+
+只有当构建本身运行在 macOS 上时，Rslib 才会自动为 `darwin` target 生成可执行文件签名。
+
+如果你在 Linux 或 Windows 上生成 macOS 可执行文件，产物会保持未签名状态。大多数情况下，需要先在 macOS 上完成签名后才能正常运行。
+
+:::
 
 #### experiments.exe.seaOptions
 
