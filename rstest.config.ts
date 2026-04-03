@@ -33,13 +33,7 @@ export const shared: RstestConfig = {
 };
 
 export default defineConfig({
-  projects: [
-    'packages/*',
-    'tests/rstest.config.ts',
-    // Keep exe tests in a separate project so eco CI can skip these slower SEA
-    // cases, while the workflow can still run them in parallel as a dedicated job.
-    'tests/rstest.exe.config.ts',
-  ],
+  projects: ['packages/*', 'tests'],
   pool: {
     // Leave some workers available for DTS tests to spawn sub processes
     maxWorkers: '80%',
