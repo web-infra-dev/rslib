@@ -46,3 +46,267 @@ export default {
 | v0.17.0 | Added this option                                |
 | v0.19.0 | Changed default value from `false` to `true`     |
 | v0.20.0 | Deprecated this option, no longer has any effect |
+
+## experiments.exe
+
+Use [Node.js Single Executable Application](https://nodejs.org/api/single-executable-applications.html) to package the generated JavaScript output into an executable file.
+
+This feature allows you to conveniently distribute a Node.js application to systems without Node.js installed.
+
+- **Type:**
+
+```ts
+type SeaOptions = {
+  disableExperimentalSEAWarning?: boolean;
+  useSnapshot?: boolean;
+  useCodeCache?: boolean;
+  execArgv?: string[];
+  execArgvExtension?: 'none' | 'env' | 'cli';
+  assets?: Record<string, string>;
+};
+
+type ExeOptions =
+  | boolean
+  | {
+      fileName?: string;
+      outputPath?: string;
+      targets?: Array<
+        | string
+        | {
+            platform?: 'darwin' | 'linux' | 'win32';
+            arch?: 'x64' | 'arm64';
+            nodeVersion?: string;
+          }
+      >;
+      seaOptions?: SeaOptions;
+    };
+```
+
+- **Default:** `false`
+
+::: tip Node.js requirement
+
+`experiments.exe` requires Node.js 25.7.0 or later, and is not supported in Bun or Deno.
+
+:::
+
+### Conditions and limits
+
+To enable `experiments.exe`, make sure that:
+
+- [`format`](/config/lib/format) is `'esm'` or `'cjs'`
+- [`output.target`](/config/rsbuild/output#outputtarget) is `'node'`
+- [`bundle`](/config/lib/bundle) is `true`
+- There is only one entry in [`source.entry`](/config/rsbuild/source#sourceentry)
+
+After enabling `experiments.exe`, Rslib will also:
+
+- Disable code splitting
+- Ignore [`autoExternal`](/config/lib/auto-external), [`output.externals`](/config/rsbuild/output#outputexternals), [`externalHelpers`](/config/lib/external-helpers), and related options, and bundle all modules directly into the executable
+
+### Boolean type
+
+You can set `experiments.exe` to `true` to enable executable generation with the default behavior.
+
+In this mode, Rslib uses the current `process.execPath` as the executable template and outputs the generated executable to the current JavaScript output directory.
+
+This means the generated executable uses:
+
+- The current host `platform` (`process.platform`)
+- The current host `arch` (`process.arch`)
+- The current Node.js version (`process.version`)
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: true,
+      },
+    },
+  ],
+};
+```
+
+If you want to disable this feature, you can set `experiments.exe` to `false` or leave it unspecified.
+
+### Object type
+
+If you want to customize executable generation, you can set `experiments.exe` to an object.
+
+#### experiments.exe.fileName
+
+- **Type:** `string`
+
+Specify the executable file name.
+
+By default, Rslib uses the entry JavaScript file name as the default file name. For `win32` targets, Rslib appends the `.exe` suffix automatically.
+
+When multiple targets are configured, Rslib appends `-<platform>-<arch>-<nodeVersion>` to avoid file name conflicts.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: {
+          fileName: 'hello',
+        },
+      },
+    },
+  ],
+};
+```
+
+#### experiments.exe.outputPath
+
+- **Type:** `string`
+
+Specify the output directory of the executable file.
+
+By default, Rslib outputs the executable to the current JavaScript output directory.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: {
+          outputPath: './build',
+        },
+      },
+    },
+  ],
+};
+```
+
+#### experiments.exe.targets
+
+- **Type:**
+
+```ts
+type ExeTargets = Array<string | ExeTarget>;
+
+type ExeTarget = {
+  platform?: 'darwin' | 'linux' | 'win32';
+  arch?: 'x64' | 'arm64';
+  nodeVersion?: string;
+};
+```
+
+Specify the list of executable targets to generate. Each item supports one of the following types:
+
+- **String type:** a custom Node.js executable path. Rslib uses this binary as the executable template, and uses a host-runnable Node.js binary with the same version for `--build-sea`.
+
+Here is an example that uses a custom Node.js binary path:
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: {
+          targets: ['./custom-node/bin/node'],
+        },
+      },
+    },
+  ],
+};
+```
+
+- **Object type:** declares the target `platform`, `arch`, and `nodeVersion`. `nodeVersion` accepts both `'25.9.0'` and `'v25.9.0'`. Rslib resolves or downloads the matching official Node.js executable automatically. Omitted fields fall back to the current host environment. If `targets` is not specified, or is an empty array, it falls back to the same default behavior as the boolean form.
+
+Here is an example that generates executables for multiple platforms in a single build:
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: {
+          targets: [
+            {
+              platform: 'linux',
+              arch: 'x64',
+            },
+            {
+              platform: 'darwin',
+              arch: 'arm64',
+            },
+            {
+              platform: 'win32',
+              arch: 'x64',
+            },
+          ],
+        },
+      },
+    },
+  ],
+};
+```
+
+:::info macOS target signing
+
+`darwin` targets are only signed automatically when the build itself runs on macOS.
+
+If you generate a macOS executable on Linux or Windows, the output remains unsigned. In most cases, you need to sign it on macOS before it can run normally.
+
+:::
+
+#### experiments.exe.seaOptions
+
+- **Type:**
+
+```ts
+type SeaOptions = {
+  disableExperimentalSEAWarning?: boolean;
+  useSnapshot?: boolean;
+  useCodeCache?: boolean;
+  execArgv?: string[];
+  execArgvExtension?: 'none' | 'env' | 'cli';
+  assets?: Record<string, string>;
+};
+```
+
+- **Default:**
+
+```ts
+const defaultSeaOptions = {
+  disableExperimentalSEAWarning: true,
+  useSnapshot: false,
+  useCodeCache: false,
+  execArgv: undefined,
+  execArgvExtension: 'env',
+  assets: undefined,
+};
+```
+
+`seaOptions` is passed directly to Node.js SEA configuration.
+
+If a target differs from the current host platform or architecture, Rslib automatically disables `useSnapshot` and `useCodeCache` for that target to keep cross-platform builds compatible.
+
+In addition, `useSnapshot` cannot be used together with `format: 'esm'`.
+
+For the complete behavior, see the [Node.js SEA documentation](https://nodejs.org/api/single-executable-applications.html).
+
+### Run the executable
+
+- On systems other than Windows:
+
+```bash
+$ ./hello world
+Hello, world!
+```
+
+- On Windows:
+
+```powershell
+$ .\hello.exe world
+Hello, world!
+```
+
+### Version history
+
+| Version | Changes            |
+| ------- | ------------------ |
+| v0.22.0 | Added this option. |

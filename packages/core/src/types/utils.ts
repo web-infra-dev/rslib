@@ -1,5 +1,6 @@
 export type PkgJson = {
   name: string;
+  bin?: string | Record<string, string>;
   type?: 'module' | 'commonjs';
   dependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
