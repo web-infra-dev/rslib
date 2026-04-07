@@ -46,3 +46,267 @@ export default {
 | v0.17.0 | 新增该选项                   |
 | v0.19.0 | 默认值由 `false` 改为 `true` |
 | v0.20.0 | 弃用该选项，已无实际效果     |
+
+## experiments.exe
+
+使用 [Node.js Single Executable Application](https://nodejs.org/api/single-executable-applications.html) 将生成的 JavaScript 产物打包为一个可执行文件。
+
+该特性可以将 Node.js 应用方便地分发到未安装 Node.js 的系统中。
+
+- **类型：**
+
+```ts
+type SeaOptions = {
+  disableExperimentalSEAWarning?: boolean;
+  useSnapshot?: boolean;
+  useCodeCache?: boolean;
+  execArgv?: string[];
+  execArgvExtension?: 'none' | 'env' | 'cli';
+  assets?: Record<string, string>;
+};
+
+type ExeOptions =
+  | boolean
+  | {
+      fileName?: string;
+      outputPath?: string;
+      targets?: Array<
+        | string
+        | {
+            platform?: 'darwin' | 'linux' | 'win32';
+            arch?: 'x64' | 'arm64';
+            nodeVersion?: string;
+          }
+      >;
+      seaOptions?: SeaOptions;
+    };
+```
+
+- **默认值：** `false`
+
+::: tip Node.js 要求
+
+`experiments.exe` 要求 Node.js 25.7.0 或更高版本，不支持在 Bun 或 Deno 中使用。
+
+:::
+
+### 使用条件与限制
+
+启用 `experiments.exe` 时，需要保证：
+
+- [`format`](/config/lib/format) 为 `'esm'` 或 `'cjs'`
+- [`output.target`](/config/rsbuild/output#outputtarget) 为 `'node'`
+- [`bundle`](/config/lib/bundle) 为 `true`
+- [`source.entry`](/config/rsbuild/source#sourceentry) 中仅有单个入口
+
+开启 `experiments.exe` 后，Rslib 还会：
+
+- 禁用代码拆分
+- 忽略 [`autoExternal`](/config/lib/auto-external)、[`output.externals`](/config/rsbuild/output#outputexternals)、[`externalHelpers`](/config/lib/external-helpers) 等配置，将所有模块直接打包进可执行文件
+
+### 布尔类型
+
+你可以将 `experiments.exe` 设置为 `true`，以默认行为启用可执行文件生成功能。
+
+在这种模式下，Rslib 会使用当前的 `process.execPath` 作为可执行文件模板，并将生成的可执行文件输出到当前 JavaScript 产物的输出目录中。
+
+这意味着生成的可执行文件会默认使用：
+
+- 当前宿主环境的 `platform`（`process.platform`）
+- 当前宿主环境的 `arch`（`process.arch`）
+- 当前 Node.js 版本（`process.version`）
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: true,
+      },
+    },
+  ],
+};
+```
+
+如果你想禁用该功能，可以将 `experiments.exe` 设置为 `false`，或者不配置该选项。
+
+### 对象类型
+
+如果你想自定义可执行文件的生成行为，可以将 `experiments.exe` 配置为一个对象。
+
+#### experiments.exe.fileName
+
+- **类型：** `string`
+
+指定可执行文件名。
+
+默认情况下，Rslib 会使用入口的 JavaScript 文件名作为默认文件名。对于 `win32` target，Rslib 会自动补上 `.exe` 后缀。
+
+当配置了多个 target 时，Rslib 会自动追加 `-<platform>-<arch>-<nodeVersion>` 后缀，避免文件名冲突。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: {
+          fileName: 'hello',
+        },
+      },
+    },
+  ],
+};
+```
+
+#### experiments.exe.outputPath
+
+- **类型：** `string`
+
+指定可执行文件的输出目录。
+
+默认情况下，Rslib 会把可执行文件输出到当前的 JavaScript 文件的输出目录中。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: {
+          outputPath: './build',
+        },
+      },
+    },
+  ],
+};
+```
+
+#### experiments.exe.targets
+
+- **类型：**
+
+```ts
+type ExeTargets = Array<string | ExeTarget>;
+
+type ExeTarget = {
+  platform?: 'darwin' | 'linux' | 'win32';
+  arch?: 'x64' | 'arm64';
+  nodeVersion?: string;
+};
+```
+
+指定要生成的可执行文件目标列表。每个元素支持以下两种类型：
+
+- **字符串类型：**表示一个自定义 Node.js 可执行文件路径。Rslib 会直接使用这个二进制文件作为可执行文件模板，并在 `--build-sea` 时使用与其版本一致、且当前宿主机可运行的 Node.js 二进制。
+
+下面是一个使用自定义 Node.js 二进制路径的示例：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: {
+          targets: ['./custom-node/bin/node'],
+        },
+      },
+    },
+  ],
+};
+```
+
+- **对象类型：**用于声明目标 `platform`、`arch` 和 `nodeVersion`。`nodeVersion` 同时兼容 `'25.9.0'` 和 `'v25.9.0'` 两种写法。Rslib 会根据这些信息自动解析或下载对应的官方 Node.js 可执行文件；未配置的字段会回退到当前宿主环境。如果没有配置 `targets`，或者将其配置为空数组，则会回退为与布尔类型相同的默认行为。
+
+下面是一个在一次构建中同时生成多个平台可执行文件的示例：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      experiments: {
+        exe: {
+          targets: [
+            {
+              platform: 'linux',
+              arch: 'x64',
+            },
+            {
+              platform: 'darwin',
+              arch: 'arm64',
+            },
+            {
+              platform: 'win32',
+              arch: 'x64',
+            },
+          ],
+        },
+      },
+    },
+  ],
+};
+```
+
+:::info macOS target 签名
+
+只有当构建本身运行在 macOS 上时，Rslib 才会自动为 `darwin` target 生成可执行文件签名。
+
+如果你在 Linux 或 Windows 上生成 macOS 可执行文件，产物会保持未签名状态。大多数情况下，需要先在 macOS 上完成签名后才能正常运行。
+
+:::
+
+#### experiments.exe.seaOptions
+
+- **类型：**
+
+```ts
+type SeaOptions = {
+  disableExperimentalSEAWarning?: boolean;
+  useSnapshot?: boolean;
+  useCodeCache?: boolean;
+  execArgv?: string[];
+  execArgvExtension?: 'none' | 'env' | 'cli';
+  assets?: Record<string, string>;
+};
+```
+
+- **默认值：**
+
+```ts
+const defaultSeaOptions = {
+  disableExperimentalSEAWarning: true,
+  useSnapshot: false,
+  useCodeCache: false,
+  execArgv: undefined,
+  execArgvExtension: 'env',
+  assets: undefined,
+};
+```
+
+`seaOptions` 会直接透传给 Node.js 的 SEA 配置。
+
+如果 target 与当前宿主平台或架构不同，Rslib 会自动关闭该 target 的 `useSnapshot` 和 `useCodeCache`，以保证跨平台构建的兼容性。
+
+此外，`useSnapshot` 不能和 `format: 'esm'` 一起使用。
+
+完整行为可参考 [Node.js SEA 文档](https://nodejs.org/api/single-executable-applications.html)。
+
+### 运行可执行文件
+
+- 在 Windows 以外的系统中：
+
+```bash
+$ ./hello world
+Hello, world!
+```
+
+- 在 Windows 系统中：
+
+```powershell
+$ .\hello.exe world
+Hello, world!
+```
+
+### 版本历史
+
+| 版本    | 变更内容   |
+| ------- | ---------- |
+| v0.22.0 | 新增该选项 |
