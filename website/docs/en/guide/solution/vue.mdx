@@ -35,13 +35,13 @@ Then select `Vue` when prompted to "Select template".
 
 For developing Vue components, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets `target` to `"node"` by default, which is different from Rsbuild's default target value.
 
-To compile Vue (.vue single-file components), you need to register the [rsbuild-plugin-unplugin-vue](https://github.com/rstackjs/rsbuild-plugin-unplugin-vue) plugin based on [unplugin-vue](https://github.com/unplugin/unplugin-vue). This plugin will automatically add the necessary configurations for Vue build.
+To compile Vue (.vue single-file components), you need to register the [@rsbuild/plugin-vue](https://rsbuild.rs/plugins/list/plugin-vue) plugin. This plugin will automatically add the necessary configurations for Vue build.
 
 For example, register in `rslib.config.ts`:
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
-import { pluginUnpluginVue } from 'rsbuild-plugin-unplugin-vue'; // [!code highlight]
+import { pluginVue } from '@rsbuild/plugin-vue'; // [!code highlight]
 
 export default defineConfig({
   lib: [
@@ -51,12 +51,8 @@ export default defineConfig({
   output: {
     target: 'web',
   },
-  plugins: [pluginUnpluginVue(/** options here */)],
+  plugins: [pluginVue(/** options here */)],
 });
 ```
 
-::: note
-Currently, the [rsbuild-plugin-unplugin-vue](https://github.com/rstackjs/rsbuild-plugin-unplugin-vue) plugin does not support packaging Vue SFC [scoped CSS](https://vuejs.org/api/sfc-css-features#scoped-css) styles. You can choose styling solutions like Less or Sass.
-:::
-
-For more configuration options, please refer to the [rsbuild-plugin-unplugin-vue](https://github.com/rstackjs/rsbuild-plugin-unplugin-vue) plugin documentation.
+For more configuration options, please refer to the [@rsbuild/plugin-vue documentation](https://rsbuild.rs/plugins/list/plugin-vue).

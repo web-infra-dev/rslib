@@ -1,5 +1,5 @@
 import { defineConfig } from '@rslib/core';
-import { pluginUnpluginVue } from 'rsbuild-plugin-unplugin-vue';
+import { pluginVue } from '@rsbuild/plugin-vue';
 
 export default defineConfig({
   lib: [
@@ -11,5 +11,5 @@ export default defineConfig({
   output: {
     target: 'web',
   },
-  plugins: [pluginUnpluginVue()],
+  plugins: [pluginVue()],
 });

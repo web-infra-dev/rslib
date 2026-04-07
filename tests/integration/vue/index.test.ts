@@ -22,75 +22,62 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
     expect(jsResult.contents.esm1).toMatchInlineSnapshot(`
       {
         "<ROOT>/tests/integration/vue/dist/bundle/index.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
-      const _00_2Fplugin_vue_2Fexport_helper = (sfc, props)=>{
-          const target = sfc.__vccOpts || sfc;
-          for (const [key, val] of props)target[key] = val;
-          return target;
-      };
-      const _sfc_main = {
-          __name: 'Button',
-          setup (__props, { expose: __expose }) {
-              __expose();
-              const button = ref('Button!');
-              const __returned__ = {
-                  button,
-                  ref: ref
+      var __webpack_modules__ = {};
+      var __webpack_module_cache__ = {};
+      function __webpack_require__(moduleId) {
+          var cachedModule = __webpack_module_cache__[moduleId];
+          if (void 0 !== cachedModule) return cachedModule.exports;
+          var module = __webpack_module_cache__[moduleId] = {
+              exports: {}
+          };
+          __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+          return module.exports;
+      }
+      __webpack_require__.m = __webpack_modules__;
+      (()=>{
+          __webpack_require__.add = function(modules) {
+              Object.assign(__webpack_require__.m, modules);
+          };
+      })();
+      __webpack_require__.add({
+          "<PNPM_INNER>/rspack-vue-loader/dist/exportHelper.js" (__unused_rspack_module, exports) {
+              exports.A = (sfc, props)=>{
+                  const target = sfc.__vccOpts || sfc;
+                  for (const [key, val] of props)target[key] = val;
+                  return target;
               };
-              Object.defineProperty(__returned__, '__isScriptSetup', {
-                  enumerable: false,
-                  value: true
-              });
-              return __returned__;
           }
-      };
+      });
       const _hoisted_1 = {
           class: "component button"
       };
-      function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-          return openBlock(), createElementBlock("p", _hoisted_1, toDisplayString($setup.button), 1);
-      }
-      const Button = /*#__PURE__*/ _00_2Fplugin_vue_2Fexport_helper(_sfc_main, [
-          [
-              'render',
-              _sfc_render
-          ],
-          [
-              '__file',
-              "<ROOT>/tests/integration/vue/src/Button/Button.vue"
-          ]
-      ]);
-      const Card_sfc_main = {
-          __name: 'Card',
-          setup (__props, { expose: __expose }) {
-              __expose();
-              const card = ref('Card!');
-              const __returned__ = {
-                  card,
-                  ref: ref
-              };
-              Object.defineProperty(__returned__, '__isScriptSetup', {
-                  enumerable: false,
-                  value: true
-              });
-              return __returned__;
+      const Buttonvue_type_script_setup_true_lang_js = {
+          __name: 'Button',
+          setup (__props) {
+              const button = ref('Button!');
+              return (_ctx, _cache)=>(openBlock(), createElementBlock("p", _hoisted_1, toDisplayString(button.value), 1));
           }
       };
-      const Card_hoisted_1 = {
-          class: "component card"
-      };
-      function Card_sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-          return openBlock(), createElementBlock("p", Card_hoisted_1, toDisplayString($setup.card), 1);
-      }
-      const Card = /*#__PURE__*/ _00_2Fplugin_vue_2Fexport_helper(Card_sfc_main, [
+      const exportHelper = __webpack_require__("<PNPM_INNER>/rspack-vue-loader/dist/exportHelper.js");
+      const __exports__ = /*#__PURE__*/ (0, exportHelper.A)(Buttonvue_type_script_setup_true_lang_js, [
           [
-              'render',
-              Card_sfc_render
-          ],
-          [
-              '__file',
-              "<ROOT>/tests/integration/vue/src/Card.vue"
+              '__scopeId',
+              "data-v-1e8aa170"
           ]
       ]);
+      const Button = __exports__;
+      const Cardvue_type_script_setup_true_lang_js_hoisted_1 = {
+          class: "component card"
+      };
+      const Cardvue_type_script_setup_true_lang_js = {
+          __name: 'Card',
+          setup (__props) {
+              const card = ref('Card!');
+              return (_ctx, _cache)=>(openBlock(), createElementBlock("p", Cardvue_type_script_setup_true_lang_js_hoisted_1, toDisplayString(card.value), 1));
+          }
+      };
+      const Card_exports_ = Cardvue_type_script_setup_true_lang_js;
+      const Card = Card_exports_;
       export { Button, Card };
       ",
       }
@@ -103,7 +90,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
         border-radius: .5rem;
       }
 
-      .button {
+      .button[data-v-1e8aa170] {
         font-weight: bold;
       }
 
@@ -120,98 +107,97 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
   test('bundleless', async () => {
     expect(jsResult.contents.esm0).toMatchInlineSnapshot(`
       {
-        "<ROOT>/tests/integration/vue/dist/bundleless/544.js": "const _00_2Fplugin_vue_2Fexport_helper = (sfc, props)=>{
-          const target = sfc.__vccOpts || sfc;
-          for (const [key, val] of props)target[key] = val;
-          return target;
-      };
-      export { _00_2Fplugin_vue_2Fexport_helper };
-      ",
-        "<ROOT>/tests/integration/vue/dist/bundleless/Button/Button.js": "import "./style.css";
-      import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
-      import { _00_2Fplugin_vue_2Fexport_helper } from "../544.js";
-      const _sfc_main = {
-          __name: 'Button',
-          setup (__props, { expose: __expose }) {
-              __expose();
-              const button = ref('Button!');
-              const __returned__ = {
-                  button,
-                  ref: ref
+        "<ROOT>/tests/integration/vue/dist/bundleless/Button/Button.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
+      import "./style.css";
+      import "./Button.css";
+      import { __webpack_require__ } from "../rslib-runtime.js";
+      __webpack_require__.add({
+          "<PNPM_INNER>/rspack-vue-loader/dist/exportHelper.js" (__unused_rspack_module, exports) {
+              exports.A = (sfc, props)=>{
+                  const target = sfc.__vccOpts || sfc;
+                  for (const [key, val] of props)target[key] = val;
+                  return target;
               };
-              Object.defineProperty(__returned__, '__isScriptSetup', {
-                  enumerable: false,
-                  value: true
-              });
-              return __returned__;
           }
-      };
+      });
       const _hoisted_1 = {
           class: "component button"
       };
-      function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-          return openBlock(), createElementBlock("p", _hoisted_1, toDisplayString($setup.button), 1);
-      }
-      const Button = /*#__PURE__*/ _00_2Fplugin_vue_2Fexport_helper(_sfc_main, [
+      const Buttonvue_type_script_setup_true_lang_js = {
+          __name: 'Button',
+          setup (__props) {
+              const button = ref('Button!');
+              return (_ctx, _cache)=>(openBlock(), createElementBlock("p", _hoisted_1, toDisplayString(button.value), 1));
+          }
+      };
+      const exportHelper = __webpack_require__("<PNPM_INNER>/rspack-vue-loader/dist/exportHelper.js");
+      const __exports__ = /*#__PURE__*/ (0, exportHelper.A)(Buttonvue_type_script_setup_true_lang_js, [
           [
-              'render',
-              _sfc_render
-          ],
-          [
-              '__file',
-              "<ROOT>/tests/integration/vue/src/Button/Button.vue"
+              '__scopeId',
+              "data-v-1e8aa170"
           ]
       ]);
+      const Button = __exports__;
       export default Button;
       ",
         "<ROOT>/tests/integration/vue/dist/bundleless/Button/index.js": "export { default } from "./Button.js";
       ",
         "<ROOT>/tests/integration/vue/dist/bundleless/Card.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
-      import { _00_2Fplugin_vue_2Fexport_helper } from "./544.js";
-      const _sfc_main = {
-          __name: 'Card',
-          setup (__props, { expose: __expose }) {
-              __expose();
-              const card = ref('Card!');
-              const __returned__ = {
-                  card,
-                  ref: ref
-              };
-              Object.defineProperty(__returned__, '__isScriptSetup', {
-                  enumerable: false,
-                  value: true
-              });
-              return __returned__;
-          }
-      };
+      import "./Card.css";
       const _hoisted_1 = {
           class: "component card"
       };
-      function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-          return openBlock(), createElementBlock("p", _hoisted_1, toDisplayString($setup.card), 1);
-      }
-      const Card = /*#__PURE__*/ _00_2Fplugin_vue_2Fexport_helper(_sfc_main, [
-          [
-              'render',
-              _sfc_render
-          ],
-          [
-              '__file',
-              "<ROOT>/tests/integration/vue/src/Card.vue"
-          ]
-      ]);
+      const Cardvue_type_script_setup_true_lang_js = {
+          __name: 'Card',
+          setup (__props) {
+              const card = ref('Card!');
+              return (_ctx, _cache)=>(openBlock(), createElementBlock("p", _hoisted_1, toDisplayString(card.value), 1));
+          }
+      };
+      const __exports__ = Cardvue_type_script_setup_true_lang_js;
+      const Card = __exports__;
       export default Card;
       ",
         "<ROOT>/tests/integration/vue/dist/bundleless/index.js": "export { default as Button } from "./Button/index.js";
       export { default as Card } from "./Card.js";
       ",
+        "<ROOT>/tests/integration/vue/dist/bundleless/rslib-runtime.js": "var __webpack_modules__ = {};
+      var __webpack_module_cache__ = {};
+      function __webpack_require__(moduleId) {
+          var cachedModule = __webpack_module_cache__[moduleId];
+          if (void 0 !== cachedModule) return cachedModule.exports;
+          var module = __webpack_module_cache__[moduleId] = {
+              exports: {}
+          };
+          __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+          return module.exports;
+      }
+      __webpack_require__.m = __webpack_modules__;
+      (()=>{
+          __webpack_require__.add = function(modules) {
+              Object.assign(__webpack_require__.m, modules);
+          };
+      })();
+      export { __webpack_require__ };
+      ",
       }
     `);
     expect(cssResult.contents.esm0).toMatchInlineSnapshot(`
       {
+        "<ROOT>/tests/integration/vue/dist/bundleless/Button/Button.css": ".button[data-v-1e8aa170] {
+        font-weight: bold;
+      }
+
+      ",
         "<ROOT>/tests/integration/vue/dist/bundleless/Button/style.css": ".button.component {
         color: #428bca;
         border-radius: .5rem;
+      }
+
+      ",
+        "<ROOT>/tests/integration/vue/dist/bundleless/Card.css": ".card {
+        color: red;
+        font-weight: bold;
       }
 
       ",

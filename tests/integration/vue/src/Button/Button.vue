@@ -9,7 +9,7 @@ const button = ref('Button!');
   <p class="component button">{{ button }}</p>
 </template>
 
-<style>
+<style scoped>
 .button {
   font-weight: bold;
 }
