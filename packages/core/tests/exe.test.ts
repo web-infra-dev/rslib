@@ -196,6 +196,28 @@ describe('experiments.exe', () => {
     expect(resolved).toBe(path.join('/project/bin', 'my-cli'));
   });
 
+  test('should reject fileName values that include directories', () => {
+    expect(() =>
+      resolveExecutableOutputPath({
+        environment: {
+          distPath: '/project/dist/esm',
+        } as any,
+        mainFile: '/project/dist/esm/index.js',
+        target: {
+          arch: 'arm64',
+          fileName: 'bin/my-cli',
+          index: 0,
+          nodeVersion: 'v25.8.0',
+          platform: 'darwin',
+          seaOptions: {},
+          suffix: null,
+        },
+      }),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: "experiments.exe.fileName" must be a file name, but received "bin/my-cli".]`,
+    );
+  });
+
   test('should append target suffix when generating multiple targets', () => {
     const resolved = resolveExecutableOutputPath({
       environment: {
@@ -334,6 +356,30 @@ describe('experiments.exe', () => {
       platform: process.platform,
       arch: process.arch,
     });
+  });
+
+  test('should throw a semantic error when custom binary version detection fails', async () => {
+    const missingBinaryPath = path.join(
+      packageRoot,
+      '__missing__',
+      'custom-node',
+    );
+
+    await expect(
+      withSupportedNodeRuntime(() =>
+        resolveTargetBinaries({
+          arch: process.arch as any,
+          customBinaryPath: missingBinaryPath,
+          index: 0,
+          nodeVersion: 'v25.8.0',
+          platform: process.platform as any,
+          seaOptions: {},
+          suffix: null,
+        }),
+      ),
+    ).rejects.toThrow(
+      `"experiments.exe" could not determine the Node.js version of custom binary "${missingBinaryPath}".`,
+    );
   });
 
   test('should keep nodeVersion from object target', async () => {

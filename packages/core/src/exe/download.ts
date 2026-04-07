@@ -15,6 +15,23 @@ import {
   normalizeNodeVersion,
 } from './version';
 
+const inFlightBinaryDownloads = new Map<string, Promise<string>>();
+
+const resolveCustomBinaryVersion = async (
+  customBinaryPath: string,
+): Promise<string> => {
+  try {
+    return normalizeNodeVersion(await readBinaryVersion(customBinaryPath));
+  } catch (error) {
+    const originalError =
+      error instanceof Error ? error.message : String(error);
+
+    throw new Error(
+      `"experiments.exe" could not determine the Node.js version of custom binary "${customBinaryPath}".\nOriginal error: ${originalError}`,
+    );
+  }
+};
+
 const resolveArchiveInfo = ({
   arch,
   nodeVersion,
@@ -132,31 +149,50 @@ const ensureDownloadedBinary = async ({
     platform,
   });
 
-  if (fs.existsSync(archiveInfo.binaryPath)) {
+  const inFlightKey = archiveInfo.binaryPath;
+  const inFlightDownload = inFlightBinaryDownloads.get(inFlightKey);
+
+  if (inFlightDownload) {
+    return inFlightDownload;
+  }
+
+  const downloadPromise = (async () => {
+    if (fs.existsSync(archiveInfo.binaryPath)) {
+      return archiveInfo.binaryPath;
+    }
+
+    if (!fs.existsSync(archiveInfo.archivePath)) {
+      await downloadArchive(archiveInfo.url, archiveInfo.archivePath);
+    }
+
+    await extractArchive({
+      archivePath: archiveInfo.archivePath,
+      extractDir: archiveInfo.extractDir,
+      platform,
+    });
+
+    if (!fs.existsSync(archiveInfo.binaryPath)) {
+      throw new Error(
+        `Failed to locate downloaded Node.js executable "${archiveInfo.binaryPath}" for "experiments.exe".`,
+      );
+    }
+
+    if (platform !== 'win32') {
+      await fs.promises.chmod(archiveInfo.binaryPath, 0o755);
+    }
+
     return archiveInfo.binaryPath;
+  })();
+
+  inFlightBinaryDownloads.set(inFlightKey, downloadPromise);
+
+  try {
+    return await downloadPromise;
+  } finally {
+    if (inFlightBinaryDownloads.get(inFlightKey) === downloadPromise) {
+      inFlightBinaryDownloads.delete(inFlightKey);
+    }
   }
-
-  if (!fs.existsSync(archiveInfo.archivePath)) {
-    await downloadArchive(archiveInfo.url, archiveInfo.archivePath);
-  }
-
-  await extractArchive({
-    archivePath: archiveInfo.archivePath,
-    extractDir: archiveInfo.extractDir,
-    platform,
-  });
-
-  if (!fs.existsSync(archiveInfo.binaryPath)) {
-    throw new Error(
-      `Failed to locate downloaded Node.js executable "${archiveInfo.binaryPath}" for "experiments.exe".`,
-    );
-  }
-
-  if (platform !== 'win32') {
-    await fs.promises.chmod(archiveInfo.binaryPath, 0o755);
-  }
-
-  return archiveInfo.binaryPath;
 };
 
 export const resolveTargetBinaries = async (
@@ -167,8 +203,8 @@ export const resolveTargetBinaries = async (
   const currentNodeVersion = normalizeNodeVersion(process.versions.node);
 
   if (target.customBinaryPath) {
-    const binaryVersion = normalizeNodeVersion(
-      await readBinaryVersion(target.customBinaryPath),
+    const binaryVersion = await resolveCustomBinaryVersion(
+      target.customBinaryPath,
     );
     assertSupportedExeNodeVersion(binaryVersion);
 

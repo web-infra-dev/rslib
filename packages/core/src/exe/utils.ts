@@ -132,6 +132,13 @@ export const resolveExecutableOutputPath = ({
 }): string => {
   const builtEntryFileName = path.parse(mainFile).name;
   const baseFileName = target.fileName ?? builtEntryFileName;
+
+  if (path.isAbsolute(baseFileName) || /[\\/]/.test(baseFileName)) {
+    throw new Error(
+      `"experiments.exe.fileName" must be a file name, but received "${baseFileName}".`,
+    );
+  }
+
   const parsedName = path.parse(baseFileName);
   const suffixedBaseName = target.suffix
     ? `${parsedName.name}-${target.suffix}`
@@ -139,12 +146,6 @@ export const resolveExecutableOutputPath = ({
   const rawFileName = parsedName.ext
     ? `${suffixedBaseName}${parsedName.ext}`
     : suffixedBaseName;
-
-  if (path.isAbsolute(rawFileName) || /[\\/]/.test(rawFileName)) {
-    throw new Error(
-      `"experiments.exe.fileName" must be a file name, but received "${rawFileName}".`,
-    );
-  }
 
   const normalizedFileName =
     target.platform === 'win32' && !rawFileName.toLowerCase().endsWith('.exe')
