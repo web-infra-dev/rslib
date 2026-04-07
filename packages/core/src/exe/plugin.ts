@@ -35,6 +35,8 @@ export const ExePlugin = ({
           );
         }
 
+        logger.info('generate single executable application started...');
+
         const entryName = entryNames[0];
         const mainFile = resolveBuiltMainFile({
           environment,
@@ -44,8 +46,6 @@ export const ExePlugin = ({
         const resolvedTargets = await Promise.all(
           targets.map((target) => resolveTargetBinaries(target)),
         );
-
-        logger.info('generate single executable application started...');
 
         await Promise.all(
           resolvedTargets.map(async (target) => {

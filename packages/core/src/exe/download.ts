@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { Readable } from 'node:stream';
@@ -16,6 +17,7 @@ import {
 } from './version';
 
 const inFlightBinaryDownloads = new Map<string, Promise<string>>();
+const shasumManifestCache = new Map<string, Promise<Map<string, string>>>();
 
 const resolveCustomBinaryVersion = async (
   customBinaryPath: string,
@@ -60,6 +62,7 @@ const resolveArchiveInfo = ({
       : path.join(extractDir, 'bin', 'node');
 
   return {
+    archiveName,
     archivePath,
     binaryPath,
     extractDir,
@@ -67,7 +70,107 @@ const resolveArchiveInfo = ({
   };
 };
 
-const downloadArchive = async (url: string, archivePath: string) => {
+const getShasumManifest = async (
+  nodeVersion: string,
+): Promise<Map<string, string>> => {
+  const normalizedVersion = normalizeNodeVersion(nodeVersion);
+  const cachedManifest = shasumManifestCache.get(normalizedVersion);
+
+  if (cachedManifest) {
+    return cachedManifest;
+  }
+
+  const manifestPromise = (async () => {
+    const manifestUrl = `https://nodejs.org/dist/${normalizedVersion}/SHASUMS256.txt`;
+    const response = await fetch(manifestUrl);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to download "${manifestUrl}" for "experiments.exe": ${response.status} ${response.statusText}.`,
+      );
+    }
+
+    const manifestText = await response.text();
+    const checksums = new Map<string, string>();
+
+    for (const line of manifestText.split(/\r?\n/)) {
+      const match = line.match(/^([a-f0-9]{64})\s+\*?(.+)$/i);
+
+      if (!match?.[1] || !match[2]) {
+        continue;
+      }
+
+      checksums.set(match[2], match[1].toLowerCase());
+    }
+
+    return checksums;
+  })();
+
+  shasumManifestCache.set(normalizedVersion, manifestPromise);
+
+  try {
+    return await manifestPromise;
+  } catch (error) {
+    shasumManifestCache.delete(normalizedVersion);
+    throw error;
+  }
+};
+
+const getExpectedArchiveChecksum = async ({
+  archiveName,
+  nodeVersion,
+}: {
+  archiveName: string;
+  nodeVersion: string;
+}) => {
+  const checksums = await getShasumManifest(nodeVersion);
+  const checksum = checksums.get(archiveName);
+
+  if (!checksum) {
+    throw new Error(
+      `Failed to find checksum for "${archiveName}" in Node.js SHASUMS256.txt for "experiments.exe".`,
+    );
+  }
+
+  return checksum;
+};
+
+const calculateFileSha256 = async (filePath: string): Promise<string> => {
+  const hash = createHash('sha256');
+  const stream = fs.createReadStream(filePath);
+
+  for await (const chunk of stream) {
+    hash.update(chunk);
+  }
+
+  return hash.digest('hex');
+};
+
+const verifyArchiveChecksum = async ({
+  archivePath,
+  expectedChecksum,
+}: {
+  archivePath: string;
+  expectedChecksum: string;
+}) => {
+  const actualChecksum = await calculateFileSha256(archivePath);
+
+  if (actualChecksum !== expectedChecksum) {
+    throw new Error(
+      `Checksum mismatch for "${archivePath}" in "experiments.exe": expected ${expectedChecksum}, received ${actualChecksum}.`,
+    );
+  }
+};
+
+const downloadArchive = async ({
+  archivePath,
+  expectedChecksum,
+  url,
+}: {
+  archivePath: string;
+  expectedChecksum: string;
+  url: string;
+}) => {
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -83,14 +186,20 @@ const downloadArchive = async (url: string, archivePath: string) => {
   }
 
   await fs.promises.mkdir(path.dirname(archivePath), { recursive: true });
+  const tempArchivePath = `${archivePath}.tmp-${process.pid}-${Date.now()}`;
 
   try {
     await pipeline(
       Readable.fromWeb(response.body as WebReadableStream<Uint8Array>),
-      fs.createWriteStream(archivePath),
+      fs.createWriteStream(tempArchivePath),
     );
+    await verifyArchiveChecksum({
+      archivePath: tempArchivePath,
+      expectedChecksum,
+    });
+    await fs.promises.rename(tempArchivePath, archivePath);
   } catch (error) {
-    await fs.promises.rm(archivePath, { force: true });
+    await fs.promises.rm(tempArchivePath, { force: true });
     throw error;
   }
 };
@@ -148,8 +257,12 @@ const ensureDownloadedBinary = async ({
     nodeVersion,
     platform,
   });
+  const expectedChecksum = await getExpectedArchiveChecksum({
+    archiveName: archiveInfo.archiveName,
+    nodeVersion,
+  });
 
-  const inFlightKey = archiveInfo.binaryPath;
+  const inFlightKey = archiveInfo.archivePath;
   const inFlightDownload = inFlightBinaryDownloads.get(inFlightKey);
 
   if (inFlightDownload) {
@@ -161,8 +274,23 @@ const ensureDownloadedBinary = async ({
       return archiveInfo.binaryPath;
     }
 
+    if (fs.existsSync(archiveInfo.archivePath)) {
+      try {
+        await verifyArchiveChecksum({
+          archivePath: archiveInfo.archivePath,
+          expectedChecksum,
+        });
+      } catch {
+        await fs.promises.rm(archiveInfo.archivePath, { force: true });
+      }
+    }
+
     if (!fs.existsSync(archiveInfo.archivePath)) {
-      await downloadArchive(archiveInfo.url, archiveInfo.archivePath);
+      await downloadArchive({
+        archivePath: archiveInfo.archivePath,
+        expectedChecksum,
+        url: archiveInfo.url,
+      });
     }
 
     await extractArchive({
