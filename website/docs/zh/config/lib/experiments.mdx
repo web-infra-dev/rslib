@@ -86,7 +86,12 @@ type ExeOptions =
 
 ::: tip Node.js 要求
 
-`experiments.exe` 要求 Node.js 25.7.0 或更高版本，不支持在 Bun 或 Deno 中使用。
+`experiments.exe` 基于 Node.js 的 SEA 流程，因此要求 Node.js 25.7.0 或更高版本。
+
+如果你在使用 Bun 或 Deno，可以对 Rslib 生成的 JavaScript 入口文件进行对应的可执行应用打包流程。
+
+- Bun：执行 `bun build --compile`
+- Deno：执行 `deno compile`
 
 :::
 
