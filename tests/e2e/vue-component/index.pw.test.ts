@@ -8,12 +8,13 @@ async function counterCompShouldWork(page: Page) {
   const buttonEl = page.locator('#root button');
   await expect(buttonEl).toHaveCount(2);
 
-  const [subtractEl, addEl] = await buttonEl.all();
+  const subtractEl = buttonEl.nth(0);
+  const addEl = buttonEl.nth(1);
 
-  await addEl!.click();
+  await addEl.click();
   await expect(h2El).toHaveText('Counter: 1');
 
-  await subtractEl!.click();
+  await subtractEl.click();
   await expect(h2El).toHaveText('Counter: 0');
 }
 
@@ -24,9 +25,11 @@ async function styleShouldWork(page: Page) {
   const buttonEl = page.locator('#root button');
   await expect(buttonEl).toHaveCount(2);
 
-  const [subtractEl, addEl] = await buttonEl.all();
-  await expect(subtractEl!).toHaveCSS('background-color', 'rgb(255, 255, 0)');
-  await expect(addEl!).toHaveCSS('background-color', 'rgb(255, 255, 0)');
+  const subtractEl = buttonEl.nth(0);
+  const addEl = buttonEl.nth(1);
+
+  await expect(subtractEl).toHaveCSS('background-color', 'rgb(255, 255, 0)');
+  await expect(addEl).toHaveCSS('background-color', 'rgb(255, 255, 0)');
 }
 
 test('should render example "vue-component-bundle" successfully', async ({
