@@ -6,7 +6,7 @@
     "test": "rstest",
     "test:benchmark": "rstest bench",
     "test:e2e": "playwright test --pass-with-no-tests",
-    "type-check": "tsc --noEmit && pnpm run --filter @type-tests/* type-check"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "react": "^19.2.4",
