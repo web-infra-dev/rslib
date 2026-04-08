@@ -104,6 +104,99 @@ export type Dts =
     }
   | boolean;
 
+export type SeaOptions = {
+  /**
+   * Whether to disable the experimental SEA warning emitted by Node.js.
+   * @defaultValue `true`
+   */
+  disableExperimentalSEAWarning?: boolean;
+  /**
+   * Whether to generate a V8 startup snapshot for the executable entry.
+   * Only supported for CommonJS executables.
+   * @defaultValue `false`
+   */
+  useSnapshot?: boolean;
+  /**
+   * Whether to generate V8 code cache for the executable entry.
+   * Only supported for CommonJS executables.
+   * @defaultValue `false`
+   */
+  useCodeCache?: boolean;
+  /**
+   * Extra Node.js execution arguments baked into the executable.
+   * @defaultValue `undefined`
+   */
+  execArgv?: string[];
+  /**
+   * How runtime execution arguments may extend {@link execArgv}.
+   * @defaultValue `'env'`
+   */
+  execArgvExtension?: 'none' | 'env' | 'cli';
+  /**
+   * Additional assets bundled into the executable.
+   *
+   * The key becomes the asset id exposed by `node:sea`,
+   * and the value should point to a file on disk.
+   * Relative paths are resolved from the project root.
+   * @defaultValue `undefined`
+   */
+  assets?: Record<string, string>;
+};
+
+export type ExePlatform = 'darwin' | 'linux' | 'win32';
+
+export type ExeArch = 'x64' | 'arm64';
+
+export type ExeTarget = {
+  /**
+   * The target platform of the generated executable.
+   * @defaultValue Current platform
+   */
+  platform?: ExePlatform;
+  /**
+   * The target architecture of the generated executable.
+   * @defaultValue Current architecture
+   */
+  arch?: ExeArch;
+  /**
+   * The Node.js version used for both `--build-sea` and the target executable.
+   * Accepts both `'25.9.0'` and `'v25.9.0'` formats.
+   * @defaultValue Current Node.js version
+   */
+  nodeVersion?: string;
+};
+
+export type ExeOptions =
+  | boolean
+  | {
+      /**
+       * The output file name of the generated executable.
+       * On Windows, `.exe` will be appended automatically when missing.
+       * @defaultValue {@link https://rslib.rs/config/lib/experiments#experimentsexe}
+       */
+      fileName?: string;
+      /**
+       * The output directory of the generated executable.
+       * Relative paths are resolved from the project root.
+       * @defaultValue `output.distPath`
+       */
+      outputPath?: string;
+      /**
+       * The executable generation targets.
+       * Each item can be:
+       * - a string path to a Node.js executable
+       * - an object containing target platform / architecture / Node.js version
+       *
+       * @defaultValue `[process.execPath]`
+       */
+      targets?: Array<string | ExeTarget>;
+      /**
+       * The underlying SEA options passed to Node.js.
+       * @defaultValue `{}`
+       */
+      seaOptions?: SeaOptions;
+    };
+
 export type AutoExternal =
   | boolean
   | {
@@ -261,6 +354,16 @@ export type LibExperiments = {
    * @see {@link https://rslib.rs/config/lib/experiments#experimentsadvancedesm}
    */
   advancedEsm?: boolean;
+  /**
+   * Generate a Node.js single executable application alongside the JavaScript output.
+   *
+   * This option is only available for Node.js `esm` and `cjs` builds in bundle mode,
+   * requires Node.js >= 25.7.0, and only supports a single entry per `lib` item.
+   * @experimental
+   * @defaultValue `false`
+   * @see {@link https://rslib.rs/config/lib/experiments#experimentsexe}
+   */
+  exe?: ExeOptions;
 };
 
 export interface LibConfig extends EnvironmentConfig {
