@@ -1,29 +1,6 @@
-import fs from 'node:fs';
-import path from 'node:path';
 import { pluginPublint } from 'rsbuild-plugin-publint';
-import { defineConfig, type rsbuild, rspack } from 'rslib';
+import { defineConfig, rspack } from 'rslib';
 import packageJson from './package.json' with { type: 'json' };
-
-const pluginFixDtsTypes: rsbuild.RsbuildPlugin = {
-  name: 'fix-dts-types',
-  setup(api) {
-    api.onAfterBuild(() => {
-      const typesDir = path.join(process.cwd(), 'dist-types');
-      const pkgPath = path.join(typesDir, 'package.json');
-      if (!fs.existsSync(typesDir)) {
-        fs.mkdirSync(typesDir);
-      }
-      fs.writeFileSync(
-        pkgPath,
-        JSON.stringify({
-          '//': 'This file is for making TypeScript work with moduleResolution node16+.',
-          version: '1.0.0',
-        }),
-        'utf8',
-      );
-    });
-  },
-};
 
 export default defineConfig({
   lib: [
@@ -40,9 +17,14 @@ export default defineConfig({
         tsgo: !process.env.CI,
         distPath: './dist-types',
       },
+      redirect: {
+        dts: {
+          extension: true,
+        },
+      },
     },
   ],
-  plugins: [pluginFixDtsTypes, pluginPublint()],
+  plugins: [pluginPublint()],
   source: {
     entry: {
       index: './src/index.ts',
