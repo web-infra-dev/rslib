@@ -24,6 +24,7 @@ export type {
   BuildResult,
   CreateRslibOptions,
   Dts,
+  ExeOptions,
   Format,
   InspectConfigOptions,
   InspectConfigResult,

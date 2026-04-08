@@ -104,6 +104,18 @@ export const expectFileWithContent = (
   }).toBeTruthy();
 
 /**
+ * Expect a file to be rewritten after a previous successful build.
+ */
+export const expectFileUpdated = (filePath: string, previousMtimeMs: number) =>
+  expectPoll(() => {
+    try {
+      return fs.statSync(filePath).mtimeMs > previousMtimeMs;
+    } catch {
+      return false;
+    }
+  }).toBeTruthy();
+
+/**
  * Expect log output from child process
  */
 export const expectLog = (child: ChildProcess, log: string) =>
