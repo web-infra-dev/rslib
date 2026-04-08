@@ -2,11 +2,11 @@ import { join } from 'node:path';
 import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
 
-test('decorators default to 2022-03', async () => {
+test('decorators default to 2023-11', async () => {
   const fixturePath = join(__dirname, 'default');
   const { entries } = await buildAndGetResults({ fixturePath });
 
-  // use 2022-03 decorator by default
+  // use 2023-11 decorator by default
   expect(entries.esm).toMatchSnapshot();
 });
 
@@ -20,8 +20,8 @@ test('decorators with experimentalDecorators in tsconfig', async () => {
   expect(entries.esm1).toMatchSnapshot();
 });
 
-test('decorators support 2023-11 config', async () => {
-  const fixturePath = join(__dirname, '2023-11');
+test('decorators support 2022-03 config', async () => {
+  const fixturePath = join(__dirname, '2022-03');
   const { entries } = await buildAndGetResults({ fixturePath });
 
   expect(entries.esm).toMatchSnapshot();

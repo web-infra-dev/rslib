@@ -1,5 +1,5 @@
 const util = require('node:util');
-var Stream = require('stream');
+const Stream = require('stream');
 
 function SendStream() {}
 

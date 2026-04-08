@@ -145,6 +145,7 @@ describe('help output', () => {
     const output = execSync('node ../dist/index.js --help', {
       cwd: __dirname,
       encoding: 'utf-8',
+      stdio: 'pipe',
     });
 
     expect(output).toContain('--skill <skill>');
@@ -167,7 +168,7 @@ describe('optional skills', () => {
       `node ../dist/index.js --dir ${projectName} --template node-esm-js --skill rslib-best-practices`,
       {
         cwd: __dirname,
-        stdio: 'inherit',
+        stdio: 'ignore',
       },
     );
 

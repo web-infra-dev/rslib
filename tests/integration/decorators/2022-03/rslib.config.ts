@@ -8,7 +8,7 @@ export default defineConfig({
       index: '../__fixtures__/src/index.ts',
     },
     decorators: {
-      version: '2023-11',
+      version: '2022-03',
     },
     tsconfigPath: '../__fixtures__/tsconfig.json',
   },

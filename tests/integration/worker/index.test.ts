@@ -16,6 +16,7 @@ test('new Worker(new URL(...)) should be preserved', async () => {
     export { worker };
     ",
       "<ROOT>/tests/integration/worker/dist/esm/worker.js": "console.log('Hello from worker', self.name);
+    export { };
     ",
     }
   `);
