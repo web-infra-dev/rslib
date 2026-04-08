@@ -167,4 +167,11 @@ create({
       },
     },
   ],
+  extraSkills: [
+    {
+      value: 'rslib-best-practices',
+      label: 'Rslib best practices',
+      source: 'rstackjs/agent-skills',
+    },
+  ],
 });
