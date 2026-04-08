@@ -22,7 +22,7 @@ importers:
         version: 0.3.4(jiti@2.6.1)
       '@rstest/adapter-rslib':
         specifier: ^0.2.2
-        version: 0.2.2(@rslib/core@0.20.3(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@module-federation/runtime-tools@2.3.1)(typescript@6.0.2))(@rstest/core@0.9.6(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(typescript@6.0.2)
+        version: 0.2.2(@rslib/core@0.21.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@module-federation/runtime-tools@2.3.1)(typescript@6.0.2))(@rstest/core@0.9.6(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(typescript@6.0.2)
       '@rstest/core':
         specifier: ^0.9.6
         version: 0.9.6(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1)
@@ -377,8 +377,8 @@ importers:
         specifier: ^0.3.4
         version: 0.3.4(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))
       rslib:
-        specifier: npm:@rslib/core@0.20.3
-        version: '@rslib/core@0.20.3(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@25.2.0))(@module-federation/runtime-tools@2.3.1)(@typescript/native-preview@7.0.0-dev.20260406.1)(typescript@6.0.2)'
+        specifier: npm:@rslib/core@0.21.0
+        version: '@rslib/core@0.21.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@25.2.0))(@module-federation/runtime-tools@2.3.1)(@typescript/native-preview@7.0.0-dev.20260406.1)(typescript@6.0.2)'
       rslog:
         specifier: ^2.1.1
         version: 2.1.1
@@ -414,8 +414,8 @@ importers:
         specifier: ^0.3.4
         version: 0.3.4(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))
       rslib:
-        specifier: npm:@rslib/core@0.20.3
-        version: '@rslib/core@0.20.3(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@module-federation/runtime-tools@2.3.1)(typescript@6.0.2)'
+        specifier: npm:@rslib/core@0.21.0
+        version: '@rslib/core@0.21.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@module-federation/runtime-tools@2.3.1)(typescript@6.0.2)'
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -451,8 +451,8 @@ importers:
         specifier: ^0.3.4
         version: 0.3.4(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))
       rslib:
-        specifier: npm:@rslib/core@0.20.3
-        version: '@rslib/core@0.20.3(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@25.2.0))(@module-federation/runtime-tools@2.3.1)(@typescript/native-preview@7.0.0-dev.20260406.1)(typescript@6.0.2)'
+        specifier: npm:@rslib/core@0.21.0
+        version: '@rslib/core@0.21.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@25.2.0))(@module-federation/runtime-tools@2.3.1)(@typescript/native-preview@7.0.0-dev.20260406.1)(typescript@6.0.2)'
       tinyglobby:
         specifier: ^0.2.15
         version: 0.2.15
@@ -2727,8 +2727,8 @@ packages:
       '@rsbuild/core':
         optional: true
 
-  '@rslib/core@0.20.3':
-    resolution: {integrity: sha512-WImc5z84oKbK0wZI5M4rk6BTK9BeYLk3lfietrR4k9e9Wk81BWR0RtPnRpDsj2+HCy8KZHCG8ZywU2QTqq36OA==}
+  '@rslib/core@0.21.0':
+    resolution: {integrity: sha512-cYNztIR9fiSV2GFb81aqfXMXYhGg2XN1fAEvNbhOVX1jqW6Xig6/LTW1sq6HNXT06Ai2sUAcx6y87nZtxOYxfg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -6489,8 +6489,8 @@ packages:
     resolution: {integrity: sha512-nLTrUKm2UyiL7rlhapu/Zl45FwNgkZGaCpZbIHajDYgwlJCOzLSk+cIPAnsEqV955GjILJnKbdQC1nVPz+gAYQ==}
     engines: {node: '>= 18'}
 
-  rsbuild-plugin-dts@0.20.3:
-    resolution: {integrity: sha512-WJlhX8UIlyLBC/wyFK7YK3FzQkQKGEpRbPC8m6wyKu+Db8H5sJkCIvVoBZW+7201V8dJnM2+pmn/NhHDpWqO2g==}
+  rsbuild-plugin-dts@0.21.0:
+    resolution: {integrity: sha512-bnn0pTVEAUfW3vcXYuo6US9QAO2SqQT7wjBBUer4ZtQAbberPF8soBQZWicPVC1t8mZZeVzg/PR0DHqKE7Hthw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@microsoft/api-extractor': ^7
@@ -9403,10 +9403,10 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1)
 
-  '@rslib/core@0.20.3(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@module-federation/runtime-tools@2.3.1)(typescript@6.0.2)':
+  '@rslib/core@0.21.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@module-federation/runtime-tools@2.3.1)(typescript@6.0.2)':
     dependencies:
-      '@rsbuild/core': 2.0.0-rc.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1)
-      rsbuild-plugin-dts: 0.20.3(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@rsbuild/core@2.0.0-rc.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(typescript@6.0.2)
+      '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1)
+      rsbuild-plugin-dts: 0.21.0(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(typescript@6.0.2)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.1(@types/node@24.12.2)
       typescript: 6.0.2
@@ -9417,10 +9417,10 @@ snapshots:
       - '@typescript/native-preview'
       - core-js
 
-  '@rslib/core@0.20.3(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@25.2.0))(@module-federation/runtime-tools@2.3.1)(@typescript/native-preview@7.0.0-dev.20260406.1)(typescript@6.0.2)':
+  '@rslib/core@0.21.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@25.2.0))(@module-federation/runtime-tools@2.3.1)(@typescript/native-preview@7.0.0-dev.20260406.1)(typescript@6.0.2)':
     dependencies:
-      '@rsbuild/core': 2.0.0-rc.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1)
-      rsbuild-plugin-dts: 0.20.3(@microsoft/api-extractor@7.58.1(@types/node@25.2.0))(@rsbuild/core@2.0.0-rc.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(@typescript/native-preview@7.0.0-dev.20260406.1)(typescript@6.0.2)
+      '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1)
+      rsbuild-plugin-dts: 0.21.0(@microsoft/api-extractor@7.58.1(@types/node@25.2.0))(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(@typescript/native-preview@7.0.0-dev.20260406.1)(typescript@6.0.2)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.1(@types/node@25.2.0)
       typescript: 6.0.2
@@ -9764,9 +9764,9 @@ snapshots:
 
   '@rstack-dev/doc-ui@1.12.5': {}
 
-  '@rstest/adapter-rslib@0.2.2(@rslib/core@0.20.3(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@module-federation/runtime-tools@2.3.1)(typescript@6.0.2))(@rstest/core@0.9.6(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(typescript@6.0.2)':
+  '@rstest/adapter-rslib@0.2.2(@rslib/core@0.21.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@module-federation/runtime-tools@2.3.1)(typescript@6.0.2))(@rstest/core@0.9.6(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(typescript@6.0.2)':
     dependencies:
-      '@rslib/core': 0.20.3(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@module-federation/runtime-tools@2.3.1)(typescript@6.0.2)
+      '@rslib/core': 0.21.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@module-federation/runtime-tools@2.3.1)(typescript@6.0.2)
       '@rstest/core': 0.9.6(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1)
     optionalDependencies:
       typescript: 6.0.2
@@ -13831,18 +13831,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.20.3(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@rsbuild/core@2.0.0-rc.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(typescript@6.0.2):
+  rsbuild-plugin-dts@0.21.0(@microsoft/api-extractor@7.58.1(@types/node@24.12.2))(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(typescript@6.0.2):
     dependencies:
       '@ast-grep/napi': 0.37.0
-      '@rsbuild/core': 2.0.0-rc.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1)
+      '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.1(@types/node@24.12.2)
       typescript: 6.0.2
 
-  rsbuild-plugin-dts@0.20.3(@microsoft/api-extractor@7.58.1(@types/node@25.2.0))(@rsbuild/core@2.0.0-rc.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(@typescript/native-preview@7.0.0-dev.20260406.1)(typescript@6.0.2):
+  rsbuild-plugin-dts@0.21.0(@microsoft/api-extractor@7.58.1(@types/node@25.2.0))(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1))(@typescript/native-preview@7.0.0-dev.20260406.1)(typescript@6.0.2):
     dependencies:
       '@ast-grep/napi': 0.37.0
-      '@rsbuild/core': 2.0.0-rc.0(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1)
+      '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.9.0)(@emnapi/runtime@1.9.0)(@module-federation/runtime-tools@2.3.1)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.1(@types/node@25.2.0)
       '@typescript/native-preview': 7.0.0-dev.20260406.1
