@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { expect, test } from '@rstest/core';
 import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
@@ -42,12 +43,67 @@ test('auto externalize Node.js built-in modules when `output.target` is "node"',
 
 test('should preserve CommonJS node built-in semantics in ESM output', async () => {
   const fixturePath = join(__dirname, 'esm-node-builtin');
-  const { entryFiles } = await buildAndGetResults({ fixturePath });
+  const { entries, entryFiles } = await buildAndGetResults({
+    fixturePath,
+    lib: ['esm-default'],
+  });
 
-  const esmOutput = await import(entryFiles.esm);
+  // Built-in modules required from bundled CommonJS should keep using createRequire.
+  expect(entries.esm0).toContain(
+    'module.exports = __rspack_createRequire_require("node:util");',
+  );
+  // Another built-in on the CommonJS path should follow the same node-commonjs runtime semantics.
+  expect(entries.esm0).toContain(
+    'module.exports = __rspack_createRequire_require("stream");',
+  );
+  // Lazy built-in imports should still be emitted in a runtime-safe form.
+  expect(entries.esm0).toContain('import("node:os")');
+  expect(entries.esm0).toContain('import("node:path")');
 
+  const esmOutput = await import(pathToFileURL(entryFiles.esm0!).href);
+
+  // The CommonJS helper should still run correctly after the built-in handling changes.
   expect(typeof esmOutput.SendStream).toBe('function');
   expect(esmOutput.sendStreamPrototypeIsInherited).toBe(true);
+  // The lazy built-in import should stay callable at runtime.
+  expect(typeof esmOutput.loadOsPlatform).toBe('function');
+  // The remapped built-in stays lazy, so importing the bundle itself should remain safe.
+  expect(typeof esmOutput.loadPathSep).toBe('function');
+});
+
+test('should report the node built-in error when user externals disables externalization', async () => {
+  const fixturePath = join(__dirname, 'esm-node-builtin');
+
+  const { logs, restore } = proxyConsole();
+  const build = buildAndGetResults({
+    fixturePath,
+    lib: ['esm-external-false'],
+  });
+
+  await expect(build).rejects.toThrowError('Rspack build failed.');
+
+  const errorLogs = logs.map((log) => stripAnsi(log)).join('\n');
+  expect(errorLogs).toContain(
+    'is a built-in Node.js module and cannot be imported in client-side code',
+  );
+
+  restore();
+});
+
+test('should remap node built-ins with user externals', async () => {
+  const fixturePath = join(__dirname, 'esm-node-builtin');
+  const { entries, entryFiles } = await buildAndGetResults({
+    fixturePath,
+    lib: ['esm-external-foo'],
+  });
+
+  // `node:path` should follow the user-configured external target instead of the default built-in external handling.
+  expect(entries.esm2).toContain('import("foo")');
+  expect(entries.esm2).not.toContain('node:path');
+
+  // The remapped built-in stays lazy, so importing the bundle itself should remain safe.
+  const esmOutput = await import(pathToFileURL(entryFiles.esm2!).href);
+  expect(typeof esmOutput.loadPathSep).toBe('function');
 });
 
 test('should get warn when use require in ESM', async () => {
@@ -89,7 +145,7 @@ test('require ESM from CJS', async () => {
   const { restore } = proxyConsole();
   const { entryFiles } = await buildAndGetResults({ fixturePath });
   restore();
-  const baz = (await import(entryFiles.cjs)).baz;
+  const baz = (await import(pathToFileURL(entryFiles.cjs).href)).baz;
   const bazValue = await baz();
   expect(bazValue).toBe('baz');
 });

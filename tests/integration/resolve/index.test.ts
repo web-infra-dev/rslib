@@ -10,6 +10,7 @@ test('resolve data url', async () => {
   expect(entries.esm).toMatchInlineSnapshot(`
     "const javascript_export_default_42 = 42;
     console.log('x:', javascript_export_default_42);
+    export { };
     "
   `);
 });
@@ -108,6 +109,7 @@ test('resolve with js extensions', async () => {
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
     "console.log(1);
+    export { };
     "
   `);
 });
@@ -119,9 +121,10 @@ test('resolve with main fields', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(Object.values(results[0]!)[0]).toMatchInlineSnapshot(`
-      "console.log(1);
-      "
-    `);
+    "console.log(1);
+    export { };
+    "
+  `);
   expect(Object.values(results[1]!)[0]).toContain('main');
   expect(Object.values(results[2]!)[0]).toContain('browser');
 });

@@ -87,7 +87,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     define: {},
     preEntry: [],
     decorators: {
-      version: '2022-03'
+      version: '2023-11'
     },
     tsconfigPath: '<WORKSPACE>/tsconfig.json'
   },
@@ -329,7 +329,63 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     '@rsbuild/core',
     'rsbuild-plugin-dts',
     '@microsoft/api-extractor',
-    'typescript'
+    'typescript',
+    'assert',
+    'assert/strict',
+    'async_hooks',
+    'buffer',
+    'child_process',
+    'cluster',
+    'console',
+    'constants',
+    'crypto',
+    'dgram',
+    'diagnostics_channel',
+    'dns',
+    'dns/promises',
+    'domain',
+    'events',
+    'fs',
+    'fs/promises',
+    'http',
+    'http2',
+    'https',
+    'inspector',
+    'inspector/promises',
+    'module',
+    'net',
+    'os',
+    'path',
+    'path/posix',
+    'path/win32',
+    'perf_hooks',
+    'process',
+    'punycode',
+    'querystring',
+    'readline',
+    'readline/promises',
+    'repl',
+    'stream',
+    'stream/consumers',
+    'stream/promises',
+    'stream/web',
+    'string_decoder',
+    'sys',
+    'timers',
+    'timers/promises',
+    'tls',
+    'trace_events',
+    'tty',
+    'url',
+    'util',
+    'util/types',
+    'v8',
+    'vm',
+    'wasi',
+    'worker_threads',
+    'zlib',
+    /^node:/,
+    'pnpapi'
   ],
   node: {
     __dirname: false,
@@ -545,7 +601,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                     },
                     transform: {
                       legacyDecorator: false,
-                      decoratorVersion: '2022-03'
+                      decoratorVersion: '2023-11'
                     }
                   },
                   isModule: 'unknown',
@@ -592,7 +648,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 },
                 transform: {
                   legacyDecorator: false,
-                  decoratorVersion: '2022-03'
+                  decoratorVersion: '2023-11'
                 }
               },
               isModule: 'unknown',
@@ -923,7 +979,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         {
           interceptApiPlugin: true,
           forceNodeShims: false,
-          externalEsmNodeBuiltin: true
+          autoCjsNodeBuiltin: true
         }
       ]
     },
@@ -1253,7 +1309,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                     },
                     transform: {
                       legacyDecorator: false,
-                      decoratorVersion: '2022-03'
+                      decoratorVersion: '2023-11'
                     }
                   },
                   isModule: 'unknown',
@@ -1300,7 +1356,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 },
                 transform: {
                   legacyDecorator: false,
-                  decoratorVersion: '2022-03'
+                  decoratorVersion: '2023-11'
                 }
               },
               isModule: 'unknown',
@@ -1630,7 +1686,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         {
           interceptApiPlugin: true,
           forceNodeShims: false,
-          externalEsmNodeBuiltin: false
+          autoCjsNodeBuiltin: false
         }
       ]
     },
@@ -1940,7 +1996,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                     },
                     transform: {
                       legacyDecorator: false,
-                      decoratorVersion: '2022-03'
+                      decoratorVersion: '2023-11'
                     }
                   },
                   isModule: 'unknown',
@@ -1987,7 +2043,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 },
                 transform: {
                   legacyDecorator: false,
-                  decoratorVersion: '2022-03'
+                  decoratorVersion: '2023-11'
                 }
               },
               isModule: 'unknown',
@@ -2242,7 +2298,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         {
           interceptApiPlugin: true,
           forceNodeShims: false,
-          externalEsmNodeBuiltin: false
+          autoCjsNodeBuiltin: false
         }
       ]
     },
@@ -2552,7 +2608,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                     },
                     transform: {
                       legacyDecorator: false,
-                      decoratorVersion: '2022-03'
+                      decoratorVersion: '2023-11'
                     }
                   },
                   isModule: 'unknown',
@@ -2599,7 +2655,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 },
                 transform: {
                   legacyDecorator: false,
-                  decoratorVersion: '2022-03'
+                  decoratorVersion: '2023-11'
                 }
               },
               isModule: 'unknown',
@@ -2855,7 +2911,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         {
           interceptApiPlugin: true,
           forceNodeShims: false,
-          externalEsmNodeBuiltin: false
+          autoCjsNodeBuiltin: false
         }
       ]
     },
@@ -3116,7 +3172,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                     },
                     transform: {
                       legacyDecorator: false,
-                      decoratorVersion: '2022-03'
+                      decoratorVersion: '2023-11'
                     }
                   },
                   isModule: 'unknown',
@@ -3168,7 +3224,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 },
                 transform: {
                   legacyDecorator: false,
-                  decoratorVersion: '2022-03'
+                  decoratorVersion: '2023-11'
                 }
               },
               isModule: 'unknown',
@@ -3459,6 +3515,62 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "rsbuild-plugin-dts",
         "@microsoft/api-extractor",
         "typescript",
+        "assert",
+        "assert/strict",
+        "async_hooks",
+        "buffer",
+        "child_process",
+        "cluster",
+        "console",
+        "constants",
+        "crypto",
+        "dgram",
+        "diagnostics_channel",
+        "dns",
+        "dns/promises",
+        "domain",
+        "events",
+        "fs",
+        "fs/promises",
+        "http",
+        "http2",
+        "https",
+        "inspector",
+        "inspector/promises",
+        "module",
+        "net",
+        "os",
+        "path",
+        "path/posix",
+        "path/win32",
+        "perf_hooks",
+        "process",
+        "punycode",
+        "querystring",
+        "readline",
+        "readline/promises",
+        "repl",
+        "stream",
+        "stream/consumers",
+        "stream/promises",
+        "stream/web",
+        "string_decoder",
+        "sys",
+        "timers",
+        "timers/promises",
+        "tls",
+        "trace_events",
+        "tty",
+        "url",
+        "util",
+        "util/types",
+        "v8",
+        "vm",
+        "wasi",
+        "worker_threads",
+        "zlib",
+        /\\^node:/,
+        "pnpapi",
       ],
       "filename": {
         "js": "[name].js",
@@ -3601,7 +3713,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             RslibPlugin {
               "_args": [
                 {
-                  "externalEsmNodeBuiltin": true,
+                  "autoCjsNodeBuiltin": true,
                   "forceNodeShims": false,
                   "interceptApiPlugin": true,
                 },
@@ -3879,7 +3991,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             RslibPlugin {
               "_args": [
                 {
-                  "externalEsmNodeBuiltin": false,
+                  "autoCjsNodeBuiltin": false,
                   "forceNodeShims": false,
                   "interceptApiPlugin": true,
                 },
@@ -4116,7 +4228,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             RslibPlugin {
               "_args": [
                 {
-                  "externalEsmNodeBuiltin": false,
+                  "autoCjsNodeBuiltin": false,
                   "forceNodeShims": false,
                   "interceptApiPlugin": true,
                 },
@@ -4355,7 +4467,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             RslibPlugin {
               "_args": [
                 {
-                  "externalEsmNodeBuiltin": false,
+                  "autoCjsNodeBuiltin": false,
                   "forceNodeShims": false,
                   "interceptApiPlugin": true,
                 },
