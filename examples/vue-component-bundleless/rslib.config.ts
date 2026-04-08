@@ -1,8 +1,8 @@
 import { defineConfig } from '@rslib/core';
-import { pluginUnpluginVue } from 'rsbuild-plugin-unplugin-vue';
+import { pluginVue } from '@rsbuild/plugin-vue';
 
 export default defineConfig({
-  plugins: [pluginUnpluginVue()],
+  plugins: [pluginVue()],
   lib: [
     {
       format: 'esm',

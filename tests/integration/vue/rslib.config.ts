@@ -1,6 +1,6 @@
 import { pluginLess } from '@rsbuild/plugin-less';
+import { pluginVue } from '@rsbuild/plugin-vue';
 import { defineConfig } from '@rslib/core';
-import { pluginUnpluginVue } from 'rsbuild-plugin-unplugin-vue';
 import { generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
@@ -8,7 +8,7 @@ export default defineConfig({
   lib: [
     // bundleless, ESM
     generateBundleEsmConfig({
-      plugins: [pluginUnpluginVue()],
+      plugins: [pluginVue()],
       bundle: false,
       output: {
         target: 'web',
@@ -17,7 +17,7 @@ export default defineConfig({
     }),
     // bundle, ESM
     generateBundleEsmConfig({
-      plugins: [pluginUnpluginVue()],
+      plugins: [pluginVue()],
       output: {
         target: 'web',
         distPath: 'dist/bundle',

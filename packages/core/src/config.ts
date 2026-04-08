@@ -1375,6 +1375,14 @@ const composeBundlelessExternalConfig = (
 } => {
   if (bundle) return { config: {} };
 
+  const isRspackVueLoaderRequest = (
+    request?: string,
+    suffix?: string,
+  ): request is string =>
+    typeof request === 'string' &&
+    request.includes('rspack-vue-loader') &&
+    (suffix ? request.includes(suffix) : true);
+
   const styleRedirectPath = redirect.style?.path ?? true;
   const styleRedirectExtension = redirect.style?.extension ?? true;
   const jsRedirectPath = redirect.js?.path ?? true;
@@ -1466,6 +1474,17 @@ const composeBundlelessExternalConfig = (
             // Issuer is not empty string when the module is imported by another module.
             // Prevent from externalizing entry modules here.
             if (issuer) {
+              // Keep vue-loader generated virtual block requests and helper
+              // modules bundled so they don't leak loader internals into
+              // bundleless output.
+              if (
+                isRspackVueLoaderRequest(request, 'dist/exportHelper.js') ||
+                isRspackVueLoaderRequest(request, '?vue&type=')
+              ) {
+                callback();
+                return;
+              }
+
               let resolvedRequest: string = request;
 
               const { path: redirectedPath, isResolved } =
