@@ -236,10 +236,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       setup() {}
     },
     {
-      name: 'rsbuild:esm',
-      setup() {}
-    },
-    {
       name: 'rsbuild:externals',
       setup() {}
     },
@@ -398,18 +394,15 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     filename: '[name].js',
     chunkFilename: '0~[name].js',
     publicPath: 'auto',
-    bundlerInfo: {
-      force: false
-    },
     library: {
       type: 'modern-module'
     },
-    assetModuleFilename: 'static/assets/[name][ext]',
-    webassemblyModuleFilename: 'static/wasm/[contenthash:10].module.wasm',
     module: true,
     chunkFormat: false,
     chunkLoading: 'import',
-    workerChunkLoading: 'import'
+    workerChunkLoading: 'import',
+    assetModuleFilename: 'static/assets/[name][ext]',
+    webassemblyModuleFilename: 'static/wasm/[contenthash:10].module.wasm'
   },
   resolve: {
     tsConfig: {
@@ -1106,9 +1099,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     filename: '[name].cjs',
     chunkFilename: '1~[name].cjs',
     publicPath: 'auto',
-    bundlerInfo: {
-      force: false
-    },
     library: {
       type: 'commonjs-static'
     },
@@ -1807,9 +1797,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     filename: '[name].js',
     chunkFilename: '2~[name].js',
     publicPath: '/',
-    bundlerInfo: {
-      force: false
-    },
     library: {
       type: 'umd'
     },
@@ -2417,9 +2404,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     filename: '[name].js',
     chunkFilename: '3~[name].js',
     publicPath: '/',
-    bundlerInfo: {
-      force: false
-    },
     library: {
       type: 'module'
     },
@@ -2972,9 +2956,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     filename: '[name].js',
     chunkFilename: '[name].js',
     publicPath: '/',
-    bundlerInfo: {
-      force: false
-    },
     assetModuleFilename: 'static/assets/[name][ext]',
     webassemblyModuleFilename: 'static/wasm/[contenthash:10].module.wasm',
     uniqueName: '@rslib/core'
