@@ -183,7 +183,16 @@ export async function getResults(
     const distPath =
       typeof libConfig?.output?.distPath === 'string'
         ? libConfig?.output?.distPath
-        : libConfig?.output?.distPath?.root!;
+        : libConfig?.output?.distPath?.root;
+
+    if (!distPath) {
+      throw new Error(
+        `Cannot determine distPath for format ${format} in libConfig ${JSON.stringify(
+          libConfig,
+        )}`,
+      );
+    }
+
     if (type === 'js' || type === 'css') {
       globFolder = distPath;
     } else if (type === 'dts' && libConfig.dts !== false) {

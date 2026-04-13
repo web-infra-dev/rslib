@@ -1,3 +1,4 @@
+/* rslint-disable @typescript-eslint/no-require-imports */
 import { createRequire } from 'node:module';
 
 // Using CommonJS require.

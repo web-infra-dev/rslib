@@ -1,5 +1,8 @@
 import { expect, test } from '@rstest/core';
+import { createRequire } from 'node:module';
 import { buildAndGetResults } from 'test-helper';
+
+const require = createRequire(import.meta.url);
 
 test('correct read globals from CommonJS', async () => {
   const fixturePath = __dirname;

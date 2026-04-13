@@ -1,5 +1,8 @@
 import { defineConfig } from '@rslib/core';
+import { createRequire } from 'node:module';
 import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
+
+const require = createRequire(import.meta.url);
 
 export default defineConfig({
   lib: [

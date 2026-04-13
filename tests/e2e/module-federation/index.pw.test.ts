@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { expect, test } from '@playwright/test';
 
 import { libText, remoteText } from './constant';

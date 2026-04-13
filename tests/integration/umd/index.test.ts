@@ -1,5 +1,8 @@
 import { expect, test } from '@rstest/core';
+import { createRequire } from 'node:module';
 import { buildAndGetResults } from 'test-helper';
+
+const require = createRequire(import.meta.url);
 
 test('read UMD value in CommonJS', async () => {
   process.env.NODE_ENV = 'production';
