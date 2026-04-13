@@ -179,19 +179,11 @@ export async function getResults(
 
     key = currentFormatCount === 1 ? format : `${format}${currentFormatIndex}`;
 
-    let globFolder = '';
-    const distPath =
+    let globFolder: string | undefined = '';
+    const distPath: string | undefined =
       typeof libConfig?.output?.distPath === 'string'
         ? libConfig?.output?.distPath
         : libConfig?.output?.distPath?.root;
-
-    if (!distPath) {
-      throw new Error(
-        `Cannot determine distPath for format ${format} in libConfig ${JSON.stringify(
-          libConfig,
-        )}`,
-      );
-    }
 
     if (type === 'js' || type === 'css') {
       globFolder = distPath;
