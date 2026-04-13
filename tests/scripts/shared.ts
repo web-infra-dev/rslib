@@ -179,11 +179,11 @@ export async function getResults(
 
     key = currentFormatCount === 1 ? format : `${format}${currentFormatIndex}`;
 
-    let globFolder: string | undefined = '';
-    const distPath: string | undefined =
+    let globFolder = '';
+    const distPath: string =
       typeof libConfig?.output?.distPath === 'string'
         ? libConfig?.output?.distPath
-        : libConfig?.output?.distPath?.root;
+        : (libConfig?.output?.distPath?.root ?? '');
 
     if (type === 'js' || type === 'css') {
       globFolder = distPath;
