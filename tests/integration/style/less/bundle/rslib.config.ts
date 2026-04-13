@@ -1,4 +1,4 @@
-import path, { resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { pluginLess } from '@rsbuild/plugin-less';
 import { defineConfig } from '@rslib/core';
 import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
@@ -23,7 +23,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, '../__fixtures__/basic/src/nest'),
+      '~': resolve(__dirname, '../__fixtures__/basic/src/nest'),
     },
   },
   output: {
