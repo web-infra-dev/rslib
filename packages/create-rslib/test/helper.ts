@@ -77,6 +77,17 @@ export const createAndValidate = (
     expect(existsSync(path.join(dir, 'tsconfig.json'))).toBeTruthy();
   }
 
+  if (
+    templateCase.lang === 'ts' &&
+    (templateCase.template === 'react' || templateCase.template === 'vue')
+  ) {
+    const envDtsPath = path.join(dir, 'src/env.d.ts');
+    expect(existsSync(envDtsPath)).toBeTruthy();
+    expect(fse.readFileSync(envDtsPath, 'utf-8').trimEnd()).toBe(
+      '/// <reference types="@rslib/core/types" />',
+    );
+  }
+
   // tool - Storybook
   if (templateCase.tools.includes('storybook')) {
     for (const file of [
