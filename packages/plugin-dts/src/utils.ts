@@ -511,6 +511,7 @@ export async function redirectDtsImports(
 
 export async function processDtsFiles(
   bundle: boolean,
+  cwd: string,
   dir: string,
   dtsExtension: string,
   redirect: DtsRedirect,
@@ -548,7 +549,7 @@ export async function processDtsFiles(
     );
   }
 
-  const dtsFiles = await globDtsFiles(dir, [`/**/*${dtsExtension}`]);
+  const dtsFiles = await globDtsFiles(cwd, dir, [`/**/*${dtsExtension}`]);
 
   await Promise.all(
     dtsFiles.map(async (file) => {
@@ -651,12 +652,14 @@ export async function calcLongestCommonPath(
 }
 
 export const globDtsFiles = async (
+  cwd: string,
   dir: string,
   patterns: string[],
 ): Promise<string[]> => {
   const dtsFiles = await Promise.all(
     patterns.map(async (pattern) =>
       glob(convertPath(join(dir, pattern)), {
+        cwd,
         absolute: true,
         dot: true,
       }),
@@ -666,7 +669,7 @@ export const globDtsFiles = async (
   return dtsFiles.flat();
 };
 
-export async function cleanDtsFiles(dir: string): Promise<void> {
+export async function cleanDtsFiles(cwd: string, dir: string): Promise<void> {
   const patterns = [
     '/**/*.d.ts',
     '/**/*.d.cts',
@@ -675,7 +678,7 @@ export async function cleanDtsFiles(dir: string): Promise<void> {
     '/**/*.d.cts.map',
     '/**/*.d.mts.map',
   ];
-  const allFiles = await globDtsFiles(dir, patterns);
+  const allFiles = await globDtsFiles(cwd, dir, patterns);
 
   await Promise.all(
     allFiles.map(async (file) => fsP.rm(file, { force: true })),

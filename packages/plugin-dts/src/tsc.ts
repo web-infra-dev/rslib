@@ -45,6 +45,7 @@ async function handleDiagnosticsAndProcessFiles(
   diagnostics: readonly Diagnostic[],
   configPath: string,
   bundle: boolean,
+  cwd: string,
   declarationDir: string,
   dtsExtension: string,
   redirect: DtsRedirect,
@@ -66,6 +67,7 @@ async function handleDiagnosticsAndProcessFiles(
 
   await processDtsFiles(
     bundle,
+    cwd,
     declarationDir,
     dtsExtension,
     redirect,
@@ -105,6 +107,7 @@ export async function emitDtsTsc(
     name,
     dtsExtension,
     rootDir,
+    cwd,
     banner,
     footer,
     paths,
@@ -161,6 +164,7 @@ export async function emitDtsTsc(
       }
       await processDtsFiles(
         bundle,
+        cwd,
         declarationDir,
         dtsExtension,
         redirect,
@@ -177,6 +181,7 @@ export async function emitDtsTsc(
       logger.error(logPrefixTsc, message);
       await processDtsFiles(
         bundle,
+        cwd,
         declarationDir,
         dtsExtension,
         redirect,
@@ -255,6 +260,7 @@ export async function emitDtsTsc(
         sortAndDeduplicateDiagnostics,
         configPath,
         bundle,
+        cwd,
         declarationDir,
         dtsExtension,
         redirect,
@@ -325,6 +331,7 @@ export async function emitDtsTsc(
         sortAndDeduplicateDiagnostics,
         configPath,
         bundle,
+        cwd,
         declarationDir,
         dtsExtension,
         redirect,
@@ -360,6 +367,7 @@ export async function emitDtsTsc(
 
       await processDtsFiles(
         bundle,
+        cwd,
         declarationDir,
         dtsExtension,
         redirect,
