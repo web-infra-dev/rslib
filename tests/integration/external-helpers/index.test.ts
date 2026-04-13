@@ -16,7 +16,9 @@ test('should throw error when @swc/helpers is not be installed when externalHelp
   const fixturePath = join(__dirname, 'no-deps');
   try {
     await buildAndGetResults({ fixturePath });
-  } catch {}
+  } catch {
+    // do nothing
+  }
 
   const logStrings = logs.map((log) => stripAnsi(log));
 

@@ -1,3 +1,4 @@
+/* rslint-disable @typescript-eslint/no-require-imports */
 export const baz = async () => {
   const foo = require('foo');
   const bar = require('bar');

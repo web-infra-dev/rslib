@@ -23,10 +23,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '~': require('node:path').resolve(
-        __dirname,
-        '../__fixtures__/basic/src/nest',
-      ),
+      '~': resolve(__dirname, '../__fixtures__/basic/src/nest'),
     },
   },
   output: {

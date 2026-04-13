@@ -180,10 +180,11 @@ export async function getResults(
     key = currentFormatCount === 1 ? format : `${format}${currentFormatIndex}`;
 
     let globFolder = '';
-    const distPath =
+    const distPath: string =
       typeof libConfig?.output?.distPath === 'string'
         ? libConfig?.output?.distPath
-        : libConfig?.output?.distPath?.root!;
+        : (libConfig?.output?.distPath?.root ?? '');
+
     if (type === 'js' || type === 'css') {
       globFolder = distPath;
     } else if (type === 'dts' && libConfig.dts !== false) {

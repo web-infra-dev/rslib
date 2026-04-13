@@ -1,3 +1,4 @@
+/* rslint-disable @typescript-eslint/no-require-imports */
 export const foo = () => {
   const React = require('react');
   const e1 = require('e1');

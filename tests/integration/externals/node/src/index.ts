@@ -1,3 +1,4 @@
+/* rslint-disable @typescript-eslint/no-require-imports */
 import assert from 'node:assert'; // handle node built-in modules with node: protocol
 import fs from 'fs'; // handle bare node built-in modules
 import React from 'react'; // works with the externals option in rslib.config.ts
