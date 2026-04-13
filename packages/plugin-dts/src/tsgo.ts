@@ -79,6 +79,7 @@ async function handleDiagnosticsAndProcessFiles(
   tsConfigResult: ts.ParsedCommandLine,
   configPath: string,
   bundle: boolean,
+  cwd: string,
   declarationDir: string,
   dtsExtension: string,
   redirect: DtsRedirect,
@@ -89,7 +90,7 @@ async function handleDiagnosticsAndProcessFiles(
   name?: string,
 ): Promise<void> {
   if (!bundle) {
-    const dtsFiles = await globDtsFiles(declarationDir, [
+    const dtsFiles = await globDtsFiles(cwd, declarationDir, [
       '/**/*.d.ts',
       '/**/*.d.ts.map',
     ]);
@@ -114,6 +115,7 @@ async function handleDiagnosticsAndProcessFiles(
 
   await processDtsFiles(
     bundle,
+    cwd,
     declarationDir,
     dtsExtension,
     redirect,
@@ -208,6 +210,7 @@ export async function emitDtsTsgo(
           tsConfigResult,
           configPath,
           bundle,
+          cwd,
           declarationDir,
           dtsExtension,
           redirect,

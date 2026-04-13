@@ -148,6 +148,7 @@ export type BuildResult = {
 export async function getResults(
   rslibConfig: RslibConfig,
   type: 'js' | 'dts' | 'css',
+  cwd: string,
 ): Promise<Omit<BuildResult, 'rspackConfig' | 'rsbuildConfig' | 'isSuccess'>> {
   const files: Record<string, string[]> = {};
   const contents: Record<string, Record<string, string>> = {};
@@ -202,6 +203,7 @@ export async function getResults(
           : /\.(js|cjs|mjs|jsx)(\.map)?$/;
 
     const content: Record<string, string> = await globContentJSON(globFolder, {
+      cwd,
       absolute: true,
     });
 
@@ -334,9 +336,9 @@ export async function buildAndGetResults({
     origin: { bundlerConfigs, rsbuildConfig },
   } = await rslib.inspectConfig({ verbose: true });
   if (type === 'all') {
-    const jsResults = await getResults(rslibConfig, 'js');
-    const dtsResults = await getResults(rslibConfig, 'dts');
-    const cssResults = await getResults(rslibConfig, 'css');
+    const jsResults = await getResults(rslibConfig, 'js', fixturePath);
+    const dtsResults = await getResults(rslibConfig, 'dts', fixturePath);
+    const cssResults = await getResults(rslibConfig, 'css', fixturePath);
     return {
       js: {
         contents: jsResults.contents,
@@ -367,7 +369,7 @@ export async function buildAndGetResults({
       },
     };
   }
-  const results = await getResults(rslibConfig, type);
+  const results = await getResults(rslibConfig, type, fixturePath);
   return {
     contents: results.contents,
     files: results.files,
