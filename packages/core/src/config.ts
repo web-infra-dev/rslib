@@ -1485,6 +1485,14 @@ const composeBundlelessExternalConfig = (
                 return;
               }
 
+              // When a dependency is set to false in output.externals, it should be
+              // bundled normally. Treating its imports as relative externals produces
+              // broken import paths in the output.
+              if (normalizeSlash(issuer).includes('/node_modules/')) {
+                callback();
+                return;
+              }
+
               let resolvedRequest: string = request;
 
               const { path: redirectedPath, isResolved } =

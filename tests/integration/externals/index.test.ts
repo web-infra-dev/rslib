@@ -150,6 +150,27 @@ test('require ESM from CJS', async () => {
   expect(bazValue).toBe('baz');
 });
 
+test('should inline multi-file package when using externals: { [name]: false } in bundleless mode', async () => {
+  // Regression test for fix: internal imports in a package set to false in output.externals
+  // were being treated as relative externals in bundleless mode, breaking the output's import paths.
+  const fixturePath = join(__dirname, 'bundleless-false');
+  const { contents } = await buildAndGetResults({ fixturePath });
+
+  const entry = queryContent(contents.esm!, 'index.js', {
+    basename: true,
+  }).content;
+
+  // Internal files shouldn't appear as broken relative imports in the output.
+  expect(entry).not.toMatch(/from ["']parse(\.js)?["']/);
+  expect(entry).not.toMatch(/from ["']quote(\.js)?["']/);
+
+  // The package's internal files should be inlined as module factories.
+  expect(entry).toMatch(/node_modules\/shell-quote\/parse\.js/);
+  expect(entry).toMatch(/node_modules\/shell-quote\/quote\.js/);
+  expect(entry).toMatch(/var CONTROL/); // from parse.js
+  expect(entry).toMatch(/return xs\.map/); // from quote.js
+});
+
 test('user externals', async () => {
   // Ensure the priority of user externals higher than others.
   // - "memfs": userExternalsConfig > targetExternalsConfig
