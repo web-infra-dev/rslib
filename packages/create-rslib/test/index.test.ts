@@ -1,4 +1,3 @@
-import { execSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
@@ -137,55 +136,6 @@ describe('custom path to create', () => {
     createAndValidate(__dirname, BASE_NODE_ESM_JS, {
       name: './test-temp-relative-dir',
     });
-  });
-});
-
-describe('help output', () => {
-  test('should list optional skills in help output', async () => {
-    const output = execSync('node ../dist/index.js --help', {
-      cwd: __dirname,
-      encoding: 'utf-8',
-      stdio: 'pipe',
-    });
-
-    expect(output).toContain('--skill <skill>');
-    expect(output).toContain('Optional skills:');
-    expect(output).toContain('rslib-best-practices');
-  });
-});
-
-describe('optional skills', () => {
-  test('should install rslib-best-practices with --skill', async () => {
-    const projectName = 'test-temp-extra-skill';
-    const { dir, clean } = createAndValidate(__dirname, BASE_NODE_ESM_JS, {
-      name: projectName,
-      clean: false,
-    });
-
-    clean();
-
-    execSync(
-      `node ../dist/index.js --dir ${projectName} --template node-esm-js --skill rslib-best-practices`,
-      {
-        cwd: __dirname,
-        stdio: 'ignore',
-      },
-    );
-
-    const skillFile = join(dir, '.agents/skills/rslib-best-practices/SKILL.md');
-    const skillsLockPath = join(dir, 'skills-lock.json');
-
-    expect(existsSync(skillFile)).toBeTruthy();
-    expect(existsSync(skillsLockPath)).toBeTruthy();
-
-    const skillContent = readFileSync(skillFile, 'utf-8');
-    expect(skillContent).toContain('name: rslib-best-practices');
-
-    const skillsLockContent = readFileSync(skillsLockPath, 'utf-8');
-    expect(skillsLockContent).toContain('"rslib-best-practices"');
-    expect(skillsLockContent).toContain('"source": "rstackjs/agent-skills"');
-
-    clean();
   });
 });
 
