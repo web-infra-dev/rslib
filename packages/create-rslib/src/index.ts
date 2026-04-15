@@ -112,7 +112,7 @@ create({
     {
       value: 'rspress',
       label: 'Rspress - documentation',
-      when: (templateName) => templateName.startsWith('react-ts'),
+      when: ({ templateName }) => templateName.startsWith('react-ts'),
       action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
         const toolFolder = path.join(__dirname, '..', 'template-rspress');
         const subFolder = path.join(toolFolder, templateName);
@@ -136,7 +136,7 @@ create({
     {
       value: 'storybook',
       label: 'Storybook - component development',
-      when: (templateName) =>
+      when: ({ templateName }) =>
         templateName.startsWith('react') || templateName.startsWith('vue'),
       action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
         const toolFolder = path.join(__dirname, '..', 'template-storybook');
@@ -170,8 +170,26 @@ create({
   extraSkills: [
     {
       value: 'rslib-best-practices',
-      label: 'Rslib best practices',
+      label: 'Rslib - best practices',
       source: 'rstackjs/agent-skills',
+    },
+    {
+      value: 'rstest-best-practices',
+      label: 'Rstest - best practices',
+      source: 'rstackjs/agent-skills',
+      when: ({ tools }) => tools.includes('rstest'),
+    },
+    {
+      value: 'rspress-custom-theme',
+      label: 'Rspress - custom theme',
+      source: 'rstackjs/agent-skills',
+      when: ({ tools }) => tools.includes('rspress'),
+    },
+    {
+      value: 'rspress-description-generator',
+      label: 'Rspress - description generator',
+      source: 'rstackjs/agent-skills',
+      when: ({ tools }) => tools.includes('rspress'),
     },
   ],
 });
