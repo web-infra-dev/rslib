@@ -1383,6 +1383,16 @@ const composeBundlelessExternalConfig = (
     request.includes('rspack-vue-loader') &&
     (suffix ? request.includes(suffix) : true);
 
+  const isPathInOutBase = (resourcePath: string, outBase: string) => {
+    const normalizedOutBase = normalizeSlash(outBase).replace(/\/+$/, '');
+    const normalizedResourcePath = normalizeSlash(resourcePath);
+
+    return (
+      normalizedResourcePath === normalizedOutBase ||
+      normalizedResourcePath.startsWith(`${normalizedOutBase}/`)
+    );
+  };
+
   const styleRedirectPath = redirect.style?.path ?? true;
   const styleRedirectExtension = redirect.style?.extension ?? true;
   const jsRedirectPath = redirect.js?.path ?? true;
@@ -1474,6 +1484,17 @@ const composeBundlelessExternalConfig = (
             // Issuer is not empty string when the module is imported by another module.
             // Prevent from externalizing entry modules here.
             if (issuer) {
+              // Only rewrite requests emitted from source modules. If a dependency in
+              // node_modules is forced to bundle via `output.externals: { pkg: false }`,
+              // its own internal requests should keep following the normal bundling flow.
+              if (
+                typeof outBase === 'string' &&
+                !isPathInOutBase(context, outBase)
+              ) {
+                callback();
+                return;
+              }
+
               // Keep vue-loader generated virtual block requests and helper
               // modules bundled so they don't leak loader internals into
               // bundleless output.
