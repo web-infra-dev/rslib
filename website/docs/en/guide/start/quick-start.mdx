@@ -80,7 +80,14 @@ Biome provides similar linting and formatting features to ESLint and Prettier. I
 
 ### Optional skills
 
-`create-rslib` can also install optional skills for coding agents that support Skills. Currently, it provides `rslib-best-practices`, which gives agents Rslib-specific best practices for configuration, workflows, and common project setup decisions.
+`create-rslib` can install optional skills for coding agents that support Skills. In interactive mode, your selections in “Optional tools” affect the available skill options. The currently available skills are:
+
+| Name                                                                                                    | Condition        |
+| ------------------------------------------------------------------------------------------------------- | ---------------- |
+| [rslib-best-practices](https://github.com/rstackjs/agent-skills#rslib-best-practices)                   | Default          |
+| [rstest-best-practices](https://github.com/rstackjs/agent-skills#rstest-best-practices)                 | Choose `Rstest`  |
+| [rspress-custom-theme](https://github.com/rstackjs/agent-skills#rspress-custom-theme)                   | Choose `Rspress` |
+| [rspress-description-generator](https://github.com/rstackjs/agent-skills#rspress-description-generator) | Choose `Rspress` |
 
 Use the arrow keys to navigate and the space bar to select. Press Enter without selecting anything to skip.
 
@@ -146,7 +153,7 @@ Optional tools:
   biome, eslint, prettier, rspress, storybook, rstest
 
 Optional skills:
-  rslib-best-practices
+  rslib-best-practices, rstest-best-practices, rspress-custom-theme, rspress-description-generator
 ```
 
 ## Migrate from existing projects
