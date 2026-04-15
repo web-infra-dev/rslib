@@ -180,14 +180,54 @@ test('user externals', async () => {
   `);
 });
 
-test('bundleless user externals false should not re-externalize bundled package internals', async () => {
+test('bundleless user externals false should bundle dependency internals in basic outputs', async () => {
   const fixturePath = join(__dirname, 'bundleless-user-external-false');
   const { contents } = await buildAndGetResults({ fixturePath });
-  const { path: entryPath } = queryContent(contents.esm, 'index.js', {
+  const { path: esmPath } = queryContent(contents.esm0!, 'index.js', {
+    basename: true,
+  });
+  const { path: cjsPath } = queryContent(contents.cjs0!, 'index.cjs', {
     basename: true,
   });
 
-  const esmOutput = await import(pathToFileURL(entryPath).href);
+  expect((await import(pathToFileURL(esmPath).href)).default).toBe('foo:inner');
+  expect((await import(pathToFileURL(cjsPath).href)).default).toBe('foo:inner');
+});
 
-  expect(esmOutput.default).toBe('foo:inner');
+test('bundleless user externals false should preserve shared dependency behavior in esm and cjs', async () => {
+  const fixturePath = join(__dirname, 'bundleless-user-external-false');
+  const { contents, files } = await buildAndGetResults({ fixturePath });
+
+  expect(files.esm1).toMatchInlineSnapshot(`
+    [
+      "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/esm-shared/504.js",
+      "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/esm-shared/a.js",
+      "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/esm-shared/b.js",
+      "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/esm-shared/rslib-runtime.js",
+    ]
+  `);
+  expect(files.cjs1).toMatchInlineSnapshot(`
+    [
+      "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/cjs-shared/a.cjs",
+      "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/cjs-shared/b.cjs",
+    ]
+  `);
+
+  // CSS currently does not support splitting shared chunks in bundleless mode,
+  // so this case only verifies the shared behavior for JS dependency modules.
+  expect(
+    queryContent(contents.esm1!, 'a.js', { basename: true }).content,
+  ).toContain('import "./504.js";');
+  expect(
+    queryContent(contents.esm1!, 'b.js', { basename: true }).content,
+  ).toContain('import "./504.js";');
+  expect(
+    queryContent(contents.esm1!, '504.js', { basename: true }).content,
+  ).toContain('./node_modules/foo/index.js');
+  expect(
+    queryContent(contents.cjs1!, 'a.cjs', { basename: true }).content,
+  ).toContain('"./node_modules/foo/index.js"');
+  expect(
+    queryContent(contents.cjs1!, 'b.cjs', { basename: true }).content,
+  ).toContain('"./node_modules/foo/index.js"');
 });
