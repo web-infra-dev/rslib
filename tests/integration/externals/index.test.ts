@@ -179,3 +179,13 @@ test('user externals', async () => {
     "
   `);
 });
+
+test('bundleless user externals false should not re-externalize bundled package internals', async () => {
+  const fixturePath = join(__dirname, 'bundleless-user-external-false');
+  const { contents } = await buildAndGetResults({ fixturePath });
+  const { path: entryPath } = queryContent(contents.esm, /index\.js/);
+
+  const esmOutput = await import(pathToFileURL(entryPath).href);
+
+  expect(esmOutput.default).toBe('foo:inner');
+});
