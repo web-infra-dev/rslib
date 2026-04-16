@@ -127,8 +127,8 @@ For VS Code users, you can install the [Biome VS Code extension](https://marketp
 
 Repository maintainers can publish a new version of changed packages to npm.
 
-1. Run `pnpm generate-release-pr` to generate a release branch, the default bump type is `patch`, use `--type minor/major` to bump minor/major version.
-2. Create a pull request, the title should be `Release: v1.2.0`, ensure the CI check passes.
+1. Trigger the `release` skill in repo with the target version to prepare the release branch and create the release pull request.
+2. Ensure the release pull request CI check passes.
 3. Run the [release action](https://github.com/web-infra-dev/rslib/actions/workflows/release.yml) to publish packages to npm.
 4. Merge the release pull request to `main`.
 5. Generate the [release notes](https://github.com/web-infra-dev/rslib/releases) via GitHub, see [Automatically generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)
