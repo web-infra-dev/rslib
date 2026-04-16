@@ -285,7 +285,8 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
         m.set(distFilepath, `${m.get(distFilepath)}\n${sourceMappingURL}`);
       }
     }
-    for (let [distFilepath, content] of m.entries()) {
+    for (const [distFilepath, initialContent] of m.entries()) {
+      let content = initialContent;
       // add banner and footer to css files in bundleless mode
       if (banner) {
         content = `${banner}\n${content}`;
