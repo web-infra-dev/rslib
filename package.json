@@ -5,12 +5,9 @@
   "scripts": {
     "build": "pnpm --filter \"./packages/*\" run build",
     "build:examples": "pnpm --filter \"@examples/*\" run build",
-    "change": "changeset",
-    "changeset": "changeset",
     "check-dependency-version": "check-dependency-version-consistency . && echo",
     "check-spell": "pnpx cspell && heading-case",
     "format": "prettier . --write && biome check --write && heading-case --write",
-    "generate-release-pr": "zx scripts/generateReleasePr.mjs",
     "lint": "biome check . --diagnostic-level=warn && prettier . --check && pnpm run check-spell && pnpm lint:type",
     "lint:type": "rslint",
     "prebundle": "pnpm --filter \"./packages/*\" run prebundle",
@@ -43,7 +40,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.12",
-    "@changesets/cli": "^2.30.0",
     "@rslint/core": "^0.4.2",
     "@rstest/adapter-rslib": "^0.2.2",
     "@rstest/core": "^0.9.7",
@@ -58,8 +54,7 @@
     "prettier": "^3.8.3",
     "prettier-plugin-packagejson": "^3.0.2",
     "simple-git-hooks": "^2.13.1",
-    "typescript": "^6.0.2",
-    "zx": "^8.8.5"
+    "typescript": "^6.0.2"
   },
   "packageManager": "pnpm@10.33.0",
   "engines": {
