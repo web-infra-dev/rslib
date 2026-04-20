@@ -54,8 +54,8 @@ describe('minify config (mf)', () => {
     const fixturePath = join(__dirname, 'mf/default');
     const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
     expect(mfExposeEntry).toMatchInlineSnapshot(`
-      "/*! LICENSE: __federation_expose_default_export.27f16ed45b.js.LICENSE.txt */
-      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([["525"],{2804(__unused_rspack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{Button:()=>Button,foo:()=>foo});var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{})}}]);"
+      "/*! LICENSE: __federation_expose_default_export.d9379c9190.js.LICENSE.txt */
+      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([[525],{2804(__unused_rspack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{Button:()=>Button,foo:()=>foo});var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{})}}]);"
     `);
   });
 
@@ -65,7 +65,7 @@ describe('minify config (mf)', () => {
 
     expect(mfExposeEntry).toMatchInlineSnapshot(`
       ""use strict";
-      (globalThis["disable_minify"] = globalThis["disable_minify"] || []).push([["525"], {
+      (globalThis["disable_minify"] = globalThis["disable_minify"] || []).push([[525], {
       2804(__unused_rspack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.r(__webpack_exports__);
       __webpack_require__.d(__webpack_exports__, {
