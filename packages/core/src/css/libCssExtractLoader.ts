@@ -270,9 +270,12 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
       }
       const cssFilename = path.basename(distFilepath);
       if (content.trim()) {
-        m.get(distFilepath)
-          ? m.set(distFilepath, `${m.get(distFilepath) + content}\n`)
-          : m.set(distFilepath, `${content}\n`);
+        const existingContent = m.get(distFilepath);
+        if (existingContent) {
+          m.set(distFilepath, `${existingContent + content}\n`);
+        } else {
+          m.set(distFilepath, `${content}\n`);
+        }
 
         importCssFiles += '\n';
         importCssFiles += `import "./${cssFilename}"`;

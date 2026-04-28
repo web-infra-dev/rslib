@@ -155,11 +155,13 @@ export async function createRslib(
         setup(api) {
           api.onAfterBuild(({ isFirstCompile, stats }) => {
             if (isFirstCompile) {
-              stats?.hasErrors()
-                ? logger.error(
-                    'build completed with errors, watching for changes...',
-                  )
-                : logger.success('build completed, watching for changes...');
+              if (stats?.hasErrors()) {
+                logger.error(
+                  'build completed with errors, watching for changes...',
+                );
+              } else {
+                logger.success('build completed, watching for changes...');
+              }
             }
           });
         },

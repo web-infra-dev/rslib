@@ -1322,7 +1322,7 @@ const composeEntryConfig = async (
         const entryName = getEntryName(file);
 
         if (resolvedEntries[entryName]) {
-          tryResolveOutBase &&
+          if (tryResolveOutBase) {
             logger.warn(
               `Duplicate entry ${color.cyan(entryName)} from ${color.cyan(
                 path.relative(root, file),
@@ -1330,6 +1330,7 @@ const composeEntryConfig = async (
                 path.relative(root, resolvedEntries[entryName]),
               )}, which may lead to the incorrect output, please rename the file.`,
             );
+          }
         }
 
         resolvedEntries[entryName] = file;

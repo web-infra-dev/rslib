@@ -244,7 +244,9 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           error.stack = '';
           throw error;
         }
-        promiseResult.errorMessage && logger.error(promiseResult.errorMessage);
+        if (promiseResult.errorMessage) {
+          logger.error(promiseResult.errorMessage);
+        }
         logger.warn(
           'With `abortOnError` configuration currently disabled, type errors will not fail the build, but proper type declaration output cannot be guaranteed.',
         );
