@@ -480,6 +480,55 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           not: 'url'
         },
         oneOf: [
+          /* config.module.rule('css').oneOf('css-url') */
+          {
+            resourceQuery: /^\\?url$/,
+            use: [
+              /* config.module.rule('css').oneOf('css-url').use('css-url') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/cssUrlLoader.mjs',
+                options: {
+                  filename: '[name].css',
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
+              },
+              /* config.module.rule('css').oneOf('css-url').use('css') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: false,
+                  sourceMap: false,
+                  exportType: 'string',
+                  importLoaders: 1
+                }
+              },
+              /* config.module.rule('css').oneOf('css-url').use('lightningcss') */
+              {
+                loader: 'builtin:lightningcss-loader',
+                options: {
+                  targets: [
+                    'last 1 Chrome versions',
+                    'last 1 Firefox versions',
+                    'last 1 Edge versions',
+                    'last 1 Safari versions',
+                    'last 1 ios_saf versions',
+                    'not dead'
+                  ],
+                  errorRecovery: true
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
+            }
+          },
           /* config.module.rule('css').oneOf('css-inline') */
           {
             resourceQuery: /[?&]inline(?:&|=|$)/,
@@ -1185,6 +1234,55 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           not: 'url'
         },
         oneOf: [
+          /* config.module.rule('css').oneOf('css-url') */
+          {
+            resourceQuery: /^\\?url$/,
+            use: [
+              /* config.module.rule('css').oneOf('css-url').use('css-url') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/cssUrlLoader.mjs',
+                options: {
+                  filename: '[name].css',
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
+              },
+              /* config.module.rule('css').oneOf('css-url').use('css') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: false,
+                  sourceMap: false,
+                  exportType: 'string',
+                  importLoaders: 1
+                }
+              },
+              /* config.module.rule('css').oneOf('css-url').use('lightningcss') */
+              {
+                loader: 'builtin:lightningcss-loader',
+                options: {
+                  targets: [
+                    'last 1 Chrome versions',
+                    'last 1 Firefox versions',
+                    'last 1 Edge versions',
+                    'last 1 Safari versions',
+                    'last 1 ios_saf versions',
+                    'not dead'
+                  ],
+                  errorRecovery: true
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
+            }
+          },
           /* config.module.rule('css').oneOf('css-inline') */
           {
             resourceQuery: /[?&]inline(?:&|=|$)/,
@@ -1872,6 +1970,55 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           not: 'url'
         },
         oneOf: [
+          /* config.module.rule('css').oneOf('css-url') */
+          {
+            resourceQuery: /^\\?url$/,
+            use: [
+              /* config.module.rule('css').oneOf('css-url').use('css-url') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/cssUrlLoader.mjs',
+                options: {
+                  filename: '[name].css',
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
+              },
+              /* config.module.rule('css').oneOf('css-url').use('css') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: false,
+                  sourceMap: false,
+                  exportType: 'string',
+                  importLoaders: 1
+                }
+              },
+              /* config.module.rule('css').oneOf('css-url').use('lightningcss') */
+              {
+                loader: 'builtin:lightningcss-loader',
+                options: {
+                  targets: [
+                    'last 1 Chrome versions',
+                    'last 1 Firefox versions',
+                    'last 1 Edge versions',
+                    'last 1 Safari versions',
+                    'last 1 ios_saf versions',
+                    'not dead'
+                  ],
+                  errorRecovery: true
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
+            }
+          },
           /* config.module.rule('css').oneOf('css-inline') */
           {
             resourceQuery: /[?&]inline(?:&|=|$)/,
@@ -2481,6 +2628,55 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           not: 'url'
         },
         oneOf: [
+          /* config.module.rule('css').oneOf('css-url') */
+          {
+            resourceQuery: /^\\?url$/,
+            use: [
+              /* config.module.rule('css').oneOf('css-url').use('css-url') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/cssUrlLoader.mjs',
+                options: {
+                  filename: '[name].css',
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
+              },
+              /* config.module.rule('css').oneOf('css-url').use('css') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: false,
+                  sourceMap: false,
+                  exportType: 'string',
+                  importLoaders: 1
+                }
+              },
+              /* config.module.rule('css').oneOf('css-url').use('lightningcss') */
+              {
+                loader: 'builtin:lightningcss-loader',
+                options: {
+                  targets: [
+                    'last 1 Chrome versions',
+                    'last 1 Firefox versions',
+                    'last 1 Edge versions',
+                    'last 1 Safari versions',
+                    'last 1 ios_saf versions',
+                    'not dead'
+                  ],
+                  errorRecovery: true
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
+            }
+          },
           /* config.module.rule('css').oneOf('css-inline') */
           {
             resourceQuery: /[?&]inline(?:&|=|$)/,
@@ -3027,6 +3223,54 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           not: 'url'
         },
         oneOf: [
+          /* config.module.rule('css').oneOf('css-url') */
+          {
+            resourceQuery: /^\\?url$/,
+            use: [
+              /* config.module.rule('css').oneOf('css-url').use('css-url') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/cssUrlLoader.mjs',
+                options: {
+                  filename: '[name].css',
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]'
+                  }
+                }
+              },
+              /* config.module.rule('css').oneOf('css-url').use('css') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/compiled/css-loader/index.js',
+                options: {
+                  modules: false,
+                  sourceMap: false,
+                  exportType: 'string',
+                  importLoaders: 1
+                }
+              },
+              /* config.module.rule('css').oneOf('css-url').use('lightningcss') */
+              {
+                loader: 'builtin:lightningcss-loader',
+                options: {
+                  targets: [
+                    'last 1 Chrome versions',
+                    'last 1 Firefox versions',
+                    'last 1 Edge versions',
+                    'last 1 Safari versions',
+                    'last 1 ios_saf versions',
+                    'not dead'
+                  ],
+                  errorRecovery: true
+                }
+              }
+            ],
+            resolve: {
+              preferRelative: true
+            }
+          },
           /* config.module.rule('css').oneOf('css-inline') */
           {
             resourceQuery: /[?&]inline(?:&|=|$)/,
