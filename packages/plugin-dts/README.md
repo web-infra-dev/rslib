@@ -296,9 +296,9 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 - **Type:** `boolean`
 - **Default:** `false`
 
-Whether to generate declaration files with [tsgo](https://github.com/microsoft/typescript-go), which can provide faster generation of declaration files, especially for large projects.
+Whether to generate declaration files with [tsgo](https://github.com/microsoft/typescript-go).
 
-> This feature is currently an **experimental feature**. Since tsgo is still in the **experimental stage**, there may be some bugs and unresolved issues or limitations. So, make sure to fully test it in your project before enabling this option.
+> Rslib recommends enabling `tsgo` to speed up declaration file generation.
 
 To enable this option, you need to:
 
