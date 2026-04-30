@@ -13,8 +13,7 @@ export default defineConfig({
         alias: {
           rslog: './compiled/rslog',
         },
-        // Only use tsgo in local dev for faster build, disable it in CI until it's more stable
-        tsgo: !process.env.CI,
+        tsgo: true,
         distPath: './dist-types',
       },
       redirect: {
