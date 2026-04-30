@@ -9,7 +9,7 @@ export default defineConfig({
         tsgo: true,
       },
       output: {
-        distPath: './dist/default/esm',
+        distPath: './dist-tsgo/default/esm',
       },
     }),
     // 1 - path: false extension: false
@@ -18,7 +18,7 @@ export default defineConfig({
         tsgo: true,
       },
       output: {
-        distPath: './dist/path-false/esm',
+        distPath: './dist-tsgo/path-false/esm',
       },
       redirect: {
         dts: {
@@ -32,7 +32,7 @@ export default defineConfig({
         tsgo: true,
       },
       output: {
-        distPath: './dist/extension-true/esm',
+        distPath: './dist-tsgo/extension-true/esm',
       },
       redirect: {
         dts: {
@@ -46,7 +46,7 @@ export default defineConfig({
         tsgo: true,
       },
       output: {
-        distPath: './dist/path-false-extension-true/esm',
+        distPath: './dist-tsgo/path-false-extension-true/esm',
       },
       redirect: {
         dts: {
@@ -62,7 +62,7 @@ export default defineConfig({
         tsgo: true,
       },
       output: {
-        distPath: './dist/auto-extension-true/esm',
+        distPath: './dist-tsgo/auto-extension-true/esm',
       },
       redirect: {
         dts: {
@@ -77,7 +77,7 @@ export default defineConfig({
         tsgo: true,
       },
       output: {
-        distPath: './dist/auto-extension-true/cjs',
+        distPath: './dist-tsgo/auto-extension-true/cjs',
       },
       redirect: {
         dts: {
