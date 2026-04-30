@@ -193,9 +193,8 @@ First, set up Storybook with the Rslib project. You can refer to the [Storybook 
    import { dirname, join } from 'node:path';
    import type { StorybookConfig } from 'storybook-react-rsbuild';
 
-   function getAbsolutePath(value: string): any {
-     return dirname(require.resolve(join(value, 'package.json')));
-   }
+   const getAbsolutePath = (value: string): string =>
+     dirname(require.resolve(join(value, 'package.json')));
 
    const config: StorybookConfig = {
      stories: [

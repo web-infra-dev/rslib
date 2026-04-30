@@ -192,9 +192,8 @@ Rslib 支持使用 Storybook 开发 Rslib 模块联邦项目。
 import { dirname, join } from 'node:path';
 import type { StorybookConfig } from 'storybook-react-rsbuild';
 
-function getAbsolutePath(value: string): any {
-  return dirname(require.resolve(join(value, 'package.json')));
-}
+const getAbsolutePath = (value: string): string =>
+  dirname(require.resolve(join(value, 'package.json')));
 
 const config: StorybookConfig = {
   stories: [

@@ -6,7 +6,7 @@ import type { StorybookConfig } from 'storybook-vue3-rsbuild';
  * This function is used to resolve the absolute path of a package.
  * It is needed in projects that use Yarn PnP or are set up within a monorepo.
  */
-const getAbsolutePath = (value: string): any => {
+const getAbsolutePath = (value: string): string => {
   return resolve(
     fileURLToPath(
       new URL(import.meta.resolve(`${value}/package.json`, import.meta.url)),
