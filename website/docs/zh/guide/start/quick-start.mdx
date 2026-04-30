@@ -58,25 +58,17 @@ import { PackageManagerTabs } from '@theme';
 
 ### 可选工具
 
-`create-rslib` 能够帮助你设置一些常用的工具，包括 [Biome](https://biomejs.dev/)、[ESLint](https://eslint.org/)、[Prettier](https://prettier.io/)、[Rspress](https://rspress.rs/)、[Storybook](https://storybook.js.org/) 和 [Rstest](https://rstest.rs/)，你可以使用上下箭头和空格进行选择。如果你不需要这些工具，可以直接按回车跳过。
+`create-rslib` 能够帮助你设置以下常用工具，你可以使用上下箭头和空格进行选择。如果你不需要这些工具，可以直接按回车跳过。
 
-- Rspress 可用于 React + TypeScript 模板，用于生成组件文档站点。
-- Storybook 可用于 Web 目标模板（React、Vue），用于组件开发和预览。
-- Rstest 适用于所有模板，用于测试。
-
-```text
-◆  Select additional tools (Use <space> to select, <enter> to continue)
-│  ◻ Biome - linting & formatting
-│  ◻ ESLint - linting
-│  ◻ Prettier - formatting
-│  ◻ Rspress - documentation
-│  ◻ Storybook - component development
-│  ◻ Rstest - testing
-```
-
-:::tip
-Biome 提供与 ESLint 和 Prettier 相似的代码检查和格式化功能。如果你选择了 Biome，通常就不需要再选择 ESLint 或 Prettier 了。
-:::
+| 工具                                   | 用途                                 |
+| -------------------------------------- | ------------------------------------ |
+| [ESLint](https://eslint.org/)          | 代码检查                             |
+| [Rslint](https://rslint.rs/)           | 代码检查                             |
+| [Prettier](https://prettier.io/)       | 代码格式化                           |
+| [Biome](https://biomejs.dev/)          | 代码检查和格式化                     |
+| [Rspress](https://rspress.rs/zh/)      | 组件文档，仅 React + TypeScript 模板 |
+| [Storybook](https://storybook.js.org/) | 组件开发和预览，仅 React 和 Vue 模板 |
+| [Rstest](https://rstest.rs/zh/)        | 测试                                 |
 
 ### 可选技能
 
@@ -150,7 +142,7 @@ Available templates:
   node-dual-js, node-dual-ts, node-esm-js, node-esm-ts, react-js, react-ts, vue-js, vue-ts
 
 Optional tools:
-  biome, eslint, prettier, rspress, storybook, rstest
+  eslint, rslint, biome, prettier, rspress, storybook, rstest
 
 Optional skills:
   rslib-best-practices, rstest-best-practices, rspress-custom-theme, rspress-description-generator
