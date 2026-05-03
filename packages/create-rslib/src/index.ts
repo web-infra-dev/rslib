@@ -9,6 +9,7 @@ import {
   copyFolder,
   create,
   type ESLintTemplateName,
+  type RslintTemplateName,
   select,
 } from 'create-rstack';
 import { parseTemplateName } from './parseTemplateName';
@@ -60,25 +61,49 @@ async function getTemplateName({ template }: Argv) {
 }
 
 function mapESLintTemplate(templateName: string): ESLintTemplateName {
-  const language = templateName.split('-').pop();
-  return `vanilla-${language}` as ESLintTemplateName;
+  switch (templateName) {
+    case 'react-js':
+    case 'react-ts':
+    case 'vue-js':
+    case 'vue-ts':
+      return templateName;
+    default: {
+      const language = templateName.split('-').pop();
+      return `vanilla-${language}` as ESLintTemplateName;
+    }
+  }
+}
+
+function mapRslintTemplate(templateName: string): RslintTemplateName {
+  switch (templateName) {
+    case 'react-js':
+    case 'react-ts':
+      return templateName;
+    default: {
+      const language = templateName.split('-').pop();
+      return `vanilla-${language}` as RslintTemplateName;
+    }
+  }
 }
 
 function mapTestingToolTemplate(templateName: string): string {
-  if (templateName.startsWith('react-')) {
-    return templateName;
+  switch (templateName) {
+    case 'react-js':
+    case 'react-ts':
+    case 'vue-js':
+    case 'vue-ts':
+      return templateName;
+    case 'node-dual-js':
+    case 'node-esm-js':
+      return 'node-js';
+    case 'node-dual-ts':
+    case 'node-esm-ts':
+      return 'node-ts';
+    default: {
+      const language = templateName.split('-').pop();
+      return `node-${language}`;
+    }
   }
-  if (templateName.startsWith('vue-')) {
-    return templateName;
-  }
-  if (templateName.startsWith('node-dual-')) {
-    return templateName.replace('node-dual-', 'node-');
-  }
-  if (templateName.startsWith('node-esm-')) {
-    return templateName.replace('node-esm-', 'node-');
-  }
-  const language = templateName.split('-').pop();
-  return `node-${language}`;
 }
 
 function getPackageName(distFolder: string): string {
@@ -108,6 +133,7 @@ create({
   templates: TEMPLATES,
   getTemplateName,
   mapESLintTemplate,
+  mapRslintTemplate,
   extraTools: [
     {
       value: 'rspress',

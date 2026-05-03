@@ -155,6 +155,87 @@ describe('linter and formatter', () => {
     clean();
   });
 
+  test('should create React project with eslint as expected', async () => {
+    const { dir, pkgJson, clean } = createAndValidate(
+      __dirname,
+      createCase('react', 'ts'),
+      {
+        name: 'test-temp-react-eslint',
+        tools: ['eslint'],
+        clean: false,
+      },
+    );
+    expect(pkgJson.devDependencies.eslint).toBeTruthy();
+    expect(pkgJson.devDependencies['eslint-plugin-react-hooks']).toBeTruthy();
+    expect(pkgJson.devDependencies['eslint-plugin-react-refresh']).toBeTruthy();
+
+    const configContent = readFileSync(join(dir, 'eslint.config.mjs'), 'utf-8');
+    expect(configContent).toContain(
+      "reactHooks.configs.flat['recommended-latest']",
+    );
+    expect(configContent).toContain('reactRefresh.configs.recommended');
+    clean();
+  });
+
+  test('should create Vue project with eslint as expected', async () => {
+    const { dir, pkgJson, clean } = createAndValidate(
+      __dirname,
+      createCase('vue', 'ts'),
+      {
+        name: 'test-temp-vue-eslint',
+        tools: ['eslint'],
+        clean: false,
+      },
+    );
+    expect(pkgJson.devDependencies.eslint).toBeTruthy();
+    expect(pkgJson.devDependencies['eslint-plugin-vue']).toBeTruthy();
+    expect(
+      pkgJson.devDependencies['@vue/eslint-config-typescript'],
+    ).toBeTruthy();
+
+    const configContent = readFileSync(join(dir, 'eslint.config.mjs'), 'utf-8');
+    expect(configContent).toContain("pluginVue.configs['flat/essential']");
+    expect(configContent).toContain('vueTsConfigs.recommended');
+    clean();
+  });
+
+  test('should create React project with rslint as expected', async () => {
+    const { dir, pkgJson, clean } = createAndValidate(
+      __dirname,
+      createCase('react', 'ts'),
+      {
+        name: 'test-temp-react-rslint',
+        tools: ['rslint'],
+        clean: false,
+      },
+    );
+    expect(pkgJson.devDependencies['@rslint/core']).toBeTruthy();
+
+    const configContent = readFileSync(join(dir, 'rslint.config.ts'), 'utf-8');
+    expect(configContent).toContain('reactPlugin.configs.recommended');
+    expect(configContent).toContain('ts.configs.recommended');
+    clean();
+  });
+
+  test('should create Vue project with vanilla rslint as expected', async () => {
+    const { dir, pkgJson, clean } = createAndValidate(
+      __dirname,
+      createCase('vue', 'js'),
+      {
+        name: 'test-temp-vue-rslint',
+        tools: ['rslint'],
+        clean: false,
+      },
+    );
+    expect(pkgJson.devDependencies['@rslint/core']).toBeTruthy();
+
+    const configContent = readFileSync(join(dir, 'rslint.config.ts'), 'utf-8');
+    expect(configContent).toContain('js.configs.recommended');
+    expect(configContent).not.toContain('ts.configs.recommended');
+    expect(configContent).not.toContain('reactPlugin');
+    clean();
+  });
+
   test('should create project with prettier as expected', async () => {
     const { dir, pkgJson, clean } = createAndValidate(
       __dirname,
