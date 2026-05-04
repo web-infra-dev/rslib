@@ -5,7 +5,6 @@
     'schedule:weekly',
     'helpers:pinGitHubActionDigests',
   ],
-  ignorePaths: ['**/node_modules/**'],
   packageRules: [
     // Use chore as semantic commit type for commit messages
     {
@@ -13,36 +12,6 @@
       semanticCommitType: 'chore',
       // always bump package.json
       rangeStrategy: 'bump',
-    },
-    {
-      groupName: 'Babel',
-      matchPackageNames: ['/babel/'],
-      groupSlug: 'babel',
-    },
-    {
-      groupName: 'Rsbuild',
-      matchPackageNames: ['/rsbuild/'],
-      groupSlug: 'rsbuild',
-    },
-    {
-      groupName: 'Rslib',
-      matchPackageNames: ['/rslib/'],
-      groupSlug: 'rslib',
-    },
-    {
-      groupName: 'Rspress',
-      matchPackageNames: ['/rspress/'],
-      groupSlug: 'rspress',
-    },
-    {
-      groupName: 'Module Federation',
-      matchPackageNames: ['/module-federation/'],
-      groupSlug: 'module-federation',
-    },
-    {
-      groupName: 'types',
-      matchPackageNames: ['/^@types/'],
-      groupSlug: 'types',
     },
     {
       groupName: 'all non-major dependencies',
@@ -53,11 +22,6 @@
     // manually update peer dependencies
     {
       matchDepTypes: ['peerDependencies'],
-      enabled: false,
-    },
-    {
-      matchPackageNames: ['pnpm'],
-      matchUpdateTypes: ['patch'],
       enabled: false,
     },
   ],
