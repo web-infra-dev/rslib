@@ -39,7 +39,7 @@ function isPortAvailable(port: number) {
         resolve(false);
       });
     });
-  } catch (_err) {
+  } catch {
     return false;
   }
 }

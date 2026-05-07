@@ -1,6 +1,6 @@
 // This file can only be imported by @rstest/core test files
 import { expect } from '@rstest/core';
-import { getFileBySuffix } from './shared.ts';
+import { getFileBySuffix } from './shared';
 
 export function expectFileContainContent(
   files: Record<string, string>,

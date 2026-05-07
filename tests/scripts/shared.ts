@@ -17,7 +17,7 @@ import {
 } from '@rsbuild/core';
 import type { Format, LibConfig, RslibConfig } from '@rslib/core';
 import { createRslib, loadConfig } from '@rslib/core';
-import { globContentJSON } from './helper.ts';
+import { globContentJSON } from './helper';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
