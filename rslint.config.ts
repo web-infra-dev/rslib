@@ -12,6 +12,7 @@ export default defineConfig([
           './examples/*/tsconfig.json',
           './examples/module-federation/*/tsconfig.json',
           './tests/tsconfig.json',
+          './tests/scripts/tsconfig.json',
           './tests/type-tests/*/tsconfig.json',
         ],
       },
