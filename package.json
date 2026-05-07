@@ -5,11 +5,9 @@
   "scripts": {
     "build": "pnpm --filter \"./packages/*\" run build",
     "build:examples": "pnpm --filter \"@examples/*\" run build",
-    "check-dependency-version": "check-dependency-version-consistency . && echo",
     "check-spell": "pnpx cspell && heading-case",
-    "format": "prettier . --write && biome check --write && heading-case --write",
-    "lint": "biome check . --diagnostic-level=warn && prettier . --check && pnpm run check-spell && pnpm lint:type",
-    "lint:type": "rslint",
+    "format": "prettier --experimental-cli --write . && heading-case --write",
+    "lint": "rslint --type-check",
     "prebundle": "pnpm --filter \"./packages/*\" run prebundle",
     "prepare": "simple-git-hooks && pnpm prebundle && pnpm build",
     "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
@@ -26,26 +24,21 @@
     "watch": "pnpm build --watch"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx nano-staged"
+    "pre-commit": "pnpm exec nano-staged"
   },
   "nano-staged": {
-    "*.{md,mdx,css,less,scss,json,jsonc,json5}": "prettier --write",
+    "*.{md,mdx,css,less,scss,json,jsonc,json5}": "prettier --experimental-cli --write",
     "*.{js,jsx,ts,tsx,mjs,mjsx,cjs,cjsx,mts,mtsx,cts,ctsx}": [
-      "biome check --write"
-    ],
-    "package.json": [
-      "pnpm run check-dependency-version",
-      "prettier --write"
+      "rslint --type-check",
+      "prettier --experimental-cli --write"
     ]
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.14",
     "@rslint/core": "^0.5.1",
     "@rstest/adapter-rslib": "^0.2.2",
     "@rstest/core": "^0.9.10",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^24.12.2",
-    "check-dependency-version-consistency": "^6.0.0",
     "cross-env": "^10.1.0",
     "cspell-ban-words": "^0.0.4",
     "fs-extra": "^11.3.4",

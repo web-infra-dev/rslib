@@ -12,7 +12,6 @@ export type CssLoaderOptionsAuto = CSSLoaderOptions['modules'] extends infer T
 /**
  * This function is copied from
  * https://github.com/webpack-contrib/mini-css-extract-plugin/blob/3effaa0319bad5cc1bf0ae760553bf7abcbc35a4/src/utils.js#L169
- * linted by biome
  */
 export function getUndoPath(
   filename: string,

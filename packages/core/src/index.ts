@@ -44,8 +44,4 @@ export const version: string = RSLIB_VERSION;
 
 export type * as Rsbuild from '@rsbuild/core';
 export * as rsbuild from '@rsbuild/core';
-export {
-  type RsbuildPlugin,
-  type Rspack,
-  rspack,
-} from '@rsbuild/core';
+export { type RsbuildPlugin, type Rspack, rspack } from '@rsbuild/core';

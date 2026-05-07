@@ -68,9 +68,8 @@ describe('ESX_TO_BROWSERSLIST', () => {
 
 describe('transformSyntaxToBrowserslist', () => {
   test('esX', () => {
-    expect(
-      transformSyntaxToBrowserslist('es2015', 'web'),
-    ).toMatchInlineSnapshot(`
+    expect(transformSyntaxToBrowserslist('es2015', 'web'))
+      .toMatchInlineSnapshot(`
       [
         "chrome >= 51",
         "edge >= 79",
@@ -81,9 +80,8 @@ describe('transformSyntaxToBrowserslist', () => {
       ]
     `);
 
-    expect(
-      transformSyntaxToBrowserslist('es2018', 'web'),
-    ).toMatchInlineSnapshot(`
+    expect(transformSyntaxToBrowserslist('es2018', 'web'))
+      .toMatchInlineSnapshot(`
       [
         "chrome >= 64",
         "edge >= 79",
@@ -108,9 +106,8 @@ describe('transformSyntaxToBrowserslist', () => {
       ]
     `);
 
-    expect(
-      transformSyntaxToBrowserslist('esnext', 'node'),
-    ).toMatchInlineSnapshot(`
+    expect(transformSyntaxToBrowserslist('esnext', 'node'))
+      .toMatchInlineSnapshot(`
       [
         "last 1 node versions",
       ]
@@ -121,17 +118,15 @@ describe('transformSyntaxToBrowserslist', () => {
   });
 
   test('browserslist', () => {
-    expect(
-      transformSyntaxToBrowserslist(['fully supports es6-module'], 'web'),
-    ).toMatchInlineSnapshot(`
+    expect(transformSyntaxToBrowserslist(['fully supports es6-module'], 'web'))
+      .toMatchInlineSnapshot(`
         [
           "fully supports es6-module",
         ]
       `);
 
-    expect(
-      transformSyntaxToBrowserslist(['node 14', 'Chrome 103'], 'web'),
-    ).toMatchInlineSnapshot(`
+    expect(transformSyntaxToBrowserslist(['node 14', 'Chrome 103'], 'web'))
+      .toMatchInlineSnapshot(`
       [
         "node 14",
         "Chrome 103",
@@ -140,9 +135,8 @@ describe('transformSyntaxToBrowserslist', () => {
   });
 
   test('combined', () => {
-    expect(
-      transformSyntaxToBrowserslist(['Chrome 123', 'es5'], 'web'),
-    ).toMatchInlineSnapshot(`
+    expect(transformSyntaxToBrowserslist(['Chrome 123', 'es5'], 'web'))
+      .toMatchInlineSnapshot(`
       [
         "Chrome 123",
         "chrome >= 13",
@@ -194,18 +188,16 @@ describe('transformSyntaxToRspackTarget', () => {
   });
 
   test('combined', () => {
-    expect(
-      transformSyntaxToRspackTarget(['Chrome 123', 'es2023']),
-    ).toMatchInlineSnapshot(`
+    expect(transformSyntaxToRspackTarget(['Chrome 123', 'es2023']))
+      .toMatchInlineSnapshot(`
       [
         "browserslist:Chrome 123",
         "es2022",
       ]
     `);
 
-    expect(
-      transformSyntaxToRspackTarget(['Chrome 123', 'es6']),
-    ).toMatchInlineSnapshot(`
+    expect(transformSyntaxToRspackTarget(['Chrome 123', 'es6']))
+      .toMatchInlineSnapshot(`
       [
         "browserslist:Chrome 123",
         "es2015",

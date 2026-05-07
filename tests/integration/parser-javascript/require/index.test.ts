@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/suspicious/noTemplateCurlyInString: test statements */
 import { join } from 'node:path';
 import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';

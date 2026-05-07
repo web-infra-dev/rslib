@@ -13,7 +13,7 @@
 - `packages/plugin-dts` (`rsbuild-plugin-dts`): provides the `dts` configuration hook (e.g., `{ dts: { bundle: true } }`).
 - `packages/create-rslib` (`create-rslib`): scaffolds new projects via `pnpm dlx create-rslib` or `npx create-rslib`.
 - Tests live in `packages/*/tests` (unit) and `tests/` (`integration`, `e2e`, `benchmark`); examples in `examples/`.
-- Key configuration files: `biome.json`, `.prettierrc.json`, `rslint.jsonc`, `pnpm-workspace.yaml`.
+- Key configuration files: `.prettierrc.json`, `rslint.config.ts`, `pnpm-workspace.yaml`.
 
 ## Build, test, and development commands
 
@@ -31,9 +31,9 @@
 ## Coding style & naming conventions
 
 - TypeScript + ESM; spaces; single quotes.
-- Biome is canonical linter/formatter; Prettier formats MD/CSS/JSON and `package.json`.
-- Run `pnpm biome check --write --unsafe` on modified source files; when `package.json` changes, also run `prettier --write package.json`.
-- Filenames: `camelCase` or `PascalCase` (Biome enforced).
+- Rslint is the canonical linter; Prettier is the canonical formatter.
+- Run `pnpm lint` for linting and `pnpm format` for formatting.
+- Filenames should use `camelCase` or `PascalCase`.
 
 ## Testing guidelines
 
