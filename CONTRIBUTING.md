@@ -111,17 +111,23 @@ pnpm test:integration dts
 pnpm test:integration -t dts
 ```
 
-## Linting
+## Linting and formatting
 
-To help maintain consistency and readability of the codebase, we use [Biome](https://github.com/biomejs/biome) to lint the codes.
+To help maintain consistency and readability of the codebase, we use [Rslint](https://rslint.rs/) to lint the code and [Prettier](https://prettier.io/) to format it.
 
-You can run the linters by executing the following command:
+You can run the linter by executing the following command:
 
 ```sh
 pnpm run lint
 ```
 
-For VS Code users, you can install the [Biome VS Code extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) to see lints while typing.
+You can format files by executing the following command:
+
+```sh
+pnpm run format
+```
+
+For VS Code users, you can install the [Rslint VS Code extension](https://marketplace.visualstudio.com/items?itemName=rstack.rslint) to see lints while typing and the [Prettier VS Code extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to format files.
 
 ## Releasing
 

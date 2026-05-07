@@ -100,9 +100,7 @@ export default function Root(): JSX.Element {
             <App1A data-dynamic="registry" data-item="fallback" />
             <foo:bar value="namespaced-three" />
             <svg:path d="M20,20 L30,30" xlink:href="#three" />
-            {(() => (
-              <NamespaceComponents.Button label="Inline child" />
-            ))()}
+            {(() => <NamespaceComponents.Button label="Inline child" />)()}
             {/* JSXEmptyExpr in action */}
           </section>,
         ]}

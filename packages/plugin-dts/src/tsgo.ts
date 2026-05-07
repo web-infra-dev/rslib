@@ -21,9 +21,8 @@ const require = createRequire(import.meta.url);
 const logPrefixTsgo = color.dim('[tsgo]');
 
 const getTsgoBinPath = async (): Promise<string> => {
-  const tsgoPkgPath = require.resolve(
-    '@typescript/native-preview/package.json',
-  );
+  const tsgoPkgPath =
+    require.resolve('@typescript/native-preview/package.json');
 
   const libPath = path.resolve(
     path.dirname(tsgoPkgPath),

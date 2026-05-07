@@ -168,9 +168,8 @@ test('user externals', async () => {
   `,
   );
 
-  expect(
-    queryContent(contents.esm1!, 'index.js', { basename: true }).content,
-  ).toMatchInlineSnapshot(`
+  expect(queryContent(contents.esm1!, 'index.js', { basename: true }).content)
+    .toMatchInlineSnapshot(`
     "import node_fs from "node:fs";
     import lodash from "lodash";
     import zip from "lodash/zip";

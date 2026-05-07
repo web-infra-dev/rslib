@@ -542,9 +542,8 @@ describe('Should compose create Rsbuild config correctly', () => {
     };
 
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
-    expect(
-      composedRsbuildConfig[0]?.config.output?.distPath,
-    ).toMatchInlineSnapshot(`
+    expect(composedRsbuildConfig[0]?.config.output?.distPath)
+      .toMatchInlineSnapshot(`
       {
         "css": "./",
         "cssAsync": "./",
@@ -553,9 +552,8 @@ describe('Should compose create Rsbuild config correctly', () => {
         "root": "dist/esm",
       }
     `);
-    expect(
-      composedRsbuildConfig[1]?.config.output?.distPath,
-    ).toMatchInlineSnapshot(`
+    expect(composedRsbuildConfig[1]?.config.output?.distPath)
+      .toMatchInlineSnapshot(`
       {
         "css": "./",
         "cssAsync": "./",
@@ -656,9 +654,8 @@ describe('syntax', () => {
 
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
-    expect(
-      composedRsbuildConfig[0]!.config.output?.overrideBrowserslist,
-    ).toMatchInlineSnapshot(`
+    expect(composedRsbuildConfig[0]!.config.output?.overrideBrowserslist)
+      .toMatchInlineSnapshot(`
       [
         "last 1 node versions",
       ]
@@ -679,9 +676,8 @@ describe('syntax', () => {
 
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
-    expect(
-      composedRsbuildConfig[0]!.config.output?.overrideBrowserslist,
-    ).toMatchInlineSnapshot(`
+    expect(composedRsbuildConfig[0]!.config.output?.overrideBrowserslist)
+      .toMatchInlineSnapshot(`
       [
         "last 1 Chrome versions",
         "last 1 Firefox versions",
@@ -707,9 +703,8 @@ describe('syntax', () => {
 
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
-    expect(
-      composedRsbuildConfig[0]!.config.output?.overrideBrowserslist,
-    ).toMatchInlineSnapshot(`
+    expect(composedRsbuildConfig[0]!.config.output?.overrideBrowserslist)
+      .toMatchInlineSnapshot(`
       [
         "last 1 node versions",
       ]
@@ -728,9 +723,8 @@ describe('syntax', () => {
 
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
-    expect(
-      composedRsbuildConfig[0]!.config.output?.overrideBrowserslist,
-    ).toMatchInlineSnapshot(`
+    expect(composedRsbuildConfig[0]!.config.output?.overrideBrowserslist)
+      .toMatchInlineSnapshot(`
       [
         "chrome >= 51",
         "edge >= 79",
@@ -755,9 +749,8 @@ describe('minify', () => {
 
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
-    expect(
-      composedRsbuildConfig[0]!.config.output?.minify,
-    ).toMatchInlineSnapshot(`
+    expect(composedRsbuildConfig[0]!.config.output?.minify)
+      .toMatchInlineSnapshot(`
       {
         "css": false,
         "js": true,
@@ -823,9 +816,8 @@ describe('minify', () => {
       composedRsbuildConfig[1]!.config.output?.minify,
     ).toMatchInlineSnapshot('true');
 
-    expect(
-      composedRsbuildConfig[2]!.config.output?.minify,
-    ).toMatchInlineSnapshot(`
+    expect(composedRsbuildConfig[2]!.config.output?.minify)
+      .toMatchInlineSnapshot(`
       {
         "css": true,
         "js": false,
