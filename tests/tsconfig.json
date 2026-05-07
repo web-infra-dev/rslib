@@ -4,15 +4,17 @@
     "noEmit": true,
     "composite": true,
     "allowJs": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx"
   },
   "include": [
-    "e2e/**/*.ts",
-    "integration/**/**.test.ts",
-    "integration/**/rslib.config.ts",
-    "integration/**/rslib.config.js",
+    "../rstest.config.ts",
+    "*.ts",
+    "scripts/**/*.ts",
     "benchmark/**/*.ts",
-    "playwright.config.ts"
+    "e2e/**/*.ts",
+    "integration/**/*.test.*",
+    "integration/**/*.config.*"
   ],
   "exclude": ["**/node_modules", "**/.*/"],
   "references": [

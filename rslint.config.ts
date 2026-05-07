@@ -6,7 +6,15 @@ export default defineConfig([
   {
     languageOptions: {
       parserOptions: {
-        project: ['./packages/*/tsconfig.json'],
+        project: [
+          './packages/*/tsconfig.json',
+          './packages/core/tests/tsconfig.json',
+          './examples/*/tsconfig.json',
+          './examples/module-federation/*/tsconfig.json',
+          './tests/tsconfig.json',
+          './tests/scripts/tsconfig.json',
+          './tests/type-tests/*/tsconfig.json',
+        ],
       },
     },
     rules: {
