@@ -1,2 +1,2 @@
-export * from './helper';
-export * from './shared';
+export * from './helper.ts';
+export * from './shared.ts';
