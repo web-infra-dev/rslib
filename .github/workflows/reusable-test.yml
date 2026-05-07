@@ -58,6 +58,7 @@ jobs:
         if: ${{ steps.changes.outputs.changed == 'true' }}
         run: pnpm install
 
+      # TODO: remove it after Rslint fix skipLibCheck issue
       - name: Type Check
         if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'ut' }}
         run: pnpm run type-check

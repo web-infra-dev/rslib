@@ -482,7 +482,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         oneOf: [
           /* config.module.rule('css').oneOf('css-url') */
           {
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             use: [
               /* config.module.rule('css').oneOf('css-url').use('css-url') */
               {
@@ -717,7 +717,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/image/[name][ext]'
             }
@@ -770,7 +770,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('svg').oneOf('svg-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/svg/[name].svg'
             }
@@ -825,7 +825,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/media/[name][ext]'
             }
@@ -878,7 +878,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('font').oneOf('font-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/font/[name][ext]'
             }
@@ -1236,7 +1236,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         oneOf: [
           /* config.module.rule('css').oneOf('css-url') */
           {
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             use: [
               /* config.module.rule('css').oneOf('css-url').use('css-url') */
               {
@@ -1471,7 +1471,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/image/[name][ext]'
             }
@@ -1524,7 +1524,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('svg').oneOf('svg-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/svg/[name].svg'
             }
@@ -1579,7 +1579,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/media/[name][ext]'
             }
@@ -1632,7 +1632,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('font').oneOf('font-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/font/[name][ext]'
             }
@@ -1972,7 +1972,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         oneOf: [
           /* config.module.rule('css').oneOf('css-url') */
           {
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             use: [
               /* config.module.rule('css').oneOf('css-url').use('css-url') */
               {
@@ -2204,7 +2204,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/image/[name][ext]'
             }
@@ -2240,7 +2240,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('svg').oneOf('svg-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/svg/[name].svg'
             }
@@ -2276,7 +2276,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/media/[name][ext]'
             }
@@ -2312,7 +2312,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('font').oneOf('font-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/font/[name][ext]'
             }
@@ -2630,7 +2630,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         oneOf: [
           /* config.module.rule('css').oneOf('css-url') */
           {
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             use: [
               /* config.module.rule('css').oneOf('css-url').use('css-url') */
               {
@@ -2862,7 +2862,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/image/[name][ext]'
             }
@@ -2898,7 +2898,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('svg').oneOf('svg-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/svg/[name].svg'
             }
@@ -2934,7 +2934,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/media/[name][ext]'
             }
@@ -2970,7 +2970,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('font').oneOf('font-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/font/[name][ext]'
             }
@@ -3225,7 +3225,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         oneOf: [
           /* config.module.rule('css').oneOf('css-url') */
           {
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             use: [
               /* config.module.rule('css').oneOf('css-url').use('css-url') */
               {
@@ -3481,7 +3481,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/image/[name][ext]'
             }
@@ -3517,7 +3517,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('svg').oneOf('svg-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/svg/[name].svg'
             }
@@ -3553,7 +3553,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/media/[name][ext]'
             }
@@ -3589,7 +3589,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('font').oneOf('font-asset-url') */
           {
             type: 'asset/resource',
-            resourceQuery: /^\\?url$/,
+            resourceQuery: /[?&]url(?:&|=|$)/,
             generator: {
               filename: 'static/font/[name][ext]'
             }

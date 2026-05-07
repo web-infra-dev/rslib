@@ -2,8 +2,7 @@ name: Ecosystem CI
 
 on:
   push:
-    # TODO: remove `ci-test` after testing.
-    branches: ['main', 'ci-test']
+    branches: ['main']
 
   workflow_dispatch:
     inputs:

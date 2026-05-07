@@ -21,7 +21,7 @@
 - Build: `pnpm build` (all) and `pnpm build:examples`.
 - Watch dev: `pnpm -C packages/core dev` (or other package).
 - Lint/format: `pnpm lint`; auto-fix: `pnpm format`.
-- Type-check: `pnpm type-check`.
+- Type-check: `pnpm lint`.
 - Tests:
   - `pnpm test` runs the entire suites.
   - `pnpm test:unit` scopes to unit tests.
