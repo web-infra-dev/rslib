@@ -152,11 +152,11 @@ export default defineConfig({
 
 ## React Compiler
 
-Rslib supports enabling [React Compiler](https://react.dev/learn/react-compiler) through `@rsbuild/plugin-babel` and `babel-plugin-react-compiler`.
+React Compiler is a build-time tool that automatically optimizes your React app. It works with plain JavaScript and understands the Rules of React, so you don't need to rewrite any code to use it.
 
-When using `create-rslib`, React Compiler is optional and is only enabled when you explicitly select `React Compiler` in optional tools, or pass `--tools react-compiler` in non-interactive mode.
+In Rslib, you can enable React Compiler through `@rsbuild/plugin-babel` and `babel-plugin-react-compiler`.
 
-React Compiler requires React 19 or higher. In scaffolded projects that enable React Compiler, the `peerDependencies` should be specified as `"react": ">=19.0.0"`.
+Before using React Compiler, we recommend reading the [React Compiler documentation](https://react.dev/learn/react-compiler) to understand its functionality, current state, and usage.
 
 ## SVGR
 

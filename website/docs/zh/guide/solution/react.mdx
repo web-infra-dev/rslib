@@ -152,11 +152,11 @@ export default defineConfig({
 
 ## React Compiler
 
-Rslib 支持通过 `@rsbuild/plugin-babel` 与 `babel-plugin-react-compiler` 启用 [React Compiler](https://zh-hans.react.dev/learn/react-compiler)。
+React Compiler 是一个构建时工具，它可以自动优化你的 React 应用。它支持纯 JavaScript，并且了解 React 的规则，因此你无需重写任何代码即可使用它。
 
-使用 `create-rslib` 时，React Compiler 是一个可选工具，只有在你显式选择可选工具中的 `React Compiler`，或在非交互模式传入 `--tools react-compiler` 时才会启用。
+在 Rslib 中，你可以通过 `@rsbuild/plugin-babel` 与 `babel-plugin-react-compiler` 启用 React Compiler。
 
-React Compiler 需要 React 19 或更高版本。在启用了 React Compiler 的脚手架项目中，`peerDependencies` 应声明为 `"react": ">=19.0.0"`。
+在开始使用 React Compiler 之前，建议阅读 [React Compiler 文档](https://zh-hans.react.dev/learn/react-compiler)，以了解 React Compiler 的功能、当前状态和使用方法。
 
 ## SVGR
 
