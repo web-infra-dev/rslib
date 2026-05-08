@@ -137,7 +137,7 @@ create({
   extraTools: [
     {
       value: 'react-compiler',
-      label: 'React Compiler',
+      label: 'React Compiler - optimization',
       order: 'pre',
       when: ({ templateName }) => templateName.startsWith('react-'),
       action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
