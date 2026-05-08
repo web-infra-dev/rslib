@@ -132,8 +132,8 @@ export const createAndValidate = (
       ).toBeFalsy();
       expect(configContent).not.toContain('pluginBabel');
       expect(configContent).not.toContain('babel-plugin-react-compiler');
-      expect(pkgJson.peerDependencies.react).toBe('>=16.9.0');
-      expect(pkgJson.peerDependencies['react-dom']).toBe('>=16.9.0');
+      expect(pkgJson.peerDependencies.react).toBe('>=16.14.0');
+      expect(pkgJson.peerDependencies['react-dom']).toBe('>=16.14.0');
     }
   }
 
