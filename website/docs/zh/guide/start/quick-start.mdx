@@ -60,15 +60,16 @@ import { PackageManagerTabs } from '@theme';
 
 `create-rslib` 能够帮助你设置以下常用工具，你可以使用上下箭头和空格进行选择。如果你不需要这些工具，可以直接按回车跳过。
 
-| 工具                                   | 用途                                 |
-| -------------------------------------- | ------------------------------------ |
-| [ESLint](https://eslint.org/)          | 代码检查                             |
-| [Rslint](https://rslint.rs/)           | 代码检查                             |
-| [Prettier](https://prettier.io/)       | 代码格式化                           |
-| [Biome](https://biomejs.dev/)          | 代码检查和格式化                     |
-| [Rspress](https://rspress.rs/zh/)      | 组件文档，仅 React + TypeScript 模板 |
-| [Storybook](https://storybook.js.org/) | 组件开发和预览，仅 React 和 Vue 模板 |
-| [Rstest](https://rstest.rs/zh/)        | 测试                                 |
+| 工具                                                                  | 用途                                   |
+| --------------------------------------------------------------------- | -------------------------------------- |
+| [ESLint](https://eslint.org/)                                         | 代码检查                               |
+| [Rslint](https://rslint.rs/)                                          | 代码检查                               |
+| [Prettier](https://prettier.io/)                                      | 代码格式化                             |
+| [Biome](https://biomejs.dev/)                                         | 代码检查和格式化                       |
+| [Rspress](https://rspress.rs/zh/)                                     | 组件文档，仅 React + TypeScript 模板   |
+| [Storybook](https://storybook.js.org/)                                | 组件开发和预览，仅 React 和 Vue 模板   |
+| [Rstest](https://rstest.rs/zh/)                                       | 测试                                   |
+| [React Compiler](https://react.dev/learn/react-compiler/introduction) | React Compiler 编译优化，仅 React 模板 |
 
 ### 可选技能
 
@@ -119,6 +120,9 @@ npx -y create-rslib@latest my-project -t react
 # 指定多个 tools
 npx -y create-rslib@latest my-project -t react --tools rstest,biome
 
+# 为 React 模板启用 React Compiler
+npx -y create-rslib@latest my-project -t react --tools react-compiler
+
 # 为 Coding Agents 安装可选 skill
 npx -y create-rslib@latest my-project -t react --skill rslib-best-practices
 ```
@@ -142,7 +146,7 @@ Available templates:
   node-dual-js, node-dual-ts, node-esm-js, node-esm-ts, react-js, react-ts, vue-js, vue-ts
 
 Optional tools:
-  eslint, rslint, biome, prettier, rspress, storybook, rstest
+  eslint, rslint, biome, prettier, rspress, storybook, rstest, react-compiler
 
 Optional skills:
   rslib-best-practices, rstest-best-practices, rspress-custom-theme, rspress-description-generator

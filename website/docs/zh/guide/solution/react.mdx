@@ -23,6 +23,8 @@ import { PackageManagerTabs } from '@theme';
 
 然后，当提示 "Select template" 选择 `React`。
 
+如果你希望在脚手架项目中启用 React Compiler，可以在可选工具中选择 `React Compiler`，或在非交互模式使用 `--tools react-compiler`。
+
 ## 在现有 Rslib 项目中使用
 
 开发 React 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。 这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。

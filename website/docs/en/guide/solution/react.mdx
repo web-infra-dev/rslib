@@ -23,6 +23,8 @@ import { PackageManagerTabs } from '@theme';
 
 Then select `React` when prompted to "Select template".
 
+If you want to enable React Compiler in the scaffolded project, select `React Compiler` in optional tools, or use `--tools react-compiler` in non-interactive mode.
+
 ## Use Rslib in an existing project
 
 To develop a React library, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default, which differs from the default target of Rsbuild.

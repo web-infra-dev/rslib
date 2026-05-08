@@ -60,15 +60,16 @@ When creating a project, you can choose from the following templates provided by
 
 `create-rslib` can help you set up the following commonly used tools. Use the arrow keys to navigate and the space bar to select. Press Enter without selecting anything to skip these tools.
 
-| Tool                                   | Use                                                       |
-| -------------------------------------- | --------------------------------------------------------- |
-| [ESLint](https://eslint.org/)          | Linting                                                   |
-| [Rslint](https://rslint.rs/)           | Linting                                                   |
-| [Prettier](https://prettier.io/)       | Formatting                                                |
-| [Biome](https://biomejs.dev/)          | Linting and formatting                                    |
-| [Rspress](https://rspress.rs/)         | Component documentation, React + TypeScript template      |
-| [Storybook](https://storybook.js.org/) | Component development and preview, React or Vue templates |
-| [Rstest](https://rstest.rs/)           | Testing                                                   |
+| Tool                                                                  | Use                                                       |
+| --------------------------------------------------------------------- | --------------------------------------------------------- |
+| [ESLint](https://eslint.org/)                                         | Linting                                                   |
+| [Rslint](https://rslint.rs/)                                          | Linting                                                   |
+| [Prettier](https://prettier.io/)                                      | Formatting                                                |
+| [Biome](https://biomejs.dev/)                                         | Linting and formatting                                    |
+| [Rspress](https://rspress.rs/)                                        | Component documentation, React + TypeScript template      |
+| [Storybook](https://storybook.js.org/)                                | Component development and preview, React or Vue templates |
+| [Rstest](https://rstest.rs/)                                          | Testing                                                   |
+| [React Compiler](https://react.dev/learn/react-compiler/introduction) | React Compiler transform, React templates                 |
 
 ### Optional skills
 
@@ -119,6 +120,9 @@ npx -y create-rslib@latest my-project -t react
 # Specify multiple tools
 npx -y create-rslib@latest my-project -t react --tools rstest,biome
 
+# Enable React Compiler for React template
+npx -y create-rslib@latest my-project -t react --tools react-compiler
+
 # Install an optional skill for coding agents
 npx -y create-rslib@latest my-project -t react --skill rslib-best-practices
 ```
@@ -142,7 +146,7 @@ Available templates:
   node-dual-js, node-dual-ts, node-esm-js, node-esm-ts, react-js, react-ts, vue-js, vue-ts
 
 Optional tools:
-  eslint, rslint, biome, prettier, rspress, storybook, rstest
+  eslint, rslint, biome, prettier, rspress, storybook, rstest, react-compiler
 
 Optional skills:
   rslib-best-practices, rstest-best-practices, rspress-custom-theme, rspress-description-generator
