@@ -23,8 +23,6 @@ import { PackageManagerTabs } from '@theme';
 
 然后，当提示 "Select template" 选择 `React`。
 
-如果你希望在脚手架项目中启用 React Compiler，可以在可选工具中选择 `React Compiler`，或在非交互模式使用 `--tools react-compiler`。
-
 ## 在现有 Rslib 项目中使用
 
 开发 React 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。 这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。
@@ -151,6 +149,14 @@ export default defineConfig({
   ],
 });
 ```
+
+## React Compiler
+
+Rslib 支持通过 `@rsbuild/plugin-babel` 与 `babel-plugin-react-compiler` 启用 [React Compiler](https://zh-hans.react.dev/learn/react-compiler)。
+
+使用 `create-rslib` 时，React Compiler 是一个可选工具，只有在你显式选择可选工具中的 `React Compiler`，或在非交互模式传入 `--tools react-compiler` 时才会启用。
+
+React Compiler 需要 React 19 或更高版本。在启用了 React Compiler 的脚手架项目中，`peerDependencies` 应声明为 `"react": ">=19.0.0"`。
 
 ## SVGR
 
