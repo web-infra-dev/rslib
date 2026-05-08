@@ -136,6 +136,28 @@ create({
   mapRslintTemplate,
   extraTools: [
     {
+      value: 'react-compiler',
+      label: 'React Compiler',
+      order: 'pre',
+      when: ({ templateName }) => templateName.startsWith('react-'),
+      action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
+        const toolFolder = path.join(
+          __dirname,
+          '..',
+          'template-react-compiler',
+        );
+        const subFolder = path.join(toolFolder, templateName);
+
+        copyFolder({
+          from: subFolder,
+          to: distFolder,
+          isMergePackageJson: true,
+        });
+
+        addAgentsMdSearchDirs(toolFolder);
+      },
+    },
+    {
       value: 'rspress',
       label: 'Rspress - documentation',
       when: ({ templateName }) => templateName.startsWith('react-ts'),
