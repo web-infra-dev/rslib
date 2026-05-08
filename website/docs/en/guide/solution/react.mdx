@@ -156,6 +156,36 @@ React Compiler is a build-time tool that automatically optimizes your React app.
 
 In Rslib, you can enable React Compiler through `@rsbuild/plugin-babel` and `babel-plugin-react-compiler`.
 
+### How to use
+
+Steps to use React Compiler in Rslib:
+
+1. Upgrade `react` and `react-dom` to v19. If you can't upgrade, install `react-compiler-runtime` to run the compiled code on earlier versions.
+2. React Compiler currently only provides a Babel plugin. Install `@rsbuild/plugin-babel` and `babel-plugin-react-compiler`.
+3. Register the Babel plugin in your Rslib config file:
+
+```ts title="rslib.config.ts"
+import { pluginBabel } from '@rsbuild/plugin-babel';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  plugins: [
+    pluginReact(),
+    pluginBabel({
+      include: /\.[jt]sx?$/,
+      exclude: [/[\\/]node_modules[\\/]/],
+      babelLoaderOptions(opts) {
+        opts.plugins ??= [];
+        opts.plugins.unshift('babel-plugin-react-compiler');
+      },
+    }),
+  ],
+});
+```
+
+If you only want to compile JSX/TSX files, you can use `include: /\.(?:jsx|tsx)$/` instead, but custom hooks in `.ts` files will not be optimized.
+
 Before using React Compiler, we recommend reading the [React Compiler documentation](https://react.dev/learn/react-compiler) to understand its functionality, current state, and usage.
 
 See the [react-compiler example](https://github.com/rstackjs/rstack-examples/tree/main/rslib/react-compiler) for a complete configuration.
