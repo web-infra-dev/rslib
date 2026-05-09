@@ -158,10 +158,10 @@ In Rslib, you can enable React Compiler through `@rsbuild/plugin-babel` and `bab
 
 ### How to use
 
-Steps to use React Compiler in Rslib:
+React Compiler supports React 17, 18, and 19. The following shows the basic setup for React 19:
 
-1. Upgrade `react` and `react-dom` to v19. If you can't upgrade, install `react-compiler-runtime` to run the compiled code on earlier versions.
-2. React Compiler currently only provides a Babel plugin. Install `@rsbuild/plugin-babel` and `babel-plugin-react-compiler`.
+1. Upgrade `react` and `react-dom` to v19
+2. Install `@rsbuild/plugin-babel` and `babel-plugin-react-compiler` as devDependencies
 3. Register the Babel plugin in your Rslib config file:
 
 ```ts title="rslib.config.ts"
@@ -184,7 +184,30 @@ export default defineConfig({
 });
 ```
 
-If you only want to compile JSX/TSX files, you can use `include: /\.(?:jsx|tsx)$/` instead, but custom hooks in `.ts` files will not be optimized.
+::: tip Using React 17 or 18
+
+If you're using React 17 or 18, you need to:
+
+1. Install `react-compiler-runtime` as a production dependency.
+2. Configure the `target` option in the Babel plugin configuration:
+   ```ts
+   babelLoaderOptions(opts) {
+     opts.plugins ??= [];
+     opts.plugins.unshift([
+       'babel-plugin-react-compiler',
+       {
+         target: '18', // Set to '17' if using React 17
+       },
+     ]);
+   }
+   ```
+   The `target` option tells the compiler which React version to generate code for.
+
+:::
+
+### Optional: Targeting specific file types
+
+If you only want to compile JSX/TSX files, you can use `include: /\.(?:jsx|tsx)$/` instead of `/\.[jt]sx?$/`, but custom hooks in `.ts` files will not be optimized.
 
 Before using React Compiler, we recommend reading the [React Compiler documentation](https://react.dev/learn/react-compiler) to understand its functionality, current state, and usage.
 
