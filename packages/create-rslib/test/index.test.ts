@@ -33,16 +33,33 @@ const CASES_NODE_ESM: TemplateCase[] = [
 const CASES_REACT: TemplateCase[] = [
   createCase('react', 'js'),
   createCase('react', 'ts'),
+  createCase('react', 'js', ['react-compiler']),
+  createCase('react', 'ts', ['react-compiler']),
   createCase('react', 'js', ['rstest', 'storybook']),
   createCase('react', 'ts', ['rstest', 'storybook']),
+  createCase('react', 'js', ['react-compiler', 'rstest', 'storybook']),
+  createCase('react', 'ts', ['react-compiler', 'rstest', 'storybook']),
   createCase('react', 'js', ['storybook']),
   createCase('react', 'js', ['rstest']),
+  createCase('react', 'js', ['react-compiler', 'storybook']),
+  createCase('react', 'js', ['react-compiler', 'rstest']),
   createCase('react', 'ts', ['storybook']),
   createCase('react', 'ts', ['rstest']),
+  createCase('react', 'ts', ['react-compiler', 'storybook']),
+  createCase('react', 'ts', ['react-compiler', 'rstest']),
   createCase('react', 'ts', ['rspress']),
   createCase('react', 'ts', ['rspress', 'storybook']),
   createCase('react', 'ts', ['rspress', 'rstest']),
   createCase('react', 'ts', ['rspress', 'rstest', 'storybook']),
+  createCase('react', 'ts', ['react-compiler', 'rspress']),
+  createCase('react', 'ts', ['react-compiler', 'rspress', 'storybook']),
+  createCase('react', 'ts', ['react-compiler', 'rspress', 'rstest']),
+  createCase('react', 'ts', [
+    'react-compiler',
+    'rspress',
+    'rstest',
+    'storybook',
+  ]),
 ];
 
 const CASES_VUE: TemplateCase[] = [
