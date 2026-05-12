@@ -710,9 +710,11 @@ const composeFormatConfig = ({
             output: {
               iife: true,
               asyncChunks: false,
+              chunkFormat: false,
               library: {
                 type: 'module',
               },
+              chunkLoading: 'import',
             },
             optimization: {
               nodeEnv: process.env.NODE_ENV,

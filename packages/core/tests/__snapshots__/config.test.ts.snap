@@ -2558,6 +2558,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     webassemblyModuleFilename: 'static/wasm/[contenthash:10].module.wasm',
     iife: true,
     asyncChunks: false,
+    chunkFormat: false,
+    chunkLoading: 'import',
     globalObject: 'globalThis'
   },
   resolve: {
@@ -4683,6 +4685,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           "output": {
             "asyncChunks": false,
+            "chunkFormat": false,
+            "chunkLoading": "import",
             "iife": true,
             "library": {
               "type": "module",
