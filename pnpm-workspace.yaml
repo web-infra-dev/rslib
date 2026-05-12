@@ -8,13 +8,27 @@ packages:
   - '!**/compile/**'
   - '!**/dist-types/**'
 
-onlyBuiltDependencies:
-  - 'core-js'
-  - 'core-js-pure'
-  - 'esbuild'
-  - 'simple-git-hooks'
+allowBuilds:
+  core-js-pure: false
+  esbuild: true
+  simple-git-hooks: false
+
+autoInstallPeers: false
+dedupePeers: true
+hoistPattern: []
+
+# Reduce the risk of installing compromised packages
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - '@rspack/*'
+  - '@rsbuild/*'
+  - '@rslib/*'
+  - '@rspress/*'
+  - '@rstest/*'
+  - '@rsdoctor/*'
+  - '@rslint/*'
+
+# Prevent un-reviewed build scripts
+strictDepBuilds: true
 
 strictPeerDependencies: false
-autoInstallPeers: false
-hoistPattern: []
-dedupePeers: true
