@@ -137,4 +137,4 @@ Repository maintainers can publish a new version of changed packages to npm.
 2. Ensure the release pull request CI check passes.
 3. Run the [release action](https://github.com/web-infra-dev/rslib/actions/workflows/release.yml) to publish packages to npm.
 4. Merge the release pull request to `main`.
-5. Use the `create-draft-release-notes` skill to create a draft [GitHub release note](https://github.com/web-infra-dev/rspack/releases). Review the draft release note, optionally add release highlights, and publish it.
+5. Use the `create-draft-release-notes` skill to create a draft [GitHub release note](https://github.com/web-infra-dev/rslib/releases). Review the draft release note, optionally add release highlights, and publish it.
