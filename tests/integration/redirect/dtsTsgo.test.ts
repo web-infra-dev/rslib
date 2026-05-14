@@ -31,6 +31,8 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/default/esm/config/load.d.ts": "export declare const loadConfig: () => void;
       ",
+        "<ROOT>/tests/integration/redirect/dts/dist-tsgo/default/esm/foo.d.mts": "export declare const fooMjs = "foo-mjs";
+      ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/default/esm/foo/foo.d.ts": "import { logRequest } from '../logger';
       import { logger } from '../../../../compile/prebundle-pkg';
       import { logRequest as logRequest2 } from '../logger';
@@ -40,11 +42,12 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/default/esm/index.d.ts": "import { logRequest } from './logger';
       import { logger } from '../../../compile/prebundle-pkg';
+      import { fooMjs } from './foo.mjs';
       import type { Baz } from './';
       import type { LoggerOptions } from './types';
       import { defaultOptions } from './types.js';
       type sources = typeof import('./logger');
-      export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions, };
       export * from './foo';
       export * from './logger';
       export type { Foo } from './types';
@@ -98,6 +101,8 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/path-false/esm/config/load.d.ts": "export declare const loadConfig: () => void;
       ",
+        "<ROOT>/tests/integration/redirect/dts/dist-tsgo/path-false/esm/foo.d.mts": "export declare const fooMjs = "foo-mjs";
+      ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/path-false/esm/foo/foo.d.ts": "import { logRequest } from '@src/logger';
       import { logger } from 'prebundle-pkg';
       import { logRequest as logRequest2 } from '../logger';
@@ -107,11 +112,12 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/path-false/esm/index.d.ts": "import { logRequest } from '@src/logger';
       import { logger } from 'prebundle-pkg';
+      import { fooMjs } from './foo.mjs';
       import type { Baz } from 'self-entry';
       import type { LoggerOptions } from './types';
       import { defaultOptions } from './types.js';
       type sources = typeof import('@src/logger');
-      export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions, };
       export * from '@src/foo';
       export * from '@src/logger';
       export type { Foo } from '@src/types';
@@ -165,6 +171,8 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/extension-true/esm/config/load.d.ts": "export declare const loadConfig: () => void;
       ",
+        "<ROOT>/tests/integration/redirect/dts/dist-tsgo/extension-true/esm/foo.d.mts": "export declare const fooMjs = "foo-mjs";
+      ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/extension-true/esm/foo/foo.d.ts": "import { logRequest } from '../logger.js';
       import { logger } from '../../../../compile/prebundle-pkg/index.js';
       import { logRequest as logRequest2 } from '../logger.js';
@@ -174,11 +182,12 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/extension-true/esm/index.d.ts": "import { logRequest } from './logger.js';
       import { logger } from '../../../compile/prebundle-pkg/index.js';
+      import { fooMjs } from './foo.mjs';
       import type { Baz } from './index.js';
       import type { LoggerOptions } from './types.js';
       import { defaultOptions } from './types.js';
       type sources = typeof import('./logger.js');
-      export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions, };
       export * from './foo/index.js';
       export * from './logger.js';
       export type { Foo } from './types.js';
@@ -232,6 +241,8 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/path-false-extension-true/esm/config/load.d.ts": "export declare const loadConfig: () => void;
       ",
+        "<ROOT>/tests/integration/redirect/dts/dist-tsgo/path-false-extension-true/esm/foo.d.mts": "export declare const fooMjs = "foo-mjs";
+      ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/path-false-extension-true/esm/foo/foo.d.ts": "import { logRequest } from '@src/logger';
       import { logger } from 'prebundle-pkg';
       import { logRequest as logRequest2 } from '../logger.js';
@@ -241,11 +252,12 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/path-false-extension-true/esm/index.d.ts": "import { logRequest } from '@src/logger';
       import { logger } from 'prebundle-pkg';
+      import { fooMjs } from './foo.mjs';
       import type { Baz } from 'self-entry';
       import type { LoggerOptions } from './types.js';
       import { defaultOptions } from './types.js';
       type sources = typeof import('@src/logger');
-      export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions, };
       export * from '@src/foo';
       export * from '@src/logger';
       export type { Foo } from '@src/types';
@@ -299,6 +311,8 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/auto-extension-true/esm/config/load.d.mts": "export declare const loadConfig: () => void;
       ",
+        "<ROOT>/tests/integration/redirect/dts/dist-tsgo/auto-extension-true/esm/foo.d.mts": "export declare const fooMjs = "foo-mjs";
+      ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/auto-extension-true/esm/foo/foo.d.mts": "import { logRequest } from '../logger.mjs';
       import { logger } from '../../../../compile/prebundle-pkg/index.js';
       import { logRequest as logRequest2 } from '../logger.mjs';
@@ -308,11 +322,12 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/auto-extension-true/esm/index.d.mts": "import { logRequest } from './logger.mjs';
       import { logger } from '../../../compile/prebundle-pkg/index.js';
+      import { fooMjs } from './foo.mjs';
       import type { Baz } from './index.mjs';
       import type { LoggerOptions } from './types.mjs';
       import { defaultOptions } from './types.mjs';
       type sources = typeof import('./logger.mjs');
-      export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions, };
       export * from './foo/index.mjs';
       export * from './logger.mjs';
       export type { Foo } from './types.mjs';
@@ -363,6 +378,8 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/auto-extension-true/cjs/config/load.d.ts": "export declare const loadConfig: () => void;
       ",
+        "<ROOT>/tests/integration/redirect/dts/dist-tsgo/auto-extension-true/cjs/foo.d.mts": "export declare const fooMjs = "foo-mjs";
+      ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/auto-extension-true/cjs/foo/foo.d.ts": "import { logRequest } from '../logger.js';
       import { logger } from '../../../../compile/prebundle-pkg/index.js';
       import { logRequest as logRequest2 } from '../logger.js';
@@ -372,11 +389,12 @@ describe('dts redirect with tsgo', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-tsgo/auto-extension-true/cjs/index.d.ts": "import { logRequest } from './logger.js';
       import { logger } from '../../../compile/prebundle-pkg/index.js';
+      import { fooMjs } from './foo.mjs';
       import type { Baz } from './index.js';
       import type { LoggerOptions } from './types.js';
       import { defaultOptions } from './types.js';
       type sources = typeof import('./logger.js');
-      export { sources, type Baz as self, logRequest, logger, type LoggerOptions, defaultOptions, };
+      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions, };
       export * from './foo/index.js';
       export * from './logger.js';
       export type { Foo } from './types.js';
