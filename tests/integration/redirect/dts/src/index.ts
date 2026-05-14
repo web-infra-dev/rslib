@@ -1,5 +1,6 @@
 import { logRequest } from '@src/logger';
 import { logger } from 'prebundle-pkg';
+import { fooMjs } from './foo.mjs';
 import type { Baz } from 'self-entry';
 import type { LoggerOptions } from './types';
 import { defaultOptions } from './types.js';
@@ -11,6 +12,7 @@ export {
   type Baz as self,
   logRequest,
   logger,
+  fooMjs,
   type LoggerOptions,
   defaultOptions,
 };

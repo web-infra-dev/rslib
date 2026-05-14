@@ -469,9 +469,38 @@ export async function redirectDtsImports(
       if (ext) {
         if (JS_EXTENSIONS_PATTERN.test(redirectImportPath)) {
           if (redirect.extension) {
+            let redirectJsExtension = jsExtension;
+            const pathWithoutExtension = redirectImportPath.replace(
+              /\.[^.]+$/,
+              '',
+            );
+            let importDtsExtension: '.d.mts' | '.d.cts' | undefined;
+
+            // A source may explicitly import './foo.mjs' while foo is emitted
+            // as foo.d.mts. In that case, keep the module-kind extension instead
+            // of blindly using the current declaration file's JS extension.
+            if (['.mjs', '.mjsx', '.mts', '.mtsx'].includes(ext)) {
+              importDtsExtension = '.d.mts';
+            } else if (['.cjs', '.cjsx', '.cts', '.ctsx'].includes(ext)) {
+              importDtsExtension = '.d.cts';
+            }
+
+            if (
+              importDtsExtension &&
+              (await pathExists(
+                join(
+                  dirname(dtsFile),
+                  `${pathWithoutExtension}${importDtsExtension}`,
+                ),
+              ))
+            ) {
+              redirectJsExtension =
+                importDtsExtension === '.d.mts' ? '.mjs' : '.cjs';
+            }
+
             redirectImportPath = redirectImportPath.replace(
               /\.[^.]+$/,
-              jsExtension,
+              redirectJsExtension,
             );
           }
         } else {
