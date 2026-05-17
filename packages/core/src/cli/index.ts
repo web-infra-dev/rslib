@@ -39,9 +39,6 @@ function setupLogLevel() {
 }
 
 export function runCLI(): void {
-  // make it easier to identify the process via activity monitor or other tools
-  process.title = 'rslib-node';
-
   initNodeEnv();
   setupLogLevel();
   showGreeting();
