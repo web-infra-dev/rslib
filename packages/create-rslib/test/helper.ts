@@ -15,10 +15,6 @@ export const expectPackageJson = (
   expect(pkgJson.scripts.dev).toBe('rslib --watch');
   if (template === 'vue' && lang === 'ts') {
     expect(pkgJson.scripts.build).toBe('rslib && vue-tsc');
-  } else if (template === 'svelte') {
-    expect(pkgJson.scripts.build).toBe(
-      'rslib && svelte-check --tsconfig ./tsconfig.json',
-    );
   } else {
     expect(pkgJson.scripts.build).toBe('rslib');
   }
@@ -118,6 +114,9 @@ export const createAndValidate = (
     expect(pkgJson.devDependencies['svelte-check']).toBeTruthy();
     expect(pkgJson.devDependencies.svelte2tsx).toBeTruthy();
     expect(pkgJson.peerDependencies.svelte).toBe('^5.0.0');
+    expect(pkgJson.scripts.check).toBe(
+      'svelte-check --tsconfig ./tsconfig.json',
+    );
     expect(existsSync(path.join(dir, 'svelte.config.ts'))).toBeTruthy();
     expect(
       existsSync(path.join(dir, 'scripts/rslib-plugin-svelte-dts.ts')),
