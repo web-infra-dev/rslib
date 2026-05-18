@@ -13,9 +13,12 @@ export const expectPackageJson = (
 ) => {
   expect(pkgJson.name).toBe(name);
   expect(pkgJson.scripts.dev).toBe('rslib --watch');
-  // Vue TS template has additional vue-tsc check
   if (template === 'vue' && lang === 'ts') {
     expect(pkgJson.scripts.build).toBe('rslib && vue-tsc');
+  } else if (template === 'svelte') {
+    expect(pkgJson.scripts.build).toBe(
+      'rslib && svelte-check --tsconfig ./tsconfig.json',
+    );
   } else {
     expect(pkgJson.scripts.build).toBe('rslib');
   }
@@ -107,6 +110,18 @@ export const createAndValidate = (
     for (const dep of storybookDeps) {
       expect(pkgJson.devDependencies[dep]).toBeTruthy();
     }
+  }
+
+  if (templateCase.template === 'svelte') {
+    expect(pkgJson.devDependencies['@rsbuild/plugin-svelte']).toBeTruthy();
+    expect(pkgJson.devDependencies.svelte).toBeTruthy();
+    expect(pkgJson.devDependencies['svelte-check']).toBeTruthy();
+    expect(pkgJson.devDependencies.svelte2tsx).toBeTruthy();
+    expect(pkgJson.peerDependencies.svelte).toBe('^5.0.0');
+    expect(existsSync(path.join(dir, 'svelte.config.ts'))).toBeTruthy();
+    expect(
+      existsSync(path.join(dir, 'scripts/rslib-plugin-svelte-dts.ts')),
+    ).toBeTruthy();
   }
 
   if (templateCase.template === 'react') {
