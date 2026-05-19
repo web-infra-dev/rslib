@@ -21,15 +21,15 @@ import { PackageManagerTabs } from '@theme';
   }}
 />
 
-然后，当提示 "Select template" 时选择 `Svelte`。Svelte 模板仅提供 TypeScript 版本，因此不会再出现 JavaScript / TypeScript 语言选择。
+然后，当提示 "Select template" 时选择 `Svelte`，并在提示 "Select language" 时选择 `TypeScript` 或 `JavaScript`。
 
 ::: note
 
-1. `create-rslib` 内置模板目前提供 Svelte 5 + TypeScript 项目。
+1. `create-rslib` 内置模板提供 Svelte 5 + TypeScript 和 Svelte 5 + JavaScript 项目。
 
-2. Svelte 组件类型声明由模板内的本地 `scripts/rslib-plugin-svelte-dts.ts` 辅助插件生成，该插件使用 `svelte2tsx`。因此 [lib.dts](/config/lib/dts) / [lib.redirect.dts](/config/lib/redirect#redirectdts) / [lib.banner.dts](/config/lib/banner#bannerdts) / [lib.footer.dts](/config/lib/footer#bannerdts) 不适用于 Svelte 模板。
+2. TypeScript 模板的 Svelte 组件类型声明由本地 `scripts/rslib-plugin-svelte-dts.ts` 辅助插件生成，该插件使用 `svelte2tsx`。因此 [lib.dts](/config/lib/dts) / [lib.redirect.dts](/config/lib/redirect#redirectdts) / [lib.banner.dts](/config/lib/banner#bannerdts) / [lib.footer.dts](/config/lib/footer#bannerdts) 不适用于 TypeScript 模板的类型产物。
 
-3. 模板默认发布编译后的 JavaScript 和类型声明，不发布原始 `.svelte` 源码文件。
+3. TypeScript 模板发布编译后的 JavaScript 和类型声明。JavaScript 模板对齐 React JavaScript 模板的行为，不生成类型声明。两个模板默认都不发布原始 `.svelte` 源码文件。
 
 :::
 
@@ -94,7 +94,7 @@ import 'your-package/style.css';
 
 ## 类型声明
 
-模板通过 `dts: false` 关闭 Rslib 内置类型声明流程，并在构建完成后运行一个本地 Rslib 插件：
+TypeScript 模板通过 `dts: false` 关闭 Rslib 内置类型声明流程，并在构建完成后运行一个本地 Rslib 插件：
 
 ```ts
 svelteDtsPlugin({
@@ -111,7 +111,7 @@ dist/index.d.ts
 dist/Button.svelte.d.ts
 ```
 
-因为类型声明由 `svelte2tsx` 生成，所以 `dts.bundle`、`redirect.dts`、`banner.dts`、`footer.dts` 等 Rslib 类型声明选项不属于该模板的类型声明流程。
+因为类型声明由 `svelte2tsx` 生成，所以 `dts.bundle`、`redirect.dts`、`banner.dts`、`footer.dts` 等 Rslib 类型声明选项不属于 TypeScript 模板的类型声明流程。JavaScript 模板不生成类型声明。
 
 ## Bundleless 模式
 

@@ -26,6 +26,7 @@ export const TEMPLATES: string[] = [
   'react-ts',
   'vue-js',
   'vue-ts',
+  'svelte-js',
   'svelte-ts',
 ];
 
@@ -49,18 +50,15 @@ async function getTemplateName({ template }: Argv) {
     }),
   );
 
-  let language = 'ts';
-  if (templateName !== 'svelte') {
-    language = checkCancel<string>(
-      await select({
-        message: 'Select language',
-        options: [
-          { value: 'ts', label: 'TypeScript' },
-          { value: 'js', label: 'JavaScript' },
-        ],
-      }),
-    );
-  }
+  const language = checkCancel<string>(
+    await select({
+      message: 'Select language',
+      options: [
+        { value: 'ts', label: 'TypeScript' },
+        { value: 'js', label: 'JavaScript' },
+      ],
+    }),
+  );
 
   return `${templateName}-${language}`;
 }
@@ -71,6 +69,7 @@ function mapESLintTemplate(templateName: string): ESLintTemplateName {
     case 'react-ts':
     case 'vue-js':
     case 'vue-ts':
+    case 'svelte-js':
     case 'svelte-ts':
       return templateName;
     default: {
@@ -98,6 +97,7 @@ function mapTestingToolTemplate(templateName: string): string {
     case 'react-ts':
     case 'vue-js':
     case 'vue-ts':
+    case 'svelte-js':
     case 'svelte-ts':
       return templateName;
     case 'node-dual-js':

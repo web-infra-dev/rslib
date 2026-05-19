@@ -74,7 +74,9 @@ const CASES_VUE: TemplateCase[] = [
 ];
 
 const CASES_SVELTE: TemplateCase[] = [
+  createCase('svelte', 'js'),
   createCase('svelte', 'ts'),
+  createCase('svelte', 'js', ['rstest']),
   createCase('svelte', 'ts', ['rstest']),
 ];
 
@@ -86,6 +88,7 @@ describe('parseTemplateName', () => {
     expect(parseTemplateName('react-js')).toBe('react-js');
     expect(parseTemplateName('vue-ts')).toBe('vue-ts');
     expect(parseTemplateName('vue-js')).toBe('vue-js');
+    expect(parseTemplateName('svelte-js')).toBe('svelte-js');
     expect(parseTemplateName('svelte-ts')).toBe('svelte-ts');
   });
 
