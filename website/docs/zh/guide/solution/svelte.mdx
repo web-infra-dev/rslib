@@ -27,7 +27,7 @@ import { PackageManagerTabs } from '@theme';
 
 1. `create-rslib` 内置模板提供 Svelte 5 + TypeScript 和 Svelte 5 + JavaScript 项目。
 
-2. TypeScript 模板的 Svelte 组件类型声明由本地 `scripts/rslib-plugin-svelte-dts.ts` 辅助插件生成，该插件使用 `svelte2tsx`。因此 [lib.dts](/config/lib/dts) / [lib.redirect.dts](/config/lib/redirect#redirectdts) / [lib.banner.dts](/config/lib/banner#bannerdts) / [lib.footer.dts](/config/lib/footer#bannerdts) 不适用于 TypeScript 模板的类型产物。
+2. TypeScript 模板的 Svelte 组件类型声明由本地 `scripts/rslib-plugin-svelte-dts.ts` 辅助插件生成，该插件使用 `svelte2tsx`。因此 [lib.dts](/config/lib/dts) / [lib.redirect.dts](/config/lib/redirect#redirectdts) / [lib.banner.dts](/config/lib/banner#bannerdts) / [lib.footer.dts](/config/lib/footer#footerdts) 不适用于 TypeScript 模板的类型产物。
 
 3. TypeScript 模板发布编译后的 JavaScript 和类型声明。模板默认不发布原始 `.svelte` 源码文件。
 
