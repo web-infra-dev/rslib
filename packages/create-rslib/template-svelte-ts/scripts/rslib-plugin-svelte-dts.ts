@@ -1,7 +1,9 @@
+import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
-import process from 'node:process';
 import type { RsbuildPlugin } from '@rslib/core';
 import { emitDts } from 'svelte2tsx';
+
+const require = createRequire(import.meta.url);
 
 export interface SvelteDtsPluginOptions {
   declarationDir?: string;
@@ -9,6 +11,9 @@ export interface SvelteDtsPluginOptions {
   tsconfig?: string;
   svelteShimsPath?: string;
 }
+
+const resolveProjectPath = (rootPath: string, path: string): string =>
+  resolve(rootPath, path);
 
 export function svelteDtsPlugin(
   options: SvelteDtsPluginOptions = {},
@@ -21,15 +26,20 @@ export function svelteDtsPlugin(
           declarationDir = './dist',
           libRoot = './src',
           tsconfig = 'tsconfig.json',
-          svelteShimsPath = 'node_modules/svelte2tsx/svelte-shims-v4.d.ts',
         } = options;
+
+        const rootPath = api.context.rootPath;
+        const svelteShimsPath =
+          options.svelteShimsPath ?
+            resolveProjectPath(rootPath, options.svelteShimsPath)
+          : require.resolve('svelte2tsx/svelte-shims-v4.d.ts');
 
         try {
           await emitDts({
-            declarationDir: resolve(process.cwd(), declarationDir),
-            svelteShimsPath: resolve(process.cwd(), svelteShimsPath),
-            libRoot: resolve(process.cwd(), libRoot),
-            tsconfig: resolve(process.cwd(), tsconfig),
+            declarationDir: resolveProjectPath(rootPath, declarationDir),
+            svelteShimsPath,
+            libRoot: resolveProjectPath(rootPath, libRoot),
+            tsconfig: resolveProjectPath(rootPath, tsconfig),
           });
 
           console.log('Svelte DTS generation complete');
