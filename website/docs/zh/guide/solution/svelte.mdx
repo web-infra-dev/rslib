@@ -115,7 +115,7 @@ dist/Button.svelte.d.ts
 
 ## Bundleless 模式
 
-Svelte 组件库不默认推荐使用 bundleless 模式。本地验证中，Svelte loader 默认的 CSS 抽取流程在 bundleless 输出里会产生无效的 loader-request import；只保留 index 入口的 bundleless 输出也可能引用缺失的组件 chunk。
+Svelte 组件库不默认推荐使用 bundleless 模式。Svelte loader 默认的 CSS 抽取流程在 bundleless 输出里可能产生无效的 loader-request import；只保留 index 入口的 bundleless 输出也可能引用缺失的组件 chunk。
 
 如果你仍然希望输出 bundleless JavaScript，需要关闭 Svelte loader 的 CSS 抽取：
 
