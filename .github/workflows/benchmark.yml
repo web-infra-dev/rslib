@@ -10,6 +10,8 @@ on:
         required: true
         default: 'main'
 
+permissions: {}
+
 jobs:
   benchmark:
     runs-on: ubuntu-24.04
@@ -23,7 +25,7 @@ jobs:
         run: echo "TODO:\ Support benchmark in Rstest, this job is only a placeholder for the time being."
 
       # - name: Checkout
-      #   uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      #   uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       #   with:
       #     fetch-depth: 10
       #     ref: ${{ inputs.ref || 'main' }}
@@ -34,7 +36,7 @@ jobs:
       #     corepack enable
 
       # - name: Setup Node.js ${{ matrix.node-version }}
-      #   uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      #   uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
       #   with:
       #     node-version: ${{ matrix.node-version }}
       #     cache: 'pnpm'
@@ -44,7 +46,7 @@ jobs:
 
       # # only run benchmark in Ubuntu
       # - name: Benchmarks (Rstest)
-      #   uses: CodSpeedHQ/action@0010eb0ca6e89b80c88e8edaaa07cfe5f3e6664d # v3
+      #   uses: CodSpeedHQ/action@0010eb0ca6e89b80c88e8edaaa07cfe5f3e6664d # v3.5.0
       #   with:
       #     run: pnpm run test:benchmark
       #     # token retrieved from the CodSpeed app at the previous step

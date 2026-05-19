@@ -9,8 +9,7 @@ on:
 
   workflow_dispatch:
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   ut:
@@ -19,6 +18,8 @@ jobs:
         runner: [ubuntu-latest, windows-latest]
         node-version: [24]
     uses: ./.github/workflows/reusable-test.yml
+    permissions:
+      contents: read
     with:
       runner: ${{ matrix.runner }}
       node-version: ${{ matrix.node-version }}
@@ -31,6 +32,8 @@ jobs:
         node-version: [24]
 
     uses: ./.github/workflows/reusable-test.yml
+    permissions:
+      contents: read
     with:
       runner: ${{ matrix.runner }}
       node-version: ${{ matrix.node-version }}
@@ -43,6 +46,8 @@ jobs:
         node-version: ['25']
 
     uses: ./.github/workflows/reusable-test.yml
+    permissions:
+      contents: read
     with:
       runner: ${{ matrix.runner }}
       node-version: ${{ matrix.node-version }}
@@ -54,6 +59,8 @@ jobs:
         runner: [ubuntu-latest, windows-latest]
         node-version: [24]
     uses: ./.github/workflows/reusable-test.yml
+    permissions:
+      contents: read
     with:
       runner: ${{ matrix.runner }}
       node-version: ${{ matrix.node-version }}
