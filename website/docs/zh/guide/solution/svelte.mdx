@@ -21,7 +21,7 @@ import { PackageManagerTabs } from '@theme';
   }}
 />
 
-然后，当提示 "Select template" 时选择 `Svelte`，并在提示 "Select language" 时选择 `TypeScript` 或 `JavaScript`。
+然后，当提示 "Select template" 时选择 `Svelte`。
 
 ::: note
 
@@ -29,7 +29,7 @@ import { PackageManagerTabs } from '@theme';
 
 2. TypeScript 模板的 Svelte 组件类型声明由本地 `scripts/rslib-plugin-svelte-dts.ts` 辅助插件生成，该插件使用 `svelte2tsx`。因此 [lib.dts](/config/lib/dts) / [lib.redirect.dts](/config/lib/redirect#redirectdts) / [lib.banner.dts](/config/lib/banner#bannerdts) / [lib.footer.dts](/config/lib/footer#bannerdts) 不适用于 TypeScript 模板的类型产物。
 
-3. TypeScript 模板发布编译后的 JavaScript 和类型声明。JavaScript 模板对齐 React JavaScript 模板的行为，不生成类型声明。两个模板默认都不发布原始 `.svelte` 源码文件。
+3. TypeScript 模板发布编译后的 JavaScript 和类型声明。模板默认不发布原始 `.svelte` 源码文件。
 
 :::
 
@@ -37,7 +37,7 @@ import { PackageManagerTabs } from '@theme';
 
 开发 Svelte 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。
 
-要编译 Svelte（`.svelte` 组件），你需要注册 [@rsbuild/plugin-svelte](https://rsbuild.rs/zh/plugins/list/plugin-svelte) 插件。该插件将自动添加 Svelte 构建所需的配置。
+要编译 Svelte（`.svelte` 组件），你需要注册 [@rsbuild/plugin-svelte](https://rsbuild.rs/zh/plugins/list/plugin-svelte) 插件。该插件内部集成了 [svelte-loader](https://github.com/sveltejs/svelte-loader)，将自动添加 Svelte 构建所需的配置。
 
 推荐使用 bundle 模式，让 Rslib 输出编译后的 ESM 和抽取后的 CSS：
 
@@ -111,7 +111,7 @@ dist/index.d.ts
 dist/Button.svelte.d.ts
 ```
 
-因为类型声明由 `svelte2tsx` 生成，所以 `dts.bundle`、`redirect.dts`、`banner.dts`、`footer.dts` 等 Rslib 类型声明选项不属于 TypeScript 模板的类型声明流程。JavaScript 模板不生成类型声明。
+因为类型声明由 `svelte2tsx` 生成，所以 `dts.bundle`、`redirect.dts`、`banner.dts`、`footer.dts` 等 Rslib 类型声明选项不属于 TypeScript 模板的类型声明流程。
 
 ## Bundleless 模式
 
@@ -133,6 +133,7 @@ export default defineConfig({
   },
   plugins: [
     pluginSvelte({
+      // [!code highlight:3]
       svelteLoaderOptions: {
         emitCss: false,
       },
