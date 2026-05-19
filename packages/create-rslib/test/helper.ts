@@ -112,7 +112,7 @@ export const createAndValidate = (
   if (templateCase.template === 'react') {
     const configFile = path.join(
       dir,
-      templateCase.lang === 'ts' ? 'rslib.config.ts' : 'rslib.config.mjs',
+      templateCase.lang === 'ts' ? 'rslib.config.ts' : 'rslib.config.js',
     );
     const configContent = fse.readFileSync(configFile, 'utf-8');
 
