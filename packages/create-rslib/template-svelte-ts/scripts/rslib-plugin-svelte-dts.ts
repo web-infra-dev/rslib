@@ -1,9 +1,7 @@
-import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import type { RsbuildPlugin } from '@rslib/core';
 import { emitDts } from 'svelte2tsx';
-
-const require = createRequire(import.meta.url);
 
 export interface SvelteDtsPluginOptions {
   declarationDir?: string;
@@ -29,22 +27,26 @@ export function svelteDtsPlugin(
         } = options;
 
         const rootPath = api.context.rootPath;
+        const declarationPath = resolveProjectPath(rootPath, declarationDir);
         const svelteShimsPath =
           options.svelteShimsPath ?
             resolveProjectPath(rootPath, options.svelteShimsPath)
-          : require.resolve('svelte2tsx/svelte-shims-v4.d.ts');
+          : fileURLToPath(import.meta.resolve('svelte2tsx/svelte-shims-v4.d.ts'));
 
         try {
           await emitDts({
-            declarationDir: resolveProjectPath(rootPath, declarationDir),
+            declarationDir: declarationPath,
             svelteShimsPath,
             libRoot: resolveProjectPath(rootPath, libRoot),
             tsconfig: resolveProjectPath(rootPath, tsconfig),
           });
 
-          console.log('Svelte DTS generation complete');
+          api.logger.ready(
+            `declaration files generated with svelte2tsx in ${declarationPath}.`,
+          );
         } catch (error) {
-          console.error('Svelte DTS generation failed:', error);
+          api.logger.error('Failed to generate declaration files with svelte2tsx.');
+          api.logger.error(error);
           throw error;
         }
       });
