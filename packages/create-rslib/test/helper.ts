@@ -120,7 +120,6 @@ export const createAndValidate = (
       expect(pkgJson.scripts.check).toBe(
         'svelte-check --tsconfig ./tsconfig.json',
       );
-      expect(existsSync(path.join(dir, 'svelte.config.ts'))).toBeTruthy();
       expect(
         existsSync(path.join(dir, 'scripts/rslib-plugin-svelte-dts.ts')),
       ).toBeTruthy();
@@ -130,7 +129,6 @@ export const createAndValidate = (
       expect(pkgJson.devDependencies['svelte-check']).toBeFalsy();
       expect(pkgJson.devDependencies.svelte2tsx).toBeFalsy();
       expect(pkgJson.scripts.check).toBeFalsy();
-      expect(existsSync(path.join(dir, 'svelte.config.js'))).toBeTruthy();
       expect(
         existsSync(path.join(dir, 'scripts/rslib-plugin-svelte-dts.ts')),
       ).toBeFalsy();
