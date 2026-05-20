@@ -1,14 +1,9 @@
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import type { RsbuildPlugin } from '@rslib/core';
-import { emitDts } from 'svelte2tsx';
+import { emitDts, type EmitDtsConfig } from 'svelte2tsx';
 
-export interface SvelteDtsPluginOptions {
-  declarationDir?: string;
-  libRoot?: string;
-  tsconfig?: string;
-  svelteShimsPath?: string;
-}
+export type SvelteDtsPluginOptions = Partial<EmitDtsConfig>;
 
 const resolveProjectPath = (rootPath: string, path: string): string =>
   resolve(rootPath, path);
