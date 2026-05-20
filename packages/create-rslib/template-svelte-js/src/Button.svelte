@@ -1,35 +1,59 @@
 <script>
-  let { label = 'Demo Button', onclick } = $props();
-  let count = $state(0);
+  let {
+    primary = false,
+    backgroundColor,
+    size = 'medium',
+    label = 'Demo Button',
+    onClick,
+  } = $props();
 
-  function increment() {
-    count++;
-    onclick?.(count);
-  }
+  const mode = $derived(
+    primary ? 'demo-button--primary' : 'demo-button--secondary',
+  );
 </script>
 
-<button class="demo-button" onclick={increment}>
-  {label}: {count}
+<button
+  type="button"
+  class={["demo-button", `demo-button--${size}`, mode].join(' ')}
+  style:background-color={backgroundColor}
+  onclick={onClick}
+>
+  {label}
 </button>
 
 <style>
   .demo-button {
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    border: 1px solid #ff3e00;
-    border-radius: 4px;
-    background-color: #ff3e00;
-    color: white;
+    font-weight: 700;
+    border: 0;
+    border-radius: 3em;
     cursor: pointer;
-    transition: all 0.2s;
+    display: inline-block;
+    line-height: 1;
   }
 
-  .demo-button:hover {
-    background-color: #ff5722;
-    border-color: #ff5722;
+  .demo-button--primary {
+    color: white;
+    background-color: #1ea7fd;
   }
 
-  .demo-button:active {
-    transform: scale(0.98);
+  .demo-button--secondary {
+    color: #333;
+    background-color: transparent;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+  }
+
+  .demo-button--small {
+    font-size: 12px;
+    padding: 10px 16px;
+  }
+
+  .demo-button--medium {
+    font-size: 14px;
+    padding: 11px 20px;
+  }
+
+  .demo-button--large {
+    font-size: 16px;
+    padding: 12px 24px;
   }
 </style>
