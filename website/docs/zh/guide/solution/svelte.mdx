@@ -1,5 +1,5 @@
 ---
-description: '使用 Rslib 构建 Svelte 组件库，涵盖 Svelte 5、编译后 ESM 产物、本地类型声明生成、样式处理与包导出。'
+description: '使用 Rslib 构建 Svelte 组件库，涵盖 Svelte 5、编译后 ESM 产物、类型声明生成、样式处理与包导出。'
 ---
 
 # Svelte
@@ -23,16 +23,6 @@ import { PackageManagerTabs } from '@theme';
 
 然后，当提示 "Select template" 时选择 `Svelte`。
 
-::: note
-
-1. `create-rslib` 内置模板提供 Svelte 5 + TypeScript 和 Svelte 5 + JavaScript 项目。
-
-2. TypeScript 模板的 Svelte 组件类型声明由本地 `scripts/rslib-plugin-svelte-dts.ts` 辅助插件生成，该插件使用 [svelte2tsx](https://github.com/sveltejs/language-tools/tree/master/packages/svelte2tsx)。因此 [lib.dts](/config/lib/dts) / [lib.redirect.dts](/config/lib/redirect#redirectdts) / [lib.banner.dts](/config/lib/banner#bannerdts) / [lib.footer.dts](/config/lib/footer#footerdts) 不适用于 TypeScript 模板的类型产物。
-
-3. TypeScript 模板发布编译后的 JavaScript 和类型声明。模板默认不发布原始 `.svelte` 源码文件。
-
-:::
-
 ## 在现有 Rslib 项目中使用
 
 开发 Svelte 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。
@@ -47,9 +37,6 @@ import { defineConfig } from '@rslib/core';
 import { svelteDtsPlugin } from './scripts/rslib-plugin-svelte-dts';
 
 export default defineConfig({
-  resolve: {
-    conditionNames: ['svelte', 'browser', '...'],
-  },
   lib: [
     {
       format: 'esm',
@@ -59,16 +46,17 @@ export default defineConfig({
   output: {
     target: 'web',
   },
+  resolve: {
+    conditionNames: ['svelte', 'browser', '...'],
+  },
   plugins: [
     pluginSvelte(),
-    svelteDtsPlugin({
-      declarationDir: './dist',
-      libRoot: './src',
-      tsconfig: 'tsconfig.json',
-    }),
+    svelteDtsPlugin(),
   ],
 });
 ```
+
+更多配置可以参考 [Rsbuild plugins 配置](/config/rsbuild/plugins) 与 [@rsbuild/plugin-svelte](https://rsbuild.rs/zh/plugins/list/plugin-svelte) 插件文档。
 
 生成的包会导出编译后的入口，并显式导出 CSS：
 
@@ -85,24 +73,15 @@ export default defineConfig({
 }
 ```
 
-使用方可以导入组件；当使用默认的 CSS 抽取产物时，也需要显式导入样式：
-
-```ts
-import { Button } from 'your-package';
-import 'your-package/style.css';
-```
-
 ## 类型声明
 
-TypeScript 模板通过 `dts: false` 关闭 Rslib 内置类型声明流程，并在构建完成后运行一个本地 Rslib 插件：
+Svelte 项目的类型声明通过 [svelte2tsx](https://github.com/sveltejs/language-tools/tree/master/packages/svelte2tsx) 生成。因此，你需要通过 `dts: false` 关闭 Rslib 内置类型声明流程，并在构建完成后运行一个本地 Rslib 插件：
 
 ```ts
-svelteDtsPlugin({
-  declarationDir: './dist',
-  libRoot: './src',
-  tsconfig: 'tsconfig.json',
-});
+svelteDtsPlugin();
 ```
+
+如果你需要自定义输出目录、组件源码目录或 tsconfig 路径，可以通过 `declarationDir`、`libRoot`、`tsconfig` 等选项进行配置。
 
 这个辅助插件会调用 `svelte2tsx.emitDts`，并输出类似 bundleless 结构的类型声明文件，例如：
 
@@ -111,36 +90,4 @@ dist/index.d.ts
 dist/Button.svelte.d.ts
 ```
 
-因为类型声明由 `svelte2tsx` 生成，所以 `dts.bundle`、`redirect.dts`、`banner.dts`、`footer.dts` 等 Rslib 类型声明选项不属于 TypeScript 模板的类型声明流程。
-
-## Bundleless 模式
-
-Svelte 组件库不默认推荐使用 bundleless 模式。Svelte loader 默认的 CSS 抽取流程在 bundleless 输出里可能产生无效的 loader-request import；只保留 index 入口的 bundleless 输出也可能引用缺失的组件 chunk。
-
-如果你仍然希望输出 bundleless JavaScript，需要关闭 Svelte loader 的 CSS 抽取：
-
-```ts title="rslib.config.ts"
-export default defineConfig({
-  lib: [
-    {
-      bundle: false,
-      format: 'esm',
-      dts: false,
-    },
-  ],
-  output: {
-    target: 'web',
-  },
-  plugins: [
-    pluginSvelte({
-      // [!code highlight:3]
-      svelteLoaderOptions: {
-        emitCss: false,
-      },
-    }),
-    svelteDtsPlugin(),
-  ],
-});
-```
-
-设置 `emitCss: false` 后，Svelte 组件样式会由编译后的组件 JavaScript 注入，而不是输出为 `dist/index.css`，因此你需要从 `package.json` 中移除 `./style.css` export。
+Svelte 的类型声明文件由 `svelte2tsx` 生成，所以 [lib.dts](/config/lib/dts) / [lib.redirect.dts](/config/lib/redirect#redirectdts) / [lib.banner.dts](/config/lib/banner#bannerdts) / [lib.footer.dts](/config/lib/footer#footerdts) 在 Svelte 项目中不生效。
