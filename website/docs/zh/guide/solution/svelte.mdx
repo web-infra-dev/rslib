@@ -75,13 +75,15 @@ export default defineConfig({
 
 ## 类型声明
 
-Svelte 项目的类型声明通过 [svelte2tsx](https://github.com/sveltejs/language-tools/tree/master/packages/svelte2tsx) 生成。因此，你需要通过 `dts: false` 关闭 Rslib 内置类型声明流程，并在构建完成后运行一个本地 Rslib 插件：
+Svelte 项目的类型声明通过 [svelte2tsx](https://github.com/sveltejs/language-tools/blob/master/packages/svelte2tsx/) 生成。因此，你需要通过 `dts: false` 关闭 Rslib 内置类型声明流程，并在构建完成后运行一个本地 Rslib 插件：
 
 ```ts
 svelteDtsPlugin();
 ```
 
 如果你需要自定义输出目录、组件源码目录或 tsconfig 路径，可以通过 `declarationDir`、`libRoot`、`tsconfig` 等选项进行配置。
+
+如果你需要进一步自定义声明生成行为，可以参考 `svelte2tsx` 的 [`emitDts` 配置项](https://github.com/sveltejs/language-tools/blob/master/packages/svelte2tsx/src/emitDts.ts)。
 
 这个辅助插件会调用 `svelte2tsx.emitDts`，并输出类似 bundleless 结构的类型声明文件，例如：
 
