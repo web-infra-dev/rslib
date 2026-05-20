@@ -2,9 +2,6 @@ import { pluginSvelte } from '@rsbuild/plugin-svelte';
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  resolve: {
-    conditionNames: ['svelte', 'browser', '...'],
-  },
   lib: [
     {
       format: 'esm',
@@ -13,6 +10,9 @@ export default defineConfig({
   ],
   output: {
     target: 'web',
+  },
+  resolve: {
+    conditionNames: ['svelte', 'browser', '...'],
   },
   plugins: [pluginSvelte()],
 });
