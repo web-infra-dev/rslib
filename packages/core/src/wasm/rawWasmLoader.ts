@@ -8,10 +8,11 @@ import {
 } from './utils';
 
 export type RawWasmLoaderOptions = {
+  format: 'esm' | 'cjs';
   target: 'web' | 'node';
 };
 
-const createNodeFacade = (
+const createEsmNodeFacade = (
   emittedPath: string,
   imports: WebAssembly.ModuleImportDescriptor[],
   exportsList: WebAssembly.ModuleExportDescriptor[],
@@ -27,12 +28,7 @@ const { instance: __rslib_wasm_instance } = await WebAssembly.instantiate(
 ${createExportsSource(exportsList)}
 `;
 
-const toRelativeAssetUrl = (emittedPath: string): string =>
-  emittedPath.startsWith('./') || emittedPath.startsWith('../')
-    ? emittedPath
-    : `./${emittedPath}`;
-
-const createWebFacade = (
+const createEsmWebFacade = (
   emittedPath: string,
   imports: WebAssembly.ModuleImportDescriptor[],
   exportsList: WebAssembly.ModuleExportDescriptor[],
@@ -45,6 +41,56 @@ const { instance: __rslib_wasm_instance } = await WebAssembly.instantiateStreami
 );
 ${createExportsSource(exportsList)}
 `;
+
+const createCjsNodeFacade = (
+  emittedPath: string,
+  imports: WebAssembly.ModuleImportDescriptor[],
+): string => `'use strict';
+
+const __rslib_fs = require('node:fs');
+const __rslib_path = require('node:path');
+
+const __rslib_wasm_path = __rslib_path.join(__dirname, ${toJsString(
+  emittedPath,
+)});
+const __rslib_wasm_bytes = __rslib_fs.readFileSync(__rslib_wasm_path);
+${createImportsObjectSource(imports)};
+const __rslib_wasm_module = new WebAssembly.Module(__rslib_wasm_bytes);
+const __rslib_wasm_instance = new WebAssembly.Instance(
+  __rslib_wasm_module,
+  __rslib_wasm_imports,
+);
+
+module.exports = __rslib_wasm_instance.exports;
+module.exports.default = __rslib_wasm_instance.exports;
+`;
+
+const toRelativeAssetUrl = (emittedPath: string): string =>
+  emittedPath.startsWith('./') || emittedPath.startsWith('../')
+    ? emittedPath
+    : `./${emittedPath}`;
+
+const createFacade = ({
+  format,
+  target,
+  emittedPath,
+  imports,
+  exportsList,
+}: {
+  format: 'esm' | 'cjs';
+  target: 'web' | 'node';
+  emittedPath: string;
+  imports: WebAssembly.ModuleImportDescriptor[];
+  exportsList: WebAssembly.ModuleExportDescriptor[];
+}): string => {
+  if (format === 'cjs') {
+    return createCjsNodeFacade(emittedPath, imports);
+  }
+
+  return target === 'node'
+    ? createEsmNodeFacade(emittedPath, imports, exportsList)
+    : createEsmWebFacade(emittedPath, imports, exportsList);
+};
 
 const loader: Rspack.LoaderDefinition<RawWasmLoaderOptions> = async function (
   content,
@@ -71,12 +117,13 @@ const loader: Rspack.LoaderDefinition<RawWasmLoaderOptions> = async function (
 
   this.emitFile(fileName, bytes);
 
-  const facade =
-    options.target === 'node'
-      ? createNodeFacade(assetUrl, imports, exportsList)
-      : createWebFacade(assetUrl, imports, exportsList);
-
-  return facade;
+  return createFacade({
+    format: options.format,
+    target: options.target,
+    emittedPath: assetUrl,
+    imports,
+    exportsList,
+  });
 };
 
 export const raw = true;

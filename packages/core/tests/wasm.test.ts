@@ -3,7 +3,7 @@ import { composeCreateRsbuildConfig } from '../src/config';
 import type { RslibConfig } from '../src/types/config';
 
 describe('wasm config', () => {
-  test('should compose wasm config for web target', async () => {
+  test('should compose wasm config for web esm target', async () => {
     const config: RslibConfig = {
       lib: [
         {
@@ -26,11 +26,53 @@ describe('wasm config', () => {
     expect(result?.config?.plugins?.length).toBeGreaterThan(0);
   });
 
-  test('should reject wasm in non-esm output', async () => {
+  test('should compose wasm config for node cjs target', async () => {
     const config: RslibConfig = {
       lib: [
         {
           format: 'cjs',
+          bundle: true,
+          wasm: true,
+          output: {
+            target: 'node',
+          },
+          source: {
+            entry: {
+              index: './src/index.ts',
+            },
+          },
+        },
+      ],
+    };
+
+    const [result] = await composeCreateRsbuildConfig(config);
+    expect(result?.config?.plugins?.length).toBeGreaterThan(0);
+  });
+
+  test('should reject wasm in unsupported web cjs output', async () => {
+    const config: RslibConfig = {
+      lib: [
+        {
+          format: 'cjs',
+          bundle: true,
+          wasm: true,
+          output: {
+            target: 'web',
+          },
+        },
+      ],
+    };
+
+    await expect(composeCreateRsbuildConfig(config)).rejects.toThrow(
+      'Rslib WASM support currently only supports CJS output when target is "node".',
+    );
+  });
+
+  test('should reject wasm in unsupported format', async () => {
+    const config: RslibConfig = {
+      lib: [
+        {
+          format: 'umd',
           bundle: true,
           wasm: true,
         },
@@ -38,7 +80,7 @@ describe('wasm config', () => {
     };
 
     await expect(composeCreateRsbuildConfig(config)).rejects.toThrow(
-      'Rslib WASM support currently only works with ESM output. Use format: "esm".',
+      'Rslib WASM support does not support format "umd" yet.',
     );
   });
 
