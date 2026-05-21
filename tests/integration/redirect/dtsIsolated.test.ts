@@ -214,7 +214,7 @@ describe('dts redirect with isolated', () => {
     `);
   });
 
-  test('redirect.dts.path: false with dts.redirect.extension: true', async () => {
+  test('redirect.dts.path: false with redirect.dts.extension: true', async () => {
     expect(contents.esm3).toMatchInlineSnapshot(`
       {
         "<ROOT>/tests/integration/redirect/dts/dist-isolated/path-false-extension-true/esm/.hidden-folder/index.d.ts": "export declare const hiddenFolder = 'This is a hidden folder';

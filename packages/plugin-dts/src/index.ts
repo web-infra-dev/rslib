@@ -280,7 +280,8 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
             promiseResult = {
               status: 'success',
             };
-          } catch {
+          } catch (error) {
+            logger.error(error);
             promiseResult = {
               status: 'error',
               errorMessage: `Error occurred in ${isolatedDtsContext.name} declaration files generation.`,
