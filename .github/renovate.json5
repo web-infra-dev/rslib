@@ -6,6 +6,7 @@
     'helpers:pinGitHubActionDigests',
     'github>rstackjs/renovate:security',
   ],
+  ignorePaths: ['**/node_modules/**'],
   packageRules: [
     // Use chore as semantic commit type for commit messages
     {
