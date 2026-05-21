@@ -1,5 +1,5 @@
 ---
-description: '在 Rslib 中生成和打包 TypeScript 声明文件，涵盖 isolated declarations 与相关最佳实践。'
+description: '在 Rslib 中生成和打包 TypeScript 声明文件，涵盖 isolatedDeclarations 与相关最佳实践。'
 ---
 
 # 类型生成
@@ -44,14 +44,16 @@ Bundleless 类型为库中的每个模块生成单独的声明文件，就像 `t
 
 ## 如何在 Rslib 中生成类型声明文件
 
-Rslib 支持使用 [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) 和 [tsgo](https://github.com/microsoft/typescript-go) 两种方式来生成类型声明文件，并且支持使用 [API Extractor](https://api-extractor.com/) 将生成的类型声明文件打包。
+Rslib 支持使用 [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)、[tsgo](https://github.com/microsoft/typescript-go) 和 [`isolatedDeclarations`](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations) 生成类型声明文件，并且支持使用 [API Extractor](https://api-extractor.com/) 将生成的类型声明文件打包。
 
 | 类型       | 支持方式                                | 说明     |
 | ---------- | --------------------------------------- | -------- |
 | bundleless | TypeScript Compiler API                 | 默认方式 |
 | bundleless | tsgo                                    |          |
+| bundleless | isolatedDeclarations                    |          |
 | bundle     | TypeScript Compiler API + API Extractor | 默认方式 |
 | bundle     | tsgo + API Extractor                    |          |
+| bundle     | isolatedDeclarations + API Extractor    |          |
 
 ### 生成 bundleless 类型
 
@@ -135,6 +137,34 @@ export default {
 }
 ```
 
+### 使用 isolatedDeclarations 生成类型声明文件
+
+你可以开启 [dts.isolated](/config/lib/dts#dtsisolated)，使用 Rspack 内置的 SWC fast_dts 能力生成类型声明文件：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      dts: {
+        isolated: true, // [!code highlight]
+      },
+    },
+  ],
+};
+```
+
+启用该选项时，建议同时在 `tsconfig.json` 中开启 [isolatedDeclarations](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations)：
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "isolatedDeclarations": true
+  }
+}
+```
+
+关于适用场景、输出范围和使用条件，请参考 [dts.isolated](/config/lib/dts#dtsisolated) 配置文档。
+
 ### 注意事项
 
 Rslib 在生成类型声明文件的过程中，默认会强制设置 `tsconfig.json`
@@ -168,6 +198,7 @@ API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) 或 [t
 | [dts.abortOnError](/config/lib/dts#dtsabortonerror)                 | 当类型声明文件生成过程中出现错误时，是否中止构建过程。                         |
 | [dts.autoExtension](/config/lib/dts#dtsautoextension)               | 是否根据 [format](/config/lib/format) 选项自动设置类型声明文件扩展名。         |
 | [dts.alias](/config/lib/dts#dtsalias)                               | 类型声明文件的路径别名。                                                       |
+| [dts.isolated](/config/lib/dts#dtsisolated)                         | 是否使用 `isolatedDeclarations` 生成类型声明文件。                             |
 | [dts.tsgo](/config/lib/dts#dtstsgo)                                 | 是否使用 [tsgo](https://github.com/microsoft/typescript-go) 生成类型声明文件。 |
 | [banner.dts](/config/lib/banner#bannerdts)                          | 在每个类型声明文件顶部注入内容。                                               |
 | [footer.dts](/config/lib/footer#footerdts)                          | 在每个类型声明文件底部注入内容。                                               |

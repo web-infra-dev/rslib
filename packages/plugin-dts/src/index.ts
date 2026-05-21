@@ -9,6 +9,15 @@ import {
 import type { ParsedCommandLine } from 'typescript';
 
 import {
+  createIsolatedDtsContext,
+  type IsolatedDtsContext,
+  processIsolatedDts,
+} from './isolated';
+import {
+  resolveDtsGenerationBackend,
+  type DtsGenerationBackend,
+} from './backend';
+import {
   cleanDtsFiles,
   cleanTsBuildInfoFile,
   clearTempDeclarationDir,
@@ -36,6 +45,7 @@ export type PluginDtsOptions = {
   abortOnError?: boolean;
   dtsExtension?: string;
   alias?: Record<string, string>;
+  isolated?: boolean;
   autoExternal?:
     | boolean
     | {
@@ -55,7 +65,7 @@ export type DtsEntry = {
   path: string;
 };
 
-export type DtsGenOptions = Omit<PluginDtsOptions, 'bundle'> & {
+export type DtsGenOptions = Omit<PluginDtsOptions, 'bundle' | 'isolated'> & {
   bundle: boolean;
   name: string;
   cwd: string;
@@ -110,10 +120,35 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     });
     let promiseResult: TaskResult;
     let childProcesses: ChildProcess[] = [];
+    let dtsBackend: DtsGenerationBackend = options.tsgo
+      ? 'tsgo'
+      : options.isolated === true
+        ? 'isolated'
+        : 'tsc';
+    let dtsGenOptions: DtsGenOptions | undefined;
+    let isolatedDtsContext: IsolatedDtsContext | undefined;
+
+    api.modifyEnvironmentConfig((config, { mergeEnvironmentConfig }) => {
+      if (options.isolated !== true) {
+        return;
+      }
+
+      return mergeEnvironmentConfig(config, {
+        tools: {
+          swc: {
+            jsc: {
+              experimental: {
+                emitIsolatedDts: true,
+              },
+            },
+          },
+        },
+      });
+    });
 
     api.onBeforeEnvironmentCompile(
-      async ({ isWatch, isFirstCompile, environment }) => {
-        if (!isFirstCompile && !options.tsgo) {
+      async ({ isWatch, isFirstCompile, environment, bundlerConfig }) => {
+        if (dtsBackend === 'tsc' && !isFirstCompile) {
           return;
         }
 
@@ -174,18 +209,9 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           await cleanTsBuildInfoFile(tsconfigPath, rawCompilerOptions);
         }
 
-        const jsExtension = extname(import.meta.filename);
-        const childProcess = fork(
-          join(import.meta.dirname, `./dts${jsExtension}`),
-          [],
-          {
-            stdio: 'inherit',
-          },
-        );
+        dtsBackend = resolveDtsGenerationBackend(options);
 
-        childProcesses.push(childProcess);
-
-        const dtsGenOptions: DtsGenOptions = {
+        dtsGenOptions = {
           ...options,
           bundle,
           dtsEntry,
@@ -200,6 +226,27 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           loggerLevel: loggerLevel as LogLevel,
         };
 
+        if (dtsBackend === 'isolated') {
+          isolatedDtsContext = await createIsolatedDtsContext(
+            dtsGenOptions,
+            bundlerConfig,
+          );
+          dtsPromise = Promise.resolve({
+            status: 'success',
+          });
+          return;
+        }
+
+        const jsExtension = extname(import.meta.filename);
+        const childProcess = fork(
+          join(import.meta.dirname, `./dts${jsExtension}`),
+          [],
+          {
+            stdio: 'inherit',
+          },
+        );
+
+        childProcesses.push(childProcess);
         childProcess.send(dtsGenOptions);
 
         dtsPromise = new Promise<TaskResult>((resolve) => {
@@ -220,8 +267,25 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     );
 
     api.onAfterBuild({
-      handler: async ({ isFirstCompile }) => {
-        if (!isFirstCompile) {
+      handler: async ({ isFirstCompile, stats }) => {
+        if (dtsBackend === 'tsc' && !isFirstCompile) {
+          return;
+        }
+
+        if (isolatedDtsContext) {
+          try {
+            await processIsolatedDts(isolatedDtsContext, {
+              logSuccess: !stats?.hasErrors(),
+            });
+            promiseResult = {
+              status: 'success',
+            };
+          } catch {
+            promiseResult = {
+              status: 'error',
+              errorMessage: `Error occurred in ${isolatedDtsContext.name} declaration files generation.`,
+            };
+          }
           return;
         }
 
@@ -233,7 +297,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     });
 
     api.onAfterBuild(({ isFirstCompile }) => {
-      if (!isFirstCompile) {
+      if (dtsBackend === 'tsc' && !isFirstCompile) {
         return;
       }
 

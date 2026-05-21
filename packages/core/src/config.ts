@@ -1634,6 +1634,7 @@ const composeDtsConfig = async (
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
         autoExternal: getAutoExternalDefaultValue(format, autoExternal),
         alias: dts?.alias,
+        isolated: dts?.isolated,
         banner: banner?.dts,
         footer: footer?.dts,
         redirect: redirect?.dts,

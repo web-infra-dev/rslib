@@ -16,6 +16,7 @@ type Dts =
       abortOnError?: boolean;
       autoExtension?: boolean;
       alias?: Record<string, string>;
+      isolated?: boolean;
       tsgo?: boolean;
     }
   | boolean;
@@ -309,3 +310,63 @@ export default {
   "typescript.experimental.useTsgo": true
 }
 ```
+
+### dts.isolated
+
+- **类型：** `boolean`
+- **默认值：** `false`
+
+是否使用 `isolatedDeclarations` 生成类型声明文件。
+
+::: tip
+
+该选项在 Rslib v0.22.0 中新增，目前仍是实验性能力。
+
+:::
+
+开启后，Rslib 会通过 Rspack 内置的 SWC fast_dts 能力，在构建过程中直接生成类型声明文件。
+
+#### 基本用法
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      dts: {
+        isolated: true, // [!code highlight]
+      },
+    },
+  ],
+};
+```
+
+启用该选项时，建议同时在 `tsconfig.json` 中开启 [isolatedDeclarations](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations)，让 TypeScript 提前暴露不满足 `isolatedDeclarations` 约束的代码。
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "isolatedDeclarations": true
+  }
+}
+```
+
+#### 适用场景
+
+Rslib 默认通过 TypeScript Compiler API 生成类型声明文件，也可以通过 `dts.tsgo` 使用 `tsgo` 生成类型声明文件。与这两种方式不同，`dts.isolated` 不会在声明文件生成阶段执行完整类型检查，因此更适合与其他独立的高性能类型检查流程搭配使用。
+
+例如在 monorepo 项目中，可以配合 [`rslint --type-check`](https://rslint.rs/guide/type-checking) 使用该选项：
+
+- 由 `rslint --type-check` 作为统一的类型检查步骤。
+- 由 `dts.isolated` 负责在各个包构建时快速输出类型声明文件。
+
+这样既能保留完整的类型检查，又能减少每个包在构建阶段重复执行 TypeScript 类型分析、加载 TypeScript 或 `tsgo` 相关包及 native binding 的开销，让整体构建链路更轻量。
+
+#### 输出范围
+
+`dts.isolated` 基于 Rspack 构建时的模块依赖图生成类型声明文件。只有入口模块以及被入口模块引用到的模块会生成对应的声明文件。如果某个文件没有进入构建依赖图，它不会像 TypeScript 那样自动生成声明文件。如果你希望这类文件也生成声明文件，可以把它们加入 [source.entry](/config/rsbuild/source#sourceentry)，或确保它们被现有入口引用。
+
+#### 使用条件
+
+- `dts.isolated` 不能与 [dts.tsgo](/config/lib/dts#dtstsgo) 同时开启。
+- `dts.isolated` 不能与 [dts.build](/config/lib/dts#dtsbuild) 同时开启。
+- 开启 `dts.isolated` 时，不能将 [dts.abortOnError](/config/lib/dts#dtsabortonerror) 设置为 `false`。

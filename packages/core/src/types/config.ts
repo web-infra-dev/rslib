@@ -95,6 +95,12 @@ export type Dts =
        */
       alias?: Record<string, string>;
       /**
+       * Whether to generate declaration files with isolated dts emit in Rspack builtin swc loader.
+       * @defaultValue `false`
+       * @experimental
+       */
+      isolated?: boolean;
+      /**
        * Whether to generate declaration files with `tsgo`.
        * @experimental
        * @defaultValue `false`
