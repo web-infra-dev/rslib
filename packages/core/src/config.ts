@@ -13,6 +13,7 @@ import {
   type ToolsConfig,
 } from '@rsbuild/core';
 import { composeAssetConfig } from './asset/assetConfig';
+import { composeWasmConfig } from './wasm';
 import {
   DTS_EXTENSIONS_PATTERN,
   JS_EXTENSIONS_PATTERN,
@@ -1848,6 +1849,12 @@ async function composeLibRsbuildConfig(
     footer?.css,
   );
   const assetConfig = composeAssetConfig(bundle, format);
+  const wasmConfig = composeWasmConfig({
+    wasm: (config as LibConfig & { wasm?: boolean }).wasm,
+    target,
+    format,
+    bundle,
+  });
 
   const entryChunkConfig = composeEntryChunkConfig({
     enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
@@ -1892,6 +1899,7 @@ async function composeLibRsbuildConfig(
     entryConfig,
     cssConfig,
     assetConfig,
+    wasmConfig,
     entryChunkConfig,
     minifyConfig,
     dtsConfig,
@@ -1983,6 +1991,7 @@ export async function composeCreateRsbuildConfig(
           umdName: true,
           outBase: true,
           experiments: true,
+          wasm: true,
         }),
       ),
     };
