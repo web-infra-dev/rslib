@@ -232,6 +232,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       setup() {}
     },
     {
+      name: 'rsbuild:worker',
+      setup() {}
+    },
+    {
       name: 'rsbuild:swc',
       setup() {}
     },
@@ -613,6 +617,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /\\.(?:ts|tsx|jsx|mts|cts)$/
         ],
         oneOf: [
+          /* config.module.rule('js').oneOf('js-worker') */
+          {
+            resourceQuery: /[?&]worker(?:&|=|$)/,
+            type: 'javascript/auto',
+            use: [
+              /* config.module.rule('js').oneOf('js-worker').use('worker-query') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/workerLoader.mjs'
+              }
+            ]
+          },
           /* config.module.rule('js').oneOf('js-raw') */
           {
             resourceQuery: /[?&]raw(?:&|=|$)/,
@@ -1007,6 +1022,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           MODE: '"production"',
           DEV: false,
           PROD: true,
+          SSR: true,
           BASE_URL: '"/"',
           ASSET_PREFIX: '"auto"'
         },
@@ -1367,6 +1383,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /\\.(?:ts|tsx|jsx|mts|cts)$/
         ],
         oneOf: [
+          /* config.module.rule('js').oneOf('js-worker') */
+          {
+            resourceQuery: /[?&]worker(?:&|=|$)/,
+            type: 'javascript/auto',
+            use: [
+              /* config.module.rule('js').oneOf('js-worker').use('worker-query') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/workerLoader.mjs'
+              }
+            ]
+          },
           /* config.module.rule('js').oneOf('js-raw') */
           {
             resourceQuery: /[?&]raw(?:&|=|$)/,
@@ -1757,6 +1784,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           MODE: '"production"',
           DEV: false,
           PROD: true,
+          SSR: true,
           BASE_URL: '"/"',
           ASSET_PREFIX: '"auto"'
         },
@@ -2103,6 +2131,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /\\.(?:ts|tsx|jsx|mts|cts)$/
         ],
         oneOf: [
+          /* config.module.rule('js').oneOf('js-worker') */
+          {
+            resourceQuery: /[?&]worker(?:&|=|$)/,
+            type: 'javascript/auto',
+            use: [
+              /* config.module.rule('js').oneOf('js-worker').use('worker-query') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/workerLoader.mjs'
+              }
+            ]
+          },
           /* config.module.rule('js').oneOf('js-raw') */
           {
             resourceQuery: /[?&]raw(?:&|=|$)/,
@@ -2418,6 +2457,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           MODE: '"production"',
           DEV: false,
           PROD: true,
+          SSR: true,
           BASE_URL: '"/"',
           ASSET_PREFIX: '""'
         },
@@ -2763,6 +2803,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /\\.(?:ts|tsx|jsx|mts|cts)$/
         ],
         oneOf: [
+          /* config.module.rule('js').oneOf('js-worker') */
+          {
+            resourceQuery: /[?&]worker(?:&|=|$)/,
+            type: 'javascript/auto',
+            use: [
+              /* config.module.rule('js').oneOf('js-worker').use('worker-query') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/workerLoader.mjs'
+              }
+            ]
+          },
           /* config.module.rule('js').oneOf('js-raw') */
           {
             resourceQuery: /[?&]raw(?:&|=|$)/,
@@ -3079,6 +3130,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           MODE: '"production"',
           DEV: false,
           PROD: true,
+          SSR: true,
           BASE_URL: '"/"',
           ASSET_PREFIX: '""'
         },
@@ -3372,6 +3424,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /@module-federation[\\\\/]/
         ],
         oneOf: [
+          /* config.module.rule('js').oneOf('js-worker') */
+          {
+            resourceQuery: /[?&]worker(?:&|=|$)/,
+            type: 'javascript/auto',
+            use: [
+              /* config.module.rule('js').oneOf('js-worker').use('worker-query') */
+              {
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/workerLoader.mjs'
+              }
+            ]
+          },
           /* config.module.rule('js').oneOf('js-raw') */
           {
             resourceQuery: /[?&]raw(?:&|=|$)/,
@@ -3694,6 +3757,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           MODE: '"production"',
           DEV: false,
           PROD: true,
+          SSR: false,
           BASE_URL: '"/"',
           ASSET_PREFIX: '""'
         },
