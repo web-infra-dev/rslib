@@ -70,8 +70,20 @@ const pluginWasm = ({
       }
 
       config.module
+        .rule('rslib-wasm-url')
+        .test(/\.wasm$/)
+        .resourceQuery(/[?&]url(?:&|=|$)/)
+        .type('asset/resource')
+        .generator({
+          filename: DEFAULT_WASM_FILENAME,
+        });
+
+      config.module
         .rule('rslib-wasm')
         .test(/\.wasm$/)
+        .resourceQuery({
+          not: [/[?&]url(?:&|=|$)/],
+        })
         .type('javascript/auto')
         .use('rslib-raw-wasm')
         .loader(path.join(__dirname, 'rawWasmLoader.js'))
