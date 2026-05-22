@@ -114,16 +114,25 @@ export async function processIsolatedDts(
     isolatedDtsContext.footer,
   );
 
-  if (isolatedDtsContext.isWatch || !logSuccess) {
+  if (!logSuccess) {
     return;
   }
 
   if (isolatedDtsContext.bundle) {
-    logger.info(
-      `declaration files prepared with isolated declaration ${color.dim(`(${isolatedDtsContext.name})`)}`,
-    );
-    await bundleDtsIfNeeded(isolatedDtsContext, isolatedDtsContext);
-  } else {
+    if (!isolatedDtsContext.isWatch) {
+      logger.info(
+        `declaration files prepared with isolated declaration ${color.dim(`(${isolatedDtsContext.name})`)}`,
+      );
+    }
+    try {
+      await bundleDtsIfNeeded(isolatedDtsContext, isolatedDtsContext);
+    } catch (error) {
+      if (!isolatedDtsContext.isWatch) {
+        throw error;
+      }
+      logger.error(error);
+    }
+  } else if (!isolatedDtsContext.isWatch) {
     logger.ready(
       `declaration files generated with isolated declaration ${color.dim(`(${isolatedDtsContext.name})`)}`,
     );
