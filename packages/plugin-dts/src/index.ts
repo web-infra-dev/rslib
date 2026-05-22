@@ -120,11 +120,8 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     });
     let promiseResult: TaskResult;
     let childProcesses: ChildProcess[] = [];
-    let dtsBackend: DtsGenerationBackend = options.tsgo
-      ? 'tsgo'
-      : options.isolated === true
-        ? 'isolated'
-        : 'tsc';
+    const dtsBackend: DtsGenerationBackend =
+      resolveDtsGenerationBackend(options);
     let dtsGenOptions: DtsGenOptions | undefined;
     let isolatedDtsContext: IsolatedDtsContext | undefined;
 
@@ -205,11 +202,12 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
         }
 
         // clean tsbuildinfo file
-        if (composite || incremental || options.build) {
+        if (
+          dtsBackend !== 'isolated' &&
+          (composite || incremental || options.build)
+        ) {
           await cleanTsBuildInfoFile(tsconfigPath, rawCompilerOptions);
         }
-
-        dtsBackend = resolveDtsGenerationBackend(options);
 
         dtsGenOptions = {
           ...options,
@@ -277,6 +275,8 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
             await processIsolatedDts(isolatedDtsContext, {
               logSuccess: !stats?.hasErrors(),
             });
+            // Isolated declaration diagnostics are reported by Rspack as
+            // compilation errors. This only tracks plugin-dts post-processing.
             promiseResult = {
               status: 'success',
             };

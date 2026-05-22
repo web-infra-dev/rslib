@@ -35,22 +35,12 @@ export function resolveDtsGenerationBackend(
 ): DtsGenerationBackend {
   validateExplicitIsolatedDtsOptions(options);
 
-  // User-facing configuration always wins. Keep the historical TypeScript
-  // compiler backend when the user did not explicitly choose another backend.
   if (options.isolated === true) {
     return 'isolated';
   }
 
   if (options.tsgo) {
     return 'tsgo';
-  }
-
-  if (options.build) {
-    return 'tsc';
-  }
-
-  if (options.isolated === false) {
-    return 'tsc';
   }
 
   return 'tsc';

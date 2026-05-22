@@ -1,6 +1,6 @@
 import { normalize, resolve } from 'node:path';
 import type { Rspack } from '@rsbuild/core';
-import { logger } from '@rsbuild/core';
+import { logger, rspack } from '@rsbuild/core';
 import {
   bundleDtsIfNeeded,
   type PreparedDtsContext,
@@ -15,22 +15,25 @@ export type IsolatedDtsContext = Omit<DtsGenOptions, 'dtsExtension'> &
     bundlerConfig: Rspack.Configuration | undefined;
   };
 
+type RslibPluginInstance = {
+  _args?: [
+    {
+      emitDts?: {
+        rootDir: string;
+        declarationDir: string;
+      };
+    },
+  ];
+};
+
 const applyIsolatedDtsOptions = (isolatedDtsContext: IsolatedDtsContext) => {
   const bundlerConfig = isolatedDtsContext.bundlerConfig;
+  const RspackRslibPlugin = rspack.experiments.RslibPlugin as new (
+    ...args: unknown[]
+  ) => unknown;
   const rslibPlugin = bundlerConfig?.plugins?.find(
-    (plugin) => plugin?.constructor?.name === 'RslibPlugin',
-  ) as
-    | {
-        _args?: [
-          {
-            emitDts?: {
-              rootDir: string;
-              declarationDir: string;
-            };
-          },
-        ];
-      }
-    | undefined;
+    (plugin) => plugin instanceof RspackRslibPlugin,
+  ) as RslibPluginInstance | undefined;
 
   if (!rslibPlugin?._args?.[0]) {
     throw new Error(
@@ -40,7 +43,7 @@ const applyIsolatedDtsOptions = (isolatedDtsContext: IsolatedDtsContext) => {
 
   // Pass fully resolved directories to Rspack so plugin-dts does not need to
   // know anything about output.path or how declaration assets are emitted.
-  rslibPlugin._args[0].emitDts = {
+  const emitDts = {
     rootDir: normalize(
       resolve(isolatedDtsContext.cwd, isolatedDtsContext.rootDir),
     ),
@@ -48,6 +51,17 @@ const applyIsolatedDtsOptions = (isolatedDtsContext: IsolatedDtsContext) => {
       resolve(isolatedDtsContext.cwd, isolatedDtsContext.declarationDir),
     ),
   };
+
+  // Rspack's built-in RslibPlugin stores constructor arguments and reads them
+  // before the native compiler is created. Configure emitDts before compilation
+  // starts so isolated declarations are emitted by Rspack itself.
+  rslibPlugin._args[0].emitDts = emitDts;
+
+  if (rslibPlugin._args[0].emitDts !== emitDts) {
+    throw new Error(
+      'Failed to configure Rspack isolated declaration emission.',
+    );
+  }
 };
 
 export async function createIsolatedDtsContext(
