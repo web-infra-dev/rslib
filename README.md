@@ -99,6 +99,7 @@ Some of the implementations of Rslib have drawn inspiration from outstanding pro
 
 - [esbuild](https://github.com/evanw/esbuild), created by [Evan Wallace](https://github.com/evanw).
 - [tsup](https://github.com/egoist/tsup), created by [EGOIST](https://github.com/egoist).
+- Rslib's SEA bundling support was inspired by prior work in [tsdown](https://github.com/rolldown/tsdown), created by [Kevin Deng](https://github.com/sxzz).
 
 ## 📖 License
 
