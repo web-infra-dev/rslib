@@ -90,6 +90,12 @@ export default {
 };
 ```
 
+::: note 使用限制
+
+Rslib 基于 API Extractor 对类型声明文件进行打包，可能会存在一些由 API Extractor 静态分析能力带来的限制，例如遇到复杂 re-export、特定解构语法、依赖生成的特殊声明文件或无法解析的导出时，可能会出现 `Internal Error: Unable to analyze the export ...` 等报错，此时建议关闭 `dts.bundle` 使用 bundleless 类型输出。
+
+:::
+
 #### dts.bundle.bundledPackages
 
 - **类型：** `string[]`
