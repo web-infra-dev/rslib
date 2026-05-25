@@ -1,1 +1,1 @@
-export const loadConfig = () => {};
+export const loadConfig = (): void => {};

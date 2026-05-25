@@ -326,6 +326,55 @@ pluginDts({
 }
 ```
 
+### isolated
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Whether to generate declaration files with [isolatedDeclarations](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations).
+
+> This option was added in Rslib v0.22.0 and is currently still experimental.
+
+When enabled, `rsbuild-plugin-dts` uses Rspack's built-in SWC fast_dts capability to generate declaration files directly during the build.
+
+```js
+pluginDts({
+  isolated: true,
+});
+```
+
+When enabling this option, we recommend also enabling `isolatedDeclarations` in `tsconfig.json` so TypeScript can surface code that does not satisfy the `isolatedDeclarations` constraints earlier.
+
+```json
+{
+  "compilerOptions": {
+    "isolatedDeclarations": true
+  }
+}
+```
+
+#### Use cases
+
+By default, `rsbuild-plugin-dts` generates declaration files through the TypeScript Compiler API, and it can also generate declaration files by enabling [tsgo](#tsgo). Unlike these two approaches, `isolated` does not perform full type checking during declaration file generation, so it is more suitable for use with another independent, high-performance type checking workflow.
+
+For example, in a monorepo project, you can use this option together with [`rslint --type-check`](https://rslint.rs/guide/type-checking):
+
+- Use `rslint --type-check` as the unified type checking step.
+- Use `isolated` to quickly output declaration files when building each package.
+
+This preserves full type checking while reducing the cost of repeatedly running TypeScript type analysis, loading TypeScript or `tsgo` related packages, and loading native bindings during each package build, making the overall build pipeline lighter.
+
+#### Output scope
+
+`isolated` generates declaration files based on the module dependency graph during the Rspack build. Only entry modules and modules referenced by entry modules will generate corresponding declaration files. If a file is not included in the build dependency graph, it will not automatically generate declaration files like TypeScript does. If you want declaration files to be generated for these files as well, add them to [source.entry](https://rslib.rs/config/rsbuild/source#sourceentry), or make sure they are referenced by an existing entry.
+
+#### Usage constraints
+
+- `isolated` is currently only available when `pluginDts` is used through Rslib, because it requires Rslib's built-in RslibPlugin.
+- `isolated` cannot be enabled together with [tsgo](#tsgo).
+- `isolated` cannot be enabled together with [build](#build).
+- When `isolated` is enabled, [abortOnError](#abortonerror) cannot be set to `false`.
+
 ## Contributing
 
 Please read the [Contributing Guide](https://github.com/web-infra-dev/rslib/blob/main/CONTRIBUTING.md).

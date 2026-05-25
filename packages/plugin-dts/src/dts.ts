@@ -123,7 +123,16 @@ export const calcBundledPackages = (
   return filteredBundledPackages;
 };
 
-export async function generateDts(data: DtsGenOptions): Promise<void> {
+export type PreparedDtsContext = {
+  declarationDir: string;
+  rootDir: string;
+  paths: Record<string, string[]>;
+  bundledDtsEntries: Required<DtsEntry>[];
+};
+
+export async function prepareDtsContext(
+  data: DtsGenOptions,
+): Promise<PreparedDtsContext> {
   const {
     bundle,
     dtsEntry,
@@ -133,26 +142,8 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     name,
     cwd,
     build,
-    isWatch,
-    dtsExtension = '.d.ts',
-    autoExternal = true,
     alias = {},
-    userExternals,
-    apiExtractorOptions,
-    banner,
-    footer,
-    redirect = {
-      path: true,
-      extension: false,
-    },
-    tsgo,
-    loggerLevel,
   } = data;
-  logger.level = loggerLevel;
-
-  if (!isWatch) {
-    logger.start(`generating declaration files... ${color.dim(`(${name})`)}`);
-  }
 
   // merge alias and tsconfig paths
   const paths = mergeAliasWithTsConfigPaths(
@@ -206,62 +197,117 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     ? ensureTempDeclarationDir(cwd, name)
     : dtsEmitPath;
 
-  let dtsEntries: Required<DtsEntry>[] = [];
-  if (bundle) {
-    dtsEntries = dtsEntry
-      .map((entryObj) => {
-        const { name: entryName, path: entryPath } = entryObj;
-        if (!entryPath) return null;
-        const entrySourcePath = isAbsolute(entryPath)
-          ? entryPath
-          : join(cwd, entryPath);
-        const relativePath = relative(rootDir, dirname(entrySourcePath));
-        const newPath = join(
-          declarationDir,
-          relativePath,
-          basename(entrySourcePath),
-        ).replace(
-          /\.(js|mjs|jsx|ts|mts|tsx|cjs|cts|cjsx|ctsx|mjsx|mtsx)$/,
-          '.d.ts',
-        );
-        return { name: entryName, path: newPath };
-      })
-      .filter(Boolean) as Required<DtsEntry>[];
+  const bundledDtsEntries = bundle
+    ? (dtsEntry
+        .map((entryObj) => {
+          const { name: entryName, path: entryPath } = entryObj;
+          if (!entryPath) return null;
+          const entrySourcePath = isAbsolute(entryPath)
+            ? entryPath
+            : join(cwd, entryPath);
+          const relativePath = relative(rootDir, dirname(entrySourcePath));
+          const newPath = join(
+            declarationDir,
+            relativePath,
+            basename(entrySourcePath),
+          ).replace(
+            /\.(js|mjs|jsx|ts|mts|tsx|cjs|cts|cjsx|ctsx|mjsx|mtsx)$/,
+            '.d.ts',
+          );
+          return { name: entryName, path: newPath };
+        })
+        .filter(Boolean) as Required<DtsEntry>[])
+    : [];
+
+  return {
+    declarationDir,
+    rootDir,
+    paths,
+    bundledDtsEntries,
+  };
+}
+
+export async function bundleDtsIfNeeded(
+  data: DtsGenOptions,
+  context: Pick<PreparedDtsContext, 'bundledDtsEntries'>,
+): Promise<void> {
+  const {
+    bundle,
+    name,
+    cwd,
+    dtsEmitPath,
+    tsconfigPath,
+    dtsExtension = '.d.ts',
+    autoExternal = true,
+    userExternals,
+    apiExtractorOptions,
+    banner,
+    footer,
+  } = data;
+
+  if (!bundle) {
+    return;
   }
 
-  const bundleDtsIfNeeded = async () => {
-    if (bundle) {
-      const { bundleDts } = await import('./apiExtractor');
-      await bundleDts({
-        name,
-        cwd,
-        distPath: dtsEmitPath,
-        dtsEntry: dtsEntries,
-        tsconfigPath,
-        dtsExtension,
-        banner,
-        footer,
-        bundledPackages: calcBundledPackages({
-          cwd,
-          autoExternal,
-          userExternals,
-          overrideBundledPackages: apiExtractorOptions?.bundledPackages,
-        }),
-      });
-    }
-  };
+  const { bundledDtsEntries } = context;
+
+  const { bundleDts } = await import('./apiExtractor');
+  await bundleDts({
+    name,
+    cwd,
+    distPath: dtsEmitPath,
+    dtsEntry: bundledDtsEntries,
+    tsconfigPath,
+    dtsExtension,
+    banner,
+    footer,
+    bundledPackages: calcBundledPackages({
+      cwd,
+      autoExternal,
+      userExternals,
+      overrideBundledPackages: apiExtractorOptions?.bundledPackages,
+    }),
+  });
+}
+
+export async function generateDts(data: DtsGenOptions): Promise<void> {
+  const {
+    bundle,
+    tsconfigPath,
+    tsConfigResult,
+    name,
+    cwd,
+    build,
+    isWatch,
+    dtsExtension = '.d.ts',
+    banner,
+    footer,
+    redirect = {
+      path: true,
+      extension: false,
+    },
+    loggerLevel,
+  } = data;
+  logger.level = loggerLevel;
+
+  if (!isWatch) {
+    logger.start(`generating declaration files... ${color.dim(`(${name})`)}`);
+  }
+
+  const preparedDtsContext = await prepareDtsContext(data);
+  const { declarationDir, rootDir, paths } = preparedDtsContext;
 
   const onComplete = async (isSuccess: boolean) => {
     if (isSuccess) {
       try {
-        await bundleDtsIfNeeded();
+        await bundleDtsIfNeeded(data, preparedDtsContext);
       } catch (e) {
         logger.error(e);
       }
     }
   };
 
-  const emitDts = tsgo
+  const emitDts = data.tsgo
     ? await import('./tsgo').then((mod) => mod.emitDtsTsgo)
     : await import('./tsc').then((mod) => mod.emitDtsTsc);
 
@@ -285,13 +331,13 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     build,
   );
 
-  if (tsgo) {
+  if (data.tsgo) {
     if (!hasError) {
-      await bundleDtsIfNeeded();
+      await bundleDtsIfNeeded(data, preparedDtsContext);
     }
   } else {
     if (!isWatch) {
-      await bundleDtsIfNeeded();
+      await bundleDtsIfNeeded(data, preparedDtsContext);
     }
   }
 }

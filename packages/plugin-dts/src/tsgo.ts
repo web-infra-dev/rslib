@@ -1,5 +1,4 @@
 import { spawn } from 'node:child_process';
-import fsP from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -10,10 +9,8 @@ import type { EmitDtsOptions } from './tsc';
 import {
   color,
   getTimeCost,
-  globDtsFiles,
   processDtsFiles,
-  renameDtsFile,
-  updateDeclarationMapContent,
+  rewriteDtsExtensions,
 } from './utils';
 
 const require = createRequire(import.meta.url);
@@ -88,29 +85,13 @@ async function handleDiagnosticsAndProcessFiles(
   footer?: string,
   name?: string,
 ): Promise<void> {
-  if (!bundle) {
-    const dtsFiles = await globDtsFiles(cwd, declarationDir, [
-      '/**/*.d.ts',
-      '/**/*.d.ts.map',
-    ]);
-    await Promise.all(
-      dtsFiles.map(async (file) => {
-        const contents = await fsP.readFile(file, 'utf8');
-        const newFileName = renameDtsFile(file, dtsExtension, bundle);
-        const newContents = updateDeclarationMapContent(
-          file,
-          contents,
-          dtsExtension,
-          bundle,
-          tsConfigResult.options.declarationMap,
-        );
-        if (file !== newFileName || contents !== newContents) {
-          await fsP.writeFile(newFileName, newContents);
-          await fsP.unlink(file);
-        }
-      }),
-    );
-  }
+  await rewriteDtsExtensions(
+    cwd,
+    declarationDir,
+    dtsExtension,
+    bundle,
+    tsConfigResult.options.declarationMap,
+  );
 
   await processDtsFiles(
     bundle,

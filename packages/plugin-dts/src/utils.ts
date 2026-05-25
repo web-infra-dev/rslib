@@ -714,6 +714,47 @@ export async function cleanDtsFiles(cwd: string, dir: string): Promise<void> {
   );
 }
 
+export async function rewriteDtsExtensions(
+  cwd: string,
+  dir: string,
+  dtsExtension: string,
+  bundle: boolean,
+  hasDeclarationMap = false,
+): Promise<void> {
+  if (bundle) {
+    return;
+  }
+
+  const dtsFiles = await globDtsFiles(cwd, dir, [
+    '/**/*.d.ts',
+    '/**/*.d.ts.map',
+  ]);
+
+  await Promise.all(
+    dtsFiles.map(async (file) => {
+      const contents = await fsP.readFile(file, 'utf8');
+      const newFileName = renameDtsFile(file, dtsExtension, bundle);
+      const newContents = updateDeclarationMapContent(
+        file,
+        contents,
+        dtsExtension,
+        bundle,
+        hasDeclarationMap,
+      );
+
+      if (file === newFileName && contents === newContents) {
+        return;
+      }
+
+      await fsP.writeFile(newFileName, newContents);
+
+      if (file !== newFileName) {
+        await fsP.unlink(file);
+      }
+    }),
+  );
+}
+
 export async function cleanTsBuildInfoFile(
   tsconfigPath: string,
   compilerOptions: CompilerOptions,
