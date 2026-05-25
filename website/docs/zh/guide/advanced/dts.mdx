@@ -1,6 +1,8 @@
 ---
-description: '在 Rslib 中生成和打包 TypeScript 声明文件，涵盖 isolatedDeclarations 与相关最佳实践。'
+description: '在 Rslib 中选择类型生成方式，使用 TypeScript Compiler API、tsgo、isolatedDeclarations 与 API Extractor 生成和打包类型声明文件。'
 ---
+
+import { PackageManagerTabs } from '@theme';
 
 # 类型生成
 
@@ -44,20 +46,27 @@ Bundleless 类型为库中的每个模块生成单独的声明文件，就像 `t
 
 ## 如何在 Rslib 中生成类型声明文件
 
-Rslib 支持使用 [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)、[tsgo](https://github.com/microsoft/typescript-go) 和 [`isolatedDeclarations`](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations) 生成类型声明文件，并且支持使用 [API Extractor](https://api-extractor.com/) 将生成的类型声明文件打包。
+Rslib 的类型生成流程可以分为两步：
 
-| 类型       | 支持方式                                | 说明     |
-| ---------- | --------------------------------------- | -------- |
-| bundleless | TypeScript Compiler API                 | 默认方式 |
-| bundleless | tsgo                                    |          |
-| bundleless | isolatedDeclarations                    |          |
-| bundle     | TypeScript Compiler API + API Extractor | 默认方式 |
-| bundle     | tsgo + API Extractor                    |          |
-| bundle     | isolatedDeclarations + API Extractor    |          |
+1. 类型生成，即生成 bundleless 类型。支持以下三种方式：
+   - [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)
+   - [tsgo](https://github.com/microsoft/typescript-go)
+   - [isolatedDeclarations](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations)
+2. 类型打包，即生成 bundle 类型（可选）。开启 [dts.bundle](/config/lib/dts#dtsbundle) 时会将生成的类型声明文件通过 [API Extractor](https://api-extractor.com/) 进行打包。
 
 ### 生成 bundleless 类型
 
-在 Rslib 配置文件中设置：
+类型声明文件可以通过以下三种方式生成：
+
+| 方式                            | 配置                                          | 类型检查 | 输出范围                | 速度 |
+| ------------------------------- | --------------------------------------------- | -------- | ----------------------- | ---- |
+| TypeScript Compiler API（默认） | `dts: true` 或 `dts: { bundle: false }`       | 有       | 由 `tsconfig.json` 决定 | 较慢 |
+| tsgo                            | [`dts.tsgo`](/config/lib/dts#dtstsgo)         | 有       | 由 `tsconfig.json` 决定 | 快   |
+| isolatedDeclarations            | [`dts.isolated`](/config/lib/dts#dtsisolated) | 无       | 构建依赖图中的模块      | 最快 |
+
+#### TypeScript Compiler API
+
+默认行为，与执行 `tsc` 的效果基本相同，会生成类型声明文件并执行类型检查，但是速度相对较慢。
 
 ```ts title="rslib.config.ts"
 export default {
@@ -74,36 +83,9 @@ export default {
 };
 ```
 
-### 生成 bundle 类型
+#### tsgo
 
-1. 安装 `@microsoft/api-extractor` 作为开发依赖，这是用于打包类型声明文件的底层工具。
-
-import { PackageManagerTabs } from '@theme';
-
-<PackageManagerTabs command="add @microsoft/api-extractor -D" />
-
-2. 在 Rslib 配置文件中设置：
-
-```ts title="rslib.config.ts"
-export default {
-  lib: [
-    {
-      // [!code highlight:3]
-      dts: {
-        bundle: true;
-      }
-    },
-  ],
-};
-```
-
-### 使用 tsgo 生成类型声明文件
-
-::: tip
-
-推荐开启 `dts.tsgo` 以加快类型生成速度。
-
-:::
+开启 [dts.tsgo](/config/lib/dts#dtstsgo) 会使用 [tsgo](https://github.com/microsoft/typescript-go) 生成类型声明文件，在保留类型检查的同时，能够显著加快类型生成的速度。
 
 1. 安装 `@typescript/native-preview` 作为开发依赖：
 
@@ -137,9 +119,9 @@ export default {
 }
 ```
 
-### 使用 isolatedDeclarations 生成类型声明文件
+#### isolatedDeclarations
 
-你可以开启 [dts.isolated](/config/lib/dts#dtsisolated)，使用 Rspack 内置的 SWC fast_dts 能力生成类型声明文件：
+开启 [dts.isolated](/config/lib/dts#dtsisolated) 会使用 Rspack 内置的 SWC fast_dts 能力生成类型声明文件，这种方式速度最快，但不会执行类型检查，并且仅会输出构建依赖图中包含模块的类型声明文件。
 
 ```ts title="rslib.config.ts"
 export default {
@@ -163,7 +145,26 @@ export default {
 }
 ```
 
-关于适用场景、输出范围和使用条件，请参考 [dts.isolated](/config/lib/dts#dtsisolated) 配置文档。
+### 生成 bundle 类型
+
+1. 安装 `@microsoft/api-extractor` 作为开发依赖，这是用于打包类型声明文件的底层工具。
+
+<PackageManagerTabs command="add @microsoft/api-extractor -D" />
+
+2. 在 Rslib 配置文件中设置：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      // [!code highlight:3]
+      dts: {
+        bundle: true;
+      }
+    },
+  ],
+};
+```
 
 ### 注意事项
 
@@ -188,7 +189,7 @@ API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) 或 [t
 - `tsconfig.json` 中的 `declarationDir` 配置项
 - [output.distPath](/config/rsbuild/output#outputdistpath) 或 [output.distPath.root](/config/rsbuild/output#outputdistpath) 配置项
 
-## 类型声明文件的相关配置
+## 相关配置
 
 | 配置项                                                              | 描述说明                                                                       |
 | ------------------------------------------------------------------- | ------------------------------------------------------------------------------ |

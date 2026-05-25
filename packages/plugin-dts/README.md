@@ -331,7 +331,7 @@ pluginDts({
 - **Type:** `boolean`
 - **Default:** `false`
 
-Whether to generate declaration files with [`isolatedDeclarations`](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations).
+Whether to generate declaration files with [isolatedDeclarations](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations).
 
 > This option was added in Rslib v0.22.0 and is currently still experimental.
 
