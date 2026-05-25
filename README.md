@@ -100,7 +100,7 @@ Parts of Rslib are derived from or inspired by many excellent open source projec
 - [esbuild](https://github.com/evanw/esbuild)
 - [tsup](https://github.com/egoist/tsup)
 - [webpack](https://github.com/webpack/webpack)
-- [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)
+- [mini-css-extract-plugin](https://github.com/webpack/mini-css-extract-plugin)
 - [tsdown](https://github.com/rolldown/tsdown)
 
 ## 📖 License
