@@ -95,11 +95,13 @@ Come and chat with us on [Discord](https://discord.gg/7uHaPXcVyV)! The Rstack te
 
 ## 🙏 Credits
 
-Some of the implementations of Rslib have drawn inspiration from outstanding projects in the community. We would like to express our gratitude to them:
+Parts of Rslib are derived from or inspired by many excellent open source projects. We sincerely appreciate the work of these projects and the ideas they have shared with the community:
 
-- [esbuild](https://github.com/evanw/esbuild), created by [Evan Wallace](https://github.com/evanw).
-- [tsup](https://github.com/egoist/tsup), created by [EGOIST](https://github.com/egoist).
-- Rslib's SEA bundling support was inspired by prior work in [tsdown](https://github.com/rolldown/tsdown), created by [Kevin Deng](https://github.com/sxzz).
+- [esbuild](https://github.com/evanw/esbuild)
+- [tsup](https://github.com/egoist/tsup)
+- [webpack](https://github.com/webpack/webpack)
+- [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)
+- [tsdown](https://github.com/rolldown/tsdown)
 
 ## 📖 License
 
