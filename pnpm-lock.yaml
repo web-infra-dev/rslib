@@ -1157,14 +1157,14 @@ importers:
   tests/integration/style/stylus/bundle:
     devDependencies:
       '@rsbuild/plugin-stylus':
-        specifier: ^1.3.2
-        version: 1.3.2(@rsbuild/core@2.0.7)(@rspack/core@2.0.4)
+        specifier: ^2.0.0
+        version: 2.0.0(@rsbuild/core@2.0.7)(@rspack/core@2.0.4)
 
   tests/integration/style/stylus/bundle-false:
     devDependencies:
       '@rsbuild/plugin-stylus':
-        specifier: ^1.3.2
-        version: 1.3.2(@rsbuild/core@2.0.7)(@rspack/core@2.0.4)
+        specifier: ^2.0.0
+        version: 2.0.0(@rsbuild/core@2.0.7)(@rspack/core@2.0.4)
 
   tests/integration/style/tailwindcss/bundle:
     devDependencies:
@@ -2642,10 +2642,10 @@ packages:
       '@rsbuild/core':
         optional: true
 
-  '@rsbuild/plugin-stylus@1.3.2':
-    resolution: {integrity: sha512-IAP3X8bd0+AAHi5OA21ksTW8m4gtZ6PdQhplEC5JjVHPhmhdKei7B7WyXP6i8V+g3XVIg1cRsR5Av1M5Gq/EPA==}
+  '@rsbuild/plugin-stylus@2.0.0':
+    resolution: {integrity: sha512-u2CZKR6b7XMUJQWKE05Qp2kCdDnjMwvVlGR4YdNkjOXUgOxUHlpMiT1jHTy1ks7Kpjg4gpjRDD7+r/evH9BVkg==}
     peerDependencies:
-      '@rsbuild/core': ^1.3.0 || ^2.0.0-0
+      '@rsbuild/core': ^2.0.0
     peerDependenciesMeta:
       '@rsbuild/core':
         optional: true
@@ -8663,10 +8663,9 @@ snapshots:
       - solid-js
       - supports-color
 
-  '@rsbuild/plugin-stylus@1.3.2(@rsbuild/core@2.0.7)(@rspack/core@2.0.4)':
+  '@rsbuild/plugin-stylus@2.0.0(@rsbuild/core@2.0.7)(@rspack/core@2.0.4)':
     dependencies:
       deepmerge: 4.3.1
-      reduce-configs: 1.1.2
       stylus: 0.64.0
       stylus-loader: 8.1.3(@rspack/core@2.0.4)(stylus@0.64.0)
     optionalDependencies:
