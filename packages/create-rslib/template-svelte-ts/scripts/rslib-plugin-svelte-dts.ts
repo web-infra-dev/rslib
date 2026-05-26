@@ -19,11 +19,15 @@ export function svelteDtsPlugin(
           api.logger.start('generating declaration files...');
         }
 
-        const { declarationDir = './dist', libRoot = './src' } = options;
+        const {
+          declarationDir = './dist',
+          libRoot = './src',
+          tsconfig,
+        } = options;
         const rootPath = api.context.rootPath;
         const tsconfigPath = resolveProjectPath(
           rootPath,
-          options.tsconfig ??
+          tsconfig ??
             api.getNormalizedConfig().source.tsconfigPath ??
             './tsconfig.json',
         );
