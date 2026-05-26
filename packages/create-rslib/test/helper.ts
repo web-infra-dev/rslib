@@ -109,6 +109,32 @@ export const createAndValidate = (
     }
   }
 
+  if (templateCase.template === 'svelte') {
+    expect(pkgJson.devDependencies['@rsbuild/plugin-svelte']).toBeTruthy();
+    expect(pkgJson.devDependencies.svelte).toBeTruthy();
+    expect(pkgJson.peerDependencies.svelte).toBe('^5.0.0');
+
+    if (templateCase.lang === 'ts') {
+      expect(pkgJson.devDependencies['svelte-check']).toBeTruthy();
+      expect(pkgJson.devDependencies.svelte2tsx).toBeTruthy();
+      expect(pkgJson.scripts.check).toBe('svelte-check');
+      expect(
+        existsSync(path.join(dir, 'scripts/rslib-plugin-svelte-dts.ts')),
+      ).toBeTruthy();
+      expect(pkgJson.exports['.'].types).toBe('./dist/index.d.ts');
+      expect(pkgJson.types).toBe('./dist/index.d.ts');
+    } else {
+      expect(pkgJson.devDependencies['svelte-check']).toBeFalsy();
+      expect(pkgJson.devDependencies.svelte2tsx).toBeFalsy();
+      expect(pkgJson.scripts.check).toBeFalsy();
+      expect(
+        existsSync(path.join(dir, 'scripts/rslib-plugin-svelte-dts.ts')),
+      ).toBeFalsy();
+      expect(pkgJson.exports['.'].types).toBeFalsy();
+      expect(pkgJson.types).toBeFalsy();
+    }
+  }
+
   if (templateCase.template === 'react') {
     const configFile = path.join(
       dir,

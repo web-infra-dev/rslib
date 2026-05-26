@@ -73,6 +73,13 @@ const CASES_VUE: TemplateCase[] = [
   createCase('vue', 'ts', ['rstest']),
 ];
 
+const CASES_SVELTE: TemplateCase[] = [
+  createCase('svelte', 'js'),
+  createCase('svelte', 'ts'),
+  createCase('svelte', 'js', ['rstest']),
+  createCase('svelte', 'ts', ['rstest']),
+];
+
 const BASE_NODE_ESM_JS = createCase('node-esm', 'js');
 
 describe('parseTemplateName', () => {
@@ -81,11 +88,14 @@ describe('parseTemplateName', () => {
     expect(parseTemplateName('react-js')).toBe('react-js');
     expect(parseTemplateName('vue-ts')).toBe('vue-ts');
     expect(parseTemplateName('vue-js')).toBe('vue-js');
+    expect(parseTemplateName('svelte-js')).toBe('svelte-js');
+    expect(parseTemplateName('svelte-ts')).toBe('svelte-ts');
   });
 
   test('should handle template without language suffix and default to ts', () => {
     expect(parseTemplateName('react')).toBe('react-ts');
     expect(parseTemplateName('vue')).toBe('vue-ts');
+    expect(parseTemplateName('svelte')).toBe('svelte-ts');
   });
 
   test('should handle multi-segment template with language suffix', () => {
@@ -136,6 +146,14 @@ describe('react', () => {
 
 describe('vue', () => {
   for (const c of CASES_VUE) {
+    test(`should create ${c.label} project as expected`, async () => {
+      createAndValidate(__dirname, c);
+    });
+  }
+});
+
+describe('svelte', () => {
+  for (const c of CASES_SVELTE) {
     test(`should create ${c.label} project as expected`, async () => {
       createAndValidate(__dirname, c);
     });

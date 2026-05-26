@@ -1,0 +1,92 @@
+---
+description: '使用 Rslib 构建 Svelte 组件库，涵盖编译后 ESM 产物、类型声明生成、样式处理与包导出。'
+---
+
+# Svelte
+
+在本文档中，你将学习如何使用 Rslib 构建 Svelte 组件库，你可在 [示例](https://github.com/rstackjs/rstack-examples/tree/main/rslib) 中查看 Svelte 相关演示项目。
+
+## 创建 Svelte 项目
+
+你可以使用 `create-rslib` 创建 Rslib + Svelte 项目。只需执行以下命令：
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm create rslib@latest',
+    yarn: 'yarn create rslib',
+    pnpm: 'pnpm create rslib@latest',
+    bun: 'bun create rslib@latest',
+  }}
+/>
+
+然后，当提示 "Select template" 时选择 `Svelte`。
+
+## 在现有 Rslib 项目中使用
+
+开发 Svelte 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。
+
+要编译 Svelte（`.svelte` 文件），你需要注册 [@rsbuild/plugin-svelte](https://rsbuild.rs/zh/plugins/list/plugin-svelte) 插件。该插件内部集成了 [svelte-loader](https://github.com/sveltejs/svelte-loader)，将自动添加 Svelte 构建所需的配置。
+
+例如，在 `rslib.config.ts` 中注册:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginSvelte } from '@rsbuild/plugin-svelte'; // [!code highlight]
+
+export default defineConfig({
+  lib: [
+    // ...
+  ],
+  // [!code highlight:4]
+  output: {
+    target: 'web',
+  },
+  plugins: [pluginSvelte(/** options here */)],
+});
+```
+
+更多配置可以参考 [@rsbuild/plugin-svelte](https://rsbuild.rs/zh/plugins/list/plugin-svelte) 插件文档。
+
+## 类型声明
+
+::: note
+
+Svelte 的类型声明文件由 [svelte2tsx](https://www.npmjs.com/package/svelte2tsx) 生成，所以 [lib.dts](/config/lib/dts) / [lib.redirect.dts](/config/lib/redirect#redirectdts) / [lib.banner.dts](/config/lib/banner#bannerdts) / [lib.footer.dts](/config/lib/footer#footerdts) 在 Svelte 项目中不生效。
+
+:::
+
+Rslib 提供了一个用于 Svelte 项目类型生成的插件示例：[svelteDtsPlugin](https://github.com/web-infra-dev/rslib/blob/main/packages/create-rslib/template-svelte-ts/scripts/rslib-plugin-svelte-dts.ts)。该插件会在构建完成后调用 [svelte2tsx](https://www.npmjs.com/package/svelte2tsx) 提供的 `emitDts` 方法，为 `.svelte` 文件生成类型声明。
+
+如果你使用 `create-rslib` 创建 Svelte TypeScript 项目，模板中已经内置该插件。
+
+在现有项目中，可以这样使用：
+
+```ts title="rslib.config.ts"
+import { svelteDtsPlugin } from './scripts/rslib-plugin-svelte-dts';
+
+export default {
+  plugins: [svelteDtsPlugin()],
+};
+```
+
+`svelteDtsPlugin` 支持透传以下参数到 [svelte2tsx](https://www.npmjs.com/package/svelte2tsx) 的 [emitDts](https://github.com/sveltejs/language-tools/blob/master/packages/svelte2tsx/src/emitDts.ts) 配置项：
+
+- `declarationDir`：类型声明文件的输出目录，默认值为 `./dist`。
+- `libRoot`：需要生成类型声明的源码目录，默认值为 `./src`。
+- `tsconfig`：生成类型声明时使用的 tsconfig 路径，默认使用 [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath)。
+- `svelteShimsPath`：svelte2tsx 的 shims 类型文件路径，默认使用 `svelte2tsx/svelte-shims-v4.d.ts`。
+
+如果需要进行类型检查，可以安装 [svelte-check](https://www.npmjs.com/package/svelte-check) npm 包，并在 `package.json` 中添加 `check` 命令：
+
+```json title="package.json"
+{
+  "scripts": {
+    "check": "svelte-check"
+  },
+  "devDependencies": {
+    "svelte-check": "^4.4.8"
+  }
+}
+```
