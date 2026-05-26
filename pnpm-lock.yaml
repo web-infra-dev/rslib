@@ -641,15 +641,6 @@ importers:
         specifier: ^19.2.6
         version: 19.2.6
 
-  tests/integration/auto-external/module-import-warn:
-    dependencies:
-      lodash:
-        specifier: ^4.18.1
-        version: 4.18.1
-      react:
-        specifier: ^19.2.6
-        version: 19.2.6
-
   tests/integration/auto-external/with-externals:
     dependencies:
       react:
@@ -931,7 +922,11 @@ importers:
 
   tests/integration/externals/esm-node-builtin: {}
 
-  tests/integration/externals/module-import-warn: {}
+  tests/integration/externals/modern-module-auto-external:
+    dependencies:
+      react:
+        specifier: ^19.2.6
+        version: 19.2.6
 
   tests/integration/externals/node: {}
 

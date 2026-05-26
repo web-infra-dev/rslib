@@ -81,6 +81,13 @@ const defaultDistPath = {
 
 在 bundle 模式下，Rslib 会默认将 `package.json` 中 `dependencies`、`optionalDependencies` 和 `peerDependencies` 字段下的三方依赖添加到 `output.externals` 中, 查看 [lib.autoExternal](/config/lib/auto-external) 了解更多信息。
 
+此外，Rslib 会根据产物格式设置 Rspack 的 `externalsType` 默认值：
+
+- `esm`：[modern-module](https://rspack.rs/zh/config/externals#externalstypemodern-module)，静态 `import` 的 external 会被输出为 ESM import，动态 `import()` 会保持动态导入，而 CommonJS `require()` 的 external 会通过 `createRequire` 加载。
+- `cjs`：[commonjs-import](https://rspack.rs/zh/config/externals#externalstypecommonjs-import)。
+- `umd`：[umd](https://rspack.rs/zh/config/externals#externalstype)。
+- `mf` / `iife`：[global](https://rspack.rs/zh/config/externals#externalstypeglobal)。
+
 :::note
 需要注意的是，`output.externals` 与 [resolve.alias](/config/rsbuild/resolve#resolvealias) 有所不同。请查看 [resolve.alias](/config/rsbuild/resolve#resolvealias) 文档以了解更多信息。
 :::
