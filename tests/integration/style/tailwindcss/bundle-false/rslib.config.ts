@@ -1,4 +1,5 @@
 import { defineConfig } from '@rslib/core';
+import { pluginTailwindcss } from '@rsbuild/plugin-tailwindcss';
 import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
@@ -13,4 +14,5 @@ export default defineConfig({
   output: {
     target: 'web',
   },
+  plugins: [pluginTailwindcss()],
 });
