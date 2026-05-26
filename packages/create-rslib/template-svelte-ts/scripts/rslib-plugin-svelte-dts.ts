@@ -19,14 +19,14 @@ export function svelteDtsPlugin(
           api.logger.start('generating declaration files...');
         }
 
-        const {
-          declarationDir = './dist',
-          libRoot = './src',
-          tsconfig = 'tsconfig.json',
-        } = options;
-
+        const { declarationDir = './dist', libRoot = './src' } = options;
         const rootPath = api.context.rootPath;
-        const declarationPath = resolveProjectPath(rootPath, declarationDir);
+        const tsconfigPath = resolveProjectPath(
+          rootPath,
+          options.tsconfig ??
+            api.getNormalizedConfig().source.tsconfigPath ??
+            './tsconfig.json',
+        );
         const svelteShimsPath = options.svelteShimsPath
           ? resolveProjectPath(rootPath, options.svelteShimsPath)
           : fileURLToPath(
@@ -35,10 +35,10 @@ export function svelteDtsPlugin(
 
         try {
           await emitDts({
-            declarationDir: declarationPath,
+            declarationDir: resolveProjectPath(rootPath, declarationDir),
             svelteShimsPath,
             libRoot: resolveProjectPath(rootPath, libRoot),
-            tsconfig: resolveProjectPath(rootPath, tsconfig),
+            tsconfig: tsconfigPath,
           });
 
           api.logger.ready(`declaration files generated with svelte2tsx.`);
