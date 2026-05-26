@@ -330,19 +330,19 @@ export default {
 
 ### Tailwind CSS v4
 
-Rslib has built-in support for PostCSS, and you can integrate [Tailwind CSS v4](https://tailwindcss.com/) in Rslib via PostCSS plugins. Here are the steps to integrate Tailwind CSS v4:
+We recommend using the [@rsbuild/plugin-tailwindcss](https://rsbuild.rs/plugins/list/plugin-tailwindcss) plugin to integrate [Tailwind CSS v4](https://tailwindcss.com/) in Rslib.
 
-1. Install `tailwindcss` and `@tailwindcss/postcss` packages:
+1. Install `@rsbuild/plugin-tailwindcss` and `tailwindcss` packages:
 
-<PackageManagerTabs command="add tailwindcss @tailwindcss/postcss -D" />
+<PackageManagerTabs command="add @rsbuild/plugin-tailwindcss tailwindcss -D" />
 
-2. Register the Tailwind CSS PostCSS plugin via [postcss.config.mjs](https://npmjs.com/package/postcss-loader#config) or [tools.postcss](/config/rsbuild/tools#toolspostcss).
+2. Register the plugin in the `rslib.config.ts` file:
 
-```js title="postcss.config.mjs"
+```ts title="rslib.config.ts"
+import { pluginTailwindcss } from '@rsbuild/plugin-tailwindcss';
+
 export default {
-  plugins: {
-    '@tailwindcss/postcss': {},
-  },
+  plugins: [pluginTailwindcss()],
 };
 ```
 
@@ -365,6 +365,20 @@ Tailwind CSS v4 cannot be used with CSS preprocessors like Sass, Less, or Stylus
 ```
 
 For more usage, please refer to the [Tailwind CSS Documentation](https://tailwindcss.com/).
+
+#### Using the PostCSS plugin
+
+If your project already has a PostCSS setup, you can also install `tailwindcss` and `@tailwindcss/postcss`, then register the Tailwind CSS PostCSS plugin via [postcss.config.mjs](https://npmjs.com/package/postcss-loader#config) or [tools.postcss](/config/rsbuild/tools#toolspostcss).
+
+<PackageManagerTabs command="add tailwindcss @tailwindcss/postcss -D" />
+
+```js title="postcss.config.mjs"
+export default {
+  plugins: {
+    '@tailwindcss/postcss': {},
+  },
+};
+```
 
 ### Tailwind CSS v3
 
