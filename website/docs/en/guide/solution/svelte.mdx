@@ -40,7 +40,6 @@ export default defineConfig({
   lib: [
     {
       format: 'esm',
-      dts: false,
     },
   ],
   output: {
@@ -49,10 +48,7 @@ export default defineConfig({
   resolve: {
     conditionNames: ['svelte', 'browser', '...'],
   },
-  plugins: [
-    pluginSvelte(),
-    svelteDtsPlugin(),
-  ],
+  plugins: [pluginSvelte(), svelteDtsPlugin()],
 });
 ```
 
