@@ -117,9 +117,7 @@ export const createAndValidate = (
     if (templateCase.lang === 'ts') {
       expect(pkgJson.devDependencies['svelte-check']).toBeTruthy();
       expect(pkgJson.devDependencies.svelte2tsx).toBeTruthy();
-      expect(pkgJson.scripts.check).toBe(
-        'svelte-check --tsconfig ./tsconfig.json',
-      );
+      expect(pkgJson.scripts.check).toBe('svelte-check');
       expect(
         existsSync(path.join(dir, 'scripts/rslib-plugin-svelte-dts.ts')),
       ).toBeTruthy();
