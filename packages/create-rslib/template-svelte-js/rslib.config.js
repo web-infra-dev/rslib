@@ -10,8 +10,5 @@ export default defineConfig({
   output: {
     target: 'web',
   },
-  resolve: {
-    conditionNames: ['svelte', 'browser', '...'],
-  },
   plugins: [pluginSvelte()],
 });
