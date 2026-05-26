@@ -1178,18 +1178,18 @@ importers:
 
   tests/integration/style/tailwindcss/bundle:
     devDependencies:
-      '@tailwindcss/postcss':
-        specifier: ^4.3.0
-        version: 4.3.0
+      '@rsbuild/plugin-tailwindcss':
+        specifier: ^2.0.0
+        version: 2.0.0(@rsbuild/core@2.0.7)
       tailwindcss:
         specifier: ^4.3.0
         version: 4.3.0
 
   tests/integration/style/tailwindcss/bundle-false:
     devDependencies:
-      '@tailwindcss/postcss':
-        specifier: ^4.3.0
-        version: 4.3.0
+      '@rsbuild/plugin-tailwindcss':
+        specifier: ^2.0.0
+        version: 2.0.0(@rsbuild/core@2.0.7)
       tailwindcss:
         specifier: ^4.3.0
         version: 4.3.0
@@ -2912,6 +2912,14 @@ packages:
       '@rsbuild/core':
         optional: true
 
+  '@rsbuild/plugin-tailwindcss@2.0.0':
+    resolution: {integrity: sha512-d34Cc6PGx9xeYug8cNWaonqPN69d+VqbdlUMrf8JCD7Z/X1/mHtgzOlGCuypGLCqBmWTK94Rdn1N47MBfjH6GA==}
+    peerDependencies:
+      '@rsbuild/core': ^2.0.0
+    peerDependenciesMeta:
+      '@rsbuild/core':
+        optional: true
+
   '@rsbuild/plugin-toml@2.0.0':
     resolution: {integrity: sha512-x1C8y1QAA8gfjK/6gS9zLwTdwI6DRHH6P3IAtYBFgaQuLNjXGxfmw1qKeSH7y88kVxscxlea/xkp0+7S2tGXqA==}
     peerDependencies:
@@ -3510,8 +3518,10 @@ packages:
     resolution: {integrity: sha512-F7HZGBeN9I0/AuuJS5PwcD8xayx5ri5GhjYUDBEVYUkexyA/giwbDNjRVrxSezE3T250OU2K/wp/ltWx3UOefg==}
     engines: {node: '>= 20'}
 
-  '@tailwindcss/postcss@4.3.0':
-    resolution: {integrity: sha512-Jm05Tjx+9yCLGv5qw1c+84Psds8MnyrEQYCB+FFk2lgGiUjlRqdxke4mVTuYrj2xnVZqKim2Apr5ySuQRYAw/w==}
+  '@tailwindcss/webpack@4.3.0':
+    resolution: {integrity: sha512-oaEdJ/X298hmdZrvI1NmAQZFKJ5XJiRXxHwlAw62GOaB5G7Ic3Uv+gfomdI8aukJXRH87h5nERy8yxvAqwqMnQ==}
+    peerDependencies:
+      webpack: ^5
 
   '@testing-library/jest-dom@6.9.1':
     resolution: {integrity: sha512-zIcONa+hVtVSSep9UT3jZ5rizo2BsxgyDYU7WFD5eICBE7no3881HGeb/QkGfsJs6JTkY1aQhT7rIPC7e+0nnA==}
@@ -9141,6 +9151,14 @@ snapshots:
       - supports-color
       - typescript
 
+  '@rsbuild/plugin-tailwindcss@2.0.0(@rsbuild/core@2.0.7)':
+    dependencies:
+      '@tailwindcss/webpack': 4.3.0
+    optionalDependencies:
+      '@rsbuild/core': 2.0.7(@module-federation/runtime-tools@2.5.0)
+    transitivePeerDependencies:
+      - webpack
+
   '@rsbuild/plugin-toml@2.0.0(@rsbuild/core@2.0.7)':
     dependencies:
       toml: 4.1.1
@@ -9834,12 +9852,11 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.3.0
       '@tailwindcss/oxide-win32-x64-msvc': 4.3.0
 
-  '@tailwindcss/postcss@4.3.0':
+  '@tailwindcss/webpack@4.3.0':
     dependencies:
       '@alloc/quick-lru': 5.2.0
       '@tailwindcss/node': 4.3.0
       '@tailwindcss/oxide': 4.3.0
-      postcss: 8.5.15
       tailwindcss: 4.3.0
 
   '@testing-library/jest-dom@6.9.1':

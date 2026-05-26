@@ -26,6 +26,8 @@ export const TEMPLATES: string[] = [
   'react-ts',
   'vue-js',
   'vue-ts',
+  'svelte-js',
+  'svelte-ts',
 ];
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -43,6 +45,7 @@ async function getTemplateName({ template }: Argv) {
         { value: 'node-dual', label: 'Node.js dual ESM/CJS package' },
         { value: 'react', label: 'React' },
         { value: 'vue', label: 'Vue' },
+        { value: 'svelte', label: 'Svelte' },
       ],
     }),
   );
@@ -66,6 +69,8 @@ function mapESLintTemplate(templateName: string): ESLintTemplateName {
     case 'react-ts':
     case 'vue-js':
     case 'vue-ts':
+    case 'svelte-js':
+    case 'svelte-ts':
       return templateName;
     default: {
       const language = templateName.split('-').pop();
@@ -92,6 +97,8 @@ function mapTestingToolTemplate(templateName: string): string {
     case 'react-ts':
     case 'vue-js':
     case 'vue-ts':
+    case 'svelte-js':
+    case 'svelte-ts':
       return templateName;
     case 'node-dual-js':
     case 'node-esm-js':
