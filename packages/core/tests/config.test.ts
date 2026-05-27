@@ -599,6 +599,24 @@ describe('Should compose create Rsbuild config correctly', () => {
 
     expect(config?.config.output?.autoExternal).toBe(true);
   });
+
+  test('output.autoExternal should override deprecated autoExternal in the same config', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+          autoExternal: true,
+          output: {
+            autoExternal: false,
+          },
+        },
+      ],
+    };
+
+    const [config] = await composeCreateRsbuildConfig(rslibConfig);
+
+    expect(config?.config.output?.autoExternal).toBe(false);
+  });
 });
 
 describe('runtimeChunk', () => {

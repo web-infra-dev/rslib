@@ -1649,6 +1649,25 @@ async function composeLibRsbuildConfig(
   );
 }
 
+const normalizeDeprecatedAutoExternal = <T extends Partial<LibConfig>>(
+  config: T,
+): T => {
+  if (
+    config.autoExternal === undefined ||
+    config.output?.autoExternal !== undefined
+  ) {
+    return config;
+  }
+
+  return {
+    ...config,
+    output: {
+      ...config.output,
+      autoExternal: config.autoExternal,
+    },
+  };
+};
+
 export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
 ): Promise<RsbuildConfigWithLibInfo[]> {
@@ -1678,8 +1697,8 @@ export async function composeCreateRsbuildConfig(
 
   const libConfigPromises = libConfigsArray.map(async (libConfig, index) => {
     const userConfig = mergeRsbuildConfig<LibConfig>(
-      sharedRsbuildConfig,
-      libConfig,
+      normalizeDeprecatedAutoExternal(sharedRsbuildConfig),
+      normalizeDeprecatedAutoExternal(libConfig),
     );
 
     // Merge the configuration of each environment based on the shared Rsbuild
@@ -1706,7 +1725,6 @@ export async function composeCreateRsbuildConfig(
       logger.warn(
         `${color.yellow('lib.autoExternal')} is deprecated, use ${color.yellow('output.autoExternal')} instead.`,
       );
-      userConfig.output.autoExternal ??= userConfig.autoExternal;
     }
 
     // Exe bundles everything into a single binary, so disable automatic externals
