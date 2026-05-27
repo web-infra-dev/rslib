@@ -803,6 +803,7 @@ const composeShimsConfig = (
 
 const composeExternalsConfig = (
   format: Format,
+  target: RsbuildConfigOutputTarget,
   externals: NonNullable<EnvironmentConfig['output']>['externals'],
 ): EnvironmentConfig => {
   // TODO: Define the internal externals config in Rsbuild's externals instead
@@ -810,7 +811,7 @@ const composeExternalsConfig = (
   // should to be unified and merged together in the future.
 
   const externalsTypeMap: Record<Format, Rspack.ExternalsType> = {
-    esm: 'modern-module',
+    esm: target === 'node' ? 'modern-module' : 'module-import',
     cjs: 'commonjs-import',
     umd: 'umd',
     // If use 'var', when projects import an external package like '@pkg', this will cause a syntax error such as 'var pkg = @pkg'.
@@ -1684,7 +1685,11 @@ async function composeLibRsbuildConfig(
     hasExe ? false : externalHelpers,
     pkgJson,
   );
-  const userExternalsConfig = composeExternalsConfig(format, userExternals);
+  const userExternalsConfig = composeExternalsConfig(
+    format,
+    target,
+    userExternals,
+  );
   const {
     config: outputFilenameConfig,
     jsExtension,

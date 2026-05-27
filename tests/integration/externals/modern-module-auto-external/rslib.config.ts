@@ -4,7 +4,17 @@ import { generateBundleEsmConfig } from 'test-helper';
 export default defineConfig({
   lib: [
     generateBundleEsmConfig({
+      id: 'esm-node',
       output: {
+        distPath: './dist/esm-node',
+        externals: { e9: 'e9' },
+      },
+    }),
+    generateBundleEsmConfig({
+      id: 'esm-web',
+      output: {
+        target: 'web',
+        distPath: './dist/esm-web',
         externals: { e9: 'e9' },
       },
     }),
