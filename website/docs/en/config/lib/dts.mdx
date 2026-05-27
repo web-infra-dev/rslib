@@ -104,7 +104,7 @@ Specifies the dependencies whose declaration files should be bundled. This confi
 
 By default, Rslib determines externalized dependencies based on the following configurations. For details, refer to [Handle third-party dependencies](/guide/advanced/third-party-deps).
 
-- [autoExternal](/config/lib/auto-external) configuration
+- [output.autoExternal](/config/rsbuild/output#outputautoexternal) configuration
 - [output.externals](/config/rsbuild/output#outputexternals) configuration
 
 Direct dependencies (declared in `package.json`) that are not externalized will be automatically added to `bundledPackages`, and their declaration files will be bundled into the final output.

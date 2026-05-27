@@ -205,7 +205,7 @@ export default {
 
 Rslib 通过 [rsbuild-plugin-dts](https://github.com/web-infra-dev/rslib/blob/main/packages/plugin-dts/README.md) 生成类型声明文件，该插件支持通过 [output.externals](/config/rsbuild/output#outputexternals) 配置，从打包后的类型声明文件中排除指定的依赖。
 
-举个例子，若 `@types/foo` 仅声明在 `devDependencies` 中，按照 [autoExternal](/config/lib/auto-external) 处理依赖的逻辑，在打包时 Rslib 会尝试将 `@types/foo` 一同打包进类型声明文件产物中，此时可以通过配置 [output.externals](/config/rsbuild/output#outputexternals) 来排除 `@types/foo`。
+举个例子，若 `@types/foo` 仅声明在 `devDependencies` 中，按照 [output.autoExternal](/config/rsbuild/output#outputautoexternal) 处理依赖的逻辑，在打包时 Rslib 会尝试将 `@types/foo` 一同打包进类型声明文件产物中，此时可以通过配置 [output.externals](/config/rsbuild/output#outputexternals) 来排除 `@types/foo`。
 
 ```ts title="rslib.config.ts"
 export default {
