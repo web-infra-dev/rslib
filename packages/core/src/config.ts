@@ -1554,10 +1554,6 @@ async function composeLibRsbuildConfig(
     sourceEntry: config.source?.entry,
   });
   const userExternals = hasExe ? undefined : config.output?.externals;
-  // Exe bundles everything into a single binary, so disable automatic externals here.
-  const exeExternalOverride: EnvironmentConfig = hasExe
-    ? { output: { autoExternal: false } }
-    : {};
   const externalHelpersConfig = composeExternalHelpersConfig(
     hasExe ? false : externalHelpers,
     pkgJson,
@@ -1624,7 +1620,6 @@ async function composeLibRsbuildConfig(
   return mergeRsbuildConfig(
     bundleConfig,
     formatConfig,
-    exeExternalOverride,
     // outputConfig,
     shimsConfig,
     syntaxConfig,
@@ -1714,6 +1709,12 @@ export async function composeCreateRsbuildConfig(
       userConfig.output.autoExternal ??= userConfig.autoExternal;
     }
 
+    // Exe bundles everything into a single binary, so disable automatic externals
+    // after user config is merged to prevent users from re-enabling it.
+    const exeExternalOverride: EnvironmentConfig = userConfig.experiments?.exe
+      ? { output: { autoExternal: false } }
+      : {};
+
     const config: RsbuildConfigWithLibInfo = {
       format: libConfig.format ?? 'esm',
       // The merge order represents the priority of the configuration
@@ -1744,6 +1745,7 @@ export async function composeCreateRsbuildConfig(
           outBase: true,
           experiments: true,
         }),
+        exeExternalOverride,
       ),
     };
 
