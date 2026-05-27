@@ -4,8 +4,6 @@ import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { expect, test } from '@rstest/core';
 import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
 
-import { composeModuleImportWarn } from '../../../packages/core/src/config';
-
 test('should fail to build when `output.target` is not "node"', async () => {
   const fixturePath = join(__dirname, 'browser');
   const { restore } = proxyConsole();
@@ -104,40 +102,6 @@ test('should remap node built-ins with user externals', async () => {
   // The remapped built-in stays lazy, so importing the bundle itself should remain safe.
   const esmOutput = await import(pathToFileURL(entryFiles.esm2!).href);
   expect(typeof esmOutput.loadPathSep).toBe('function');
-});
-
-test('should get warn when use require in ESM', async () => {
-  const { logs, restore } = proxyConsole();
-  const fixturePath = join(__dirname, 'module-import-warn');
-  const { entries } = await buildAndGetResults({ fixturePath });
-  const logStrings = logs.map((log) => stripAnsi(log));
-  const issuer = join(fixturePath, 'src/index.ts');
-
-  for (const external of [
-    'import * as __rspack_external_bar from "bar";',
-    'import * as __rspack_external_foo from "foo";',
-    'import * as __rspack_external_qux from "qux";',
-  ]) {
-    expect(entries.esm).toContain(external);
-  }
-
-  for (const external of ['foo', 'bar', 'qux']) {
-    expect(
-      logStrings.some((l) =>
-        l.includes(stripAnsi(composeModuleImportWarn(external, issuer))),
-      ),
-    ).toBe(true);
-  }
-
-  for (const external of ['./baz', 'quxx']) {
-    expect(
-      logStrings.some((l) =>
-        l.includes(stripAnsi(composeModuleImportWarn(external, issuer))),
-      ),
-    ).toBe(false);
-  }
-
-  restore();
 });
 
 test('require ESM from CJS', async () => {

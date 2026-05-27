@@ -397,10 +397,11 @@ describe('CLI options', () => {
         "lib": [
           {
             "autoExtension": false,
-            "autoExternal": false,
+            "autoExternal": true,
             "bundle": false,
             "dts": true,
             "output": {
+              "autoExternal": false,
               "cleanDistPath": true,
               "distPath": {
                 "root": "build",
