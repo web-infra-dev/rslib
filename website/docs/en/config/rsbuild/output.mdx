@@ -21,6 +21,21 @@ When `output.assetPrefix` is set to `"auto"`, Rslib defaults to setting [importM
 
 When `output.assetPrefix` is set to a specific path, the static asset import statements in JavaScript files will no longer be preserved and will be replaced with URLs prefixed by that path. Additionally, the static asset paths in CSS files will be substituted with paths that include this prefix.
 
+## output.autoExternal <RsbuildDocBadge path="/config/output/auto-external" text="output.autoExternal" />
+
+- **CLI:** `--auto-external` / `--no-auto-external`
+
+Whether to automatically externalize dependencies of different dependency types and do not bundle them. This is a specific configuration for bundle mode, it will not take effect in bundleless mode.
+
+In Rslib, the default value for this option depends on [format](/config/lib/format):
+
+- When `format` is `cjs` or `esm`, the default value is `true`.
+- When `format` is `umd`, `mf`, or `iife`, the default value is `false`.
+
+When set to `true`, the `dependencies`, `optionalDependencies`, and `peerDependencies` listed in `package.json` will be automatically externalized.
+
+For more details about handling third-party dependencies, please refer to [Handle Third-party Dependencies](/guide/advanced/third-party-deps).
+
 ## output.charset <RsbuildDocBadge path="/config/output/charset" text="output.charset" />
 
 The `charset` config allows you to specify the [character encoding](https://developer.mozilla.org/en-US/docs/Glossary/Character_encoding) for output files to ensure they are displayed correctly in different environments.
@@ -83,7 +98,7 @@ Whether to emit CSS to the output bundles.
 
 At build time, prevent some `import` dependencies from being packed into bundles in your code, and instead fetch them externally at runtime.
 
-In bundle mode, Rslib will automatically add the dependencies listed in the `dependencies`, `optionalDependencies`, and `peerDependencies` fields of `package.json` to `output.externals`. See [lib.autoExternal](/config/lib/auto-external) for more information.
+In bundle mode, Rslib will automatically externalize the dependencies listed in `package.json` based on [output.autoExternal](#outputautoexternal). See [output.autoExternal](#outputautoexternal) for more information.
 
 :::note
 It is important to note that `output.externals` differs from [resolve.alias](/config/rsbuild/resolve#resolvealias). Check out [resolve.alias](/config/rsbuild/resolve#resolvealias) documentation for more information.
