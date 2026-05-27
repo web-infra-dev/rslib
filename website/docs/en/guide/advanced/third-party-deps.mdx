@@ -59,30 +59,39 @@ console.info(foo);
 
 If you want to modify the default processing, you can use the following API:
 
-- [lib.autoExternal](/config/lib/auto-external)
+- [output.autoExternal](/config/rsbuild/output#outputautoexternal)
 - [output.externals](/config/rsbuild/output#outputexternals)
 
-## Exclude specified third-party dependencies
+## Customize third-party dependency handling
 
-The configuration described above allows you to implement more fine-grained handling of third-party dependencies.
+You can use the following two options to adjust the default behavior:
 
-For example, when we need to leave only certain dependencies unbundled, we can configure it as follows.
+- [output.autoExternal](/config/rsbuild/output#outputautoexternal): automatically externalizes dependencies based on `package.json`.
+- [output.externals](/config/rsbuild/output#outputexternals): manually marks matched import requests as external.
 
-:::tip
-In this case, some dependencies may not be suitable for bundling. If so, you can handle it as follows.
-:::
+### Bundle dependencies from package.json
+
+For ESM and CJS bundle outputs, Rslib enables `output.autoExternal` by default. This means dependencies in `dependencies`, `optionalDependencies`, and `peerDependencies` are externalized automatically.
+
+If you want these dependencies to be bundled into the output, you can configure [output.autoExternal](/config/rsbuild/output#outputautoexternal) to disable automatic externalization, or enable it only for specific dependency types.
+
+### Externalize specified imports
+
+Use [output.externals](/config/rsbuild/output#outputexternals) when you need to manually externalize an import, or change the request path after externalization:
 
 ```ts
 export default defineConfig({
   lib: [
     {
-      // ...
-      autoExternal: true,
       output: {
-        externals: ['pkg-1', /pkg-2/],
+        externals: {
+          react: 'react',
+          'react/jsx-runtime': 'react/jsx-runtime',
+        },
       },
-      // ...
     },
   ],
 });
 ```
+
+If you need precise control over which imports are externalized, we recommend disabling `output.autoExternal` and explicitly listing them with `output.externals`. If a subpath import such as `react/jsx-runtime` also needs to be externalized or remapped, add the subpath to `output.externals` as well.

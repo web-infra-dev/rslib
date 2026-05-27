@@ -57,32 +57,36 @@ import foo from 'foo';
 console.info(foo);
 ```
 
-如果想要修改默认的处理方式，可以通过下面的 API 进行修改:
+## 自定义三方依赖处理
 
-- [lib.autoExternal](/config/lib/auto-external)
-- [output.externals](/config/rsbuild/output#outputexternals)
+可以使用下面两个配置调整默认行为：
 
-## 排除指定三方依赖
+- [output.autoExternal](/config/rsbuild/output#outputautoexternal)：根据 `package.json` 自动外部化依赖。
+- [output.externals](/config/rsbuild/output#outputexternals)：手动将匹配到的 import 请求标记为 external。
 
-上面介绍的配置可以让你实现对三方依赖更细微的处理。
+### 打包 package.json 中的依赖
 
-例如当我们需要仅对某些依赖不进行打包处理的时候，可以按照如下方式进行配置：
+对于 ESM 和 CJS 的 bundle 产物，Rslib 默认启用 `output.autoExternal`。这意味着 `dependencies`、`optionalDependencies` 和 `peerDependencies` 中的依赖会被自动外部化。
 
-:::tip
-在这种情况下，某些依赖可能不适合打包。如果遇到这种情况，则可以按照下面的方式进行处理。
-:::
+如果希望这些依赖被打包进产物，通过配置 [output.autoExternal](/config/rsbuild/output#outputautoexternal) 可以禁用自动外部化，或者只对指定依赖类型启用。
+
+### 外部化指定 import
+
+当你需要手动外部化某个 import，或需要改变 external 后的请求路径时，可以使用 [output.externals](/config/rsbuild/output#outputexternals)：
 
 ```ts
 export default defineConfig({
   lib: [
     {
-      // ...
-      autoExternal: true,
       output: {
-        externals: ['pkg-1', /pkg-2/],
+        externals: {
+          react: 'react',
+          'react/jsx-runtime': 'react/jsx-runtime',
+        },
       },
-      // ...
     },
   ],
 });
 ```
+
+如果你需要精确控制哪些 import 被 external，建议禁用 `output.autoExternal`，并使用 `output.externals` 显式列出它们。如果 `react/jsx-runtime` 这类子路径 import 也需要 external 或改名，也需要把子路径一起添加到 `output.externals` 中。
