@@ -85,7 +85,7 @@ At build time, prevent some `import` dependencies from being packed into bundles
 
 In bundle mode, Rslib will automatically add the dependencies listed in the `dependencies`, `optionalDependencies`, and `peerDependencies` fields of `package.json` to `output.externals`. See [lib.autoExternal](/config/lib/auto-external) for more information.
 
-In addition, Rslib sets the default Rspack `externalsType` based on the output format and `output.target`:
+In addition, Rslib sets the default Rspack [`externalsType`](https://rspack.rs/config/externals#externalstype) based on the output format and [`output.target`](#outputtarget):
 
 - `esm` with `output.target` set to `node` (default): [modern-module](https://rspack.rs/config/externals#externalstypemodern-module). Static `import` externals are emitted as ESM imports, dynamic `import()` externals stay dynamic, and CommonJS `require()` externals are loaded through `createRequire`.
 - `esm` with `output.target` set to `web`: [module-import](https://rspack.rs/config/externals#externalstypemodule-import), preserving a safer external output for browser ESM bundles.
