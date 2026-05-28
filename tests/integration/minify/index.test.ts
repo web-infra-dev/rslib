@@ -54,8 +54,8 @@ describe('minify config (mf)', () => {
     const fixturePath = join(__dirname, 'mf/default');
     const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
     expect(mfExposeEntry).toMatchInlineSnapshot(`
-      "/*! LICENSE: __federation_expose_default_export.3aa30e97f0.js.LICENSE.txt */
-      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([[525],{2115(__unused_rspack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);__webpack_require__.d(__webpack_exports__,{Button:()=>Button,foo:()=>foo});var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{})}}]);"
+      "/*! LICENSE: __federation_expose_default_export.3ca2a77c59.js.LICENSE.txt */
+      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([[525],{2115(__unused_rspack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{});__webpack_require__.d(__webpack_exports__,{},{Button:Button,foo:foo})}}]);"
     `);
   });
 
@@ -68,10 +68,6 @@ describe('minify config (mf)', () => {
       (globalThis["disable_minify"] = globalThis["disable_minify"] || []).push([[525], {
       2115(__unused_rspack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.r(__webpack_exports__);
-      __webpack_require__.d(__webpack_exports__, {
-        Button: () => (Button),
-        foo: () => (foo)
-      });
       /* import */ var react_jsx_runtime__rspack_import_0 = __webpack_require__(491);
       /* import */ var react_jsx_runtime__rspack_import_0_default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__rspack_import_0);
       /*! Legal Comment */ 
@@ -82,6 +78,12 @@ describe('minify config (mf)', () => {
       };
       // normal comment
       const Button = ()=>/*#__PURE__*/ (0,react_jsx_runtime__rspack_import_0.jsx)('button', {});
+
+      __webpack_require__.d(__webpack_exports__, {
+      }, {
+        Button: Button,
+        foo: foo
+      });
 
 
       },
