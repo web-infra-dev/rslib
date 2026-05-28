@@ -64,29 +64,38 @@ If you want to modify the default processing, you can use the following API:
 
 ## Customize third-party dependency handling
 
-You can use the following two options to adjust the default behavior:
+Rslib mainly uses [output.autoExternal](/config/rsbuild/output#outputautoexternal) and [output.externals](/config/rsbuild/output#outputexternals) to control whether third-party dependencies are bundled.
 
-- [output.autoExternal](/config/rsbuild/output#outputautoexternal): automatically externalizes dependencies based on `package.json`.
-- [output.externals](/config/rsbuild/output#outputexternals): manually marks matched import requests as external.
+### Override the default auto external behavior
 
-### Bundle dependencies from package.json
+For ESM and CJS bundle outputs, Rslib enables `output.autoExternal` by default. It automatically externalizes dependencies declared in `dependencies`, `optionalDependencies`, and `peerDependencies`.
 
-For ESM and CJS bundle outputs, Rslib enables `output.autoExternal` by default. This means dependencies in `dependencies`, `optionalDependencies`, and `peerDependencies` are externalized automatically.
-
-If you want these dependencies to be bundled into the output, you can configure [output.autoExternal](/config/rsbuild/output#outputautoexternal) to disable automatic externalization, or enable it only for specific dependency types.
-
-### Externalize specified imports
-
-Use [output.externals](/config/rsbuild/output#outputexternals) when you need to manually externalize an import, or change the request path after externalization:
+If you want these dependencies to be bundled into the output, disable auto externalization:
 
 ```ts
 export default defineConfig({
   lib: [
     {
       output: {
-        externals: {
-          react: 'react',
-          'react/jsx-runtime': 'react/jsx-runtime',
+        autoExternal: false,
+      },
+    },
+  ],
+});
+```
+
+If you only want to adjust certain dependency types, use the object form:
+
+```ts
+export default defineConfig({
+  lib: [
+    {
+      output: {
+        autoExternal: {
+          dependencies: true,
+          optionalDependencies: true,
+          peerDependencies: true,
+          devDependencies: false,
         },
       },
     },
@@ -94,4 +103,98 @@ export default defineConfig({
 });
 ```
 
-If you need precise control over which imports are externalized, we recommend disabling `output.autoExternal` and explicitly listing them with `output.externals`. If a subpath import such as `react/jsx-runtime` also needs to be externalized or remapped, add the subpath to `output.externals` as well.
+If you only want a few dependencies to skip auto externalization, use `exclude`. Excluded dependencies and their subpath imports will be bundled into the output:
+
+```ts
+export default defineConfig({
+  lib: [
+    {
+      output: {
+        autoExternal: {
+          exclude: ['react', /^@scope\//],
+        },
+      },
+    },
+  ],
+});
+```
+
+### Externalize specified imports
+
+Use [output.externals](/config/rsbuild/output#outputexternals) when you need to specify imports that should not be bundled by Rslib, or when you need to change the request path after externalization.
+
+The array form is useful when you want to keep the original request paths:
+
+```ts
+export default defineConfig({
+  lib: [
+    {
+      output: {
+        externals: ['react', 'react/jsx-runtime'],
+      },
+    },
+  ],
+});
+```
+
+The object form can specify the request path after externalization, and is commonly used to rename externals:
+
+```ts
+export default defineConfig({
+  lib: [
+    {
+      output: {
+        externals: {
+          react: 'react-18',
+          'react/jsx-runtime': 'react-18/jsx-runtime',
+        },
+      },
+    },
+  ],
+});
+```
+
+Subpath imports such as `react/jsx-runtime` need to be handled separately. Configuring only `react` does not mean `react/jsx-runtime` will use the same external rule.
+
+If you want to match a group of imports, use a regular expression:
+
+```ts
+export default defineConfig({
+  lib: [
+    {
+      output: {
+        externals: [/^react($|\/)/],
+      },
+    },
+  ],
+});
+```
+
+### Configure more complex external rules
+
+If you need to decide whether to externalize a module based on the request issuer, context, or other information, configure Rspack's `externals` via [tools.rspack](/config/rsbuild/tools#toolsrspack):
+
+```ts
+export default defineConfig({
+  lib: [
+    {
+      tools: {
+        rspack: {
+          externals: [
+            ({ request }, callback) => {
+              if (request?.startsWith('react')) {
+                callback(null, request);
+                return;
+              }
+
+              callback();
+            },
+          ],
+        },
+      },
+    },
+  ],
+});
+```
+
+For most cases, prefer `output.autoExternal` and `output.externals`. Use `tools.rspack.externals` only when you need more advanced Rspack external capabilities. For more details, see the Rspack [Externals](https://rspack.rs/config/externals) documentation.
