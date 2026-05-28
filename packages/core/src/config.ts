@@ -1649,25 +1649,6 @@ async function composeLibRsbuildConfig(
   );
 }
 
-const normalizeDeprecatedAutoExternal = <T extends Partial<LibConfig>>(
-  config: T,
-): T => {
-  if (
-    config.autoExternal === undefined ||
-    config.output?.autoExternal !== undefined
-  ) {
-    return config;
-  }
-
-  return {
-    ...config,
-    output: {
-      ...config.output,
-      autoExternal: config.autoExternal,
-    },
-  };
-};
-
 export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
 ): Promise<RsbuildConfigWithLibInfo[]> {
@@ -1696,10 +1677,35 @@ export async function composeCreateRsbuildConfig(
   }
 
   const libConfigPromises = libConfigsArray.map(async (libConfig, index) => {
+    if (libConfig.autoExternal !== undefined) {
+      logger.warn(
+        `${color.yellow('lib.autoExternal')} is deprecated, use ${color.yellow('output.autoExternal')} instead.`,
+      );
+    }
+
+    const normalizedLibConfig =
+      libConfig.autoExternal !== undefined &&
+      libConfig.output?.autoExternal === undefined
+        ? {
+            ...libConfig,
+            output: {
+              ...libConfig.output,
+              autoExternal: libConfig.autoExternal,
+            },
+          }
+        : libConfig;
+
     const userConfig = mergeRsbuildConfig<LibConfig>(
-      normalizeDeprecatedAutoExternal(sharedRsbuildConfig),
-      normalizeDeprecatedAutoExternal(libConfig),
+      sharedRsbuildConfig,
+      normalizedLibConfig,
     );
+
+    // Exe bundles everything into a single binary, so disable automatic externals
+    // after user config is merged to prevent users from re-enabling it.
+    if (userConfig.experiments?.exe) {
+      userConfig.output ??= {};
+      userConfig.output.autoExternal = false;
+    }
 
     // Merge the configuration of each environment based on the shared Rsbuild
     // configuration and Lib configuration in the settings.
@@ -1719,19 +1725,6 @@ export async function composeCreateRsbuildConfig(
     // Already manually sort and merge the externals configuration.
     userConfig.output ??= {};
     delete userConfig.output.externals;
-
-    // Deprecated lib.autoExternal → output.autoExternal shim
-    if (userConfig.autoExternal !== undefined) {
-      logger.warn(
-        `${color.yellow('lib.autoExternal')} is deprecated, use ${color.yellow('output.autoExternal')} instead.`,
-      );
-    }
-
-    // Exe bundles everything into a single binary, so disable automatic externals
-    // after user config is merged to prevent users from re-enabling it.
-    const exeExternalOverride: EnvironmentConfig = userConfig.experiments?.exe
-      ? { output: { autoExternal: false } }
-      : {};
 
     const config: RsbuildConfigWithLibInfo = {
       format: libConfig.format ?? 'esm',
@@ -1763,7 +1756,6 @@ export async function composeCreateRsbuildConfig(
           outBase: true,
           experiments: true,
         }),
-        exeExternalOverride,
       ),
     };
 
