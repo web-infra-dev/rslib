@@ -59,11 +59,15 @@ exports[`use svgr > mixedImport: true should contain export { url as default, Re
 ""use strict";
 var __webpack_require__ = {};
 (()=>{
-    __webpack_require__.d = (exports1, definition)=>{
-        for(var key in definition)if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports1, key)) Object.defineProperty(exports1, key, {
-            enumerable: true,
-            get: definition[key]
-        });
+    __webpack_require__.d = (exports1, getters, values)=>{
+        var define = (defs, kind)=>{
+            for(var key in defs)if (__webpack_require__.o(defs, key) && !__webpack_require__.o(exports1, key)) Object.defineProperty(exports1, key, {
+                enumerable: true,
+                [kind]: defs[key]
+            });
+        };
+        define(getters, "get");
+        define(values, "value");
     };
 })();
 (()=>{
@@ -154,11 +158,15 @@ exports[`use svgr > should only contain svgr default export 2`] = `
 ""use strict";
 var __webpack_require__ = {};
 (()=>{
-    __webpack_require__.d = (exports1, definition)=>{
-        for(var key in definition)if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports1, key)) Object.defineProperty(exports1, key, {
-            enumerable: true,
-            get: definition[key]
-        });
+    __webpack_require__.d = (exports1, getters, values)=>{
+        var define = (defs, kind)=>{
+            for(var key in defs)if (__webpack_require__.o(defs, key) && !__webpack_require__.o(exports1, key)) Object.defineProperty(exports1, key, {
+                enumerable: true,
+                [kind]: defs[key]
+            });
+        };
+        define(getters, "get");
+        define(values, "value");
     };
 })();
 (()=>{
