@@ -8,8 +8,7 @@ test('resolve data url', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
-    "const javascript_export_default_42 = 42;
-    console.log('x:', javascript_export_default_42);
+    "console.log('x:', 42);
     export { };
     "
   `);
@@ -43,11 +42,15 @@ test('resolve false', async () => {
         };
     })();
     (()=>{
-        __webpack_require__.d = (exports, definition)=>{
-            for(var key in definition)if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) Object.defineProperty(exports, key, {
-                enumerable: true,
-                get: definition[key]
-            });
+        __webpack_require__.d = (exports, getters, values)=>{
+            var define = (defs, kind)=>{
+                for(var key in defs)if (__webpack_require__.o(defs, key) && !__webpack_require__.o(exports, key)) Object.defineProperty(exports, key, {
+                    enumerable: true,
+                    [kind]: defs[key]
+                });
+            };
+            define(getters, "get");
+            define(values, "value");
         };
     })();
     (()=>{

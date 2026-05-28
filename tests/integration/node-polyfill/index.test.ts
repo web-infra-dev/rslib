@@ -6,7 +6,7 @@ test('`Buffer` should be imported from polyfill when bundled', async () => {
   const fixturePath = join(__dirname, './bundle');
   const { entries, entryFiles } = await buildAndGetResults({ fixturePath });
   const bufferRegex =
-    /var .* = __webpack_require__\(".*\/node_modules\/buffer\/index\.js"\)\[".*"\]/g;
+    /var [\w$]+ = __webpack_require__\(".*\/node_modules\/buffer\/index\.js"\)\.[\w$]+/g;
 
   for (const format of ['esm', 'cjs'] as const) {
     expect(entries[format].match(bufferRegex)?.length).toBe(2);
