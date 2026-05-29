@@ -8,7 +8,7 @@ export default defineConfig({
       syntax: ['es2023'],
       dts: {
         bundle: false,
-        tsgo: true,
+        isolated: true,
       },
       redirect: {
         dts: {

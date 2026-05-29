@@ -13,7 +13,7 @@ export default defineConfig({
         alias: {
           rslog: './compiled/rslog',
         },
-        tsgo: true,
+        isolated: true,
         distPath: './dist-types',
       },
       redirect: {

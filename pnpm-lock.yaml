@@ -14,7 +14,7 @@ importers:
         version: 0.5.3(jiti@2.6.1)
       '@rstest/adapter-rslib':
         specifier: ^0.10.2
-        version: 0.10.2(@rslib/core@0.21.5)(@rstest/core@0.10.2)(typescript@6.0.3)
+        version: 0.10.2(@rslib/core@0.22.0)(@rstest/core@0.10.2)(typescript@6.0.3)
       '@rstest/core':
         specifier: ^0.10.2
         version: 0.10.2
@@ -24,6 +24,9 @@ importers:
       '@types/node':
         specifier: ^24.12.4
         version: 24.12.4
+      '@typescript/native-preview':
+        specifier: 7.0.0-dev.20260527.2
+        version: 7.0.0-dev.20260527.2
       cross-env:
         specifier: ^10.1.0
         version: 10.1.0
@@ -334,16 +337,13 @@ importers:
     devDependencies:
       '@module-federation/rsbuild-plugin':
         specifier: ^2.5.0
-        version: 2.5.0(@rsbuild/core@2.0.8)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.2)
+        version: 2.5.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.2)
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20260527.2
-        version: 7.0.0-dev.20260527.2
       cac:
         specifier: ^7.0.0
         version: 7.0.0
@@ -366,8 +366,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0(@rsbuild/core@2.0.8)
       rslib:
-        specifier: npm:@rslib/core@0.21.5
-        version: '@rslib/core@0.21.5(@microsoft/api-extractor@7.58.7)(@module-federation/runtime-tools@2.5.0)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3)'
+        specifier: npm:@rslib/core@0.22.0
+        version: '@rslib/core@0.22.0(@microsoft/api-extractor@7.58.7)(@module-federation/runtime-tools@2.5.0)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3)'
       rslog:
         specifier: ^2.1.1
         version: 2.1.1
@@ -403,8 +403,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0(@rsbuild/core@2.0.8)
       rslib:
-        specifier: npm:@rslib/core@0.21.5
-        version: '@rslib/core@0.21.5(@microsoft/api-extractor@7.58.7)(@module-federation/runtime-tools@2.5.0)(typescript@6.0.3)'
+        specifier: npm:@rslib/core@0.22.0
+        version: '@rslib/core@0.22.0(@microsoft/api-extractor@7.58.7)(@module-federation/runtime-tools@2.5.0)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3)'
       tsx:
         specifier: ^4.22.3
         version: 4.22.3
@@ -427,9 +427,6 @@ importers:
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20260527.2
-        version: 7.0.0-dev.20260527.2
       magic-string:
         specifier: ^0.30.21
         version: 0.30.21
@@ -440,8 +437,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0(@rsbuild/core@2.0.8)
       rslib:
-        specifier: npm:@rslib/core@0.21.5
-        version: '@rslib/core@0.21.5(@microsoft/api-extractor@7.58.7)(@module-federation/runtime-tools@2.5.0)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3)'
+        specifier: npm:@rslib/core@0.22.0
+        version: '@rslib/core@0.22.0(@microsoft/api-extractor@7.58.7)(@module-federation/runtime-tools@2.5.0)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3)'
       tinyglobby:
         specifier: ^0.2.16
         version: 0.2.16
@@ -2968,8 +2965,8 @@ packages:
       '@rsbuild/core':
         optional: true
 
-  '@rslib/core@0.21.5':
-    resolution: {integrity: sha512-KPWR8gcodSIw8txfJ+KbgF5NoL7CxX0AljHiJk1VWDiClrN94jYmF5iGCFgaDraOBV9jJhpIIwPOfu09ild8eA==}
+  '@rslib/core@0.22.0':
+    resolution: {integrity: sha512-DGTMBDTSdILac0SmeBWvdYf/ZDn09vXgbJQ3/N1J7i6vBpFGWCCKjARoz1R5jYqr1Z9tLJ1OfOVZktbNY/XXuA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -6464,8 +6461,8 @@ packages:
     resolution: {integrity: sha512-nLTrUKm2UyiL7rlhapu/Zl45FwNgkZGaCpZbIHajDYgwlJCOzLSk+cIPAnsEqV955GjILJnKbdQC1nVPz+gAYQ==}
     engines: {node: '>= 18'}
 
-  rsbuild-plugin-dts@0.21.5:
-    resolution: {integrity: sha512-tRSqSCmaY2Ef/FTxcLUw26jQxM/HJHAFqTsqngXnXnfic0BHlSCKzJuwjGoGUYimb3RdH6qnC7jzkXuoe+ZXOA==}
+  rsbuild-plugin-dts@0.22.0:
+    resolution: {integrity: sha512-Oyiu5oJDHWOnBv7yRr8eAGfoEddwxfPqUbAX6HvcJxrnR/h6Zd0VgTBWVTgqALYhLcL2ZdyZ2vwnqfhan4krwA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@microsoft/api-extractor': ^7
@@ -8548,21 +8545,6 @@ snapshots:
       - utf-8-validate
       - vue-tsc
 
-  '@module-federation/node@2.7.43(typescript@6.0.3)(vue-tsc@3.3.2)':
-    dependencies:
-      '@module-federation/enhanced': 2.5.0(@rspack/core@2.0.5)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.2)
-      '@module-federation/runtime': 2.5.0(node-fetch@2.7.0)
-      '@module-federation/sdk': 2.5.0(node-fetch@2.7.0)
-      encoding: 0.1.13
-      node-fetch: 2.7.0(encoding@0.1.13)
-      tapable: 2.3.0
-    transitivePeerDependencies:
-      - '@rspack/core'
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - vue-tsc
-
   '@module-federation/rsbuild-plugin@2.5.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5)(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.2)':
     dependencies:
       '@module-federation/enhanced': 2.5.0(@rspack/core@2.0.5)(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.2)
@@ -8583,22 +8565,6 @@ snapshots:
     dependencies:
       '@module-federation/enhanced': 2.5.0(@rspack/core@2.0.5)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.2)
       '@module-federation/node': 2.7.43(@rspack/core@2.0.5)(typescript@6.0.3)(vue-tsc@3.3.2)
-      '@module-federation/sdk': 2.5.0(node-fetch@2.7.0)
-    optionalDependencies:
-      '@rsbuild/core': 2.0.8(@module-federation/runtime-tools@2.5.0)
-    transitivePeerDependencies:
-      - '@rspack/core'
-      - bufferutil
-      - node-fetch
-      - typescript
-      - utf-8-validate
-      - vue-tsc
-      - webpack
-
-  '@module-federation/rsbuild-plugin@2.5.0(@rsbuild/core@2.0.8)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.2)':
-    dependencies:
-      '@module-federation/enhanced': 2.5.0(@rspack/core@2.0.5)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.2)
-      '@module-federation/node': 2.7.43(typescript@6.0.3)(vue-tsc@3.3.2)
       '@module-federation/sdk': 2.5.0(node-fetch@2.7.0)
     optionalDependencies:
       '@rsbuild/core': 2.0.8(@module-federation/runtime-tools@2.5.0)
@@ -9217,34 +9183,10 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.0.8(@module-federation/runtime-tools@2.5.0)
 
-  '@rslib/core@0.21.5(@microsoft/api-extractor@7.58.7)(@module-federation/runtime-tools@2.5.0)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3)':
+  '@rslib/core@0.22.0(@microsoft/api-extractor@7.58.7)(@module-federation/runtime-tools@2.5.0)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3)':
     dependencies:
       '@rsbuild/core': 2.0.8(@module-federation/runtime-tools@2.5.0)
-      rsbuild-plugin-dts: 0.21.5(@microsoft/api-extractor@7.58.7)(@rsbuild/core@2.0.8)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3)
-    optionalDependencies:
-      '@microsoft/api-extractor': 7.58.7(@types/node@25.2.0)
-      typescript: 6.0.3
-    transitivePeerDependencies:
-      - '@module-federation/runtime-tools'
-      - '@typescript/native-preview'
-      - core-js
-
-  '@rslib/core@0.21.5(@microsoft/api-extractor@7.58.7)(@module-federation/runtime-tools@2.5.0)(typescript@6.0.3)':
-    dependencies:
-      '@rsbuild/core': 2.0.8(@module-federation/runtime-tools@2.5.0)
-      rsbuild-plugin-dts: 0.21.5(@microsoft/api-extractor@7.58.7)(@rsbuild/core@2.0.8)(typescript@6.0.3)
-    optionalDependencies:
-      '@microsoft/api-extractor': 7.58.7(@types/node@24.12.4)
-      typescript: 6.0.3
-    transitivePeerDependencies:
-      - '@module-federation/runtime-tools'
-      - '@typescript/native-preview'
-      - core-js
-
-  '@rslib/core@0.21.5(@microsoft/api-extractor@7.58.7)(typescript@6.0.3)':
-    dependencies:
-      '@rsbuild/core': 2.0.8(@module-federation/runtime-tools@2.5.0)
-      rsbuild-plugin-dts: 0.21.5(@microsoft/api-extractor@7.58.7)(@rsbuild/core@2.0.8)(typescript@6.0.3)
+      rsbuild-plugin-dts: 0.22.0(@microsoft/api-extractor@7.58.7)(@rsbuild/core@2.0.8)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.7(@types/node@24.12.4)
       typescript: 6.0.3
@@ -9462,9 +9404,9 @@ snapshots:
     optionalDependencies:
       '@rspress/core': 2.0.13(@module-federation/runtime-tools@2.5.0)(@rspack/core@2.0.5)(@types/mdast@4.0.4)(@types/react@19.2.15)(micromark-util-types@2.0.2)(micromark@4.0.2)
 
-  '@rstest/adapter-rslib@0.10.2(@rslib/core@0.21.5)(@rstest/core@0.10.2)(typescript@6.0.3)':
+  '@rstest/adapter-rslib@0.10.2(@rslib/core@0.22.0)(@rstest/core@0.10.2)(typescript@6.0.3)':
     dependencies:
-      '@rslib/core': 0.21.5(@microsoft/api-extractor@7.58.7)(typescript@6.0.3)
+      '@rslib/core': 0.22.0(@microsoft/api-extractor@7.58.7)(@module-federation/runtime-tools@2.5.0)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3)
       '@rstest/core': 0.10.2
     optionalDependencies:
       typescript: 6.0.3
@@ -13437,21 +13379,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.21.5(@microsoft/api-extractor@7.58.7)(@rsbuild/core@2.0.8)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3):
-    dependencies:
-      '@ast-grep/napi': 0.37.0
-      '@rsbuild/core': 2.0.8(@module-federation/runtime-tools@2.5.0)
-    optionalDependencies:
-      '@microsoft/api-extractor': 7.58.7(@types/node@25.2.0)
-      '@typescript/native-preview': 7.0.0-dev.20260527.2
-      typescript: 6.0.3
-
-  rsbuild-plugin-dts@0.21.5(@microsoft/api-extractor@7.58.7)(@rsbuild/core@2.0.8)(typescript@6.0.3):
+  rsbuild-plugin-dts@0.22.0(@microsoft/api-extractor@7.58.7)(@rsbuild/core@2.0.8)(@typescript/native-preview@7.0.0-dev.20260527.2)(typescript@6.0.3):
     dependencies:
       '@ast-grep/napi': 0.37.0
       '@rsbuild/core': 2.0.8(@module-federation/runtime-tools@2.5.0)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.7(@types/node@24.12.4)
+      '@typescript/native-preview': 7.0.0-dev.20260527.2
       typescript: 6.0.3
 
   rsbuild-plugin-google-analytics@1.0.5(@rsbuild/core@2.0.8):
