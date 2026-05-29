@@ -358,12 +358,12 @@ export default {
 
 #### 适用场景
 
-Rslib 默认通过 TypeScript Compiler API 生成类型声明文件，也可以通过 `dts.tsgo` 使用 `tsgo` 生成类型声明文件。与这两种方式不同，`dts.isolated` 不会在声明文件生成阶段执行完整类型检查，因此更适合与其他独立的高性能类型检查流程搭配使用。
+Rslib 默认通过 TypeScript Compiler API 生成类型声明文件，也可以通过 `dts.tsgo` 使用 `tsgo` 生成类型声明文件。与这两种方式不同，`dts.isolated` 速度最快，适合追求构建性能的场景。
 
-例如在 monorepo 项目中，可以配合 [`rslint --type-check`](https://rslint.rs/guide/type-checking) 使用该选项：
+由于 `dts.isolated` 不会在声明文件生成阶段执行类型检查，所以通常需要与其他独立的高性能类型检查流程搭配使用。例如在 monorepo 项目中，可以配合 [`rslint --type-check`](https://rslint.rs/guide/type-checking) 使用该选项：
 
-- 由 `rslint --type-check` 作为统一的类型检查步骤。
-- 由 `dts.isolated` 负责在各个包构建时快速输出类型声明文件。
+- 日常构建：由 `dts.isolated` 负责在各个包构建时快速输出类型声明文件。
+- 全局检查：在 CI 或 pre-commit hook 中运行 `rslint --type-check`，按需执行统一的类型检查。
 
 这样既能保留完整的类型检查，又能减少每个包在构建阶段重复执行 TypeScript 类型分析、加载 TypeScript 或 `tsgo` 相关包及 native binding 的开销，让整体构建链路更轻量。
 
