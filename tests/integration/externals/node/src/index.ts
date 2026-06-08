@@ -11,7 +11,7 @@ export const foo = async () => {
 
 export const bar = async () => {
   assert(React.version);
-  const barModule = require('bar'); // ESM: fallback to "module" when not specify externals type
+  const barModule = require('bar'); // ESM: follows modern-module externals type
   barModule();
 };
 
