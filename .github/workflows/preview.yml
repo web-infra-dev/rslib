@@ -27,11 +27,6 @@ jobs:
           fetch-depth: 1
           ref: ${{ github.event.inputs.branch }}
 
-      - name: Install pnpm
-        run: |
-          npm install -g corepack@latest --force
-          corepack enable
-
       - uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
         id: changes
         with:
@@ -47,9 +42,11 @@ jobs:
           node-version: 24
           package-manager-cache: false
 
-      - name: Install Dependencies
+      - name: Install pnpm
         if: steps.changes.outputs.changed == 'true'
-        run: pnpm install
+        uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+        with:
+          run_install: true
 
       - name: Publish Preview
         if: steps.changes.outputs.changed == 'true'
