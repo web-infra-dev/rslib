@@ -478,6 +478,11 @@ export interface LibConfig extends EnvironmentConfig {
    */
   output?: RslibOutputConfig;
   /**
+   * Enable the first phase of Rslib WASM support for bundle ESM outputs.
+   * @defaultValue `false`
+   */
+  wasm?: boolean;
+  /**
    * Options for experimental features.
    * @defaultValue `{}`
    * @see {@link https://rslib.rs/config/lib/experiments}

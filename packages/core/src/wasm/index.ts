@@ -1,0 +1,1 @@
+export { composeWasmConfig } from './wasmConfig';
