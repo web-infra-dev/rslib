@@ -205,7 +205,7 @@ export default {
 
 Rslib uses [rsbuild-plugin-dts](https://github.com/web-infra-dev/rslib/blob/main/packages/plugin-dts/README.md) to generate declaration files, which supports configuration via [output.externals](/config/rsbuild/output#outputexternals) for excluding certain dependencies from bundled declaration files.
 
-For example, if `@types/foo` is only declared in `devDependencies`, according to the dependency handling logic of [autoExternal](/config/lib/auto-external), Rslib will try to bundle `@types/foo` into the declaration output files during the build. In this case, you can exclude `@types/foo` by configuring [output.externals](/config/rsbuild/output#outputexternals).
+For example, if `@types/foo` is only declared in `devDependencies`, according to the dependency handling logic of [output.autoExternal](/config/rsbuild/output#outputautoexternal), Rslib will try to bundle `@types/foo` into the declaration output files during the build. In this case, you can exclude `@types/foo` by configuring [output.externals](/config/rsbuild/output#outputexternals).
 
 ```ts title="rslib.config.ts"
 export default {

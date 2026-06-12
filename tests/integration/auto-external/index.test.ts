@@ -1,9 +1,6 @@
 import { join } from 'node:path';
-import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { expect, test } from '@rstest/core';
-import { buildAndGetResults, proxyConsole } from 'test-helper';
-
-import { composeModuleImportWarn } from '../../../packages/core/src/config';
+import { buildAndGetResults } from 'test-helper';
 
 test('auto external default should works', async () => {
   const fixturePath = join(__dirname, 'default');
@@ -72,39 +69,4 @@ test('externals should overrides auto external', async () => {
   expect(entries.cjs).toContain(
     'const external_react1_namespaceObject = require("react1");',
   );
-});
-
-test('should get warn when use require in ESM', async () => {
-  const { logs, restore } = proxyConsole();
-  const fixturePath = join(__dirname, 'module-import-warn');
-  const { entries } = await buildAndGetResults({ fixturePath });
-  const logStrings = logs.map((log) => stripAnsi(log));
-
-  const shouldWarn = ['react', 'e2', 'e3', 'e5', 'e6', 'e7'];
-  const shouldNotWarn = ['e1', 'e4', 'e8', 'lodash/add', 'lodash/drop'];
-  const issuer = join(fixturePath, 'src/index.ts');
-
-  for (const item of shouldWarn) {
-    expect(entries.esm).toContain(
-      `import * as __rspack_external_${item} from "${item}"`,
-    );
-  }
-
-  for (const request of shouldWarn) {
-    expect(
-      logStrings.some((l) =>
-        l.includes(stripAnsi(composeModuleImportWarn(request, issuer))),
-      ),
-    ).toBe(true);
-  }
-
-  for (const request of shouldNotWarn) {
-    expect(
-      logStrings.some((l) =>
-        l.includes(stripAnsi(composeModuleImportWarn(request, issuer))),
-      ),
-    ).toBe(false);
-  }
-
-  restore();
 });
