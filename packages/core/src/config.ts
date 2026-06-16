@@ -482,7 +482,6 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
       htmlPlugin: false,
       rspack: {
         optimization: {
-          moduleIds: 'named',
           nodeEnv: false,
         },
         // TypeScript-specific behavior: if the extension is ".js" or ".jsx", try replacing it with ".ts" or ".tsx"
@@ -750,7 +749,6 @@ const composeFormatConfig = ({
               // can not set nodeEnv to false, because mf format should build shared module.
               // If nodeEnv is false, the process.env.NODE_ENV in third-party packages's will not be replaced
               nodeEnv: env === 'development' ? 'development' : 'production',
-              moduleIds: env === 'development' ? 'named' : 'deterministic',
             };
           },
         },
@@ -1705,6 +1703,25 @@ const composeTargetConfig = (
   }
 };
 
+const composeModuleIdsConfig = (
+  format: Format,
+  target: RsbuildConfigOutputTarget,
+): EnvironmentConfig => {
+  if (format === 'mf') {
+    return {};
+  }
+
+  return {
+    tools: {
+      rspack: {
+        optimization: {
+          moduleIds: target === 'web' ? 'deterministic' : 'named',
+        },
+      },
+    },
+  };
+};
+
 const composeExternalHelpersConfig = (
   externalHelpers: boolean,
   pkgJson?: PkgJson,
@@ -1792,6 +1809,7 @@ async function composeLibRsbuildConfig(
     multiCompilerIndex,
     sourceEntry: config.source?.entry,
   });
+  const moduleIdsConfig = composeModuleIdsConfig(format, target);
   const userExternals = hasExe ? undefined : config.output?.externals;
   const externalHelpersConfig = composeExternalHelpersConfig(
     hasExe ? false : externalHelpers,
@@ -1872,6 +1890,7 @@ async function composeLibRsbuildConfig(
     bundleConfig,
     formatConfig,
     // outputConfig,
+    moduleIdsConfig,
     shimsConfig,
     syntaxConfig,
     externalHelpersConfig,
