@@ -307,9 +307,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   watchOptions: {
     aggregateTimeout: 0
   },
-  experiments: {
-    pureFunctions: true
-  },
   devtool: false,
   cache: {
     type: 'persistent',
@@ -582,7 +579,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
@@ -1081,9 +1088,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   watchOptions: {
     aggregateTimeout: 0
   },
-  experiments: {
-    pureFunctions: true
-  },
   devtool: false,
   cache: {
     type: 'persistent',
@@ -1351,7 +1355,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
@@ -1851,9 +1865,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   watchOptions: {
     aggregateTimeout: 0
   },
-  experiments: {
-    pureFunctions: true
-  },
   devtool: false,
   cache: {
     type: 'persistent',
@@ -2102,7 +2113,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
@@ -2522,9 +2543,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   watchOptions: {
     aggregateTimeout: 0
   },
-  experiments: {
-    pureFunctions: true
-  },
   devtool: false,
   cache: {
     type: 'persistent',
@@ -2777,7 +2795,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
@@ -3197,9 +3225,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   watchOptions: {
     aggregateTimeout: 0
-  },
-  experiments: {
-    pureFunctions: true
   },
   devtool: false,
   cache: {
