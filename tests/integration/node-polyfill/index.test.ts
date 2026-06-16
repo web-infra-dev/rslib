@@ -6,7 +6,7 @@ test('`Buffer` should be imported from polyfill when bundled', async () => {
   const fixturePath = join(__dirname, './bundle');
   const { entries, entryFiles } = await buildAndGetResults({ fixturePath });
   const bufferRegex =
-    /var [\w$]+ = __webpack_require__\(".*\/node_modules\/buffer\/index\.js"\)\.[\w$]+/g;
+    /var [\w$]+ = __webpack_require__\((?:"[^"]+"|\d+)\)\.[\w$]+/g;
 
   for (const format of ['esm', 'cjs'] as const) {
     expect(entries[format].match(bufferRegex)?.length).toBe(2);
@@ -31,7 +31,7 @@ test('`Buffer` should be aliased to polyfill packages when bundle is disabled', 
     import { createRequire as __rspack_createRequire } from "node:module";
     const __rspack_createRequire_require = __rspack_createRequire(import.meta.url);
     __webpack_require__.add({
-        "<PNPM_INNER>/buffer/index.js" (module) {
+        181 (module) {
             module.exports = __rspack_createRequire_require("buffer");
         }
     });

@@ -737,6 +737,54 @@ describe('syntax', () => {
   });
 });
 
+describe('module ids', () => {
+  test('uses target-specific module ids by default', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {},
+        {
+          output: {
+            target: 'web',
+          },
+        },
+      ],
+    };
+
+    const rslib = await createRslib({
+      config: rslibConfig,
+    });
+    const { origin } = await rslib.inspectConfig();
+
+    expect(origin.bundlerConfigs[0]!.optimization?.moduleIds).toBe('named');
+    expect(origin.bundlerConfigs[1]!.optimization?.moduleIds).toBe(
+      'deterministic',
+    );
+  });
+
+  test('respects user configured module ids for web target', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [{}],
+      output: {
+        target: 'web',
+      },
+      tools: {
+        rspack: {
+          optimization: {
+            moduleIds: 'named',
+          },
+        },
+      },
+    };
+
+    const rslib = await createRslib({
+      config: rslibConfig,
+    });
+    const { origin } = await rslib.inspectConfig();
+
+    expect(origin.bundlerConfigs[0]!.optimization?.moduleIds).toBe('named');
+  });
+});
+
 describe('minify', () => {
   test('`minify` default value', async () => {
     const rslibConfig: RslibConfig = {

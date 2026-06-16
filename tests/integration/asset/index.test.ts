@@ -57,7 +57,7 @@ test('set the size threshold to inline static assets', async () => {
   expect(logoCjs2).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        "./src/assets/logo.svg" (module) {
+        334 (module) {
             module.exports = require("../static/svg/logo.svg");
         }
     };
@@ -71,7 +71,7 @@ test('set the size threshold to inline static assets', async () => {
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("./src/assets/logo.svg");
+    var __webpack_exports__ = __webpack_require__(334);
     exports["default"] = __webpack_exports__["default"];
     for(var __rspack_i in __webpack_exports__)if (-1 === [
         "default"
@@ -117,7 +117,7 @@ test('set the assets filename with hash', async () => {
   expect(imageCjs1).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        "./src/assets/image.png" (module) {
+        369 (module) {
             module.exports = require("../static/image/image.c74653c171.png");
         }
     };
@@ -131,7 +131,7 @@ test('set the assets filename with hash', async () => {
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("./src/assets/image.png");
+    var __webpack_exports__ = __webpack_require__(369);
     exports["default"] = __webpack_exports__["default"];
     for(var __rspack_i in __webpack_exports__)if (-1 === [
         "default"
@@ -177,7 +177,7 @@ test('set the assets output path', async () => {
   expect(imageCjs1).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        "./src/assets/image.png" (module) {
+        369 (module) {
             module.exports = require("../assets/bundleless/image.png");
         }
     };
@@ -191,7 +191,7 @@ test('set the assets output path', async () => {
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("./src/assets/image.png");
+    var __webpack_exports__ = __webpack_require__(369);
     exports["default"] = __webpack_exports__["default"];
     for(var __rspack_i in __webpack_exports__)if (-1 === [
         "default"
