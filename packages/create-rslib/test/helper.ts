@@ -20,6 +20,10 @@ export const expectPackageJson = (
     expect(pkgJson.scripts.build).toBe('rslib');
   }
   expect(pkgJson.devDependencies['@rslib/core']).toBeTruthy();
+  expect(pkgJson.scripts.test).toBe('rstest');
+  expect(pkgJson.scripts['test:watch']).toBe('rstest --watch');
+  expect(pkgJson.devDependencies['@rstest/adapter-rslib']).toBeTruthy();
+  expect(pkgJson.devDependencies['@rstest/core']).toBeTruthy();
 };
 
 export interface TemplateCase {
@@ -88,6 +92,16 @@ export const createAndValidate = (
     );
   }
 
+  expect(
+    existsSync(path.join(dir, `rstest.config.${templateCase.lang}`)),
+  ).toBeTruthy();
+  expect(existsSync(path.join(dir, 'tests'))).toBeTruthy();
+  expect(
+    fse
+      .readdirSync(path.join(dir, 'tests'))
+      .some((file) => file.startsWith('index.test.')),
+  ).toBe(true);
+
   // tool - Storybook
   if (templateCase.tools.includes('storybook')) {
     for (const file of [
@@ -141,6 +155,10 @@ export const createAndValidate = (
       templateCase.lang === 'ts' ? 'rslib.config.ts' : 'rslib.config.js',
     );
     const configContent = fse.readFileSync(configFile, 'utf-8');
+
+    expect(pkgJson.devDependencies['@testing-library/dom']).toBeTruthy();
+    expect(pkgJson.devDependencies['@types/react-dom']).toBeTruthy();
+    expect(pkgJson.devDependencies['react-dom']).toBeTruthy();
 
     if (templateCase.tools.includes('react-compiler')) {
       expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeTruthy();

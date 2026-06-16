@@ -21,3 +21,15 @@ Build the library in watch mode:
 ```bash
 {{ packageManager }} run dev
 ```
+
+Run tests:
+
+```bash
+{{ packageManager }} run test
+```
+
+Run tests in watch mode:
+
+```bash
+{{ packageManager }} run test:watch
+```
