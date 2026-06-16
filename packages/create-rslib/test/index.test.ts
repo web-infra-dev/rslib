@@ -19,15 +19,11 @@ const createCase = (
 const CASES_NODE_DUAL: TemplateCase[] = [
   createCase('node-dual', 'js'),
   createCase('node-dual', 'ts'),
-  createCase('node-dual', 'js', ['rstest']),
-  createCase('node-dual', 'ts', ['rstest']),
 ];
 
 const CASES_NODE_ESM: TemplateCase[] = [
   createCase('node-esm', 'js'),
   createCase('node-esm', 'ts'),
-  createCase('node-esm', 'js', ['rstest']),
-  createCase('node-esm', 'ts', ['rstest']),
 ];
 
 const CASES_REACT: TemplateCase[] = [
@@ -35,49 +31,26 @@ const CASES_REACT: TemplateCase[] = [
   createCase('react', 'ts'),
   createCase('react', 'js', ['react-compiler']),
   createCase('react', 'ts', ['react-compiler']),
-  createCase('react', 'js', ['rstest', 'storybook']),
-  createCase('react', 'ts', ['rstest', 'storybook']),
-  createCase('react', 'js', ['react-compiler', 'rstest', 'storybook']),
-  createCase('react', 'ts', ['react-compiler', 'rstest', 'storybook']),
   createCase('react', 'js', ['storybook']),
-  createCase('react', 'js', ['rstest']),
   createCase('react', 'js', ['react-compiler', 'storybook']),
-  createCase('react', 'js', ['react-compiler', 'rstest']),
   createCase('react', 'ts', ['storybook']),
-  createCase('react', 'ts', ['rstest']),
   createCase('react', 'ts', ['react-compiler', 'storybook']),
-  createCase('react', 'ts', ['react-compiler', 'rstest']),
   createCase('react', 'ts', ['rspress']),
   createCase('react', 'ts', ['rspress', 'storybook']),
-  createCase('react', 'ts', ['rspress', 'rstest']),
-  createCase('react', 'ts', ['rspress', 'rstest', 'storybook']),
   createCase('react', 'ts', ['react-compiler', 'rspress']),
   createCase('react', 'ts', ['react-compiler', 'rspress', 'storybook']),
-  createCase('react', 'ts', ['react-compiler', 'rspress', 'rstest']),
-  createCase('react', 'ts', [
-    'react-compiler',
-    'rspress',
-    'rstest',
-    'storybook',
-  ]),
 ];
 
 const CASES_VUE: TemplateCase[] = [
   createCase('vue', 'js'),
   createCase('vue', 'ts'),
-  createCase('vue', 'js', ['rstest', 'storybook']),
-  createCase('vue', 'ts', ['rstest', 'storybook']),
   createCase('vue', 'js', ['storybook']),
   createCase('vue', 'ts', ['storybook']),
-  createCase('vue', 'js', ['rstest']),
-  createCase('vue', 'ts', ['rstest']),
 ];
 
 const CASES_SVELTE: TemplateCase[] = [
   createCase('svelte', 'js'),
   createCase('svelte', 'ts'),
-  createCase('svelte', 'js', ['rstest']),
-  createCase('svelte', 'ts', ['rstest']),
 ];
 
 const BASE_NODE_ESM_JS = createCase('node-esm', 'js');

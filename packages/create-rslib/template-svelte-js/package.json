@@ -13,11 +13,16 @@
   ],
   "scripts": {
     "build": "rslib",
-    "dev": "rslib --watch"
+    "dev": "rslib --watch",
+    "test": "rstest",
+    "test:watch": "rstest --watch"
   },
   "devDependencies": {
     "@rsbuild/plugin-svelte": "^2.0.0",
     "@rslib/core": "workspace:*",
+    "@rstest/adapter-rslib": "^0.10.4",
+    "@rstest/core": "^0.10.4",
+    "happy-dom": "^20.10.3",
     "svelte": "^5.56.3"
   },
   "peerDependencies": {

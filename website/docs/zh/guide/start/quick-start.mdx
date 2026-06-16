@@ -39,6 +39,8 @@ import { PackageManagerTabs } from '@theme';
 
 按照提示一步步操作即可。在创建过程中，你可以选择模板、语言、可选工具，以及供 Coding Agents 使用的可选技能。
 
+创建的 Rslib 项目默认使用 [Rstest](https://rstest.rs/zh/) 作为测试框架，阅读 [使用 Rstest](/guide/advanced/rstest) 了解更多信息。
+
 在创建完成后，你可以执行以下步骤：
 
 - 执行 `git init` 来初始化 Git 仓库。
@@ -69,7 +71,6 @@ import { PackageManagerTabs } from '@theme';
 | [Biome](https://biomejs.dev/)                             | 代码检查和格式化                     |
 | [Rspress](https://rspress.rs/zh/)                         | 组件文档，仅 React + TypeScript 模板 |
 | [Storybook](https://storybook.js.org/)                    | 组件开发和预览，仅 React 和 Vue 模板 |
-| [Rstest](https://rstest.rs/zh/)                           | 测试                                 |
 | [React Compiler](/zh/guide/solution/react#react-compiler) | 优化 React 组件，仅 React 模板       |
 
 ### 可选技能
@@ -79,7 +80,7 @@ import { PackageManagerTabs } from '@theme';
 | 名称                                                                                                    | 条件           |
 | ------------------------------------------------------------------------------------------------------- | -------------- |
 | [rslib-best-practices](https://github.com/rstackjs/agent-skills#rslib-best-practices)                   | 默认显示       |
-| [rstest-best-practices](https://github.com/rstackjs/agent-skills#rstest-best-practices)                 | 选择 `Rstest`  |
+| [rstest-best-practices](https://github.com/rstackjs/agent-skills#rstest-best-practices)                 | 默认显示       |
 | [rspress-custom-theme](https://github.com/rstackjs/agent-skills#rspress-custom-theme)                   | 选择 `Rspress` |
 | [rspress-description-generator](https://github.com/rstackjs/agent-skills#rspress-description-generator) | 选择 `Rspress` |
 
@@ -88,6 +89,7 @@ import { PackageManagerTabs } from '@theme';
 ```text
 ◆  Select optional skills (Use <space> to select, <enter> to continue)
 │  ◻ Rslib - best practices
+│  ◻ Rstest - best practices
 ```
 
 关于 Agent Skills 和其他 AI 相关能力的更多介绍，可参考 [AI](/guide/start/ai)。
@@ -119,7 +121,7 @@ npx -y create-rslib@latest my-project --template react
 npx -y create-rslib@latest my-project -t react
 
 # 指定多个 tools
-npx -y create-rslib@latest my-project -t react --tools rstest,biome
+npx -y create-rslib@latest my-project -t react --tools storybook,biome
 
 # 为 Coding Agents 安装可选 skill
 npx -y create-rslib@latest my-project -t react --skill rslib-best-practices
@@ -144,7 +146,7 @@ Available templates:
   node-dual-js, node-dual-ts, node-esm-js, node-esm-ts, react-js, react-ts, vue-js, vue-ts, svelte-js, svelte-ts
 
 Optional tools:
-  react-compiler, eslint, rslint, biome, prettier, rspress, storybook, rstest
+  react-compiler, eslint, rslint, biome, prettier, rspress, storybook
 
 Optional skills:
   rslib-best-practices, rstest-best-practices, rspress-custom-theme, rspress-description-generator
