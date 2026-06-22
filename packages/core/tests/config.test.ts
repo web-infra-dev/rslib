@@ -589,22 +589,27 @@ describe('runtimeChunk', () => {
     ).toBeUndefined();
   });
 
-  test('returns runtime chunk for multiple entries without multi-compiler', async () => {
+  test('returns prefixed runtime chunk for bundled multi-compiler', async () => {
     expect(
       getRuntimeChunkConfig({
         bundle: true,
-        multiCompilerIndex: null,
+        multiCompilerIndex: 0,
+        sourceEntry: undefined,
+      }),
+    ).toEqual({
+      name: '0~rslib-runtime',
+    });
+    expect(
+      getRuntimeChunkConfig({
+        bundle: true,
+        multiCompilerIndex: 0,
         sourceEntry: {
           index: './src/index.ts',
-          cli: './src/cli/index.ts',
         },
       }),
     ).toEqual({
-      name: 'rslib-runtime',
+      name: '0~rslib-runtime',
     });
-  });
-
-  test('returns prefixed runtime chunk for multiple entries with multi-compiler', async () => {
     expect(
       getRuntimeChunkConfig({
         bundle: true,
@@ -617,17 +622,20 @@ describe('runtimeChunk', () => {
     ).toEqual({
       name: '0~rslib-runtime',
     });
+  });
+
+  test('returns runtime chunk for multiple entries without multi-compiler', async () => {
     expect(
       getRuntimeChunkConfig({
         bundle: true,
-        multiCompilerIndex: 1,
+        multiCompilerIndex: null,
         sourceEntry: {
-          foo: './src/foo.ts',
-          bar: './src/bar.ts',
+          index: './src/index.ts',
+          cli: './src/cli/index.ts',
         },
       }),
     ).toEqual({
-      name: '1~rslib-runtime',
+      name: 'rslib-runtime',
     });
   });
 

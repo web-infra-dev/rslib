@@ -835,7 +835,11 @@ export const getRuntimeChunkConfig = ({
     };
   }
 
-  if (!sourceEntry || Object.keys(sourceEntry).length <= 1) {
+  const shouldSetRuntimeChunkName =
+    typeof multiCompilerIndex === 'number' ||
+    (sourceEntry && Object.keys(sourceEntry).length > 1);
+
+  if (!shouldSetRuntimeChunkName) {
     return undefined;
   }
 

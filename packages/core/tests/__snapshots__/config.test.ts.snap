@@ -1018,7 +1018,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     nodeEnv: false,
     concatenateModules: false,
     sideEffects: true,
-    runtimeChunk: undefined,
+    runtimeChunk: {
+      name: '0~rslib-runtime'
+    },
     avoidEntryIife: true,
     moduleIds: 'named'
   },
@@ -4024,7 +4026,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "avoidEntryIife": true,
             "concatenateModules": false,
             "moduleIds": "named",
-            "runtimeChunk": undefined,
+            "runtimeChunk": {
+              "name": "0~rslib-runtime",
+            },
             "sideEffects": true,
             "splitChunks": {
               "chunks": "async",
