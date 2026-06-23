@@ -49,6 +49,9 @@ jobs:
         with:
           run_install: true
 
+      - name: Build
+        run: pnpm run build
+
       - name: Publish to npm
         run: |
           pnpm --filter './packages/*' -r stage publish --tag ${{ github.event.inputs.npm_tag }} --no-git-checks

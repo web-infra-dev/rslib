@@ -56,6 +56,10 @@ jobs:
         with:
           run_install: true
 
+      - name: Build
+        if: ${{ steps.changes.outputs.changed == 'true' }}
+        run: pnpm run build
+
       - name: Unit Test
         if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'ut' }}
         run: pnpm run test:unit

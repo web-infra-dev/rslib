@@ -48,6 +48,10 @@ jobs:
         with:
           run_install: true
 
+      - name: Build
+        if: steps.changes.outputs.changed == 'true'
+        run: pnpm run build
+
       - name: Publish Preview
         if: steps.changes.outputs.changed == 'true'
         run: pnpx pkg-pr-new publish --compact --pnpm ./packages/*
