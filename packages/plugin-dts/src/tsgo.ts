@@ -1,16 +1,15 @@
+import { logger } from '@rsbuild/core';
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { logger } from '@rsbuild/core';
-import type ts from 'typescript';
-import type { DtsRedirect } from './index';
-import type { EmitDtsOptions } from './tsc';
+import type { EmitDtsOptions } from './dts';
 import {
   color,
   getTimeCost,
   processDtsFiles,
   rewriteDtsExtensions,
+  type GetTsconfigTsconfigResultForBin,
 } from './utils';
 
 const require = createRequire(import.meta.url);
@@ -72,15 +71,15 @@ const generateTsgoArgs = (
 async function handleDiagnosticsAndProcessFiles(
   isWatch: boolean,
   hasErrors: boolean,
-  tsConfigResult: ts.ParsedCommandLine,
+  tsConfigResult: GetTsconfigTsconfigResultForBin,
   configPath: string,
   bundle: boolean,
   cwd: string,
   declarationDir: string,
   dtsExtension: string,
-  redirect: DtsRedirect,
+  redirect: EmitDtsOptions<GetTsconfigTsconfigResultForBin>['redirect'],
   rootDir: string,
-  paths: Record<string, string[]>,
+  paths: EmitDtsOptions<GetTsconfigTsconfigResultForBin>['paths'],
   banner?: string,
   footer?: string,
   name?: string,
@@ -117,7 +116,7 @@ async function handleDiagnosticsAndProcessFiles(
 }
 
 export async function emitDtsTsgo(
-  options: EmitDtsOptions,
+  options: EmitDtsOptions<GetTsconfigTsconfigResultForBin>,
   _onComplete: (isSuccess: boolean) => void,
   bundle = false,
   isWatch = false,

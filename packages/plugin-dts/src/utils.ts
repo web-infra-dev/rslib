@@ -1,3 +1,7 @@
+import type { NapiConfig } from '@ast-grep/napi';
+import { logger, type RsbuildConfig } from '@rsbuild/core';
+import { getTsconfig } from 'get-tsconfig';
+import MagicString from 'magic-string';
 import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -13,21 +17,15 @@ import path, {
   resolve,
 } from 'node:path';
 import { styleText } from 'node:util';
-import { logger, type RsbuildConfig } from '@rsbuild/core';
 import { convertPathToPattern, glob } from 'tinyglobby';
-import { type MatchPath, createMatchPath, loadConfig } from 'tsconfig-paths';
-import MagicString from 'magic-string';
-import type { NapiConfig } from '@ast-grep/napi';
-import type {
-  CompilerOptions,
-  Diagnostic,
-  ParsedCommandLine,
-} from 'typescript';
+import { createMatchPath, loadConfig, type MatchPath } from 'tsconfig-paths';
+import type { CompilerOptions, ParsedCommandLine } from 'typescript';
 import type { DtsEntry, DtsRedirect } from './index';
 
 const require = createRequire(import.meta.url);
 
 let astGrepNapi: typeof import('@ast-grep/napi') | undefined;
+let typescript: typeof import('typescript') | undefined;
 
 const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
   if (!astGrepNapi) {
@@ -38,15 +36,19 @@ const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
   return astGrepNapi;
 };
 
-/**
- * Currently, typescript only provides a CJS bundle, so we use require to load it
- * for better startup performance. If we use `import ts from 'typescript'`,
- * Node.js will use `cjs-module-lexer` to parse it, which slows down startup time.
- */
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const ts = require('typescript') as typeof import('typescript');
+export const loadTypescript = (): typeof import('typescript') => {
+  if (!typescript) {
+    /**
+     * Currently, typescript only provides a CJS bundle, so we use require to load it
+     * for better startup performance. If we use `import ts from 'typescript'`,
+     * Node.js will use `cjs-module-lexer` to parse it, which slows down startup time.
+     */
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    typescript = require('typescript') as typeof import('typescript');
+  }
 
-export { ts };
+  return typescript;
+};
 
 type ColorFn = (text: string | number) => string;
 type ColorMap = Record<
@@ -86,7 +88,22 @@ export const JS_EXTENSIONS_PATTERN: RegExp = new RegExp(
   `\\.(${JS_EXTENSIONS.join('|')})$`,
 );
 
-export function loadTsconfig(tsconfigPath: string): ParsedCommandLine {
+export type CompilerApiTsconfigResultForApi = ParsedCommandLine;
+export type GetTsconfigTsconfigResultForBin = Pick<
+  CompilerApiTsconfigResultForApi,
+  'options'
+>;
+
+const resolveTsconfigPath = (
+  tsconfigDir: string,
+  value: string | undefined,
+): string | undefined =>
+  value && (isAbsolute(value) ? value : resolve(tsconfigDir, value));
+
+export function loadTsconfig(
+  tsconfigPath: string,
+  ts: typeof import('typescript') = loadTypescript(),
+): CompilerApiTsconfigResultForApi {
   const configFile = ts.readConfigFile(
     tsconfigPath,
     ts.sys.readFile.bind(ts.sys),
@@ -98,6 +115,49 @@ export function loadTsconfig(tsconfigPath: string): ParsedCommandLine {
   );
 
   return configFileContent;
+}
+
+export function loadTsconfigResultForBin(
+  cwd: string,
+  configName: string,
+): { path: string; config: GetTsconfigTsconfigResultForBin } | undefined {
+  if (isAbsolute(configName) && !fs.existsSync(configName)) {
+    return undefined;
+  }
+
+  const tsconfig = getTsconfig(isAbsolute(configName) ? configName : cwd, {
+    configName: isAbsolute(configName) ? basename(configName) : configName,
+    typescriptVersion: false,
+  });
+
+  if (!tsconfig) {
+    return undefined;
+  }
+
+  const tsconfigDir = dirname(tsconfig.path);
+  const compilerOptions = tsconfig.config.compilerOptions ?? {};
+  // get-tsconfig keeps path-like options relative to the tsconfig file.
+  // The dts post-processing code expects the TypeScript API shape.
+  const options = {
+    ...compilerOptions,
+    declarationDir: resolveTsconfigPath(
+      tsconfigDir,
+      compilerOptions.declarationDir,
+    ),
+    outDir: resolveTsconfigPath(tsconfigDir, compilerOptions.outDir),
+    rootDir: resolveTsconfigPath(tsconfigDir, compilerOptions.rootDir),
+    tsBuildInfoFile: resolveTsconfigPath(
+      tsconfigDir,
+      compilerOptions.tsBuildInfoFile,
+    ),
+  } as GetTsconfigTsconfigResultForBin['options'];
+
+  return {
+    path: tsconfig.path,
+    config: {
+      options,
+    },
+  };
 }
 
 export function mergeAliasWithTsConfigPaths(
@@ -183,18 +243,6 @@ export async function clearTempDeclarationDir(cwd: string): Promise<void> {
   const dirPath = path.join(cwd, TEMP_DTS_DIR);
 
   await emptyDir(dirPath);
-}
-
-export function getFileLoc(diagnostic: Diagnostic, configPath: string): string {
-  if (diagnostic.file) {
-    const { line, character } = ts.getLineAndCharacterOfPosition(
-      diagnostic.file,
-      diagnostic.start!,
-    );
-    return `${color.cyan(diagnostic.file.fileName)}:${color.yellow(line + 1)}:${color.yellow(character + 1)}`;
-  }
-
-  return color.cyan(configPath);
 }
 
 export const prettyTime = (seconds: number): string => {

@@ -1,6 +1,6 @@
 import type { PluginDtsOptions } from './index';
 
-export type DtsGenerationBackend = 'isolated' | 'tsc' | 'tsgo';
+export type DtsGenerationBackend = 'tsc-api' | 'tsgo-bin' | 'isolated';
 
 export function validateExplicitIsolatedDtsOptions(
   options: Pick<
@@ -40,8 +40,8 @@ export function resolveDtsGenerationBackend(
   }
 
   if (options.tsgo) {
-    return 'tsgo';
+    return 'tsgo-bin';
   }
 
-  return 'tsc';
+  return 'tsc-api';
 }

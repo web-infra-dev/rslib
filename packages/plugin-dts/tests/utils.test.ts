@@ -1,10 +1,10 @@
-// import { execSync } from 'node:child_process';
+import { describe, expect, test } from '@rstest/core';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { describe, expect, test } from '@rstest/core';
+import type { CompilerOptions } from 'typescript';
 import {
   cleanTsBuildInfoFile,
-  loadTsconfig,
+  loadTsconfigResultForBin,
   mergeAliasWithTsConfigPaths,
   prettyTime,
 } from '../src/utils';
@@ -112,6 +112,47 @@ describe('mergeAliasWithTsConfigPaths', () => {
   });
 });
 
+describe('loadTsconfigResultForBin', () => {
+  test('should load the options needed by the bin backend', async () => {
+    const tempDir = await fs.mkdtemp(path.join(__dirname, 'bin-tsconfig-'));
+
+    try {
+      const tsconfigPath = path.join(tempDir, 'tsconfig.json');
+      await fs.writeFile(
+        tsconfigPath,
+        JSON.stringify(
+          {
+            compilerOptions: {
+              declarationDir: 'types',
+              outDir: 'dist',
+              rootDir: 'src',
+              tsBuildInfoFile: '.cache/build.tsbuildinfo',
+            },
+          },
+          null,
+          2,
+        ),
+      );
+
+      const loaded = loadTsconfigResultForBin(tempDir, 'tsconfig.json');
+
+      expect(path.normalize(loaded?.path ?? '')).toBe(
+        path.normalize(tsconfigPath),
+      );
+      expect(loaded?.config).toEqual({
+        options: {
+          declarationDir: path.join(tempDir, 'types'),
+          outDir: path.join(tempDir, 'dist'),
+          rootDir: path.join(tempDir, 'src'),
+          tsBuildInfoFile: path.join(tempDir, '.cache/build.tsbuildinfo'),
+        },
+      });
+    } finally {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    }
+  });
+});
+
 describe('cleanTsBuildInfoFile', () => {
   const fileExists = async (filePath: string): Promise<boolean> => {
     try {
@@ -179,8 +220,7 @@ describe('cleanTsBuildInfoFile', () => {
             JSON.stringify({ compilerOptions: testCase.config }, null, 2),
           );
 
-          // execSync(`npx tsc --p ${tsconfigPath}`, { cwd: tempDir });
-          // tsc is too slow, so we directly create the file
+          // Create the file directly instead of running tsc for every case.
           await fs.mkdir(path.dirname(expectedBuildInfoPath), {
             recursive: true,
           });
@@ -191,8 +231,13 @@ describe('cleanTsBuildInfoFile', () => {
 
           expect(await fileExists(expectedBuildInfoPath)).toBe(true);
 
-          const tsconfig = loadTsconfig(tsconfigPath);
-          await cleanTsBuildInfoFile(tsconfigPath, tsconfig.options);
+          const compilerOptions = Object.fromEntries(
+            Object.entries(testCase.config).map(([key, value]) => [
+              key,
+              typeof value === 'string' ? path.join(tempDir, value) : value,
+            ]),
+          ) as CompilerOptions;
+          await cleanTsBuildInfoFile(tsconfigPath, compilerOptions);
 
           expect(await fileExists(expectedBuildInfoPath)).toBe(false);
         }),
