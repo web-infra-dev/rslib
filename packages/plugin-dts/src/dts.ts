@@ -1,3 +1,4 @@
+import { logger } from '@rsbuild/core';
 import fs from 'node:fs';
 import {
   basename,
@@ -8,13 +9,14 @@ import {
   relative,
   resolve,
 } from 'node:path';
-import { logger } from '@rsbuild/core';
-import type { DtsEntry, DtsGenOptions } from './index';
+import type { DtsEntry, DtsGenOptions, DtsRedirect } from './index';
 import {
   calcLongestCommonPath,
   color,
   ensureTempDeclarationDir,
   mergeAliasWithTsConfigPaths,
+  type CompilerApiTsconfigResultForApi,
+  type GetTsconfigTsconfigResultForBin,
 } from './utils';
 
 const isObject = (obj: unknown): obj is Record<string, any> =>
@@ -130,6 +132,24 @@ export type PreparedDtsContext = {
   bundledDtsEntries: Required<DtsEntry>[];
 };
 
+export type EmitDtsOptions<
+  Tsconfig extends
+    | CompilerApiTsconfigResultForApi
+    | GetTsconfigTsconfigResultForBin,
+> = {
+  name: string;
+  cwd: string;
+  configPath: string;
+  tsConfigResult: Tsconfig;
+  declarationDir: string;
+  dtsExtension: string;
+  rootDir: string;
+  redirect: DtsRedirect;
+  paths: Record<string, string[]>;
+  banner?: string;
+  footer?: string;
+};
+
 export async function prepareDtsContext(
   data: DtsGenOptions,
 ): Promise<PreparedDtsContext> {
@@ -154,7 +174,9 @@ export async function prepareDtsContext(
     tsConfigResult.options.paths = paths;
   }
 
-  const { options: rawCompilerOptions, fileNames } = tsConfigResult;
+  const { options: rawCompilerOptions } = tsConfigResult;
+  const fileNames =
+    'fileNames' in tsConfigResult ? tsConfigResult.fileNames : [];
 
   // The longest common path of all non-declaration input files.
   // If composite is set, the default is instead the directory containing the tsconfig.json file.
@@ -307,31 +329,47 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     }
   };
 
-  const emitDts = data.tsgo
-    ? await import('./tsgo').then((mod) => mod.emitDtsTsgo)
-    : await import('./tsc').then((mod) => mod.emitDtsTsc);
+  const emitOptions = {
+    name,
+    cwd,
+    configPath: tsconfigPath,
+    declarationDir,
+    dtsExtension,
+    redirect,
+    rootDir,
+    paths,
+    banner,
+    footer,
+  };
 
-  const hasError = await emitDts(
-    {
-      name,
-      cwd,
-      configPath: tsconfigPath,
-      tsConfigResult,
-      declarationDir,
-      dtsExtension,
-      redirect,
-      rootDir,
-      paths,
-      banner,
-      footer,
-    },
-    onComplete,
-    bundle,
-    isWatch,
-    build,
-  );
+  const useTsgoBin = data.dtsBackend === 'tsgo-bin';
+  const hasError = useTsgoBin
+    ? await import('./tsgo').then((mod) =>
+        mod.emitDtsTsgo(
+          {
+            ...emitOptions,
+            tsConfigResult: tsConfigResult as GetTsconfigTsconfigResultForBin,
+          },
+          onComplete,
+          bundle,
+          isWatch,
+          build,
+        ),
+      )
+    : await import('./tsc').then((mod) =>
+        mod.emitDtsTsc(
+          {
+            ...emitOptions,
+            tsConfigResult: tsConfigResult as CompilerApiTsconfigResultForApi,
+          },
+          onComplete,
+          bundle,
+          isWatch,
+          build,
+        ),
+      );
 
-  if (data.tsgo) {
+  if (useTsgoBin) {
     if (!hasError) {
       await bundleDtsIfNeeded(data, preparedDtsContext);
     }
