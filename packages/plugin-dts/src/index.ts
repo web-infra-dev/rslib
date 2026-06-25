@@ -284,6 +284,11 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
         );
 
         childProcesses.push(childProcess);
+        childProcess.once('close', () => {
+          childProcesses = childProcesses.filter(
+            (item) => item !== childProcess,
+          );
+        });
         childProcess.send(dtsGenOptions);
 
         dtsPromise = new Promise<TaskResult>((resolve) => {

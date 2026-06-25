@@ -24,6 +24,16 @@ const isObject = (obj: unknown): obj is Record<string, any> =>
 
 export const DEFAULT_EXCLUDED_PACKAGES: string[] = ['@types/react'];
 
+type ExecutableDtsGenerationBackend = Extract<
+  DtsGenOptions['dtsBackend'],
+  'tsc-executable' | 'tsgo-executable'
+>;
+
+const isExecutableBackend = (
+  dtsBackend: DtsGenOptions['dtsBackend'],
+): dtsBackend is ExecutableDtsGenerationBackend =>
+  dtsBackend === 'tsc-executable' || dtsBackend === 'tsgo-executable';
+
 type CalculateBundledPackagesOptions = {
   cwd: string;
   autoExternal: DtsGenOptions['autoExternal'];
@@ -346,8 +356,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   };
 
   const dtsBackend = data.dtsBackend;
-  const useExecutable =
-    dtsBackend === 'tsc-executable' || dtsBackend === 'tsgo-executable';
+  const useExecutable = isExecutableBackend(dtsBackend);
   const hasError = useExecutable
     ? await import('./tsgo').then((mod) =>
         mod.emitDtsTsgo(
@@ -392,6 +401,9 @@ process.on('disconnect', () => {
   process.exit();
 });
 
+const shouldExitAfterGenerate = (data: DtsGenOptions): boolean =>
+  !data.isWatch || isExecutableBackend(data.dtsBackend);
+
 process.on('message', async (data: DtsGenOptions) => {
   if (!data.cwd) {
     return;
@@ -407,7 +419,7 @@ process.on('message', async (data: DtsGenOptions) => {
 
   process.send!('success');
 
-  if (!data.isWatch) {
+  if (shouldExitAfterGenerate(data)) {
     process.exit();
   }
 });
