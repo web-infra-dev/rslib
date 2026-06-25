@@ -47,8 +47,23 @@ describe('dts with tsgo when bundle: false', () => {
       type: 'dts',
     });
 
-    expect(files.esm).toContain(join(fixturePath, 'dist/esm/index.d.ts'));
-    expect(files.cjs).toContain(join(fixturePath, 'dist/cjs/index.d.ts'));
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/esm/sum.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/esm/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/esm/utils/strings.d.ts",
+      ]
+    `);
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/cjs/index.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/cjs/sum.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/cjs/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/cjs/utils/strings.d.ts",
+      ]
+    `);
   });
 
   test('distPath', async () => {

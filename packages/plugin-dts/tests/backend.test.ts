@@ -13,16 +13,16 @@ describe('resolveDtsGenerationBackend', () => {
     expect(resolveDtsGenerationBackend({}, '6.0.1')).toBe('api-old');
   });
 
-  test('should use the TypeScript tsc bin backend for TypeScript 7.0', () => {
-    expect(resolveDtsGenerationBackend({}, '7.0.1-rc')).toBe('tsc-bin');
+  test('should use the TypeScript executable backend for TypeScript 7.0', () => {
+    expect(resolveDtsGenerationBackend({}, '7.0.1-rc')).toBe('tsc-executable');
     expect(resolveDtsGenerationBackend({ tsgo: true }, '7.0.1-rc')).toBe(
-      'tsc-bin',
+      'tsc-executable',
     );
   });
 
-  test('should use the native-preview tsgo bin backend when tsgo is enabled without TypeScript 7.0', () => {
+  test('should use the native-preview executable backend when tsgo is enabled without TypeScript 7.0', () => {
     expect(resolveDtsGenerationBackend({ tsgo: true }, '6.0.1')).toBe(
-      'tsgo-bin',
+      'tsgo-executable',
     );
   });
 
@@ -34,8 +34,8 @@ describe('resolveDtsGenerationBackend', () => {
     );
   });
 
-  test('should use the TypeScript tsc bin backend for TypeScript 7.1 or higher', () => {
-    expect(resolveDtsGenerationBackend({}, '7.1.0')).toBe('tsc-bin');
+  test('should use the TypeScript executable backend for TypeScript 7.1 or higher', () => {
+    expect(resolveDtsGenerationBackend({}, '7.1.0')).toBe('tsc-executable');
   });
 
   test('should read the TypeScript version from cwd', async () => {
@@ -61,7 +61,7 @@ describe('resolveDtsGenerationBackend', () => {
 
       expect(typescriptVersion).toBe('7.0.1-rc');
       expect(resolveDtsGenerationBackend({}, typescriptVersion)).toBe(
-        'tsc-bin',
+        'tsc-executable',
       );
     } finally {
       await fs.rm(tempDir, { recursive: true, force: true });

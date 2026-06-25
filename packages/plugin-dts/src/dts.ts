@@ -16,7 +16,7 @@ import {
   ensureTempDeclarationDir,
   mergeAliasWithTsConfigPaths,
   type CompilerApiTsconfigResultForApi,
-  type GetTsconfigTsconfigResultForBin,
+  type GetTsconfigTsconfigResultForExecutable,
 } from './utils';
 
 const isObject = (obj: unknown): obj is Record<string, any> =>
@@ -135,7 +135,7 @@ export type PreparedDtsContext = {
 export type EmitDtsOptions<
   Tsconfig extends
     | CompilerApiTsconfigResultForApi
-    | GetTsconfigTsconfigResultForBin,
+    | GetTsconfigTsconfigResultForExecutable,
 > = {
   name: string;
   cwd: string;
@@ -181,6 +181,9 @@ export async function prepareDtsContext(
   // The longest common path of all non-declaration input files.
   // If composite is set, the default is instead the directory containing the tsconfig.json file.
   // see https://www.typescriptlang.org/tsconfig/#rootDir
+  // Since TypeScript 6, rootDir defaults to the tsconfig directory. This also
+  // covers TypeScript 7+ executable backends when TypeScript API fileNames are
+  // unavailable.
   const rootDir =
     rawCompilerOptions.rootDir ??
     (rawCompilerOptions.composite
@@ -343,14 +346,16 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   };
 
   const dtsBackend = data.dtsBackend;
-  const useTsgoBin = dtsBackend === 'tsc-bin' || dtsBackend === 'tsgo-bin';
-  const hasError = useTsgoBin
+  const useExecutable =
+    dtsBackend === 'tsc-executable' || dtsBackend === 'tsgo-executable';
+  const hasError = useExecutable
     ? await import('./tsgo').then((mod) =>
         mod.emitDtsTsgo(
           {
             ...emitOptions,
             dtsBackend,
-            tsConfigResult: tsConfigResult as GetTsconfigTsconfigResultForBin,
+            tsConfigResult:
+              tsConfigResult as GetTsconfigTsconfigResultForExecutable,
           },
           onComplete,
           bundle,
@@ -371,7 +376,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
         ),
       );
 
-  if (useTsgoBin) {
+  if (useExecutable) {
     if (!hasError) {
       await bundleDtsIfNeeded(data, preparedDtsContext);
     }

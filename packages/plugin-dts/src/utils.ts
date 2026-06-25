@@ -88,7 +88,7 @@ export const JS_EXTENSIONS_PATTERN: RegExp = new RegExp(
 );
 
 export type CompilerApiTsconfigResultForApi = ParsedCommandLine;
-export type GetTsconfigTsconfigResultForBin = Pick<
+export type GetTsconfigTsconfigResultForExecutable = Pick<
   CompilerApiTsconfigResultForApi,
   'options'
 >;
@@ -116,10 +116,12 @@ export function loadTsconfig(
   return configFileContent;
 }
 
-export function loadTsconfigResultForBin(
+export function loadTsconfigResultForExecutable(
   cwd: string,
   configName: string,
-): { path: string; config: GetTsconfigTsconfigResultForBin } | undefined {
+):
+  | { path: string; config: GetTsconfigTsconfigResultForExecutable }
+  | undefined {
   if (isAbsolute(configName) && !fs.existsSync(configName)) {
     return undefined;
   }
@@ -149,7 +151,7 @@ export function loadTsconfigResultForBin(
       tsconfigDir,
       compilerOptions.tsBuildInfoFile,
     ),
-  } as GetTsconfigTsconfigResultForBin['options'];
+  } as GetTsconfigTsconfigResultForExecutable['options'];
 
   return {
     path: tsconfig.path,

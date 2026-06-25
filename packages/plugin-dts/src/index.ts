@@ -24,9 +24,9 @@ import {
   color,
   type CompilerApiTsconfigResultForApi,
   getDtsEmitPath,
-  type GetTsconfigTsconfigResultForBin,
+  type GetTsconfigTsconfigResultForExecutable,
   loadTsconfig,
-  loadTsconfigResultForBin,
+  loadTsconfigResultForExecutable,
   loadTypescript,
   processSourceEntry,
   warnIfOutside,
@@ -82,7 +82,7 @@ export type DtsGenOptions = Omit<
   tsconfigPath: string;
   tsConfigResult:
     | CompilerApiTsconfigResultForApi
-    | GetTsconfigTsconfigResultForBin;
+    | GetTsconfigTsconfigResultForExecutable;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
   apiExtractorOptions?: ApiExtractorOptions;
   loggerLevel: LogLevel;
@@ -174,7 +174,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
         let tsconfigPath: string | undefined;
         let tsConfigResult:
           | CompilerApiTsconfigResultForApi
-          | GetTsconfigTsconfigResultForBin
+          | GetTsconfigTsconfigResultForExecutable
           | undefined;
 
         if (tsApi) {
@@ -187,7 +187,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
             tsConfigResult = loadTsconfig(tsconfigPath, tsApi);
           }
         } else {
-          const loadedTsconfig = loadTsconfigResultForBin(
+          const loadedTsconfig = loadTsconfigResultForExecutable(
             cwd,
             configuredTsconfigPath,
           );

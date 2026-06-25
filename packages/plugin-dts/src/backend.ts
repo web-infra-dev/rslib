@@ -5,8 +5,8 @@ import type { PluginDtsOptions } from './index';
 
 export type DtsGenerationBackend =
   | 'api-old'
-  | 'tsc-bin'
-  | 'tsgo-bin'
+  | 'tsc-executable'
+  | 'tsgo-executable'
   | 'isolated';
 
 type ParsedTypescriptVersion = {
@@ -97,11 +97,11 @@ export function resolveDtsGenerationBackend(
       );
     }
 
-    return 'tsc-bin';
+    return 'tsc-executable';
   }
 
   if (options.tsgo === true) {
-    return 'tsgo-bin';
+    return 'tsgo-executable';
   }
 
   return 'api-old';
