@@ -25,6 +25,7 @@ import type { DtsEntry, DtsRedirect } from './index';
 const require = createRequire(import.meta.url);
 
 let astGrepNapi: typeof import('@ast-grep/napi') | undefined;
+const typescriptCache = new Map<string, typeof import('typescript')>();
 
 const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
   if (!astGrepNapi) {
@@ -39,6 +40,12 @@ export const loadTypescript = (cwd?: string): typeof import('typescript') => {
   const currentRequire = cwd
     ? createRequire(join(cwd, 'package.json'))
     : require;
+  const typescriptPath = currentRequire.resolve('typescript');
+  const cachedTypescript = typescriptCache.get(typescriptPath);
+
+  if (cachedTypescript) {
+    return cachedTypescript;
+  }
 
   /**
    * Currently, typescript only provides a CJS bundle, so we use require to load it
@@ -46,7 +53,12 @@ export const loadTypescript = (cwd?: string): typeof import('typescript') => {
    * Node.js will use `cjs-module-lexer` to parse it, which slows down startup time.
    */
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  return currentRequire('typescript') as typeof import('typescript');
+  const typescript = currentRequire(
+    'typescript',
+  ) as typeof import('typescript');
+  typescriptCache.set(typescriptPath, typescript);
+
+  return typescript;
 };
 
 type ColorFn = (text: string | number) => string;
