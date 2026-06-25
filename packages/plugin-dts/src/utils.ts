@@ -27,6 +27,9 @@ const require = createRequire(import.meta.url);
 let astGrepNapi: typeof import('@ast-grep/napi') | undefined;
 const typescriptCache = new Map<string, typeof import('typescript')>();
 
+export const createRequireFromPackageJson = (cwd: string): NodeJS.Require =>
+  createRequire(join(cwd, 'package.json'));
+
 const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
   if (!astGrepNapi) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -37,9 +40,7 @@ const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
 };
 
 export const loadTypescript = (cwd?: string): typeof import('typescript') => {
-  const currentRequire = cwd
-    ? createRequire(join(cwd, 'package.json'))
-    : require;
+  const currentRequire = cwd ? createRequireFromPackageJson(cwd) : require;
   const typescriptPath = currentRequire.resolve('typescript');
   const cachedTypescript = typescriptCache.get(typescriptPath);
 

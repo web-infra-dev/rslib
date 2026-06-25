@@ -1,7 +1,6 @@
 import fs from 'node:fs';
-import { createRequire } from 'node:module';
-import { join } from 'node:path';
 import type { PluginDtsOptions } from './index';
+import { createRequireFromPackageJson } from './utils';
 
 export type DtsGenerationBackend =
   | 'api-old'
@@ -16,7 +15,7 @@ type ParsedTypescriptVersion = {
 
 export const readTypescriptVersion = (cwd: string): string | undefined => {
   try {
-    const currentRequire = createRequire(join(cwd, 'package.json'));
+    const currentRequire = createRequireFromPackageJson(cwd);
     const packageJsonPath = currentRequire.resolve('typescript/package.json');
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
     return typeof packageJson.version === 'string'

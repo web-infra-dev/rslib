@@ -1,12 +1,12 @@
 import { logger } from '@rsbuild/core';
 import { spawn } from 'node:child_process';
-import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import type { DtsGenerationBackend } from './backend';
 import type { EmitDtsOptions } from './dts';
 import {
   color,
+  createRequireFromPackageJson,
   getTimeCost,
   processDtsFiles,
   rewriteDtsExtensions,
@@ -33,9 +33,6 @@ type DtsExecutableCommand = {
   displayCommand: string;
 };
 
-const getRequire = (cwd: string): NodeJS.Require =>
-  createRequire(path.join(cwd, 'package.json'));
-
 const getDtsExecutablePath = async (
   cwd: string,
   packageName:
@@ -45,7 +42,9 @@ const getDtsExecutablePath = async (
   let packageJsonPath: string;
 
   try {
-    packageJsonPath = getRequire(cwd).resolve(`${packageName}/package.json`);
+    packageJsonPath = createRequireFromPackageJson(cwd).resolve(
+      `${packageName}/package.json`,
+    );
   } catch {
     if (packageName === NATIVE_PREVIEW_PACKAGE_NAME) {
       throw new Error(
