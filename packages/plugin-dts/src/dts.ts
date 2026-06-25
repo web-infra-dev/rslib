@@ -392,6 +392,11 @@ process.on('disconnect', () => {
   process.exit();
 });
 
+const shouldExitAfterGenerate = (data: DtsGenOptions): boolean =>
+  !data.isWatch ||
+  data.dtsBackend === 'tsc-executable' ||
+  data.dtsBackend === 'tsgo-executable';
+
 process.on('message', async (data: DtsGenOptions) => {
   if (!data.cwd) {
     return;
@@ -407,7 +412,7 @@ process.on('message', async (data: DtsGenOptions) => {
 
   process.send!('success');
 
-  if (!data.isWatch) {
+  if (shouldExitAfterGenerate(data)) {
     process.exit();
   }
 });
