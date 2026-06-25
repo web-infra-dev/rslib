@@ -25,7 +25,10 @@ import type { DtsEntry, DtsRedirect } from './index';
 const require = createRequire(import.meta.url);
 
 let astGrepNapi: typeof import('@ast-grep/napi') | undefined;
-let typescript: typeof import('typescript') | undefined;
+const typescriptCache = new Map<string, typeof import('typescript')>();
+
+export const createRequireFromPackageJson = (cwd: string): NodeJS.Require =>
+  createRequire(join(cwd, 'package.json'));
 
 const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
   if (!astGrepNapi) {
@@ -36,16 +39,25 @@ const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
   return astGrepNapi;
 };
 
-export const loadTypescript = (): typeof import('typescript') => {
-  if (!typescript) {
-    /**
-     * Currently, typescript only provides a CJS bundle, so we use require to load it
-     * for better startup performance. If we use `import ts from 'typescript'`,
-     * Node.js will use `cjs-module-lexer` to parse it, which slows down startup time.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    typescript = require('typescript') as typeof import('typescript');
+export const loadTypescript = (cwd?: string): typeof import('typescript') => {
+  const currentRequire = cwd ? createRequireFromPackageJson(cwd) : require;
+  const typescriptPath = currentRequire.resolve('typescript');
+  const cachedTypescript = typescriptCache.get(typescriptPath);
+
+  if (cachedTypescript) {
+    return cachedTypescript;
   }
+
+  /**
+   * Currently, typescript only provides a CJS bundle, so we use require to load it
+   * for better startup performance. If we use `import ts from 'typescript'`,
+   * Node.js will use `cjs-module-lexer` to parse it, which slows down startup time.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const typescript = currentRequire(
+    'typescript',
+  ) as typeof import('typescript');
+  typescriptCache.set(typescriptPath, typescript);
 
   return typescript;
 };
@@ -89,7 +101,7 @@ export const JS_EXTENSIONS_PATTERN: RegExp = new RegExp(
 );
 
 export type CompilerApiTsconfigResultForApi = ParsedCommandLine;
-export type GetTsconfigTsconfigResultForBin = Pick<
+export type GetTsconfigTsconfigResultForExecutable = Pick<
   CompilerApiTsconfigResultForApi,
   'options'
 >;
@@ -117,10 +129,12 @@ export function loadTsconfig(
   return configFileContent;
 }
 
-export function loadTsconfigResultForBin(
+export function loadTsconfigResultForExecutable(
   cwd: string,
   configName: string,
-): { path: string; config: GetTsconfigTsconfigResultForBin } | undefined {
+):
+  | { path: string; config: GetTsconfigTsconfigResultForExecutable }
+  | undefined {
   if (isAbsolute(configName) && !fs.existsSync(configName)) {
     return undefined;
   }
@@ -150,7 +164,7 @@ export function loadTsconfigResultForBin(
       tsconfigDir,
       compilerOptions.tsBuildInfoFile,
     ),
-  } as GetTsconfigTsconfigResultForBin['options'];
+  } as GetTsconfigTsconfigResultForExecutable['options'];
 
   return {
     path: tsconfig.path,

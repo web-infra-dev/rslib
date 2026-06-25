@@ -1,7 +1,7 @@
+import { describe, expect, test } from '@rstest/core';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
-import { describe, expect, test } from '@rstest/core';
 import {
   buildAndGetResults,
   createTempFiles,
@@ -37,6 +37,33 @@ describe('dts with tsgo when bundle: false', () => {
     `);
 
     expect(contents.esm).toMatchSnapshot();
+  });
+
+  test('ts7 basic', async () => {
+    const fixturePath = join(__dirname, 'ts7-basic');
+
+    const { files } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/esm/index.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/esm/sum.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/esm/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/esm/utils/strings.d.ts",
+      ]
+    `);
+
+    expect(files.cjs).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/cjs/index.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/cjs/sum.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/cjs/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts-tsgo/bundle-false/ts7-basic/dist/cjs/utils/strings.d.ts",
+      ]
+    `);
   });
 
   test('distPath', async () => {

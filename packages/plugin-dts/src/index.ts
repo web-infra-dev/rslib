@@ -9,6 +9,7 @@ import { extname, join } from 'node:path';
 
 import {
   type DtsGenerationBackend,
+  readTypescriptVersion,
   resolveDtsGenerationBackend,
 } from './backend';
 import {
@@ -23,9 +24,9 @@ import {
   color,
   type CompilerApiTsconfigResultForApi,
   getDtsEmitPath,
-  type GetTsconfigTsconfigResultForBin,
+  type GetTsconfigTsconfigResultForExecutable,
   loadTsconfig,
-  loadTsconfigResultForBin,
+  loadTsconfigResultForExecutable,
   loadTypescript,
   processSourceEntry,
   warnIfOutside,
@@ -81,7 +82,7 @@ export type DtsGenOptions = Omit<
   tsconfigPath: string;
   tsConfigResult:
     | CompilerApiTsconfigResultForApi
-    | GetTsconfigTsconfigResultForBin;
+    | GetTsconfigTsconfigResultForExecutable;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
   apiExtractorOptions?: ApiExtractorOptions;
   loggerLevel: LogLevel;
@@ -121,16 +122,18 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     options.redirect.path = options.redirect.path ?? true;
     options.redirect.extension = options.redirect.extension ?? false;
     options.alias = options.alias ?? {};
-    options.tsgo = options.tsgo ?? false;
 
     let dtsPromise: Promise<TaskResult> = Promise.resolve({
       status: 'success',
     });
     let promiseResult: TaskResult;
     let childProcesses: ChildProcess[] = [];
-    const dtsBackend: DtsGenerationBackend =
-      resolveDtsGenerationBackend(options);
-    const tsApi = dtsBackend === 'tsc-api' ? loadTypescript() : undefined;
+    const typescriptVersion = readTypescriptVersion(api.context.rootPath);
+    const dtsBackend = resolveDtsGenerationBackend(options, typescriptVersion);
+    const tsApi =
+      dtsBackend === 'api-old'
+        ? loadTypescript(api.context.rootPath)
+        : undefined;
     let dtsGenOptions: DtsGenOptions | undefined;
     let isolatedDtsContext: IsolatedDtsContext | undefined;
 
@@ -154,7 +157,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
 
     api.onBeforeEnvironmentCompile(
       async ({ isWatch, isFirstCompile, environment, bundlerConfig }) => {
-        if (dtsBackend === 'tsc-api' && !isFirstCompile) {
+        if (dtsBackend === 'api-old' && !isFirstCompile) {
           return;
         }
 
@@ -171,7 +174,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
         let tsconfigPath: string | undefined;
         let tsConfigResult:
           | CompilerApiTsconfigResultForApi
-          | GetTsconfigTsconfigResultForBin
+          | GetTsconfigTsconfigResultForExecutable
           | undefined;
 
         if (tsApi) {
@@ -184,7 +187,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
             tsConfigResult = loadTsconfig(tsconfigPath, tsApi);
           }
         } else {
-          const loadedTsconfig = loadTsconfigResultForBin(
+          const loadedTsconfig = loadTsconfigResultForExecutable(
             cwd,
             configuredTsconfigPath,
           );
@@ -302,7 +305,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
 
     api.onAfterBuild({
       handler: async ({ isFirstCompile, stats }) => {
-        if (dtsBackend === 'tsc-api' && !isFirstCompile) {
+        if (dtsBackend === 'api-old' && !isFirstCompile) {
           return;
         }
 
@@ -334,7 +337,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     });
 
     api.onAfterBuild(({ isFirstCompile }) => {
-      if (dtsBackend === 'tsc-api' && !isFirstCompile) {
+      if (dtsBackend === 'api-old' && !isFirstCompile) {
         return;
       }
 

@@ -1,27 +1,64 @@
 import { logger } from '@rsbuild/core';
 import { spawn } from 'node:child_process';
-import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import type { DtsGenerationBackend } from './backend';
 import type { EmitDtsOptions } from './dts';
 import {
   color,
+  createRequireFromPackageJson,
   getTimeCost,
   processDtsFiles,
   rewriteDtsExtensions,
-  type GetTsconfigTsconfigResultForBin,
+  type GetTsconfigTsconfigResultForExecutable,
 } from './utils';
 
-const require = createRequire(import.meta.url);
-
 const logPrefixTsgo = color.dim('[tsgo]');
+const TYPESCRIPT_PACKAGE_NAME = 'typescript';
+const NATIVE_PREVIEW_PACKAGE_NAME = '@typescript/native-preview';
 
-const getTsgoBinPath = async (): Promise<string> => {
-  const tsgoPkgPath =
-    require.resolve('@typescript/native-preview/package.json');
+type ExecutableDtsGenerationBackend = Extract<
+  DtsGenerationBackend,
+  'tsc-executable' | 'tsgo-executable'
+>;
+
+type EmitDtsExecutableOptions =
+  EmitDtsOptions<GetTsconfigTsconfigResultForExecutable> & {
+    dtsBackend: ExecutableDtsGenerationBackend;
+  };
+
+type DtsExecutableCommand = {
+  command: string;
+  args: string[];
+  displayCommand: string;
+};
+
+const getDtsExecutablePath = async (
+  cwd: string,
+  packageName:
+    | typeof TYPESCRIPT_PACKAGE_NAME
+    | typeof NATIVE_PREVIEW_PACKAGE_NAME,
+): Promise<string> => {
+  let packageJsonPath: string;
+
+  try {
+    packageJsonPath = createRequireFromPackageJson(cwd).resolve(
+      `${packageName}/package.json`,
+    );
+  } catch {
+    if (packageName === NATIVE_PREVIEW_PACKAGE_NAME) {
+      throw new Error(
+        'Failed to resolve @typescript/native-preview. Install "typescript@rc" or "@typescript/native-preview" to use TypeScript Go.',
+      );
+    }
+
+    throw new Error(
+      'Failed to resolve typescript. Install "typescript@rc" to use TypeScript Go.',
+    );
+  }
 
   const libPath = path.resolve(
-    path.dirname(tsgoPkgPath),
+    path.dirname(packageJsonPath),
     './lib/getExePath.js',
   );
 
@@ -38,6 +75,25 @@ const getTsgoBinPath = async (): Promise<string> => {
     const getExePath = mod.default;
     return getExePath();
   });
+};
+
+const resolveDtsExecutableCommand = async (
+  dtsBackend: ExecutableDtsGenerationBackend,
+  args: string[],
+  cwd: string,
+): Promise<DtsExecutableCommand> => {
+  const dtsExecutableFile = await getDtsExecutablePath(
+    cwd,
+    dtsBackend === 'tsc-executable'
+      ? TYPESCRIPT_PACKAGE_NAME
+      : NATIVE_PREVIEW_PACKAGE_NAME,
+  );
+
+  return {
+    command: dtsExecutableFile,
+    args,
+    displayCommand: `${dtsExecutableFile} ${args.join(' ')}`,
+  };
 };
 
 const generateTsgoArgs = (
@@ -71,15 +127,15 @@ const generateTsgoArgs = (
 async function handleDiagnosticsAndProcessFiles(
   isWatch: boolean,
   hasErrors: boolean,
-  tsConfigResult: GetTsconfigTsconfigResultForBin,
+  tsConfigResult: GetTsconfigTsconfigResultForExecutable,
   configPath: string,
   bundle: boolean,
   cwd: string,
   declarationDir: string,
   dtsExtension: string,
-  redirect: EmitDtsOptions<GetTsconfigTsconfigResultForBin>['redirect'],
+  redirect: EmitDtsOptions<GetTsconfigTsconfigResultForExecutable>['redirect'],
   rootDir: string,
-  paths: EmitDtsOptions<GetTsconfigTsconfigResultForBin>['paths'],
+  paths: EmitDtsOptions<GetTsconfigTsconfigResultForExecutable>['paths'],
   banner?: string,
   footer?: string,
   name?: string,
@@ -116,7 +172,7 @@ async function handleDiagnosticsAndProcessFiles(
 }
 
 export async function emitDtsTsgo(
-  options: EmitDtsOptions<GetTsconfigTsconfigResultForBin>,
+  options: EmitDtsExecutableOptions,
   _onComplete: (isSuccess: boolean) => void,
   bundle = false,
   isWatch = false,
@@ -135,18 +191,26 @@ export async function emitDtsTsgo(
     paths,
     redirect,
     cwd,
+    dtsBackend,
   } = options;
 
-  const tsgoBinFile = await getTsgoBinPath();
   const args = generateTsgoArgs(configPath, declarationDir, build, isWatch);
+  const dtsExecutableCommand = await resolveDtsExecutableCommand(
+    dtsBackend,
+    args,
+    cwd,
+  );
 
-  logger.debug(logPrefixTsgo, `Running: ${tsgoBinFile} ${args.join(' ')}`);
+  logger.debug(
+    logPrefixTsgo,
+    `Running: ${dtsExecutableCommand.displayCommand}`,
+  );
 
   return new Promise((resolve, reject) => {
     const childProcess = spawn(
-      tsgoBinFile,
+      dtsExecutableCommand.command,
       [
-        ...args,
+        ...dtsExecutableCommand.args,
         // Required parameter to enable colored stdout
         '--pretty',
       ],

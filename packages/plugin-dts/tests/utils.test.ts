@@ -4,7 +4,7 @@ import path from 'node:path';
 import type { CompilerOptions } from 'typescript';
 import {
   cleanTsBuildInfoFile,
-  loadTsconfigResultForBin,
+  loadTsconfigResultForExecutable,
   mergeAliasWithTsConfigPaths,
   prettyTime,
 } from '../src/utils';
@@ -112,9 +112,11 @@ describe('mergeAliasWithTsConfigPaths', () => {
   });
 });
 
-describe('loadTsconfigResultForBin', () => {
-  test('should load the options needed by the bin backend', async () => {
-    const tempDir = await fs.mkdtemp(path.join(__dirname, 'bin-tsconfig-'));
+describe('loadTsconfigResultForExecutable', () => {
+  test('should load the options needed by the executable backend', async () => {
+    const tempDir = await fs.mkdtemp(
+      path.join(__dirname, 'executable-tsconfig-'),
+    );
 
     try {
       const tsconfigPath = path.join(tempDir, 'tsconfig.json');
@@ -134,7 +136,7 @@ describe('loadTsconfigResultForBin', () => {
         ),
       );
 
-      const loaded = loadTsconfigResultForBin(tempDir, 'tsconfig.json');
+      const loaded = loadTsconfigResultForExecutable(tempDir, 'tsconfig.json');
 
       expect(path.normalize(loaded?.path ?? '')).toBe(
         path.normalize(tsconfigPath),

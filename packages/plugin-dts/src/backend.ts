@@ -1,6 +1,55 @@
+import fs from 'node:fs';
 import type { PluginDtsOptions } from './index';
+import { createRequireFromPackageJson } from './utils';
 
-export type DtsGenerationBackend = 'tsc-api' | 'tsgo-bin' | 'isolated';
+export type DtsGenerationBackend =
+  | 'api-old'
+  | 'tsc-executable'
+  | 'tsgo-executable'
+  | 'isolated';
+
+type ParsedTypescriptVersion = {
+  major: number;
+  minor: number;
+};
+
+export const readTypescriptVersion = (cwd: string): string | undefined => {
+  try {
+    const currentRequire = createRequireFromPackageJson(cwd);
+    const packageJsonPath = currentRequire.resolve('typescript/package.json');
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+    return typeof packageJson.version === 'string'
+      ? packageJson.version
+      : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+const parseTypescriptVersion = (
+  version: string | undefined,
+): ParsedTypescriptVersion | undefined => {
+  const match = version?.match(/^(\d+)\.(\d+)/);
+
+  if (!match) {
+    return undefined;
+  }
+
+  return {
+    major: Number(match[1]),
+    minor: Number(match[2]),
+  };
+};
+
+const isTypeScriptVersionAtLeast7 = (version: string | undefined): boolean => {
+  const parsedVersion = parseTypescriptVersion(version);
+
+  if (!parsedVersion) {
+    return false;
+  }
+
+  return parsedVersion.major >= 7;
+};
 
 export function validateExplicitIsolatedDtsOptions(
   options: Pick<
@@ -32,6 +81,7 @@ export function resolveDtsGenerationBackend(
     PluginDtsOptions,
     'isolated' | 'tsgo' | 'build' | 'abortOnError'
   >,
+  typescriptVersion?: string,
 ): DtsGenerationBackend {
   validateExplicitIsolatedDtsOptions(options);
 
@@ -39,9 +89,19 @@ export function resolveDtsGenerationBackend(
     return 'isolated';
   }
 
-  if (options.tsgo) {
-    return 'tsgo-bin';
+  if (isTypeScriptVersionAtLeast7(typescriptVersion)) {
+    if (options.tsgo === false) {
+      throw new Error(
+        'Can not set "dts.tsgo: false" when using TypeScript 7 or higher.',
+      );
+    }
+
+    return 'tsc-executable';
   }
 
-  return 'tsc-api';
+  if (options.tsgo === true) {
+    return 'tsgo-executable';
+  }
+
+  return 'api-old';
 }
