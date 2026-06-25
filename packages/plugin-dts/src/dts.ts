@@ -342,12 +342,14 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     footer,
   };
 
-  const useTsgoBin = data.dtsBackend === 'tsgo-bin';
+  const dtsBackend = data.dtsBackend;
+  const useTsgoBin = dtsBackend === 'tsc-bin' || dtsBackend === 'tsgo-bin';
   const hasError = useTsgoBin
     ? await import('./tsgo').then((mod) =>
         mod.emitDtsTsgo(
           {
             ...emitOptions,
+            dtsBackend,
             tsConfigResult: tsConfigResult as GetTsconfigTsconfigResultForBin,
           },
           onComplete,

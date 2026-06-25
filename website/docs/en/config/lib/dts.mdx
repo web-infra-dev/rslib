@@ -273,23 +273,17 @@ At this time, when [redirect.dts.path](/config/lib/redirect#redirectdtspath) is 
 ### dts.tsgo
 
 - **Type:** `boolean`
-- **Default:** `false`
+- **Default:** `true` when the installed `typescript` package is version 7 or higher, otherwise `false`
 
-Whether to generate declaration files with [tsgo](https://github.com/microsoft/typescript-go).
+Whether to generate declaration files with [TypeScript Go](https://github.com/microsoft/typescript-go).
 
-To enable this option, you need to:
+After installing TypeScript 7 or higher, Rslib will automatically enable this option.
 
-1. Install [@typescript/native-preview](https://www.npmjs.com/package/@typescript/native-preview) as a development dependency.
+<PackageManagerTabs command="add typescript@rc -D" />
+
+You can also install [@typescript/native-preview](https://www.npmjs.com/package/@typescript/native-preview) and manually enable this option.
 
 <PackageManagerTabs command="add @typescript/native-preview -D" />
-
-::: tip Version requirements
-
-`@typescript/native-preview` requires Node.js 20.6.0 or higher.
-
-:::
-
-2. Configure in the Rslib config file:
 
 ```ts title="rslib.config.ts"
 export default {
@@ -303,7 +297,13 @@ export default {
 };
 ```
 
-3. In order to ensure the consistency of local development, you need to install the corresponding [VS Code Preview Extension](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) and add the following configuration in the VS Code settings:
+:::note
+
+The `@typescript/native-preview` usage is deprecated and kept only for compatibility. Prefer installing `typescript@rc` to use tsgo.
+
+:::
+
+To ensure consistency during local development, you need to install the corresponding [VS Code Preview Extension](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) and add the following setting to VS Code:
 
 ```json title=".vscode/settings.json"
 {

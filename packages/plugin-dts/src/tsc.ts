@@ -103,7 +103,7 @@ export async function emitDtsTsc(
     paths,
     redirect,
   } = options;
-  const ts = loadTypescript();
+  const ts = loadTypescript(cwd);
   const formatHost = createFormatHost(ts);
   const {
     options: rawCompilerOptions,

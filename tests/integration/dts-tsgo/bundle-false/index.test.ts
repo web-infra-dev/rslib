@@ -1,7 +1,7 @@
+import { describe, expect, test } from '@rstest/core';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
-import { describe, expect, test } from '@rstest/core';
 import {
   buildAndGetResults,
   createTempFiles,
@@ -37,6 +37,18 @@ describe('dts with tsgo when bundle: false', () => {
     `);
 
     expect(contents.esm).toMatchSnapshot();
+  });
+
+  test('ts7 basic', async () => {
+    const fixturePath = join(__dirname, 'ts7-basic');
+
+    const { files } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(files.esm).toContain(join(fixturePath, 'dist/esm/index.d.ts'));
+    expect(files.cjs).toContain(join(fixturePath, 'dist/cjs/index.d.ts'));
   });
 
   test('distPath', async () => {

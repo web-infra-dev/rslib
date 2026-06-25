@@ -25,7 +25,6 @@ import type { DtsEntry, DtsRedirect } from './index';
 const require = createRequire(import.meta.url);
 
 let astGrepNapi: typeof import('@ast-grep/napi') | undefined;
-let typescript: typeof import('typescript') | undefined;
 
 const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
   if (!astGrepNapi) {
@@ -36,18 +35,18 @@ const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
   return astGrepNapi;
 };
 
-export const loadTypescript = (): typeof import('typescript') => {
-  if (!typescript) {
-    /**
-     * Currently, typescript only provides a CJS bundle, so we use require to load it
-     * for better startup performance. If we use `import ts from 'typescript'`,
-     * Node.js will use `cjs-module-lexer` to parse it, which slows down startup time.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    typescript = require('typescript') as typeof import('typescript');
-  }
+export const loadTypescript = (cwd?: string): typeof import('typescript') => {
+  const currentRequire = cwd
+    ? createRequire(join(cwd, 'package.json'))
+    : require;
 
-  return typescript;
+  /**
+   * Currently, typescript only provides a CJS bundle, so we use require to load it
+   * for better startup performance. If we use `import ts from 'typescript'`,
+   * Node.js will use `cjs-module-lexer` to parse it, which slows down startup time.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  return currentRequire('typescript') as typeof import('typescript');
 };
 
 type ColorFn = (text: string | number) => string;
