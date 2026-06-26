@@ -147,6 +147,9 @@ importers:
       storybook-react-rsbuild:
         specifier: ^3.3.4
         version: 3.3.4(@rsbuild/core@2.1.0-beta.0)(@rspack/core@2.1.0-beta.0)(@types/react-dom@19.2.3)(@types/react@19.2.17)(@typescript/native-preview@7.0.0-dev.20260620.1)(react-dom@19.2.7)(react@19.2.7)(rollup@4.60.4)(storybook@10.4.6)(typescript@6.0.3)
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
 
   examples/module-federation/mf-remote:
     dependencies:
@@ -465,7 +468,7 @@ importers:
         version: 4.0.1
       '@module-federation/rsbuild-plugin':
         specifier: ^2.5.1
-        version: 2.5.1(@rsbuild/core@2.1.0-beta.0)(@rspack/core@2.0.8)(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)
+        version: 2.5.1(@rsbuild/core@2.1.0-beta.0)(@rspack/core@2.0.8)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.5)
       '@playwright/test':
         specifier: 1.61.0
         version: 1.61.0
@@ -523,6 +526,9 @@ importers:
       tinyglobby:
         specifier: ^0.2.17
         version: 0.2.17
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
 
   tests/e2e/react-component:
     dependencies:
@@ -8441,19 +8447,6 @@ snapshots:
     transitivePeerDependencies:
       - node-fetch
 
-  '@module-federation/cli@2.5.1(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)':
-    dependencies:
-      '@module-federation/dts-plugin': 2.5.1(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)
-      '@module-federation/sdk': 2.5.1(node-fetch@2.7.0)
-      commander: 11.1.0
-      jiti: 2.4.2
-    transitivePeerDependencies:
-      - bufferutil
-      - node-fetch
-      - typescript
-      - utf-8-validate
-      - vue-tsc
-
   '@module-federation/cli@2.5.1(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.5)':
     dependencies:
       '@module-federation/dts-plugin': 2.5.1(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.5)
@@ -8466,26 +8459,6 @@ snapshots:
       - typescript
       - utf-8-validate
       - vue-tsc
-
-  '@module-federation/dts-plugin@2.5.1(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)':
-    dependencies:
-      '@module-federation/error-codes': 2.5.1
-      '@module-federation/managers': 2.5.1(node-fetch@2.7.0)
-      '@module-federation/sdk': 2.5.1(node-fetch@2.7.0)
-      '@module-federation/third-party-dts-extractor': 2.5.1
-      adm-zip: 0.5.10
-      ansi-colors: 4.1.3
-      isomorphic-ws: 5.0.0(ws@8.21.0)
-      node-schedule: 2.1.1
-      typescript: 5.9.3
-      undici: 7.24.7
-      ws: 8.21.0
-    optionalDependencies:
-      vue-tsc: 3.3.5(typescript@5.9.3)
-    transitivePeerDependencies:
-      - bufferutil
-      - node-fetch
-      - utf-8-validate
 
   '@module-federation/dts-plugin@2.5.1(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.5)':
     dependencies:
@@ -8503,31 +8476,6 @@ snapshots:
     optionalDependencies:
       vue-tsc: 3.3.5(typescript@6.0.3)
     transitivePeerDependencies:
-      - bufferutil
-      - node-fetch
-      - utf-8-validate
-
-  '@module-federation/enhanced@2.5.1(@rspack/core@2.0.8)(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)':
-    dependencies:
-      '@module-federation/bridge-react-webpack-plugin': 2.5.1(node-fetch@2.7.0)
-      '@module-federation/cli': 2.5.1(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)
-      '@module-federation/dts-plugin': 2.5.1(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)
-      '@module-federation/error-codes': 2.5.1
-      '@module-federation/inject-external-runtime-core-plugin': 2.5.1(@module-federation/runtime-tools@2.5.1)
-      '@module-federation/managers': 2.5.1(node-fetch@2.7.0)
-      '@module-federation/manifest': 2.5.1(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)
-      '@module-federation/rspack': 2.5.1(@rspack/core@2.0.8)(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)
-      '@module-federation/runtime-tools': 2.5.1(node-fetch@2.7.0)
-      '@module-federation/sdk': 2.5.1(node-fetch@2.7.0)
-      '@module-federation/webpack-bundler-runtime': 2.5.1(node-fetch@2.7.0)
-      schema-utils: 4.3.0
-      tapable: 2.3.0
-      upath: 2.0.1
-    optionalDependencies:
-      typescript: 5.9.3
-      vue-tsc: 3.3.5(typescript@5.9.3)
-    transitivePeerDependencies:
-      - '@rspack/core'
       - bufferutil
       - node-fetch
       - utf-8-validate
@@ -8620,19 +8568,6 @@ snapshots:
     transitivePeerDependencies:
       - node-fetch
 
-  '@module-federation/manifest@2.5.1(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)':
-    dependencies:
-      '@module-federation/dts-plugin': 2.5.1(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)
-      '@module-federation/managers': 2.5.1(node-fetch@2.7.0)
-      '@module-federation/sdk': 2.5.1(node-fetch@2.7.0)
-      find-pkg: 2.0.0
-    transitivePeerDependencies:
-      - bufferutil
-      - node-fetch
-      - typescript
-      - utf-8-validate
-      - vue-tsc
-
   '@module-federation/manifest@2.5.1(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.5)':
     dependencies:
       '@module-federation/dts-plugin': 2.5.1(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.5)
@@ -8642,21 +8577,6 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - node-fetch
-      - typescript
-      - utf-8-validate
-      - vue-tsc
-
-  '@module-federation/node@2.7.44(@rspack/core@2.0.8)(typescript@5.9.3)(vue-tsc@3.3.5)':
-    dependencies:
-      '@module-federation/enhanced': 2.5.1(@rspack/core@2.0.8)(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)
-      '@module-federation/runtime': 2.5.1(node-fetch@2.7.0)
-      '@module-federation/sdk': 2.5.1(node-fetch@2.7.0)
-      encoding: 0.1.13
-      node-fetch: 2.7.0(encoding@0.1.13)
-      tapable: 2.3.0
-    transitivePeerDependencies:
-      - '@rspack/core'
-      - bufferutil
       - typescript
       - utf-8-validate
       - vue-tsc
@@ -8706,22 +8626,6 @@ snapshots:
       - utf-8-validate
       - vue-tsc
 
-  '@module-federation/rsbuild-plugin@2.5.1(@rsbuild/core@2.1.0-beta.0)(@rspack/core@2.0.8)(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)':
-    dependencies:
-      '@module-federation/enhanced': 2.5.1(@rspack/core@2.0.8)(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)
-      '@module-federation/node': 2.7.44(@rspack/core@2.0.8)(typescript@5.9.3)(vue-tsc@3.3.5)
-      '@module-federation/sdk': 2.5.1(node-fetch@2.7.0)
-    optionalDependencies:
-      '@rsbuild/core': 2.1.0-beta.0(@module-federation/runtime-tools@2.5.1)
-    transitivePeerDependencies:
-      - '@rspack/core'
-      - bufferutil
-      - node-fetch
-      - typescript
-      - utf-8-validate
-      - vue-tsc
-      - webpack
-
   '@module-federation/rsbuild-plugin@2.5.1(@rsbuild/core@2.1.0-beta.0)(@rspack/core@2.0.8)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.5)':
     dependencies:
       '@module-federation/enhanced': 2.5.1(@rspack/core@2.0.8)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.5)
@@ -8769,24 +8673,6 @@ snapshots:
       - utf-8-validate
       - vue-tsc
       - webpack
-
-  '@module-federation/rspack@2.5.1(@rspack/core@2.0.8)(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)':
-    dependencies:
-      '@module-federation/bridge-react-webpack-plugin': 2.5.1(node-fetch@2.7.0)
-      '@module-federation/dts-plugin': 2.5.1(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)
-      '@module-federation/inject-external-runtime-core-plugin': 2.5.1(@module-federation/runtime-tools@2.5.1)
-      '@module-federation/managers': 2.5.1(node-fetch@2.7.0)
-      '@module-federation/manifest': 2.5.1(node-fetch@2.7.0)(typescript@5.9.3)(vue-tsc@3.3.5)
-      '@module-federation/runtime-tools': 2.5.1(node-fetch@2.7.0)
-      '@module-federation/sdk': 2.5.1(node-fetch@2.7.0)
-      '@rspack/core': 2.0.8(@module-federation/runtime-tools@2.5.1)(@swc/helpers@0.5.23)
-    optionalDependencies:
-      typescript: 5.9.3
-      vue-tsc: 3.3.5(typescript@5.9.3)
-    transitivePeerDependencies:
-      - bufferutil
-      - node-fetch
-      - utf-8-validate
 
   '@module-federation/rspack@2.5.1(@rspack/core@2.0.8)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.5)':
     dependencies:
@@ -14842,13 +14728,6 @@ snapshots:
   vue-inbrowser-compiler-independent-utils@4.71.1(vue@3.5.38):
     dependencies:
       vue: 3.5.38(typescript@6.0.3)
-
-  vue-tsc@3.3.5(typescript@5.9.3):
-    dependencies:
-      '@volar/typescript': 2.4.28
-      '@vue/language-core': 3.3.5
-      typescript: 5.9.3
-    optional: true
 
   vue-tsc@3.3.5(typescript@6.0.3):
     dependencies:
