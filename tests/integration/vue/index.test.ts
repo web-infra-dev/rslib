@@ -40,7 +40,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
           };
       })();
       __webpack_require__.add({
-          246 (__unused_rspack_module, exports) {
+          727 (__unused_rspack_module, exports) {
               exports.A = (sfc, props)=>{
                   const target = sfc.__vccOpts || sfc;
                   for (const [key, val] of props)target[key] = val;
@@ -58,7 +58,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
               return (_ctx, _cache)=>(openBlock(), createElementBlock("p", _hoisted_1, toDisplayString(button.value), 1));
           }
       };
-      const exportHelper = __webpack_require__("246");
+      const exportHelper = __webpack_require__("727");
       const __exports__ = /*#__PURE__*/ (0, exportHelper.A)(Buttonvue_type_script_setup_true_lang_js, [
           [
               '__scopeId',
@@ -112,7 +112,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
       import "./Button.css";
       import { __webpack_require__ } from "../rslib-runtime.js";
       __webpack_require__.add({
-          246 (__unused_rspack_module, exports) {
+          727 (__unused_rspack_module, exports) {
               exports.A = (sfc, props)=>{
                   const target = sfc.__vccOpts || sfc;
                   for (const [key, val] of props)target[key] = val;
@@ -130,7 +130,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
               return (_ctx, _cache)=>(openBlock(), createElementBlock("p", _hoisted_1, toDisplayString(button.value), 1));
           }
       };
-      const exportHelper = __webpack_require__("246");
+      const exportHelper = __webpack_require__("727");
       const __exports__ = /*#__PURE__*/ (0, exportHelper.A)(Buttonvue_type_script_setup_true_lang_js, [
           [
               '__scopeId',
