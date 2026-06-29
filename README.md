@@ -16,7 +16,8 @@
 English | [简体中文](./README.zh-CN.md)
 
 > [!NOTE]
-> The `main` branch is under active development for **Rslib 1.0**.  
+> The `main` branch is under active development for **Rslib 1.0**.
+>
 > The stable **0.x** releases are maintained in the [v0.x](https://github.com/web-infra-dev/rslib/tree/v0.x) branch.
 
 Rslib is a library development tool that leverages the well-designed configurations and plugins of [Rsbuild](https://rsbuild.rs), empowering library developers to take advantage of the extensive knowledge and ecosystem of webpack and Rspack.
