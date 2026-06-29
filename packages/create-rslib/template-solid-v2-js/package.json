@@ -1,15 +1,13 @@
 {
-  "name": "rslib-solid-ts",
+  "name": "rslib-solid-v2-js",
   "version": "0.0.0",
   "type": "module",
   "exports": {
     ".": {
       "solid": "./dist/source/index.jsx",
-      "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
   },
-  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -21,7 +19,7 @@
   },
   "devDependencies": {
     "@rsbuild/plugin-babel": "^2.0.0",
-    "@rsbuild/plugin-solid": "^1.2.2",
+    "@rsbuild/plugin-solid": "2.0.0-beta.0",
     "@rslib/core": "^0.23.1",
     "@rstest/adapter-rslib": "^0.10.6",
     "@rstest/core": "^0.10.6",
@@ -29,10 +27,11 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "happy-dom": "^20.10.6",
-    "solid-js": "^1.9.9",
-    "typescript": "^6.0.3"
+    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
+    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
   },
   "peerDependencies": {
-    "solid-js": "^1.8.0"
+    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
+    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
   }
 }

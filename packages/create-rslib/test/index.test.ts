@@ -54,8 +54,10 @@ const CASES_SVELTE: TemplateCase[] = [
 ];
 
 const CASES_SOLID: TemplateCase[] = [
-  createCase('solid', 'js'),
-  createCase('solid', 'ts'),
+  createCase('solid-v1', 'js'),
+  createCase('solid-v1', 'ts'),
+  createCase('solid-v2', 'js'),
+  createCase('solid-v2', 'ts'),
 ];
 
 const BASE_NODE_ESM_JS = createCase('node-esm', 'js');
@@ -68,15 +70,18 @@ describe('parseTemplateName', () => {
     expect(parseTemplateName('vue-js')).toBe('vue-js');
     expect(parseTemplateName('svelte-js')).toBe('svelte-js');
     expect(parseTemplateName('svelte-ts')).toBe('svelte-ts');
-    expect(parseTemplateName('solid-js')).toBe('solid-js');
-    expect(parseTemplateName('solid-ts')).toBe('solid-ts');
+    expect(parseTemplateName('solid-v1-js')).toBe('solid-v1-js');
+    expect(parseTemplateName('solid-v1-ts')).toBe('solid-v1-ts');
+    expect(parseTemplateName('solid-v2-js')).toBe('solid-v2-js');
+    expect(parseTemplateName('solid-v2-ts')).toBe('solid-v2-ts');
   });
 
   test('should handle template without language suffix and default to ts', () => {
     expect(parseTemplateName('react')).toBe('react-ts');
     expect(parseTemplateName('vue')).toBe('vue-ts');
     expect(parseTemplateName('svelte')).toBe('svelte-ts');
-    expect(parseTemplateName('solid')).toBe('solid-ts');
+    expect(parseTemplateName('solid-v1')).toBe('solid-v1-ts');
+    expect(parseTemplateName('solid-v2')).toBe('solid-v2-ts');
   });
 
   test('should handle multi-segment template with language suffix', () => {

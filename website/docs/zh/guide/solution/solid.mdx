@@ -21,13 +21,54 @@ import { PackageManagerTabs } from '@theme';
   }}
 />
 
-然后，当提示 "Select template" 时选择 `Solid`。
+然后，当提示 "Select template" 时选择 `Solid v1` 或 `Solid v2`。
+
+## 版本状态
+
+Rslib 提供两套 Solid 模板：
+
+| 模板 | Solid 版本 | Rsbuild 插件 | 状态 |
+| ---- | ---------- | ------------ | ---- |
+| `Solid v1` | `solid-js@^1` | `@rsbuild/plugin-solid@^1.2.2` | 稳定版本，推荐用于生产组件库。 |
+| `Solid v2` | `solid-js@2.0.0-beta` + `@solidjs/web@2.0.0-beta` | `@rsbuild/plugin-solid@2.0.0-beta.0` | 实验版本。Solid 2 和 Rsbuild Solid v2 插件当前都处于 beta 阶段。 |
+
+两套模板的产物形态一致：为普通消费端编译一份 ESM 输出，同时通过 `"solid"` 导出条件发布一份保留 JSX 的源码输出。v2 模板主要区别在于依赖范围和运行时包。
 
 ## 在现有 Rslib 项目中使用
 
 开发 Solid 组件库，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`。
 
 要编译 Solid JSX，你需要同时注册 [@rsbuild/plugin-babel](https://rsbuild.rs/zh/plugins/list/plugin-babel) 和 [@rsbuild/plugin-solid](https://rsbuild.rs/zh/plugins/list/plugin-solid) 插件。Solid 插件使用 `babel-preset-solid` 将 JSX 转换为 Solid 的运行时 DOM 表达式。
+
+稳定项目使用 Solid v1 依赖：
+
+```json title="package.json"
+{
+  "devDependencies": {
+    "@rsbuild/plugin-solid": "^1.2.2",
+    "solid-js": "^1.9.9"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.8.0"
+  }
+}
+```
+
+只有在你明确要面向 beta 运行时时，才使用 Solid v2 依赖：
+
+```json title="package.json"
+{
+  "devDependencies": {
+    "@rsbuild/plugin-solid": "2.0.0-beta.0",
+    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
+    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
+  },
+  "peerDependencies": {
+    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
+    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
+  }
+}
+```
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -149,7 +190,7 @@ export default defineConfig({
 
 ## TypeScript
 
-对于使用 TypeScript 的 Solid 项目，在 `tsconfig.json` 中设置 `"jsx": "preserve"` 和 `"jsxImportSource": "solid-js"`：
+对于使用 TypeScript 的 Solid v1 项目，在 `tsconfig.json` 中设置 `"jsx": "preserve"` 和 `"jsxImportSource": "solid-js"`：
 
 ```json title="tsconfig.json"
 {
@@ -160,9 +201,22 @@ export default defineConfig({
 }
 ```
 
+对于 Solid v2 beta 项目，JSX runtime 位于 `@solidjs/web`，因此需要将 `jsxImportSource` 设置为 `@solidjs/web`：
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "@solidjs/web"
+  }
+}
+```
+
 ## SSR
 
-要为服务端渲染构建 Solid 库，可通过 `pluginSolid()` 传入 `solid` 选项：
+大多数 Solid 组件库默认不会单独发布 SSR 构建。下游框架通常会解析 `"solid"` 条件，拿到保留 JSX 的源码输出，再按自己的目标编译。
+
+如果你确实需要预编译的 SSR 产物，可以在额外的 lib 配置中通过 `pluginSolid()` 传入 `solid` 选项：
 
 ```ts
 pluginSolid({

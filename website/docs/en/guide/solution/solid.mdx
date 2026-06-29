@@ -21,13 +21,54 @@ import { PackageManagerTabs } from '@theme';
   }}
 />
 
-Then select `Solid` when prompted to "Select template".
+Then select `Solid v1` or `Solid v2` when prompted to "Select template".
+
+## Version status
+
+Rslib provides two Solid templates:
+
+| Template | Solid version | Rsbuild plugin | Status |
+| -------- | ------------- | -------------- | ------ |
+| `Solid v1` | `solid-js@^1` | `@rsbuild/plugin-solid@^1.2.2` | Stable and recommended for production libraries. |
+| `Solid v2` | `solid-js@2.0.0-beta` + `@solidjs/web@2.0.0-beta` | `@rsbuild/plugin-solid@2.0.0-beta.0` | Experimental. Solid 2 and the Rsbuild Solid v2 plugin are both beta releases. |
+
+The main code shape is the same for both templates: compile one ESM output for general consumers and publish one preserved JSX output through the `"solid"` export condition. The v2 template mainly differs in dependency ranges and runtime packages.
 
 ## Use Rslib in an existing project
 
 To develop a Solid library, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default.
 
 To compile Solid JSX, you need to register both the [@rsbuild/plugin-babel](https://rsbuild.rs/plugins/list/plugin-babel) and [@rsbuild/plugin-solid](https://rsbuild.rs/plugins/list/plugin-solid) plugins. The Solid plugin uses `babel-preset-solid` to transform JSX into Solid's runtime DOM expressions.
+
+Use Solid v1 dependencies for stable projects:
+
+```json title="package.json"
+{
+  "devDependencies": {
+    "@rsbuild/plugin-solid": "^1.2.2",
+    "solid-js": "^1.9.9"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.8.0"
+  }
+}
+```
+
+Use Solid v2 dependencies only when you intentionally target the beta runtime:
+
+```json title="package.json"
+{
+  "devDependencies": {
+    "@rsbuild/plugin-solid": "2.0.0-beta.0",
+    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
+    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
+  },
+  "peerDependencies": {
+    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
+    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
+  }
+}
+```
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -149,7 +190,7 @@ When a downstream app uses `@rsbuild/plugin-solid`, the `"solid"` condition is a
 
 ## TypeScript
 
-For Solid projects using TypeScript, set `"jsx": "preserve"` and `"jsxImportSource": "solid-js"` in your `tsconfig.json`:
+For Solid v1 projects using TypeScript, set `"jsx": "preserve"` and `"jsxImportSource": "solid-js"` in your `tsconfig.json`:
 
 ```json title="tsconfig.json"
 {
@@ -160,9 +201,22 @@ For Solid projects using TypeScript, set `"jsx": "preserve"` and `"jsxImportSour
 }
 ```
 
+For Solid v2 beta projects, the JSX runtime lives in `@solidjs/web`, so set `jsxImportSource` to `@solidjs/web`:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "@solidjs/web"
+  }
+}
+```
+
 ## SSR
 
-To build a Solid library for server-side rendering, pass the `solid` option to `pluginSolid()`:
+Most Solid component libraries do not publish a separate SSR build by default. Instead, downstream frameworks resolve the `"solid"` condition, get the preserved JSX output, and compile it for their own target.
+
+If you intentionally need a pre-compiled SSR output, pass the `solid` option to `pluginSolid()` in an additional lib entry:
 
 ```ts
 pluginSolid({
