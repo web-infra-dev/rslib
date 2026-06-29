@@ -39,6 +39,8 @@ import { PackageManagerTabs } from '@theme';
 
 Follow the prompts step by step. During project creation, you can choose a template, language, optional tools, and optional skills.
 
+All templates include [Rstest](https://rstest.rs/) by default for testing.
+
 After creating the project, do the following:
 
 - Run `git init` to initialize a Git repository.
@@ -69,7 +71,6 @@ When creating a project, you can choose from the following templates provided by
 | [Biome](https://biomejs.dev/)                          | Linting and formatting                                    |
 | [Rspress](https://rspress.rs/)                         | Component documentation, React + TypeScript template      |
 | [Storybook](https://storybook.js.org/)                 | Component development and preview, React or Vue templates |
-| [Rstest](https://rstest.rs/)                           | Testing                                                   |
 | [React Compiler](/guide/solution/react#react-compiler) | Optimizing React components, React template only          |
 
 ### Optional skills
@@ -79,7 +80,7 @@ When creating a project, you can choose from the following templates provided by
 | Name                                                                                                    | Condition        |
 | ------------------------------------------------------------------------------------------------------- | ---------------- |
 | [rslib-best-practices](https://github.com/rstackjs/agent-skills#rslib-best-practices)                   | Default          |
-| [rstest-best-practices](https://github.com/rstackjs/agent-skills#rstest-best-practices)                 | Choose `Rstest`  |
+| [rstest-best-practices](https://github.com/rstackjs/agent-skills#rstest-best-practices)                 | Default          |
 | [rspress-custom-theme](https://github.com/rstackjs/agent-skills#rspress-custom-theme)                   | Choose `Rspress` |
 | [rspress-description-generator](https://github.com/rstackjs/agent-skills#rspress-description-generator) | Choose `Rspress` |
 
@@ -88,6 +89,7 @@ Use the arrow keys to navigate and the space bar to select. Press Enter without 
 ```text
 ◆  Select optional skills (Use <space> to select, <enter> to continue)
 │  ◻ Rslib - best practices
+│  ◻ Rstest - best practices
 ```
 
 For more details about Agent Skills and other AI-related capabilities, see [AI](/guide/start/ai).
@@ -119,7 +121,7 @@ npx -y create-rslib@latest my-project --template react
 npx -y create-rslib@latest my-project -t react
 
 # Specify multiple tools
-npx -y create-rslib@latest my-project -t react --tools rstest,biome
+npx -y create-rslib@latest my-project -t react --tools storybook,biome
 
 # Install an optional skill for coding agents
 npx -y create-rslib@latest my-project -t react --skill rslib-best-practices
@@ -144,7 +146,7 @@ Available templates:
   node-dual-js, node-dual-ts, node-esm-js, node-esm-ts, react-js, react-ts, vue-js, vue-ts, svelte-js, svelte-ts
 
 Optional tools:
-  react-compiler, eslint, rslint, biome, prettier, rspress, storybook, rstest
+  react-compiler, eslint, rslint, biome, prettier, rspress, storybook
 
 Optional skills:
   rslib-best-practices, rstest-best-practices, rspress-custom-theme, rspress-description-generator

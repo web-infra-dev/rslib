@@ -16,16 +16,21 @@
   "scripts": {
     "build": "rslib",
     "check": "svelte-check",
-    "dev": "rslib --watch"
+    "dev": "rslib --watch",
+    "test": "rstest",
+    "test:watch": "rstest --watch"
   },
   "devDependencies": {
-    "@rsbuild/plugin-svelte": "^1.1.1",
+    "@rsbuild/plugin-svelte": "^2.0.0",
     "@rslib/core": "workspace:*",
+    "@rstest/adapter-rslib": "^0.10.6",
+    "@rstest/core": "^0.10.6",
     "@tsconfig/svelte": "^5.0.8",
-    "@types/node": "^24.12.4",
-    "svelte": "^5.55.9",
-    "svelte-check": "^4.4.8",
-    "svelte2tsx": "^0.7.55",
+    "@types/node": "^24.13.2",
+    "happy-dom": "^20.10.6",
+    "svelte": "^5.56.4",
+    "svelte-check": "^4.7.1",
+    "svelte2tsx": "^0.7.57",
     "typescript": "^6.0.3"
   },
   "peerDependencies": {

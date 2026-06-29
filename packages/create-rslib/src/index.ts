@@ -91,28 +91,6 @@ function mapRslintTemplate(templateName: string): RslintTemplateName {
   }
 }
 
-function mapTestingToolTemplate(templateName: string): string {
-  switch (templateName) {
-    case 'react-js':
-    case 'react-ts':
-    case 'vue-js':
-    case 'vue-ts':
-    case 'svelte-js':
-    case 'svelte-ts':
-      return templateName;
-    case 'node-dual-js':
-    case 'node-esm-js':
-      return 'node-js';
-    case 'node-dual-ts':
-    case 'node-esm-ts':
-      return 'node-ts';
-    default: {
-      const language = templateName.split('-').pop();
-      return `node-${language}`;
-    }
-  }
-}
-
 function getPackageName(distFolder: string): string {
   const pkgPath = path.join(distFolder, 'package.json');
   const pkgContent = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
@@ -205,22 +183,6 @@ create({
         addAgentsMdSearchDirs(toolFolder);
       },
     },
-    {
-      value: 'rstest',
-      label: 'Rstest - testing',
-      action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
-        const rstestTemplate = mapTestingToolTemplate(templateName);
-        const toolFolder = path.join(__dirname, '..', 'template-rstest');
-        const subFolder = path.join(toolFolder, rstestTemplate);
-
-        copyFolder({
-          from: subFolder,
-          to: distFolder,
-          isMergePackageJson: true,
-        });
-        addAgentsMdSearchDirs(toolFolder);
-      },
-    },
   ],
   extraSkills: [
     {
@@ -232,7 +194,6 @@ create({
       value: 'rstest-best-practices',
       label: 'Rstest - best practices',
       source: 'rstackjs/agent-skills',
-      when: ({ tools }) => tools.includes('rstest'),
     },
     {
       value: 'rspress-custom-theme',

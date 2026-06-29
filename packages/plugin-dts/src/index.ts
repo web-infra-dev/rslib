@@ -1,31 +1,34 @@
-import { type ChildProcess, fork } from 'node:child_process';
-import { extname, join } from 'node:path';
 import {
-  type LogLevel,
   logger,
+  type LogLevel,
   type RsbuildConfig,
   type RsbuildPlugin,
 } from '@rsbuild/core';
-import type { ParsedCommandLine } from 'typescript';
+import { type ChildProcess, fork } from 'node:child_process';
+import { extname, join } from 'node:path';
 
+import {
+  type DtsGenerationBackend,
+  readTypescriptVersion,
+  resolveDtsGenerationBackend,
+} from './backend';
 import {
   createIsolatedDtsContext,
   type IsolatedDtsContext,
   processIsolatedDts,
 } from './isolated';
 import {
-  resolveDtsGenerationBackend,
-  type DtsGenerationBackend,
-} from './backend';
-import {
   cleanDtsFiles,
   cleanTsBuildInfoFile,
   clearTempDeclarationDir,
   color,
+  type CompilerApiTsconfigResultForApi,
   getDtsEmitPath,
+  type GetTsconfigTsconfigResultForExecutable,
   loadTsconfig,
+  loadTsconfigResultForExecutable,
+  loadTypescript,
   processSourceEntry,
-  ts,
   warnIfOutside,
 } from './utils';
 
@@ -65,7 +68,10 @@ export type DtsEntry = {
   path: string;
 };
 
-export type DtsGenOptions = Omit<PluginDtsOptions, 'bundle' | 'isolated'> & {
+export type DtsGenOptions = Omit<
+  PluginDtsOptions,
+  'bundle' | 'isolated' | 'tsgo'
+> & {
   bundle: boolean;
   name: string;
   cwd: string;
@@ -74,10 +80,13 @@ export type DtsGenOptions = Omit<PluginDtsOptions, 'bundle' | 'isolated'> & {
   dtsEmitPath: string;
   build?: boolean;
   tsconfigPath: string;
-  tsConfigResult: ParsedCommandLine;
+  tsConfigResult:
+    | CompilerApiTsconfigResultForApi
+    | GetTsconfigTsconfigResultForExecutable;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
   apiExtractorOptions?: ApiExtractorOptions;
   loggerLevel: LogLevel;
+  dtsBackend: DtsGenerationBackend;
 };
 
 interface TaskResult {
@@ -113,15 +122,18 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     options.redirect.path = options.redirect.path ?? true;
     options.redirect.extension = options.redirect.extension ?? false;
     options.alias = options.alias ?? {};
-    options.tsgo = options.tsgo ?? false;
 
     let dtsPromise: Promise<TaskResult> = Promise.resolve({
       status: 'success',
     });
     let promiseResult: TaskResult;
     let childProcesses: ChildProcess[] = [];
-    const dtsBackend: DtsGenerationBackend =
-      resolveDtsGenerationBackend(options);
+    const typescriptVersion = readTypescriptVersion(api.context.rootPath);
+    const dtsBackend = resolveDtsGenerationBackend(options, typescriptVersion);
+    const tsApi =
+      dtsBackend === 'api-old'
+        ? loadTypescript(api.context.rootPath)
+        : undefined;
     let dtsGenOptions: DtsGenOptions | undefined;
     let isolatedDtsContext: IsolatedDtsContext | undefined;
 
@@ -145,7 +157,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
 
     api.onBeforeEnvironmentCompile(
       async ({ isWatch, isFirstCompile, environment, bundlerConfig }) => {
-        if (dtsBackend === 'tsc' && !isFirstCompile) {
+        if (dtsBackend === 'api-old' && !isFirstCompile) {
           return;
         }
 
@@ -157,22 +169,41 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
         const dtsEntry = processSourceEntry(bundle, config.source?.entry);
 
         const cwd = api.context.rootPath;
-        const tsconfigPath = ts.findConfigFile(
-          cwd,
-          ts.sys.fileExists.bind(ts.sys),
-          config.source.tsconfigPath,
-        );
+        const configuredTsconfigPath =
+          config.source.tsconfigPath ?? 'tsconfig.json';
+        let tsconfigPath: string | undefined;
+        let tsConfigResult:
+          | CompilerApiTsconfigResultForApi
+          | GetTsconfigTsconfigResultForExecutable
+          | undefined;
 
-        if (!tsconfigPath) {
+        if (tsApi) {
+          tsconfigPath = tsApi.findConfigFile(
+            cwd,
+            tsApi.sys.fileExists.bind(tsApi.sys),
+            configuredTsconfigPath,
+          );
+          if (tsconfigPath) {
+            tsConfigResult = loadTsconfig(tsconfigPath, tsApi);
+          }
+        } else {
+          const loadedTsconfig = loadTsconfigResultForExecutable(
+            cwd,
+            configuredTsconfigPath,
+          );
+          tsconfigPath = loadedTsconfig?.path;
+          tsConfigResult = loadedTsconfig?.config;
+        }
+
+        if (!tsconfigPath || !tsConfigResult) {
           const error = new Error(
-            `Failed to resolve tsconfig file ${color.cyan(`"${config.source.tsconfigPath}"`)} from ${color.cyan(cwd)}. Please ensure that the file exists.`,
+            `Failed to resolve tsconfig file ${color.cyan(`"${configuredTsconfigPath}"`)} from ${color.cyan(cwd)}. Please ensure that the file exists.`,
           );
           error.stack = '';
           // do not log the stack trace, it is not helpful for users
           throw error;
         }
 
-        const tsConfigResult = loadTsconfig(tsconfigPath);
         const { options: rawCompilerOptions } = tsConfigResult;
         const { declarationDir, outDir, composite, incremental } =
           rawCompilerOptions;
@@ -209,8 +240,15 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           await cleanTsBuildInfoFile(tsconfigPath, rawCompilerOptions);
         }
 
+        const {
+          bundle: _bundle,
+          isolated: _isolated,
+          tsgo: _tsgo,
+          ...rest
+        } = options;
+
         dtsGenOptions = {
-          ...options,
+          ...rest,
           bundle,
           dtsEntry,
           dtsEmitPath,
@@ -222,6 +260,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           cwd,
           isWatch,
           loggerLevel: loggerLevel as LogLevel,
+          dtsBackend,
         };
 
         if (dtsBackend === 'isolated') {
@@ -245,6 +284,11 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
         );
 
         childProcesses.push(childProcess);
+        childProcess.once('close', () => {
+          childProcesses = childProcesses.filter(
+            (item) => item !== childProcess,
+          );
+        });
         childProcess.send(dtsGenOptions);
 
         dtsPromise = new Promise<TaskResult>((resolve) => {
@@ -266,7 +310,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
 
     api.onAfterBuild({
       handler: async ({ isFirstCompile, stats }) => {
-        if (dtsBackend === 'tsc' && !isFirstCompile) {
+        if (dtsBackend === 'api-old' && !isFirstCompile) {
           return;
         }
 
@@ -298,7 +342,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     });
 
     api.onAfterBuild(({ isFirstCompile }) => {
-      if (dtsBackend === 'tsc' && !isFirstCompile) {
+      if (dtsBackend === 'api-old' && !isFirstCompile) {
         return;
       }
 

@@ -273,23 +273,17 @@ export default {
 ### dts.tsgo
 
 - **类型：** `boolean`
-- **默认值：** `false`
+- **默认值：** 当安装的 `typescript` 包版本为 7 或更高时为 `true`，否则为 `false`
 
-是否使用 [tsgo](https://github.com/microsoft/typescript-go) 生成类型声明文件。
+是否使用 [TypeScript Go](https://github.com/microsoft/typescript-go) 生成类型声明文件。
 
-启用该选项，你需要：
+安装 TypeScript 7 或更高版本后，Rslib 会自动开启该选项。
 
-1. 安装 [@typescript/native-preview](https://www.npmjs.com/package/@typescript/native-preview) 作为开发依赖。
+<PackageManagerTabs command="add typescript@rc -D" />
+
+你也可以安装 [@typescript/native-preview](https://www.npmjs.com/package/@typescript/native-preview)，并手动开启该选项。
 
 <PackageManagerTabs command="add @typescript/native-preview -D" />
-
-::: tip 版本要求
-
-`@typescript/native-preview` 要求 Node.js 20.6.0 或更高版本。
-
-:::
-
-2. 在 Rslib 配置文件中设置：
 
 ```ts title="rslib.config.ts"
 export default {
@@ -303,7 +297,11 @@ export default {
 };
 ```
 
-3. 为了保证本地开发的一致性，你需要安装对应的 [VS Code 预览版扩展](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview)，并在 VS Code 设置中添加如下配置：
+:::note
+`@typescript/native-preview` 的用法已废弃，仅作为兼容方式保留，推荐安装 `typescript@rc` 使用 tsgo。
+:::
+
+为了保证本地开发的一致性，你需要安装对应的 [VS Code 预览版扩展](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview)，并在 VS Code 设置中添加如下配置：
 
 ```json title=".vscode/settings.json"
 {
@@ -358,12 +356,12 @@ export default {
 
 #### 适用场景
 
-Rslib 默认通过 TypeScript Compiler API 生成类型声明文件，也可以通过 `dts.tsgo` 使用 `tsgo` 生成类型声明文件。与这两种方式不同，`dts.isolated` 不会在声明文件生成阶段执行完整类型检查，因此更适合与其他独立的高性能类型检查流程搭配使用。
+Rslib 默认通过 TypeScript Compiler API 生成类型声明文件，也可以通过 `dts.tsgo` 使用 `tsgo` 生成类型声明文件。与这两种方式不同，`dts.isolated` 速度最快，适合追求构建性能的场景。
 
-例如在 monorepo 项目中，可以配合 [`rslint --type-check`](https://rslint.rs/guide/type-checking) 使用该选项：
+由于 `dts.isolated` 不会在声明文件生成阶段执行类型检查，所以通常需要与其他独立的高性能类型检查流程搭配使用。例如在 monorepo 项目中，可以配合 [`rslint --type-check`](https://rslint.rs/guide/type-checking) 使用该选项：
 
-- 由 `rslint --type-check` 作为统一的类型检查步骤。
-- 由 `dts.isolated` 负责在各个包构建时快速输出类型声明文件。
+- 日常构建：由 `dts.isolated` 负责在各个包构建时快速输出类型声明文件。
+- 全局检查：在 CI 或 pre-commit hook 中运行 `rslint --type-check`，按需执行统一的类型检查。
 
 这样既能保留完整的类型检查，又能减少每个包在构建阶段重复执行 TypeScript 类型分析、加载 TypeScript 或 `tsgo` 相关包及 native binding 的开销，让整体构建链路更轻量。
 

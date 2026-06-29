@@ -1,3 +1,4 @@
+import { logger } from '@rsbuild/core';
 import fs from 'node:fs';
 import {
   basename,
@@ -8,19 +9,30 @@ import {
   relative,
   resolve,
 } from 'node:path';
-import { logger } from '@rsbuild/core';
-import type { DtsEntry, DtsGenOptions } from './index';
+import type { DtsEntry, DtsGenOptions, DtsRedirect } from './index';
 import {
   calcLongestCommonPath,
   color,
   ensureTempDeclarationDir,
   mergeAliasWithTsConfigPaths,
+  type CompilerApiTsconfigResultForApi,
+  type GetTsconfigTsconfigResultForExecutable,
 } from './utils';
 
 const isObject = (obj: unknown): obj is Record<string, any> =>
   Object.prototype.toString.call(obj) === '[object Object]';
 
 export const DEFAULT_EXCLUDED_PACKAGES: string[] = ['@types/react'];
+
+type ExecutableDtsGenerationBackend = Extract<
+  DtsGenOptions['dtsBackend'],
+  'tsc-executable' | 'tsgo-executable'
+>;
+
+const isExecutableBackend = (
+  dtsBackend: DtsGenOptions['dtsBackend'],
+): dtsBackend is ExecutableDtsGenerationBackend =>
+  dtsBackend === 'tsc-executable' || dtsBackend === 'tsgo-executable';
 
 type CalculateBundledPackagesOptions = {
   cwd: string;
@@ -130,6 +142,24 @@ export type PreparedDtsContext = {
   bundledDtsEntries: Required<DtsEntry>[];
 };
 
+export type EmitDtsOptions<
+  Tsconfig extends
+    | CompilerApiTsconfigResultForApi
+    | GetTsconfigTsconfigResultForExecutable,
+> = {
+  name: string;
+  cwd: string;
+  configPath: string;
+  tsConfigResult: Tsconfig;
+  declarationDir: string;
+  dtsExtension: string;
+  rootDir: string;
+  redirect: DtsRedirect;
+  paths: Record<string, string[]>;
+  banner?: string;
+  footer?: string;
+};
+
 export async function prepareDtsContext(
   data: DtsGenOptions,
 ): Promise<PreparedDtsContext> {
@@ -154,11 +184,16 @@ export async function prepareDtsContext(
     tsConfigResult.options.paths = paths;
   }
 
-  const { options: rawCompilerOptions, fileNames } = tsConfigResult;
+  const { options: rawCompilerOptions } = tsConfigResult;
+  const fileNames =
+    'fileNames' in tsConfigResult ? tsConfigResult.fileNames : [];
 
   // The longest common path of all non-declaration input files.
   // If composite is set, the default is instead the directory containing the tsconfig.json file.
   // see https://www.typescriptlang.org/tsconfig/#rootDir
+  // Since TypeScript 6, rootDir defaults to the tsconfig directory. This also
+  // covers TypeScript 7+ executable backends when TypeScript API fileNames are
+  // unavailable.
   const rootDir =
     rawCompilerOptions.rootDir ??
     (rawCompilerOptions.composite
@@ -307,31 +342,50 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     }
   };
 
-  const emitDts = data.tsgo
-    ? await import('./tsgo').then((mod) => mod.emitDtsTsgo)
-    : await import('./tsc').then((mod) => mod.emitDtsTsc);
+  const emitOptions = {
+    name,
+    cwd,
+    configPath: tsconfigPath,
+    declarationDir,
+    dtsExtension,
+    redirect,
+    rootDir,
+    paths,
+    banner,
+    footer,
+  };
 
-  const hasError = await emitDts(
-    {
-      name,
-      cwd,
-      configPath: tsconfigPath,
-      tsConfigResult,
-      declarationDir,
-      dtsExtension,
-      redirect,
-      rootDir,
-      paths,
-      banner,
-      footer,
-    },
-    onComplete,
-    bundle,
-    isWatch,
-    build,
-  );
+  const dtsBackend = data.dtsBackend;
+  const useExecutable = isExecutableBackend(dtsBackend);
+  const hasError = useExecutable
+    ? await import('./tsgo').then((mod) =>
+        mod.emitDtsTsgo(
+          {
+            ...emitOptions,
+            dtsBackend,
+            tsConfigResult:
+              tsConfigResult as GetTsconfigTsconfigResultForExecutable,
+          },
+          onComplete,
+          bundle,
+          isWatch,
+          build,
+        ),
+      )
+    : await import('./tsc').then((mod) =>
+        mod.emitDtsTsc(
+          {
+            ...emitOptions,
+            tsConfigResult: tsConfigResult as CompilerApiTsconfigResultForApi,
+          },
+          onComplete,
+          bundle,
+          isWatch,
+          build,
+        ),
+      );
 
-  if (data.tsgo) {
+  if (useExecutable) {
     if (!hasError) {
       await bundleDtsIfNeeded(data, preparedDtsContext);
     }
@@ -346,6 +400,9 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
 process.on('disconnect', () => {
   process.exit();
 });
+
+const shouldExitAfterGenerate = (data: DtsGenOptions): boolean =>
+  !data.isWatch || isExecutableBackend(data.dtsBackend);
 
 process.on('message', async (data: DtsGenOptions) => {
   if (!data.cwd) {
@@ -362,7 +419,7 @@ process.on('message', async (data: DtsGenOptions) => {
 
   process.send!('success');
 
-  if (!data.isWatch) {
+  if (shouldExitAfterGenerate(data)) {
     process.exit();
   }
 });

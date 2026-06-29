@@ -9,12 +9,11 @@
     "format": "prettier --experimental-cli --write . && heading-case --write",
     "lint": "rslint --type-check",
     "prebundle": "pnpm --filter \"./packages/*\" run prebundle",
-    "prepare": "simple-git-hooks && pnpm prebundle && pnpm build",
+    "prepare": "simple-git-hooks && pnpm prebundle",
     "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
     "test": "pnpm run test:unit && pnpm run test:integration && pnpm run test:e2e",
     "test:benchmark": "cd ./tests && pnpm run test:benchmark",
     "test:e2e": "pnpm run build:examples && cd tests && pnpm run test:e2e",
-    "test:ecosystem-ci": "pnpm run test:unit && cross-env ECO_CI=1 pnpm run test:integration && pnpm run test:e2e",
     "test:integration": "rstest --project integration",
     "test:integration:exe": "rstest --project integration-exe",
     "test:unit": "rstest --project unit*",
@@ -33,24 +32,24 @@
     ]
   },
   "devDependencies": {
-    "@rslint/core": "^0.5.3",
-    "@rstest/adapter-rslib": "^0.10.2",
-    "@rstest/core": "^0.10.2",
+    "@rslint/core": "^0.6.3",
+    "@rstest/adapter-rslib": "^0.10.6",
+    "@rstest/core": "^0.10.6",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^24.12.4",
-    "cross-env": "^10.1.0",
+    "@types/node": "^24.13.2",
+    "@typescript/native-preview": "7.0.0-dev.20260627.2",
     "cspell-ban-words": "^0.0.4",
     "fs-extra": "^11.3.5",
-    "heading-case": "^1.1.0",
+    "heading-case": "^1.1.3",
     "nano-staged": "^1.0.2",
-    "prettier": "^3.8.3",
+    "prettier": "^3.9.1",
     "prettier-plugin-packagejson": "^3.0.2",
     "simple-git-hooks": "^2.13.1",
     "typescript": "^6.0.3"
   },
-  "packageManager": "pnpm@11.4.0",
+  "packageManager": "pnpm@11.9.0",
   "engines": {
     "node": "^20.19.0 || >=22.12.0",
-    "pnpm": ">=11.4.0"
+    "pnpm": ">=11.9.0"
   }
 }

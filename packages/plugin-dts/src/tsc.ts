@@ -4,51 +4,41 @@ import type {
   CompilerOptions,
   Diagnostic,
   FormatDiagnosticsHost,
-  ParsedCommandLine,
   Program,
   System,
   WatchStatusReporter,
 } from 'typescript';
-import type { DtsRedirect } from './index';
+import type { EmitDtsOptions } from './dts';
 import {
   color,
   getTimeCost,
+  loadTypescript,
   processDtsFiles,
   renameDtsFile,
-  ts,
   updateDeclarationMapContent,
+  type CompilerApiTsconfigResultForApi,
 } from './utils';
 
 const logPrefixTsc = color.dim('[tsc]');
 
-const formatHost: FormatDiagnosticsHost = {
+const createFormatHost = (
+  ts: ReturnType<typeof loadTypescript>,
+): FormatDiagnosticsHost => ({
   getCanonicalFileName: (path) => path,
   getCurrentDirectory: ts.sys.getCurrentDirectory.bind(ts.sys),
   getNewLine: () => ts.sys.newLine,
-};
-
-export type EmitDtsOptions = {
-  name: string;
-  cwd: string;
-  configPath: string;
-  tsConfigResult: ParsedCommandLine;
-  declarationDir: string;
-  dtsExtension: string;
-  rootDir: string;
-  redirect: DtsRedirect;
-  paths: Record<string, string[]>;
-  banner?: string;
-  footer?: string;
-};
+});
 
 async function handleDiagnosticsAndProcessFiles(
+  ts: ReturnType<typeof loadTypescript>,
+  formatHost: FormatDiagnosticsHost,
   diagnostics: readonly Diagnostic[],
   configPath: string,
   bundle: boolean,
   cwd: string,
   declarationDir: string,
   dtsExtension: string,
-  redirect: DtsRedirect,
+  redirect: EmitDtsOptions<CompilerApiTsconfigResultForApi>['redirect'],
   rootDir: string,
   paths: Record<string, string[]>,
   banner?: string,
@@ -93,7 +83,7 @@ async function handleDiagnosticsAndProcessFiles(
 }
 
 export async function emitDtsTsc(
-  options: EmitDtsOptions,
+  options: EmitDtsOptions<CompilerApiTsconfigResultForApi>,
   onComplete: (isSuccess: boolean) => void,
   bundle = false,
   isWatch = false,
@@ -113,6 +103,8 @@ export async function emitDtsTsc(
     paths,
     redirect,
   } = options;
+  const ts = loadTypescript(cwd);
+  const formatHost = createFormatHost(ts);
   const {
     options: rawCompilerOptions,
     fileNames,
@@ -257,6 +249,8 @@ export async function emitDtsTsc(
         ts.sortAndDeduplicateDiagnostics(allDiagnostics);
 
       await handleDiagnosticsAndProcessFiles(
+        ts,
+        formatHost,
         sortAndDeduplicateDiagnostics,
         configPath,
         bundle,
@@ -328,6 +322,8 @@ export async function emitDtsTsc(
         ts.sortAndDeduplicateDiagnostics(allDiagnostics);
 
       await handleDiagnosticsAndProcessFiles(
+        ts,
+        formatHost,
         sortAndDeduplicateDiagnostics,
         configPath,
         bundle,

@@ -14,7 +14,8 @@ describe('ESM shims', async () => {
   test('__dirname', async () => {
     for (const shim of [
       'import { fileURLToPath as __rspack_fileURLToPath } from "node:url";',
-      'var src_dirname = __rspack_dirname(__rspack_fileURLToPath(import.meta.url));',
+      'import { dirname as __rspack_dirname } from "node:path";',
+      'var __rspack_import_meta_dirname__ = __rspack_dirname(__rspack_fileURLToPath(import.meta.url));',
     ]) {
       expect(entries.esm0).toContain(shim);
     }
@@ -27,7 +28,7 @@ describe('ESM shims', async () => {
   test('__filename', async () => {
     for (const shim of [
       'import { fileURLToPath as __rspack_fileURLToPath } from "node:url";',
-      'var src_filename = __rspack_fileURLToPath(import.meta.url);',
+      'var __rspack_import_meta_filename__ = __rspack_fileURLToPath(import.meta.url);',
     ]) {
       expect(entries.esm0).toContain(shim);
     }
@@ -63,8 +64,8 @@ describe('ESM shims', async () => {
     for (const shim of [
       'import { fileURLToPath as __rspack_fileURLToPath } from "node:url";',
       'import { dirname as __rspack_dirname } from "node:path";',
-      'var node_dirname = __rspack_dirname(__rspack_fileURLToPath(import.meta.url));',
-      'var node_filename = __rspack_fileURLToPath(import.meta.url);',
+      'var __rspack_import_meta_dirname__ = __rspack_dirname(__rspack_fileURLToPath(import.meta.url));',
+      'var __rspack_import_meta_filename__ = __rspack_fileURLToPath(import.meta.url);',
     ]) {
       expect(entries.esm3).toContain(shim);
     }

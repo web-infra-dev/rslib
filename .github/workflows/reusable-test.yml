@@ -22,7 +22,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 1
 
@@ -31,11 +31,6 @@ jobs:
         shell: bash
         run: |
           git config --system core.longpaths true
-
-      - name: Install pnpm
-        run: |
-          npm install -g corepack@latest --force
-          corepack enable
 
       - uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
         id: changes
@@ -55,9 +50,15 @@ jobs:
           node-version: ${{ inputs.node-version }}
           package-manager-cache: false
 
-      - name: Install Dependencies
+      - name: Install pnpm
         if: ${{ steps.changes.outputs.changed == 'true' }}
-        run: pnpm install
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          run_install: true
+
+      - name: Build
+        if: ${{ steps.changes.outputs.changed == 'true' }}
+        run: pnpm run build
 
       - name: Unit Test
         if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'ut' }}

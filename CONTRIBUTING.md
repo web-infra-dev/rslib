@@ -32,7 +32,7 @@ What this will do:
 
 - Install all dependencies.
 - Create symlinks between packages in the monorepo
-- Run the prepare script to build all packages.
+- Run the prepare script to set up Git hooks and prebundle packages.
 
 ## Making changes and building
 

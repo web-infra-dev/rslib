@@ -14,10 +14,10 @@ Using Rstest will bring a seamless testing experience to your Rslib project.
 
 ### New project
 
-You can use Rslib to create a new Rslib + Rstest project. Just add the `--tools rstest` flag when creating the project:
+Newly created Rslib projects use Rstest as the test framework by default. See [Creating an Rslib project](https://rslib.rs/guide/start/quick-start#creating-an-rslib-project) for details. You can create a React project with:
 
 ```bash
-npx create-rslib --dir my-project --template react-ts --tools rstest
+npx create-rslib --dir my-project --template react-ts
 ```
 
 ### Existing project
@@ -86,4 +86,4 @@ export default defineConfig({
 });
 ```
 
-For more information about the `withRslibConfig` function, please refer to the [Rstest documentation](https://rstest.rs/guide/integration/rslib#reusing-rslib-configuration).
+For more information about the `withRslibConfig` function, please refer to the [Rstest documentation](https://rstest.rs/guide/integration/rslib#reuse-rslib-config).

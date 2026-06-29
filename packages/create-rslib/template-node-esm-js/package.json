@@ -12,9 +12,13 @@
   ],
   "scripts": {
     "build": "rslib",
-    "dev": "rslib --watch"
+    "dev": "rslib --watch",
+    "test": "rstest",
+    "test:watch": "rstest --watch"
   },
   "devDependencies": {
-    "@rslib/core": "workspace:*"
+    "@rslib/core": "workspace:*",
+    "@rstest/adapter-rslib": "^0.10.6",
+    "@rstest/core": "^0.10.6"
   }
 }

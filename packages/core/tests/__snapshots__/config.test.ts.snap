@@ -307,6 +307,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   watchOptions: {
     aggregateTimeout: 0
   },
+  experiments: {
+    sourceImport: true
+  },
   devtool: false,
   cache: {
     type: 'persistent',
@@ -578,7 +581,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
@@ -1004,12 +1017,12 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         }
       )
     ],
-    moduleIds: 'named',
     nodeEnv: false,
     concatenateModules: false,
     sideEffects: true,
     runtimeChunk: undefined,
-    avoidEntryIife: true
+    avoidEntryIife: true,
+    moduleIds: 'named'
   },
   plugins: [
     /* config.plugin('RsbuildCorePlugin') */
@@ -1076,6 +1089,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   watchOptions: {
     aggregateTimeout: 0
+  },
+  experiments: {
+    sourceImport: true
   },
   devtool: false,
   cache: {
@@ -1344,7 +1360,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
@@ -1770,8 +1796,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         }
       )
     ],
-    moduleIds: 'named',
-    nodeEnv: false
+    nodeEnv: false,
+    moduleIds: 'named'
   },
   plugins: [
     /* config.plugin('RsbuildCorePlugin') */
@@ -1843,6 +1869,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   watchOptions: {
     aggregateTimeout: 0
+  },
+  experiments: {
+    sourceImport: true
   },
   devtool: false,
   cache: {
@@ -2092,7 +2121,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
@@ -2443,8 +2482,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         }
       )
     ],
-    moduleIds: 'named',
-    nodeEnv: 'production'
+    nodeEnv: 'production',
+    moduleIds: 'named'
   },
   plugins: [
     /* config.plugin('RsbuildCorePlugin') */
@@ -2511,6 +2550,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   watchOptions: {
     aggregateTimeout: 0
+  },
+  experiments: {
+    sourceImport: true
   },
   devtool: false,
   cache: {
@@ -2764,7 +2806,17 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             use: [
               /* config.module.rule('css').oneOf('css').use('ignore-css') */
               {
-                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs'
+                loader: '<PNPM_INNER>/@rsbuild/core/dist/ignoreCssLoader.mjs',
+                options: {
+                  modules: {
+                    auto: true,
+                    namedExport: false,
+                    exportGlobals: false,
+                    exportLocalsConvention: 'camelCase',
+                    localIdentName: '[local]-[hash:base64:6]',
+                    exportOnlyLocals: true
+                  }
+                }
               },
               /* config.module.rule('css').oneOf('css').use('css') */
               {
@@ -3116,8 +3168,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         }
       )
     ],
-    moduleIds: 'named',
-    nodeEnv: 'production'
+    nodeEnv: 'production',
+    moduleIds: 'named'
   },
   plugins: [
     /* config.plugin('RsbuildCorePlugin') */
@@ -3184,6 +3236,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   watchOptions: {
     aggregateTimeout: 0
+  },
+  experiments: {
+    sourceImport: true
   },
   devtool: false,
   cache: {
@@ -3735,7 +3790,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         }
       )
     ],
-    moduleIds: 'deterministic',
     nodeEnv: 'production'
   },
   plugins: [
@@ -3927,7 +3981,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "rspack": [
         {
           "optimization": {
-            "moduleIds": "named",
             "nodeEnv": false,
           },
           "resolve": {
@@ -3976,6 +4029,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           "optimization": {
             "avoidEntryIife": true,
             "concatenateModules": false,
+            "moduleIds": "named",
             "runtimeChunk": undefined,
             "sideEffects": true,
             "splitChunks": {
@@ -4206,7 +4260,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "rspack": [
         {
           "optimization": {
-            "moduleIds": "named",
             "nodeEnv": false,
           },
           "resolve": {
@@ -4249,6 +4302,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
           },
           "optimization": {
+            "moduleIds": "named",
             "splitChunks": {
               "chunks": "async",
             },
@@ -4455,7 +4509,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "rspack": [
         {
           "optimization": {
-            "moduleIds": "named",
             "nodeEnv": false,
           },
           "resolve": {
@@ -4490,6 +4543,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
           },
           "optimization": {
+            "moduleIds": "named",
             "nodeEnv": undefined,
             "splitChunks": false,
           },
@@ -4693,7 +4747,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "rspack": [
         {
           "optimization": {
-            "moduleIds": "named",
             "nodeEnv": false,
           },
           "resolve": {
@@ -4728,6 +4781,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
           },
           "optimization": {
+            "moduleIds": "named",
             "nodeEnv": undefined,
             "splitChunks": false,
           },
@@ -4886,7 +4940,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "rspack": [
         {
           "optimization": {
-            "moduleIds": "named",
             "nodeEnv": false,
           },
           "resolve": {

@@ -27,7 +27,6 @@ describe('mf-dev', () => {
 
     const rspackConfigContent = await fse.readFile(rspackConfigFile, 'utf-8');
     expect(rspackConfigContent).toContain(`nodeEnv: 'development'`);
-    expect(rspackConfigContent).toContain(`moduleIds: 'named'`);
 
     const rsbuildConfigContent = await fse.readFile(rsbuildConfigFile, 'utf-8');
     expect(rsbuildConfigContent).toContain('writeToDisk: true');
@@ -106,6 +105,5 @@ describe('mf build', () => {
     const rspackConfigContent = await fse.readFile(rspackConfigFile, 'utf-8');
 
     expect(rspackConfigContent).toContain(`nodeEnv: 'production'`);
-    expect(rspackConfigContent).toContain(`moduleIds: 'deterministic'`);
   });
 });

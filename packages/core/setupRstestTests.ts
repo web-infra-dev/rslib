@@ -31,16 +31,3 @@ expect.addSnapshotSerializer(
     ],
   }),
 );
-
-if (process.env.ECO_CI) {
-  expect.extend({
-    toMatchSnapshot: () => ({
-      pass: true,
-      message: () => 'Snapshot always passes',
-    }),
-    toMatchInlineSnapshot: () => ({
-      pass: true,
-      message: () => 'Snapshot always passes',
-    }),
-  });
-}

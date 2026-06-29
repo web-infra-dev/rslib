@@ -62,9 +62,9 @@ test('resolve false', async () => {
         __webpack_require__.o = (obj, prop)=>Object.prototype.hasOwnProperty.call(obj, prop);
     })();
     __webpack_require__.add({
-        "?27ce" () {}
+        237 () {}
     });
-    const util_ignored_ = __webpack_require__("?27ce");
+    const util_ignored_ = __webpack_require__("237");
     var util_ignored__default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
     console.log('foo:', util_ignored__default());
     console.log('bar: ', "bar");

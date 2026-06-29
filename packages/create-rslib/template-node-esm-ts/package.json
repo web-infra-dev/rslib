@@ -14,11 +14,15 @@
   ],
   "scripts": {
     "build": "rslib",
-    "dev": "rslib --watch"
+    "dev": "rslib --watch",
+    "test": "rstest",
+    "test:watch": "rstest --watch"
   },
   "devDependencies": {
     "@rslib/core": "workspace:*",
-    "@types/node": "^24.12.4",
+    "@rstest/adapter-rslib": "^0.10.6",
+    "@rstest/core": "^0.10.6",
+    "@types/node": "^24.13.2",
     "typescript": "^6.0.3"
   }
 }

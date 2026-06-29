@@ -27,7 +27,11 @@ minimumReleaseAgeExclude:
   - '@rstest/*'
   - '@rsdoctor/*'
   - '@rslint/*'
-  - rsbuild-plugin-dts
+  - reduce-configs
+  - '@rstack-dev/doc-ui'
+  - 'rsbuild-plugin-*'
+  - '@swc/*'
+  - heading-case
 
 # Prevent un-reviewed build scripts
 strictDepBuilds: true

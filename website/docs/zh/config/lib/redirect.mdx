@@ -98,9 +98,9 @@ import { foo } from '../foo.mjs'; // './dist/utils/index.mjs' 预期生成的代
 - **类型:** `boolean`
 - **默认值:** `true`
 
-当设置为 `true` 时，[resolve.alias](/config/rsbuild/resolve#resolvealias) 和 [resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) 会在产物文件中生效，产物文件的导入路径会被重写。对于 TypeScript 项目，在 `tsconfig.json` 文件中配置 [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) 即可。
+当设置为 `true` 时，[resolve.alias](/config/rsbuild/resolve#resolvealias) 和 [resolve.aliasStrategy](/config/rsbuild/resolve#resolvealiasstrategy) 会在产物文件中生效，产物文件的导入路径会被重写。对于 TypeScript 项目，在 `tsconfig.json` 文件中配置 [compilerOptions.paths](https://typescriptlang.org/tsconfig#paths) 即可。
 
-当设置为 `false` 时，导入路径将不受 [resolve.alias](/config/rsbuild/resolve#resolvealias)、[resolve.aliasStrategy](/config/rsbuild/resolve#aliasstrategy) 和 `tsconfig.json` 的影响。
+当设置为 `false` 时，导入路径将不受 [resolve.alias](/config/rsbuild/resolve#resolvealias)、[resolve.aliasStrategy](/config/rsbuild/resolve#resolvealiasstrategy) 和 `tsconfig.json` 的影响。
 
 - **示例：**
 
@@ -271,7 +271,7 @@ import url from './assets/logo.mjs'; // './dist/foo.mjs' 预期生成的代码
 
 ::: note
 
-在 JavaScript 文件中引用静态资源的方式及对应的产物结构，请查看 [静态资源](/guide/advanced/static-assets#在-JavaScript-文件中引用)。
+在 JavaScript 文件中引用静态资源的方式及对应的产物结构，请查看 [静态资源](/guide/advanced/static-assets#在-javascript-文件中引用)。
 
 :::
 
