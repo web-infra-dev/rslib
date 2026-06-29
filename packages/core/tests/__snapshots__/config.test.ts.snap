@@ -380,14 +380,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'zlib',
     /^node:/,
     'pnpapi',
-    /^@rsbuild\\/core($|\\/|\\\\)/,
-    /^rsbuild-plugin-dts($|\\/|\\\\)/,
-    /^@microsoft\\/api-extractor($|\\/|\\\\)/,
-    /^typescript($|\\/|\\\\)/,
-    '@rsbuild/core',
-    'rsbuild-plugin-dts',
-    '@microsoft/api-extractor',
-    'typescript'
+    /^@rsbuild\\/core(?:$|[/\\\\])/,
+    /^rsbuild-plugin-dts(?:$|[/\\\\])/,
+    /^@microsoft\\/api-extractor(?:$|[/\\\\])/,
+    /^typescript(?:$|[/\\\\])/
   ],
   node: {
     __dirname: false,
@@ -1163,14 +1159,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'zlib',
     /^node:/,
     'pnpapi',
-    /^@rsbuild\\/core($|\\/|\\\\)/,
-    /^rsbuild-plugin-dts($|\\/|\\\\)/,
-    /^@microsoft\\/api-extractor($|\\/|\\\\)/,
-    /^typescript($|\\/|\\\\)/,
-    '@rsbuild/core',
-    'rsbuild-plugin-dts',
-    '@microsoft/api-extractor',
-    'typescript'
+    /^@rsbuild\\/core(?:$|[/\\\\])/,
+    /^rsbuild-plugin-dts(?:$|[/\\\\])/,
+    /^@microsoft\\/api-extractor(?:$|[/\\\\])/,
+    /^typescript(?:$|[/\\\\])/
   ],
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
