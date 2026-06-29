@@ -63,7 +63,7 @@ export default defineConfig({
 
 Solid 组件库通常同时提供**编译后的输出**和**保留 JSX 的源码输出**。`package.json` 中的 `"solid"` 导出条件指向未编译的 JSX 源码，允许下游打包器（如配置了 `@rsbuild/plugin-solid` 的项目）以最优的方式本地编译（DOM vs SSR）。
 
-添加第二个 lib 配置来保留 JSX：
+添加第二个 lib 配置来保留 JSX。第一个 lib 通过 `babel-preset-solid` 编译 JSX，第二个则通过 SWC 的 `runtime: 'preserve'` 保持原始 JSX 不变，并启用 Rspack 的 JSX parser：
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -99,6 +99,27 @@ export default defineConfig({
           js: '[name].jsx',
         },
       },
+      tools: {
+        swc: {
+          detectSyntax: 'auto',
+          jsc: {
+            transform: {
+              react: {
+                runtime: 'preserve',
+              },
+            },
+          },
+        },
+        rspack: {
+          module: {
+            parser: {
+              javascript: {
+                jsx: true,
+              },
+            },
+          },
+        },
+      },
     },
   ],
   output: {
@@ -106,6 +127,9 @@ export default defineConfig({
   },
 });
 ```
+
+- 第一个 lib 使用 `pluginBabel` + `pluginSolid` 将 JSX 编译为 Solid 的运行时调用（如 `template()`、`insert()`、`delegateEvents()`），产出标准 `.js` 文件。
+- 第二个 lib 跳过 Solid 编译。`jsc.transform.react.runtime: 'preserve'` 告诉 SWC 保持 JSX 语法不变，`module.parser.javascript.jsx: true` 告诉 Rspack parser 接受输出中的 JSX。
 
 然后在 `package.json` 中配置 exports：
 
@@ -120,6 +144,8 @@ export default defineConfig({
   }
 }
 ```
+
+当下游应用使用 `@rsbuild/plugin-solid` 时，`"solid"` 条件会自动加入模块解析，打包器会解析到 `.jsx` 源码并本地编译。不使用 Solid 感知打包器的应用会回退到预编译的 `"import"` 入口。
 
 ## TypeScript
 

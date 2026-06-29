@@ -63,7 +63,7 @@ export default defineConfig({
 
 Solid component libraries conventionally provide both a **compiled** output and a **source JSX** output. The `"solid"` export condition in `package.json` points to the uncompiled JSX source, allowing downstream bundlers (with `@rsbuild/plugin-solid`) to compile it locally with optimal settings for their target (DOM vs SSR).
 
-Add a second lib entry that preserves JSX:
+Add a second lib entry that preserves JSX. The first lib entry compiles JSX via `babel-preset-solid`, while the second keeps the original JSX intact by setting SWC's `runtime: 'preserve'` and enabling Rspack's JSX parser:
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -99,6 +99,27 @@ export default defineConfig({
           js: '[name].jsx',
         },
       },
+      tools: {
+        swc: {
+          detectSyntax: 'auto',
+          jsc: {
+            transform: {
+              react: {
+                runtime: 'preserve',
+              },
+            },
+          },
+        },
+        rspack: {
+          module: {
+            parser: {
+              javascript: {
+                jsx: true,
+              },
+            },
+          },
+        },
+      },
     },
   ],
   output: {
@@ -106,6 +127,9 @@ export default defineConfig({
   },
 });
 ```
+
+- The first lib entry uses `pluginBabel` + `pluginSolid` to compile JSX into Solid's runtime calls (e.g. `template()`, `insert()`, `delegateEvents()`), producing standard `.js` files.
+- The second lib entry skips Solid compilation entirely. `jsc.transform.react.runtime: 'preserve'` tells SWC to leave JSX syntax as-is, and `module.parser.javascript.jsx: true` tells Rspack's parser to accept JSX in the output.
 
 Then configure `package.json` exports accordingly:
 
@@ -120,6 +144,8 @@ Then configure `package.json` exports accordingly:
   }
 }
 ```
+
+When a downstream app uses `@rsbuild/plugin-solid`, the `"solid"` condition is automatically added to module resolution, so the bundler resolves the `.jsx` source and compiles it locally. Apps that don't use a Solid-aware bundler will fall back to the pre-compiled `"import"` entry.
 
 ## TypeScript
 
