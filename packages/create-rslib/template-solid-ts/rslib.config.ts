@@ -31,6 +31,27 @@ export default defineConfig({
           js: '[name].jsx',
         },
       },
+      tools: {
+        swc: {
+          detectSyntax: 'auto',
+          jsc: {
+            transform: {
+              react: {
+                runtime: 'preserve',
+              },
+            },
+          },
+        },
+        rspack: {
+          module: {
+            parser: {
+              javascript: {
+                jsx: true,
+              },
+            },
+          },
+        },
+      },
     },
   ],
   output: {
