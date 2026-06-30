@@ -159,43 +159,6 @@ For Solid projects using TypeScript, set `"jsx": "preserve"` and `"jsxImportSour
 }
 ```
 
-## Use Solid v2
-
-Solid v2 and `@rsbuild/plugin-solid` are currently in beta. You can use the following adjustments to develop a component library targeting Solid v2:
-
-Update the dependency ranges in `package.json`. Compared with the default template, a Solid v2 library also needs to declare `@solidjs/web` as a peer dependency because the DOM runtime and JSX runtime are no longer provided only by `solid-js`:
-
-```json title="package.json"
-{
-  "devDependencies": {
-    "@rsbuild/plugin-solid": "2.0.0-beta.0",
-    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
-    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
-  },
-  "peerDependencies": {
-    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
-    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
-  }
-}
-```
-
-For TypeScript projects, also change `tsconfig.json`:
-
-```json title="tsconfig.json"
-{
-  "compilerOptions": {
-    "jsx": "preserve",
-    "jsxImportSource": "@solidjs/web"
-  }
-}
-```
-
-If your library or examples render to the DOM directly, import DOM runtime APIs from `@solidjs/web` instead of from `solid-js/web`:
-
-```ts
-import { render } from '@solidjs/web';
-```
-
 ## SSR
 
 Most Solid component libraries do not publish a separate SSR build by default. Instead, downstream frameworks resolve the `"solid"` condition, get the preserved JSX output, and compile it for their own target.

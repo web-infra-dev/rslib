@@ -159,43 +159,6 @@ export default defineConfig({
 }
 ```
 
-## 使用 Solid v2
-
-Solid v2 和 `@rsbuild/plugin-solid` 当前都处于 beta 阶段。你可以通过以下调整来开发面向 Solid v2 的组件库：
-
-修改 `package.json` 中的依赖范围。与默认模板相比，面向 Solid v2 的组件库还需要将 `@solidjs/web` 声明为 peer dependency，因为 DOM runtime 和 JSX runtime 不再只由 `solid-js` 提供：
-
-```json title="package.json"
-{
-  "devDependencies": {
-    "@rsbuild/plugin-solid": "2.0.0-beta.0",
-    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
-    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
-  },
-  "peerDependencies": {
-    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
-    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
-  }
-}
-```
-
-TypeScript 项目还需要修改 `tsconfig.json`：
-
-```json title="tsconfig.json"
-{
-  "compilerOptions": {
-    "jsx": "preserve",
-    "jsxImportSource": "@solidjs/web"
-  }
-}
-```
-
-如果你的库或示例需要直接渲染到 DOM，请从 `@solidjs/web` 导入 DOM runtime API，而不是从 `solid-js/web` 导入：
-
-```ts
-import { render } from '@solidjs/web';
-```
-
 ## SSR
 
 大多数 Solid 组件库默认不会单独发布 SSR 构建。下游框架通常会解析 `"solid"` 条件，拿到保留 JSX 的源码输出，再按自己的目标编译。
