@@ -163,16 +163,37 @@ For Solid projects using TypeScript, set `"jsx": "preserve"` and `"jsxImportSour
 
 Most Solid component libraries do not publish a separate SSR build by default. Instead, downstream frameworks resolve the `"solid"` condition, get the preserved JSX output, and compile it for their own target.
 
-If you intentionally need a pre-compiled SSR output, pass the `solid` option to `pluginSolid()` in an additional lib entry:
+If you intentionally need a pre-compiled SSR output, use `pluginSolid({ solid: { generate: 'ssr' } })`:
 
-```ts
-pluginSolid({
-  solid: {
-    generate: 'ssr',
-    hydratable: true,
-  },
-})
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    // ... existing compiled and source entries
+    // [!code ++:20]
+    {
+      bundle: false,
+      format: 'esm',
+      output: {
+        distPath: {
+          root: './dist/server',
+        },
+      },
+      plugins: [
+        pluginBabel({
+          include: /\.(?:jsx|tsx)$/,
+        }),
+        pluginSolid({
+          solid: {
+            generate: 'ssr',
+            hydratable: true,
+          },
+        }),
+      ],
+    },
+  ],
+});
 ```
+
 
 ## Further reading
 
