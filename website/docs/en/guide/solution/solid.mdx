@@ -21,26 +21,24 @@ import { PackageManagerTabs } from '@theme';
   }}
 />
 
-Then select `Solid v1` or `Solid v2` when prompted to "Select template".
+Then select `Solid` when prompted to "Select template".
 
 ## Version status
 
-Rslib provides two Solid templates:
+The built-in Solid template targets Solid v1, which is the stable version used by most production Solid component libraries.
 
-| Template | Solid version | Rsbuild plugin | Status |
-| -------- | ------------- | -------------- | ------ |
-| `Solid v1` | `solid-js@^1` | `@rsbuild/plugin-solid@^1.2.2` | Stable and recommended for production libraries. |
-| `Solid v2` | `solid-js@2.0.0-beta` + `@solidjs/web@2.0.0-beta` | `@rsbuild/plugin-solid@2.0.0-beta.0` | Experimental. Solid 2 and the Rsbuild Solid v2 plugin are both beta releases. |
+| Solid version | Rsbuild plugin | Status |
+| ------------- | -------------- | ------ |
+| `solid-js@^1` | `@rsbuild/plugin-solid@^1.2.2` | Stable and used by the default Rslib Solid template. |
+| `solid-js@2.0.0-beta` + `@solidjs/web@2.0.0-beta` | `@rsbuild/plugin-solid@2.0.0-beta.0` | Experimental. Solid 2 and the Rsbuild Solid v2 plugin are both beta releases. |
 
-The main code shape is the same for both templates: compile one ESM output for general consumers and publish one preserved JSX output through the `"solid"` export condition. The v2 template mainly differs in dependency ranges and runtime packages.
+The output shape is the same for Solid v1 and v2: compile one ESM output for general consumers and publish one preserved JSX output through the `"solid"` export condition. Solid v2 mainly differs in dependency ranges and runtime packages.
 
 ## Use Rslib in an existing project
 
 To develop a Solid library, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default.
 
 To compile Solid JSX, you need to register both the [@rsbuild/plugin-babel](https://rsbuild.rs/plugins/list/plugin-babel) and [@rsbuild/plugin-solid](https://rsbuild.rs/plugins/list/plugin-solid) plugins. The Solid plugin uses `babel-preset-solid` to transform JSX into Solid's runtime DOM expressions.
-
-Use Solid v1 dependencies for stable projects:
 
 ```json title="package.json"
 {
@@ -50,22 +48,6 @@ Use Solid v1 dependencies for stable projects:
   },
   "peerDependencies": {
     "solid-js": "^1.8.0"
-  }
-}
-```
-
-Use Solid v2 dependencies only when you intentionally target the beta runtime:
-
-```json title="package.json"
-{
-  "devDependencies": {
-    "@rsbuild/plugin-solid": "2.0.0-beta.0",
-    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
-    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
-  },
-  "peerDependencies": {
-    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
-    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
   }
 }
 ```
@@ -211,6 +193,45 @@ For Solid v2 beta projects, the JSX runtime lives in `@solidjs/web`, so set `jsx
   }
 }
 ```
+
+## Use Solid v2 beta
+
+Solid v2 and `@rsbuild/plugin-solid@2.0.0-beta.0` are currently beta releases. The default Rslib Solid template does not target v2, but you can adapt it manually when you intentionally want to test the beta runtime.
+
+Change the dependency ranges in `package.json`:
+
+```json title="package.json"
+{
+  "devDependencies": {
+    "@rsbuild/plugin-solid": "2.0.0-beta.0",
+    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
+    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
+  },
+  "peerDependencies": {
+    "@solidjs/web": ">=2.0.0-beta.0 <2.0.0-experimental.0",
+    "solid-js": ">=2.0.0-beta.0 <2.0.0-experimental.0"
+  }
+}
+```
+
+For TypeScript projects, also change `tsconfig.json`:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "@solidjs/web"
+  }
+}
+```
+
+If your library or examples render to the DOM directly, import DOM runtime APIs from `@solidjs/web` instead of `solid-js/web`:
+
+```ts
+import { render } from '@solidjs/web';
+```
+
+The Rslib build configuration can stay the same. `@rsbuild/plugin-solid@2.0.0-beta.0` still uses Babel and `babel-preset-solid`; the v2 difference is the compiler/runtime dependency set.
 
 ## SSR
 

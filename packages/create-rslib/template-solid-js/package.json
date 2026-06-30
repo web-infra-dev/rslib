@@ -1,15 +1,13 @@
 {
-  "name": "rslib-solid-v1-ts",
+  "name": "rslib-solid-js",
   "version": "0.0.0",
   "type": "module",
   "exports": {
     ".": {
       "solid": "./dist/source/index.jsx",
-      "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
   },
-  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -29,8 +27,7 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "happy-dom": "^20.10.6",
-    "solid-js": "^1.9.9",
-    "typescript": "^6.0.3"
+    "solid-js": "^1.9.9"
   },
   "peerDependencies": {
     "solid-js": "^1.8.0"

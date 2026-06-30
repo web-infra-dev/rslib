@@ -85,7 +85,7 @@ export const createAndValidate = (
     templateCase.lang === 'ts' &&
     (templateCase.template === 'react' ||
       templateCase.template === 'vue' ||
-      templateCase.template.startsWith('solid'))
+      templateCase.template === 'solid')
   ) {
     const envDtsPath = path.join(dir, 'src/env.d.ts');
     expect(existsSync(envDtsPath)).toBeTruthy();
@@ -151,31 +151,15 @@ export const createAndValidate = (
     }
   }
 
-  if (templateCase.template.startsWith('solid')) {
+  if (templateCase.template === 'solid') {
     expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeTruthy();
     expect(pkgJson.devDependencies['@rsbuild/plugin-solid']).toBeTruthy();
+    expect(pkgJson.devDependencies['@rsbuild/plugin-solid']).toBe('^1.2.2');
     expect(pkgJson.devDependencies['solid-js']).toBeTruthy();
     expect(pkgJson.devDependencies['@solidjs/testing-library']).toBeTruthy();
     expect(pkgJson.exports['.'].solid).toBe('./dist/source/index.jsx');
-
-    if (templateCase.template === 'solid-v1') {
-      expect(pkgJson.devDependencies['@rsbuild/plugin-solid']).toBe('^1.2.2');
-      expect(pkgJson.peerDependencies['solid-js']).toBe('^1.8.0');
-      expect(pkgJson.peerDependencies['@solidjs/web']).toBeFalsy();
-    } else {
-      expect(pkgJson.devDependencies['@rsbuild/plugin-solid']).toBe(
-        '2.0.0-beta.0',
-      );
-      expect(pkgJson.devDependencies['@solidjs/web']).toBe(
-        '>=2.0.0-beta.0 <2.0.0-experimental.0',
-      );
-      expect(pkgJson.peerDependencies['@solidjs/web']).toBe(
-        '>=2.0.0-beta.0 <2.0.0-experimental.0',
-      );
-      expect(pkgJson.peerDependencies['solid-js']).toBe(
-        '>=2.0.0-beta.0 <2.0.0-experimental.0',
-      );
-    }
+    expect(pkgJson.peerDependencies['solid-js']).toBe('^1.8.0');
+    expect(pkgJson.peerDependencies['@solidjs/web']).toBeFalsy();
 
     if (templateCase.lang === 'ts') {
       expect(pkgJson.exports['.'].types).toBe('./dist/index.d.ts');
