@@ -27,7 +27,7 @@ import { PackageManagerTabs } from '@theme';
 
 开发 Solid 组件库时，需要在 `rslib.config.ts` 中将 [target](/config/rsbuild/output#outputtarget) 设置为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`。
 
-要编译 Solid JSX，你需要同时注册 [@rsbuild/plugin-babel](https://www.npmjs.com/package/@rsbuild/plugin-babel) 和 [@rsbuild/plugin-solid](https://www.npmjs.com/package/@rsbuild/plugin-solid) 插件。Solid 插件使用 `babel-preset-solid` 将 JSX 转换为 Solid 的运行时 DOM 表达式。
+要编译 Solid JSX，你需要同时注册 [@rsbuild/plugin-babel](https://rsbuild.rs/zh/plugins/list/plugin-babel) 和 [@rsbuild/plugin-solid](https://rsbuild.rs/zh/plugins/list/plugin-solid) 插件。Solid 插件使用 [`babel-preset-solid`](https://www.npmjs.com/package/babel-preset-solid) 将 JSX 转换为 Solid 的运行时 DOM 表达式。
 
 ```json title="package.json"
 {
