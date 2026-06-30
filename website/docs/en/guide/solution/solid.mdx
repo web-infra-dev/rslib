@@ -70,7 +70,7 @@ export default defineConfig({
 
 Solid component libraries conventionally provide both a **compiled** output and a **source JSX** output. The `"solid"` export condition in `package.json` points to the uncompiled JSX source, allowing downstream bundlers (with `@rsbuild/plugin-solid`) to compile it locally with optimal settings for their target (DOM vs SSR).
 
-Add a second lib entry that preserves JSX. The first lib entry compiles JSX via `babel-preset-solid`, while the second keeps the original JSX intact by setting SWC's `runtime: 'preserve'` and enabling Rspack's JSX parser:
+The first lib entry uses `pluginBabel` + `pluginSolid` to compile JSX into Solid's runtime calls (e.g. `template()`, `insert()`, `delegateEvents()`), producing standard `.js` files. The second lib entry skips Solid compilation entirely. `jsc.transform.react.runtime: 'preserve'` tells SWC to leave JSX syntax as-is, and `module.parser.javascript.jsx: true` tells Rspack's parser to accept JSX in the output.
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -130,9 +130,6 @@ export default defineConfig({
 });
 ```
 
-- The first lib entry uses `pluginBabel` + `pluginSolid` to compile JSX into Solid's runtime calls (e.g. `template()`, `insert()`, `delegateEvents()`), producing standard `.js` files.
-- The second lib entry skips Solid compilation entirely. `jsc.transform.react.runtime: 'preserve'` tells SWC to leave JSX syntax as-is, and `module.parser.javascript.jsx: true` tells Rspack's parser to accept JSX in the output.
-
 Then configure `package.json` exports accordingly:
 
 ```json title="package.json"
@@ -166,7 +163,7 @@ For Solid projects using TypeScript, set `"jsx": "preserve"` and `"jsxImportSour
 
 Solid v2 and `@rsbuild/plugin-solid` are currently in beta. You can use the following adjustments to develop a component library targeting Solid v2:
 
-Update the dependency ranges in `package.json`. Compared with the default template, Solid v2 additionally needs `@solidjs/web` as a peer dependency because the DOM runtime and JSX runtime are no longer only consumed through `solid-js`:
+Update the dependency ranges in `package.json`. Compared with the default template, a Solid v2 library also needs to declare `@solidjs/web` as a peer dependency because the DOM runtime and JSX runtime are no longer provided only by `solid-js`:
 
 ```json title="package.json"
 {
@@ -193,7 +190,7 @@ For TypeScript projects, also change `tsconfig.json`:
 }
 ```
 
-If your library or examples render to the DOM directly, import DOM runtime APIs from `@solidjs/web` instead of `solid-js/web`:
+If your library or examples render to the DOM directly, import DOM runtime APIs from `@solidjs/web` instead of from `solid-js/web`:
 
 ```ts
 import { render } from '@solidjs/web';

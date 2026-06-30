@@ -4,7 +4,7 @@ description: '使用 Rslib 构建 Solid 组件库，涵盖编译输出与源码 
 
 # Solid
 
-在本文档中，你将学习如何使用 Rslib 构建 Solid 组件库，你可在 [示例](https://github.com/rstackjs/rstack-examples/tree/main/rslib) 中查看 Solid 相关演示项目。
+在本文档中，你将学习如何使用 Rslib 构建 Solid 组件库。你也可以在 [示例](https://github.com/rstackjs/rstack-examples/tree/main/rslib) 中查看 Solid 相关演示项目。
 
 ## 创建 Solid 项目
 
@@ -25,7 +25,7 @@ import { PackageManagerTabs } from '@theme';
 
 ## 在现有 Rslib 项目中使用
 
-开发 Solid 组件库，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`。
+开发 Solid 组件库时，需要在 `rslib.config.ts` 中将 [target](/config/rsbuild/output#outputtarget) 设置为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`。
 
 要编译 Solid JSX，你需要同时注册 [@rsbuild/plugin-babel](https://rsbuild.rs/zh/plugins/list/plugin-babel) 和 [@rsbuild/plugin-solid](https://rsbuild.rs/zh/plugins/list/plugin-solid) 插件。Solid 插件使用 `babel-preset-solid` 将 JSX 转换为 Solid 的运行时 DOM 表达式。
 
@@ -70,7 +70,7 @@ export default defineConfig({
 
 Solid 组件库通常同时提供**编译后的输出**和**保留 JSX 的源码输出**。`package.json` 中的 `"solid"` 导出条件指向未编译的 JSX 源码，允许下游打包器（如配置了 `@rsbuild/plugin-solid` 的项目）以最优的方式本地编译（DOM vs SSR）。
 
-添加第二个 lib 配置来保留 JSX。第一个 lib 通过 `babel-preset-solid` 编译 JSX，第二个则通过 SWC 的 `runtime: 'preserve'` 保持原始 JSX 不变，并启用 Rspack 的 JSX parser：
+第一个 lib 使用 `pluginBabel` + `pluginSolid` 将 JSX 编译为 Solid 的运行时调用（如 `template()`、`insert()`、`delegateEvents()`），产出标准 `.js` 文件。第二个 lib 跳过 Solid 编译。`jsc.transform.react.runtime: 'preserve'` 告诉 SWC 保持 JSX 语法不变，`module.parser.javascript.jsx: true` 告诉 Rspack parser 接受输出中的 JSX。
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -130,9 +130,6 @@ export default defineConfig({
 });
 ```
 
-- 第一个 lib 使用 `pluginBabel` + `pluginSolid` 将 JSX 编译为 Solid 的运行时调用（如 `template()`、`insert()`、`delegateEvents()`），产出标准 `.js` 文件。
-- 第二个 lib 跳过 Solid 编译。`jsc.transform.react.runtime: 'preserve'` 告诉 SWC 保持 JSX 语法不变，`module.parser.javascript.jsx: true` 告诉 Rspack parser 接受输出中的 JSX。
-
 然后在 `package.json` 中配置 exports：
 
 ```json title="package.json"
@@ -147,7 +144,7 @@ export default defineConfig({
 }
 ```
 
-当下游应用使用 `@rsbuild/plugin-solid` 时，`"solid"` 条件会自动加入模块解析，打包器会解析到 `.jsx` 源码并本地编译。不使用 Solid 感知打包器的应用会回退到预编译的 `"import"` 入口。
+当下游应用使用 `@rsbuild/plugin-solid` 时，`"solid"` 条件会自动加入模块解析，打包器会解析到 `.jsx` 源码并在本地编译。未配置 Solid 编译能力的应用会回退到预编译的 `"import"` 入口。
 
 ## TypeScript
 
@@ -166,7 +163,7 @@ export default defineConfig({
 
 Solid v2 和 `@rsbuild/plugin-solid` 当前都处于 beta 阶段。你可以通过以下调整来开发面向 Solid v2 的组件库：
 
-修改 `package.json` 里的依赖范围。与默认模板相比，Solid v2 新增需要把 `@solidjs/web` 声明为 peer dependency，因为 DOM runtime 和 JSX runtime 不再只通过 `solid-js` 提供：
+修改 `package.json` 中的依赖范围。与默认模板相比，面向 Solid v2 的组件库还需要将 `@solidjs/web` 声明为 peer dependency，因为 DOM runtime 和 JSX runtime 不再只由 `solid-js` 提供：
 
 ```json title="package.json"
 {
@@ -193,7 +190,7 @@ TypeScript 项目还需要修改 `tsconfig.json`：
 }
 ```
 
-如果你的库或示例直接渲染到 DOM，从 `@solidjs/web` 导入 DOM runtime API，而不是 `solid-js/web`：
+如果你的库或示例需要直接渲染到 DOM，请从 `@solidjs/web` 导入 DOM runtime API，而不是从 `solid-js/web` 导入：
 
 ```ts
 import { render } from '@solidjs/web';
