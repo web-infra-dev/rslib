@@ -42,8 +42,8 @@ import { PackageManagerTabs } from '@theme';
 ```
 
 ```ts title="rslib.config.ts"
-import { pluginBabel } from '@rsbuild/plugin-babel';
-import { pluginSolid } from '@rsbuild/plugin-solid';
+import { pluginBabel } from '@rsbuild/plugin-babel'; // [!code highlight]
+import { pluginSolid } from '@rsbuild/plugin-solid'; // [!code highlight]
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
@@ -52,6 +52,7 @@ export default defineConfig({
       bundle: false,
       dts: true,
       format: 'esm',
+      // [!code highlight:6]
       plugins: [
         pluginBabel({
           include: /\.(?:jsx|tsx)$/,
@@ -60,6 +61,7 @@ export default defineConfig({
       ],
     },
   ],
+  // [!code highlight:3]
   output: {
     target: 'web',
   },
@@ -134,6 +136,7 @@ export default defineConfig({
 
 ```json title="package.json"
 {
+  // [!code highlight:7]
   "exports": {
     ".": {
       "solid": "./dist/source/index.jsx",
@@ -153,6 +156,7 @@ export default defineConfig({
 ```json title="tsconfig.json"
 {
   "compilerOptions": {
+    // [!code highlight:2]
     "jsx": "preserve",
     "jsxImportSource": "solid-js"
   }
@@ -169,7 +173,7 @@ export default defineConfig({
 export default defineConfig({
   lib: [
     // ... 已有的 compiled 和 source 入口
-    // [!code ++:20]
+    // [!code highlight:20]
     {
       bundle: false,
       format: 'esm',
