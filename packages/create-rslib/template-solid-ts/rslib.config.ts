@@ -5,6 +5,7 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     {
+      id: 'compiled',
       bundle: false,
       dts: true,
       format: 'esm',
@@ -16,6 +17,7 @@ export default defineConfig({
       ],
     },
     {
+      id: 'source',
       bundle: false,
       format: 'esm',
       output: {
