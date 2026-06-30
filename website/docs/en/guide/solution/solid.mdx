@@ -27,7 +27,7 @@ Then select `Solid` when prompted to "Select template".
 
 To develop a Solid library, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default.
 
-To compile Solid JSX, you need to register both the [@rsbuild/plugin-babel](https://rsbuild.rs/plugins/list/plugin-babel) and [@rsbuild/plugin-solid](https://rsbuild.rs/plugins/list/plugin-solid) plugins. The Solid plugin uses `babel-preset-solid` to transform JSX into Solid's runtime DOM expressions.
+To compile Solid JSX, you need to register both the [@rsbuild/plugin-babel](https://www.npmjs.com/package/@rsbuild/plugin-babel) and [@rsbuild/plugin-solid](https://www.npmjs.com/package/@rsbuild/plugin-solid) plugins. The Solid plugin uses [`babel-preset-solid`](https://www.npmjs.com/package/babel-preset-solid) to transform JSX into Solid's runtime DOM expressions.
 
 ```json title="package.json"
 {
