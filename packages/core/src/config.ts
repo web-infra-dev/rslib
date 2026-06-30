@@ -1,5 +1,3 @@
-import fs from 'node:fs';
-import path, { dirname, extname, join } from 'node:path';
 import {
   defineConfig as defineRsbuildConfig,
   type EnvironmentConfig,
@@ -12,6 +10,8 @@ import {
   rspack,
   type ToolsConfig,
 } from '@rsbuild/core';
+import fs from 'node:fs';
+import path, { dirname, extname, join } from 'node:path';
 import { composeAssetConfig } from './asset/assetConfig';
 import {
   DTS_EXTENSIONS_PATTERN,
