@@ -23,17 +23,6 @@ import { PackageManagerTabs } from '@theme';
 
 然后，当提示 "Select template" 时选择 `Solid`。
 
-## 版本状态
-
-内置 Solid 模板面向 Solid v1，这是大多数生产 Solid 组件库使用的稳定版本。
-
-| Solid 版本 | Rsbuild 插件 | 状态 |
-| ---------- | ------------ | ---- |
-| `solid-js@^1` | `@rsbuild/plugin-solid@^1.2.2` | 稳定版本，内置 Rslib Solid 模板默认使用。 |
-| `solid-js@2.0.0-beta` + `@solidjs/web@2.0.0-beta` | `@rsbuild/plugin-solid@2.0.0-beta.0` | 实验版本。Solid 2 和 Rsbuild Solid v2 插件当前都处于 beta 阶段。 |
-
-Solid v1 和 v2 的产物形态一致：为普通消费端编译一份 ESM 输出，同时通过 `"solid"` 导出条件发布一份保留 JSX 的源码输出。Solid v2 主要区别在于依赖范围和运行时包。
-
 ## 在现有 Rslib 项目中使用
 
 开发 Solid 组件库，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`。
@@ -58,11 +47,6 @@ import { pluginSolid } from '@rsbuild/plugin-solid';
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  source: {
-    entry: {
-      index: ['./src/**'],
-    },
-  },
   lib: [
     {
       bundle: false,
@@ -94,11 +78,6 @@ import { pluginSolid } from '@rsbuild/plugin-solid';
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  source: {
-    entry: {
-      index: ['./src/**'],
-    },
-  },
   lib: [
     {
       bundle: false,
@@ -172,7 +151,7 @@ export default defineConfig({
 
 ## TypeScript
 
-对于使用 TypeScript 的 Solid v1 项目，在 `tsconfig.json` 中设置 `"jsx": "preserve"` 和 `"jsxImportSource": "solid-js"`：
+对于使用 TypeScript 的 Solid 项目，在 `tsconfig.json` 中设置 `"jsx": "preserve"` 和 `"jsxImportSource": "solid-js"`：
 
 ```json title="tsconfig.json"
 {
@@ -183,22 +162,11 @@ export default defineConfig({
 }
 ```
 
-对于 Solid v2 beta 项目，JSX runtime 位于 `@solidjs/web`，因此需要将 `jsxImportSource` 设置为 `@solidjs/web`：
+## 使用 Solid v2
 
-```json title="tsconfig.json"
-{
-  "compilerOptions": {
-    "jsx": "preserve",
-    "jsxImportSource": "@solidjs/web"
-  }
-}
-```
+Solid v2 和 `@rsbuild/plugin-solid` 当前都处于 beta 阶段。你可以通过以下调整来开发面向 Solid v2 的组件库：
 
-## 使用 Solid v2 beta
-
-Solid v2 和 `@rsbuild/plugin-solid@2.0.0-beta.0` 当前都处于 beta 阶段。默认 Rslib Solid 模板不面向 v2，但如果你明确要测试 beta 运行时，可以手动调整模板配置。
-
-修改 `package.json` 里的依赖范围：
+修改 `package.json` 里的依赖范围。与默认模板相比，Solid v2 新增需要把 `@solidjs/web` 声明为 peer dependency，因为 DOM runtime 和 JSX runtime 不再只通过 `solid-js` 提供：
 
 ```json title="package.json"
 {
@@ -230,8 +198,6 @@ TypeScript 项目还需要修改 `tsconfig.json`：
 ```ts
 import { render } from '@solidjs/web';
 ```
-
-Rslib 构建配置可以保持不变。`@rsbuild/plugin-solid@2.0.0-beta.0` 仍然使用 Babel 和 `babel-preset-solid`，v2 的区别主要是编译器和运行时依赖集合。
 
 ## SSR
 
