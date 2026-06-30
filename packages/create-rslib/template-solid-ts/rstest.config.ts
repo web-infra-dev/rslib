@@ -6,5 +6,4 @@ export default defineConfig({
     libId: 'compiled',
   }),
   setupFiles: ['./rstest.setup.ts'],
-  testEnvironment: 'happy-dom',
 });
