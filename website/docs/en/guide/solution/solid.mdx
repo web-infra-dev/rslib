@@ -66,9 +66,9 @@ export default defineConfig({
 });
 ```
 
-## Dual output with "solid" condition
+## Output
 
-Solid component libraries conventionally provide both a **compiled** output and a **source JSX** output. The `"solid"` export condition in `package.json` points to the JSX source, allowing downstream bundlers (with `@rsbuild/plugin-solid`) to compile it locally with optimal settings for their target (DOM vs SSR).
+Solid component libraries conventionally provide both a **compiled** output and a **source JSX** output. The `"solid"` condition name in `package.json` points to the JSX source, allowing downstream bundlers (with `@rsbuild/plugin-solid`) to compile it locally with optimal settings for their target (DOM vs SSR).
 
 The first lib entry uses `pluginBabel` + `pluginSolid` to compile JSX into Solid's runtime calls (e.g. `template()`, `insert()`, `delegateEvents()`), producing standard `.js` files. The second lib entry skips Solid compilation entirely. `jsc.transform.react.runtime: 'preserve'` tells SWC to leave JSX syntax as-is, and `module.parser.javascript.jsx: true` tells Rspack's parser to accept JSX in the output.
 
@@ -144,7 +144,7 @@ Then configure `package.json` exports accordingly:
 }
 ```
 
-When a downstream app uses `@rsbuild/plugin-solid`, the `"solid"` condition is automatically added to module resolution, so the bundler resolves the `.jsx` source and compiles it locally. Apps that don't use a Solid-aware bundler will fall back to the pre-compiled `"import"` entry.
+When a downstream app uses `@rsbuild/plugin-solid`, the `"solid"` condition name is automatically added to module resolution, so the bundler resolves the `.jsx` source and compiles it locally. Apps that don't use a Solid-aware bundler will fall back to the pre-compiled `"import"` entry.
 
 ## TypeScript
 
