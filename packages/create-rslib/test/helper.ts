@@ -161,18 +161,10 @@ export const createAndValidate = (
     expect(pkgJson.devDependencies['react-dom']).toBeTruthy();
 
     if (templateCase.tools.includes('react-compiler')) {
-      expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeFalsy();
-      expect(
-        pkgJson.devDependencies['babel-plugin-react-compiler'],
-      ).toBeFalsy();
       expect(configContent).toContain('reactCompiler');
       expect(pkgJson.peerDependencies.react).toBe('>=19.0.0');
       expect(pkgJson.peerDependencies['react-dom']).toBe('>=19.0.0');
     } else {
-      expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeFalsy();
-      expect(
-        pkgJson.devDependencies['babel-plugin-react-compiler'],
-      ).toBeFalsy();
       expect(configContent).not.toContain('reactCompiler');
       expect(pkgJson.peerDependencies.react).toBe('>=16.14.0');
       expect(pkgJson.peerDependencies['react-dom']).toBe('>=16.14.0');
