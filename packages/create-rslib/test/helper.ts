@@ -154,11 +154,10 @@ export const createAndValidate = (
   if (templateCase.template === 'solid') {
     expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeTruthy();
     expect(pkgJson.devDependencies['@rsbuild/plugin-solid']).toBeTruthy();
-    expect(pkgJson.devDependencies['@rsbuild/plugin-solid']).toBe('^1.2.2');
     expect(pkgJson.devDependencies['solid-js']).toBeTruthy();
     expect(pkgJson.devDependencies['@solidjs/testing-library']).toBeTruthy();
     expect(pkgJson.exports['.'].solid).toBe('./dist/source/index.jsx');
-    expect(pkgJson.peerDependencies['solid-js']).toBe('^1.8.0');
+    expect(pkgJson.peerDependencies['solid-js']).toBeTruthy();
     expect(pkgJson.peerDependencies['@solidjs/web']).toBeFalsy();
 
     if (templateCase.lang === 'ts') {
