@@ -83,7 +83,9 @@ export const createAndValidate = (
 
   if (
     templateCase.lang === 'ts' &&
-    (templateCase.template === 'react' || templateCase.template === 'vue')
+    (templateCase.template === 'react' ||
+      templateCase.template === 'vue' ||
+      templateCase.template === 'solid')
   ) {
     const envDtsPath = path.join(dir, 'src/env.d.ts');
     expect(existsSync(envDtsPath)).toBeTruthy();
@@ -144,6 +146,24 @@ export const createAndValidate = (
       expect(
         existsSync(path.join(dir, 'scripts/rslib-plugin-svelte-dts.ts')),
       ).toBeFalsy();
+      expect(pkgJson.exports['.'].types).toBeFalsy();
+      expect(pkgJson.types).toBeFalsy();
+    }
+  }
+
+  if (templateCase.template === 'solid') {
+    expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeTruthy();
+    expect(pkgJson.devDependencies['@rsbuild/plugin-solid']).toBeTruthy();
+    expect(pkgJson.devDependencies['solid-js']).toBeTruthy();
+    expect(pkgJson.devDependencies['@solidjs/testing-library']).toBeTruthy();
+    expect(pkgJson.exports['.'].solid).toBe('./dist/index.jsx');
+    expect(pkgJson.peerDependencies['solid-js']).toBeTruthy();
+    expect(pkgJson.peerDependencies['@solidjs/web']).toBeFalsy();
+
+    if (templateCase.lang === 'ts') {
+      expect(pkgJson.exports['.'].types).toBe('./dist/index.d.ts');
+      expect(pkgJson.types).toBe('./dist/index.d.ts');
+    } else {
       expect(pkgJson.exports['.'].types).toBeFalsy();
       expect(pkgJson.types).toBeFalsy();
     }

@@ -1,0 +1,205 @@
+---
+description: 'Build Solid component libraries with Rslib using compiled and source JSX outputs, the "solid" export condition, and declaration generation.'
+---
+
+# Solid
+
+In this document, you will learn how to build a Solid component library using Rslib. You can check out Solid related example projects in [Examples](https://github.com/rstackjs/rstack-examples/tree/main/rslib).
+
+## Create Solid project
+
+You can use `create-rslib` to create a project with Rslib + Solid. Just execute the following command:
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm create rslib@latest',
+    yarn: 'yarn create rslib',
+    pnpm: 'pnpm create rslib@latest',
+    bun: 'bun create rslib@latest',
+  }}
+/>
+
+Then select `Solid` when prompted to "Select template".
+
+## Use Rslib in an existing project
+
+To develop a Solid library, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default.
+
+To compile Solid JSX, you need to register both the [@rsbuild/plugin-babel](https://rsbuild.rs/plugins/list/plugin-babel) and [@rsbuild/plugin-solid](https://rsbuild.rs/plugins/list/plugin-solid) plugins. The Solid plugin uses [`babel-preset-solid`](https://www.npmjs.com/package/babel-preset-solid) to transform JSX into Solid's runtime DOM expressions.
+
+```json title="package.json"
+{
+  "devDependencies": {
+    "@rsbuild/plugin-babel": "^2.0.0",
+    "@rsbuild/plugin-solid": "^1.2.2",
+    "solid-js": "^1.9.9"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.8.0"
+  }
+}
+```
+
+```ts title="rslib.config.ts"
+import { pluginBabel } from '@rsbuild/plugin-babel'; // [!code highlight]
+import { pluginSolid } from '@rsbuild/plugin-solid'; // [!code highlight]
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+      dts: true,
+      format: 'esm',
+      // [!code highlight:6]
+      plugins: [
+        pluginBabel({
+          include: /\.(?:jsx|tsx)$/,
+        }),
+        pluginSolid(),
+      ],
+    },
+  ],
+  // [!code highlight:3]
+  output: {
+    target: 'web',
+  },
+});
+```
+
+## Output
+
+Solid component libraries conventionally provide two outputs:
+
+- **Compiled output**: the default ESM entry for regular bundlers.
+- **Source output**: preserves JSX and is exposed through the `"solid"` condition name for Solid-aware downstream bundlers.
+
+The `"solid"` condition name in `package.json` points to the source output. After a downstream project configures `@rsbuild/plugin-solid`, it can resolve this JSX source and recompile it for its own target (DOM vs SSR).
+
+```ts title="rslib.config.ts"
+import { pluginBabel } from '@rsbuild/plugin-babel';
+import { pluginSolid } from '@rsbuild/plugin-solid';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      // Compile JSX into Solid runtime calls, such as template(), insert(), and delegateEvents().
+      bundle: false,
+      dts: true,
+      format: 'esm',
+      plugins: [
+        pluginBabel({
+          include: /\.(?:jsx|tsx)$/,
+        }),
+        pluginSolid(),
+      ],
+    },
+    {
+      // Preserve JSX syntax for the "solid" condition name.
+      bundle: false,
+      format: 'esm',
+      output: {
+        filename: {
+          js: '[name].jsx',
+        },
+      },
+      tools: {
+        swc: {
+          detectSyntax: 'auto',
+          jsc: {
+            transform: {
+              react: {
+                // Keep JSX syntax in the output.
+                runtime: 'preserve',
+              },
+            },
+          },
+        },
+        rspack: {
+          module: {
+            parser: {
+              javascript: {
+                // Allow Rspack to parse preserved JSX.
+                jsx: true,
+              },
+            },
+          },
+        },
+      },
+    },
+  ],
+  output: {
+    target: 'web',
+  },
+});
+```
+
+Then configure the `"exports"` field in `package.json`:
+
+```json title="package.json"
+{
+  // [!code highlight:7]
+  "exports": {
+    ".": {
+      "solid": "./dist/index.jsx",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  }
+}
+```
+
+When a downstream app uses `@rsbuild/plugin-solid`, the `"solid"` condition name is automatically added to module resolution, so the bundler resolves the `.jsx` source and compiles it locally. Apps that don't use a Solid-aware bundler will fall back to the pre-compiled `"import"` entry.
+
+## TypeScript
+
+For Solid projects using TypeScript, set `"jsx": "preserve"` and `"jsxImportSource": "solid-js"` in your `tsconfig.json`:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // [!code highlight:2]
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
+  }
+}
+```
+
+## SSR
+
+Most Solid component libraries do not publish a separate SSR build by default. Instead, downstream frameworks resolve the `"solid"` condition, get the preserved JSX output, and compile it for their own target.
+
+If you intentionally need a pre-compiled SSR output, use `pluginSolid({ solid: { generate: 'ssr' } })`:
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    // ... existing compiled and source entries
+    // [!code highlight:21]
+    {
+      id: 'server',
+      bundle: false,
+      format: 'esm',
+      output: {
+        distPath: {
+          root: './dist/server',
+        },
+      },
+      plugins: [
+        pluginBabel({
+          include: /\.(?:jsx|tsx)$/,
+        }),
+        pluginSolid({
+          solid: {
+            generate: 'ssr',
+            hydratable: true,
+          },
+        }),
+      ],
+    },
+  ],
+});
+```

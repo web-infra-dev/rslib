@@ -1,0 +1,205 @@
+---
+description: '使用 Rslib 构建 Solid 组件库，涵盖编译输出与源码 JSX 输出、"solid" condition names 与类型声明生成。'
+---
+
+# Solid
+
+在本文档中，你将学习如何使用 Rslib 构建 Solid 组件库。你也可以在 [示例](https://github.com/rstackjs/rstack-examples/tree/main/rslib) 中查看 Solid 相关演示项目。
+
+## 创建 Solid 项目
+
+你可以使用 `create-rslib` 创建 Rslib + Solid 项目。只需执行以下命令：
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm create rslib@latest',
+    yarn: 'yarn create rslib',
+    pnpm: 'pnpm create rslib@latest',
+    bun: 'bun create rslib@latest',
+  }}
+/>
+
+然后，当提示 "Select template" 时选择 `Solid`。
+
+## 在现有 Rslib 项目中使用
+
+开发 Solid 组件库时，需要在 `rslib.config.ts` 中将 [target](/config/rsbuild/output#outputtarget) 设置为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`。
+
+要编译 Solid JSX，你需要同时注册 [@rsbuild/plugin-babel](https://rsbuild.rs/zh/plugins/list/plugin-babel) 和 [@rsbuild/plugin-solid](https://rsbuild.rs/zh/plugins/list/plugin-solid) 插件。Solid 插件使用 [`babel-preset-solid`](https://www.npmjs.com/package/babel-preset-solid) 将 JSX 转换为 Solid 的运行时 DOM 表达式。
+
+```json title="package.json"
+{
+  "devDependencies": {
+    "@rsbuild/plugin-babel": "^2.0.0",
+    "@rsbuild/plugin-solid": "^1.2.2",
+    "solid-js": "^1.9.9"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.8.0"
+  }
+}
+```
+
+```ts title="rslib.config.ts"
+import { pluginBabel } from '@rsbuild/plugin-babel'; // [!code highlight]
+import { pluginSolid } from '@rsbuild/plugin-solid'; // [!code highlight]
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+      dts: true,
+      format: 'esm',
+      // [!code highlight:6]
+      plugins: [
+        pluginBabel({
+          include: /\.(?:jsx|tsx)$/,
+        }),
+        pluginSolid(),
+      ],
+    },
+  ],
+  // [!code highlight:3]
+  output: {
+    target: 'web',
+  },
+});
+```
+
+## 输出产物
+
+Solid 组件库通常同时提供两种产物：
+
+- **编译产物**：默认 ESM 入口，给普通打包器消费。
+- **JSX 源码**：保留 JSX，并通过 `"solid"` condition name 暴露给 Solid-aware 的下游打包器。
+
+`package.json` 中的 `"solid"` condition name 指向 JSX 源码。下游项目配置 `@rsbuild/plugin-solid` 后，可以解析到这份 JSX 源码，并根据自己的目标重新编译（DOM vs SSR）。
+
+```ts title="rslib.config.ts"
+import { pluginBabel } from '@rsbuild/plugin-babel';
+import { pluginSolid } from '@rsbuild/plugin-solid';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      // 将 JSX 编译为 Solid 运行时调用，例如 template()、insert() 和 delegateEvents()。
+      bundle: false,
+      dts: true,
+      format: 'esm',
+      plugins: [
+        pluginBabel({
+          include: /\.(?:jsx|tsx)$/,
+        }),
+        pluginSolid(),
+      ],
+    },
+    {
+      // 为 "solid" condition name 保留 JSX 语法。
+      bundle: false,
+      format: 'esm',
+      output: {
+        filename: {
+          js: '[name].jsx',
+        },
+      },
+      tools: {
+        swc: {
+          detectSyntax: 'auto',
+          jsc: {
+            transform: {
+              react: {
+                // 保持输出中的 JSX 语法。
+                runtime: 'preserve',
+              },
+            },
+          },
+        },
+        rspack: {
+          module: {
+            parser: {
+              javascript: {
+                // 允许 Rspack 解析保留的 JSX。
+                jsx: true,
+              },
+            },
+          },
+        },
+      },
+    },
+  ],
+  output: {
+    target: 'web',
+  },
+});
+```
+
+然后在 `package.json` 中配置 `"exports"` 字段：
+
+```json title="package.json"
+{
+  // [!code highlight:7]
+  "exports": {
+    ".": {
+      "solid": "./dist/index.jsx",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  }
+}
+```
+
+当下游应用使用 `@rsbuild/plugin-solid` 时，`"solid"` condition names 会自动加入模块解析，打包器会解析到 `.jsx` 源码并在本地编译。未配置 Solid 编译能力的应用会回退到预编译的 `"import"` 入口。
+
+## TypeScript
+
+对于使用 TypeScript 的 Solid 项目，在 `tsconfig.json` 中设置 `"jsx": "preserve"` 和 `"jsxImportSource": "solid-js"`：
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // [!code highlight:2]
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
+  }
+}
+```
+
+## SSR
+
+大多数 Solid 组件库默认不会单独发布 SSR 构建。下游框架通常会解析 `"solid"` condition names，拿到保留 JSX 的源码输出，再按自己的目标编译。
+
+如果你确实需要预编译的 SSR 产物，可以使用 `pluginSolid({ solid: { generate: 'ssr' } })`：
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    // ... 已有的 compiled 和 source 入口
+    // [!code highlight:21]
+    {
+      id: 'server',
+      bundle: false,
+      format: 'esm',
+      output: {
+        distPath: {
+          root: './dist/server',
+        },
+      },
+      plugins: [
+        pluginBabel({
+          include: /\.(?:jsx|tsx)$/,
+        }),
+        pluginSolid({
+          solid: {
+            generate: 'ssr',
+            hydratable: true,
+          },
+        }),
+      ],
+    },
+  ],
+});
+```
