@@ -28,7 +28,6 @@ import { composeExeConfig } from './exe';
 import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
 import { pluginCjsShims, pluginEsmRequireShim } from './plugins/shims';
 import type {
-  AutoExternal,
   BannerAndFooter,
   DeepRequired,
   ExcludesFalse,
@@ -56,7 +55,6 @@ import {
   isDirectory,
   isEmptyObject,
   isIntermediateOutputFormat,
-  isObject,
   nodeBuiltInModules,
   normalizeSlash,
   omit,
@@ -70,241 +68,6 @@ import {
   transformSyntaxToRspackTarget,
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
-
-// Match logic is derived from https://github.com/webpack/webpack/blob/94aba382eccf3de1004d235045d4462918dfdbb7/lib/ExternalModuleFactoryPlugin.js#L89-L158
-const handleMatchedExternal = (
-  value: string | string[] | boolean | Record<string, string | string[]>,
-  request: string,
-): boolean => {
-  if (typeof value === 'boolean') {
-    return value;
-  }
-
-  if (typeof value === 'string') {
-    const [first, second] = value.split(' ');
-    const hasType = !!second;
-    const _request = second ? second : first;
-
-    // Don't need to warn explicit declared external type.
-    if (!hasType) {
-      return request === _request;
-    }
-
-    return false;
-  }
-
-  if (Array.isArray(value)) {
-    return handleMatchedExternal(value[0] ?? '', request);
-  }
-
-  if (typeof value === 'object') {
-    return false;
-  }
-
-  return false;
-};
-
-const composeExternalsWarnConfig = (
-  format: Format,
-  ...externalsArray: NonNullable<EnvironmentConfig['output']>['externals'][]
-): EnvironmentConfig => {
-  if (format !== 'esm') {
-    return {};
-  }
-
-  const externals: NonNullable<EnvironmentConfig['output']>['externals'] = [];
-  for (const e of externalsArray.filter(Boolean)) {
-    if (Array.isArray(e)) {
-      externals.push(...e);
-    } else {
-      // @ts-expect-error
-      externals.push(e);
-    }
-  }
-
-  // Match logic is derived from https://github.com/webpack/webpack/blob/94aba382eccf3de1004d235045d4462918dfdbb7/lib/ExternalModuleFactoryPlugin.js#L166-L293.
-  const matchUserExternals = (
-    externals: NonNullable<EnvironmentConfig['output']>['externals'],
-    request: string,
-    callback: (matched: boolean, shouldWarn?: boolean) => void,
-  ) => {
-    // string
-    if (typeof externals === 'string') {
-      if (handleMatchedExternal(externals, request)) {
-        callback(true, true);
-        return;
-      }
-    }
-    // array
-    if (Array.isArray(externals)) {
-      let i = 0;
-      const next = () => {
-        let asyncFlag: boolean;
-        const handleExternalsAndCallback = (
-          matched: boolean,
-          shouldWarn?: boolean,
-        ) => {
-          if (!matched) {
-            if (asyncFlag) {
-              asyncFlag = false;
-              return;
-            }
-            next();
-            return;
-          }
-
-          callback(matched, shouldWarn);
-        };
-
-        do {
-          asyncFlag = true;
-          if (i >= externals.length) {
-            callback(false);
-            return;
-          }
-          matchUserExternals(
-            externals[i++],
-            request,
-            handleExternalsAndCallback,
-          );
-        } while (!asyncFlag);
-        asyncFlag = false;
-      };
-
-      next();
-      return;
-    }
-    // regexp
-    if (externals instanceof RegExp) {
-      if (externals.test(request)) {
-        callback(true, true);
-        return;
-      }
-    }
-    // function
-    else if (typeof externals === 'function') {
-      // TODO: Support function
-    }
-    // object
-    else if (typeof externals === 'object') {
-      if (Object.hasOwn(externals, request)) {
-        if (handleMatchedExternal(externals[request]!, request)) {
-          callback(true, true);
-        } else {
-          callback(true);
-        }
-        return;
-      }
-    }
-
-    callback(false);
-  };
-
-  return {
-    output: {
-      externals: [
-        ({ request, dependencyType, contextInfo }: any, callback: any) => {
-          let shouldWarn = false;
-          const _callback = (_matched: boolean, _shouldWarn?: boolean) => {
-            if (_shouldWarn) {
-              shouldWarn = true;
-            }
-          };
-
-          if (contextInfo.issuer && dependencyType === 'commonjs') {
-            matchUserExternals(externals, request, _callback);
-            if (shouldWarn) {
-              logger.warn(composeModuleImportWarn(request, contextInfo.issuer));
-            }
-          }
-          callback();
-        },
-      ],
-    },
-  };
-};
-
-const getAutoExternalDefaultValue = (
-  format: Format,
-  autoExternal?: AutoExternal,
-): AutoExternal => {
-  return autoExternal ?? isIntermediateOutputFormat(format);
-};
-
-export const composeAutoExternalConfig = (options: {
-  bundle: boolean;
-  format: Format;
-  autoExternal?: AutoExternal;
-  pkgJson?: PkgJson;
-  userExternals?: NonNullable<EnvironmentConfig['output']>['externals'];
-}): EnvironmentConfig => {
-  const { bundle, format, pkgJson, userExternals } = options;
-
-  // If bundle is false, autoExternal will be disabled
-  if (!bundle) {
-    return {};
-  }
-
-  const autoExternal = getAutoExternalDefaultValue(
-    format,
-    options.autoExternal,
-  );
-
-  if (autoExternal === false) {
-    return {};
-  }
-
-  if (!pkgJson) {
-    logger.warn(
-      'The `autoExternal` configuration will not be applied due to read package.json failed',
-    );
-    return {};
-  }
-
-  // User externals configuration has higher priority than autoExternal
-  // eg: autoExternal: ['react'], user: output: { externals: { react: 'react-1' } }
-  // Only handle the case where the externals type is object, string / string[] does not need to be processed, other types are too complex.
-  const userExternalKeys =
-    userExternals && isObject(userExternals) ? Object.keys(userExternals) : [];
-
-  const externalOptions = {
-    dependencies: true,
-    optionalDependencies: true,
-    peerDependencies: true,
-    devDependencies: false,
-    ...(autoExternal === true ? {} : autoExternal),
-  };
-
-  const externals = (
-    [
-      'dependencies',
-      'peerDependencies',
-      'devDependencies',
-      'optionalDependencies',
-    ] as const
-  )
-    .reduce<string[]>((prev, type) => {
-      if (externalOptions[type]) {
-        return pkgJson[type] ? prev.concat(Object.keys(pkgJson[type])) : prev;
-      }
-      return prev;
-    }, [])
-    .filter((name) => !userExternalKeys.includes(name));
-
-  const uniqueExternals = Array.from(new Set(externals));
-
-  return externals.length
-    ? {
-        output: {
-          externals: [
-            // Exclude dependencies, e.g. `react`, `react/jsx-runtime`
-            ...uniqueExternals.map((dep) => new RegExp(`^${dep}($|\\/|\\\\)`)),
-            ...uniqueExternals,
-          ],
-        },
-      }
-    : {};
-};
 
 export function composeMinifyConfig(config: LibConfig): EnvironmentConfig {
   const minify = config.output?.minify;
@@ -561,6 +324,7 @@ const composeFormatConfig = ({
         plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
         output: {
           filenameHash: false,
+          ...(bundle && { autoExternal: true }),
         },
         tools: {
           rspack: {
@@ -606,6 +370,7 @@ const composeFormatConfig = ({
         output: {
           module: false,
           filenameHash: false,
+          ...(bundle && { autoExternal: true }),
         },
         tools: {
           rspack: {
@@ -954,13 +719,6 @@ const composeShimsConfig = (
   }
 
   return { rsbuildConfig, enabledShims };
-};
-
-export const composeModuleImportWarn = (
-  request: string,
-  issuer: string,
-): string => {
-  return `The externalized commonjs request ${color.green(`"${request}"`)} from ${color.green(issuer)} will use ${color.blue('"module"')} external type in ESM format. If you want to specify other external type, consider setting the request and type with ${color.blue('"output.externals"')}.`;
 };
 
 const composeExternalsConfig = (
@@ -1625,7 +1383,7 @@ const composeDtsConfig = async (
   format: Format,
   dtsExtension: string,
 ): Promise<EnvironmentConfig> => {
-  const { autoExternal, banner, footer, redirect } = libConfig;
+  const { banner, footer, redirect } = libConfig;
 
   let { dts } = libConfig;
 
@@ -1648,7 +1406,10 @@ const composeDtsConfig = async (
         build: dts?.build,
         abortOnError: dts?.abortOnError,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
-        autoExternal: getAutoExternalDefaultValue(format, autoExternal),
+        autoExternal:
+          libConfig.output?.autoExternal ??
+          libConfig.autoExternal ??
+          isIntermediateOutputFormat(format),
         alias: dts?.alias,
         isolated: dts?.isolated,
         banner: banner?.dts,
@@ -1800,13 +1561,13 @@ async function composeLibRsbuildConfig(
     banner = {},
     footer = {},
     autoExtension = true,
-    autoExternal,
     externalHelpers = false,
     redirect = {},
     umdName,
     experiments = {},
   } = config;
   const hasExe = Boolean(experiments.exe);
+
   const { rsbuildConfig: bundleConfig } = composeBundleConfig(bundle);
   const { rsbuildConfig: shimsConfig, enabledShims } = composeShimsConfig(
     format,
@@ -1870,13 +1631,6 @@ async function composeLibRsbuildConfig(
     outBase,
   );
   const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
-  const autoExternalConfig = composeAutoExternalConfig({
-    bundle,
-    format,
-    autoExternal: hasExe ? false : autoExternal,
-    pkgJson,
-    userExternals,
-  });
   const cssConfig = composeCssConfig(
     outBase,
     cssModulesAuto,
@@ -1891,11 +1645,6 @@ async function composeLibRsbuildConfig(
     contextToWatch: outBase,
   });
   const dtsConfig = await composeDtsConfig(config, format, dtsExtension);
-  const externalsWarnConfig = composeExternalsWarnConfig(
-    format,
-    userExternalsConfig?.output?.externals,
-    autoExternalConfig?.output?.externals,
-  );
   const minifyConfig = composeMinifyConfig(config);
   const bannerFooterConfig = composeBannerFooterConfig(banner, footer);
   const decoratorsConfig = composeDecoratorsConfig(
@@ -1916,14 +1665,11 @@ async function composeLibRsbuildConfig(
     targetConfig,
     // #region Externals configs
     // The order of the externals config should come in the following order:
-    // 1. `externalsWarnConfig` should come before other externals config to touch the externalized modules first.
-    // 2. `userExternalsConfig` should present at first to takes effect earlier than others.
-    // 3. The externals config in `bundlelessExternalConfig` should present after other externals config as
+    // 1. `userExternalsConfig` should present at first to takes effect earlier than others.
+    // 2. The externals config in `bundlelessExternalConfig` should present after other externals config as
     //    it relies on other externals config to bail out the externalized modules first then resolve
     //    the correct path for relative imports.
-    externalsWarnConfig,
     userExternalsConfig,
-    autoExternalConfig,
     targetExternalsConfig,
     bundlelessExternalConfig,
     // #endregion
@@ -1968,10 +1714,35 @@ export async function composeCreateRsbuildConfig(
   }
 
   const libConfigPromises = libConfigsArray.map(async (libConfig, index) => {
+    if (libConfig.autoExternal !== undefined) {
+      logger.warn(
+        `${color.yellow('lib.autoExternal')} is deprecated, use ${color.yellow('output.autoExternal')} instead.`,
+      );
+    }
+
+    const normalizedLibConfig =
+      libConfig.autoExternal !== undefined &&
+      libConfig.output?.autoExternal === undefined
+        ? {
+            ...libConfig,
+            output: {
+              ...libConfig.output,
+              autoExternal: libConfig.autoExternal,
+            },
+          }
+        : libConfig;
+
     const userConfig = mergeRsbuildConfig<LibConfig>(
       sharedRsbuildConfig,
-      libConfig,
+      normalizedLibConfig,
     );
+
+    // Exe bundles everything into a single binary, so disable automatic externals
+    // after user config is merged to prevent users from re-enabling it.
+    if (userConfig.experiments?.exe) {
+      userConfig.output ??= {};
+      userConfig.output.autoExternal = false;
+    }
 
     // Merge the configuration of each environment based on the shared Rsbuild
     // configuration and Lib configuration in the settings.

@@ -175,6 +175,36 @@ describe('experiments.exe', () => {
     ).resolves.toBeTruthy();
   });
 
+  test('should force disable output.autoExternal for executables', async () => {
+    const [config] = await withSupportedNodeRuntime(() =>
+      composeTestRslibConfig({
+        format: 'esm',
+        output: {
+          autoExternal: true,
+        },
+        experiments: {
+          exe: true,
+        },
+      }),
+    );
+
+    expect(config?.config.output?.autoExternal).toBe(false);
+  });
+
+  test('should force disable deprecated lib.autoExternal for executables', async () => {
+    const [config] = await withSupportedNodeRuntime(() =>
+      composeTestRslibConfig({
+        format: 'esm',
+        autoExternal: true,
+        experiments: {
+          exe: true,
+        },
+      }),
+    );
+
+    expect(config?.config.output?.autoExternal).toBe(false);
+  });
+
   test('should resolve outputPath separately from fileName', () => {
     const resolved = resolveExecutableOutputPath({
       environment: {

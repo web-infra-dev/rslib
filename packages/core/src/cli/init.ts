@@ -92,9 +92,9 @@ export const applyCliOptions = (
     if (options.dts !== undefined) lib.dts = options.dts;
     if (options.autoExtension !== undefined)
       lib.autoExtension = options.autoExtension;
-    if (options.autoExternal !== undefined)
-      lib.autoExternal = options.autoExternal;
     lib.output ??= {};
+    if (options.autoExternal !== undefined)
+      lib.output.autoExternal = options.autoExternal;
     if (options.target !== undefined)
       lib.output.target = options.target as RsbuildConfigOutputTarget;
     if (options.minify !== undefined) lib.output.minify = options.minify;
