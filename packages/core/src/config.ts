@@ -761,26 +761,36 @@ const composeFormatConfig = ({
   }
 };
 
-const disableUrlParseRsbuildPlugin = (): RsbuildPlugin => ({
-  name: 'rsbuild:disable-url-parse',
+const modifyRsbuildDefaultPlugin = ({
+  disableUrlParse,
+}: {
+  disableUrlParse?: boolean;
+} = {}): RsbuildPlugin => ({
+  name: 'rslib:modify-rsbuild-default',
   setup(api) {
-    api.modifyBundlerChain((config, { CHAIN_ID }) => {
+    api.modifyBundlerChain((chain, { CHAIN_ID, target }) => {
+      // Part 1: disable URL parsing for library output.
       // Fix for https://github.com/web-infra-dev/rslib/issues/499.
-      // Prevent parsing and try bundling `new URL()` in ESM format.
-      config.module
+      // Prevent parsing and try bundling `new URL()` in ESM/CJS format.
+      if (disableUrlParse) {
+        chain.module
+          .rule(CHAIN_ID.RULE.JS)
+          .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
+          .parser({
+            url: false,
+          });
+      }
+
+      // Part 2: remove Rsbuild's default JS module type.
+      // Port https://github.com/web-infra-dev/rsbuild/pull/5955 before it merged into Rsbuild.
+      chain.module
         .rule(CHAIN_ID.RULE.JS)
         .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
-        .parser({
-          url: false,
-        });
-    });
-  },
-});
+        .delete('type');
 
-const resetEnvConstPlugin = (): RsbuildPlugin => ({
-  name: 'rsbuild:reset-env-const',
-  setup(api) {
-    api.modifyBundlerChain((chain, { target }) => {
+      // Part 3: reset Rsbuild's const environment override.
+      // Rsbuild disables `const` for web-like app runtimes. Rslib should
+      // leave this to Rspack's target inference for library output.
       if (target !== 'web' && target !== 'web-worker') {
         return;
       }
@@ -791,26 +801,11 @@ const resetEnvConstPlugin = (): RsbuildPlugin => ({
         return;
       }
 
-      // Rsbuild disables `const` for web-like app runtimes. Rslib should
-      // leave this to Rspack's target inference for library output.
       delete environment.const;
 
       if (Object.keys(environment).length === 0) {
         chain.output.delete('environment');
       }
-    });
-  },
-});
-
-// Port https://github.com/web-infra-dev/rsbuild/pull/5955 before it merged into Rsbuild.
-const fixJsModuleTypePlugin = (): RsbuildPlugin => ({
-  name: 'rsbuild:fix-js-module-type',
-  setup(api) {
-    api.modifyBundlerChain((config, { CHAIN_ID }) => {
-      config.module
-        .rule(CHAIN_ID.RULE.JS)
-        .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
-        .delete('type');
     });
   },
 });
@@ -934,9 +929,7 @@ const composeShimsConfig = (
         },
         plugins: [
           resolvedShims.esm.require && pluginEsmRequireShim(),
-          disableUrlParseRsbuildPlugin(),
-          fixJsModuleTypePlugin(),
-          resetEnvConstPlugin(),
+          modifyRsbuildDefaultPlugin({ disableUrlParse: true }),
         ].filter(Boolean),
       };
       break;
@@ -945,9 +938,7 @@ const composeShimsConfig = (
       rsbuildConfig = {
         plugins: [
           pluginCjsShims(resolvedShims.cjs),
-          disableUrlParseRsbuildPlugin(),
-          fixJsModuleTypePlugin(),
-          resetEnvConstPlugin(),
+          modifyRsbuildDefaultPlugin({ disableUrlParse: true }),
         ].filter(Boolean),
       };
       break;
@@ -955,7 +946,7 @@ const composeShimsConfig = (
     case 'iife':
     case 'mf':
       rsbuildConfig = {
-        plugins: [fixJsModuleTypePlugin(), resetEnvConstPlugin()],
+        plugins: [modifyRsbuildDefaultPlugin()],
       };
       break;
     default:
