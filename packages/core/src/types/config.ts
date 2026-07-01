@@ -353,6 +353,25 @@ export type Redirect = {
   dts?: DtsRedirect;
 };
 
+export type WasmMode = 'compile' | 'preserve';
+
+export type Wasm = {
+  /**
+   * How Rslib handles `.wasm` modules in the output.
+   *
+   * - `'compile'`: Rspack emits JS glue and the runtime needed to load the wasm.
+   * - `'preserve'`: Keep `.wasm` as a real ESM import in the output and emit the
+   *   binary. In bundle mode the binary uses a content-hashed filename; in
+   *   bundleless mode it keeps the source-relative path and original filename.
+   *
+   * Defaults to `'compile'` when `bundle` is `true`, `'preserve'` when `bundle`
+   * is `false`.
+   *
+   * Only effective for `format: 'esm'` builds.
+   */
+  mode?: WasmMode;
+};
+
 export type LibExperiments = {
   /**
    * Whether to enable Rspack advanced ESM output.
@@ -473,6 +492,11 @@ export interface LibConfig extends EnvironmentConfig {
    * @see {@link https://rslib.rs/config/lib/out-base}
    */
   outBase?: string;
+  /**
+   * Configure how Rslib handles `.wasm` modules.
+   * @defaultValue `undefined`
+   */
+  wasm?: Wasm;
   /**
    * @inheritdoc
    */

@@ -1,0 +1,308 @@
+---
+description: '在 Rslib 库中使用 WebAssembly 模块，了解 compile 与 preserve 模式。'
+---
+
+import { Tabs, Tab } from '@theme';
+
+# WebAssembly
+
+Rslib 支持构建引用 WebAssembly（`.wasm`）模块的库。
+
+你可以在源码中使用 WebAssembly ESM Integration 语法：
+
+```ts title="src/index.ts"
+import { add } from './add.wasm';
+
+export const sum = add(1, 2);
+```
+
+## API
+
+在 `lib` 配置中使用 `wasm` 配置 Rslib 如何处理直接导入的 `.wasm` 模块。
+
+- **类型：**
+
+```ts
+type WasmMode = 'compile' | 'preserve';
+
+type Wasm = {
+  mode?: WasmMode;
+};
+```
+
+当未配置 `mode` 时，Rslib 会根据 [bundle](/config/lib/bundle) 选择默认 mode：
+
+| bundle  | 默认 mode |
+| ------- | --------- |
+| `true`  | `compile` |
+| `false` | `preserve` |
+
+如果需要显式控制行为，可以设置 `wasm.mode`：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      wasm: {
+        mode: 'preserve',
+      },
+    },
+  ],
+};
+```
+
+### wasm.mode
+
+`mode` 用于控制直接 `.wasm` import 的处理方式。
+
+- `compile`：Rspack 解析 `.wasm` 模块，并生成 JavaScript 胶水代码和运行时加载逻辑。详见 [Compile mode](#compile-mode)。
+- `preserve`：Rslib 在产物中保留 `.wasm` import，并输出二进制文件，交给支持 WebAssembly ESM Integration 的下游工具或运行时处理。详见 [Preserve mode](#preserve-mode)。
+
+`mode` 仅对 ESM 产物生效，详见 [使用限制](#使用限制)。
+
+## Compile mode
+
+在 compile mode 下，Rspack 会编译 `.wasm` 模块，并生成负责加载和实例化 WebAssembly 的 JavaScript 代码。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      bundle: true,
+      wasm: {
+        mode: 'compile',
+      },
+    },
+  ],
+};
+```
+
+Compile mode 会将 WebAssembly 二进制文件作为资源输出。输出路径遵循 Rsbuild 的 [output.distPath.wasm](/config/rsbuild/output#outputdistpath)（默认 `static/wasm`）和默认 wasm 文件名模板，例如：
+
+```text
+static/wasm/[contenthash].module.wasm
+```
+
+你可以通过 [output.distPath](/config/rsbuild/output#outputdistpath) 和 [output.filename](/config/rsbuild/output) 自定义目录和文件名。
+
+该模式适用于下游用户没有再使用构建工具的场景，例如在 Node.js 应用中直接导入该库，或在浏览器中直接加载 ESM 产物。
+
+在 compile mode 下，Rslib 会生成用于加载 `.wasm` 文件的运行时代码。具体加载方式会根据 Rslib 的 [output.target](/config/rsbuild/output#outputtarget) 配置决定：
+
+- Web target 会生成通过 `fetch` 加载 `.wasm` 的运行时代码。
+- Node target 会生成通过 Node.js 异步文件系统 API 加载 `.wasm` 的运行时代码。
+
+## Preserve mode
+
+在 preserve mode 下，Rslib 不会为直接 `.wasm` import 生成 WebAssembly 加载运行时，而是在 JavaScript 产物中保留真实的 `.wasm` import，并输出二进制文件。
+
+```ts title="src/index.ts"
+import { add } from './add.wasm';
+
+export { add };
+```
+
+产物布局取决于 [bundle](/config/lib/bundle)。
+
+### Bundle 模式
+
+在 bundle 模式下，源码文件会被打包进 JavaScript chunk，因此 `.wasm` 二进制会作为资产输出，并使用带 content hash 的文件名：
+
+<Tabs>
+  <Tab label="dist">
+
+```text
+dist/
+├── index.js
+└── static/
+    └── wasm/
+        └── [contenthash].module.wasm
+```
+
+  </Tab>
+  <Tab label="dist/index.js">
+
+```js
+import { add } from './static/wasm/[contenthash].module.wasm';
+
+export { add };
+```
+
+  </Tab>
+</Tabs>
+
+::: warning
+
+content hash 的 asset 布局会破坏依赖相对 module specifier 的 `.wasm` 模块的 WebAssembly ESM Integration 语义（例如部分 `wasm-bindgen` 产物，其 `.wasm` 文件必须与 JavaScript glue 文件保持相邻）。将二进制以 hash 文件名移动到资产目录后，这些相对路径会断裂。对于这类模块，请使用 [bundleless 模式](#bundleless-模式) 或 [compile 模式](#compile-mode)。
+
+:::
+
+### Bundleless 模式
+
+在 bundleless 模式下，Rslib 会按照源码相对路径和原文件名将 `.wasm` 文件 copy 到产物目录：
+
+<Tabs>
+  <Tab label="dist">
+
+```text
+dist/
+├── index.js
+└── add.wasm
+```
+
+  </Tab>
+  <Tab label="dist/index.js">
+
+```js
+import { add } from './add.wasm';
+
+export { add };
+```
+
+  </Tab>
+  <Tab label="src/index.ts">
+
+```ts
+import { add } from './add.wasm';
+
+export { add };
+```
+
+  </Tab>
+</Tabs>
+
+该布局会让 `.wasm` 文件与 JavaScript 文件保持相邻，适用于依赖相对 module specifier 的 WebAssembly 包，例如部分 `wasm-bindgen` 产物需要让 `.wasm` 文件与 JavaScript glue 文件保持相邻。
+
+## 支持的导入形式
+
+Rslib 在 ESM 产物中支持以下 WebAssembly ESM Integration 导入形式。
+
+### 静态导入与导出
+
+当你希望通过 ESM binding 访问实例化后的 WebAssembly 导出时，可以使用静态导入和导出：
+
+```ts
+import { add } from './add.wasm';
+import * as wasm from './add.wasm';
+export { add } from './add.wasm';
+export * from './add.wasm';
+export * as wasm from './add.wasm';
+import './add.wasm';
+```
+
+### 动态导入
+
+也支持动态导入：
+
+```ts
+const wasm = await import('./add.wasm');
+```
+
+在 `preserve` 模式下，Rslib 会保留 `.wasm` 模块的导入语义，但生成的 JavaScript 中仍可能包含用于加载 JavaScript chunk 的 bundler runtime。
+
+### Source phase import
+
+`import source` 是 WebAssembly ESM Integration 的一部分。它导入的是编译后的 `WebAssembly.Module`，而不是实例化后的导出对象。
+
+当你需要自行实例化模块时（例如传入自定义 import object），可以使用这种语法：
+
+```ts
+import source wasmModule from './add.wasm';
+
+const { instance } = await WebAssembly.instantiate(wasmModule, {
+  env: {
+    now: Date.now,
+  },
+});
+```
+
+也支持通过 `import.source()` 进行动态 source phase import：
+
+```ts
+const wasmModule = await import.source('./add.wasm');
+```
+
+在 `compile` 模式下，Rspack 会将这种语法转换为 JavaScript 产物，因此最终消费方不需要原生支持 source phase import。
+
+在 `preserve` 模式下，Rslib 会在产物中保留 source phase import，因此下游运行时或打包工具必须支持这种语法。
+
+运行时支持：
+
+| 运行时 | 支持情况 |
+| --- | --- |
+| Node.js | 请使用 Node.js v24.5.0 及以上版本，或 Node.js v22.19.0 及以上版本。 |
+| Deno | 请使用 Deno v2.6 及以上版本。 |
+
+打包工具支持：
+
+| 打包工具 | 支持情况 |
+| --- | --- |
+| Rspack | 请使用 `@rspack/core` v2.0.8 及以上版本。 |
+| Rsbuild | 请使用 `@rsbuild/core` v2.0.15 及以上版本。 |
+
+::: warning TypeScript 支持
+
+TypeScript 当前不能解析 `import source` 或 `import.source()`。请在 JavaScript 文件中编写 source phase import，或使用支持该语法的工具链。
+
+:::
+
+## 使用 wasm-bindgen
+
+[`wasm-bindgen`](https://wasm-bindgen.github.io/wasm-bindgen/) 是 Rust 和 WebAssembly 生态中的工具，它提供了一站式的 WebAssembly 开发方案。
+
+在 Rslib 中使用 `wasm-bindgen` 时，建议使用 `--target bundler` 生成产物：
+
+```bash
+wasm-bindgen ./target/wasm32-unknown-unknown/release/pkg.wasm \
+  --target bundler \
+  --out-dir ./src/pkg
+```
+
+`bundler` target 会生成以 ES module 形式导入 `.wasm` 文件的 JavaScript glue 产物，这和 Rslib 的 WebAssembly 处理模型匹配。
+
+`wasm-bindgen` 产物中，`.wasm` 二进制与 JavaScript glue 文件之间存在相对依赖：glue 会 import `.wasm`，`.wasm` 又会 import 回 glue。某个 Rslib 配置能否保持这种关系，取决于 `mode` 与 `bundle` 的组合：
+
+| bundle  | mode       | 是否支持 | 说明                                                       |
+| ------- | ---------- | -------- | ---------------------------------------------------------- |
+| `true`  | `compile`  | 支持     | Rspack 解析 glue 依赖，并将所有内容打包进 JavaScript 产物。 |
+| `false` | `compile`  | 支持     | Rspack 解析 glue 依赖，并按文件生成加载运行时。            |
+| `false` | `preserve` | 支持     | `.wasm` 与 glue 文件保持源码相对布局，相对 specifier 仍然有效。 |
+| `true`  | `preserve` | 不支持   | content hash 的 asset 布局会将 `.wasm` 移离 glue 文件，破坏相对 specifier。 |
+
+在 `compile` 模式下，Rspack 会在构建时解析 `.wasm` 模块及其 glue 依赖，因此无论 bundle 还是 bundleless 都能正常工作。
+
+如果你希望在产物中保留原始的 `wasm-bindgen` 文件、且不生成加载运行时，可以使用 bundleless preserve 模式：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+      wasm: {
+        mode: 'preserve',
+      },
+    },
+  ],
+};
+```
+
+::: warning
+
+不要对 `wasm-bindgen` 产物使用 [bundle 模式](#bundle-模式) 的 preserve。content hash 的 asset 布局会将 `.wasm` 文件移离 glue 文件，破坏生成产物中的相对 module specifier。请改用 `compile` 模式或 bundleless `preserve` 模式。
+
+:::
+
+## TypeScript 类型声明
+
+TypeScript 默认不提供 `.wasm` 文件的模块类型声明。你可以在 `.wasm` 文件旁添加 `.d.wasm.ts` 扩展名的声明文件，这需要在 `tsconfig.json` 中开启 [`allowArbitraryExtensions`](https://www.typescriptlang.org/tsconfig/allowArbitraryExtensions.html)：
+
+```ts title="src/add.d.wasm.ts"
+export function add(a: number, b: number): number;
+```
+
+## 使用限制
+
+- 直接 WebAssembly ESM Integration import 仅支持 ESM 产物；`cjs`、`umd`、`iife` 和 `mf` 格式不支持直接 `.wasm` import/export。当为非 ESM 格式设置 `mode` 时，该配置会被忽略，并回退到 compile 行为。
