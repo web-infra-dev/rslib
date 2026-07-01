@@ -174,8 +174,9 @@ export default defineConfig({
 export default defineConfig({
   lib: [
     // ... 已有的 compiled 和 source 入口
-    // [!code highlight:20]
+    // [!code highlight:21]
     {
+      id: 'server',
       bundle: false,
       format: 'esm',
       output: {

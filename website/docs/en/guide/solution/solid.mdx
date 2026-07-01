@@ -174,8 +174,9 @@ If you intentionally need a pre-compiled SSR output, use `pluginSolid({ solid: {
 export default defineConfig({
   lib: [
     // ... existing compiled and source entries
-    // [!code highlight:20]
+    // [!code highlight:21]
     {
+      id: 'server',
       bundle: false,
       format: 'esm',
       output: {
