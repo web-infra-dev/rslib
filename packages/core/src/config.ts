@@ -778,7 +778,7 @@ const disableUrlParseRsbuildPlugin = (): RsbuildPlugin => ({
 });
 
 const resetEnvConstPlugin = (): RsbuildPlugin => ({
-  name: 'rslib:reset-env-const',
+  name: 'rsbuild:reset-env-const',
   setup(api) {
     api.modifyBundlerChain((chain, { target }) => {
       if (target !== 'web' && target !== 'web-worker') {
