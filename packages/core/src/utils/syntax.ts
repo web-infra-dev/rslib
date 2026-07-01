@@ -34,8 +34,6 @@ const calcEsnextBrowserslistByTarget = (target: RsbuildConfigOutputTarget) => {
 };
 
 const RSPACK_TARGET_UNLISTED_MODERN_ECMA_VERSIONS: EcmaScriptVersion[] = [
-  'es2023',
-  'es2024',
   'esnext',
 ] satisfies EcmaScriptVersion[];
 
@@ -124,11 +122,16 @@ export const ESX_TO_BROWSERSLIST: Record<
       node: '16.11',
       safari: '16.4',
     },
-    // ES2023 did not introduce new ECMA syntax, so map it to ES2022.
+    // ES2023/ES2024/ES2025 did not introduce new ECMA syntax, so map them to ES2022.
     get es2023() {
       return ESX_TO_BROWSERSLIST.es2022;
     },
-    es2024: calcEsnextBrowserslistByTarget,
+    get es2024() {
+      return ESX_TO_BROWSERSLIST.es2022;
+    },
+    get es2025() {
+      return ESX_TO_BROWSERSLIST.es2022;
+    },
     esnext: calcEsnextBrowserslistByTarget,
   } as const;
 
@@ -140,14 +143,12 @@ export function transformSyntaxToRspackTarget(
 
     if (normalizedSyntaxItem.startsWith('es')) {
       if (normalizedSyntaxItem in ESX_TO_BROWSERSLIST) {
-        // The latest EcmaScript version supported by Rspack's `target` is es2022.
-        // Higher versions are treated as es2022.
         if (
           RSPACK_TARGET_UNLISTED_MODERN_ECMA_VERSIONS.includes(
             normalizedSyntaxItem as EcmaScriptVersion,
           )
         ) {
-          return 'es2022';
+          return 'es2025';
         }
         // The es6 is the same as es2015, compatible with rspack API schema
         if (normalizedSyntaxItem === 'es6') {
