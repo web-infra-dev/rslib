@@ -71,9 +71,12 @@ export default defineConfig({
 
 ## 输出产物
 
-Solid 组件库通常同时提供**编译后的输出**和**保留 JSX 的源码输出**。`package.json` 中的 `"solid"` condition names（条件名称）指向 JSX 源码，允许下游打包器（如配置了 `@rsbuild/plugin-solid` 的项目）以最优的方式本地编译（DOM vs SSR）。
+Solid 组件库通常同时提供两种产物：
 
-第一个 lib 使用 `pluginBabel` + `pluginSolid` 将 JSX 编译为 Solid 的运行时调用（如 `template()`、`insert()`、`delegateEvents()`），产出标准 `.js` 文件。第二个 lib 跳过 Solid 编译。`jsc.transform.react.runtime: 'preserve'` 告诉 SWC 保持 JSX 语法不变，`module.parser.javascript.jsx: true` 告诉 Rspack parser 接受输出中的 JSX。
+- **编译产物**：默认 ESM 入口，给普通打包器消费。
+- **JSX 源码**：保留 JSX，并通过 `"solid"` condition name 暴露给 Solid-aware 的下游打包器。
+
+`package.json` 中的 `"solid"` condition name 指向 JSX 源码。下游项目配置 `@rsbuild/plugin-solid` 后，可以解析到这份 JSX 源码，并根据自己的目标重新编译（DOM vs SSR）。
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -83,6 +86,7 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     {
+      // 将 JSX 编译为 Solid 运行时调用，例如 template()、insert() 和 delegateEvents()。
       bundle: false,
       dts: true,
       format: 'esm',
@@ -94,6 +98,7 @@ export default defineConfig({
       ],
     },
     {
+      // 为 "solid" condition name 保留 JSX 语法。
       bundle: false,
       format: 'esm',
       output: {
@@ -110,6 +115,7 @@ export default defineConfig({
           jsc: {
             transform: {
               react: {
+                // 保持输出中的 JSX 语法。
                 runtime: 'preserve',
               },
             },
@@ -119,6 +125,7 @@ export default defineConfig({
           module: {
             parser: {
               javascript: {
+                // 允许 Rspack 解析保留的 JSX。
                 jsx: true,
               },
             },

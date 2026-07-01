@@ -71,9 +71,12 @@ export default defineConfig({
 
 ## Output
 
-Solid component libraries conventionally provide both a **compiled** output and a **source JSX** output. The `"solid"` condition name in `package.json` points to the JSX source, allowing downstream bundlers (with `@rsbuild/plugin-solid`) to compile it locally with optimal settings for their target (DOM vs SSR).
+Solid component libraries conventionally provide two outputs:
 
-The first lib entry uses `pluginBabel` + `pluginSolid` to compile JSX into Solid's runtime calls (e.g. `template()`, `insert()`, `delegateEvents()`), producing standard `.js` files. The second lib entry skips Solid compilation entirely. `jsc.transform.react.runtime: 'preserve'` tells SWC to leave JSX syntax as-is, and `module.parser.javascript.jsx: true` tells Rspack's parser to accept JSX in the output.
+- **Compiled output**: the default ESM entry for regular bundlers.
+- **Source output**: preserves JSX and is exposed through the `"solid"` condition name for Solid-aware downstream bundlers.
+
+The `"solid"` condition name in `package.json` points to the source output. After a downstream project configures `@rsbuild/plugin-solid`, it can resolve this JSX source and recompile it for its own target (DOM vs SSR).
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -83,6 +86,7 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   lib: [
     {
+      // Compile JSX into Solid runtime calls, such as template(), insert(), and delegateEvents().
       bundle: false,
       dts: true,
       format: 'esm',
@@ -94,6 +98,7 @@ export default defineConfig({
       ],
     },
     {
+      // Preserve JSX syntax for the "solid" condition name.
       bundle: false,
       format: 'esm',
       output: {
@@ -110,6 +115,7 @@ export default defineConfig({
           jsc: {
             transform: {
               react: {
+                // Keep JSX syntax in the output.
                 runtime: 'preserve',
               },
             },
@@ -119,6 +125,7 @@ export default defineConfig({
           module: {
             parser: {
               javascript: {
+                // Allow Rspack to parse preserved JSX.
                 jsx: true,
               },
             },
