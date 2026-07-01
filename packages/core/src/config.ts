@@ -547,7 +547,7 @@ const composeFormatConfig = ({
 
   // The built-in Rslib plugin will apply to all formats except the `mf` format.
   // The `mf` format functions more like an application than a library and requires additional webpack runtime.
-  const plugins = [
+  const rspackPlugins = [
     new rspack.experiments.RslibPlugin({
       interceptApiPlugin: true,
       forceNodeShims: enabledShims.esm.__dirname || enabledShims.esm.__filename,
@@ -558,6 +558,7 @@ const composeFormatConfig = ({
   switch (format) {
     case 'esm':
       return {
+        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
         output: {
           filenameHash: false,
         },
@@ -595,12 +596,13 @@ const composeFormatConfig = ({
               chunkLoading: 'import',
               workerChunkLoading: 'import',
             },
-            plugins,
+            plugins: rspackPlugins,
           },
         },
       };
     case 'cjs':
       return {
+        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
         output: {
           module: false,
           filenameHash: false,
@@ -631,7 +633,7 @@ const composeFormatConfig = ({
               chunkLoading: 'require',
               workerChunkLoading: 'async-node',
             },
-            plugins,
+            plugins: rspackPlugins,
           },
         },
       };
@@ -643,6 +645,7 @@ const composeFormatConfig = ({
       }
 
       const config: EnvironmentConfig = {
+        plugins: [modifyRsbuildDefaultPlugin()],
         output: {
           module: false,
           filenameHash: false,
@@ -671,7 +674,7 @@ const composeFormatConfig = ({
               nodeEnv: process.env.NODE_ENV,
               splitChunks: false,
             },
-            plugins,
+            plugins: rspackPlugins,
           },
         },
       };
@@ -686,6 +689,7 @@ const composeFormatConfig = ({
       }
 
       const config: EnvironmentConfig = {
+        plugins: [modifyRsbuildDefaultPlugin()],
         output: {
           module: false,
           filenameHash: false,
@@ -719,7 +723,7 @@ const composeFormatConfig = ({
               nodeEnv: process.env.NODE_ENV,
               splitChunks: false,
             },
-            plugins,
+            plugins: rspackPlugins,
           },
         },
       };
@@ -734,6 +738,7 @@ const composeFormatConfig = ({
       }
 
       return {
+        plugins: [modifyRsbuildDefaultPlugin()],
         dev: {
           writeToDisk: true,
         },
@@ -781,8 +786,9 @@ const modifyRsbuildDefaultPlugin = ({
           });
       }
 
-      // Part 2: remove Rsbuild's default JS module type.
-      // Port https://github.com/web-infra-dev/rsbuild/pull/5955 before it merged into Rsbuild.
+      // Part 2: remove Rsbuild's `type: 'javascript/auto'` override.
+      // Rslib follows Rspack's original module type inference, so ESM-like
+      // modules are treated as strict ESM (`javascript/esm`).
       chain.module
         .rule(CHAIN_ID.RULE.JS)
         .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
@@ -927,27 +933,21 @@ const composeShimsConfig = (
             },
           },
         },
-        plugins: [
-          resolvedShims.esm.require && pluginEsmRequireShim(),
-          modifyRsbuildDefaultPlugin({ disableUrlParse: true }),
-        ].filter(Boolean),
+        plugins: [resolvedShims.esm.require && pluginEsmRequireShim()].filter(
+          Boolean,
+        ),
       };
       break;
     }
     case 'cjs':
       rsbuildConfig = {
-        plugins: [
-          pluginCjsShims(resolvedShims.cjs),
-          modifyRsbuildDefaultPlugin({ disableUrlParse: true }),
-        ].filter(Boolean),
+        plugins: [pluginCjsShims(resolvedShims.cjs)],
       };
       break;
     case 'umd':
     case 'iife':
     case 'mf':
-      rsbuildConfig = {
-        plugins: [modifyRsbuildDefaultPlugin()],
-      };
+      rsbuildConfig = {};
       break;
     default:
       throw new Error(`Unsupported format: ${format}`);
