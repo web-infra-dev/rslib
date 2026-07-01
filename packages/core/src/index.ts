@@ -38,6 +38,7 @@ export type {
   StartMFDevServerOptions,
   StartDevServerResult,
   Syntax,
+  Wasm,
 } from './types';
 
 export const version: string = RSLIB_VERSION;

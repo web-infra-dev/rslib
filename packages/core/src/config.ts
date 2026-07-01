@@ -27,6 +27,7 @@ import { type CssLoaderOptionsAuto, isCssGlobalFile } from './css/utils';
 import { composeExeConfig } from './exe';
 import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
 import { pluginCjsShims, pluginEsmRequireShim } from './plugins/shims';
+import { composeWasmConfig, resolveWasmConfig } from './wasm';
 import type {
   AutoExternal,
   BannerAndFooter,
@@ -1186,6 +1187,7 @@ const composeEntryConfig = async (
   bundle: LibConfig['bundle'],
   root: string,
   cssModulesAuto: CssLoaderOptionsAuto,
+  excludeWasmEntry: boolean,
   userOutBase?: string,
 ): Promise<{ entryConfig: EnvironmentConfig; outBase: string | null }> => {
   let entries = rawEntry;
@@ -1309,7 +1311,11 @@ const composeEntryConfig = async (
 
       // Filter the glob resolved entry files based on the allowed extensions
       const resolvedEntryFiles = globEntryFiles.filter((i) => {
-        return !DTS_EXTENSIONS_PATTERN.test(i);
+        if (DTS_EXTENSIONS_PATTERN.test(i)) return false;
+        // In preserve mode, `.wasm` files are handled by the wasm externals
+        // plugin, not as source entries.
+        if (excludeWasmEntry && i.endsWith('.wasm')) return false;
+        return true;
       });
 
       if (resolvedEntryFiles.length === 0) {
@@ -1388,6 +1394,8 @@ const composeBundlelessExternalConfig = (
   cssModulesAuto: CssLoaderOptionsAuto,
   bundle: boolean,
   outBase: string | null,
+  preExternals: Rspack.ExternalItem[],
+  skipWasmExternal: boolean,
 ): {
   config: EnvironmentConfig;
   resolvedJsRedirect?: DeepRequired<JsRedirect>;
@@ -1429,9 +1437,14 @@ const composeBundlelessExternalConfig = (
     config: {
       output: {
         externals: [
+          ...preExternals,
           async (data, callback) => {
             const { request, getResolve, context, contextInfo } = data;
             if (!request || !getResolve || !context || !contextInfo) {
+              callback();
+              return;
+            }
+            if (skipWasmExternal && /\.wasm(?:[?#]|$)/.test(request)) {
               callback();
               return;
             }
@@ -1846,11 +1859,19 @@ async function composeLibRsbuildConfig(
     pkgJson,
   );
 
+  const resolvedWasm = resolveWasmConfig({
+    bundle,
+    format,
+    wasmConfig: config.wasm,
+  });
+  const excludeWasmEntry = !bundle;
+
   const { entryConfig, outBase } = await composeEntryConfig(
     config.source?.entry,
     config.bundle,
     root,
     cssModulesAuto,
+    excludeWasmEntry,
     config.outBase,
   );
   const { config: exeConfig } = composeExeConfig({
@@ -1862,12 +1883,23 @@ async function composeLibRsbuildConfig(
     target,
   });
 
+  const wasmCompose = composeWasmConfig({
+    bundle,
+    format,
+    mode: resolvedWasm.mode,
+    hasUserWasmMode: resolvedWasm.hasUserWasmMode,
+    outBase,
+  });
+  const wasmConfig = wasmCompose.config;
+
   const { config: bundlelessExternalConfig } = composeBundlelessExternalConfig(
     jsExtension,
     redirect,
     cssModulesAuto,
     bundle,
     outBase,
+    wasmCompose.bundlelessExternal ? [wasmCompose.bundlelessExternal] : [],
+    resolvedWasm.mode === 'compile',
   );
   const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
   const autoExternalConfig = composeAutoExternalConfig({
@@ -1930,6 +1962,7 @@ async function composeLibRsbuildConfig(
     entryConfig,
     cssConfig,
     assetConfig,
+    wasmConfig,
     entryChunkConfig,
     minifyConfig,
     dtsConfig,
@@ -2020,6 +2053,7 @@ export async function composeCreateRsbuildConfig(
           shims: true,
           umdName: true,
           outBase: true,
+          wasm: true,
           experiments: true,
         }),
       ),
