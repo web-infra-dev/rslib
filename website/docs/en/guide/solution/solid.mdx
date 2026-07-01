@@ -102,9 +102,6 @@ export default defineConfig({
       bundle: false,
       format: 'esm',
       output: {
-        distPath: {
-          root: './dist/source',
-        },
         filename: {
           js: '[name].jsx',
         },
@@ -147,7 +144,7 @@ Then configure the `"exports"` field in `package.json`:
   // [!code highlight:7]
   "exports": {
     ".": {
-      "solid": "./dist/source/index.jsx",
+      "solid": "./dist/index.jsx",
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }

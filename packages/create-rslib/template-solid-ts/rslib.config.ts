@@ -21,9 +21,6 @@ export default defineConfig({
       bundle: false,
       format: 'esm',
       output: {
-        distPath: {
-          root: './dist/source',
-        },
         filename: {
           js: '[name].jsx',
         },

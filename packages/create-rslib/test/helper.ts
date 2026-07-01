@@ -156,7 +156,7 @@ export const createAndValidate = (
     expect(pkgJson.devDependencies['@rsbuild/plugin-solid']).toBeTruthy();
     expect(pkgJson.devDependencies['solid-js']).toBeTruthy();
     expect(pkgJson.devDependencies['@solidjs/testing-library']).toBeTruthy();
-    expect(pkgJson.exports['.'].solid).toBe('./dist/source/index.jsx');
+    expect(pkgJson.exports['.'].solid).toBe('./dist/index.jsx');
     expect(pkgJson.peerDependencies['solid-js']).toBeTruthy();
     expect(pkgJson.peerDependencies['@solidjs/web']).toBeFalsy();
 
