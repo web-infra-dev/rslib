@@ -777,6 +777,31 @@ const disableUrlParseRsbuildPlugin = (): RsbuildPlugin => ({
   },
 });
 
+const resetEnvConstPlugin = (): RsbuildPlugin => ({
+  name: 'rslib:reset-env-const',
+  setup(api) {
+    api.modifyBundlerChain((chain, { target }) => {
+      if (target !== 'web' && target !== 'web-worker') {
+        return;
+      }
+
+      const environment = chain.output.get('environment');
+
+      if (!environment || environment.const !== false) {
+        return;
+      }
+
+      // Rsbuild disables `const` for web-like app runtimes. Rslib should
+      // leave this to Rspack's target inference for library output.
+      delete environment.const;
+
+      if (Object.keys(environment).length === 0) {
+        chain.output.delete('environment');
+      }
+    });
+  },
+});
+
 // Port https://github.com/web-infra-dev/rsbuild/pull/5955 before it merged into Rsbuild.
 const fixJsModuleTypePlugin = (): RsbuildPlugin => ({
   name: 'rsbuild:fix-js-module-type',
@@ -911,6 +936,7 @@ const composeShimsConfig = (
           resolvedShims.esm.require && pluginEsmRequireShim(),
           disableUrlParseRsbuildPlugin(),
           fixJsModuleTypePlugin(),
+          resetEnvConstPlugin(),
         ].filter(Boolean),
       };
       break;
@@ -921,6 +947,7 @@ const composeShimsConfig = (
           pluginCjsShims(resolvedShims.cjs),
           disableUrlParseRsbuildPlugin(),
           fixJsModuleTypePlugin(),
+          resetEnvConstPlugin(),
         ].filter(Boolean),
       };
       break;
@@ -928,7 +955,7 @@ const composeShimsConfig = (
     case 'iife':
     case 'mf':
       rsbuildConfig = {
-        plugins: [fixJsModuleTypePlugin()],
+        plugins: [fixJsModuleTypePlugin(), resetEnvConstPlugin()],
       };
       break;
     default:

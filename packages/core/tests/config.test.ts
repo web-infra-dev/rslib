@@ -1,5 +1,6 @@
 import { join } from 'node:path';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+import type { RsbuildPlugin } from '@rsbuild/core';
 import { describe, expect, rs, test } from '@rstest/core';
 import type { BuildOptions } from '../src/cli/commands';
 import { init } from '../src/cli/init';
@@ -782,6 +783,57 @@ describe('module ids', () => {
     const { origin } = await rslib.inspectConfig();
 
     expect(origin.bundlerConfigs[0]!.optimization?.moduleIds).toBe('named');
+  });
+});
+
+describe('output environment', () => {
+  test('resets Rsbuild default const environment for web target', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {},
+        {
+          tools: {
+            rspack: {
+              output: {
+                environment: {
+                  const: false,
+                },
+              },
+            },
+          },
+        },
+        {
+          plugins: [
+            {
+              name: 'test:set-lib-output-environment-const',
+              setup(api) {
+                api.modifyBundlerChain((chain) => {
+                  chain.output.merge({
+                    environment: {
+                      const: false,
+                    },
+                  });
+                });
+              },
+            } satisfies RsbuildPlugin,
+          ],
+        },
+      ],
+      output: {
+        target: 'web',
+      },
+    };
+
+    const rslib = await createRslib({
+      config: rslibConfig,
+    });
+    const { origin } = await rslib.inspectConfig();
+
+    expect(
+      origin.bundlerConfigs[0]!.output?.environment?.const,
+    ).toBeUndefined();
+    expect(origin.bundlerConfigs[1]!.output?.environment?.const).toBe(false);
+    expect(origin.bundlerConfigs[2]!.output?.environment?.const).toBe(false);
   });
 });
 
