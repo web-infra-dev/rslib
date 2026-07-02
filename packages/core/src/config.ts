@@ -1135,7 +1135,7 @@ const composeSyntaxConfig = (
   return {
     tools: {
       rspack: (config) => {
-        config.target = ['es2022'];
+        config.target = ['es2025'];
         return config;
       },
     },

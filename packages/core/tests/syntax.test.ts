@@ -28,8 +28,14 @@ const compareSemver = (a: string, b: string) => {
 describe('ESX_TO_BROWSERSLIST', () => {
   test('some ECMA version queries should be the same', () => {
     expect(ESX_TO_BROWSERSLIST.es6).toStrictEqual(ESX_TO_BROWSERSLIST.es2015);
-    expect(ESX_TO_BROWSERSLIST.esnext).toStrictEqual(
-      ESX_TO_BROWSERSLIST.es2024,
+    expect(ESX_TO_BROWSERSLIST.es2023).toStrictEqual(
+      ESX_TO_BROWSERSLIST.es2022,
+    );
+    expect(ESX_TO_BROWSERSLIST.es2024).toStrictEqual(
+      ESX_TO_BROWSERSLIST.es2022,
+    );
+    expect(ESX_TO_BROWSERSLIST.es2025).toStrictEqual(
+      ESX_TO_BROWSERSLIST.es2022,
     );
   });
 
@@ -45,7 +51,6 @@ describe('ESX_TO_BROWSERSLIST', () => {
       'es2020',
       'es2021',
       'es2022',
-      'es2023',
     ];
 
     for (let i = 1; i < sortedVersions.length; i++) {
@@ -112,8 +117,8 @@ describe('transformSyntaxToBrowserslist', () => {
         "last 1 node versions",
       ]
     `);
-    expect(transformSyntaxToBrowserslist('esnext', 'node')).toStrictEqual(
-      transformSyntaxToBrowserslist('es2024', 'node'),
+    expect(transformSyntaxToBrowserslist('es2025', 'web')).toStrictEqual(
+      transformSyntaxToBrowserslist('es2022', 'web'),
     );
   });
 
@@ -159,10 +164,11 @@ describe('transformSyntaxToRspackTarget', () => {
     const es6 = transformSyntaxToRspackTarget('es6');
     const es2023 = transformSyntaxToRspackTarget('es2023');
     const es2024 = transformSyntaxToRspackTarget('es2024');
+    const es2025 = transformSyntaxToRspackTarget('es2025');
     const esnext = transformSyntaxToRspackTarget('esnext');
 
-    expect(es2023).toEqual(es2024);
-    expect(es2023).toEqual(esnext);
+    expect(es2025).toEqual(esnext);
+    expect(es2025).toEqual(['es2025']);
 
     expect(es6).toMatchInlineSnapshot(`
       [
@@ -173,7 +179,15 @@ describe('transformSyntaxToRspackTarget', () => {
     expect(es2023).toMatchInlineSnapshot(
       `
       [
-        "es2022",
+        "es2023",
+      ]
+    `,
+    );
+
+    expect(es2024).toMatchInlineSnapshot(
+      `
+      [
+        "es2024",
       ]
     `,
     );
@@ -192,7 +206,7 @@ describe('transformSyntaxToRspackTarget', () => {
       .toMatchInlineSnapshot(`
       [
         "browserslist:Chrome 123",
-        "es2022",
+        "es2023",
       ]
     `);
 

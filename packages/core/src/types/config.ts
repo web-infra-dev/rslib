@@ -19,8 +19,10 @@ export type FixedEcmaVersions =
   | 'es2020'
   | 'es2021'
   | 'es2022'
-  | 'es2023';
-export type LatestEcmaVersions = 'es2024' | 'esnext';
+  | 'es2023'
+  | 'es2024'
+  | 'es2025';
+export type LatestEcmaVersions = 'esnext';
 export type EcmaScriptVersion = FixedEcmaVersions | LatestEcmaVersions;
 
 export type RsbuildConfigWithLibInfo = {
