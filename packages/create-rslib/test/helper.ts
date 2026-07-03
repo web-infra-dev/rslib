@@ -24,6 +24,7 @@ export const expectPackageJson = (
   expect(pkgJson.scripts['test:watch']).toBe('rstest --watch');
   expect(pkgJson.devDependencies['@rstest/adapter-rslib']).toBeTruthy();
   expect(pkgJson.devDependencies['@rstest/core']).toBeTruthy();
+  expect(pkgJson.publishConfig?.access).toBe('public');
 };
 
 export interface TemplateCase {
