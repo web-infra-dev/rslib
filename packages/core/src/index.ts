@@ -12,6 +12,9 @@ export {
   type LoadConfigResult,
   type LoadEnvOptions,
   type LoadEnvResult,
+  type RslibConfigAsyncFn,
+  type RslibConfigDefinition,
+  type RslibConfigSyncFn,
   loadConfig,
   loadEnv,
 } from './loadConfig';

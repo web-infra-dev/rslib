@@ -19,7 +19,7 @@ export type RslibConfigSyncFn = (env: ConfigParams) => RslibConfig;
 
 export type RslibConfigAsyncFn = (env: ConfigParams) => Promise<RslibConfig>;
 
-export type RslibConfigExport =
+export type RslibConfigDefinition =
   RslibConfig | RslibConfigSyncFn | RslibConfigAsyncFn;
 
 export type LoadConfigOptions = Pick<
@@ -48,8 +48,10 @@ export type LoadConfigResult = {
 export function defineConfig(config: RslibConfig): RslibConfig;
 export function defineConfig(config: RslibConfigSyncFn): RslibConfigSyncFn;
 export function defineConfig(config: RslibConfigAsyncFn): RslibConfigAsyncFn;
-export function defineConfig(config: RslibConfigExport): RslibConfigExport;
-export function defineConfig(config: RslibConfigExport) {
+export function defineConfig(
+  config: RslibConfigDefinition,
+): RslibConfigDefinition;
+export function defineConfig(config: RslibConfigDefinition) {
   return config;
 }
 
