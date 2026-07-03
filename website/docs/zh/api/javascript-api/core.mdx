@@ -99,10 +99,30 @@ function loadConfig(params?: {
   cwd?: string;
   // 指定配置文件路径，可以为相对路径或绝对路径
   path?: string;
+  // 未指定 path 时要查找的配置文件名列表
+  configFileNames?: string[];
   meta?: Record<string, unknown>;
   envMode?: string;
+  /**
+   * 传给配置函数的命令。
+   * @default process.argv[2]
+   */
   command?: string;
+  /**
+   * 指定配置文件加载器，可选值为 `auto`、`jiti` 或 `native`。
+   * - 'auto'：优先使用 Node.js 原生加载器，失败后回退到 jiti
+   * - 'jiti'：使用 jiti 作为加载器，开箱支持 TypeScript 和 ESM
+   * - 'native'：使用 Node.js 原生加载器，TypeScript 配置文件需要
+   *   Node.js 22.6+ 等原生 TypeScript 支持。
+   * @default 'auto'
+   */
   loader?: 'auto' | 'jiti' | 'native';
+  /**
+   * 从配置文件中读取的导出名称。
+   * 设置为 `false` 时只执行配置文件，不读取任何导出。
+   * @default 'default'
+   */
+  exportName?: string | false;
 }): Promise<{
   content: RslibConfig;
   filePath: string | null;
@@ -126,54 +146,18 @@ const rslib = await createRslib({
 
 如果 cwd 目录下不存在 Rslib 配置文件，loadConfig 方法的返回值为 `{ content: {}, filePath: null }`。
 
-### 指定配置文件
+未指定 `path` 时，`loadConfig` 会按照以下顺序查找配置文件：
 
-使用 `path` 选项加载 `my-config.ts` 配置文件：
+- `rslib.config.mjs`
+- `rslib.config.ts`
+- `rslib.config.js`
+- `rslib.config.cjs`
+- `rslib.config.mts`
+- `rslib.config.cts`
 
-```ts
-import { join } from 'node:path';
-import { loadConfig } from '@rslib/core';
+如果同时存在多个配置文件，`loadConfig` 会使用这个列表中第一个匹配到的文件。
 
-const { content } = await loadConfig({
-  path: join(__dirname, 'my-config.ts'),
-});
-```
-
-### 传入 meta 对象
-
-加载配置文件，并传入自定义的 meta 对象：
-
-```ts
-import { join } from 'node:path';
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  meta: {
-    foo: 'bar',
-  },
-});
-```
-
-在 `defineConfig` 定义的配置函数中，你可以通过 `meta` 对象访问到 `foo` 变量：
-
-```ts title="rslib.config.ts"
-export default defineConfig(({ meta }) => {
-  console.log(meta.foo); // bar
-  return config;
-});
-```
-
-### 传入 command
-
-默认情况下，`loadConfig` 会将 `process.argv[2]` 作为 `command` 传给配置函数。你可以通过 `command` 选项显式设置该值。
-
-```ts
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  command: 'build',
-});
-```
+Rslib 的 `loadConfig` 与 Rsbuild 的用法基本一致，区别在于默认查找 `rslib.config.*`，且返回结果中的 `content` 类型为 [RslibConfig](/api/javascript-api/types#rslibconfig)，更多用法可参考 [loadConfig -- Rsbuild](https://rsbuild.rs/zh/api/javascript-api/core#loadconfig)。
 
 ## loadEnv
 

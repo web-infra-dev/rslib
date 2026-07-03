@@ -1,7 +1,7 @@
-import { join } from 'node:path';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { describe, expect, rs, test } from '@rstest/core';
+import { join } from 'node:path';
 import type { BuildOptions } from '../src/cli/commands';
 import { init, initCliAction } from '../src/cli/init';
 import {
