@@ -157,9 +157,9 @@ const rslib = await createRslib({
 
 如果同时存在多个配置文件，`loadConfig` 会使用这个列表中第一个匹配到的文件。
 
-`loadConfig` 的大部分选项用法与 Rsbuild 基本一致。在 Rslib 中，需要注意默认查找的是 `rslib.config.*`，返回的 `content` 类型为 [RslibConfig](/api/javascript-api/types#rslibconfig)。
+Rslib 的 `loadConfig` 与 Rsbuild 的用法基本一致，区别在于默认查找 `rslib.config.*`，且返回结果中的 `content` 类型为 [RslibConfig](/api/javascript-api/types#rslibconfig)。
 
-可参考 Rsbuild 文档中的相同用法：
+以下选项的详细用法可参考 Rsbuild 文档：
 
 - [自定义配置文件名](https://rsbuild.rs/api/javascript-api/core#customize-config-file-names)：使用 `configFileNames` 替换默认配置文件查找列表。
 - [指定配置文件](https://rsbuild.rs/api/javascript-api/core#specify-the-configuration-file)：使用 `path` 加载相对路径或绝对路径的配置文件。
