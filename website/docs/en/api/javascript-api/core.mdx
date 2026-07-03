@@ -157,80 +157,15 @@ When `path` is not specified, `loadConfig` searches for config files in the foll
 
 If multiple config files exist at the same time, `loadConfig` uses the first matching file in this list.
 
-### Customize config file names
+Most `loadConfig` options are aligned with Rsbuild. The main differences in Rslib are that the default lookup list uses `rslib.config.*`, and the returned `content` is typed as `RslibConfig`.
 
-Use the `configFileNames` option to replace the default `rslib.config.*` lookup list. The file names are resolved relative to `cwd`, and this option is ignored when `path` is specified.
+Refer to the Rsbuild documentation for similar usage:
 
-```ts
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  configFileNames: ['framework.config.ts', 'framework.config.mjs'],
-});
-```
-
-### Specify export name
-
-By default, `loadConfig` reads the default export from the config file. Use the `exportName` option to read a named export instead:
-
-```ts
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  exportName: 'rslibConfig',
-});
-```
-
-Set `exportName` to `false` to execute the config file without reading any exports.
-
-### Specify the configuration file
-
-Use the `path` option to load the `my-config.ts` configuration file:
-
-```ts
-import { join } from 'node:path';
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  path: join(__dirname, 'my-config.ts'),
-});
-```
-
-### Passing meta object
-
-Load the configuration file and pass in a custom meta object:
-
-```ts
-import { join } from 'node:path';
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  meta: {
-    foo: 'bar',
-  },
-});
-```
-
-In the `defineConfig` configuration function, you can access the `foo` variable through the `meta` object:
-
-```ts title="rslib.config.ts"
-export default defineConfig(({ meta }) => {
-  console.log(meta.foo); // bar
-  return config;
-});
-```
-
-### Passing command
-
-By default, `loadConfig` passes `process.argv[2]` as the `command` value to the config function. Use the `command` option to explicitly set this value.
-
-```ts
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  command: 'build',
-});
-```
+- [Customize config file names](https://rsbuild.rs/api/javascript-api/core#customize-config-file-names): use `configFileNames` to replace the default lookup list.
+- [Specify the configuration file](https://rsbuild.rs/api/javascript-api/core#specify-the-configuration-file): use `path` to load a relative or absolute config file.
+- [Specify the export name](https://rsbuild.rs/api/javascript-api/core#specify-the-export-name): use `exportName` to read a named export, or set it to `false` to execute the config file without reading exports.
+- [Passing meta object](https://rsbuild.rs/api/javascript-api/core#passing-meta-object): pass custom `meta` data to the config function.
+- [Passing command](https://rsbuild.rs/api/javascript-api/core#passing-command): pass a custom `command` value to the config function.
 
 ## loadEnv
 

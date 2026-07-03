@@ -157,80 +157,15 @@ const rslib = await createRslib({
 
 如果同时存在多个配置文件，`loadConfig` 会使用这个列表中第一个匹配到的文件。
 
-### 自定义配置文件名
+除默认配置文件名为 `rslib.config.*`、返回的 `content` 类型为 `RslibConfig` 外，`loadConfig` 的大部分选项用法与 Rsbuild 基本一致。
 
-使用 `configFileNames` 选项可以替换默认的 `rslib.config.*` 配置文件查找列表。文件名会相对于 `cwd` 解析，且指定 `path` 时会忽略该选项。
+可参考 Rsbuild 文档中的相同用法：
 
-```ts
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  configFileNames: ['framework.config.ts', 'framework.config.mjs'],
-});
-```
-
-### 指定导出名称
-
-默认情况下，`loadConfig` 会读取配置文件的默认导出。你可以通过 `exportName` 选项读取命名导出：
-
-```ts
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  exportName: 'rslibConfig',
-});
-```
-
-将 `exportName` 设置为 `false` 时，只会执行配置文件，不会读取任何导出。
-
-### 指定配置文件
-
-使用 `path` 选项加载 `my-config.ts` 配置文件：
-
-```ts
-import { join } from 'node:path';
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  path: join(__dirname, 'my-config.ts'),
-});
-```
-
-### 传入 meta 对象
-
-加载配置文件，并传入自定义的 meta 对象：
-
-```ts
-import { join } from 'node:path';
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  meta: {
-    foo: 'bar',
-  },
-});
-```
-
-在 `defineConfig` 定义的配置函数中，你可以通过 `meta` 对象访问到 `foo` 变量：
-
-```ts title="rslib.config.ts"
-export default defineConfig(({ meta }) => {
-  console.log(meta.foo); // bar
-  return config;
-});
-```
-
-### 传入 command
-
-默认情况下，`loadConfig` 会将 `process.argv[2]` 作为 `command` 传给配置函数。你可以通过 `command` 选项显式设置该值。
-
-```ts
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  command: 'build',
-});
-```
+- [自定义配置文件名](https://rsbuild.rs/api/javascript-api/core#customize-config-file-names)：使用 `configFileNames` 替换默认配置文件查找列表。
+- [指定配置文件](https://rsbuild.rs/api/javascript-api/core#specify-the-configuration-file)：使用 `path` 加载相对路径或绝对路径的配置文件。
+- [指定导出名称](https://rsbuild.rs/api/javascript-api/core#specify-the-export-name)：使用 `exportName` 读取命名导出，或设置为 `false` 仅执行配置文件而不读取导出。
+- [传入 meta 对象](https://rsbuild.rs/api/javascript-api/core#passing-meta-object)：向配置函数传入自定义 `meta` 数据。
+- [传入 command](https://rsbuild.rs/api/javascript-api/core#passing-command)：向配置函数传入自定义 `command` 值。
 
 ## loadEnv
 
