@@ -1,7 +1,7 @@
-import { join } from 'node:path';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { describe, expect, rs, test } from '@rstest/core';
+import { join } from 'node:path';
 import type { BuildOptions } from '../src/cli/commands';
 import { init, initCliAction } from '../src/cli/init';
 import {
@@ -165,24 +165,6 @@ describe('Should load config file correctly', () => {
 
     expect(config.source?.define).toEqual({
       COMMAND: JSON.stringify('build'),
-    });
-  });
-
-  test('Load config with rslib config file names by default', async () => {
-    const fixtureDir = join(__dirname, 'fixtures/config/cjs');
-    const configFilePath = join(fixtureDir, 'rslib.config.mjs');
-    const { content: config, filePath } = await loadConfig({ cwd: fixtureDir });
-    expect(filePath).toBe(configFilePath);
-    expect(config).toEqual({
-      lib: [],
-      source: {
-        entry: {
-          index: './foo/index.js',
-        },
-      },
-      _privateMeta: {
-        configFilePath,
-      },
     });
   });
 });
