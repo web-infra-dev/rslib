@@ -2,6 +2,17 @@ import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
 
+const normalizeMfExposeEntry = (content: string) =>
+  content
+    .replace(
+      /__federation_expose_default_export\.[a-f0-9]+\.js\.LICENSE\.txt/g,
+      '__federation_expose_default_export.<HASH>.js.LICENSE.txt',
+    )
+    .replace(
+      /(\[\[525\],\s*\{\s*)\d+(?=\(__unused_rspack_module,)/g,
+      '$1<MODULE_ID>',
+    );
+
 describe('minify config', () => {
   test('tree shaking is enabled by default, bar and baz should be shaken, some comments and annotations are preserved', async () => {
     const fixturePath = join(__dirname, 'default');
@@ -53,9 +64,10 @@ describe('minify config (mf)', () => {
   test('minify is enabled by default in mf format, bar and baz should be shaken, some comments and annotations are preserved', async () => {
     const fixturePath = join(__dirname, 'mf/default');
     const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
-    expect(mfExposeEntry).toMatchInlineSnapshot(`
-      "/*! LICENSE: __federation_expose_default_export.3ca2a77c59.js.LICENSE.txt */
-      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([[525],{2115(__unused_rspack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{});__webpack_require__.d(__webpack_exports__,{},{Button:Button,foo:foo})}}]);"
+    expect(mfExposeEntry).toBeDefined();
+    expect(normalizeMfExposeEntry(mfExposeEntry!)).toMatchInlineSnapshot(`
+      "/*! LICENSE: __federation_expose_default_export.<HASH>.js.LICENSE.txt */
+      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([[525],{<MODULE_ID>(__unused_rspack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{});__webpack_require__.d(__webpack_exports__,{},{Button:Button,foo:foo})}}]);"
     `);
   });
 
@@ -63,10 +75,11 @@ describe('minify config (mf)', () => {
     const fixturePath = join(__dirname, 'mf/config');
     const { mfExposeEntry } = await buildAndGetResults({ fixturePath });
 
-    expect(mfExposeEntry).toMatchInlineSnapshot(`
+    expect(mfExposeEntry).toBeDefined();
+    expect(normalizeMfExposeEntry(mfExposeEntry!)).toMatchInlineSnapshot(`
       ""use strict";
       (globalThis["disable_minify"] = globalThis["disable_minify"] || []).push([[525], {
-      2115(__unused_rspack_module, __webpack_exports__, __webpack_require__) {
+      <MODULE_ID>(__unused_rspack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.r(__webpack_exports__);
       /* import */ var react_jsx_runtime__rspack_import_0 = __webpack_require__(491);
       /* import */ var react_jsx_runtime__rspack_import_0_default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__rspack_import_0);
