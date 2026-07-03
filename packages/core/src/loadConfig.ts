@@ -1,12 +1,8 @@
-import fs from 'node:fs';
-import { dirname, isAbsolute, join } from 'node:path';
 import {
   loadConfig as loadRsbuildConfig,
   type LoadConfigOptions as RsbuildLoadConfigOptions,
 } from '@rsbuild/core';
 import type { RslibConfig } from './types';
-import { color } from './utils/color';
-import { logger } from './utils/logger';
 
 export type ConfigParams = {
   env: string;
@@ -22,10 +18,7 @@ export type RslibConfigAsyncFn = (env: ConfigParams) => Promise<RslibConfig>;
 export type RslibConfigExport =
   RslibConfig | RslibConfigSyncFn | RslibConfigAsyncFn;
 
-export type LoadConfigOptions = Pick<
-  RsbuildLoadConfigOptions,
-  'cwd' | 'path' | 'envMode' | 'meta' | 'loader' | 'command'
->;
+export type LoadConfigOptions = RsbuildLoadConfigOptions;
 
 export type ConfigLoader = RsbuildLoadConfigOptions['loader'];
 
@@ -53,74 +46,26 @@ export function defineConfig(config: RslibConfigExport) {
   return config;
 }
 
-const resolveConfigPath = (
-  root: string,
-  customConfig?: string,
-): string | null => {
-  if (customConfig) {
-    const customConfigPath = isAbsolute(customConfig)
-      ? customConfig
-      : join(root, customConfig);
-    if (fs.existsSync(customConfigPath)) {
-      return customConfigPath;
-    }
-    const error = new Error(
-      `${color.dim('[rslib:loadConfig]')} Cannot find config file: ${color.dim(customConfigPath)}`,
-    );
-    error.stack = '';
-    throw error;
-  }
+const RSLIB_CONFIG_FILE_NAMES = [
+  // `.mjs` and `.ts` are the most used configuration types,
+  // so we resolve them first for performance
+  'rslib.config.mjs',
+  'rslib.config.ts',
+  'rslib.config.js',
+  'rslib.config.cjs',
+  'rslib.config.mts',
+  'rslib.config.cts',
+];
 
-  const CONFIG_FILES = [
-    // `.mjs` and `.ts` are the most used configuration types,
-    // so we resolve them first for performance
-    'rslib.config.mjs',
-    'rslib.config.ts',
-    'rslib.config.js',
-    'rslib.config.cjs',
-    'rslib.config.mts',
-    'rslib.config.cts',
-  ];
-
-  for (const file of CONFIG_FILES) {
-    const configFile = join(root, file);
-
-    if (fs.existsSync(configFile)) {
-      return configFile;
-    }
-  }
-
-  return null;
-};
-
-export async function loadConfig({
-  cwd = process.cwd(),
-  path,
-  envMode,
-  meta,
-  loader,
-  command,
-}: LoadConfigOptions): Promise<LoadConfigResult> {
-  const configFilePath = resolveConfigPath(cwd, path);
-
-  if (!configFilePath) {
-    logger.debug('no config file found.');
-    return {
-      content: {} as RslibConfig,
-      filePath: null,
-    };
-  }
-
-  const { content } = await loadRsbuildConfig({
-    cwd: dirname(configFilePath),
-    path: configFilePath,
-    envMode,
-    meta,
-    loader,
-    command,
+export async function loadConfig(
+  options: LoadConfigOptions = {},
+): Promise<LoadConfigResult> {
+  const { content, filePath } = await loadRsbuildConfig({
+    ...options,
+    configFileNames: options.configFileNames ?? RSLIB_CONFIG_FILE_NAMES,
   });
 
-  return { content: content as RslibConfig, filePath: configFilePath };
+  return { content: content as RslibConfig, filePath };
 }
 
 export {

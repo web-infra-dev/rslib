@@ -167,6 +167,86 @@ describe('Should load config file correctly', () => {
       COMMAND: JSON.stringify('build'),
     });
   });
+
+  test('Return empty config when config file is absent', async () => {
+    const fixtureDir = join(__dirname, 'fixtures/config/no-config');
+    const { content: config, filePath } = await loadConfig({ cwd: fixtureDir });
+
+    expect(config).toEqual({});
+    expect(filePath).toBeNull();
+  });
+
+  test('Load config with rslib config file names by default', async () => {
+    const fixtureDir = join(__dirname, 'fixtures/config/cjs');
+    const configFilePath = join(fixtureDir, 'rslib.config.mjs');
+    const { content: config, filePath } = await loadConfig({ cwd: fixtureDir });
+    expect(filePath).toBe(configFilePath);
+    expect(config).toEqual({
+      lib: [],
+      source: {
+        entry: {
+          index: './foo/index.js',
+        },
+      },
+      _privateMeta: {
+        configFilePath,
+      },
+    });
+  });
+
+  test('Load config with custom config file names', async () => {
+    const fixtureDir = join(__dirname, 'fixtures/config/custom-file-names');
+    const configFilePath = join(fixtureDir, 'custom.config.mjs');
+    const { content: config, filePath } = await loadConfig({
+      cwd: fixtureDir,
+      configFileNames: ['custom.config.mjs', 'fallback.config.mjs'],
+    });
+
+    expect(filePath).toBe(configFilePath);
+    expect(config).toEqual({
+      source: {
+        define: {
+          CONFIG_FILE_NAME: JSON.stringify('custom'),
+        },
+      },
+      _privateMeta: {
+        configFilePath,
+      },
+    });
+  });
+
+  test('Load config path before custom config file names', async () => {
+    const fixtureDir = join(__dirname, 'fixtures/config/custom-file-names');
+    const configFilePath = join(fixtureDir, 'fallback.config.mjs');
+    const { content: config, filePath } = await loadConfig({
+      cwd: fixtureDir,
+      path: './fallback.config.mjs',
+      configFileNames: ['custom.config.mjs'],
+    });
+
+    expect(filePath).toBe(configFilePath);
+    expect(config).toEqual({
+      source: {
+        define: {
+          CONFIG_FILE_NAME: JSON.stringify('fallback'),
+        },
+      },
+      _privateMeta: {
+        configFilePath,
+      },
+    });
+  });
+
+  test('Throw error for missing custom config file', async () => {
+    const fixtureDir = join(__dirname, 'fixtures/config/cjs');
+
+    await expect(
+      loadConfig({
+        cwd: fixtureDir,
+        path: './not-found.config.js',
+      }),
+    ).rejects.toThrow('Cannot find config file');
+  });
 });
 
 describe('Should merge Rslib config correctly', () => {

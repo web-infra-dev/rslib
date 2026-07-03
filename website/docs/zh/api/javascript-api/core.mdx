@@ -99,9 +99,23 @@ function loadConfig(params?: {
   cwd?: string;
   // 指定配置文件路径，可以为相对路径或绝对路径
   path?: string;
+  // 未指定 path 时要查找的配置文件名列表
+  configFileNames?: string[];
   meta?: Record<string, unknown>;
   envMode?: string;
+  /**
+   * 传给配置函数的命令。
+   * @default process.argv[2]
+   */
   command?: string;
+  /**
+   * 指定配置文件加载器，可选值为 `auto`、`jiti` 或 `native`。
+   * - 'auto'：优先使用 Node.js 原生加载器，失败后回退到 jiti
+   * - 'jiti'：使用 jiti 作为加载器，开箱支持 TypeScript 和 ESM
+   * - 'native'：使用 Node.js 原生加载器，TypeScript 配置文件需要
+   *   Node.js 22.6+ 等原生 TypeScript 支持。
+   * @default 'auto'
+   */
   loader?: 'auto' | 'jiti' | 'native';
 }): Promise<{
   content: RslibConfig;
@@ -125,6 +139,29 @@ const rslib = await createRslib({
 ```
 
 如果 cwd 目录下不存在 Rslib 配置文件，loadConfig 方法的返回值为 `{ content: {}, filePath: null }`。
+
+未指定 `path` 时，`loadConfig` 会按照以下顺序查找配置文件：
+
+- `rslib.config.mjs`
+- `rslib.config.ts`
+- `rslib.config.js`
+- `rslib.config.cjs`
+- `rslib.config.mts`
+- `rslib.config.cts`
+
+如果同时存在多个配置文件，`loadConfig` 会使用这个列表中第一个匹配到的文件。
+
+### 自定义配置文件名
+
+使用 `configFileNames` 选项可以替换默认的 `rslib.config.*` 配置文件查找列表。文件名会相对于 `cwd` 解析，且指定 `path` 时会忽略该选项。
+
+```ts
+import { loadConfig } from '@rslib/core';
+
+const { content } = await loadConfig({
+  configFileNames: ['framework.config.ts', 'framework.config.mjs'],
+});
+```
 
 ### 指定配置文件
 

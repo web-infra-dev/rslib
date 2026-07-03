@@ -99,9 +99,23 @@ function loadConfig(params?: {
   cwd?: string;
   // Specify the configuration file (relative or absolute path)
   path?: string;
+  // Config file names to search when path is not specified
+  configFileNames?: string[];
   meta?: Record<string, unknown>;
   envMode?: string;
+  /**
+   * The command passed to the config function.
+   * @default process.argv[2]
+   */
   command?: string;
+  /**
+   * Specify the config loader, can be `auto`, `jiti` or `native`.
+   * - 'auto': Use native Node.js loader first, fallback to jiti if failed
+   * - 'jiti': Use jiti as loader, which supports TypeScript and ESM out of the box
+   * - 'native': Use native Node.js loader. TypeScript config files require
+   *   native TypeScript support, such as Node.js 22.6+.
+   * @default 'auto'
+   */
   loader?: 'auto' | 'jiti' | 'native';
 }): Promise<{
   content: RslibConfig;
@@ -125,6 +139,29 @@ const rslib = await createRslib({
 ```
 
 If the Rslib config file does not exist in the cwd directory, the return value of the loadConfig method is `{ content: {}, filePath: null }`.
+
+When `path` is not specified, `loadConfig` searches for config files in the following order:
+
+- `rslib.config.mjs`
+- `rslib.config.ts`
+- `rslib.config.js`
+- `rslib.config.cjs`
+- `rslib.config.mts`
+- `rslib.config.cts`
+
+If multiple config files exist at the same time, `loadConfig` uses the first matching file in this list.
+
+### Customize config file names
+
+Use the `configFileNames` option to replace the default `rslib.config.*` lookup list. The file names are resolved relative to `cwd`, and this option is ignored when `path` is specified.
+
+```ts
+import { loadConfig } from '@rslib/core';
+
+const { content } = await loadConfig({
+  configFileNames: ['framework.config.ts', 'framework.config.mjs'],
+});
+```
 
 ### Specify the configuration file
 
