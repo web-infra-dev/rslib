@@ -2729,16 +2729,6 @@ packages:
       core-js:
         optional: true
 
-  '@rsbuild/core@2.1.3':
-    resolution: {integrity: sha512-R2W+eiuPZhUKU2EGyAtUeJMe8LTvyUKbAKTZRfLoZPbSWslMq4t9wLrJY7xVTB/qlUyRl1d/MeP7otvp1HGapA==}
-    engines: {node: ^20.19.0 || >=22.12.0}
-    hasBin: true
-    peerDependencies:
-      core-js: '>= 3.0.0'
-    peerDependenciesMeta:
-      core-js:
-        optional: true
-
   '@rsbuild/core@2.1.4':
     resolution: {integrity: sha512-kdubx/qB6tXduCdqaW78OULLZJ3ludpuA4mOkDko18THsI1rUy9U34DsaDSnotE8GAvTeme+FX9MnqLEUlg8kQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -9024,13 +9014,6 @@ snapshots:
     transitivePeerDependencies:
       - '@module-federation/runtime-tools'
 
-  '@rsbuild/core@2.1.3(@module-federation/runtime-tools@2.6.0)':
-    dependencies:
-      '@rspack/core': 2.1.2(@module-federation/runtime-tools@2.6.0)(@swc/helpers@0.5.23)
-      '@swc/helpers': 0.5.23
-    transitivePeerDependencies:
-      - '@module-federation/runtime-tools'
-
   '@rsbuild/core@2.1.4(@module-federation/runtime-tools@2.6.0)':
     dependencies:
       '@rspack/core': 2.1.2(@module-federation/runtime-tools@2.6.0)(@swc/helpers@0.5.23)
@@ -9234,8 +9217,8 @@ snapshots:
 
   '@rslib/core@0.23.1(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(@typescript/native-preview@7.0.0-dev.20260701.1)(typescript@6.0.3)':
     dependencies:
-      '@rsbuild/core': 2.1.3(@module-federation/runtime-tools@2.6.0)
-      rsbuild-plugin-dts: 0.23.1(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260701.1)(typescript@6.0.3)
+      '@rsbuild/core': 2.1.4(@module-federation/runtime-tools@2.6.0)
+      rsbuild-plugin-dts: 0.23.1(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.4)(@typescript/native-preview@7.0.0-dev.20260701.1)(typescript@6.0.3)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.9(@types/node@24.13.2)
       typescript: 6.0.3
@@ -13555,10 +13538,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.23.1(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260701.1)(typescript@6.0.3):
+  rsbuild-plugin-dts@0.23.1(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.4)(@typescript/native-preview@7.0.0-dev.20260701.1)(typescript@6.0.3):
     dependencies:
       '@ast-grep/napi': 0.37.0
-      '@rsbuild/core': 2.1.3(@module-federation/runtime-tools@2.6.0)
+      '@rsbuild/core': 2.1.4(@module-federation/runtime-tools@2.6.0)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.9(@types/node@24.13.2)
       '@typescript/native-preview': 7.0.0-dev.20260701.1
