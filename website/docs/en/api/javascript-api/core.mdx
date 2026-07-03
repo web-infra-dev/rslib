@@ -157,15 +157,7 @@ When `path` is not specified, `loadConfig` searches for config files in the foll
 
 If multiple config files exist at the same time, `loadConfig` uses the first matching file in this list.
 
-Most `loadConfig` options follow the same usage as Rsbuild. In Rslib, the default lookup list uses `rslib.config.*`, and the returned `content` is typed as [RslibConfig](/api/javascript-api/types#rslibconfig).
-
-See the Rsbuild documentation for details about these options:
-
-- [Customize config file names](https://rsbuild.rs/api/javascript-api/core#customize-config-file-names): use `configFileNames` to replace the default lookup list.
-- [Specify the configuration file](https://rsbuild.rs/api/javascript-api/core#specify-the-configuration-file): use `path` to load a relative or absolute config file.
-- [Specify the export name](https://rsbuild.rs/api/javascript-api/core#specify-the-export-name): use `exportName` to read a named export, or set it to `false` to execute the config file without reading exports.
-- [Passing meta object](https://rsbuild.rs/api/javascript-api/core#passing-meta-object): pass custom `meta` data to the config function.
-- [Passing command](https://rsbuild.rs/api/javascript-api/core#passing-command): pass a custom `command` value to the config function.
+Most `loadConfig` options follow the same usage as Rsbuild. In Rslib, the default lookup list uses `rslib.config.*`, and the returned `content` is typed as [RslibConfig](/api/javascript-api/types#rslibconfig); see [loadConfig -- Rsbuild](https://rsbuild.rs/api/javascript-api/core#loadconfig) for more usage details.
 
 ## loadEnv
 
