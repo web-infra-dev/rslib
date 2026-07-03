@@ -3,7 +3,7 @@
  * the public API of @rslib/core.
  */
 
-export { runCLI } from './cli';
+export { type RunCLIOptions, runCLI } from './cli';
 export { createRslib } from './createRslib';
 export {
   type ConfigParams,

@@ -2,10 +2,18 @@ import type { LogLevel } from '@rsbuild/core';
 import { isDebug, logger } from '../utils/logger';
 import { setupCommands } from './commands';
 
-function initNodeEnv() {
+export type RunCLIOptions = {
+  /**
+   * The command-line arguments to parse, matching the shape of Node.js `process.argv`
+   * @default process.argv
+   */
+  argv?: string[];
+};
+
+function initNodeEnv(argv: string[]) {
   if (!process.env.NODE_ENV) {
     // defaults to build mode
-    const command = process.argv[2] ?? 'build';
+    const command = argv[2] ?? 'build';
     process.env.NODE_ENV = ['build', 'inspect'].includes(command)
       ? 'production'
       : 'development';
@@ -26,25 +34,25 @@ function showGreeting() {
 }
 
 // ensure log level is set before any log is printed
-function setupLogLevel() {
-  const logLevelIndex = process.argv.findIndex(
+function setupLogLevel(argv: string[]) {
+  const logLevelIndex = argv.findIndex(
     (item) => item === '--log-level' || item === '--logLevel',
   );
   if (logLevelIndex !== -1) {
-    const level = process.argv[logLevelIndex + 1];
+    const level = argv[logLevelIndex + 1];
     if (level && ['warn', 'error', 'silent'].includes(level) && !isDebug()) {
       logger.level = level as LogLevel;
     }
   }
 }
 
-export function runCLI(): void {
-  initNodeEnv();
-  setupLogLevel();
+export function runCLI({ argv = process.argv }: RunCLIOptions = {}): void {
+  initNodeEnv(argv);
+  setupLogLevel(argv);
   showGreeting();
 
   try {
-    setupCommands();
+    setupCommands(argv);
   } catch (err) {
     logger.error('Failed to start Rslib CLI.');
     logger.error(err);

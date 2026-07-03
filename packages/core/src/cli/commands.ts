@@ -86,7 +86,7 @@ const applyCommonOptions = (cli: CAC) => {
     .option('--no-env', 'Disable loading of `.env` files');
 };
 
-export function setupCommands(): void {
+export function setupCommands(argv: string[]): void {
   const cli = cac('rslib');
 
   cli.version(RSLIB_VERSION);
@@ -253,5 +253,5 @@ export function setupCommands(): void {
     }
   });
 
-  cli.parse();
+  cli.parse(argv);
 }
