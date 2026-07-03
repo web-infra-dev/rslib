@@ -5,3 +5,11 @@ export default {
     },
   },
 };
+
+export const namedConfig = {
+  source: {
+    define: {
+      CONFIG_FILE_NAME: JSON.stringify('named'),
+    },
+  },
+};

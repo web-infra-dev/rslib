@@ -117,6 +117,12 @@ function loadConfig(params?: {
    * @default 'auto'
    */
   loader?: 'auto' | 'jiti' | 'native';
+  /**
+   * The export name to read from the config file.
+   * Set to `false` to execute the config file without reading exports.
+   * @default 'default'
+   */
+  exportName?: string | false;
 }): Promise<{
   content: RslibConfig;
   filePath: string | null;
@@ -162,6 +168,20 @@ const { content } = await loadConfig({
   configFileNames: ['framework.config.ts', 'framework.config.mjs'],
 });
 ```
+
+### Specify export name
+
+By default, `loadConfig` reads the default export from the config file. Use the `exportName` option to read a named export instead:
+
+```ts
+import { loadConfig } from '@rslib/core';
+
+const { content } = await loadConfig({
+  exportName: 'rslibConfig',
+});
+```
+
+Set `exportName` to `false` to execute the config file without reading any exports.
 
 ### Specify the configuration file
 

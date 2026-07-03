@@ -22,11 +22,11 @@ export type LoadConfigOptions = RsbuildLoadConfigOptions;
 
 export type ConfigLoader = RsbuildLoadConfigOptions['loader'];
 
-export type LoadConfigResult = {
+export type LoadConfigResult<Config = RslibConfig> = {
   /**
    * The loaded configuration object.
    */
-  content: RslibConfig;
+  content: Config;
   /**
    * The path to the loaded configuration file.
    * Return `null` if the configuration file is not found.
@@ -57,15 +57,15 @@ const RSLIB_CONFIG_FILE_NAMES = [
   'rslib.config.cts',
 ];
 
-export async function loadConfig(
+export async function loadConfig<Config = RslibConfig>(
   options: LoadConfigOptions = {},
-): Promise<LoadConfigResult> {
+): Promise<LoadConfigResult<Config>> {
   const { content, filePath } = await loadRsbuildConfig({
     ...options,
     configFileNames: options.configFileNames ?? RSLIB_CONFIG_FILE_NAMES,
   });
 
-  return { content: content as RslibConfig, filePath };
+  return { content: content as Config, filePath };
 }
 
 export {

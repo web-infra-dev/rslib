@@ -75,11 +75,13 @@ import type { CreateRslibOptions } from '@rslib/core';
 [loadConfig](/api/javascript-api/core#loadconfig) 方法的入参类型。
 
 ```ts twoslash
-import type { LoadConfigOptions } from '@rslib/core';
+import type { LoadConfigOptions, LoadConfigResult } from '@rslib/core';
 
 const options: LoadConfigOptions = {
   configFileNames: ['framework.config.ts'],
 };
+
+let result: LoadConfigResult;
 ```
 
 ## BuildOptions

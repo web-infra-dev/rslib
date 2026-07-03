@@ -117,6 +117,12 @@ function loadConfig(params?: {
    * @default 'auto'
    */
   loader?: 'auto' | 'jiti' | 'native';
+  /**
+   * 从配置文件中读取的导出名称。
+   * 设置为 `false` 时只执行配置文件，不读取任何导出。
+   * @default 'default'
+   */
+  exportName?: string | false;
 }): Promise<{
   content: RslibConfig;
   filePath: string | null;
@@ -162,6 +168,20 @@ const { content } = await loadConfig({
   configFileNames: ['framework.config.ts', 'framework.config.mjs'],
 });
 ```
+
+### 指定导出名称
+
+默认情况下，`loadConfig` 会读取配置文件的默认导出。你可以通过 `exportName` 选项读取命名导出：
+
+```ts
+import { loadConfig } from '@rslib/core';
+
+const { content } = await loadConfig({
+  exportName: 'rslibConfig',
+});
+```
+
+将 `exportName` 设置为 `false` 时，只会执行配置文件，不会读取任何导出。
 
 ### 指定配置文件
 

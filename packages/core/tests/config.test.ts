@@ -237,6 +237,28 @@ describe('Should load config file correctly', () => {
     });
   });
 
+  test('Load config with custom export name', async () => {
+    const fixtureDir = join(__dirname, 'fixtures/config/custom-file-names');
+    const configFilePath = join(fixtureDir, 'custom.config.mjs');
+    const { content: config, filePath } = await loadConfig({
+      cwd: fixtureDir,
+      path: './custom.config.mjs',
+      exportName: 'namedConfig',
+    });
+
+    expect(filePath).toBe(configFilePath);
+    expect(config).toEqual({
+      source: {
+        define: {
+          CONFIG_FILE_NAME: JSON.stringify('named'),
+        },
+      },
+      _privateMeta: {
+        configFilePath,
+      },
+    });
+  });
+
   test('Throw error for missing custom config file', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/cjs');
 
