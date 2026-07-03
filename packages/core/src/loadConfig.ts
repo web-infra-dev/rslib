@@ -1,6 +1,6 @@
 import {
   loadConfig as loadRsbuildConfig,
-  type LoadConfigOptions as RsbuildLoadConfigOptions,
+  type LoadConfigOptions,
 } from '@rsbuild/core';
 import type { RslibConfig } from './types';
 
@@ -18,9 +18,7 @@ export type RslibConfigAsyncFn = (env: ConfigParams) => Promise<RslibConfig>;
 export type RslibConfigExport =
   RslibConfig | RslibConfigSyncFn | RslibConfigAsyncFn;
 
-export type LoadConfigOptions = RsbuildLoadConfigOptions;
-
-export type ConfigLoader = RsbuildLoadConfigOptions['loader'];
+export type ConfigLoader = LoadConfigOptions['loader'];
 
 export type LoadConfigResult<Config = RslibConfig> = {
   /**
@@ -69,6 +67,7 @@ export async function loadConfig<Config = RslibConfig>(
 }
 
 export {
+  type LoadConfigOptions,
   type LoadEnvOptions,
   type LoadEnvResult,
   loadEnv,
