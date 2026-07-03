@@ -9,7 +9,7 @@ import {
 import type { Format, Syntax } from '../types';
 import { color } from '../utils/color';
 import { logger } from '../utils/logger';
-import { init } from './init';
+import { init, initCliAction } from './init';
 
 const RSPACK_BUILD_ERROR = 'Rspack build failed.';
 
@@ -142,9 +142,10 @@ export function setupCommands(argv: string[]): void {
       'use specific tsconfig (relative to project root)',
     )
     .action(async (options: BuildOptions) => {
+      initCliAction('build', options);
       try {
         const cliBuild = async () => {
-          const rslib = await init(options);
+          const rslib = await init();
 
           if (options.watch) {
             watchFilesForRestart(getWatchFilesForRestart(rslib), async () => {
@@ -185,8 +186,9 @@ export function setupCommands(argv: string[]): void {
     })
     .option('--verbose', 'show full function definitions in output')
     .action(async (options: InspectOptions) => {
+      initCliAction('inspect', options);
       try {
-        const rslib = await init(options);
+        const rslib = await init();
         await rslib.inspectConfig({
           lib: options.lib,
           mode: options.mode,
@@ -202,9 +204,10 @@ export function setupCommands(argv: string[]): void {
     });
 
   mfDevCommand.action(async (options: MfDevOptions) => {
+    initCliAction('mf-dev', options);
     try {
       const cliMfDev = async () => {
-        const rslib = await init(options);
+        const rslib = await init();
         await rslib.startMFDevServer({
           lib: options.lib,
         });

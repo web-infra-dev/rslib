@@ -101,6 +101,7 @@ function loadConfig(params?: {
   path?: string;
   meta?: Record<string, unknown>;
   envMode?: string;
+  command?: string;
   loader?: 'auto' | 'jiti' | 'native';
 }): Promise<{
   content: RslibConfig;
@@ -159,6 +160,18 @@ const { content } = await loadConfig({
 export default defineConfig(({ meta }) => {
   console.log(meta.foo); // bar
   return config;
+});
+```
+
+### 传入 command
+
+默认情况下，`loadConfig` 会将 `process.argv[2]` 作为 `command` 传给配置函数。你可以通过 `command` 选项显式设置该值。
+
+```ts
+import { loadConfig } from '@rslib/core';
+
+const { content } = await loadConfig({
+  command: 'build',
 });
 ```
 

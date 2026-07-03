@@ -20,13 +20,11 @@ export type RslibConfigSyncFn = (env: ConfigParams) => RslibConfig;
 export type RslibConfigAsyncFn = (env: ConfigParams) => Promise<RslibConfig>;
 
 export type RslibConfigExport =
-  | RslibConfig
-  | RslibConfigSyncFn
-  | RslibConfigAsyncFn;
+  RslibConfig | RslibConfigSyncFn | RslibConfigAsyncFn;
 
 export type LoadConfigOptions = Pick<
   RsbuildLoadConfigOptions,
-  'cwd' | 'path' | 'envMode' | 'meta' | 'loader'
+  'cwd' | 'path' | 'envMode' | 'meta' | 'loader' | 'command'
 >;
 
 export type ConfigLoader = RsbuildLoadConfigOptions['loader'];
@@ -101,6 +99,7 @@ export async function loadConfig({
   envMode,
   meta,
   loader,
+  command,
 }: LoadConfigOptions): Promise<LoadConfigResult> {
   const configFilePath = resolveConfigPath(cwd, path);
 
@@ -118,6 +117,7 @@ export async function loadConfig({
     envMode,
     meta,
     loader,
+    command,
   });
 
   return { content: content as RslibConfig, filePath: configFilePath };
