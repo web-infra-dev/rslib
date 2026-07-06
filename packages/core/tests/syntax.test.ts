@@ -33,8 +33,8 @@ describe('ESX_TO_BROWSERSLIST', () => {
     );
   });
 
-  test('es2023/es2024/es2025 must not sit below SWC downleveled syntax', () => {
-    // SWC only downlevels one post-ES2022 syntax: the RegExp `v` flag (ES2024).
+  test('es2023/es2024/es2025 must not sit below SWC down-leveled syntax', () => {
+    // SWC only down-levels one post-ES2022 syntax: the RegExp `v` flag (ES2024).
     const unicodeSetsRegex: Record<string, string> = {
       chrome: '112',
       edge: '112',
