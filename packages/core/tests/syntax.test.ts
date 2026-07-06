@@ -29,14 +29,27 @@ describe('ESX_TO_BROWSERSLIST', () => {
   test('some ECMA version queries should be the same', () => {
     expect(ESX_TO_BROWSERSLIST.es6).toStrictEqual(ESX_TO_BROWSERSLIST.es2015);
     expect(ESX_TO_BROWSERSLIST.es2023).toStrictEqual(
-      ESX_TO_BROWSERSLIST.es2022,
+      ESX_TO_BROWSERSLIST.es2024,
     );
-    expect(ESX_TO_BROWSERSLIST.es2024).toStrictEqual(
-      ESX_TO_BROWSERSLIST.es2022,
-    );
-    expect(ESX_TO_BROWSERSLIST.es2025).toStrictEqual(
-      ESX_TO_BROWSERSLIST.es2022,
-    );
+  });
+
+  test('es2023/es2024/es2025 must not sit below SWC downleveled syntax', () => {
+    // SWC only downlevels one post-ES2022 syntax: the RegExp `v` flag (ES2024).
+    const unicodeSetsRegex: Record<string, string> = {
+      chrome: '112',
+      edge: '112',
+      firefox: '116',
+      ios: '17',
+      node: '20',
+      safari: '17',
+    };
+
+    for (const version of ['es2023', 'es2024', 'es2025'] as const) {
+      const baseline = ESX_TO_BROWSERSLIST[version] as Record<string, string>;
+      for (const [engine, min] of Object.entries(unicodeSetsRegex)) {
+        expect(compareSemver(baseline[engine]!, min)).toBeGreaterThanOrEqual(0);
+      }
+    }
   });
 
   test('ECMA version mapped browserslist queries should increments', () => {
@@ -51,6 +64,9 @@ describe('ESX_TO_BROWSERSLIST', () => {
       'es2020',
       'es2021',
       'es2022',
+      'es2023',
+      'es2024',
+      'es2025',
     ];
 
     for (let i = 1; i < sortedVersions.length; i++) {
@@ -97,6 +113,30 @@ describe('transformSyntaxToBrowserslist', () => {
       ]
     `);
 
+    expect(transformSyntaxToBrowserslist('es2024', 'web'))
+      .toMatchInlineSnapshot(`
+      [
+        "chrome >= 112",
+        "edge >= 112",
+        "firefox >= 116",
+        "ios >= 17",
+        "node >= 20",
+        "safari >= 17",
+      ]
+    `);
+
+    expect(transformSyntaxToBrowserslist('es2025', 'web'))
+      .toMatchInlineSnapshot(`
+      [
+        "chrome >= 126",
+        "edge >= 126",
+        "firefox >= 132",
+        "ios >= 17.4",
+        "node >= 23",
+        "safari >= 17.4",
+      ]
+    `);
+
     const web = transformSyntaxToBrowserslist('esnext', 'web');
     const webWorker = transformSyntaxToBrowserslist('esnext', 'web-worker');
     expect(web).toStrictEqual(webWorker);
@@ -117,8 +157,8 @@ describe('transformSyntaxToBrowserslist', () => {
         "last 1 node versions",
       ]
     `);
-    expect(transformSyntaxToBrowserslist('es2025', 'web')).toStrictEqual(
-      transformSyntaxToBrowserslist('es2022', 'web'),
+    expect(transformSyntaxToBrowserslist('es2023', 'web')).toStrictEqual(
+      transformSyntaxToBrowserslist('es2024', 'web'),
     );
   });
 

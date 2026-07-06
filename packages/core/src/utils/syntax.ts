@@ -123,15 +123,29 @@ export const ESX_TO_BROWSERSLIST: Record<
       node: '16.11',
       safari: '16.4',
     },
-    // ES2023/ES2024/ES2025 did not introduce new ECMA syntax, so map them to ES2022.
-    get es2023() {
-      return ESX_TO_BROWSERSLIST.es2022;
+    es2023: {
+      chrome: '112',
+      edge: '112',
+      firefox: '116',
+      ios: '17',
+      node: '20',
+      safari: '17',
     },
-    get es2024() {
-      return ESX_TO_BROWSERSLIST.es2022;
+    es2024: {
+      chrome: '112',
+      edge: '112',
+      firefox: '116',
+      ios: '17',
+      node: '20',
+      safari: '17',
     },
-    get es2025() {
-      return ESX_TO_BROWSERSLIST.es2022;
+    es2025: {
+      chrome: '126',
+      edge: '126',
+      firefox: '132',
+      ios: '17.4',
+      node: '23',
+      safari: '17.4',
     },
     esnext: calcEsnextBrowserslistByTarget,
   } as const;
