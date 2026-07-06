@@ -38,8 +38,9 @@ const RSPACK_TARGET_UNLISTED_MODERN_ECMA_VERSIONS: EcmaScriptVersion[] = [
 ] satisfies EcmaScriptVersion[];
 
 /**
- * The esX to browserslist mapping is transformed from
- * https://github.com/rstackjs/browserslist-to-es-version
+ * The esX to browserslist mapping is calculated from feature groups based on
+ * SWC EsVersion::caniuse, then backfilled to browserslist versions via
+ * Babel/SWC compat-data.
  */
 export const ESX_TO_BROWSERSLIST: Record<
   FixedEcmaVersions,
