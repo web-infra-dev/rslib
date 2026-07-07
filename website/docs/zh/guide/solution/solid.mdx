@@ -75,7 +75,7 @@ Solid 组件库通常同时发布两种产物：
 - **预编译产物**：已经用 `babel-preset-solid` 将 JSX 编译成 Solid 运行时调用（如 `template()`、`insert()`）的 ESM 文件。构建工具（如 Rsbuild 或 Vite）可以直接使用，无需额外安装 Solid 相关插件。
 - **保留 JSX 的源码产物**：不做 Solid 编译，只保留原始 JSX 语法的 ESM 文件，通过 `package.json` 的 `"solid"` 导出条件暴露出来。
 
-安装了 `@rsbuild/plugin-solid`（或其他 Solid 打包器插件）的下游项目，会命中 `"solid"` 导出条件、拿到 JSX 源码，然后根据自己的运行环境重新编译——浏览器端应用编译为客户端 DOM 渲染代码（`generate: 'dom'`），SSR 框架编译为服务端字符串渲染代码（`generate: 'ssr'`）。没有 Solid 插件的项目则回退到预编译的 `"import"` 入口。
+能够编译 Solid JSX 的下游项目（如安装了 `@rsbuild/plugin-solid` 的 Rsbuild 项目），会命中 `"solid"` 导出条件、拿到 JSX 源码，然后根据自己的运行环境重新编译——浏览器端应用编译为客户端 DOM 渲染代码（`generate: 'dom'`），SSR 框架编译为服务端字符串渲染代码（`generate: 'ssr'`）。没有 Solid 插件的项目则回退到预编译的 `"import"` 入口。
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
