@@ -169,7 +169,7 @@ export default defineConfig({
 
 大多数 Solid 组件库默认不会单独发布 SSR 构建。下游框架通常会解析 `"solid"` condition names，拿到保留 JSX 的源码输出，再按自己的目标编译。
 
-如果你确实需要预编译的 SSR 产物，可以使用 `pluginSolid({ solid: { generate: 'ssr' } })`：
+如果你确实需要预编译的 SSR 产物，可以通过 `pluginSolid` 的 `solid.generate` 选项配置为 `'ssr'`：
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
