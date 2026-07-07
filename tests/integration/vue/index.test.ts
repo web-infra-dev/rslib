@@ -1,7 +1,23 @@
+import { beforeAll, describe, expect, test } from '@rstest/core';
 import { platform } from 'node:os';
 import { join } from 'node:path';
-import { beforeAll, describe, expect, test } from '@rstest/core';
 import { buildAndGetResults, type BuildResult } from 'test-helper';
+
+const normalizeVueModuleIds = (contents: Record<string, string>) =>
+  Object.fromEntries(
+    Object.entries(contents).map(([file, content]) => [
+      file,
+      content
+        .replace(
+          /(\n\s*)\d+(?= \(__unused_rspack_module, exports\) \{)/g,
+          '$1<MODULE_ID>',
+        )
+        .replace(
+          /__webpack_require__\("?\d+"?\)/g,
+          '__webpack_require__("<MODULE_ID>")',
+        ),
+    ]),
+  );
 
 // '__file' path can't be normalized on win32.
 describe.runIf(platform() !== 'win32')('ESM', async () => {
@@ -19,7 +35,8 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
   });
 
   test('bundle', async () => {
-    expect(jsResult.contents.esm1).toMatchInlineSnapshot(`
+    expect(normalizeVueModuleIds(jsResult.contents.esm1!))
+      .toMatchInlineSnapshot(`
       {
         "<ROOT>/tests/integration/vue/dist/bundle/index.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
       var __webpack_modules__ = {};
@@ -40,7 +57,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
           };
       })();
       __webpack_require__.add({
-          265 (__unused_rspack_module, exports) {
+          <MODULE_ID> (__unused_rspack_module, exports) {
               exports.A = (sfc, props)=>{
                   const target = sfc.__vccOpts || sfc;
                   for (const [key, val] of props)target[key] = val;
@@ -58,7 +75,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
               return (_ctx, _cache)=>(openBlock(), createElementBlock("p", _hoisted_1, toDisplayString(button.value), 1));
           }
       };
-      const exportHelper = __webpack_require__("265");
+      const exportHelper = __webpack_require__("<MODULE_ID>");
       const __exports__ = /*#__PURE__*/ (0, exportHelper.A)(Buttonvue_type_script_setup_true_lang_js, [
           [
               '__scopeId',
@@ -105,14 +122,15 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
   });
 
   test('bundleless', async () => {
-    expect(jsResult.contents.esm0).toMatchInlineSnapshot(`
+    expect(normalizeVueModuleIds(jsResult.contents.esm0!))
+      .toMatchInlineSnapshot(`
       {
         "<ROOT>/tests/integration/vue/dist/bundleless/Button/Button.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
       import "./style.css";
       import "./Button.css";
       import { __webpack_require__ } from "../rslib-runtime.js";
       __webpack_require__.add({
-          265 (__unused_rspack_module, exports) {
+          <MODULE_ID> (__unused_rspack_module, exports) {
               exports.A = (sfc, props)=>{
                   const target = sfc.__vccOpts || sfc;
                   for (const [key, val] of props)target[key] = val;
@@ -130,7 +148,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
               return (_ctx, _cache)=>(openBlock(), createElementBlock("p", _hoisted_1, toDisplayString(button.value), 1));
           }
       };
-      const exportHelper = __webpack_require__("265");
+      const exportHelper = __webpack_require__("<MODULE_ID>");
       const __exports__ = /*#__PURE__*/ (0, exportHelper.A)(Buttonvue_type_script_setup_true_lang_js, [
           [
               '__scopeId',
