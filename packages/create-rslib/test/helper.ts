@@ -24,6 +24,7 @@ export const expectPackageJson = (
   expect(pkgJson.scripts['test:watch']).toBe('rstest --watch');
   expect(pkgJson.devDependencies['@rstest/adapter-rslib']).toBeTruthy();
   expect(pkgJson.devDependencies['@rstest/core']).toBeTruthy();
+  expect(pkgJson.publishConfig?.access).toBe('public');
 };
 
 export interface TemplateCase {
@@ -181,21 +182,11 @@ export const createAndValidate = (
     expect(pkgJson.devDependencies['react-dom']).toBeTruthy();
 
     if (templateCase.tools.includes('react-compiler')) {
-      expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeTruthy();
-      expect(
-        pkgJson.devDependencies['babel-plugin-react-compiler'],
-      ).toBeTruthy();
-      expect(configContent).toContain('pluginBabel');
-      expect(configContent).toContain('babel-plugin-react-compiler');
+      expect(configContent).toContain('reactCompiler');
       expect(pkgJson.peerDependencies.react).toBe('>=19.0.0');
       expect(pkgJson.peerDependencies['react-dom']).toBe('>=19.0.0');
     } else {
-      expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeFalsy();
-      expect(
-        pkgJson.devDependencies['babel-plugin-react-compiler'],
-      ).toBeFalsy();
-      expect(configContent).not.toContain('pluginBabel');
-      expect(configContent).not.toContain('babel-plugin-react-compiler');
+      expect(configContent).not.toContain('reactCompiler');
       expect(pkgJson.peerDependencies.react).toBe('>=16.14.0');
       expect(pkgJson.peerDependencies['react-dom']).toBe('>=16.14.0');
     }

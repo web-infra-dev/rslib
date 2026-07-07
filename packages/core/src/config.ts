@@ -1,5 +1,3 @@
-import fs from 'node:fs';
-import path, { dirname, extname, join } from 'node:path';
 import {
   defineConfig as defineRsbuildConfig,
   type EnvironmentConfig,
@@ -12,6 +10,8 @@ import {
   rspack,
   type ToolsConfig,
 } from '@rsbuild/core';
+import fs from 'node:fs';
+import path, { dirname, extname, join } from 'node:path';
 import { composeAssetConfig } from './asset/assetConfig';
 import {
   DTS_EXTENSIONS_PATTERN,
@@ -547,7 +547,7 @@ const composeFormatConfig = ({
 
   // The built-in Rslib plugin will apply to all formats except the `mf` format.
   // The `mf` format functions more like an application than a library and requires additional webpack runtime.
-  const plugins = [
+  const rspackPlugins = [
     new rspack.experiments.RslibPlugin({
       interceptApiPlugin: true,
       forceNodeShims: enabledShims.esm.__dirname || enabledShims.esm.__filename,
@@ -558,6 +558,7 @@ const composeFormatConfig = ({
   switch (format) {
     case 'esm':
       return {
+        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
         output: {
           filenameHash: false,
         },
@@ -595,12 +596,13 @@ const composeFormatConfig = ({
               chunkLoading: 'import',
               workerChunkLoading: 'import',
             },
-            plugins,
+            plugins: rspackPlugins,
           },
         },
       };
     case 'cjs':
       return {
+        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
         output: {
           module: false,
           filenameHash: false,
@@ -631,7 +633,7 @@ const composeFormatConfig = ({
               chunkLoading: 'require',
               workerChunkLoading: 'async-node',
             },
-            plugins,
+            plugins: rspackPlugins,
           },
         },
       };
@@ -643,6 +645,7 @@ const composeFormatConfig = ({
       }
 
       const config: EnvironmentConfig = {
+        plugins: [modifyRsbuildDefaultPlugin()],
         output: {
           module: false,
           filenameHash: false,
@@ -671,7 +674,7 @@ const composeFormatConfig = ({
               nodeEnv: process.env.NODE_ENV,
               splitChunks: false,
             },
-            plugins,
+            plugins: rspackPlugins,
           },
         },
       };
@@ -686,6 +689,7 @@ const composeFormatConfig = ({
       }
 
       const config: EnvironmentConfig = {
+        plugins: [modifyRsbuildDefaultPlugin()],
         output: {
           module: false,
           filenameHash: false,
@@ -719,7 +723,7 @@ const composeFormatConfig = ({
               nodeEnv: process.env.NODE_ENV,
               splitChunks: false,
             },
-            plugins,
+            plugins: rspackPlugins,
           },
         },
       };
@@ -734,6 +738,7 @@ const composeFormatConfig = ({
       }
 
       return {
+        plugins: [modifyRsbuildDefaultPlugin()],
         dev: {
           writeToDisk: true,
         },
@@ -761,31 +766,52 @@ const composeFormatConfig = ({
   }
 };
 
-const disableUrlParseRsbuildPlugin = (): RsbuildPlugin => ({
-  name: 'rsbuild:disable-url-parse',
+const modifyRsbuildDefaultPlugin = ({
+  disableUrlParse,
+}: {
+  disableUrlParse?: boolean;
+} = {}): RsbuildPlugin => ({
+  name: 'rslib:modify-rsbuild-default',
   setup(api) {
-    api.modifyBundlerChain((config, { CHAIN_ID }) => {
+    api.modifyBundlerChain((chain, { CHAIN_ID, target }) => {
+      // Part 1: disable URL parsing for library output.
       // Fix for https://github.com/web-infra-dev/rslib/issues/499.
-      // Prevent parsing and try bundling `new URL()` in ESM format.
-      config.module
-        .rule(CHAIN_ID.RULE.JS)
-        .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
-        .parser({
-          url: false,
-        });
-    });
-  },
-});
+      // Prevent parsing and try bundling `new URL()` in ESM/CJS format.
+      if (disableUrlParse) {
+        chain.module
+          .rule(CHAIN_ID.RULE.JS)
+          .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
+          .parser({
+            url: false,
+          });
+      }
 
-// Port https://github.com/web-infra-dev/rsbuild/pull/5955 before it merged into Rsbuild.
-const fixJsModuleTypePlugin = (): RsbuildPlugin => ({
-  name: 'rsbuild:fix-js-module-type',
-  setup(api) {
-    api.modifyBundlerChain((config, { CHAIN_ID }) => {
-      config.module
+      // Part 2: remove Rsbuild's `type: 'javascript/auto'` override.
+      // Rslib follows Rspack's original module type inference, so ESM-like
+      // modules are treated as strict ESM (`javascript/esm`).
+      chain.module
         .rule(CHAIN_ID.RULE.JS)
         .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
         .delete('type');
+
+      // Part 3: reset Rsbuild's const environment override.
+      // Rsbuild disables `const` for web-like app runtimes. Rslib should
+      // leave this to Rspack's target inference for library output.
+      if (target !== 'web' && target !== 'web-worker') {
+        return;
+      }
+
+      const environment = chain.output.get('environment');
+
+      if (!environment || environment.const !== false) {
+        return;
+      }
+
+      delete environment.const;
+
+      if (Object.keys(environment).length === 0) {
+        chain.output.delete('environment');
+      }
     });
   },
 });
@@ -907,29 +933,21 @@ const composeShimsConfig = (
             },
           },
         },
-        plugins: [
-          resolvedShims.esm.require && pluginEsmRequireShim(),
-          disableUrlParseRsbuildPlugin(),
-          fixJsModuleTypePlugin(),
-        ].filter(Boolean),
+        plugins: [resolvedShims.esm.require && pluginEsmRequireShim()].filter(
+          Boolean,
+        ),
       };
       break;
     }
     case 'cjs':
       rsbuildConfig = {
-        plugins: [
-          pluginCjsShims(resolvedShims.cjs),
-          disableUrlParseRsbuildPlugin(),
-          fixJsModuleTypePlugin(),
-        ].filter(Boolean),
+        plugins: [pluginCjsShims(resolvedShims.cjs)],
       };
       break;
     case 'umd':
     case 'iife':
     case 'mf':
-      rsbuildConfig = {
-        plugins: [fixJsModuleTypePlugin()],
-      };
+      rsbuildConfig = {};
       break;
     default:
       throw new Error(`Unsupported format: ${format}`);
@@ -1117,7 +1135,9 @@ const composeSyntaxConfig = (
   return {
     tools: {
       rspack: (config) => {
-        config.target = ['es2022'];
+        // Default syntax is esnext (no downgrade), while Rspack target requires
+        // a fixed ES version.
+        config.target = ['es2025'];
         return config;
       },
     },

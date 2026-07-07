@@ -4,11 +4,11 @@ export default defineConfig({
   lib: [
     {
       format: 'esm',
-      syntax: ['node 18'],
+      syntax: ['node 22'],
     },
     {
       format: 'cjs',
-      syntax: ['node 18'],
+      syntax: ['node 22'],
     },
   ],
 });
