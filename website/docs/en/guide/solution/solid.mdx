@@ -1,5 +1,5 @@
 ---
-description: 'Build Solid component libraries with Rslib using compiled and source JSX outputs, the "solid" export condition, and declaration generation.'
+description: 'Build Solid component libraries with Rslib using compiled and source JSX outputs, the "solid" condition name, and declaration generation.'
 ---
 
 # Solid
@@ -73,9 +73,9 @@ export default defineConfig({
 Solid component libraries conventionally ship two outputs:
 
 - **Pre-compiled output**: JSX has already been transformed by `babel-preset-solid` into Solid runtime calls (`template()`, `insert()`, etc.). Build tools like Rsbuild or Vite can consume it directly, without installing a Solid plugin.
-- **JSX source output**: keeps the original JSX syntax untouched, exposed through the `"solid"` export condition in `package.json`.
+- **JSX source output**: keeps the original JSX syntax untouched, exposed through the `"solid"` condition name in `package.json`.
 
-Downstream projects that can compile Solid JSX (such as an Rsbuild project with `@rsbuild/plugin-solid` installed) hit the `"solid"` condition, receive the raw JSX, and recompile it for their own runtime — browser apps compile it into client-side DOM rendering code (`generate: 'dom'`), while SSR frameworks compile it into server-side string rendering code (`generate: 'ssr'`). Projects without a Solid plugin fall back to the pre-compiled `"import"` entry.
+Downstream projects that can compile Solid JSX (such as an Rsbuild project with `@rsbuild/plugin-solid` installed) hit the `"solid"` condition name, receive the raw JSX, and recompile it for their own runtime — browser apps compile it into client-side DOM rendering code (`generate: 'dom'`), while SSR frameworks compile it into server-side string rendering code (`generate: 'ssr'`). Projects without a Solid plugin fall back to the pre-compiled `"import"` entry.
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -167,7 +167,7 @@ For Solid projects using TypeScript, set `"jsx": "preserve"` and `"jsxImportSour
 
 ## SSR
 
-Most Solid component libraries do not publish a separate SSR build by default. Instead, downstream frameworks resolve the `"solid"` condition, get the preserved JSX output, and compile it for their own target.
+Most Solid component libraries do not publish a separate SSR build by default. Instead, downstream frameworks resolve the `"solid"` condition name, get the preserved JSX output, and compile it for their own target.
 
 If you intentionally need a pre-compiled SSR output, configure `pluginSolid` with the `solid.generate` option set to `'ssr'`:
 
