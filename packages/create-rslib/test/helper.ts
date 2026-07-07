@@ -167,8 +167,8 @@ export const createAndValidate = (
       expect(pkgJson.peerDependencies['react-dom']).toBe('>=19.0.0');
     } else {
       expect(configContent).not.toContain('reactCompiler');
-      expect(pkgJson.peerDependencies.react).toBe('>=16.14.0');
-      expect(pkgJson.peerDependencies['react-dom']).toBe('>=16.14.0');
+      expect(pkgJson.peerDependencies.react).toBe('>=18.0.0');
+      expect(pkgJson.peerDependencies['react-dom']).toBe('>=18.0.0');
     }
   }
 
