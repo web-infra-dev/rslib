@@ -54,7 +54,7 @@ export default defineConfig({
 
 React introduced a [new JSX transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html) in version 17. This new transform removes the need to import `React` when using JSX.
 
-By default, Rslib uses the new JSX transform, which is `runtime: 'automatic'`. It requires at least React `16.14.0` or higher and the `peerDependencies` should be specified as `"react": ">=16.14.0"`.
+By default, Rslib uses the new JSX transform, which is `runtime: 'automatic'`. The automatic runtime itself requires React `16.14.0` or higher, but the Rslib React templates use React `18.0.0` or higher as the peer dependency baseline, so `peerDependencies` should be specified as `"react": ">=18.0.0"` and `"react-dom": ">=18.0.0"`.
 
 To change the JSX transform, you can set the [swcReactOptions](https://rsbuild.rs/plugins/list/plugin-react#swcreactoptionsruntime) option in `@rsbuild/plugin-react`.
 
