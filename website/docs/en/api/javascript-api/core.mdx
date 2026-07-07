@@ -99,9 +99,30 @@ function loadConfig(params?: {
   cwd?: string;
   // Specify the configuration file (relative or absolute path)
   path?: string;
+  // Config file names to search when path is not specified
+  configFileNames?: string[];
   meta?: Record<string, unknown>;
   envMode?: string;
+  /**
+   * The command passed to the config function.
+   * @default process.argv[2]
+   */
+  command?: string;
+  /**
+   * Specify the config loader, can be `auto`, `jiti` or `native`.
+   * - 'auto': Use native Node.js loader first, fallback to jiti if failed
+   * - 'jiti': Use jiti as loader, which supports TypeScript and ESM out of the box
+   * - 'native': Use native Node.js loader. TypeScript config files require
+   *   native TypeScript support, such as Node.js 22.6+.
+   * @default 'auto'
+   */
   loader?: 'auto' | 'jiti' | 'native';
+  /**
+   * The export name to read from the config file.
+   * Set to `false` to execute the config file without reading exports.
+   * @default 'default'
+   */
+  exportName?: string | false;
 }): Promise<{
   content: RslibConfig;
   filePath: string | null;
@@ -125,42 +146,18 @@ const rslib = await createRslib({
 
 If the Rslib config file does not exist in the cwd directory, the return value of the loadConfig method is `{ content: {}, filePath: null }`.
 
-### Specify the configuration file
+When `path` is not specified, `loadConfig` searches for config files in the following order:
 
-Use the `path` option to load the `my-config.ts` configuration file:
+- `rslib.config.mjs`
+- `rslib.config.ts`
+- `rslib.config.js`
+- `rslib.config.cjs`
+- `rslib.config.mts`
+- `rslib.config.cts`
 
-```ts
-import { join } from 'node:path';
-import { loadConfig } from '@rslib/core';
+If multiple config files exist at the same time, `loadConfig` uses the first matching file in this list.
 
-const { content } = await loadConfig({
-  path: join(__dirname, 'my-config.ts'),
-});
-```
-
-### Passing meta object
-
-Load the configuration file and pass in a custom meta object:
-
-```ts
-import { join } from 'node:path';
-import { loadConfig } from '@rslib/core';
-
-const { content } = await loadConfig({
-  meta: {
-    foo: 'bar',
-  },
-});
-```
-
-In the `defineConfig` configuration function, you can access the `foo` variable through the `meta` object:
-
-```ts title="rslib.config.ts"
-export default defineConfig(({ meta }) => {
-  console.log(meta.foo); // bar
-  return config;
-});
-```
+Most `loadConfig` options follow the same usage as Rsbuild. In Rslib, the default lookup list uses `rslib.config.*`, and the returned `content` is typed as [RslibConfig](/api/javascript-api/types#rslibconfig); see [loadConfig -- Rsbuild](https://rsbuild.rs/api/javascript-api/core#loadconfig) for more usage details.
 
 ## loadEnv
 

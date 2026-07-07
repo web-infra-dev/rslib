@@ -487,6 +487,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           not: 'url'
         },
         oneOf: [
+          /* config.module.rule('css').oneOf('css-text') */
+          {
+            'with': {
+              type: 'text'
+            },
+            type: 'asset/source'
+          },
           /* config.module.rule('css').oneOf('css-url') */
           {
             resourceQuery: /[?&]url(?:&|=|$)/,
@@ -641,6 +648,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               }
             ]
           },
+          /* config.module.rule('js').oneOf('js-text') */
+          {
+            'with': {
+              type: 'text'
+            },
+            type: 'asset/source'
+          },
           /* config.module.rule('js').oneOf('js-raw') */
           {
             resourceQuery: /[?&]raw(?:&|=|$)/,
@@ -755,6 +769,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('image').oneOf('image-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('image').oneOf('image-asset-raw') */
           {
             type: 'asset/source',
@@ -807,6 +828,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
           },
           /* config.module.rule('svg').oneOf('svg-asset-raw') */
           {
@@ -863,6 +891,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('media').oneOf('media-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('media').oneOf('media-asset-raw') */
           {
             type: 'asset/source',
@@ -916,6 +951,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('font').oneOf('font-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('font').oneOf('font-asset-raw') */
           {
             type: 'asset/source',
@@ -956,6 +998,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       {
         test: /\\.json$/i,
         oneOf: [
+          /* config.module.rule('json').oneOf('json-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('json').oneOf('json-asset-raw') */
           {
             type: 'asset/source',
@@ -1266,6 +1315,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           not: 'url'
         },
         oneOf: [
+          /* config.module.rule('css').oneOf('css-text') */
+          {
+            'with': {
+              type: 'text'
+            },
+            type: 'asset/source'
+          },
           /* config.module.rule('css').oneOf('css-url') */
           {
             resourceQuery: /[?&]url(?:&|=|$)/,
@@ -1420,6 +1476,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               }
             ]
           },
+          /* config.module.rule('js').oneOf('js-text') */
+          {
+            'with': {
+              type: 'text'
+            },
+            type: 'asset/source'
+          },
           /* config.module.rule('js').oneOf('js-raw') */
           {
             resourceQuery: /[?&]raw(?:&|=|$)/,
@@ -1534,6 +1597,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('image').oneOf('image-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('image').oneOf('image-asset-raw') */
           {
             type: 'asset/source',
@@ -1586,6 +1656,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
           },
           /* config.module.rule('svg').oneOf('svg-asset-raw') */
           {
@@ -1642,6 +1719,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('media').oneOf('media-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('media').oneOf('media-asset-raw') */
           {
             type: 'asset/source',
@@ -1695,6 +1779,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('font').oneOf('font-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('font').oneOf('font-asset-raw') */
           {
             type: 'asset/source',
@@ -1735,6 +1826,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       {
         test: /\\.json$/i,
         oneOf: [
+          /* config.module.rule('json').oneOf('json-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('json').oneOf('json-asset-raw') */
           {
             type: 'asset/source',
@@ -2027,6 +2125,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           not: 'url'
         },
         oneOf: [
+          /* config.module.rule('css').oneOf('css-text') */
+          {
+            'with': {
+              type: 'text'
+            },
+            type: 'asset/source'
+          },
           /* config.module.rule('css').oneOf('css-url') */
           {
             resourceQuery: /[?&]url(?:&|=|$)/,
@@ -2181,6 +2286,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               }
             ]
           },
+          /* config.module.rule('js').oneOf('js-text') */
+          {
+            'with': {
+              type: 'text'
+            },
+            type: 'asset/source'
+          },
           /* config.module.rule('js').oneOf('js-raw') */
           {
             resourceQuery: /[?&]raw(?:&|=|$)/,
@@ -2292,6 +2404,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('image').oneOf('image-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('image').oneOf('image-asset-raw') */
           {
             type: 'asset/source',
@@ -2327,6 +2446,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
           },
           /* config.module.rule('svg').oneOf('svg-asset-raw') */
           {
@@ -2364,6 +2490,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('media').oneOf('media-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('media').oneOf('media-asset-raw') */
           {
             type: 'asset/source',
@@ -2400,6 +2533,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('font').oneOf('font-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('font').oneOf('font-asset-raw') */
           {
             type: 'asset/source',
@@ -2423,6 +2563,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       {
         test: /\\.json$/i,
         oneOf: [
+          /* config.module.rule('json').oneOf('json-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('json').oneOf('json-asset-raw') */
           {
             type: 'asset/source',
@@ -2712,6 +2859,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           not: 'url'
         },
         oneOf: [
+          /* config.module.rule('css').oneOf('css-text') */
+          {
+            'with': {
+              type: 'text'
+            },
+            type: 'asset/source'
+          },
           /* config.module.rule('css').oneOf('css-url') */
           {
             resourceQuery: /[?&]url(?:&|=|$)/,
@@ -2866,6 +3020,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               }
             ]
           },
+          /* config.module.rule('js').oneOf('js-text') */
+          {
+            'with': {
+              type: 'text'
+            },
+            type: 'asset/source'
+          },
           /* config.module.rule('js').oneOf('js-raw') */
           {
             resourceQuery: /[?&]raw(?:&|=|$)/,
@@ -2977,6 +3138,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('image').oneOf('image-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('image').oneOf('image-asset-raw') */
           {
             type: 'asset/source',
@@ -3012,6 +3180,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
           },
           /* config.module.rule('svg').oneOf('svg-asset-raw') */
           {
@@ -3049,6 +3224,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('media').oneOf('media-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('media').oneOf('media-asset-raw') */
           {
             type: 'asset/source',
@@ -3085,6 +3267,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('font').oneOf('font-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('font').oneOf('font-asset-raw') */
           {
             type: 'asset/source',
@@ -3108,6 +3297,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       {
         test: /\\.json$/i,
         oneOf: [
+          /* config.module.rule('json').oneOf('json-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('json').oneOf('json-asset-raw') */
           {
             type: 'asset/source',
@@ -3332,6 +3528,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           not: 'url'
         },
         oneOf: [
+          /* config.module.rule('css').oneOf('css-text') */
+          {
+            'with': {
+              type: 'text'
+            },
+            type: 'asset/source'
+          },
           /* config.module.rule('css').oneOf('css-url') */
           {
             resourceQuery: /[?&]url(?:&|=|$)/,
@@ -3490,6 +3693,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               }
             ]
           },
+          /* config.module.rule('js').oneOf('js-text') */
+          {
+            'with': {
+              type: 'text'
+            },
+            type: 'asset/source'
+          },
           /* config.module.rule('js').oneOf('js-raw') */
           {
             resourceQuery: /[?&]raw(?:&|=|$)/,
@@ -3611,6 +3821,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('image').oneOf('image-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('image').oneOf('image-asset-raw') */
           {
             type: 'asset/source',
@@ -3646,6 +3863,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           {
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('svg').oneOf('svg-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
           },
           /* config.module.rule('svg').oneOf('svg-asset-raw') */
           {
@@ -3683,6 +3907,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('media').oneOf('media-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('media').oneOf('media-asset-raw') */
           {
             type: 'asset/source',
@@ -3719,6 +3950,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             type: 'asset/inline',
             resourceQuery: /[?&]inline(?:&|=|$)/
           },
+          /* config.module.rule('font').oneOf('font-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('font').oneOf('font-asset-raw') */
           {
             type: 'asset/source',
@@ -3742,6 +3980,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       {
         test: /\\.json$/i,
         oneOf: [
+          /* config.module.rule('json').oneOf('json-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
           /* config.module.rule('json').oneOf('json-asset-raw') */
           {
             type: 'asset/source',

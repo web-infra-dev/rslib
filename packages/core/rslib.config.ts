@@ -35,7 +35,7 @@ export default defineConfig({
   },
   tools: {
     rspack: {
-      plugins: [new rspack.CircularDependencyRspackPlugin({})],
+      plugins: [new rspack.CircularCheckRspackPlugin()],
     },
   },
 });

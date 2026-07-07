@@ -11,6 +11,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "rslib",
     "dev": "rslib --watch",
@@ -18,7 +21,7 @@
     "test:watch": "rstest --watch"
   },
   "devDependencies": {
-    "@rsbuild/plugin-svelte": "^2.0.0",
+    "@rsbuild/plugin-svelte": "^2.0.1",
     "@rslib/core": "workspace:*",
     "@rstest/adapter-rslib": "^0.10.6",
     "@rstest/core": "^0.10.6",

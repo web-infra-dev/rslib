@@ -12,6 +12,27 @@ import { ensureAbsolutePath } from '../utils/helper';
 import { logger } from '../utils/logger';
 import type { BuildOptions, CommonOptions } from './commands';
 
+export type CommandName = 'build' | 'inspect' | 'mf-dev';
+
+const cliState: {
+  command?: CommandName;
+  options: CommonOptions;
+} = {
+  options: {} as CommonOptions,
+};
+
+export const initCliAction = (
+  command: CommandName,
+  options: CommonOptions,
+): void => {
+  if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = command === 'mf-dev' ? 'development' : 'production';
+  }
+
+  cliState.command = command;
+  cliState.options = options;
+};
+
 const getEnvDir = (cwd: string, envDir?: string) => {
   if (envDir) {
     return path.isAbsolute(envDir) ? envDir : path.resolve(cwd, envDir);
@@ -110,12 +131,17 @@ export const applyCliOptions = (
   }
 };
 
-const loadConfig = async (options: CommonOptions, root: string) => {
+const loadConfig = async (
+  options: CommonOptions,
+  root: string,
+  command?: CommandName,
+) => {
   const { content: config, filePath: configFilePath } = await baseLoadConfig({
     cwd: root,
     path: options.config,
     envMode: options.envMode,
     loader: options.configLoader,
+    command,
   });
 
   if (configFilePath === null) {
@@ -128,13 +154,14 @@ const loadConfig = async (options: CommonOptions, root: string) => {
   return config;
 };
 
-export async function init(options: CommonOptions): Promise<RslibInstance> {
+export async function init(): Promise<RslibInstance> {
+  const { options, command } = cliState;
   const cwd = process.cwd();
   const root = options.root ? ensureAbsolutePath(cwd, options.root) : cwd;
 
   const rslib = await createRslib({
     cwd: root,
-    config: () => loadConfig(options, root),
+    config: () => loadConfig(options, root, command),
     loadEnv:
       options.env === false
         ? false

@@ -1,9 +1,9 @@
-import { join } from 'node:path';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { describe, expect, rs, test } from '@rstest/core';
+import { join } from 'node:path';
 import type { BuildOptions } from '../src/cli/commands';
-import { init } from '../src/cli/init';
+import { init, initCliAction } from '../src/cli/init';
 import {
   composeCreateRsbuildConfig,
   composeRsbuildEnvironments,
@@ -153,6 +153,18 @@ describe('Should load config file correctly', () => {
       _privateMeta: {
         configFilePath,
       },
+    });
+  });
+
+  test('passes command to config function', async () => {
+    const fixtureDir = join(__dirname, 'fixtures/config/command');
+    const { content: config } = await loadConfig({
+      cwd: fixtureDir,
+      command: 'build',
+    });
+
+    expect(config.source?.define).toEqual({
+      COMMAND: JSON.stringify('build'),
     });
   });
 });
@@ -387,9 +399,12 @@ describe('CLI options', () => {
       tsconfig: 'tsconfig.build.json',
     };
 
-    const rslib = await init(options);
-    const config = rslib.getRslibConfig();
-    expect(config).toMatchInlineSnapshot(`
+    const originalNodeEnv = process.env.NODE_ENV;
+    try {
+      initCliAction('build', options);
+      const rslib = await init();
+      const config = rslib.getRslibConfig();
+      expect(config).toMatchInlineSnapshot(`
       {
         "_privateMeta": {
           "configFilePath": "<WORKSPACE>/tests/fixtures/config/cli-options/rslib.config.ts",
@@ -429,6 +444,13 @@ describe('CLI options', () => {
         },
       }
     `);
+    } finally {
+      if (originalNodeEnv === undefined) {
+        delete process.env.NODE_ENV;
+      } else {
+        process.env.NODE_ENV = originalNodeEnv;
+      }
+    }
   });
 });
 
