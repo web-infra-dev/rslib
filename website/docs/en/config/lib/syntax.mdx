@@ -25,12 +25,14 @@ type EcmaScriptVersion =
 type Syntax = EcmaScriptVersion | string[];
 ```
 
-- **Default:** `'esnext'`
+- **Default:** `'esnext'`, or inferred from `package.json#engines.node` when [output.target](/config/rsbuild/output#outputtarget) is `'node'`
 - **CLI:** `--syntax <value>` (repeatable, e.g. `--syntax es2018` or `--syntax="node 14" --syntax="Chrome 103"`)
 
 Configure the syntax to which JavaScript and CSS will be downgraded.
 
 See [Output Compatibility - Syntax Downgrade](/guide/advanced/output-compatibility) for more details.
+
+When [output.target](/config/rsbuild/output#outputtarget) is set to `'node'` and `syntax` is not configured, Rslib will infer the syntax from the minimum Node.js version declared in `package.json#engines.node`.
 
 ## Set ECMAScript version
 
