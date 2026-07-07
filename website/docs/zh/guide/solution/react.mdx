@@ -54,7 +54,7 @@ export default defineConfig({
 
 React 引入了一个 [新的 JSX transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html) 在版本 17 中。这个新的 transform 在使用 JSX 时无需导入 `React`。
 
-默认情况下，Rslib 使用新的 JSX 转换，即 `runtime: 'automatic'`。Automatic runtime 本身需要 React `16.14.0` 或更高版本，但 Rslib React 模板以 React `18.0.0` 或更高版本作为 peer dependency 基线，因此 `peerDependencies` 中应声明 `"react": ">=18.0.0"` 和 `"react-dom": ">=18.0.0"`。
+默认情况下，Rslib 使用新的 JSX 转换，即 `runtime: 'automatic'`。这需要 React `16.14.0` 或更高版本，且 `peerDependencies` 中应声明 `"react": ">=16.14.0"`。
 
 要更改 JSX transform，可以在 `@rsbuild/plugin-react` 中设置 [swcReactOptions](https://rsbuild.rs/zh/plugins/list/plugin-react#swcreactoptionsruntime) 选项。
 
