@@ -8,7 +8,6 @@ export default defineConfig({
       id: 'compiled',
       bundle: false,
       dts: true,
-      format: 'esm',
       plugins: [
         pluginBabel({
           include: /\.(?:jsx|tsx)$/,
@@ -19,7 +18,6 @@ export default defineConfig({
     {
       id: 'source',
       bundle: false,
-      format: 'esm',
       output: {
         filename: {
           js: '[name].jsx',
