@@ -72,8 +72,8 @@ export default defineConfig({
 
 Solid component libraries conventionally ship two outputs:
 
-- **Pre-compiled output**: ESM files whose JSX has already been transformed by `babel-preset-solid` into Solid runtime calls (`template()`, `insert()`, etc.). Build tools like Rsbuild or Vite can consume it directly, without installing a Solid plugin.
-- **JSX source output**: ESM files that keep the original JSX syntax untouched, exposed through the `"solid"` export condition in `package.json`.
+- **Pre-compiled output**: JSX has already been transformed by `babel-preset-solid` into Solid runtime calls (`template()`, `insert()`, etc.). Build tools like Rsbuild or Vite can consume it directly, without installing a Solid plugin.
+- **JSX source output**: keeps the original JSX syntax untouched, exposed through the `"solid"` export condition in `package.json`.
 
 Downstream projects that can compile Solid JSX (such as an Rsbuild project with `@rsbuild/plugin-solid` installed) hit the `"solid"` condition, receive the raw JSX, and recompile it for their own runtime — browser apps compile it into client-side DOM rendering code (`generate: 'dom'`), while SSR frameworks compile it into server-side string rendering code (`generate: 'ssr'`). Projects without a Solid plugin fall back to the pre-compiled `"import"` entry.
 
