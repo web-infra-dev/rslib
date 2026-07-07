@@ -1,3 +1,5 @@
+import { mkdtemp, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { describe, expect, rs, test } from '@rstest/core';
@@ -460,6 +462,7 @@ describe('Should compose create Rsbuild config correctly', () => {
       lib: [
         {
           format: 'esm',
+          syntax: 'esnext',
           source: {
             preEntry: './b.js',
           },
@@ -471,6 +474,7 @@ describe('Should compose create Rsbuild config correctly', () => {
         },
         {
           format: 'cjs',
+          syntax: 'esnext',
           source: {
             preEntry: ['./c.js', './d.js'],
           },
@@ -482,12 +486,15 @@ describe('Should compose create Rsbuild config correctly', () => {
         },
         {
           format: 'umd',
+          syntax: 'esnext',
         },
         {
           format: 'iife',
+          syntax: 'esnext',
         },
         {
           format: 'mf',
+          syntax: 'esnext',
           plugins: [
             pluginModuleFederation(
               {
@@ -668,6 +675,7 @@ describe('runtimeChunk', () => {
 describe('syntax', () => {
   test('`syntax` default value', async () => {
     const rslibConfig: RslibConfig = {
+      root: join(__dirname, 'fixtures/config/esm'),
       lib: [
         {
           format: 'esm',
@@ -714,6 +722,7 @@ describe('syntax', () => {
 
   test('`syntax` default value should determined by target `node`', async () => {
     const rslibConfig: RslibConfig = {
+      root: join(__dirname, 'fixtures/config/esm'),
       lib: [
         {
           format: 'esm',
@@ -730,6 +739,75 @@ describe('syntax', () => {
       .toMatchInlineSnapshot(`
       [
         "last 1 node versions",
+      ]
+    `);
+  });
+
+  test('`syntax` default value should be inferred from engines.node for node target', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'rslib-engines-node-'));
+    await writeFile(
+      join(root, 'package.json'),
+      JSON.stringify({
+        engines: {
+          node: '^20.19.0 || >=22.12.0',
+        },
+      }),
+    );
+
+    const rslibConfig: RslibConfig = {
+      root,
+      lib: [
+        {
+          format: 'esm',
+        },
+      ],
+      output: {
+        target: 'node',
+      },
+    };
+
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
+
+    expect(composedRsbuildConfig[0]!.config.output?.overrideBrowserslist).toEqual(
+      ['node >= 20.19.0'],
+    );
+  });
+
+  test('explicit `syntax` should take precedence over engines.node', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'rslib-engines-node-'));
+    await writeFile(
+      join(root, 'package.json'),
+      JSON.stringify({
+        engines: {
+          node: '^20.19.0 || >=22.12.0',
+        },
+      }),
+    );
+
+    const rslibConfig: RslibConfig = {
+      root,
+      lib: [
+        {
+          syntax: 'es2015',
+          format: 'esm',
+        },
+      ],
+      output: {
+        target: 'node',
+      },
+    };
+
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
+
+    expect(composedRsbuildConfig[0]!.config.output?.overrideBrowserslist)
+      .toMatchInlineSnapshot(`
+      [
+        "chrome >= 51",
+        "edge >= 79",
+        "firefox >= 53",
+        "ios >= 16.3",
+        "node >= 6.5",
+        "safari >= 16.3",
       ]
     `);
   });
