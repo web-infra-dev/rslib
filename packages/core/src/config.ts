@@ -1135,6 +1135,8 @@ const composeSyntaxConfig = (
   return {
     tools: {
       rspack: (config) => {
+        // Default syntax is esnext (no downgrade), while Rspack target requires
+        // a fixed ES version.
         config.target = ['es2025'];
         return config;
       },

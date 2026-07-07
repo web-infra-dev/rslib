@@ -123,6 +123,7 @@ export const ESX_TO_BROWSERSLIST: Record<
       node: '16.11',
       safari: '16.4',
     },
+    // Below UnicodeSetsRegex so ES2024 RegExp `v` flag is still transformed.
     es2023: {
       chrome: '110',
       edge: '110',
@@ -131,6 +132,7 @@ export const ESX_TO_BROWSERSLIST: Record<
       node: '20',
       safari: '17',
     },
+    // Aligns with UnicodeSetsRegex.
     es2024: {
       chrome: '112',
       edge: '112',
@@ -139,6 +141,7 @@ export const ESX_TO_BROWSERSLIST: Record<
       node: '20',
       safari: '17',
     },
+    // Based on later regexp compat-data and used as a fixed Lightning CSS target.
     es2025: {
       chrome: '126',
       edge: '126',
