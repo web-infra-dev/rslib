@@ -268,16 +268,16 @@ describe('resolveMinNodeVersion', () => {
     );
   });
 
-  test('returns null for unsatisfiable ranges', async () => {
-    await expectMinNodeVersion('>=20 <20 || >=22.0.0', null);
+  test('returns null for impractical lower bounds', async () => {
     await expectMinNodeVersion('<18 || >=20.0.0', null);
-  });
-
-  test('ignores all-version and unparseable ranges', async () => {
-    await expectMinNodeVersion('*', null);
-    await expectMinNodeVersion('', null);
     await expectMinNodeVersion('>=0', null);
     await expectMinNodeVersion('<20', null);
+  });
+
+  test('returns null for unsatisfiable or unparseable ranges', async () => {
+    await expectMinNodeVersion('>=20 <20 || >=22.0.0', null);
+    await expectMinNodeVersion('*', null);
+    await expectMinNodeVersion('', null);
     await expectMinNodeVersion('latest', null);
   });
 });
