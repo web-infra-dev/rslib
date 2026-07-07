@@ -88,6 +88,10 @@ export const applyCliOptions = (
   options: BuildOptions,
   root: string,
 ): void => {
+  if (config.lib === undefined) {
+    config.lib = [{} satisfies LibConfig];
+  }
+
   if (options.root) {
     config.root = root;
   }

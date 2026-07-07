@@ -518,7 +518,7 @@ interface RslibOutputConfig extends OutputConfig {
 }
 
 export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
-  lib: LibConfig[];
+  lib?: LibConfig[];
   /**
    * @inheritdoc
    */
