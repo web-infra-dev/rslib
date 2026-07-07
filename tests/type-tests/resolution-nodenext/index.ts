@@ -61,3 +61,13 @@ defineConfig({
   // @ts-expect-error experiments is only supported in lib items.
   experiments: {},
 });
+
+defineConfig({});
+
+defineConfig({
+  source: {
+    entry: {
+      index: './src/index.ts',
+    },
+  },
+});

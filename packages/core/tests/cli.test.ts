@@ -66,6 +66,46 @@ describe('parseEntryOption', () => {
 });
 
 describe('applyCliOptions', () => {
+  test('applies CLI flags to the implicit default library', () => {
+    const config = {
+      source: {},
+      output: {},
+    } as RslibConfig;
+
+    const options = {
+      format: 'cjs',
+      entry: ['index=src/index.ts'],
+      dts: true,
+    } as CommonOptions;
+
+    applyCliOptions(config, options, '/abs/root');
+
+    expect(config.lib).toEqual([
+      {
+        dts: true,
+        format: 'cjs',
+        output: {},
+        source: {
+          entry: {
+            index: 'src/index.ts',
+          },
+        },
+      },
+    ]);
+  });
+
+  test('does not apply CLI flags to null lib field as implicit default library', () => {
+    const config = {
+      lib: null,
+    } as unknown as RslibConfig;
+
+    const options = {
+      format: 'cjs',
+    } as CommonOptions;
+
+    expect(() => applyCliOptions(config, options, '/abs/root')).toThrow();
+  });
+
   test('applies CLI flags to the config and its libraries', () => {
     const config = {
       root: '/initial',
