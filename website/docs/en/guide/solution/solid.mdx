@@ -52,7 +52,6 @@ export default defineConfig({
     {
       bundle: false,
       dts: true,
-      format: 'esm',
       // [!code highlight:6]
       plugins: [
         pluginBabel({
@@ -89,7 +88,6 @@ export default defineConfig({
       // Compile JSX into Solid runtime calls, such as template(), insert(), and delegateEvents().
       bundle: false,
       dts: true,
-      format: 'esm',
       plugins: [
         pluginBabel({
           include: /\.(?:jsx|tsx)$/,
@@ -100,7 +98,6 @@ export default defineConfig({
     {
       // Preserve JSX syntax for the "solid" condition name.
       bundle: false,
-      format: 'esm',
       output: {
         filename: {
           js: '[name].jsx',
@@ -182,7 +179,6 @@ export default defineConfig({
     {
       id: 'server',
       bundle: false,
-      format: 'esm',
       output: {
         distPath: {
           root: './dist/server',

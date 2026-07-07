@@ -52,7 +52,6 @@ export default defineConfig({
     {
       bundle: false,
       dts: true,
-      format: 'esm',
       // [!code highlight:6]
       plugins: [
         pluginBabel({
@@ -89,7 +88,6 @@ export default defineConfig({
       // 将 JSX 编译为 Solid 运行时调用，例如 template()、insert() 和 delegateEvents()。
       bundle: false,
       dts: true,
-      format: 'esm',
       plugins: [
         pluginBabel({
           include: /\.(?:jsx|tsx)$/,
@@ -100,7 +98,6 @@ export default defineConfig({
     {
       // 为 "solid" condition name 保留 JSX 语法。
       bundle: false,
-      format: 'esm',
       output: {
         filename: {
           js: '[name].jsx',
@@ -182,7 +179,6 @@ export default defineConfig({
     {
       id: 'server',
       bundle: false,
-      format: 'esm',
       output: {
         distPath: {
           root: './dist/server',
