@@ -124,9 +124,9 @@ export const ESX_TO_BROWSERSLIST: Record<
       safari: '16.4',
     },
     es2023: {
-      chrome: '112',
-      edge: '112',
-      firefox: '116',
+      chrome: '110',
+      edge: '110',
+      firefox: '115',
       ios: '17',
       node: '20',
       safari: '17',

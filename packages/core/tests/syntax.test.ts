@@ -28,12 +28,9 @@ const compareSemver = (a: string, b: string) => {
 describe('ESX_TO_BROWSERSLIST', () => {
   test('some ECMA version queries should be the same', () => {
     expect(ESX_TO_BROWSERSLIST.es6).toStrictEqual(ESX_TO_BROWSERSLIST.es2015);
-    expect(ESX_TO_BROWSERSLIST.es2023).toStrictEqual(
-      ESX_TO_BROWSERSLIST.es2024,
-    );
   });
 
-  test('es2023/es2024/es2025 must not sit below SWC down-leveled syntax', () => {
+  test('es2024/es2025 must not sit below SWC down-leveled syntax', () => {
     // SWC only down-levels one post-ES2022 syntax: the RegExp `v` flag (ES2024).
     const unicodeSetsRegex: Record<string, string> = {
       chrome: '112',
@@ -44,12 +41,24 @@ describe('ESX_TO_BROWSERSLIST', () => {
       safari: '17',
     };
 
-    for (const version of ['es2023', 'es2024', 'es2025'] as const) {
+    for (const version of ['es2024', 'es2025'] as const) {
       const baseline = ESX_TO_BROWSERSLIST[version] as Record<string, string>;
       for (const [engine, min] of Object.entries(unicodeSetsRegex)) {
         expect(compareSemver(baseline[engine]!, min)).toBeGreaterThanOrEqual(0);
       }
     }
+  });
+
+  test('es2023 should stay below the RegExp v flag support line', () => {
+    expect(
+      compareSemver(ESX_TO_BROWSERSLIST.es2023.chrome!, '112'),
+    ).toBeLessThan(0);
+    expect(compareSemver(ESX_TO_BROWSERSLIST.es2023.edge!, '112')).toBeLessThan(
+      0,
+    );
+    expect(
+      compareSemver(ESX_TO_BROWSERSLIST.es2023.firefox!, '116'),
+    ).toBeLessThan(0);
   });
 
   test('ECMA version mapped browserslist queries should increments', () => {
@@ -113,6 +122,18 @@ describe('transformSyntaxToBrowserslist', () => {
       ]
     `);
 
+    expect(transformSyntaxToBrowserslist('es2023', 'web'))
+      .toMatchInlineSnapshot(`
+      [
+        "chrome >= 110",
+        "edge >= 110",
+        "firefox >= 115",
+        "ios >= 17",
+        "node >= 20",
+        "safari >= 17",
+      ]
+    `);
+
     expect(transformSyntaxToBrowserslist('es2024', 'web'))
       .toMatchInlineSnapshot(`
       [
@@ -157,9 +178,6 @@ describe('transformSyntaxToBrowserslist', () => {
         "last 1 node versions",
       ]
     `);
-    expect(transformSyntaxToBrowserslist('es2023', 'web')).toStrictEqual(
-      transformSyntaxToBrowserslist('es2024', 'web'),
-    );
   });
 
   test('browserslist', () => {
