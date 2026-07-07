@@ -70,12 +70,12 @@ export default defineConfig({
 
 ## Output
 
-Solid component libraries conventionally provide two outputs:
+Solid component libraries conventionally ship two outputs:
 
-- **Compiled output**: the default ESM entry for regular bundlers.
-- **Source output**: preserves JSX and is exposed through the `"solid"` condition name for Solid-aware downstream bundlers.
+- **Pre-compiled output**: ESM files whose JSX has already been transformed by `babel-preset-solid` into Solid runtime calls (`template()`, `insert()`, etc.). Any bundler (Webpack, Vite, Rspack, ...) can consume it as-is, without installing a Solid plugin.
+- **JSX source output**: ESM files that keep the original JSX syntax untouched, exposed through the `"solid"` export condition in `package.json`.
 
-The `"solid"` condition name in `package.json` points to the source output. After a downstream project configures `@rsbuild/plugin-solid`, it can resolve this JSX source and recompile it for its own target (DOM vs SSR).
+Downstream projects that install `@rsbuild/plugin-solid` (or another Solid-aware bundler plugin) hit the `"solid"` condition, receive the raw JSX, and recompile it for their own runtime — browser apps compile it into client-side DOM rendering code (`generate: 'dom'`), while SSR frameworks compile it into server-side string rendering code (`generate: 'ssr'`). Projects without a Solid plugin fall back to the pre-compiled `"import"` entry.
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';

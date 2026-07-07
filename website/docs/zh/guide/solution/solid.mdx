@@ -70,12 +70,12 @@ export default defineConfig({
 
 ## 输出产物
 
-Solid 组件库通常同时提供两种产物：
+Solid 组件库通常同时发布两种产物：
 
-- **编译产物**：默认 ESM 入口，给普通打包器消费。
-- **JSX 源码**：保留 JSX，并通过 `"solid"` condition name 暴露给 Solid-aware 的下游打包器。
+- **预编译产物**：已经用 `babel-preset-solid` 将 JSX 编译成 Solid 运行时调用（如 `template()`、`insert()`）的 ESM 文件。任意打包器（Webpack、Vite、Rspack 等）都能直接使用，无需额外安装 Solid 相关插件。
+- **保留 JSX 的源码产物**：不做 Solid 编译，只保留原始 JSX 语法的 ESM 文件，通过 `package.json` 的 `"solid"` 导出条件暴露出来。
 
-`package.json` 中的 `"solid"` condition name 指向 JSX 源码。下游项目配置 `@rsbuild/plugin-solid` 后，可以解析到这份 JSX 源码，并根据自己的目标重新编译（DOM vs SSR）。
+安装了 `@rsbuild/plugin-solid`（或其他 Solid 打包器插件）的下游项目，会命中 `"solid"` 导出条件、拿到 JSX 源码，然后根据自己的运行环境重新编译——浏览器端应用编译为客户端 DOM 渲染代码（`generate: 'dom'`），SSR 框架编译为服务端字符串渲染代码（`generate: 'ssr'`）。没有 Solid 插件的项目则回退到预编译的 `"import"` 入口。
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
