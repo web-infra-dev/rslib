@@ -53,6 +53,11 @@ const CASES_SVELTE: TemplateCase[] = [
   createCase('svelte', 'ts'),
 ];
 
+const CASES_SOLID: TemplateCase[] = [
+  createCase('solid', 'js'),
+  createCase('solid', 'ts'),
+];
+
 const BASE_NODE_ESM_JS = createCase('node-esm', 'js');
 
 describe('parseTemplateName', () => {
@@ -63,12 +68,15 @@ describe('parseTemplateName', () => {
     expect(parseTemplateName('vue-js')).toBe('vue-js');
     expect(parseTemplateName('svelte-js')).toBe('svelte-js');
     expect(parseTemplateName('svelte-ts')).toBe('svelte-ts');
+    expect(parseTemplateName('solid-js')).toBe('solid-js');
+    expect(parseTemplateName('solid-ts')).toBe('solid-ts');
   });
 
   test('should handle template without language suffix and default to ts', () => {
     expect(parseTemplateName('react')).toBe('react-ts');
     expect(parseTemplateName('vue')).toBe('vue-ts');
     expect(parseTemplateName('svelte')).toBe('svelte-ts');
+    expect(parseTemplateName('solid')).toBe('solid-ts');
   });
 
   test('should handle multi-segment template with language suffix', () => {
@@ -127,6 +135,14 @@ describe('vue', () => {
 
 describe('svelte', () => {
   for (const c of CASES_SVELTE) {
+    test(`should create ${c.label} project as expected`, async () => {
+      createAndValidate(__dirname, c);
+    });
+  }
+});
+
+describe('solid', () => {
+  for (const c of CASES_SOLID) {
     test(`should create ${c.label} project as expected`, async () => {
       createAndValidate(__dirname, c);
     });

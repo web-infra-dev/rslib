@@ -28,6 +28,8 @@ export const TEMPLATES: string[] = [
   'vue-ts',
   'svelte-js',
   'svelte-ts',
+  'solid-js',
+  'solid-ts',
 ];
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -46,6 +48,7 @@ async function getTemplateName({ template }: Argv) {
         { value: 'react', label: 'React' },
         { value: 'vue', label: 'Vue' },
         { value: 'svelte', label: 'Svelte' },
+        { value: 'solid', label: 'Solid' },
       ],
     }),
   );
