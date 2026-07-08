@@ -28,7 +28,7 @@ import logo from './assets/logo.png';
 
 console.log(logo); // "/static/image/logo.png"
 
-export default = () => <img src={logo} />;
+export default () => <img src={logo} />;
 ```
 
 也可以使用**路径别名**来引用：
@@ -38,7 +38,7 @@ import logo from '@/assets/logo.png';
 
 console.log(logo); // "/static/image/logo.png"
 
-export default = () => <img src={logo} />;
+export default () => <img src={logo} />;
 ```
 
 在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物，默认会在代码转换时将源文件转化为一个 JavaScript 文件和一个根据 [output.distPath](/config/rsbuild/output#outputdistpath) 输出的静态资源文件，并保留引用静态资源的 `import` 或 `require` 语句。

@@ -28,7 +28,7 @@ import logo from './assets/logo.png';
 
 console.log(logo); // "/static/image/logo.png"
 
-export default = () => <img src={logo} />;
+export default () => <img src={logo} />;
 ```
 
 Import with **alias** is also available:
@@ -38,7 +38,7 @@ import logo from '@/assets/logo.png';
 
 console.log(logo); // "/static/image/logo.png"
 
-export default = () => <img src={logo} />;
+export default () => <img src={logo} />;
 ```
 
 When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the output as an mid-level artifact that will be consumed by other build tools again and transforms the source file into a JavaScript file and a static asset file that is emitted according to [output.distPath](/config/rsbuild/output#outputdistpath) by default with preserving the `import` or `require` statements for static assets.
