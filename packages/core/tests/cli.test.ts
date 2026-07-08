@@ -157,7 +157,7 @@ describe('applyCliOptions', () => {
       distPath: 'dist/custom',
     } as CommonOptions;
 
-    const libBefore = config.lib[0]!;
+    const libBefore = config.lib![0]!;
     const outputBefore = libBefore.output;
 
     applyCliOptions(config, options, '/abs/custom');
@@ -165,7 +165,7 @@ describe('applyCliOptions', () => {
     expect(config.root).toBe('/abs/custom');
     expect(config.logLevel).toBe('error');
 
-    const lib = config.lib[0]!;
+    const lib = config.lib![0]!;
     expect(lib.format).toBe('cjs');
     expect(lib.bundle).toBe(false);
     expect(lib.dts).toBe(true);
