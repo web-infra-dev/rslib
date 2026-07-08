@@ -25,14 +25,42 @@ type EcmaScriptVersion =
 type Syntax = EcmaScriptVersion | string[];
 ```
 
-- **默认值：** `'esnext'`，当 [output.target](/config/rsbuild/output#outputtarget) 为 `'node'` 时，也会根据 `package.json#engines.node` 推断
+- **默认值：**
+  - `'esnext'`
+  - 当 [output.target](/config/rsbuild/output#outputtarget) 为 `'node'` 时，会根据 `package.json#engines.node` 推断
 - **命令行：** `--syntax <value>`（可重复，例如 `--syntax es2018` 或 `--syntax="node 14" --syntax="Chrome 103"`）
 
 配置 JavaScript 和 CSS 将被降级的语法版本。
 
 参考 [产物兼容性 - 语法降级](/guide/advanced/output-compatibility) 了解更多详情。
 
-当 [output.target](/config/rsbuild/output#outputtarget) 设置为 `'node'` 且未配置 `syntax` 时，Rslib 会根据 `package.json#engines.node` 中声明的最低 Node.js 版本推断语法目标。
+默认情况下，`syntax` 被设置为 `'esnext'`，这代表将仅支持主流浏览器（Chrome / Firefox / Edge / macOS Safari / iOS Safari）或 Node.js 的最新版本，具体取决于 [output.target](/config/rsbuild/output#outputtarget)。
+
+## 根据 engines.node 推断
+
+当 [output.target](/config/rsbuild/output#outputtarget) 设置为 `'node'` 且未配置 `syntax` 时，Rslib 会读取 `package.json` 中 `engines.node` 声明的最低 Node.js 版本，并将其作为语法目标。
+
+```json title="package.json"
+{
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+```
+
+上述配置等效于：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      syntax: ['node >= 18.0.0'],
+    },
+  ],
+};
+```
+
+如需覆盖该默认行为，显式设置 `syntax` 即可。
 
 ## 设置 ECMAScript 版本
 
