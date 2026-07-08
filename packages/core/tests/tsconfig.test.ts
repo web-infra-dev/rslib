@@ -8,20 +8,16 @@ describe('loadTsconfig', () => {
     const result1 = await loadTsconfig(fixtureDir);
     const result2 = await loadTsconfig(fixtureDir, './tsconfig.custom.json');
 
-    expect(result1).toMatchInlineSnapshot(`
-      {
-        "compilerOptions": {
-          "rootDir": "./",
-        },
-      }
-    `);
-    expect(result2).toMatchInlineSnapshot(`
-      {
-        "compilerOptions": {
-          "rootDir": "custom",
-        },
-      }
-    `);
+    expect(result1).toEqual({
+      compilerOptions: {
+        rootDir: './',
+      },
+    });
+    expect(result2).toEqual({
+      compilerOptions: {
+        rootDir: './custom',
+      },
+    });
   });
 
   it('should return an empty object when no tsconfig file is found', async () => {
