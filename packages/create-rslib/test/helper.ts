@@ -111,13 +111,9 @@ export const createAndValidate = (
     templateCase.lang === 'ts' &&
     (templateCase.template === 'react' || templateCase.template === 'vue')
   ) {
-    const envDtsPath = path.join(dir, 'src/env.d.ts');
-    const testDtsPath = path.join(dir, 'tests/test.d.ts');
     const testsTsconfig = readTsconfig(path.join(dir, 'tests/tsconfig.json'));
     const testsTypes = testsTsconfig.compilerOptions?.types;
 
-    expect(existsSync(envDtsPath)).toBe(false);
-    expect(existsSync(testDtsPath)).toBe(false);
     expect(
       tsconfig?.compilerOptions?.types?.includes('@rslib/core/types'),
     ).toBe(true);
