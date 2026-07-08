@@ -6,47 +6,6 @@ description: 'Configure lib.experiments to enable experimental features and try 
 
 Used to enable some Rslib experimental features.
 
-## experiments.advancedEsm
-
-::: tip
-
-`experiments.advancedEsm` is deprecated since Rslib v0.20 and will be removed in v1. Advanced ESM output is now the default for ESM format, so this option has no effect.
-
-:::
-
-- **Type:** `boolean`
-- **Default:** `true`
-
-Controls whether to enable Rspack experimental ESM output. When enabled, it emits ESM output that is high-quality, more friendly to static analysis, and supports code splitting.
-
-:::info
-Currently this option only takes effect in bundle mode when format is `'esm'`.
-:::
-
-If you need to disable this feature, you can set it to `false`:
-
-```js title="rslib.config.ts"
-export default {
-  lib: [
-    {
-      format: 'esm',
-      bundle: true,
-      experiments: {
-        advancedEsm: false,
-      },
-    },
-  ],
-};
-```
-
-### Version history
-
-| Version | Changes                                          |
-| ------- | ------------------------------------------------ |
-| v0.17.0 | Added this option                                |
-| v0.19.0 | Changed default value from `false` to `true`     |
-| v0.20.0 | Deprecated this option, no longer has any effect |
-
 ## experiments.exe
 
 Use [Node.js Single Executable Application](https://nodejs.org/api/single-executable-applications.html) to package the generated JavaScript output into an executable file.
