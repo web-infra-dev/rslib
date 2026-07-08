@@ -159,10 +159,14 @@ declare module '*.scss' {
 }
 ```
 
-or
+or add the [preset types](/guide/basic/typescript#preset-types) provided by `@rslib/core` to `tsconfig.json`:
 
-```ts title="src/env.d.ts"
-/// <reference types="@rslib/core/types" />
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "types": ["@rslib/core/types"]
+  }
+}
 ```
 
 ## CSS Modules
