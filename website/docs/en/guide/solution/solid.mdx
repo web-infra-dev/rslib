@@ -70,12 +70,12 @@ export default defineConfig({
 
 ## Output
 
-Solid component libraries conventionally ship two outputs:
+Solid component libraries usually ship two types of outputs:
 
-- **Pre-compiled output**: JSX has already been transformed by `babel-preset-solid` into Solid runtime calls (`template()`, `insert()`, etc.). Build tools like Rsbuild or Vite can consume it directly, without installing a Solid plugin.
-- **JSX source output**: keeps the original JSX syntax untouched, exposed through the `"solid"` condition name in `package.json`.
+- **Pre-compiled output**: JSX has already been transformed by `babel-preset-solid` into Solid runtime calls, such as `template()` and `insert()`. Application projects that use this component library can import this output directly, without configuring Solid JSX compilation.
+- **JSX source output**: the library build does not compile Solid JSX. Instead, it preserves the original JSX syntax and exposes it through the `"solid"` condition name in `package.json` for the application-side toolchain.
 
-Downstream projects that can compile Solid JSX (such as an Rsbuild project with `@rsbuild/plugin-solid` installed) hit the `"solid"` condition name, receive the raw JSX, and recompile it for their own runtime — browser apps compile it into client-side DOM rendering code (`generate: 'dom'`), while SSR frameworks compile it into server-side string rendering code (`generate: 'ssr'`). Projects without a Solid plugin fall back to the pre-compiled `"import"` entry.
+When an application project that uses this component library can compile Solid JSX (for example, an Rsbuild project with `@rsbuild/plugin-solid` installed), module resolution will hit the `"solid"` condition name, read the JSX source output, and recompile it for the application's runtime target: browser apps compile it into client-side DOM rendering code (`generate: 'dom'`), while SSR frameworks compile it into server-side rendering code (`generate: 'ssr'`). Application projects without Solid JSX compilation configured fall back to the pre-compiled `"import"` entry.
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -149,7 +149,7 @@ Then configure the `"exports"` field in `package.json`:
 }
 ```
 
-When a downstream app uses `@rsbuild/plugin-solid`, the `"solid"` condition name is automatically added to module resolution, so the bundler resolves the `.jsx` source and compiles it locally. Apps that don't use a Solid-aware bundler will fall back to the pre-compiled `"import"` entry.
+When an application project that uses this component library configures `@rsbuild/plugin-solid`, the `"solid"` condition name is automatically added to module resolution, so the application-side toolchain resolves the `.jsx` source and compiles it locally. Application projects without Solid JSX compilation configured will fall back to the pre-compiled `"import"` entry.
 
 ## TypeScript
 
