@@ -1,19 +1,20 @@
 ---
-description: 'Handle images, fonts, audio, video, and other static assets in Rslib builds, from imports to output.'
+description: 'Rslib supports importing static assets, including images, fonts, media, and other file types.'
 ---
 
 # Static assets
 
-Rslib supports import static assets, including images, fonts, audio and video.
+Rslib supports importing static assets, including images, fonts, media, and other file types.
 
-## Assets format
+## Asset formats
 
-The following are the formats supported by Rslib by default:
+Rslib supports these formats by default:
 
-- **images**: png, jpg, jpeg, gif, svg, bmp, webp, ico, apng, avif, tif, tiff, jfif, pjpeg, pjp, cur.
-- **fonts**: woff, woff2, eot, ttf, otf, ttc.
-- **audio**: mp3, wav, flac, aac, m4a, opus.
-- **video**: mp4, webm, ogg, mov.
+- **Images**: png, jpg, jpeg, gif, svg, bmp, webp, ico, apng, avif, tif, tiff, jfif, pjpeg, pjp, cur, jxl.
+- **Fonts**: woff, woff2, eot, ttf, otf, ttc.
+- **Audio**: mp3, wav, flac, aac, m4a, opus.
+- **Video**: mp4, webm, ogg, mov.
+- **Other**: webmanifest, pdf, txt, vtt.
 
 To import assets in other formats, refer to [Extend Asset Types](#extend-asset-types).
 
@@ -25,7 +26,7 @@ In JavaScript files, you can directly import static assets with relative paths t
 // Import the logo.png image in the 'src/assets' directory
 import logo from './assets/logo.png';
 
-console.log(logo); // "/static/logo.[hash].png"
+console.log(logo); // "/static/image/logo.png"
 
 export default = () => <img src={logo} />;
 ```
@@ -35,7 +36,7 @@ Import with **alias** is also available:
 ```tsx
 import logo from '@/assets/logo.png';
 
-console.log(logo); // "/static/logo.[hash].png"
+console.log(logo); // "/static/image/logo.png"
 
 export default = () => <img src={logo} />;
 ```
@@ -278,7 +279,7 @@ After adding the type declaration, if the type error still exists, you can try t
 
 ## Extend asset types
 
-If the built-in static assets type of Rslib does not meet your needs, you can extend the additional static assets type in the following ways.
+If the built-in asset types in Rslib cannot meet your requirements, you can extend additional static asset types in the following ways.
 
 ### Use `source.assetsInclude`
 
@@ -287,24 +288,24 @@ By using the [source.assetsInclude](/config/rsbuild/source#sourceassetsinclude) 
 ```ts title="rslib.config.ts"
 export default {
   source: {
-    assetsInclude: /\.pdf$/,
+    assetsInclude: /\.gltf$/,
   },
 };
 ```
 
-After adding the above configuration, you can import `*.pdf` files in your code, for example:
+After adding the above configuration, you can import `*.gltf` files in your code, for example:
 
 ```js
-import myFile from './static/myFile.pdf';
+import myFile from './static/model.gltf';
 
-console.log(myFile);
+console.log(myFile); // "/static/assets/model.gltf"
 ```
 
 ### Use `tools.rspack`
 
 You can modify the built-in Rspack configuration and add custom static assets handling rules via [tools.rspack](/config/rsbuild/tools#toolsrspack).
 
-For example, to treat `*.pdf` files as assets and output them to the dist directory, you can add the following configuration:
+For example, to treat `*.gltf` files as assets and output them to the dist directory, you can add the following configuration:
 
 ```ts title="rslib.config.ts"
 export default {
@@ -312,7 +313,7 @@ export default {
     rspack(config, { addRules }) {
       addRules([
         {
-          test: /\.pdf$/,
+          test: /\.gltf$/,
           // Convert assets to separate files and keep import statements
           type: 'asset/resource',
           generator: {

@@ -20,6 +20,21 @@ import {
 } from './utils';
 
 const logPrefixTsc = color.dim('[tsc]');
+/*
+ * TS builds this prefix in `formatDiagnosticsWithColorAndContext`:
+ * `diagnosticCategoryName` + `getCategoryFormat` + `formatColorAndReset`.
+ * Rslib already prints `logger.error`, so strip only the TS category word.
+ * Use String.fromCharCode(27) for ESC to avoid no-control-regex.
+ * See https://github.com/microsoft/TypeScript/blob/main/src/compiler/program.ts
+ */
+const ansiEscape = String.fromCharCode(27);
+let diagnosticErrorPrefixRE: RegExp | undefined;
+const diagnosticCodeReplacement = `${ansiEscape}[90m$1${ansiEscape}[0m`;
+
+const getDiagnosticErrorPrefixRE = (): RegExp =>
+  (diagnosticErrorPrefixRE ??= new RegExp(
+    `${ansiEscape}\\[91merror${ansiEscape}\\[0m${ansiEscape}\\[90m (TS\\d+: )${ansiEscape}\\[0m`,
+  ));
 
 const createFormatHost = (
   ts: ReturnType<typeof loadTypescript>,
@@ -28,6 +43,15 @@ const createFormatHost = (
   getCurrentDirectory: ts.sys.getCurrentDirectory.bind(ts.sys),
   getNewLine: () => ts.sys.newLine,
 });
+
+const formatDiagnosticWithoutErrorWord = (
+  ts: ReturnType<typeof loadTypescript>,
+  formatHost: FormatDiagnosticsHost,
+  diagnostic: Diagnostic,
+): string =>
+  ts
+    .formatDiagnosticsWithColorAndContext([diagnostic], formatHost)
+    .replace(getDiagnosticErrorPrefixRE(), diagnosticCodeReplacement);
 
 async function handleDiagnosticsAndProcessFiles(
   ts: ReturnType<typeof loadTypescript>,
@@ -48,9 +72,10 @@ async function handleDiagnosticsAndProcessFiles(
   const diagnosticMessages: string[] = [];
 
   for (const diagnostic of diagnostics) {
-    const message = ts.formatDiagnosticsWithColorAndContext(
-      [diagnostic],
+    const message = formatDiagnosticWithoutErrorWord(
+      ts,
       formatHost,
+      diagnostic,
     );
     diagnosticMessages.push(message);
   }
@@ -125,7 +150,7 @@ export async function emitDtsTsc(
   const reportDiagnostic = (diagnostic: Diagnostic) => {
     logger.error(
       logPrefixTsc,
-      ts.formatDiagnosticsWithColorAndContext([diagnostic], formatHost),
+      formatDiagnosticWithoutErrorWord(ts, formatHost, diagnostic),
     );
   };
 

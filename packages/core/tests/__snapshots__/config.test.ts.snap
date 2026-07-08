@@ -295,7 +295,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack config - 0 esm 1`] = `
 "{
   target: [
-    'es2022',
+    'es2025',
     'node'
   ],
   name: 'esm',
@@ -754,7 +754,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       /* config.module.rule('image') */
       {
-        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur)$/i,
+        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur|jxl)$/i,
         oneOf: [
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
@@ -876,7 +876,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       /* config.module.rule('media') */
       {
-        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus|vtt)$/i,
         oneOf: [
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
@@ -991,6 +991,49 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               filename: 'static/font/[name][ext]'
             },
             issuer: /\\.(css|sass|scss|less|styl|stylus)$/
+          }
+        ]
+      },
+      /* config.module.rule('assets') */
+      {
+        test: /\\.(?:webmanifest|pdf|txt)$/i,
+        oneOf: [
+          /* config.module.rule('assets').oneOf('assets-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /[?&]url(?:&|=|$)/,
+            generator: {
+              filename: 'static/assets/[name][ext]'
+            }
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('assets').oneOf('assets-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/assets/[name][ext]'
+            }
           }
         ]
       },
@@ -1128,7 +1171,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack config - 1 cjs 1`] = `
 "{
   target: [
-    'es2022',
+    'es2025',
     'node'
   ],
   name: 'cjs',
@@ -1582,7 +1625,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       /* config.module.rule('image') */
       {
-        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur)$/i,
+        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur|jxl)$/i,
         oneOf: [
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
@@ -1704,7 +1747,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       /* config.module.rule('media') */
       {
-        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus|vtt)$/i,
         oneOf: [
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
@@ -1819,6 +1862,49 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
               filename: 'static/font/[name][ext]'
             },
             issuer: /\\.(css|sass|scss|less|styl|stylus)$/
+          }
+        ]
+      },
+      /* config.module.rule('assets') */
+      {
+        test: /\\.(?:webmanifest|pdf|txt)$/i,
+        oneOf: [
+          /* config.module.rule('assets').oneOf('assets-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /[?&]url(?:&|=|$)/,
+            generator: {
+              filename: 'static/assets/[name][ext]'
+            }
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('assets').oneOf('assets-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 0
+              }
+            },
+            generator: {
+              filename: 'static/assets/[name][ext]'
+            }
           }
         ]
       },
@@ -1957,7 +2043,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack config - 2 umd 1`] = `
 "{
   target: [
-    'es2022',
+    'es2025',
     'node'
   ],
   name: 'umd',
@@ -2389,7 +2475,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       /* config.module.rule('image') */
       {
-        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur)$/i,
+        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur|jxl)$/i,
         oneOf: [
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
@@ -2475,7 +2561,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       /* config.module.rule('media') */
       {
-        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus|vtt)$/i,
         oneOf: [
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
@@ -2555,6 +2641,49 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
             generator: {
               filename: 'static/font/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('assets') */
+      {
+        test: /\\.(?:webmanifest|pdf|txt)$/i,
+        oneOf: [
+          /* config.module.rule('assets').oneOf('assets-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /[?&]url(?:&|=|$)/,
+            generator: {
+              filename: 'static/assets/[name][ext]'
+            }
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('assets').oneOf('assets-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/assets/[name][ext]'
             }
           }
         ]
@@ -2687,7 +2816,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack config - 3 iife 1`] = `
 "{
   target: [
-    'es2022',
+    'es2025',
     'node'
   ],
   name: 'iife',
@@ -3123,7 +3252,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       /* config.module.rule('image') */
       {
-        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur)$/i,
+        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur|jxl)$/i,
         oneOf: [
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
@@ -3209,7 +3338,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       /* config.module.rule('media') */
       {
-        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus|vtt)$/i,
         oneOf: [
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
@@ -3289,6 +3418,49 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
             generator: {
               filename: 'static/font/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('assets') */
+      {
+        test: /\\.(?:webmanifest|pdf|txt)$/i,
+        oneOf: [
+          /* config.module.rule('assets').oneOf('assets-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /[?&]url(?:&|=|$)/,
+            generator: {
+              filename: 'static/assets/[name][ext]'
+            }
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('assets').oneOf('assets-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/assets/[name][ext]'
             }
           }
         ]
@@ -3422,7 +3594,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rspack config - 4 mf 1`] = `
 "{
   target: [
-    'es2022',
+    'es2025',
     'web'
   ],
   name: 'mf',
@@ -3806,7 +3978,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       /* config.module.rule('image') */
       {
-        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur)$/i,
+        test: /\\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif|cur|jxl)$/i,
         oneOf: [
           /* config.module.rule('image').oneOf('image-asset-url') */
           {
@@ -3892,7 +4064,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
       /* config.module.rule('media') */
       {
-        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+        test: /\\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus|vtt)$/i,
         oneOf: [
           /* config.module.rule('media').oneOf('media-asset-url') */
           {
@@ -3972,6 +4144,49 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             },
             generator: {
               filename: 'static/font/[name][ext]'
+            }
+          }
+        ]
+      },
+      /* config.module.rule('assets') */
+      {
+        test: /\\.(?:webmanifest|pdf|txt)$/i,
+        oneOf: [
+          /* config.module.rule('assets').oneOf('assets-asset-url') */
+          {
+            type: 'asset/resource',
+            resourceQuery: /[?&]url(?:&|=|$)/,
+            generator: {
+              filename: 'static/assets/[name][ext]'
+            }
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-inline') */
+          {
+            type: 'asset/inline',
+            resourceQuery: /[?&]inline(?:&|=|$)/
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-text') */
+          {
+            type: 'asset/source',
+            'with': {
+              type: 'text'
+            }
+          },
+          /* config.module.rule('assets').oneOf('assets-asset-raw') */
+          {
+            type: 'asset/source',
+            resourceQuery: /[?&]raw(?:&|=|$)/
+          },
+          /* config.module.rule('assets').oneOf('assets-asset') */
+          {
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 4096
+              }
+            },
+            generator: {
+              filename: 'static/assets/[name][ext]'
             }
           }
         ]
