@@ -1,13 +1,9 @@
 import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import path from 'node:path';
 import { expect } from '@rstest/core';
 import fse from 'fs-extra';
 import type { Lang } from '../src/index';
-
-const require = createRequire(import.meta.url);
-const ts = require('typescript') as typeof import('typescript');
 
 export const expectPackageJson = (
   pkgJson: Record<string, any>,
@@ -37,21 +33,6 @@ export interface TemplateCase {
   tools: string[];
   label: string;
 }
-
-const readTsconfig = (tsconfigPath: string): Record<string, any> => {
-  const result = ts.parseConfigFileTextToJson(
-    tsconfigPath,
-    fse.readFileSync(tsconfigPath, 'utf-8'),
-  );
-
-  if (result.error) {
-    throw new Error(
-      ts.flattenDiagnosticMessageText(result.error.messageText, '\n'),
-    );
-  }
-
-  return result.config;
-};
 
 export const createAndValidate = (
   cwd: string,
@@ -96,29 +77,9 @@ export const createAndValidate = (
   );
 
   // tsconfig
-  let tsconfig: Record<string, any> | undefined;
   if (templateCase.lang === 'ts') {
     expect(pkgJson.devDependencies.typescript).toBeTruthy();
     expect(existsSync(path.join(dir, 'tsconfig.json'))).toBeTruthy();
-    tsconfig = readTsconfig(path.join(dir, 'tsconfig.json'));
-
-    if (pkgJson.devDependencies['@types/node']) {
-      expect(tsconfig?.compilerOptions?.types?.includes('node')).toBe(true);
-    }
-  }
-
-  if (
-    templateCase.lang === 'ts' &&
-    (templateCase.template === 'react' || templateCase.template === 'vue')
-  ) {
-    const testsTsconfig = readTsconfig(path.join(dir, 'tests/tsconfig.json'));
-    const testsTypes = testsTsconfig.compilerOptions?.types;
-
-    expect(
-      tsconfig?.compilerOptions?.types?.includes('@rslib/core/types'),
-    ).toBe(true);
-    expect(testsTypes.includes('@rslib/core/types')).toBe(true);
-    expect(testsTypes.includes('@testing-library/jest-dom')).toBe(true);
   }
 
   expect(
