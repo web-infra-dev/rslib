@@ -2,6 +2,7 @@ import { describe, expect, test } from '@rstest/core';
 import type { EcmaScriptVersion } from '../src/types';
 import {
   ESX_TO_BROWSERSLIST,
+  resolveMinNodeVersion,
   transformSyntaxToBrowserslist,
   transformSyntaxToRspackTarget,
 } from '../src/utils/syntax';
@@ -275,5 +276,80 @@ describe('transformSyntaxToRspackTarget', () => {
         "es2015",
       ]
     `);
+  });
+});
+
+describe('resolveMinNodeVersion', () => {
+  const expectMinNodeVersion = async (range: string, expected: string | null) => {
+    await expect(resolveMinNodeVersion(range)).resolves.toBe(expected);
+  };
+  test('extracts minimum versions from common range operators', async () => {
+    await expectMinNodeVersion('>=18', '18.0.0');
+    await expectMinNodeVersion('>=18.12', '18.12.0');
+    await expectMinNodeVersion('>=18.12.1', '18.12.1');
+    await expectMinNodeVersion('^20.19.0', '20.19.0');
+    await expectMinNodeVersion('~22.12.1', '22.12.1');
+    await expectMinNodeVersion('=24.0.0', '24.0.0');
+    await expectMinNodeVersion('20.19.0', '20.19.0');
+  });
+
+  test('extracts minimum versions from partial, v-prefixed, and prerelease versions', async () => {
+    await expectMinNodeVersion('18', '18.0.0');
+    await expectMinNodeVersion('18.12', '18.12.0');
+    await expectMinNodeVersion('v20.19.0', '20.19.0');
+    await expectMinNodeVersion(
+      '>=20.19.0-alpha.1',
+      '20.19.0-alpha.1',
+    );
+    await expectMinNodeVersion('^20.19.0-alpha.1', '20.19.0-alpha.1');
+  });
+
+  test('normalizes exclusive lower bounds with semver range semantics', async () => {
+    await expectMinNodeVersion('>18', '19.0.0');
+    await expectMinNodeVersion('>18.12', '18.13.0');
+    await expectMinNodeVersion('>18.12.1', '18.12.2');
+  });
+
+  test('extracts minimum versions from hyphen ranges', async () => {
+    await expectMinNodeVersion('18.12.0 - 20.0.0', '18.12.0');
+    await expectMinNodeVersion('18 - 20', '18.0.0');
+    await expectMinNodeVersion('18.12 - 20.1', '18.12.0');
+  });
+
+  test('treats wildcard ranges as unrestricted', async () => {
+    await expectMinNodeVersion('x', null);
+    await expectMinNodeVersion('X', null);
+    await expectMinNodeVersion('*', null);
+    await expectMinNodeVersion('18.x', '18.0.0');
+    await expectMinNodeVersion('18.*', '18.0.0');
+    await expectMinNodeVersion('18.12.x', '18.12.0');
+  });
+
+  test('uses the highest lower bound within an AND range', async () => {
+    await expectMinNodeVersion('>=18 <21', '18.0.0');
+    await expectMinNodeVersion('>=18.12.0 >=20.0.0 <21', '20.0.0');
+    await expectMinNodeVersion('>=18.12.0 >18.13.0 <20', '18.13.1');
+  });
+
+  test('uses the lowest satisfiable set from OR ranges', async () => {
+    await expectMinNodeVersion('^20.19.0 || >=22.12.0', '20.19.0');
+    await expectMinNodeVersion('>=22.12.0 || >=20.19.0', '20.19.0');
+    await expectMinNodeVersion(
+      '>=18.12.0 <19 || >=20.0.0',
+      '18.12.0',
+    );
+  });
+
+  test('returns null for impractical lower bounds', async () => {
+    await expectMinNodeVersion('<18 || >=20.0.0', null);
+    await expectMinNodeVersion('>=0', null);
+    await expectMinNodeVersion('<20', null);
+  });
+
+  test('returns null for unsatisfiable or unparseable ranges', async () => {
+    await expectMinNodeVersion('>=20 <20 || >=22.0.0', null);
+    await expectMinNodeVersion('*', null);
+    await expectMinNodeVersion('', null);
+    await expectMinNodeVersion('latest', null);
   });
 });

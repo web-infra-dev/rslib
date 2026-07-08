@@ -66,6 +66,7 @@ import {
 import { isDebug, logger } from './utils/logger';
 import {
   ESX_TO_BROWSERSLIST,
+  resolveMinNodeVersion,
   transformSyntaxToBrowserslist,
   transformSyntaxToRspackTarget,
 } from './utils/syntax';
@@ -1114,12 +1115,12 @@ const composeOutputFilenameConfig = (
   };
 };
 
-const composeSyntaxConfig = (
+const composeSyntaxConfig = async (
   target: RsbuildConfigOutputTarget,
   syntax?: Syntax,
-): EnvironmentConfig => {
-  // Defaults to ESNext, Rslib will assume all of the latest JavaScript and CSS features are supported.
-  if (syntax) {
+  pkgJson?: PkgJson,
+): Promise<EnvironmentConfig> => {
+  const composeSyntaxTransformConfig = (syntax: Syntax): EnvironmentConfig => {
     return {
       tools: {
         rspack: (config) => {
@@ -1130,6 +1131,17 @@ const composeSyntaxConfig = (
         overrideBrowserslist: transformSyntaxToBrowserslist(syntax, target),
       },
     };
+  };
+
+  if (syntax) {
+    return composeSyntaxTransformConfig(syntax);
+  }
+
+  if (target === 'node' && pkgJson?.engines?.node) {
+    const minVer = await resolveMinNodeVersion(pkgJson.engines.node);
+    if (minVer) {
+      return composeSyntaxTransformConfig([`node >= ${minVer}`]);
+    }
   }
 
   return {
@@ -1871,7 +1883,11 @@ async function composeLibRsbuildConfig(
     bundle,
     outBase,
   );
-  const syntaxConfig = composeSyntaxConfig(target, config?.syntax);
+  const syntaxConfig = await composeSyntaxConfig(
+    target,
+    config?.syntax,
+    pkgJson,
+  );
   const autoExternalConfig = composeAutoExternalConfig({
     bundle,
     format,

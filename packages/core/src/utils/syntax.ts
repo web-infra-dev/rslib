@@ -228,3 +228,15 @@ export function transformSyntaxToBrowserslist(
 
   return handleSyntaxItem(syntax);
 }
+
+export async function resolveMinNodeVersion(
+  range: string,
+): Promise<string | null> {
+  try {
+    const { default: minVersion } = await import('semver/ranges/min-version');
+    const minVer = minVersion(range);
+    return minVer?.version === '0.0.0' ? null : minVer?.version ?? null;
+  } catch {
+    return null;
+  }
+}
