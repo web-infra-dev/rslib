@@ -82,19 +82,6 @@ export const createAndValidate = (
     expect(existsSync(path.join(dir, 'tsconfig.json'))).toBeTruthy();
   }
 
-  if (
-    templateCase.lang === 'ts' &&
-    (templateCase.template === 'react' ||
-      templateCase.template === 'vue' ||
-      templateCase.template === 'solid')
-  ) {
-    const envDtsPath = path.join(dir, 'src/env.d.ts');
-    expect(existsSync(envDtsPath)).toBeTruthy();
-    expect(fse.readFileSync(envDtsPath, 'utf-8').trimEnd()).toBe(
-      '/// <reference types="@rslib/core/types" />',
-    );
-  }
-
   expect(
     existsSync(path.join(dir, `rstest.config.${templateCase.lang}`)),
   ).toBeTruthy();
@@ -187,8 +174,8 @@ export const createAndValidate = (
       expect(pkgJson.peerDependencies['react-dom']).toBe('>=19.0.0');
     } else {
       expect(configContent).not.toContain('reactCompiler');
-      expect(pkgJson.peerDependencies.react).toBe('>=16.14.0');
-      expect(pkgJson.peerDependencies['react-dom']).toBe('>=16.14.0');
+      expect(pkgJson.peerDependencies.react).toBe('>=18.0.0');
+      expect(pkgJson.peerDependencies['react-dom']).toBe('>=18.0.0');
     }
   }
 
