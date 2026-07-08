@@ -149,8 +149,6 @@ Then configure the `"exports"` field in `package.json`:
 }
 ```
 
-When an application project that uses this component library configures `@rsbuild/plugin-solid`, the `"solid"` condition name is automatically added to module resolution, so the application-side toolchain resolves the `.jsx` source and compiles it locally. Application projects without Solid JSX compilation configured will fall back to the pre-compiled `"import"` entry.
-
 ## TypeScript
 
 For Solid projects using TypeScript, set `"jsx": "preserve"` and `"jsxImportSource": "solid-js"` in your `tsconfig.json`:

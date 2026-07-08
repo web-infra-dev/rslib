@@ -149,8 +149,6 @@ export default defineConfig({
 }
 ```
 
-当使用该组件库的应用项目配置了 `@rsbuild/plugin-solid` 时，`"solid"` condition name 会自动加入模块解析，应用侧工具链会解析到 `.jsx` 源码并在本地编译。未配置 Solid JSX 编译能力的应用项目会回退到预编译的 `"import"` 入口。
-
 ## TypeScript
 
 对于使用 TypeScript 的 Solid 项目，在 `tsconfig.json` 中设置 `"jsx": "preserve"` 和 `"jsxImportSource": "solid-js"`：
