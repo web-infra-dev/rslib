@@ -38,11 +38,19 @@ export type { SomeType } from './types';
 
 `@rslib/core` 提供了一些预设的类型定义，包含 CSS Modules、静态资源、`import.meta` 等类型。
 
-你可以创建一个 `src/env.d.ts` 文件来引用：
+你可以在 `tsconfig.json` 的 [`compilerOptions.types`](https://www.typescriptlang.org/tsconfig/#types) 中添加这些预设类型：
 
-```ts title="src/env.d.ts"
-/// <reference types="@rslib/core/types" />
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "types": ["@rslib/core/types"]
+  }
+}
 ```
+
+如果你的项目中已经配置了 `compilerOptions.types`，请将 `@rslib/core/types` 追加到已有列表中。
+
+> Rslib 的预设类型与 Rsbuild 的预设类型相同。参考 Rsbuild 的 [types.d.ts](https://github.com/web-infra-dev/rsbuild/blob/main/packages/core/types.d.ts) 来了解完整类型定义。
 
 ## 类型检查
 

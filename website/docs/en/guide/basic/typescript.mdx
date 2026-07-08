@@ -38,11 +38,19 @@ export type { SomeType } from './types';
 
 `@rslib/core` provides some preset type definitions, including CSS Modules, static assets, `import.meta` and other types.
 
-You can create a `src/env.d.ts` file to reference it:
+Add the preset types to [`compilerOptions.types`](https://www.typescriptlang.org/tsconfig/#types) in `tsconfig.json`:
 
-```ts title="src/env.d.ts"
-/// <reference types="@rslib/core/types" />
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "types": ["@rslib/core/types"]
+  }
+}
 ```
+
+If your project already has `compilerOptions.types`, append `@rslib/core/types` to the existing list.
+
+> Rslib's preset types are the same as Rsbuild's preset types. See Rsbuild's [types.d.ts](https://github.com/web-infra-dev/rsbuild/blob/main/packages/core/types.d.ts) for the complete type definitions.
 
 ## Type checking
 

@@ -159,10 +159,14 @@ declare module '*.scss' {
 }
 ```
 
-或者
+或者在 `tsconfig.json` 中添加 `@rslib/core` 提供的 [预设类型](/guide/basic/typescript#预设类型)：
 
-```ts title="src/env.d.ts"
-/// <reference types="@rslib/core/types" />
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "types": ["@rslib/core/types"]
+  }
+}
 ```
 
 ## CSS Modules
