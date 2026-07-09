@@ -294,11 +294,11 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 ### tsgo
 
 - **Type:** `boolean`
-- **Default:** `true` when the installed `typescript` package is version 7 or higher, otherwise `false`
+- **Default:** `true` when TypeScript 7+ is detected, otherwise `false`
 
-Whether to generate declaration files with [TypeScript Go](https://github.com/microsoft/typescript-go).
+Whether to generate declaration files using [native TypeScript](https://github.com/microsoft/typescript-go).
 
-After installing TypeScript 7 or higher, Rslib will automatically enable this option.
+When unset, Rslib enables this option automatically when TypeScript 7+ is detected.
 
 ```bash
 npm add typescript@latest -D

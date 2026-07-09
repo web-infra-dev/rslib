@@ -85,9 +85,9 @@ export default {
 
 #### tsgo
 
-Using [TypeScript Go](https://github.com/microsoft/typescript-go) to generate declaration files can preserve type checking while significantly improving the speed of declaration generation.
+Using [native TypeScript](https://github.com/microsoft/typescript-go) to generate declaration files keeps type checking enabled while significantly speeding up declaration generation.
 
-After installing TypeScript 7 or higher, Rslib will automatically enable [dts.tsgo](/config/lib/dts#dtstsgo).
+When [dts.tsgo](/config/lib/dts#dtstsgo) is unset, Rslib enables it automatically when TypeScript 7+ is detected.
 
 <PackageManagerTabs command="add typescript@latest -D" />
 

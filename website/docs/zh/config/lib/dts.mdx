@@ -273,11 +273,11 @@ export default {
 ### dts.tsgo
 
 - **类型：** `boolean`
-- **默认值：** 当安装的 `typescript` 包版本为 7 或更高时为 `true`，否则为 `false`
+- **默认值：** 检测到 TypeScript 7+ 时为 `true`，否则为 `false`
 
-是否使用 [TypeScript Go](https://github.com/microsoft/typescript-go) 生成类型声明文件。
+是否通过 [native TypeScript](https://github.com/microsoft/typescript-go) 生成类型声明文件。
 
-安装 TypeScript 7 或更高版本后，Rslib 会自动开启该选项。
+如果没有显式设置该选项，Rslib 会在检测到 TypeScript 7+ 时自动开启。
 
 <PackageManagerTabs command="add typescript@latest -D" />
 

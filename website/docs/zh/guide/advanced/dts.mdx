@@ -85,9 +85,9 @@ export default {
 
 #### tsgo
 
-使用 [TypeScript Go](https://github.com/microsoft/typescript-go) 生成类型声明文件，可以在保留类型检查的同时，显著加快类型生成的速度。
+使用 [native TypeScript](https://github.com/microsoft/typescript-go) 生成类型声明文件，可以在保留类型检查的同时显著提升生成速度。
 
-安装 TypeScript 7 或更高版本后，Rslib 会自动开启 [dts.tsgo](/config/lib/dts#dtstsgo)。
+如果没有显式设置 [dts.tsgo](/config/lib/dts#dtstsgo)，Rslib 会在检测到 TypeScript 7+ 时自动开启该选项。
 
 <PackageManagerTabs command="add typescript@latest -D" />
 

@@ -273,11 +273,11 @@ At this time, when [redirect.dts.path](/config/lib/redirect#redirectdtspath) is 
 ### dts.tsgo
 
 - **Type:** `boolean`
-- **Default:** `true` when the installed `typescript` package is version 7 or higher, otherwise `false`
+- **Default:** `true` when TypeScript 7+ is detected, otherwise `false`
 
-Whether to generate declaration files with [TypeScript Go](https://github.com/microsoft/typescript-go).
+Whether to generate declaration files using [native TypeScript](https://github.com/microsoft/typescript-go).
 
-After installing TypeScript 7 or higher, Rslib will automatically enable this option.
+When unset, Rslib enables this option automatically when TypeScript 7+ is detected.
 
 <PackageManagerTabs command="add typescript@latest -D" />
 
