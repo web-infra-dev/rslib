@@ -33,7 +33,7 @@ describe('resolveDtsGenerationBackend', () => {
 
   test('should reject disabling tsgo with TypeScript 7.0', () => {
     expect(() => resolveDtsGenerationBackend({ tsgo: false }, '7.0.2')).toThrow(
-      'Can not set "dts.tsgo: false" when using TypeScript 7 or higher.',
+      'Can not set "dts.tsgo: false" when using `typescript` >= 7.0.0.',
     );
   });
 

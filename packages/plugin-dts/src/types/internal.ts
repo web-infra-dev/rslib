@@ -1,5 +1,5 @@
 import type { LogLevel, RsbuildConfig } from '@rsbuild/core';
-import type { ParsedCommandLine } from 'typescript-api';
+import type { ParsedCommandLine } from 'typescript6-api';
 import type { ApiExtractorOptions, PluginDtsOptions } from './options';
 
 export type DtsGenerationBackend = 'api-old' | 'ts7-executable' | 'isolated';

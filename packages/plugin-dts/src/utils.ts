@@ -19,7 +19,7 @@ import path, {
 import { styleText } from 'node:util';
 import { convertPathToPattern, glob } from 'tinyglobby';
 import { createMatchPath, loadConfig, type MatchPath } from 'tsconfig-paths';
-import type { CompilerOptions } from 'typescript-api';
+import type { CompilerOptions } from 'typescript6-api';
 import type { DtsRedirect } from './types/options';
 import type {
   CompilerApiTsconfigResultForApi,
@@ -30,7 +30,7 @@ import type {
 const require = createRequire(import.meta.url);
 
 let astGrepNapi: typeof import('@ast-grep/napi') | undefined;
-const typescriptCache = new Map<string, typeof import('typescript-api')>();
+const typescriptCache = new Map<string, typeof import('typescript6-api')>();
 
 export const createRequireFromPackageJson = (cwd: string): NodeJS.Require =>
   createRequire(join(cwd, 'package.json'));
@@ -46,7 +46,7 @@ const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
 
 export const loadTypescript = (
   cwd?: string,
-): typeof import('typescript-api') => {
+): typeof import('typescript6-api') => {
   const currentRequire = cwd ? createRequireFromPackageJson(cwd) : require;
   const typescriptPath = currentRequire.resolve('typescript');
   const cachedTypescript = typescriptCache.get(typescriptPath);
@@ -63,7 +63,7 @@ export const loadTypescript = (
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const typescript = currentRequire(
     'typescript',
-  ) as typeof import('typescript-api');
+  ) as typeof import('typescript6-api');
   typescriptCache.set(typescriptPath, typescript);
 
   return typescript;
@@ -115,7 +115,7 @@ const resolveTsconfigPath = (
 
 export function loadTsconfig(
   tsconfigPath: string,
-  ts: typeof import('typescript-api') = loadTypescript(),
+  ts: typeof import('typescript6-api') = loadTypescript(),
 ): CompilerApiTsconfigResultForApi {
   const configFile = ts.readConfigFile(
     tsconfigPath,

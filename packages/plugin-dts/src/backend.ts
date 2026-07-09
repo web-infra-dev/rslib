@@ -47,10 +47,7 @@ const isTypeScriptVersionAtLeast7 = (version: string | undefined): boolean => {
 };
 
 export function validateExplicitIsolatedDtsOptions(
-  options: Pick<
-    PluginDtsOptions,
-    'isolated' | 'tsgo' | 'build' | 'abortOnError'
-  >,
+  options: PluginDtsOptions,
 ): void {
   if (options.isolated !== true) {
     return;
@@ -72,10 +69,7 @@ export function validateExplicitIsolatedDtsOptions(
 }
 
 export function resolveDtsGenerationBackend(
-  options: Pick<
-    PluginDtsOptions,
-    'isolated' | 'tsgo' | 'build' | 'abortOnError'
-  >,
+  options: PluginDtsOptions,
   typescriptVersion?: string,
 ): DtsGenerationBackend {
   validateExplicitIsolatedDtsOptions(options);
@@ -87,7 +81,7 @@ export function resolveDtsGenerationBackend(
   if (isTypeScriptVersionAtLeast7(typescriptVersion)) {
     if (options.tsgo === false) {
       throw new Error(
-        'Can not set "dts.tsgo: false" when using TypeScript 7 or higher.',
+        'Can not set "dts.tsgo: false" when using `typescript` >= 7.0.0.',
       );
     }
 
