@@ -16,8 +16,8 @@ describe('resolveDtsGenerationBackend', () => {
   });
 
   test('should use the TypeScript 7 executable backend for TypeScript 7.0', () => {
-    expect(resolveDtsGenerationBackend({}, '7.0.1-rc')).toBe('ts7-executable');
-    expect(resolveDtsGenerationBackend({ tsgo: true }, '7.0.1-rc')).toBe(
+    expect(resolveDtsGenerationBackend({}, '7.0.2')).toBe('ts7-executable');
+    expect(resolveDtsGenerationBackend({ tsgo: true }, '7.0.2')).toBe(
       'ts7-executable',
     );
   });
@@ -32,9 +32,7 @@ describe('resolveDtsGenerationBackend', () => {
   });
 
   test('should reject disabling tsgo with TypeScript 7.0', () => {
-    expect(() =>
-      resolveDtsGenerationBackend({ tsgo: false }, '7.0.1-rc'),
-    ).toThrow(
+    expect(() => resolveDtsGenerationBackend({ tsgo: false }, '7.0.2')).toThrow(
       'Can not set "dts.tsgo: false" when using TypeScript 7 or higher.',
     );
   });
@@ -59,12 +57,12 @@ describe('resolveDtsGenerationBackend', () => {
       );
       await fs.writeFile(
         path.join(typescriptPkgDir, 'package.json'),
-        JSON.stringify({ name: 'typescript', version: '7.0.1-rc' }),
+        JSON.stringify({ name: 'typescript', version: '7.0.2' }),
       );
 
       const typescriptVersion = readTypescriptVersion(packageDir);
 
-      expect(typescriptVersion).toBe('7.0.1-rc');
+      expect(typescriptVersion).toBe('7.0.2');
       expect(resolveDtsGenerationBackend({}, typescriptVersion)).toBe(
         'ts7-executable',
       );

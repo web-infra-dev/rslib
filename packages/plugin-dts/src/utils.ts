@@ -19,13 +19,13 @@ import path, {
 import { styleText } from 'node:util';
 import { convertPathToPattern, glob } from 'tinyglobby';
 import { createMatchPath, loadConfig, type MatchPath } from 'tsconfig-paths';
-import type { CompilerOptions, ParsedCommandLine } from 'typescript';
+import type { CompilerOptions, ParsedCommandLine } from 'typescript-api';
 import type { DtsEntry, DtsRedirect } from './index';
 
 const require = createRequire(import.meta.url);
 
 let astGrepNapi: typeof import('@ast-grep/napi') | undefined;
-const typescriptCache = new Map<string, typeof import('typescript')>();
+const typescriptCache = new Map<string, typeof import('typescript-api')>();
 
 export const createRequireFromPackageJson = (cwd: string): NodeJS.Require =>
   createRequire(join(cwd, 'package.json'));
@@ -39,7 +39,9 @@ const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
   return astGrepNapi;
 };
 
-export const loadTypescript = (cwd?: string): typeof import('typescript') => {
+export const loadTypescript = (
+  cwd?: string,
+): typeof import('typescript-api') => {
   const currentRequire = cwd ? createRequireFromPackageJson(cwd) : require;
   const typescriptPath = currentRequire.resolve('typescript');
   const cachedTypescript = typescriptCache.get(typescriptPath);
@@ -56,7 +58,7 @@ export const loadTypescript = (cwd?: string): typeof import('typescript') => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const typescript = currentRequire(
     'typescript',
-  ) as typeof import('typescript');
+  ) as typeof import('typescript-api');
   typescriptCache.set(typescriptPath, typescript);
 
   return typescript;
@@ -114,7 +116,7 @@ const resolveTsconfigPath = (
 
 export function loadTsconfig(
   tsconfigPath: string,
-  ts: typeof import('typescript') = loadTypescript(),
+  ts: typeof import('typescript-api') = loadTypescript(),
 ): CompilerApiTsconfigResultForApi {
   const configFile = ts.readConfigFile(
     tsconfigPath,
@@ -133,8 +135,7 @@ export function loadTsconfigResultForExecutable(
   cwd: string,
   configName: string,
 ):
-  | { path: string; config: GetTsconfigTsconfigResultForExecutable }
-  | undefined {
+  { path: string; config: GetTsconfigTsconfigResultForExecutable } | undefined {
   if (isAbsolute(configName) && !fs.existsSync(configName)) {
     return undefined;
   }

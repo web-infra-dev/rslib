@@ -25,41 +25,28 @@ type DtsExecutableCommand = {
 };
 
 const getDtsExecutablePath = async (cwd: string): Promise<string> => {
-  let packageJsonPath: string;
-
   try {
-    packageJsonPath = createRequireFromPackageJson(cwd).resolve(
+    const packageJsonPath = createRequireFromPackageJson(cwd).resolve(
       `${TYPESCRIPT_PACKAGE_NAME}/package.json`,
     );
+
+    const libPath = path.resolve(
+      path.dirname(packageJsonPath),
+      './lib/getExePath.js',
+    );
+
+    // handle Windows paths
+    // On Windows, absolute paths must be valid file:// URLs
+    const fileUrl =
+      process.platform === 'win32' ? pathToFileURL(libPath).href : libPath;
+
+    const mod = await import(fileUrl);
+    return mod.default();
   } catch {
     throw new Error(
       'Failed to resolve the native TypeScript executable. `dts.tsgo` requires `typescript` >= 7.0.0.',
     );
   }
-
-  const libPath = path.resolve(
-    path.dirname(packageJsonPath),
-    './lib/getExePath.js',
-  );
-
-  // handle Windows paths
-  // On Windows, absolute paths must be valid file:// URLs
-  let fileUrl: string;
-  if (process.platform === 'win32') {
-    fileUrl = pathToFileURL(libPath).href;
-  } else {
-    fileUrl = libPath;
-  }
-
-  return import(fileUrl).then((mod) => {
-    const getExePath = mod.default;
-    if (typeof getExePath !== 'function') {
-      throw new Error(
-        `Cannot resolve the native TypeScript executable from "${TYPESCRIPT_PACKAGE_NAME}".`,
-      );
-    }
-    return getExePath();
-  });
 };
 
 const resolveDtsExecutableCommand = async (

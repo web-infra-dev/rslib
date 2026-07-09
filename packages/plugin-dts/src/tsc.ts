@@ -7,7 +7,7 @@ import type {
   Program,
   System,
   WatchStatusReporter,
-} from 'typescript';
+} from 'typescript-api';
 import type { EmitDtsOptions } from './dts';
 import {
   color,
