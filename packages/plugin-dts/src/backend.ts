@@ -2,11 +2,7 @@ import fs from 'node:fs';
 import type { PluginDtsOptions } from './index';
 import { createRequireFromPackageJson } from './utils';
 
-export type DtsGenerationBackend =
-  | 'api-old'
-  | 'tsc-executable'
-  | 'tsgo-executable'
-  | 'isolated';
+export type DtsGenerationBackend = 'api-old' | 'ts7-executable' | 'isolated';
 
 type ParsedTypescriptVersion = {
   major: number;
@@ -96,11 +92,11 @@ export function resolveDtsGenerationBackend(
       );
     }
 
-    return 'tsc-executable';
+    return 'ts7-executable';
   }
 
   if (options.tsgo === true) {
-    return 'tsgo-executable';
+    throw new Error('`dts.tsgo` requires `typescript` >= 7.0.0.');
   }
 
   return 'api-old';

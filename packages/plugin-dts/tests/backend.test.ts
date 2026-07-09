@@ -8,21 +8,26 @@ import {
 } from '../src/backend';
 
 describe('resolveDtsGenerationBackend', () => {
+  const tsgoRequirementMessage = '`dts.tsgo` requires `typescript` >= 7.0.0.';
+
   test('should use the old compiler api backend for TypeScript 5 and 6', () => {
     expect(resolveDtsGenerationBackend({}, '5.9.3')).toBe('api-old');
     expect(resolveDtsGenerationBackend({}, '6.0.1')).toBe('api-old');
   });
 
-  test('should use the TypeScript executable backend for TypeScript 7.0', () => {
-    expect(resolveDtsGenerationBackend({}, '7.0.1-rc')).toBe('tsc-executable');
+  test('should use the TypeScript 7 executable backend for TypeScript 7.0', () => {
+    expect(resolveDtsGenerationBackend({}, '7.0.1-rc')).toBe('ts7-executable');
     expect(resolveDtsGenerationBackend({ tsgo: true }, '7.0.1-rc')).toBe(
-      'tsc-executable',
+      'ts7-executable',
     );
   });
 
-  test('should use the native-preview executable backend when tsgo is enabled without TypeScript 7.0', () => {
-    expect(resolveDtsGenerationBackend({ tsgo: true }, '6.0.1')).toBe(
-      'tsgo-executable',
+  test('should reject enabling tsgo without TypeScript 7.0 installed', () => {
+    expect(() => resolveDtsGenerationBackend({ tsgo: true }, '6.0.1')).toThrow(
+      tsgoRequirementMessage,
+    );
+    expect(() => resolveDtsGenerationBackend({ tsgo: true })).toThrow(
+      tsgoRequirementMessage,
     );
   });
 
@@ -34,8 +39,8 @@ describe('resolveDtsGenerationBackend', () => {
     );
   });
 
-  test('should use the TypeScript executable backend for TypeScript 7.1 or higher', () => {
-    expect(resolveDtsGenerationBackend({}, '7.1.0')).toBe('tsc-executable');
+  test('should use the TypeScript 7 executable backend for TypeScript 7.1 or higher', () => {
+    expect(resolveDtsGenerationBackend({}, '7.1.0')).toBe('ts7-executable');
   });
 
   test('should read the TypeScript version from cwd', async () => {
@@ -61,7 +66,7 @@ describe('resolveDtsGenerationBackend', () => {
 
       expect(typescriptVersion).toBe('7.0.1-rc');
       expect(resolveDtsGenerationBackend({}, typescriptVersion)).toBe(
-        'tsc-executable',
+        'ts7-executable',
       );
     } finally {
       await fs.rm(tempDir, { recursive: true, force: true });

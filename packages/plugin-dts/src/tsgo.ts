@@ -2,7 +2,6 @@ import { logger } from '@rsbuild/core';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import type { DtsGenerationBackend } from './backend';
 import type { EmitDtsOptions } from './dts';
 import {
   color,
@@ -15,17 +14,9 @@ import {
 
 const logPrefixTsgo = color.dim('[tsgo]');
 const TYPESCRIPT_PACKAGE_NAME = 'typescript';
-const NATIVE_PREVIEW_PACKAGE_NAME = '@typescript/native-preview';
-
-type ExecutableDtsGenerationBackend = Extract<
-  DtsGenerationBackend,
-  'tsc-executable' | 'tsgo-executable'
->;
 
 type EmitDtsExecutableOptions =
-  EmitDtsOptions<GetTsconfigTsconfigResultForExecutable> & {
-    dtsBackend: ExecutableDtsGenerationBackend;
-  };
+  EmitDtsOptions<GetTsconfigTsconfigResultForExecutable>;
 
 type DtsExecutableCommand = {
   command: string;
@@ -33,27 +24,16 @@ type DtsExecutableCommand = {
   displayCommand: string;
 };
 
-const getDtsExecutablePath = async (
-  cwd: string,
-  packageName:
-    | typeof TYPESCRIPT_PACKAGE_NAME
-    | typeof NATIVE_PREVIEW_PACKAGE_NAME,
-): Promise<string> => {
+const getDtsExecutablePath = async (cwd: string): Promise<string> => {
   let packageJsonPath: string;
 
   try {
     packageJsonPath = createRequireFromPackageJson(cwd).resolve(
-      `${packageName}/package.json`,
+      `${TYPESCRIPT_PACKAGE_NAME}/package.json`,
     );
   } catch {
-    if (packageName === NATIVE_PREVIEW_PACKAGE_NAME) {
-      throw new Error(
-        'Failed to resolve @typescript/native-preview. Install "typescript@rc" or "@typescript/native-preview" to use TypeScript Go.',
-      );
-    }
-
     throw new Error(
-      'Failed to resolve typescript. Install "typescript@rc" to use TypeScript Go.',
+      'Failed to resolve the native TypeScript executable. `dts.tsgo` requires `typescript` >= 7.0.0.',
     );
   }
 
@@ -73,21 +53,20 @@ const getDtsExecutablePath = async (
 
   return import(fileUrl).then((mod) => {
     const getExePath = mod.default;
+    if (typeof getExePath !== 'function') {
+      throw new Error(
+        `Cannot resolve the native TypeScript executable from "${TYPESCRIPT_PACKAGE_NAME}".`,
+      );
+    }
     return getExePath();
   });
 };
 
 const resolveDtsExecutableCommand = async (
-  dtsBackend: ExecutableDtsGenerationBackend,
   args: string[],
   cwd: string,
 ): Promise<DtsExecutableCommand> => {
-  const dtsExecutableFile = await getDtsExecutablePath(
-    cwd,
-    dtsBackend === 'tsc-executable'
-      ? TYPESCRIPT_PACKAGE_NAME
-      : NATIVE_PREVIEW_PACKAGE_NAME,
-  );
+  const dtsExecutableFile = await getDtsExecutablePath(cwd);
 
   return {
     command: dtsExecutableFile,
@@ -191,15 +170,10 @@ export async function emitDtsTsgo(
     paths,
     redirect,
     cwd,
-    dtsBackend,
   } = options;
 
   const args = generateTsgoArgs(configPath, declarationDir, build, isWatch);
-  const dtsExecutableCommand = await resolveDtsExecutableCommand(
-    dtsBackend,
-    args,
-    cwd,
-  );
+  const dtsExecutableCommand = await resolveDtsExecutableCommand(args, cwd);
 
   logger.debug(
     logPrefixTsgo,

@@ -279,29 +279,7 @@ Whether to generate declaration files with [TypeScript Go](https://github.com/mi
 
 After installing TypeScript 7 or higher, Rslib will automatically enable this option.
 
-<PackageManagerTabs command="add typescript@rc -D" />
-
-You can also install [@typescript/native-preview](https://www.npmjs.com/package/@typescript/native-preview) and manually enable this option.
-
-<PackageManagerTabs command="add @typescript/native-preview -D" />
-
-```ts title="rslib.config.ts"
-export default {
-  lib: [
-    {
-      dts: {
-        tsgo: true, // [!code highlight]
-      },
-    },
-  ],
-};
-```
-
-:::note
-
-The `@typescript/native-preview` usage is deprecated and kept only for compatibility. Prefer installing `typescript@rc` to use tsgo.
-
-:::
+<PackageManagerTabs command="add typescript@latest -D" />
 
 To ensure consistency during local development, you need to install the corresponding [VS Code Preview Extension](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) and add the following setting to VS Code:
 

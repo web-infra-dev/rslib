@@ -279,27 +279,7 @@ export default {
 
 安装 TypeScript 7 或更高版本后，Rslib 会自动开启该选项。
 
-<PackageManagerTabs command="add typescript@rc -D" />
-
-你也可以安装 [@typescript/native-preview](https://www.npmjs.com/package/@typescript/native-preview)，并手动开启该选项。
-
-<PackageManagerTabs command="add @typescript/native-preview -D" />
-
-```ts title="rslib.config.ts"
-export default {
-  lib: [
-    {
-      dts: {
-        tsgo: true, // [!code highlight]
-      },
-    },
-  ],
-};
-```
-
-:::note
-`@typescript/native-preview` 的用法已废弃，仅作为兼容方式保留，推荐安装 `typescript@rc` 使用 tsgo。
-:::
+<PackageManagerTabs command="add typescript@latest -D" />
 
 为了保证本地开发的一致性，你需要安装对应的 [VS Code 预览版扩展](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview)，并在 VS Code 设置中添加如下配置：
 

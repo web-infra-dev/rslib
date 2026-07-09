@@ -24,15 +24,9 @@ const isObject = (obj: unknown): obj is Record<string, any> =>
 
 export const DEFAULT_EXCLUDED_PACKAGES: string[] = ['@types/react'];
 
-type ExecutableDtsGenerationBackend = Extract<
-  DtsGenOptions['dtsBackend'],
-  'tsc-executable' | 'tsgo-executable'
->;
-
 const isExecutableBackend = (
   dtsBackend: DtsGenOptions['dtsBackend'],
-): dtsBackend is ExecutableDtsGenerationBackend =>
-  dtsBackend === 'tsc-executable' || dtsBackend === 'tsgo-executable';
+): boolean => dtsBackend === 'ts7-executable';
 
 type CalculateBundledPackagesOptions = {
   cwd: string;
@@ -144,8 +138,7 @@ export type PreparedDtsContext = {
 
 export type EmitDtsOptions<
   Tsconfig extends
-    | CompilerApiTsconfigResultForApi
-    | GetTsconfigTsconfigResultForExecutable,
+    CompilerApiTsconfigResultForApi | GetTsconfigTsconfigResultForExecutable,
 > = {
   name: string;
   cwd: string;
@@ -362,7 +355,6 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
         mod.emitDtsTsgo(
           {
             ...emitOptions,
-            dtsBackend,
             tsConfigResult:
               tsConfigResult as GetTsconfigTsconfigResultForExecutable,
           },
