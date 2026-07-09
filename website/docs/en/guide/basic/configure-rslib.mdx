@@ -21,6 +21,21 @@ export default {
 };
 ```
 
+### Common lib configurations
+
+Some `lib` options can be configured outside the `lib` field as common defaults. Each `lib` item inherits these defaults, and the same option inside a `lib` item overrides the common value.
+
+For example, set [`syntax`](/config/lib/syntax) once for all outputs:
+
+```js title="rslib.config.mjs"
+export default {
+  syntax: 'es2021',
+  lib: [{ format: 'esm' }, { format: 'cjs' }],
+};
+```
+
+The supported common `lib` options are listed in the [`lib` configuration overview](/config/lib).
+
 ### Common Rsbuild configurations
 
 You can set common Rsbuild configurations outside the `lib` field, which will be inherited by each configuration object inside the `lib` field.

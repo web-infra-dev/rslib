@@ -25,7 +25,21 @@ interface LibConfig extends EnvironmentConfig {
   umdName?: Rspack.LibraryName;
 }
 
-interface RslibConfig extends RsbuildConfig {
+type SharedLibConfig = Pick<
+  LibConfig,
+  | 'bundle'
+  | 'autoExtension'
+  | 'autoExternal'
+  | 'redirect'
+  | 'syntax'
+  | 'externalHelpers'
+  | 'banner'
+  | 'footer'
+  | 'shims'
+  | 'outBase'
+>;
+
+interface RslibConfig extends RsbuildConfig, SharedLibConfig {
   lib: LibConfig[];
 }
 ```
@@ -35,3 +49,22 @@ interface RslibConfig extends RsbuildConfig {
 - **必选:** `true`
 
 `lib` 配置是一个对象数组，每个对象代表一组不同的配置。这些配置包括所有 Rsbuild 配置以及 Rslib 特定的配置，可以生成不同格式的产物。
+
+## 共享的 lib 配置
+
+部分 `lib` 配置也可以配置在 `RslibConfig` 顶层，作为所有 `lib` 项的默认值。`lib` 项内的同名配置会覆盖顶层配置。
+
+以下配置支持顶层配置：
+
+| 配置项                                            | 说明                                      |
+| ------------------------------------------------- | ----------------------------------------- |
+| [`bundle`](/config/lib/bundle)                    | 是否打包库。                              |
+| [`autoExtension`](/config/lib/auto-extension)     | 是否自动设置 JavaScript 产物文件扩展名。  |
+| [`autoExternal`](/config/lib/auto-external)       | 是否自动外部化依赖。                      |
+| [`redirect`](/config/lib/redirect)                | 配置产物文件中导入路径的重定向。          |
+| [`syntax`](/config/lib/syntax)                    | 配置 JavaScript 和 CSS 的语法目标。       |
+| [`externalHelpers`](/config/lib/external-helpers) | 是否从 `@swc/helpers` 导入 SWC 辅助函数。 |
+| [`banner`](/config/lib/banner)                    | 在产物文件顶部注入内容。                  |
+| [`footer`](/config/lib/footer)                    | 在产物文件底部注入内容。                  |
+| [`shims`](/config/lib/shims)                      | 配置 CommonJS 和 ESM 产物的 shims。       |
+| [`outBase`](/config/lib/out-base)                 | 配置 bundleless 产物文件的基础目录。      |

@@ -21,6 +21,21 @@ export default {
 };
 ```
 
+### 公共的 lib 配置
+
+部分 `lib` 配置可以配置在 `lib` 字段外部，作为公共默认值。每个 `lib` 项都会继承这些默认值，`lib` 项内的同名配置会覆盖公共配置。
+
+例如，为所有产物统一设置 [`syntax`](/config/lib/syntax)：
+
+```js title="rslib.config.mjs"
+export default {
+  syntax: 'es2021',
+  lib: [{ format: 'esm' }, { format: 'cjs' }],
+};
+```
+
+支持的公共 `lib` 配置项见 [`lib` 配置总览](/config/lib)。
+
 ### 公共的 Rsbuild 配置
 
 在 `lib` 字段外部，你可以设置公共的 Rsbuild 配置，这些配置将被 `lib` 内的每个配置对象继承。

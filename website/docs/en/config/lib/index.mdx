@@ -25,7 +25,21 @@ interface LibConfig extends EnvironmentConfig {
   umdName?: Rspack.LibraryName;
 }
 
-interface RslibConfig extends RsbuildConfig {
+type SharedLibConfig = Pick<
+  LibConfig,
+  | 'bundle'
+  | 'autoExtension'
+  | 'autoExternal'
+  | 'redirect'
+  | 'syntax'
+  | 'externalHelpers'
+  | 'banner'
+  | 'footer'
+  | 'shims'
+  | 'outBase'
+>;
+
+interface RslibConfig extends RsbuildConfig, SharedLibConfig {
   lib: LibConfig[];
 }
 ```
@@ -35,3 +49,22 @@ interface RslibConfig extends RsbuildConfig {
 - **Required:** `true`
 
 The `lib` configuration is an array of objects, each representing a distinct set of configurations. These include all Rsbuild configurations as well as Rslib-specific configurations, designed to generate different outputs.
+
+## Shared lib configuration
+
+Some `lib` options can also be configured at the top level of `RslibConfig` as defaults for all `lib` items. The same option configured inside a `lib` item overrides the top-level value.
+
+The following options support top-level configuration:
+
+| Option                                            | Description                                                     |
+| ------------------------------------------------- | --------------------------------------------------------------- |
+| [`bundle`](/config/lib/bundle)                    | Whether to bundle the library.                                  |
+| [`autoExtension`](/config/lib/auto-extension)     | Whether to automatically set JavaScript output file extensions. |
+| [`autoExternal`](/config/lib/auto-external)       | Whether to automatically externalize dependencies.              |
+| [`redirect`](/config/lib/redirect)                | Configure import path redirects in output files.                |
+| [`syntax`](/config/lib/syntax)                    | Configure the JavaScript and CSS syntax target.                 |
+| [`externalHelpers`](/config/lib/external-helpers) | Whether to import SWC helpers from `@swc/helpers`.              |
+| [`banner`](/config/lib/banner)                    | Inject content into the top of output files.                    |
+| [`footer`](/config/lib/footer)                    | Inject content into the bottom of output files.                 |
+| [`shims`](/config/lib/shims)                      | Configure shims for CommonJS and ESM output.                    |
+| [`outBase`](/config/lib/out-base)                 | Configure the base directory of bundleless output files.        |
