@@ -14,7 +14,7 @@ importers:
         version: 0.6.4(jiti@2.7.0)
       '@rstest/adapter-rslib':
         specifier: ^0.10.6
-        version: 0.10.6(@rslib/core@0.23.2)(@rstest/core@0.10.6)(@typescript/typescript6@6.0.2)
+        version: 0.10.6(@rslib/core@0.23.2)(@rstest/core@0.10.6)(typescript@6.0.3)
       '@rstest/core':
         specifier: ^0.10.6
         version: 0.10.6(@module-federation/runtime-tools@2.6.0)
@@ -38,7 +38,7 @@ importers:
         version: 1.0.2
       prebundle:
         specifier: 1.6.5
-        version: 1.6.5(@typescript/typescript6@6.0.2)
+        version: 1.6.5(typescript@6.0.3)
       prettier:
         specifier: ^3.9.4
         version: 3.9.4
@@ -49,8 +49,8 @@ importers:
         specifier: ^2.13.1
         version: 2.13.1
       typescript:
-        specifier: npm:@typescript/typescript6@^6.0.2
-        version: '@typescript/typescript6@6.0.2'
+        specifier: ^6.0.3
+        version: 6.0.3
 
   examples/express-plugin:
     devDependencies:
@@ -452,8 +452,8 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
       typescript6-api:
-        specifier: npm:@typescript/typescript6@^6.0.2
-        version: '@typescript/typescript6@6.0.2'
+        specifier: npm:typescript@^6.0.3
+        version: typescript@6.0.3
 
   scripts/tsconfig: {}
 
@@ -736,8 +736,8 @@ importers:
   tests/integration/dts:
     devDependencies:
       typescript:
-        specifier: npm:@typescript/typescript6@^6.0.2
-        version: '@typescript/typescript6@6.0.2'
+        specifier: ^6.0.3
+        version: 6.0.3
 
   tests/integration/dts-tsgo:
     devDependencies:
@@ -1082,8 +1082,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       typescript:
-        specifier: npm:@typescript/typescript6@^6.0.2
-        version: '@typescript/typescript6@6.0.2'
+        specifier: ^6.0.3
+        version: 6.0.3
 
   tests/integration/redirect/dts-tsgo:
     devDependencies:
@@ -3858,10 +3858,6 @@ packages:
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [win32]
-
-  '@typescript/typescript6@6.0.2':
-    resolution: {integrity: sha512-mbCddXd+jm7hfx7w2YU64/Av4/NqqeG3GoRZgxPcgoTxYjhrcfJRw9ULch71SS4G+Q3bOXFhRvPqjguN0Hyp5w==}
-    hasBin: true
 
   '@typescript/vfs@1.6.4':
     resolution: {integrity: sha512-PJFXFS4ZJKiJ9Qiuix6Dz/OwEIqHD7Dme1UwZhTK11vR+5dqW2ACbdndWQexBzCx+CPuMe5WBYQWCsFyGlQLlQ==}
@@ -9355,13 +9351,13 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
 
-  '@rslib/core@0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(@typescript/typescript6@6.0.2)':
+  '@rslib/core@0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(typescript@6.0.3)':
     dependencies:
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
-      rsbuild-plugin-dts: 0.23.2(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.5)(@typescript/typescript6@6.0.2)
+      rsbuild-plugin-dts: 0.23.2(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.5)(typescript@6.0.3)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.9(@types/node@24.13.2)
-      typescript: '@typescript/typescript6@6.0.2'
+      typescript: 6.0.3
     transitivePeerDependencies:
       - '@module-federation/runtime-tools'
       - '@typescript/native-preview'
@@ -9665,12 +9661,12 @@ snapshots:
     optionalDependencies:
       '@rspress/core': 2.0.16(@module-federation/runtime-tools@2.6.0)(@rspack/core@2.1.3)(@types/mdast@4.0.4)(@types/react@19.2.17)(micromark-util-types@2.0.2)(micromark@4.0.2)
 
-  '@rstest/adapter-rslib@0.10.6(@rslib/core@0.23.2)(@rstest/core@0.10.6)(@typescript/typescript6@6.0.2)':
+  '@rstest/adapter-rslib@0.10.6(@rslib/core@0.23.2)(@rstest/core@0.10.6)(typescript@6.0.3)':
     dependencies:
-      '@rslib/core': 0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(@typescript/typescript6@6.0.2)
+      '@rslib/core': 0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(typescript@6.0.3)
       '@rstest/core': 0.10.6(@module-federation/runtime-tools@2.6.0)
     optionalDependencies:
-      typescript: '@typescript/typescript6@6.0.2'
+      typescript: 6.0.3
 
   '@rstest/core@0.10.6(@module-federation/runtime-tools@2.6.0)':
     dependencies:
@@ -10327,10 +10323,6 @@ snapshots:
 
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
-
-  '@typescript/typescript6@6.0.2':
-    dependencies:
-      '@typescript/old': typescript@6.0.3
 
   '@typescript/vfs@1.6.4(typescript@6.0.3)':
     dependencies:
@@ -13125,13 +13117,13 @@ snapshots:
 
   preact@10.29.4: {}
 
-  prebundle@1.6.5(@typescript/typescript6@6.0.2):
+  prebundle@1.6.5(typescript@6.0.3):
     dependencies:
       '@vercel/ncc': 0.38.4
       cac: 7.0.0
       prettier: 3.9.4
       rollup: 4.60.4
-      rollup-plugin-dts: 6.4.1(@typescript/typescript6@6.0.2)(rollup@4.60.4)
+      rollup-plugin-dts: 6.4.1(rollup@4.60.4)(typescript@6.0.3)
       terser: 5.48.0
     transitivePeerDependencies:
       - typescript
@@ -13632,14 +13624,14 @@ snapshots:
       hash-base: 3.1.0
       inherits: 2.0.4
 
-  rollup-plugin-dts@6.4.1(@typescript/typescript6@6.0.2)(rollup@4.60.4):
+  rollup-plugin-dts@6.4.1(rollup@4.60.4)(typescript@6.0.3):
     dependencies:
       '@jridgewell/remapping': 2.3.5
       '@jridgewell/sourcemap-codec': 1.5.5
       convert-source-map: 2.0.0
       magic-string: 0.30.21
       rollup: 4.60.4
-      typescript: '@typescript/typescript6@6.0.2'
+      typescript: 6.0.3
     optionalDependencies:
       '@babel/code-frame': 7.29.7
 
@@ -13684,13 +13676,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.23.2(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.5)(@typescript/typescript6@6.0.2):
+  rsbuild-plugin-dts@0.23.2(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.5)(typescript@6.0.3):
     dependencies:
       '@ast-grep/napi': 0.37.0
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.9(@types/node@24.13.2)
-      typescript: '@typescript/typescript6@6.0.2'
+      typescript: 6.0.3
 
   rsbuild-plugin-dts@0.23.2(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.5)(typescript@7.0.2):
     dependencies:
