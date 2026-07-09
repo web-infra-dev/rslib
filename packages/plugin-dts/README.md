@@ -301,7 +301,7 @@ Whether to generate declaration files with [TypeScript Go](https://github.com/mi
 After installing TypeScript 7 or higher, Rslib will automatically enable this option.
 
 ```bash
-npm add typescript@rc -D
+npm add typescript@latest -D
 ```
 
 You can also install [@typescript/native-preview](https://www.npmjs.com/package/@typescript/native-preview) and manually enable this option.
@@ -316,7 +316,7 @@ pluginDts({
 });
 ```
 
-> The `@typescript/native-preview` usage is deprecated and kept only for compatibility. Prefer installing `typescript@rc` to use tsgo.
+> The `@typescript/native-preview` usage is deprecated and kept only for compatibility. Prefer installing `typescript@latest` to use tsgo.
 
 To ensure consistency during local development, you need to install the corresponding [VS Code Preview Extension](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) and add the following setting to VS Code:
 

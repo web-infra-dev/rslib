@@ -36,8 +36,7 @@ type DtsExecutableCommand = {
 const getDtsExecutablePath = async (
   cwd: string,
   packageName:
-    | typeof TYPESCRIPT_PACKAGE_NAME
-    | typeof NATIVE_PREVIEW_PACKAGE_NAME,
+    typeof TYPESCRIPT_PACKAGE_NAME | typeof NATIVE_PREVIEW_PACKAGE_NAME,
 ): Promise<string> => {
   let packageJsonPath: string;
 
@@ -48,12 +47,12 @@ const getDtsExecutablePath = async (
   } catch {
     if (packageName === NATIVE_PREVIEW_PACKAGE_NAME) {
       throw new Error(
-        'Failed to resolve @typescript/native-preview. Install "typescript@rc" or "@typescript/native-preview" to use TypeScript Go.',
+        'Failed to resolve @typescript/native-preview. Install "typescript@latest" or "@typescript/native-preview" to use TypeScript Go.',
       );
     }
 
     throw new Error(
-      'Failed to resolve typescript. Install "typescript@rc" to use TypeScript Go.',
+      'Failed to resolve typescript. Install "typescript@latest" to use TypeScript Go.',
     );
   }
 
