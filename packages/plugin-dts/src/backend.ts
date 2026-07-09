@@ -1,8 +1,7 @@
 import fs from 'node:fs';
-import type { PluginDtsOptions } from './index';
+import type { DtsGenerationBackend } from './types/internal';
+import type { PluginDtsOptions } from './types/options';
 import { createRequireFromPackageJson } from './utils';
-
-export type DtsGenerationBackend = 'api-old' | 'ts7-executable' | 'isolated';
 
 type ParsedTypescriptVersion = {
   major: number;

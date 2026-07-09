@@ -9,8 +9,8 @@ import {
   getTimeCost,
   processDtsFiles,
   rewriteDtsExtensions,
-  type GetTsconfigTsconfigResultForExecutable,
 } from './utils';
+import type { GetTsconfigTsconfigResultForExecutable } from './types/internal';
 
 const logPrefixTsgo = color.dim('[tsgo]');
 const TYPESCRIPT_PACKAGE_NAME = 'typescript';

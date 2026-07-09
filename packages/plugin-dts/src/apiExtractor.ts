@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { join, relative } from 'node:path';
 import type * as ApiExtractor from '@microsoft/api-extractor';
 import { logger } from '@rsbuild/core';
-import type { DtsEntry } from './index';
+import type { DtsEntry } from './types/internal';
 import { addBannerAndFooter, color, getTimeCost } from './utils';
 
 const logPrefixApiExtractor = color.dim('[api-extractor]');

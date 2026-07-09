@@ -16,8 +16,8 @@ import {
   processDtsFiles,
   renameDtsFile,
   updateDeclarationMapContent,
-  type CompilerApiTsconfigResultForApi,
 } from './utils';
+import type { CompilerApiTsconfigResultForApi } from './types/internal';
 
 const logPrefixTsc = color.dim('[tsc]');
 /*

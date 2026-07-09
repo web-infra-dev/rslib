@@ -19,8 +19,13 @@ import path, {
 import { styleText } from 'node:util';
 import { convertPathToPattern, glob } from 'tinyglobby';
 import { createMatchPath, loadConfig, type MatchPath } from 'tsconfig-paths';
-import type { CompilerOptions, ParsedCommandLine } from 'typescript-api';
-import type { DtsEntry, DtsRedirect } from './index';
+import type { CompilerOptions } from 'typescript-api';
+import type { DtsRedirect } from './types/options';
+import type {
+  CompilerApiTsconfigResultForApi,
+  DtsEntry,
+  GetTsconfigTsconfigResultForExecutable,
+} from './types/internal';
 
 const require = createRequire(import.meta.url);
 
@@ -101,12 +106,6 @@ const JS_EXTENSIONS: string[] = [
 export const JS_EXTENSIONS_PATTERN: RegExp = new RegExp(
   `\\.(${JS_EXTENSIONS.join('|')})$`,
 );
-
-export type CompilerApiTsconfigResultForApi = ParsedCommandLine;
-export type GetTsconfigTsconfigResultForExecutable = Pick<
-  CompilerApiTsconfigResultForApi,
-  'options'
->;
 
 const resolveTsconfigPath = (
   tsconfigDir: string,

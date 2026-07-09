@@ -9,14 +9,18 @@ import {
   relative,
   resolve,
 } from 'node:path';
-import type { DtsEntry, DtsGenOptions, DtsRedirect } from './index';
+import type { DtsRedirect } from './types/options';
+import type {
+  CompilerApiTsconfigResultForApi,
+  DtsEntry,
+  DtsGenOptions,
+  GetTsconfigTsconfigResultForExecutable,
+} from './types/internal';
 import {
   calcLongestCommonPath,
   color,
   ensureTempDeclarationDir,
   mergeAliasWithTsConfigPaths,
-  type CompilerApiTsconfigResultForApi,
-  type GetTsconfigTsconfigResultForExecutable,
 } from './utils';
 
 const isObject = (obj: unknown): obj is Record<string, any> =>
