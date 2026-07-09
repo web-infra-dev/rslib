@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@rstest/core';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import type { CompilerOptions } from 'typescript';
+import type { CompilerOptions } from 'typescript6-api';
 import {
   cleanTsBuildInfoFile,
   loadTsconfigResultForExecutable,

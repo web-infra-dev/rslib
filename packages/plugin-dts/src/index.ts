@@ -1,30 +1,21 @@
-import {
-  logger,
-  type LogLevel,
-  type RsbuildConfig,
-  type RsbuildPlugin,
-} from '@rsbuild/core';
+import { logger, type LogLevel, type RsbuildPlugin } from '@rsbuild/core';
 import { type ChildProcess, fork } from 'node:child_process';
 import { extname, join } from 'node:path';
 
-import {
-  type DtsGenerationBackend,
-  readTypescriptVersion,
-  resolveDtsGenerationBackend,
-} from './backend';
+import { readTypescriptVersion, resolveDtsGenerationBackend } from './backend';
 import {
   createIsolatedDtsContext,
   type IsolatedDtsContext,
   processIsolatedDts,
 } from './isolated';
+import type { DtsGenOptions, DtsTsconfigResult } from './types/internal';
+import type { PluginDtsOptions } from './types/options';
 import {
   cleanDtsFiles,
   cleanTsBuildInfoFile,
   clearTempDeclarationDir,
   color,
-  type CompilerApiTsconfigResultForApi,
   getDtsEmitPath,
-  type GetTsconfigTsconfigResultForExecutable,
   loadTsconfig,
   loadTsconfigResultForExecutable,
   loadTypescript,
@@ -32,62 +23,11 @@ import {
   warnIfOutside,
 } from './utils';
 
-export type DtsRedirect = {
-  path?: boolean;
-  extension?: boolean;
-};
-
-export type ApiExtractorOptions = {
-  bundledPackages?: string[];
-};
-
-export type PluginDtsOptions = {
-  bundle?: boolean | ApiExtractorOptions;
-  distPath?: string;
-  build?: boolean;
-  abortOnError?: boolean;
-  dtsExtension?: string;
-  alias?: Record<string, string>;
-  isolated?: boolean;
-  autoExternal?:
-    | boolean
-    | {
-        dependencies?: boolean;
-        optionalDependencies?: boolean;
-        peerDependencies?: boolean;
-        devDependencies?: boolean;
-      };
-  banner?: string;
-  footer?: string;
-  redirect?: DtsRedirect;
-  tsgo?: boolean;
-};
-
-export type DtsEntry = {
-  name: string;
-  path: string;
-};
-
-export type DtsGenOptions = Omit<
+export type {
+  ApiExtractorOptions,
+  DtsRedirect,
   PluginDtsOptions,
-  'bundle' | 'isolated' | 'tsgo'
-> & {
-  bundle: boolean;
-  name: string;
-  cwd: string;
-  isWatch: boolean;
-  dtsEntry: DtsEntry[];
-  dtsEmitPath: string;
-  build?: boolean;
-  tsconfigPath: string;
-  tsConfigResult:
-    | CompilerApiTsconfigResultForApi
-    | GetTsconfigTsconfigResultForExecutable;
-  userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
-  apiExtractorOptions?: ApiExtractorOptions;
-  loggerLevel: LogLevel;
-  dtsBackend: DtsGenerationBackend;
-};
+} from './types/options';
 
 interface TaskResult {
   status: 'success' | 'error';
@@ -172,10 +112,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
         const configuredTsconfigPath =
           config.source.tsconfigPath ?? 'tsconfig.json';
         let tsconfigPath: string | undefined;
-        let tsConfigResult:
-          | CompilerApiTsconfigResultForApi
-          | GetTsconfigTsconfigResultForExecutable
-          | undefined;
+        let tsConfigResult: DtsTsconfigResult | undefined;
 
         if (tsApi) {
           tsconfigPath = tsApi.findConfigFile(

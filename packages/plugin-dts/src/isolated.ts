@@ -6,7 +6,7 @@ import {
   type PreparedDtsContext,
   prepareDtsContext,
 } from './dts';
-import type { DtsGenOptions } from './index';
+import type { DtsGenOptions } from './types/internal';
 import { color, processDtsFiles, rewriteDtsExtensions } from './utils';
 
 export type IsolatedDtsContext = Omit<DtsGenOptions, 'dtsExtension'> &

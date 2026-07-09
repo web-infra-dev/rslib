@@ -24,9 +24,6 @@ importers:
       '@types/node':
         specifier: ^24.13.2
         version: 24.13.2
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20260704.1
-        version: 7.0.0-dev.20260704.1
       cspell-ban-words:
         specifier: ^0.0.4
         version: 0.0.4
@@ -39,6 +36,9 @@ importers:
       nano-staged:
         specifier: ^1.0.2
         version: 1.0.2
+      prebundle:
+        specifier: 1.6.5
+        version: 1.6.5(typescript@6.0.3)
       prettier:
         specifier: ^3.9.4
         version: 3.9.4
@@ -146,7 +146,7 @@ importers:
         version: 3.3.4(@rsbuild/core@2.1.5)(@rslib/core@packages+core)(storybook-builder-rsbuild@3.3.4)(typescript@6.0.3)
       storybook-react-rsbuild:
         specifier: ^3.3.4
-        version: 3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@types/react-dom@19.2.3)(@types/react@19.2.17)(@typescript/native-preview@7.0.0-dev.20260704.1)(react-dom@19.2.7)(react@19.2.7)(rollup@4.60.4)(storybook@10.4.6)(typescript@6.0.3)
+        version: 3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@types/react-dom@19.2.3)(@types/react@19.2.17)(react-dom@19.2.7)(react@19.2.7)(rollup@4.60.4)(storybook@10.4.6)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -315,7 +315,7 @@ importers:
         version: 3.3.4(@rsbuild/core@2.1.5)(@rslib/core@packages+core)(storybook-builder-rsbuild@3.3.4)(typescript@6.0.3)
       storybook-vue3-rsbuild:
         specifier: ^3.3.4
-        version: 3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260704.1)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3)(vue@3.5.39)
+        version: 3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3)(vue@3.5.39)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -337,7 +337,7 @@ importers:
     devDependencies:
       '@module-federation/rsbuild-plugin':
         specifier: ^2.6.0
-        version: 2.6.0(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.6)
+        version: 2.6.0(@rsbuild/core@2.1.5)(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
@@ -365,15 +365,12 @@ importers:
       path-serializer:
         specifier: 0.6.0
         version: 0.6.0
-      prebundle:
-        specifier: 1.6.5
-        version: 1.6.5(typescript@6.0.3)
       rsbuild-plugin-publint:
         specifier: ^1.0.0
         version: 1.0.0(@rsbuild/core@2.1.5)
       rslib:
         specifier: npm:@rslib/core@0.23.2
-        version: '@rslib/core@0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(@typescript/native-preview@7.0.0-dev.20260704.1)(typescript@6.0.3)'
+        version: '@rslib/core@0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(typescript@7.0.2)'
       rslog:
         specifier: ^2.1.3
         version: 2.1.3
@@ -384,8 +381,8 @@ importers:
         specifier: ^0.2.17
         version: 0.2.17
       typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
+        specifier: ^7.0.2
+        version: 7.0.2
 
   packages/create-rslib:
     dependencies:
@@ -410,13 +407,13 @@ importers:
         version: 1.0.0(@rsbuild/core@2.1.5)
       rslib:
         specifier: npm:@rslib/core@0.23.2
-        version: '@rslib/core@0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(@typescript/native-preview@7.0.0-dev.20260704.1)(typescript@6.0.3)'
+        version: '@rslib/core@0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(typescript@7.0.2)'
       tsx:
         specifier: ^4.23.0
         version: 4.23.0
       typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
+        specifier: ^7.0.2
+        version: 7.0.2
 
   packages/plugin-dts:
     dependencies:
@@ -439,15 +436,12 @@ importers:
       magic-string:
         specifier: ^0.30.21
         version: 0.30.21
-      prebundle:
-        specifier: 1.6.5
-        version: 1.6.5(typescript@6.0.3)
       rsbuild-plugin-publint:
         specifier: ^1.0.0
         version: 1.0.0(@rsbuild/core@2.1.5)
       rslib:
         specifier: npm:@rslib/core@0.23.2
-        version: '@rslib/core@0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(@typescript/native-preview@7.0.0-dev.20260704.1)(typescript@6.0.3)'
+        version: '@rslib/core@0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(typescript@7.0.2)'
       tinyglobby:
         specifier: ^0.2.17
         version: 0.2.17
@@ -455,8 +449,11 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
+        specifier: ^7.0.2
+        version: 7.0.2
+      typescript6-api:
+        specifier: npm:typescript@^6.0.3
+        version: typescript@6.0.3
 
   scripts/tsconfig: {}
 
@@ -474,7 +471,7 @@ importers:
         version: 4.0.1
       '@module-federation/rsbuild-plugin':
         specifier: ^2.6.0
-        version: 2.6.0(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.6)
+        version: 2.6.0(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
       '@playwright/test':
         specifier: 1.61.1
         version: 1.61.1
@@ -533,8 +530,8 @@ importers:
         specifier: ^0.2.17
         version: 0.2.17
       typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
+        specifier: ^7.0.2
+        version: 7.0.2
 
   tests/e2e/react-component:
     dependencies:
@@ -564,7 +561,7 @@ importers:
         version: link:../../../examples/vue-component-bundleless
       vue:
         specifier: ^3.5.39
-        version: 3.5.39(typescript@6.0.3)
+        version: 3.5.39(typescript@7.0.2)
 
   tests/integration/alias: {}
 
@@ -597,7 +594,7 @@ importers:
         version: 2.1.0(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)
       '@rsbuild/plugin-svgr':
         specifier: ^2.0.5
-        version: 2.0.5(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(typescript@6.0.3)
+        version: 2.0.5(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(typescript@7.0.2)
 
   tests/integration/async-chunks/default: {}
 
@@ -694,7 +691,7 @@ importers:
         version: 2.1.0(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)
       '@rsbuild/plugin-svgr':
         specifier: ^2.0.5
-        version: 2.0.5(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(typescript@6.0.3)
+        version: 2.0.5(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(typescript@7.0.2)
 
   tests/integration/cli/build: {}
 
@@ -736,6 +733,18 @@ importers:
 
   tests/integration/directive/shebang: {}
 
+  tests/integration/dts:
+    devDependencies:
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+
+  tests/integration/dts-tsgo:
+    devDependencies:
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
+
   tests/integration/dts-tsgo/build/__references__: {}
 
   tests/integration/dts-tsgo/build/abort-on-error: {}
@@ -767,12 +776,6 @@ importers:
   tests/integration/dts-tsgo/bundle-false/declaration-map: {}
 
   tests/integration/dts-tsgo/bundle-false/dist-path: {}
-
-  tests/integration/dts-tsgo/bundle-false/ts7-basic:
-    devDependencies:
-      typescript:
-        specifier: 7.0.1-rc
-        version: 7.0.1-rc
 
   tests/integration/dts-tsgo/bundle-false/tsconfig-path: {}
 
@@ -1082,6 +1085,21 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
+  tests/integration/redirect/dts-tsgo:
+    devDependencies:
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../../../packages/core
+      '@types/express':
+        specifier: ^5.0.6
+        version: 5.0.6
+      express:
+        specifier: ^5.2.1
+        version: 5.2.1
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
+
   tests/integration/redirect/js:
     devDependencies:
       '@types/lodash':
@@ -1260,7 +1278,7 @@ importers:
         version: 2.0.1(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(vue@3.5.39)
       vue:
         specifier: ^3.5.39
-        version: 3.5.39(typescript@6.0.3)
+        version: 3.5.39(typescript@7.0.2)
 
   tests/integration/worker: {}
 
@@ -3721,169 +3739,122 @@ packages:
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
 
-  '@typescript/native-preview-darwin-arm64@7.0.0-dev.20260704.1':
-    resolution: {integrity: sha512-WHNMx8HTka+2w9ZifYbfkHHyQBzO+MCbOLQzNJE3K7A7mYJ1aq6ZEvBhRcNqixjKAIIO4U34KQvaQ6PXlwezkQ==}
-    engines: {node: '>=16.20.0'}
-    cpu: [arm64]
-    os: [darwin]
-
-  '@typescript/native-preview-darwin-x64@7.0.0-dev.20260704.1':
-    resolution: {integrity: sha512-IZJib4da/+3gRVSQFoQU1uFzsiSXnI02xBZljipDoPwahRcOdjH9gJ7DMBFbZ53pUtN5lvqbpES4oXiJZTneDA==}
-    engines: {node: '>=16.20.0'}
-    cpu: [x64]
-    os: [darwin]
-
-  '@typescript/native-preview-linux-arm64@7.0.0-dev.20260704.1':
-    resolution: {integrity: sha512-rjyHYAmDQ68NZIpU5i46D50hgQ63UJGGN/LJv3DAPWC8KraNonS5j4fN2bH/V+acQV9l/sS3+US1daV8VkQaFQ==}
-    engines: {node: '>=16.20.0'}
-    cpu: [arm64]
-    os: [linux]
-
-  '@typescript/native-preview-linux-arm@7.0.0-dev.20260704.1':
-    resolution: {integrity: sha512-Dkz8oqvg4nEIu2Acz/d+iBDhIIOqjaAJ6mo6a2diRrDI+K5NAHljTzvkclCxgz6WIa5JnUY3kWzy8jE5AtaCQg==}
-    engines: {node: '>=16.20.0'}
-    cpu: [arm]
-    os: [linux]
-
-  '@typescript/native-preview-linux-x64@7.0.0-dev.20260704.1':
-    resolution: {integrity: sha512-y2L2eNwCgrTgXKMol9n/bSPeyNHwJbrUDAv6/J7/087yhPNCt61l3KbpiGAYs0KYcCt3V2lNSDtS3geHQfSWJQ==}
-    engines: {node: '>=16.20.0'}
-    cpu: [x64]
-    os: [linux]
-
-  '@typescript/native-preview-win32-arm64@7.0.0-dev.20260704.1':
-    resolution: {integrity: sha512-PzBVRs8UNSAqtoCp9BtT1jsG4SSOfuDT1yo8Z3gGevmNtKEFZjb92BTSnBZaMPPQkM22fq83zgrAEVOEENIicw==}
-    engines: {node: '>=16.20.0'}
-    cpu: [arm64]
-    os: [win32]
-
-  '@typescript/native-preview-win32-x64@7.0.0-dev.20260704.1':
-    resolution: {integrity: sha512-wb/C+fqWpXAoJZd8KQZdpjOq67v/cmLsApjL9oHjC1X6zqz7AzyOQ486uxWT6LvYzKkar4A+iq8h5h+PNgN38w==}
-    engines: {node: '>=16.20.0'}
-    cpu: [x64]
-    os: [win32]
-
-  '@typescript/native-preview@7.0.0-dev.20260704.1':
-    resolution: {integrity: sha512-B8CxdI0CumQVV9/9COcanWCWJmu8Jm1kMuYvse3iGm5ay9QrKTD+qyb11x8SPKUMtiUqnhNxt0n4ESNt+LQMuQ==}
-    engines: {node: '>=16.20.0'}
-    hasBin: true
-
-  '@typescript/typescript-aix-ppc64@7.0.1-rc':
-    resolution: {integrity: sha512-oqq2ZfEJ7BQuufcC3QBQndZLPNyamYNHLao8lKRBeeSkZKypBqxPSgkzrcFZtbYcIaBvpiyUnQP9MT7DEYHWbw==}
+  '@typescript/typescript-aix-ppc64@7.0.2':
+    resolution: {integrity: sha512-MTKKkWB7p/0E9xi1d1tHtZ5PiLkGEMIq88pK2CubZjOsLtYTLqhgIgi6zepFa+9GHZ6h05NMCkQxGKiPXMxXtQ==}
     engines: {node: '>=16.20.0'}
     cpu: [ppc64]
     os: [aix]
 
-  '@typescript/typescript-darwin-arm64@7.0.1-rc':
-    resolution: {integrity: sha512-Slc0yTftT2F/uGDmtPst8ijydneL6uZaLEyr2UjahxZpbhTjHFBJ5agXtVz/TL4A+ldxzjzj+E8QtLZlh/5mXw==}
+  '@typescript/typescript-darwin-arm64@7.0.2':
+    resolution: {integrity: sha512-gowzar9MwS/aRWp6f3a4KUqzRjAZjOsmGNCM6LcTgXum+dBfgsBVMN+AgvOCCbguXyick6LJhpBszxMebJ8syA==}
     engines: {node: '>=16.20.0'}
     cpu: [arm64]
     os: [darwin]
 
-  '@typescript/typescript-darwin-x64@7.0.1-rc':
-    resolution: {integrity: sha512-h68iFW/LbA1/BsGgSRGFw981/3s1f/rY27YrmeZNuN+ly7dI+fiDduwT9ZT9866x2onoKNRq7PTyxSKyKDzfAQ==}
+  '@typescript/typescript-darwin-x64@7.0.2':
+    resolution: {integrity: sha512-SZ9xZInqApNlNGc9s0W1VSsktYSOe9cFqNOIqmN1Gs8SmkjKZYFt017G4VwPxASInODuAdbTW7sXiFUf893RgA==}
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [darwin]
 
-  '@typescript/typescript-freebsd-arm64@7.0.1-rc':
-    resolution: {integrity: sha512-DE+ppd8Ix2c6OMuRkKY4PJ4hngMGJ9M95OQUP17p9xL/1IKXof7npIeuusMN/bgL5o5JzMfSGh+N+5scTYRg0Q==}
+  '@typescript/typescript-freebsd-arm64@7.0.2':
+    resolution: {integrity: sha512-W5NH4y/J0plIIS5b2xvTEkU7JFxyqdMAOgf+Ilhl0vHQXKO5dZoxd+C/jEtq56c4F3wk71RB4BMRQ2XdI+bwYQ==}
     engines: {node: '>=16.20.0'}
     cpu: [arm64]
     os: [freebsd]
 
-  '@typescript/typescript-freebsd-x64@7.0.1-rc':
-    resolution: {integrity: sha512-ST1ozHMw0u+CLOnWkcTyWDMV4Qn9osZ6fd1V1lnKDM1t0hZIp81mdGpdHxyHJjd7jdGrb6Gb/QXcZ1uqZ0t5zw==}
+  '@typescript/typescript-freebsd-x64@7.0.2':
+    resolution: {integrity: sha512-UMGDx5sTpzNw3WiPebH7l90IWfJggEd+egHt/q6p7/Cm3zqoV7VxkGXt+3DxPIw8CcmvAB0j3sVVfbhX+M4Tpw==}
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [freebsd]
 
-  '@typescript/typescript-linux-arm64@7.0.1-rc':
-    resolution: {integrity: sha512-N46pRihK3t5zD5MUtTQcdmQUqr1WI4U2nxno1gLwOtRSsB4krFkRjPHcQNG7h2DtRkX64rQiReX6WKwg2wprMA==}
+  '@typescript/typescript-linux-arm64@7.0.2':
+    resolution: {integrity: sha512-Qh4eU4/y3yDjnfjjyPYihMj5/ODIlmt+Bzu17OI+fiSRDW57QmU5SiN63exPRNJPKUzcc1INa1NXdrJ+MqHjUQ==}
     engines: {node: '>=16.20.0'}
     cpu: [arm64]
     os: [linux]
 
-  '@typescript/typescript-linux-arm@7.0.1-rc':
-    resolution: {integrity: sha512-gHmHwT5Naq5CKM8g9bbaGeEpnwQEvWCLn3fwP4K2m61VQdDKkPk0Dhab/OoZ4LV2SrMddmclYXTzpyg23YGt5g==}
+  '@typescript/typescript-linux-arm@7.0.2':
+    resolution: {integrity: sha512-gffT3xPz9sR7j/YJExkyPntrI0P2EP9XbOyWzth2/Gs0RstK+90RBcO0ncXoXy/beYll1SXw846Nf2zdnEz0QQ==}
     engines: {node: '>=16.20.0'}
     cpu: [arm]
     os: [linux]
 
-  '@typescript/typescript-linux-loong64@7.0.1-rc':
-    resolution: {integrity: sha512-G17Sao312rgiPBTh2F4nOpLpa3CcnBSaNhqNghZk2LNhnsp1RaMO5HMq2me21gqu9xLpc6CIgHtOzU6JBgNlfg==}
+  '@typescript/typescript-linux-loong64@7.0.2':
+    resolution: {integrity: sha512-uEHck9i8hoAzXPiYRib1O7miOnz23SxIeVl6F4LXox+qov1K35jHcEW6VHKvZI+pyvl7fZEP4MCU5LYvIq1GuQ==}
     engines: {node: '>=16.20.0'}
     cpu: [loong64]
     os: [linux]
 
-  '@typescript/typescript-linux-mips64el@7.0.1-rc':
-    resolution: {integrity: sha512-0FQspOb5UsQ4tQKvWgUO3pS9OIWkP7/8dPRWq+CRazJUeQZ4LBjtYK52jg5iIOrvItrVl2CwvRtrU3/9OihwJg==}
+  '@typescript/typescript-linux-mips64el@7.0.2':
+    resolution: {integrity: sha512-R4KvAMnE43W5Qeqb0Ly56O3mWMWIAgsMyz36DCaycd5nbg/9kzm0liw3JocfRqyJY0KPmzFjbswozXyW0DnIYA==}
     engines: {node: '>=16.20.0'}
     cpu: [mips64el]
     os: [linux]
 
-  '@typescript/typescript-linux-ppc64@7.0.1-rc':
-    resolution: {integrity: sha512-SUmwfVBEv6A2Ld0eWfcvW0FqrgemfQL8jFGOmV1qYxsDqumjE5DekHXqbstgmbE4SHr4rrjHjvmuGCY+kTH/vw==}
+  '@typescript/typescript-linux-ppc64@7.0.2':
+    resolution: {integrity: sha512-DORx5b3sd/4S7eayxm4FQv+A7CrkUIGRaHiwI8oiHTAI1fAPWhF4J0vAlkC8biAlHSVVwxMQ3tjZ2/DVbnQiiA==}
     engines: {node: '>=16.20.0'}
     cpu: [ppc64]
     os: [linux]
 
-  '@typescript/typescript-linux-riscv64@7.0.1-rc':
-    resolution: {integrity: sha512-rxeqnNnGiYzv/LlPHi/3+4p0ooR1cNJLjRIHXKovtiVmxXGJq6gtw8VSpbHuWPekyFMXgIAoLCZN0SQ51rAALQ==}
+  '@typescript/typescript-linux-riscv64@7.0.2':
+    resolution: {integrity: sha512-wf0jqEDOjrPRnKwYRyyJDRo11KMbvMFrU+q4zqKyChODBzvlkbhNQfKvLxQCcwTpdDaXSHZTVuh0JoCrKCUMHQ==}
     engines: {node: '>=16.20.0'}
     cpu: [riscv64]
     os: [linux]
 
-  '@typescript/typescript-linux-s390x@7.0.1-rc':
-    resolution: {integrity: sha512-RYWCHCiPypxajdRHM2CNK/eM22e4Ex5TTjV2pXf7PTtBowGr0xX8i8kIMknyZS0LX2QfleYHouaoMVsFDSle3g==}
+  '@typescript/typescript-linux-s390x@7.0.2':
+    resolution: {integrity: sha512-IkwJc3L7yhytWd/ewjyxNDfOmswCm9GWMJT/ue/dU4aZNbwZeYAetq42VyLmsmSjvoX7z74X6ZaYCtzAr0EuGw==}
     engines: {node: '>=16.20.0'}
     cpu: [s390x]
     os: [linux]
 
-  '@typescript/typescript-linux-x64@7.0.1-rc':
-    resolution: {integrity: sha512-PfLJSu0JzroDkqw2m4nqflPEcn8yev0m/vHFQlY9EzHorzjR6QG0wL8AJHvnD1e6h1s76AZngJ5u+z1K/D/HKw==}
+  '@typescript/typescript-linux-x64@7.0.2':
+    resolution: {integrity: sha512-EYdf2cNg7rgCWJnxCdJ+F3V39O8ihb37eHAu1LK8oAFizgTQbPOK7zHHXbPt8rX24COqODXeI3sIf0fCXG7H/A==}
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [linux]
 
-  '@typescript/typescript-netbsd-arm64@7.0.1-rc':
-    resolution: {integrity: sha512-FfbPxH3dTfp8yVIaNM7bdWTixXuyxpzoemluqcqMROSIz+ImpCG3Q9HO9Ptzp9/giv+P9YYEnCMSXh61migj2w==}
+  '@typescript/typescript-netbsd-arm64@7.0.2':
+    resolution: {integrity: sha512-+polYF4MF04aPpO5FTkHran9yUQDSXqy5GiSDKpsll5jy3l3+g9QLhpf39T+ePtefhXLOGrLl0QIjkQP6VnelA==}
     engines: {node: '>=16.20.0'}
     cpu: [arm64]
     os: [netbsd]
 
-  '@typescript/typescript-netbsd-x64@7.0.1-rc':
-    resolution: {integrity: sha512-FzdTfSzhRYb6hlav6K3cI5RVgcvCTvNAu/vc+t7B6AmZkThQ+t/1ntnvT5fnHmY1Az2RIBw7/b+qtCEG61HJTQ==}
+  '@typescript/typescript-netbsd-x64@7.0.2':
+    resolution: {integrity: sha512-8YIT0EHM/3dq10ZOVF/A7pc/YSMtbcecct4rWtexrnSCHOPcpC2KTLXfTCR6vDpnSiY12heNb1GiN/wu+T/FyA==}
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [netbsd]
 
-  '@typescript/typescript-openbsd-arm64@7.0.1-rc':
-    resolution: {integrity: sha512-PQGhlxfNig+0YQ9Wwzd0USPBkt6w/ZqkBQWsU7G/0JkTzunJel+jSWwhKw4947pak/m7hGSeYiI04xReDLGZww==}
+  '@typescript/typescript-openbsd-arm64@7.0.2':
+    resolution: {integrity: sha512-APT8+ClYnuYm1u9+kgGXoMj2VzWzcymwh2gNSQVySHfkRDGOTVkoWLjCmOQSaO+PoqQ57B0flRp9SA+7GnnkzQ==}
     engines: {node: '>=16.20.0'}
     cpu: [arm64]
     os: [openbsd]
 
-  '@typescript/typescript-openbsd-x64@7.0.1-rc':
-    resolution: {integrity: sha512-WJ7NYgO2mHmLUkI/tZ+hl8lFd26QPJqO8ONOHNuYbdsybLvSB6B6sep222JIVrOfPRDGvFinbGGB+l3m1FWRWA==}
+  '@typescript/typescript-openbsd-x64@7.0.2':
+    resolution: {integrity: sha512-yX7s+Q0Dln0Dt9tEzZsAjXXR/+ytBM7AlglaqyeMPxQszJ1JhlJdZ6jLA+IzldHtflX81em7lDao1xXu+aRRkg==}
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [openbsd]
 
-  '@typescript/typescript-sunos-x64@7.0.1-rc':
-    resolution: {integrity: sha512-UYjDeUxd765V9qcwlUPk4pEXyL0i3G76CJm9baK4i99u1pGO1psf3nXDw4MMmElVOPvGbZag99ZR/O59E2OX6w==}
+  '@typescript/typescript-sunos-x64@7.0.2':
+    resolution: {integrity: sha512-dLJDGaLZ1D4HPQn62u1n8mBDkJREwMsAkCdkwd4Ieqw+x3TUyTsqY0YiBCtE6H6OzzgGk3iuZ3vFWRS+E8/d1g==}
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [sunos]
 
-  '@typescript/typescript-win32-arm64@7.0.1-rc':
-    resolution: {integrity: sha512-KzXzFSXZOm7zvEt2Aw0MsB2LbTL88znAiVqTDNAOHdlEb7brgmUQh/X2wM/8Be+N0fjEqWKl65cBKNwpWEbJiw==}
+  '@typescript/typescript-win32-arm64@7.0.2':
+    resolution: {integrity: sha512-Gyl1Vy6OsWesLzmq+EP0Fb7b4Nid5232AvcA2SFcdYreldpNtYFFofPjnt62y9hQy7VTaZp65ICJjuAQRaVcIQ==}
     engines: {node: '>=16.20.0'}
     cpu: [arm64]
     os: [win32]
 
-  '@typescript/typescript-win32-x64@7.0.1-rc':
-    resolution: {integrity: sha512-98R3+OqDr/r0/PLWEoXu88AE0lGVLNd335Ew8ONgzK1JWkNs4ou/5BGt3Or1ij4iXjH+c7PRL+jFjCbtWze+EA==}
+  '@typescript/typescript-win32-x64@7.0.2':
+    resolution: {integrity: sha512-0BQ3HkAHHlKLSp1qRvf3SUhGpGsDuhB/jgFw75guyqbxJqEaS0Cw/VFO8i2nHglJUzQCRtMMR/IBAKE3ETMC4g==}
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [win32]
@@ -7408,8 +7379,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typescript@7.0.1-rc:
-    resolution: {integrity: sha512-drEP77wK7CCDlPfXZH4e008UUQOsw1DFmHmZOZjuNA+yoDLLnSNMZRXi90NbV/1LVo7SbNLq1bs3jjvk49TEqQ==}
+  typescript@7.0.2:
+    resolution: {integrity: sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA==}
     engines: {node: '>=16.20.0'}
     hasBin: true
 
@@ -7831,7 +7802,7 @@ snapshots:
       '@babel/helper-validator-option': 8.0.0
       browserslist: 4.28.4
       lru-cache: 11.5.1
-      semver: 7.7.4
+      semver: 7.8.5
 
   '@babel/helper-create-class-features-plugin@7.29.7(@babel/core@7.29.7)':
     dependencies:
@@ -8511,6 +8482,19 @@ snapshots:
       - utf-8-validate
       - vue-tsc
 
+  '@module-federation/cli@2.6.0(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)':
+    dependencies:
+      '@module-federation/dts-plugin': 2.6.0(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/sdk': 2.6.0(node-fetch@2.7.0)
+      commander: 11.1.0
+      jiti: 2.4.2
+    transitivePeerDependencies:
+      - bufferutil
+      - node-fetch
+      - typescript
+      - utf-8-validate
+      - vue-tsc
+
   '@module-federation/dts-plugin@2.6.0(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.6)':
     dependencies:
       '@module-federation/error-codes': 2.6.0
@@ -8526,6 +8510,26 @@ snapshots:
       ws: 8.21.0
     optionalDependencies:
       vue-tsc: 3.3.6(typescript@6.0.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - node-fetch
+      - utf-8-validate
+
+  '@module-federation/dts-plugin@2.6.0(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)':
+    dependencies:
+      '@module-federation/error-codes': 2.6.0
+      '@module-federation/managers': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/sdk': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/third-party-dts-extractor': 2.6.0
+      adm-zip: 0.5.10
+      ansi-colors: 4.1.3
+      isomorphic-ws: 5.0.0(ws@8.21.0)
+      node-schedule: 2.1.1
+      typescript: 7.0.2
+      undici: 7.28.0
+      ws: 8.21.0
+    optionalDependencies:
+      vue-tsc: 3.3.6(typescript@7.0.2)
     transitivePeerDependencies:
       - bufferutil
       - node-fetch
@@ -8550,6 +8554,31 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.3
       vue-tsc: 3.3.6(typescript@6.0.3)
+    transitivePeerDependencies:
+      - '@rspack/core'
+      - bufferutil
+      - node-fetch
+      - utf-8-validate
+
+  '@module-federation/enhanced@2.6.0(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)':
+    dependencies:
+      '@module-federation/bridge-react-webpack-plugin': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/cli': 2.6.0(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/dts-plugin': 2.6.0(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/error-codes': 2.6.0
+      '@module-federation/inject-external-runtime-core-plugin': 2.6.0(@module-federation/runtime-tools@2.6.0)
+      '@module-federation/managers': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/manifest': 2.6.0(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/rspack': 2.6.0(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/runtime-tools': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/sdk': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/webpack-bundler-runtime': 2.6.0(node-fetch@2.7.0)
+      schema-utils: 4.3.0
+      tapable: 2.3.0
+      upath: 2.0.1
+    optionalDependencies:
+      typescript: 7.0.2
+      vue-tsc: 3.3.6(typescript@7.0.2)
     transitivePeerDependencies:
       - '@rspack/core'
       - bufferutil
@@ -8582,9 +8611,52 @@ snapshots:
       - utf-8-validate
       - vue-tsc
 
+  '@module-federation/manifest@2.6.0(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)':
+    dependencies:
+      '@module-federation/dts-plugin': 2.6.0(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/managers': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/sdk': 2.6.0(node-fetch@2.7.0)
+      find-pkg: 2.0.0
+    transitivePeerDependencies:
+      - bufferutil
+      - node-fetch
+      - typescript
+      - utf-8-validate
+      - vue-tsc
+
   '@module-federation/node@2.7.45(@rspack/core@2.1.3)(typescript@6.0.3)(vue-tsc@3.3.6)':
     dependencies:
       '@module-federation/enhanced': 2.6.0(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.6)
+      '@module-federation/runtime': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/sdk': 2.6.0(node-fetch@2.7.0)
+      encoding: 0.1.13
+      node-fetch: 2.7.0(encoding@0.1.13)
+      tapable: 2.3.0
+    transitivePeerDependencies:
+      - '@rspack/core'
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - vue-tsc
+
+  '@module-federation/node@2.7.45(@rspack/core@2.1.3)(typescript@7.0.2)(vue-tsc@3.3.6)':
+    dependencies:
+      '@module-federation/enhanced': 2.6.0(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/runtime': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/sdk': 2.6.0(node-fetch@2.7.0)
+      encoding: 0.1.13
+      node-fetch: 2.7.0(encoding@0.1.13)
+      tapable: 2.3.0
+    transitivePeerDependencies:
+      - '@rspack/core'
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - vue-tsc
+
+  '@module-federation/node@2.7.45(typescript@7.0.2)(vue-tsc@3.3.6)':
+    dependencies:
+      '@module-federation/enhanced': 2.6.0(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
       '@module-federation/runtime': 2.6.0(node-fetch@2.7.0)
       '@module-federation/sdk': 2.6.0(node-fetch@2.7.0)
       encoding: 0.1.13
@@ -8613,6 +8685,38 @@ snapshots:
       - vue-tsc
       - webpack
 
+  '@module-federation/rsbuild-plugin@2.6.0(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)':
+    dependencies:
+      '@module-federation/enhanced': 2.6.0(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/node': 2.7.45(@rspack/core@2.1.3)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/sdk': 2.6.0(node-fetch@2.7.0)
+    optionalDependencies:
+      '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
+    transitivePeerDependencies:
+      - '@rspack/core'
+      - bufferutil
+      - node-fetch
+      - typescript
+      - utf-8-validate
+      - vue-tsc
+      - webpack
+
+  '@module-federation/rsbuild-plugin@2.6.0(@rsbuild/core@2.1.5)(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)':
+    dependencies:
+      '@module-federation/enhanced': 2.6.0(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/node': 2.7.45(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/sdk': 2.6.0(node-fetch@2.7.0)
+    optionalDependencies:
+      '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
+    transitivePeerDependencies:
+      - '@rspack/core'
+      - bufferutil
+      - node-fetch
+      - typescript
+      - utf-8-validate
+      - vue-tsc
+      - webpack
+
   '@module-federation/rspack@2.6.0(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@6.0.3)(vue-tsc@3.3.6)':
     dependencies:
       '@module-federation/bridge-react-webpack-plugin': 2.6.0(node-fetch@2.7.0)
@@ -8626,6 +8730,24 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.3
       vue-tsc: 3.3.6(typescript@6.0.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - node-fetch
+      - utf-8-validate
+
+  '@module-federation/rspack@2.6.0(@rspack/core@2.1.3)(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)':
+    dependencies:
+      '@module-federation/bridge-react-webpack-plugin': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/dts-plugin': 2.6.0(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/inject-external-runtime-core-plugin': 2.6.0(@module-federation/runtime-tools@2.6.0)
+      '@module-federation/managers': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/manifest': 2.6.0(node-fetch@2.7.0)(typescript@7.0.2)(vue-tsc@3.3.6)
+      '@module-federation/runtime-tools': 2.6.0(node-fetch@2.7.0)
+      '@module-federation/sdk': 2.6.0(node-fetch@2.7.0)
+      '@rspack/core': 2.1.3(@module-federation/runtime-tools@2.6.0)(@swc/helpers@0.5.23)
+    optionalDependencies:
+      typescript: 7.0.2
+      vue-tsc: 3.3.6(typescript@7.0.2)
     transitivePeerDependencies:
       - bufferutil
       - node-fetch
@@ -9169,12 +9291,12 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rsbuild/plugin-svgr@2.0.5(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(typescript@6.0.3)':
+  '@rsbuild/plugin-svgr@2.0.5(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(typescript@7.0.2)':
     dependencies:
       '@rsbuild/plugin-react': 2.1.0(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)
-      '@svgr/core': 8.1.0(typescript@6.0.3)
+      '@svgr/core': 8.1.0(typescript@7.0.2)
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0)
-      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0)(typescript@6.0.3)
+      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0)(typescript@7.0.2)
       deepmerge: 4.3.1
       loader-utils: 3.3.1
     optionalDependencies:
@@ -9199,15 +9321,14 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
 
-  '@rsbuild/plugin-type-check@1.4.0(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260704.1)(typescript@6.0.3)':
+  '@rsbuild/plugin-type-check@1.4.0(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(typescript@6.0.3)':
     dependencies:
       deepmerge: 4.3.1
       json5: 2.2.3
       reduce-configs: 1.1.2
-      ts-checker-rspack-plugin: 1.4.0(@rspack/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260704.1)(typescript@6.0.3)
+      ts-checker-rspack-plugin: 1.4.0(@rspack/core@2.1.3)(typescript@6.0.3)
     optionalDependencies:
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
-      '@typescript/native-preview': 7.0.0-dev.20260704.1
     transitivePeerDependencies:
       - '@rspack/core'
       - typescript
@@ -9230,13 +9351,25 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
 
-  '@rslib/core@0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(@typescript/native-preview@7.0.0-dev.20260704.1)(typescript@6.0.3)':
+  '@rslib/core@0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(typescript@6.0.3)':
     dependencies:
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
-      rsbuild-plugin-dts: 0.23.2(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.5)(@typescript/native-preview@7.0.0-dev.20260704.1)(typescript@6.0.3)
+      rsbuild-plugin-dts: 0.23.2(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.5)(typescript@6.0.3)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.9(@types/node@24.13.2)
       typescript: 6.0.3
+    transitivePeerDependencies:
+      - '@module-federation/runtime-tools'
+      - '@typescript/native-preview'
+      - core-js
+
+  '@rslib/core@0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(typescript@7.0.2)':
+    dependencies:
+      '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
+      rsbuild-plugin-dts: 0.23.2(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.5)(typescript@7.0.2)
+    optionalDependencies:
+      '@microsoft/api-extractor': 7.58.9(@types/node@25.2.0)
+      typescript: 7.0.2
     transitivePeerDependencies:
       - '@module-federation/runtime-tools'
       - '@typescript/native-preview'
@@ -9530,7 +9663,7 @@ snapshots:
 
   '@rstest/adapter-rslib@0.10.6(@rslib/core@0.23.2)(@rstest/core@0.10.6)(typescript@6.0.3)':
     dependencies:
-      '@rslib/core': 0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(@typescript/native-preview@7.0.0-dev.20260704.1)(typescript@6.0.3)
+      '@rslib/core': 0.23.2(@microsoft/api-extractor@7.58.9)(@module-federation/runtime-tools@2.6.0)(typescript@6.0.3)
       '@rstest/core': 0.10.6(@module-federation/runtime-tools@2.6.0)
     optionalDependencies:
       typescript: 6.0.3
@@ -9834,12 +9967,12 @@ snapshots:
       '@svgr/babel-plugin-transform-react-native-svg': 8.1.0(@babel/core@7.29.7)
       '@svgr/babel-plugin-transform-svg-component': 8.0.0(@babel/core@7.29.7)
 
-  '@svgr/core@8.1.0(typescript@6.0.3)':
+  '@svgr/core@8.1.0(typescript@7.0.2)':
     dependencies:
       '@babel/core': 7.29.7
       '@svgr/babel-preset': 8.1.0(@babel/core@7.29.7)
       camelcase: 6.3.0
-      cosmiconfig: 8.3.6(typescript@6.0.3)
+      cosmiconfig: 8.3.6(typescript@7.0.2)
       snake-case: 3.0.4
     transitivePeerDependencies:
       - supports-color
@@ -9854,16 +9987,16 @@ snapshots:
     dependencies:
       '@babel/core': 7.29.7
       '@svgr/babel-preset': 8.1.0(@babel/core@7.29.7)
-      '@svgr/core': 8.1.0(typescript@6.0.3)
+      '@svgr/core': 8.1.0(typescript@7.0.2)
       '@svgr/hast-util-to-babel-ast': 8.0.0
       svg-parser: 2.0.4
     transitivePeerDependencies:
       - supports-color
 
-  '@svgr/plugin-svgo@8.1.0(@svgr/core@8.1.0)(typescript@6.0.3)':
+  '@svgr/plugin-svgo@8.1.0(@svgr/core@8.1.0)(typescript@7.0.2)':
     dependencies:
-      '@svgr/core': 8.1.0(typescript@6.0.3)
-      cosmiconfig: 8.3.6(typescript@6.0.3)
+      '@svgr/core': 8.1.0(typescript@7.0.2)
+      cosmiconfig: 8.3.6(typescript@7.0.2)
       deepmerge: 4.3.1
       svgo: 3.3.3
     transitivePeerDependencies:
@@ -10131,95 +10264,64 @@ snapshots:
 
   '@types/unist@3.0.3': {}
 
-  '@typescript/native-preview-darwin-arm64@7.0.0-dev.20260704.1':
+  '@typescript/typescript-aix-ppc64@7.0.2':
     optional: true
 
-  '@typescript/native-preview-darwin-x64@7.0.0-dev.20260704.1':
+  '@typescript/typescript-darwin-arm64@7.0.2':
     optional: true
 
-  '@typescript/native-preview-linux-arm64@7.0.0-dev.20260704.1':
+  '@typescript/typescript-darwin-x64@7.0.2':
     optional: true
 
-  '@typescript/native-preview-linux-arm@7.0.0-dev.20260704.1':
+  '@typescript/typescript-freebsd-arm64@7.0.2':
     optional: true
 
-  '@typescript/native-preview-linux-x64@7.0.0-dev.20260704.1':
+  '@typescript/typescript-freebsd-x64@7.0.2':
     optional: true
 
-  '@typescript/native-preview-win32-arm64@7.0.0-dev.20260704.1':
+  '@typescript/typescript-linux-arm64@7.0.2':
     optional: true
 
-  '@typescript/native-preview-win32-x64@7.0.0-dev.20260704.1':
+  '@typescript/typescript-linux-arm@7.0.2':
     optional: true
 
-  '@typescript/native-preview@7.0.0-dev.20260704.1':
-    optionalDependencies:
-      '@typescript/native-preview-darwin-arm64': 7.0.0-dev.20260704.1
-      '@typescript/native-preview-darwin-x64': 7.0.0-dev.20260704.1
-      '@typescript/native-preview-linux-arm': 7.0.0-dev.20260704.1
-      '@typescript/native-preview-linux-arm64': 7.0.0-dev.20260704.1
-      '@typescript/native-preview-linux-x64': 7.0.0-dev.20260704.1
-      '@typescript/native-preview-win32-arm64': 7.0.0-dev.20260704.1
-      '@typescript/native-preview-win32-x64': 7.0.0-dev.20260704.1
-
-  '@typescript/typescript-aix-ppc64@7.0.1-rc':
+  '@typescript/typescript-linux-loong64@7.0.2':
     optional: true
 
-  '@typescript/typescript-darwin-arm64@7.0.1-rc':
+  '@typescript/typescript-linux-mips64el@7.0.2':
     optional: true
 
-  '@typescript/typescript-darwin-x64@7.0.1-rc':
+  '@typescript/typescript-linux-ppc64@7.0.2':
     optional: true
 
-  '@typescript/typescript-freebsd-arm64@7.0.1-rc':
+  '@typescript/typescript-linux-riscv64@7.0.2':
     optional: true
 
-  '@typescript/typescript-freebsd-x64@7.0.1-rc':
+  '@typescript/typescript-linux-s390x@7.0.2':
     optional: true
 
-  '@typescript/typescript-linux-arm64@7.0.1-rc':
+  '@typescript/typescript-linux-x64@7.0.2':
     optional: true
 
-  '@typescript/typescript-linux-arm@7.0.1-rc':
+  '@typescript/typescript-netbsd-arm64@7.0.2':
     optional: true
 
-  '@typescript/typescript-linux-loong64@7.0.1-rc':
+  '@typescript/typescript-netbsd-x64@7.0.2':
     optional: true
 
-  '@typescript/typescript-linux-mips64el@7.0.1-rc':
+  '@typescript/typescript-openbsd-arm64@7.0.2':
     optional: true
 
-  '@typescript/typescript-linux-ppc64@7.0.1-rc':
+  '@typescript/typescript-openbsd-x64@7.0.2':
     optional: true
 
-  '@typescript/typescript-linux-riscv64@7.0.1-rc':
+  '@typescript/typescript-sunos-x64@7.0.2':
     optional: true
 
-  '@typescript/typescript-linux-s390x@7.0.1-rc':
+  '@typescript/typescript-win32-arm64@7.0.2':
     optional: true
 
-  '@typescript/typescript-linux-x64@7.0.1-rc':
-    optional: true
-
-  '@typescript/typescript-netbsd-arm64@7.0.1-rc':
-    optional: true
-
-  '@typescript/typescript-netbsd-x64@7.0.1-rc':
-    optional: true
-
-  '@typescript/typescript-openbsd-arm64@7.0.1-rc':
-    optional: true
-
-  '@typescript/typescript-openbsd-x64@7.0.1-rc':
-    optional: true
-
-  '@typescript/typescript-sunos-x64@7.0.1-rc':
-    optional: true
-
-  '@typescript/typescript-win32-arm64@7.0.1-rc':
-    optional: true
-
-  '@typescript/typescript-win32-x64@7.0.1-rc':
+  '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
   '@typescript/vfs@1.6.4(typescript@6.0.3)':
@@ -10838,14 +10940,14 @@ snapshots:
 
   corser@2.0.1: {}
 
-  cosmiconfig@8.3.6(typescript@6.0.3):
+  cosmiconfig@8.3.6(typescript@7.0.2):
     dependencies:
       import-fresh: 3.3.1
       js-yaml: 4.1.1
       parse-json: 5.2.0
       path-type: 4.0.0
     optionalDependencies:
-      typescript: 6.0.3
+      typescript: 7.0.2
 
   create-ecdh@4.0.4:
     dependencies:
@@ -13574,14 +13676,21 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.23.2(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.5)(@typescript/native-preview@7.0.0-dev.20260704.1)(typescript@6.0.3):
+  rsbuild-plugin-dts@0.23.2(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.5)(typescript@6.0.3):
     dependencies:
       '@ast-grep/napi': 0.37.0
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.9(@types/node@24.13.2)
-      '@typescript/native-preview': 7.0.0-dev.20260704.1
       typescript: 6.0.3
+
+  rsbuild-plugin-dts@0.23.2(@microsoft/api-extractor@7.58.9)(@rsbuild/core@2.1.5)(typescript@7.0.2):
+    dependencies:
+      '@ast-grep/napi': 0.37.0
+      '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
+    optionalDependencies:
+      '@microsoft/api-extractor': 7.58.9(@types/node@25.2.0)
+      typescript: 7.0.2
 
   rsbuild-plugin-google-analytics@1.0.6(@rsbuild/core@2.1.5):
     optionalDependencies:
@@ -13956,7 +14065,7 @@ snapshots:
       detect-newline: 4.0.1
       git-hooks-list: 4.2.1
       is-plain-obj: 4.1.0
-      semver: 7.7.4
+      semver: 7.8.5
       sort-object-keys: 2.1.0
       tinyglobby: 0.2.17
 
@@ -13985,14 +14094,14 @@ snapshots:
     dependencies:
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
       '@rslib/core': link:packages/core
-      storybook-builder-rsbuild: 3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260704.1)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3)
+      storybook-builder-rsbuild: 3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3)
     optionalDependencies:
       typescript: 6.0.3
 
-  storybook-builder-rsbuild@3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260704.1)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3):
+  storybook-builder-rsbuild@3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3):
     dependencies:
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
-      '@rsbuild/plugin-type-check': 1.4.0(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260704.1)(typescript@6.0.3)
+      '@rsbuild/plugin-type-check': 1.4.0(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(typescript@6.0.3)
       '@vitest/mocker': 3.2.4
       browser-assert: 1.2.1
       case-sensitive-paths-webpack-plugin: 2.4.0
@@ -14021,7 +14130,7 @@ snapshots:
       - msw
       - vite
 
-  storybook-react-rsbuild@3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@types/react-dom@19.2.3)(@types/react@19.2.17)(@typescript/native-preview@7.0.0-dev.20260704.1)(react-dom@19.2.7)(react@19.2.7)(rollup@4.60.4)(storybook@10.4.6)(typescript@6.0.3):
+  storybook-react-rsbuild@3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@types/react-dom@19.2.3)(@types/react@19.2.17)(react-dom@19.2.7)(react@19.2.7)(rollup@4.60.4)(storybook@10.4.6)(typescript@6.0.3):
     dependencies:
       '@rollup/pluginutils': 5.3.0(rollup@4.60.4)
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
@@ -14035,7 +14144,7 @@ snapshots:
       react-dom: 19.2.7(react@19.2.7)
       resolve: 1.22.12
       storybook: 10.4.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/react@19.2.17)(prettier@3.9.4)(react-dom@19.2.7)(react@19.2.7)
-      storybook-builder-rsbuild: 3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260704.1)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3)
+      storybook-builder-rsbuild: 3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3)
       tsconfig-paths: 4.2.0
     optionalDependencies:
       typescript: 6.0.3
@@ -14050,12 +14159,12 @@ snapshots:
       - vite
       - webpack
 
-  storybook-vue3-rsbuild@3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260704.1)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3)(vue@3.5.39):
+  storybook-vue3-rsbuild@3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3)(vue@3.5.39):
     dependencies:
       '@rsbuild/core': 2.1.5(@module-federation/runtime-tools@2.6.0)
       '@storybook/vue3': 10.4.6(storybook@10.4.6)(vue@3.5.39)
       storybook: 10.4.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/react@19.2.17)(prettier@3.9.4)(react-dom@19.2.7)(react@19.2.7)
-      storybook-builder-rsbuild: 3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260704.1)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3)
+      storybook-builder-rsbuild: 3.3.4(@rsbuild/core@2.1.5)(@rspack/core@2.1.3)(react-dom@19.2.7)(react@19.2.7)(storybook@10.4.6)(typescript@6.0.3)
       vue: 3.5.39(typescript@6.0.3)
       vue-docgen-api: 4.79.2(vue@3.5.39)
       vue-docgen-loader: 2.0.1(vue-docgen-api@4.79.2)
@@ -14085,7 +14194,7 @@ snapshots:
       oxc-parser: 0.127.0
       oxc-resolver: 11.19.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
       recast: 0.23.11
-      semver: 7.7.4
+      semver: 7.8.5
       use-sync-external-store: 1.6.0(react@19.2.7)
       ws: 8.21.0
     optionalDependencies:
@@ -14296,7 +14405,7 @@ snapshots:
 
   trough@2.2.0: {}
 
-  ts-checker-rspack-plugin@1.4.0(@rspack/core@2.1.3)(@typescript/native-preview@7.0.0-dev.20260704.1)(typescript@6.0.3):
+  ts-checker-rspack-plugin@1.4.0(@rspack/core@2.1.3)(typescript@6.0.3):
     dependencies:
       '@rspack/lite-tapable': 1.1.2
       chokidar: 3.6.0
@@ -14305,7 +14414,6 @@ snapshots:
       typescript: 6.0.3
     optionalDependencies:
       '@rspack/core': 2.1.3(@module-federation/runtime-tools@2.6.0)(@swc/helpers@0.5.23)
-      '@typescript/native-preview': 7.0.0-dev.20260704.1
 
   ts-dedent@2.3.0: {}
 
@@ -14362,28 +14470,28 @@ snapshots:
 
   typescript@6.0.3: {}
 
-  typescript@7.0.1-rc:
+  typescript@7.0.2:
     optionalDependencies:
-      '@typescript/typescript-aix-ppc64': 7.0.1-rc
-      '@typescript/typescript-darwin-arm64': 7.0.1-rc
-      '@typescript/typescript-darwin-x64': 7.0.1-rc
-      '@typescript/typescript-freebsd-arm64': 7.0.1-rc
-      '@typescript/typescript-freebsd-x64': 7.0.1-rc
-      '@typescript/typescript-linux-arm': 7.0.1-rc
-      '@typescript/typescript-linux-arm64': 7.0.1-rc
-      '@typescript/typescript-linux-loong64': 7.0.1-rc
-      '@typescript/typescript-linux-mips64el': 7.0.1-rc
-      '@typescript/typescript-linux-ppc64': 7.0.1-rc
-      '@typescript/typescript-linux-riscv64': 7.0.1-rc
-      '@typescript/typescript-linux-s390x': 7.0.1-rc
-      '@typescript/typescript-linux-x64': 7.0.1-rc
-      '@typescript/typescript-netbsd-arm64': 7.0.1-rc
-      '@typescript/typescript-netbsd-x64': 7.0.1-rc
-      '@typescript/typescript-openbsd-arm64': 7.0.1-rc
-      '@typescript/typescript-openbsd-x64': 7.0.1-rc
-      '@typescript/typescript-sunos-x64': 7.0.1-rc
-      '@typescript/typescript-win32-arm64': 7.0.1-rc
-      '@typescript/typescript-win32-x64': 7.0.1-rc
+      '@typescript/typescript-aix-ppc64': 7.0.2
+      '@typescript/typescript-darwin-arm64': 7.0.2
+      '@typescript/typescript-darwin-x64': 7.0.2
+      '@typescript/typescript-freebsd-arm64': 7.0.2
+      '@typescript/typescript-freebsd-x64': 7.0.2
+      '@typescript/typescript-linux-arm': 7.0.2
+      '@typescript/typescript-linux-arm64': 7.0.2
+      '@typescript/typescript-linux-loong64': 7.0.2
+      '@typescript/typescript-linux-mips64el': 7.0.2
+      '@typescript/typescript-linux-ppc64': 7.0.2
+      '@typescript/typescript-linux-riscv64': 7.0.2
+      '@typescript/typescript-linux-s390x': 7.0.2
+      '@typescript/typescript-linux-x64': 7.0.2
+      '@typescript/typescript-netbsd-arm64': 7.0.2
+      '@typescript/typescript-netbsd-x64': 7.0.2
+      '@typescript/typescript-openbsd-arm64': 7.0.2
+      '@typescript/typescript-openbsd-x64': 7.0.2
+      '@typescript/typescript-sunos-x64': 7.0.2
+      '@typescript/typescript-win32-arm64': 7.0.2
+      '@typescript/typescript-win32-x64': 7.0.2
 
   undici-types@7.16.0: {}
 
@@ -14583,6 +14691,13 @@ snapshots:
       '@vue/language-core': 3.3.6
       typescript: 6.0.3
 
+  vue-tsc@3.3.6(typescript@7.0.2):
+    dependencies:
+      '@volar/typescript': 2.4.28
+      '@vue/language-core': 3.3.6
+      typescript: 7.0.2
+    optional: true
+
   vue@3.5.39(typescript@6.0.3):
     dependencies:
       '@vue/compiler-dom': 3.5.39
@@ -14592,6 +14707,16 @@ snapshots:
       '@vue/shared': 3.5.39
     optionalDependencies:
       typescript: 6.0.3
+
+  vue@3.5.39(typescript@7.0.2):
+    dependencies:
+      '@vue/compiler-dom': 3.5.39
+      '@vue/compiler-sfc': 3.5.39
+      '@vue/runtime-dom': 3.5.39
+      '@vue/server-renderer': 3.5.39(vue@3.5.39)
+      '@vue/shared': 3.5.39
+    optionalDependencies:
+      typescript: 7.0.2
 
   web-namespaces@2.0.1: {}
 

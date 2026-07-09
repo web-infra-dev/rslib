@@ -6,11 +6,10 @@ describe('dts redirect with tsgo', () => {
   let contents: Awaited<ReturnType<typeof buildAndGetResults>>['contents'];
 
   beforeAll(async () => {
-    const fixturePath = path.resolve(__dirname, './dts');
+    const fixturePath = path.resolve(__dirname, './dts-tsgo');
     contents = (
       await buildAndGetResults({
         fixturePath,
-        configPath: './rslib.tsgo.config.mts',
         type: 'dts',
       })
     ).contents;

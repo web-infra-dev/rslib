@@ -7,7 +7,7 @@ import type {
   Program,
   System,
   WatchStatusReporter,
-} from 'typescript';
+} from 'typescript6-api';
 import type { EmitDtsOptions } from './dts';
 import {
   color,
@@ -16,8 +16,8 @@ import {
   processDtsFiles,
   renameDtsFile,
   updateDeclarationMapContent,
-  type CompilerApiTsconfigResultForApi,
 } from './utils';
+import type { CompilerApiTsconfigResultForApi } from './types/internal';
 
 const logPrefixTsc = color.dim('[tsc]');
 /*
