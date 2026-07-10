@@ -10,27 +10,10 @@ Rslib's configuration is based on Rsbuild, which means that you can use all of R
 
 Rslib has two types of configuration:
 
-- [Lib configurations](/config/lib) describe library outputs, such as their module formats, bundle modes, and syntax targets.
-- [Rsbuild configurations](/config/rsbuild) control compilation and build behavior, such as source transforms and output paths.
+- [Lib configurations](/config/lib): Describe library outputs, such as their module formats, bundle modes, and syntax targets.
+- [Rsbuild configurations](/config/rsbuild): Control compilation and build behavior, such as source transforms and output paths.
 
-`lib` is an array of objects, with each object representing one output. Both types of configuration can be specified in a `lib` item to customize that output:
-
-```js title="rslib.config.mjs"
-export default {
-  lib: [
-    {
-      // Lib configurations
-      format: 'esm',
-      syntax: 'es2021',
-      // Rsbuild configurations
-      output: {
-        target: 'web',
-      },
-    },
-    { format: 'cjs' },
-  ],
-};
-```
+Rslib configurations can be specified inside the `lib` option or at the top level. The `lib` option is an array of objects, with each object configuring one output. Configurations in a `lib` item customize that output, while top-level configurations apply to all outputs.
 
 ### Lib configurations
 
@@ -41,7 +24,15 @@ For example, all outputs use [`syntax`](/config/lib/syntax) `es2021` by default,
 ```js title="rslib.config.mjs"
 export default {
   syntax: 'es2021',
-  lib: [{ format: 'esm' }, { format: 'cjs', syntax: 'es2020' }],
+  lib: [
+    {
+      format: 'esm',
+    },
+    {
+      format: 'cjs',
+      syntax: 'es2020',
+    },
+  ],
 };
 ```
 
@@ -65,14 +56,16 @@ export default {
         target: 'web',
       },
     },
-    { format: 'cjs' },
+    {
+      format: 'cjs',
+    },
   ],
 };
 ```
 
 Rslib will generate the [environments](https://rsbuild.rs/config/environments) configuration of Rsbuild internally, you can run [rslib inspect](/guide/basic/cli#rslib-inspect) command to view the final generated configuration.
 
-You can also refer to the [Configuration Overview](/config/) page to view the detailed introduction of all configurations.
+You can also refer to the [Configuration overview](/config/) page to view the detailed introduction of all configurations.
 
 ## Configuration file
 
