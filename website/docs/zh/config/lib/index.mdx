@@ -2,7 +2,7 @@
 description: '了解 Rslib 的 lib 配置结构、共享配置方式，以及每个库产物支持的配置项。'
 ---
 
-# lib 配置
+# 总览
 
 lib 配置用于描述 Rslib 生成的库产物。`lib` 是一个对象数组，每个对象代表一种产物：
 
@@ -55,13 +55,11 @@ export default {
 
 以下 lib 配置用于描述或定制单个产物，只能写在 `lib` 项中：
 
-| 配置项                                   | 说明                           |
-| ---------------------------------------- | ------------------------------ |
-| [`format`](/config/lib/format)           | 配置产物的模块格式。           |
-| [`id`](/config/lib/id)                   | 配置产物的唯一标识。           |
-| [`dts`](/config/lib/dts)                 | 配置 TypeScript 声明文件生成。 |
-| [`umdName`](/config/lib/umd-name)        | 配置 UMD 产物的导出名称。      |
-| [`experiments`](/config/lib/experiments) | 配置产物的实验性功能。         |
+- [`format`](/config/lib/format)
+- [`id`](/config/lib/id)
+- [`dts`](/config/lib/dts)
+- [`umdName`](/config/lib/umd-name)
+- [`experiments`](/config/lib/experiments)
 
 共享 lib 配置也可以写在 `lib` 项中，用于单独定制该产物。
 
