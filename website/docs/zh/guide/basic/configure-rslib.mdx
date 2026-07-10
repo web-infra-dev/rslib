@@ -1,5 +1,5 @@
 ---
-description: '配置 Rslib，了解 lib 选项、共享的 Rsbuild 配置、配置文件与 defineConfig 的使用方式。'
+description: '配置 Rslib，了解 lib 配置、Rsbuild 配置、配置文件与 defineConfig 的使用方式。'
 ---
 
 # 配置 Rslib
@@ -8,76 +8,65 @@ Rslib 的配置是基于 Rsbuild 扩展的，这意味着你可以使用 Rsbuild
 
 ## 配置结构
 
-Rslib 提供了 `lib` 选项来配置库产物，它是一个数组，每个对象用于描述一种输出格式。
+Rslib 配置包含两类配置：
 
-例如，输出 ESM 和 CJS 两种格式的产物，并使用 `es2021` 语法：
+- [lib 配置](/config/lib)用于描述库产物，例如模块格式、打包模式和语法目标。
+- [Rsbuild 配置](/config/rsbuild)用于控制编译和构建行为，例如源码转换和产物路径。
+
+`lib` 是一个对象数组，每个对象代表一种产物。两类配置都可以写在 `lib` 项中，用于单独配置该产物：
 
 ```js title="rslib.config.mjs"
 export default {
   lib: [
-    { format: 'esm', syntax: 'es2021' },
-    { format: 'cjs', syntax: 'es2021' },
+    {
+      // lib 配置
+      format: 'esm',
+      syntax: 'es2021',
+      // Rsbuild 配置
+      output: {
+        target: 'web',
+      },
+    },
+    { format: 'cjs' },
   ],
 };
 ```
 
-### 公共的 lib 配置
+### lib 配置
 
-部分 `lib` 配置可以配置在 `lib` 字段外部，作为公共默认值。每个 `lib` 项都会继承这些默认值，`lib` 项内的同名配置会覆盖公共配置。
+lib 配置通常写在 `lib` 项中，用于描述单个产物。其中部分配置也可以写在顶层，作为所有产物的共享配置。`lib` 项内的同名配置优先于共享配置。
 
-例如，为所有产物统一设置 [`syntax`](/config/lib/syntax)：
+例如，所有产物默认使用 [`syntax`](/config/lib/syntax) `es2021`，CJS 产物则单独使用 `es2020`：
 
 ```js title="rslib.config.mjs"
 export default {
   syntax: 'es2021',
-  lib: [{ format: 'esm' }, { format: 'cjs' }],
+  lib: [{ format: 'esm' }, { format: 'cjs', syntax: 'es2020' }],
 };
 ```
 
-支持的公共 `lib` 配置项见 [`lib` 配置总览](/config/lib)。
+并非所有 lib 配置都支持共享。例如，`format` 和 `dts` 用于描述单个产物，只能写在 `lib` 项中。完整列表见 [lib 配置](/config/lib)。
 
-### 公共的 Rsbuild 配置
+### Rsbuild 配置
 
-在 `lib` 字段外部，你可以设置公共的 Rsbuild 配置，这些配置将被 `lib` 内的每个配置对象继承。
+Rsbuild 配置可以写在顶层，作用于所有产物；也可以写在 `lib` 项中，单独配置该产物。`lib` 项内的 Rsbuild 配置会与顶层配置合并，并在冲突时优先。
 
-例如，设置 Rsbuild 的 [output.target](/config/rsbuild/output#outputtarget) 为 `web`，这会影响所有 `lib` 配置对象的输出：
+例如，所有产物的 [output.target](/config/rsbuild/output#outputtarget) 默认为 `node`，ESM 产物则单独设置为 `web`：
 
 ```js title="rslib.config.mjs"
 export default {
-  lib: [
-    { format: 'esm', syntax: 'es2021' },
-    { format: 'cjs', syntax: 'es2021' },
-  ],
   output: {
-    target: 'web',
+    target: 'node',
   },
-};
-```
-
-### 单独的 Rsbuild 配置
-
-在 `lib` 字段内部，你可以为每种输出格式设置单独的 Rsbuild 配置，这些配置将覆盖外部的公共 Rsbuild 配置。
-
-例如，单独设置 ESM 产物的 [output.target](/config/rsbuild/output#outputtarget) 为 `web`：
-
-```js title="rslib.config.mjs"
-export default {
   lib: [
-    // ESM 产物的 target 为 `web`
     {
       format: 'esm',
       output: {
         target: 'web',
       },
     },
-    // CJS 产物继承了公共配置，target 为 `node`
-    {
-      format: 'cjs',
-    },
+    { format: 'cjs' },
   ],
-  output: {
-    target: 'node',
-  },
 };
 ```
 
