@@ -30,6 +30,7 @@ type Syntax = EcmaScriptVersion | string[];
   - `['node >= <minimum-version>']` when [output.target](/config/rsbuild/output#outputtarget) is `'node'` and `package.json#engines.node` declares an inferable minimum Node.js version
   - Otherwise, `'esnext'`
 - **CLI:** `--syntax <value>` (repeatable, e.g. `--syntax es2018` or `--syntax="node 14" --syntax="Chrome 103"`)
+- **Top-level config:** Supported
 
 Configure the syntax to which JavaScript and CSS will be downgraded.
 

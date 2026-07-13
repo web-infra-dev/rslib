@@ -30,6 +30,7 @@ type Syntax = EcmaScriptVersion | string[];
   - 当 [output.target](/config/rsbuild/output#outputtarget) 为 `'node'`，且 `package.json#engines.node` 可推断出最低 Node.js 版本时，使用 `['node >= <minimum-version>']`
   - 其他情况下，使用 `'esnext'`
 - **命令行：** `--syntax <value>`（可重复，例如 `--syntax es2018` 或 `--syntax="node 14" --syntax="Chrome 103"`）
+- **顶层配置：** 支持
 
 配置 JavaScript 和 CSS 将被降级的语法版本。
 

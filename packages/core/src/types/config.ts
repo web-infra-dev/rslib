@@ -482,6 +482,20 @@ export interface LibConfig extends EnvironmentConfig {
 
 export type LibOnlyConfig = Omit<LibConfig, keyof EnvironmentConfig>;
 
+export type SharedLibConfig = Pick<
+  LibConfig,
+  | 'bundle'
+  | 'autoExtension'
+  | 'autoExternal'
+  | 'redirect'
+  | 'syntax'
+  | 'externalHelpers'
+  | 'banner'
+  | 'footer'
+  | 'shims'
+  | 'outBase'
+>;
+
 interface RslibOutputConfig extends OutputConfig {
   /**
    * @override
@@ -503,7 +517,7 @@ interface RslibOutputConfig extends OutputConfig {
   minify?: OutputConfig['minify'];
 }
 
-export interface RslibConfig extends RsbuildConfig {
+export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
   lib: LibConfig[];
   /**
    * @inheritdoc

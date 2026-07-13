@@ -1,37 +1,76 @@
 ---
-description: '查看 Rslib lib 配置总览，了解输出格式、语法目标、声明文件、bundle 模式与核心构建选项。'
+description: '了解 Rslib 的 lib 配置结构、共享配置方式，以及每个库产物支持的配置项。'
 ---
 
 # 总览
 
-- **类型:**
+lib 配置用于描述 Rslib 生成的库产物。`lib` 是一个对象数组，每个对象代表一种产物：
 
-```ts
-interface LibConfig extends EnvironmentConfig {
-  autoExtension?: boolean;
-  autoExternal?: AutoExternal;
-  banner?: BannerAndFooter;
-  bundle?: boolean;
-  dts?: Dts;
-  experiments?: { exe?: ExeOptions };
-  externalHelpers?: boolean;
-  format?: Format;
-  id?: string;
-  outBase?: string;
-  footer?: BannerAndFooter;
-  redirect?: Redirect;
-  shims?: Shims;
-  syntax?: Syntax;
-  umdName?: Rspack.LibraryName;
-}
-
-interface RslibConfig extends RsbuildConfig {
-  lib: LibConfig[];
-}
+```js title="rslib.config.mjs"
+export default {
+  lib: [
+    {
+      format: 'esm'
+    },
+    {
+      format: 'cjs'
+    },
+  ],
+};
 ```
 
 - **默认值:** `undefined`
-
 - **必选:** `true`
 
-`lib` 配置是一个对象数组，每个对象代表一组不同的配置。这些配置包括所有 Rsbuild 配置以及 Rslib 特定的配置，可以生成不同格式的产物。
+每个 `lib` 项都可以使用 Rslib 的 lib 配置和 [Rsbuild 配置](/config/rsbuild)，从而为不同产物设置不同的构建行为。
+
+## 共享 lib 配置
+
+部分 lib 配置可以写在 Rslib 配置顶层，作为所有 `lib` 项的共享配置。需要针对某个产物单独设置时，可以在对应的 `lib` 项中覆盖共享配置：
+
+```js title="rslib.config.mjs"
+export default {
+  // 所有产物使用 es2021 语法且默认不打包
+  syntax: 'es2021',
+  bundle: false,
+  lib: [
+    { format: 'esm' },
+    {
+      format: 'cjs',
+      // 仅 CJS 产物会被打包
+      bundle: true,
+    },
+  ],
+};
+```
+
+以下 lib 配置支持共享：
+
+- [`bundle`](/config/lib/bundle)
+- [`autoExtension`](/config/lib/auto-extension)
+- [`autoExternal`](/config/lib/auto-external)
+- [`redirect`](/config/lib/redirect)
+- [`syntax`](/config/lib/syntax)
+- [`externalHelpers`](/config/lib/external-helpers)
+- [`banner`](/config/lib/banner)
+- [`footer`](/config/lib/footer)
+- [`shims`](/config/lib/shims)
+- [`outBase`](/config/lib/out-base)
+
+## 单个产物的 lib 配置
+
+以下 lib 配置用于描述或定制单个产物，只能写在 `lib` 项中：
+
+- [`format`](/config/lib/format)
+- [`id`](/config/lib/id)
+- [`dts`](/config/lib/dts)
+- [`umdName`](/config/lib/umd-name)
+- [`experiments`](/config/lib/experiments)
+
+共享 lib 配置也可以写在 `lib` 项中，用于单独定制该产物。
+
+## Rsbuild 配置
+
+除了 lib 配置，每个 `lib` 项还支持 [Rsbuild 配置](/config/rsbuild)。顶层 Rsbuild 配置会作用于所有产物，`lib` 项内的 Rsbuild 配置则用于单独定制该产物。
+
+关于两类配置的具体用法，请参考[配置 Rslib](/guide/basic/configure-rslib#配置结构)。

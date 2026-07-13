@@ -1,5 +1,5 @@
 ---
-description: 'Configure Rslib with lib options, shared Rsbuild settings, config files, and defineConfig.'
+description: 'Configure Rslib with lib configurations, Rsbuild configurations, config files, and defineConfig.'
 ---
 
 # Configure Rslib
@@ -8,67 +8,64 @@ Rslib's configuration is based on Rsbuild, which means that you can use all of R
 
 ## Configuration structure
 
-Rslib provides the `lib` option to configure the library outputs. It is an array, and each object is used to describe a format of the output.
+Rslib has two types of configuration:
 
-For example, output ESM and CJS formats, and use `es2021` syntax:
+- [Lib configurations](/config/lib): Describe library outputs, such as their module formats, bundle modes, and syntax targets.
+- [Rsbuild configurations](/config/rsbuild): Control compilation and build behavior, such as source transforms and output paths.
+
+Rslib configurations can be specified inside the `lib` option or at the top level. The `lib` option is an array of objects, with each object configuring one output. Configurations in a `lib` item customize that output, while top-level configurations apply to all outputs.
+
+### Lib configurations
+
+Lib configurations are usually specified in a `lib` item to describe an individual output. Some can also be specified at the top level and shared by all outputs. The same configuration in a `lib` item takes precedence over the shared configuration.
+
+For example, all outputs use [`syntax`](/config/lib/syntax) `es2021` by default, while the CJS output uses `es2020`:
 
 ```js title="rslib.config.mjs"
 export default {
+  syntax: 'es2021',
   lib: [
-    { format: 'esm', syntax: 'es2021' },
-    { format: 'cjs', syntax: 'es2021' },
+    {
+      format: 'esm',
+    },
+    {
+      format: 'cjs',
+      syntax: 'es2020',
+    },
   ],
 };
 ```
 
-### Common Rsbuild configurations
+Not all lib configurations can be shared. For example, `format` and `dts` describe an individual output and can only be specified in a `lib` item. See [Lib configurations](/config/lib) for the complete list.
 
-You can set common Rsbuild configurations outside the `lib` field, which will be inherited by each configuration object inside the `lib` field.
+### Rsbuild configurations
 
-For example, set the [output.target](/config/rsbuild/output#outputtarget) of Rsbuild to `web`, which will affect the output of all `lib` configuration objects:
+Rsbuild configurations can be specified at the top level to apply to all outputs, or in a `lib` item to customize that output. Rsbuild configurations in a `lib` item are merged with the top-level configurations and take precedence when they conflict.
+
+For example, the [output.target](/config/rsbuild/output#outputtarget) defaults to `node` for all outputs, while the ESM output uses `web`:
 
 ```js title="rslib.config.mjs"
 export default {
-  lib: [
-    { format: 'esm', syntax: 'es2021' },
-    { format: 'cjs', syntax: 'es2021' },
-  ],
   output: {
-    target: 'web',
+    target: 'node',
   },
-};
-```
-
-### Separate Rsbuild configurations
-
-In the `lib` field, you can set separate Rsbuild configurations for each output format, which will override the common Rsbuild configurations outside the `lib` field.
-
-For example, separately set the [output.target](/config/rsbuild/output#outputtarget) of the ESM output to `web`:
-
-```js title="rslib.config.mjs"
-export default {
   lib: [
-    // The target of the ESM output is `web`
     {
       format: 'esm',
       output: {
         target: 'web',
       },
     },
-    // The CJS output inherits the common configuration and target is `node`
     {
       format: 'cjs',
     },
   ],
-  output: {
-    target: 'node',
-  },
 };
 ```
 
 Rslib will generate the [environments](https://rsbuild.rs/config/environments) configuration of Rsbuild internally, you can run [rslib inspect](/guide/basic/cli#rslib-inspect) command to view the final generated configuration.
 
-You can also refer to the [Configuration Overview](/config/) page to view the detailed introduction of all configurations.
+You can also refer to the [Configuration overview](/config/) page to view the detailed introduction of all configurations.
 
 ## Configuration file
 
