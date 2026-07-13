@@ -66,6 +66,46 @@ describe('parseEntryOption', () => {
 });
 
 describe('applyCliOptions', () => {
+  test('applies CLI flags to the implicit default library', () => {
+    const config = {
+      source: {},
+      output: {},
+    } as RslibConfig;
+
+    const options = {
+      format: 'cjs',
+      entry: ['index=src/index.ts'],
+      dts: true,
+    } as CommonOptions;
+
+    applyCliOptions(config, options, '/abs/root');
+
+    expect(config.lib).toEqual([
+      {
+        dts: true,
+        format: 'cjs',
+        output: {},
+        source: {
+          entry: {
+            index: 'src/index.ts',
+          },
+        },
+      },
+    ]);
+  });
+
+  test('does not apply CLI flags to null lib field as implicit default library', () => {
+    const config = {
+      lib: null,
+    } as unknown as RslibConfig;
+
+    const options = {
+      format: 'cjs',
+    } as CommonOptions;
+
+    expect(() => applyCliOptions(config, options, '/abs/root')).toThrow();
+  });
+
   test('applies CLI flags to the config and its libraries', () => {
     const config = {
       root: '/initial',
@@ -117,7 +157,7 @@ describe('applyCliOptions', () => {
       distPath: 'dist/custom',
     } as CommonOptions;
 
-    const libBefore = config.lib[0]!;
+    const libBefore = config.lib![0]!;
     const outputBefore = libBefore.output;
 
     applyCliOptions(config, options, '/abs/custom');
@@ -125,7 +165,7 @@ describe('applyCliOptions', () => {
     expect(config.root).toBe('/abs/custom');
     expect(config.logLevel).toBe('error');
 
-    const lib = config.lib[0]!;
+    const lib = config.lib![0]!;
     expect(lib.format).toBe('cjs');
     expect(lib.bundle).toBe(false);
     expect(lib.dts).toBe(true);

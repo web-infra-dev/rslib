@@ -16,9 +16,9 @@ import {
 
 const packageRoot = path.resolve(import.meta.dirname, '..');
 
-type TestLibConfig = Parameters<
-  typeof composeCreateRsbuildConfig
->[0]['lib'][number];
+type TestLibConfig = NonNullable<
+  Parameters<typeof composeCreateRsbuildConfig>[0]['lib']
+>[number];
 
 const composeTestRslibConfig = (lib: TestLibConfig) =>
   composeCreateRsbuildConfig({

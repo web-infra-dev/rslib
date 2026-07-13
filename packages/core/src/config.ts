@@ -1963,7 +1963,7 @@ export async function composeCreateRsbuildConfig(
 ): Promise<RsbuildConfigWithLibInfo[]> {
   const constantRsbuildConfig = await createConstantRsbuildConfig();
   const {
-    lib: libConfigsArray,
+    lib: rawLibConfigsArray,
     mode: _mode,
     root,
     plugins: sharedPlugins,
@@ -1976,6 +1976,9 @@ export async function composeCreateRsbuildConfig(
   if (logLevel && !isDebug()) {
     logger.level = logLevel;
   }
+
+  const libConfigsArray =
+    rawLibConfigsArray === undefined ? [{}] : rawLibConfigsArray;
 
   if (!Array.isArray(libConfigsArray) || libConfigsArray.length === 0) {
     throw new Error(

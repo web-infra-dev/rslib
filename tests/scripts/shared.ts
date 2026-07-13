@@ -164,7 +164,7 @@ export async function getResults(
   let mfExposeEntry: string | undefined;
   let key = '';
 
-  const formatCount: Record<Format, number> = rslibConfig.lib.reduce(
+  const formatCount: Record<Format, number> = rslibConfig.lib!.reduce(
     (acc, { format = 'esm' }) => {
       acc[format] = (acc[format] ?? 0) + 1;
       return acc;
@@ -172,7 +172,7 @@ export async function getResults(
     {} as Record<Format, number>,
   );
 
-  for (const libConfig of rslibConfig.lib) {
+  for (const libConfig of rslibConfig.lib!) {
     const { format = 'esm' } = libConfig;
     const currentFormatCount = formatCount[format];
     const currentFormatIndex = formatIndex[format]++;

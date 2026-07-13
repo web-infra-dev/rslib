@@ -457,6 +457,30 @@ describe('CLI options', () => {
 });
 
 describe('Should compose create Rsbuild config correctly', () => {
+  test('treats omitted lib field as default library config', async () => {
+    const rslibConfig: RslibConfig = {
+      root: join(__dirname, '..'),
+    };
+
+    const composedRsbuildConfig = await composeRsbuildEnvironments(rslibConfig);
+
+    expect(Object.keys(composedRsbuildConfig.environments))
+      .toMatchInlineSnapshot(`
+      [
+        "esm",
+      ]
+    `);
+    expect(composedRsbuildConfig.environmentWithInfos[0]?.format).toBe('esm');
+  });
+
+  test('does not treat null lib field as default library config', async () => {
+    const rslibConfig = {
+      lib: null,
+    } as unknown as RslibConfig;
+
+    await expect(composeCreateRsbuildConfig(rslibConfig)).rejects.toThrow();
+  });
+
   test('Merge Rsbuild config in each format', async () => {
     const rslibConfig: RslibConfig = {
       lib: [
