@@ -1,10 +1,6 @@
 import { mergeRsbuildConfig } from '@rsbuild/core';
 import type { LibConfig, RslibConfig } from './types';
 
-export type RslibConfigWithOptionalLib = Omit<RslibConfig, 'lib'> & {
-  lib?: RslibConfig['lib'];
-};
-
 /**
  * Merge multiple lib arrays, merging items with the same id.
  * Items without id are appended to the result.
@@ -53,10 +49,10 @@ function mergeLibConfigs(
  * Other configuration fields are merged using `mergeRsbuildConfig`.
  */
 export function mergeRslibConfig(
-  ...originalConfigs: (RslibConfigWithOptionalLib | undefined)[]
-): RslibConfigWithOptionalLib {
+  ...originalConfigs: (RslibConfig | undefined)[]
+): RslibConfig {
   const definedConfigs = originalConfigs.filter(
-    (config): config is RslibConfigWithOptionalLib => config !== undefined,
+    (config): config is RslibConfig => config !== undefined,
   );
 
   if (definedConfigs.length === 0) {
@@ -73,9 +69,7 @@ export function mergeRslibConfig(
   });
 
   // Merge non-lib parts using mergeRsbuildConfig
-  const mergedConfig = mergeRsbuildConfig(
-    ...configsWithoutLib,
-  ) as RslibConfigWithOptionalLib;
+  const mergedConfig = mergeRsbuildConfig(...configsWithoutLib) as RslibConfig;
 
   // Merge lib arrays with id-based merging
   const mergedLib = mergeLibConfigs(...libArrays);
