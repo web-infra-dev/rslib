@@ -10,7 +10,7 @@ The `lib` field is an optional array of objects used to describe the library out
 - **Default:** `[{}]`
 - **Required:** `false`
 
-If `lib` is omitted, Rslib uses a default configuration equivalent to `lib: [{}]`; if `lib` is set explicitly, it must be a non-empty array.
+If the `lib` field is omitted, Rslib uses a default configuration equivalent to `lib: [{}]` to generate a single ESM output; if the `lib` field is explicitly configured, it must be a non-empty array.
 
 For example, the following configuration will generate ESM and CJS outputs:
 

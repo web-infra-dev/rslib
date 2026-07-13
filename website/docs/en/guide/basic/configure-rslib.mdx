@@ -21,8 +21,6 @@ Rslib merges the shared configuration with each `lib` item according to the [con
 
 Lib configurations can be specified in a `lib` item to configure a specific output. [Some lib configurations](/config/lib#shared-lib-configurations) can also be placed outside the `lib` field as shared configuration for all outputs.
 
-When you only need the default single ESM output, you can omit the `lib` field. This is equivalent to setting `lib: [{}]`.
-
 For example, set [`syntax`](/config/lib/syntax) to `es2020` for the CJS output and use shared configuration to set `syntax` to `es2021` for the other outputs:
 
 ```js title="rslib.config.mjs"
@@ -41,6 +39,8 @@ export default {
 ```
 
 After merging, `syntax` is `es2021` for the ESM output and `es2020` for the CJS output.
+
+When you only need to generate a single ESM output using the default configuration, you can omit the `lib` field. This is equivalent to setting `lib: [{}]`.
 
 ### Rsbuild configurations
 

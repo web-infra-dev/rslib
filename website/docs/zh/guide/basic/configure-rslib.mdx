@@ -21,8 +21,6 @@ Rslib 会按照 [配置合并规则](https://rsbuild.rs/zh/api/javascript-api/co
 
 lib 配置可以写在 `lib` 项中，用于单独配置对应产物。[部分 lib 配置](/config/lib#共享-lib-配置)也可以写在 `lib` 字段外，作为共享配置应用于所有产物。
 
-当你只需要默认的单个 ESM 产物时，可以省略 `lib` 字段。这等价于配置 `lib: [{}]`。
-
 例如，将 CJS 产物的 [`syntax`](/config/lib/syntax) 设置为 `es2020`，并通过共享配置将其余产物的 `syntax` 设置为 `es2021`：
 
 ```js title="rslib.config.mjs"
@@ -41,6 +39,8 @@ export default {
 ```
 
 合并后，ESM 产物的 `syntax` 为 `es2021`，CJS 产物的 `syntax` 为 `es2020`。
+
+当你只需要基于默认配置生成一份 ESM 产物时，可以省略 `lib` 字段，这等价于配置 `lib: [{}]`。
 
 ### Rsbuild 配置
 
