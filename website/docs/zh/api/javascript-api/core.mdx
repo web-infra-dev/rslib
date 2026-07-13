@@ -181,9 +181,7 @@ Rslib 的 `loadConfig` 与 Rsbuild 的用法基本一致，区别在于默认查
 - **类型：**
 
 ```ts
-function mergeRslibConfig(
-  ...configs: (RslibConfigWithOptionalLib | undefined)[]
-): RslibConfigWithOptionalLib;
+function mergeRslibConfig(...configs: (RslibConfig | undefined)[]): RslibConfig;
 ```
 
 ### 基础示例

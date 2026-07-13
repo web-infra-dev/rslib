@@ -181,9 +181,7 @@ The `mergeRslibConfig` function takes multiple configuration objects as paramete
 - **Type:**
 
 ```ts
-function mergeRslibConfig(
-  ...configs: (RslibConfigWithOptionalLib | undefined)[]
-): RslibConfigWithOptionalLib;
+function mergeRslibConfig(...configs: (RslibConfig | undefined)[]): RslibConfig;
 ```
 
 ### Basic example

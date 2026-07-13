@@ -13,10 +13,7 @@ import {
 } from '../src/config';
 import { createRslib } from '../src/createRslib';
 import { loadConfig } from '../src/loadConfig';
-import {
-  mergeRslibConfig,
-  type RslibConfigWithOptionalLib,
-} from '../src/mergeConfig';
+import { mergeRslibConfig } from '../src/mergeConfig';
 import type { RslibConfig } from '../src/types/config';
 
 rs.mock('rslog');
@@ -273,7 +270,7 @@ describe('Should merge Rslib config correctly', () => {
       },
     };
 
-    const config2: RslibConfigWithOptionalLib = {
+    const config2: RslibConfig = {
       output: {
         target: 'web',
       },
