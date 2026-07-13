@@ -13,15 +13,15 @@ Rslib configuration consists of two types of options:
 - [Lib configurations](/config/lib) describe library outputs, including their output formats, output structures, and syntax targets.
 - [Rsbuild configurations](/config/rsbuild) control the underlying compilation and build behavior, including module resolution, source processing, and related plugins.
 
-The `lib` field is an array of objects. Each object corresponds to one output and can contain both types of configuration above. Configurations inside a `lib` item apply only to that output, while configurations outside the `lib` field are shared across all outputs.
-
-When you only need the default single ESM output, you can omit the `lib` field. This is equivalent to setting `lib: [{}]`.
+The `lib` field is an optional array of objects. Each object corresponds to one output and can contain both types of configuration above. Configurations inside a `lib` item apply only to that output, while configurations outside the `lib` field are shared across all outputs.
 
 Rslib merges the shared configuration with each `lib` item according to the [configuration merge rules](https://rsbuild.rs/api/javascript-api/core#merge-rules).
 
 ### Lib configurations
 
 Lib configurations can be specified in a `lib` item to configure a specific output. [Some lib configurations](/config/lib#shared-lib-configurations) can also be placed outside the `lib` field as shared configuration for all outputs.
+
+When you only need the default single ESM output, you can omit the `lib` field. This is equivalent to setting `lib: [{}]`.
 
 For example, set [`syntax`](/config/lib/syntax) to `es2020` for the CJS output and use shared configuration to set `syntax` to `es2021` for the other outputs:
 
