@@ -5,10 +5,33 @@ import path from 'node:path';
 import {
   readTypescriptVersion,
   resolveDtsGenerationBackend,
+  resolveTypescriptPath,
 } from '../src/backend';
 
 describe('resolveDtsGenerationBackend', () => {
   const tsgoRequirementMessage = '`dts.tsgo` requires `typescript` >= 7.0.0.';
+
+  test('should preserve backend selection when typescriptPath is unset', () => {
+    const cases = [
+      [{}, undefined, 'api-old'],
+      [{ tsgo: false }, undefined, 'api-old'],
+      [{}, '5.9.3', 'api-old'],
+      [{ tsgo: false }, '5.9.3', 'api-old'],
+      [{}, '6.0.1', 'api-old'],
+      [{ tsgo: false }, '6.0.1', 'api-old'],
+      [{}, '7.0.2', 'ts7-executable'],
+      [{ tsgo: true }, '7.0.2', 'ts7-executable'],
+      [{ isolated: true }, undefined, 'isolated'],
+      [{ isolated: true }, '6.0.1', 'isolated'],
+      [{ isolated: true, tsgo: false }, '7.0.2', 'isolated'],
+    ] as const;
+
+    for (const [options, typescriptVersion, expectedBackend] of cases) {
+      expect(resolveDtsGenerationBackend(options, typescriptVersion)).toBe(
+        expectedBackend,
+      );
+    }
+  });
 
   test('should use the old compiler api backend for TypeScript 5 and 6', () => {
     expect(resolveDtsGenerationBackend({}, '5.9.3')).toBe('api-old');
@@ -41,7 +64,7 @@ describe('resolveDtsGenerationBackend', () => {
     expect(resolveDtsGenerationBackend({}, '7.1.0')).toBe('ts7-executable');
   });
 
-  test('should read the TypeScript version from cwd', async () => {
+  test('should resolve TypeScript from cwd and read its version', async () => {
     const tempDir = await fs.mkdtemp(
       path.join(os.tmpdir(), 'rslib-plugin-dts-'),
     );
@@ -60,14 +83,65 @@ describe('resolveDtsGenerationBackend', () => {
         JSON.stringify({ name: 'typescript', version: '7.0.2' }),
       );
 
-      const typescriptVersion = readTypescriptVersion(packageDir);
+      const typescriptPath = resolveTypescriptPath(packageDir);
+      const typescriptVersion = readTypescriptVersion(typescriptPath);
 
+      expect(typescriptPath).toBe(
+        await fs.realpath(path.join(typescriptPkgDir, 'package.json')),
+      );
       expect(typescriptVersion).toBe('7.0.2');
       expect(resolveDtsGenerationBackend({}, typescriptVersion)).toBe(
         'ts7-executable',
       );
     } finally {
       await fs.rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  test('should use the configured TypeScript package.json', async () => {
+    const tempDir = await fs.mkdtemp(
+      path.join(os.tmpdir(), 'rslib-plugin-dts-custom-'),
+    );
+
+    try {
+      const packageJsonPath = path.join(tempDir, 'package.json');
+      await fs.writeFile(
+        packageJsonPath,
+        JSON.stringify({ name: 'typescript', version: '6.0.3' }),
+      );
+
+      expect(resolveTypescriptPath(tempDir, packageJsonPath)).toBe(
+        packageJsonPath,
+      );
+      expect(readTypescriptVersion(packageJsonPath)).toBe('6.0.3');
+    } finally {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  test('should validate the configured TypeScript path', () => {
+    expect(() => resolveTypescriptPath('/project', './package.json')).toThrow(
+      'must be an absolute path',
+    );
+    expect(() =>
+      resolveTypescriptPath('/project', '/tmp/typescript.js'),
+    ).toThrow('must point to a TypeScript package.json');
+    expect(() =>
+      resolveTypescriptPath('/project', '/path/not-found/package.json'),
+    ).toThrow('does not exist');
+  });
+
+  test('should reject typescriptPath with isolated declarations', () => {
+    for (const typescriptPath of ['/path/to/package.json', '']) {
+      expect(() =>
+        resolveDtsGenerationBackend(
+          {
+            isolated: true,
+            typescriptPath,
+          },
+          '6.0.3',
+        ),
+      ).toThrow('Can not set "dts.typescriptPath" when "dts.isolated: true".');
     }
   });
 });

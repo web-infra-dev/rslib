@@ -20,7 +20,7 @@ export type DtsTsconfigResult =
 
 export type DtsGenOptions = Omit<
   PluginDtsOptions,
-  'bundle' | 'isolated' | 'tsgo'
+  'bundle' | 'isolated' | 'tsgo' | 'typescriptPath'
 > & {
   bundle: boolean;
   name: string;
@@ -35,4 +35,5 @@ export type DtsGenOptions = Omit<
   apiExtractorOptions?: ApiExtractorOptions;
   loggerLevel: LogLevel;
   dtsBackend: DtsGenerationBackend;
+  typescriptPath?: string;
 };

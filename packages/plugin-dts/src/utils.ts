@@ -46,9 +46,14 @@ const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
 
 export const loadTypescript = (
   cwd?: string,
+  typescriptPackageJsonPath?: string,
 ): typeof import('typescript6-api') => {
   const currentRequire = cwd ? createRequireFromPackageJson(cwd) : require;
-  const typescriptPath = currentRequire.resolve('typescript');
+  const typescriptRequest =
+    typescriptPackageJsonPath === undefined
+      ? 'typescript'
+      : dirname(typescriptPackageJsonPath);
+  const typescriptPath = currentRequire.resolve(typescriptRequest);
   const cachedTypescript = typescriptCache.get(typescriptPath);
 
   if (cachedTypescript) {
@@ -62,7 +67,7 @@ export const loadTypescript = (
    */
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const typescript = currentRequire(
-    'typescript',
+    typescriptRequest,
   ) as typeof import('typescript6-api');
   typescriptCache.set(typescriptPath, typescript);
 

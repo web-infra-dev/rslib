@@ -291,6 +291,30 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 
 - When set to `false`, import paths will retain their original file extensions.
 
+### typescriptPath
+
+- **Type:** `string`
+- **Default:** The `typescript/package.json` resolved from the project root
+
+The absolute path to the `package.json` of the TypeScript installation used to generate declaration files. This allows TypeScript 6 and TypeScript 7 to be installed side-by-side with npm aliases while selecting which installation this plugin uses.
+
+```ts
+import { createRequire } from 'node:module';
+import { pluginDts } from 'rsbuild-plugin-dts';
+
+const require = createRequire(import.meta.url);
+
+export default {
+  plugins: [
+    pluginDts({
+      typescriptPath: require.resolve('@typescript/native/package.json'),
+    }),
+  ],
+};
+```
+
+The path must be absolute and point to a TypeScript `package.json`. This option cannot be used together with `isolated`.
+
 ### tsgo
 
 - **Type:** `boolean`

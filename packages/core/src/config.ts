@@ -1668,6 +1668,7 @@ const composeDtsConfig = async (
         banner: banner?.dts,
         footer: footer?.dts,
         redirect: redirect?.dts,
+        typescriptPath: dts?.typescriptPath,
         tsgo: dts?.tsgo,
       }),
     ],

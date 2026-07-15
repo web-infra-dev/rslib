@@ -735,9 +735,12 @@ importers:
 
   tests/integration/dts:
     devDependencies:
+      '@typescript/native':
+        specifier: npm:typescript@^7.0.2
+        version: typescript@7.0.2
       typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
+        specifier: npm:@typescript/typescript6@^6.0.2
+        version: '@typescript/typescript6@6.0.2'
 
   tests/integration/dts-tsgo:
     devDependencies:
@@ -846,6 +849,8 @@ importers:
   tests/integration/dts/bundle-false/true: {}
 
   tests/integration/dts/bundle-false/tsconfig-path: {}
+
+  tests/integration/dts/bundle-false/typescript-path: {}
 
   tests/integration/dts/bundle/abort-on-error: {}
 
@@ -3858,6 +3863,10 @@ packages:
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [win32]
+
+  '@typescript/typescript6@6.0.2':
+    resolution: {integrity: sha512-mbCddXd+jm7hfx7w2YU64/Av4/NqqeG3GoRZgxPcgoTxYjhrcfJRw9ULch71SS4G+Q3bOXFhRvPqjguN0Hyp5w==}
+    hasBin: true
 
   '@typescript/vfs@1.6.4':
     resolution: {integrity: sha512-PJFXFS4ZJKiJ9Qiuix6Dz/OwEIqHD7Dme1UwZhTK11vR+5dqW2ACbdndWQexBzCx+CPuMe5WBYQWCsFyGlQLlQ==}
@@ -10325,6 +10334,10 @@ snapshots:
 
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
+
+  '@typescript/typescript6@6.0.2':
+    dependencies:
+      '@typescript/old': typescript@6.0.3
 
   '@typescript/vfs@1.6.4(typescript@6.0.3)':
     dependencies:
