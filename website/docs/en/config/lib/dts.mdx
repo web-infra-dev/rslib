@@ -274,11 +274,13 @@ At this time, when [redirect.dts.path](/config/lib/redirect#redirectdtspath) is 
 ### dts.typescriptPath
 
 - **Type:** `string`
-- **Default:** The `typescript/package.json` resolved from the project root
+- **Default:** The `package.json` of the project's `typescript` dependency
 
-The absolute path to the `package.json` of the TypeScript installation used to generate declaration files. Rslib uses the TypeScript Compiler API for TypeScript 5 and 6, and the native executable for TypeScript 7 and later.
+Specifies the TypeScript installation used to generate declaration files. Set it to an absolute path to that installation's `package.json`.
 
-This option is useful when TypeScript 6 and 7 are installed side-by-side with [npm aliases](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-60):
+When this option is unset, Rslib detects the version of the project's `typescript` dependency: TypeScript 5 and 6 use the Compiler API, while TypeScript 7 and later use the native executable. When this option is set, Rslib detects the version from the configured TypeScript installation instead.
+
+For example, a project can use TypeScript 6 for development while using TypeScript 7 to generate declaration files. Install both versions with [npm aliases](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-60):
 
 ```json title="package.json"
 {
@@ -289,7 +291,7 @@ This option is useful when TypeScript 6 and 7 are installed side-by-side with [n
 }
 ```
 
-You can explicitly use the aliased TypeScript 7 installation for declaration generation:
+Then select the TypeScript 7 installation provided by `@typescript/native` in the Rslib config:
 
 ```ts title="rslib.config.ts"
 import { createRequire } from 'node:module';
@@ -308,7 +310,7 @@ export default defineConfig({
 });
 ```
 
-The path must be absolute and point to a TypeScript `package.json`. This option cannot be used together with [dts.isolated](#dtsisolated), because isolated declaration generation does not use TypeScript.
+This option cannot be used together with [dts.isolated](#dtsisolated), because isolated declaration generation does not use TypeScript.
 
 ### dts.tsgo
 

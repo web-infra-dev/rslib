@@ -294,9 +294,11 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 ### typescriptPath
 
 - **Type:** `string`
-- **Default:** The `typescript/package.json` resolved from the project root
+- **Default:** The `package.json` of the project's `typescript` dependency
 
-The absolute path to the `package.json` of the TypeScript installation used to generate declaration files. This allows TypeScript 6 and TypeScript 7 to be installed side-by-side with npm aliases while selecting which installation this plugin uses.
+Specifies the TypeScript installation used to generate declaration files. Set it to an absolute path to that installation's `package.json`.
+
+When this option is unset, the plugin detects the version of the project's `typescript` dependency: TypeScript 5 and 6 use the Compiler API, while TypeScript 7 and later use the native executable. When this option is set, the plugin detects the version from the configured TypeScript installation instead.
 
 ```ts
 import { createRequire } from 'node:module';
