@@ -86,7 +86,7 @@ describe('resolveDtsGenerationBackend', () => {
       const typescriptPath = resolveTypescriptPath(packageDir);
       const typescriptVersion = readTypescriptVersion(typescriptPath);
 
-      expect(typescriptPath).toBe(
+      expect(await fs.realpath(typescriptPath!)).toBe(
         await fs.realpath(path.join(typescriptPkgDir, 'package.json')),
       );
       expect(typescriptVersion).toBe('7.0.2');
