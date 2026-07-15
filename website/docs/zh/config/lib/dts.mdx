@@ -278,7 +278,9 @@ export default {
 
 指定用于生成类型声明文件的 TypeScript。配置值必须是指向这个 TypeScript 的 `package.json` 的绝对路径。
 
-未设置此项时，Rslib 根据项目的 `typescript` 依赖的版本选择后端：TypeScript 5 和 6 使用 Compiler API，TypeScript 7 及以上版本使用 native executable。设置此项后，Rslib 改为根据这个 TypeScript 的版本选择后端。
+未设置此项时，Rslib 使用项目的 `typescript` 依赖；设置此项后，Rslib 使用配置的 TypeScript。
+
+Rslib 根据所使用 TypeScript 的版本选择类型声明生成后端：TypeScript 5 和 6 使用 Compiler API，TypeScript 7 及以上版本使用 native executable。
 
 例如，项目使用 TypeScript 6 开发，但希望通过 TypeScript 7 生成类型声明。可以通过 [npm alias](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-60) 同时安装两个版本：
 

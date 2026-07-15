@@ -278,7 +278,9 @@ At this time, when [redirect.dts.path](/config/lib/redirect#redirectdtspath) is 
 
 Specifies the TypeScript installation used to generate declaration files. Set it to an absolute path to that installation's `package.json`.
 
-When this option is unset, Rslib detects the version of the project's `typescript` dependency: TypeScript 5 and 6 use the Compiler API, while TypeScript 7 and later use the native executable. When this option is set, Rslib detects the version from the configured TypeScript installation instead.
+When this option is unset, Rslib uses the project's `typescript` dependency. When set, Rslib uses the configured TypeScript instead.
+
+Rslib selects the declaration generation backend from the selected TypeScript's version: TypeScript 5 and 6 use the Compiler API, while TypeScript 7 and later use the native executable.
 
 For example, a project can use TypeScript 6 for development while using TypeScript 7 to generate declaration files. Install both versions with [npm aliases](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-60):
 

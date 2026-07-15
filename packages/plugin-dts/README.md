@@ -296,9 +296,11 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 - **Type:** `string`
 - **Default:** The `package.json` of the project's `typescript` dependency
 
-Specifies the TypeScript installation used to generate declaration files. Set it to an absolute path to that installation's `package.json`.
+Specifies the TypeScript installation used to generate declaration files. Set it to an absolute path to that TypeScript's `package.json`.
 
-When this option is unset, the plugin detects the version of the project's `typescript` dependency: TypeScript 5 and 6 use the Compiler API, while TypeScript 7 and later use the native executable. When this option is set, the plugin detects the version from the configured TypeScript installation instead.
+When this option is unset, the plugin uses the project's `typescript` dependency. When set, it uses the configured TypeScript instead.
+
+The plugin selects the declaration generation backend from the selected TypeScript's version: TypeScript 5 and 6 use the Compiler API, while TypeScript 7 and later use the native executable.
 
 ```ts
 import { createRequire } from 'node:module';
