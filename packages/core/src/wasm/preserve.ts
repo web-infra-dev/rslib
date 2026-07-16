@@ -99,7 +99,7 @@ export const createWasmPreserveExternal = (
 };
 
 export class WasmPreservePlugin {
-  constructor(private readonly options: WasmPreserveOptions) {}
+  constructor(private readonly outBase: string) {}
 
   apply(compiler: Rspack.Compiler): void {
     const { sources, Compilation } = compiler.webpack;
@@ -160,14 +160,14 @@ export class WasmPreservePlugin {
         continue;
       }
       if (!sourcePath) continue;
-      if (!isPathInDirectory(sourcePath, this.options.outBase)) {
+      if (!isPathInDirectory(sourcePath, this.outBase)) {
         continue;
       }
 
       found.set(
         sourcePath,
         computeWasmEmitPath({
-          outBase: this.options.outBase,
+          outBase: this.outBase,
           sourcePath,
         }),
       );

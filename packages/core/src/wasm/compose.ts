@@ -60,7 +60,7 @@ export const composeWasmConfig = ({
     config: {
       tools: {
         rspack: {
-          plugins: [new WasmPreservePlugin(preserveOptions)],
+          plugins: [new WasmPreservePlugin(preserveOptions.outBase)],
         },
       },
     },

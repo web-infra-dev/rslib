@@ -1,19 +1,8 @@
 import path from 'node:path';
-
-/**
- * Convert a platform-specific file path to a forward-slash path.
- *
- * @param value A file path that may contain platform-specific separators.
- * @returns The same path using `/` as the separator.
- * @example
- * normalizePath(path.join('src', 'wasm', 'add.wasm'));
- * // => 'src/wasm/add.wasm'
- */
-const normalizePath = (value: string): string =>
-  value.split(path.sep).join('/');
+import { normalizeSlash } from '../utils/helper';
 
 const renderJsFilename = (template: string, name: string): string =>
-  normalizePath(template)
+  normalizeSlash(template)
     .replace(/\[name\]/g, () => name)
     .replace(/\[[^\]]+\]/g, 'chunk');
 
@@ -36,7 +25,7 @@ export const computeWasmEmitPath = ({
 }: {
   outBase: string;
   sourcePath: string;
-}): string => normalizePath(path.relative(outBase, sourcePath));
+}): string => normalizeSlash(path.relative(outBase, sourcePath));
 
 /**
  * Simulate the bundleless JavaScript output path for a source module.
@@ -62,7 +51,7 @@ export const computeBundlelessJsEmitPath = ({
   issuer: string;
   jsFilename: string;
 }): string => {
-  const relativeIssuer = normalizePath(path.relative(outBase, issuer));
+  const relativeIssuer = normalizeSlash(path.relative(outBase, issuer));
   const { dir, name } = path.posix.parse(relativeIssuer);
   return renderJsFilename(jsFilename, path.posix.join(dir, name));
 };
