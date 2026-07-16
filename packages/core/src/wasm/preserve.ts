@@ -1,7 +1,7 @@
 import { type Rspack, rspack } from '@rsbuild/core';
 import { promises as fs } from 'node:fs';
 import type { RspackResolver } from '../types';
-import { computeWasmEmitPath, computeWasmRequest } from './path';
+import { computeWasmEmitPath, computeWasmRequest } from './path_utils';
 
 const PLUGIN_NAME = 'RslibWasmPreservePlugin';
 
@@ -52,7 +52,7 @@ export const createWasmPreserveExternal = (
     });
     const externalRequest = computeWasmRequest({
       ...options,
-      issuer: contextInfo.issuer || '',
+      issuer: contextInfo.issuer,
       emitPath,
     });
     callback(undefined, externalRequest);
@@ -77,20 +77,19 @@ export class WasmPreservePlugin {
 
           await Promise.all(
             Array.from(toEmit, async ([sourcePath, emitPath]) => {
+              let bytes: Buffer;
+
               try {
-                const bytes = await fs.readFile(sourcePath);
-                // Duplicate emits with equal content are merged by Rspack;
-                // conflicting content triggers Rspack's duplicate asset error.
-                compilation.emitAsset(emitPath, new sources.RawSource(bytes));
+                bytes = await fs.readFile(sourcePath);
               } catch (err) {
-                compilation.errors.push(
-                  new compiler.webpack.WebpackError(
-                    `[rslib:wasm] Failed to read .wasm source ${sourcePath}: ${
-                      (err as Error).message
-                    }`,
-                  ),
+                throw new Error(
+                  `[rslib:wasm] Failed to read .wasm source ${sourcePath}: ${
+                    (err as Error).message
+                  }`,
                 );
               }
+
+              compilation.emitAsset(emitPath, new sources.RawSource(bytes));
             }),
           );
         },
