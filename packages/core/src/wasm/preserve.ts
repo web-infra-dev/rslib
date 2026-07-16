@@ -142,8 +142,7 @@ export class WasmPreservePlugin {
       const { userRequest } = module;
       if (!userRequest?.endsWith('.wasm')) continue;
 
-      const issuer = moduleGraph.getIssuer(module);
-      const issuerContext = (issuer as { context?: string } | null)?.context;
+      const issuerContext = moduleGraph.getIssuer(module)?.context;
       if (!issuerContext) continue;
 
       let sourcePath: string | false;
