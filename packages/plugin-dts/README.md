@@ -303,21 +303,21 @@ When this option is unset, the plugin uses the project's `typescript` dependency
 The plugin selects the declaration generation backend from the selected TypeScript's version: TypeScript 5 and 6 use the Compiler API, while TypeScript 7 and later use the native executable.
 
 ```ts
-import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import { pluginDts } from 'rsbuild-plugin-dts';
-
-const require = createRequire(import.meta.url);
 
 export default {
   plugins: [
     pluginDts({
-      typescriptPath: require.resolve('@typescript/native/package.json'),
+      typescriptPath: fileURLToPath(
+        import.meta.resolve('@typescript/native/package.json'),
+      ),
     }),
   ],
 };
 ```
 
-The path must be absolute and point to a TypeScript `package.json`. This option cannot be used together with `isolated`.
+The path must be absolute and point to a TypeScript `package.json`.
 
 ### tsgo
 
@@ -385,6 +385,7 @@ This preserves full type checking while reducing the cost of repeatedly running 
 #### Usage constraints
 
 - `isolated` is currently only available when `pluginDts` is used through Rslib, because it requires Rslib's built-in RslibPlugin.
+- `isolated` cannot be enabled together with [typescriptPath](#typescriptpath).
 - `isolated` cannot be enabled together with [tsgo](#tsgo).
 - `isolated` cannot be enabled together with [build](#build).
 - When `isolated` is enabled, [abortOnError](#abortonerror) cannot be set to `false`.

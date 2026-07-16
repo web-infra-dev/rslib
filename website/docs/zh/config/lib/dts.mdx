@@ -296,23 +296,21 @@ Rslib 根据所使用 TypeScript 的版本选择类型声明生成后端：TypeS
 然后在 Rslib 配置中，选择 `@typescript/native` 对应的 TypeScript 7：
 
 ```ts title="rslib.config.ts"
-import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from '@rslib/core';
-
-const require = createRequire(import.meta.url);
 
 export default defineConfig({
   lib: [
     {
       dts: {
-        typescriptPath: require.resolve('@typescript/native/package.json'),
+        typescriptPath: fileURLToPath(
+          import.meta.resolve('@typescript/native/package.json'),
+        ),
       },
     },
   ],
 });
 ```
-
-由于 isolated 类型声明生成不会使用 TypeScript，因此该配置不能与 [dts.isolated](#dtsisolated) 同时使用。
 
 ### dts.tsgo
 

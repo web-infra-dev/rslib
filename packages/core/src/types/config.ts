@@ -104,8 +104,7 @@ export type Dts =
        */
       isolated?: boolean;
       /**
-       * The absolute path to the package.json of the TypeScript installation
-       * used to generate declaration files.
+       * The absolute path to TypeScript's `package.json`.
        * @defaultValue The package.json of the project's `typescript` dependency.
        * @see {@link https://rslib.rs/config/lib/dts#dtstypescriptpath}
        */
