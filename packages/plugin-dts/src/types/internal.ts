@@ -20,7 +20,7 @@ export type DtsTsconfigResult =
 
 export type DtsGenOptions = Omit<
   PluginDtsOptions,
-  'bundle' | 'isolated' | 'tsgo' | 'typescriptPath'
+  'bundle' | 'isolated' | 'tsgo'
 > & {
   bundle: boolean;
   name: string;
@@ -28,12 +28,10 @@ export type DtsGenOptions = Omit<
   isWatch: boolean;
   dtsEntry: DtsEntry[];
   dtsEmitPath: string;
-  build?: boolean;
   tsconfigPath: string;
   tsConfigResult: DtsTsconfigResult;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
   apiExtractorOptions?: ApiExtractorOptions;
   loggerLevel: LogLevel;
   dtsBackend: DtsGenerationBackend;
-  typescriptPath?: string;
 };
