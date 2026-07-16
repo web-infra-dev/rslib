@@ -9,7 +9,7 @@ import path from 'node:path';
  * normalizePath(path.join('src', 'wasm', 'add.wasm'));
  * // => 'src/wasm/add.wasm'
  */
-export const normalizePath = (value: string): string =>
+const normalizePath = (value: string): string =>
   value.split(path.sep).join('/');
 
 /**
