@@ -28,6 +28,7 @@ export type DtsGenOptions = Omit<
   isWatch: boolean;
   dtsEntry: DtsEntry[];
   dtsEmitPath: string;
+  build?: boolean;
   tsconfigPath: string;
   tsConfigResult: DtsTsconfigResult;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
