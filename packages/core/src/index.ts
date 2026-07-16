@@ -42,6 +42,7 @@ export type {
   StartDevServerResult,
   Syntax,
   Wasm,
+  WasmMode,
 } from './types';
 
 export const version: string = RSLIB_VERSION;
