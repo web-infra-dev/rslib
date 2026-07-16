@@ -35,6 +35,8 @@ const dtsTestStrings = [
   { str: '/Users/path/index.d.ts', expected: true },
   { str: '/Users/path/index.d.mts', expected: true },
   { str: '/Users/path/index.d.cts', expected: true },
+  { str: '/Users/path/index.d.wasm.ts', expected: true },
+  { str: '/Users/path/index.d.module.css.ts', expected: true },
   { str: '/Users/path/index.tsx', expected: false },
 ];
 
