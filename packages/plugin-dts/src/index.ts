@@ -72,22 +72,20 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     });
     let promiseResult: TaskResult;
     let childProcesses: ChildProcess[] = [];
-    const typescriptPath =
+    const resolvedTypescriptPath =
       options.isolated === true
         ? undefined
         : resolveTypescriptPath(api.context.rootPath, options.typescriptPath);
-    const typescriptVersion = readTypescriptVersion(typescriptPath);
-    if (typescriptPath && !typescriptVersion) {
+    const typescriptVersion = readTypescriptVersion(resolvedTypescriptPath);
+    if (resolvedTypescriptPath && !typescriptVersion) {
       throw new Error(
-        `Failed to read the TypeScript version from ${JSON.stringify(typescriptPath)}.`,
+        `Failed to read the TypeScript version from ${JSON.stringify(resolvedTypescriptPath)}.`,
       );
     }
-    const configuredTypescriptPath =
-      options.typescriptPath === undefined ? undefined : typescriptPath;
     const dtsBackend = resolveDtsGenerationBackend(options, typescriptVersion);
     const tsApi =
       dtsBackend === 'api-old'
-        ? loadTypescript(api.context.rootPath, configuredTypescriptPath)
+        ? loadTypescript(api.context.rootPath, resolvedTypescriptPath)
         : undefined;
     let dtsGenOptions: DtsGenOptions | undefined;
     let isolatedDtsContext: IsolatedDtsContext | undefined;
@@ -214,10 +212,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           isWatch,
           loggerLevel: loggerLevel as LogLevel,
           dtsBackend,
-          typescriptPath:
-            dtsBackend === 'ts7-executable'
-              ? typescriptPath
-              : configuredTypescriptPath,
+          typescriptPath: resolvedTypescriptPath,
         };
 
         if (dtsBackend === 'isolated') {
