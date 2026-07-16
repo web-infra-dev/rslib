@@ -1960,19 +1960,11 @@ async function composeLibRsbuildConfig(
     outputFilenameConfig,
     targetConfig,
     // #region Externals configs
-    // The order of the externals config should come in the following order:
-    // 1. `wasmExternalConfig` should come before other externals config because preserve mode needs to handle
-    //    `.wasm` requests before user, auto, target and bundleless externals.
-    // 2. `externalsWarnConfig` should come before other externals config to touch the externalized modules first.
-    // 3. `userExternalsConfig` should present at first to takes effect earlier than others.
-    // 4. The externals config in `bundlelessExternalConfig` should present after other externals config as
-    //    it relies on other externals config to bail out the externalized modules first then resolve
-    //    the correct path for relative imports.
-    wasmExternalConfig,
     externalsWarnConfig,
     userExternalsConfig,
     autoExternalConfig,
     targetExternalsConfig,
+    wasmExternalConfig,
     bundlelessExternalConfig,
     // #endregion
     entryConfig,

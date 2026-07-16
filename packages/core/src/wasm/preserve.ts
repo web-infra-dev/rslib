@@ -1,5 +1,6 @@
 import { type Rspack, rspack } from '@rsbuild/core';
 import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import type { RspackResolver } from '../types';
 import { computeWasmEmitPath, computeWasmRequest } from './path_utils';
 
@@ -9,6 +10,15 @@ export type WasmPreserveOptions = {
   bundle: boolean;
   outBase: string | null;
   wasmDistDir: string;
+};
+
+const isPathInDirectory = (filePath: string, directory: string): boolean => {
+  const relativePath = path.relative(directory, filePath);
+  return (
+    relativePath !== '..' &&
+    !relativePath.startsWith(`..${path.sep}`) &&
+    !path.isAbsolute(relativePath)
+  );
 };
 
 export const createWasmPreserveExternal = (
@@ -42,7 +52,20 @@ export const createWasmPreserveExternal = (
     try {
       sourcePath = await resolver(context, request);
     } catch (err) {
+      if (
+        !options.bundle &&
+        !request.startsWith('.') &&
+        !path.isAbsolute(request)
+      ) {
+        callback(undefined, request);
+        return;
+      }
       callback(err as Error);
+      return;
+    }
+
+    if (!options.bundle && !isPathInDirectory(sourcePath, options.outBase!)) {
+      callback(undefined, request);
       return;
     }
 
@@ -116,8 +139,19 @@ export class WasmPreservePlugin {
       const issuerContext = (issuer as { context?: string } | null)?.context;
       if (!issuerContext) continue;
 
-      const sourcePath = resolver.resolveSync({}, issuerContext, userRequest);
+      let sourcePath: string | false;
+      try {
+        sourcePath = resolver.resolveSync({}, issuerContext, userRequest);
+      } catch {
+        continue;
+      }
       if (!sourcePath) continue;
+      if (
+        !this.options.bundle &&
+        !isPathInDirectory(sourcePath, this.options.outBase!)
+      ) {
+        continue;
+      }
 
       found.set(
         sourcePath,
