@@ -1,4 +1,4 @@
-import type { EnvironmentConfig } from '@rsbuild/core';
+import type { EnvironmentConfig, Rspack } from '@rsbuild/core';
 import type { Format, Wasm, WasmMode } from '../types';
 import { createWasmPreserveExternal, WasmPreservePlugin } from './preserve';
 
@@ -17,21 +17,27 @@ export const resolveWasmMode = ({
     );
   }
 
-  return wasmConfig?.mode ?? (bundle ? 'compile' : 'preserve');
+  const mode = wasmConfig?.mode ?? (bundle ? 'compile' : 'preserve');
+
+  if (bundle && mode === 'preserve') {
+    throw new Error(
+      'When using "wasm.mode: preserve", "bundle" must be set to "false". Use "wasm.mode: compile" to process WebAssembly in bundle mode.',
+    );
+  }
+
+  return mode;
 };
 
 export const composeWasmConfig = ({
-  bundle,
   format,
+  jsFilename,
   mode,
   outBase,
-  wasmDistDir,
 }: {
-  bundle: boolean;
   format: Format;
+  jsFilename: Rspack.Filename;
   mode: WasmMode;
   outBase: string | null;
-  wasmDistDir: string;
 }): {
   externalConfig: EnvironmentConfig;
   config: EnvironmentConfig;
@@ -41,9 +47,8 @@ export const composeWasmConfig = ({
   }
 
   const preserveOptions = {
-    bundle,
-    outBase,
-    wasmDistDir,
+    jsFilename,
+    outBase: outBase!,
   };
 
   return {

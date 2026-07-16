@@ -789,9 +789,9 @@ describe('syntax', () => {
 
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
-    expect(composedRsbuildConfig[0]!.config.output?.overrideBrowserslist).toEqual(
-      ['node >= 20.19.0'],
-    );
+    expect(
+      composedRsbuildConfig[0]!.config.output?.overrideBrowserslist,
+    ).toEqual(['node >= 20.19.0']);
   });
 
   test('explicit `syntax` should take precedence over engines.node', async () => {
@@ -1157,6 +1157,24 @@ describe('id', () => {
 });
 
 describe('wasm', () => {
+  test('does not allow preserve mode with bundle enabled', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          bundle: true,
+          format: 'esm',
+          wasm: { mode: 'preserve' },
+        },
+      ],
+    };
+
+    await expect(() =>
+      composeRsbuildEnvironments(rslibConfig),
+    ).rejects.toThrowError(
+      'When using "wasm.mode: preserve", "bundle" must be set to "false". Use "wasm.mode: compile" to process WebAssembly in bundle mode.',
+    );
+  });
+
   test.each(['cjs', 'umd', 'iife', 'mf'] as const)(
     'does not allow wasm config with %s format',
     async (format) => {

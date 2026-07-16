@@ -364,7 +364,7 @@ export type Wasm = {
    * - `'compile'`: Generates the JavaScript loading code, so consumers do not
    *   need to support WebAssembly ESM imports.
    * - `'preserve'`: Keeps `.wasm` imports and files for the consumer's bundler
-   *   or runtime to handle.
+   *   or runtime to handle. Requires `bundle` to be `false`.
    *
    * Defaults to `'compile'` when `bundle` is `true`, `'preserve'` when `bundle`
    * is `false`.

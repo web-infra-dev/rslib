@@ -1031,6 +1031,7 @@ const composeOutputFilenameConfig = (
 ): {
   config: EnvironmentConfig;
   jsExtension: string;
+  jsFilename: Rspack.Filename;
   dtsExtension: string;
 } => {
   const { jsExtension, dtsExtension } = getDefaultExtension({
@@ -1077,9 +1078,8 @@ const composeOutputFilenameConfig = (
   const hash = getHash();
   const defaultJsFilename = `[name]${hash}${jsExtension}`;
   const userJsFilename = config.output?.filename?.js;
-  const defaultJsChunkFilename = inferChunkFilename(
-    (userJsFilename as string) ?? defaultJsFilename,
-  );
+  const jsFilename = userJsFilename ?? defaultJsFilename;
+  const defaultJsChunkFilename = inferChunkFilename(jsFilename as string);
 
   // will be returned to use in redirect feature
   // only support string type for now since we can not get the return value of function
@@ -1112,6 +1112,7 @@ const composeOutputFilenameConfig = (
     // Do not modify MF's output hash configuration.
     config: format === 'mf' ? {} : finalConfig,
     jsExtension: finalJsExtension,
+    jsFilename,
     dtsExtension,
   };
 };
@@ -1860,6 +1861,7 @@ async function composeLibRsbuildConfig(
   const {
     config: outputFilenameConfig,
     jsExtension,
+    jsFilename,
     dtsExtension,
   } = composeOutputFilenameConfig(
     config,
@@ -1891,14 +1893,10 @@ async function composeLibRsbuildConfig(
   });
 
   const wasmCompose = composeWasmConfig({
-    bundle,
     format,
+    jsFilename,
     mode: wasmMode,
     outBase,
-    wasmDistDir:
-      typeof config.output?.distPath === 'object'
-        ? (config.output.distPath.wasm ?? 'static/wasm')
-        : 'static/wasm',
   });
   const wasmExternalConfig = wasmCompose.externalConfig;
   const wasmConfig = wasmCompose.config;

@@ -69,6 +69,8 @@ const defaultDistPath = {
 };
 ```
 
+The `wasm` path applies to WebAssembly emitted in [`lib.wasm.mode: 'compile'`](/config/lib/wasm#wasmmode). Bundleless Preserve mode keeps each `.wasm` file at its source-relative path.
+
 {/* ## output.emitAssets <RsbuildDocBadge path="/config/output/emit-assets" text="output.emitAssets" /> */}
 
 {/* Control whether to emit static assets such as images, fonts, audio, video, etc. */}
@@ -107,7 +109,7 @@ You can also specify different filenames for different types of files by configu
 
 :::warning
 
-`output.filenameHash` does not affect WebAssembly files emitted by [`lib.wasm.mode: 'preserve'`](/config/lib/wasm#wasmmode). Preserve mode uses the source file name for `.wasm` files.
+`output.filenameHash` does not affect WebAssembly files emitted in bundleless [`lib.wasm.mode: 'preserve'`](/config/lib/wasm#wasmmode). Preserve mode uses the source file name for `.wasm` files.
 
 :::
 
@@ -119,7 +121,7 @@ By default, Rslib will modify the JavaScript output file extension by setting `o
 
 :::warning
 
-`output.filename` does not rename WebAssembly files emitted by [`lib.wasm.mode: 'preserve'`](/config/lib/wasm#wasmmode). Preserve mode uses the source file name for `.wasm` files.
+`output.filename` does not rename WebAssembly files emitted in bundleless [`lib.wasm.mode: 'preserve'`](/config/lib/wasm#wasmmode). Preserve mode uses the source file name for `.wasm` files.
 
 :::
 

@@ -18,13 +18,6 @@ export default defineConfig({
       },
     }),
     generateBundleEsmConfig({
-      bundle: true,
-      wasm: { mode: 'preserve' },
-      output: {
-        distPath: './dist/static-source/preserve-bundle',
-      },
-    }),
-    generateBundleEsmConfig({
       bundle: false,
       wasm: { mode: 'preserve' },
       output: {

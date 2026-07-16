@@ -5,10 +5,10 @@ export default defineConfig({
   lib: [
     generateBundleEsmConfig({
       bundle: true,
-      wasm: { mode: 'preserve' },
+      wasm: { mode: 'compile' },
       output: {
         distPath: {
-          root: './dist/dist-path/preserve-bundle',
+          root: './dist/dist-path/compile-bundle',
           wasm: 'user-defined/wasm-assets',
         },
       },

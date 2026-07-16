@@ -12,77 +12,86 @@ import path from 'node:path';
 const normalizePath = (value: string): string =>
   value.split(path.sep).join('/');
 
+const renderJsFilename = (template: string, name: string): string =>
+  normalizePath(template)
+    .replace(/\[name\]/g, () => name)
+    .replace(/\[[^\]]+\]/g, 'chunk');
+
 /**
  * Compute the output path of a preserved wasm file relative to the dist root.
  *
- * @param bundle Whether the JavaScript output is bundled.
  * @param outBase The absolute source base used by bundleless output.
  * @param sourcePath The absolute path of the source wasm file.
- * @param wasmDistDir The dist-relative wasm directory used by bundle output.
  * @returns A forward-slash path relative to the dist root.
  * @example
  * computeWasmEmitPath({
- *   bundle: false,
  *   outBase: '/project/src',
  *   sourcePath: '/project/src/wasm/add.wasm',
- *   wasmDistDir: 'static/wasm',
  * });
  * // => 'wasm/add.wasm'
  */
 export const computeWasmEmitPath = ({
-  bundle,
   outBase,
   sourcePath,
-  wasmDistDir,
 }: {
-  bundle: boolean;
-  outBase: string | null;
+  outBase: string;
   sourcePath: string;
-  wasmDistDir: string;
-}): string => {
-  if (bundle) {
-    return path.posix.join(wasmDistDir, path.basename(sourcePath));
-  }
+}): string => normalizePath(path.relative(outBase, sourcePath));
 
-  return normalizePath(path.relative(outBase!, sourcePath));
+/**
+ * Simulate the bundleless JavaScript output path for a source module.
+ *
+ * @param outBase The absolute source base used by bundleless output.
+ * @param issuer The absolute path of the source JavaScript module.
+ * @param jsFilename The JavaScript filename template.
+ * @returns The JavaScript output path relative to the dist root.
+ * @example
+ * computeBundlelessJsEmitPath({
+ *   outBase: '/project/src',
+ *   issuer: '/project/src/lib/index.js',
+ *   jsFilename: 'js/[name].js',
+ * });
+ * // => 'js/lib/index.js'
+ */
+export const computeBundlelessJsEmitPath = ({
+  outBase,
+  issuer,
+  jsFilename,
+}: {
+  outBase: string;
+  issuer: string;
+  jsFilename: string;
+}): string => {
+  const relativeIssuer = normalizePath(path.relative(outBase, issuer));
+  const { dir, name } = path.posix.parse(relativeIssuer);
+  return renderJsFilename(jsFilename, path.posix.join(dir, name));
 };
 
 /**
- * Compute the ESM request from emitted JavaScript to a preserved wasm file.
+ * Compute the relative ESM request from an emitted JavaScript file to a
+ * preserved wasm file.
  *
- * @param bundle Whether the JavaScript output is bundled.
- * @param outBase The absolute source base used by bundleless output.
- * @param issuer The absolute path of the source JavaScript module.
- * @param emitPath The wasm output path relative to the dist root.
+ * @param jsEmitPath The JavaScript output path relative to the dist root.
+ * @param wasmEmitPath The wasm output path relative to the dist root.
  * @returns A relative ESM module specifier using forward slashes.
  * @example
  * computeWasmRequest({
- *   bundle: false,
- *   outBase: '/project/src',
- *   issuer: '/project/src/lib/index.js',
- *   emitPath: 'wasm/add.wasm',
+ *   jsEmitPath: 'js/lib/index.js',
+ *   wasmEmitPath: 'lib/add.wasm',
  * });
- * // => '../wasm/add.wasm'
+ * // => '../../lib/add.wasm'
  */
 export const computeWasmRequest = ({
-  bundle,
-  outBase,
-  issuer,
-  emitPath,
+  jsEmitPath,
+  wasmEmitPath,
 }: {
-  bundle: boolean;
-  outBase: string | null;
-  issuer: string;
-  emitPath: string;
+  jsEmitPath: string;
+  wasmEmitPath: string;
 }): string => {
-  if (bundle) {
-    return `./${emitPath}`;
-  }
-
-  const issuerDir = issuer
-    ? normalizePath(path.dirname(path.relative(outBase!, issuer)))
-    : '.';
-  const relativePath = path.posix.relative(issuerDir, emitPath);
+  const relativePath = path.posix.relative(
+    path.posix.dirname(jsEmitPath),
+    wasmEmitPath,
+  );
 
   // path.relative omits `./` for files in the same directory or a child
   // directory, but an ESM relative specifier must start with `./` or `../`.

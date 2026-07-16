@@ -77,7 +77,7 @@ TypeScript does not currently parse `import source` or `import.source()`. Write 
 Rslib provides two modes to emit `.wasm` modules, controlled by [lib.wasm.mode](/config/lib/wasm#wasmmode).
 
 - Compile mode: Rspack handles `.wasm` imports during the build, generates JavaScript runtime code that loads and instantiates WebAssembly, and emits the binary as a static asset. Consumers do not need to support ESM Integration.
-- Preserve mode: Rslib retains `.wasm` ESM Integration imports in the JavaScript output and emits the binary as-is. The downstream build tool or runtime is responsible for resolving and loading the `.wasm` module.
+- Preserve mode: In bundleless builds, Rslib retains `.wasm` ESM Integration imports in the JavaScript output and emits the binary as-is. The downstream build tool or runtime is responsible for resolving and loading the `.wasm` module.
 
 The default value depends on [bundle](/config/lib/bundle):
 
@@ -86,7 +86,7 @@ The default value depends on [bundle](/config/lib/bundle):
 | `true`  | `compile`    |
 | `false` | `preserve`   |
 
-If the output needs to be consumed directly by a JavaScript runtime such as a browser, use Compile mode. If the output will be processed by a build tool that supports ESM Integration, such as Rsbuild, or if the target runtime (such as [Node.js](https://nodejs.org/api/esm.html#wasm-modules) `^22.19.0 || >=24.5.0`) supports this feature natively, you can use Preserve mode.
+If the output needs to be consumed directly by a JavaScript runtime such as a browser, use Compile mode. If a bundleless output will be processed by a build tool that supports ESM Integration, such as Rsbuild, or if the target runtime (such as [Node.js](https://nodejs.org/api/esm.html#wasm-modules) `^22.19.0 || >=24.5.0`) supports this feature natively, you can use Preserve mode. Rslib rejects `bundle: true` together with `wasm.mode: 'preserve'`; use Compile mode for bundled output.
 
 ### Compile mode
 
@@ -127,33 +127,7 @@ The generated loading runtime is derived from [output.target](/config/rsbuild/ou
 
 ### Preserve mode
 
-In Preserve mode, Rslib does not generate any WebAssembly loading runtime. It keeps a real `.wasm` import in the JavaScript output and emits the binary as-is.
-
-The output layout depends on [bundle](/config/lib/bundle).
-
-<Tabs>
-<Tab label="bundle">
-
-Source files are bundled into JavaScript chunks, and the `.wasm` binary is emitted under [output.distPath.wasm](/config/rsbuild/output#outputdistpath) (defaults to `static/wasm`) using its source file name:
-
-```
-dist
-├── index.js
-└── static
-    └── wasm
-        └── add.wasm
-```
-
-```js title="dist/index.js"
-import { add } from './static/wasm/add.wasm';
-
-export { add };
-```
-
-If multiple `.wasm` files use the same source file name in Preserve mode with bundle enabled, they will conflict in the generated output. Rename the source files to avoid this. The `.wasm` filename in Preserve mode is not affected by [output.filenameHash](/config/rsbuild/output#outputfilenamehash).
-
-</Tab>
-<Tab label="bundleless">
+Preserve mode requires [bundle](/config/lib/bundle) to be `false`. Rslib does not generate any WebAssembly loading runtime. It keeps a real `.wasm` import in the JavaScript output and emits the binary as-is.
 
 The `.wasm` file is copied to the output using the same source-relative path and original filename:
 
@@ -169,14 +143,7 @@ import { add } from './add.wasm';
 export { add };
 ```
 
-</Tab>
-</Tabs>
-
-:::warning
-
-In bundle mode, the `.wasm` binary is moved to the wasm dist dir. This breaks `.wasm` modules that rely on relative module specifiers back into their JavaScript glue files (for example, some [`wasm-bindgen`](#use-wasm-bindgen) outputs). For such modules, use bundleless Preserve mode or Compile mode.
-
-:::
+The `.wasm` filename in Preserve mode is not affected by [output.filenameHash](/config/rsbuild/output#outputfilenamehash).
 
 ## Use wasm-bindgen
 
@@ -194,16 +161,16 @@ The JavaScript glue imports the `.wasm` file as an ES module, and the `.wasm` mo
 
 Because of this two-way relative dependency, the output layout must keep the `.wasm` file next to its glue:
 
-| `bundle` | `wasm.mode` | Supported                                             |
-| -------- | ----------- | ----------------------------------------------------- |
-| `true`   | `compile`   | ✅                                                    |
-| `false`  | `compile`   | ✅                                                    |
-| `false`  | `preserve`  | ✅                                                    |
-| `true`   | `preserve`  | ❌ The asset layout moves `.wasm` away from its glue. |
+| `bundle` | `wasm.mode` | Supported                                        |
+| -------- | ----------- | ------------------------------------------------ |
+| `true`   | `compile`   | ✅                                               |
+| `false`  | `compile`   | ✅                                               |
+| `false`  | `preserve`  | ✅                                               |
+| `true`   | `preserve`  | ❌ Rslib rejects this configuration combination. |
 
 ### `module`
 
-The JavaScript glue imports the `.wasm` file with the [source phase import](#source-phase-import) syntax, and constructs the imports object entirely in JavaScript. The glue only needs the compiled `WebAssembly.Module`, so all `wasm.mode` and `bundle` combinations are supported.
+The JavaScript glue imports the `.wasm` file with the [source phase import](#source-phase-import) syntax, and constructs the imports object entirely in JavaScript. Use Compile mode for bundled output, or Preserve mode for bundleless output.
 
 ### `web` / `experimental-nodejs-module`
 

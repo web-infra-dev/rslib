@@ -26,14 +26,15 @@ See [WebAssembly](/guide/advanced/webassembly) for more details.
 Controls how `.wasm` modules are emitted.
 
 - `'compile'`: Rspack parses the `.wasm` module and generates JavaScript glue code and runtime loading logic. Suitable when the library is consumed directly by a runtime such as Node.js or the browser.
-- `'preserve'`: Rslib keeps the `.wasm` import in the output JavaScript and emits the binary as-is. Suitable when the library is consumed by another build tool or a runtime that supports WebAssembly ESM Integration natively.
+- `'preserve'`: Rslib keeps the `.wasm` import in the output JavaScript and emits the binary as-is. This mode requires [bundle](/config/lib/bundle) to be `false` and is suitable when the library is consumed by another build tool or a runtime that supports WebAssembly ESM Integration natively.
 
-In preserve mode, bundle output emits the binary under [output.distPath.wasm](/config/rsbuild/output#outputdistpath) using the source file name. Bundleless output keeps the source-relative path and original filename. [output.filenameHash](/config/rsbuild/output#outputfilenamehash) does not affect `.wasm` filenames in preserve mode.
+In preserve mode, the `.wasm` file keeps its source-relative path and original filename. [output.distPath.wasm](/config/rsbuild/output#outputdistpath) and [output.filenameHash](/config/rsbuild/output#outputfilenamehash) do not affect `.wasm` files in preserve mode.
 
 ```ts title="rslib.config.ts"
 export default {
   lib: [
     {
+      bundle: false,
       format: 'esm',
       wasm: {
         mode: 'preserve',
@@ -45,6 +46,6 @@ export default {
 
 :::note
 
-`wasm` can only be configured when [format](/config/lib/format) is `'esm'` (the default value). The build will fail for other formats.
+`wasm` can only be configured when [format](/config/lib/format) is `'esm'` (the default value). In addition, `wasm.mode: 'preserve'` requires [bundle](/config/lib/bundle) to be `false`. The build will fail for unsupported combinations.
 
 :::

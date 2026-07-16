@@ -2,14 +2,17 @@ import { type Rspack, rspack } from '@rsbuild/core';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import type { RspackResolver } from '../types';
-import { computeWasmEmitPath, computeWasmRequest } from './path_utils';
+import {
+  computeBundlelessJsEmitPath,
+  computeWasmEmitPath,
+  computeWasmRequest,
+} from './path_utils';
 
 const PLUGIN_NAME = 'RslibWasmPreservePlugin';
 
-export type WasmPreserveOptions = {
-  bundle: boolean;
-  outBase: string | null;
-  wasmDistDir: string;
+type WasmPreserveOptions = {
+  jsFilename: Rspack.Filename;
+  outBase: string;
 };
 
 const isPathInDirectory = (filePath: string, directory: string): boolean => {
@@ -52,11 +55,7 @@ export const createWasmPreserveExternal = (
     try {
       sourcePath = await resolver(context, request);
     } catch (err) {
-      if (
-        !options.bundle &&
-        !request.startsWith('.') &&
-        !path.isAbsolute(request)
-      ) {
+      if (!request.startsWith('.') && !path.isAbsolute(request)) {
         callback(undefined, request);
         return;
       }
@@ -64,19 +63,34 @@ export const createWasmPreserveExternal = (
       return;
     }
 
-    if (!options.bundle && !isPathInDirectory(sourcePath, options.outBase!)) {
+    if (!isPathInDirectory(sourcePath, options.outBase)) {
       callback(undefined, request);
       return;
     }
 
     const emitPath = computeWasmEmitPath({
-      ...options,
+      outBase: options.outBase,
       sourcePath,
     });
-    const externalRequest = computeWasmRequest({
-      ...options,
+
+    if (typeof options.jsFilename !== 'string') {
+      callback(
+        new Error(
+          'Wasm preserve does not support a function for "output.filename.js".',
+        ),
+      );
+      return;
+    }
+
+    const jsEmitPath = computeBundlelessJsEmitPath({
+      outBase: options.outBase,
       issuer: contextInfo.issuer,
-      emitPath,
+      jsFilename: options.jsFilename,
+    });
+
+    const externalRequest = computeWasmRequest({
+      jsEmitPath,
+      wasmEmitPath: emitPath,
     });
     callback(undefined, externalRequest);
   };
@@ -146,16 +160,16 @@ export class WasmPreservePlugin {
         continue;
       }
       if (!sourcePath) continue;
-      if (
-        !this.options.bundle &&
-        !isPathInDirectory(sourcePath, this.options.outBase!)
-      ) {
+      if (!isPathInDirectory(sourcePath, this.options.outBase)) {
         continue;
       }
 
       found.set(
         sourcePath,
-        computeWasmEmitPath({ ...this.options, sourcePath }),
+        computeWasmEmitPath({
+          outBase: this.options.outBase,
+          sourcePath,
+        }),
       );
     }
 

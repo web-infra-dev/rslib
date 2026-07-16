@@ -78,10 +78,6 @@ describe('wasm static', () => {
     expect(existsSync(join(compileBundlelessDir, 'add.js'))).toBe(false);
     expect(wasmFiles(compileBundlelessDir).length).toBe(1);
 
-    const preserveBundleDir = join(fixturePath, 'dist/static/preserve-bundle');
-    await expectUseAdd(fixturePath, 'static', 'preserve-bundle');
-    expectSingleWasm(preserveBundleDir, 'static/wasm/add.wasm');
-
     const preserveBundlelessDir = join(
       fixturePath,
       'dist/static/preserve-bundleless',
@@ -103,26 +99,17 @@ describe('wasm static', () => {
     );
     expectSingleWasm(distDir, 'add.wasm');
   });
-
-  test('handles a nested bundled JS filename', async () => {
-    const distDir = join(fixturePath, 'dist/static/preserve-bundle-nested-js');
-    await expectUseAdd(
-      fixturePath,
-      'static',
-      'preserve-bundle-nested-js',
-      'js/index.js',
-    );
-    expectSingleWasm(distDir, 'static/wasm/add.wasm');
-  });
 });
 
-test('wasm preserve respects non-default dist path', async () => {
+test('wasm compile respects non-default dist path', async () => {
   const fixturePath = join(__dirname, 'dist-path');
   await buildAndGetResults({ fixturePath });
 
-  const preserveBundleDir = join(fixturePath, 'dist/dist-path/preserve-bundle');
-  await expectUseAdd(fixturePath, 'dist-path', 'preserve-bundle');
-  expectSingleWasm(preserveBundleDir, 'user-defined/wasm-assets/add.wasm');
+  const compileBundleDir = join(fixturePath, 'dist/dist-path/compile-bundle');
+  await expectUseAdd(fixturePath, 'dist-path', 'compile-bundle');
+  expect(wasmFiles(compileBundleDir).map(normalizePath)).toEqual([
+    expect.stringContaining('/user-defined/wasm-assets/'),
+  ]);
 });
 
 test('wasm preserve keeps bundleless package wasm external', async () => {
@@ -162,14 +149,6 @@ test('wasm static source phase', async () => {
   expect(existsSync(join(compileBundlelessDir, 'add.js'))).toBe(false);
   expect(wasmFiles(compileBundlelessDir).length).toBe(1);
 
-  const preserveBundleDir = join(
-    fixturePath,
-    'dist/static-source/preserve-bundle',
-  );
-  await expectCreateAdd(fixturePath, 'static-source', 'preserve-bundle');
-  expect(jsFiles(preserveBundleDir).length).toBe(1);
-  expectSingleWasm(preserveBundleDir, 'static/wasm/add.wasm');
-
   const preserveBundlelessDir = join(
     fixturePath,
     'dist/static-source/preserve-bundleless',
@@ -194,11 +173,6 @@ test('wasm dynamic', async () => {
   await expectCreateAdd(fixturePath, 'dynamic', 'compile-bundleless');
   expect(jsFiles(compileBundlelessDir).length).toBe(4);
   expect(wasmFiles(compileBundlelessDir).length).toBe(1);
-
-  const preserveBundleDir = join(fixturePath, 'dist/dynamic/preserve-bundle');
-  await expectCreateAdd(fixturePath, 'dynamic', 'preserve-bundle');
-  expect(jsFiles(preserveBundleDir).length).toBe(1);
-  expectSingleWasm(preserveBundleDir, 'static/wasm/add.wasm');
 
   const preserveBundlelessDir = join(
     fixturePath,
@@ -227,14 +201,6 @@ test('wasm dynamic source phase', async () => {
   await expectCreateAdd(fixturePath, 'dynamic-source', 'compile-bundleless');
   expect(jsFiles(compileBundlelessDir).length).toBe(4);
   expect(wasmFiles(compileBundlelessDir).length).toBe(1);
-
-  const preserveBundleDir = join(
-    fixturePath,
-    'dist/dynamic-source/preserve-bundle',
-  );
-  await expectCreateAdd(fixturePath, 'dynamic-source', 'preserve-bundle');
-  expect(jsFiles(preserveBundleDir).length).toBe(1);
-  expectSingleWasm(preserveBundleDir, 'static/wasm/add.wasm');
 
   const preserveBundlelessDir = join(
     fixturePath,
