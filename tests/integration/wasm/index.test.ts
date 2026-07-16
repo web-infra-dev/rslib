@@ -1,4 +1,4 @@
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { beforeAll, describe, expect, test } from '@rstest/core';
@@ -123,6 +123,23 @@ test('wasm preserve respects non-default dist path', async () => {
   const preserveBundleDir = join(fixturePath, 'dist/dist-path/preserve-bundle');
   await expectUseAdd(fixturePath, 'dist-path', 'preserve-bundle');
   expectSingleWasm(preserveBundleDir, 'user-defined/wasm-assets/add.wasm');
+});
+
+test('wasm preserve keeps bundleless package wasm external', async () => {
+  const fixturePath = join(__dirname, 'external-package');
+  await buildAndGetResults({ fixturePath });
+
+  const distDir = join(fixturePath, 'dist/esm');
+  expect(readFileSync(join(distDir, 'index.js'), 'utf8')).toContain(
+    'from "wasm-package/add.wasm"',
+  );
+  expect(readFileSync(join(distDir, 'index.js'), 'utf8')).toContain(
+    'from "missing-wasm-package/add.wasm"',
+  );
+  expect(
+    readFileSync(join(fixturePath, 'dist/user-external/index.js'), 'utf8'),
+  ).toContain('from "mapped-wasm-package"');
+  expect(wasmFiles(join(fixturePath, 'dist'))).toEqual([]);
 });
 
 test('wasm static source phase', async () => {
