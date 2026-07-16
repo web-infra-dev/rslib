@@ -30,6 +30,8 @@ Controls how `.wasm` modules are emitted.
 
 In preserve mode, the `.wasm` file keeps its source-relative path and original filename. [output.distPath.wasm](/config/rsbuild/output#outputdistpath) and [output.filenameHash](/config/rsbuild/output#outputfilenamehash) do not affect `.wasm` files in preserve mode.
 
+Rslib updates JavaScript imports so they continue to point to the emitted `.wasm` files. It does not rewrite imports stored inside a WebAssembly binary. If a `.wasm` file imports JavaScript, keep the relative output path and filename of that JavaScript file unchanged.
+
 ```ts title="rslib.config.ts"
 export default {
   lib: [

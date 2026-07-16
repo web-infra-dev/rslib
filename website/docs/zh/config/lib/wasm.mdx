@@ -30,6 +30,8 @@ type Wasm = {
 
 在 preserve 模式下，`.wasm` 文件会保持源码相对路径与原文件名。[output.distPath.wasm](/config/rsbuild/output#outputdistpath) 与 [output.filenameHash](/config/rsbuild/output#outputfilenamehash) 不会影响 preserve 模式下的 `.wasm` 文件。
 
+Rslib 会更新 JavaScript 中的 import，使其继续指向输出后的 `.wasm` 文件，但不会改写 WebAssembly 二进制内部保存的 import。如果 `.wasm` 文件会反向导入 JavaScript，请保持该 JavaScript 文件的相对输出路径和文件名不变。
+
 ```ts title="rslib.config.ts"
 export default {
   lib: [

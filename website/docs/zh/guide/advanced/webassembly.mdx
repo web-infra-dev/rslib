@@ -145,6 +145,8 @@ export { add };
 
 Preserve 模式下的 `.wasm` 文件名不受 [output.filenameHash](/config/rsbuild/output#outputfilenamehash) 影响。
 
+Rslib 会更新 JavaScript 中的 import，使其继续指向输出后的 `.wasm` 文件，包括通过 [output.filename.js](/config/rsbuild/output#outputfilename) 将 JavaScript 输出到其他目录的情况。但是，WebAssembly 二进制会保持原样。如果它会反向导入 JavaScript，这些 import 仍会使用原有的相对路径和文件名。此时请勿在产物中移动或重命名被导入的 JavaScript 文件。例如，将 `index.js` 改为 `js/index.js` 或 `index.mjs`，会导致 WebAssembly 内部的 `./index.js` import 失效。
+
 ## 使用 wasm-bindgen
 
 [`wasm-bindgen`](https://wasm-bindgen.github.io/wasm-bindgen/) 是使用 Rust 构建 WebAssembly 库的工具，可通过 `--target` 选项生成面向不同运行环境的产物。
@@ -157,14 +159,14 @@ Rslib 支持以下 target：
 
 ### `bundler`
 
-JavaScript 胶水以 ES module 形式导入 `.wasm` 文件，`.wasm` 模块又反向导入胶水以获得 imports 对象。由于存在这种双向相对依赖，产物布局必须保持 `.wasm` 文件与胶水相邻：
+JavaScript 胶水以 ES module 形式导入 `.wasm` 文件，`.wasm` 模块又反向导入胶水以获得 imports 对象。由于存在这种双向相对依赖，Preserve 模式要求产物保持 `.wasm` 文件与 JavaScript 胶水之间的相对路径和文件名。尤其需要避免通过 [output.filename.js](/config/rsbuild/output#outputfilename) 移动胶水，或通过 [autoExtension](/config/lib/auto-extension) 修改其扩展名。
 
-| `bundle` | `wasm.mode` | 是否支持                    |
-| -------- | ----------- | --------------------------- |
-| `true`   | `compile`   | ✅                          |
-| `false`  | `compile`   | ✅                          |
-| `false`  | `preserve`  | ✅                          |
-| `true`   | `preserve`  | ❌ Rslib 会拒绝此配置组合。 |
+| `bundle` | `wasm.mode` | 是否支持                                |
+| -------- | ----------- | --------------------------------------- |
+| `true`   | `compile`   | ✅                                      |
+| `false`  | `compile`   | ✅                                      |
+| `false`  | `preserve`  | ✅ 保持胶水的相对路径和文件名不变时支持 |
+| `true`   | `preserve`  | ❌ Rslib 会拒绝此配置组合               |
 
 ### `module`
 

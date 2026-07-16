@@ -145,6 +145,8 @@ export { add };
 
 The `.wasm` filename in Preserve mode is not affected by [output.filenameHash](/config/rsbuild/output#outputfilenamehash).
 
+Rslib updates JavaScript imports to follow the emitted `.wasm` files, including when [output.filename.js](/config/rsbuild/output#outputfilename) places JavaScript in another directory. However, the WebAssembly binary is emitted without modification. If it imports JavaScript, those imports still use their original relative paths and filenames. In this case, do not move or rename the imported JavaScript files in the output. For example, changing `index.js` to `js/index.js` or `index.mjs` would break a WebAssembly import of `./index.js`.
+
 ## Use wasm-bindgen
 
 [`wasm-bindgen`](https://wasm-bindgen.github.io/wasm-bindgen/) is a tool for building WebAssembly libraries with Rust. The `--target` option generates output for different runtime environments.
@@ -159,14 +161,14 @@ Rslib supports the following targets:
 
 The JavaScript glue imports the `.wasm` file as an ES module, and the `.wasm` module imports back into the glue for its imports object.
 
-Because of this two-way relative dependency, the output layout must keep the `.wasm` file next to its glue:
+Because of this two-way relative dependency, Preserve mode requires the output to keep the relative path and filename between the `.wasm` file and its JavaScript glue. In particular, avoid moving the glue with [output.filename.js](/config/rsbuild/output#outputfilename) or changing its extension with [autoExtension](/config/lib/auto-extension).
 
-| `bundle` | `wasm.mode` | Supported                                        |
-| -------- | ----------- | ------------------------------------------------ |
-| `true`   | `compile`   | ✅                                               |
-| `false`  | `compile`   | ✅                                               |
-| `false`  | `preserve`  | ✅                                               |
-| `true`   | `preserve`  | ❌ Rslib rejects this configuration combination. |
+| `bundle` | `wasm.mode` | Supported                                                           |
+| -------- | ----------- | ------------------------------------------------------------------- |
+| `true`   | `compile`   | ✅                                                                  |
+| `false`  | `compile`   | ✅                                                                  |
+| `false`  | `preserve`  | ✅ When the relative path and filename of the glue remain unchanged |
+| `true`   | `preserve`  | ❌ Rslib rejects this configuration combination                     |
 
 ### `module`
 
