@@ -25,10 +25,30 @@ export default defineConfig({
       },
     }),
     generateBundleEsmConfig({
+      bundle: true,
+      wasm: { mode: 'preserve' },
+      output: {
+        distPath: './dist/static/preserve-bundle-nested-js',
+        filename: {
+          js: 'js/[name].js',
+        },
+      },
+    }),
+    generateBundleEsmConfig({
       bundle: false,
       wasm: { mode: 'preserve' },
       output: {
         distPath: './dist/static/preserve-bundleless',
+      },
+    }),
+    generateBundleEsmConfig({
+      bundle: false,
+      wasm: { mode: 'preserve' },
+      output: {
+        distPath: './dist/static/preserve-bundleless-nested-js',
+        filename: {
+          js: 'js/[name].js',
+        },
       },
     }),
   ],
