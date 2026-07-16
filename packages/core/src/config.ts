@@ -1407,7 +1407,6 @@ const composeBundlelessExternalConfig = (
   cssModulesAuto: CssLoaderOptionsAuto,
   bundle: boolean,
   outBase: string | null,
-  skipWasmExternal: boolean,
 ): {
   config: EnvironmentConfig;
   resolvedJsRedirect?: DeepRequired<JsRedirect>;
@@ -1455,7 +1454,7 @@ const composeBundlelessExternalConfig = (
               callback();
               return;
             }
-            if (skipWasmExternal && /\.wasm(?:[?#]|$)/.test(request)) {
+            if (request.endsWith('.wasm')) {
               callback();
               return;
             }
@@ -1910,7 +1909,6 @@ async function composeLibRsbuildConfig(
     cssModulesAuto,
     bundle,
     outBase,
-    wasmMode === 'compile',
   );
   const syntaxConfig = await composeSyntaxConfig(
     target,

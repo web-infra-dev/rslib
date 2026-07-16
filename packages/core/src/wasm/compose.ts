@@ -1,7 +1,6 @@
 import type { EnvironmentConfig } from '@rsbuild/core';
 import type { Format, Wasm, WasmMode } from '../types';
-import { WasmPreserveEmitPlugin } from './emit';
-import { createWasmPreserveExternal } from './external';
+import { createWasmPreserveExternal, WasmPreservePlugin } from './preserve';
 
 export const resolveWasmMode = ({
   bundle,
@@ -42,9 +41,9 @@ export const composeWasmConfig = ({
   }
 
   const preserveOptions = {
-    preserveToSource: !bundle,
+    bundle,
+    outBase,
     wasmDistDir,
-    outBase: bundle ? undefined : (outBase ?? undefined),
   };
 
   return {
@@ -56,7 +55,7 @@ export const composeWasmConfig = ({
     config: {
       tools: {
         rspack: {
-          plugins: [new WasmPreserveEmitPlugin(preserveOptions)],
+          plugins: [new WasmPreservePlugin(preserveOptions)],
         },
       },
     },

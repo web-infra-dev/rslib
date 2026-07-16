@@ -359,13 +359,12 @@ export type WasmMode = 'compile' | 'preserve';
 
 export type Wasm = {
   /**
-   * How Rslib handles `.wasm` modules in the output.
+   * Controls how `.wasm` imports are emitted.
    *
-   * - `'compile'`: Rspack emits JS glue and the runtime needed to load the wasm.
-   * - `'preserve'`: Keep `.wasm` as a real ESM import in the output and emit the
-   *   binary. In bundle mode the binary is emitted under `output.distPath.wasm`
-   *   using the source file name; in bundleless mode it keeps the
-   *   source-relative path and original filename.
+   * - `'compile'`: Generates the JavaScript loading code, so consumers do not
+   *   need to support WebAssembly ESM imports.
+   * - `'preserve'`: Keeps `.wasm` imports and files for the consumer's bundler
+   *   or runtime to handle.
    *
    * Defaults to `'compile'` when `bundle` is `true`, `'preserve'` when `bundle`
    * is `false`.
