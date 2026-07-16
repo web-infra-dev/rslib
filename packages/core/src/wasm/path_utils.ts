@@ -13,19 +13,6 @@ export const normalizePath = (value: string): string =>
   value.split(path.sep).join('/');
 
 /**
- * Convert a normalized relative path to an ESM relative module specifier.
- *
- * @param value A forward-slash path relative to the importing module.
- * @returns The path prefixed with `./` when it does not already start with
- * `./` or `../`.
- * @example
- * toRelativeModuleSpecifier('wasm/add.wasm');
- * // => './wasm/add.wasm'
- */
-export const toRelativeModuleSpecifier = (value: string): string =>
-  value.startsWith('./') || value.startsWith('../') ? value : `./${value}`;
-
-/**
  * Compute the output path of a preserved wasm file relative to the dist root.
  *
  * @param bundle Whether the JavaScript output is bundled.
@@ -89,12 +76,15 @@ export const computeWasmRequest = ({
   emitPath: string;
 }): string => {
   if (bundle) {
-    return toRelativeModuleSpecifier(emitPath);
+    return `./${emitPath}`;
   }
 
   const issuerDir = issuer
     ? normalizePath(path.dirname(path.relative(outBase!, issuer)))
     : '.';
+  const relativePath = path.posix.relative(issuerDir, emitPath);
 
-  return toRelativeModuleSpecifier(path.posix.relative(issuerDir, emitPath));
+  // path.relative omits `./` for files in the same directory or a child
+  // directory, but an ESM relative specifier must start with `./` or `../`.
+  return relativePath.startsWith('../') ? relativePath : `./${relativePath}`;
 };
