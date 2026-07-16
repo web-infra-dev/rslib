@@ -27,7 +27,6 @@ import { type CssLoaderOptionsAuto, isCssGlobalFile } from './css/utils';
 import { composeExeConfig } from './exe';
 import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
 import { pluginCjsShims, pluginEsmRequireShim } from './plugins/shims';
-import { composeWasmConfig, resolveWasmMode } from './wasm/compose';
 import type {
   AutoExternal,
   BannerAndFooter,
@@ -72,6 +71,7 @@ import {
   transformSyntaxToRspackTarget,
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
+import { composeWasmConfig, resolveWasmMode } from './wasm/compose';
 
 // Match logic is derived from https://github.com/webpack/webpack/blob/94aba382eccf3de1004d235045d4462918dfdbb7/lib/ExternalModuleFactoryPlugin.js#L89-L158
 const handleMatchedExternal = (
@@ -1455,6 +1455,8 @@ const composeBundlelessExternalConfig = (
               callback();
               return;
             }
+
+            // for bundleless + compile mode
             if (request.endsWith('.wasm')) {
               callback();
               return;
@@ -1958,6 +1960,13 @@ async function composeLibRsbuildConfig(
     outputFilenameConfig,
     targetConfig,
     // #region Externals configs
+    // The order of the externals config should come in the following order:
+    // 1. `externalsWarnConfig` should come before other externals config to touch the externalized modules first.
+    // 2. `userExternalsConfig` should present at first to takes effect earlier than others.
+    // 3. `wasmExternalConfig` should come before `bundlelessExternalConfig` to preserve local wasm imports.
+    // 4. The externals config in `bundlelessExternalConfig` should present after other externals config as
+    //    it relies on other externals config to bail out the externalized modules first then resolve
+    //    the correct path for relative imports.
     externalsWarnConfig,
     userExternalsConfig,
     autoExternalConfig,
