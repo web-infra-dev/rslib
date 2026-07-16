@@ -1,8 +1,6 @@
-import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from '@rslib/core';
 import { generateBundleEsmConfig } from 'test-helper';
-
-const require = createRequire(import.meta.url);
 
 export default defineConfig({
   lib: [
@@ -13,7 +11,9 @@ export default defineConfig({
       },
       dts: {
         bundle: false,
-        typescriptPath: require.resolve('typescript/package.json'),
+        typescriptPath: fileURLToPath(
+          import.meta.resolve('typescript/package.json'),
+        ),
       },
     }),
     generateBundleEsmConfig({
@@ -23,7 +23,9 @@ export default defineConfig({
       },
       dts: {
         bundle: false,
-        typescriptPath: require.resolve('@typescript/native/package.json'),
+        typescriptPath: fileURLToPath(
+          import.meta.resolve('@typescript/native/package.json'),
+        ),
       },
     }),
   ],
