@@ -86,6 +86,9 @@ export default defineConfig({
       },
     }),
   ],
+  output: {
+    cleanDistPath: true,
+  },
   source: {
     entry: {
       index: '../dts/src/index.ts',
