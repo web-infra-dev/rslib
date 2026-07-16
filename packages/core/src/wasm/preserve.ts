@@ -3,9 +3,10 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import type { RspackResolver } from '../types';
 import {
-  computeBundlelessJsEmitPath,
-  computeWasmEmitPath,
-  computeWasmRequest,
+    computeBundlelessJsEmitPath,
+    computeWasmEmitPath,
+    computeWasmRequest,
+    isPathInDirectory,
 } from './path_utils';
 
 const PLUGIN_NAME = 'RslibWasmPreservePlugin';
@@ -13,15 +14,6 @@ const PLUGIN_NAME = 'RslibWasmPreservePlugin';
 type WasmPreserveOptions = {
   jsFilename: Rspack.Filename;
   outBase: string;
-};
-
-const isPathInDirectory = (filePath: string, directory: string): boolean => {
-  const relativePath = path.relative(directory, filePath);
-  return (
-    relativePath !== '..' &&
-    !relativePath.startsWith(`..${path.sep}`) &&
-    !path.isAbsolute(relativePath)
-  );
 };
 
 export const createWasmPreserveExternal = (
@@ -92,6 +84,7 @@ export const createWasmPreserveExternal = (
       jsEmitPath,
       wasmEmitPath: emitPath,
     });
+    
     callback(undefined, externalRequest);
   };
 

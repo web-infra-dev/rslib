@@ -7,6 +7,28 @@ const renderJsFilename = (template: string, name: string): string =>
     .replace(/\[[^\]]+\]/g, 'chunk');
 
 /**
+ * Check whether a file path is inside a directory.
+ *
+ * @param filePath The absolute path to check.
+ * @param directory The absolute parent directory.
+ * @returns Whether the file path is inside the directory.
+ * @example
+ * isPathInDirectory('/project/src/add.wasm', '/project/src');
+ * // => true
+ */
+export const isPathInDirectory = (
+  filePath: string,
+  directory: string,
+): boolean => {
+  const relativePath = path.relative(directory, filePath);
+  return (
+    relativePath !== '..' &&
+    !relativePath.startsWith(`..${path.sep}`) &&
+    !path.isAbsolute(relativePath)
+  );
+};
+
+/**
  * Compute the output path of a preserved wasm file relative to the dist root.
  *
  * @param outBase The absolute source base used by bundleless output.
