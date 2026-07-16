@@ -1155,3 +1155,29 @@ describe('id', () => {
     );
   });
 });
+
+describe('wasm', () => {
+  test.each(['cjs', 'umd', 'iife', 'mf'] as const)(
+    'does not allow wasm config with %s format',
+    async (format) => {
+      const rslibConfig: RslibConfig = {
+        lib: [
+          {
+            format,
+            plugins:
+              format === 'mf'
+                ? [pluginModuleFederation({ name: 'test-mf' }, {})]
+                : undefined,
+            wasm: {},
+          },
+        ],
+      };
+
+      await expect(() =>
+        composeRsbuildEnvironments(rslibConfig),
+      ).rejects.toThrowError(
+        'When using "wasm", "format" must be set to "esm". Since the default value for "format" is "esm", you can either explicitly set it to "esm" or remove the field entirely.',
+      );
+    },
+  );
+});

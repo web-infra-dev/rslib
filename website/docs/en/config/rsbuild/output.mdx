@@ -105,11 +105,23 @@ You can also specify different filenames for different types of files by configu
 
 :::
 
+:::warning
+
+`output.filenameHash` does not affect WebAssembly files emitted by [`lib.wasm.mode: 'preserve'`](/config/lib/wasm#wasmmode). Preserve mode uses the source file name for `.wasm` files.
+
+:::
+
 ## output.filename <RsbuildDocBadge path="/config/output/filename" text="output.filename" />
 
 Sets the filename of dist files.
 
 By default, Rslib will modify the JavaScript output file extension by setting `output.filename.js` according to [format](/config/lib/format), see [autoExtension](/config/lib/auto-extension) for more details.
+
+:::warning
+
+`output.filename` does not rename WebAssembly files emitted by [`lib.wasm.mode: 'preserve'`](/config/lib/wasm#wasmmode). Preserve mode uses the source file name for `.wasm` files.
+
+:::
 
 ## output.injectStyles <RsbuildDocBadge path="/config/output/inject-styles" text="output.injectStyles" />
 

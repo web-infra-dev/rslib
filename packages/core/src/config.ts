@@ -27,6 +27,7 @@ import { type CssLoaderOptionsAuto, isCssGlobalFile } from './css/utils';
 import { composeExeConfig } from './exe';
 import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
 import { pluginCjsShims, pluginEsmRequireShim } from './plugins/shims';
+import { composeWasmConfig, resolveWasmMode } from './wasm/compose';
 import type {
   AutoExternal,
   BannerAndFooter,
@@ -1323,7 +1324,11 @@ const composeEntryConfig = async (
 
       // Filter the glob resolved entry files based on the allowed extensions
       const resolvedEntryFiles = globEntryFiles.filter((i) => {
-        return !DTS_EXTENSIONS_PATTERN.test(i);
+        if (DTS_EXTENSIONS_PATTERN.test(i)) return false;
+        // In bundleless mode, `.wasm` files are handled through imports rather
+        // than emitted as standalone source entries.
+        if (i.endsWith('.wasm')) return false;
+        return true;
       });
 
       if (resolvedEntryFiles.length === 0) {
@@ -1402,6 +1407,7 @@ const composeBundlelessExternalConfig = (
   cssModulesAuto: CssLoaderOptionsAuto,
   bundle: boolean,
   outBase: string | null,
+  skipWasmExternal: boolean,
 ): {
   config: EnvironmentConfig;
   resolvedJsRedirect?: DeepRequired<JsRedirect>;
@@ -1446,6 +1452,10 @@ const composeBundlelessExternalConfig = (
           async (data, callback) => {
             const { request, getResolve, context, contextInfo } = data;
             if (!request || !getResolve || !context || !contextInfo) {
+              callback();
+              return;
+            }
+            if (skipWasmExternal && /\.wasm(?:[?#]|$)/.test(request)) {
               callback();
               return;
             }
@@ -1860,6 +1870,11 @@ async function composeLibRsbuildConfig(
     pkgJson,
   );
 
+  const wasmMode = resolveWasmMode({
+    bundle,
+    format,
+    wasmConfig: config.wasm,
+  });
   const { entryConfig, outBase } = await composeEntryConfig(
     config.source?.entry,
     config.bundle,
@@ -1876,12 +1891,26 @@ async function composeLibRsbuildConfig(
     target,
   });
 
+  const wasmCompose = composeWasmConfig({
+    bundle,
+    format,
+    mode: wasmMode,
+    outBase,
+    wasmDistDir:
+      typeof config.output?.distPath === 'object'
+        ? (config.output.distPath.wasm ?? 'static/wasm')
+        : 'static/wasm',
+  });
+  const wasmExternalConfig = wasmCompose.externalConfig;
+  const wasmConfig = wasmCompose.config;
+
   const { config: bundlelessExternalConfig } = composeBundlelessExternalConfig(
     jsExtension,
     redirect,
     cssModulesAuto,
     bundle,
     outBase,
+    wasmMode === 'compile',
   );
   const syntaxConfig = await composeSyntaxConfig(
     target,
@@ -1934,11 +1963,14 @@ async function composeLibRsbuildConfig(
     targetConfig,
     // #region Externals configs
     // The order of the externals config should come in the following order:
-    // 1. `externalsWarnConfig` should come before other externals config to touch the externalized modules first.
-    // 2. `userExternalsConfig` should present at first to takes effect earlier than others.
-    // 3. The externals config in `bundlelessExternalConfig` should present after other externals config as
+    // 1. `wasmExternalConfig` should come before other externals config because preserve mode needs to handle
+    //    `.wasm` requests before user, auto, target and bundleless externals.
+    // 2. `externalsWarnConfig` should come before other externals config to touch the externalized modules first.
+    // 3. `userExternalsConfig` should present at first to takes effect earlier than others.
+    // 4. The externals config in `bundlelessExternalConfig` should present after other externals config as
     //    it relies on other externals config to bail out the externalized modules first then resolve
     //    the correct path for relative imports.
+    wasmExternalConfig,
     externalsWarnConfig,
     userExternalsConfig,
     autoExternalConfig,
@@ -1948,6 +1980,7 @@ async function composeLibRsbuildConfig(
     entryConfig,
     cssConfig,
     assetConfig,
+    wasmConfig,
     entryChunkConfig,
     minifyConfig,
     dtsConfig,
@@ -2041,6 +2074,7 @@ export async function composeCreateRsbuildConfig(
           shims: true,
           umdName: true,
           outBase: true,
+          wasm: true,
           experiments: true,
         }),
       ),
