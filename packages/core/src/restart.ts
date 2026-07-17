@@ -5,11 +5,31 @@ import { debounce, isTTY } from './utils/helper';
 import { logger } from './utils/logger';
 
 export function getWatchFilesForRestart(rslib: RslibInstance): string[] {
-  const meta = rslib.getRslibConfig()._privateMeta;
-  if (!meta) {
-    return [];
+  const { _privateMeta: meta, dev } = rslib.getRslibConfig();
+  const files: string[] = [];
+
+  if (meta) {
+    files.push(meta.configFilePath, ...(meta.envFilePaths || []));
   }
-  return [meta.configFilePath, ...(meta.envFilePaths || [])].filter(Boolean);
+
+  const watchConfig = dev?.watchFiles;
+  if (!watchConfig) {
+    return files;
+  }
+
+  const configs = Array.isArray(watchConfig) ? watchConfig : [watchConfig];
+  for (const { paths, type } of configs) {
+    if (type !== 'reload-server') {
+      continue;
+    }
+    if (Array.isArray(paths)) {
+      files.push(...paths);
+    } else {
+      files.push(paths);
+    }
+  }
+
+  return files;
 }
 
 export async function watchFilesForRestart(
