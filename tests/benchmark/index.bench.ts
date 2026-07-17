@@ -11,10 +11,11 @@ const disableDts = (rslibConfig: RslibConfig) => {
 };
 
 const onlyEnableMF = (rslibConfig: RslibConfig) => {
-  const length = rslibConfig.lib.length;
+  const lib = rslibConfig.lib!;
+  const length = lib.length;
   for (let i = length - 1; i >= 0; i--) {
-    if (rslibConfig.lib[i] && rslibConfig.lib[i]!.format !== 'mf') {
-      rslibConfig.lib.splice(i, 1);
+    if (lib[i] && lib[i]!.format !== 'mf') {
+      lib.splice(i, 1);
     }
   }
   disableDts(rslibConfig);

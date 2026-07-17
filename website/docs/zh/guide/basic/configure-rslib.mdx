@@ -1,61 +1,62 @@
 ---
-description: '配置 Rslib，了解 lib 选项、共享的 Rsbuild 配置、配置文件与 defineConfig 的使用方式。'
+description: '配置 Rslib，了解 lib 配置、Rsbuild 配置、共享配置、配置文件与 defineConfig 的使用方式。'
 ---
 
 # 配置 Rslib
 
-Rslib 的配置是基于 Rsbuild 扩展的，这意味着你可以使用 Rsbuild 的所有配置，以及 Rslib 特有的 `lib` 配置。
+通过 Rslib 配置，你可以定义库的产物形式，并控制每份产物的构建行为。
 
 ## 配置结构
 
-Rslib 提供了 `lib` 选项来配置库产物，它是一个数组，每个对象用于描述一种输出格式。
+Rslib 配置由两类配置组成：
 
-例如，输出 ESM 和 CJS 两种格式的产物，并使用 `es2021` 语法：
+- [lib 配置](/config/lib)：描述库产物本身，包括输出格式、产物结构和语法目标等。
+- [Rsbuild 配置](/config/rsbuild)：控制底层编译和构建行为，包括模块解析、源码处理与相关插件等。
+
+`lib` 是一个可选的对象数组，每个对象对应一份产物，可包含上述两类配置。写在 `lib` 项中的配置仅作用于对应产物；写在 `lib` 字段外的配置则作为共享配置，应用于所有产物。
+
+Rslib 会按照 [配置合并规则](https://rsbuild.rs/zh/api/javascript-api/core#合并规则) 将共享配置与每个 `lib` 项合并。
+
+### lib 配置
+
+lib 配置可以写在 `lib` 项中，用于单独配置对应产物。[部分 lib 配置](/config/lib#共享-lib-配置)也可以写在 `lib` 字段外，作为共享配置应用于所有产物。
+
+例如，将 CJS 产物的 [`syntax`](/config/lib/syntax) 设置为 `es2020`，并通过共享配置将其余产物的 `syntax` 设置为 `es2021`：
 
 ```js title="rslib.config.mjs"
 export default {
   lib: [
-    { format: 'esm', syntax: 'es2021' },
-    { format: 'cjs', syntax: 'es2021' },
+    {
+      format: 'esm',
+    },
+    {
+      format: 'cjs',
+      syntax: 'es2020',
+    },
   ],
+  syntax: 'es2021',
 };
 ```
 
-### 公共的 Rsbuild 配置
+合并后，ESM 产物的 `syntax` 为 `es2021`，CJS 产物的 `syntax` 为 `es2020`。
 
-在 `lib` 字段外部，你可以设置公共的 Rsbuild 配置，这些配置将被 `lib` 内的每个配置对象继承。
+当你只需要基于默认配置生成一份 ESM 产物时，可以省略 `lib` 字段，这等价于配置 `lib: [{}]`。
 
-例如，设置 Rsbuild 的 [output.target](/config/rsbuild/output#outputtarget) 为 `web`，这会影响所有 `lib` 配置对象的输出：
+### Rsbuild 配置
 
-```js title="rslib.config.mjs"
-export default {
-  lib: [
-    { format: 'esm', syntax: 'es2021' },
-    { format: 'cjs', syntax: 'es2021' },
-  ],
-  output: {
-    target: 'web',
-  },
-};
-```
+Rsbuild 配置可以写在 `lib` 字段外作为共享配置，也可以写在 `lib` 项中，用于单独配置对应产物。
 
-### 单独的 Rsbuild 配置
-
-在 `lib` 字段内部，你可以为每种输出格式设置单独的 Rsbuild 配置，这些配置将覆盖外部的公共 Rsbuild 配置。
-
-例如，单独设置 ESM 产物的 [output.target](/config/rsbuild/output#outputtarget) 为 `web`：
+例如，将 ESM 产物的 [output.target](/config/rsbuild/output#outputtarget) 设置为 `'web'`，并通过共享配置将其余产物的 `output.target` 设置为 `'node'`：
 
 ```js title="rslib.config.mjs"
 export default {
   lib: [
-    // ESM 产物的 target 为 `web`
     {
       format: 'esm',
       output: {
         target: 'web',
       },
     },
-    // CJS 产物继承了公共配置，target 为 `node`
     {
       format: 'cjs',
     },
@@ -66,9 +67,15 @@ export default {
 };
 ```
 
-Rslib 会在内部生成 Rsbuild 的 [environments](https://rsbuild.rs/zh/config/environments) 配置，可以运行 [rslib inspect](/guide/basic/cli#rslib-inspect) 命令来查看最终生成的配置。
+合并后，ESM 产物的 `output.target` 为 `'web'`，CJS 产物的 `output.target` 为 `'node'`。
 
-你也可以在 [配置概览](/config/) 页面查看所有配置的详细介绍。
+:::info
+
+- Rslib 会在内部生成 Rsbuild 的 [environments](https://rsbuild.rs/zh/config/environments) 配置，你可以开启[调试模式](#调试模式)，或运行 [rslib inspect](/guide/basic/cli#rslib-inspect) 命令来查看最终生成的配置。
+
+- 你可以在[配置总览](/config/)页面找到所有配置项的详细说明。
+
+:::
 
 ## 配置文件
 

@@ -9,7 +9,7 @@ import {
 import type { Format, Syntax } from '../types';
 import { color } from '../utils/color';
 import { logger } from '../utils/logger';
-import { init } from './init';
+import { init, initCliAction } from './init';
 
 const RSPACK_BUILD_ERROR = 'Rspack build failed.';
 
@@ -86,7 +86,7 @@ const applyCommonOptions = (cli: CAC) => {
     .option('--no-env', 'Disable loading of `.env` files');
 };
 
-export function setupCommands(): void {
+export function setupCommands(argv: string[]): void {
   const cli = cac('rslib');
 
   cli.version(RSLIB_VERSION);
@@ -142,9 +142,10 @@ export function setupCommands(): void {
       'use specific tsconfig (relative to project root)',
     )
     .action(async (options: BuildOptions) => {
+      initCliAction('build', options);
       try {
         const cliBuild = async () => {
-          const rslib = await init(options);
+          const rslib = await init();
 
           if (options.watch) {
             watchFilesForRestart(getWatchFilesForRestart(rslib), async () => {
@@ -185,8 +186,9 @@ export function setupCommands(): void {
     })
     .option('--verbose', 'show full function definitions in output')
     .action(async (options: InspectOptions) => {
+      initCliAction('inspect', options);
       try {
-        const rslib = await init(options);
+        const rslib = await init();
         await rslib.inspectConfig({
           lib: options.lib,
           mode: options.mode,
@@ -202,9 +204,10 @@ export function setupCommands(): void {
     });
 
   mfDevCommand.action(async (options: MfDevOptions) => {
+    initCliAction('mf-dev', options);
     try {
       const cliMfDev = async () => {
-        const rslib = await init(options);
+        const rslib = await init();
         await rslib.startMFDevServer({
           lib: options.lib,
         });
@@ -226,13 +229,17 @@ export function setupCommands(): void {
     // remove the default version log as we already log it in greeting
     sections.shift();
 
+    const commandName = cli.matchedCommandName;
+    sections = sections.filter(
+      ({ title }) =>
+        !commandName ||
+        (title !== 'Commands' && !title?.startsWith('For more info')),
+    );
+
     for (const section of sections) {
       // Fix the command usage
       if (section.title === 'Usage') {
-        section.body = section.body.replace(
-          '$ rslib',
-          color.yellow('$ rslib [command] [options]'),
-        );
+        section.body = `  ${color.yellow(`$ rslib ${commandName || '[command]'} [options]`)}`;
       }
 
       // Fix the build command name
@@ -243,7 +250,7 @@ export function setupCommands(): void {
         );
       }
 
-      // Simplify the help output for sub-commands
+      // Simplify the root help instructions for sub-commands
       if (section.title?.startsWith('For more info')) {
         section.title = color.dim('  For details on a sub-command, run');
         section.body = color.dim('  $ rslib <command> -h');
@@ -251,7 +258,9 @@ export function setupCommands(): void {
         section.title = color.cyan(section.title);
       }
     }
+
+    return sections;
   });
 
-  cli.parse();
+  cli.parse(argv);
 }

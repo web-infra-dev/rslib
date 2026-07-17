@@ -3,7 +3,7 @@ import { generateBundleEsmConfig } from 'test-helper';
 
 const assetSourceRules = [
   {
-    test: /\.txt$/i,
+    test: /\.source$/i,
     type: 'asset/source',
   },
 ];

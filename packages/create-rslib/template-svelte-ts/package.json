@@ -13,6 +13,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "rslib",
     "check": "svelte-check",
@@ -21,15 +24,15 @@
     "test:watch": "rstest --watch"
   },
   "devDependencies": {
-    "@rsbuild/plugin-svelte": "^2.0.0",
+    "@rsbuild/plugin-svelte": "^2.0.1",
     "@rslib/core": "workspace:*",
-    "@rstest/adapter-rslib": "^0.10.6",
-    "@rstest/core": "^0.10.6",
+    "@rstest/adapter-rslib": "^0.11.1",
+    "@rstest/core": "^0.11.1",
     "@tsconfig/svelte": "^5.0.8",
-    "@types/node": "^24.13.2",
+    "@types/node": "^24.13.3",
     "happy-dom": "^20.10.6",
     "svelte": "^5.56.4",
-    "svelte-check": "^4.7.1",
+    "svelte-check": "^4.7.2",
     "svelte2tsx": "^0.7.57",
     "typescript": "^6.0.3"
   },

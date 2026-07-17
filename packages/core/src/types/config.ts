@@ -19,8 +19,10 @@ export type FixedEcmaVersions =
   | 'es2020'
   | 'es2021'
   | 'es2022'
-  | 'es2023';
-export type LatestEcmaVersions = 'es2024' | 'esnext';
+  | 'es2023'
+  | 'es2024'
+  | 'es2025';
+export type LatestEcmaVersions = 'esnext';
 export type EcmaScriptVersion = FixedEcmaVersions | LatestEcmaVersions;
 
 export type RsbuildConfigWithLibInfo = {
@@ -355,13 +357,6 @@ export type Redirect = {
 
 export type LibExperiments = {
   /**
-   * Whether to enable Rspack advanced ESM output.
-   * @deprecated The advanced ESM output is now the default output for ESM format and this option has no effect. It will be removed in a future major version.
-   * @defaultValue `true`
-   * @see {@link https://rslib.rs/config/lib/experiments#experimentsadvancedesm}
-   */
-  advancedEsm?: boolean;
-  /**
    * Generate a Node.js single executable application alongside the JavaScript output.
    *
    * This option is only available for Node.js `esm` and `cjs` builds in bundle mode,
@@ -488,6 +483,20 @@ export interface LibConfig extends EnvironmentConfig {
 
 export type LibOnlyConfig = Omit<LibConfig, keyof EnvironmentConfig>;
 
+export type SharedLibConfig = Pick<
+  LibConfig,
+  | 'bundle'
+  | 'autoExtension'
+  | 'autoExternal'
+  | 'redirect'
+  | 'syntax'
+  | 'externalHelpers'
+  | 'banner'
+  | 'footer'
+  | 'shims'
+  | 'outBase'
+>;
+
 interface RslibOutputConfig extends OutputConfig {
   /**
    * @override
@@ -514,8 +523,8 @@ interface RslibOutputConfig extends OutputConfig {
   autoExternal?: OutputConfig['autoExternal'];
 }
 
-export interface RslibConfig extends RsbuildConfig {
-  lib: LibConfig[];
+export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
+  lib?: LibConfig[];
   /**
    * @inheritdoc
    */

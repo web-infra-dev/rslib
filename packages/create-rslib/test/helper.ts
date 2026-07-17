@@ -24,6 +24,7 @@ export const expectPackageJson = (
   expect(pkgJson.scripts['test:watch']).toBe('rstest --watch');
   expect(pkgJson.devDependencies['@rstest/adapter-rslib']).toBeTruthy();
   expect(pkgJson.devDependencies['@rstest/core']).toBeTruthy();
+  expect(pkgJson.publishConfig?.access).toBe('public');
 };
 
 export interface TemplateCase {
@@ -79,17 +80,6 @@ export const createAndValidate = (
   if (templateCase.lang === 'ts') {
     expect(pkgJson.devDependencies.typescript).toBeTruthy();
     expect(existsSync(path.join(dir, 'tsconfig.json'))).toBeTruthy();
-  }
-
-  if (
-    templateCase.lang === 'ts' &&
-    (templateCase.template === 'react' || templateCase.template === 'vue')
-  ) {
-    const envDtsPath = path.join(dir, 'src/env.d.ts');
-    expect(existsSync(envDtsPath)).toBeTruthy();
-    expect(fse.readFileSync(envDtsPath, 'utf-8').trimEnd()).toBe(
-      '/// <reference types="@rslib/core/types" />',
-    );
   }
 
   expect(
@@ -149,6 +139,24 @@ export const createAndValidate = (
     }
   }
 
+  if (templateCase.template === 'solid') {
+    expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeTruthy();
+    expect(pkgJson.devDependencies['@rsbuild/plugin-solid']).toBeTruthy();
+    expect(pkgJson.devDependencies['solid-js']).toBeTruthy();
+    expect(pkgJson.devDependencies['@solidjs/testing-library']).toBeTruthy();
+    expect(pkgJson.exports['.'].solid).toBe('./dist/index.jsx');
+    expect(pkgJson.peerDependencies['solid-js']).toBeTruthy();
+    expect(pkgJson.peerDependencies['@solidjs/web']).toBeFalsy();
+
+    if (templateCase.lang === 'ts') {
+      expect(pkgJson.exports['.'].types).toBe('./dist/index.d.ts');
+      expect(pkgJson.types).toBe('./dist/index.d.ts');
+    } else {
+      expect(pkgJson.exports['.'].types).toBeFalsy();
+      expect(pkgJson.types).toBeFalsy();
+    }
+  }
+
   if (templateCase.template === 'react') {
     const configFile = path.join(
       dir,
@@ -161,23 +169,13 @@ export const createAndValidate = (
     expect(pkgJson.devDependencies['react-dom']).toBeTruthy();
 
     if (templateCase.tools.includes('react-compiler')) {
-      expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeTruthy();
-      expect(
-        pkgJson.devDependencies['babel-plugin-react-compiler'],
-      ).toBeTruthy();
-      expect(configContent).toContain('pluginBabel');
-      expect(configContent).toContain('babel-plugin-react-compiler');
+      expect(configContent).toContain('reactCompiler');
       expect(pkgJson.peerDependencies.react).toBe('>=19.0.0');
       expect(pkgJson.peerDependencies['react-dom']).toBe('>=19.0.0');
     } else {
-      expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeFalsy();
-      expect(
-        pkgJson.devDependencies['babel-plugin-react-compiler'],
-      ).toBeFalsy();
-      expect(configContent).not.toContain('pluginBabel');
-      expect(configContent).not.toContain('babel-plugin-react-compiler');
-      expect(pkgJson.peerDependencies.react).toBe('>=16.14.0');
-      expect(pkgJson.peerDependencies['react-dom']).toBe('>=16.14.0');
+      expect(configContent).not.toContain('reactCompiler');
+      expect(pkgJson.peerDependencies.react).toBe('>=18.0.0');
+      expect(pkgJson.peerDependencies['react-dom']).toBe('>=18.0.0');
     }
   }
 

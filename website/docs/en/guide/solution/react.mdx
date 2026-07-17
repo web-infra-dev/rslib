@@ -161,8 +161,68 @@ Before using React Compiler, we recommend reading the [React Compiler documentat
 Steps to use React Compiler in Rslib:
 
 1. Upgrade `react` and `react-dom` to v19. If you can't upgrade, install the [react-compiler-runtime](https://npmjs.com/package/react-compiler-runtime) package to run the compiled code on earlier versions.
-2. React Compiler currently only provides a Babel plugin. Install [@rsbuild/plugin-babel](https://rsbuild.rs/plugins/list/plugin-babel) and [babel-plugin-react-compiler](https://npmjs.com/package/babel-plugin-react-compiler).
-3. Register the Babel plugin in your Rslib config file:
+2. Enable React Compiler through the `reactCompiler` option of `@rsbuild/plugin-react`:
+
+```ts title="rslib.config.ts"
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  plugins: [
+    pluginReact({
+      reactCompiler: true,
+    }),
+  ],
+});
+```
+
+This uses the Rust version of React Compiler integrated in `builtin:swc-loader`, which is around **7-13x faster** than the Babel version.
+
+> You can also refer to the [example project](https://github.com/rstackjs/rstack-examples/tree/main/rslib/react-compiler).
+
+### Configuration
+
+Pass a config object to customize the React Compiler behavior. For all available options, refer to the [`reactCompiler`](https://rsbuild.rs/plugins/list/plugin-react#reactcompiler) option of `@rsbuild/plugin-react`.
+
+```ts title="rslib.config.ts"
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  plugins: [
+    pluginReact({
+      reactCompiler: {
+        compilationMode: 'annotation',
+      },
+    }),
+  ],
+});
+```
+
+For React 17 and 18 projects, install [react-compiler-runtime](https://npmjs.com/package/react-compiler-runtime) and specify the `target`:
+
+```ts title="rslib.config.ts"
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  plugins: [
+    pluginReact({
+      reactCompiler: {
+        target: '18', // '17' | '18' | '19'
+      },
+    }),
+  ],
+});
+```
+
+The `reactCompiler` options are aligned with the React Compiler configuration. For more options, refer to the official [React Compiler configuration documentation](https://react.dev/reference/react-compiler/configuration).
+
+### Using Babel
+
+You can also use the Babel plugin published by React Compiler. This is useful if you need Babel-specific integration or options that are not yet available in the SWC transform.
+
+Install [@rsbuild/plugin-babel](https://rsbuild.rs/plugins/list/plugin-babel) and [babel-plugin-react-compiler](https://npmjs.com/package/babel-plugin-react-compiler), then register the Babel plugin in your Rslib config file:
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -182,53 +242,6 @@ export default defineConfig({
     }),
   ],
 });
-```
-
-:::tip
-The `include` pattern uses `/\.[jt]sx?$/` to match `.js`, `.jsx`, `.ts`, and `.tsx` files. This ensures React Compiler can optimize both components and [custom hooks](https://react.dev/learn/reusing-logic-with-custom-hooks), which are often defined in plain `.ts` files. The `exclude` for `node_modules` prevents the compiler from processing third-party dependencies.
-
-If you only want to compile JSX/TSX files, you can use `include: /\.(?:jsx|tsx)$/` instead, but custom hooks in `.ts` files will not be optimized.
-:::
-
-> You can also refer to the [example project](https://github.com/rstackjs/rstack-examples/tree/main/rslib/react-compiler).
-
-### Configuration
-
-Set the config for React Compiler as follows:
-
-```ts title="rslib.config.ts"
-import { pluginBabel } from '@rsbuild/plugin-babel';
-import { pluginReact } from '@rsbuild/plugin-react';
-import { defineConfig } from '@rslib/core';
-
-const ReactCompilerConfig = {
-  /* ... */
-};
-
-export default defineConfig({
-  plugins: [
-    pluginReact(),
-    pluginBabel({
-      include: /\.[jt]sx?$/,
-      exclude: [/[\\/]node_modules[\\/]/],
-      babelLoaderOptions(opts) {
-        opts.plugins ??= [];
-        opts.plugins.unshift([
-          'babel-plugin-react-compiler',
-          ReactCompilerConfig,
-        ]);
-      },
-    }),
-  ],
-});
-```
-
-For React 17 and 18 projects, install [react-compiler-runtime](https://npmjs.com/package/react-compiler-runtime) and specify the `target`:
-
-```ts title="rslib.config.ts"
-const ReactCompilerConfig = {
-  target: '18', // '17' | '18' | '19'
-};
 ```
 
 ## SVGR

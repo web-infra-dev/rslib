@@ -5,7 +5,6 @@ export default defineConfig({
   lib: [
     {
       bundle: false,
-      format: 'esm',
     },
   ],
   output: {

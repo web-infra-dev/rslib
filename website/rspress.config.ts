@@ -28,6 +28,9 @@ export default defineConfig({
   logoText: 'Rslib',
   root: path.join(__dirname, 'docs'),
   markdown: {
+    link: {
+      checkAnchors: true,
+    },
     shiki: {
       transformers: [transformerNotationHighlight(), transformerNotationDiff()],
     },

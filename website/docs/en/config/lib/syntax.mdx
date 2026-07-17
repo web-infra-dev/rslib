@@ -20,17 +20,49 @@ type EcmaScriptVersion =
   | 'es2022'
   | 'es2023'
   | 'es2024'
+  | 'es2025'
   | 'esnext';
 
 type Syntax = EcmaScriptVersion | string[];
 ```
 
-- **Default:** `'esnext'`
+- **Default:**
+  - `['node >= <minimum-version>']` when [output.target](/config/rsbuild/output#outputtarget) is `'node'` and `package.json#engines.node` declares an inferable minimum Node.js version
+  - Otherwise, `'esnext'`
 - **CLI:** `--syntax <value>` (repeatable, e.g. `--syntax es2018` or `--syntax="node 14" --syntax="Chrome 103"`)
+- **Top-level config:** Supported
 
 Configure the syntax to which JavaScript and CSS will be downgraded.
 
 See [Output Compatibility - Syntax Downgrade](/guide/advanced/output-compatibility) for more details.
+
+## Default behavior
+
+When [output.target](/config/rsbuild/output#outputtarget) is set to `'node'` and `syntax` is not configured, Rslib tries to infer the syntax target from `package.json#engines.node`. If `package.json` declares an inferable `engines.node` range, Rslib uses the minimum Node.js version from that range as the syntax target.
+
+```json title="package.json"
+{
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}
+```
+
+The config above is equivalent to:
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      syntax: ['node >= 20.19.0'],
+    },
+  ],
+};
+```
+
+In other cases, Rslib defaults to `'esnext'`. This means the output targets only the latest versions of mainstream browsers (Chrome / Firefox / Edge / macOS Safari / iOS Safari) or the latest Node.js version, depending on [output.target](/config/rsbuild/output#outputtarget).
+
+To override this default behavior, set `syntax` explicitly.
 
 ## Set ECMAScript version
 

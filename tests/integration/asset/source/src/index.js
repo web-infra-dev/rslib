@@ -1,3 +1,3 @@
-import draft from './assets/draft.txt';
+import draft from './assets/draft.source';
 
 console.log(draft);

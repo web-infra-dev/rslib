@@ -6,47 +6,6 @@ description: '配置 lib.experiments，启用实验性特性并提前试用 Rsli
 
 用于开启 Rslib 的一些实验性的功能。
 
-## experiments.advancedEsm
-
-::: tip
-
-自 Rslib v0.20 版本起，`experiments.advancedEsm` 已被弃用，并将在 v1 版本中移除。高级 ESM 输出现已作为 ESM 格式的默认行为，因此该配置项已无实际效果。
-
-:::
-
-- **类型：** `boolean`
-- **默认值：** `true`
-
-控制是否启用 Rspack 实验性的 ESM 输出。开启后会生成高质量、对静态分析更友好并且支持代码分割的 ESM 输出。
-
-:::info
-目前该选项仅在 bundle 模式下且 format 为 `'esm'` 时生效。
-:::
-
-如果需要禁用该功能，可以将其设置为 `false`：
-
-```js title="rslib.config.ts"
-export default {
-  lib: [
-    {
-      format: 'esm',
-      bundle: true,
-      experiments: {
-        advancedEsm: false,
-      },
-    },
-  ],
-};
-```
-
-### 版本历史
-
-| 版本    | 变更内容                     |
-| ------- | ---------------------------- |
-| v0.17.0 | 新增该选项                   |
-| v0.19.0 | 默认值由 `false` 改为 `true` |
-| v0.20.0 | 弃用该选项，已无实际效果     |
-
 ## experiments.exe
 
 使用 [Node.js Single Executable Application](https://nodejs.org/api/single-executable-applications.html) 将生成的 JavaScript 产物打包为一个可执行文件。

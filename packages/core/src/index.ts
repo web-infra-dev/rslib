@@ -3,7 +3,7 @@
  * the public API of @rslib/core.
  */
 
-export { runCLI } from './cli';
+export { type RunCLIOptions, runCLI } from './cli';
 export { createRslib } from './createRslib';
 export {
   type ConfigParams,
@@ -12,6 +12,9 @@ export {
   type LoadConfigResult,
   type LoadEnvOptions,
   type LoadEnvResult,
+  type RslibConfigAsyncFn,
+  type RslibConfigDefinition,
+  type RslibConfigSyncFn,
   loadConfig,
   loadEnv,
 } from './loadConfig';

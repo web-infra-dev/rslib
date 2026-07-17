@@ -1,6 +1,6 @@
 {
   "name": "rsbuild-plugin-dts",
-  "version": "0.23.1",
+  "version": "1.0.0-beta.0",
   "description": "Rsbuild plugin that supports emitting declaration files for TypeScript.",
   "homepage": "https://rslib.rs",
   "bugs": {
@@ -36,28 +36,24 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.58.9",
-    "@rsbuild/core": "~2.1.1",
+    "@rsbuild/core": "~2.1.5",
     "@rslib/tsconfig": "workspace:*",
     "get-tsconfig": "5.0.0-beta.5",
     "magic-string": "^0.30.21",
-    "prebundle": "1.6.5",
     "rsbuild-plugin-publint": "^1.0.0",
-    "rslib": "npm:@rslib/core@0.23.1",
+    "rslib": "npm:@rslib/core@0.23.2",
     "tinyglobby": "^0.2.17",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2",
+    "typescript6-api": "npm:typescript@^6.0.3"
   },
   "peerDependencies": {
     "@microsoft/api-extractor": "^7",
-    "@rsbuild/core": "^1.0.0 || ^2.0.0-0",
-    "@typescript/native-preview": "^7.0.0-0",
-    "typescript": "^5 || ^6 || ^7.0.1-0"
+    "@rsbuild/core": "^2.0.0",
+    "typescript": "^5 || ^6 || ^7"
   },
   "peerDependenciesMeta": {
     "@microsoft/api-extractor": {
-      "optional": true
-    },
-    "@typescript/native-preview": {
       "optional": true
     },
     "typescript": {

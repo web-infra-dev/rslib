@@ -2,6 +2,7 @@ import { describe, expect, test } from '@rstest/core';
 import type { EcmaScriptVersion } from '../src/types';
 import {
   ESX_TO_BROWSERSLIST,
+  resolveMinNodeVersion,
   transformSyntaxToBrowserslist,
   transformSyntaxToRspackTarget,
 } from '../src/utils/syntax';
@@ -28,9 +29,37 @@ const compareSemver = (a: string, b: string) => {
 describe('ESX_TO_BROWSERSLIST', () => {
   test('some ECMA version queries should be the same', () => {
     expect(ESX_TO_BROWSERSLIST.es6).toStrictEqual(ESX_TO_BROWSERSLIST.es2015);
-    expect(ESX_TO_BROWSERSLIST.esnext).toStrictEqual(
-      ESX_TO_BROWSERSLIST.es2024,
+  });
+
+  test('es2024/es2025 must not sit below SWC down-leveled syntax', () => {
+    // SWC only down-levels one post-ES2022 syntax: the RegExp `v` flag (ES2024).
+    const unicodeSetsRegex: Record<string, string> = {
+      chrome: '112',
+      edge: '112',
+      firefox: '116',
+      ios: '17',
+      node: '20',
+      safari: '17',
+    };
+
+    for (const version of ['es2024', 'es2025'] as const) {
+      const baseline = ESX_TO_BROWSERSLIST[version] as Record<string, string>;
+      for (const [engine, min] of Object.entries(unicodeSetsRegex)) {
+        expect(compareSemver(baseline[engine]!, min)).toBeGreaterThanOrEqual(0);
+      }
+    }
+  });
+
+  test('es2023 should stay below the RegExp v flag support line', () => {
+    expect(
+      compareSemver(ESX_TO_BROWSERSLIST.es2023.chrome!, '112'),
+    ).toBeLessThan(0);
+    expect(compareSemver(ESX_TO_BROWSERSLIST.es2023.edge!, '112')).toBeLessThan(
+      0,
     );
+    expect(
+      compareSemver(ESX_TO_BROWSERSLIST.es2023.firefox!, '116'),
+    ).toBeLessThan(0);
   });
 
   test('ECMA version mapped browserslist queries should increments', () => {
@@ -46,6 +75,8 @@ describe('ESX_TO_BROWSERSLIST', () => {
       'es2021',
       'es2022',
       'es2023',
+      'es2024',
+      'es2025',
     ];
 
     for (let i = 1; i < sortedVersions.length; i++) {
@@ -92,6 +123,42 @@ describe('transformSyntaxToBrowserslist', () => {
       ]
     `);
 
+    expect(transformSyntaxToBrowserslist('es2023', 'web'))
+      .toMatchInlineSnapshot(`
+      [
+        "chrome >= 110",
+        "edge >= 110",
+        "firefox >= 115",
+        "ios >= 17",
+        "node >= 20",
+        "safari >= 17",
+      ]
+    `);
+
+    expect(transformSyntaxToBrowserslist('es2024', 'web'))
+      .toMatchInlineSnapshot(`
+      [
+        "chrome >= 112",
+        "edge >= 112",
+        "firefox >= 116",
+        "ios >= 17",
+        "node >= 20",
+        "safari >= 17",
+      ]
+    `);
+
+    expect(transformSyntaxToBrowserslist('es2025', 'web'))
+      .toMatchInlineSnapshot(`
+      [
+        "chrome >= 126",
+        "edge >= 126",
+        "firefox >= 132",
+        "ios >= 17.4",
+        "node >= 23",
+        "safari >= 17.4",
+      ]
+    `);
+
     const web = transformSyntaxToBrowserslist('esnext', 'web');
     const webWorker = transformSyntaxToBrowserslist('esnext', 'web-worker');
     expect(web).toStrictEqual(webWorker);
@@ -112,9 +179,6 @@ describe('transformSyntaxToBrowserslist', () => {
         "last 1 node versions",
       ]
     `);
-    expect(transformSyntaxToBrowserslist('esnext', 'node')).toStrictEqual(
-      transformSyntaxToBrowserslist('es2024', 'node'),
-    );
   });
 
   test('browserslist', () => {
@@ -159,10 +223,11 @@ describe('transformSyntaxToRspackTarget', () => {
     const es6 = transformSyntaxToRspackTarget('es6');
     const es2023 = transformSyntaxToRspackTarget('es2023');
     const es2024 = transformSyntaxToRspackTarget('es2024');
+    const es2025 = transformSyntaxToRspackTarget('es2025');
     const esnext = transformSyntaxToRspackTarget('esnext');
 
-    expect(es2023).toEqual(es2024);
-    expect(es2023).toEqual(esnext);
+    expect(es2025).toEqual(esnext);
+    expect(es2025).toEqual(['es2025']);
 
     expect(es6).toMatchInlineSnapshot(`
       [
@@ -173,7 +238,15 @@ describe('transformSyntaxToRspackTarget', () => {
     expect(es2023).toMatchInlineSnapshot(
       `
       [
-        "es2022",
+        "es2023",
+      ]
+    `,
+    );
+
+    expect(es2024).toMatchInlineSnapshot(
+      `
+      [
+        "es2024",
       ]
     `,
     );
@@ -192,7 +265,7 @@ describe('transformSyntaxToRspackTarget', () => {
       .toMatchInlineSnapshot(`
       [
         "browserslist:Chrome 123",
-        "es2022",
+        "es2023",
       ]
     `);
 
@@ -203,5 +276,80 @@ describe('transformSyntaxToRspackTarget', () => {
         "es2015",
       ]
     `);
+  });
+});
+
+describe('resolveMinNodeVersion', () => {
+  const expectMinNodeVersion = async (range: string, expected: string | null) => {
+    await expect(resolveMinNodeVersion(range)).resolves.toBe(expected);
+  };
+  test('extracts minimum versions from common range operators', async () => {
+    await expectMinNodeVersion('>=18', '18.0.0');
+    await expectMinNodeVersion('>=18.12', '18.12.0');
+    await expectMinNodeVersion('>=18.12.1', '18.12.1');
+    await expectMinNodeVersion('^20.19.0', '20.19.0');
+    await expectMinNodeVersion('~22.12.1', '22.12.1');
+    await expectMinNodeVersion('=24.0.0', '24.0.0');
+    await expectMinNodeVersion('20.19.0', '20.19.0');
+  });
+
+  test('extracts minimum versions from partial, v-prefixed, and prerelease versions', async () => {
+    await expectMinNodeVersion('18', '18.0.0');
+    await expectMinNodeVersion('18.12', '18.12.0');
+    await expectMinNodeVersion('v20.19.0', '20.19.0');
+    await expectMinNodeVersion(
+      '>=20.19.0-alpha.1',
+      '20.19.0-alpha.1',
+    );
+    await expectMinNodeVersion('^20.19.0-alpha.1', '20.19.0-alpha.1');
+  });
+
+  test('normalizes exclusive lower bounds with semver range semantics', async () => {
+    await expectMinNodeVersion('>18', '19.0.0');
+    await expectMinNodeVersion('>18.12', '18.13.0');
+    await expectMinNodeVersion('>18.12.1', '18.12.2');
+  });
+
+  test('extracts minimum versions from hyphen ranges', async () => {
+    await expectMinNodeVersion('18.12.0 - 20.0.0', '18.12.0');
+    await expectMinNodeVersion('18 - 20', '18.0.0');
+    await expectMinNodeVersion('18.12 - 20.1', '18.12.0');
+  });
+
+  test('treats wildcard ranges as unrestricted', async () => {
+    await expectMinNodeVersion('x', null);
+    await expectMinNodeVersion('X', null);
+    await expectMinNodeVersion('*', null);
+    await expectMinNodeVersion('18.x', '18.0.0');
+    await expectMinNodeVersion('18.*', '18.0.0');
+    await expectMinNodeVersion('18.12.x', '18.12.0');
+  });
+
+  test('uses the highest lower bound within an AND range', async () => {
+    await expectMinNodeVersion('>=18 <21', '18.0.0');
+    await expectMinNodeVersion('>=18.12.0 >=20.0.0 <21', '20.0.0');
+    await expectMinNodeVersion('>=18.12.0 >18.13.0 <20', '18.13.1');
+  });
+
+  test('uses the lowest satisfiable set from OR ranges', async () => {
+    await expectMinNodeVersion('^20.19.0 || >=22.12.0', '20.19.0');
+    await expectMinNodeVersion('>=22.12.0 || >=20.19.0', '20.19.0');
+    await expectMinNodeVersion(
+      '>=18.12.0 <19 || >=20.0.0',
+      '18.12.0',
+    );
+  });
+
+  test('returns null for impractical lower bounds', async () => {
+    await expectMinNodeVersion('<18 || >=20.0.0', null);
+    await expectMinNodeVersion('>=0', null);
+    await expectMinNodeVersion('<20', null);
+  });
+
+  test('returns null for unsatisfiable or unparseable ranges', async () => {
+    await expectMinNodeVersion('>=20 <20 || >=22.0.0', null);
+    await expectMinNodeVersion('*', null);
+    await expectMinNodeVersion('', null);
+    await expectMinNodeVersion('latest', null);
   });
 });

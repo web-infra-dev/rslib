@@ -1,8 +1,11 @@
-import { join } from 'node:path';
+import { mkdtemp, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+import type { RsbuildPlugin } from '@rsbuild/core';
 import { describe, expect, rs, test } from '@rstest/core';
+import { join } from 'node:path';
 import type { BuildOptions } from '../src/cli/commands';
-import { init } from '../src/cli/init';
+import { init, initCliAction } from '../src/cli/init';
 import {
   composeCreateRsbuildConfig,
   composeRsbuildEnvironments,
@@ -10,10 +13,7 @@ import {
 } from '../src/config';
 import { createRslib } from '../src/createRslib';
 import { loadConfig } from '../src/loadConfig';
-import {
-  mergeRslibConfig,
-  type RslibConfigWithOptionalLib,
-} from '../src/mergeConfig';
+import { mergeRslibConfig } from '../src/mergeConfig';
 import type { RslibConfig } from '../src/types/config';
 
 rs.mock('rslog', () => ({
@@ -171,6 +171,18 @@ describe('Should load config file correctly', () => {
       },
     });
   });
+
+  test('passes command to config function', async () => {
+    const fixtureDir = join(__dirname, 'fixtures/config/command');
+    const { content: config } = await loadConfig({
+      cwd: fixtureDir,
+      command: 'build',
+    });
+
+    expect(config.source?.define).toEqual({
+      COMMAND: JSON.stringify('build'),
+    });
+  });
 });
 
 describe('Should merge Rslib config correctly', () => {
@@ -275,7 +287,7 @@ describe('Should merge Rslib config correctly', () => {
       },
     };
 
-    const config2: RslibConfigWithOptionalLib = {
+    const config2: RslibConfig = {
       output: {
         target: 'web',
       },
@@ -403,9 +415,12 @@ describe('CLI options', () => {
       tsconfig: 'tsconfig.build.json',
     };
 
-    const rslib = await init(options);
-    const config = rslib.getRslibConfig();
-    expect(config).toMatchInlineSnapshot(`
+    const originalNodeEnv = process.env.NODE_ENV;
+    try {
+      initCliAction('build', options);
+      const rslib = await init();
+      const config = rslib.getRslibConfig();
+      expect(config).toMatchInlineSnapshot(`
       {
         "_privateMeta": {
           "configFilePath": "<WORKSPACE>/tests/fixtures/config/cli-options/rslib.config.ts",
@@ -446,15 +461,47 @@ describe('CLI options', () => {
         },
       }
     `);
+    } finally {
+      if (originalNodeEnv === undefined) {
+        delete process.env.NODE_ENV;
+      } else {
+        process.env.NODE_ENV = originalNodeEnv;
+      }
+    }
   });
 });
 
 describe('Should compose create Rsbuild config correctly', () => {
+  test('treats omitted lib field as default library config', async () => {
+    const rslibConfig: RslibConfig = {
+      root: join(__dirname, '..'),
+    };
+
+    const composedRsbuildConfig = await composeRsbuildEnvironments(rslibConfig);
+
+    expect(Object.keys(composedRsbuildConfig.environments))
+      .toMatchInlineSnapshot(`
+      [
+        "esm",
+      ]
+    `);
+    expect(composedRsbuildConfig.environmentWithInfos[0]?.format).toBe('esm');
+  });
+
+  test('does not treat null lib field as default library config', async () => {
+    const rslibConfig = {
+      lib: null,
+    } as unknown as RslibConfig;
+
+    await expect(composeCreateRsbuildConfig(rslibConfig)).rejects.toThrow();
+  });
+
   test('Merge Rsbuild config in each format', async () => {
     const rslibConfig: RslibConfig = {
       lib: [
         {
           format: 'esm',
+          syntax: 'esnext',
           source: {
             preEntry: './b.js',
           },
@@ -466,6 +513,7 @@ describe('Should compose create Rsbuild config correctly', () => {
         },
         {
           format: 'cjs',
+          syntax: 'esnext',
           source: {
             preEntry: ['./c.js', './d.js'],
           },
@@ -477,12 +525,15 @@ describe('Should compose create Rsbuild config correctly', () => {
         },
         {
           format: 'umd',
+          syntax: 'esnext',
         },
         {
           format: 'iife',
+          syntax: 'esnext',
         },
         {
           format: 'mf',
+          syntax: 'esnext',
           plugins: [
             pluginModuleFederation(
               {
@@ -699,6 +750,7 @@ describe('runtimeChunk', () => {
 describe('syntax', () => {
   test('`syntax` default value', async () => {
     const rslibConfig: RslibConfig = {
+      root: join(__dirname, 'fixtures/config/esm'),
       lib: [
         {
           format: 'esm',
@@ -745,6 +797,7 @@ describe('syntax', () => {
 
   test('`syntax` default value should determined by target `node`', async () => {
     const rslibConfig: RslibConfig = {
+      root: join(__dirname, 'fixtures/config/esm'),
       lib: [
         {
           format: 'esm',
@@ -761,6 +814,75 @@ describe('syntax', () => {
       .toMatchInlineSnapshot(`
       [
         "last 1 node versions",
+      ]
+    `);
+  });
+
+  test('`syntax` default value should be inferred from engines.node for node target', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'rslib-engines-node-'));
+    await writeFile(
+      join(root, 'package.json'),
+      JSON.stringify({
+        engines: {
+          node: '^20.19.0 || >=22.12.0',
+        },
+      }),
+    );
+
+    const rslibConfig: RslibConfig = {
+      root,
+      lib: [
+        {
+          format: 'esm',
+        },
+      ],
+      output: {
+        target: 'node',
+      },
+    };
+
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
+
+    expect(composedRsbuildConfig[0]!.config.output?.overrideBrowserslist).toEqual(
+      ['node >= 20.19.0'],
+    );
+  });
+
+  test('explicit `syntax` should take precedence over engines.node', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'rslib-engines-node-'));
+    await writeFile(
+      join(root, 'package.json'),
+      JSON.stringify({
+        engines: {
+          node: '^20.19.0 || >=22.12.0',
+        },
+      }),
+    );
+
+    const rslibConfig: RslibConfig = {
+      root,
+      lib: [
+        {
+          syntax: 'es2015',
+          format: 'esm',
+        },
+      ],
+      output: {
+        target: 'node',
+      },
+    };
+
+    const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
+
+    expect(composedRsbuildConfig[0]!.config.output?.overrideBrowserslist)
+      .toMatchInlineSnapshot(`
+      [
+        "chrome >= 51",
+        "edge >= 79",
+        "firefox >= 53",
+        "ios >= 16.3",
+        "node >= 6.5",
+        "safari >= 16.3",
       ]
     `);
   });
@@ -836,6 +958,57 @@ describe('module ids', () => {
     const { origin } = await rslib.inspectConfig();
 
     expect(origin.bundlerConfigs[0]!.optimization?.moduleIds).toBe('named');
+  });
+});
+
+describe('output environment', () => {
+  test('resets Rsbuild default const environment for web target', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {},
+        {
+          tools: {
+            rspack: {
+              output: {
+                environment: {
+                  const: false,
+                },
+              },
+            },
+          },
+        },
+        {
+          plugins: [
+            {
+              name: 'test:set-lib-output-environment-const',
+              setup(api) {
+                api.modifyBundlerChain((chain) => {
+                  chain.output.merge({
+                    environment: {
+                      const: false,
+                    },
+                  });
+                });
+              },
+            } satisfies RsbuildPlugin,
+          ],
+        },
+      ],
+      output: {
+        target: 'web',
+      },
+    };
+
+    const rslib = await createRslib({
+      config: rslibConfig,
+    });
+    const { origin } = await rslib.inspectConfig();
+
+    expect(
+      origin.bundlerConfigs[0]!.output?.environment?.const,
+    ).toBeUndefined();
+    expect(origin.bundlerConfigs[1]!.output?.environment?.const).toBe(false);
+    expect(origin.bundlerConfigs[2]!.output?.environment?.const).toBe(false);
   });
 });
 

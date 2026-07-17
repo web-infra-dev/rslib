@@ -12,6 +12,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "rslib && vue-tsc",
     "dev": "rslib --watch",
@@ -19,17 +22,17 @@
     "test:watch": "rstest --watch"
   },
   "devDependencies": {
-    "@rsbuild/plugin-vue": "^2.0.0",
+    "@rsbuild/plugin-vue": "^2.0.1",
     "@rslib/core": "workspace:*",
-    "@rstest/adapter-rslib": "^0.10.6",
-    "@rstest/core": "^0.10.6",
+    "@rstest/adapter-rslib": "^0.11.1",
+    "@rstest/core": "^0.11.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/vue": "^8.1.0",
     "@vue/test-utils": "^2.4.11",
     "happy-dom": "^20.10.6",
     "typescript": "^6.0.3",
     "vue": "^3.5.39",
-    "vue-tsc": "^3.3.5"
+    "vue-tsc": "^3.3.7"
   },
   "peerDependencies": {
     "vue": "^3.2.0"

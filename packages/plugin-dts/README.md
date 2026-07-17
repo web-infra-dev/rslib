@@ -294,29 +294,15 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 ### tsgo
 
 - **Type:** `boolean`
-- **Default:** `true` when the installed `typescript` package is version 7 or higher, otherwise `false`
+- **Default:** `true` when TypeScript 7+ is detected, otherwise `false`
 
-Whether to generate declaration files with [TypeScript Go](https://github.com/microsoft/typescript-go).
+Whether to generate declaration files using [native TypeScript](https://github.com/microsoft/typescript-go).
 
-After installing TypeScript 7 or higher, Rslib will automatically enable this option.
-
-```bash
-npm add typescript@rc -D
-```
-
-You can also install [@typescript/native-preview](https://www.npmjs.com/package/@typescript/native-preview) and manually enable this option.
+When unset, Rslib enables this option automatically when TypeScript 7+ is detected.
 
 ```bash
-npm add @typescript/native-preview -D
+npm add typescript@latest -D
 ```
-
-```js
-pluginDts({
-  tsgo: true,
-});
-```
-
-> The `@typescript/native-preview` usage is deprecated and kept only for compatibility. Prefer installing `typescript@rc` to use tsgo.
 
 To ensure consistency during local development, you need to install the corresponding [VS Code Preview Extension](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) and add the following setting to VS Code:
 
