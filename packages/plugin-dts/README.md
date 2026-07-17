@@ -294,9 +294,9 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 ### typescriptPath
 
 - **Type:** `string`
-- **Default:** The `package.json` of the project's `typescript` dependency
+- **Default:** The absolute path to the module entry of the project's `typescript` dependency
 
-Specifies the TypeScript installation used to generate declaration files. Set it to an absolute path to that TypeScript's `package.json`.
+Specifies the TypeScript installation used to generate declaration files. Set it to the absolute path of that TypeScript's module entry.
 
 When this option is unset, the plugin uses the project's `typescript` dependency. When set, it uses the configured TypeScript instead.
 
@@ -309,15 +309,13 @@ import { pluginDts } from 'rsbuild-plugin-dts';
 export default {
   plugins: [
     pluginDts({
-      typescriptPath: fileURLToPath(
-        import.meta.resolve('@typescript/native/package.json'),
-      ),
+      typescriptPath: fileURLToPath(import.meta.resolve('@typescript/native')),
     }),
   ],
 };
 ```
 
-The path must be absolute and point to a TypeScript `package.json`.
+The path must be absolute and point to a TypeScript module entry.
 
 ### tsgo
 

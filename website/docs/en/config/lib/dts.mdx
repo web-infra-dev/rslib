@@ -274,9 +274,9 @@ At this time, when [redirect.dts.path](/config/lib/redirect#redirectdtspath) is 
 ### dts.typescriptPath
 
 - **Type:** `string`
-- **Default:** The `package.json` of the project's `typescript` dependency
+- **Default:** The absolute path to the module entry of the project's `typescript` dependency
 
-Specifies the TypeScript installation used to generate declaration files. Set it to an absolute path to that installation's `package.json`.
+Specifies the TypeScript installation used to generate declaration files. Set it to the absolute path of that TypeScript's module entry.
 
 When this option is unset, Rslib uses the project's `typescript` dependency. When set, Rslib uses the configured TypeScript instead.
 
@@ -304,7 +304,7 @@ export default defineConfig({
     {
       dts: {
         typescriptPath: fileURLToPath(
-          import.meta.resolve('@typescript/native/package.json'),
+          import.meta.resolve('@typescript/native'),
         ),
       },
     },

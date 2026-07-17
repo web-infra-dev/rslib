@@ -11,9 +11,7 @@ export default defineConfig({
       },
       dts: {
         bundle: false,
-        typescriptPath: fileURLToPath(
-          import.meta.resolve('typescript/package.json'),
-        ),
+        typescriptPath: fileURLToPath(import.meta.resolve('typescript')),
       },
     }),
     generateBundleEsmConfig({
@@ -24,7 +22,7 @@ export default defineConfig({
       dts: {
         bundle: false,
         typescriptPath: fileURLToPath(
-          import.meta.resolve('@typescript/native/package.json'),
+          import.meta.resolve('@typescript/native'),
         ),
       },
     }),

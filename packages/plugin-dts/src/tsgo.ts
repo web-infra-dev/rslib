@@ -27,7 +27,7 @@ const getDtsExecutablePath = async (
   try {
     const libPath = path.resolve(
       path.dirname(typescriptPath),
-      './lib/getExePath.js',
+      './getExePath.js',
     );
 
     // handle Windows paths
@@ -157,7 +157,7 @@ export async function emitDtsTsgo(
 
   if (!typescriptPath) {
     throw new Error(
-      'Failed to resolve the native TypeScript executable because no TypeScript package.json was found.',
+      'Failed to resolve the native TypeScript executable because no TypeScript module entry was found.',
     );
   }
 

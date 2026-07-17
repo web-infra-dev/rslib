@@ -1,8 +1,11 @@
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import type { DtsGenerationBackend } from './types/internal';
 import type { PluginDtsOptions } from './types/options';
 import { createRequireFromPackageJson } from './utils';
+
+const require = createRequire(import.meta.url);
 
 type ParsedTypescriptVersion = {
   major: number;
@@ -16,13 +19,7 @@ export const resolveTypescriptPath = (
   if (configuredPath !== undefined) {
     if (!path.isAbsolute(configuredPath)) {
       throw new Error(
-        `The "dts.typescriptPath" option must be an absolute path to a TypeScript package.json, received ${JSON.stringify(configuredPath)}.`,
-      );
-    }
-
-    if (path.basename(configuredPath) !== 'package.json') {
-      throw new Error(
-        `The "dts.typescriptPath" option must point to a TypeScript package.json, received ${JSON.stringify(configuredPath)}.`,
+        `The "dts.typescriptPath" option must be an absolute path to a TypeScript module entry, received ${JSON.stringify(configuredPath)}.`,
       );
     }
 
@@ -37,7 +34,7 @@ export const resolveTypescriptPath = (
 
   try {
     const currentRequire = createRequireFromPackageJson(cwd);
-    return currentRequire.resolve('typescript/package.json');
+    return currentRequire.resolve('typescript');
   } catch {
     return undefined;
   }
@@ -51,10 +48,11 @@ export const readTypescriptVersion = (
   }
 
   try {
-    const packageJsonPath = typescriptPath;
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
-    return typeof packageJson.version === 'string'
-      ? packageJson.version
+    const typescript = require(typescriptPath) as {
+      version?: unknown;
+    };
+    return typeof typescript.version === 'string'
+      ? typescript.version
       : undefined;
   } catch {
     return undefined;

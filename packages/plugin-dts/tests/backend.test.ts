@@ -80,14 +80,25 @@ describe('resolveDtsGenerationBackend', () => {
       );
       await fs.writeFile(
         path.join(typescriptPkgDir, 'package.json'),
-        JSON.stringify({ name: 'typescript', version: '7.0.2' }),
+        JSON.stringify({
+          name: 'typescript',
+          version: '7.0.2',
+          exports: {
+            '.': './lib/version.cjs',
+          },
+        }),
+      );
+      await fs.mkdir(path.join(typescriptPkgDir, 'lib'));
+      await fs.writeFile(
+        path.join(typescriptPkgDir, 'lib', 'version.cjs'),
+        'exports.version = "7.0.2";',
       );
 
       const typescriptPath = resolveTypescriptPath(packageDir);
       const typescriptVersion = readTypescriptVersion(typescriptPath);
 
       expect(await fs.realpath(typescriptPath!)).toBe(
-        await fs.realpath(path.join(typescriptPkgDir, 'package.json')),
+        await fs.realpath(path.join(typescriptPkgDir, 'lib', 'version.cjs')),
       );
       expect(typescriptVersion).toBe('7.0.2');
       expect(resolveDtsGenerationBackend({}, typescriptVersion)).toBe(
@@ -98,41 +109,35 @@ describe('resolveDtsGenerationBackend', () => {
     }
   });
 
-  test('should use the configured TypeScript package.json', async () => {
+  test('should use the configured TypeScript module entry', async () => {
     const tempDir = await fs.mkdtemp(
       path.join(os.tmpdir(), 'rslib-plugin-dts-custom-'),
     );
 
     try {
-      const packageJsonPath = path.join(tempDir, 'package.json');
-      await fs.writeFile(
-        packageJsonPath,
-        JSON.stringify({ name: 'typescript', version: '6.0.3' }),
-      );
+      const typescriptPath = path.join(tempDir, 'typescript.cjs');
+      await fs.writeFile(typescriptPath, 'exports.version = "6.0.3";');
 
-      expect(resolveTypescriptPath(tempDir, packageJsonPath)).toBe(
-        packageJsonPath,
+      expect(resolveTypescriptPath(tempDir, typescriptPath)).toBe(
+        typescriptPath,
       );
-      expect(readTypescriptVersion(packageJsonPath)).toBe('6.0.3');
+      expect(readTypescriptVersion(typescriptPath)).toBe('6.0.3');
     } finally {
       await fs.rm(tempDir, { recursive: true, force: true });
     }
   });
 
   test('should validate the configured TypeScript path', () => {
-    expect(() => resolveTypescriptPath('/project', './package.json')).toThrow(
+    expect(() => resolveTypescriptPath('/project', './typescript.js')).toThrow(
       'must be an absolute path',
     );
     expect(() =>
-      resolveTypescriptPath('/project', '/tmp/typescript.js'),
-    ).toThrow('must point to a TypeScript package.json');
-    expect(() =>
-      resolveTypescriptPath('/project', '/path/not-found/package.json'),
+      resolveTypescriptPath('/project', '/path/not-found/typescript.js'),
     ).toThrow('does not exist');
   });
 
   test('should reject typescriptPath with isolated declarations', () => {
-    for (const typescriptPath of ['/path/to/package.json', '']) {
+    for (const typescriptPath of ['/path/to/typescript.js', '']) {
       expect(() =>
         resolveDtsGenerationBackend(
           {

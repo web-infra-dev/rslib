@@ -274,9 +274,9 @@ export default {
 ### dts.typescriptPath
 
 - **类型：** `string`
-- **默认值：** 项目的 `typescript` 依赖的 `package.json` 路径
+- **默认值：** 项目的 `typescript` 依赖模块入口的绝对路径
 
-指定用于生成类型声明文件的 TypeScript。配置值必须是指向这个 TypeScript 的 `package.json` 的绝对路径。
+指定用于生成类型声明文件的 TypeScript。配置值必须是这个 TypeScript 模块入口的绝对路径。
 
 未设置此项时，Rslib 使用项目的 `typescript` 依赖；设置此项后，Rslib 使用配置的 TypeScript。
 
@@ -304,7 +304,7 @@ export default defineConfig({
     {
       dts: {
         typescriptPath: fileURLToPath(
-          import.meta.resolve('@typescript/native/package.json'),
+          import.meta.resolve('@typescript/native'),
         ),
       },
     },
