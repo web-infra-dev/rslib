@@ -229,13 +229,17 @@ export function setupCommands(argv: string[]): void {
     // remove the default version log as we already log it in greeting
     sections.shift();
 
+    const commandName = cli.matchedCommandName;
+    sections = sections.filter(
+      ({ title }) =>
+        !commandName ||
+        (title !== 'Commands' && !title?.startsWith('For more info')),
+    );
+
     for (const section of sections) {
       // Fix the command usage
       if (section.title === 'Usage') {
-        section.body = section.body.replace(
-          '$ rslib',
-          color.yellow('$ rslib [command] [options]'),
-        );
+        section.body = `  ${color.yellow(`$ rslib ${commandName || '[command]'} [options]`)}`;
       }
 
       // Fix the build command name
@@ -246,7 +250,7 @@ export function setupCommands(argv: string[]): void {
         );
       }
 
-      // Simplify the help output for sub-commands
+      // Simplify the root help instructions for sub-commands
       if (section.title?.startsWith('For more info')) {
         section.title = color.dim('  For details on a sub-command, run');
         section.body = color.dim('  $ rslib <command> -h');
@@ -254,6 +258,8 @@ export function setupCommands(argv: string[]): void {
         section.title = color.cyan(section.title);
       }
     }
+
+    return sections;
   });
 
   cli.parse(argv);
