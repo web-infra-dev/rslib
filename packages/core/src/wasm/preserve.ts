@@ -3,15 +3,16 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import type { RspackResolver } from '../types';
 import {
-    computeBundlelessJsEmitPath,
-    computeWasmEmitPath,
-    computeWasmRequest,
-    isPathInDirectory,
+  computeBundlelessJsEmitPath,
+  computeWasmEmitPath,
+  computeWasmRequest,
+  isPathInDirectory,
 } from './path_utils';
 
 const PLUGIN_NAME = 'RslibWasmPreservePlugin';
 
 type WasmPreserveOptions = {
+  jsDistPath: string;
   jsFilename: Rspack.Filename;
   outBase: string;
 };
@@ -77,6 +78,7 @@ export const createWasmPreserveExternal = (
     const jsEmitPath = computeBundlelessJsEmitPath({
       outBase: options.outBase,
       issuer: contextInfo.issuer,
+      jsDistPath: options.jsDistPath,
       jsFilename: options.jsFilename,
     });
 
@@ -84,7 +86,7 @@ export const createWasmPreserveExternal = (
       jsEmitPath,
       wasmEmitPath: emitPath,
     });
-    
+
     callback(undefined, externalRequest);
   };
 

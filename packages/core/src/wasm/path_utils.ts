@@ -54,28 +54,35 @@ export const computeWasmEmitPath = ({
  *
  * @param outBase The absolute source base used by bundleless output.
  * @param issuer The absolute path of the source JavaScript module.
+ * @param jsDistPath The JavaScript output directory relative to the dist root.
  * @param jsFilename The JavaScript filename template.
  * @returns The JavaScript output path relative to the dist root.
  * @example
  * computeBundlelessJsEmitPath({
  *   outBase: '/project/src',
  *   issuer: '/project/src/lib/index.js',
- *   jsFilename: 'js/[name].js',
+ *   jsDistPath: 'js',
+ *   jsFilename: '[name].js',
  * });
  * // => 'js/lib/index.js'
  */
 export const computeBundlelessJsEmitPath = ({
   outBase,
   issuer,
+  jsDistPath,
   jsFilename,
 }: {
   outBase: string;
   issuer: string;
+  jsDistPath: string;
   jsFilename: string;
 }): string => {
   const relativeIssuer = normalizeSlash(path.relative(outBase, issuer));
   const { dir, name } = path.posix.parse(relativeIssuer);
-  return renderJsFilename(jsFilename, path.posix.join(dir, name));
+  return path.posix.join(
+    normalizeSlash(jsDistPath),
+    renderJsFilename(jsFilename, path.posix.join(dir, name)),
+  );
 };
 
 /**

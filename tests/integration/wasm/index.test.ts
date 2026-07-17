@@ -99,6 +99,20 @@ describe('wasm static', () => {
     );
     expectSingleWasm(distDir, 'add.wasm');
   });
+
+  test('handles a bundleless JS dist path', async () => {
+    const distDir = join(
+      fixturePath,
+      'dist/static/preserve-bundleless-js-dist-path',
+    );
+    await expectUseAdd(
+      fixturePath,
+      'static',
+      'preserve-bundleless-js-dist-path',
+      'js/index.js',
+    );
+    expectSingleWasm(distDir, 'add.wasm');
+  });
 });
 
 test('wasm compile respects non-default dist path', async () => {

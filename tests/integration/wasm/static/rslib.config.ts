@@ -34,6 +34,16 @@ export default defineConfig({
         },
       },
     }),
+    generateBundleEsmConfig({
+      bundle: false,
+      wasm: { mode: 'preserve' },
+      output: {
+        distPath: {
+          root: './dist/static/preserve-bundleless-js-dist-path',
+          js: 'js',
+        },
+      },
+    }),
   ],
   output: {
     target: 'node',

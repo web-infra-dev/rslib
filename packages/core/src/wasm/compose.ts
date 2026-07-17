@@ -30,11 +30,13 @@ export const resolveWasmMode = ({
 
 export const composeWasmConfig = ({
   format,
+  jsDistPath,
   jsFilename,
   mode,
   outBase,
 }: {
   format: Format;
+  jsDistPath: string;
   jsFilename: Rspack.Filename;
   mode: WasmMode;
   outBase: string | null;
@@ -47,6 +49,7 @@ export const composeWasmConfig = ({
   }
 
   const preserveOptions = {
+    jsDistPath,
     jsFilename,
     outBase: outBase!,
   };
