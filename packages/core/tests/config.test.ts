@@ -16,24 +16,7 @@ import { loadConfig } from '../src/loadConfig';
 import { mergeRslibConfig } from '../src/mergeConfig';
 import type { RslibConfig } from '../src/types/config';
 
-rs.mock('rslog', () => ({
-  color: {
-    blue: (text: string) => text,
-    cyan: (text: string) => text,
-    dim: (text: string) => text,
-    gray: (text: string) => text,
-    green: (text: string) => text,
-    magenta: (text: string) => text,
-    yellow: (text: string) => text,
-  },
-  logger: {
-    level: 'info',
-    debug: rs.fn(),
-    error: rs.fn(),
-    override: rs.fn(),
-    warn: rs.fn(),
-  },
-}));
+rs.mock('rslog');
 
 describe('Should load config file correctly', () => {
   test('Load config.js in cjs project', async () => {
