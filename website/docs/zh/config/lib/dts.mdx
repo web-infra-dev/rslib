@@ -17,6 +17,7 @@ type Dts =
       autoExtension?: boolean;
       alias?: Record<string, string>;
       isolated?: boolean;
+      typescriptPath?: string;
       tsgo?: boolean;
     }
   | boolean;
@@ -270,6 +271,47 @@ export default {
 + export * from './compiled/foo';
 ```
 
+### dts.typescriptPath
+
+- **类型：** `string`
+- **默认值：** 项目的 `typescript` 依赖模块入口的绝对路径
+
+指定用于生成类型声明文件的 TypeScript。配置值必须是这个 TypeScript 模块入口的绝对路径。
+
+未设置此项时，Rslib 使用项目的 `typescript` 依赖；设置此项后，Rslib 使用配置的 TypeScript。
+
+Rslib 根据所使用 TypeScript 的版本选择类型声明生成后端：TypeScript 5 和 6 使用 Compiler API，TypeScript 7 及以上版本使用 native executable。
+
+例如，项目使用 TypeScript 6 开发，但希望通过 TypeScript 7 生成类型声明。可以通过 [npm alias](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-60) 同时安装两个版本：
+
+```json title="package.json"
+{
+  "devDependencies": {
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
+  }
+}
+```
+
+然后在 Rslib 配置中，选择 `@typescript/native` 对应的 TypeScript 7：
+
+```ts title="rslib.config.ts"
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      dts: {
+        typescriptPath: fileURLToPath(
+          import.meta.resolve('@typescript/native'),
+        ),
+      },
+    },
+  ],
+});
+```
+
 ### dts.tsgo
 
 - **类型：** `boolean`
@@ -277,7 +319,7 @@ export default {
 
 是否通过 [native TypeScript](https://github.com/microsoft/typescript-go) 生成类型声明文件。
 
-如果没有显式设置该选项，Rslib 会在检测到 TypeScript 7+ 时自动开启。
+如果没有显式设置该选项，Rslib 会在检测到 TypeScript 7+ 时自动开启。设置 [dts.typescriptPath](#dtstypescriptpath) 后，Rslib 会以这个 TypeScript 的版本为准。
 
 <PackageManagerTabs command="add typescript@latest -D" />
 
@@ -328,6 +370,7 @@ export default {
 
 ::: info 使用条件
 
+- `dts.isolated` 不能与 [dts.typescriptPath](/config/lib/dts#dtstypescriptpath) 同时开启。
 - `dts.isolated` 不能与 [dts.tsgo](/config/lib/dts#dtstsgo) 同时开启。
 - `dts.isolated` 不能与 [dts.build](/config/lib/dts#dtsbuild) 同时开启。
 - 开启 `dts.isolated` 时，不能将 [dts.abortOnError](/config/lib/dts#dtsabortonerror) 设置为 `false`。

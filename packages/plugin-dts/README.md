@@ -291,6 +291,32 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 
 - When set to `false`, import paths will retain their original file extensions.
 
+### typescriptPath
+
+- **Type:** `string`
+- **Default:** The absolute path to the module entry of the project's `typescript` dependency
+
+Specifies the TypeScript installation used to generate declaration files. Set it to the absolute path of that TypeScript's module entry.
+
+When this option is unset, the plugin uses the project's `typescript` dependency. When set, it uses the configured TypeScript instead.
+
+The plugin selects the declaration generation backend from the selected TypeScript's version: TypeScript 5 and 6 use the Compiler API, while TypeScript 7 and later use the native executable.
+
+```ts
+import { fileURLToPath } from 'node:url';
+import { pluginDts } from 'rsbuild-plugin-dts';
+
+export default {
+  plugins: [
+    pluginDts({
+      typescriptPath: fileURLToPath(import.meta.resolve('@typescript/native')),
+    }),
+  ],
+};
+```
+
+The path must be absolute and point to a TypeScript module entry.
+
 ### tsgo
 
 - **Type:** `boolean`
@@ -357,6 +383,7 @@ This preserves full type checking while reducing the cost of repeatedly running 
 #### Usage constraints
 
 - `isolated` is currently only available when `pluginDts` is used through Rslib, because it requires Rslib's built-in RslibPlugin.
+- `isolated` cannot be enabled together with [typescriptPath](#typescriptpath).
 - `isolated` cannot be enabled together with [tsgo](#tsgo).
 - `isolated` cannot be enabled together with [build](#build).
 - When `isolated` is enabled, [abortOnError](#abortonerror) cannot be set to `false`.

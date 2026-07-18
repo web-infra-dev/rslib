@@ -1,20 +1,58 @@
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
+import path from 'node:path';
 import type { DtsGenerationBackend } from './types/internal';
 import type { PluginDtsOptions } from './types/options';
 import { createRequireFromPackageJson } from './utils';
+
+const require = createRequire(import.meta.url);
 
 type ParsedTypescriptVersion = {
   major: number;
   minor: number;
 };
 
-export const readTypescriptVersion = (cwd: string): string | undefined => {
+export const resolveTypescriptPath = (
+  cwd: string,
+  configuredPath?: string,
+): string | undefined => {
+  if (configuredPath !== undefined) {
+    if (!path.isAbsolute(configuredPath)) {
+      throw new Error(
+        `The "dts.typescriptPath" option must be an absolute path to a TypeScript module entry, received ${JSON.stringify(configuredPath)}.`,
+      );
+    }
+
+    if (!fs.existsSync(configuredPath)) {
+      throw new Error(
+        `Failed to resolve TypeScript from "dts.typescriptPath": ${JSON.stringify(configuredPath)} does not exist.`,
+      );
+    }
+
+    return configuredPath;
+  }
+
   try {
     const currentRequire = createRequireFromPackageJson(cwd);
-    const packageJsonPath = currentRequire.resolve('typescript/package.json');
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
-    return typeof packageJson.version === 'string'
-      ? packageJson.version
+    return currentRequire.resolve('typescript');
+  } catch {
+    return undefined;
+  }
+};
+
+export const readTypescriptVersion = (
+  typescriptPath: string | undefined,
+): string | undefined => {
+  if (!typescriptPath) {
+    return undefined;
+  }
+
+  try {
+    const typescript = require(typescriptPath) as {
+      version?: unknown;
+    };
+    return typeof typescript.version === 'string'
+      ? typescript.version
       : undefined;
   } catch {
     return undefined;
@@ -51,6 +89,12 @@ export function validateExplicitIsolatedDtsOptions(
 ): void {
   if (options.isolated !== true) {
     return;
+  }
+
+  if (options.typescriptPath !== undefined) {
+    throw new Error(
+      'Can not set "dts.typescriptPath" when "dts.isolated: true".',
+    );
   }
 
   if (options.tsgo) {
