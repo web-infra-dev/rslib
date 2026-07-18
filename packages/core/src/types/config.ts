@@ -104,7 +104,7 @@ export type Dts =
        */
       isolated?: boolean;
       /**
-       * A custom absolute path used to resolve TypeScript.
+       * A custom absolute path to the TypeScript module entry.
        * @defaultValue The resolved path of `typescript` from the project root.
        * @see {@link https://rslib.rs/config/lib/dts#dtstypescriptpath}
        */
