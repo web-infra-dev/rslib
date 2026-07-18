@@ -9,10 +9,6 @@ export default defineConfig({
       syntax: ['es2023'],
       dts: {
         bundle: false,
-        // alias to pre-bundled types as they are public API
-        alias: {
-          rslog: './compiled/rslog',
-        },
         isolated: true,
         distPath: './dist-types',
       },

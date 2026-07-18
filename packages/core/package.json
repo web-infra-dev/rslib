@@ -32,17 +32,15 @@
     "bin",
     "dist",
     "dist-types",
-    "compiled",
     "types.d.ts"
   ],
   "scripts": {
     "build": "rslib",
     "dev": "rslib --watch",
-    "prebundle": "prebundle",
     "test": "rstest"
   },
   "dependencies": {
-    "@rsbuild/core": "~2.1.5",
+    "@rsbuild/core": "~2.1.6",
     "rsbuild-plugin-dts": "workspace:*"
   },
   "devDependencies": {

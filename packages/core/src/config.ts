@@ -274,7 +274,6 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
 
 const composeFormatConfig = ({
   format,
-  target,
   bundle = true,
   umdName,
   pkgJson,
@@ -283,7 +282,6 @@ const composeFormatConfig = ({
   sourceEntry,
 }: {
   format: Format;
-  target: RsbuildConfigOutputTarget;
   pkgJson: PkgJson;
   bundle?: boolean;
   umdName?: Rspack.LibraryName;
@@ -315,7 +313,6 @@ const composeFormatConfig = ({
     new rspack.experiments.RslibPlugin({
       interceptApiPlugin: true,
       forceNodeShims: enabledShims.esm.__dirname || enabledShims.esm.__filename,
-      autoCjsNodeBuiltin: format === 'esm' && target === 'node',
     }),
   ].filter(Boolean);
 
@@ -731,7 +728,7 @@ const composeExternalsConfig = (
   // should to be unified and merged together in the future.
 
   const externalsTypeMap: Record<Format, Rspack.ExternalsType> = {
-    esm: 'module-import',
+    esm: 'modern-module',
     cjs: 'commonjs-import',
     umd: 'umd',
     // If use 'var', when projects import an external package like '@pkg', this will cause a syntax error such as 'var pkg = @pkg'.
@@ -1475,8 +1472,9 @@ const composeTargetConfig = (
         target: 'node',
         externalsConfig: {
           output: {
-            // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
             // Keep Node.js built-in modules externalized for all Node.js targets.
+            // The generated code follows the current format's externalsType,
+            // such as `modern-module` for ESM and `commonjs-import` for CJS.
             // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
             externals: nodeBuiltInModules,
           },
@@ -1594,7 +1592,6 @@ async function composeLibRsbuildConfig(
   } = composeTargetConfig(config.output?.target, format);
   const formatConfig = composeFormatConfig({
     format,
-    target,
     pkgJson: pkgJson!,
     bundle,
     umdName,

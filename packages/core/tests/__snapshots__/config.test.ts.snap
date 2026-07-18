@@ -1136,8 +1136,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       _args: [
         {
           interceptApiPlugin: true,
-          forceNodeShims: false,
-          autoCjsNodeBuiltin: true
+          forceNodeShims: false
         }
       ]
     },
@@ -1159,7 +1158,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   externalsPresets: {
     node: false
   },
-  externalsType: 'module-import'
+  externalsType: 'modern-module'
 }"
 `;
 
@@ -2002,8 +2001,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       _args: [
         {
           interceptApiPlugin: true,
-          forceNodeShims: false,
-          autoCjsNodeBuiltin: false
+          forceNodeShims: false
         }
       ]
     },
@@ -2777,8 +2775,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       _args: [
         {
           interceptApiPlugin: true,
-          forceNodeShims: false,
-          autoCjsNodeBuiltin: false
+          forceNodeShims: false
         }
       ]
     },
@@ -3555,8 +3552,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       _args: [
         {
           interceptApiPlugin: true,
-          forceNodeShims: false,
-          autoCjsNodeBuiltin: false
+          forceNodeShims: false
         }
       ]
     },
@@ -4497,7 +4493,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             RslibPlugin {
               "_args": [
                 {
-                  "autoCjsNodeBuiltin": true,
                   "forceNodeShims": false,
                   "interceptApiPlugin": true,
                 },
@@ -4522,7 +4517,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           ],
         },
         {
-          "externalsType": "module-import",
+          "externalsType": "modern-module",
         },
         {
           "plugins": [
@@ -4764,7 +4759,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             RslibPlugin {
               "_args": [
                 {
-                  "autoCjsNodeBuiltin": false,
                   "forceNodeShims": false,
                   "interceptApiPlugin": true,
                 },
@@ -5001,7 +4995,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             RslibPlugin {
               "_args": [
                 {
-                  "autoCjsNodeBuiltin": false,
                   "forceNodeShims": false,
                   "interceptApiPlugin": true,
                 },
@@ -5242,7 +5235,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             RslibPlugin {
               "_args": [
                 {
-                  "autoCjsNodeBuiltin": false,
                   "forceNodeShims": false,
                   "interceptApiPlugin": true,
                 },

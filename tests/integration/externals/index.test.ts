@@ -19,11 +19,13 @@ test('auto externalize Node.js built-in modules when `output.target` is "node"',
   restore();
 
   for (const external of [
-    'import * as __rspack_external_bar from "bar";',
     'import { createRequire as __rspack_createRequire } from "node:module";',
     'import node_assert from "node:assert";',
     'import fs from "fs";',
     'import react from "react";',
+    'const __rspack_createRequire_require = __rspack_createRequire(import.meta.url);',
+    'module.exports = __rspack_createRequire_require("foo");',
+    'module.exports = __rspack_createRequire_require("bar");',
   ]) {
     expect(entries.esm).toContain(external);
   }
@@ -117,7 +119,7 @@ test('require ESM from CJS', async () => {
 test('user externals', async () => {
   // Ensure the priority of user externals higher than others.
   // - "memfs": userExternalsConfig > targetExternalsConfig
-  // - "lodash-es/zip": userExternalsConfig > autoExternalConfig
+  // - "lodash-es/zip": userExternalsConfig > Rsbuild autoExternal
   // - "./foo2": userExternalsConfig > bundlelessExternalConfig
 
   const fixturePath = join(__dirname, 'user-externals');
