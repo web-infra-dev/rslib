@@ -3,6 +3,8 @@ import { defineConfig } from '@rslib/core';
 import { generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
+  // Explicit `tsgo` values make the test fail if `typescriptPath` resolves
+  // to an unexpected TypeScript major version.
   lib: [
     generateBundleEsmConfig({
       bundle: false,
