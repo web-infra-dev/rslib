@@ -72,159 +72,6 @@ import {
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
 
-// Match logic is derived from https://github.com/webpack/webpack/blob/94aba382eccf3de1004d235045d4462918dfdbb7/lib/ExternalModuleFactoryPlugin.js#L89-L158
-const handleMatchedExternal = (
-  value: string | string[] | boolean | Record<string, string | string[]>,
-  request: string,
-): boolean => {
-  if (typeof value === 'boolean') {
-    return value;
-  }
-
-  if (typeof value === 'string') {
-    const [first, second] = value.split(' ');
-    const hasType = !!second;
-    const _request = second ? second : first;
-
-    // Don't need to warn explicit declared external type.
-    if (!hasType) {
-      return request === _request;
-    }
-
-    return false;
-  }
-
-  if (Array.isArray(value)) {
-    return handleMatchedExternal(value[0] ?? '', request);
-  }
-
-  if (typeof value === 'object') {
-    return false;
-  }
-
-  return false;
-};
-
-const composeExternalsWarnConfig = (
-  format: Format,
-  ...externalsArray: NonNullable<EnvironmentConfig['output']>['externals'][]
-): EnvironmentConfig => {
-  if (format !== 'esm') {
-    return {};
-  }
-
-  const externals: NonNullable<EnvironmentConfig['output']>['externals'] = [];
-  for (const e of externalsArray.filter(Boolean)) {
-    if (Array.isArray(e)) {
-      externals.push(...e);
-    } else {
-      // @ts-expect-error
-      externals.push(e);
-    }
-  }
-
-  // Match logic is derived from https://github.com/webpack/webpack/blob/94aba382eccf3de1004d235045d4462918dfdbb7/lib/ExternalModuleFactoryPlugin.js#L166-L293.
-  const matchUserExternals = (
-    externals: NonNullable<EnvironmentConfig['output']>['externals'],
-    request: string,
-    callback: (matched: boolean, shouldWarn?: boolean) => void,
-  ) => {
-    // string
-    if (typeof externals === 'string') {
-      if (handleMatchedExternal(externals, request)) {
-        callback(true, true);
-        return;
-      }
-    }
-    // array
-    if (Array.isArray(externals)) {
-      let i = 0;
-      const next = () => {
-        let asyncFlag: boolean;
-        const handleExternalsAndCallback = (
-          matched: boolean,
-          shouldWarn?: boolean,
-        ) => {
-          if (!matched) {
-            if (asyncFlag) {
-              asyncFlag = false;
-              return;
-            }
-            next();
-            return;
-          }
-
-          callback(matched, shouldWarn);
-        };
-
-        do {
-          asyncFlag = true;
-          if (i >= externals.length) {
-            callback(false);
-            return;
-          }
-          matchUserExternals(
-            externals[i++],
-            request,
-            handleExternalsAndCallback,
-          );
-        } while (!asyncFlag);
-        asyncFlag = false;
-      };
-
-      next();
-      return;
-    }
-    // regexp
-    if (externals instanceof RegExp) {
-      if (externals.test(request)) {
-        callback(true, true);
-        return;
-      }
-    }
-    // function
-    else if (typeof externals === 'function') {
-      // TODO: Support function
-    }
-    // object
-    else if (typeof externals === 'object') {
-      if (Object.hasOwn(externals, request)) {
-        if (handleMatchedExternal(externals[request]!, request)) {
-          callback(true, true);
-        } else {
-          callback(true);
-        }
-        return;
-      }
-    }
-
-    callback(false);
-  };
-
-  return {
-    output: {
-      externals: [
-        ({ request, dependencyType, contextInfo }: any, callback: any) => {
-          let shouldWarn = false;
-          const _callback = (_matched: boolean, _shouldWarn?: boolean) => {
-            if (_shouldWarn) {
-              shouldWarn = true;
-            }
-          };
-
-          if (contextInfo.issuer && dependencyType === 'commonjs') {
-            matchUserExternals(externals, request, _callback);
-            if (shouldWarn) {
-              logger.warn(composeModuleImportWarn(request, contextInfo.issuer));
-            }
-          }
-          callback();
-        },
-      ],
-    },
-  };
-};
-
 const getAutoExternalDefaultValue = (
   format: Format,
   autoExternal?: AutoExternal,
@@ -511,7 +358,6 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
 
 const composeFormatConfig = ({
   format,
-  target,
   bundle = true,
   umdName,
   pkgJson,
@@ -520,7 +366,6 @@ const composeFormatConfig = ({
   sourceEntry,
 }: {
   format: Format;
-  target: RsbuildConfigOutputTarget;
   pkgJson: PkgJson;
   bundle?: boolean;
   umdName?: Rspack.LibraryName;
@@ -552,7 +397,6 @@ const composeFormatConfig = ({
     new rspack.experiments.RslibPlugin({
       interceptApiPlugin: true,
       forceNodeShims: enabledShims.esm.__dirname || enabledShims.esm.__filename,
-      autoCjsNodeBuiltin: format === 'esm' && target === 'node',
     }),
   ].filter(Boolean);
 
@@ -957,13 +801,6 @@ const composeShimsConfig = (
   return { rsbuildConfig, enabledShims };
 };
 
-export const composeModuleImportWarn = (
-  request: string,
-  issuer: string,
-): string => {
-  return `The externalized commonjs request ${color.green(`"${request}"`)} from ${color.green(issuer)} will use ${color.blue('"module"')} external type in ESM format. If you want to specify other external type, consider setting the request and type with ${color.blue('"output.externals"')}.`;
-};
-
 const composeExternalsConfig = (
   format: Format,
   externals: NonNullable<EnvironmentConfig['output']>['externals'],
@@ -973,7 +810,7 @@ const composeExternalsConfig = (
   // should to be unified and merged together in the future.
 
   const externalsTypeMap: Record<Format, Rspack.ExternalsType> = {
-    esm: 'module-import',
+    esm: 'modern-module',
     cjs: 'commonjs-import',
     umd: 'umd',
     // If use 'var', when projects import an external package like '@pkg', this will cause a syntax error such as 'var pkg = @pkg'.
@@ -1715,8 +1552,9 @@ const composeTargetConfig = (
         target: 'node',
         externalsConfig: {
           output: {
-            // When output.target is 'node', Node.js's built-in will be treated as externals of type `node-commonjs`.
             // Keep Node.js built-in modules externalized for all Node.js targets.
+            // The generated code follows the current format's externalsType,
+            // such as `modern-module` for ESM and `commonjs-import` for CJS.
             // https://github.com/webpack/webpack/blob/dd44b206a9c50f4b4cb4d134e1a0bd0387b159a3/lib/node/NodeTargetPlugin.js#L81
             externals: nodeBuiltInModules,
           },
@@ -1834,7 +1672,6 @@ async function composeLibRsbuildConfig(
   } = composeTargetConfig(config.output?.target, format);
   const formatConfig = composeFormatConfig({
     format,
-    target,
     pkgJson: pkgJson!,
     bundle,
     umdName,
@@ -1910,11 +1747,6 @@ async function composeLibRsbuildConfig(
     contextToWatch: outBase,
   });
   const dtsConfig = await composeDtsConfig(config, format, dtsExtension);
-  const externalsWarnConfig = composeExternalsWarnConfig(
-    format,
-    userExternalsConfig?.output?.externals,
-    autoExternalConfig?.output?.externals,
-  );
   const minifyConfig = composeMinifyConfig(config);
   const bannerFooterConfig = composeBannerFooterConfig(banner, footer);
   const decoratorsConfig = composeDecoratorsConfig(
@@ -1935,12 +1767,10 @@ async function composeLibRsbuildConfig(
     targetConfig,
     // #region Externals configs
     // The order of the externals config should come in the following order:
-    // 1. `externalsWarnConfig` should come before other externals config to touch the externalized modules first.
-    // 2. `userExternalsConfig` should present at first to takes effect earlier than others.
-    // 3. The externals config in `bundlelessExternalConfig` should present after other externals config as
+    // 1. `userExternalsConfig` should present at first to takes effect earlier than others.
+    // 2. The externals config in `bundlelessExternalConfig` should present after other externals config as
     //    it relies on other externals config to bail out the externalized modules first then resolve
     //    the correct path for relative imports.
-    externalsWarnConfig,
     userExternalsConfig,
     autoExternalConfig,
     targetExternalsConfig,

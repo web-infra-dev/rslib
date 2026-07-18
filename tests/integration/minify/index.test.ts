@@ -67,7 +67,7 @@ describe('minify config (mf)', () => {
     expect(mfExposeEntry).toBeDefined();
     expect(normalizeMfExposeEntry(mfExposeEntry!)).toMatchInlineSnapshot(`
       "/*! LICENSE: __federation_expose_default_export.<HASH>.js.LICENSE.txt */
-      "use strict";(globalThis["default_minify"]=globalThis["default_minify"]||[]).push([[525],{<MODULE_ID>(__unused_rspack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{});__webpack_require__.d(__webpack_exports__,{},{Button:Button,foo:foo})}}]);"
+      "use strict";(globalThis["default_minify"]||=[]).push([[525],{<MODULE_ID>(__unused_rspack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__);var react_jsx_runtime__rspack_import_0=__webpack_require__(491);/*! Legal Comment */const foo=()=>{};const Button=()=>/*#__PURE__*/(0,react_jsx_runtime__rspack_import_0.jsx)("button",{});__webpack_require__.d(__webpack_exports__,{},{Button:Button,foo:foo})}}]);"
     `);
   });
 
@@ -78,7 +78,7 @@ describe('minify config (mf)', () => {
     expect(mfExposeEntry).toBeDefined();
     expect(normalizeMfExposeEntry(mfExposeEntry!)).toMatchInlineSnapshot(`
       ""use strict";
-      (globalThis["disable_minify"] = globalThis["disable_minify"] || []).push([[525], {
+      (globalThis["disable_minify"] ||= []).push([[525], {
       <MODULE_ID>(__unused_rspack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.r(__webpack_exports__);
       /* import */ var react_jsx_runtime__rspack_import_0 = __webpack_require__(491);

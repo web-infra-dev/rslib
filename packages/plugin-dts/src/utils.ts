@@ -18,7 +18,7 @@ import path, {
 } from 'node:path';
 import { styleText } from 'node:util';
 import { convertPathToPattern, glob } from 'tinyglobby';
-import { createMatchPath, loadConfig, type MatchPath } from 'tsconfig-paths';
+import type { MatchPath } from 'tsconfig-paths';
 import type { CompilerOptions } from 'typescript6-api';
 import type { DtsRedirect } from './types/options';
 import type {
@@ -621,6 +621,7 @@ export async function processDtsFiles(
   let matchPath: MatchPath | undefined;
 
   if (redirect.path || redirect.extension) {
+    const { createMatchPath, loadConfig } = await import('tsconfig-paths');
     const result = loadConfig(tsconfigPath);
 
     if (result.resultType === 'failed') {
