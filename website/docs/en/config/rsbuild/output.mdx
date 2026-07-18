@@ -85,6 +85,18 @@ At build time, prevent some `import` dependencies from being packed into bundles
 
 In bundle mode, Rslib will automatically add the dependencies listed in the `dependencies`, `optionalDependencies`, and `peerDependencies` fields of `package.json` to `output.externals`. See [lib.autoExternal](/config/lib/auto-external) for more information.
 
+In addition, Rslib sets the default Rspack [`externalsType`](https://rspack.rs/config/externals#externalstype) based on the output format:
+
+- `esm`: [modern-module](https://rspack.rs/config/externals#externalstypemodern-module). Static `import` externals are emitted as ESM imports, and dynamic `import()` externals stay dynamic. CommonJS `require()` externals load through `createRequire` for Node-like [`output.target`](#outputtarget) values, while other targets preserve a bare `require()` call.
+
+:::warning
+When external modules are loaded through `createRequire()`, bundling the output again requires the consuming bundler to statically analyze this call pattern. Rspack users can enable [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire) to support it.
+:::
+
+- `cjs`: [commonjs-import](https://rspack.rs/config/externals#externalstypecommonjs-import).
+- `umd`: [umd](https://rspack.rs/config/externals#externalstype).
+- `mf` / `iife`: [global](https://rspack.rs/config/externals#externalstypeglobal).
+
 :::note
 It is important to note that `output.externals` differs from [resolve.alias](/config/rsbuild/resolve#resolvealias). Check out [resolve.alias](/config/rsbuild/resolve#resolvealias) documentation for more information.
 :::

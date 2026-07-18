@@ -4,8 +4,6 @@ import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { expect, test } from '@rstest/core';
 import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
 
-import { composeModuleImportWarn } from '../../../packages/core/src/config';
-
 test('should fail to build when `output.target` is not "node"', async () => {
   const fixturePath = join(__dirname, 'browser');
   const { restore } = proxyConsole();
@@ -21,11 +19,13 @@ test('auto externalize Node.js built-in modules when `output.target` is "node"',
   restore();
 
   for (const external of [
-    'import * as __rspack_external_bar from "bar";',
     'import { createRequire as __rspack_createRequire } from "node:module";',
     'import node_assert from "node:assert";',
     'import fs from "fs";',
     'import react from "react";',
+    'const __rspack_createRequire_require = __rspack_createRequire(import.meta.url);',
+    'module.exports = __rspack_createRequire_require("foo");',
+    'module.exports = __rspack_createRequire_require("bar");',
   ]) {
     expect(entries.esm).toContain(external);
   }
@@ -106,38 +106,66 @@ test('should remap node built-ins with user externals', async () => {
   expect(typeof esmOutput.loadPathSep).toBe('function');
 });
 
-test('should get warn when use require in ESM', async () => {
-  const { logs, restore } = proxyConsole();
-  const fixturePath = join(__dirname, 'module-import-warn');
+test('modern-module externals should handle CommonJS requests by target', async () => {
+  const fixturePath = join(__dirname, 'modern-module-auto-external');
   const { entries } = await buildAndGetResults({ fixturePath });
-  const logStrings = logs.map((log) => stripAnsi(log));
-  const issuer = join(fixturePath, 'src/index.ts');
+  const nodeOutput = entries.esm0!;
+  const webOutput = entries.esm1!;
 
-  for (const external of [
-    'import * as __rspack_external_bar from "bar";',
-    'import * as __rspack_external_foo from "foo";',
-    'import * as __rspack_external_qux from "qux";',
+  expect(nodeOutput).toContain(
+    'import { createRequire as __rspack_createRequire } from "node:module";',
+  );
+  expect(nodeOutput).toContain(
+    'const __rspack_createRequire_require = __rspack_createRequire(import.meta.url);',
+  );
+
+  for (const request of ['react', 'e2', 'e3', 'e5', 'e6', 'e7']) {
+    expect(nodeOutput).toContain(
+      `module.exports = __rspack_createRequire_require("${request}");`,
+    );
+  }
+
+  for (const request of ['e1', 'e4']) {
+    expect(nodeOutput).toContain(`module.exports = require("${request}");`);
+  }
+
+  expect(nodeOutput).toContain('import * as __rspack_external_e8 from "e8";');
+  expect(nodeOutput).toContain('module.exports = __rspack_external_e8;');
+  expect(nodeOutput).toContain('"./src/local-false.ts"');
+  expect(nodeOutput).toContain(
+    'const localFalse = __webpack_require__("./src/local-false.ts");',
+  );
+  expect(nodeOutput).not.toContain('require("./local-false")');
+
+  for (const request of ['e9', 'e10']) {
+    expect(nodeOutput).toContain(
+      `module.exports = __rspack_createRequire_require("${request}");`,
+    );
+  }
+
+  expect(nodeOutput).toContain('const e11 = await import("e11");');
+
+  expect(webOutput).not.toContain('node:module');
+  expect(webOutput).not.toContain('__rspack_createRequire');
+
+  for (const request of [
+    'react',
+    'e1',
+    'e2',
+    'e3',
+    'e4',
+    'e5',
+    'e6',
+    'e7',
+    'e9',
+    'e10',
   ]) {
-    expect(entries.esm).toContain(external);
+    expect(webOutput).toContain(`module.exports = require("${request}");`);
   }
 
-  for (const external of ['foo', 'bar', 'qux']) {
-    expect(
-      logStrings.some((l) =>
-        l.includes(stripAnsi(composeModuleImportWarn(external, issuer))),
-      ),
-    ).toBe(true);
-  }
-
-  for (const external of ['./baz', 'quxx']) {
-    expect(
-      logStrings.some((l) =>
-        l.includes(stripAnsi(composeModuleImportWarn(external, issuer))),
-      ),
-    ).toBe(false);
-  }
-
-  restore();
+  expect(webOutput).toContain('import * as __rspack_external_e8 from "e8";');
+  expect(webOutput).toContain('module.exports = __rspack_external_e8;');
+  expect(webOutput).toContain('const e11 = await import("e11");');
 });
 
 test('require ESM from CJS', async () => {
