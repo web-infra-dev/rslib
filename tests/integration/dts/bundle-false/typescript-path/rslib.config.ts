@@ -3,6 +3,8 @@ import { defineConfig } from '@rslib/core';
 import { generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
+  // Explicit `tsgo` values make the test fail if `typescriptPath` resolves
+  // to an unexpected TypeScript major version.
   lib: [
     generateBundleEsmConfig({
       bundle: false,
@@ -11,6 +13,7 @@ export default defineConfig({
       },
       dts: {
         bundle: false,
+        tsgo: false,
         typescriptPath: fileURLToPath(import.meta.resolve('typescript')),
       },
     }),
@@ -21,6 +24,7 @@ export default defineConfig({
       },
       dts: {
         bundle: false,
+        tsgo: true,
         typescriptPath: fileURLToPath(
           import.meta.resolve('@typescript/native'),
         ),

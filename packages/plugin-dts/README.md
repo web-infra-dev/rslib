@@ -294,13 +294,22 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 ### typescriptPath
 
 - **Type:** `string`
-- **Default:** The absolute path to the module entry of the project's `typescript` dependency
+- **Default:** The resolved path of `typescript` from the project root
 
-Specifies the TypeScript installation used to generate declaration files. Set it to the absolute path of that TypeScript's module entry.
+Specifies a custom absolute path to the TypeScript module entry.
 
-When this option is unset, the plugin uses the project's `typescript` dependency. When set, it uses the configured TypeScript instead.
+If a project uses TypeScript 6 and you want to try TypeScript 7 for declaration generation, install both versions with [npm aliases](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0):
 
-The plugin selects the declaration generation backend from the selected TypeScript's version: TypeScript 5 and 6 use the Compiler API, while TypeScript 7 and later use the native executable.
+```json
+{
+  "devDependencies": {
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
+  }
+}
+```
+
+Then, configure the plugin to use TypeScript 7 through the `@typescript/native` alias:
 
 ```ts
 import { fileURLToPath } from 'node:url';
@@ -314,8 +323,6 @@ export default {
   ],
 };
 ```
-
-The path must be absolute and point to a TypeScript module entry.
 
 ### tsgo
 

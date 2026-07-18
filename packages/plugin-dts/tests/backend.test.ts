@@ -97,7 +97,7 @@ describe('resolveDtsGenerationBackend', () => {
       const typescriptPath = resolveTypescriptPath(packageDir);
       const typescriptVersion = readTypescriptVersion(typescriptPath);
 
-      expect(await fs.realpath(typescriptPath!)).toBe(
+      expect(await fs.realpath(typescriptPath)).toBe(
         await fs.realpath(path.join(typescriptPkgDir, 'lib', 'version.cjs')),
       );
       expect(typescriptVersion).toBe('7.0.2');
@@ -109,7 +109,7 @@ describe('resolveDtsGenerationBackend', () => {
     }
   });
 
-  test('should use the configured TypeScript module entry', async () => {
+  test('should use the configured TypeScript path', async () => {
     const tempDir = await fs.mkdtemp(
       path.join(os.tmpdir(), 'rslib-plugin-dts-custom-'),
     );
@@ -131,9 +131,28 @@ describe('resolveDtsGenerationBackend', () => {
     expect(() => resolveTypescriptPath('/project', './typescript.js')).toThrow(
       'must be an absolute path',
     );
-    expect(() =>
-      resolveTypescriptPath('/project', '/path/not-found/typescript.js'),
-    ).toThrow('does not exist');
+    for (const configuredPath of [
+      '/path/not-found/typescript.js',
+      os.tmpdir(),
+    ]) {
+      expect(() => resolveTypescriptPath('/project', configuredPath)).toThrow(
+        'must point to an existing TypeScript module entry file',
+      );
+    }
+  });
+
+  test('should reject when TypeScript cannot be resolved from cwd', async () => {
+    const tempDir = await fs.mkdtemp(
+      path.join(os.tmpdir(), 'rslib-plugin-dts-missing-'),
+    );
+
+    try {
+      expect(() => resolveTypescriptPath(tempDir)).toThrow(
+        'Failed to resolve TypeScript from the project root',
+      );
+    } finally {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    }
   });
 
   test('should reject typescriptPath with isolated declarations', () => {

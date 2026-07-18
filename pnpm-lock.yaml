@@ -723,12 +723,9 @@ importers:
 
   tests/integration/dts:
     devDependencies:
-      '@typescript/native':
-        specifier: npm:typescript@^7.0.2
-        version: typescript@7.0.2
       typescript:
-        specifier: npm:@typescript/typescript6@^6.0.2
-        version: '@typescript/typescript6@6.0.2'
+        specifier: ^6.0.3
+        version: 6.0.3
 
   tests/integration/dts-tsgo:
     devDependencies:
@@ -838,7 +835,14 @@ importers:
 
   tests/integration/dts/bundle-false/tsconfig-path: {}
 
-  tests/integration/dts/bundle-false/typescript-path: {}
+  tests/integration/dts/bundle-false/typescript-path:
+    devDependencies:
+      '@typescript/native':
+        specifier: npm:typescript@^7.0.2
+        version: typescript@7.0.2
+      typescript:
+        specifier: npm:@typescript/typescript6@^6.0.2
+        version: '@typescript/typescript6@6.0.2'
 
   tests/integration/dts/bundle/abort-on-error: {}
 
