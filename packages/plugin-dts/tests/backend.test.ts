@@ -131,9 +131,14 @@ describe('resolveDtsGenerationBackend', () => {
     expect(() => resolveTypescriptPath('/project', './typescript.js')).toThrow(
       'must be an absolute path',
     );
-    expect(() =>
-      resolveTypescriptPath('/project', '/path/not-found/typescript.js'),
-    ).toThrow('does not exist');
+    for (const configuredPath of [
+      '/path/not-found/typescript.js',
+      os.tmpdir(),
+    ]) {
+      expect(() => resolveTypescriptPath('/project', configuredPath)).toThrow(
+        'must point to an existing TypeScript module entry file',
+      );
+    }
   });
 
   test('should reject when TypeScript cannot be resolved from cwd', async () => {

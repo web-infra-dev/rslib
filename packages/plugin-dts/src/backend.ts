@@ -23,9 +23,9 @@ export const resolveTypescriptPath = (
       );
     }
 
-    if (!fs.existsSync(configuredPath)) {
+    if (!fs.statSync(configuredPath, { throwIfNoEntry: false })?.isFile()) {
       throw new Error(
-        `The path specified by "dts.typescriptPath" does not exist: ${JSON.stringify(configuredPath)}.`,
+        `The path specified by "dts.typescriptPath" must point to an existing TypeScript module entry file: ${JSON.stringify(configuredPath)}.`,
       );
     }
 
