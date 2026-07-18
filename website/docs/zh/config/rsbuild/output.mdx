@@ -84,6 +84,11 @@ const defaultDistPath = {
 此外，Rslib 会根据产物格式设置 Rspack 的 [`externalsType`](https://rspack.rs/zh/config/externals#externalstype) 默认值：
 
 - `esm`：[modern-module](https://rspack.rs/zh/config/externals#externalstypemodern-module)，静态 `import` 的 external 会被输出为 ESM import，动态 `import()` 会保持动态导入；CommonJS `require()` 的 external 在 Node-like [`output.target`](#outputtarget) 下会通过 `createRequire` 加载，在其他 target 下会保留裸 `require()` 调用。
+
+:::warning
+对于通过 `createRequire()` 加载的 external 模块，如果对应产物需要再次打包，消费方的打包器必须能够静态分析这种调用模式。Rspack 项目可开启 [`module.parser.javascript.createRequire`](https://rspack.rs/zh/config/module-parser#javascriptcreaterequire) 来支持该能力。
+:::
+
 - `cjs`：[commonjs-import](https://rspack.rs/zh/config/externals#externalstypecommonjs-import)。
 - `umd`：[umd](https://rspack.rs/zh/config/externals#externalstype)。
 - `mf` / `iife`：[global](https://rspack.rs/zh/config/externals#externalstypeglobal)。

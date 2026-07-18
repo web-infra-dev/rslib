@@ -106,7 +106,7 @@ test('should remap node built-ins with user externals', async () => {
   expect(typeof esmOutput.loadPathSep).toBe('function');
 });
 
-test('ESM externals type should follow output.target', async () => {
+test('modern-module externals should handle CommonJS requests by target', async () => {
   const fixturePath = join(__dirname, 'modern-module-auto-external');
   const { entries } = await buildAndGetResults({ fixturePath });
   const nodeOutput = entries.esm0!;
@@ -148,19 +148,23 @@ test('ESM externals type should follow output.target', async () => {
   expect(webOutput).not.toContain('node:module');
   expect(webOutput).not.toContain('__rspack_createRequire');
 
-  for (const request of ['react', 'e2', 'e3', 'e5', 'e6', 'e7', 'e9', 'e10']) {
-    expect(webOutput).toContain(
-      `import * as __rspack_external_${request} from "${request}";`,
-    );
-    expect(webOutput).toContain(
-      `module.exports = __rspack_external_${request};`,
-    );
-  }
-
-  for (const request of ['e1', 'e4']) {
+  for (const request of [
+    'react',
+    'e1',
+    'e2',
+    'e3',
+    'e4',
+    'e5',
+    'e6',
+    'e7',
+    'e9',
+    'e10',
+  ]) {
     expect(webOutput).toContain(`module.exports = require("${request}");`);
   }
 
+  expect(webOutput).toContain('import * as __rspack_external_e8 from "e8";');
+  expect(webOutput).toContain('module.exports = __rspack_external_e8;');
   expect(webOutput).toContain('const e11 = await import("e11");');
 });
 
