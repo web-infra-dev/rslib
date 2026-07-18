@@ -15,17 +15,17 @@ type ParsedTypescriptVersion = {
 export const resolveTypescriptPath = (
   cwd: string,
   configuredPath?: string,
-): string | undefined => {
+): string => {
   if (configuredPath !== undefined) {
     if (!path.isAbsolute(configuredPath)) {
       throw new Error(
-        `The "dts.typescriptPath" option must be an absolute path to a TypeScript module entry, received ${JSON.stringify(configuredPath)}.`,
+        `The "dts.typescriptPath" option must be an absolute path where TypeScript can be resolved, received ${JSON.stringify(configuredPath)}.`,
       );
     }
 
     if (!fs.existsSync(configuredPath)) {
       throw new Error(
-        `Failed to resolve TypeScript from "dts.typescriptPath": ${JSON.stringify(configuredPath)} does not exist.`,
+        `The path specified by "dts.typescriptPath" does not exist: ${JSON.stringify(configuredPath)}.`,
       );
     }
 
@@ -36,7 +36,9 @@ export const resolveTypescriptPath = (
     const currentRequire = createRequireFromPackageJson(cwd);
     return currentRequire.resolve('typescript');
   } catch {
-    return undefined;
+    throw new Error(
+      'Failed to resolve TypeScript from the project root. Please install TypeScript or set "dts.typescriptPath".',
+    );
   }
 };
 

@@ -11,6 +11,7 @@ export default defineConfig({
       },
       dts: {
         bundle: false,
+        tsgo: false,
         typescriptPath: fileURLToPath(import.meta.resolve('typescript')),
       },
     }),
@@ -21,6 +22,7 @@ export default defineConfig({
       },
       dts: {
         bundle: false,
+        tsgo: true,
         typescriptPath: fileURLToPath(
           import.meta.resolve('@typescript/native'),
         ),

@@ -274,15 +274,11 @@ At this time, when [redirect.dts.path](/config/lib/redirect#redirectdtspath) is 
 ### dts.typescriptPath
 
 - **Type:** `string`
-- **Default:** The absolute path to the module entry of the project's `typescript` dependency
+- **Default:** The resolved path of `typescript` from the project root
 
-Specifies the TypeScript installation used to generate declaration files. Set it to the absolute path of that TypeScript's module entry.
+Specifies a custom absolute path used to resolve TypeScript.
 
-When this option is unset, Rslib uses the project's `typescript` dependency. When set, Rslib uses the configured TypeScript instead.
-
-Rslib selects the declaration generation backend from the selected TypeScript's version: TypeScript 5 and 6 use the Compiler API, while TypeScript 7 and later use the native executable.
-
-For example, a project can use TypeScript 6 for development while using TypeScript 7 to generate declaration files. Install both versions with [npm aliases](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-60):
+If a project uses TypeScript 6 and you want to try TypeScript 7 for declaration generation, install both versions with [npm aliases](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0):
 
 ```json title="package.json"
 {
@@ -293,7 +289,7 @@ For example, a project can use TypeScript 6 for development while using TypeScri
 }
 ```
 
-Then select the TypeScript 7 installation provided by `@typescript/native` in the Rslib config:
+Then, configure Rslib to use TypeScript 7 through the `@typescript/native` alias:
 
 ```ts title="rslib.config.ts"
 import { fileURLToPath } from 'node:url';
@@ -319,7 +315,7 @@ export default defineConfig({
 
 Whether to generate declaration files using [native TypeScript](https://github.com/microsoft/typescript-go).
 
-When unset, Rslib enables this option automatically when TypeScript 7+ is detected. If [dts.typescriptPath](#dtstypescriptpath) is set, Rslib uses that TypeScript version.
+When unset, Rslib enables this option automatically when TypeScript 7+ is detected. When [dts.typescriptPath](#dtstypescriptpath) is configured, Rslib determines whether to enable `tsgo` automatically based on the resolved TypeScript version.
 
 <PackageManagerTabs command="add typescript@latest -D" />
 

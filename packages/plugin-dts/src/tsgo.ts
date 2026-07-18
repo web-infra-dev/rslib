@@ -155,16 +155,10 @@ export async function emitDtsTsgo(
     typescriptPath,
   } = options;
 
-  if (!typescriptPath) {
-    throw new Error(
-      'Failed to resolve the native TypeScript executable because no TypeScript module entry was found.',
-    );
-  }
-
   const args = generateTsgoArgs(configPath, declarationDir, build, isWatch);
   const dtsExecutableCommand = await resolveDtsExecutableCommand(
     args,
-    typescriptPath,
+    typescriptPath!,
   );
 
   logger.debug(
