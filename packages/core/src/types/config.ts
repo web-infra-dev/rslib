@@ -493,7 +493,6 @@ export type SharedLibConfig = Pick<
   LibConfig,
   | 'bundle'
   | 'autoExtension'
-  | 'autoExternal'
   | 'redirect'
   | 'syntax'
   | 'externalHelpers'

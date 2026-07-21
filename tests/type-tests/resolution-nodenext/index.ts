@@ -10,7 +10,6 @@ defineConfig({
   lib: [{}],
   bundle: false,
   autoExtension: false,
-  autoExternal: false,
   redirect: {
     js: {
       extension: false,
