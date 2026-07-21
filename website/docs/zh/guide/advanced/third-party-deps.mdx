@@ -114,9 +114,9 @@ export default defineConfig({
 });
 ```
 
-### 外部化指定 import
+### 配置 externals
 
-当你需要指定某些 import 不被 Rslib 打包，或需要改变 external 后的请求路径时，可以使用 [output.externals](/config/rsbuild/output#outputexternals)。
+当你需要指定某些模块不被 Rslib 打包，或需要改变 external 后的请求路径时，可以使用 [output.externals](/config/rsbuild/output#outputexternals)。
 
 数组形式适合保留原始请求路径：
 
@@ -150,10 +150,10 @@ export default defineConfig({
 ```
 
 :::tip
-`react/jsx-runtime` 这类子路径 import 需要单独处理。只配置 `react` 不代表 `react/jsx-runtime` 也会使用相同的 external 规则。
+`react/jsx-runtime` 这类子路径需要单独处理。只配置 `react` 不代表 `react/jsx-runtime` 也会使用相同的 external 规则。
 :::
 
-如果要匹配一组 import，可以使用正则：
+如果要匹配一组模块，可以使用正则：
 
 ```ts
 export default defineConfig({
@@ -166,8 +166,6 @@ export default defineConfig({
   ],
 });
 ```
-
-### 使用函数配置 external 规则
 
 在一些复杂场景中，如果需要根据请求来源、上下文等信息决定是否 external，可以通过 [tools.rspack](/config/rsbuild/tools#toolsrspack) 配置 Rspack 的 `externals`：
 

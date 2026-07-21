@@ -119,9 +119,9 @@ export default defineConfig({
 });
 ```
 
-### Externalize specified imports
+### Configure externals
 
-Use [output.externals](/config/rsbuild/output#outputexternals) when you need to specify imports that should not be bundled by Rslib, or when you need to change the request path after externalization.
+Use [output.externals](/config/rsbuild/output#outputexternals) when you need to specify modules that should not be bundled by Rslib, or when you need to change the request path after externalization.
 
 The array form is useful when you want to keep the original request paths:
 
@@ -158,7 +158,7 @@ export default defineConfig({
 Subpath imports such as `react/jsx-runtime` need to be handled separately. Configuring only `react` does not mean `react/jsx-runtime` will use the same external rule.
 :::
 
-If you want to match a group of imports, use a regular expression:
+If you want to match a group of modules, use a regular expression:
 
 ```ts
 export default defineConfig({
@@ -171,8 +171,6 @@ export default defineConfig({
   ],
 });
 ```
-
-### Use function to configure external rules
 
 For complex scenarios where you need to decide whether to externalize a module based on the request issuer or context, configure Rspack's `externals` via [tools.rspack](/config/rsbuild/tools#toolsrspack):
 
