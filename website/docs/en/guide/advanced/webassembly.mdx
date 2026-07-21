@@ -118,6 +118,7 @@ The `.wasm` file is emitted using the same source-relative path and original fil
 ```
 dist
 ├── index.js
+├── utils.js
 └── add.wasm
 ```
 
@@ -129,11 +130,11 @@ export { add };
 
 The filename is not affected by [output.filenameHash](/config/rsbuild/output#outputfilenamehash).
 
-Rslib updates JavaScript imports to follow the emitted `.wasm` files, including when [output.filename.js](/config/rsbuild/output#outputfilename) places JavaScript in another directory. However, imports inside the WebAssembly binary are kept as-is — if a `.wasm` file imports JavaScript (e.g. wasm-bindgen `bundler` target), avoid configurations that change the relative path or filename of the JavaScript output:
+Rslib updates JavaScript imports to follow the emitted `.wasm` files. However, imports inside the WebAssembly binary are kept as-is — if a `.wasm` file imports JavaScript (e.g. wasm-bindgen `bundler` target), avoid configurations that change the relative path or filename of the JavaScript output:
 
-- [output.distPath.js](/config/rsbuild/output#outputdistpath) (moves JS to a subdirectory)
-- [output.filename.js](/config/rsbuild/output#outputfilename) (changes the filename template)
-- [autoExtension](/config/lib/auto-extension) (changes `.js` to `.mjs`, etc.)
+- [output.distPath.js](/config/rsbuild/output#outputdistpath)
+- [output.filename.js](/config/rsbuild/output#outputfilename)
+- [autoExtension](/config/lib/auto-extension)
 
 ## Use wasm-bindgen
 
