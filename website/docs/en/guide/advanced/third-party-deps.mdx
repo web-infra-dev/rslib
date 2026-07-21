@@ -68,7 +68,7 @@ Rslib mainly uses [output.autoExternal](/config/rsbuild/output#outputautoexterna
 
 ### Override the default auto external behavior
 
-For ESM and CJS bundle outputs, Rslib enables `output.autoExternal` by default. It automatically externalizes dependencies declared in `dependencies`, `optionalDependencies`, and `peerDependencies`.
+In bundle mode, when format is esm or cjs, Rslib enables `output.autoExternal` by default, automatically externalizing dependencies declared in `dependencies`, `optionalDependencies`, and `peerDependencies`.
 
 If you want these dependencies to be bundled into the output, disable auto externalization:
 
@@ -137,7 +137,7 @@ export default defineConfig({
 });
 ```
 
-The object form can specify the request path after externalization, and is commonly used to rename externals:
+The object form can specify the request path after externalization, commonly used to rename externalized modules:
 
 ```ts
 export default defineConfig({
@@ -154,7 +154,9 @@ export default defineConfig({
 });
 ```
 
+:::tip
 Subpath imports such as `react/jsx-runtime` need to be handled separately. Configuring only `react` does not mean `react/jsx-runtime` will use the same external rule.
+:::
 
 If you want to match a group of imports, use a regular expression:
 
@@ -170,9 +172,9 @@ export default defineConfig({
 });
 ```
 
-### Configure more complex external rules
+### Use function to configure external rules
 
-If you need to decide whether to externalize a module based on the request issuer, context, or other information, configure Rspack's `externals` via [tools.rspack](/config/rsbuild/tools#toolsrspack):
+For complex scenarios where you need to decide whether to externalize a module based on the request issuer or context, configure Rspack's `externals` via [tools.rspack](/config/rsbuild/tools#toolsrspack):
 
 ```ts
 export default defineConfig({
@@ -197,4 +199,4 @@ export default defineConfig({
 });
 ```
 
-For most cases, prefer `output.autoExternal` and `output.externals`. Use `tools.rspack.externals` only when you need more advanced Rspack external capabilities. For more details, see the Rspack [Externals](https://rspack.rs/config/externals) documentation.
+For more details, see the Rspack [Externals](https://rspack.rs/config/externals) documentation.
