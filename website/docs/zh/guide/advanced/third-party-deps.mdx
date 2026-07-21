@@ -63,7 +63,7 @@ Rslib 主要通过 [output.autoExternal](/config/rsbuild/output#outputautoextern
 
 ### 覆盖默认自动 external 行为
 
-在 bundle 模式下，当 format 为 esm 或 cjs 时，Rslib 会默认启用 `output.autoExternal`，自动 external `dependencies`、`optionalDependencies` 和 `peerDependencies` 中声明的依赖。
+在 bundle 模式下，当 format 为 `'esm'` 或 `'cjs'` 时，Rslib 会默认启用 `output.autoExternal`，自动 external `dependencies`、`optionalDependencies` 和 `peerDependencies` 中声明的依赖。
 
 如果希望这些依赖被打包进产物，可以禁用自动 external：
 
@@ -98,7 +98,7 @@ export default defineConfig({
 });
 ```
 
-如果只想让少数依赖不被自动 external，可以使用 `exclude`。被排除的依赖及其子路径会被打包进产物：
+使用 [exclude](https://rsbuild.rs/zh/config/output/auto-external#exclude) 可以从 `output.autoExternal` 自动生成的 external 规则中排除指定包。如果某个包被排除，它的子路径导入也不会被 external：
 
 ```ts
 export default defineConfig({
