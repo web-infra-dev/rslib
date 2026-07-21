@@ -31,6 +31,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -48,6 +49,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -65,6 +67,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -82,6 +85,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -99,6 +103,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -116,6 +121,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -133,6 +139,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -406,6 +413,7 @@ describe('CLI options', () => {
       expect(config).toMatchInlineSnapshot(`
       {
         "_privateMeta": {
+          "configFileDependencies": [],
           "configFilePath": "<WORKSPACE>/tests/fixtures/config/cli-options/rslib.config.ts",
           "envFilePaths": [],
         },
@@ -826,9 +834,9 @@ describe('syntax', () => {
 
     const composedRsbuildConfig = await composeCreateRsbuildConfig(rslibConfig);
 
-    expect(composedRsbuildConfig[0]!.config.output?.overrideBrowserslist).toEqual(
-      ['node >= 20.19.0'],
-    );
+    expect(
+      composedRsbuildConfig[0]!.config.output?.overrideBrowserslist,
+    ).toEqual(['node >= 20.19.0']);
   });
 
   test('explicit `syntax` should take precedence over engines.node', async () => {
