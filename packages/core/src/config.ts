@@ -937,25 +937,6 @@ const composeOutputFilenameConfig = (
   const inferredJsChunkFilename = inferChunkFilename(
     userJsFilename ?? defaultJsFilenameTemplate,
   );
-  const defaultJsChunkFilename =
-    multiCompilerSuffix && inferredJsChunkFilename !== undefined
-      ? appendMultiCompilerSuffix(inferredJsChunkFilename, multiCompilerSuffix)
-      : inferredJsChunkFilename;
-  // With the default filename, runtime and other initial chunks use `filename`
-  // instead of `chunkFilename`. Keep entry filenames stable while isolating the
-  // other chunks by compiler. The first compiler keeps the original filename,
-  // and later compilers append a stable suffix based on their `lib` order.
-  // Do not infer whether compiler output paths actually overlap here.
-  const shouldSuffixInitialChunk = Boolean(multiCompilerSuffix);
-  const defaultInitialChunkFilename = shouldSuffixInitialChunk
-    ? appendMultiCompilerSuffix(defaultJsFilenameTemplate, multiCompilerSuffix)
-    : defaultJsFilenameTemplate;
-  const defaultJsFilename: Rspack.Filename = shouldSuffixInitialChunk
-    ? ({ chunk }) =>
-        isEntryChunk(chunk)
-          ? defaultJsFilenameTemplate
-          : defaultInitialChunkFilename
-    : defaultJsFilenameTemplate;
 
   // will be returned to use in redirect feature
   // only support string type for now since we can not get the return value of function
@@ -964,28 +945,60 @@ const composeOutputFilenameConfig = (
       ? extname(userJsFilename)
       : jsExtension;
 
-  const chunkFilename: RsbuildConfig =
-    defaultJsChunkFilename === undefined
-      ? {}
-      : {
-          tools: {
-            rspack: {
-              output: {
-                chunkFilename: defaultJsChunkFilename,
-              },
-            },
-          },
-        };
+  if (inferredJsChunkFilename === undefined) {
+    return {
+      config: {},
+      jsExtension: finalJsExtension,
+      dtsExtension,
+    };
+  }
 
-  const finalConfig: RsbuildConfig = userJsFilename
-    ? chunkFilename
-    : mergeRsbuildConfig(chunkFilename, {
-        output: {
-          filename: {
-            js: defaultJsFilename,
-          },
-        },
-      });
+  // Runtime and other initial chunks use `filename` instead of `chunkFilename`.
+  // For default and string filename templates, keep entry filenames stable
+  // while isolating the other chunks by compiler. The first compiler keeps the
+  // original filename, and later compilers append a stable suffix based on
+  // their `lib` order.
+  // Do not infer whether compiler output paths actually overlap here.
+  const jsFilenameTemplate =
+    typeof userJsFilename === 'string'
+      ? userJsFilename
+      : defaultJsFilenameTemplate;
+  let jsFilename: Rspack.Filename = jsFilenameTemplate;
+  let jsChunkFilename = inferredJsChunkFilename;
+
+  if (multiCompilerSuffix) {
+    const nonEntryFilename = appendMultiCompilerSuffix(
+      jsFilenameTemplate,
+      multiCompilerSuffix,
+    );
+    jsFilename = ({ chunk }) =>
+      isEntryChunk(chunk) ? jsFilenameTemplate : nonEntryFilename;
+    jsChunkFilename = appendMultiCompilerSuffix(
+      inferredJsChunkFilename,
+      multiCompilerSuffix,
+    );
+  }
+
+  const rspackOutput: NonNullable<Rspack.Configuration['output']> = {
+    chunkFilename: jsChunkFilename,
+  };
+  const finalConfig: RsbuildConfig = {
+    tools: {
+      rspack: {
+        output: rspackOutput,
+      },
+    },
+  };
+
+  if (userJsFilename === undefined) {
+    finalConfig.output = {
+      filename: {
+        js: jsFilename,
+      },
+    };
+  } else if (multiCompilerSuffix) {
+    rspackOutput.filename = jsFilename;
+  }
 
   return {
     // Do not modify MF's output hash configuration.

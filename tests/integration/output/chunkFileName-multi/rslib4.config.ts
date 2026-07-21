@@ -24,6 +24,11 @@ export default defineConfig({
           multi2: './src/runtime2.js',
         },
       },
+      output: {
+        filename: {
+          js: 'custom/[name].js',
+        },
+      },
     }),
     generateBundleEsmConfig({
       source: {
