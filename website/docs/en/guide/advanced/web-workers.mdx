@@ -1,0 +1,151 @@
+---
+description: 'Use Web Workers in Rslib ESM libraries, including Worker URL syntax and output behavior in bundle and bundleless modes.'
+---
+
+# Web Workers
+
+Rslib supports referencing Worker source files with the standard `new Worker(new URL(...))` syntax.
+
+:::note
+
+When using Web Workers, only ESM output can be generated, so [format](/config/lib/format) must be set to `'esm'` (default).
+
+:::
+
+## Create a worker
+
+### Syntax
+
+Basic Worker creation syntax:
+
+```ts title="src/index.ts"
+new Worker(new URL('./worker.ts', import.meta.url));
+```
+
+Rslib rewrites the Worker URL to reference the generated JavaScript file and emits the Worker as an ES module:
+
+```js title="dist/index.js"
+new Worker(new URL('./worker.js', import.meta.url), {
+  type: 'module',
+});
+```
+
+### Limitations
+
+Rslib relies on static analysis, so keep the `new URL()` expression inline. Passing a string or a variable is not supported:
+
+```ts
+// Not supported
+new Worker('./worker.ts');
+
+// Not supported
+const workerUrl = new URL('./worker.ts', import.meta.url);
+new Worker(workerUrl);
+```
+
+See [Rspack - Web Workers](https://rspack.rs/guide/features/web-workers) for more information about Worker syntax and its limitations.
+
+## Output modes
+
+Web Workers are supported in both [bundle and bundleless modes](/guide/basic/output-structure#bundle--bundleless).
+
+### Bundle mode
+
+In bundle mode, Rslib emits the Worker entry as a separate chunk and bundles modules imported by the Worker into that chunk.
+
+### Bundleless mode
+
+Set [lib.bundle](/config/lib/bundle) to `false` to use bundleless mode:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+    },
+  ],
+});
+```
+
+In bundleless mode, Rslib transforms each source module separately. Worker URLs and imports inside Workers are rewritten to reference the corresponding generated ESM files.
+
+For example, given the following source structure:
+
+```text
+src/
+├── index.ts
+├── worker.ts
+└── helper.ts
+```
+
+import { Tabs, Tab } from '@theme';
+
+<Tabs>
+<Tab label="src/index.ts">
+
+```ts
+export const worker = new Worker(new URL('./worker.ts', import.meta.url));
+```
+
+</Tab>
+<Tab label="src/worker.ts">
+
+```ts
+import { add } from './helper';
+
+self.onmessage = ({ data }: MessageEvent<[number, number]>) => {
+  self.postMessage(add(data[0], data[1]));
+};
+```
+
+</Tab>
+<Tab label="src/helper.ts">
+
+```ts
+export const add = (left: number, right: number) => left + right;
+```
+
+</Tab>
+</Tabs>
+
+Rslib generates the corresponding ESM files:
+
+```text
+dist/
+├── index.js
+├── worker.js
+└── helper.js
+```
+
+<Tabs>
+<Tab label="dist/index.js">
+
+```js
+const worker = new Worker(new URL('./worker.js', import.meta.url), {
+  type: 'module',
+});
+export { worker };
+```
+
+</Tab>
+<Tab label="dist/worker.js">
+
+```js
+import { add } from './helper.js';
+self.onmessage = ({ data }) => {
+  self.postMessage(add(data[0], data[1]));
+};
+```
+
+</Tab>
+<Tab label="dist/helper.js">
+
+```js
+const add = (left, right) => left + right;
+export { add };
+```
+
+</Tab>
+</Tabs>

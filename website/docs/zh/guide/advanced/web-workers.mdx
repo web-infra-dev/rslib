@@ -1,0 +1,151 @@
+---
+description: '在 Rslib 的 ESM 库中使用 Web Worker，了解 Worker URL 语法，以及 bundle 与 bundleless 模式的产物行为和限制。'
+---
+
+# Web Workers
+
+Rslib 支持使用标准的 `new Worker(new URL(...))` 语法引用 Worker 源文件。
+
+:::note
+
+使用 Web Worker 时，仅支持生成 ESM 格式的产物，因此 [format](/config/lib/format) 必须设置为 `'esm'`（默认值）。
+
+:::
+
+## 创建 Worker
+
+### 语法
+
+创建 Worker 的基本语法如下：
+
+```ts title="src/index.ts"
+new Worker(new URL('./worker.ts', import.meta.url));
+```
+
+Rslib 会重写 Worker URL，使其指向生成的 JavaScript 文件，并将 Worker 输出为 ES 模块：
+
+```js title="dist/index.js"
+new Worker(new URL('./worker.js', import.meta.url), {
+  type: 'module',
+});
+```
+
+### 限制
+
+Rslib 依赖静态分析，因此需要保持 `new URL()` 表达式内联，不支持传入字符串或变量：
+
+```ts
+// 不支持
+new Worker('./worker.ts');
+
+// 不支持
+const workerUrl = new URL('./worker.ts', import.meta.url);
+new Worker(workerUrl);
+```
+
+更多 Worker 语法及其限制，请参考 [Rspack - Web Workers](https://rspack.rs/zh/guide/features/web-workers)。
+
+## 产物模式
+
+Web Worker 同时支持 [bundle 和 bundleless 模式](/guide/basic/output-structure#bundle--bundleless)。
+
+### Bundle 模式
+
+在 bundle 模式下，Rslib 会将 Worker 入口拆分为独立 chunk，并将 Worker 导入的模块打包到该 chunk 中。
+
+### Bundleless 模式
+
+将 [lib.bundle](/config/lib/bundle) 设置为 `false` 以使用 bundleless 模式：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+    },
+  ],
+});
+```
+
+在 bundleless 模式下，Rslib 会分别转换每个源模块，并将 Worker URL 和 Worker 内部的导入重写为对应的 ESM 产物路径。
+
+例如，源码结构如下：
+
+```text
+src/
+├── index.ts
+├── worker.ts
+└── helper.ts
+```
+
+import { Tabs, Tab } from '@theme';
+
+<Tabs>
+<Tab label="src/index.ts">
+
+```ts
+export const worker = new Worker(new URL('./worker.ts', import.meta.url));
+```
+
+</Tab>
+<Tab label="src/worker.ts">
+
+```ts
+import { add } from './helper';
+
+self.onmessage = ({ data }: MessageEvent<[number, number]>) => {
+  self.postMessage(add(data[0], data[1]));
+};
+```
+
+</Tab>
+<Tab label="src/helper.ts">
+
+```ts
+export const add = (left: number, right: number) => left + right;
+```
+
+</Tab>
+</Tabs>
+
+Rslib 会生成对应的 ESM 文件：
+
+```text
+dist/
+├── index.js
+├── worker.js
+└── helper.js
+```
+
+<Tabs>
+<Tab label="dist/index.js">
+
+```js
+const worker = new Worker(new URL('./worker.js', import.meta.url), {
+  type: 'module',
+});
+export { worker };
+```
+
+</Tab>
+<Tab label="dist/worker.js">
+
+```js
+import { add } from './helper.js';
+self.onmessage = ({ data }) => {
+  self.postMessage(add(data[0], data[1]));
+};
+```
+
+</Tab>
+<Tab label="dist/helper.js">
+
+```js
+const add = (left, right) => left + right;
+export { add };
+```
+
+</Tab>
+</Tabs>
