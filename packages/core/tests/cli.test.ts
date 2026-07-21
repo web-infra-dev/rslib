@@ -170,7 +170,7 @@ describe('applyCliOptions', () => {
     expect(lib.bundle).toBe(false);
     expect(lib.dts).toBe(true);
     expect(lib.autoExtension).toBe(false);
-    expect(lib.autoExternal).toBe(false);
+    expect(lib.output?.autoExternal).toBe(false);
     expect(lib.syntax).toEqual(['node 18']);
     expect(lib.source?.tsconfigPath).toBe('./tsconfig.build.json');
     expect(lib.source?.entry).toEqual({

@@ -324,14 +324,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   externals: [
-    /^@rsbuild\\/core($|\\/|\\\\)/,
-    /^rsbuild-plugin-dts($|\\/|\\\\)/,
-    /^@microsoft\\/api-extractor($|\\/|\\\\)/,
-    /^typescript($|\\/|\\\\)/,
-    '@rsbuild/core',
-    'rsbuild-plugin-dts',
-    '@microsoft/api-extractor',
-    'typescript',
     'assert',
     'assert/strict',
     'async_hooks',
@@ -387,7 +379,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'worker_threads',
     'zlib',
     /^node:/,
-    'pnpapi'
+    'pnpapi',
+    /^@rsbuild\\/core(?:$|[/\\\\])/,
+    /^rsbuild-plugin-dts(?:$|[/\\\\])/,
+    /^@microsoft\\/api-extractor(?:$|[/\\\\])/,
+    /^typescript(?:$|[/\\\\])/
   ],
   node: {
     __dirname: false,
@@ -1198,14 +1194,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   externals: [
-    /^@rsbuild\\/core($|\\/|\\\\)/,
-    /^rsbuild-plugin-dts($|\\/|\\\\)/,
-    /^@microsoft\\/api-extractor($|\\/|\\\\)/,
-    /^typescript($|\\/|\\\\)/,
-    '@rsbuild/core',
-    'rsbuild-plugin-dts',
-    '@microsoft/api-extractor',
-    'typescript',
     'assert',
     'assert/strict',
     'async_hooks',
@@ -1261,7 +1249,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'worker_threads',
     'zlib',
     /^node:/,
-    'pnpapi'
+    'pnpapi',
+    /^@rsbuild\\/core(?:$|[/\\\\])/,
+    /^rsbuild-plugin-dts(?:$|[/\\\\])/,
+    /^@microsoft\\/api-extractor(?:$|[/\\\\])/,
+    /^typescript(?:$|[/\\\\])/
   ],
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
@@ -4298,6 +4290,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   "config": {
     "output": {
       "assetPrefix": "auto",
+      "autoExternal": true,
       "dataUriLimit": 0,
       "distPath": {
         "css": "./",
@@ -4306,14 +4299,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "jsAsync": "./",
       },
       "externals": [
-        /\\^@rsbuild\\\\/core\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^rsbuild-plugin-dts\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^@microsoft\\\\/api-extractor\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^typescript\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        "@rsbuild/core",
-        "rsbuild-plugin-dts",
-        "@microsoft/api-extractor",
-        "typescript",
         "assert",
         "assert/strict",
         "async_hooks",
@@ -4570,6 +4555,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   "config": {
     "output": {
       "assetPrefix": "auto",
+      "autoExternal": true,
       "dataUriLimit": 0,
       "distPath": {
         "css": "./",
@@ -4578,14 +4564,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "jsAsync": "./",
       },
       "externals": [
-        /\\^@rsbuild\\\\/core\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^rsbuild-plugin-dts\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^@microsoft\\\\/api-extractor\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^typescript\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        "@rsbuild/core",
-        "rsbuild-plugin-dts",
-        "@microsoft/api-extractor",
-        "typescript",
         "assert",
         "assert/strict",
         "async_hooks",

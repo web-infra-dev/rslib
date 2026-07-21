@@ -181,7 +181,7 @@ test('require ESM from CJS', async () => {
 test('user externals', async () => {
   // Ensure the priority of user externals higher than others.
   // - "memfs": userExternalsConfig > targetExternalsConfig
-  // - "lodash-es/zip": userExternalsConfig > autoExternalConfig
+  // - "lodash-es/zip": userExternalsConfig > Rsbuild autoExternal
   // - "./foo2": userExternalsConfig > bundlelessExternalConfig
 
   const fixturePath = join(__dirname, 'user-externals');

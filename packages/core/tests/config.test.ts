@@ -412,10 +412,11 @@ describe('CLI options', () => {
         "lib": [
           {
             "autoExtension": false,
-            "autoExternal": false,
+            "autoExternal": true,
             "bundle": false,
             "dts": true,
             "output": {
+              "autoExternal": false,
               "cleanDistPath": true,
               "distPath": {
                 "root": "build",
@@ -613,6 +614,42 @@ describe('Should compose create Rsbuild config correctly', () => {
         "root": "dist/cjs",
       }
     `);
+  });
+
+  test('per-lib deprecated autoExternal should override shared output.autoExternal', async () => {
+    const rslibConfig: RslibConfig = {
+      output: {
+        autoExternal: false,
+      },
+      lib: [
+        {
+          format: 'esm',
+          autoExternal: true,
+        },
+      ],
+    };
+
+    const [config] = await composeCreateRsbuildConfig(rslibConfig);
+
+    expect(config?.config.output?.autoExternal).toBe(true);
+  });
+
+  test('output.autoExternal should override deprecated autoExternal in the same config', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+          autoExternal: true,
+          output: {
+            autoExternal: false,
+          },
+        },
+      ],
+    };
+
+    const [config] = await composeCreateRsbuildConfig(rslibConfig);
+
+    expect(config?.config.output?.autoExternal).toBe(false);
   });
 });
 
