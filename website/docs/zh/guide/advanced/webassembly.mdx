@@ -12,25 +12,15 @@ Rslib 支持遵循 [WebAssembly ESM Integration](https://github.com/WebAssembly/
 
 使用 WebAssembly ESM Integration 提案语法的源码仅能构建为 ESM 产物，因此 [format](/config/lib/format) 须为 `'esm'`（默认值）。
 
-这是因为 `.wasm` 模块的编译和实例化是异步的，静态导入它的 JavaScript 模块也会成为 async module，并将异步求值传播到上游模块图。CommonJS、UMD 和 IIFE 没有与 ESM async module 等价的模块求值和导出语义，因此无法可靠地转换这类导入。
-
 :::
 
-## 在 JavaScript 中导入 wasm
-
-你可以使用 ESM 模块导入语法导入 `.wasm` 模块：
-
-```ts title="src/index.ts"
-import { add } from './add.wasm';
-
-export const sum = add(1, 2);
-```
+## 导入 WASM 模块
 
 Rslib 支持以下几种 `.wasm` 模块的导入形式。
 
 ### 静态导入与导出
 
-通过标准的 ESM 绑定访问实例化后的导出：
+通过标准的 ESM 语法导入 `.wasm` 模块并访问实例化后的导出：
 
 ```ts
 import { add } from './add.wasm';
@@ -50,7 +40,7 @@ const wasm = await import('./add.wasm');
 
 ### Source phase 导入
 
-[`import source`](https://github.com/tc39/proposal-source-phase-imports) 是 WebAssembly ESM Integration 的一部分，Rspack 对此提供了一流的支持。它导入的是编译后的 `WebAssembly.Module`，而不是实例化后的导出，可以让你使用自定义 import object 手动完成实例化：
+[`import source`](https://github.com/tc39/proposal-source-phase-imports) 是 WebAssembly ESM Integration 的一部分，它导入的是编译后的 `WebAssembly.Module`，可以让你使用自定义 import object 手动完成实例化：
 
 ```ts
 import source addModule from './add.wasm';

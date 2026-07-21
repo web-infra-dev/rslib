@@ -12,25 +12,15 @@ Rslib supports WebAssembly (`.wasm`) modules used with the [WebAssembly ESM Inte
 
 Source code that uses the WebAssembly ESM Integration proposal syntax can only be built as ESM output, so [format](/config/lib/format) must be `'esm'` (the default value).
 
-This is because compiling and instantiating a `.wasm` module is asynchronous. A JavaScript module that statically imports it also becomes an async module, and asynchronous evaluation propagates through the importing module graph. CommonJS, UMD, and IIFE do not provide module evaluation and export semantics equivalent to ESM async modules, so these imports cannot be transformed reliably.
-
 :::
 
-## Import wasm in JavaScript file
-
-You can import a `.wasm` module using the ESM module import syntax:
-
-```ts title="src/index.ts"
-import { add } from './add.wasm';
-
-export const sum = add(1, 2);
-```
+## Import WASM modules
 
 Rslib supports the following import forms for `.wasm` modules.
 
 ### Static import and export
 
-Access instantiated exports through standard ESM bindings:
+Import a `.wasm` module using standard ESM syntax and access its instantiated exports:
 
 ```ts
 import { add } from './add.wasm';
@@ -50,7 +40,7 @@ const wasm = await import('./add.wasm');
 
 ### Source phase import
 
-[`import source`](https://github.com/tc39/proposal-source-phase-imports) is part of WebAssembly ESM Integration, and Rspack provides first-class support for it. It imports the compiled `WebAssembly.Module` instead of the instantiated exports, so you can instantiate it yourself with a custom import object:
+[`import source`](https://github.com/tc39/proposal-source-phase-imports) is part of WebAssembly ESM Integration. It imports a compiled `WebAssembly.Module`, allowing you to instantiate it manually with a custom import object:
 
 ```ts
 import source addModule from './add.wasm';
