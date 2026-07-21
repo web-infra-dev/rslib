@@ -147,22 +147,15 @@ Rslib 支持以下 target：
 
 ### `bundler`
 
-JavaScript 胶水以 ES module 形式导入 `.wasm` 文件，`.wasm` 模块又反向导入胶水以获得 imports 对象。由于存在这种双向相对依赖，Preserve 模式要求产物保持 `.wasm` 文件与 JavaScript 胶水之间的相对路径和文件名。尤其需要避免通过 [output.filename.js](/config/rsbuild/output#outputfilename) 移动胶水，或通过 [autoExtension](/config/lib/auto-extension) 修改其扩展名。
-
-| `bundle` | `wasm.mode` | 是否支持                                |
-| -------- | ----------- | --------------------------------------- |
-| `true`   | `compile`   | ✅                                      |
-| `false`  | `compile`   | ✅                                      |
-| `false`  | `preserve`  | ✅ 保持胶水的相对路径和文件名不变时支持 |
-| `true`   | `preserve`  | ❌ Rslib 会拒绝此配置组合               |
+胶水 JavaScript 文件以 ES module 形式导入 `.wasm` 文件，`.wasm` 模块又反向导入胶水 JavaScript 文件以获得 imports 对象。这种双向依赖意味着 Preserve 模式下存在[反向引用约束](#preserve-mode)——需要保持胶水 JavaScript 文件的相对路径和文件名不变。Compile 模式则不受影响。
 
 ### `module`
 
-JavaScript 胶水通过 [source phase 导入](#source-phase-导入)语法导入 `.wasm` 文件，并完全在 JavaScript 中构造 imports 对象。bundle 产物请使用 Compile 模式，bundleless 产物可以使用 Preserve 模式。
+胶水 JavaScript 文件通过 [source phase 导入](#source-phase-导入)语法导入 `.wasm` 文件，并完全在 JavaScript 中构造 imports 对象。由于 `.wasm` 不会反向导入 JavaScript，不存在反向引用约束，无需关注文件名或路径配置，Compile 和 Preserve 模式都能直接工作。
 
 ### `web` / `experimental-nodejs-module`
 
-JavaScript 胶水通过 `new URL('./pkg.wasm', import.meta.url)` 加载 `.wasm` 文件。Rslib 将其作为静态资源处理，而不是 WebAssembly ESM 模块。
+胶水 JavaScript 文件通过 `new URL('./pkg.wasm', import.meta.url)` 加载 `.wasm` 文件。Rslib 将其作为静态资源处理，而不是 WebAssembly ESM 模块。
 
 此时 `wasm.mode` 不适用。
 

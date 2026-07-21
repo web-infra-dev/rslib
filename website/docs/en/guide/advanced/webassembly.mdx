@@ -147,24 +147,15 @@ Rslib supports the following targets:
 
 ### `bundler`
 
-The JavaScript glue imports the `.wasm` file as an ES module, and the `.wasm` module imports back into the glue for its imports object.
-
-Because of this two-way relative dependency, Preserve mode requires the output to keep the relative path and filename between the `.wasm` file and its JavaScript glue. In particular, avoid moving the glue with [output.filename.js](/config/rsbuild/output#outputfilename) or changing its extension with [autoExtension](/config/lib/auto-extension).
-
-| `bundle` | `wasm.mode` | Supported                                                           |
-| -------- | ----------- | ------------------------------------------------------------------- |
-| `true`   | `compile`   | ✅                                                                  |
-| `false`  | `compile`   | ✅                                                                  |
-| `false`  | `preserve`  | ✅ When the relative path and filename of the glue remain unchanged |
-| `true`   | `preserve`  | ❌ Rslib rejects this configuration combination                     |
+The JavaScript glue imports the `.wasm` file as an ES module, and the `.wasm` module imports back into the glue for its imports object. This two-way dependency means Preserve mode is subject to the [reverse-import constraints](#preserve-mode) — the glue's relative path and filename must remain unchanged. Compile mode is not affected.
 
 ### `module`
 
-The JavaScript glue imports the `.wasm` file with the [source phase import](#source-phase-import) syntax, and constructs the imports object entirely in JavaScript. Use Compile mode for bundled output, or Preserve mode for bundleless output.
+The glue JavaScript file imports the `.wasm` file with the [source phase import](#source-phase-import) syntax and constructs the imports object entirely in JavaScript. Since the `.wasm` file does not import JavaScript back, there are no reverse-import constraints — no filename or path configuration to worry about, and both Compile and Preserve modes work out of the box.
 
 ### `web` / `experimental-nodejs-module`
 
-The JavaScript glue loads the `.wasm` file through `new URL('./pkg.wasm', import.meta.url)`. Rslib treats it as a static asset instead of a WebAssembly ESM module.
+The glue JavaScript file loads the `.wasm` file through `new URL('./pkg.wasm', import.meta.url)`. Rslib treats it as a static asset instead of a WebAssembly ESM module.
 
 `wasm.mode` does not apply in this case.
 
@@ -174,4 +165,6 @@ TypeScript does not provide built-in module declarations for `.wasm` files. If y
 
 ```ts title="src/add.d.wasm.ts"
 export function add(a: number, b: number): number;
+```
+number, b: number): number;
 ```
