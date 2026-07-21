@@ -464,7 +464,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         requireResolve: false,
         requireDynamic: false,
         requireAsExpression: false,
-        worker: false
+        worker: {
+          url: 'new-url-relative'
+        }
       }
     },
     rules: [
@@ -658,7 +660,10 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           /* config.module.rule('js').oneOf('js') */
           {
             parser: {
-              url: false
+              url: false,
+              worker: {
+                url: 'new-url-relative'
+              }
             },
             use: [
               /* config.module.rule('js').oneOf('js').use('swc') */
@@ -4462,7 +4467,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 "requireAsExpression": false,
                 "requireDynamic": false,
                 "requireResolve": false,
-                "worker": false,
+                "worker": {
+                  "url": "new-url-relative",
+                },
               },
             },
           },
