@@ -27,9 +27,7 @@ description: '在 Rslib 的 bundle 模式下处理三方依赖，涵盖 external
 
 如果需要打包某些依赖，建议将它们从 `dependencies` 移动到 `devDependencies`，这相当于预打包依赖，并减少依赖安装的体积。
 
-### 示例
-
-如果项目依赖了 `foo`。
+以下是一个简单示例，假设项目依赖 `foo`：
 
 ```json title="package.json"
 {
@@ -61,13 +59,11 @@ console.info(foo);
 
 Rslib 主要通过 [output.autoExternal](/config/rsbuild/output#outputautoexternal) 和 [output.externals](/config/rsbuild/output#outputexternals) 控制三方依赖是否被打包。
 
-### 覆盖默认自动 external 行为
+### 配置 autoExternal
 
-在 bundle 模式下，当 format 为 `'esm'` 或 `'cjs'` 时，Rslib 会默认启用 `output.autoExternal`，自动 external `dependencies`、`optionalDependencies` 和 `peerDependencies` 中声明的依赖。
+如果希望覆盖 `output.autoExternal` 的上述默认行为，使这些依赖被打包进产物，可以将其设置为 `false`：
 
-如果希望这些依赖被打包进产物，可以禁用自动 external：
-
-```ts
+```ts title="rslib.config.ts"
 export default defineConfig({
   lib: [
     {
@@ -81,7 +77,7 @@ export default defineConfig({
 
 如果只想调整某几类依赖，可以使用对象形式：
 
-```ts
+```ts title="rslib.config.ts"
 export default defineConfig({
   lib: [
     {
@@ -100,7 +96,7 @@ export default defineConfig({
 
 使用 [exclude](https://rsbuild.rs/zh/config/output/auto-external#exclude) 可以从 `output.autoExternal` 自动生成的 external 规则中排除指定包。如果某个包被排除，它的子路径导入也不会被 external：
 
-```ts
+```ts title="rslib.config.ts"
 export default defineConfig({
   lib: [
     {
@@ -120,7 +116,7 @@ export default defineConfig({
 
 数组形式适合保留原始请求路径：
 
-```ts
+```ts title="rslib.config.ts"
 export default defineConfig({
   lib: [
     {
@@ -134,7 +130,7 @@ export default defineConfig({
 
 对象形式可以指定 external 后的请求路径，常用于给 external 的模块改名：
 
-```ts
+```ts title="rslib.config.ts"
 export default defineConfig({
   lib: [
     {
@@ -155,7 +151,7 @@ export default defineConfig({
 
 如果要匹配一组模块，可以使用正则：
 
-```ts
+```ts title="rslib.config.ts"
 export default defineConfig({
   lib: [
     {
@@ -169,7 +165,7 @@ export default defineConfig({
 
 在一些复杂场景中，如果需要根据请求来源、上下文等信息决定是否 external，可以通过 [tools.rspack](/config/rsbuild/tools#toolsrspack) 配置 Rspack 的 `externals`：
 
-```ts
+```ts title="rslib.config.ts"
 export default defineConfig({
   lib: [
     {
