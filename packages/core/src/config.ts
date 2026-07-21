@@ -362,7 +362,6 @@ const composeFormatConfig = ({
   umdName,
   pkgJson,
   enabledShims,
-  multiCompilerIndex,
   sourceEntry,
 }: {
   format: Format;
@@ -370,7 +369,6 @@ const composeFormatConfig = ({
   bundle?: boolean;
   umdName?: Rspack.LibraryName;
   enabledShims: DeepRequired<Shims>;
-  multiCompilerIndex: number | null;
   sourceEntry?: RsbuildConfigEntry;
 }): EnvironmentConfig => {
   const jsParserOptions: Record<string, Rspack.JavascriptParserOptions> = {
@@ -401,7 +399,12 @@ const composeFormatConfig = ({
   ].filter(Boolean);
 
   switch (format) {
-    case 'esm':
+    case 'esm': {
+      // Bundleless builds can expand a single source pattern into many entries.
+      // Bundled builds only need a shared runtime for multiple declared entries.
+      const shouldExtractRuntimeChunk =
+        bundle === false || Object.keys(sourceEntry ?? {}).length > 1;
+
       return {
         plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
         output: {
@@ -421,11 +424,9 @@ const composeFormatConfig = ({
             optimization: {
               concatenateModules: false,
               sideEffects: true,
-              runtimeChunk: getRuntimeChunkConfig({
-                bundle,
-                multiCompilerIndex,
-                sourceEntry,
-              }),
+              ...(shouldExtractRuntimeChunk
+                ? { runtimeChunk: { name: 'rslib-runtime' } }
+                : {}),
               avoidEntryIife: true,
               splitChunks: {
                 // Splitted "sync" chunks will make entry modules can't be inlined.
@@ -445,6 +446,7 @@ const composeFormatConfig = ({
           },
         },
       };
+    }
     case 'cjs':
       return {
         plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
@@ -682,39 +684,6 @@ const BundlePlugin = (): RsbuildPlugin => ({
   },
 });
 
-const RSLIB_RUNTIME_CHUNK_NAME = 'rslib-runtime';
-
-const getMultiCompilerRuntimeChunkName = (
-  multiCompilerIndex: number | null,
-): string =>
-  typeof multiCompilerIndex === 'number'
-    ? `${multiCompilerIndex}~${RSLIB_RUNTIME_CHUNK_NAME}`
-    : RSLIB_RUNTIME_CHUNK_NAME;
-
-export const getRuntimeChunkConfig = ({
-  bundle,
-  multiCompilerIndex,
-  sourceEntry,
-}: {
-  bundle: boolean;
-  multiCompilerIndex: number | null;
-  sourceEntry?: RsbuildConfigEntry;
-}): NonNullable<Rspack.Configuration['optimization']>['runtimeChunk'] => {
-  if (!bundle) {
-    return {
-      name: RSLIB_RUNTIME_CHUNK_NAME,
-    };
-  }
-
-  if (!sourceEntry || Object.keys(sourceEntry).length <= 1) {
-    return undefined;
-  }
-
-  return {
-    name: getMultiCompilerRuntimeChunkName(multiCompilerIndex),
-  };
-};
-
 const composeBundleConfig = (
   bundle: LibConfig['bundle'],
 ): { rsbuildConfig: EnvironmentConfig } => {
@@ -858,6 +827,16 @@ const composeExternalsConfig = (
   };
 };
 
+const isEntryChunk = (chunk: Rspack.PathData['chunk']): boolean => {
+  if (!chunk || !('groupsIterable' in chunk)) {
+    return false;
+  }
+
+  return [...chunk.groupsIterable].some(
+    (group) => group.isInitial() && group.getEntrypointChunk() === chunk,
+  );
+};
+
 const composeOutputFilenameConfig = (
   config: LibConfig,
   format: Format,
@@ -884,38 +863,99 @@ const composeOutputFilenameConfig = (
     return filenameHash ? '.[contenthash:10]' : '';
   };
 
-  // Copied from https://github.com/web-infra-dev/rspack/blob/2efea8673f86a562559e26a9351680e8df4d9ae9/packages/rspack/src/config/defaults.ts#L667-L680.
-  const inferChunkFilename = (filename: string): string | undefined => {
-    if (typeof filename !== 'function') {
-      const hasName = filename.includes('[name]');
-      const hasId = filename.includes('[id]');
-      const hasChunkHash = filename.includes('[chunkhash]');
-      const hasContentHash = filename.includes('[contenthash]');
-      const multiCompilerPrefix =
-        typeof multiCompilerIndex === 'number' ? `${multiCompilerIndex}~` : '';
-      // Anything changing depending on chunk is fine
+  const chunkFilenamePlaceholders = [
+    '[name]',
+    '[id]',
+    '[chunkhash]',
+    '[contenthash]',
+  ];
 
-      if (hasChunkHash || hasContentHash || hasName || hasId)
-        return filename.replace(
-          /(^|\/)([^/]*(?:\?|$))/,
-          `$1${multiCompilerPrefix}$2`,
-        );
-      // Otherwise prefix "[id]." in front of the basename to make it changing
-      return filename.replace(
-        /(^|\/)([^/]*(?:\?|$))/,
-        `$1${multiCompilerIndex}[id].$2`,
-      );
+  // Keep filename inference in sync with Rspack's default `chunkFilename`
+  // inference for strings:
+  // https://github.com/web-infra-dev/rspack/blob/e8a7bce74b5261220f0f351ebe581d5d99df54d6/packages/rspack/src/config/defaults.ts#L813-L826
+  const inferChunkFilename = (
+    filename: Rspack.Filename,
+  ): string | undefined => {
+    if (typeof filename === 'function') {
+      return undefined;
     }
 
-    return undefined;
+    const hasName = filename.includes('[name]');
+    const hasId = filename.includes('[id]');
+    const hasChunkHash = filename.includes('[chunkhash]');
+    const hasContentHash = filename.includes('[contenthash]');
+    // Anything changing depending on chunk is fine
+    if (hasChunkHash || hasContentHash || hasName || hasId) return filename;
+    // Otherwise prefix "[id]." in front of the basename to make it changing
+    return filename.replace(/(^|\/)([^/]*(?:\?|$))/, '$1[id].$2');
+  };
+
+  /**
+   * Appends a multi-compiler suffix to a Rspack filename template without
+   * resolving its placeholders. The suffix is placed after a chunk-specific
+   * placeholder in the basename when possible, or before the file extension
+   * otherwise, while preserving directories and query strings.
+   *
+   * For example, `assets/[name].[contenthash].js?raw` with `~1` becomes
+   * `assets/[name]~1.[contenthash].js?raw`, and `assets/chunk.js` becomes
+   * `assets/chunk~1.js`. This keeps `filename` for non-entry initial chunks and
+   * `chunkFilename` for async chunks in the same multi-compiler namespace.
+   */
+  const appendMultiCompilerSuffix = (
+    filename: string,
+    suffix: string,
+  ): string => {
+    const queryIndex = filename.indexOf('?');
+    const pathname =
+      queryIndex === -1 ? filename : filename.slice(0, queryIndex);
+    const query = queryIndex === -1 ? '' : filename.slice(queryIndex);
+    const basenameIndex = pathname.lastIndexOf('/') + 1;
+    const dirname = pathname.slice(0, basenameIndex);
+    const basename = pathname.slice(basenameIndex);
+    const placeholder = chunkFilenamePlaceholders.find((item) =>
+      basename.includes(item),
+    );
+    if (placeholder) {
+      return `${dirname}${basename.replace(placeholder, `${placeholder}${suffix}`)}${query}`;
+    }
+
+    const extension = extname(basename);
+    const stem = extension ? basename.slice(0, -extension.length) : basename;
+    return `${dirname}${stem}${suffix}${extension}${query}`;
   };
 
   const hash = getHash();
-  const defaultJsFilename = `[name]${hash}${jsExtension}`;
+  const multiCompilerSuffix =
+    typeof multiCompilerIndex === 'number' && multiCompilerIndex > 0
+      ? `~${multiCompilerIndex}`
+      : '';
+  const defaultJsFilenameTemplate = `[name]${hash}${jsExtension}`;
   const userJsFilename = config.output?.filename?.js;
-  const defaultJsChunkFilename = inferChunkFilename(
-    (userJsFilename as string) ?? defaultJsFilename,
+  // A custom filename function owns the naming contract. Leave
+  // `chunkFilename` unset so Rsbuild applies it to async chunks as well; users
+  // are responsible for avoiding collisions across compilers.
+  const inferredJsChunkFilename = inferChunkFilename(
+    userJsFilename ?? defaultJsFilenameTemplate,
   );
+  const defaultJsChunkFilename =
+    multiCompilerSuffix && inferredJsChunkFilename !== undefined
+      ? appendMultiCompilerSuffix(inferredJsChunkFilename, multiCompilerSuffix)
+      : inferredJsChunkFilename;
+  // With the default filename, runtime and other initial chunks use `filename`
+  // instead of `chunkFilename`. Keep entry filenames stable while isolating the
+  // other chunks by compiler. The first compiler keeps the original filename,
+  // and later compilers append a stable suffix based on their `lib` order.
+  // Do not infer whether compiler output paths actually overlap here.
+  const shouldSuffixInitialChunk = Boolean(multiCompilerSuffix);
+  const defaultInitialChunkFilename = shouldSuffixInitialChunk
+    ? appendMultiCompilerSuffix(defaultJsFilenameTemplate, multiCompilerSuffix)
+    : defaultJsFilenameTemplate;
+  const defaultJsFilename: Rspack.Filename = shouldSuffixInitialChunk
+    ? ({ chunk }) =>
+        isEntryChunk(chunk)
+          ? defaultJsFilenameTemplate
+          : defaultInitialChunkFilename
+    : defaultJsFilenameTemplate;
 
   // will be returned to use in redirect feature
   // only support string type for now since we can not get the return value of function
@@ -924,15 +964,18 @@ const composeOutputFilenameConfig = (
       ? extname(userJsFilename)
       : jsExtension;
 
-  const chunkFilename: RsbuildConfig = {
-    tools: {
-      rspack: {
-        output: {
-          chunkFilename: defaultJsChunkFilename,
-        },
-      },
-    },
-  };
+  const chunkFilename: RsbuildConfig =
+    defaultJsChunkFilename === undefined
+      ? {}
+      : {
+          tools: {
+            rspack: {
+              output: {
+                chunkFilename: defaultJsChunkFilename,
+              },
+            },
+          },
+        };
 
   const finalConfig: RsbuildConfig = userJsFilename
     ? chunkFilename
@@ -1676,7 +1719,6 @@ async function composeLibRsbuildConfig(
     bundle,
     umdName,
     enabledShims,
-    multiCompilerIndex,
     sourceEntry: config.source?.entry,
   });
   const moduleIdsConfig = composeModuleIdsConfig(format, target);

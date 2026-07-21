@@ -236,7 +236,7 @@ test('set the assets public path', async () => {
     /assets\/image\.js/,
   );
   expect(imageJs).toMatchInlineSnapshot(`
-    "import { __webpack_require__ } from "../rslib-runtime.js";
+    "import { __webpack_require__ } from "../rslib-runtime~2.js";
     const image_namespaceObject = __webpack_require__.p + "static/image/image.png";
     export default image_namespaceObject;
     "
