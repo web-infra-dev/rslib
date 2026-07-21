@@ -155,6 +155,7 @@ export type EmitDtsOptions<
   paths: Record<string, string[]>;
   banner?: string;
   footer?: string;
+  typescriptPath?: string;
 };
 
 export async function prepareDtsContext(
@@ -319,6 +320,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       extension: false,
     },
     loggerLevel,
+    typescriptPath,
   } = data;
   logger.level = loggerLevel;
 
@@ -350,6 +352,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     paths,
     banner,
     footer,
+    typescriptPath,
   };
 
   const dtsBackend = data.dtsBackend;

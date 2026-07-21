@@ -15,6 +15,11 @@ export default defineConfig({
           extension: true,
         },
       },
+      shims: {
+        esm: {
+          require: true,
+        },
+      },
     },
   ],
   source: {
@@ -23,10 +28,14 @@ export default defineConfig({
       dts: './src/dts.ts',
     },
   },
-  // externalize pre-bundled dependencies
-  output: {
-    externals: {
-      'tsconfig-paths': 'node-commonjs ../compiled/tsconfig-paths/index.js',
+  tools: {
+    rspack: {
+      resolve: {
+        alias: {
+          // Ensure tsconfig-paths resolves json5 to its CommonJS entry.
+          json5$: 'json5/lib/index.js',
+        },
+      },
     },
   },
   plugins: [pluginPublint()],

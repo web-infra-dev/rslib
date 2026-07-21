@@ -5,7 +5,6 @@ import { pathToFileURL } from 'node:url';
 import type { EmitDtsOptions } from './dts';
 import {
   color,
-  createRequireFromPackageJson,
   getTimeCost,
   processDtsFiles,
   rewriteDtsExtensions,
@@ -13,8 +12,6 @@ import {
 import type { GetTsconfigTsconfigResultForExecutable } from './types/internal';
 
 const logPrefixTsgo = color.dim('[tsgo]');
-const TYPESCRIPT_PACKAGE_NAME = 'typescript';
-
 type EmitDtsExecutableOptions =
   EmitDtsOptions<GetTsconfigTsconfigResultForExecutable>;
 
@@ -24,15 +21,13 @@ type DtsExecutableCommand = {
   displayCommand: string;
 };
 
-const getDtsExecutablePath = async (cwd: string): Promise<string> => {
+const getDtsExecutablePath = async (
+  typescriptPath: string,
+): Promise<string> => {
   try {
-    const packageJsonPath = createRequireFromPackageJson(cwd).resolve(
-      `${TYPESCRIPT_PACKAGE_NAME}/package.json`,
-    );
-
     const libPath = path.resolve(
-      path.dirname(packageJsonPath),
-      './lib/getExePath.js',
+      path.dirname(typescriptPath),
+      './getExePath.js',
     );
 
     // handle Windows paths
@@ -51,9 +46,9 @@ const getDtsExecutablePath = async (cwd: string): Promise<string> => {
 
 const resolveDtsExecutableCommand = async (
   args: string[],
-  cwd: string,
+  typescriptPath: string,
 ): Promise<DtsExecutableCommand> => {
-  const dtsExecutableFile = await getDtsExecutablePath(cwd);
+  const dtsExecutableFile = await getDtsExecutablePath(typescriptPath);
 
   return {
     command: dtsExecutableFile,
@@ -157,10 +152,14 @@ export async function emitDtsTsgo(
     paths,
     redirect,
     cwd,
+    typescriptPath,
   } = options;
 
   const args = generateTsgoArgs(configPath, declarationDir, build, isWatch);
-  const dtsExecutableCommand = await resolveDtsExecutableCommand(args, cwd);
+  const dtsExecutableCommand = await resolveDtsExecutableCommand(
+    args,
+    typescriptPath!,
+  );
 
   logger.debug(
     logPrefixTsgo,

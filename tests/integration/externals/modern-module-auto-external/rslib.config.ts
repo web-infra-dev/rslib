@@ -2,7 +2,23 @@ import { defineConfig } from '@rslib/core';
 import { generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
-  lib: [generateBundleEsmConfig()],
+  lib: [
+    generateBundleEsmConfig({
+      id: 'esm-node',
+      output: {
+        distPath: './dist/esm-node',
+        externals: { e9: 'e9' },
+      },
+    }),
+    generateBundleEsmConfig({
+      id: 'esm-web',
+      output: {
+        target: 'web',
+        distPath: './dist/esm-web',
+        externals: { e9: 'e9' },
+      },
+    }),
+  ],
   source: {
     entry: {
       index: './src/index.ts',
@@ -16,12 +32,13 @@ export default defineConfig({
         e3: true,
         e4: ['commonjs e4'],
         e5: ['e5'],
-        'lodash/add': false,
-        'lodash/drop': 'commonjs lodash/drop',
+        './local-false': false,
         e8: ['module e8'],
       },
       /e6/,
       'e7',
+      /^e10$/,
+      'e11',
     ],
   },
 });

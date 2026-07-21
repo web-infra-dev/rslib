@@ -2,7 +2,11 @@ import { logger, type LogLevel, type RsbuildPlugin } from '@rsbuild/core';
 import { type ChildProcess, fork } from 'node:child_process';
 import { extname, join } from 'node:path';
 
-import { readTypescriptVersion, resolveDtsGenerationBackend } from './backend';
+import {
+  readTypescriptVersion,
+  resolveDtsGenerationBackend,
+  resolveTypescriptPath,
+} from './backend';
 import {
   createIsolatedDtsContext,
   type IsolatedDtsContext,
@@ -68,11 +72,20 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     });
     let promiseResult: TaskResult;
     let childProcesses: ChildProcess[] = [];
-    const typescriptVersion = readTypescriptVersion(api.context.rootPath);
+    const resolvedTypescriptPath =
+      options.isolated === true
+        ? undefined
+        : resolveTypescriptPath(api.context.rootPath, options.typescriptPath);
+    const typescriptVersion = readTypescriptVersion(resolvedTypescriptPath);
+    if (resolvedTypescriptPath && !typescriptVersion) {
+      throw new Error(
+        `Failed to read the TypeScript version from ${JSON.stringify(resolvedTypescriptPath)}.`,
+      );
+    }
     const dtsBackend = resolveDtsGenerationBackend(options, typescriptVersion);
     const tsApi =
       dtsBackend === 'api-old'
-        ? loadTypescript(api.context.rootPath)
+        ? loadTypescript(api.context.rootPath, resolvedTypescriptPath)
         : undefined;
     let dtsGenOptions: DtsGenOptions | undefined;
     let isolatedDtsContext: IsolatedDtsContext | undefined;
@@ -181,6 +194,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           bundle: _bundle,
           isolated: _isolated,
           tsgo: _tsgo,
+          typescriptPath: _typescriptPath,
           ...rest
         } = options;
 
@@ -198,6 +212,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           isWatch,
           loggerLevel: loggerLevel as LogLevel,
           dtsBackend,
+          typescriptPath: resolvedTypescriptPath,
         };
 
         if (dtsBackend === 'isolated') {

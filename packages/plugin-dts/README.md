@@ -291,6 +291,39 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 
 - When set to `false`, import paths will retain their original file extensions.
 
+### typescriptPath
+
+- **Type:** `string`
+- **Default:** The resolved path of `typescript` from the project root
+
+Specifies a custom absolute path to the TypeScript module entry.
+
+If a project uses TypeScript 6 and you want to try TypeScript 7 for declaration generation, install both versions with [npm aliases](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0):
+
+```json
+{
+  "devDependencies": {
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
+  }
+}
+```
+
+Then, configure the plugin to use TypeScript 7 through the `@typescript/native` alias:
+
+```ts
+import { fileURLToPath } from 'node:url';
+import { pluginDts } from 'rsbuild-plugin-dts';
+
+export default {
+  plugins: [
+    pluginDts({
+      typescriptPath: fileURLToPath(import.meta.resolve('@typescript/native')),
+    }),
+  ],
+};
+```
+
 ### tsgo
 
 - **Type:** `boolean`
@@ -357,6 +390,7 @@ This preserves full type checking while reducing the cost of repeatedly running 
 #### Usage constraints
 
 - `isolated` is currently only available when `pluginDts` is used through Rslib, because it requires Rslib's built-in RslibPlugin.
+- `isolated` cannot be enabled together with [typescriptPath](#typescriptpath).
 - `isolated` cannot be enabled together with [tsgo](#tsgo).
 - `isolated` cannot be enabled together with [build](#build).
 - When `isolated` is enabled, [abortOnError](#abortonerror) cannot be set to `false`.

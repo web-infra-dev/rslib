@@ -22,24 +22,22 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist",
-    "compiled"
+    "dist"
   ],
   "scripts": {
     "build": "rslib",
     "dev": "rslib --watch",
-    "prebundle": "prebundle",
     "test": "rstest"
   },
   "dependencies": {
     "@ast-grep/napi": "0.37.0"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.58.9",
-    "@rsbuild/core": "~2.1.5",
+    "@microsoft/api-extractor": "^7.58.11",
+    "@rsbuild/core": "~2.1.6",
     "@rslib/tsconfig": "workspace:*",
     "get-tsconfig": "5.0.0-beta.5",
-    "magic-string": "^0.30.21",
+    "magic-string": "^1.0.0",
     "rsbuild-plugin-publint": "^1.0.0",
     "rslib": "npm:@rslib/core@0.23.2",
     "tinyglobby": "^0.2.17",
