@@ -129,7 +129,11 @@ export { add };
 
 文件名不受 [output.filenameHash](/config/rsbuild/output#outputfilenamehash) 影响。
 
-Rslib 会更新 JavaScript 中的 import 使其指向输出后的 `.wasm` 文件，包括通过 [output.filename.js](/config/rsbuild/output#outputfilename) 将 JavaScript 输出到其他目录的情况。但 WebAssembly 二进制内部的 import 保持原样——如果 `.wasm` 反向导入 JavaScript，请勿移动或重命名被导入的 JavaScript 文件。
+Rslib 会更新 JavaScript 中的 import 使其指向输出后的 `.wasm` 文件，包括通过 [output.filename.js](/config/rsbuild/output#outputfilename) 将 JavaScript 输出到其他目录的情况。但 WebAssembly 二进制内部的 import 保持原样——如果 `.wasm` 反向导入 JavaScript（如 wasm-bindgen `bundler` target），请避免以下会改变 JavaScript 相对路径或文件名的配置：
+
+- [output.distPath.js](/config/rsbuild/output#outputdistpath)（将 JS 移到子目录）
+- [output.filename.js](/config/rsbuild/output#outputfilename)（改变文件名模板）
+- [autoExtension](/config/lib/auto-extension)（将 `.js` 改为 `.mjs` 等）
 
 ## 使用 wasm-bindgen
 
