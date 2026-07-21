@@ -128,7 +128,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
         "<ROOT>/tests/integration/vue/dist/bundleless/Button/Button.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
       import "./style.css";
       import "./Button.css";
-      import { __webpack_require__ } from "../rslib-runtime.js";
+      import { __webpack_require__ } from "../rslib-runtime~0.js";
       __webpack_require__.add({
           <MODULE_ID> (__unused_rspack_module, exports) {
               exports.A = (sfc, props)=>{
@@ -179,7 +179,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
         "<ROOT>/tests/integration/vue/dist/bundleless/index.js": "export { default as Button } from "./Button/index.js";
       export { default as Card } from "./Card.js";
       ",
-        "<ROOT>/tests/integration/vue/dist/bundleless/rslib-runtime.js": "var __webpack_modules__ = {};
+        "<ROOT>/tests/integration/vue/dist/bundleless/rslib-runtime~0.js": "var __webpack_modules__ = {};
       var __webpack_module_cache__ = {};
       function __webpack_require__(moduleId) {
           var cachedModule = __webpack_module_cache__[moduleId];

@@ -926,9 +926,7 @@ const composeOutputFilenameConfig = (
 
   const hash = getHash();
   const multiCompilerSuffix =
-    typeof multiCompilerIndex === 'number' && multiCompilerIndex > 0
-      ? `~${multiCompilerIndex}`
-      : '';
+    typeof multiCompilerIndex === 'number' ? `~${multiCompilerIndex}` : '';
   const defaultJsFilenameTemplate = `[name]${hash}${jsExtension}`;
   const userJsFilename = config.output?.filename?.js;
   // A custom filename function owns the naming contract. Leave
@@ -955,9 +953,8 @@ const composeOutputFilenameConfig = (
 
   // Runtime and other initial chunks use `filename` instead of `chunkFilename`.
   // For default and string filename templates, keep entry filenames stable
-  // while isolating the other chunks by compiler. The first compiler keeps the
-  // original filename, and later compilers append a stable suffix based on
-  // their `lib` order.
+  // while isolating the other chunks by compiler. Multi-compiler builds append
+  // a stable suffix based on each compiler's `lib` index, starting from `~0`.
   // Do not infer whether compiler output paths actually overlap here.
   const jsFilenameTemplate =
     typeof userJsFilename === 'string'

@@ -397,8 +397,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
     devtoolFallbackModuleFilenameTemplate: '[relative-resource-path]?[hash]',
     path: '<WORKSPACE>/dist',
-    filename: '[name].js',
-    chunkFilename: '[name].js',
+    filename: function () { /* omitted long function */ },
+    chunkFilename: '[name]~0.js',
     publicPath: 'auto',
     library: {
       type: 'modern-module'
@@ -4371,7 +4371,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "pnpapi",
       ],
       "filename": {
-        "js": "[name].js",
+        "js": [Function],
       },
       "filenameHash": false,
       "minify": {
@@ -4518,7 +4518,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         [Function],
         {
           "output": {
-            "chunkFilename": "[name].js",
+            "chunkFilename": "[name]~0.js",
           },
         },
         {

@@ -14,7 +14,7 @@ describe('output config', () => {
       expect(rspackConfig.length).toBeGreaterThanOrEqual(2);
       expect(rspackConfig[0]!.optimization?.runtimeChunk).toBeUndefined();
       expect(rspackConfig[1]!.optimization?.runtimeChunk).toBeUndefined();
-      expect(rspackConfig[0]!.output?.chunkFilename).toBe('[name].js');
+      expect(rspackConfig[0]!.output?.chunkFilename).toBe('[name]~0.js');
       expect(rspackConfig[1]!.output?.chunkFilename).toBe('[name]~1.js');
 
       const esm0BaseNames = (files.esm0 ?? []).map((p) => basename(p));
@@ -22,11 +22,13 @@ describe('output config', () => {
 
       expect(esm0BaseNames).toContain('lib1.js');
       expect(esm1BaseNames).toContain('lib2.js');
-      expect(esm0BaseNames.some((name) => /^\d+\.js$/.test(name))).toBe(false);
+      expect(esm0BaseNames.some((name) => /^\d+~0\.js$/.test(name))).toBe(
+        false,
+      );
       expect(esm1BaseNames.some((name) => /^\d+~1\.js$/.test(name))).toBe(
         false,
       );
-      expect(esm0BaseNames.some((n) => n === 'shared.js')).toBeTruthy();
+      expect(esm0BaseNames.some((n) => n === 'shared~0.js')).toBeTruthy();
       expect(esm1BaseNames.some((n) => n === 'shared~1.js')).toBeTruthy();
     });
 
@@ -38,11 +40,8 @@ describe('output config', () => {
       });
 
       expect(rspackConfig.length).toBeGreaterThanOrEqual(2);
-      expect(rspackConfig[0]!.output?.filename).toBe(
-        'static/js/[name].[contenthash:10].js',
-      );
       expect(rspackConfig[0]!.output?.chunkFilename).toBe(
-        'static/js/[name].[contenthash:10].js',
+        'static/js/[name]~0.[contenthash:10].js',
       );
       expect(rspackConfig[1]!.output?.chunkFilename).toBe(
         'static/js/[name]~1.[contenthash:10].js',
@@ -52,7 +51,7 @@ describe('output config', () => {
       const esm1BaseNames = (files.esm1 ?? []).map((p) => basename(p));
 
       expect(
-        esm0BaseNames.some((n) => /^shared\.[a-f0-9]+\.js$/.test(n)),
+        esm0BaseNames.some((n) => /^shared~0\.[a-f0-9]+\.js$/.test(n)),
       ).toBeTruthy();
       expect(
         esm1BaseNames.some((n) => /^shared~1\.[a-f0-9]+\.js$/.test(n)),
@@ -73,16 +72,15 @@ describe('output config', () => {
       });
 
       expect(rspackConfig.length).toBeGreaterThanOrEqual(2);
-      expect(rspackConfig[0]!.output?.filename).toBe('static1/js/[name].js');
       expect(rspackConfig[0]!.output?.chunkFilename).toBe(
-        'static1/js/[name].js',
+        'static1/js/[name]~0.js',
       );
       expect(rspackConfig[1]!.output?.chunkFilename).toBe(
         'static2/js/[name]~1.[contenthash:10].js',
       );
 
       expect(
-        files.esm0!.some((n) => /static1\/js\/shared\.js$/.test(n)),
+        files.esm0!.some((n) => /static1\/js\/shared~0\.js$/.test(n)),
       ).toBeTruthy();
       expect(
         files.esm0!.some((n) => /static1\/js\/lib1\.js$/.test(n)),
@@ -97,7 +95,7 @@ describe('output config', () => {
       ).toBeTruthy();
     });
 
-    test('should suffix non-entry initial chunks for later compilers', async () => {
+    test('should suffix non-entry initial chunks for all compilers', async () => {
       const fixturePath = join(__dirname, 'chunkFileName-multi');
       const { files, rspackConfig } = await buildAndGetResults({
         fixturePath,
@@ -126,8 +124,9 @@ describe('output config', () => {
       expect(esm0BaseNames).toContain('runtime1.js');
       expect(esm1BaseNames).toContain('runtime2.js');
       expect(esm3BaseNames).toContain('manual.js');
-      expect(esm0BaseNames.some((name) => /^\d+\.js$/.test(name))).toBe(true);
+      expect(esm0BaseNames.some((name) => /^\d+~0\.js$/.test(name))).toBe(true);
       expect(esm1BaseNames.some((name) => /^\d+~1\.js$/.test(name))).toBe(true);
+      expect(esm0BaseNames).toContain('shared~0.js');
       expect(esm3BaseNames).toContain('manual-runtime~3.js');
       expect(esm3BaseNames).toContain('shared~3.js');
       expect(esm2OutputFiles).toEqual(

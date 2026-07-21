@@ -595,7 +595,7 @@ describe('Should compose create Rsbuild config correctly', () => {
     expect(
       bundlerConfigs.map((config) => config.output?.chunkFilename),
     ).toEqual([
-      '[name].js',
+      '[name]~0.js',
       '[name]~1.js',
       'assets/[id]~2.file.js?asset=/x',
       '[id]~3.[contenthash:10].js',
