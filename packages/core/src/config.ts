@@ -1740,22 +1740,19 @@ export async function composeCreateRsbuildConfig(
       );
     }
 
-    const normalizedLibConfig =
-      libConfig.autoExternal !== undefined &&
-      libConfig.output?.autoExternal === undefined
-        ? {
-            ...libConfig,
-            output: {
-              ...libConfig.output,
-              autoExternal: libConfig.autoExternal,
-            },
-          }
-        : libConfig;
-
     const userConfig = mergeRsbuildConfig<LibConfig>(
       sharedRsbuildConfig,
-      normalizedLibConfig,
+      libConfig,
     );
+
+    // Deprecation shim: migrate lib.autoExternal → output.autoExternal
+    if (
+      libConfig.autoExternal !== undefined &&
+      libConfig.output?.autoExternal === undefined
+    ) {
+      userConfig.output ??= {};
+      userConfig.output.autoExternal = libConfig.autoExternal;
+    }
 
     // Exe bundles everything into a single binary, so disable automatic externals
     // after user config is merged to prevent users from re-enabling it.
