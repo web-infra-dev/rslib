@@ -6,11 +6,11 @@ import { Tabs, Tab } from '@theme';
 
 # Wasm
 
-Rslib 提供了对 WebAssembly（`.wasm`）模块的原生支持，允许你在项目中通过标准 ESM 语法直接导入 `.wasm` 文件，遵循 [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 规范。
+Rslib 原生支持 WebAssembly（WASM）模块，允许你在项目中通过 [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 提案定义的 ESM 导入方式，直接导入和使用 `.wasm` 文件。
 
 :::warning
 
-使用 WebAssembly ESM Integration 语法的源码仅能构建为 ESM 产物，因此 [format](/config/lib/format) 须为 `'esm'`（默认值）。
+使用 WebAssembly ESM Integration 导入 `.wasm` 模块时，仅支持生成 ESM 格式的产物，因此 [format](/config/lib/format) 必须设置为 `'esm'`（默认值）。
 
 :::
 
@@ -40,7 +40,7 @@ const wasm = await import('./add.wasm');
 
 ### Source phase 导入
 
-[`import source`](https://github.com/tc39/proposal-source-phase-imports) 是 WebAssembly ESM Integration 的一部分，它导入的是编译后的 `WebAssembly.Module`，可以让你使用自定义 import object 手动完成实例化：
+你可以使用 [Source Phase Imports](https://github.com/tc39/proposal-source-phase-imports) 获取编译后的 `WebAssembly.Module`，并通过自定义 import object 手动完成实例化：
 
 ```ts
 import source addModule from './add.wasm';
@@ -50,7 +50,7 @@ const { instance } = await WebAssembly.instantiate(addModule, {
 });
 ```
 
-也支持通过 `import.source()` 进行动态 source phase 导入：
+你也可以使用 `import.source()` 动态获取编译后的 `WebAssembly.Module`：
 
 ```ts
 const addModule = await import.source('./add.wasm');
@@ -58,25 +58,22 @@ const addModule = await import.source('./add.wasm');
 
 :::note
 
-TypeScript 目前不解析 `import source` 与 `import.source()`。请将 source phase 导入写在 JavaScript 文件中，或使用支持该语法的工具链。
+TypeScript 目前无法解析 `import source` 和 `import.source()`。请在 JavaScript 文件中使用这些语法，或选择支持它们的工具链。
 
 :::
 
-## 产物
+## 输出模式
 
-你可以通过 [lib.wasm.mode](/config/lib/wasm#wasmmode) 控制 `.wasm` 模块的产物形态：
+你可以通过 [lib.wasm.mode](/config/lib/wasm#wasmmode) 选择 `.wasm` 模块的输出模式。具体使用哪种模式，取决于 [bundle](/config/lib/bundle) 配置以及消费方是否支持 WebAssembly ESM Integration：
 
-- **Compile**：Rslib 解析 `.wasm` 模块，生成加载和实例化 WebAssembly 的 JavaScript 胶水代码，并将二进制文件作为静态资源输出。消费方无需支持 ESM Integration。
-- **Preserve**：Rslib 在产物 JavaScript 中保留 `.wasm` import，并将二进制文件原样输出。下游构建工具或运行时负责解析和加载 `.wasm` 模块。Preserve 模式要求 [bundle](/config/lib/bundle) 为 `false`。
+- 当 `bundle` 为 `true` 时，仅支持 `compile` 模式。
+- 当 `bundle` 为 `false` 时：
+  - 如果产物由支持 WebAssembly ESM Integration 的下游构建工具（如 Rsbuild），或原生支持该特性的目标运行时（如 [Node.js](https://nodejs.org/api/esm.html#wasm-modules) `^22.19.0 || >=24.5.0`）消费，使用 `preserve` 模式（默认）。消费方负责解析和加载 `.wasm` 模块。
+  - 如果消费方不支持 WebAssembly ESM Integration，或不希望依赖消费方处理 `.wasm` 模块，使用 `compile` 模式。
 
-| bundle  | 默认 mode  | 可选 mode              |
-| ------- | ---------- | ---------------------- |
-| `true`  | `compile`  | 仅 `compile`           |
-| `false` | `preserve` | `compile` 或 `preserve` |
+### Compile 模式
 
-如果产物被浏览器等运行时直接消费，使用 Compile 模式。如果 bundleless 产物会交给支持 ESM Integration 的构建工具（如 Rsbuild）继续处理，或目标运行时（如 [Node.js](https://nodejs.org/api/esm.html#wasm-modules) `^22.19.0 || >=24.5.0`）原生支持该特性，可以使用 Preserve 模式。
-
-### Compile mode
+Rslib 解析每个 `.wasm` 模块，生成加载和实例化该模块所需的 JavaScript 胶水代码，并将二进制文件作为静态资源输出。
 
 二进制文件输出到 [output.distPath.wasm](/config/rsbuild/output#outputdistpath)（默认 `static/wasm`），文件名带 content hash：
 
@@ -106,12 +103,14 @@ dist
 </Tab>
 </Tabs>
 
-生成的加载运行时由 [output.target](/config/rsbuild/output#outputtarget) 决定：
+生成的加载代码取决于 [output.target](/config/rsbuild/output#outputtarget)：
 
-- `web` target 会通过 `fetch` 加载 `.wasm`。
-- `node` target 会通过 Node.js 的异步文件系统 API 加载 `.wasm`。
+- `web`：使用 `fetch` 加载 `.wasm` 文件。
+- `node`：使用 Node.js 异步文件系统 API 加载 `.wasm` 文件。
 
-### Preserve mode
+### Preserve 模式
+
+Rslib 在 JavaScript 产物中保留对 `.wasm` 模块的 import 语句，并原样输出二进制文件。
 
 `.wasm` 文件按源码相对路径和原文件名输出：
 
@@ -128,13 +127,17 @@ import { add } from './add.wasm';
 export { add };
 ```
 
-文件名不受 [output.filenameHash](/config/rsbuild/output#outputfilenamehash) 影响。
+:::note .wasm 导入 JavaScript 时的路径限制
 
-Rslib 会更新 JavaScript 中的 import 使其指向输出后的 `.wasm` 文件。但 WebAssembly 二进制内部的 import 保持原样——如果 `.wasm` 反向导入 JavaScript（如 wasm-bindgen `bundler` target），请避免以下会改变 JavaScript 相对路径或文件名的配置：
+在 `preserve` 模式下，`.wasm` 文件名不受 [output.filenameHash](/config/rsbuild/output#outputfilenamehash) 影响。
+
+Rslib 会更新 JavaScript 中对 `.wasm` 文件的 import，使其指向输出后的文件，但不会修改 WebAssembly 二进制内部的 import。如果 `.wasm` 模块反向导入 JavaScript（例如使用 wasm-bindgen 的 `bundler` target），请避免使用以下会改变 JavaScript 输出路径或文件名的配置：
 
 - [output.distPath.js](/config/rsbuild/output#outputdistpath)
 - [output.filename.js](/config/rsbuild/output#outputfilename)
 - [autoExtension](/config/lib/auto-extension)
+
+:::
 
 ## 使用 wasm-bindgen
 
@@ -148,11 +151,11 @@ Rslib 支持以下 target：
 
 ### `bundler`
 
-胶水 JavaScript 文件以 ES module 形式导入 `.wasm` 文件，`.wasm` 模块又反向导入胶水 JavaScript 文件以获得 imports 对象。这种双向依赖意味着 Preserve 模式下存在[反向引用约束](#preserve-mode)——需要保持胶水 JavaScript 文件的相对路径和文件名不变。Compile 模式则不受影响。
+胶水 JavaScript 文件以 ES module 形式导入 `.wasm` 文件，`.wasm` 模块又反向导入胶水 JavaScript 文件以获得 imports 对象。这种双向依赖意味着 Preserve 模式需要遵守[上述路径限制](#preserve-模式)，即保持胶水 JavaScript 文件的相对路径和文件名不变。Compile 模式不受此限制。
 
 ### `module`
 
-胶水 JavaScript 文件通过 [source phase 导入](#source-phase-导入)语法导入 `.wasm` 文件，并完全在 JavaScript 中构造 imports 对象。由于 `.wasm` 不会反向导入 JavaScript，不存在反向引用约束，无需关注文件名或路径配置，Compile 和 Preserve 模式都能直接工作。
+胶水 JavaScript 文件通过 [source phase 导入](#source-phase-导入)语法导入 `.wasm` 文件，并完全在 JavaScript 中构造 imports 对象。由于 `.wasm` 不会导入 JavaScript，因此无需保持 JavaScript 文件的输出路径和文件名，Compile 和 Preserve 模式都能直接工作。
 
 ### `web` / `experimental-nodejs-module`
 
