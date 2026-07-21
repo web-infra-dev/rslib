@@ -12,7 +12,9 @@ type Wasm = {
 };
 ```
 
-- **默认值：** `undefined`
+- **默认值：**
+  - 当 [bundle](/config/lib/bundle) 为 `true` 时，为 `{ mode: 'compile' }`
+  - 当 [bundle](/config/lib/bundle) 为 `false` 时，为 `{ mode: 'preserve' }`
 
 配置 Rslib 如何处理遵循 [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 提案语法使用的 `.wasm` 模块。
 
@@ -25,7 +27,7 @@ type Wasm = {
 
 控制 `.wasm` 模块的产物形态。
 
-- `'compile'`：Rspack 会解析 `.wasm` 模块，并生成 JavaScript 胶水代码与运行时加载逻辑。适用于产物被 Node.js、浏览器等运行时直接消费的场景。
+- `'compile'`：Rslib 解析 `.wasm` 模块，并生成 JavaScript 胶水代码与运行时加载逻辑。适用于产物被 Node.js、浏览器等运行时直接消费的场景。
 - `'preserve'`：Rslib 会在产物 JavaScript 中保留 `.wasm` 的 import 语句，并将二进制文件原样输出。此模式要求 [bundle](/config/lib/bundle) 为 `false`，适用于产物再由其他构建工具消费，或运行时原生支持 WebAssembly ESM Integration 的场景。
 
 在 preserve 模式下，`.wasm` 文件会保持源码相对路径与原文件名。[output.distPath.wasm](/config/rsbuild/output#outputdistpath) 与 [output.filenameHash](/config/rsbuild/output#outputfilenamehash) 不会影响 preserve 模式下的 `.wasm` 文件。
