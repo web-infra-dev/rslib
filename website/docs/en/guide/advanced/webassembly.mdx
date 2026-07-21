@@ -6,11 +6,11 @@ import { Tabs, Tab } from '@theme';
 
 # WebAssembly
 
-Rslib supports WebAssembly (`.wasm`) modules used with the [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) proposal syntax.
+Rslib provides native support for WebAssembly (`.wasm`) modules, allowing you to import `.wasm` files directly using standard ESM syntax following the [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) specification.
 
 :::warning
 
-Source code that uses the WebAssembly ESM Integration proposal syntax can only be built as ESM output, so [format](/config/lib/format) must be `'esm'` (the default value).
+Source code that uses WebAssembly ESM Integration syntax can only be built as ESM output, so [format](/config/lib/format) must be `'esm'` (the default value).
 
 :::
 

@@ -6,11 +6,11 @@ import { Tabs, Tab } from '@theme';
 
 # WebAssembly
 
-Rslib 支持遵循 [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 提案语法使用的 WebAssembly（`.wasm`）模块。
+Rslib 提供了对 WebAssembly（`.wasm`）模块的原生支持，允许你在项目中通过标准 ESM 语法直接导入 `.wasm` 文件，遵循 [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 规范。
 
 :::warning
 
-使用 WebAssembly ESM Integration 提案语法的源码仅能构建为 ESM 产物，因此 [format](/config/lib/format) 须为 `'esm'`（默认值）。
+使用 WebAssembly ESM Integration 语法的源码仅能构建为 ESM 产物，因此 [format](/config/lib/format) 须为 `'esm'`（默认值）。
 
 :::
 
