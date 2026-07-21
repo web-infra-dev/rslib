@@ -17,6 +17,7 @@ type Dts =
       autoExtension?: boolean;
       alias?: Record<string, string>;
       isolated?: boolean;
+      typescriptPath?: string;
       tsgo?: boolean;
     }
   | boolean;
@@ -270,6 +271,43 @@ At this time, when [redirect.dts.path](/config/lib/redirect#redirectdtspath) is 
 + export * from './compiled/foo';
 ```
 
+### dts.typescriptPath
+
+- **Type:** `string`
+- **Default:** The resolved path of `typescript` from the project root
+
+Specifies a custom absolute path to the TypeScript module entry.
+
+If a project uses TypeScript 6 and you want to try TypeScript 7 for declaration generation, install both versions with [npm aliases](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0):
+
+```json title="package.json"
+{
+  "devDependencies": {
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
+  }
+}
+```
+
+Then, configure Rslib to use TypeScript 7 through the `@typescript/native` alias:
+
+```ts title="rslib.config.ts"
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      dts: {
+        typescriptPath: fileURLToPath(
+          import.meta.resolve('@typescript/native'),
+        ),
+      },
+    },
+  ],
+});
+```
+
 ### dts.tsgo
 
 - **Type:** `boolean`
@@ -277,7 +315,7 @@ At this time, when [redirect.dts.path](/config/lib/redirect#redirectdtspath) is 
 
 Whether to generate declaration files using [native TypeScript](https://github.com/microsoft/typescript-go).
 
-When unset, Rslib enables this option automatically when TypeScript 7+ is detected.
+When unset, Rslib enables this option automatically when TypeScript 7+ is detected. When [dts.typescriptPath](#dtstypescriptpath) is configured, Rslib determines whether to enable `tsgo` automatically based on the resolved TypeScript version.
 
 <PackageManagerTabs command="add typescript@latest -D" />
 
@@ -328,6 +366,7 @@ When enabling this option, we recommend also enabling [isolatedDeclarations](htt
 
 :::info Usage constraints
 
+- `dts.isolated` cannot be enabled together with [dts.typescriptPath](/config/lib/dts#dtstypescriptpath).
 - `dts.isolated` cannot be enabled together with [dts.tsgo](/config/lib/dts#dtstsgo).
 - `dts.isolated` cannot be enabled together with [dts.build](/config/lib/dts#dtsbuild).
 - When `dts.isolated` is enabled, [dts.abortOnError](/config/lib/dts#dtsabortonerror) cannot be set to `false`.

@@ -127,8 +127,9 @@ export async function emitDtsTsc(
     footer,
     paths,
     redirect,
+    typescriptPath,
   } = options;
-  const ts = loadTypescript(cwd);
+  const ts = loadTypescript(cwd, typescriptPath);
   const formatHost = createFormatHost(ts);
   const {
     options: rawCompilerOptions,

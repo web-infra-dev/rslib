@@ -60,6 +60,29 @@ describe('dts when bundle: false', () => {
     `);
   });
 
+  test('typescriptPath', async () => {
+    const fixturePath = join(__dirname, 'typescript-path');
+    const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });
+
+    expect(files.esm0).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle-false/typescript-path/dist/ts6/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/typescript-path/dist/ts6/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/typescript-path/dist/ts6/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/typescript-path/dist/ts6/utils/strings.d.ts",
+      ]
+    `);
+
+    expect(files.esm1).toMatchInlineSnapshot(`
+      [
+        "<ROOT>/tests/integration/dts/bundle-false/typescript-path/dist/ts7/index.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/typescript-path/dist/ts7/sum.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/typescript-path/dist/ts7/utils/numbers.d.ts",
+        "<ROOT>/tests/integration/dts/bundle-false/typescript-path/dist/ts7/utils/strings.d.ts",
+      ]
+    `);
+  });
+
   test('distPath', async () => {
     const fixturePath = join(__dirname, 'dist-path');
     const { files } = await buildAndGetResults({ fixturePath, type: 'dts' });

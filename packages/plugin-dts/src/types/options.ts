@@ -26,5 +26,6 @@ export type PluginDtsOptions = {
   banner?: string;
   footer?: string;
   redirect?: DtsRedirect;
+  typescriptPath?: string;
   tsgo?: boolean;
 };

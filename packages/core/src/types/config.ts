@@ -104,6 +104,12 @@ export type Dts =
        */
       isolated?: boolean;
       /**
+       * A custom absolute path to the TypeScript module entry.
+       * @defaultValue The resolved path of `typescript` from the project root.
+       * @see {@link https://rslib.rs/config/lib/dts#dtstypescriptpath}
+       */
+      typescriptPath?: string;
+      /**
        * Whether to generate declaration files with `tsgo`.
        * @experimental
        * @defaultValue `true` when the installed `typescript` package is version 7 or higher, otherwise `false`.
