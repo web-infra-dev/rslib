@@ -62,27 +62,23 @@ TypeScript 目前不解析 `import source` 与 `import.source()`。请将 source
 
 :::
 
-## 配置产物
+## 产物
 
-Rslib 提供两种 `.wasm` 模块的产物形态，通过 [lib.wasm.mode](/config/lib/wasm#wasmmode) 控制。
+你可以通过 [lib.wasm.mode](/config/lib/wasm#wasmmode) 控制 `.wasm` 模块的产物形态：
 
-- Compile 模式：Rspack 在构建时处理 `.wasm` 导入，生成加载和实例化 WebAssembly 的 JavaScript 运行时代码，并将二进制文件作为静态资源输出。消费方无需支持 ESM Integration。
-- Preserve 模式：在 bundleless 构建中，Rslib 会在 JavaScript 产物中保留 `.wasm` ESM Integration 导入，并原样输出二进制文件。下游构建工具或运行时负责解析和加载 `.wasm` 模块。
+- **Compile**：Rslib 解析 `.wasm` 模块，生成加载和实例化 WebAssembly 的 JavaScript 胶水代码，并将二进制文件作为静态资源输出。消费方无需支持 ESM Integration。
+- **Preserve**：Rslib 在产物 JavaScript 中保留 `.wasm` import，并将二进制文件原样输出。下游构建工具或运行时负责解析和加载 `.wasm` 模块。Preserve 模式要求 [bundle](/config/lib/bundle) 为 `false`。
 
-默认值取决于 [bundle](/config/lib/bundle)：
+| bundle  | 默认 mode  | 可选 mode              |
+| ------- | ---------- | ---------------------- |
+| `true`  | `compile`  | 仅 `compile`           |
+| `false` | `preserve` | `compile` 或 `preserve` |
 
-| bundle  | 默认 mode  |
-| ------- | ---------- |
-| `true`  | `compile`  |
-| `false` | `preserve` |
-
-如果产物需要被浏览器等 JavaScript 运行时直接消费，你应该使用 Compile 模式。如果 bundleless 产物会交给支持 ESM Integration 的构建工具（如 Rsbuild）继续处理，或目标运行时（如 [Node.js](https://nodejs.org/api/esm.html#wasm-modules) `^22.19.0 || >=24.5.0`）原生支持该特性，你可以使用 Preserve 模式。Rslib 不支持同时设置 `bundle: true` 与 `wasm.mode: 'preserve'`；bundle 产物请使用 Compile 模式。
+如果产物被浏览器等运行时直接消费，使用 Compile 模式。如果 bundleless 产物会交给支持 ESM Integration 的构建工具（如 Rsbuild）继续处理，或目标运行时（如 [Node.js](https://nodejs.org/api/esm.html#wasm-modules) `^22.19.0 || >=24.5.0`）原生支持该特性，可以使用 Preserve 模式。
 
 ### Compile mode
 
-在 Compile 模式下，Rspack 会解析 `.wasm` 模块，并生成负责加载和实例化 WebAssembly 的 JavaScript 胶水代码。
-
-二进制文件会作为资源输出到 [output.distPath.wasm](/config/rsbuild/output#outputdistpath)（默认 `static/wasm`），并使用带 content hash 的文件名：
+二进制文件输出到 [output.distPath.wasm](/config/rsbuild/output#outputdistpath)（默认 `static/wasm`），文件名带 content hash：
 
 <Tabs>
 <Tab label="bundle">
@@ -117,9 +113,7 @@ dist
 
 ### Preserve mode
 
-Preserve 模式要求 [bundle](/config/lib/bundle) 为 `false`。Rslib 不会生成任何 WebAssembly 加载运行时，而是在产物 JavaScript 中保留真实的 `.wasm` import，并将二进制文件原样输出。
-
-`.wasm` 文件按源码相对路径和原文件名 copy 到产物目录：
+`.wasm` 文件按源码相对路径和原文件名输出：
 
 ```
 dist
@@ -133,9 +127,9 @@ import { add } from './add.wasm';
 export { add };
 ```
 
-Preserve 模式下的 `.wasm` 文件名不受 [output.filenameHash](/config/rsbuild/output#outputfilenamehash) 影响。
+文件名不受 [output.filenameHash](/config/rsbuild/output#outputfilenamehash) 影响。
 
-Rslib 会更新 JavaScript 中的 import，使其继续指向输出后的 `.wasm` 文件，包括通过 [output.filename.js](/config/rsbuild/output#outputfilename) 将 JavaScript 输出到其他目录的情况。但是，WebAssembly 二进制会保持原样。如果它会反向导入 JavaScript，这些 import 仍会使用原有的相对路径和文件名。此时请勿在产物中移动或重命名被导入的 JavaScript 文件。例如，将 `index.js` 改为 `js/index.js` 或 `index.mjs`，会导致 WebAssembly 内部的 `./index.js` import 失效。
+Rslib 会更新 JavaScript 中的 import 使其指向输出后的 `.wasm` 文件，包括通过 [output.filename.js](/config/rsbuild/output#outputfilename) 将 JavaScript 输出到其他目录的情况。但 WebAssembly 二进制内部的 import 保持原样——如果 `.wasm` 反向导入 JavaScript，请勿移动或重命名被导入的 JavaScript 文件。
 
 ## 使用 wasm-bindgen
 
