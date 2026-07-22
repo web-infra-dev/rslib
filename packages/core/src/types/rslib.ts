@@ -1,7 +1,8 @@
 import type {
   BuildResult,
-  LoadEnvOptions,
   InspectConfigResult as RsbuildInspectConfigResult,
+  LoadEnvOptions,
+  RestartFn,
   RsbuildInstance,
   RsbuildMode,
   StartDevServerResult,
@@ -117,4 +118,8 @@ export type CreateRslibOptions = {
    * @default false
    */
   loadEnv?: boolean | LoadEnvOptions;
+  /**
+   * Function used to restart the current dev server or watch build.
+   */
+  restart?: RestartFn;
 };

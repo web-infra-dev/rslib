@@ -1,5 +1,5 @@
 import path from 'node:path';
-import type { RsbuildEntry } from '@rsbuild/core';
+import type { RestartFn, RsbuildEntry } from '@rsbuild/core';
 import { createRslib } from '../createRslib';
 import { loadConfig as baseLoadConfig } from '../loadConfig';
 import type {
@@ -158,22 +158,59 @@ const loadConfig = async (
   return config;
 };
 
-export async function init(): Promise<RslibInstance> {
+const restart: RestartFn = async ({ action }) => {
+  const rslib = await init({ isRestart: true });
+  if (!rslib) {
+    return false;
+  }
+
+  if (action === 'build') {
+    await rslib.build({
+      lib: cliState.options.lib,
+      watch: true,
+    });
+  } else {
+    await rslib.startMFDevServer({
+      lib: cliState.options.lib,
+    });
+  }
+
+  return true;
+};
+
+export function init(): Promise<RslibInstance>;
+export function init(options: {
+  isRestart: true;
+}): Promise<RslibInstance | undefined>;
+export async function init({
+  isRestart = false,
+}: {
+  isRestart?: boolean;
+} = {}): Promise<RslibInstance | undefined> {
   const { options, command } = cliState;
   const cwd = process.cwd();
   const root = options.root ? ensureAbsolutePath(cwd, options.root) : cwd;
 
-  const rslib = await createRslib({
-    cwd: root,
-    config: () => loadConfig(options, root, command),
-    loadEnv:
-      options.env === false
-        ? false
-        : {
-            cwd: getEnvDir(root, options.envDir),
-            mode: options.envMode,
-          },
-  });
+  try {
+    return await createRslib({
+      cwd: root,
+      config: () => loadConfig(options, root, command),
+      loadEnv:
+        options.env === false
+          ? false
+          : {
+              cwd: getEnvDir(root, options.envDir),
+              mode: options.envMode,
+            },
+      restart,
+    });
+  } catch (error) {
+    if (isRestart) {
+      logger.error(error);
+    } else {
+      throw error;
+    }
+  }
 
-  return rslib;
+  return undefined;
 }

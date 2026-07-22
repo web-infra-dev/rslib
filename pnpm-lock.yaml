@@ -347,9 +347,6 @@ importers:
       cac:
         specifier: ^7.0.0
         version: 7.0.0
-      chokidar:
-        specifier: ^5.0.0
-        version: 5.0.0
       fs-extra:
         specifier: ^11.3.6
         version: 11.3.6
@@ -9225,8 +9222,8 @@ snapshots:
 
   '@rslib/core@1.0.0-beta.0(@microsoft/api-extractor@7.58.11)(@module-federation/runtime-tools@2.8.0)(typescript@6.0.3)':
     dependencies:
-      '@rsbuild/core': 2.1.6(@module-federation/runtime-tools@2.8.0)
-      rsbuild-plugin-dts: 1.0.0-beta.0(@microsoft/api-extractor@7.58.11)(@rsbuild/core@2.1.6)(typescript@6.0.3)
+      '@rsbuild/core': 2.1.7(@module-federation/runtime-tools@2.8.0)
+      rsbuild-plugin-dts: 1.0.0-beta.0(@microsoft/api-extractor@7.58.11)(@rsbuild/core@2.1.7)(typescript@6.0.3)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.11(@types/node@24.13.3)
       typescript: 6.0.3
@@ -10709,6 +10706,7 @@ snapshots:
   chokidar@5.0.0:
     dependencies:
       readdirp: 5.0.0
+    optional: true
 
   cipher-base@1.0.6:
     dependencies:
@@ -13259,7 +13257,8 @@ snapshots:
     dependencies:
       picomatch: 2.3.2
 
-  readdirp@5.0.0: {}
+  readdirp@5.0.0:
+    optional: true
 
   recast@0.23.11:
     dependencies:
@@ -13495,10 +13494,10 @@ snapshots:
       '@microsoft/api-extractor': 7.58.11(@types/node@25.2.0)
       typescript: 7.0.2
 
-  rsbuild-plugin-dts@1.0.0-beta.0(@microsoft/api-extractor@7.58.11)(@rsbuild/core@2.1.6)(typescript@6.0.3):
+  rsbuild-plugin-dts@1.0.0-beta.0(@microsoft/api-extractor@7.58.11)(@rsbuild/core@2.1.7)(typescript@6.0.3):
     dependencies:
       '@ast-grep/napi': 0.37.0
-      '@rsbuild/core': 2.1.6(@module-federation/runtime-tools@2.8.0)
+      '@rsbuild/core': 2.1.7(@module-federation/runtime-tools@2.8.0)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.11(@types/node@24.13.3)
       typescript: 6.0.3

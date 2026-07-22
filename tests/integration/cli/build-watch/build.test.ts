@@ -6,11 +6,12 @@ import {
   expectBuildEnd,
   expectFile,
   expectFileWithContent,
+  expectPoll,
   runCli,
 } from 'test-helper';
 
 describe('build --watch command', async () => {
-  test('basic', async () => {
+  test('should restart when config changes', async () => {
     const distPath = path.join(__dirname, 'dist');
     const dist1Path = path.join(__dirname, 'dist-1');
     fse.removeSync(distPath);
@@ -35,6 +36,11 @@ export default defineConfig({
     });
 
     await expectFile(distEsmIndexFile);
+    await expectPoll(() =>
+      stripAnsi(process.stdout()).includes(
+        'build completed, watching for changes',
+      ),
+    ).toBeTruthy();
 
     fse.outputFileSync(
       tempConfigFile,
@@ -54,7 +60,7 @@ export default defineConfig({
     await expectFile(dist1EsmIndexFile);
 
     expect(stripAnsi(process.stdout())).toContain(
-      'build completed, watching for changes',
+      'restarting build as test-temp-rslib.config.mjs changed',
     );
 
     process.child.kill();

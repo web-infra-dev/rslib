@@ -1,4 +1,3 @@
-import util from 'node:util';
 import {
   createRsbuild,
   type EnvironmentConfig,
@@ -6,8 +5,8 @@ import {
   type RsbuildInstance,
   type RsbuildPlugin,
 } from '@rsbuild/core';
+import util from 'node:util';
 import { composeRsbuildEnvironments, pruneEnvironments } from './config';
-import { onBeforeRestart } from './restart';
 import type { RslibConfig } from './types';
 import type {
   BuildOptions,
@@ -17,8 +16,8 @@ import type {
   InspectConfigResult,
   OnAfterCreateRsbuildFn,
   RslibInstance,
-  StartMFDevServerOptions,
   StartDevServerResult,
+  StartMFDevServerOptions,
 } from './types/rslib';
 import {
   ensureAbsolutePath,
@@ -97,9 +96,22 @@ export async function createRslib(
   const cwd = options.cwd || process.cwd();
   config.root = config.root ? ensureAbsolutePath(cwd, config.root) : cwd;
 
-  // attach envFilePaths to config._privateMeta for watch files
-  if (config._privateMeta) {
-    config._privateMeta.envFilePaths = envs ? envs.filePaths : [];
+  // Watch env files for restarting
+  if (envs?.filePaths.length) {
+    config.dev ||= {};
+
+    const { watchFiles } = config.dev;
+    config.dev.watchFiles = [
+      ...(Array.isArray(watchFiles)
+        ? watchFiles
+        : watchFiles
+          ? [watchFiles]
+          : []),
+      {
+        paths: envs.filePaths,
+        type: 'restart',
+      },
+    ];
   }
 
   const onAfterCreateRsbuildCallbacks: OnAfterCreateRsbuildFn[] = [];
@@ -117,6 +129,7 @@ export async function createRslib(
       cwd: options.cwd,
       callerName: 'rslib',
       config: {
+        ...(config._privateMeta ? { _privateMeta: config._privateMeta } : {}),
         mode,
         root: config.root,
         plugins: config.plugins,
@@ -125,6 +138,7 @@ export async function createRslib(
         logLevel: isDebug() ? 'info' : config.logLevel,
         environments,
       },
+      restart: options.restart,
     });
 
     if (envs) {
@@ -261,11 +275,7 @@ export async function createRslib(
       selectedEnvironments,
     );
 
-    const startDevServer = await rsbuildInstance.startDevServer();
-
-    onBeforeRestart(startDevServer.server.close);
-
-    return startDevServer;
+    return rsbuildInstance.startDevServer();
   };
 
   const getRslibConfig = () => {
