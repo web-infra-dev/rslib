@@ -414,7 +414,6 @@ describe('CLI options', () => {
         "_privateMeta": {
           "configFileDependencies": [],
           "configFilePath": "<WORKSPACE>/tests/fixtures/config/cli-options/rslib.config.ts",
-          "envFilePaths": [],
         },
         "lib": [
           {

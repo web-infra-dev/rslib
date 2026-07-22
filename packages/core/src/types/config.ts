@@ -534,11 +534,4 @@ export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
    * @inheritdoc
    */
   output?: RslibOutputConfig;
-  /**
-   * @private
-   */
-  _privateMeta?: {
-    configFilePath: string;
-    envFilePaths?: string[];
-  };
 }

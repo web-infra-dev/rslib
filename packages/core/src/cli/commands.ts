@@ -1,11 +1,6 @@
 import type { LogLevel, RsbuildMode } from '@rsbuild/core';
 import cac, { type CAC } from 'cac';
 import type { ConfigLoader } from '../loadConfig';
-import {
-  getWatchFilesForRestart,
-  onBeforeRestart,
-  watchFilesForRestart,
-} from '../restart';
 import type { Format, Syntax } from '../types';
 import { color } from '../utils/color';
 import { logger } from '../utils/logger';
@@ -144,25 +139,11 @@ export function setupCommands(argv: string[]): void {
     .action(async (options: BuildOptions) => {
       initCliAction('build', options);
       try {
-        const cliBuild = async () => {
-          const rslib = await init();
-
-          if (options.watch) {
-            watchFilesForRestart(getWatchFilesForRestart(rslib), async () => {
-              await cliBuild();
-            });
-          }
-
-          const buildInstance = await rslib.build(options);
-
-          if (options.watch) {
-            onBeforeRestart(buildInstance.close);
-          } else {
-            await buildInstance.close();
-          }
-        };
-
-        await cliBuild();
+        const rslib = await init();
+        const buildInstance = await rslib.build(options);
+        if (!options.watch) {
+          await buildInstance.close();
+        }
       } catch (err) {
         const isRspackError =
           err instanceof Error && err.message === RSPACK_BUILD_ERROR;
@@ -206,18 +187,10 @@ export function setupCommands(argv: string[]): void {
   mfDevCommand.action(async (options: MfDevOptions) => {
     initCliAction('mf-dev', options);
     try {
-      const cliMfDev = async () => {
-        const rslib = await init();
-        await rslib.startMFDevServer({
-          lib: options.lib,
-        });
-
-        watchFilesForRestart(getWatchFilesForRestart(rslib), async () => {
-          await cliMfDev();
-        });
-      };
-
-      await cliMfDev();
+      const rslib = await init();
+      await rslib.startMFDevServer({
+        lib: options.lib,
+      });
     } catch (err) {
       logger.error('Failed to start mf-dev.');
       logger.error(err);
