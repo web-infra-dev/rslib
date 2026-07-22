@@ -14,6 +14,7 @@ import { createRslib } from '../src/createRslib';
 import { loadConfig } from '../src/loadConfig';
 import { mergeRslibConfig } from '../src/mergeConfig';
 import type { RslibConfig } from '../src/types/config';
+import { normalizeSlash } from '../src/utils/helper';
 
 rs.mock('rslog');
 
@@ -685,7 +686,7 @@ describe('Should compose create Rsbuild config correctly', () => {
         throw new Error('Expected bundleless entry to be a function');
       }
       await expect(entry()).resolves.toEqual({
-        'lib/index': join(root, 'src/lib/index.js'),
+        'lib/index': normalizeSlash(join(root, 'src/lib/index.js')),
       });
     } finally {
       await rm(root, { recursive: true, force: true });

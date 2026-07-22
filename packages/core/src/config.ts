@@ -1155,7 +1155,7 @@ const composeEntryConfig = async (
       function getEntryName(file: string) {
         const { dir, name } = path.parse(path.relative(outBase, file));
         // Entry filename contains nested path to preserve source directory structure.
-        const entryFileName = path.join(dir, name);
+        const entryFileName = normalizeSlash(path.join(dir, name));
 
         // 1. we mark the global css files (which will generate empty js chunk in cssExtract), and deleteAsset in RemoveCssExtractAssetPlugin
         // 2. avoid the same name e.g: `index.ts` and `index.css`
