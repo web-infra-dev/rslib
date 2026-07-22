@@ -97,7 +97,7 @@ export class WasmPreservePlugin {
   constructor(private readonly outBase: string) {}
 
   apply(compiler: Rspack.Compiler): void {
-    const { sources, Compilation } = compiler.webpack;
+    const { sources, Compilation } = rspack;
     compiler.hooks.thisCompilation.tap(PLUGIN_NAME, (compilation) => {
       compilation.hooks.processAssets.tapPromise(
         {

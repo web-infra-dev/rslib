@@ -13,7 +13,7 @@ export const resolveWasmMode = ({
 }): WasmMode => {
   if (wasmConfig !== undefined && format !== 'esm') {
     throw new Error(
-      'When using "wasm", "format" must be set to "esm". Since the default value for "format" is "esm", you can either explicitly set it to "esm" or remove the field entirely.',
+      '"wasm" only supports the "esm" format. Set "format" to "esm" or omit it.',
     );
   }
 

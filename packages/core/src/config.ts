@@ -1738,15 +1738,14 @@ async function composeLibRsbuildConfig(
     target,
   });
 
-  const wasmCompose = composeWasmConfig({
-    format,
-    jsDistPath,
-    jsFilename,
-    mode: wasmMode,
-    outBase,
-  });
-  const wasmExternalConfig = wasmCompose.externalConfig;
-  const wasmConfig = wasmCompose.config;
+  const { externalConfig: wasmExternalConfig, config: wasmConfig } =
+    composeWasmConfig({
+      format,
+      jsDistPath,
+      jsFilename,
+      mode: wasmMode,
+      outBase,
+    });
 
   const { config: bundlelessExternalConfig } = composeBundlelessExternalConfig(
     jsExtension,
