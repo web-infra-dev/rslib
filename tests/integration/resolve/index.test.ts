@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { expect, test } from '@rstest/core';
-import { buildAndGetResults } from 'test-helper';
+import { buildAndGetResults, queryContent } from 'test-helper';
 
 test('resolve data url', async () => {
   const fixturePath = join(__dirname, 'data-url');
@@ -89,20 +89,25 @@ test('resolve with condition exports', async () => {
   const fixturePath = join(__dirname, 'with-condition-exports');
   const { contents, isSuccess } = await buildAndGetResults({ fixturePath });
 
-  const nodeResults = Object.values(contents.esm0!);
-  const browserResults = Object.values(contents.esm1!);
+  const entryFiles = ['entry1.js', 'entry2.js', 'entry3.js', 'entry4.js'];
+  const getEntryContents = (output: Record<string, string>) =>
+    entryFiles.map(
+      (filename) => queryContent(output, filename, { basename: true }).content,
+    );
+  const nodeResults = getEntryContents(contents.esm0!);
+  const browserResults = getEntryContents(contents.esm1!);
 
   expect(isSuccess).toBeTruthy();
 
-  expect(nodeResults[1]).toContain('lib1 mjs');
-  expect(nodeResults[2]).toContain('lib2 module');
-  expect(nodeResults[3]).toContain('node');
-  expect(nodeResults[4]).toContain('lib1 cjs');
+  expect(nodeResults[0]).toContain('lib1 mjs');
+  expect(nodeResults[1]).toContain('lib2 module');
+  expect(nodeResults[2]).toContain('node');
+  expect(nodeResults[3]).toContain('lib1 cjs');
 
-  expect(browserResults[1]).toContain('lib1 mjs');
-  expect(browserResults[2]).toContain('lib2 module');
-  expect(browserResults[3]).toContain('browser');
-  expect(browserResults[4]).toContain('lib1 cjs');
+  expect(browserResults[0]).toContain('lib1 mjs');
+  expect(browserResults[1]).toContain('lib2 module');
+  expect(browserResults[2]).toContain('browser');
+  expect(browserResults[3]).toContain('lib1 cjs');
 });
 
 test('resolve with js extensions', async () => {
