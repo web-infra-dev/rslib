@@ -60,7 +60,7 @@ const defaultRedirect = {
   },
   dts: {
     path: true,
-    extension: false,
+    extension: true,
   },
 };
 ```
@@ -318,7 +318,7 @@ import { foo } from '../foo'; // expected output './dist/utils/index.d.ts'
 Whether to automatically redirect the file extension of import paths based on the TypeScript declaration output files.
 
 - **Type:** `boolean`
-- **Default:** `false`
+- **Default:** `true`
 
 When set to `true`, the file extension of the import path in the declaration file will be automatically completed or replaced with the corresponding JavaScript file extension that can be resolved to the corresponding declaration file.
 
@@ -339,3 +339,32 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 import { foo } from './foo.ts'; // source code of './src/bar.ts' ↓
 import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 ```
+
+#### Notes
+
+This option also applies to declaration import paths rewritten through [`paths`](https://typescriptlang.org/tsconfig#paths) or [`dts.alias`](/config/lib/dts#dtsalias). Note the following cases:
+
+- If a configured path is a package directory that relies on the `types` field, the `types` condition name in `exports`, or `typesVersions` to locate its declaration entry, configure the concrete declaration entry directly. For example, when `vendor/foo/package.json` contains `"types": "./dist/index.d.ts"`:
+
+  ```diff title="rslib.config.ts"
+   dts: {
+     alias: {
+  -    foo: './vendor/foo',
+  +    foo: './vendor/foo/dist/index',
+     },
+   },
+  ```
+
+- If the CommonJS declaration referenced by a configured path originally uses `export =`, preserve that export form instead of converting it to `export default`. Otherwise, when the module is resolved with NodeNext from an ESM declaration, CommonJS default interop may combine with the explicit default export and move the original namespace members one level under `default`. For example:
+
+  ```diff title="foo/index.d.ts"
+   declare function Foo(): void;
+   declare namespace Foo {
+     interface Options {}
+   }
+
+  -export { Foo as default };
+  +export = Foo;
+  ```
+
+Bare package imports that do not match `paths` or `dts.alias` are not rewritten and continue to use TypeScript's package resolution.

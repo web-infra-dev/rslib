@@ -345,7 +345,7 @@ export type DtsRedirect = {
   path?: boolean;
   /**
    * Whether to automatically redirect the file extension to import paths based on the TypeScript declaration output files.
-   * @defaultValue `false`
+   * @defaultValue `true`
    */
   extension?: boolean;
 };
