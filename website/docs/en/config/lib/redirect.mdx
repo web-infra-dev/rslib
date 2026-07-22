@@ -344,7 +344,7 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 
 This option also applies to declaration import paths rewritten through [`paths`](https://typescriptlang.org/tsconfig#paths) or [`dts.alias`](/config/lib/dts#dtsalias). Note the following cases:
 
-- If a configured path is a package directory that relies on `types`, `exports.types`, or `typesVersions` to locate its declaration entry, configure the concrete declaration entry directly. For example, when `vendor/foo/package.json` contains `"types": "./dist/index.d.ts"`:
+- If a configured path is a package directory that relies on the `types` field, the `types` condition name in `exports`, or `typesVersions` to locate its declaration entry, configure the concrete declaration entry directly. For example, when `vendor/foo/package.json` contains `"types": "./dist/index.d.ts"`:
 
   ```diff title="rslib.config.ts"
    dts: {

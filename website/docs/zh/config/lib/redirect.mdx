@@ -344,7 +344,7 @@ import { foo } from './foo.mjs'; // './dist/bar.d.mts' 预期生成的代码
 
 该配置也适用于通过 [`paths`](https://typescriptlang.org/tsconfig#paths) 或 [`dts.alias`](/config/lib/dts#dtsalias) 改写后的类型导入路径，因此需要注意以下情况：
 
-- 如果配置路径是包目录，并依赖 `types`、`exports.types` 或 `typesVersions` 定位类型入口，请直接配置具体的类型声明入口。例如，当 `vendor/foo/package.json` 中配置了 `"types": "./dist/index.d.ts"` 时：
+- 如果配置路径是包目录，并依赖 `types` 字段、`exports` 中的 `types` 条件名称或 `typesVersions` 定位类型入口，请直接配置具体的类型声明入口。例如，当 `vendor/foo/package.json` 中配置了 `"types": "./dist/index.d.ts"` 时：
 
   ```diff title="rslib.config.ts"
    dts: {
