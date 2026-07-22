@@ -28,7 +28,6 @@ import { composeExeConfig } from './exe';
 import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
 import { pluginCjsShims, pluginEsmRequireShim } from './plugins/shims';
 import type {
-  AutoExternal,
   BannerAndFooter,
   DeepRequired,
   ExcludesFalse,
@@ -56,7 +55,6 @@ import {
   isDirectory,
   isEmptyObject,
   isIntermediateOutputFormat,
-  isObject,
   nodeBuiltInModules,
   normalizeSlash,
   omit,
@@ -72,88 +70,6 @@ import {
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
 import { composeWasmConfig, resolveWasmMode } from './wasm/compose';
-
-const getAutoExternalDefaultValue = (
-  format: Format,
-  autoExternal?: AutoExternal,
-): AutoExternal => {
-  return autoExternal ?? isIntermediateOutputFormat(format);
-};
-
-export const composeAutoExternalConfig = (options: {
-  bundle: boolean;
-  format: Format;
-  autoExternal?: AutoExternal;
-  pkgJson?: PkgJson;
-  userExternals?: NonNullable<EnvironmentConfig['output']>['externals'];
-}): EnvironmentConfig => {
-  const { bundle, format, pkgJson, userExternals } = options;
-
-  // If bundle is false, autoExternal will be disabled
-  if (!bundle) {
-    return {};
-  }
-
-  const autoExternal = getAutoExternalDefaultValue(
-    format,
-    options.autoExternal,
-  );
-
-  if (autoExternal === false) {
-    return {};
-  }
-
-  if (!pkgJson) {
-    logger.warn(
-      'The `autoExternal` configuration will not be applied due to read package.json failed',
-    );
-    return {};
-  }
-
-  // User externals configuration has higher priority than autoExternal
-  // eg: autoExternal: ['react'], user: output: { externals: { react: 'react-1' } }
-  // Only handle the case where the externals type is object, string / string[] does not need to be processed, other types are too complex.
-  const userExternalKeys =
-    userExternals && isObject(userExternals) ? Object.keys(userExternals) : [];
-
-  const externalOptions = {
-    dependencies: true,
-    optionalDependencies: true,
-    peerDependencies: true,
-    devDependencies: false,
-    ...(autoExternal === true ? {} : autoExternal),
-  };
-
-  const externals = (
-    [
-      'dependencies',
-      'peerDependencies',
-      'devDependencies',
-      'optionalDependencies',
-    ] as const
-  )
-    .reduce<string[]>((prev, type) => {
-      if (externalOptions[type]) {
-        return pkgJson[type] ? prev.concat(Object.keys(pkgJson[type])) : prev;
-      }
-      return prev;
-    }, [])
-    .filter((name) => !userExternalKeys.includes(name));
-
-  const uniqueExternals = Array.from(new Set(externals));
-
-  return externals.length
-    ? {
-        output: {
-          externals: [
-            // Exclude dependencies, e.g. `react`, `react/jsx-runtime`
-            ...uniqueExternals.map((dep) => new RegExp(`^${dep}($|\\/|\\\\)`)),
-            ...uniqueExternals,
-          ],
-        },
-      }
-    : {};
-};
 
 export function composeMinifyConfig(config: LibConfig): EnvironmentConfig {
   const minify = config.output?.minify;
@@ -363,7 +279,6 @@ const composeFormatConfig = ({
   umdName,
   pkgJson,
   enabledShims,
-  multiCompilerIndex,
   sourceEntry,
 }: {
   format: Format;
@@ -371,7 +286,6 @@ const composeFormatConfig = ({
   bundle?: boolean;
   umdName?: Rspack.LibraryName;
   enabledShims: DeepRequired<Shims>;
-  multiCompilerIndex: number | null;
   sourceEntry?: RsbuildConfigEntry;
 }): EnvironmentConfig => {
   const jsParserOptions: Record<string, Rspack.JavascriptParserOptions> = {
@@ -402,11 +316,17 @@ const composeFormatConfig = ({
   ].filter(Boolean);
 
   switch (format) {
-    case 'esm':
+    case 'esm': {
+      // Bundleless builds can expand a single source pattern into many entries.
+      // Bundled builds only need a shared runtime for multiple declared entries.
+      const shouldExtractRuntimeChunk =
+        bundle === false || Object.keys(sourceEntry ?? {}).length > 1;
+
       return {
         plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
         output: {
           filenameHash: false,
+          ...(bundle && { autoExternal: true }),
         },
         tools: {
           rspack: {
@@ -422,11 +342,9 @@ const composeFormatConfig = ({
             optimization: {
               concatenateModules: false,
               sideEffects: true,
-              runtimeChunk: getRuntimeChunkConfig({
-                bundle,
-                multiCompilerIndex,
-                sourceEntry,
-              }),
+              ...(shouldExtractRuntimeChunk
+                ? { runtimeChunk: { name: 'rslib-runtime' } }
+                : {}),
               avoidEntryIife: true,
               splitChunks: {
                 // Splitted "sync" chunks will make entry modules can't be inlined.
@@ -446,12 +364,14 @@ const composeFormatConfig = ({
           },
         },
       };
+    }
     case 'cjs':
       return {
         plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
         output: {
           module: false,
           filenameHash: false,
+          ...(bundle && { autoExternal: true }),
         },
         tools: {
           rspack: {
@@ -683,39 +603,6 @@ const BundlePlugin = (): RsbuildPlugin => ({
   },
 });
 
-const RSLIB_RUNTIME_CHUNK_NAME = 'rslib-runtime';
-
-const getMultiCompilerRuntimeChunkName = (
-  multiCompilerIndex: number | null,
-): string =>
-  typeof multiCompilerIndex === 'number'
-    ? `${multiCompilerIndex}~${RSLIB_RUNTIME_CHUNK_NAME}`
-    : RSLIB_RUNTIME_CHUNK_NAME;
-
-export const getRuntimeChunkConfig = ({
-  bundle,
-  multiCompilerIndex,
-  sourceEntry,
-}: {
-  bundle: boolean;
-  multiCompilerIndex: number | null;
-  sourceEntry?: RsbuildConfigEntry;
-}): NonNullable<Rspack.Configuration['optimization']>['runtimeChunk'] => {
-  if (!bundle) {
-    return {
-      name: RSLIB_RUNTIME_CHUNK_NAME,
-    };
-  }
-
-  if (!sourceEntry || Object.keys(sourceEntry).length <= 1) {
-    return undefined;
-  }
-
-  return {
-    name: getMultiCompilerRuntimeChunkName(multiCompilerIndex),
-  };
-};
-
 const composeBundleConfig = (
   bundle: LibConfig['bundle'],
 ): { rsbuildConfig: EnvironmentConfig } => {
@@ -859,6 +746,16 @@ const composeExternalsConfig = (
   };
 };
 
+const isEntryChunk = (chunk: Rspack.PathData['chunk']): boolean => {
+  if (!chunk || !('groupsIterable' in chunk)) {
+    return false;
+  }
+
+  return [...chunk.groupsIterable].some(
+    (group) => group.isInitial() && group.getEntrypointChunk() === chunk,
+  );
+};
+
 const composeOutputFilenameConfig = (
   config: LibConfig,
   format: Format,
@@ -887,40 +784,70 @@ const composeOutputFilenameConfig = (
     return filenameHash ? '.[contenthash:10]' : '';
   };
 
-  // Copied from https://github.com/web-infra-dev/rspack/blob/2efea8673f86a562559e26a9351680e8df4d9ae9/packages/rspack/src/config/defaults.ts#L667-L680.
-  const inferChunkFilename = (filename: string): string | undefined => {
-    if (typeof filename !== 'function') {
-      const hasName = filename.includes('[name]');
-      const hasId = filename.includes('[id]');
-      const hasChunkHash = filename.includes('[chunkhash]');
-      const hasContentHash = filename.includes('[contenthash]');
-      const multiCompilerPrefix =
-        typeof multiCompilerIndex === 'number' ? `${multiCompilerIndex}~` : '';
-      // Anything changing depending on chunk is fine
+  const chunkFilenamePlaceholders = [
+    '[name]',
+    '[id]',
+    '[chunkhash]',
+    '[contenthash]',
+  ];
 
-      if (hasChunkHash || hasContentHash || hasName || hasId)
-        return filename.replace(
-          /(^|\/)([^/]*(?:\?|$))/,
-          `$1${multiCompilerPrefix}$2`,
-        );
-      // Otherwise prefix "[id]." in front of the basename to make it changing
-      return filename.replace(
-        /(^|\/)([^/]*(?:\?|$))/,
-        `$1${multiCompilerIndex}[id].$2`,
-      );
+  // Keep filename inference in sync with Rspack's default `chunkFilename`
+  // inference for strings:
+  // https://github.com/web-infra-dev/rspack/blob/e8a7bce74b5261220f0f351ebe581d5d99df54d6/packages/rspack/src/config/defaults.ts#L813-L826
+  const inferChunkFilename = (filename: string): string => {
+    const hasName = filename.includes('[name]');
+    const hasId = filename.includes('[id]');
+    const hasChunkHash = filename.includes('[chunkhash]');
+    const hasContentHash = filename.includes('[contenthash]');
+    // Anything changing depending on chunk is fine
+    if (hasChunkHash || hasContentHash || hasName || hasId) return filename;
+    // Otherwise prefix "[id]." in front of the basename to make it changing
+    return filename.replace(/(^|\/)([^/]*(?:\?|$))/, '$1[id].$2');
+  };
+
+  /**
+   * Appends a multi-compiler suffix to a Rspack filename template without
+   * resolving its placeholders. The suffix is placed after a chunk-specific
+   * placeholder in the basename when possible, or before the file extension
+   * otherwise, while preserving directories and query strings.
+   *
+   * For example, `assets/[name].[contenthash].js?raw` with `~1` becomes
+   * `assets/[name]~1.[contenthash].js?raw`, and `assets/chunk.js` becomes
+   * `assets/chunk~1.js`. This keeps `filename` for non-entry initial chunks and
+   * `chunkFilename` for async chunks in the same multi-compiler namespace.
+   */
+  const appendMultiCompilerSuffix = (
+    filename: string,
+    suffix: string,
+  ): string => {
+    const queryIndex = filename.indexOf('?');
+    const pathname =
+      queryIndex === -1 ? filename : filename.slice(0, queryIndex);
+    const query = queryIndex === -1 ? '' : filename.slice(queryIndex);
+    const basenameIndex = pathname.lastIndexOf('/') + 1;
+    const dirname = pathname.slice(0, basenameIndex);
+    const basename = pathname.slice(basenameIndex);
+    const placeholder = chunkFilenamePlaceholders.find((item) =>
+      basename.includes(item),
+    );
+    if (placeholder) {
+      return `${dirname}${basename.replace(placeholder, `${placeholder}${suffix}`)}${query}`;
     }
 
-    return undefined;
+    const extension = extname(basename);
+    const stem = extension ? basename.slice(0, -extension.length) : basename;
+    return `${dirname}${stem}${suffix}${extension}${query}`;
   };
 
   const hash = getHash();
-  const defaultJsFilename = `[name]${hash}${jsExtension}`;
+  const multiCompilerSuffix =
+    typeof multiCompilerIndex === 'number' ? `~${multiCompilerIndex}` : '';
+  const defaultJsFilenameTemplate = `[name]${hash}${jsExtension}`;
   const userJsFilename = config.output?.filename?.js;
-  const jsFilename = userJsFilename ?? defaultJsFilename;
+  const bundlelessJsFilename = userJsFilename ?? defaultJsFilenameTemplate;
   const distPath = config.output?.distPath;
   const jsDistPath =
     typeof distPath === 'object' && distPath ? (distPath.js ?? './') : './';
-  const defaultJsChunkFilename = inferChunkFilename(jsFilename as string);
 
   // will be returned to use in redirect feature
   // only support string type for now since we can not get the return value of function
@@ -929,32 +856,69 @@ const composeOutputFilenameConfig = (
       ? extname(userJsFilename)
       : jsExtension;
 
-  const chunkFilename: RsbuildConfig = {
+  if (typeof bundlelessJsFilename === 'function') {
+    // A custom filename function owns the naming contract. Leave
+    // `chunkFilename` unset so Rsbuild applies it to async chunks as well; users
+    // are responsible for avoiding collisions across compilers.
+    return {
+      config: {},
+      jsExtension: finalJsExtension,
+      jsDistPath,
+      jsFilename: bundlelessJsFilename,
+      dtsExtension,
+    };
+  }
+
+  const inferredJsChunkFilename = inferChunkFilename(bundlelessJsFilename);
+
+  // Runtime and other initial chunks use `filename` instead of `chunkFilename`.
+  // For default and string filename templates, keep entry filenames stable
+  // while isolating the other chunks by compiler. Multi-compiler builds append
+  // a stable suffix based on each compiler's `lib` index, starting from `~0`.
+  // Do not infer whether compiler output paths actually overlap here.
+  let jsFilename: Rspack.Filename = bundlelessJsFilename;
+  let jsChunkFilename = inferredJsChunkFilename;
+
+  if (multiCompilerSuffix) {
+    const nonEntryFilename = appendMultiCompilerSuffix(
+      bundlelessJsFilename,
+      multiCompilerSuffix,
+    );
+    jsFilename = ({ chunk }) =>
+      isEntryChunk(chunk) ? bundlelessJsFilename : nonEntryFilename;
+    jsChunkFilename = appendMultiCompilerSuffix(
+      inferredJsChunkFilename,
+      multiCompilerSuffix,
+    );
+  }
+
+  const rspackOutput: NonNullable<Rspack.Configuration['output']> = {
+    chunkFilename: jsChunkFilename,
+  };
+  const finalConfig: RsbuildConfig = {
     tools: {
       rspack: {
-        output: {
-          chunkFilename: defaultJsChunkFilename,
-        },
+        output: rspackOutput,
       },
     },
   };
 
-  const finalConfig: RsbuildConfig = userJsFilename
-    ? chunkFilename
-    : mergeRsbuildConfig(chunkFilename, {
-        output: {
-          filename: {
-            js: defaultJsFilename,
-          },
-        },
-      });
+  if (userJsFilename === undefined) {
+    finalConfig.output = {
+      filename: {
+        js: jsFilename,
+      },
+    };
+  } else if (multiCompilerSuffix) {
+    rspackOutput.filename = jsFilename;
+  }
 
   return {
     // Do not modify MF's output hash configuration.
     config: format === 'mf' ? {} : finalConfig,
     jsExtension: finalJsExtension,
     jsDistPath,
-    jsFilename,
+    jsFilename: bundlelessJsFilename,
     dtsExtension,
   };
 };
@@ -1493,7 +1457,7 @@ const composeDtsConfig = async (
   format: Format,
   dtsExtension: string,
 ): Promise<EnvironmentConfig> => {
-  const { autoExternal, banner, footer, redirect } = libConfig;
+  const { banner, footer, redirect } = libConfig;
 
   let { dts } = libConfig;
 
@@ -1516,7 +1480,10 @@ const composeDtsConfig = async (
         build: dts?.build,
         abortOnError: dts?.abortOnError,
         dtsExtension: dts?.autoExtension ? dtsExtension : '.d.ts',
-        autoExternal: getAutoExternalDefaultValue(format, autoExternal),
+        autoExternal:
+          libConfig.output?.autoExternal ??
+          libConfig.autoExternal ??
+          isIntermediateOutputFormat(format),
         alias: dts?.alias,
         isolated: dts?.isolated,
         banner: banner?.dts,
@@ -1670,13 +1637,13 @@ async function composeLibRsbuildConfig(
     banner = {},
     footer = {},
     autoExtension = true,
-    autoExternal,
     externalHelpers = false,
     redirect = {},
     umdName,
     experiments = {},
   } = config;
   const hasExe = Boolean(experiments.exe);
+
   const { rsbuildConfig: bundleConfig } = composeBundleConfig(bundle);
   const { rsbuildConfig: shimsConfig, enabledShims } = composeShimsConfig(
     format,
@@ -1693,7 +1660,6 @@ async function composeLibRsbuildConfig(
     bundle,
     umdName,
     enabledShims,
-    multiCompilerIndex,
     sourceEntry: config.source?.entry,
   });
   const moduleIdsConfig = composeModuleIdsConfig(format, target);
@@ -1759,13 +1725,7 @@ async function composeLibRsbuildConfig(
     config?.syntax,
     pkgJson,
   );
-  const autoExternalConfig = composeAutoExternalConfig({
-    bundle,
-    format,
-    autoExternal: hasExe ? false : autoExternal,
-    pkgJson,
-    userExternals,
-  });
+
   const cssConfig = composeCssConfig(
     outBase,
     cssModulesAuto,
@@ -1806,7 +1766,6 @@ async function composeLibRsbuildConfig(
     //    it relies on other externals config to bail out the externalized modules first then resolve
     //    the correct path for relative imports.
     userExternalsConfig,
-    autoExternalConfig,
     targetExternalsConfig,
     wasmExternalConfig,
     bundlelessExternalConfig,
@@ -1856,10 +1815,32 @@ export async function composeCreateRsbuildConfig(
   }
 
   const libConfigPromises = libConfigsArray.map(async (libConfig, index) => {
+    if (libConfig.autoExternal !== undefined) {
+      logger.warn(
+        `${color.yellow('lib.autoExternal')} is deprecated, use ${color.yellow('output.autoExternal')} instead.`,
+      );
+    }
+
     const userConfig = mergeRsbuildConfig<LibConfig>(
       sharedRsbuildConfig,
       libConfig,
     );
+
+    // Deprecation shim: migrate lib.autoExternal → output.autoExternal
+    if (
+      libConfig.autoExternal !== undefined &&
+      libConfig.output?.autoExternal === undefined
+    ) {
+      userConfig.output ??= {};
+      userConfig.output.autoExternal = libConfig.autoExternal;
+    }
+
+    // Exe bundles everything into a single binary, so disable automatic externals
+    // after user config is merged to prevent users from re-enabling it.
+    if (userConfig.experiments?.exe) {
+      userConfig.output ??= {};
+      userConfig.output.autoExternal = false;
+    }
 
     // Merge the configuration of each environment based on the shared Rsbuild
     // configuration and Lib configuration in the settings.

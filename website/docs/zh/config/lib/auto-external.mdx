@@ -5,6 +5,10 @@ overviewHeaders: [2, 3]
 
 # lib.autoExternal
 
+:::warning
+`lib.autoExternal` 已废弃，请使用 [output.autoExternal](/config/rsbuild/output#outputautoexternal) 代替。
+:::
+
 :::info
 
 `autoExternal` 是 bundle 模式的特定配置。在 bundleless 模式（将 [lib.bundle](/config/lib/bundle) 设置为 `false`）下不会生效，因为 bundleless 模式下依赖不会被打包。
@@ -28,7 +32,6 @@ type AutoExternal =
   - 当 [format](/config/lib/format) 为 `cjs` 或 `esm` 时为 `true`
   - 当 [format](/config/lib/format) 为 `umd` 或 `mf` 时为 `false`
 - **命令行：** `--auto-external` / `--no-auto-external`
-- **顶层配置：** 支持
 
 是否自动对不同依赖类型的依赖进行外部化处理，不将其打包。
 

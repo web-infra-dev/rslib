@@ -21,6 +21,21 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 
 当 `output.assetPrefix` 设置为具体的路径时，JavaScript 文件中引用静态资源的 `import` 或 `require` 语句会被替换为包含该前缀的 URL。同时，CSS 文件中的静态资源会被直接替换为带有该前缀的路径。
 
+## output.autoExternal <RsbuildDocBadge path="/config/output/auto-external" text="output.autoExternal" />
+
+- **命令行：** `--auto-external` / `--no-auto-external`
+
+是否自动对不同依赖类型的依赖进行外部化处理，不将其打包。该配置仅在 bundle 模式下生效，bundleless 模式下不会生效。
+
+在 Rslib 中，该选项的默认值由 [format](/config/lib/format) 决定：
+
+- 当 `format` 为 `cjs` 或 `esm` 时，默认值为 `true`。
+- 当 `format` 为 `umd`、`mf` 或 `iife` 时，默认值为 `false`。
+
+设置为 `true` 时，`package.json` 中 `dependencies`、`optionalDependencies` 和 `peerDependencies` 字段下的依赖将被自动外部化。
+
+关于第三方依赖处理的更多细节，请参考 [处理第三方依赖](/guide/advanced/third-party-deps)。
+
 ## output.charset <RsbuildDocBadge path="/config/output/charset" text="output.charset" />
 
 指定输出文件的 [字符编码](https://developer.mozilla.org/en-US/docs/Glossary/Character_encoding)，以确保它们在不同的环境中能够正确显示。
@@ -81,7 +96,7 @@ const defaultDistPath = {
 
 在构建时，防止将代码中某些 `import` 的依赖包打包到 bundle 中，而是在运行时再去从外部获取这些依赖。
 
-在 bundle 模式下，Rslib 会默认将 `package.json` 中 `dependencies`、`optionalDependencies` 和 `peerDependencies` 字段下的三方依赖添加到 `output.externals` 中, 查看 [lib.autoExternal](/config/lib/auto-external) 了解更多信息。
+在 bundle 模式下，Rslib 会根据 [output.autoExternal](#outputautoexternal) 自动将 `package.json` 中的依赖进行外部化处理，查看 [output.autoExternal](#outputautoexternal) 了解更多信息。
 
 此外，Rslib 会根据产物格式设置 Rspack 的 [`externalsType`](https://rspack.rs/zh/config/externals#externalstype) 默认值：
 

@@ -1,15 +1,14 @@
-import { mkdtemp, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { describe, expect, rs, test } from '@rstest/core';
+import { mkdtemp, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { BuildOptions } from '../src/cli/commands';
 import { init, initCliAction } from '../src/cli/init';
 import {
   composeCreateRsbuildConfig,
   composeRsbuildEnvironments,
-  getRuntimeChunkConfig,
 } from '../src/config';
 import { createRslib } from '../src/createRslib';
 import { loadConfig } from '../src/loadConfig';
@@ -31,6 +30,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -48,6 +48,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -65,6 +66,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -82,6 +84,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -99,6 +102,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -116,6 +120,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -133,6 +138,7 @@ describe('Should load config file correctly', () => {
         },
       },
       _privateMeta: {
+        configFileDependencies: [],
         configFilePath,
       },
     });
@@ -406,16 +412,17 @@ describe('CLI options', () => {
       expect(config).toMatchInlineSnapshot(`
       {
         "_privateMeta": {
+          "configFileDependencies": [],
           "configFilePath": "<WORKSPACE>/tests/fixtures/config/cli-options/rslib.config.ts",
-          "envFilePaths": [],
         },
         "lib": [
           {
             "autoExtension": false,
-            "autoExternal": false,
+            "autoExternal": true,
             "bundle": false,
             "dts": true,
             "output": {
+              "autoExternal": false,
               "cleanDistPath": true,
               "distPath": {
                 "root": "build",
@@ -572,6 +579,87 @@ describe('Should compose create Rsbuild config correctly', () => {
     });
   });
 
+  test('infers and suffixes chunkFilename from string filenames', async () => {
+    const rslib = await createRslib({
+      config: {
+        root: join(__dirname, '..'),
+        source: {
+          entry: {
+            index: './src/index.ts',
+          },
+        },
+        lib: [
+          { output: { filename: { js: '[name].js' } } },
+          { output: { filename: { js: '[name].js' } } },
+          { output: { filename: { js: 'assets/file.js?asset=/x' } } },
+          { output: { filename: { js: '[contenthash:10].js' } } },
+        ],
+      },
+    });
+    const {
+      origin: { bundlerConfigs },
+    } = await rslib.inspectConfig({ verbose: true });
+
+    expect(
+      bundlerConfigs.map((config) => config.output?.chunkFilename),
+    ).toEqual([
+      '[name]~0.js',
+      '[name]~1.js',
+      'assets/[id]~2.file.js?asset=/x',
+      '[id]~3.[contenthash:10].js',
+    ]);
+  });
+
+  test('does not override chunkFilename for filename functions', async () => {
+    const filename = () => '[name].js';
+    const rslibConfig: RslibConfig = {
+      root: join(__dirname, '..'),
+      source: {
+        entry: {
+          index: './src/index.ts',
+        },
+      },
+      lib: [
+        { output: { filename: { js: filename } } },
+        { output: { filename: { js: filename } } },
+      ],
+    };
+
+    const composedRsbuildConfigs =
+      await composeCreateRsbuildConfig(rslibConfig);
+    expect(
+      composedRsbuildConfigs.map(({ config }) => config.output?.filename?.js),
+    ).toEqual([filename, filename]);
+    for (const { config } of composedRsbuildConfigs) {
+      const rspackConfigs = Array.isArray(config.tools?.rspack)
+        ? config.tools.rspack
+        : [config.tools?.rspack];
+      expect(
+        rspackConfigs.some(
+          (rspackConfig) =>
+            typeof rspackConfig === 'object' &&
+            rspackConfig.output !== undefined &&
+            Object.prototype.hasOwnProperty.call(
+              rspackConfig.output,
+              'chunkFilename',
+            ),
+        ),
+      ).toBe(false);
+    }
+
+    const rslib = await createRslib({ config: rslibConfig });
+    const {
+      origin: { bundlerConfigs },
+    } = await rslib.inspectConfig({ verbose: true });
+
+    expect(
+      bundlerConfigs.map((config) => typeof config.output?.filename),
+    ).toEqual(['function', 'function']);
+    expect(
+      bundlerConfigs.map((config) => config.output?.chunkFilename),
+    ).toEqual([expect.any(Function), expect.any(Function)]);
+  });
+
   test('Merge output.distPath correctly', async () => {
     const rslibConfig: RslibConfig = {
       lib: [
@@ -614,82 +702,41 @@ describe('Should compose create Rsbuild config correctly', () => {
       }
     `);
   });
-});
 
-describe('runtimeChunk', () => {
-  test('defaults to rslib-runtime for bundleless esm', async () => {
-    expect(
-      getRuntimeChunkConfig({
-        bundle: false,
-        multiCompilerIndex: null,
-      }),
-    ).toEqual({
-      name: 'rslib-runtime',
-    });
+  test('per-lib deprecated autoExternal should override shared output.autoExternal', async () => {
+    const rslibConfig: RslibConfig = {
+      output: {
+        autoExternal: false,
+      },
+      lib: [
+        {
+          format: 'esm',
+          autoExternal: true,
+        },
+      ],
+    };
+
+    const [config] = await composeCreateRsbuildConfig(rslibConfig);
+
+    expect(config?.config.output?.autoExternal).toBe(true);
   });
 
-  test('defaults to undefined for single-entry bundled esm', async () => {
-    expect(
-      getRuntimeChunkConfig({
-        bundle: true,
-        multiCompilerIndex: null,
-        sourceEntry: {
-          index: './src/index.ts',
+  test('output.autoExternal should override deprecated autoExternal in the same config', async () => {
+    const rslibConfig: RslibConfig = {
+      lib: [
+        {
+          format: 'esm',
+          autoExternal: true,
+          output: {
+            autoExternal: false,
+          },
         },
-      }),
-    ).toBeUndefined();
-  });
+      ],
+    };
 
-  test('returns runtime chunk for multiple entries without multi-compiler', async () => {
-    expect(
-      getRuntimeChunkConfig({
-        bundle: true,
-        multiCompilerIndex: null,
-        sourceEntry: {
-          index: './src/index.ts',
-          cli: './src/cli/index.ts',
-        },
-      }),
-    ).toEqual({
-      name: 'rslib-runtime',
-    });
-  });
+    const [config] = await composeCreateRsbuildConfig(rslibConfig);
 
-  test('returns prefixed runtime chunk for multiple entries with multi-compiler', async () => {
-    expect(
-      getRuntimeChunkConfig({
-        bundle: true,
-        multiCompilerIndex: 0,
-        sourceEntry: {
-          foo: './src/foo.ts',
-          bar: './src/bar.ts',
-        },
-      }),
-    ).toEqual({
-      name: '0~rslib-runtime',
-    });
-    expect(
-      getRuntimeChunkConfig({
-        bundle: true,
-        multiCompilerIndex: 1,
-        sourceEntry: {
-          foo: './src/foo.ts',
-          bar: './src/bar.ts',
-        },
-      }),
-    ).toEqual({
-      name: '1~rslib-runtime',
-    });
-  });
-
-  test('returns undefined when source.entry is not provided', async () => {
-    expect(
-      getRuntimeChunkConfig({
-        bundle: true,
-        multiCompilerIndex: null,
-        sourceEntry: undefined,
-      }),
-    ).toBeUndefined();
+    expect(config?.config.output?.autoExternal).toBe(false);
   });
 });
 

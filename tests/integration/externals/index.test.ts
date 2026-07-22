@@ -181,7 +181,7 @@ test('require ESM from CJS', async () => {
 test('user externals', async () => {
   // Ensure the priority of user externals higher than others.
   // - "memfs": userExternalsConfig > targetExternalsConfig
-  // - "lodash-es/zip": userExternalsConfig > autoExternalConfig
+  // - "lodash-es/zip": userExternalsConfig > Rsbuild autoExternal
   // - "./foo2": userExternalsConfig > bundlelessExternalConfig
 
   const fixturePath = join(__dirname, 'user-externals');
@@ -227,10 +227,10 @@ test('bundleless user externals false should preserve shared dependency behavior
 
   expect(files.esm1).toMatchInlineSnapshot(`
     [
-      "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/esm-shared/504.js",
+      "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/esm-shared/504~2.js",
       "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/esm-shared/a.js",
       "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/esm-shared/b.js",
-      "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/esm-shared/rslib-runtime.js",
+      "<ROOT>/tests/integration/externals/bundleless-user-external-false/dist/esm-shared/rslib-runtime~2.js",
     ]
   `);
   expect(files.cjs1).toMatchInlineSnapshot(`
@@ -244,12 +244,12 @@ test('bundleless user externals false should preserve shared dependency behavior
   // so this case only verifies the shared behavior for JS dependency modules.
   expect(
     queryContent(contents.esm1!, 'a.js', { basename: true }).content,
-  ).toContain('import "./504.js";');
+  ).toContain('import "./504~2.js";');
   expect(
     queryContent(contents.esm1!, 'b.js', { basename: true }).content,
-  ).toContain('import "./504.js";');
+  ).toContain('import "./504~2.js";');
   expect(
-    queryContent(contents.esm1!, '504.js', { basename: true }).content,
+    queryContent(contents.esm1!, '504~2.js', { basename: true }).content,
   ).toContain('./node_modules/foo/index.js');
   expect(
     queryContent(contents.cjs1!, 'a.cjs', { basename: true }).content,

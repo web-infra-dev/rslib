@@ -416,6 +416,7 @@ export interface LibConfig extends EnvironmentConfig {
   autoExtension?: boolean;
   /**
    * Whether to automatically externalize dependencies of different dependency types and do not bundle them.
+   * @deprecated Use `output.autoExternal` instead.
    * @defaultValue `true` when {@link format} is `cjs` or `esm`, `false` when {@link format} is `umd` or `mf`.
    * @see {@link https://rslib.rs/config/lib/auto-external}
    */
@@ -516,7 +517,6 @@ export type SharedLibConfig = Pick<
   LibConfig,
   | 'bundle'
   | 'autoExtension'
-  | 'autoExternal'
   | 'redirect'
   | 'syntax'
   | 'externalHelpers'
@@ -545,6 +545,11 @@ interface RslibOutputConfig extends OutputConfig {
    * @see {@link https://rslib.rs/config/rsbuild/output#outputminify}
    */
   minify?: OutputConfig['minify'];
+  /**
+   * @override
+   * @default `true` for ESM/CJS, `false` for UMD/MF/IIFE
+   */
+  autoExternal?: OutputConfig['autoExternal'];
 }
 
 export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
@@ -553,11 +558,4 @@ export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
    * @inheritdoc
    */
   output?: RslibOutputConfig;
-  /**
-   * @private
-   */
-  _privateMeta?: {
-    configFilePath: string;
-    envFilePaths?: string[];
-  };
 }

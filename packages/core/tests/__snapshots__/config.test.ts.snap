@@ -13,7 +13,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         paths: [
           '<WORKSPACE>/tsconfig.json'
         ],
-        type: 'reload-server'
+        type: 'restart'
       }
     ],
     assetPrefix: '/',
@@ -324,14 +324,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   externals: [
-    /^@rsbuild\\/core($|\\/|\\\\)/,
-    /^rsbuild-plugin-dts($|\\/|\\\\)/,
-    /^@microsoft\\/api-extractor($|\\/|\\\\)/,
-    /^typescript($|\\/|\\\\)/,
-    '@rsbuild/core',
-    'rsbuild-plugin-dts',
-    '@microsoft/api-extractor',
-    'typescript',
     'assert',
     'assert/strict',
     'async_hooks',
@@ -387,7 +379,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'worker_threads',
     'zlib',
     /^node:/,
-    'pnpapi'
+    'pnpapi',
+    /^@rsbuild\\/core(?:$|[/\\\\])/,
+    /^rsbuild-plugin-dts(?:$|[/\\\\])/,
+    /^@microsoft\\/api-extractor(?:$|[/\\\\])/,
+    /^typescript(?:$|[/\\\\])/
   ],
   node: {
     __dirname: false,
@@ -397,8 +393,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
     devtoolFallbackModuleFilenameTemplate: '[relative-resource-path]?[hash]',
     path: '<WORKSPACE>/dist',
-    filename: '[name].js',
-    chunkFilename: '0~[name].js',
+    filename: function () { /* omitted long function */ },
+    chunkFilename: '[name]~0.js',
     publicPath: 'auto',
     library: {
       type: 'modern-module'
@@ -1112,7 +1108,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     nodeEnv: false,
     concatenateModules: false,
     sideEffects: true,
-    runtimeChunk: undefined,
     avoidEntryIife: true,
     moduleIds: 'named'
   },
@@ -1198,14 +1193,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   externals: [
-    /^@rsbuild\\/core($|\\/|\\\\)/,
-    /^rsbuild-plugin-dts($|\\/|\\\\)/,
-    /^@microsoft\\/api-extractor($|\\/|\\\\)/,
-    /^typescript($|\\/|\\\\)/,
-    '@rsbuild/core',
-    'rsbuild-plugin-dts',
-    '@microsoft/api-extractor',
-    'typescript',
     'assert',
     'assert/strict',
     'async_hooks',
@@ -1261,14 +1248,18 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     'worker_threads',
     'zlib',
     /^node:/,
-    'pnpapi'
+    'pnpapi',
+    /^@rsbuild\\/core(?:$|[/\\\\])/,
+    /^rsbuild-plugin-dts(?:$|[/\\\\])/,
+    /^@microsoft\\/api-extractor(?:$|[/\\\\])/,
+    /^typescript(?:$|[/\\\\])/
   ],
   output: {
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
     devtoolFallbackModuleFilenameTemplate: '[relative-resource-path]?[hash]',
     path: '<WORKSPACE>/dist',
-    filename: '[name].cjs',
-    chunkFilename: '1~[name].cjs',
+    filename: function () { /* omitted long function */ },
+    chunkFilename: '[name]~1.cjs',
     publicPath: 'auto',
     library: {
       type: 'commonjs-static'
@@ -2130,8 +2121,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
     devtoolFallbackModuleFilenameTemplate: '[relative-resource-path]?[hash]',
     path: '<WORKSPACE>/dist',
-    filename: '[name].js',
-    chunkFilename: '2~[name].js',
+    filename: function () { /* omitted long function */ },
+    chunkFilename: '[name]~2.js',
     publicPath: '/',
     library: {
       type: 'umd'
@@ -2902,8 +2893,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     devtoolModuleFilenameTemplate: '[relative-resource-path]',
     devtoolFallbackModuleFilenameTemplate: '[relative-resource-path]?[hash]',
     path: '<WORKSPACE>/dist',
-    filename: '[name].js',
-    chunkFilename: '3~[name].js',
+    filename: function () { /* omitted long function */ },
+    chunkFilename: '[name]~3.js',
     publicPath: '/',
     library: {
       type: 'module'
@@ -4298,6 +4289,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   "config": {
     "output": {
       "assetPrefix": "auto",
+      "autoExternal": true,
       "dataUriLimit": 0,
       "distPath": {
         "css": "./",
@@ -4306,14 +4298,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "jsAsync": "./",
       },
       "externals": [
-        /\\^@rsbuild\\\\/core\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^rsbuild-plugin-dts\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^@microsoft\\\\/api-extractor\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^typescript\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        "@rsbuild/core",
-        "rsbuild-plugin-dts",
-        "@microsoft/api-extractor",
-        "typescript",
         "assert",
         "assert/strict",
         "async_hooks",
@@ -4372,7 +4356,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "pnpapi",
       ],
       "filename": {
-        "js": "[name].js",
+        "js": [Function],
       },
       "filenameHash": false,
       "minify": {
@@ -4489,7 +4473,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             "avoidEntryIife": true,
             "concatenateModules": false,
             "moduleIds": "named",
-            "runtimeChunk": undefined,
             "sideEffects": true,
             "splitChunks": {
               "chunks": "async",
@@ -4520,7 +4503,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         [Function],
         {
           "output": {
-            "chunkFilename": "0~[name].js",
+            "chunkFilename": "[name]~0.js",
           },
         },
         {
@@ -4570,6 +4553,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   "config": {
     "output": {
       "assetPrefix": "auto",
+      "autoExternal": true,
       "dataUriLimit": 0,
       "distPath": {
         "css": "./",
@@ -4578,14 +4562,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "jsAsync": "./",
       },
       "externals": [
-        /\\^@rsbuild\\\\/core\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^rsbuild-plugin-dts\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^@microsoft\\\\/api-extractor\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        /\\^typescript\\(\\$\\|\\\\/\\|\\\\\\\\\\)/,
-        "@rsbuild/core",
-        "rsbuild-plugin-dts",
-        "@microsoft/api-extractor",
-        "typescript",
         "assert",
         "assert/strict",
         "async_hooks",
@@ -4644,7 +4620,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "pnpapi",
       ],
       "filename": {
-        "js": "[name].cjs",
+        "js": [Function],
       },
       "filenameHash": false,
       "minify": {
@@ -4793,7 +4769,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         [Function],
         {
           "output": {
-            "chunkFilename": "1~[name].cjs",
+            "chunkFilename": "[name]~1.cjs",
           },
         },
         {
@@ -4907,7 +4883,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "pnpapi",
       ],
       "filename": {
-        "js": "[name].js",
+        "js": [Function],
       },
       "filenameHash": false,
       "minify": {
@@ -5029,7 +5005,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         [Function],
         {
           "output": {
-            "chunkFilename": "2~[name].js",
+            "chunkFilename": "[name]~2.js",
           },
         },
         {
@@ -5143,7 +5119,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         "pnpapi",
       ],
       "filename": {
-        "js": "[name].js",
+        "js": [Function],
       },
       "filenameHash": false,
       "minify": {
@@ -5269,7 +5245,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         [Function],
         {
           "output": {
-            "chunkFilename": "3~[name].js",
+            "chunkFilename": "[name]~3.js",
           },
         },
         {
