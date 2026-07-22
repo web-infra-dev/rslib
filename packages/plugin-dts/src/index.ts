@@ -64,7 +64,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     options.build = options.build ?? false;
     options.redirect = options.redirect ?? {};
     options.redirect.path = options.redirect.path ?? true;
-    options.redirect.extension = options.redirect.extension ?? false;
+    options.redirect.extension = options.redirect.extension ?? true;
     options.alias = options.alias ?? {};
 
     let dtsPromise: Promise<TaskResult> = Promise.resolve({

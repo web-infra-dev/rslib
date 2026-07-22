@@ -317,7 +317,7 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
     footer,
     redirect = {
       path: true,
-      extension: false,
+      extension: true,
     },
     loggerLevel,
     typescriptPath,

@@ -236,7 +236,7 @@ type DtsRedirect = {
 ```ts
 const defaultRedirect = {
   path: true,
-  extension: false,
+  extension: true,
 };
 ```
 
@@ -246,7 +246,7 @@ Controls the redirect of the import paths of TypeScript declaration output files
 pluginDts({
   redirect: {
     path: true,
-    extension: false,
+    extension: true,
   },
 });
 ```
@@ -274,7 +274,7 @@ import { foo } from '../foo'; // expected output './dist/utils/index.d.ts'
 #### redirect.extension
 
 - **Type:** `boolean`
-- **Default:** `false`
+- **Default:** `true`
 
 Whether to automatically redirect the file extension of import paths based on the TypeScript declaration output files.
 

@@ -60,7 +60,7 @@ const defaultRedirect = {
   },
   dts: {
     path: true,
-    extension: false,
+    extension: true,
   },
 };
 ```
@@ -318,7 +318,7 @@ import { foo } from '../foo'; // './dist/utils/index.d.ts' 预期生成的代码
 是否根据 TypeScript 类型文件自动重定向导入路径的文件扩展名。
 
 - **类型:** `boolean`
-- **默认值:** `false`
+- **默认值:** `true`
 
 当设置为 `true` 时，类型声明文件中的导入路径，其文件扩展名会被自动补全或替换为对应的可以解析到相应类型声明文件的 JavaScript 文件扩展名。
 
@@ -339,3 +339,32 @@ import { foo } from './foo.mjs'; // './dist/bar.d.mts' 预期生成的代码
 import { foo } from './foo.ts'; // './src/bar.ts' 的源码 ↓
 import { foo } from './foo.mjs'; // './dist/bar.d.mts' 预期生成的代码
 ```
+
+#### 注意事项
+
+该配置也适用于通过 [`paths`](https://typescriptlang.org/tsconfig#paths) 或 [`dts.alias`](/config/lib/dts#dtsalias) 改写后的类型导入路径，因此需要注意以下情况：
+
+- 如果配置路径是包目录，并依赖 `types`、`exports.types` 或 `typesVersions` 定位类型入口，请直接配置具体的类型声明入口。例如，当 `vendor/foo/package.json` 中配置了 `"types": "./dist/index.d.ts"` 时：
+
+  ```diff title="rslib.config.ts"
+   dts: {
+     alias: {
+  -    foo: './vendor/foo',
+  +    foo: './vendor/foo/dist/index',
+     },
+   },
+  ```
+
+- 如果配置路径对应的 CommonJS 类型声明原本使用 `export =`，请保留该导出形式，不要将其转换为 `export default`。否则，从 ESM 类型声明中使用 NodeNext 解析该模块时，CommonJS default interop 可能与显式 default 导出叠加，导致原本的命名空间成员出现在 `default` 下一层。例如：
+
+  ```diff title="foo/index.d.ts"
+   declare function Foo(): void;
+   declare namespace Foo {
+     interface Options {}
+   }
+
+  -export { Foo as default };
+  +export = Foo;
+  ```
+
+未命中 `paths` 或 `dts.alias` 的裸包导入不会被改写，仍由 TypeScript 按正常的包解析流程处理。
