@@ -365,17 +365,13 @@ export type WasmMode = 'compile' | 'preserve';
 
 export type Wasm = {
   /**
-   * Controls how `.wasm` imports are emitted.
+   * Controls how `.wasm` modules are emitted.
    *
-   * - `'compile'`: Generates the JavaScript loading code, so consumers do not
-   *   need to support WebAssembly ESM imports.
-   * - `'preserve'`: Keeps `.wasm` imports and files for the consumer's bundler
-   *   or runtime to handle. Requires `bundle` to be `false`.
+   * - `'compile'`: Generates JavaScript loading code and emits `.wasm` files as static assets.
+   * - `'preserve'`: Preserves `.wasm` imports and files for the consumer to handle. Requires `bundle` to be `false`.
    *
-   * Defaults to `'compile'` when `bundle` is `true`, `'preserve'` when `bundle`
-   * is `false`.
-   *
-   * Can only be configured for `format: 'esm'` builds.
+   * @defaultValue `'compile'` when `bundle` is `true`; `'preserve'` when `bundle` is `false`.
+   * @see {@link https://rslib.rs/config/lib/wasm#wasmmode}
    */
   mode?: WasmMode;
 };
@@ -495,7 +491,11 @@ export interface LibConfig extends EnvironmentConfig {
   outBase?: string;
   /**
    * Configure how Rslib handles `.wasm` modules.
-   * @defaultValue `undefined`
+   *
+   * This option can only be configured when `format` is `'esm'`.
+   *
+   * @defaultValue `{ mode: 'compile' }` when `bundle` is `true`; `{ mode: 'preserve' }` when `bundle` is `false`.
+   * @see {@link https://rslib.rs/config/lib/wasm}
    */
   wasm?: Wasm;
   /**

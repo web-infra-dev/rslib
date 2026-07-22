@@ -1,5 +1,5 @@
 ---
-description: 'Configure lib.wasm to control how Rslib handles `.wasm` imports in the output.'
+description: 'Configure lib.wasm to select the output mode for WASM modules.'
 ---
 
 # lib.wasm
@@ -16,24 +16,13 @@ type Wasm = {
   - When [bundle](/config/lib/bundle) is `true`: `{ mode: 'compile' }`
   - When [bundle](/config/lib/bundle) is `false`: `{ mode: 'preserve' }`
 
-Configure how Rslib handles `.wasm` modules imported with the [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) syntax.
-
-See [Wasm](/guide/advanced/wasm) for more details.
+Configure how Rslib handles `.wasm` modules. See [Wasm](/guide/advanced/wasm) for details.
 
 ## wasm.mode
 
 - **Type:** `'compile' | 'preserve'`
-- **Default:** `'compile'` when [bundle](/config/lib/bundle) is `true`, `'preserve'` when `bundle` is `false`
+- **Default:**
+  - When [bundle](/config/lib/bundle) is `true`: `'compile'`
+  - When [bundle](/config/lib/bundle) is `false`: `'preserve'`
 
-Controls how `.wasm` modules are emitted.
-
-- `'compile'`: Rslib parses the `.wasm` module and generates JavaScript glue code and runtime loading logic. Suitable when the library is consumed directly by a runtime such as Node.js or the browser.
-- `'preserve'`: Rslib keeps the `.wasm` import in the output JavaScript and emits the binary as-is. This mode requires [bundle](/config/lib/bundle) to be `false` and is suitable when the library is consumed by another build tool or a runtime that supports WebAssembly ESM Integration natively.
-
-In preserve mode, the `.wasm` file keeps its source-relative path and original filename. [output.distPath.wasm](/config/rsbuild/output#outputdistpath) and [output.filenameHash](/config/rsbuild/output#outputfilenamehash) do not affect `.wasm` files in preserve mode.
-
-:::note
-
-`wasm` can only be configured when [format](/config/lib/format) is `'esm'` (the default value). In addition, `wasm.mode: 'preserve'` requires [bundle](/config/lib/bundle) to be `false`. The build will fail for unsupported combinations.
-
-:::
+Selects the output mode for `.wasm` modules. See [Wasm - Output modes](/guide/advanced/wasm#output-modes) for details.

@@ -69,7 +69,7 @@ const defaultDistPath = {
 };
 ```
 
-The `wasm` path applies to WebAssembly emitted in [`lib.wasm.mode: 'compile'`](/config/lib/wasm#wasmmode). Bundleless Preserve mode keeps each `.wasm` file at its source-relative path.
+The `wasm` option only takes effect when [lib.wasm.mode](/config/lib/wasm#wasmmode) is `compile`, and specifies the output directory for `.wasm` files. In `preserve` mode, `.wasm` files are emitted at their source-relative paths.
 
 {/* ## output.emitAssets <RsbuildDocBadge path="/config/output/emit-assets" text="output.emitAssets" /> */}
 
