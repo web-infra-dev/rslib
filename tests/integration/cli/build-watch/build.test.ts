@@ -31,13 +31,20 @@ export default defineConfig({
   `,
     );
 
-    const process = runCli(`build --watch -c ${tempConfigFile}`, {
+    const cliProcess = runCli(`build --watch -c ${tempConfigFile}`, {
       cwd: __dirname,
+    });
+
+    onTestFinished(() => {
+      cliProcess.child.kill();
+      fse.removeSync(tempConfigFile);
+      fse.removeSync(distPath);
+      fse.removeSync(dist1Path);
     });
 
     await expectFile(distEsmIndexFile);
     await expectPoll(() =>
-      stripAnsi(process.stdout()).includes(
+      stripAnsi(cliProcess.stdout()).includes(
         'build completed, watching for changes',
       ),
     ).toBeTruthy();
@@ -59,11 +66,9 @@ export default defineConfig({
 
     await expectFile(dist1EsmIndexFile);
 
-    expect(stripAnsi(process.stdout())).toContain(
+    expect(stripAnsi(cliProcess.stdout())).toContain(
       'restarting build as test-temp-rslib.config.mjs changed',
     );
-
-    process.child.kill();
   });
 });
 
