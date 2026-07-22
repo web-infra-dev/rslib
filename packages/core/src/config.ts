@@ -1086,6 +1086,7 @@ const composeEntryConfig = async (
   const scanGlobEntries = async (tryResolveOutBase: boolean) => {
     // In bundleless mode, resolve glob patterns and convert them to entry object.
     const resolvedEntries: Record<string, string> = {};
+    const resolvedOutBaseFiles: string[] = [];
 
     const resolveOutBase = async (resolvedEntryFiles: string[]) => {
       if (userOutBase !== undefined) {
@@ -1129,14 +1130,17 @@ const composeEntryConfig = async (
         ignore: ['**/.DS_Store', '**/Thumbs.db'],
       });
 
-      // Filter the glob resolved entry files based on the allowed extensions
-      const resolvedEntryFiles = globEntryFiles.filter((i) => {
-        if (DTS_EXTENSIONS_PATTERN.test(i)) return false;
-        // In bundleless mode, `.wasm` files are handled through imports rather
-        // than emitted as standalone source entries.
-        if (i.endsWith('.wasm')) return false;
-        return true;
-      });
+      // Declaration files do not participate in entry or outBase resolution.
+      const outBaseFiles = globEntryFiles.filter(
+        (file) => !DTS_EXTENSIONS_PATTERN.test(file),
+      );
+      resolvedOutBaseFiles.push(...outBaseFiles);
+
+      // WebAssembly files participate in outBase resolution, but are handled
+      // through imports rather than emitted as standalone bundleless entries.
+      const resolvedEntryFiles = outBaseFiles.filter(
+        (file) => !file.endsWith('.wasm'),
+      );
 
       if (resolvedEntryFiles.length === 0) {
         const error = new Error(
@@ -1146,7 +1150,7 @@ const composeEntryConfig = async (
         throw error;
       }
 
-      const outBase = await resolveOutBase(resolvedEntryFiles);
+      const outBase = await resolveOutBase(outBaseFiles);
 
       function getEntryName(file: string) {
         const { dir, name } = path.parse(path.relative(outBase, file));
@@ -1182,7 +1186,7 @@ const composeEntryConfig = async (
     }
 
     if (tryResolveOutBase) {
-      const outBase = await resolveOutBase(Object.values(resolvedEntries));
+      const outBase = await resolveOutBase(resolvedOutBaseFiles);
       return { resolvedEntries, outBase };
     }
 

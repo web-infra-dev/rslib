@@ -1,7 +1,7 @@
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { describe, expect, rs, test } from '@rstest/core';
-import { mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { BuildOptions } from '../src/cli/commands';
@@ -658,6 +658,38 @@ describe('Should compose create Rsbuild config correctly', () => {
     expect(
       bundlerConfigs.map((config) => config.output?.chunkFilename),
     ).toEqual([expect.any(Function), expect.any(Function)]);
+  });
+
+  test('includes wasm files in bundleless outBase inference', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'rslib-wasm-out-base-'));
+
+    try {
+      await mkdir(join(root, 'src/lib'), { recursive: true });
+      await mkdir(join(root, 'src/wasm'), { recursive: true });
+      await writeFile(join(root, 'src/lib/index.js'), '');
+      await writeFile(join(root, 'src/wasm/add.wasm'), '');
+
+      const rslib = await createRslib({
+        config: {
+          root,
+          lib: [{ bundle: false, wasm: { mode: 'preserve' } }],
+        },
+      });
+      const {
+        origin: { bundlerConfigs },
+      } = await rslib.inspectConfig({ verbose: true });
+      const entry = bundlerConfigs[0]!.entry;
+
+      expect(entry).toBeTypeOf('function');
+      if (typeof entry !== 'function') {
+        throw new Error('Expected bundleless entry to be a function');
+      }
+      await expect(entry()).resolves.toEqual({
+        'lib/index': join(root, 'src/lib/index.js'),
+      });
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 
   test('Merge output.distPath correctly', async () => {
