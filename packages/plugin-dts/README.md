@@ -168,10 +168,24 @@ At this time, when [redirect.path](#redirectpath) is enabled, the import path of
 
 ### autoExternal
 
-- **Type:** `boolean`
+- **Type:**
+
+```ts
+type AutoExternal =
+  | boolean
+  | {
+      dependencies?: boolean;
+      optionalDependencies?: boolean;
+      peerDependencies?: boolean;
+      devDependencies?: boolean;
+      packageJson?: string | string[];
+      exclude?: string | RegExp | (string | RegExp)[];
+    };
+```
+
 - **Default:** `true`
 
-Whether to automatically externalize dependencies of different dependency types and do not bundle them into the declaration file.
+Controls which dependencies are automatically externalized and not bundled into the declaration file.
 
 The default value of `autoExternal` is `true`, which means the following dependency types will not be bundled:
 
@@ -190,6 +204,36 @@ pluginDts({
     optionalDependencies: true,
     peerDependencies: true,
     devDependencies: false,
+  },
+});
+```
+
+#### autoExternal.packageJson
+
+- **Type:** `string | string[]`
+- **Default:** `'<root>/package.json'`
+
+Specifies the `package.json` file path(s) used to collect dependencies. Relative paths are resolved from the Rsbuild root directory. When multiple files are specified, their dependency fields are merged.
+
+```js
+pluginDts({
+  autoExternal: {
+    packageJson: ['./package.json', './packages/foo/package.json'],
+  },
+});
+```
+
+#### autoExternal.exclude
+
+- **Type:** `string | RegExp | (string | RegExp)[]`
+- **Default:** `undefined`
+
+Excludes matched packages from automatic externalization so their declaration files are bundled. Strings match package names exactly, and regular expressions test package names.
+
+```js
+pluginDts({
+  autoExternal: {
+    exclude: ['react', /^@scope\//],
   },
 });
 ```
