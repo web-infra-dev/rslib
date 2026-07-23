@@ -344,13 +344,13 @@ import { foo } from './foo.mjs'; // expected output of './dist/bar.d.mts'
 
 This option also applies to declaration import paths rewritten through [`paths`](https://typescriptlang.org/tsconfig#paths) or [`dts.alias`](/config/lib/dts#dtsalias). Note the following cases:
 
-- When processing a configured path that points to a directory, Rslib only probes for an `index` declaration file in that directory. It does not use the `types` field, the `types` condition name in `exports`, or `typesVersions` from the directory's `package.json` to resolve a declaration entry. If a declaration entry must be resolved using this package metadata, point the configured path directly to that entry. For example, when `vendor/foo/package.json` contains `"types": "./dist/index.d.ts"`:
+- Rslib probes for an `index` entry under the configured path, but does not use the `types` field, the `types` condition name in `exports`, or `typesVersions` from the directory's `package.json` to locate a declaration entry. If an entry must be resolved using this package metadata, point the configured path directly to that entry. For example, when `vendor/foo/package.json` contains `"types": "./typings/main.d.ts"`:
 
   ```diff title="rslib.config.ts"
    dts: {
      alias: {
   -    foo: './vendor/foo',
-  +    foo: './vendor/foo/dist/index',
+  +    foo: './vendor/foo/typings/main',
      },
    },
   ```

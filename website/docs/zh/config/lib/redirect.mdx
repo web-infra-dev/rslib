@@ -344,13 +344,13 @@ import { foo } from './foo.mjs'; // './dist/bar.d.mts' 预期生成的代码
 
 该配置也适用于通过 [`paths`](https://typescriptlang.org/tsconfig#paths) 或 [`dts.alias`](/config/lib/dts#dtsalias) 改写后的类型导入路径，因此需要注意以下情况：
 
-- Rslib 仅会自动探测配置路径所指目录下的 `index` 类型声明文件，不会根据该目录 `package.json` 中的 `types`、`exports` 的 `types` 条件名称或 `typesVersions` 定位类型入口。若需根据这些包配置定位类型入口，请将配置路径直接指向具体入口。例如，当 `vendor/foo/package.json` 中配置了 `"types": "./dist/index.d.ts"` 时：
+- Rslib 会对配置路径进行 `index` 入口探测，但不会根据该目录 `package.json` 中的 `types`、`exports` 的 `types` 条件名称或 `typesVersions` 定位类型入口。若需根据这些包配置定位入口，请将配置路径直接指向具体入口。例如，当 `vendor/foo/package.json` 中配置了 `"types": "./typings/main.d.ts"` 时：
 
   ```diff title="rslib.config.ts"
    dts: {
      alias: {
   -    foo: './vendor/foo',
-  +    foo: './vendor/foo/dist/index',
+  +    foo: './vendor/foo/typings/main',
      },
    },
   ```
