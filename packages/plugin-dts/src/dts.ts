@@ -26,6 +26,72 @@ import {
 const isObject = (obj: unknown): obj is Record<string, any> =>
   Object.prototype.toString.call(obj) === '[object Object]';
 
+const castArray = <T>(value: T | T[]): T[] =>
+  Array.isArray(value) ? value : [value];
+
+const PACKAGE_JSON_DEPENDENCY_TYPES = [
+  'dependencies',
+  'peerDependencies',
+  'devDependencies',
+  'optionalDependencies',
+] as const;
+
+type PackageJsonDeps = {
+  [key in (typeof PACKAGE_JSON_DEPENDENCY_TYPES)[number]]?: Record<
+    string,
+    string
+  >;
+};
+
+// Read one or more package.json files and merge their dependency fields,
+// aligning with Rsbuild's `output.autoExternal.packageJson` behavior.
+const readPackageJsonDeps = (
+  cwd: string,
+  packageJson?: string | string[],
+): PackageJsonDeps | undefined => {
+  const paths = castArray(packageJson ?? 'package.json').map((path) =>
+    resolve(cwd, path),
+  );
+
+  const merged: PackageJsonDeps = {};
+  let hasAny = false;
+
+  for (const path of paths) {
+    let content: PackageJsonDeps;
+    try {
+      content = JSON.parse(fs.readFileSync(path, 'utf-8'));
+    } catch {
+      continue;
+    }
+    hasAny = true;
+    for (const type of PACKAGE_JSON_DEPENDENCY_TYPES) {
+      const deps = content[type];
+      if (isObject(deps)) {
+        merged[type] = { ...merged[type], ...deps };
+      }
+    }
+  }
+
+  return hasAny ? merged : undefined;
+};
+
+// Whether a package name is matched by `autoExternal.exclude` conditions.
+const matchAutoExternalExclude = (
+  packageName: string,
+  conditions: (string | RegExp)[],
+): boolean => {
+  return conditions.some((condition) => {
+    if (typeof condition === 'string') {
+      return condition === packageName;
+    }
+
+    // Clone stateful regexps to avoid mutating user config via `lastIndex`.
+    const regexp =
+      condition.global || condition.sticky ? new RegExp(condition) : condition;
+    return regexp.test(packageName);
+  });
+};
+
 export const DEFAULT_EXCLUDED_PACKAGES: string[] = ['@types/react'];
 
 const isExecutableBackend = (
@@ -49,17 +115,12 @@ export const calcBundledPackages = (
     return overrideBundledPackages;
   }
 
-  let pkgJson: {
-    dependencies?: Record<string, string>;
-    peerDependencies?: Record<string, string>;
-    devDependencies?: Record<string, string>;
-    optionalDependencies?: Record<string, string>;
-  };
+  const autoExternalObject =
+    autoExternal && autoExternal !== true ? autoExternal : {};
 
-  try {
-    const content = fs.readFileSync(join(cwd, 'package.json'), 'utf-8');
-    pkgJson = JSON.parse(content);
-  } catch {
+  const pkgJson = readPackageJsonDeps(cwd, autoExternalObject.packageJson);
+
+  if (!pkgJson) {
     logger.warn(
       'The type of third-party packages will not be bundled due to read package.json failed',
     );
@@ -72,7 +133,7 @@ export const calcBundledPackages = (
         peerDependencies: true,
         optionalDependencies: true,
         devDependencies: false,
-        ...(autoExternal === true ? {} : autoExternal),
+        ...autoExternalObject,
       }
     : {
         dependencies: false,
@@ -80,6 +141,10 @@ export const calcBundledPackages = (
         optionalDependencies: false,
         devDependencies: false,
       };
+
+  const excludeConditions = autoExternalObject.exclude
+    ? castArray(autoExternalObject.exclude)
+    : undefined;
 
   // User externals should not bundled
   // Only handle the case where the externals type is string / (string | RegExp)[] / plain object, function type is too complex.
@@ -117,7 +182,15 @@ export const calcBundledPackages = (
     const deps = pkgJson[type] && Object.keys(pkgJson[type]);
     if (deps) {
       if (externalOptions[type]) {
-        externals.push(...deps);
+        // Packages matched by `exclude` are kept out of externals so their
+        // declarations are bundled, aligning with the JS auto externalization.
+        externals.push(
+          ...(excludeConditions
+            ? deps.filter(
+                (dep) => !matchAutoExternalExclude(dep, excludeConditions),
+              )
+            : deps),
+        );
       }
       allDeps.push(...deps);
     }

@@ -3,6 +3,8 @@ export type DtsRedirect = {
   extension?: boolean;
 };
 
+export type AutoExternalExclude = (string | RegExp) | (string | RegExp)[];
+
 export type ApiExtractorOptions = {
   bundledPackages?: string[];
 };
@@ -22,6 +24,8 @@ export type PluginDtsOptions = {
         optionalDependencies?: boolean;
         peerDependencies?: boolean;
         devDependencies?: boolean;
+        packageJson?: string | string[];
+        exclude?: AutoExternalExclude;
       };
   banner?: string;
   footer?: string;

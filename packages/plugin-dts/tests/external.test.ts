@@ -1,7 +1,24 @@
 import fs from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { logger } from '@rsbuild/core';
-import { describe, expect, it, rs } from '@rstest/core';
+import { afterEach, describe, expect, it, rs } from '@rstest/core';
 import { calcBundledPackages, DEFAULT_EXCLUDED_PACKAGES } from '../src/dts';
+
+const tempDirs: string[] = [];
+
+const createTempDir = (): string => {
+  const tempDir = fs.mkdtempSync(join(tmpdir(), 'rslib-plugin-dts-external-'));
+  tempDirs.push(tempDir);
+  return tempDir;
+};
+
+afterEach(() => {
+  for (const tempDir of tempDirs) {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+  tempDirs.length = 0;
+});
 
 const defaultExcludePackages = DEFAULT_EXCLUDED_PACKAGES.reduce(
   (acc: Record<string, string>, cur: string) => {
@@ -128,6 +145,76 @@ describe('should calcBundledPackages correctly', () => {
     });
 
     expect(result).toEqual(['foo', '@bar/*']);
+  });
+
+  it('autoExternal exclude with string', () => {
+    rs.spyOn(fs, 'readFileSync').mockImplementation(() =>
+      JSON.stringify(commonPkgJson),
+    );
+
+    // `foo` is excluded from auto externalization, so it is bundled.
+    const result = calcBundledPackages({
+      autoExternal: {
+        exclude: ['foo'],
+      },
+      cwd: 'pkg/to/root',
+    });
+
+    expect(result).toEqual(['foo', 'bar']);
+  });
+
+  it('autoExternal exclude with RegExp', () => {
+    rs.spyOn(fs, 'readFileSync').mockImplementation(() =>
+      JSON.stringify(commonPkgJson),
+    );
+
+    // `baz` matches the RegExp and is excluded from auto externalization.
+    const result = calcBundledPackages({
+      autoExternal: {
+        exclude: [/^ba/],
+      },
+      cwd: 'pkg/to/root',
+    });
+
+    expect(result).toEqual(['baz', 'bar']);
+  });
+
+  it('autoExternal exclude with global RegExp', () => {
+    rs.spyOn(fs, 'readFileSync').mockImplementation(() =>
+      JSON.stringify(commonPkgJson),
+    );
+
+    // Global regexps must be cloned to avoid `lastIndex` side effects.
+    const result = calcBundledPackages({
+      autoExternal: {
+        exclude: /^ba/g,
+      },
+      cwd: 'pkg/to/root',
+    });
+
+    expect(result).toEqual(['baz', 'bar']);
+  });
+
+  it('autoExternal reads and merges packageJson files relative to cwd', () => {
+    const cwd = createTempDir();
+    fs.mkdirSync(join(cwd, 'packages', 'sub'), { recursive: true });
+    fs.writeFileSync(
+      join(cwd, 'package.json'),
+      JSON.stringify({ devDependencies: { foo: '1.0.0' } }),
+    );
+    fs.writeFileSync(
+      join(cwd, 'packages', 'sub', 'package.json'),
+      JSON.stringify({ devDependencies: { bar: '1.0.0' } }),
+    );
+
+    const result = calcBundledPackages({
+      autoExternal: {
+        packageJson: ['./package.json', './packages/sub/package.json'],
+      },
+      cwd,
+    });
+
+    expect(result).toEqual(['foo', 'bar']);
   });
 });
 
