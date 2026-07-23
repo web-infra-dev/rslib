@@ -36,9 +36,13 @@ export type LoadConfigResult<Config = RslibConfig> = {
  * This function helps you to autocomplete configuration types.
  * It accepts a Rslib config object, or a function that returns a config.
  */
+export function defineConfig<const Config extends RslibConfig>(
+  config: (env: ConfigParams) => Config,
+): (env: ConfigParams) => Config;
+export function defineConfig<const Config extends RslibConfig>(
+  config: (env: ConfigParams) => Promise<Config>,
+): (env: ConfigParams) => Promise<Config>;
 export function defineConfig(config: RslibConfig): RslibConfig;
-export function defineConfig(config: RslibConfigSyncFn): RslibConfigSyncFn;
-export function defineConfig(config: RslibConfigAsyncFn): RslibConfigAsyncFn;
 export function defineConfig(
   config: RslibConfigDefinition,
 ): RslibConfigDefinition;
