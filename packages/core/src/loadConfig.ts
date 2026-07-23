@@ -38,10 +38,10 @@ export type LoadConfigResult<Config = RslibConfig> = {
  */
 export function defineConfig<const Config extends RslibConfig>(
   config: (env: ConfigParams) => Config,
-): (env: ConfigParams) => Config;
+): RslibConfigSyncFn;
 export function defineConfig<const Config extends RslibConfig>(
   config: (env: ConfigParams) => Promise<Config>,
-): (env: ConfigParams) => Promise<Config>;
+): RslibConfigAsyncFn;
 export function defineConfig(config: RslibConfig): RslibConfig;
 export function defineConfig(
   config: RslibConfigDefinition,
