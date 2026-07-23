@@ -77,6 +77,7 @@ export const calcBundledPackages = (
     : {
         dependencies: false,
         peerDependencies: false,
+        optionalDependencies: false,
         devDependencies: false,
       };
 
@@ -110,6 +111,7 @@ export const calcBundledPackages = (
   for (const type of [
     'dependencies',
     'peerDependencies',
+    'optionalDependencies',
     'devDependencies',
   ] as const) {
     const deps = pkgJson[type] && Object.keys(pkgJson[type]);
