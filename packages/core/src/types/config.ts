@@ -111,7 +111,6 @@ export type Dts =
       typescriptPath?: string;
       /**
        * Whether to generate declaration files with `tsgo`.
-       * @experimental
        * @defaultValue `true` when the installed `typescript` package is version 7 or higher, otherwise `false`.
        * @see {@link https://rslib.rs/config/lib/dts#dtstsgo}
        */
