@@ -352,7 +352,7 @@ To ensure consistency during local development, you need to install the correspo
 
 Whether to generate declaration files with [isolatedDeclarations](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations).
 
-> This option was added in Rslib v0.22.0 and is currently still experimental.
+> This option is currently experimental.
 
 When enabled, `rsbuild-plugin-dts` uses Rspack's built-in SWC fast_dts capability to generate declaration files directly during the build.
 

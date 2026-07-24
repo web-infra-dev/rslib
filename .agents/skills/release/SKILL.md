@@ -9,7 +9,7 @@ metadata:
 
 ## Input
 
-- Target version, for example `0.21.3`
+- Target version, for example `1.0.0`
 
 If the version is missing, ask for it before making changes.
 
