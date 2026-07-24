@@ -301,9 +301,16 @@ const composeFormatConfig = ({
       },
     },
     others: {
-      worker: false,
+      worker:
+        format === 'esm'
+          ? {
+              url: 'new-url-relative',
+            }
+          : false,
     },
   };
+
+  const workerParserOptions = jsParserOptions.others?.worker;
 
   // The built-in Rslib plugin will apply to all formats except the `mf` format.
   // The `mf` format functions more like an application than a library and requires additional webpack runtime.
@@ -322,7 +329,12 @@ const composeFormatConfig = ({
         bundle === false || Object.keys(sourceEntry ?? {}).length > 1;
 
       return {
-        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
+        plugins: [
+          modifyRsbuildDefaultPlugin({
+            disableUrlParse: true,
+            worker: workerParserOptions,
+          }),
+        ],
         output: {
           filenameHash: false,
           ...(bundle && { autoExternal: true }),
@@ -366,7 +378,12 @@ const composeFormatConfig = ({
     }
     case 'cjs':
       return {
-        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
+        plugins: [
+          modifyRsbuildDefaultPlugin({
+            disableUrlParse: true,
+            worker: workerParserOptions,
+          }),
+        ],
         output: {
           module: false,
           filenameHash: false,
@@ -533,8 +550,10 @@ const composeFormatConfig = ({
 
 const modifyRsbuildDefaultPlugin = ({
   disableUrlParse,
+  worker,
 }: {
   disableUrlParse?: boolean;
+  worker?: Rspack.JavascriptParserOptions['worker'];
 } = {}): RsbuildPlugin => ({
   name: 'rslib:modify-rsbuild-default',
   setup(api) {
@@ -548,6 +567,7 @@ const modifyRsbuildDefaultPlugin = ({
           .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
           .parser({
             url: false,
+            ...(worker ? { worker } : {}),
           });
       }
 
@@ -1252,11 +1272,17 @@ const composeBundlelessExternalConfig = (
       output: {
         externals: [
           async (data, callback) => {
-            const { request, getResolve, context, contextInfo } = data;
+            const {
+              request,
+              getResolve,
+              context,
+              contextInfo,
+            } = data;
             if (!request || !getResolve || !context || !contextInfo) {
               callback();
               return;
             }
+
             const { issuer } = contextInfo;
             const originExtension = extname(request);
 
