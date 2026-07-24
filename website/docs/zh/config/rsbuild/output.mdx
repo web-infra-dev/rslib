@@ -84,6 +84,8 @@ const defaultDistPath = {
 };
 ```
 
+其中，`wasm` 配置仅在 [lib.wasm.mode](/config/lib/wasm#wasmmode) 为 `compile` 时生效，用于指定 `.wasm` 文件的输出目录。在 `preserve` 模式下，`.wasm` 文件会按源码相对路径输出。
+
 ## output.emitCss <RsbuildDocBadge path="/config/output/emit-css" text="output.emitCss" />
 
 是否将 CSS 输出到产物中。

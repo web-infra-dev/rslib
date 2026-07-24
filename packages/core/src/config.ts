@@ -69,6 +69,7 @@ import {
   transformSyntaxToRspackTarget,
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
+import { composeWasmConfig, resolveWasmMode } from './wasm/compose';
 
 export function composeMinifyConfig(config: LibConfig): EnvironmentConfig {
   const minify = config.output?.minify;
@@ -764,6 +765,8 @@ const composeOutputFilenameConfig = (
 ): {
   config: EnvironmentConfig;
   jsExtension: string;
+  jsDistPath: string;
+  jsFilename: Rspack.Filename;
   dtsExtension: string;
 } => {
   const { jsExtension, dtsExtension } = getDefaultExtension({
@@ -791,13 +794,7 @@ const composeOutputFilenameConfig = (
   // Keep filename inference in sync with Rspack's default `chunkFilename`
   // inference for strings:
   // https://github.com/web-infra-dev/rspack/blob/e8a7bce74b5261220f0f351ebe581d5d99df54d6/packages/rspack/src/config/defaults.ts#L813-L826
-  const inferChunkFilename = (
-    filename: Rspack.Filename,
-  ): string | undefined => {
-    if (typeof filename === 'function') {
-      return undefined;
-    }
-
+  const inferChunkFilename = (filename: string): string => {
     const hasName = filename.includes('[name]');
     const hasId = filename.includes('[id]');
     const hasChunkHash = filename.includes('[chunkhash]');
@@ -847,12 +844,10 @@ const composeOutputFilenameConfig = (
     typeof multiCompilerIndex === 'number' ? `~${multiCompilerIndex}` : '';
   const defaultJsFilenameTemplate = `[name]${hash}${jsExtension}`;
   const userJsFilename = config.output?.filename?.js;
-  // A custom filename function owns the naming contract. Leave
-  // `chunkFilename` unset so Rsbuild applies it to async chunks as well; users
-  // are responsible for avoiding collisions across compilers.
-  const inferredJsChunkFilename = inferChunkFilename(
-    userJsFilename ?? defaultJsFilenameTemplate,
-  );
+  const bundlelessJsFilename = userJsFilename ?? defaultJsFilenameTemplate;
+  const distPath = config.output?.distPath;
+  const jsDistPath =
+    typeof distPath === 'object' && distPath ? (distPath.js ?? './') : './';
 
   // will be returned to use in redirect feature
   // only support string type for now since we can not get the return value of function
@@ -861,33 +856,36 @@ const composeOutputFilenameConfig = (
       ? extname(userJsFilename)
       : jsExtension;
 
-  if (inferredJsChunkFilename === undefined) {
+  if (typeof bundlelessJsFilename === 'function') {
+    // A custom filename function owns the naming contract. Leave
+    // `chunkFilename` unset so Rsbuild applies it to async chunks as well; users
+    // are responsible for avoiding collisions across compilers.
     return {
       config: {},
       jsExtension: finalJsExtension,
+      jsDistPath,
+      jsFilename: bundlelessJsFilename,
       dtsExtension,
     };
   }
+
+  const inferredJsChunkFilename = inferChunkFilename(bundlelessJsFilename);
 
   // Runtime and other initial chunks use `filename` instead of `chunkFilename`.
   // For default and string filename templates, keep entry filenames stable
   // while isolating the other chunks by compiler. Multi-compiler builds append
   // a stable suffix based on each compiler's `lib` index, starting from `~0`.
   // Do not infer whether compiler output paths actually overlap here.
-  const jsFilenameTemplate =
-    typeof userJsFilename === 'string'
-      ? userJsFilename
-      : defaultJsFilenameTemplate;
-  let jsFilename: Rspack.Filename = jsFilenameTemplate;
+  let jsFilename: Rspack.Filename = bundlelessJsFilename;
   let jsChunkFilename = inferredJsChunkFilename;
 
   if (multiCompilerSuffix) {
     const nonEntryFilename = appendMultiCompilerSuffix(
-      jsFilenameTemplate,
+      bundlelessJsFilename,
       multiCompilerSuffix,
     );
     jsFilename = ({ chunk }) =>
-      isEntryChunk(chunk) ? jsFilenameTemplate : nonEntryFilename;
+      isEntryChunk(chunk) ? bundlelessJsFilename : nonEntryFilename;
     jsChunkFilename = appendMultiCompilerSuffix(
       inferredJsChunkFilename,
       multiCompilerSuffix,
@@ -919,6 +917,8 @@ const composeOutputFilenameConfig = (
     // Do not modify MF's output hash configuration.
     config: format === 'mf' ? {} : finalConfig,
     jsExtension: finalJsExtension,
+    jsDistPath,
+    jsFilename: bundlelessJsFilename,
     dtsExtension,
   };
 };
@@ -1086,6 +1086,7 @@ const composeEntryConfig = async (
   const scanGlobEntries = async (tryResolveOutBase: boolean) => {
     // In bundleless mode, resolve glob patterns and convert them to entry object.
     const resolvedEntries: Record<string, string> = {};
+    const resolvedOutBaseFiles: string[] = [];
 
     const resolveOutBase = async (resolvedEntryFiles: string[]) => {
       if (userOutBase !== undefined) {
@@ -1129,10 +1130,17 @@ const composeEntryConfig = async (
         ignore: ['**/.DS_Store', '**/Thumbs.db'],
       });
 
-      // Filter the glob resolved entry files based on the allowed extensions
-      const resolvedEntryFiles = globEntryFiles.filter((i) => {
-        return !DTS_EXTENSIONS_PATTERN.test(i);
-      });
+      // Declaration files do not participate in entry or outBase resolution.
+      const outBaseFiles = globEntryFiles.filter(
+        (file) => !DTS_EXTENSIONS_PATTERN.test(file),
+      );
+      resolvedOutBaseFiles.push(...outBaseFiles);
+
+      // WebAssembly files participate in outBase resolution, but are handled
+      // through imports rather than emitted as standalone bundleless entries.
+      const resolvedEntryFiles = outBaseFiles.filter(
+        (file) => !file.endsWith('.wasm'),
+      );
 
       if (resolvedEntryFiles.length === 0) {
         const error = new Error(
@@ -1142,12 +1150,12 @@ const composeEntryConfig = async (
         throw error;
       }
 
-      const outBase = await resolveOutBase(resolvedEntryFiles);
+      const outBase = await resolveOutBase(outBaseFiles);
 
       function getEntryName(file: string) {
         const { dir, name } = path.parse(path.relative(outBase, file));
         // Entry filename contains nested path to preserve source directory structure.
-        const entryFileName = path.join(dir, name);
+        const entryFileName = normalizeSlash(path.join(dir, name));
 
         // 1. we mark the global css files (which will generate empty js chunk in cssExtract), and deleteAsset in RemoveCssExtractAssetPlugin
         // 2. avoid the same name e.g: `index.ts` and `index.css`
@@ -1178,7 +1186,7 @@ const composeEntryConfig = async (
     }
 
     if (tryResolveOutBase) {
-      const outBase = await resolveOutBase(Object.values(resolvedEntries));
+      const outBase = await resolveOutBase(resolvedOutBaseFiles);
       return { resolvedEntries, outBase };
     }
 
@@ -1254,6 +1262,12 @@ const composeBundlelessExternalConfig = (
           async (data, callback) => {
             const { request, getResolve, context, contextInfo } = data;
             if (!request || !getResolve || !context || !contextInfo) {
+              callback();
+              return;
+            }
+
+            // for bundleless + compile mode
+            if (request.endsWith('.wasm')) {
               callback();
               return;
             }
@@ -1662,6 +1676,8 @@ async function composeLibRsbuildConfig(
   const {
     config: outputFilenameConfig,
     jsExtension,
+    jsDistPath,
+    jsFilename,
     dtsExtension,
   } = composeOutputFilenameConfig(
     config,
@@ -1671,6 +1687,11 @@ async function composeLibRsbuildConfig(
     pkgJson,
   );
 
+  const wasmMode = resolveWasmMode({
+    bundle,
+    format,
+    wasmConfig: config.wasm,
+  });
   const { entryConfig, outBase } = await composeEntryConfig(
     config.source?.entry,
     config.bundle,
@@ -1686,6 +1707,15 @@ async function composeLibRsbuildConfig(
     sourceEntry: entryConfig.source?.entry,
     target,
   });
+
+  const { externalConfig: wasmExternalConfig, config: wasmConfig } =
+    composeWasmConfig({
+      format,
+      jsDistPath,
+      jsFilename,
+      mode: wasmMode,
+      outBase,
+    });
 
   const { config: bundlelessExternalConfig } = composeBundlelessExternalConfig(
     jsExtension,
@@ -1735,16 +1765,19 @@ async function composeLibRsbuildConfig(
     // #region Externals configs
     // The order of the externals config should come in the following order:
     // 1. `userExternalsConfig` should present at first to takes effect earlier than others.
-    // 2. The externals config in `bundlelessExternalConfig` should present after other externals config as
+    // 2. `wasmExternalConfig` should come before `bundlelessExternalConfig` to preserve local wasm imports.
+    // 3. The externals config in `bundlelessExternalConfig` should present after other externals config as
     //    it relies on other externals config to bail out the externalized modules first then resolve
     //    the correct path for relative imports.
     userExternalsConfig,
     targetExternalsConfig,
+    wasmExternalConfig,
     bundlelessExternalConfig,
     // #endregion
     entryConfig,
     cssConfig,
     assetConfig,
+    wasmConfig,
     entryChunkConfig,
     minifyConfig,
     dtsConfig,
@@ -1860,6 +1893,7 @@ export async function composeCreateRsbuildConfig(
           shims: true,
           umdName: true,
           outBase: true,
+          wasm: true,
           experiments: true,
         }),
       ),

@@ -1,0 +1,156 @@
+---
+description: '在 Rslib 库中导入 WebAssembly 模块，通过 compile 或 preserve 模式选择产物形态。'
+---
+
+import { Tabs, Tab } from '@theme';
+
+# Wasm
+
+Rslib 原生支持 WebAssembly（WASM）模块，允许你在项目中通过 [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 提案定义的 ESM 导入方式，直接导入和使用 `.wasm` 文件。
+
+:::note
+
+使用 WebAssembly ESM Integration 导入 `.wasm` 模块时，仅支持生成 ESM 格式的产物，因此 [format](/config/lib/format) 必须设置为 `'esm'`（默认值）。
+
+:::
+
+## 使用 WASM 模块
+
+Rslib 支持通过以下方式使用 `.wasm` 模块。
+
+### 静态导入与重新导出
+
+你可以使用标准 ESM 语法导入 `.wasm` 模块并访问其实例化后的导出，也可以直接重新导出这些内容：
+
+```ts
+import { add } from './add.wasm';
+import * as wasm from './add.wasm';
+import './add.wasm';
+
+export { add } from './add.wasm';
+export * from './add.wasm';
+export * as wasm from './add.wasm';
+```
+
+### 动态导入
+
+你可以使用 `import()` 动态导入 `.wasm` 模块并访问其实例化后的导出：
+
+```ts
+const wasm = await import('./add.wasm');
+```
+
+### Source phase 导入
+
+你可以使用 [Source Phase Imports](https://github.com/tc39/proposal-source-phase-imports) 获取编译后的 `WebAssembly.Module`，并通过自定义 import object 手动完成实例化：
+
+```ts
+import source addModule from './add.wasm';
+
+const { instance } = await WebAssembly.instantiate(addModule, {
+  env: { now: Date.now },
+});
+```
+
+你也可以使用 `import.source()` 动态获取编译后的 `WebAssembly.Module`：
+
+```ts
+const addModule = await import.source('./add.wasm');
+```
+
+:::note
+
+TypeScript 目前无法解析 `import source` 和 `import.source()`。请在 JavaScript 文件中使用这些语法，或选择支持它们的工具链。
+
+:::
+
+## 输出模式
+
+你可以通过 [lib.wasm.mode](/config/lib/wasm#wasmmode) 选择 `.wasm` 模块的输出模式：
+
+- [bundle](/config/lib/bundle) 为 `true`：仅支持 `compile` 模式。
+- [bundle](/config/lib/bundle) 为 `false`：默认使用 `preserve` 模式，适用于 `.wasm` 模块由支持 WebAssembly ESM Integration 的下游构建工具（如 Rsbuild 或 Rspack）或目标运行时（如 [Node.js](https://nodejs.org/api/esm.html#wasm-modules) `^22.19.0 || >=24.5.0`）解析和加载的场景。如果消费方不支持该特性，或不希望依赖其处理 `.wasm` 模块，则使用 `compile` 模式。
+
+### `compile` 模式
+
+Rslib 解析每个 `.wasm` 模块，生成加载和实例化该模块所需的 JavaScript 胶水代码，并将二进制文件作为静态资源输出到由 [output.distPath.wasm](/config/rsbuild/output#outputdistpath) 指定的目录（默认为 `dist/static/wasm`），文件名包含 content hash：
+
+<Tabs>
+<Tab label="bundle">
+
+```
+dist
+├── index.js
+└── static
+    └── wasm
+        └── [contenthash].module.wasm
+```
+
+</Tab>
+<Tab label="bundleless">
+
+```
+dist
+├── index.js
+├── utils.js
+└── static
+    └── wasm
+        └── [contenthash].module.wasm
+```
+
+</Tab>
+</Tabs>
+
+生成的加载代码取决于 [output.target](/config/rsbuild/output#outputtarget)：
+
+- `web`：使用 `fetch` 加载 `.wasm` 文件。
+- `node`：使用 Node.js 异步文件系统 API 加载 `.wasm` 文件。
+
+### `preserve` 模式
+
+Rslib 在 JavaScript 产物中保留对 `.wasm` 模块的 import 语句，并按源码相对路径和原文件名原样输出二进制文件：
+
+```
+dist
+├── index.js
+├── utils.js
+└── add.wasm
+```
+
+```js title="dist/index.js"
+import { add } from './add.wasm';
+
+export { add };
+```
+
+`preserve` 模式会保留 `.wasm` 文件的原始名称，因此 [output.filenameHash](/config/rsbuild/output#outputfilenamehash) 不会影响其文件名。
+
+:::note JavaScript 产物的路径和文件名限制
+
+Rslib 会更新 JavaScript 产物中对 `.wasm` 文件的 import，使其指向输出后的文件，但不会更新 `.wasm` 二进制内部记录的 import 模块名。
+
+如果这些模块名对应 JavaScript 产物，请勿通过以下配置改变 JavaScript 产物的相对路径或文件名：
+
+- [output.distPath.js](/config/rsbuild/output#outputdistpath)
+- [output.filename.js](/config/rsbuild/output#outputfilename)
+- [lib.autoExtension](/config/lib/auto-extension)
+
+:::
+
+## 与 wasm-bindgen 配合使用
+
+[`wasm-bindgen`](https://wasm-bindgen.github.io/wasm-bindgen/) 是使用 Rust 构建 WebAssembly 库的工具，可通过 `--target` 选项生成面向不同运行环境的产物。
+
+Rslib 目前支持以下 target：
+
+- `bundler`（推荐）：胶水 JavaScript 以 ES module 形式导入 `.wasm` 模块，同时提供该模块实例化所需的 imports。`compile` 和 `preserve` 两种模式均可使用；使用 `preserve` 模式时，需遵守[上文的路径和文件名限制](#preserve-模式)。
+- `module`：胶水 JavaScript 通过 [Source Phase 导入](#source-phase-导入)获取编译后的 `WebAssembly.Module`，然后构造 import object 并完成实例化。`compile` 和 `preserve` 两种模式均可使用。
+- `web` / `experimental-nodejs-module`：胶水 JavaScript 通过 `new URL('./pkg.wasm', import.meta.url)` 定位并加载 `.wasm` 文件。Rslib 将该文件作为静态资源处理，因此 [lib.wasm.mode](/config/lib/wasm#wasmmode) 不适用。
+
+## 类型声明
+
+TypeScript 未内置 `.wasm` 文件的模块声明。使用 TypeScript 时，你需要在 `.wasm` 文件旁添加一个 `.d.wasm.ts` 声明文件，并在 `tsconfig.json` 中启用 [`allowArbitraryExtensions`](https://www.typescriptlang.org/tsconfig/allowArbitraryExtensions.html)：
+
+```ts title="src/add.d.wasm.ts"
+export function add(a: number, b: number): number;
+```

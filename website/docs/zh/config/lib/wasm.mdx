@@ -1,0 +1,28 @@
+---
+description: '配置 lib.wasm，选择 WASM 模块的输出模式。'
+---
+
+# lib.wasm
+
+- **类型：**
+
+```ts
+type Wasm = {
+  mode?: 'compile' | 'preserve';
+};
+```
+
+- **默认值：**
+  - 当 [bundle](/config/lib/bundle) 为 `true` 时：`{ mode: 'compile' }`
+  - 当 [bundle](/config/lib/bundle) 为 `false` 时：`{ mode: 'preserve' }`
+
+配置 Rslib 如何处理 `.wasm` 模块，详见 [Wasm](/guide/advanced/wasm)。
+
+## wasm.mode
+
+- **类型：** `'compile' | 'preserve'`
+- **默认值：**
+  - 当 [bundle](/config/lib/bundle) 为 `true` 时：`'compile'`
+  - 当 [bundle](/config/lib/bundle) 为 `false` 时：`'preserve'`
+
+选择 `.wasm` 模块的输出模式，详见 [Wasm - 输出模式](/guide/advanced/wasm#输出模式)。

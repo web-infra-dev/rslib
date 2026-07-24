@@ -1,0 +1,28 @@
+---
+description: 'Configure lib.wasm to select the output mode for WASM modules.'
+---
+
+# lib.wasm
+
+- **Type:**
+
+```ts
+type Wasm = {
+  mode?: 'compile' | 'preserve';
+};
+```
+
+- **Default:**
+  - When [bundle](/config/lib/bundle) is `true`: `{ mode: 'compile' }`
+  - When [bundle](/config/lib/bundle) is `false`: `{ mode: 'preserve' }`
+
+Configure how Rslib handles `.wasm` modules. See [Wasm](/guide/advanced/wasm) for details.
+
+## wasm.mode
+
+- **Type:** `'compile' | 'preserve'`
+- **Default:**
+  - When [bundle](/config/lib/bundle) is `true`: `'compile'`
+  - When [bundle](/config/lib/bundle) is `false`: `'preserve'`
+
+Selects the output mode for `.wasm` modules. See [Wasm - Output modes](/guide/advanced/wasm#output-modes) for details.

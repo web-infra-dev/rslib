@@ -1,6 +1,12 @@
 import { defineConfig, js, ts } from '@rslint/core';
 
 export default defineConfig([
+  {
+    ignores: [
+      // TypeScript does not support source phase imports syntax
+      'tests/integration/wasm/static-source/src/utils.js',
+    ],
+  },
   js.configs.recommended,
   ts.configs.recommended,
   {
