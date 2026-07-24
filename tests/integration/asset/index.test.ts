@@ -1,5 +1,5 @@
-import { join } from 'node:path';
 import { expect, test } from '@rstest/core';
+import { join } from 'node:path';
 import { buildAndGetResults, queryContent } from 'test-helper';
 
 test('set the size threshold to inline static assets', async () => {
@@ -457,4 +457,47 @@ test('use source.assetInclude', async () => {
   // esm
   const { content: dataJs } = queryContent(contents.esm1!, /assets\/draft\.js/);
   expect(dataJs).matchSnapshot();
+});
+
+test('preserve `new URL` as relative URL', async () => {
+  const fixturePath = join(__dirname, 'new-url');
+  const { contents, files } = await buildAndGetResults({ fixturePath });
+
+  // 0. bundle
+  // esm
+  // `new URL(..., import.meta.url)` should be preserved as a static relative
+  // URL that points to the emitted asset, instead of being bundled.
+  const { content: bundleEsm } = queryContent(contents.esm0!, /index\.js/);
+  expect(bundleEsm).toMatchInlineSnapshot(`
+    "const logo = new URL("./static/svg/logo.svg", import.meta.url);
+    export { logo };
+    "
+  `);
+  // cjs
+  // `import.meta.url` is invalid in CommonJS, so it is rewritten to the
+  // injected `__rslib_import_meta_url__` shim.
+  const { content: bundleCjs } = queryContent(contents.cjs0!, /index\.cjs/);
+  expect(bundleCjs).toContain(
+    'const logo = new URL("./static/svg/logo.svg", __rslib_import_meta_url__);',
+  );
+  expect(bundleCjs).not.toContain('import.meta.url');
+
+  // 1. bundleless
+  // esm
+  // The referenced asset is emitted (not externalized nor turned into a
+  // standalone JS chunk), and `new URL()` still resolves to it relatively.
+  const { content: bundlelessEsm } = queryContent(contents.esm1!, /index\.js/);
+  expect(bundlelessEsm).toMatchInlineSnapshot(`
+    "const logo = new URL("./static/svg/logo.svg", import.meta.url);
+    export { logo };
+    "
+  `);
+  // cjs
+  const { content: bundlelessCjs } = queryContent(contents.cjs1!, /index\.cjs/);
+  expect(bundlelessCjs).toContain(
+    'const logo = new URL("./static/svg/logo.svg", __rslib_import_meta_url__);',
+  );
+  expect(bundlelessCjs).not.toContain('import.meta.url');
+  // The asset is emitted as a file, without an extra `assets/logo.*` JS chunk.
+  expect(files.esm1!.some((f) => /assets\/logo\.js$/.test(f))).toBe(false);
 });

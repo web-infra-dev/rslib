@@ -64,6 +64,26 @@ class EntryChunkPlugin {
             const oldSource = old.source().toString();
             const replaceSource = new rspack.sources.ReplaceSource(old);
 
+            // Rewrite the `import.meta.url` emitted by Rspack's
+            // `new-url-relative` URL template (e.g. `new URL(..., import.meta.url)`).
+            // `import.meta` is invalid in CommonJS output, and this occurrence is
+            // injected during code generation so it bypasses the `source.define`
+            // replacement in `pluginCjsShims`. Since that define has already
+            // rewritten every `import.meta.url` from user source, any remaining
+            // one here comes from the URL template and is safe to replace.
+            const IMPORT_META_URL = 'import.meta.url';
+            for (
+              let index = oldSource.indexOf(IMPORT_META_URL);
+              index !== -1;
+              index = oldSource.indexOf(IMPORT_META_URL, index + 1)
+            ) {
+              replaceSource.replace(
+                index,
+                index + IMPORT_META_URL.length - 1,
+                '__rslib_import_meta_url__',
+              );
+            }
+
             if (oldSource.startsWith('#!')) {
               const firstLineEnd = oldSource.indexOf('\n');
               replaceSource.insert(firstLineEnd + 1, IMPORT_META_URL_SHIM);

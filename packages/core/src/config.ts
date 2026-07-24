@@ -322,7 +322,7 @@ const composeFormatConfig = ({
         bundle === false || Object.keys(sourceEntry ?? {}).length > 1;
 
       return {
-        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
+        plugins: [modifyRsbuildDefaultPlugin({ relativeUrl: true })],
         output: {
           filenameHash: false,
           ...(bundle && { autoExternal: true }),
@@ -366,7 +366,7 @@ const composeFormatConfig = ({
     }
     case 'cjs':
       return {
-        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
+        plugins: [modifyRsbuildDefaultPlugin({ relativeUrl: true })],
         output: {
           module: false,
           filenameHash: false,
@@ -532,22 +532,23 @@ const composeFormatConfig = ({
 };
 
 const modifyRsbuildDefaultPlugin = ({
-  disableUrlParse,
+  relativeUrl,
 }: {
-  disableUrlParse?: boolean;
+  relativeUrl?: boolean;
 } = {}): RsbuildPlugin => ({
   name: 'rslib:modify-rsbuild-default',
   setup(api) {
     api.modifyBundlerChain((chain, { CHAIN_ID, target }) => {
-      // Part 1: disable URL parsing for library output.
+      // Part 1: emit relative `new URL()` for library output.
       // Fix for https://github.com/web-infra-dev/rslib/issues/499.
-      // Prevent parsing and try bundling `new URL()` in ESM/CJS format.
-      if (disableUrlParse) {
+      // Use Rspack's `new-url-relative` mode so `new URL()` references are
+      // preserved as static relative URLs instead of being bundled.
+      if (relativeUrl) {
         chain.module
           .rule(CHAIN_ID.RULE.JS)
           .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
           .parser({
-            url: false,
+            url: 'new-url-relative',
           });
       }
 
@@ -1257,6 +1258,13 @@ const composeBundlelessExternalConfig = (
               callback();
               return;
             }
+
+            // Do not externalize assets referenced via `new URL()`.
+            if (data.dependencyType === 'url') {
+              callback();
+              return;
+            }
+
             const { issuer } = contextInfo;
             const originExtension = extname(request);
 
