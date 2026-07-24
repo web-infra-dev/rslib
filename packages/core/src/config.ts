@@ -61,6 +61,11 @@ import {
   pick,
   readPackageJson,
 } from './utils/helper';
+import {
+  appendPathExtension,
+  parsePathQueryFragment,
+  replacePathExtension,
+} from './utils/path';
 import { isDebug, logger } from './utils/logger';
 import {
   ESX_TO_BROWSERSLIST,
@@ -1258,33 +1263,39 @@ const composeBundlelessExternalConfig = (
               return;
             }
             const { issuer } = contextInfo;
-            const originExtension = extname(request);
+            const originExtension = extname(
+              parsePathQueryFragment(request).path,
+            );
 
             if (!resolver) {
               resolver = getResolve() as RspackResolver;
             }
 
-            async function redirectPath(
-              request: string,
-            ): Promise<{ path?: string; isResolved: boolean }> {
+            async function redirectPath(request: string): Promise<{
+              path?: string;
+              isResolved: boolean;
+            }> {
               try {
+                const { query, fragment } = parsePathQueryFragment(request);
                 let resolvedRequest = request;
                 // use resolver to resolve the request
                 resolvedRequest = await resolver!(context!, resolvedRequest);
+                const { path: resolvedPath } =
+                  parsePathQueryFragment(resolvedRequest);
                 if (typeof outBase !== 'string') {
                   throw new Error(
                     `outBase expect to be a string in bundleless mode, but got ${outBase}`,
                   );
                 }
 
-                const isSubpath = normalizeSlash(resolvedRequest).startsWith(
+                const isSubpath = normalizeSlash(resolvedPath).startsWith(
                   `${normalizeSlash(outBase)}/`,
                 );
 
                 // only handle the request that within the root path
                 if (isSubpath) {
                   resolvedRequest = normalizeSlash(
-                    path.relative(path.dirname(issuer), resolvedRequest),
+                    path.relative(path.dirname(issuer), resolvedPath),
                   );
                   // Requests that fall through here cannot be matched by any other externals config ahead.
                   // Treat all these requests as relative import of source code. Node.js won't add the
@@ -1297,7 +1308,7 @@ const composeBundlelessExternalConfig = (
                     resolvedRequest = `./${resolvedRequest}`;
                   }
                   return {
-                    path: resolvedRequest,
+                    path: `${resolvedRequest}${query}${fragment}`,
                     isResolved: true,
                   };
                 }
@@ -1382,13 +1393,15 @@ const composeBundlelessExternalConfig = (
               // This may result in a change in semantics,
               // user should use copy to keep origin file or use another separate entry to deal this
               if (resolvedRequest.startsWith('.') && isResolved) {
-                const ext = extname(resolvedRequest);
+                const requestResourcePath =
+                  parsePathQueryFragment(resolvedRequest).path;
+                const ext = extname(requestResourcePath);
 
                 if (ext) {
                   // 1. js files hit JS_EXTENSIONS_PATTERN, ./foo.ts -> ./foo.mjs
-                  if (JS_EXTENSIONS_PATTERN.test(resolvedRequest)) {
-                    resolvedRequest = resolvedRequest.replace(
-                      /\.[^.]+$/,
+                  if (JS_EXTENSIONS_PATTERN.test(requestResourcePath)) {
+                    resolvedRequest = replacePathExtension(
+                      resolvedRequest,
                       jsRedirectExtension
                         ? jsExtension
                         : JS_EXTENSIONS_PATTERN.test(originExtension)
@@ -1419,13 +1432,21 @@ const composeBundlelessExternalConfig = (
                     if (
                       !jsRedirectPath &&
                       (await isDirectory(
-                        join(dirname(issuer), resolvedRequest),
+                        join(
+                          dirname(issuer),
+                          parsePathQueryFragment(resolvedRequest).path,
+                        ),
                       ))
                     ) {
                       // This uses `/` instead of `path.join` here because `join` removes potential "./" prefixes
-                      resolvedRequest = `${resolvedRequest.replace(/\/+$/, '')}/index`;
+                      const { path, query, fragment } =
+                        parsePathQueryFragment(resolvedRequest);
+                      resolvedRequest = `${path.replace(/\/+$/, '')}/index${query}${fragment}`;
                     }
-                    resolvedRequest = `${resolvedRequest}${jsExtension}`;
+                    resolvedRequest = appendPathExtension(
+                      resolvedRequest,
+                      jsExtension,
+                    );
                   }
                 }
               }

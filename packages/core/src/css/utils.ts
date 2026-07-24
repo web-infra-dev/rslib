@@ -1,6 +1,7 @@
 import path from 'node:path';
 import type { CSSLoaderOptions } from '@rsbuild/core';
 import { CSS_EXTENSIONS_PATTERN } from '../constant';
+import { parsePathQueryFragment } from '../utils/path';
 
 // https://rsbuild.rs/config/output/css-modules#cssmodulesauto
 export type CssLoaderOptionsAuto = CSSLoaderOptions['modules'] extends infer T
@@ -53,47 +54,33 @@ export function getUndoPath(
 }
 
 export function isCssFile(filepath: string): boolean {
-  return CSS_EXTENSIONS_PATTERN.test(filepath);
+  const { path } = parsePathQueryFragment(filepath);
+  return CSS_EXTENSIONS_PATTERN.test(path);
 }
 
 const CSS_MODULE_REG = /\.module\.\w+$/i;
-
-/**
- * This function is modified based on
- * https://github.com/web-infra-dev/rspack/blob/7b80a45a1c58de7bc506dbb107fad6fda37d2a1f/packages/rspack/src/loader-runner/index.ts#L903
- */
-const PATH_QUERY_FRAGMENT_REGEXP =
-  /^((?:\u200b.|[^?#\u200b])*)(\?(?:\u200b.|[^#\u200b])*)?(#.*)?$/;
-export function parsePathQueryFragment(str: string): {
-  path: string;
-  query: string;
-  fragment: string;
-} {
-  const match = PATH_QUERY_FRAGMENT_REGEXP.exec(str);
-  return {
-    path: match?.[1]?.replace(/\u200b(.)/g, '$1') || '',
-    query: match?.[2] ? match[2].replace(/\u200b(.)/g, '$1') : '',
-    fragment: match?.[3] || '',
-  };
-}
 
 export function isCssModulesFile(
   filepath: string,
   auto: CssLoaderOptionsAuto,
 ): boolean {
-  const filename = path.basename(filepath);
+  const {
+    path: resourcePath,
+    query,
+    fragment,
+  } = parsePathQueryFragment(filepath);
+  const filename = path.basename(resourcePath);
   if (auto === true) {
     return CSS_MODULE_REG.test(filename);
   }
 
   if (auto instanceof RegExp) {
-    return auto.test(filepath);
+    return auto.test(resourcePath);
   }
 
   if (typeof auto === 'function') {
-    const { path, query, fragment } = parsePathQueryFragment(filepath);
     // this is a mock for loader
-    return auto(path, query, fragment);
+    return auto(resourcePath, query, fragment);
   }
 
   return false;
