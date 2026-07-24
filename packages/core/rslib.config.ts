@@ -5,17 +5,9 @@ import packageJson from './package.json' with { type: 'json' };
 export default defineConfig({
   lib: [
     {
-      format: 'esm',
-      syntax: ['es2023'],
       dts: {
-        bundle: false,
         isolated: true,
         distPath: './dist-types',
-      },
-      redirect: {
-        dts: {
-          extension: true,
-        },
       },
     },
   ],
