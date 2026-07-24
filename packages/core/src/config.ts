@@ -1833,7 +1833,8 @@ export async function composeCreateRsbuildConfig(
     delete userConfig.output.externals;
 
     const config: RsbuildConfigWithLibInfo = {
-      format: libConfig.format ?? 'esm',
+      // Read from the merged `userConfig` so a top-level `format` is honored.
+      format: userConfig.format ?? 'esm',
       // The merge order represents the priority of the configuration
       // The priorities from high to low are as follows:
       // 1 - userConfig: users can configure any Rsbuild and Rspack config
