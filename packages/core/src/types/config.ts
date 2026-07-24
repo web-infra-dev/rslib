@@ -490,6 +490,7 @@ export type LibOnlyConfig = Omit<LibConfig, keyof EnvironmentConfig>;
 
 export type SharedLibConfig = Pick<
   LibConfig,
+  | 'format'
   | 'bundle'
   | 'autoExtension'
   | 'redirect'

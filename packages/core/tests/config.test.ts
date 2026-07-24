@@ -1167,6 +1167,50 @@ describe('id', () => {
     `);
   });
 
+  test('top-level format is shared by libs without their own format', async () => {
+    const rslibConfig: RslibConfig = {
+      format: 'cjs',
+      lib: [{}, {}, {}],
+    };
+
+    const { environments, environmentWithInfos } =
+      await composeRsbuildEnvironments(rslibConfig);
+    // Default ids and reported formats should reflect the top-level `format`
+    // rather than falling back to `esm`.
+    expect(Object.keys(environments)).toMatchInlineSnapshot(`
+      [
+        "cjs0",
+        "cjs1",
+        "cjs2",
+      ]
+    `);
+    expect(environmentWithInfos.map(({ format }) => format)).toEqual([
+      'cjs',
+      'cjs',
+      'cjs',
+    ]);
+  });
+
+  test('lib.format overrides the top-level format', async () => {
+    const rslibConfig: RslibConfig = {
+      format: 'cjs',
+      lib: [{}, { format: 'esm' }],
+    };
+
+    const { environments, environmentWithInfos } =
+      await composeRsbuildEnvironments(rslibConfig);
+    expect(Object.keys(environments)).toMatchInlineSnapshot(`
+      [
+        "cjs",
+        "esm",
+      ]
+    `);
+    expect(environmentWithInfos.map(({ format }) => format)).toEqual([
+      'cjs',
+      'esm',
+    ]);
+  });
+
   test('do not allow conflicted id', async () => {
     const rslibConfig: RslibConfig = {
       lib: [
