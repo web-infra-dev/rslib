@@ -322,7 +322,12 @@ const composeFormatConfig = ({
         bundle === false || Object.keys(sourceEntry ?? {}).length > 1;
 
       return {
-        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
+        plugins: [
+          modifyRsbuildDefaultPlugin({
+            disableUrlParse: true,
+            removeImportMetaEnvPreset: true,
+          }),
+        ],
         output: {
           filenameHash: false,
           ...(bundle && { autoExternal: true }),
@@ -366,7 +371,12 @@ const composeFormatConfig = ({
     }
     case 'cjs':
       return {
-        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
+        plugins: [
+          modifyRsbuildDefaultPlugin({
+            disableUrlParse: true,
+            removeImportMetaEnvPreset: true,
+          }),
+        ],
         output: {
           module: false,
           filenameHash: false,
@@ -380,8 +390,14 @@ const composeFormatConfig = ({
                   ...jsParserOptions.esm,
                   ...jsParserOptions.cjs,
                   ...jsParserOptions.others,
+                  importMeta: {
+                    env: true,
+                  },
                 },
               },
+            },
+            experiments: {
+              env: true,
             },
             optimization: {
               splitChunks: {
@@ -533,13 +549,36 @@ const composeFormatConfig = ({
 
 const modifyRsbuildDefaultPlugin = ({
   disableUrlParse,
+  removeImportMetaEnvPreset,
 }: {
   disableUrlParse?: boolean;
+  removeImportMetaEnvPreset?: boolean;
 } = {}): RsbuildPlugin => ({
   name: 'rslib:modify-rsbuild-default',
   setup(api) {
-    api.modifyBundlerChain((chain, { CHAIN_ID, target }) => {
-      // Part 1: disable URL parsing for library output.
+    api.modifyBundlerChain((chain, { CHAIN_ID, environment, target }) => {
+      // Part 1: remove Rsbuild's default env presets so downstream consumers
+      // can replace them. Explicit user defines still take precedence.
+      const userDefine = environment.config.source.define;
+      const defaultDefineKeys = [
+        'process.env.BASE_URL',
+        'process.env.ASSET_PREFIX',
+        ...(removeImportMetaEnvPreset ? ['import.meta.env'] : []),
+      ];
+
+      chain.plugin(CHAIN_ID.PLUGIN.DEFINE).tap(([define]) => {
+        const nextDefine = { ...define };
+
+        for (const key of defaultDefineKeys) {
+          if (!Object.hasOwn(userDefine, key)) {
+            delete nextDefine[key];
+          }
+        }
+
+        return [nextDefine];
+      });
+
+      // Part 2: disable URL parsing for library output.
       // Fix for https://github.com/web-infra-dev/rslib/issues/499.
       // Prevent parsing and try bundling `new URL()` in ESM/CJS format.
       if (disableUrlParse) {
@@ -551,7 +590,7 @@ const modifyRsbuildDefaultPlugin = ({
           });
       }
 
-      // Part 2: remove Rsbuild's `type: 'javascript/auto'` override.
+      // Part 3: remove Rsbuild's `type: 'javascript/auto'` override.
       // Rslib follows Rspack's original module type inference, so ESM-like
       // modules are treated as strict ESM (`javascript/esm`).
       chain.module
@@ -559,22 +598,22 @@ const modifyRsbuildDefaultPlugin = ({
         .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
         .delete('type');
 
-      // Part 3: reset Rsbuild's const environment override.
+      // Part 4: reset Rsbuild's const environment override.
       // Rsbuild disables `const` for web-like app runtimes. Rslib should
       // leave this to Rspack's target inference for library output.
       if (target !== 'web' && target !== 'web-worker') {
         return;
       }
 
-      const environment = chain.output.get('environment');
+      const outputEnvironment = chain.output.get('environment');
 
-      if (!environment || environment.const !== false) {
+      if (!outputEnvironment || outputEnvironment.const !== false) {
         return;
       }
 
-      delete environment.const;
+      delete outputEnvironment.const;
 
-      if (Object.keys(environment).length === 0) {
+      if (Object.keys(outputEnvironment).length === 0) {
         chain.output.delete('environment');
       }
     });
