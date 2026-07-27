@@ -21,6 +21,11 @@
       matchPackageNames: ['**'],
       matchUpdateTypes: ['patch', 'minor'],
     },
+    // Intentional TypeScript 6 API and integration coverage
+    {
+      matchPackageNames: ['@typescript/typescript6'],
+      enabled: false,
+    },
     // manually update peer dependencies
     {
       matchDepTypes: ['peerDependencies'],

@@ -293,23 +293,23 @@ catalogs:
       specifier: ^4.23.1
       version: 4.23.1
     typescript:
-      specifier: ^6.0.3
-      version: 6.0.3
-    typescript6-api:
-      specifier: npm:typescript@^6.0.3
-      version: 6.0.3
+      specifier: ^7.0.2
+      version: 7.0.2
     vue:
       specifier: ^3.5.40
       version: 3.5.40
     vue-tsc:
       specifier: ^3.3.8
       version: 3.3.8
-  typescript-7:
+  typescript-6:
     typescript:
-      specifier: ^7.0.2
-      version: 7.0.2
-  typescript-api-6:
+      specifier: ^6.0.3
+      version: 6.0.3
+  typescript-6-fixed:
     typescript:
+      specifier: npm:@typescript/typescript6@^6.0.2
+      version: 6.0.2
+    typescript6-api:
       specifier: npm:@typescript/typescript6@^6.0.2
       version: 6.0.2
 
@@ -322,7 +322,7 @@ importers:
         version: 0.7.1(jiti@2.7.0)
       '@rstest/adapter-rslib':
         specifier: 'catalog:'
-        version: 0.11.4(@rslib/core@1.0.0-beta.1)(@rstest/core@0.11.4)(typescript@6.0.3)
+        version: 0.11.4(@rslib/core@1.0.0-beta.1)(@rstest/core@0.11.4)(typescript@7.0.2)
       '@rstest/core':
         specifier: 'catalog:'
         version: 0.11.4
@@ -355,7 +355,7 @@ importers:
         version: 2.13.1
       typescript:
         specifier: 'catalog:'
-        version: 6.0.3
+        version: 7.0.2
 
   examples/express-plugin:
     devDependencies:
@@ -369,7 +369,7 @@ importers:
         specifier: 'catalog:'
         version: 5.2.1(supports-color@9.4.0)
       typescript:
-        specifier: 'catalog:'
+        specifier: catalog:typescript-6
         version: 6.0.3
 
   examples/module-federation: {}
@@ -399,7 +399,7 @@ importers:
         specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.17)
       typescript:
-        specifier: 'catalog:'
+        specifier: catalog:typescript-6
         version: 6.0.3
 
   examples/module-federation/mf-react-component:
@@ -453,7 +453,7 @@ importers:
         specifier: 'catalog:'
         version: 3.3.4(@rsbuild/core@2.1.8)(@rspack/core@2.1.5)(@types/react-dom@19.2.3)(@types/react@19.2.17)(react-dom@19.2.8)(react@19.2.8)(storybook@10.5.4)(supports-color@9.4.0)(typescript@6.0.3)
       typescript:
-        specifier: 'catalog:'
+        specifier: catalog:typescript-6
         version: 6.0.3
 
   examples/module-federation/mf-remote:
@@ -481,7 +481,7 @@ importers:
         specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.17)
       typescript:
-        specifier: 'catalog:'
+        specifier: catalog:typescript-6
         version: 6.0.3
 
   examples/preact-component-bundle-false:
@@ -571,7 +571,7 @@ importers:
         specifier: 'catalog:'
         version: 1.9.14
       typescript:
-        specifier: 'catalog:'
+        specifier: catalog:typescript-6
         version: 6.0.3
 
   examples/vue-component-bundle:
@@ -583,7 +583,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core
       typescript:
-        specifier: 'catalog:'
+        specifier: catalog:typescript-6
         version: 6.0.3
       vue:
         specifier: 'catalog:'
@@ -622,7 +622,7 @@ importers:
         specifier: 'catalog:'
         version: 3.3.4(@rsbuild/core@2.1.8)(@rspack/core@2.1.5)(react-dom@19.2.8)(react@19.2.8)(storybook@10.5.4)(typescript@6.0.3)(vue@3.5.40)
       typescript:
-        specifier: 'catalog:'
+        specifier: catalog:typescript-6
         version: 6.0.3
       vue:
         specifier: 'catalog:'
@@ -683,7 +683,7 @@ importers:
         specifier: 'catalog:'
         version: 0.2.17
       typescript:
-        specifier: catalog:typescript-7
+        specifier: 'catalog:'
         version: 7.0.2
 
   packages/create-rslib:
@@ -714,7 +714,7 @@ importers:
         specifier: 'catalog:'
         version: 4.23.1
       typescript:
-        specifier: catalog:typescript-7
+        specifier: 'catalog:'
         version: 7.0.2
 
   packages/plugin-dts:
@@ -750,12 +750,9 @@ importers:
       tsconfig-paths:
         specifier: 'catalog:'
         version: 4.2.0
-      typescript:
-        specifier: catalog:typescript-7
-        version: 7.0.2
       typescript6-api:
-        specifier: 'catalog:'
-        version: typescript@6.0.3
+        specifier: catalog:typescript-6-fixed
+        version: '@typescript/typescript6@6.0.2'
 
   scripts/tsconfig: {}
 
@@ -832,7 +829,7 @@ importers:
         specifier: 'catalog:'
         version: 0.2.17
       typescript:
-        specifier: catalog:typescript-7
+        specifier: 'catalog:'
         version: 7.0.2
 
   tests/e2e/react-component:
@@ -1029,13 +1026,13 @@ importers:
   tests/integration/dts:
     devDependencies:
       typescript:
-        specifier: 'catalog:'
-        version: 6.0.3
+        specifier: catalog:typescript-6-fixed
+        version: '@typescript/typescript6@6.0.2'
 
   tests/integration/dts-tsgo:
     devDependencies:
       typescript:
-        specifier: catalog:typescript-7
+        specifier: 'catalog:'
         version: 7.0.2
 
   tests/integration/dts-tsgo/build/__references__: {}
@@ -1146,7 +1143,7 @@ importers:
         specifier: 'catalog:'
         version: typescript@7.0.2
       typescript:
-        specifier: catalog:typescript-api-6
+        specifier: catalog:typescript-6-fixed
         version: '@typescript/typescript6@6.0.2'
 
   tests/integration/dts/bundle/abort-on-error: {}
@@ -1391,8 +1388,8 @@ importers:
         specifier: 'catalog:'
         version: 5.2.1(supports-color@9.4.0)
       typescript:
-        specifier: 'catalog:'
-        version: 6.0.3
+        specifier: catalog:typescript-6-fixed
+        version: '@typescript/typescript6@6.0.2'
 
   tests/integration/redirect/dts-tsgo:
     devDependencies:
@@ -1406,7 +1403,7 @@ importers:
         specifier: 'catalog:'
         version: 5.2.1(supports-color@9.4.0)
       typescript:
-        specifier: catalog:typescript-7
+        specifier: 'catalog:'
         version: 7.0.2
 
   tests/integration/redirect/js:
@@ -1669,7 +1666,7 @@ importers:
         specifier: 'catalog:'
         version: 1.0.4(@rspress/core@2.0.18)
       typescript:
-        specifier: 'catalog:'
+        specifier: catalog:typescript-6
         version: 6.0.3
 
 packages:
@@ -9415,13 +9412,13 @@ snapshots:
       - '@module-federation/runtime-tools'
       - core-js
 
-  '@rslib/core@1.0.0-beta.1(@microsoft/api-extractor@7.58.12)(typescript@6.0.3)':
+  '@rslib/core@1.0.0-beta.1(@microsoft/api-extractor@7.58.12)(typescript@7.0.2)':
     dependencies:
       '@rsbuild/core': 2.1.8(@module-federation/runtime-tools@2.8.0)
-      rsbuild-plugin-dts: 1.0.0-beta.1(@microsoft/api-extractor@7.58.12)(@rsbuild/core@2.1.8)(typescript@6.0.3)
+      rsbuild-plugin-dts: 1.0.0-beta.1(@microsoft/api-extractor@7.58.12)(@rsbuild/core@2.1.8)(typescript@7.0.2)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.12(@types/node@24.13.3)
-      typescript: 6.0.3
+      typescript: 7.0.2
     transitivePeerDependencies:
       - '@module-federation/runtime-tools'
       - core-js
@@ -9652,12 +9649,12 @@ snapshots:
     optionalDependencies:
       '@rspress/core': 2.0.18(@module-federation/runtime-tools@2.8.0)(@rspack/core@2.1.5)(@types/mdast@4.0.4)(@types/react@19.2.17)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@9.4.0)
 
-  '@rstest/adapter-rslib@0.11.4(@rslib/core@1.0.0-beta.1)(@rstest/core@0.11.4)(typescript@6.0.3)':
+  '@rstest/adapter-rslib@0.11.4(@rslib/core@1.0.0-beta.1)(@rstest/core@0.11.4)(typescript@7.0.2)':
     dependencies:
-      '@rslib/core': 1.0.0-beta.1(@microsoft/api-extractor@7.58.12)(typescript@6.0.3)
+      '@rslib/core': 1.0.0-beta.1(@microsoft/api-extractor@7.58.12)(typescript@7.0.2)
       '@rstest/core': 0.11.4
     optionalDependencies:
-      typescript: 6.0.3
+      typescript: 7.0.2
 
   '@rstest/core@0.11.4':
     dependencies:
@@ -13640,20 +13637,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@1.0.0-beta.1(@microsoft/api-extractor@7.58.12)(@rsbuild/core@2.1.8)(typescript@6.0.3):
-    dependencies:
-      '@ast-grep/napi': 0.37.0
-      '@rsbuild/core': 2.1.8(@module-federation/runtime-tools@2.8.0)
-    optionalDependencies:
-      '@microsoft/api-extractor': 7.58.12(@types/node@24.13.3)
-      typescript: 6.0.3
-
   rsbuild-plugin-dts@1.0.0-beta.1(@microsoft/api-extractor@7.58.12)(@rsbuild/core@2.1.8)(typescript@7.0.2):
     dependencies:
       '@ast-grep/napi': 0.37.0
       '@rsbuild/core': 2.1.8(@module-federation/runtime-tools@2.8.0)
     optionalDependencies:
-      '@microsoft/api-extractor': 7.58.12(@types/node@25.2.0)
+      '@microsoft/api-extractor': 7.58.12(@types/node@24.13.3)
       typescript: 7.0.2
 
   rsbuild-plugin-google-analytics@1.0.6(@rsbuild/core@2.1.8):
