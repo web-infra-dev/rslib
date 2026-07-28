@@ -71,14 +71,43 @@ TypeScript 目前无法解析 `import source` 和 `import.source()`。请在 Jav
 - [bundle](/config/lib/bundle) 为 `true`：仅支持 `compile` 模式。
 - [bundle](/config/lib/bundle) 为 `false`：默认使用 `preserve` 模式，适用于 `.wasm` 模块由支持 WebAssembly ESM Integration 的下游构建工具（如 Rsbuild 或 Rspack）或目标运行时（如 [Node.js](https://nodejs.org/api/esm.html#wasm-modules) `^22.19.0 || >=24.5.0`）解析和加载的场景。如果消费方不支持该特性，或不希望依赖其处理 `.wasm` 模块，则使用 `compile` 模式。
 
+输出模式中的产物示例基于这组源码，其中 `add.wasm` 导出 `add` 函数：
+
+```text
+src
+├── add.wasm
+├── index.ts
+└── utils.ts
+```
+
+<Tabs>
+  <Tab label="src/index.ts">
+
+```ts
+export { useAdd } from './utils.js';
+```
+
+  </Tab>
+  <Tab label="src/utils.ts">
+
+```ts
+import { add } from './add.wasm';
+
+export const useAdd = (a: number, b: number) => add(a, b);
+```
+
+  </Tab>
+</Tabs>
+
 ### `compile` 模式
 
 Rslib 解析每个 `.wasm` 模块，生成加载和实例化该模块所需的 JavaScript 胶水代码，并将二进制文件作为静态资源输出到由 [output.distPath.wasm](/config/rsbuild/output#outputdistpath) 指定的目录（默认为 `dist/static/wasm`），文件名包含 content hash：
 
-<Tabs>
-<Tab label="bundle">
+以下代码省略 Rspack runtime 的内部实现，但保留产物中的 runtime 边界、WASM 模块注册和调用关系。
 
-```
+#### Bundle
+
+```text
 dist
 ├── index.js
 └── static
@@ -86,19 +115,55 @@ dist
         └── [contenthash].module.wasm
 ```
 
-</Tab>
-<Tab label="bundleless">
+<Tabs>
+  <Tab label="dist/index.js">
 
+```js
+// Rspack 模块 runtime...
+// 注册 WASM 模块并实例化
+// static/wasm/[contenthash].module.wasm...
+
+const add = await __webpack_require__('./src/add.wasm');
+const useAdd = (a, b) => (0, add.add)(a, b);
+export { useAdd };
 ```
+
+  </Tab>
+</Tabs>
+
+#### Bundleless
+
+```text
 dist
 ├── index.js
+├── rslib-runtime~1.js
 ├── utils.js
 └── static
     └── wasm
         └── [contenthash].module.wasm
 ```
 
-</Tab>
+<Tabs>
+  <Tab label="dist/index.js">
+
+```js
+export { useAdd } from './utils.js';
+```
+
+  </Tab>
+  <Tab label="dist/utils.js">
+
+```js
+// 从 rslib-runtime~1.js 导入 Rspack runtime...
+// 注册 WASM 模块并实例化
+// static/wasm/[contenthash].module.wasm...
+
+const add = await __webpack_require__('./src/add.wasm');
+const useAdd = (a, b) => (0, add.add)(a, b);
+export { useAdd };
+```
+
+  </Tab>
 </Tabs>
 
 生成的加载代码取决于 [output.target](/config/rsbuild/output#outputtarget)：
@@ -110,18 +175,32 @@ dist
 
 Rslib 在 JavaScript 产物中保留对 `.wasm` 模块的 import 语句，并按源码相对路径和原文件名原样输出二进制文件：
 
-```
+```text
 dist
 ├── index.js
 ├── utils.js
 └── add.wasm
 ```
 
-```js title="dist/index.js"
+<Tabs>
+  <Tab label="dist/index.js">
+
+```js
+export { useAdd } from './utils.js';
+```
+
+  </Tab>
+  <Tab label="dist/utils.js">
+
+```js
 import { add } from './add.wasm';
 
-export { add };
+const useAdd = (a, b) => add(a, b);
+export { useAdd };
 ```
+
+  </Tab>
+</Tabs>
 
 `preserve` 模式会保留 `.wasm` 文件的原始名称，因此 [output.filenameHash](/config/rsbuild/output#outputfilenamehash) 不会影响其文件名。
 
