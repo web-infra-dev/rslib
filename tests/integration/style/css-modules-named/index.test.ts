@@ -65,12 +65,12 @@ export { _1 as contentWrapper };`,
   expectFileContainContent(
     jsContents.cjs,
     'button/index.module.cjs',
-    `__webpack_require__.d(__webpack_exports__, {
+    `__rspack_context.d(__rspack_exports, {
     contentWrapper: ()=>_1
 });
 require("./index_module.css");
 var _1 = "content-wrapper-iNtwbA";
-exports.contentWrapper = __webpack_exports__.contentWrapper;`,
+exports.contentWrapper = __rspack_exports.contentWrapper;`,
   );
   // cspell:enable
 });

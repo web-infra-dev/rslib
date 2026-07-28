@@ -2,9 +2,9 @@
 
 exports[`resolve.extensionAlias should work 1`] = `
 ""use strict";
-var __webpack_require__ = {};
-(()=>{
-    __webpack_require__.r = (exports1)=>{
+var __rspack_context = {};
+(function() {
+    var makeNamespaceObject = (exports1)=>{
         if ("u" > typeof Symbol && Symbol.toStringTag) Object.defineProperty(exports1, Symbol.toStringTag, {
             value: 'Module'
         });
@@ -12,11 +12,12 @@ var __webpack_require__ = {};
             value: true
         });
     };
-})();
-var __webpack_exports__ = {};
-__webpack_require__.r(__webpack_exports__);
+    __rspack_context.N = makeNamespaceObject;
+}).call(this);
+var __rspack_exports = {};
+__rspack_context.N(__rspack_exports);
 console.log("foobar");
-for(var __rspack_i in __webpack_exports__)exports[__rspack_i] = __webpack_exports__[__rspack_i];
+for(var __rspack_i in __rspack_exports)exports[__rspack_i] = __rspack_exports[__rspack_i];
 Object.defineProperty(exports, '__esModule', {
     value: true
 });

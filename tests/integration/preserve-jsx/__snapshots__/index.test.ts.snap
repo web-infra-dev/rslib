@@ -2,11 +2,11 @@
 
 exports[`JSX syntax should be preserved 1`] = `
 ""use strict";
-var __webpack_require__ = {};
-(()=>{
-    __webpack_require__.d = (exports1, getters, values)=>{
+var __rspack_context = {};
+(function() {
+    var definePropertyGetters = (exports1, getters, values)=>{
         var define = (defs, kind)=>{
-            for(var key in defs)if (__webpack_require__.o(defs, key) && !__webpack_require__.o(exports1, key)) Object.defineProperty(exports1, key, {
+            for(var key in defs)if (hasOwnProperty(defs, key) && !hasOwnProperty(exports1, key)) Object.defineProperty(exports1, key, {
                 enumerable: true,
                 [kind]: defs[key]
             });
@@ -14,12 +14,9 @@ var __webpack_require__ = {};
         define(getters, "get");
         define(values, "value");
     };
-})();
-(()=>{
-    __webpack_require__.o = (obj, prop)=>Object.prototype.hasOwnProperty.call(obj, prop);
-})();
-(()=>{
-    __webpack_require__.r = (exports1)=>{
+    __rspack_context.d = definePropertyGetters;
+    var hasOwnProperty = (obj, prop)=>Object.prototype.hasOwnProperty.call(obj, prop);
+    var makeNamespaceObject = (exports1)=>{
         if ("u" > typeof Symbol && Symbol.toStringTag) Object.defineProperty(exports1, Symbol.toStringTag, {
             value: 'Module'
         });
@@ -27,10 +24,11 @@ var __webpack_require__ = {};
             value: true
         });
     };
-})();
-var __webpack_exports__ = {};
-__webpack_require__.r(__webpack_exports__);
-__webpack_require__.d(__webpack_exports__, {
+    __rspack_context.N = makeNamespaceObject;
+}).call(this);
+var __rspack_exports = {};
+__rspack_context.N(__rspack_exports);
+__rspack_context.d(__rspack_exports, {
     default: ()=>Root
 });
 const external_App1_namespaceObject = require("./App1");
@@ -117,10 +115,10 @@ function Root() {
       </div>
     </>;
 }
-exports["default"] = __webpack_exports__["default"];
-for(var __rspack_i in __webpack_exports__)if (-1 === [
+exports["default"] = __rspack_exports["default"];
+for(var __rspack_i in __rspack_exports)if (-1 === [
     "default"
-].indexOf(__rspack_i)) exports[__rspack_i] = __webpack_exports__[__rspack_i];
+].indexOf(__rspack_i)) exports[__rspack_i] = __rspack_exports[__rspack_i];
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
