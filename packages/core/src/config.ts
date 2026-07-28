@@ -794,7 +794,13 @@ const composeOutputFilenameConfig = (
   // Keep filename inference in sync with Rspack's default `chunkFilename`
   // inference for strings:
   // https://github.com/web-infra-dev/rspack/blob/e8a7bce74b5261220f0f351ebe581d5d99df54d6/packages/rspack/src/config/defaults.ts#L813-L826
-  const inferChunkFilename = (filename: string): string => {
+  const inferChunkFilename = (
+    filename: Rspack.Filename,
+  ): string | undefined => {
+    if (typeof filename === 'function') {
+      return undefined;
+    }
+
     const hasName = filename.includes('[name]');
     const hasId = filename.includes('[id]');
     const hasChunkHash = filename.includes('[chunkhash]');
@@ -844,7 +850,12 @@ const composeOutputFilenameConfig = (
     typeof multiCompilerIndex === 'number' ? `~${multiCompilerIndex}` : '';
   const defaultJsFilenameTemplate = `[name]${hash}${jsExtension}`;
   const userJsFilename = config.output?.filename?.js;
-  const bundlelessJsFilename = userJsFilename ?? defaultJsFilenameTemplate;
+  // A custom filename function owns the naming contract. Leave
+  // `chunkFilename` unset so Rsbuild applies it to async chunks as well; users
+  // are responsible for avoiding collisions across compilers.
+  const inferredJsChunkFilename = inferChunkFilename(
+    userJsFilename ?? defaultJsFilenameTemplate,
+  );
   const distPath = config.output?.distPath;
   const jsDistPath =
     typeof distPath === 'object' && distPath ? (distPath.js ?? './') : './';
@@ -856,36 +867,35 @@ const composeOutputFilenameConfig = (
       ? extname(userJsFilename)
       : jsExtension;
 
-  if (typeof bundlelessJsFilename === 'function') {
-    // A custom filename function owns the naming contract. Leave
-    // `chunkFilename` unset so Rsbuild applies it to async chunks as well; users
-    // are responsible for avoiding collisions across compilers.
+  if (inferredJsChunkFilename === undefined) {
     return {
       config: {},
       jsExtension: finalJsExtension,
       jsDistPath,
-      jsFilename: bundlelessJsFilename,
+      jsFilename: userJsFilename ?? defaultJsFilenameTemplate,
       dtsExtension,
     };
   }
-
-  const inferredJsChunkFilename = inferChunkFilename(bundlelessJsFilename);
 
   // Runtime and other initial chunks use `filename` instead of `chunkFilename`.
   // For default and string filename templates, keep entry filenames stable
   // while isolating the other chunks by compiler. Multi-compiler builds append
   // a stable suffix based on each compiler's `lib` index, starting from `~0`.
   // Do not infer whether compiler output paths actually overlap here.
-  let jsFilename: Rspack.Filename = bundlelessJsFilename;
+  const jsFilenameTemplate =
+    typeof userJsFilename === 'string'
+      ? userJsFilename
+      : defaultJsFilenameTemplate;
+  let jsFilename: Rspack.Filename = jsFilenameTemplate;
   let jsChunkFilename = inferredJsChunkFilename;
 
   if (multiCompilerSuffix) {
     const nonEntryFilename = appendMultiCompilerSuffix(
-      bundlelessJsFilename,
+      jsFilenameTemplate,
       multiCompilerSuffix,
     );
     jsFilename = ({ chunk }) =>
-      isEntryChunk(chunk) ? bundlelessJsFilename : nonEntryFilename;
+      isEntryChunk(chunk) ? jsFilenameTemplate : nonEntryFilename;
     jsChunkFilename = appendMultiCompilerSuffix(
       inferredJsChunkFilename,
       multiCompilerSuffix,
@@ -918,7 +928,7 @@ const composeOutputFilenameConfig = (
     config: format === 'mf' ? {} : finalConfig,
     jsExtension: finalJsExtension,
     jsDistPath,
-    jsFilename: bundlelessJsFilename,
+    jsFilename: jsFilenameTemplate,
     dtsExtension,
   };
 };
