@@ -200,14 +200,14 @@ describe('dts when bundle: false', () => {
 
     expect(contents.esm).toMatchInlineSnapshot(`
       {
-        "<ROOT>/tests/integration/dts/bundle-false/alias/dist/esm/index.d.ts": "export {} from '../../compile/prebundle-pkg';
+        "<ROOT>/tests/integration/dts/bundle-false/alias/dist/esm/index.d.ts": "export {} from '../../compile/prebundle-pkg/index.js';
       ",
       }
     `);
 
     expect(contents.cjs).toMatchInlineSnapshot(`
       {
-        "<ROOT>/tests/integration/dts/bundle-false/alias/dist/cjs/index.d.ts": "export {} from '../../compile/prebundle-pkg';
+        "<ROOT>/tests/integration/dts/bundle-false/alias/dist/cjs/index.d.ts": "export {} from '../../compile/prebundle-pkg/index.js';
       ",
       }
     `);

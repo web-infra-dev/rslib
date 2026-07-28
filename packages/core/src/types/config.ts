@@ -111,7 +111,6 @@ export type Dts =
       typescriptPath?: string;
       /**
        * Whether to generate declaration files with `tsgo`.
-       * @experimental
        * @defaultValue `true` when the installed `typescript` package is version 7 or higher, otherwise `false`.
        * @see {@link https://rslib.rs/config/lib/dts#dtstsgo}
        */
@@ -345,7 +344,7 @@ export type DtsRedirect = {
   path?: boolean;
   /**
    * Whether to automatically redirect the file extension to import paths based on the TypeScript declaration output files.
-   * @defaultValue `false`
+   * @defaultValue `true`
    */
   extension?: boolean;
 };
@@ -515,6 +514,7 @@ export type LibOnlyConfig = Omit<LibConfig, keyof EnvironmentConfig>;
 
 export type SharedLibConfig = Pick<
   LibConfig,
+  | 'format'
   | 'bundle'
   | 'autoExtension'
   | 'redirect'

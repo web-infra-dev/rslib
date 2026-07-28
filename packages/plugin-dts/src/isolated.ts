@@ -105,7 +105,7 @@ export async function processIsolatedDts(
     isolatedDtsContext.dtsExtension,
     isolatedDtsContext.redirect ?? {
       path: true,
-      extension: false,
+      extension: true,
     },
     isolatedDtsContext.tsconfigPath,
     isolatedDtsContext.rootDir,

@@ -130,3 +130,42 @@ describe('should calcBundledPackages correctly', () => {
     expect(result).toEqual(['foo', '@bar/*']);
   });
 });
+
+describe('should handle optionalDependencies in calcBundledPackages', () => {
+  const optionalPkgJson = {
+    dependencies: {
+      foo: '1.0.0',
+    },
+    optionalDependencies: {
+      opt: '1.0.0',
+    },
+  };
+
+  it('optionalDependencies is bundled when autoExternal is false', () => {
+    rs.spyOn(fs, 'readFileSync').mockImplementation(() =>
+      JSON.stringify(optionalPkgJson),
+    );
+
+    const result = calcBundledPackages({
+      autoExternal: false,
+      cwd: 'pkg/to/root',
+    });
+
+    expect(result).toEqual(['foo', 'opt']);
+  });
+
+  it('optionalDependencies is bundled when optionalDependencies is false', () => {
+    rs.spyOn(fs, 'readFileSync').mockImplementation(() =>
+      JSON.stringify(optionalPkgJson),
+    );
+
+    const result = calcBundledPackages({
+      autoExternal: {
+        optionalDependencies: false,
+      },
+      cwd: 'pkg/to/root',
+    });
+
+    expect(result).toEqual(['opt']);
+  });
+});

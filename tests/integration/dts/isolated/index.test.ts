@@ -58,8 +58,8 @@ describe('isolated dts', () => {
       basename: true,
     });
 
-    expect(esmIndex).toContain(`from '../../compile/aliased-pkg'`);
-    expect(cjsIndex).toContain(`from '../../compile/aliased-pkg'`);
+    expect(esmIndex).toContain(`from '../../compile/aliased-pkg/index.js'`);
+    expect(cjsIndex).toContain(`from '../../compile/aliased-pkg/index.js'`);
   });
 
   test('should support bundled output in isolated mode', async () => {

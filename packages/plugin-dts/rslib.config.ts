@@ -4,16 +4,8 @@ import { defineConfig } from 'rslib';
 export default defineConfig({
   lib: [
     {
-      format: 'esm',
-      syntax: ['es2023'],
       dts: {
-        bundle: false,
         isolated: true,
-      },
-      redirect: {
-        dts: {
-          extension: true,
-        },
       },
       shims: {
         esm: {

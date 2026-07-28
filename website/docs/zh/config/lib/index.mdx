@@ -10,7 +10,9 @@ description: '查看 Rslib 的 lib 配置，了解每份库产物可用的 lib �
 - **默认值:** `[{}]`
 - **必选:** `false`
 
-若省略 `lib` 字段，Rslib 会使用等价于 `lib: [{}]` 的默认配置生成一份 ESM 产物；若显式配置 `lib` 字段，则必须为非空数组。
+省略 `lib` 字段时，Rslib 会使用等价于 `lib: [{}]` 的默认配置生成一份产物。产物格式由顶层 `format` 指定，若未配置，则默认为 `'esm'`。
+
+显式配置 `lib` 字段时，其值必须为非空数组。
 
 例如，以下配置会生成 ESM 和 CJS 两份产物：
 
@@ -36,6 +38,7 @@ export default {
 - [`bundle`](/config/lib/bundle)
 - [`externalHelpers`](/config/lib/external-helpers)
 - [`footer`](/config/lib/footer)
+- [`format`](/config/lib/format)
 - [`outBase`](/config/lib/out-base)
 - [`redirect`](/config/lib/redirect)
 - [`shims`](/config/lib/shims)
@@ -47,6 +50,5 @@ export default {
 
 - [`dts`](/config/lib/dts)
 - [`experiments`](/config/lib/experiments)
-- [`format`](/config/lib/format)
 - [`id`](/config/lib/id)
 - [`umdName`](/config/lib/umd-name)

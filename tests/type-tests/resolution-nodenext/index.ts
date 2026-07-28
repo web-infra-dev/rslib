@@ -9,6 +9,7 @@ defineConfig({ lib: [] });
 defineConfig({
   lib: [{}],
   bundle: false,
+  format: 'cjs',
   autoExtension: false,
   redirect: {
     js: {
@@ -29,12 +30,6 @@ defineConfig({
     },
   },
   outBase: 'src',
-});
-
-defineConfig({
-  lib: [{}],
-  // @ts-expect-error format is only supported in lib items.
-  format: 'cjs',
 });
 
 defineConfig({

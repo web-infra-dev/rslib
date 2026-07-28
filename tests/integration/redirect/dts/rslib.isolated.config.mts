@@ -3,7 +3,7 @@ import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
-    // 0 - default - path: true extension: false
+    // 0 - default - path: true extension: true
     generateBundleEsmConfig({
       dts: {
         isolated: true,
@@ -23,20 +23,21 @@ export default defineConfig({
       redirect: {
         dts: {
           path: false,
+          extension: false,
         },
       },
     }),
-    // 2 - path: true extension: true
+    // 2 - path: true extension: false
     generateBundleEsmConfig({
       dts: {
         isolated: true,
       },
       output: {
-        distPath: './dist-isolated/extension-true/esm',
+        distPath: './dist-isolated/extension-false/esm',
       },
       redirect: {
         dts: {
-          extension: true,
+          extension: false,
         },
       },
     }),

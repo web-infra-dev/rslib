@@ -1,0 +1,78 @@
+---
+description: '了解如何升级 Rslib 依赖、查看版本变更，并同步更新相关包。'
+---
+
+# 升级 Rslib
+
+本节介绍如何将项目中的 Rslib 依赖升级到最新版本。
+
+:::tip
+
+参考 [npm - @rslib/core](https://npmjs.com/package/@rslib/core) 查看当前的最新版本。
+
+:::
+
+## 语义化版本
+
+Rslib 遵循 [Semantic Versioning](https://semver.org/) 语义化版本规范。
+
+- 主版本号：包含不兼容的 API 变更。
+- 次版本号：包含向下兼容的功能性变更和问题修复。
+- 修订号：包含向下兼容的问题修复。
+
+## 更新日志
+
+访问 [GitHub Releases](https://github.com/web-infra-dev/rslib/releases) 查看 Rslib 每个版本的变更内容。
+
+## 使用 Taze
+
+我们推荐使用 [Taze](https://github.com/antfu-collective/taze) 来升级 Rslib 版本。Taze 是一个用于更新 npm 依赖的 CLI 工具。
+
+### 使用方法
+
+运行以下命令以升级所有名称中包含 `rslib` 和 `rsbuild` 的依赖项：
+
+```bash
+npx taze --include "/(rsbuild|rslib)/" -w
+```
+
+运行结果类似于：
+
+```bash
+rslib - 2 minor
+
+  @rslib/core                 dev  ~1mo  ^1.0.0  →  ^1.1.0
+  @rsbuild/plugin-react       dev  ~1mo  ^2.0.0  →  ^2.1.0
+
+ℹ changes written to package.json, run npm i to install updates.
+```
+
+你可以调整 `include` 模式以匹配特定包，例如，仅升级 `@rslib` scope 下的包：
+
+```bash
+npx taze --include /@rslib/ -w
+```
+
+### 选项
+
+以下是一些使用 taze 选项的示例。
+
+- 在 monorepo 中，你可以添加 `-r` 选项以递归升级：
+
+```bash
+npx taze --include "/(rsbuild|rslib)/" -w -r
+```
+
+- 添加 `-l` 选项以升级锁定版本：
+
+```bash
+npx taze --include "/(rsbuild|rslib)/" -w -l
+```
+
+- 升级到 major 版本：
+
+```bash
+npx taze major --include "/(rsbuild|rslib)/" -w
+```
+
+> 更多选项请参考 [taze 文档](https://github.com/antfu-collective/taze)。

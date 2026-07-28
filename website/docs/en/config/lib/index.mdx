@@ -10,7 +10,9 @@ The `lib` field is an optional array of objects used to describe the library out
 - **Default:** `[{}]`
 - **Required:** `false`
 
-If the `lib` field is omitted, Rslib uses a default configuration equivalent to `lib: [{}]` to generate a single ESM output; if the `lib` field is explicitly configured, it must be a non-empty array.
+When the `lib` field is omitted, Rslib uses a default configuration equivalent to `lib: [{}]` to generate a single output. The output format is specified by the top-level `format`; if no top-level `format` is configured, the output format defaults to `'esm'`.
+
+When the `lib` field is explicitly configured, its value must be a non-empty array.
 
 For example, the following configuration will generate ESM and CJS outputs:
 
@@ -36,6 +38,7 @@ The following lib configurations can be placed outside the `lib` field as shared
 - [`bundle`](/config/lib/bundle)
 - [`externalHelpers`](/config/lib/external-helpers)
 - [`footer`](/config/lib/footer)
+- [`format`](/config/lib/format)
 - [`outBase`](/config/lib/out-base)
 - [`redirect`](/config/lib/redirect)
 - [`shims`](/config/lib/shims)
@@ -47,6 +50,5 @@ The following lib configurations do not support shared configuration and can onl
 
 - [`dts`](/config/lib/dts)
 - [`experiments`](/config/lib/experiments)
-- [`format`](/config/lib/format)
 - [`id`](/config/lib/id)
 - [`umdName`](/config/lib/umd-name)
