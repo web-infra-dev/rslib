@@ -1281,6 +1281,31 @@ describe('id', () => {
 });
 
 describe('wasm', () => {
+  test('supports top-level wasm config', async () => {
+    const rslibConfig: RslibConfig = {
+      bundle: true,
+      format: 'esm',
+      wasm: { mode: 'preserve' },
+    };
+
+    await expect(composeRsbuildEnvironments(rslibConfig)).rejects.toThrow(
+      'When using "wasm.mode: preserve", "bundle" must be set to "false". Use "wasm.mode: compile" to process WebAssembly in bundle mode.',
+    );
+  });
+
+  test('lib wasm config overrides top-level wasm config', async () => {
+    const rslibConfig: RslibConfig = {
+      bundle: true,
+      format: 'esm',
+      wasm: { mode: 'preserve' },
+      lib: [{ wasm: { mode: 'compile' } }],
+    };
+
+    await expect(
+      composeRsbuildEnvironments(rslibConfig),
+    ).resolves.toBeDefined();
+  });
+
   test('does not allow preserve mode with bundle enabled', async () => {
     const rslibConfig: RslibConfig = {
       lib: [

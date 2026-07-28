@@ -524,6 +524,7 @@ export type SharedLibConfig = Pick<
   | 'footer'
   | 'shims'
   | 'outBase'
+  | 'wasm'
 >;
 
 interface RslibOutputConfig extends OutputConfig {
