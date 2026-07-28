@@ -1,0 +1,246 @@
+---
+description: 'This document lists all breaking changes from Rslib 0.23 to 1.0. You can use it as a migration reference.'
+---
+
+# Upgrading from 0.x to v1
+
+This document lists all breaking changes from Rslib 0.23 to 1.0. You can use it as a migration reference.
+
+{/* TODO: ## Using Agent Skills */}
+
+## Upgrade Rslib to v1
+
+Upgrade `@rslib/core` to version 1.0:
+
+```json title="package.json"
+{
+  "devDependencies": {
+    "@rslib/core": "^1.0.0"
+  }
+}
+```
+
+## Rsbuild v2
+
+Because Rslib v1 is based on Rsbuild v2, you can check the `peerDependencies` of the Rsbuild plugins in your project for `@rsbuild/core` v2 support. We recommend using [Taze](https://github.com/antfu-collective/taze) to upgrade the Rsbuild plugins in your project to their latest versions:
+
+```bash
+# Upgrade Rsbuild plugins in the current directory
+npx taze major --include "/rsbuild/" -w
+
+# Or recursively upgrade Rsbuild plugins across the monorepo
+npx taze major --include "/rsbuild/" -w -r
+```
+
+If your project directly uses Rsbuild configuration or JavaScript APIs, you can refer to the [Rsbuild v2 upgrade guide](https://rsbuild.rs/guide/upgrade/v1-to-v2) for the related changes.
+
+## Default syntax target update
+
+When [output.target](/config/rsbuild/output#outputtarget) is `'node'` and [lib.syntax](/config/lib/syntax) is not configured, Rslib v1 attempts to infer the syntax target from `package.json#engines.node`.
+
+For example, the following `engines.node`:
+
+```json title="package.json"
+{
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}
+```
+
+Rslib resolves it to the following syntax target:
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      syntax: ['node >= 20.19.0'],
+    },
+  ],
+};
+```
+
+If `engines.node` is missing or no minimum version can be inferred, Rslib continues to use `'esnext'`.
+
+An explicit [lib.syntax](/config/lib/syntax) value takes precedence over automatic inference, so existing configurations are unaffected and you can set it explicitly to override the target inferred from `engines.node`.
+
+In addition, Rslib v1 adjusts the Browserslist baselines for `es2023` and `es2024`, and adds the new `es2025` target:
+
+| `lib.syntax` | Rslib v0.x                                                     | Rslib v1                                                      |
+| ------------ | -------------------------------------------------------------- | ------------------------------------------------------------- |
+| `es2023`     | Chrome / Edge 94, Firefox 93, Safari / iOS 16.4, Node.js 16.11 | Chrome / Edge 110, Firefox 115, Safari / iOS 17, Node.js 20   |
+| `es2024`     | Same as `esnext`, using the latest browser or Node.js version  | Chrome / Edge 112, Firefox 116, Safari / iOS 17, Node.js 20   |
+| `es2025`     | Not supported                                                  | Chrome / Edge 126, Firefox 132, Safari / iOS 17.4, Node.js 23 |
+
+These options only control JavaScript and CSS syntax transformations. They do not inject polyfills for runtime APIs missing from the target environment. The practical impact of the new baselines on JavaScript transformations is limited. The main difference is that Lightning CSS may emit more modern CSS.
+
+No changes are needed if the new baselines are suitable. To preserve the syntax target behavior from Rslib v0.x:
+
+- If the project previously used `es2023` and needs to retain the more conservative compatibility range:
+
+  ```diff title="rslib.config.ts"
+  export default {
+    lib: [
+      {
+  -      syntax: 'es2023',
+  +      syntax: 'es2022',
+      },
+    ],
+  };
+  ```
+
+- If the project previously used `es2024` and needs to continue using a dynamic Browserslist target:
+
+  ```diff title="rslib.config.ts"
+  export default {
+    lib: [
+      {
+  -      syntax: 'es2024',
+  +      syntax: 'esnext',
+      },
+    ],
+  };
+  ```
+
+## Default `externalsType` update
+
+For `format: 'esm'` output, Rslib v1 changes Rspack's default [`externalsType: 'module-import'`](https://rspack.rs/config/externals#externalstypemodule-import) to [`externalsType: 'modern-module'`](https://rspack.rs/config/externals#externalstypemodern-module):
+
+| Source syntax                           | Rslib v0.x               | Rslib v1                 |
+| --------------------------------------- | ------------------------ | ------------------------ |
+| Static `import`                         | Emitted as an ESM import | Emitted as an ESM import |
+| Dynamic `import()`                      | Remains dynamic          | Remains dynamic          |
+| CommonJS `require()` (`target: 'node'`) | Emitted as an ESM import | Uses `createRequire()`   |
+| CommonJS `require()` (`target: 'web'`)  | Emitted as an ESM import | Preserves `require()`    |
+
+This change only affects external CommonJS modules loaded with `require()` when `externalsType` is not explicitly configured. This includes dependencies externalized through [lib.autoExternal](/config/lib/auto-external), [output.autoExternal](/config/rsbuild/output#outputautoexternal), or [output.externals](/config/rsbuild/output#outputexternals), as well as Node.js built-ins externalized automatically for `target: 'node'`. Externals loaded with ESM imports retain their previous behavior and generally require no changes.
+
+Note that if the output contains an external loaded through `createRequire()` and is bundled again, the consuming bundler must be able to statically analyze this call. Rsbuild / Rspack projects can enable [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire). If the change in module-loading semantics is acceptable, you can also consider migrating CommonJS `require()` calls in the source to ESM imports.
+
+If only one dependency needs to retain the Rslib v0.x behavior, and its loading semantics are compatible with ESM imports, use the `${externalsType} ${libraryName}` syntax in [output.externals](/config/rsbuild/output#outputexternals) to use `module-import` for that dependency:
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      output: {
+        externals: {
+          'some-package': 'module-import some-package',
+        },
+      },
+    },
+  ],
+};
+```
+
+To preserve the Rslib v0.x behavior for all dependencies, set `externalsType` to `module-import` through [tools.rspack](/config/rsbuild/tools#toolsrspack):
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      tools: {
+        rspack(config) {
+          config.externalsType = 'module-import';
+        },
+      },
+    },
+  ],
+};
+```
+
+## `@typescript/native-preview` support update
+
+In Rslib v0.x, enabling [dts.tsgo](/config/lib/dts#dtstsgo) caused Rslib to load `@typescript/native-preview` automatically to generate declaration files.
+
+Rslib v1 does not load `@typescript/native-preview` by default. Instead, it resolves `typescript` from the project root and selects the declaration generation method based on the resolved version. When TypeScript 7+ is detected, Rslib automatically enables `dts.tsgo`.
+
+To continue using `@typescript/native-preview`, explicitly specify its module entry through [dts.typescriptPath](/config/lib/dts#dtstypescriptpath):
+
+```ts title="rslib.config.ts"
+import { fileURLToPath } from 'node:url';
+
+export default {
+  lib: [
+    {
+      dts: {
+        typescriptPath: fileURLToPath(
+          import.meta.resolve('@typescript/native-preview'),
+        ),
+      },
+    },
+  ],
+};
+```
+
+## Configuration
+
+### Enable `redirect.dts.extension` by default
+
+Rslib v1 enables [redirect.dts.extension](/config/lib/redirect#redirectdtsextension) by default. When bundleless declaration files are generated, import paths automatically gain or replace their extensions with JavaScript file extensions that resolve to the corresponding declaration files.
+
+For example, when an import path corresponds to `foo.d.ts`, the generated output changes as follows:
+
+```diff title="dist/index.d.ts"
+-export type { Foo } from './foo';
++export type { Foo } from './foo.js';
+```
+
+If your consuming tools depend on type imports without extensions, or another tool handles extension rewriting, restore the Rslib 0.x behavior:
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      redirect: {
+        dts: {
+          extension: false,
+        },
+      },
+    },
+  ],
+};
+```
+
+If you also configure `compilerOptions.paths` or [dts.alias](/config/lib/dts#dtsalias), check whether the mapped type import paths need to point directly to a concrete declaration entry. See [redirect.dts.extension](/config/lib/redirect#notes) for details.
+
+### Migrate `lib.autoExternal`
+
+[lib.autoExternal](/config/lib/auto-external) is deprecated in Rslib v1, but has not yet been removed and can still be used.
+
+We recommend replacing it with Rsbuild's [output.autoExternal](/config/rsbuild/output#outputautoexternal) option:
+
+```diff title="rslib.config.ts"
+ export default {
+   lib: [
+     {
+-      autoExternal: false,
++      output: {
++        autoExternal: false,
++      },
+     },
+   ],
+ };
+```
+
+### Remove `experiments.advancedEsm`
+
+The `experiments.advancedEsm` option has been removed.
+
+This option was originally used to generate ESM output that was more suitable for static analysis and supported code splitting. In Rslib v1, this behavior is enabled by default for ESM output, so the option is no longer needed.
+
+```diff title="rslib.config.ts"
+ export default {
+   lib: [
+     {
+-      experiments: {
+-        advancedEsm: true,
+-      },
+     },
+   ],
+ };
+```
+
+## JavaScript API
+
+- The type of `lib` in [RslibConfig](/api/javascript-api/types#rslibconfig) has changed from `LibConfig[]` to `LibConfig[] | undefined`. Omitting `lib` is equivalent to configuring `lib: [{}]`.

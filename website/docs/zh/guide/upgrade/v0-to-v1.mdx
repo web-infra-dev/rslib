@@ -1,0 +1,246 @@
+---
+description: '当前文档列出了从 Rslib 0.23 到 1.0 的所有不兼容更新，你可以参考此文档来迁移。'
+---
+
+# 从 0.x 升级到 v1
+
+当前文档列出了从 Rslib 0.23 到 1.0 的所有不兼容更新，你可以参考此文档来迁移。
+
+{/* TODO: ## 使用 Agent Skills */}
+
+## 升级 Rslib 到 v1
+
+将 `@rslib/core` 升级到 1.0 版本：
+
+```json title="package.json"
+{
+  "devDependencies": {
+    "@rslib/core": "^1.0.0"
+  }
+}
+```
+
+## Rsbuild v2
+
+Rslib v1 基于 Rsbuild v2，升级时可以通过 `peerDependencies` 检查项目中的 Rsbuild 插件是否支持 `@rsbuild/core` v2。推荐使用 [Taze](https://github.com/antfu-collective/taze) 将项目中的 Rsbuild 插件升级到最新版本：
+
+```bash
+# 升级当前目录中的 Rsbuild 插件
+npx taze major --include "/rsbuild/" -w
+
+# 或递归升级整个 monorepo 中的 Rsbuild 插件
+npx taze major --include "/rsbuild/" -w -r
+```
+
+如果项目直接使用了 Rsbuild 配置或 JavaScript API，可以参考 [Rsbuild v2 升级指南](https://rsbuild.rs/zh/guide/upgrade/v1-to-v2) 了解相关变更。
+
+## 默认语法目标更新
+
+当 [output.target](/config/rsbuild/output#outputtarget) 为 `'node'` 且未配置 [lib.syntax](/config/lib/syntax) 时，Rslib v1 会尝试根据 `package.json#engines.node` 推断语法目标。
+
+例如，以下 `engines.node`：
+
+```json title="package.json"
+{
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}
+```
+
+Rslib 会将其解析为以下语法目标：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      syntax: ['node >= 20.19.0'],
+    },
+  ],
+};
+```
+
+如果 `engines.node` 不存在或无法推断出最低版本，Rslib 会继续使用 `'esnext'`。
+
+显式配置的 [lib.syntax](/config/lib/syntax) 优先级高于自动推断，因此已有配置不会受到影响，也可以通过它覆盖根据 `engines.node` 推断出的目标。
+
+此外，Rslib v1 调整了 `es2023` 和 `es2024` 的 Browserslist 基线，并新增了 `es2025`：
+
+| `lib.syntax` | Rslib v0.x                                                     | Rslib v1                                                      |
+| ------------ | -------------------------------------------------------------- | ------------------------------------------------------------- |
+| `es2023`     | Chrome / Edge 94、Firefox 93、Safari / iOS 16.4、Node.js 16.11 | Chrome / Edge 110、Firefox 115、Safari / iOS 17、Node.js 20   |
+| `es2024`     | 与 `esnext` 相同，使用动态的最新浏览器或 Node.js 版本          | Chrome / Edge 112、Firefox 116、Safari / iOS 17、Node.js 20   |
+| `es2025`     | 不支持                                                         | Chrome / Edge 126、Firefox 132、Safari / iOS 17.4、Node.js 23 |
+
+这些配置仅控制 JavaScript 和 CSS 的语法降级，不会为目标环境缺失的运行时 API 注入 polyfill。新基线对 JavaScript 降级的实际影响较小，主要会使 Lightning CSS 输出更现代的 CSS。
+
+如果新的基线符合预期，则无需调整。如果需要保留 Rslib v0.x 的语法目标行为：
+
+- 项目原来使用 `es2023`，并且需要保留之前较保守的兼容范围：
+
+  ```diff title="rslib.config.ts"
+  export default {
+    lib: [
+      {
+  -      syntax: 'es2023',
+  +      syntax: 'es2022',
+      },
+    ],
+  };
+  ```
+
+- 项目原来使用 `es2024`，并且需要继续使用动态的 Browserslist 目标：
+
+  ```diff title="rslib.config.ts"
+  export default {
+    lib: [
+      {
+  -      syntax: 'es2024',
+  +      syntax: 'esnext',
+      },
+    ],
+  };
+  ```
+
+## 默认 `externalsType` 更新
+
+对于 `format: 'esm'` 的产物，Rslib v1 将 Rspack 的默认 [`externalsType: 'module-import'`](https://rspack.rs/zh/config/externals#externalstypemodule-import) 调整为 [`externalsType: 'modern-module'`](https://rspack.rs/zh/config/externals#externalstypemodern-module)：
+
+| 源码中的引用方式                         | Rslib v0.x        | Rslib v1                    |
+| ---------------------------------------- | ----------------- | --------------------------- |
+| 静态 `import`                            | 输出为 ESM import | 输出为 ESM import           |
+| 动态 `import()`                          | 保持动态导入      | 保持动态导入                |
+| CommonJS `require()`（`target: 'node'`） | 输出为 ESM import | 使用 `createRequire()` 加载 |
+| CommonJS `require()`（`target: 'web'`）  | 输出为 ESM import | 保留 `require()`            |
+
+这项变化只影响在未显式设置 `externalsType` 时，通过 `require()` 加载的外部 CommonJS 模块，包括通过 [lib.autoExternal](/config/lib/auto-external)、[output.autoExternal](/config/rsbuild/output#outputautoexternal)、[output.externals](/config/rsbuild/output#outputexternals) 外部化的依赖，以及 `target: 'node'` 下自动外部化的 Node.js 内置模块。通过 ESM import 加载的 external 行为不变，通常不需要调整。
+
+需要注意的是，如果产物中包含通过 `createRequire()` 加载的 external，并且该产物还会被再次打包，消费方的打包器需要能够静态分析这种调用。Rsbuild / Rspack 项目可以开启 [`module.parser.javascript.createRequire`](https://rspack.rs/zh/config/module-parser#javascriptcreaterequire)。如果模块加载语义允许，也可以考虑将源码中的 CommonJS `require()` 改为 ESM import。
+
+如果只需要让某个依赖保留 Rslib v0.x 的行为，并且确认该依赖适用 ESM import 的加载语义，可以在 [output.externals](/config/rsbuild/output#outputexternals) 中使用 `${externalsType} ${libraryName}` 语法，将该依赖指定为 `module-import`：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      output: {
+        externals: {
+          'some-package': 'module-import some-package',
+        },
+      },
+    },
+  ],
+};
+```
+
+如果需要保留所有依赖在 Rslib v0.x 中的行为，可以通过 [tools.rspack](/config/rsbuild/tools#toolsrspack) 将 `externalsType` 设置为 `module-import`：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      tools: {
+        rspack(config) {
+          config.externalsType = 'module-import';
+        },
+      },
+    },
+  ],
+};
+```
+
+## `@typescript/native-preview` 支持调整
+
+在 Rslib v0.x 中，开启 [dts.tsgo](/config/lib/dts#dtstsgo) 后，Rslib 会自动加载 `@typescript/native-preview` 来生成类型声明文件。
+
+Rslib v1 默认不会加载 `@typescript/native-preview`，而是从项目根目录解析 `typescript`，并根据解析到的版本选择类型声明生成方式。检测到 TypeScript 7+ 时，Rslib 会自动启用 `dts.tsgo`。
+
+如果需要继续使用 `@typescript/native-preview`，可以通过 [dts.typescriptPath](/config/lib/dts#dtstypescriptpath) 显式指定它的模块入口：
+
+```ts title="rslib.config.ts"
+import { fileURLToPath } from 'node:url';
+
+export default {
+  lib: [
+    {
+      dts: {
+        typescriptPath: fileURLToPath(
+          import.meta.resolve('@typescript/native-preview'),
+        ),
+      },
+    },
+  ],
+};
+```
+
+## 配置
+
+### 默认开启 `redirect.dts.extension`
+
+Rslib v1 默认开启了 [redirect.dts.extension](/config/lib/redirect#redirectdtsextension)，在生成 bundleless 类型声明文件时，导入路径会自动补全或替换为可以解析到相应类型声明文件的 JavaScript 文件扩展名。
+
+例如，当导入路径对应 `foo.d.ts` 时，生成结果如下：
+
+```diff title="dist/index.d.ts"
+-export type { Foo } from './foo';
++export type { Foo } from './foo.js';
+```
+
+如果你的消费工具依赖不带扩展名的类型导入路径，或由其他工具负责重写扩展名，可以恢复 Rslib 0.x 的行为：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      redirect: {
+        dts: {
+          extension: false,
+        },
+      },
+    },
+  ],
+};
+```
+
+如果你同时配置了 `compilerOptions.paths` 或 [dts.alias](/config/lib/dts#dtsalias)，请检查映射后的类型导入路径是否需要直接指向具体的类型声明入口，详情请参考 [redirect.dts.extension](/config/lib/redirect#注意事项)。
+
+### 迁移 `lib.autoExternal`
+
+[lib.autoExternal](/config/lib/auto-external) 已在 Rslib v1 中废弃，但暂未移除，仍可继续使用。
+
+我们推荐使用 Rsbuild 的 [output.autoExternal](/config/rsbuild/output#outputautoexternal) 配置替代它：
+
+```diff title="rslib.config.ts"
+ export default {
+   lib: [
+     {
+-      autoExternal: false,
++      output: {
++        autoExternal: false,
++      },
+     },
+   ],
+ };
+```
+
+### 移除 `experiments.advancedEsm`
+
+`experiments.advancedEsm` 选项已被移除。
+
+该选项原本用于生成对静态分析更友好并支持代码分割的 ESM 产物。但在 Rslib v1 中，这种 ESM 输出已成为默认行为，因此该选项不再需要。
+
+```diff title="rslib.config.ts"
+ export default {
+   lib: [
+     {
+-      experiments: {
+-        advancedEsm: true,
+-      },
+     },
+   ],
+ };
+```
+
+## JavaScript API
+
+- [RslibConfig](/api/javascript-api/types#rslibconfig) 中 `lib` 的类型从 `LibConfig[]` 变为 `LibConfig[] | undefined`。省略 `lib` 时，行为等同于配置 `lib: [{}]`。
