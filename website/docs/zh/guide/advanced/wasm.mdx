@@ -114,7 +114,30 @@ Rslib 解析每个 `.wasm` 模块，生成加载和实例化该模块所需的 J
   <Tab label="dist/index.js">
 
 ```js
-// Rspack 模块 runtime...
+function __webpack_require__(moduleId) {
+  // 读取缓存并执行已注册的模块...
+}
+
+__webpack_require__.add = (modules) => {
+  // 注册模块...
+};
+__webpack_require__.v = async (
+  exports,
+  wasmModuleId,
+  wasmModuleHash,
+  importsObj,
+) => {
+  // 根据 output.target 加载 static/wasm/[contenthash].module.wasm...
+  const bytes = await loadWasmBytes(wasmModuleHash);
+  const { instance } = await WebAssembly.instantiate(bytes, importsObj);
+  return Object.assign(exports, instance.exports);
+};
+
+__webpack_require__.add({
+  './src/add.wasm'(module, exports, __webpack_require__) {
+    module.exports = __webpack_require__.v(exports, module.id, '[contenthash]');
+  },
+});
 
 const add = await __webpack_require__('./src/add.wasm');
 const useAdd = (a, b) => (0, add.add)(a, b);
@@ -151,6 +174,12 @@ export { useAdd } from './utils.js';
 ```js
 import { __webpack_require__ } from './rslib-runtime.js';
 
+__webpack_require__.add({
+  './src/add.wasm'(module, exports, __webpack_require__) {
+    module.exports = __webpack_require__.v(exports, module.id, '[contenthash]');
+  },
+});
+
 const add = await __webpack_require__('./src/add.wasm');
 const useAdd = (a, b) => (0, add.add)(a, b);
 export { useAdd };
@@ -160,7 +189,26 @@ export { useAdd };
   <Tab label="dist/rslib-runtime.js">
 
 ```js
-// Rspack runtime...
+function __webpack_require__(moduleId) {
+  // 读取缓存并执行已注册的模块...
+}
+
+__webpack_require__.add = (modules) => {
+  // 注册模块...
+};
+__webpack_require__.v = async (
+  exports,
+  wasmModuleId,
+  wasmModuleHash,
+  importsObj,
+) => {
+  // 根据 output.target 加载 static/wasm/[contenthash].module.wasm...
+  const bytes = await loadWasmBytes(wasmModuleHash);
+  const { instance } = await WebAssembly.instantiate(bytes, importsObj);
+  return Object.assign(exports, instance.exports);
+};
+
+export { __webpack_require__ };
 ```
 
   </Tab>
