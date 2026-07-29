@@ -106,12 +106,14 @@ export const useAdd = (a: number, b: number) => add(a, b);
 
 ### `compile` 模式
 
-Rslib 解析每个 `.wasm` 模块，生成加载和实例化该模块所需的 JavaScript 胶水代码，并将二进制文件作为静态资源输出到由 [output.distPath.wasm](/config/rsbuild/output#outputdistpath) 指定的目录（默认为 `dist/static/wasm`），文件名包含 content hash：
+Rslib 解析每个 `.wasm` 模块，生成加载和实例化该模块所需的 JavaScript 胶水代码，并将二进制文件作为静态资源输出到由 [output.distPath.wasm](/config/rsbuild/output#outputdistpath) 指定的目录（默认为 `dist/static/wasm`），文件名包含 content hash。
 
-#### Bundle
+根据配置文件中的 [bundle](/config/lib/bundle) 配置，在 `dist` 目录下输出如下产物：
 
 <Tabs>
-  <Tab label="dist/index.js">
+<Tab label="bundle">
+<Tabs>
+  <Tab label="index.js">
 
 ```js
 function __webpack_require__(moduleId) {
@@ -145,7 +147,7 @@ export { useAdd };
 ```
 
   </Tab>
-  <Tab label="dist/static/wasm/[contenthash].module.wasm">
+  <Tab label="static/wasm/[contenthash].module.wasm">
 
 ```wasm
 (type (;0;) (func (param i32 i32) (result i32)))
@@ -158,18 +160,19 @@ export { useAdd };
 
   </Tab>
 </Tabs>
+</Tab>
 
-#### Bundleless
+<Tab label="bundleless">
 
 <Tabs>
-  <Tab label="dist/index.js">
+  <Tab label="index.js">
 
 ```js
 export { useAdd } from './utils.js';
 ```
 
   </Tab>
-  <Tab label="dist/utils.js">
+  <Tab label="utils.js">
 
 ```js
 import { __webpack_require__ } from './rslib-runtime.js';
@@ -186,7 +189,7 @@ export { useAdd };
 ```
 
   </Tab>
-  <Tab label="dist/rslib-runtime.js">
+  <Tab label="rslib-runtime.js">
 
 ```js
 function __webpack_require__(moduleId) {
@@ -212,7 +215,7 @@ export { __webpack_require__ };
 ```
 
   </Tab>
-  <Tab label="dist/static/wasm/[contenthash].module.wasm">
+  <Tab label="static/wasm/[contenthash].module.wasm">
 
 ```wasm
 (type (;0;) (func (param i32 i32) (result i32)))
@@ -225,6 +228,8 @@ export { __webpack_require__ };
 
   </Tab>
 </Tabs>
+</Tab>
+</Tabs>
 
 生成的加载代码取决于 [output.target](/config/rsbuild/output#outputtarget)：
 
@@ -233,17 +238,17 @@ export { __webpack_require__ };
 
 ### `preserve` 模式
 
-Rslib 在 JavaScript 产物中保留对 `.wasm` 模块的 import 语句，并按源码相对路径和原文件名原样输出二进制文件：
+Rslib 在 JavaScript 产物中保留对 `.wasm` 模块的 import 语句，并在 `dist` 目录下按源码相对路径和原文件名原样输出二进制文件：
 
 <Tabs>
-  <Tab label="dist/index.js">
+  <Tab label="index.js">
 
 ```js
 export { useAdd } from './utils.js';
 ```
 
   </Tab>
-  <Tab label="dist/utils.js">
+  <Tab label="utils.js">
 
 ```js
 import { add } from './add.wasm';
@@ -253,7 +258,7 @@ export { useAdd };
 ```
 
   </Tab>
-  <Tab label="dist/add.wasm">
+  <Tab label="add.wasm">
 
 ```wasm
 (type (;0;) (func (param i32 i32) (result i32)))

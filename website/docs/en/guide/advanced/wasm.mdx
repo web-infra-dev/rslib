@@ -106,12 +106,14 @@ export const useAdd = (a: number, b: number) => add(a, b);
 
 ### `compile` mode
 
-Rslib parses each `.wasm` module, generates the JavaScript glue code required to load and instantiate it, and emits its binary as a static asset to the directory specified by [output.distPath.wasm](/config/rsbuild/output#outputdistpath) (`dist/static/wasm` by default), with a content hash in the filename:
+Rslib parses each `.wasm` module, generates the JavaScript glue code required to load and instantiate it, and emits its binary as a static asset to the directory specified by [output.distPath.wasm](/config/rsbuild/output#outputdistpath) (`dist/static/wasm` by default), with a content hash in the filename.
 
-#### Bundle
+Depending on the [bundle](/config/lib/bundle) configuration, Rslib emits the following files in the `dist` directory:
 
 <Tabs>
-  <Tab label="dist/index.js">
+<Tab label="bundle">
+<Tabs>
+  <Tab label="index.js">
 
 ```js
 function __webpack_require__(moduleId) {
@@ -145,7 +147,7 @@ export { useAdd };
 ```
 
   </Tab>
-  <Tab label="dist/static/wasm/[contenthash].module.wasm">
+  <Tab label="static/wasm/[contenthash].module.wasm">
 
 ```wasm
 (type (;0;) (func (param i32 i32) (result i32)))
@@ -158,18 +160,19 @@ export { useAdd };
 
   </Tab>
 </Tabs>
+</Tab>
 
-#### Bundleless
+<Tab label="bundleless">
 
 <Tabs>
-  <Tab label="dist/index.js">
+  <Tab label="index.js">
 
 ```js
 export { useAdd } from './utils.js';
 ```
 
   </Tab>
-  <Tab label="dist/utils.js">
+  <Tab label="utils.js">
 
 ```js
 import { __webpack_require__ } from './rslib-runtime.js';
@@ -186,7 +189,7 @@ export { useAdd };
 ```
 
   </Tab>
-  <Tab label="dist/rslib-runtime.js">
+  <Tab label="rslib-runtime.js">
 
 ```js
 function __webpack_require__(moduleId) {
@@ -212,7 +215,7 @@ export { __webpack_require__ };
 ```
 
   </Tab>
-  <Tab label="dist/static/wasm/[contenthash].module.wasm">
+  <Tab label="static/wasm/[contenthash].module.wasm">
 
 ```wasm
 (type (;0;) (func (param i32 i32) (result i32)))
@@ -225,6 +228,8 @@ export { __webpack_require__ };
 
   </Tab>
 </Tabs>
+</Tab>
+</Tabs>
 
 The generated loading code depends on [output.target](/config/rsbuild/output#outputtarget):
 
@@ -233,17 +238,17 @@ The generated loading code depends on [output.target](/config/rsbuild/output#out
 
 ### `preserve` mode
 
-Rslib keeps imports of `.wasm` modules in the JavaScript output and emits the `.wasm` files unchanged, preserving their source-relative paths and original filenames:
+Rslib keeps imports of `.wasm` modules in the JavaScript output and emits them unchanged in the `dist` directory, preserving their source-relative paths and original filenames:
 
 <Tabs>
-  <Tab label="dist/index.js">
+  <Tab label="index.js">
 
 ```js
 export { useAdd } from './utils.js';
 ```
 
   </Tab>
-  <Tab label="dist/utils.js">
+  <Tab label="utils.js">
 
 ```js
 import { add } from './add.wasm';
@@ -253,7 +258,7 @@ export { useAdd };
 ```
 
   </Tab>
-  <Tab label="dist/add.wasm">
+  <Tab label="add.wasm">
 
 ```wasm
 (type (;0;) (func (param i32 i32) (result i32)))
