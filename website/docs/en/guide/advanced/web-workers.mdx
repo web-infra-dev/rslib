@@ -71,26 +71,19 @@ export default defineConfig({
 
 In bundleless mode, Rslib transforms each source module separately. Worker URLs and imports inside Workers are rewritten to reference the corresponding generated ESM files.
 
-For example, given the following source structure:
-
-```text
-src/
-├── index.ts
-├── worker.ts
-└── helper.ts
-```
+Consider the following source files:
 
 import { Tabs, Tab } from '@theme';
 
 <Tabs>
-<Tab label="src/index.ts">
+<Tab label="index.ts">
 
 ```ts
 export const worker = new Worker(new URL('./worker.ts', import.meta.url));
 ```
 
 </Tab>
-<Tab label="src/worker.ts">
+<Tab label="worker.ts">
 
 ```ts
 import { add } from './helper';
@@ -101,7 +94,7 @@ self.onmessage = ({ data }: MessageEvent<[number, number]>) => {
 ```
 
 </Tab>
-<Tab label="src/helper.ts">
+<Tab label="helper.ts">
 
 ```ts
 export const add = (left: number, right: number) => left + right;
@@ -112,15 +105,8 @@ export const add = (left: number, right: number) => left + right;
 
 Rslib generates the corresponding ESM files:
 
-```text
-dist/
-├── index.js
-├── worker.js
-└── helper.js
-```
-
 <Tabs>
-<Tab label="dist/index.js">
+<Tab label="index.js">
 
 ```js
 const worker = new Worker(new URL('./worker.js', import.meta.url), {
@@ -130,7 +116,7 @@ export { worker };
 ```
 
 </Tab>
-<Tab label="dist/worker.js">
+<Tab label="worker.js">
 
 ```js
 import { add } from './helper.js';
@@ -140,7 +126,7 @@ self.onmessage = ({ data }) => {
 ```
 
 </Tab>
-<Tab label="dist/helper.js">
+<Tab label="helper.js">
 
 ```js
 const add = (left, right) => left + right;
