@@ -328,12 +328,7 @@ const composeFormatConfig = ({
         bundle === false || Object.keys(sourceEntry ?? {}).length > 1;
 
       return {
-        plugins: [
-          modifyRsbuildDefaultPlugin({
-            disableUrlParse: true,
-            worker: jsParserOptions.others?.worker,
-          }),
-        ],
+        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
         output: {
           filenameHash: false,
           ...(bundle && { autoExternal: true }),
@@ -544,10 +539,8 @@ const composeFormatConfig = ({
 
 const modifyRsbuildDefaultPlugin = ({
   disableUrlParse,
-  worker,
 }: {
   disableUrlParse?: boolean;
-  worker?: Rspack.JavascriptParserOptions['worker'];
 } = {}): RsbuildPlugin => ({
   name: 'rslib:modify-rsbuild-default',
   setup(api) {
@@ -561,7 +554,6 @@ const modifyRsbuildDefaultPlugin = ({
           .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
           .parser({
             url: false,
-            ...(worker ? { worker } : {}),
           });
       }
 
