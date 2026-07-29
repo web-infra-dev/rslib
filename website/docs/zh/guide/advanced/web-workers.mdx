@@ -1,10 +1,12 @@
 ---
-description: '在 Rslib 的 ESM 库中使用 Web Worker，了解 Worker URL 语法，以及 bundle 与 bundleless 模式的产物行为和限制。'
+description: '在 Rslib 的 ESM 库中使用 Worker 构造器语法或 query 后缀导入。'
 ---
+
+import { Tabs, Tab } from '@theme';
 
 # Web Workers
 
-Rslib 支持使用标准的 `new Worker(new URL(..., import.meta.url))` 语法引用 Worker 源文件。
+Rslib 支持 Web Worker 模块。推荐使用标准的 `new Worker(new URL(..., import.meta.url))` 语法。你也可以使用 `?worker` 和 `?worker&inline` query 后缀导入 Worker。
 
 :::note
 
@@ -12,11 +14,11 @@ Rslib 支持使用标准的 `new Worker(new URL(..., import.meta.url))` 语法�
 
 :::
 
-## 创建 Worker
+## 使用 Worker 构造器
 
-### 语法
+### 基本用法
 
-创建 Worker 的基本语法如下：
+使用标准构造器语法创建 Worker：
 
 ```ts
 new Worker(new URL('./worker.ts', import.meta.url));
@@ -32,7 +34,7 @@ new Worker(new URL('./worker.js', import.meta.url), {
 
 ### 限制
 
-Rslib 依赖静态分析，因此需要保持 `new URL(..., import.meta.url)` 表达式内联，不支持传入字符串或变量：
+该语法的处理依赖静态分析，因此 `new URL(..., import.meta.url)` 表达式需要保持内联，不支持传入字符串或变量：
 
 ```ts
 // 不支持
@@ -45,35 +47,9 @@ new Worker(workerUrl);
 
 更多 Worker 语法及其限制，请参考 [Rspack - Web Workers](https://rspack.rs/zh/guide/features/web-workers)。
 
-## 产物模式
+### 产物模式
 
-Web Worker 同时支持 [bundle 和 bundleless 模式](/guide/basic/output-structure#bundle--bundleless)。
-
-### Bundle 模式
-
-在 bundle 模式下，Rslib 会将 Worker 入口拆分为独立 chunk，并将 Worker 导入的模块打包到该 chunk 中。
-
-### Bundleless 模式
-
-将 [lib.bundle](/config/lib/bundle) 设置为 `false` 以使用 bundleless 模式：
-
-```ts title="rslib.config.ts"
-import { defineConfig } from '@rslib/core';
-
-export default defineConfig({
-  lib: [
-    {
-      bundle: false,
-    },
-  ],
-});
-```
-
-在 bundleless 模式下，Rslib 会分别转换每个源模块，并将 Worker URL 和 Worker 内部的导入重写为对应的 ESM 产物路径。
-
-以下面这组源码为例：
-
-import { Tabs, Tab } from '@theme';
+Worker 构造器语法可用于 [bundle 和 bundleless 模式](/guide/basic/output-structure#bundle--bundleless)，下面通过一组示例源码展示两种模式下的构建结果：
 
 <Tabs>
 <Tab label="src/index.ts">
@@ -103,7 +79,37 @@ export const add = (left: number, right: number) => left + right;
 </Tab>
 </Tabs>
 
-Rslib 会生成对应的 ESM 文件：
+#### Bundle 模式
+
+在 bundle 模式下，Rslib 会将 Worker 入口拆分为独立 chunk，并将 Worker 导入的模块打包到该 chunk 中：
+
+<Tabs>
+<Tab label="dist/index.js">
+
+```js
+const worker = new Worker(new URL('./worker.js', import.meta.url), {
+  type: 'module',
+});
+export { worker };
+```
+
+</Tab>
+<Tab label="dist/worker.js">
+
+```js
+const add = (left, right) => left + right;
+self.onmessage = ({ data }) => {
+  self.postMessage(add(data[0], data[1]));
+};
+export {};
+```
+
+</Tab>
+</Tabs>
+
+#### Bundleless 模式
+
+在 bundleless 模式下，Rslib 会分别转换每个源模块，并将 Worker URL 和 Worker 内部的导入重写为对应的 ESM 产物路径：
 
 <Tabs>
 <Tab label="dist/index.js">
@@ -135,3 +141,37 @@ export { add };
 
 </Tab>
 </Tabs>
+
+## 使用 Query 后缀导入
+
+Rslib 还支持 [Rsbuild 提供的 query 后缀语法](https://rsbuild.rs/zh/guide/basic/web-workers#使用-query-后缀导入)。
+
+:::note
+
+Query 后缀仅支持 bundle 模式。
+
+:::
+
+### 输出独立 Worker 文件
+
+在 Worker 导入路径后添加 `?worker`：
+
+```ts
+import MyWorker from './worker.ts?worker';
+
+export const worker = new MyWorker();
+```
+
+Rslib 会将 Worker 输出为独立的 ESM 文件。
+
+### 内联 Worker
+
+添加 `?worker&inline` 可以内联 Worker：
+
+```ts
+import MyWorker from './worker.ts?worker&inline';
+
+export const worker = new MyWorker();
+```
+
+Rslib 会将 Worker 代码编码为 data URL，并内联到导入该 Worker 的 JavaScript 文件中，不再输出独立的 Worker 文件。

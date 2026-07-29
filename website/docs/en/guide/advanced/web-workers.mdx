@@ -1,10 +1,12 @@
 ---
-description: 'Use Web Workers in Rslib ESM libraries, including Worker URL syntax and output behavior in bundle and bundleless modes.'
+description: 'Use Web Workers in Rslib ESM libraries with the Worker constructor or query suffix imports.'
 ---
+
+import { Tabs, Tab } from '@theme';
 
 # Web Workers
 
-Rslib supports referencing Worker source files with the standard `new Worker(new URL(..., import.meta.url))` syntax.
+Rslib supports Web Worker modules. We recommend using the standard `new Worker(new URL(..., import.meta.url))` syntax. You can also import Workers with the `?worker` and `?worker&inline` query suffixes.
 
 :::note
 
@@ -12,11 +14,11 @@ When using Web Workers, only ESM output can be generated, so [format](/config/li
 
 :::
 
-## Create a worker
+## Use the Worker constructor
 
-### Syntax
+### Basic usage
 
-Basic Worker creation syntax:
+Create a Worker with the standard constructor syntax:
 
 ```ts
 new Worker(new URL('./worker.ts', import.meta.url));
@@ -32,7 +34,7 @@ new Worker(new URL('./worker.js', import.meta.url), {
 
 ### Limitations
 
-Rslib relies on static analysis, so keep the `new URL(..., import.meta.url)` expression inline. Passing a string or a variable is not supported:
+Processing this syntax relies on static analysis, so the `new URL(..., import.meta.url)` expression must remain inline. Passing a string or a variable is not supported:
 
 ```ts
 // Not supported
@@ -45,35 +47,9 @@ new Worker(workerUrl);
 
 See [Rspack - Web Workers](https://rspack.rs/guide/features/web-workers) for more information about Worker syntax and its limitations.
 
-## Output modes
+### Output modes
 
-Web Workers are supported in both [bundle and bundleless modes](/guide/basic/output-structure#bundle--bundleless).
-
-### Bundle mode
-
-In bundle mode, Rslib emits the Worker entry as a separate chunk and bundles modules imported by the Worker into that chunk.
-
-### Bundleless mode
-
-Set [lib.bundle](/config/lib/bundle) to `false` to use bundleless mode:
-
-```ts title="rslib.config.ts"
-import { defineConfig } from '@rslib/core';
-
-export default defineConfig({
-  lib: [
-    {
-      bundle: false,
-    },
-  ],
-});
-```
-
-In bundleless mode, Rslib transforms each source module separately. Worker URLs and imports inside Workers are rewritten to reference the corresponding generated ESM files.
-
-Consider the following source files:
-
-import { Tabs, Tab } from '@theme';
+The Worker constructor syntax works in both [bundle and bundleless modes](/guide/basic/output-structure#bundle--bundleless), as shown by the following source files and their build output:
 
 <Tabs>
 <Tab label="src/index.ts">
@@ -103,7 +79,37 @@ export const add = (left: number, right: number) => left + right;
 </Tab>
 </Tabs>
 
-Rslib generates the corresponding ESM files:
+#### Bundle mode
+
+In bundle mode, Rslib emits the Worker entry as a separate chunk and bundles modules imported by the Worker into that chunk:
+
+<Tabs>
+<Tab label="dist/index.js">
+
+```js
+const worker = new Worker(new URL('./worker.js', import.meta.url), {
+  type: 'module',
+});
+export { worker };
+```
+
+</Tab>
+<Tab label="dist/worker.js">
+
+```js
+const add = (left, right) => left + right;
+self.onmessage = ({ data }) => {
+  self.postMessage(add(data[0], data[1]));
+};
+export {};
+```
+
+</Tab>
+</Tabs>
+
+#### Bundleless mode
+
+In bundleless mode, Rslib transforms each source module separately. Worker URLs and imports inside Workers are rewritten to reference the corresponding generated ESM files:
 
 <Tabs>
 <Tab label="dist/index.js">
@@ -135,3 +141,37 @@ export { add };
 
 </Tab>
 </Tabs>
+
+## Import with query suffixes
+
+Rslib also supports the [query suffix syntax provided by Rsbuild](https://rsbuild.rs/guide/basic/web-workers#import-with-query-suffixes).
+
+:::note
+
+Query suffixes are only supported in bundle mode.
+
+:::
+
+### Emit a separate Worker file
+
+Append `?worker` to a Worker import:
+
+```ts
+import MyWorker from './worker.ts?worker';
+
+export const worker = new MyWorker();
+```
+
+Rslib emits the Worker as a separate ESM file.
+
+### Inline a Worker
+
+Append `?worker&inline` to inline the Worker:
+
+```ts
+import MyWorker from './worker.ts?worker&inline';
+
+export const worker = new MyWorker();
+```
+
+Rslib encodes the Worker code as a data URL and inlines it into the JavaScript file that imports the Worker without emitting a separate Worker file.
