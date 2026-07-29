@@ -22,6 +22,8 @@ To import assets in other formats, refer to [Extend Asset Types](#extend-asset-t
 
 ## Import assets in JavaScript file
 
+### `import` imports
+
 In JavaScript files, you can directly import static assets with relative paths through `import`:
 
 ```tsx
@@ -111,6 +113,56 @@ export { logo_namespaceObject as default };
 </Tab>
 
 </Tabs>
+
+### `new URL` imports
+
+:::note
+
+When referencing static assets with `new URL()`, only ESM output is supported, so [format](/config/lib/format) must be set to `'esm'` (the default).
+
+:::
+
+You can also reference static assets by using JavaScript's native `URL` together with `import.meta.url`:
+
+```js
+const logo = new URL('./assets/logo.svg', import.meta.url);
+```
+
+The following output will be emitted:
+
+<Tabs>
+<Tab label="dist/index.mjs">
+
+```js
+const logo = new URL('./static/svg/logo.svg', import.meta.url);
+export { logo };
+```
+
+</Tab>
+
+<Tab label="dist/static/svg/logo.svg">
+  <img src="https://assets.rspack.rs/rslib/rslib-logo.svg" width="100" height="100" loading="lazy" />
+</Tab>
+</Tabs>
+
+After build, the path in `new URL()` points to the emitted asset file.
+
+In bundleless mode, the default glob entry matches `src/**`. When referencing static assets with `new URL()`, you need to manually exclude the corresponding asset files from the entry:
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+      source: {
+        entry: {
+          index: ['src/**', '!src/assets/logo.svg'],
+        },
+      },
+    },
+  ],
+});
+```
 
 ## Import assets in CSS file
 

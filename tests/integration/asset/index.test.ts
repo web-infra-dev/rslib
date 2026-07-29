@@ -1,6 +1,8 @@
+import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent } from 'test-helper';
 
@@ -528,4 +530,43 @@ test('use Node.js addons', async () => {
       expect(typeof addon.readLength).toBe('function');
     }
   }
+});
+
+// Runtime helper: import the emitted module and assert `new URL(...)` resolves
+// against the module's own directory. `key` picks the matrix cell; `query`
+// selects the emitted entry file. `subpath` is appended to the module dir to
+// form the expected URL (empty for a directory reference). The resolved target
+// is also checked to exist on disk, so each cell proves the resource is emitted.
+const expectUrlResolves = async (
+  contents: Record<string, Record<string, string>>,
+  key: string,
+  query: RegExp,
+  exportName: string,
+  subpath: string,
+) => {
+  const { path } = queryContent(contents[key]!, query);
+  const mod = await import(path);
+  const resolved = mod[exportName];
+  const expected = `${pathToFileURL(dirname(path)).href}/${subpath}`;
+  expect(resolved.href).toBe(expected);
+  // The resolved URL must point to a real emitted target on disk.
+  expect(existsSync(resolved)).toBe(true);
+};
+
+test('preserve `new URL` file asset as relative URL', async () => {
+  // `new URL('./assets/logo.svg', import.meta.url)` points to an emitted asset
+  // and is kept as a static relative URL. At runtime it resolves to the emitted
+  // `static/svg/logo.svg` next to the module across every matrix cell.
+  // Matrix (lib array order): esm0 = bundle, esm1 = bundleless.
+  const { contents, files } = await buildAndGetResults({
+    fixturePath: join(__dirname, 'new-url'),
+  });
+
+  const asset = 'static/svg/logo.svg';
+  // esm × bundle
+  await expectUrlResolves(contents, 'esm0', /index\.js/, 'logo', asset);
+  // esm × bundleless
+  await expectUrlResolves(contents, 'esm1', /index\.js/, 'logo', asset);
+  // The asset is emitted as a file, without an extra `assets/logo.*` JS chunk.
+  expect(files.esm1!.some((f) => /assets\/logo\.js$/.test(f))).toBe(false);
 });

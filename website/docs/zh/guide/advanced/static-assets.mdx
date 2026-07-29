@@ -22,6 +22,8 @@ Rslib 支持在代码中引用图片、字体、媒体和其他类型文件等�
 
 ## 在 JavaScript 文件中引用
 
+### `import` 引用
+
 在 JavaScript 文件中，可以直接通过 `import` 的方式引用相对路径下的静态资源：
 
 ```tsx
@@ -111,6 +113,56 @@ export { logo_namespaceObject as default };
 </Tab>
 
 </Tabs>
+
+### `new URL` 引用
+
+:::note
+
+使用 `new URL()` 引用静态资源时，仅支持生成 ESM 格式的产物，因此 [format](/config/lib/format) 必须设置为 `'esm'`（默认值）。
+
+:::
+
+你可以通过 JavaScript 原生的 `URL` 和 `import.meta.url` 相配合，来引用静态资源：
+
+```js
+const logo = new URL('./assets/logo.svg', import.meta.url);
+```
+
+将会输出如下产物：
+
+<Tabs>
+<Tab label="dist/index.mjs">
+
+```js
+const logo = new URL('./static/svg/logo.svg', import.meta.url);
+export { logo };
+```
+
+</Tab>
+
+<Tab label="dist/static/svg/logo.svg">
+  <img src="https://assets.rspack.rs/rslib/rslib-logo.svg" width="100" height="100" loading="lazy" />
+</Tab>
+</Tabs>
+
+构建后，`new URL()` 中的路径会指向产物中输出的资源文件。
+
+在 bundleless 模式下，默认的 glob 入口会匹配 `src/**`。使用 `new URL()` 引用静态资源时，需要手动将对应资源文件从入口中排除：
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+      source: {
+        entry: {
+          index: ['src/**', '!src/assets/logo.svg'],
+        },
+      },
+    },
+  ],
+});
+```
 
 ## 在 CSS 文件中引用
 
