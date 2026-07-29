@@ -1,7 +1,5 @@
 export const SWC_HELPERS = '@swc/helpers';
 
-const DTS_EXTENSIONS: string[] = ['d.ts', 'd.mts', 'd.cts'];
-
 const JS_EXTENSIONS: string[] = [
   'js',
   'mjs',
@@ -34,6 +32,4 @@ export const CSS_EXTENSIONS_PATTERN: RegExp = new RegExp(
   `\\.(${CSS_EXTENSIONS.join('|')})$`,
 );
 
-export const DTS_EXTENSIONS_PATTERN: RegExp = new RegExp(
-  `\\.(${DTS_EXTENSIONS.join('|')})$`,
-);
+export const DTS_EXTENSIONS_PATTERN: RegExp = /\.d\.(?:[cm]?ts|[^/\\]+\.ts)$/;

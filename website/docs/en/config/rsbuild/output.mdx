@@ -84,6 +84,8 @@ const defaultDistPath = {
 };
 ```
 
+The `wasm` option only takes effect when [lib.wasm.mode](/config/lib/wasm#wasmmode) is `compile`, and specifies the output directory for `.wasm` files. In `preserve` mode, `.wasm` files are emitted at their source-relative paths.
+
 {/* ## output.emitAssets <RsbuildDocBadge path="/config/output/emit-assets" text="output.emitAssets" /> */}
 
 {/* Control whether to emit static assets such as images, fonts, audio, video, etc. */}

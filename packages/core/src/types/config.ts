@@ -360,6 +360,21 @@ export type Redirect = {
   dts?: DtsRedirect;
 };
 
+export type WasmMode = 'compile' | 'preserve';
+
+export type Wasm = {
+  /**
+   * Controls how `.wasm` modules are emitted.
+   *
+   * - `'compile'`: Generates JavaScript loading code and emits `.wasm` files as static assets.
+   * - `'preserve'`: Preserves `.wasm` imports and files for the consumer to handle. Requires `bundle` to be `false`.
+   *
+   * @defaultValue `'compile'` when `bundle` is `true`; `'preserve'` when `bundle` is `false`.
+   * @see {@link https://rslib.rs/config/lib/wasm#wasmmode}
+   */
+  mode?: WasmMode;
+};
+
 export type LibExperiments = {
   /**
    * Generate a Node.js single executable application alongside the JavaScript output.
@@ -475,6 +490,15 @@ export interface LibConfig extends EnvironmentConfig {
    */
   outBase?: string;
   /**
+   * Configure how Rslib handles `.wasm` modules.
+   *
+   * This option can only be configured when `format` is `'esm'`.
+   *
+   * @defaultValue `{ mode: 'compile' }` when `bundle` is `true`; `{ mode: 'preserve' }` when `bundle` is `false`.
+   * @see {@link https://rslib.rs/config/lib/wasm}
+   */
+  wasm?: Wasm;
+  /**
    * @inheritdoc
    */
   output?: RslibOutputConfig;
@@ -500,6 +524,7 @@ export type SharedLibConfig = Pick<
   | 'footer'
   | 'shims'
   | 'outBase'
+  | 'wasm'
 >;
 
 interface RslibOutputConfig extends OutputConfig {
