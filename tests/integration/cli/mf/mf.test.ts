@@ -107,3 +107,24 @@ describe('mf build', () => {
     expect(rspackConfigContent).toContain(`nodeEnv: 'production'`);
   });
 });
+
+describe('mf inspect', () => {
+  test('inspect in development mode', async () => {
+    const fixturePath = join(__dirname, 'dev');
+    const distFolder = join(fixturePath, 'dist-mf0');
+    const rspackConfigFile = join(distFolder, '.rsbuild/rspack.config.mf0.mjs');
+
+    fse.removeSync(distFolder);
+
+    const { status } = runCliSync('inspect --mode development --lib mf0', {
+      cwd: fixturePath,
+      stdio: 'pipe',
+    });
+
+    expect(status).toBe(0);
+
+    const rspackConfigContent = await fse.readFile(rspackConfigFile, 'utf-8');
+    expect(rspackConfigContent).toContain(`mode: 'development'`);
+    expect(rspackConfigContent).toContain(`nodeEnv: 'development'`);
+  });
+});

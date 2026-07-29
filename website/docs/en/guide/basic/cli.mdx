@@ -105,36 +105,45 @@ export default defineConfig({
 
 ## rslib inspect
 
-The `rslib inspect` command is used to view the Rsbuild config and Rspack config of the Rslib project.
+The `rslib inspect` command inspects a project's Rslib config and the corresponding Rsbuild and Rspack configs.
 
 ```bash
 Usage:
   $ rslib inspect
 
 Options:
-  --output <output>     specify inspect content output path (default: ".rsbuild")
-  --verbose             show full function definitions in output
+  --mode <mode>         set the build mode (development | production)
+  --output <output>     set the output path for inspection results (default: ".rsbuild")
+  --verbose             show complete function definitions in output
 ```
 
 When you run the command `npx rslib inspect` in the project root directory, the following files will be generated in the `dist/.rsbuild` directory of the project:
 
 - `rsbuild.config.mjs`: Represents the Rsbuild configuration used during the build.
-- `rspack.config.web.mjs`: Represents the Rspack configuration used during the build.
-- `rslib.config.mjs`: Represents the final Rslib configuration after normalization.
+- `rspack.config.esm.mjs`: Represents the Rspack configuration used during the build.
+- `rslib.config.mjs`: Represents the resolved Rslib configuration.
 
 ```text
 ➜ npx rslib inspect
 
-Inspect config succeed, open following files to view the content:
+config inspection completed, generated files:
 
-  - Rsbuild Config: /project/dist/.rsbuild/rsbuild.config.mjs
+  - Rsbuild config: /project/dist/.rsbuild/rsbuild.config.mjs
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
   - Rslib Config: /project/dist/.rsbuild/rslib.config.mjs
 ```
 
+### Setting mode
+
+By default, the inspect command outputs production mode configurations for all libraries. You can add the `--mode development` option to output development mode configurations for libraries with [format](/config/lib/format) set to `mf`:
+
+```bash
+rslib inspect --mode development
+```
+
 ### Verbose content
 
-By default, the inspect command omits the content of functions in the configuration object. You can add the `--verbose` option to output the complete content of functions:
+By default, the inspect command omits function bodies in the configuration object. To output complete function content, add the `--verbose` option:
 
 ```bash
 rslib inspect --verbose
@@ -147,10 +156,10 @@ If the current project has multiple output formats, such as ESM artifact and CJS
 ```text
 ➜ npx rslib inspect
 
-Inspect config succeed, open following files to view the content:
+config inspection completed, generated files:
 
-  - Rsbuild Config (esm): /project/dist/.rsbuild/rsbuild.config.esm.mjs
-  - Rsbuild Config (cjs): /project/dist/.rsbuild/rsbuild.config.cjs.mjs
+  - Rsbuild config (esm): /project/dist/.rsbuild/rsbuild.config.esm.mjs
+  - Rsbuild config (cjs): /project/dist/.rsbuild/rsbuild.config.cjs.mjs
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
   - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
   - Rslib Config: /project/dist/.rsbuild/rslib.config.mjs

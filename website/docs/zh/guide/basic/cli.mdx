@@ -105,31 +105,40 @@ export default defineConfig({
 
 ## rslib inspect
 
-`rslib inspect` 命令用于查看 Rslib 项目的 Rsbuild 配置和 Rspack 配置。
+`rslib inspect` 命令用于查看项目的 Rslib 配置及对应的 Rsbuild 和 Rspack 配置。
 
 ```bash
 Usage:
   $ rslib inspect
 
 Options:
-  --output <output>     指定检查内容输出路径（默认：".rsbuild"）
-  --verbose             在输出中显示完整的函数定义
+  --mode <mode>         指定构建模式（development | production）
+  --output <output>     指定在 dist 目录下输出的路径（默认：".rsbuild"）
+  --verbose             在结果中展示函数的完整内容
 ```
 
-当你在项目根目录下执行命令 `npx rsbuild inspect` 后，会在项目的 `dist/.rsbuild` 目录生成以下文件：
+当你在项目根目录下执行命令 `npx rslib inspect` 后，会在项目的 `dist/.rsbuild` 目录生成以下文件：
 
 - `rsbuild.config.mjs`: 表示在构建时使用的 Rsbuild 配置。
-- `rspack.config.web.mjs`: 表示在构建时使用的 Rspack 配置。
-- `rslib.config.mjs`: 表示归一化后的 Rslib 配置。
+- `rspack.config.esm.mjs`: 表示在构建时使用的 Rspack 配置。
+- `rslib.config.mjs`: 表示解析后的 Rslib 配置。
 
 ```text
 ➜ npx rslib inspect
 
-Inspect config succeed, open following files to view the content:
+config inspection completed, generated files:
 
-  - Rsbuild Config: /project/dist/.rsbuild/rsbuild.config.mjs
+  - Rsbuild config: /project/dist/.rsbuild/rsbuild.config.mjs
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
   - Rslib Config: /project/dist/.rsbuild/rslib.config.mjs
+```
+
+### 指定模式
+
+默认情况下，inspect 命令会输出所有库的生产模式配置，你可以添加 `--mode development` 选项来输出 [format](/config/lib/format) 为 `mf` 的库的开发模式配置：
+
+```bash
+rslib inspect --mode development
 ```
 
 ### 完整内容
@@ -147,10 +156,10 @@ rslib inspect --verbose
 ```text
 ➜ npx rslib inspect
 
-Inspect config succeed, open following files to view the content:
+config inspection completed, generated files:
 
-  - Rsbuild Config (esm): /project/dist/.rsbuild/rsbuild.config.esm.mjs
-  - Rsbuild Config (cjs): /project/dist/.rsbuild/rsbuild.config.cjs.mjs
+  - Rsbuild config (esm): /project/dist/.rsbuild/rsbuild.config.esm.mjs
+  - Rsbuild config (cjs): /project/dist/.rsbuild/rsbuild.config.cjs.mjs
   - Rspack Config (esm): /project/dist/.rsbuild/rspack.config.esm.mjs
   - Rspack Config (cjs): /project/dist/.rsbuild/rspack.config.cjs.mjs
   - Rslib Config: /project/dist/.rsbuild/rslib.config.mjs

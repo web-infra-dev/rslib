@@ -244,3 +244,4 @@ This option was originally used to generate ESM output that was more suitable fo
 ## JavaScript API
 
 - The type of `lib` in [RslibConfig](/api/javascript-api/types#rslibconfig) has changed from `LibConfig[]` to `LibConfig[] | undefined`. Omitting `lib` is equivalent to configuring `lib: [{}]`.
+- The invalid `'none'` value has been removed from the `mode` option of [`rslib.inspectConfig()`](/api/javascript-api/instance#rslibinspectconfig). When `mode` is `'development'`, `rslib.inspectConfig()` now only outputs configurations for libraries with `format: 'mf'`.

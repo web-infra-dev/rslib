@@ -235,7 +235,7 @@ type InspectConfigOptions = {
    * 可选值：'development' 或 'production'
    * @default 'production'
    */
-  mode?: RsbuildMode;
+  mode?: 'development' | 'production';
   /**
    * 启用详细模式，显示配置中函数的完整内容
    * @default false
@@ -243,7 +243,7 @@ type InspectConfigOptions = {
   verbose?: boolean;
   /**
    * 指定检查结果的输出路径
-   * @default 'output.distPath.root'
+   * @default '<output.distPath.root>/.rsbuild'
    */
   outputPath?: string;
   /**
@@ -291,6 +291,16 @@ await rslib.inspectConfig({
 });
 ```
 
+### 指定模式
+
+默认情况下，`rslib.inspectConfig()` 会输出所有库的生产模式配置，你可以将 `mode` 设置为 `'development'` 来输出 [format](/config/lib/format) 为 `mf` 的库的开发模式配置：
+
+```ts
+await rslib.inspectConfig({
+  mode: 'development',
+});
+```
+
 ### 运行指定的库
 
 可以通过 `lib` 参数指定需要查看配置的库 id。如果不指定该参数，则会输出所有配置。
@@ -305,9 +315,9 @@ await rslib.inspectConfig({
 
 ### 输出路径
 
-你可以通过 `outputPath` 来设置输出目录，默认为 [output.distPath.root](/config/rsbuild/output#outputdistpath) 的值。
+你可以通过 `outputPath` 来设置输出目录。当 `writeToDisk` 为 `true` 时，文件默认会写入 [output.distPath.root](/config/rsbuild/output#outputdistpath) 下的 `.rsbuild` 目录。
 
-当 `outputPath` 是一个相对路径时，会相对于 `output.distPath.root` 的值进行拼接。你也可以将 `outputPath` 设置为一个绝对路径，此时会直接将文件写入到该路径下。比如：
+当 `outputPath` 是一个相对路径时，会相对于 `output.distPath.root` 进行解析。你也可以将 `outputPath` 设置为一个绝对路径，此时会直接将文件写入到该路径下。比如：
 
 ```ts
 import path from 'node:path';

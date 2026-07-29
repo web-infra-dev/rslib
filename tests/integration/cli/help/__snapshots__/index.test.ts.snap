@@ -40,8 +40,9 @@ Usage:
   $ rslib inspect [options]
 
 Options:
-  --output <output>         specify inspect content output path (default: .rsbuild)
-  --verbose                 show full function definitions in output
+  --mode <mode>             set the build mode (development | production)
+  --output <output>         set the output path for inspection results (default: .rsbuild)
+  --verbose                 show complete function definitions in output
   -c, --config <config>     specify the configuration file, can be a relative or absolute path
   --config-loader <loader>  Set the config file loader (auto | jiti | native) (default: auto)
   -r, --root <root>         specify the project root directory, can be an absolute path or a path relative to cwd
@@ -79,7 +80,7 @@ Usage:
 
 Commands:
   build    build the library for production (default if no command is given)
-  inspect  inspect the Rsbuild / Rspack configs of Rslib projects
+  inspect  inspect the Rslib, Rsbuild, and Rspack configs
   mf-dev   start Rsbuild dev server of Module Federation format
 
   For details on a sub-command, run:

@@ -7,7 +7,7 @@ import {
 } from '@rsbuild/core';
 import util from 'node:util';
 import { composeRsbuildEnvironments, pruneEnvironments } from './config';
-import type { RslibConfig } from './types';
+import type { Format, RslibConfig } from './types';
 import type {
   BuildOptions,
   BuildResult,
@@ -26,6 +26,36 @@ import {
   setNodeEnv,
 } from './utils/helper';
 import { isDebug, isDebugKey, logger } from './utils/logger';
+
+const pruneMFEnvironments = (
+  {
+    environments,
+    environmentWithInfos,
+  }: {
+    environments: Record<string, EnvironmentConfig>;
+    environmentWithInfos: { id: string; format: Format }[];
+  },
+  libs?: string[],
+): Record<string, EnvironmentConfig> => {
+  const selectedEnvironmentIds = environmentWithInfos
+    .filter(
+      ({ format, id }) =>
+        format === 'mf' && (!libs?.length || libs.includes(id)),
+    )
+    .map(({ id }) => id);
+
+  if (!selectedEnvironmentIds.length) {
+    throw new Error(
+      `No mf format found in ${
+        libs?.length
+          ? `libs ${libs.map((lib) => `"${lib}"`).join(', ')}`
+          : 'your config'
+      }, please check your config to ensure that the mf format is enabled correctly.`,
+    );
+  }
+
+  return pruneEnvironments(environments, selectedEnvironmentIds);
+};
 
 const applyDebugInspectConfigPlugin = (
   rsbuildInstance: RsbuildInstance,
@@ -201,17 +231,32 @@ export async function createRslib(
     inspectOptions: InspectConfigOptions = {},
   ): Promise<InspectConfigResult> => {
     if (inspectOptions.mode) {
+      if (
+        inspectOptions.mode !== 'development' &&
+        inspectOptions.mode !== 'production'
+      ) {
+        throw new Error(
+          `Invalid inspect mode "${inspectOptions.mode}". Expected "development" or "production".`,
+        );
+      }
       setNodeEnv(inspectOptions.mode);
     } else if (!getNodeEnv()) {
       setNodeEnv('production');
     }
 
-    const { environments } = await composeRsbuildEnvironments(config);
+    const composedEnvironments = await composeRsbuildEnvironments(config);
+    const environments =
+      inspectOptions.mode === 'development'
+        ? pruneMFEnvironments(composedEnvironments, inspectOptions.lib)
+        : pruneEnvironments(
+            composedEnvironments.environments,
+            inspectOptions.lib,
+          );
 
     const rsbuildInstance = await createRsbuildInstance(
       options,
-      'production',
-      pruneEnvironments(environments, inspectOptions.lib),
+      inspectOptions.mode ?? 'production',
+      environments,
     );
 
     const inspectConfigResult = await rsbuildInstance.inspectConfig({
@@ -241,32 +286,10 @@ export async function createRslib(
       setNodeEnv('development');
     }
 
-    const { environments, environmentWithInfos } =
-      await composeRsbuildEnvironments(config);
-
-    const selectedEnvironmentIds = environmentWithInfos
-      .filter((env) => {
-        const isMf = env.format === 'mf';
-        if (!mfOptions.lib || mfOptions.lib.length === 0) {
-          return isMf;
-        }
-        return env.id && mfOptions.lib.includes(env.id);
-      })
-      .map((env) => env.id);
-
-    if (!selectedEnvironmentIds.length) {
-      throw new Error(
-        `No mf format found in ${
-          mfOptions.lib && mfOptions.lib.length > 0
-            ? `libs ${mfOptions.lib.map((lib) => `"${lib}"`).join(', ')}`
-            : 'your config'
-        }, please check your config to ensure that the mf format is enabled correctly.`,
-      );
-    }
-
-    const selectedEnvironments = pruneEnvironments(
-      environments,
-      selectedEnvironmentIds,
+    const composedEnvironments = await composeRsbuildEnvironments(config);
+    const selectedEnvironments = pruneMFEnvironments(
+      composedEnvironments,
+      mfOptions.lib,
     );
 
     const rsbuildInstance = await createRsbuildInstance(

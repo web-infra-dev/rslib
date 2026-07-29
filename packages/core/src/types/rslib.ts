@@ -4,7 +4,6 @@ import type {
   LoadEnvOptions,
   RestartFn,
   RsbuildInstance,
-  RsbuildMode,
   StartDevServerResult,
 } from '@rsbuild/core';
 import type { RslibConfig } from './config';
@@ -30,7 +29,7 @@ export type InspectConfigOptions = CommonOptions & {
    * Available options: 'development' or 'production'.
    * @default 'production'
    */
-  mode?: RsbuildMode;
+  mode?: 'development' | 'production';
   /**
    * Enables verbose mode to display the complete function
    * content in the configuration.
@@ -39,7 +38,7 @@ export type InspectConfigOptions = CommonOptions & {
   verbose?: boolean;
   /**
    * Specify the output path for inspection results.
-   * @default 'output.distPath.root'
+   * @default '<output.distPath.root>/.rsbuild'
    */
   outputPath?: string;
   /**
