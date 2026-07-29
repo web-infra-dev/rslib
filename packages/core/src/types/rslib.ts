@@ -27,7 +27,7 @@ export type InspectConfigOptions = CommonOptions & {
   /**
    * Inspect the config in the specified mode.
    * Available options: 'development' or 'production'.
-   * @default 'production'
+   * @default Inferred from `process.env.NODE_ENV`: 'development' when set to 'development', otherwise 'production'.
    */
   mode?: 'development' | 'production';
   /**

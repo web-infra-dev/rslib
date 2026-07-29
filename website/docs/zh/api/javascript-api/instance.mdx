@@ -233,7 +233,7 @@ type InspectConfigOptions = {
   /**
    * 检查指定 mode 下的配置
    * 可选值：'development' 或 'production'
-   * @default 'production'
+   * @default 根据 `process.env.NODE_ENV` 推断：当值为 'development' 时使用 'development'，否则使用 'production'
    */
   mode?: 'development' | 'production';
   /**
@@ -293,13 +293,17 @@ await rslib.inspectConfig({
 
 ### 指定模式
 
-默认情况下，`rslib.inspectConfig()` 会输出所有库的生产模式配置，你可以将 `mode` 设置为 `'development'` 来输出 [format](/config/lib/format) 为 `mf` 的库的开发模式配置：
+默认情况下，`mode` 会根据 `process.env.NODE_ENV` 推断。当 `mode` 为 `'production'` 时，`rslib.inspectConfig()` 会输出所有库的生产模式配置。你也可以将 `mode` 设置为 `'development'` 来输出 [format](/config/lib/format) 为 `mf` 的库的开发模式配置：
 
 ```ts
 await rslib.inspectConfig({
   mode: 'development',
 });
 ```
+
+:::tip
+Rslib 配置会在调用 `inspectConfig()` 前完成解析，因此 `mode` 不会影响配置的加载方式。如需根据 `NODE_ENV` 加载不同的 Rslib 配置，请在调用 [`createRslib()`](/api/javascript-api/core#createrslib) 前进行设置。
+:::
 
 ### 运行指定的库
 

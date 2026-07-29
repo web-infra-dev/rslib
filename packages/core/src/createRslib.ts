@@ -244,9 +244,11 @@ export async function createRslib(
       setNodeEnv('production');
     }
 
+    const mode = getNodeEnv() === 'development' ? 'development' : 'production';
+
     const composedEnvironments = await composeRsbuildEnvironments(config);
     const environments =
-      inspectOptions.mode === 'development'
+      mode === 'development'
         ? pruneMFEnvironments(composedEnvironments, inspectOptions.lib)
         : pruneEnvironments(
             composedEnvironments.environments,
@@ -255,12 +257,12 @@ export async function createRslib(
 
     const rsbuildInstance = await createRsbuildInstance(
       options,
-      inspectOptions.mode ?? 'production',
+      mode,
       environments,
     );
 
     const inspectConfigResult = await rsbuildInstance.inspectConfig({
-      mode: inspectOptions.mode,
+      mode,
       verbose: inspectOptions.verbose,
       outputPath: inspectOptions.outputPath,
       writeToDisk: inspectOptions.writeToDisk,

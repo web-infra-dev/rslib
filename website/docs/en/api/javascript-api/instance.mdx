@@ -233,7 +233,7 @@ type InspectConfigOptions = {
   /**
    * Inspect the config in the specified mode.
    * Available options: 'development' or 'production'.
-   * @default 'production'
+   * @default Inferred from `process.env.NODE_ENV`: 'development' when set to 'development', otherwise 'production'.
    */
   mode?: 'development' | 'production';
   /**
@@ -294,13 +294,17 @@ await rslib.inspectConfig({
 
 ### Setting mode
 
-By default, `rslib.inspectConfig()` outputs production mode configurations for all libraries. You can set `mode` to `'development'` to output development mode configurations for libraries with [format](/config/lib/format) set to `mf`:
+By default, `mode` is inferred from `process.env.NODE_ENV`. When `mode` is `'production'`, `rslib.inspectConfig()` outputs production mode configs for all libraries. You can also set `mode` to `'development'` to output development mode configs only for libraries with [format](/config/lib/format) set to `mf`:
 
 ```ts
 await rslib.inspectConfig({
   mode: 'development',
 });
 ```
+
+:::tip
+The Rslib config is resolved before `inspectConfig()` is called, so `mode` does not affect how it is loaded. To load different Rslib configs based on `NODE_ENV`, set it before calling [`createRslib()`](/api/javascript-api/core#createrslib).
+:::
 
 ### Run specified library
 

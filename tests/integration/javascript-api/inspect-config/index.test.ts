@@ -59,6 +59,16 @@ describe('rslib.inspectConfig', async () => {
     );
   });
 
+  test('should infer development mode from NODE_ENV', async () => {
+    process.env.NODE_ENV = 'development';
+
+    const rslib = await createModeRslib();
+    const result = await rslib.inspectConfig();
+
+    expect(result.origin.rsbuildConfig.mode).toBe('development');
+    expect(Object.keys(result.origin.environmentConfigs)).toEqual(['mf']);
+  });
+
   test('should inspect only MF configs in development mode', async () => {
     const rslib = await createModeRslib();
     const result = await rslib.inspectConfig({
