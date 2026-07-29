@@ -76,14 +76,14 @@ Consider the following source files:
 import { Tabs, Tab } from '@theme';
 
 <Tabs>
-<Tab label="index.ts">
+<Tab label="src/index.ts">
 
 ```ts
 export const worker = new Worker(new URL('./worker.ts', import.meta.url));
 ```
 
 </Tab>
-<Tab label="worker.ts">
+<Tab label="src/worker.ts">
 
 ```ts
 import { add } from './helper';
@@ -94,7 +94,7 @@ self.onmessage = ({ data }: MessageEvent<[number, number]>) => {
 ```
 
 </Tab>
-<Tab label="helper.ts">
+<Tab label="src/helper.ts">
 
 ```ts
 export const add = (left: number, right: number) => left + right;
@@ -106,7 +106,7 @@ export const add = (left: number, right: number) => left + right;
 Rslib generates the corresponding ESM files:
 
 <Tabs>
-<Tab label="index.js">
+<Tab label="dist/index.js">
 
 ```js
 const worker = new Worker(new URL('./worker.js', import.meta.url), {
@@ -116,7 +116,7 @@ export { worker };
 ```
 
 </Tab>
-<Tab label="worker.js">
+<Tab label="dist/worker.js">
 
 ```js
 import { add } from './helper.js';
@@ -126,7 +126,7 @@ self.onmessage = ({ data }) => {
 ```
 
 </Tab>
-<Tab label="helper.js">
+<Tab label="dist/helper.js">
 
 ```js
 const add = (left, right) => left + right;
