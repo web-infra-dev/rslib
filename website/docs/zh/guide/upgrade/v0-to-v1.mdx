@@ -244,4 +244,4 @@ export default {
 ## JavaScript API
 
 - [RslibConfig](/api/javascript-api/types#rslibconfig) 中 `lib` 的类型从 `LibConfig[]` 变为 `LibConfig[] | undefined`。省略 `lib` 时，行为等同于配置 `lib: [{}]`。
-- [`rslib.inspectConfig()`](/api/javascript-api/instance#rslibinspectconfig) 的 `mode` 选项移除了无效的 `'none'` 值。当 `mode` 为 `'development'` 时，`rslib.inspectConfig()` 现在仅会输出 `format: 'mf'` 的库配置。
+- [`rslib.inspectConfig()`](/api/javascript-api/instance#rslibinspectconfig) 的 `mode` 选项移除了无效的 `'none'` 值。未设置 `mode` 时，现在会根据 `process.env.NODE_ENV` 推断：当 `NODE_ENV` 为 `'development'` 时，`mode` 为 `'development'`，否则为 `'production'`。当 `mode` 为 `'development'` 时，`rslib.inspectConfig()` 现在仅会输出 `format: 'mf'` 的库配置。

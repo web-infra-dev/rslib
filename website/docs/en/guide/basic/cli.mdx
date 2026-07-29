@@ -135,7 +135,9 @@ config inspection completed, generated files:
 
 ### Setting mode
 
-By default, the inspect command outputs production mode configurations for all libraries. You can add the `--mode development` option to output development mode configurations for libraries with [format](/config/lib/format) set to `mf`:
+By default, `mode` is inferred from `process.env.NODE_ENV`: it is `'development'` when `NODE_ENV` is `'development'`, and `'production'` otherwise.
+
+When `mode` is `'production'`, the inspect command outputs production mode configurations for all libraries. You can add the `--mode development` option to output development mode configurations for libraries with [format](/config/lib/format) set to `mf`:
 
 ```bash
 rslib inspect --mode development

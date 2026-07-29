@@ -135,7 +135,9 @@ config inspection completed, generated files:
 
 ### 指定模式
 
-默认情况下，inspect 命令会输出所有库的生产模式配置，你可以添加 `--mode development` 选项来输出 [format](/config/lib/format) 为 `mf` 的库的开发模式配置：
+默认情况下，`mode` 会根据 `process.env.NODE_ENV` 推断：当 `NODE_ENV` 为 `'development'` 时，`mode` 为 `'development'`，否则为 `'production'`。
+
+当 `mode` 为 `'production'` 时，inspect 命令会输出所有库的生产模式配置。你也可以添加 `--mode development` 选项来输出 [format](/config/lib/format) 为 `mf` 的库的开发模式配置：
 
 ```bash
 rslib inspect --mode development
