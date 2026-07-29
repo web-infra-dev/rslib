@@ -4,7 +4,7 @@ description: 'Use Web Workers in Rslib ESM libraries, including Worker URL synta
 
 # Web Workers
 
-Rslib supports referencing Worker source files with the standard `new Worker(new URL(...))` syntax.
+Rslib supports referencing Worker source files with the standard `new Worker(new URL(..., import.meta.url))` syntax.
 
 :::note
 

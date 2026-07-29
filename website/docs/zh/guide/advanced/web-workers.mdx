@@ -4,7 +4,7 @@ description: '在 Rslib 的 ESM 库中使用 Web Worker，了解 Worker URL 语�
 
 # Web Workers
 
-Rslib 支持使用标准的 `new Worker(new URL(...))` 语法引用 Worker 源文件。
+Rslib 支持使用标准的 `new Worker(new URL(..., import.meta.url))` 语法引用 Worker 源文件。
 
 :::note
 
