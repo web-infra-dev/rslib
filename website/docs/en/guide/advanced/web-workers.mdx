@@ -32,7 +32,7 @@ new Worker(new URL('./worker.js', import.meta.url), {
 
 ### Limitations
 
-Rslib relies on static analysis, so keep the `new URL(url, import.meta.url)` expression inline. Passing a string or a variable is not supported:
+Rslib relies on static analysis, so keep the `new URL(..., import.meta.url)` expression inline. Passing a string or a variable is not supported:
 
 ```ts
 // Not supported

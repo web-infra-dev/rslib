@@ -32,7 +32,7 @@ new Worker(new URL('./worker.js', import.meta.url), {
 
 ### 限制
 
-Rslib 依赖静态分析，因此需要保持 `new URL(url, import.meta.url)` 表达式内联，不支持传入字符串或变量：
+Rslib 依赖静态分析，因此需要保持 `new URL(..., import.meta.url)` 表达式内联，不支持传入字符串或变量：
 
 ```ts
 // 不支持
