@@ -11,6 +11,8 @@ test('new Worker(new URL(...)) should emit analyzable ESM worker URLs', async ()
     fixturePath,
   });
 
+  expect(contents).toMatchSnapshot();
+
   const workerUrls: string[] = [];
   const workerOptions: (WorkerOptions | undefined)[] = [];
   const originalWorker = globalThis.Worker;
@@ -55,9 +57,11 @@ test('new Worker(new URL(...)) should emit analyzable ESM worker URLs', async ()
 test('importing with ?worker should emit a working Worker constructor', async () => {
   process.env.NODE_ENV = 'production';
   const fixturePath = join(__dirname, 'query');
-  const { entryFiles } = await buildAndGetResults({
+  const { contents, entryFiles } = await buildAndGetResults({
     fixturePath,
   });
+
+  expect(contents).toMatchSnapshot();
 
   const workerUrls: string[] = [];
   const workerOptions: (WorkerOptions | undefined)[] = [];
@@ -96,6 +100,8 @@ test('importing with ?worker&inline should emit a working inline Worker construc
   const { contents, entryFiles } = await buildAndGetResults({
     fixturePath,
   });
+
+  expect(contents).toMatchSnapshot();
 
   const workerUrls: string[] = [];
   const workerOptions: (WorkerOptions | undefined)[] = [];
