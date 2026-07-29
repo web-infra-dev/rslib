@@ -18,13 +18,13 @@ When using Web Workers, only ESM output can be generated, so [format](/config/li
 
 Basic Worker creation syntax:
 
-```ts title="src/index.ts"
+```ts
 new Worker(new URL('./worker.ts', import.meta.url));
 ```
 
 Rslib rewrites the Worker URL to reference the generated JavaScript file and emits the Worker as an ES module:
 
-```js title="dist/index.js"
+```js
 new Worker(new URL('./worker.js', import.meta.url), {
   type: 'module',
 });
@@ -32,7 +32,7 @@ new Worker(new URL('./worker.js', import.meta.url), {
 
 ### Limitations
 
-Rslib relies on static analysis, so keep the `new URL()` expression inline. Passing a string or a variable is not supported:
+Rslib relies on static analysis, so keep the `new URL(url, import.meta.url)` expression inline. Passing a string or a variable is not supported:
 
 ```ts
 // Not supported
