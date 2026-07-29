@@ -71,29 +71,34 @@ You can use [lib.wasm.mode](/config/lib/wasm#wasmmode) to select the output mode
 - [bundle](/config/lib/bundle) is `true`: Only `compile` mode is available.
 - [bundle](/config/lib/bundle) is `false`: `preserve` mode is used by default when the `.wasm` modules are resolved and loaded by a downstream build tool that supports WebAssembly ESM Integration (such as Rsbuild or Rspack) or a target runtime with native support (such as [Node.js](https://nodejs.org/api/esm.html#wasm-modules) versions matching `^22.19.0 || >=24.5.0`). If the consumer does not support this feature, or you do not want to rely on it to handle the `.wasm` modules, use `compile` mode.
 
-The output examples in each mode are based on this source code, where `add.wasm` exports an `add` function:
-
-```text
-src
-├── add.wasm
-├── index.ts
-└── utils.ts
-```
+The following examples use the same source files to demonstrate how to configure `compile` and `preserve` modes and what each mode outputs.
 
 <Tabs>
-  <Tab label="src/index.ts">
+  <Tab label="index.ts">
 
 ```ts
 export { useAdd } from './utils.js';
 ```
 
   </Tab>
-  <Tab label="src/utils.ts">
+  <Tab label="utils.ts">
 
 ```ts
 import { add } from './add.wasm';
 
 export const useAdd = (a: number, b: number) => add(a, b);
+```
+
+  </Tab>
+  <Tab label="add.wasm">
+
+```wasm
+(type (;0;) (func (param i32 i32) (result i32)))
+  (func (;0;) (type 0) (param i32 i32) (result i32)
+    local.get 0
+    local.get 1
+    i32.add)
+  (export "add" (func 0)))
 ```
 
   </Tab>
@@ -107,16 +112,8 @@ The following code omits the Rspack runtime internals while preserving the runti
 
 #### Bundle
 
-```text
-dist
-├── index.js
-└── static
-    └── wasm
-        └── [contenthash].module.wasm
-```
-
 <Tabs>
-  <Tab label="dist/index.js">
+  <Tab label="index.js">
 
 ```js
 // Rspack module runtime...
@@ -129,29 +126,31 @@ export { useAdd };
 ```
 
   </Tab>
+  <Tab label="static/wasm/[contenthash].module.wasm">
+
+```wasm
+(type (;0;) (func (param i32 i32) (result i32)))
+  (func (;0;) (type 0) (param i32 i32) (result i32)
+    local.get 0
+    local.get 1
+    i32.add)
+  (export "add" (func 0)))
+```
+
+  </Tab>
 </Tabs>
 
 #### Bundleless
 
-```text
-dist
-├── index.js
-├── rslib-runtime~1.js
-├── utils.js
-└── static
-    └── wasm
-        └── [contenthash].module.wasm
-```
-
 <Tabs>
-  <Tab label="dist/index.js">
+  <Tab label="index.js">
 
 ```js
 export { useAdd } from './utils.js';
 ```
 
   </Tab>
-  <Tab label="dist/utils.js">
+  <Tab label="utils.js">
 
 ```js
 // Import the Rspack runtime from rslib-runtime~1.js...
@@ -161,6 +160,18 @@ export { useAdd } from './utils.js';
 const add = await __webpack_require__('./src/add.wasm');
 const useAdd = (a, b) => (0, add.add)(a, b);
 export { useAdd };
+```
+
+  </Tab>
+  <Tab label="static/wasm/[contenthash].module.wasm">
+
+```wasm
+(type (;0;) (func (param i32 i32) (result i32)))
+  (func (;0;) (type 0) (param i32 i32) (result i32)
+    local.get 0
+    local.get 1
+    i32.add)
+  (export "add" (func 0)))
 ```
 
   </Tab>
@@ -175,28 +186,33 @@ The generated loading code depends on [output.target](/config/rsbuild/output#out
 
 Rslib keeps imports of `.wasm` modules in the JavaScript output and emits the `.wasm` files unchanged, preserving their source-relative paths and original filenames:
 
-```text
-dist
-├── index.js
-├── utils.js
-└── add.wasm
-```
-
 <Tabs>
-  <Tab label="dist/index.js">
+  <Tab label="index.js">
 
 ```js
 export { useAdd } from './utils.js';
 ```
 
   </Tab>
-  <Tab label="dist/utils.js">
+  <Tab label="utils.js">
 
 ```js
 import { add } from './add.wasm';
 
 const useAdd = (a, b) => add(a, b);
 export { useAdd };
+```
+
+  </Tab>
+  <Tab label="add.wasm">
+
+```wasm
+(type (;0;) (func (param i32 i32) (result i32)))
+  (func (;0;) (type 0) (param i32 i32) (result i32)
+    local.get 0
+    local.get 1
+    i32.add)
+  (export "add" (func 0)))
 ```
 
   </Tab>

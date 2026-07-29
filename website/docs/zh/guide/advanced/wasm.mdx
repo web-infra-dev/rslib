@@ -71,29 +71,34 @@ TypeScript 目前无法解析 `import source` 和 `import.source()`。请在 Jav
 - [bundle](/config/lib/bundle) 为 `true`：仅支持 `compile` 模式。
 - [bundle](/config/lib/bundle) 为 `false`：默认使用 `preserve` 模式，适用于 `.wasm` 模块由支持 WebAssembly ESM Integration 的下游构建工具（如 Rsbuild 或 Rspack）或目标运行时（如 [Node.js](https://nodejs.org/api/esm.html#wasm-modules) `^22.19.0 || >=24.5.0`）解析和加载的场景。如果消费方不支持该特性，或不希望依赖其处理 `.wasm` 模块，则使用 `compile` 模式。
 
-输出模式中的产物示例基于这组源码，其中 `add.wasm` 导出 `add` 函数：
-
-```text
-src
-├── add.wasm
-├── index.ts
-└── utils.ts
-```
+下面以一组示例源码为例，介绍 compile 模式与 preserve 模式的配置方式及其构建结果。
 
 <Tabs>
-  <Tab label="src/index.ts">
+  <Tab label="index.ts">
 
 ```ts
 export { useAdd } from './utils.js';
 ```
 
   </Tab>
-  <Tab label="src/utils.ts">
+  <Tab label="utils.ts">
 
 ```ts
 import { add } from './add.wasm';
 
 export const useAdd = (a: number, b: number) => add(a, b);
+```
+
+  </Tab>
+  <Tab label="add.wasm">
+
+```wasm
+(type (;0;) (func (param i32 i32) (result i32)))
+  (func (;0;) (type 0) (param i32 i32) (result i32)
+    local.get 0
+    local.get 1
+    i32.add)
+  (export "add" (func 0)))
 ```
 
   </Tab>
@@ -107,16 +112,8 @@ Rslib 解析每个 `.wasm` 模块，生成加载和实例化该模块所需的 J
 
 #### Bundle
 
-```text
-dist
-├── index.js
-└── static
-    └── wasm
-        └── [contenthash].module.wasm
-```
-
 <Tabs>
-  <Tab label="dist/index.js">
+  <Tab label="index.js">
 
 ```js
 // Rspack 模块 runtime...
@@ -129,29 +126,31 @@ export { useAdd };
 ```
 
   </Tab>
+  <Tab label="static/wasm/[contenthash].module.wasm">
+
+```wasm
+(type (;0;) (func (param i32 i32) (result i32)))
+  (func (;0;) (type 0) (param i32 i32) (result i32)
+    local.get 0
+    local.get 1
+    i32.add)
+  (export "add" (func 0)))
+```
+
+  </Tab>
 </Tabs>
 
 #### Bundleless
 
-```text
-dist
-├── index.js
-├── rslib-runtime~1.js
-├── utils.js
-└── static
-    └── wasm
-        └── [contenthash].module.wasm
-```
-
 <Tabs>
-  <Tab label="dist/index.js">
+  <Tab label="index.js">
 
 ```js
 export { useAdd } from './utils.js';
 ```
 
   </Tab>
-  <Tab label="dist/utils.js">
+  <Tab label="utils.js">
 
 ```js
 // 从 rslib-runtime~1.js 导入 Rspack runtime...
@@ -161,6 +160,18 @@ export { useAdd } from './utils.js';
 const add = await __webpack_require__('./src/add.wasm');
 const useAdd = (a, b) => (0, add.add)(a, b);
 export { useAdd };
+```
+
+  </Tab>
+  <Tab label="static/wasm/[contenthash].module.wasm">
+
+```wasm
+(type (;0;) (func (param i32 i32) (result i32)))
+  (func (;0;) (type 0) (param i32 i32) (result i32)
+    local.get 0
+    local.get 1
+    i32.add)
+  (export "add" (func 0)))
 ```
 
   </Tab>
@@ -175,28 +186,33 @@ export { useAdd };
 
 Rslib 在 JavaScript 产物中保留对 `.wasm` 模块的 import 语句，并按源码相对路径和原文件名原样输出二进制文件：
 
-```text
-dist
-├── index.js
-├── utils.js
-└── add.wasm
-```
-
 <Tabs>
-  <Tab label="dist/index.js">
+  <Tab label="index.js">
 
 ```js
 export { useAdd } from './utils.js';
 ```
 
   </Tab>
-  <Tab label="dist/utils.js">
+  <Tab label="utils.js">
 
 ```js
 import { add } from './add.wasm';
 
 const useAdd = (a, b) => add(a, b);
 export { useAdd };
+```
+
+  </Tab>
+  <Tab label="add.wasm">
+
+```wasm
+(type (;0;) (func (param i32 i32) (result i32)))
+  (func (;0;) (type 0) (param i32 i32) (result i32)
+    local.get 0
+    local.get 1
+    i32.add)
+  (export "add" (func 0)))
 ```
 
   </Tab>
