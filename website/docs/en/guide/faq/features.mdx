@@ -282,3 +282,55 @@ export default defineConfig({
   },
 });
 ```
+
+### How to preserve `__webpack_require__` and its property accesses in the source code when generating outputs?
+
+Rspack, which Rslib uses under the hood, recognizes `__webpack_require__` and its property accesses as runtime variables. Unlike module variables such as `__webpack_hash__`, `source.define` cannot reliably preserve these runtime variables. Instead, use placeholders and replace them through `processAssets`:
+
+1. Replace them with unique placeholders in the source code:
+
+```ts title="src/index.ts"
+const webpackRequire = __webpack_require__; // [!code --]
+const webpackRequire = RSLIB_WEBPACK_REQUIRE; // [!code ++]
+
+__webpack_require__.i.push(handler); // [!code --]
+RSLIB_INTERCEPT_MODULE_EXECUTION.push(handler); // [!code ++]
+```
+
+2. Add a plugin that restores the placeholders with the [`processAssets`](https://rsbuild.rs/plugins/dev/core#apiprocessassets) hook:
+
+```ts title="rslib.config.ts"
+import { defineConfig, rspack, type RsbuildPlugin } from '@rslib/core';
+
+const preserveWebpackRuntimePlugin: RsbuildPlugin = {
+  name: 'preserve-webpack-runtime',
+  setup(api) {
+    api.processAssets(
+      { stage: 'optimize-inline' },
+      ({ assets, compilation, sources }) => {
+        for (const [assetName, asset] of Object.entries(assets)) {
+          if (!/\.[cm]?js$/.test(assetName)) continue;
+
+          const source = asset.source().toString();
+          const code = source
+            .replaceAll('RSLIB_WEBPACK_REQUIRE', rspack.RuntimeGlobals.require)
+            .replaceAll(
+              'RSLIB_INTERCEPT_MODULE_EXECUTION',
+              rspack.RuntimeGlobals.interceptModuleExecution,
+            );
+
+          if (code !== source) {
+            compilation.updateAsset(assetName, new sources.RawSource(code));
+          }
+        }
+      },
+    );
+  },
+};
+
+export default defineConfig({
+  plugins: [preserveWebpackRuntimePlugin],
+});
+```
+
+`RuntimeGlobals.require` maps to `__webpack_require__`, and `RuntimeGlobals.interceptModuleExecution` maps to `__webpack_require__.i`. See the [RuntimeGlobals list](https://github.com/web-infra-dev/rspack/blob/main/packages/rspack/src/RuntimeGlobals.ts) for other properties. If a property has no matching `RuntimeGlobals` value, write `RSLIB_WEBPACK_REQUIRE.foo` in the source code; the plugin will restore it as `__webpack_require__.foo`.

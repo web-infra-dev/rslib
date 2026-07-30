@@ -282,3 +282,55 @@ export default defineConfig({
   },
 });
 ```
+
+### 如何在生成产物时保留源码中的 `__webpack_require__` 及其属性访问？
+
+Rslib 底层使用的 Rspack 会在构建时将 `__webpack_require__` 及其属性访问识别为运行时变量。与 `__webpack_hash__` 等模块变量不同，这类运行时变量无法通过 `source.define` 可靠地保留，需要通过占位符和 `processAssets` 进行处理：
+
+1. 在源码中将这些引用替换为唯一的占位符：
+
+```ts title="src/index.ts"
+const webpackRequire = __webpack_require__; // [!code --]
+const webpackRequire = RSLIB_WEBPACK_REQUIRE; // [!code ++]
+
+__webpack_require__.i.push(handler); // [!code --]
+RSLIB_INTERCEPT_MODULE_EXECUTION.push(handler); // [!code ++]
+```
+
+2. 在 Rslib 配置中添加插件，通过 [`processAssets`](https://rsbuild.rs/zh/plugins/dev/core#apiprocessassets) hook 还原占位符：
+
+```ts title="rslib.config.ts"
+import { defineConfig, rspack, type RsbuildPlugin } from '@rslib/core';
+
+const preserveWebpackRuntimePlugin: RsbuildPlugin = {
+  name: 'preserve-webpack-runtime',
+  setup(api) {
+    api.processAssets(
+      { stage: 'optimize-inline' },
+      ({ assets, compilation, sources }) => {
+        for (const [assetName, asset] of Object.entries(assets)) {
+          if (!/\.[cm]?js$/.test(assetName)) continue;
+
+          const source = asset.source().toString();
+          const code = source
+            .replaceAll('RSLIB_WEBPACK_REQUIRE', rspack.RuntimeGlobals.require)
+            .replaceAll(
+              'RSLIB_INTERCEPT_MODULE_EXECUTION',
+              rspack.RuntimeGlobals.interceptModuleExecution,
+            );
+
+          if (code !== source) {
+            compilation.updateAsset(assetName, new sources.RawSource(code));
+          }
+        }
+      },
+    );
+  },
+};
+
+export default defineConfig({
+  plugins: [preserveWebpackRuntimePlugin],
+});
+```
+
+`RuntimeGlobals.require` 对应 `__webpack_require__`，`RuntimeGlobals.interceptModuleExecution` 对应 `__webpack_require__.i`。其他属性可参考 [RuntimeGlobals 列表](https://github.com/web-infra-dev/rspack/blob/main/packages/rspack/src/RuntimeGlobals.ts)。如果某个属性没有对应的 `RuntimeGlobals` 值，可以在源码中写成 `RSLIB_WEBPACK_REQUIRE.foo`，插件会将其还原为 `__webpack_require__.foo`。
