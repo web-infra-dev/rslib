@@ -333,4 +333,6 @@ export default defineConfig({
 });
 ```
 
+> 该插件会在 source map 生成后修改 JavaScript 产物，但不会同步更新 source map。开启 [`output.sourceMap`](/config/rsbuild/output#outputsourcemap) 时，生成的映射可能不准确。
+
 `RuntimeGlobals.require` 对应 `__webpack_require__`，`RuntimeGlobals.interceptModuleExecution` 对应 `__webpack_require__.i`。其他属性可参考 [RuntimeGlobals 列表](https://github.com/web-infra-dev/rspack/blob/main/packages/rspack/src/RuntimeGlobals.ts)。如果某个属性没有对应的 `RuntimeGlobals` 值，可以在源码中写成 `RSLIB_WEBPACK_REQUIRE.foo`，插件会将其还原为 `__webpack_require__.foo`。

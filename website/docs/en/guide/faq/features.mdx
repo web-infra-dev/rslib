@@ -333,4 +333,6 @@ export default defineConfig({
 });
 ```
 
+> This plugin modifies JavaScript assets after source maps are generated without updating the source maps. When [`output.sourceMap`](/config/rsbuild/output#outputsourcemap) is enabled, the generated mappings may be inaccurate.
+
 `RuntimeGlobals.require` maps to `__webpack_require__`, and `RuntimeGlobals.interceptModuleExecution` maps to `__webpack_require__.i`. See the [RuntimeGlobals list](https://github.com/web-infra-dev/rspack/blob/main/packages/rspack/src/RuntimeGlobals.ts) for other properties. If a property has no matching `RuntimeGlobals` value, write `RSLIB_WEBPACK_REQUIRE.foo` in the source code; the plugin will restore it as `__webpack_require__.foo`.
