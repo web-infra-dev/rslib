@@ -69,7 +69,7 @@ TypeScript cannot currently parse `import source` or `import.source()`. Use thes
 You can use [lib.wasm.mode](/config/lib/wasm#wasmmode) to select the output mode for `.wasm` modules:
 
 - [bundle](/config/lib/bundle) is `true`: Only `compile` mode is available.
-- [bundle](/config/lib/bundle) is `false`: `preserve` mode is used by default when the `.wasm` modules are resolved and loaded by a downstream build tool that supports WebAssembly ESM Integration (such as Rsbuild or Rspack) or a target runtime with native support (such as [Node.js](https://nodejs.org/api/esm.html#wasm-modules) versions matching `^22.19.0 || >=24.5.0`). If the consumer does not support this feature, or you do not want to rely on it to handle the `.wasm` modules, use `compile` mode.
+- [bundle](/config/lib/bundle) is `false`: `preserve` mode is used by default when the `.wasm` modules are resolved and loaded by a downstream build tool that supports WebAssembly ESM Integration (such as Rsbuild or Rspack) or a target runtime with native support (such as [Node.js](https://nodejs.org/api/esm.html#wasm-modules) versions matching `>=24.5.0`). If the consumer does not support this feature, or you do not want to rely on it to handle the `.wasm` modules, use `compile` mode.
 
 The following source files demonstrate how to configure the `compile` and `preserve` modes and their build outputs.
 
