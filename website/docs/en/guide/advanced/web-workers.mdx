@@ -146,7 +146,7 @@ Rslib supports importing Web Workers with query suffixes in bundle mode; for det
 
 ### Emit a separate worker file
 
-You can append `?worker` to an import request to import a Web Worker script, and Rslib emits the script as a separate ESM file:
+You can append `?worker` to an import request to import a Web Worker script, which Rslib emits as a separate ESM file:
 
 ```ts title="index.ts"
 import MyWorker from './worker.ts?worker';
@@ -156,7 +156,7 @@ export const worker = new MyWorker();
 
 ### Inline a worker
 
-You can append `?worker&inline` to an import request to import a Web Worker script, and Rslib inlines the script into the JavaScript file that imports the Worker instead of emitting a separate Worker file:
+You can append `?worker&inline` to an import request to import a Web Worker script, which Rslib inlines into the JavaScript file that imports the Worker instead of emitting a separate Worker file:
 
 ```ts title="index.ts"
 import InlineWorker from './worker.ts?worker&inline';
