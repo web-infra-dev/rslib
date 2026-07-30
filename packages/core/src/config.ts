@@ -302,7 +302,12 @@ const composeFormatConfig = ({
       },
     },
     others: {
-      worker: false,
+      worker:
+        format === 'esm'
+          ? {
+              url: 'new-url-relative',
+            }
+          : false,
     },
   };
 

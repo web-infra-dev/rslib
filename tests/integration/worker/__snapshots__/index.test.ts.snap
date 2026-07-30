@@ -1,0 +1,96 @@
+// Rstest Snapshot v1
+
+exports[`importing with ?worker should emit a working Worker constructor 1`] = `
+{
+  "esm": {
+    "<ROOT>/tests/integration/worker/query/dist/esm/index.js": "function WorkerWrapper(options) {
+    return new Worker(new URL("./worker.js", import.meta.url), Object.assign({}, {
+        type: "module",
+        name: options && options.name
+    }, {
+        type: "module"
+    }));
+}
+const worker = new WorkerWrapper();
+export { worker };
+",
+    "<ROOT>/tests/integration/worker/query/dist/esm/worker.js": "self.onmessage = ({ data })=>{
+    self.postMessage(2 * data);
+};
+export { };
+",
+  },
+}
+`;
+
+exports[`importing with ?worker&inline should emit a working inline Worker constructor 1`] = `
+{
+  "esm": {
+    "<ROOT>/tests/integration/worker/query-inline/dist/esm/index.js": "const jsContent = "self.onmessage = ({ data })=>{\\n    self.postMessage(2 * data);\\n};\\n";
+const workerURL = "u" > typeof self && (self.URL || self.webkitURL);
+const blob = workerURL && self.Blob && new Blob([
+    "URL.revokeObjectURL(import.meta.url);",
+    jsContent
+], {
+    type: "text/javascript;charset=utf-8"
+});
+function WorkerWrapper(options) {
+    let objURL;
+    try {
+        objURL = blob && workerURL.createObjectURL(blob);
+        if (!objURL) throw "";
+        const worker = new Worker(objURL, {
+            type: "module",
+            name: options && options.name
+        });
+        worker.addEventListener("error", ()=>{
+            workerURL.revokeObjectURL(objURL);
+        });
+        return worker;
+    } catch (e) {
+        if (objURL) workerURL.revokeObjectURL(objURL);
+        return new Worker("data:text/javascript;charset=utf-8," + encodeURIComponent(jsContent), {
+            type: "module",
+            name: options && options.name
+        });
+    }
+}
+const src_worker = new WorkerWrapper();
+export { src_worker as worker };
+",
+  },
+}
+`;
+
+exports[`new Worker(new URL(...)) should emit analyzable ESM worker URLs 1`] = `
+{
+  "esm0": {
+    "<ROOT>/tests/integration/worker/constructor/dist/esm-bundle/index.js": "const worker = new Worker(new URL("./worker~0.js", import.meta.url), {
+    type: "module"
+});
+export { worker };
+",
+    "<ROOT>/tests/integration/worker/constructor/dist/esm-bundle/worker~0.js": "const add = (left, right)=>left + right;
+self.onmessage = ({ data })=>{
+    self.postMessage(add(data[0], data[1]));
+};
+export { };
+",
+  },
+  "esm1": {
+    "<ROOT>/tests/integration/worker/constructor/dist/esm-bundleless/helper.js": "const add = (left, right)=>left + right;
+export { add };
+",
+    "<ROOT>/tests/integration/worker/constructor/dist/esm-bundleless/index.js": "const worker = new Worker(new URL("./worker.js", import.meta.url), {
+    type: "module"
+});
+export { worker };
+",
+    "<ROOT>/tests/integration/worker/constructor/dist/esm-bundleless/worker.js": "import { add } from "./helper.js";
+self.onmessage = ({ data })=>{
+    self.postMessage(add(data[0], data[1]));
+};
+",
+  },
+}
+`;

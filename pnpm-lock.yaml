@@ -445,7 +445,7 @@ importers:
         version: 19.2.8(react@19.2.8)
       storybook:
         specifier: 'catalog:'
-        version: 10.5.4(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
+        version: 10.5.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
       storybook-addon-rslib:
         specifier: 'catalog:'
         version: 3.3.4(@rsbuild/core@2.1.9)(@rslib/core@packages+core)(storybook-builder-rsbuild@3.3.4)(typescript@6.0.3)
@@ -1601,6 +1601,12 @@ importers:
   tests/integration/wasm/static-source: {}
 
   tests/integration/worker: {}
+
+  tests/integration/worker/constructor: {}
+
+  tests/integration/worker/query: {}
+
+  tests/integration/worker/query-inline: {}
 
   tests/scripts: {}
 
@@ -3170,19 +3176,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rspack/binding-darwin-arm64@2.1.5':
-    resolution: {integrity: sha512-XLAN6YSU36qkciJtV9DY9z57pdHOjKy/f1HyoqpZenRg8p46jnXPziV45lfrTZpG+FF6g/jtTUc4dKbeyoWqPw==}
-    cpu: [arm64]
-    os: [darwin]
-
   '@rspack/binding-darwin-arm64@2.1.7':
     resolution: {integrity: sha512-DwxzrXRctueP/3Pyom9JHcIsRShuEAlHb+mrE5OPT+4cdHI1UnJpbzEvEDLTo4IKJhDb3vjXdHLtjqtL0SYbeA==}
     cpu: [arm64]
-    os: [darwin]
-
-  '@rspack/binding-darwin-x64@2.1.5':
-    resolution: {integrity: sha512-KLW7PV86jyCOyqJSqrkZdvYUWYCFX/Q4LsGmVc8tyDA8jBYLMHJDewC/lNf9ot3rU2SoLDZKhDUh7q7dX0FRmg==}
-    cpu: [x64]
     os: [darwin]
 
   '@rspack/binding-darwin-x64@2.1.7':
@@ -3190,23 +3186,11 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@rspack/binding-linux-arm64-gnu@2.1.5':
-    resolution: {integrity: sha512-KOooAC8L+Ljx5sY7ZuMeaXCQ310FNWaPWXcYQJpFPApF3qyLeSfuOftUGwxcxeo5U0mS5OY3zxp7/5CaHWKYjg==}
-    cpu: [arm64]
-    os: [linux]
-    libc: [glibc]
-
   '@rspack/binding-linux-arm64-gnu@2.1.7':
     resolution: {integrity: sha512-VFB+YXM3kZ6IIuLV64H3vgnwqvQIIaqfR/aeGwuxYvwcZsrgblSBmXMeDULdgDjqP8Yr0VaFMBBiD9OtG5KdFw==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
-
-  '@rspack/binding-linux-arm64-musl@2.1.5':
-    resolution: {integrity: sha512-0GFc07gT71+uRbHtejDecBfSL0fs7dQAwCtXYieXboACauL7UvS3Hwr6v8A91aGtAcvLotnCaIa3CWWYwtYlYQ==}
-    cpu: [arm64]
-    os: [linux]
-    libc: [musl]
 
   '@rspack/binding-linux-arm64-musl@2.1.7':
     resolution: {integrity: sha512-Mzbxyg0aJ+ITj526Iuz0enEDYY6WxhFIwEKXqwjQh+Vpd5v/+aPzPo83sSQVX/3puBV1sbmviTURbh6N9e1fvA==}
@@ -3214,23 +3198,11 @@ packages:
     os: [linux]
     libc: [musl]
 
-  '@rspack/binding-linux-riscv64-gnu@2.1.5':
-    resolution: {integrity: sha512-isQQDp3fBzPSZpLVFzPqVXIVA4I9b9mKs58TfUgOzDP/1g1582YSV3iFopgFogvEliihXDuuXvM6aAkP+w8Z+Q==}
-    cpu: [riscv64]
-    os: [linux]
-    libc: [glibc]
-
   '@rspack/binding-linux-riscv64-gnu@2.1.7':
     resolution: {integrity: sha512-mpazwgT/Pse1720mvEJsoXfPkJ+enj0xUqpbe/wL6aedwjGT+9jJNB8HTJXE4XBX0UO7umGqcJMeKA6YsD2CDA==}
     cpu: [riscv64]
     os: [linux]
     libc: [glibc]
-
-  '@rspack/binding-linux-riscv64-musl@2.1.5':
-    resolution: {integrity: sha512-/SP6VknY4kH60BYplI2FDNAJCo4U4DUszLxhKsgVlgA5ImgHC8Ew2AsKgidk7ceiYV9OcKzYuWYe9tVpysBYVA==}
-    cpu: [riscv64]
-    os: [linux]
-    libc: [musl]
 
   '@rspack/binding-linux-riscv64-musl@2.1.7':
     resolution: {integrity: sha512-oU/l3soPRsDEWn7KZic+npyTMM2N1kRdHjoJ+L5IUBXs8bjdTXPLoyTbTdIOza5ZSoT4+UeEiEryj4BB0tQE5w==}
@@ -3238,23 +3210,11 @@ packages:
     os: [linux]
     libc: [musl]
 
-  '@rspack/binding-linux-x64-gnu@2.1.5':
-    resolution: {integrity: sha512-/GJmS+buA4pilT10gs5mfAhAZxSHXpDD8veZ3QpYvNUuoU9gvempAq9TgjbyNN/vc5pf76GdXPXKFMiehudYSA==}
-    cpu: [x64]
-    os: [linux]
-    libc: [glibc]
-
   '@rspack/binding-linux-x64-gnu@2.1.7':
     resolution: {integrity: sha512-7Gtpl3h3jtnOpk1mYQE8mRndXAO2ibI8mnAbs7klevdKey+ZHneWMoMi2yOMQhhI/ifWEFxDzyGJ8bdxo0XTsA==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
-
-  '@rspack/binding-linux-x64-musl@2.1.5':
-    resolution: {integrity: sha512-iwS3t75nZ2TnUjB05KtvpvjpdkOy/nLxbaOnwjbdnNZZXpUaMadLbllGAWayHPGCMsL2yKBEhVEESZpR7tK3SA==}
-    cpu: [x64]
-    os: [linux]
-    libc: [musl]
 
   '@rspack/binding-linux-x64-musl@2.1.7':
     resolution: {integrity: sha512-w+whI2Uy+DYkGN+MVkzMFWweL7B/s1gMqX+nvTE1vhOy3hGV0VyA9H6lqWjSD3I+eGkpYhN9Pr244cYnLpZOUQ==}
@@ -3262,27 +3222,13 @@ packages:
     os: [linux]
     libc: [musl]
 
-  '@rspack/binding-wasm32-wasi@2.1.5':
-    resolution: {integrity: sha512-jOhW69t1H/jcRaSMB5U8jVzWP18j0YQIlo0nT8W+KvNVScJeyOze4FFc+5RIS7VmuT8/jid7hUyydZOfm6UgqA==}
-    cpu: [wasm32]
-
   '@rspack/binding-wasm32-wasi@2.1.7':
     resolution: {integrity: sha512-cDVgvzRdTgxaeM+a5Lx0+7/VAvunvwO0wNtQ3ATQGOtFCW5b7cUzhNPcytH5ZSJTnFWuxinlGwtar5yfcnkdZQ==}
     cpu: [wasm32]
 
-  '@rspack/binding-win32-arm64-msvc@2.1.5':
-    resolution: {integrity: sha512-OLfMXmtFBcrWr9BRGKXJYrWgYR0JSaoAWr3EVFDjKGi/YR5aUwQSGc3AJPBph9g0YsdSqRuUhtQGtCk84DeeEA==}
-    cpu: [arm64]
-    os: [win32]
-
   '@rspack/binding-win32-arm64-msvc@2.1.7':
     resolution: {integrity: sha512-JDd85+iYwUvaG9Zrt5X7oIxRZRiTW+76FwkRakoXNy/5VAWQW32Jq4ESjSVz6l6mh0KnZxPq3TLMugacCPnLjw==}
     cpu: [arm64]
-    os: [win32]
-
-  '@rspack/binding-win32-ia32-msvc@2.1.5':
-    resolution: {integrity: sha512-p4OSmnj21+AY8vpIADveLEBXfXJRXonOTYim2VLVWV4TbXfhYNMLiX3qESHCdNnn6lVJM0q6zxxzEUfTyAKydw==}
-    cpu: [ia32]
     os: [win32]
 
   '@rspack/binding-win32-ia32-msvc@2.1.7':
@@ -3290,33 +3236,13 @@ packages:
     cpu: [ia32]
     os: [win32]
 
-  '@rspack/binding-win32-x64-msvc@2.1.5':
-    resolution: {integrity: sha512-YCkLLDGMkHsw5CpcsFtFhzCu+JZEsNrcH9O1GpWMkyxR2ku2Fq1i2wEHYSm26HyW+PJ3+Fv347MPWMFZIz9q2g==}
-    cpu: [x64]
-    os: [win32]
-
   '@rspack/binding-win32-x64-msvc@2.1.7':
     resolution: {integrity: sha512-BjkOzcPY/K8YlRRvyywz0mDWk89MMxqAMhDmgBXCWorh1IjgKTsWDJ2lCGIM8M9CZXUG3khom8AfrOGwRT2I+g==}
     cpu: [x64]
     os: [win32]
 
-  '@rspack/binding@2.1.5':
-    resolution: {integrity: sha512-lF3ZLeeyV0AN3BL0m2jAmNZD5pP9IHsQ8gUXN7mo0g4xsW6nf6hsN7o9CnEHECz5uUZb+EoWsuWzAAmnA9Ip8Q==}
-
   '@rspack/binding@2.1.7':
     resolution: {integrity: sha512-wYqi8TY30hsIzLry503o/Uqu7y9Ec7pEwN5TVmB7Pb3xHrR2eHsQPzdpF/GkCLUjQSgD2Es3CDVV1mr6zO/78g==}
-
-  '@rspack/core@2.1.5':
-    resolution: {integrity: sha512-YHjL7xVXycAWsjJtF39cRZ2u+ddiNFxY+FcNgEBe6Y8OaLeUfMfjba3gK+B1Oj32UcKD6BmXGsPfu9p+OII/Yw==}
-    engines: {node: ^20.19.0 || >=22.12.0}
-    peerDependencies:
-      '@module-federation/runtime-tools': ^0.24.1 || ^2.0.0
-      '@swc/helpers': ^0.5.23
-    peerDependenciesMeta:
-      '@module-federation/runtime-tools':
-        optional: true
-      '@swc/helpers':
-        optional: true
 
   '@rspack/core@2.1.7':
     resolution: {integrity: sha512-d5Ju3zXzGgbqQWvlMlLUtek2eFPIzsFe2QOF4nwTAknxo/4OZ64t+kPT9nM6fr3aZX93VK0R3v02/kZYIRrV9Q==}
@@ -9043,7 +8969,7 @@ snapshots:
       '@module-federation/sdk': 2.8.0
     optionalDependencies:
       '@rsbuild/core': 2.1.9(@module-federation/runtime-tools@2.8.0)
-      storybook: 10.5.4(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
+      storybook: 10.5.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
       webpack-virtual-modules: 0.6.2
     transitivePeerDependencies:
       - '@rspack/core'
@@ -9208,6 +9134,14 @@ snapshots:
       - '@emnapi/runtime'
     optional: true
 
+  '@oxc-resolver/binding-wasm32-wasi@11.19.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)':
+    dependencies:
+      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
+    optional: true
+
   '@oxc-resolver/binding-win32-arm64-msvc@11.19.1':
     optional: true
 
@@ -9314,7 +9248,7 @@ snapshots:
 
   '@rsbuild/core@2.1.8(@module-federation/runtime-tools@2.8.0)':
     dependencies:
-      '@rspack/core': 2.1.5(@module-federation/runtime-tools@2.8.0)(@swc/helpers@0.5.23)
+      '@rspack/core': 2.1.7(@module-federation/runtime-tools@2.8.0)(@swc/helpers@0.5.23)
       '@swc/helpers': 0.5.23
     transitivePeerDependencies:
       - '@module-federation/runtime-tools'
@@ -9561,59 +9495,28 @@ snapshots:
   '@rslint/native-win32-x64-msvc@0.7.1':
     optional: true
 
-  '@rspack/binding-darwin-arm64@2.1.5':
-    optional: true
-
   '@rspack/binding-darwin-arm64@2.1.7':
-    optional: true
-
-  '@rspack/binding-darwin-x64@2.1.5':
     optional: true
 
   '@rspack/binding-darwin-x64@2.1.7':
     optional: true
 
-  '@rspack/binding-linux-arm64-gnu@2.1.5':
-    optional: true
-
   '@rspack/binding-linux-arm64-gnu@2.1.7':
-    optional: true
-
-  '@rspack/binding-linux-arm64-musl@2.1.5':
     optional: true
 
   '@rspack/binding-linux-arm64-musl@2.1.7':
     optional: true
 
-  '@rspack/binding-linux-riscv64-gnu@2.1.5':
-    optional: true
-
   '@rspack/binding-linux-riscv64-gnu@2.1.7':
-    optional: true
-
-  '@rspack/binding-linux-riscv64-musl@2.1.5':
     optional: true
 
   '@rspack/binding-linux-riscv64-musl@2.1.7':
     optional: true
 
-  '@rspack/binding-linux-x64-gnu@2.1.5':
-    optional: true
-
   '@rspack/binding-linux-x64-gnu@2.1.7':
     optional: true
 
-  '@rspack/binding-linux-x64-musl@2.1.5':
-    optional: true
-
   '@rspack/binding-linux-x64-musl@2.1.7':
-    optional: true
-
-  '@rspack/binding-wasm32-wasi@2.1.5':
-    dependencies:
-      '@emnapi/core': 1.11.2
-      '@emnapi/runtime': 1.11.2
-      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
     optional: true
 
   '@rspack/binding-wasm32-wasi@2.1.7':
@@ -9623,38 +9526,14 @@ snapshots:
       '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
     optional: true
 
-  '@rspack/binding-win32-arm64-msvc@2.1.5':
-    optional: true
-
   '@rspack/binding-win32-arm64-msvc@2.1.7':
-    optional: true
-
-  '@rspack/binding-win32-ia32-msvc@2.1.5':
     optional: true
 
   '@rspack/binding-win32-ia32-msvc@2.1.7':
     optional: true
 
-  '@rspack/binding-win32-x64-msvc@2.1.5':
-    optional: true
-
   '@rspack/binding-win32-x64-msvc@2.1.7':
     optional: true
-
-  '@rspack/binding@2.1.5':
-    optionalDependencies:
-      '@rspack/binding-darwin-arm64': 2.1.5
-      '@rspack/binding-darwin-x64': 2.1.5
-      '@rspack/binding-linux-arm64-gnu': 2.1.5
-      '@rspack/binding-linux-arm64-musl': 2.1.5
-      '@rspack/binding-linux-riscv64-gnu': 2.1.5
-      '@rspack/binding-linux-riscv64-musl': 2.1.5
-      '@rspack/binding-linux-x64-gnu': 2.1.5
-      '@rspack/binding-linux-x64-musl': 2.1.5
-      '@rspack/binding-wasm32-wasi': 2.1.5
-      '@rspack/binding-win32-arm64-msvc': 2.1.5
-      '@rspack/binding-win32-ia32-msvc': 2.1.5
-      '@rspack/binding-win32-x64-msvc': 2.1.5
 
   '@rspack/binding@2.1.7':
     optionalDependencies:
@@ -9670,13 +9549,6 @@ snapshots:
       '@rspack/binding-win32-arm64-msvc': 2.1.7
       '@rspack/binding-win32-ia32-msvc': 2.1.7
       '@rspack/binding-win32-x64-msvc': 2.1.7
-
-  '@rspack/core@2.1.5(@module-federation/runtime-tools@2.8.0)(@swc/helpers@0.5.23)':
-    dependencies:
-      '@rspack/binding': 2.1.5
-    optionalDependencies:
-      '@module-federation/runtime-tools': 2.8.0
-      '@swc/helpers': 0.5.23
 
   '@rspack/core@2.1.7(@module-federation/runtime-tools@2.8.0)(@swc/helpers@0.5.23)':
     dependencies:
@@ -9997,7 +9869,7 @@ snapshots:
       '@storybook/react-dom-shim': 10.5.4(@types/react-dom@19.2.3)(@types/react@19.2.17)(react-dom@19.2.8)(react@19.2.8)(storybook@10.5.4)
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
-      storybook: 10.5.4(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
+      storybook: 10.5.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
       ts-dedent: 2.3.0
     optionalDependencies:
       '@types/react': 19.2.17
@@ -10010,11 +9882,11 @@ snapshots:
 
   '@storybook/addon-onboarding@10.5.4(storybook@10.5.4)':
     dependencies:
-      storybook: 10.5.4(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
+      storybook: 10.5.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
 
   '@storybook/csf-plugin@10.5.4(esbuild@0.28.1)(storybook@10.5.4)':
     dependencies:
-      storybook: 10.5.4(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
+      storybook: 10.5.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
       unplugin: 2.3.11
     optionalDependencies:
       esbuild: 0.28.1
@@ -10043,7 +9915,7 @@ snapshots:
     dependencies:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
-      storybook: 10.5.4(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
+      storybook: 10.5.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
     optionalDependencies:
       '@types/react': 19.2.17
       '@types/react-dom': 19.2.3(@types/react@19.2.17)
@@ -10056,7 +9928,7 @@ snapshots:
       react-docgen: 8.0.3(supports-color@9.4.0)
       react-docgen-typescript: 2.4.0(typescript@6.0.3)
       react-dom: 19.2.8(react@19.2.8)
-      storybook: 10.5.4(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
+      storybook: 10.5.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
     optionalDependencies:
       '@types/react': 19.2.17
       '@types/react-dom': 19.2.3(@types/react@19.2.17)
@@ -13116,6 +12988,32 @@ snapshots:
       - '@emnapi/core'
       - '@emnapi/runtime'
 
+  oxc-resolver@11.19.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2):
+    optionalDependencies:
+      '@oxc-resolver/binding-android-arm-eabi': 11.19.1
+      '@oxc-resolver/binding-android-arm64': 11.19.1
+      '@oxc-resolver/binding-darwin-arm64': 11.19.1
+      '@oxc-resolver/binding-darwin-x64': 11.19.1
+      '@oxc-resolver/binding-freebsd-x64': 11.19.1
+      '@oxc-resolver/binding-linux-arm-gnueabihf': 11.19.1
+      '@oxc-resolver/binding-linux-arm-musleabihf': 11.19.1
+      '@oxc-resolver/binding-linux-arm64-gnu': 11.19.1
+      '@oxc-resolver/binding-linux-arm64-musl': 11.19.1
+      '@oxc-resolver/binding-linux-ppc64-gnu': 11.19.1
+      '@oxc-resolver/binding-linux-riscv64-gnu': 11.19.1
+      '@oxc-resolver/binding-linux-riscv64-musl': 11.19.1
+      '@oxc-resolver/binding-linux-s390x-gnu': 11.19.1
+      '@oxc-resolver/binding-linux-x64-gnu': 11.19.1
+      '@oxc-resolver/binding-linux-x64-musl': 11.19.1
+      '@oxc-resolver/binding-openharmony-arm64': 11.19.1
+      '@oxc-resolver/binding-wasm32-wasi': 11.19.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
+      '@oxc-resolver/binding-win32-arm64-msvc': 11.19.1
+      '@oxc-resolver/binding-win32-ia32-msvc': 11.19.1
+      '@oxc-resolver/binding-win32-x64-msvc': 11.19.1
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
+
   p-limit@2.3.0:
     dependencies:
       p-try: 2.2.0
@@ -14227,7 +14125,7 @@ snapshots:
       process: 0.11.10
       rsbuild-plugin-html-minifier-terser: 1.1.5(@rsbuild/core@2.1.9)
       sirv: 2.0.4
-      storybook: 10.5.4(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
+      storybook: 10.5.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
       ts-dedent: 2.3.0
       url: 0.11.4
       util: 0.12.5
@@ -14255,7 +14153,7 @@ snapshots:
       react-docgen-typescript: 2.4.0(typescript@6.0.3)
       react-dom: 19.2.8(react@19.2.8)
       resolve: 1.22.12
-      storybook: 10.5.4(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
+      storybook: 10.5.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8)
       storybook-builder-rsbuild: 3.3.4(@rsbuild/core@2.1.9)(@rspack/core@2.1.7)(react-dom@19.2.8)(react@19.2.8)(storybook@10.5.4)(typescript@6.0.3)
       tsconfig-paths: 4.2.0
     optionalDependencies:
@@ -14307,6 +14205,36 @@ snapshots:
       open: 10.2.0
       oxc-parser: 0.127.0
       oxc-resolver: 11.19.1(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
+      recast: 0.23.11
+      semver: 7.8.5
+      use-sync-external-store: 1.6.0(react@19.2.8)
+      ws: 8.21.0
+    optionalDependencies:
+      '@types/react': 19.2.17
+      prettier: 3.9.6
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
+      - bufferutil
+      - react
+      - react-dom
+      - utf-8-validate
+
+  storybook@10.5.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/react@19.2.17)(prettier@3.9.6)(react-dom@19.2.8)(react@19.2.8):
+    dependencies:
+      '@storybook/global': 5.0.0
+      '@storybook/icons': 2.0.2(react-dom@19.2.8)(react@19.2.8)
+      '@testing-library/dom': 10.4.1
+      '@testing-library/jest-dom': 6.9.1
+      '@testing-library/user-event': 14.6.1(@testing-library/dom@10.4.1)
+      '@vitest/expect': 3.2.4
+      '@vitest/spy': 3.2.4
+      '@webcontainer/env': 1.1.1
+      esbuild: 0.28.1
+      jsonc-parser: 3.3.1
+      open: 10.2.0
+      oxc-parser: 0.127.0
+      oxc-resolver: 11.19.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
       recast: 0.23.11
       semver: 7.8.5
       use-sync-external-store: 1.6.0(react@19.2.8)
