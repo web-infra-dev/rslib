@@ -246,6 +246,13 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
     tools: {
       htmlPlugin: false,
       rspack: {
+        module: {
+          parser: {
+            javascript: {
+              createRequire: true,
+            },
+          },
+        },
         optimization: {
           nodeEnv: false,
         },
