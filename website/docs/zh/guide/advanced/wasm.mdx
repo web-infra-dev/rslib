@@ -69,7 +69,7 @@ TypeScript 目前无法解析 `import source` 和 `import.source()`。请在 Jav
 你可以通过 [lib.wasm.mode](/config/lib/wasm#wasmmode) 选择 `.wasm` 模块的输出模式：
 
 - [bundle](/config/lib/bundle) 为 `true`：仅支持 `compile` 模式。
-- [bundle](/config/lib/bundle) 为 `false`：默认使用 `preserve` 模式，适用于 `.wasm` 模块由支持 WebAssembly ESM Integration 的下游构建工具（如 Rsbuild 或 Rspack）或目标运行时（如 [Node.js](https://nodejs.org/api/esm.html#wasm-modules) `^22.19.0 || >=24.5.0`）解析和加载的场景。如果消费方不支持该特性，或不希望依赖其处理 `.wasm` 模块，则使用 `compile` 模式。
+- [bundle](/config/lib/bundle) 为 `false`：默认使用 `preserve` 模式，适用于 `.wasm` 模块由支持 WebAssembly ESM Integration 的下游构建工具（如 Rsbuild 或 Rspack）或目标运行时（如 [Node.js](https://nodejs.org/api/esm.html#wasm-modules) `>=24.5.0`）解析和加载的场景。如果消费方不支持该特性，或不希望依赖其处理 `.wasm` 模块，则使用 `compile` 模式。
 
 以下通过一组示例源码，介绍 compile 和 preserve 模式的配置方式及构建结果。
 
