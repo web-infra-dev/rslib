@@ -1,29 +1,118 @@
 import { join } from 'node:path';
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { createRslib } from '@rslib/core';
-import { describe, expect, test } from '@rstest/core';
+import { afterEach, describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
 import { expectFile } from 'test-helper';
 
 describe('rslib.inspectConfig', async () => {
-  test('return Rsbuild and Rspack config', async () => {
-    const rslib = await createRslib({
+  const initialNodeEnv = process.env.NODE_ENV;
+
+  afterEach(() => {
+    if (initialNodeEnv === undefined) {
+      delete process.env.NODE_ENV;
+    } else {
+      process.env.NODE_ENV = initialNodeEnv;
+    }
+  });
+
+  const createModeRslib = () => {
+    return createRslib({
       cwd: import.meta.dirname,
       config: {
         lib: [
           {
-            format: 'esm',
+            format: 'mf',
+            plugins: [
+              pluginModuleFederation({
+                name: 'inspect-mode',
+              }),
+            ],
+          },
+          {
+            format: 'umd',
+            umdName: 'InspectMode',
           },
         ],
         logLevel: 'silent',
       },
     });
-    const { rslibConfig, rsbuildConfig, bundlerConfigs } =
+  };
+
+  test('should apply production mode before composing configs', async () => {
+    process.env.NODE_ENV = 'development';
+
+    const rslib = await createModeRslib();
+    const result = await rslib.inspectConfig({
+      lib: ['umd'],
+      mode: 'production',
+    });
+
+    expect(process.env.NODE_ENV).toBe('production');
+    expect(result.origin.rsbuildConfig.mode).toBe('production');
+    expect(Object.keys(result.origin.environmentConfigs)).toEqual(['umd']);
+    expect(result.origin.bundlerConfigs).toHaveLength(1);
+    expect(result.origin.bundlerConfigs[0]!.mode).toBe('production');
+    expect(result.origin.bundlerConfigs[0]!.optimization?.nodeEnv).toBe(
+      'production',
+    );
+  });
+
+  test('should infer development mode from NODE_ENV', async () => {
+    process.env.NODE_ENV = 'development';
+
+    const rslib = await createModeRslib();
+    const result = await rslib.inspectConfig();
+
+    expect(result.origin.rsbuildConfig.mode).toBe('development');
+    expect(Object.keys(result.origin.environmentConfigs)).toEqual(['mf']);
+  });
+
+  test('should inspect only MF configs in development mode', async () => {
+    const rslib = await createModeRslib();
+    const result = await rslib.inspectConfig({
+      mode: 'development',
+    });
+
+    expect(process.env.NODE_ENV).toBe('development');
+    expect(result.origin.rsbuildConfig.mode).toBe('development');
+    expect(Object.keys(result.origin.environmentConfigs)).toEqual(['mf']);
+    expect(result.origin.bundlerConfigs).toHaveLength(1);
+    expect(result.origin.bundlerConfigs[0]!.name).toBe('mf');
+    expect(result.origin.bundlerConfigs[0]!.mode).toBe('development');
+    expect(result.origin.bundlerConfigs[0]!.optimization?.nodeEnv).toBe(
+      'development',
+    );
+  });
+
+  test('should reject unsupported inspect modes', async () => {
+    const rslib = await createModeRslib();
+
+    await expect(
+      rslib.inspectConfig({
+        // @ts-expect-error testing runtime validation for JavaScript callers
+        mode: 'none',
+      }),
+    ).rejects.toThrow(
+      'Invalid inspect mode "none". Expected "development" or "production".',
+    );
+  });
+
+  test('should inspect all configs in production mode by default', async () => {
+    const rslib = await createModeRslib();
+    const { rslibConfig, rsbuildConfig, bundlerConfigs, origin } =
       await rslib.inspectConfig();
 
     expect(rslibConfig).not.toBeUndefined();
     expect(rsbuildConfig).not.toBeUndefined();
     expect(bundlerConfigs).not.toBeUndefined();
+    expect(origin.rsbuildConfig.mode).toBe('production');
+    expect(Object.keys(origin.environmentConfigs)).toEqual(['mf', 'umd']);
+    expect(origin.bundlerConfigs).toHaveLength(2);
+    expect(
+      origin.bundlerConfigs.every((config) => config.mode === 'production'),
+    ).toBe(true);
   });
 
   test('should write to disk correctly', async () => {

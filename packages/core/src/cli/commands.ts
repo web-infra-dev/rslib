@@ -1,7 +1,7 @@
-import type { LogLevel, RsbuildMode } from '@rsbuild/core';
+import type { LogLevel } from '@rsbuild/core';
 import cac, { type CAC } from 'cac';
 import type { ConfigLoader } from '../loadConfig';
-import type { Format, Syntax } from '../types';
+import type { Format, InspectConfigOptions, Syntax } from '../types';
 import { color } from '../utils/color';
 import { logger } from '../utils/logger';
 import { init, initCliAction } from './init';
@@ -37,7 +37,7 @@ export type BuildOptions = CommonOptions & {
 };
 
 export type InspectOptions = CommonOptions & {
-  mode?: RsbuildMode;
+  mode?: InspectConfigOptions['mode'];
   output?: string;
   verbose?: boolean;
 };
@@ -93,7 +93,7 @@ export function setupCommands(argv: string[]): void {
   const buildCommand = cli.command('', buildDescription).alias('build');
   const inspectCommand = cli.command(
     'inspect',
-    'inspect the Rsbuild / Rspack configs of Rslib projects',
+    'inspect the Rslib, Rsbuild, and Rspack configs',
   );
   const mfDevCommand = cli.command(
     'mf-dev',
@@ -162,10 +162,11 @@ export function setupCommands(argv: string[]): void {
     });
 
   inspectCommand
-    .option('--output <output>', 'specify inspect content output path', {
+    .option('--mode <mode>', 'set the build mode (development | production)')
+    .option('--output <output>', 'set the output path for inspection results', {
       default: '.rsbuild',
     })
-    .option('--verbose', 'show full function definitions in output')
+    .option('--verbose', 'show complete function definitions in output')
     .action(async (options: InspectOptions) => {
       initCliAction('inspect', options);
       try {

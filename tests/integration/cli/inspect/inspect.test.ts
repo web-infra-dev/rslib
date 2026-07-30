@@ -49,7 +49,7 @@ describe('inspect command', async () => {
     );
     const fileNames = Object.keys(files).sort();
 
-    // Rsbuild will emit dump files to `dist/esm` if only one environment is specified.
+    // Rsbuild emits inspection files to the selected environment's dist path.
     expect(fileNames).toMatchInlineSnapshot(`
       [
         "<ROOT>/tests/integration/cli/inspect/dist/esm/.rsbuild/rsbuild.config.mjs",
@@ -82,7 +82,6 @@ describe('inspect command', async () => {
     const files = await globContentJSON(path.join(__dirname, 'dist/.rsbuild'));
     const fileNames = Object.keys(files).sort();
 
-    // Rsbuild will emit dump files to `dist/esm` if only one environment is specified.
     expect(fileNames).toMatchInlineSnapshot(`
       [
         "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rsbuild.config.cjs.mjs",
@@ -92,5 +91,17 @@ describe('inspect command', async () => {
         "<ROOT>/tests/integration/cli/inspect/dist/.rsbuild/rspack.config.esm.mjs",
       ]
     `);
+  });
+
+  test('--mode should reject unsupported values', () => {
+    const { status, stderr } = runCliSync('inspect --mode none', {
+      cwd: __dirname,
+      stdio: 'pipe',
+    });
+
+    expect(status).toBe(1);
+    expect(stderr).toContain(
+      'Invalid inspect mode "none". Expected "development" or "production".',
+    );
   });
 });

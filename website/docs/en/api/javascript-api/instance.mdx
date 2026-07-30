@@ -233,9 +233,9 @@ type InspectConfigOptions = {
   /**
    * Inspect the config in the specified mode.
    * Available options: 'development' or 'production'.
-   * @default 'production'
+   * @default Inferred from `process.env.NODE_ENV`: 'development' when set to 'development', otherwise 'production'.
    */
-  mode?: RsbuildMode;
+  mode?: 'development' | 'production';
   /**
    * Enables verbose mode to display the complete function
    * content in the configuration.
@@ -244,7 +244,7 @@ type InspectConfigOptions = {
   verbose?: boolean;
   /**
    * Specify the output path for inspection results.
-   * @default 'output.distPath.root'
+   * @default '<output.distPath.root>/.rsbuild'
    */
   outputPath?: string;
   /**
@@ -292,7 +292,19 @@ await rslib.inspectConfig({
 });
 ```
 
-可以通过 `lib` 参数指定需要查看配置的库 id。如果不指定该参数，则会输出所有配置。
+### Setting mode
+
+By default, `mode` is inferred from `process.env.NODE_ENV`. When `mode` is `'production'`, `rslib.inspectConfig()` outputs production mode configs for all libraries. You can also set `mode` to `'development'` to output development mode configs only for libraries with [format](/config/lib/format) set to `mf`:
+
+```ts
+await rslib.inspectConfig({
+  mode: 'development',
+});
+```
+
+:::tip
+The Rslib config is resolved before `inspectConfig()` is called, so `mode` does not affect how it is loaded. To load different Rslib configs based on `NODE_ENV`, set it before calling [`createRslib()`](/api/javascript-api/core#createrslib).
+:::
 
 ### Run specified library
 
@@ -308,9 +320,9 @@ await rslib.inspectConfig({
 
 ### Output path
 
-You can set the output path using `outputPath`. The default value is [output.distPath.root](/config/rsbuild/output#outputdistpath).
+You can set the output path using `outputPath`. When `writeToDisk` is `true`, the files are written to the `.rsbuild` directory under [output.distPath.root](/config/rsbuild/output#outputdistpath) by default.
 
-If `outputPath` is a relative path, it will be concatenated relative to the value of `output.distPath.root`. You can also set `outputPath` to an absolute path, in which case the files will be written directly to that path. For example:
+If `outputPath` is a relative path, it will be resolved relative to `output.distPath.root`. You can also set `outputPath` to an absolute path, in which case the files will be written directly to that path. For example:
 
 ```ts
 import path from 'node:path';
