@@ -6,7 +6,7 @@ import { Tabs, Tab } from '@theme';
 
 # Web Workers
 
-Rslib supports Web Worker modules. We recommend using the standard `new Worker(new URL(..., import.meta.url))` syntax. You can also import Workers with the `?worker` and `?worker&inline` query suffixes.
+This guide explains how to configure and use Web Workers in Rslib projects.
 
 :::note
 
@@ -18,19 +18,21 @@ When using Web Workers, only ESM output can be generated, so [format](/config/li
 
 ### Basic usage
 
-Create a Worker with the standard constructor syntax:
+You can create a Worker with the standard constructor syntax:
 
-```ts
+```ts title="index.ts"
 new Worker(new URL('./worker.ts', import.meta.url));
 ```
 
 Rslib rewrites the Worker URL to reference the generated JavaScript file and emits the Worker as an ES module:
 
-```js
+```js title="index.js"
 new Worker(new URL('./worker.js', import.meta.url), {
   type: 'module',
 });
 ```
+
+For more Worker usage, see [Rsbuild - Web Workers - Import with constructors](https://rsbuild.rs/guide/basic/web-workers#import-with-constructors) and [Rspack - Web Workers - Usage](https://rspack.rs/guide/features/web-workers#usage).
 
 ### Limitations
 
@@ -45,11 +47,11 @@ const workerUrl = new URL('./worker.ts', import.meta.url);
 new Worker(workerUrl);
 ```
 
-See [Rspack - Web Workers](https://rspack.rs/guide/features/web-workers) for more information about Worker syntax and its limitations.
+For details, see [Rspack - Web Workers - Limitations](https://rspack.rs/guide/features/web-workers#limitations).
 
 ### Output modes
 
-The Worker constructor syntax works in both [bundle and bundleless modes](/guide/basic/output-structure#bundle--bundleless), as shown by the following source files and their build output:
+Depending on the [lib.bundle](/config/lib/bundle) option, the Worker constructor is compiled into different output. The following source files demonstrate the build output in both modes:
 
 <Tabs>
 <Tab label="src/index.ts">
@@ -148,7 +150,7 @@ Rslib also supports the [query suffix syntax provided by Rsbuild](https://rsbuil
 
 :::note
 
-Query suffixes are only supported in bundle mode.
+Query suffixes currently only support bundle mode.
 
 :::
 
@@ -156,7 +158,7 @@ Query suffixes are only supported in bundle mode.
 
 Append `?worker` to a Worker import:
 
-```ts
+```ts title="index.ts"
 import MyWorker from './worker.ts?worker';
 
 export const worker = new MyWorker();
@@ -168,10 +170,30 @@ Rslib emits the Worker as a separate ESM file.
 
 Append `?worker&inline` to inline the Worker:
 
-```ts
+```ts title="index.ts"
 import MyWorker from './worker.ts?worker&inline';
 
 export const worker = new MyWorker();
 ```
 
 Rslib encodes the Worker code as a data URL and inlines it into the JavaScript file that imports the Worker without emitting a separate Worker file.
+
+### Type declarations
+
+When you import a Worker with a query suffix in TypeScript code, TypeScript may report that the module is missing type definitions:
+
+```
+TS2307: Cannot find module './worker.ts?worker' or its corresponding type declarations.
+```
+
+You can add the [preset types](/guide/basic/typescript#preset-types) provided by `@rslib/core` to `tsconfig.json`:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "types": ["@rslib/core/types"]
+  }
+}
+```
+
+The preset types include declarations for `*?worker`, `*?worker&inline`, and `*?inline&worker`.

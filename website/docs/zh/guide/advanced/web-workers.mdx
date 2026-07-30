@@ -6,7 +6,7 @@ import { Tabs, Tab } from '@theme';
 
 # Web Workers
 
-Rslib 支持 Web Worker 模块。推荐使用标准的 `new Worker(new URL(..., import.meta.url))` 语法。你也可以使用 `?worker` 和 `?worker&inline` query 后缀导入 Worker。
+本文将介绍在 Rslib 项目中如何配置和使用 Web Workers。
 
 :::note
 
@@ -18,19 +18,21 @@ Rslib 支持 Web Worker 模块。推荐使用标准的 `new Worker(new URL(..., 
 
 ### 基本用法
 
-使用标准构造器语法创建 Worker：
+你可以使用标准构造器语法创建 Worker：
 
-```ts
+```ts title="index.ts"
 new Worker(new URL('./worker.ts', import.meta.url));
 ```
 
 Rslib 会重写 Worker URL，使其指向生成的 JavaScript 文件，并将 Worker 输出为 ES 模块：
 
-```js
+```js title="index.js"
 new Worker(new URL('./worker.js', import.meta.url), {
   type: 'module',
 });
 ```
+
+更多 Worker 用法，请参考 [Rsbuild - Web Workers - 使用 Worker 构造器](https://rsbuild.rs/zh/guide/basic/web-workers#%E4%BD%BF%E7%94%A8-worker-%E6%9E%84%E9%80%A0%E5%99%A8) 和 [Rspack - Web Workers - 使用方式](https://rspack.rs/zh/guide/features/web-workers#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F)。
 
 ### 限制
 
@@ -45,11 +47,11 @@ const workerUrl = new URL('./worker.ts', import.meta.url);
 new Worker(workerUrl);
 ```
 
-更多 Worker 语法及其限制，请参考 [Rspack - Web Workers](https://rspack.rs/zh/guide/features/web-workers)。
+相关限制请参考 [Rspack - Web Workers - 限制](https://rspack.rs/zh/guide/features/web-workers#%E9%99%90%E5%88%B6)。
 
 ### 产物模式
 
-Worker 构造器语法可用于 [bundle 和 bundleless 模式](/guide/basic/output-structure#bundle--bundleless)，下面通过一组示例源码展示两种模式下的构建结果：
+由于 [lib.bundle](/config/lib/bundle) 配置项不同，Worker 构造器会被编译为不同的产物，下面通过一组示例源码展示两种模式下的构建结果：
 
 <Tabs>
 <Tab label="src/index.ts">
@@ -142,13 +144,13 @@ export { add };
 </Tab>
 </Tabs>
 
-## 使用 Query 后缀导入
+## 使用 query 后缀导入
 
 Rslib 还支持 [Rsbuild 提供的 query 后缀语法](https://rsbuild.rs/zh/guide/basic/web-workers#使用-query-后缀导入)。
 
 :::note
 
-Query 后缀仅支持 bundle 模式。
+query 后缀目前仅支持 bundle 模式。
 
 :::
 
@@ -156,7 +158,7 @@ Query 后缀仅支持 bundle 模式。
 
 在 Worker 导入路径后添加 `?worker`：
 
-```ts
+```ts title="index.ts"
 import MyWorker from './worker.ts?worker';
 
 export const worker = new MyWorker();
@@ -168,10 +170,30 @@ Rslib 会将 Worker 输出为独立的 ESM 文件。
 
 添加 `?worker&inline` 可以内联 Worker：
 
-```ts
+```ts title="index.ts"
 import MyWorker from './worker.ts?worker&inline';
 
 export const worker = new MyWorker();
 ```
 
 Rslib 会将 Worker 代码编码为 data URL，并内联到导入该 Worker 的 JavaScript 文件中，不再输出独立的 Worker 文件。
+
+### 类型声明
+
+当你在 TypeScript 代码中使用 query 后缀导入 Worker 时，TypeScript 可能会提示该模块缺少类型定义：
+
+```
+TS2307: Cannot find module './worker.ts?worker' or its corresponding type declarations.
+```
+
+你可以在 `tsconfig.json` 中添加 `@rslib/core` 提供的 [预设类型](/guide/basic/typescript#预设类型)：
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "types": ["@rslib/core/types"]
+  }
+}
+```
+
+预设类型中已包含 `*?worker`、`*?worker&inline` 和 `*?inline&worker` 的类型声明。
