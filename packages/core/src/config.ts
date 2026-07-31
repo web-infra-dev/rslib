@@ -1833,6 +1833,19 @@ export async function composeCreateRsbuildConfig(
     );
   }
 
+  if (rslibConfig.dts !== undefined && rslibConfig.dts !== false) {
+    const enabledDtsLibCount = libConfigsArray.filter((libConfig) => {
+      const dts = libConfig.dts ?? rslibConfig.dts;
+      return dts !== undefined && dts !== false;
+    }).length;
+
+    if (enabledDtsLibCount > 1) {
+      logger.warn(
+        'The top-level "dts" option enables declaration generation for multiple lib items. These lib items may write to or clean the same declaration output concurrently. To avoid conflicts, configure "dts" in only one lib item.',
+      );
+    }
+  }
+
   const libConfigPromises = libConfigsArray.map(async (libConfig, index) => {
     if (libConfig.autoExternal !== undefined) {
       logger.warn(
