@@ -149,6 +149,85 @@ export default {
 };
 ```
 
+## Parse `createRequire()` by default
+
+Rslib v1 enables Rspack's [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire) by default. Dependencies loaded through a `require` created by `createRequire()` are now included in the bundle.
+
+In Rslib v0.x, `createRequire()` calls were preserved in the output.
+
+If a dependency must be resolved at runtime, disable the `createRequire` parser to restore the Rslib v0.x behavior:
+
+```ts title="rslib.config.ts"
+export default {
+  tools: {
+    rspack: {
+      module: {
+        parser: {
+          javascript: {
+            createRequire: false,
+          },
+        },
+      },
+    },
+  },
+};
+```
+
+## Resource module handling updates
+
+Rslib v1 supports handling static assets referenced through `new URL()`, Web Workers, and WebAssembly modules in ESM output.
+
+### Static assets referenced by `new URL()`
+
+For ESM output, Rslib v1 treats statically analyzable local references such as `new URL('./assets/logo.svg', import.meta.url)` as asset dependencies. It emits the referenced asset automatically and rewrites the URL in the generated code to a relative path pointing to that file.
+
+Rslib v0.x preserved the `new URL()` expression without emitting the referenced file. After upgrading, remove any configuration or scripts that copied these assets manually.
+
+In bundleless mode, exclude assets referenced by `new URL()` from [source.entry](/config/rsbuild/source#sourceentry) to avoid generating an additional JavaScript entry for them. See the [Static assets guide](/guide/advanced/static-assets) for details.
+
+:::warning
+
+Due to a current Rspack limitation, patterns such as `new URL('.', import.meta.url)` that obtain the current file's directory cannot be handled correctly. In Node.js, use `dirname(fileURLToPath(import.meta.url))` instead:
+
+```ts
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const packageDirectory = dirname(fileURLToPath(import.meta.url));
+```
+
+:::
+
+### Web Workers
+
+Rslib v1 parses `new Worker(new URL('./worker.ts', import.meta.url))` in ESM output, builds the Worker and its dependencies, and rewrites the URL to the corresponding output path.
+
+If the project previously configured the Worker source as a separate entry and referenced the expected `.js` output from the source code, remove this workaround and reference the Worker source file directly:
+
+```diff title="rslib.config.ts"
+ export default {
+   source: {
+     entry: {
+       index: './src/index.ts',
+-      worker: './src/worker.ts',
+     },
+   },
+ };
+```
+
+```diff title="src/index.ts"
+-new Worker(new URL('./worker.js', import.meta.url));
++new Worker(new URL('./worker.ts', import.meta.url));
+```
+
+The Worker URL must be passed as an inline `new URL()` expression. See the [Web Workers guide](/guide/advanced/web-workers) for details.
+
+### WebAssembly
+
+For output with `format: 'esm'` and `bundle: false`, Rslib v1 uses [`wasm.mode: 'preserve'`](/config/lib/wasm#wasmmode) by default. The generated JavaScript preserves `.wasm` imports, while `.wasm` files retain their original filenames and source directory structure in the output.
+
+The behavior for `bundle: true` is unchanged. With `bundle: false`, Rslib v0.x could not generate usable WASM output; Rslib v1 supports this scenario through `preserve` mode by default. When using `preserve` mode, ensure that the downstream bundler or target runtime supports WebAssembly ESM Integration. See the [WASM guide](/guide/advanced/wasm) for details.
+
 ## `@typescript/native-preview` support update
 
 In Rslib v0.x, enabling [dts.tsgo](/config/lib/dts#dtstsgo) caused Rslib to load `@typescript/native-preview` automatically to generate declaration files.

@@ -149,6 +149,85 @@ export default {
 };
 ```
 
+## 默认解析 `createRequire()`
+
+Rslib v1 默认开启了 Rspack 的 [`module.parser.javascript.createRequire`](https://rspack.rs/zh/config/module-parser#javascriptcreaterequire)。现在，使用 `createRequire()` 创建的 `require` 引入的依赖将会参与打包。
+
+在 Rslib v0.x 中，`createRequire()` 调用会保留在产物中。
+
+如果依赖需要在运行时解析，可以关闭 `createRequire` parser 来恢复 Rslib v0.x 的行为：
+
+```ts title="rslib.config.ts"
+export default {
+  tools: {
+    rspack: {
+      module: {
+        parser: {
+          javascript: {
+            createRequire: false,
+          },
+        },
+      },
+    },
+  },
+};
+```
+
+## 资源模块处理更新
+
+Rslib v1 支持在 ESM 产物中处理通过 `new URL()` 引用的静态资源、Web Worker 和 WebAssembly 模块。
+
+### `new URL()` 静态资源
+
+对于 ESM 产物，Rslib v1 会将可静态分析的本地引用（例如 `new URL('./assets/logo.svg', import.meta.url)`）识别为资源依赖，自动输出对应的资源文件，并将生成代码中的 URL 重写为指向该文件的相对路径。
+
+Rslib v0.x 会原样保留 `new URL()` 表达式，不会输出对应的资源文件。升级后，可以移除用于复制这些资源的配置或脚本。
+
+在 bundleless 模式下，需要在 [source.entry](/config/rsbuild/source#sourceentry) 中排除被 `new URL()` 引用的资源文件，避免为资源生成额外的 JavaScript 入口。更多信息请参考[静态资源指南](/guide/advanced/static-assets)。
+
+:::warning
+
+受限于 Rspack 当前实现，`new URL('.', import.meta.url)` 等用于获取当前文件目录的写法无法被正确处理。在 Node.js 中，建议改用 `dirname(fileURLToPath(import.meta.url))`：
+
+```ts
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const packageDirectory = dirname(fileURLToPath(import.meta.url));
+```
+
+:::
+
+### Web Worker
+
+Rslib v1 会在 ESM 产物中解析 `new Worker(new URL('./worker.ts', import.meta.url))`，构建 Worker 及其依赖，并将 URL 重写为对应的输出路径。
+
+如果项目原本将 Worker 源文件配置为独立入口，并在源码中引用预期生成的 `.js` 文件，可以移除该变通配置，改为直接引用 Worker 源文件：
+
+```diff title="rslib.config.ts"
+ export default {
+   source: {
+     entry: {
+       index: './src/index.ts',
+-      worker: './src/worker.ts',
+     },
+   },
+ };
+```
+
+```diff title="src/index.ts"
+-new Worker(new URL('./worker.js', import.meta.url));
++new Worker(new URL('./worker.ts', import.meta.url));
+```
+
+Worker URL 必须通过内联的 `new URL()` 表达式传入，详情请参考 [Web Workers 指南](/guide/advanced/web-workers)。
+
+### WebAssembly
+
+对于 `format: 'esm'` 且 `bundle: false` 的产物，Rslib v1 默认使用 [`wasm.mode: 'preserve'`](/config/lib/wasm#wasmmode)。生成的 JavaScript 会保留 `.wasm` import，`.wasm` 文件会保留原始文件名，并按照源代码中的目录结构输出。
+
+`bundle: true` 时的行为保持不变。对于 `bundle: false`，Rslib v0.x 无法生成可用的 WASM 产物；Rslib v1 默认通过 `preserve` 模式支持这一场景。使用 `preserve` 模式时，需要确保下游构建工具或目标运行时支持 WebAssembly ESM Integration。更多信息请参考 [WASM 指南](/guide/advanced/wasm)。
+
 ## `@typescript/native-preview` 支持调整
 
 在 Rslib v0.x 中，开启 [dts.tsgo](/config/lib/dts#dtstsgo) 后，Rslib 会自动加载 `@typescript/native-preview` 来生成类型声明文件。
