@@ -15,6 +15,7 @@ import { loadConfig } from '../src/loadConfig';
 import { mergeRslibConfig } from '../src/mergeConfig';
 import type { RslibConfig } from '../src/types/config';
 import { normalizeSlash } from '../src/utils/helper';
+import { logger } from '../src/utils/logger';
 
 rs.mock('rslog');
 
@@ -770,6 +771,61 @@ describe('Should compose create Rsbuild config correctly', () => {
     const [config] = await composeCreateRsbuildConfig(rslibConfig);
 
     expect(config?.config.output?.autoExternal).toBe(false);
+  });
+});
+
+describe('dts', () => {
+  test('supports top-level dts with the implicit default lib', async () => {
+    const [config] = await composeCreateRsbuildConfig({
+      dts: true,
+    });
+
+    expect(config?.config.plugins).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: 'rsbuild:dts',
+        }),
+      ]),
+    );
+  });
+
+  test('lib.dts overrides top-level dts', async () => {
+    const [config] = await composeCreateRsbuildConfig({
+      dts: true,
+      lib: [{ dts: false }],
+    });
+
+    expect(config?.config.plugins).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: 'rsbuild:dts',
+        }),
+      ]),
+    );
+  });
+
+  test('warns when top-level dts enables multiple libs', async () => {
+    const warn = rs.spyOn(logger, 'warn').mockImplementation(() => {});
+
+    await composeCreateRsbuildConfig({
+      dts: true,
+      lib: [{ format: 'esm' }, { format: 'cjs' }],
+    });
+
+    expect(warn).toHaveBeenCalledWith(
+      'The top-level "dts" option enables declaration generation for multiple lib items. These lib items may write to or clean the same declaration output concurrently. To avoid conflicts, configure "dts" in only one lib item.',
+    );
+  });
+
+  test('does not warn when top-level dts enables only one lib', async () => {
+    const warn = rs.spyOn(logger, 'warn').mockImplementation(() => {});
+
+    await composeCreateRsbuildConfig({
+      dts: true,
+      lib: [{ format: 'esm' }, { format: 'cjs', dts: false }],
+    });
+
+    expect(warn).not.toHaveBeenCalled();
   });
 });
 
