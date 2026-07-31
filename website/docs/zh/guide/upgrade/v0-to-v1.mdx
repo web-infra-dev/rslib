@@ -198,7 +198,7 @@ const packageDirectory = dirname(fileURLToPath(import.meta.url));
 
 :::
 
-### Web Worker
+### Web Workers
 
 Rslib v1 会在 ESM 产物中解析 `new Worker(new URL('./worker.ts', import.meta.url))`，构建 Worker 及其依赖，并将 URL 重写为对应的输出路径。
 
