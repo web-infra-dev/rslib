@@ -25,8 +25,18 @@ type Dts =
 
 - **Default:** `undefined`
 - **CLI:** `--dts` / `--no-dts`
+- **Top-level config:** Supported
 
 Configure the generation of the TypeScript declaration files.
+
+When configured at the top level, `dts` is inherited by every `lib` item. A
+`dts` value in a `lib` item takes precedence over the top-level value.
+
+:::warning
+Enabling top-level `dts` with multiple `lib` items may cause them to write to or
+clean the same declaration output concurrently. To avoid conflicts, configure
+`dts` in only one `lib` item.
+:::
 
 ## Boolean type
 
@@ -34,12 +44,7 @@ Declaration files generation is an optional feature, you can set `dts: true` to 
 
 ```ts title="rslib.config.ts"
 export default {
-  lib: [
-    {
-      format: 'esm',
-      dts: true, // [!code highlight]
-    },
-  ],
+  dts: true, // [!code highlight]
 };
 ```
 

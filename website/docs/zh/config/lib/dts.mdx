@@ -25,8 +25,17 @@ type Dts =
 
 - **默认值：** `undefined`
 - **命令行：** `--dts` / `--no-dts`
+- **顶层配置：** 支持
 
 配置 TypeScript 声明文件的生成。
+
+在顶层配置时，每个 `lib` 配置项都会继承 `dts`。`lib` 配置项中的 `dts`
+优先级高于顶层配置。
+
+:::warning
+在多个 `lib` 配置项中启用顶层 `dts`，可能导致它们并发写入或清理相同的类型声明输出。
+为避免冲突，请仅在一个 `lib` 配置项中配置 `dts`。
+:::
 
 ## 布尔类型
 
@@ -34,12 +43,7 @@ type Dts =
 
 ```ts title="rslib.config.ts"
 export default {
-  lib: [
-    {
-      format: 'esm',
-      dts: true, // [!code highlight]
-    },
-  ],
+  dts: true, // [!code highlight]
 };
 ```
 
