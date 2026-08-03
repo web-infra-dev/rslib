@@ -16,6 +16,8 @@ Rslib 支持在代码中引用图片、字体、媒体和其他类型文件等�
 - **视频**：mp4、webm、ogg、mov。
 - **其他**：webmanifest、pdf、txt、vtt。
 
+除上述静态资源格式外，当 [output.target](/config/rsbuild/output#outputtarget) 为 `'node'` 时，Rslib 还支持在 JavaScript 文件中引入 Node.js [addons](https://nodejs.org/api/addons.html)。
+
 如果你需要引用其他格式的静态资源，请参考 [扩展静态资源类型](#扩展静态资源类型)。
 
 ## 在 JavaScript 文件中引用
