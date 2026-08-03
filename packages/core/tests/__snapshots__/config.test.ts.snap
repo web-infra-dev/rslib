@@ -456,6 +456,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     parser: {
       javascript: {
         typeReexportsPresence: 'tolerant',
+        createRequire: true,
         importMeta: false,
         importDynamic: false,
         commonjs: {
@@ -1323,6 +1324,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     parser: {
       javascript: {
         typeReexportsPresence: 'tolerant',
+        createRequire: true,
         importMeta: false,
         importDynamic: false,
         commonjs: {
@@ -2183,6 +2185,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     parser: {
       javascript: {
         typeReexportsPresence: 'tolerant',
+        createRequire: true,
         importMeta: false
       }
     },
@@ -2959,6 +2962,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     parser: {
       javascript: {
         typeReexportsPresence: 'tolerant',
+        createRequire: true,
         importMeta: false
       }
     },
@@ -3670,7 +3674,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   module: {
     parser: {
       javascript: {
-        typeReexportsPresence: 'tolerant'
+        typeReexportsPresence: 'tolerant',
+        createRequire: true
       }
     },
     rules: [
@@ -4425,6 +4430,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "module": {
+            "parser": {
+              "javascript": {
+                "createRequire": true,
+              },
+            },
+          },
           "optimization": {
             "nodeEnv": false,
           },
@@ -4700,6 +4712,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "module": {
+            "parser": {
+              "javascript": {
+                "createRequire": true,
+              },
+            },
+          },
           "optimization": {
             "nodeEnv": false,
           },
@@ -4948,6 +4967,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "module": {
+            "parser": {
+              "javascript": {
+                "createRequire": true,
+              },
+            },
+          },
           "optimization": {
             "nodeEnv": false,
           },
@@ -5185,6 +5211,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "module": {
+            "parser": {
+              "javascript": {
+                "createRequire": true,
+              },
+            },
+          },
           "optimization": {
             "nodeEnv": false,
           },
@@ -5377,6 +5410,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "module": {
+            "parser": {
+              "javascript": {
+                "createRequire": true,
+              },
+            },
+          },
           "optimization": {
             "nodeEnv": false,
           },
