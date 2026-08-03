@@ -224,17 +224,16 @@ The Worker URL must be passed as an inline `new URL()` expression. See the [Web 
 
 ### WebAssembly
 
-Rslib v1 adds support for generating usable WASM output with `format: 'esm'` and `bundle: false`, which was not supported in Rslib v0.x. The behavior with `bundle: true` remains unchanged.
+Rslib v1 adds support for [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) when `bundle: false`. The behavior with `bundle: true` remains unchanged.
 
 With `bundle: false`, the generated JavaScript preserves `.wasm` imports, while `.wasm` files retain their original filenames and source directory structure in the output. This requires the downstream bundler or target runtime to support WebAssembly ESM Integration.
 
-If you do not want to preserve `.wasm` imports, set [`wasm.mode`](/config/lib/wasm#wasmmode) to `'compile'`. Rslib will generate the JavaScript glue code required to load and instantiate the WASM modules, and emit the binaries as static assets with content hashes:
+If you do not want to preserve `.wasm` imports, set [`wasm.mode`](/config/lib/wasm#wasmmode) to `'compile'`. Rslib will generate the JavaScript glue code required to load and instantiate the WASM modules, and emit the WASM files:
 
 ```ts title="rslib.config.ts"
 export default {
   lib: [
     {
-      format: 'esm',
       bundle: false,
       wasm: {
         mode: 'compile',

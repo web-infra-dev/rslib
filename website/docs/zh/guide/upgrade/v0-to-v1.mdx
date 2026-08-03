@@ -224,17 +224,16 @@ Worker URL 必须通过内联的 `new URL()` 表达式传入，详情请参考 [
 
 ### WebAssembly
 
-Rslib v1 新增了在 `format: 'esm'` 且 `bundle: false` 时生成可用 WASM 产物的能力，Rslib v0.x 不支持这一场景。`bundle: true` 时的行为保持不变。
+Rslib v1 新增了在 `bundle: false` 时对 [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 的支持。`bundle: true` 时的行为保持不变。
 
 当 `bundle: false` 时，生成的 JavaScript 会保留 `.wasm` import，`.wasm` 文件会保留原始文件名，并按照源代码中的目录结构输出。这要求下游构建工具或目标运行时支持 WebAssembly ESM Integration。
 
-如果不希望保留 `.wasm` import，可以将 [`wasm.mode`](/config/lib/wasm#wasmmode) 设置为 `'compile'`。Rslib 会生成加载和实例化 WASM 模块所需的 JavaScript 胶水代码，并将二进制文件作为带 content hash 的静态资源输出：
+如果不希望保留 `.wasm` import，可以将 [`wasm.mode`](/config/lib/wasm#wasmmode) 设置为 `'compile'`。Rslib 会生成加载和实例化 WASM 模块所需的 JavaScript 胶水代码，并输出 WASM 文件：
 
 ```ts title="rslib.config.ts"
 export default {
   lib: [
     {
-      format: 'esm',
       bundle: false,
       wasm: {
         mode: 'compile',
