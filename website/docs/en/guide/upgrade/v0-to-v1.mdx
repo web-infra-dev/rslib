@@ -224,9 +224,27 @@ The Worker URL must be passed as an inline `new URL()` expression. See the [Web 
 
 ### WebAssembly
 
-For output with `format: 'esm'` and `bundle: false`, Rslib v1 uses [`wasm.mode: 'preserve'`](/config/lib/wasm#wasmmode) by default. The generated JavaScript preserves `.wasm` imports, while `.wasm` files retain their original filenames and source directory structure in the output.
+Rslib v1 adds support for generating usable WASM output with `format: 'esm'` and `bundle: false`, which was not supported in Rslib v0.x. The behavior with `bundle: true` remains unchanged.
 
-The behavior for `bundle: true` is unchanged. With `bundle: false`, Rslib v0.x could not generate usable WASM output; Rslib v1 supports this scenario through `preserve` mode by default. When using `preserve` mode, ensure that the downstream bundler or target runtime supports WebAssembly ESM Integration. See the [WASM guide](/guide/advanced/wasm) for details.
+With `bundle: false`, the generated JavaScript preserves `.wasm` imports, while `.wasm` files retain their original filenames and source directory structure in the output. This requires the downstream bundler or target runtime to support WebAssembly ESM Integration.
+
+If you do not want to preserve `.wasm` imports, set [`wasm.mode`](/config/lib/wasm#wasmmode) to `'compile'`. Rslib will generate the JavaScript glue code required to load and instantiate the WASM modules, and emit the binaries as static assets with content hashes:
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+      wasm: {
+        mode: 'compile',
+      },
+    },
+  ],
+};
+```
+
+See the [WASM guide](/guide/advanced/wasm) for details about the two output modes.
 
 ## `@typescript/native-preview` support update
 
