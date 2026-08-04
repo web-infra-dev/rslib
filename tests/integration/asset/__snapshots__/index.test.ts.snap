@@ -311,18 +311,6 @@ console.log('defaultImport', 'Url', logo);
 
 exports[`use svgr 2`] = `
 ""use strict";
-var __rspack_module_cache = {};
-var __rspack_context = {};
-function __rspack_require(moduleId) {
-    var cachedModule = __rspack_module_cache[moduleId];
-    if (void 0 !== cachedModule) return cachedModule.exports;
-    var module = __rspack_module_cache[moduleId] = {
-        exports: {}
-    };
-    __rspack_modules[moduleId](module, module.exports, __rspack_context);
-    return module.exports;
-}
-__rspack_context.r = __rspack_require;
 var __rspack_exports = {};
 const jsx_runtime_namespaceObject = require("react/jsx-runtime");
 require("react");

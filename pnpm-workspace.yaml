@@ -14,7 +14,7 @@ catalogMode: prefer
 cleanupUnusedCatalogs: true
 
 overrides:
-  '@rspack/core': 'npm:@rspack-canary/core@2.1.8-canary-4b189917-20260802173728'
+  '@rspack/core': 2.1.8
 
 catalog:
   '@arco-design/web-react': '^2.66.16'
@@ -149,7 +149,6 @@ minimumReleaseAgeExclude:
   - typescript
   - '@typescript/*'
   - heading-case
-  - '@rspack-canary/*'
 
 # Prevent un-reviewed build scripts
 strictDepBuilds: true

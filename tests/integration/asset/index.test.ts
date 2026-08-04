@@ -231,8 +231,7 @@ test('set the assets public path', async () => {
   // esm
   const { content: indexJs } = queryContent(contents.esm0!, /index\.js/);
   expect(indexJs).toMatchInlineSnapshot(`
-    "var publicPath;
-    var publicPath = "/public/path/";
+    "var publicPath = "/public/path/";
     const image_namespaceObject = publicPath + "static/image/image.png";
     const src = image_namespaceObject;
     export default src;

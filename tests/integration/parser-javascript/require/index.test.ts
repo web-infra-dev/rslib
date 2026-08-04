@@ -18,8 +18,8 @@ test('require.resolve', async () => {
   ];
 
   const esmStatements = [
-    'import { createRequire as external_node_module_createRequire } from "node:module"',
-    'const _require = external_node_module_createRequire(import.meta.url)',
+    'import { createRequire } from "node:module"',
+    'const _require = createRequire(import.meta.url)',
   ];
 
   const cjsStatements = [
@@ -47,8 +47,8 @@ test('require dynamic', async () => {
   ];
 
   const esmStatements = [
-    'import { createRequire as external_node_module_createRequire } from "node:module"',
-    'const _require = external_node_module_createRequire(import.meta.url)',
+    'import { createRequire } from "node:module"',
+    'const _require = createRequire(import.meta.url)',
   ];
 
   const cjsStatements = [
