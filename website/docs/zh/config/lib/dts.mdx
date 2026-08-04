@@ -29,12 +29,10 @@ type Dts =
 
 配置 TypeScript 声明文件的生成。
 
-在顶层配置时，每个 `lib` 配置项都会继承 `dts`。`lib` 配置项中的 `dts`
-优先级高于顶层配置。
+顶层 `dts` 会被所有 `lib` 配置项继承，但配置项自身的 `dts` 具有更高优先级。
 
 :::warning
-在多个 `lib` 配置项中启用顶层 `dts`，可能导致它们并发写入或清理相同的类型声明输出。
-为避免冲突，请仅在一个 `lib` 配置项中配置 `dts`。
+存在多个 `lib` 配置项时，使用顶层 `dts` 可能导致类型声明生成过程中的文件写入或删除操作发生冲突，建议改为在具体的 `lib` 配置项中配置 `dts`。
 :::
 
 ## 布尔类型
@@ -43,7 +41,12 @@ type Dts =
 
 ```ts title="rslib.config.ts"
 export default {
-  dts: true, // [!code highlight]
+  lib: [
+    {
+      format: 'esm',
+      dts: true, // [!code highlight]
+    },
+  ],
 };
 ```
 

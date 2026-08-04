@@ -804,7 +804,7 @@ describe('dts', () => {
     );
   });
 
-  test('warns when top-level dts enables multiple libs', async () => {
+  test('warns about output risks when top-level dts enables multiple libs', async () => {
     const warn = rs.spyOn(logger, 'warn').mockImplementation(() => {});
 
     await composeCreateRsbuildConfig({
@@ -813,7 +813,7 @@ describe('dts', () => {
     });
 
     expect(warn).toHaveBeenCalledWith(
-      'The top-level "dts" option enables declaration generation for multiple lib items. These lib items may write to or clean the same declaration output concurrently. To avoid conflicts, configure "dts" in only one lib item.',
+      'When multiple lib items are present, using top-level "dts" may cause conflicting file writes or deletions during declaration generation, so configure "dts" on a specific lib item instead.',
     );
   });
 
