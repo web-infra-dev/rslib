@@ -308,7 +308,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    sourceImport: true
+    sourceImport: true,
+    runtimeMode: 'rspack'
   },
   devtool: false,
   cache: {
@@ -1180,7 +1181,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    sourceImport: true
+    sourceImport: true,
+    runtimeMode: 'rspack'
   },
   devtool: false,
   cache: {
@@ -2048,7 +2050,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    sourceImport: true
+    sourceImport: true,
+    runtimeMode: 'rspack'
   },
   devtool: false,
   cache: {
@@ -2821,7 +2824,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    sourceImport: true
+    sourceImport: true,
+    runtimeMode: 'rspack'
   },
   devtool: false,
   cache: {
@@ -3599,7 +3603,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    sourceImport: true
+    sourceImport: true,
+    runtimeMode: 'rspack'
   },
   devtool: false,
   cache: {
@@ -4430,6 +4435,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "experiments": {
+            "runtimeMode": "rspack",
+          },
           "module": {
             "parser": {
               "javascript": {
@@ -4712,6 +4720,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "experiments": {
+            "runtimeMode": "rspack",
+          },
           "module": {
             "parser": {
               "javascript": {
@@ -4967,6 +4978,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "experiments": {
+            "runtimeMode": "rspack",
+          },
           "module": {
             "parser": {
               "javascript": {
@@ -5211,6 +5225,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "experiments": {
+            "runtimeMode": "rspack",
+          },
           "module": {
             "parser": {
               "javascript": {
@@ -5410,6 +5427,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "experiments": {
+            "runtimeMode": "rspack",
+          },
           "module": {
             "parser": {
               "javascript": {

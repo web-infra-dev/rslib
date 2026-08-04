@@ -463,6 +463,32 @@ describe('CLI options', () => {
 });
 
 describe('Should compose create Rsbuild config correctly', () => {
+  test('uses Rspack runtime mode by default and allows overriding it', async () => {
+    const defaultRslib = await createRslib({});
+    const {
+      origin: { bundlerConfigs: defaultBundlerConfigs },
+    } = await defaultRslib.inspectConfig({ verbose: true });
+    expect(defaultBundlerConfigs[0]?.experiments?.runtimeMode).toBe('rspack');
+
+    const overriddenRslib = await createRslib({
+      config: {
+        tools: {
+          rspack: {
+            experiments: {
+              runtimeMode: 'webpack',
+            },
+          },
+        },
+      },
+    });
+    const {
+      origin: { bundlerConfigs: overriddenBundlerConfigs },
+    } = await overriddenRslib.inspectConfig({ verbose: true });
+    expect(overriddenBundlerConfigs[0]?.experiments?.runtimeMode).toBe(
+      'webpack',
+    );
+  });
+
   test('treats omitted lib field as default library config', async () => {
     const rslibConfig: RslibConfig = {
       root: join(__dirname, '..'),

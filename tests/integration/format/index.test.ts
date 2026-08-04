@@ -65,11 +65,9 @@ test('import.meta.url should be preserved', async () => {
   `);
   expect(entries.esm).toMatchInlineSnapshot(`
     "import node_url from "node:url";
-    var __webpack_require__ = {};
-    (()=>{
-        __webpack_require__.b = new URL("./", import.meta.url);
-    })();
-    const packageDirectory = node_url.fileURLToPath(new URL('.', __webpack_require__.b));
+    var baseUri;
+    baseUri = new URL("./", import.meta.url);
+    const packageDirectory = node_url.fileURLToPath(new URL('.', baseUri));
     const foo = 'foo';
     export { foo, packageDirectory };
     "

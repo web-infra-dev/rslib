@@ -20,52 +20,44 @@ test('resolve false', async () => {
 
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
-    "var __webpack_modules__ = {};
-    var __webpack_module_cache__ = {};
-    function __webpack_require__(moduleId) {
-        var cachedModule = __webpack_module_cache__[moduleId];
+    "var modules = {};
+    var moduleCache = {};
+    function rspackRequire(moduleId) {
+        var cachedModule = moduleCache[moduleId];
         if (void 0 !== cachedModule) return cachedModule.exports;
-        var module = __webpack_module_cache__[moduleId] = {
+        var module = moduleCache[moduleId] = {
             exports: {}
         };
-        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        modules[moduleId](module, module.exports, rspackRequire);
         return module.exports;
     }
-    __webpack_require__.m = __webpack_modules__;
-    (()=>{
-        __webpack_require__.n = (module)=>{
-            var getter = module && module.__esModule ? ()=>module['default'] : ()=>module;
-            __webpack_require__.d(getter, {
-                a: getter
+    var moduleFactories = modules;
+    var compatGetDefaultExport = (module)=>{
+        var getter = module && module.__esModule ? ()=>module['default'] : ()=>module;
+        definePropertyGetters(getter, {
+            a: getter
+        });
+        return getter;
+    };
+    var definePropertyGetters = (exports, getters, values)=>{
+        var define = (defs, kind)=>{
+            for(var key in defs)if (hasOwnProperty(defs, key) && !hasOwnProperty(exports, key)) Object.defineProperty(exports, key, {
+                enumerable: true,
+                [kind]: defs[key]
             });
-            return getter;
         };
-    })();
-    (()=>{
-        __webpack_require__.d = (exports, getters, values)=>{
-            var define = (defs, kind)=>{
-                for(var key in defs)if (__webpack_require__.o(defs, key) && !__webpack_require__.o(exports, key)) Object.defineProperty(exports, key, {
-                    enumerable: true,
-                    [kind]: defs[key]
-                });
-            };
-            define(getters, "get");
-            define(values, "value");
-        };
-    })();
-    (()=>{
-        __webpack_require__.add = function(modules) {
-            Object.assign(__webpack_require__.m, modules);
-        };
-    })();
-    (()=>{
-        __webpack_require__.o = (obj, prop)=>Object.prototype.hasOwnProperty.call(obj, prop);
-    })();
-    __webpack_require__.add({
+        define(getters, "get");
+        define(values, "value");
+    };
+    moduleFactories.add = function(modules) {
+        Object.assign(moduleFactories, modules);
+    };
+    var hasOwnProperty = (obj, prop)=>Object.prototype.hasOwnProperty.call(obj, prop);
+    moduleFactories.add({
         237 () {}
     });
-    const util_ignored_ = __webpack_require__("237");
-    var util_ignored__default = /*#__PURE__*/ __webpack_require__.n(util_ignored_);
+    const util_ignored_ = rspackRequire("237");
+    var util_ignored__default = /*#__PURE__*/ compatGetDefaultExport(util_ignored_);
     console.log('foo:', util_ignored__default());
     console.log('bar: ', "bar");
     "
