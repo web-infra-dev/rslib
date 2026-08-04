@@ -1122,18 +1122,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     {},
     /* config.plugin('define') */
     new DefinePlugin(
-      {
-        'import.meta.env': {
-          MODE: '"production"',
-          DEV: false,
-          PROD: true,
-          SSR: true,
-          BASE_URL: '"/"',
-          ASSET_PREFIX: '"auto"'
-        },
-        'process.env.BASE_URL': '"/"',
-        'process.env.ASSET_PREFIX': '"auto"'
-      }
+      {}
     ),
     {
       affectedHooks: undefined,
@@ -1327,7 +1316,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     parser: {
       javascript: {
         typeReexportsPresence: 'tolerant',
-        importMeta: false,
+        importMeta: true,
         importDynamic: false,
         commonjs: {
           exports: 'skipInEsm'
@@ -1989,16 +1978,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     /* config.plugin('define') */
     new DefinePlugin(
       {
-        'import.meta.env': {
-          MODE: '"production"',
-          DEV: false,
-          PROD: true,
-          SSR: true,
-          BASE_URL: '"/"',
-          ASSET_PREFIX: '"auto"'
-        },
-        'process.env.BASE_URL': '"/"',
-        'process.env.ASSET_PREFIX': '"auto"',
         'import.meta.url': '__rslib_import_meta_url__',
         'import.meta.dirname': '__dirname',
         'import.meta.filename': '__filename'
@@ -4742,7 +4721,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                   "exports": "skipInEsm",
                 },
                 "importDynamic": false,
-                "importMeta": false,
+                "importMeta": true,
                 "requireAsExpression": false,
                 "requireDynamic": false,
                 "requireResolve": false,
