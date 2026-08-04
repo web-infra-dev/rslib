@@ -122,20 +122,19 @@ When referencing static assets with `new URL()`, only ESM output is supported, s
 
 :::
 
-You can also reference static assets by using JavaScript's native `URL` together with `import.meta.url`:
+You can also reference static assets by using JavaScript's native [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) together with [import.meta.url](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta):
 
-```js
+```ts title="src/index.ts"
 const logo = new URL('./assets/logo.svg', import.meta.url);
 ```
 
-The following output will be emitted:
+After the build, the path in `new URL()` points to the emitted asset file, producing the following output:
 
 <Tabs>
-<Tab label="dist/index.mjs">
+<Tab label="dist/index.js">
 
 ```js
 const logo = new URL('./static/svg/logo.svg', import.meta.url);
-export { logo };
 ```
 
 </Tab>
@@ -145,12 +144,14 @@ export { logo };
 </Tab>
 </Tabs>
 
-After build, the path in `new URL()` points to the emitted asset file.
+Files such as `.js`, `.ts`, `.css`, and `.scss` referenced through `new URL()` are also treated as URL assets. They bypass the relevant built-in loaders, and their original contents are emitted as assets.
 
-In bundleless mode, the default glob entry matches `src/**`. When referencing static assets with `new URL()`, you need to manually exclude the corresponding asset files from the entry:
+:::note
+
+When [bundle](/config/lib/bundle) is `false`, the default entry is the `src/**` glob pattern, which also matches static asset files under `src`. Assets referenced through `new URL()` need to be excluded from [source.entry](/config/rsbuild/source#sourceentry).
 
 ```ts title="rslib.config.ts"
-export default defineConfig({
+export default {
   lib: [
     {
       bundle: false,
@@ -161,8 +162,56 @@ export default defineConfig({
       },
     },
   ],
+};
+```
+
+:::
+
+#### Skip `new URL()` processing
+
+If you do not want `new URL()` to be parsed as a URL asset, choose one of the following approaches based on the required scope.
+
+##### Disable the URL parser
+
+Disable the [URL parser](https://rspack.rs/config/module-parser#javascripturl) on the built-in JavaScript rule through [tools.bundlerChain](/config/rsbuild/tools#toolsbundlerchain) to skip asset parsing for all `new URL()` expressions:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  tools: {
+    bundlerChain(chain, { CHAIN_ID }) {
+      chain.module
+        .rule(CHAIN_ID.RULE.JS)
+        .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
+        .parser({
+          url: false,
+        });
+    },
+  },
 });
 ```
+
+After the parser is disabled, the `new URL()` expression is preserved unchanged, and Rslib does not emit the referenced file:
+
+```js title="dist/index.js"
+const logo = new URL('./assets/logo.svg', import.meta.url);
+```
+
+The output retains the standard `new URL(path, import.meta.url)` form. If the referenced asset needs to be published with the output, we recommend copying it to the output directory through [output.copy](/config/rsbuild/output#outputcopy) or a similar method and ensuring that its output path matches the relative path in `new URL()`. This allows the asset to be located correctly whether the output is processed by a downstream bundler or run directly in Node.js.
+
+##### Ignore a specific reference
+
+To skip processing for a specific `new URL()`, add the [rspackIgnore](https://rspack.rs/api/runtime-api/module-methods#rspackignore) comment before its first argument:
+
+```ts title="src/index.ts"
+const logo = new URL(
+  /* rspackIgnore: true */ './assets/logo.svg',
+  import.meta.url,
+);
+```
+
+At this point, Rslib uses a runtime variable as the base URL for `new URL()`, and the emitted expression no longer retains `import.meta.url`. This limits downstream bundlers' ability to statically analyze the asset reference when consuming the output.
 
 ## Import assets in CSS file
 
