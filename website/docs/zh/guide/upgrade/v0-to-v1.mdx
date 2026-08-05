@@ -153,25 +153,46 @@ export default {
 
 Rslib v1 默认开启了 Rspack 的 [`module.parser.javascript.createRequire`](https://rspack.rs/zh/config/module-parser#javascriptcreaterequire)。现在，使用 `createRequire()` 创建的 `require` 引入的依赖将会参与打包。
 
-在 Rslib v0.x 中，`createRequire()` 调用会保留在产物中。
+在 Rslib v0.x 中，Rslib 不会解析 `createRequire()` 调用。通过 `createRequire()` 创建的 `require()` 调用会被当作普通函数调用，并原样保留在产物中。
 
-如果依赖需要在运行时解析，可以关闭 `createRequire` parser 来恢复 Rslib v0.x 的行为：
+部分项目会利用这一行为，通过相对路径引用生成产物中的文件：
 
-```ts title="rslib.config.ts"
-export default {
-  tools: {
-    rspack: {
-      module: {
-        parser: {
-          javascript: {
-            createRequire: false,
+```ts
+const require = createRequire(import.meta.url);
+
+// 运行时相对于生成的文件解析
+const runtime = require('./runtime.js');
+```
+
+在 Rslib v1 中，通过 `createRequire()` 创建且可以静态分析的 `require()` 调用会被当作依赖，并在构建时从源码文件开始解析。因此，指向生成产物中文件的路径可能不再生效。如果源码目录中不存在对应路径，构建可能会失败；如果存在对应源码文件，也可能被意外打包。
+
+可以根据需求选择以下迁移方式：
+
+- 如果文件应该被打包，直接引用源码文件：
+
+  ```ts
+  const runtime = require('./runtime.ts');
+  ```
+
+- 如果希望路径在运行时相对于生成的文件解析，可以关闭 `createRequire` 解析，以保留 Rslib v0.x 的行为：
+
+  ```ts title="rslib.config.ts"
+  export default {
+    tools: {
+      rspack: {
+        module: {
+          parser: {
+            javascript: {
+              createRequire: false,
+            },
           },
         },
       },
     },
-  },
-};
-```
+  };
+  ```
+
+- 如果只有特定请求不应被打包，可以通过 [output.externals](/config/rsbuild/output#outputexternals) 将这些请求配置为 external，并显式指定所需的 external 类型。
 
 ## 资源模块处理更新
 

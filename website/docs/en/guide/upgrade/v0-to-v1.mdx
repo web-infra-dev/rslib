@@ -153,25 +153,46 @@ export default {
 
 Rslib v1 enables Rspack's [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire) by default. Dependencies loaded through a `require` created by `createRequire()` are now included in the bundle.
 
-In Rslib v0.x, `createRequire()` calls were preserved in the output.
+In Rslib v0.x, Rslib did not analyze `createRequire()` calls. A `require()` call created by `createRequire()` was treated as an ordinary function call and preserved in the output.
 
-If a dependency must be resolved at runtime, disable the `createRequire` parser to restore the Rslib v0.x behavior:
+Some projects use this behavior to reference a file by its relative path in the generated output:
 
-```ts title="rslib.config.ts"
-export default {
-  tools: {
-    rspack: {
-      module: {
-        parser: {
-          javascript: {
-            createRequire: false,
+```ts
+const require = createRequire(import.meta.url);
+
+// Resolved relative to the generated file at runtime
+const runtime = require('./runtime.js');
+```
+
+In Rslib v1, statically analyzable `require()` calls created by `createRequire()` are treated as dependencies and resolved from the source file during the build. As a result, paths that refer to files in the generated output may no longer work. The build may fail if the path does not exist in the source directory, or the referenced source file may be bundled unexpectedly.
+
+Choose one of the following migration strategies:
+
+- If the file should be bundled, reference the source file directly:
+
+  ```ts
+  const runtime = require('./runtime.ts');
+  ```
+
+- If the path should be resolved at runtime relative to the generated file, disable `createRequire` parsing to preserve the Rslib v0.x behavior:
+
+  ```ts title="rslib.config.ts"
+  export default {
+    tools: {
+      rspack: {
+        module: {
+          parser: {
+            javascript: {
+              createRequire: false,
+            },
           },
         },
       },
     },
-  },
-};
-```
+  };
+  ```
+
+- If only specific requests should remain external, configure [output.externals](/config/rsbuild/output#outputexternals) for those requests and explicitly specify the required external type.
 
 ## Resource module handling updates
 
