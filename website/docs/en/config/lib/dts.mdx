@@ -25,8 +25,15 @@ type Dts =
 
 - **Default:** `undefined`
 - **CLI:** `--dts` / `--no-dts`
+- **Top-level config:** Supported
 
 Configure the generation of the TypeScript declaration files.
+
+A top-level `dts` value is inherited by all `lib` items, but a `dts` value in a `lib` item takes precedence.
+
+:::warning
+When multiple `lib` items are present, using top-level `dts` may cause conflicting file writes or deletions during declaration generation, so configure `dts` on a specific `lib` item instead.
+:::
 
 ## Boolean type
 

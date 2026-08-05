@@ -1,5 +1,5 @@
 ---
-description: "Browse Rslib's lib configuration, including the lib and Rsbuild options available to each output and the shared and non-shared lib options."
+description: "Browse Rslib's lib configuration, including the lib and Rsbuild options available to each output and the top-level and non-top-level lib options."
 ---
 
 # Overview
@@ -29,13 +29,14 @@ export default {
 };
 ```
 
-## Shared lib configurations
+## Top-level lib configurations
 
-The following lib configurations can be placed outside the `lib` field as shared configuration for all outputs or inside a `lib` item to configure a specific output:
+The following lib configurations can be placed outside the `lib` field as top-level configuration shared across `lib` outputs, or inside a `lib` item to configure a specific output:
 
 - [`autoExtension`](/config/lib/auto-extension)
 - [`banner`](/config/lib/banner)
 - [`bundle`](/config/lib/bundle)
+- [`dts`](/config/lib/dts)
 - [`externalHelpers`](/config/lib/external-helpers)
 - [`footer`](/config/lib/footer)
 - [`format`](/config/lib/format)
@@ -45,11 +46,10 @@ The following lib configurations can be placed outside the `lib` field as shared
 - [`syntax`](/config/lib/syntax)
 - [`wasm`](/config/lib/wasm)
 
-## Non-shared lib configurations
+## Non-top-level lib configurations
 
-The following lib configurations do not support shared configuration and can only be specified in a `lib` item to configure an individual output:
+The following lib configurations do not support top-level configuration and can only be specified in a `lib` item to configure an individual output:
 
-- [`dts`](/config/lib/dts)
 - [`experiments`](/config/lib/experiments)
 - [`id`](/config/lib/id)
 - [`umdName`](/config/lib/umd-name)

@@ -523,6 +523,7 @@ export type SharedLibConfig = Pick<
   | 'banner'
   | 'footer'
   | 'shims'
+  | 'dts'
   | 'outBase'
   | 'wasm'
 >;

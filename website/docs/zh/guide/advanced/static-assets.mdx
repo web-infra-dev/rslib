@@ -16,9 +16,13 @@ Rslib 支持在代码中引用图片、字体、媒体和其他类型文件等�
 - **视频**：mp4、webm、ogg、mov。
 - **其他**：webmanifest、pdf、txt、vtt。
 
+除上述静态资源格式外，当 [output.target](/config/rsbuild/output#outputtarget) 为 `'node'` 时，Rslib 还支持在 JavaScript 文件中引入 Node.js [addons](https://nodejs.org/api/addons.html)。
+
 如果你需要引用其他格式的静态资源，请参考 [扩展静态资源类型](#扩展静态资源类型)。
 
 ## 在 JavaScript 文件中引用
+
+### `import` 引用
 
 在 JavaScript 文件中，可以直接通过 `import` 的方式引用相对路径下的静态资源：
 
@@ -109,6 +113,105 @@ export { logo_namespaceObject as default };
 </Tab>
 
 </Tabs>
+
+### `new URL` 引用
+
+:::note
+
+使用 `new URL()` 引用静态资源时，仅支持生成 ESM 格式的产物，因此 [format](/config/lib/format) 必须设置为 `'esm'`（默认值）。
+
+:::
+
+你可以通过 JavaScript 原生的 [URL](https://developer.mozilla.org/zh-CN/docs/Web/API/URL/URL) 和 [import.meta.url](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/import.meta) 相配合，来引用静态资源：
+
+```ts title="src/index.ts"
+const logo = new URL('./assets/logo.svg', import.meta.url);
+```
+
+构建后，`new URL()` 中的路径会指向构建产物中的资源文件，并输出如下产物：
+
+<Tabs>
+<Tab label="dist/index.js">
+
+```js
+const logo = new URL('./static/svg/logo.svg', import.meta.url);
+```
+
+</Tab>
+
+<Tab label="dist/static/svg/logo.svg">
+  <img src="https://assets.rspack.rs/rslib/rslib-logo.svg" width="100" height="100" loading="lazy" />
+</Tab>
+</Tabs>
+
+通过 `new URL()` 引用的 `.js`、`.ts`、`.css` 和 `.scss` 等文件也会被视为 URL assets，不会经过相关的内置 loader 处理，其原始内容将作为资源输出。
+
+:::note
+
+当 [bundle](/config/lib/bundle) 为 `false` 时，默认入口为 glob 模式 `src/**`，会同时匹配 `src` 下的静态资源文件。对于已经通过 `new URL()` 引用的资源，需要在 [source.entry](/config/rsbuild/source#sourceentry) 中排除这些文件。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      bundle: false,
+      source: {
+        entry: {
+          index: ['src/**', '!src/assets/logo.svg'],
+        },
+      },
+    },
+  ],
+};
+```
+
+:::
+
+#### 跳过 `new URL()` 处理
+
+如果不希望将项目源码中的 `new URL()` 解析为 URL asset，可以根据作用范围选择以下方式。
+
+##### 关闭 URL parser
+
+Rslib 默认会将内置 JavaScript rule 的 [URL parser](https://rspack.rs/zh/config/module-parser#javascripturl) 设置为 `'new-url-relative'`。你可以通过 [tools.bundlerChain](/config/rsbuild/tools#toolsbundlerchain) 将该 rule 的 URL parser 设置为 `false`，来跳过项目源码中所有 `new URL()` 的资源解析：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  tools: {
+    bundlerChain(chain, { CHAIN_ID }) {
+      chain.module
+        .rule(CHAIN_ID.RULE.JS)
+        .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
+        .parser({
+          url: false,
+        });
+    },
+  },
+});
+```
+
+关闭后，`new URL()` 表达式会原样保留，引用的文件不会由 Rslib 输出：
+
+```js title="dist/index.js"
+const logo = new URL('./assets/logo.svg', import.meta.url);
+```
+
+产物仍会保留标准的 `new URL(path, import.meta.url)` 形式。如果引用的资源需要随产物一起发布，建议通过 [output.copy](/config/rsbuild/output#outputcopy) 等方式将其复制到产物目录，并确保输出路径与 `new URL()` 中的相对路径一致。这样无论产物由后续的打包工具继续处理，还是直接在 Node.js 中运行，都能正确定位该资源。
+
+##### 忽略特定引用
+
+如果只需要跳过某个 `new URL()` 的处理，可以在第一个参数前添加 [rspackIgnore](https://rspack.rs/zh/api/runtime-api/module-methods#rspackignore) 注释：
+
+```ts title="src/index.ts"
+const logo = new URL(
+  /* rspackIgnore: true */ './assets/logo.svg',
+  import.meta.url,
+);
+```
+
+此时，Rslib 会使用运行时变量作为 `new URL()` 的基准 URL，产物中的表达式将不再保留 `import.meta.url`，这会限制后续打包工具在二次消费产物时对该资源引用的静态分析。
 
 ## 在 CSS 文件中引用
 

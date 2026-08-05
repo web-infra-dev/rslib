@@ -246,6 +246,13 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
     tools: {
       htmlPlugin: false,
       rspack: {
+        module: {
+          parser: {
+            javascript: {
+              createRequire: true,
+            },
+          },
+        },
         optimization: {
           nodeEnv: false,
         },
@@ -328,7 +335,11 @@ const composeFormatConfig = ({
         bundle === false || Object.keys(sourceEntry ?? {}).length > 1;
 
       return {
-        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
+        plugins: [
+          modifyRsbuildDefaultPlugin({
+            urlParserMode: 'new-url-relative',
+          }),
+        ],
         output: {
           filenameHash: false,
           ...(bundle && { autoExternal: true }),
@@ -372,7 +383,7 @@ const composeFormatConfig = ({
     }
     case 'cjs':
       return {
-        plugins: [modifyRsbuildDefaultPlugin({ disableUrlParse: true })],
+        plugins: [modifyRsbuildDefaultPlugin({ urlParserMode: false })],
         output: {
           module: false,
           filenameHash: false,
@@ -538,22 +549,21 @@ const composeFormatConfig = ({
 };
 
 const modifyRsbuildDefaultPlugin = ({
-  disableUrlParse,
+  urlParserMode,
 }: {
-  disableUrlParse?: boolean;
+  urlParserMode?: false | 'new-url-relative';
 } = {}): RsbuildPlugin => ({
   name: 'rslib:modify-rsbuild-default',
   setup(api) {
     api.modifyBundlerChain((chain, { CHAIN_ID, target }) => {
-      // Part 1: disable URL parsing for library output.
+      // Part 1: configure URL parsing for library output.
       // Fix for https://github.com/web-infra-dev/rslib/issues/499.
-      // Prevent parsing and try bundling `new URL()` in ESM/CJS format.
-      if (disableUrlParse) {
+      if (urlParserMode !== undefined) {
         chain.module
           .rule(CHAIN_ID.RULE.JS)
           .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
           .parser({
-            url: false,
+            url: urlParserMode,
           });
       }
 
@@ -1286,6 +1296,13 @@ const composeBundlelessExternalConfig = (
               callback();
               return;
             }
+
+            // Do not externalize assets referenced via `new URL()`.
+            if (data.dependencyType === 'url') {
+              callback();
+              return;
+            }
+
             const { issuer } = contextInfo;
             const originExtension = extname(request);
 
@@ -1831,6 +1848,19 @@ export async function composeCreateRsbuildConfig(
         JSON.stringify(libConfigsArray),
       )}.`,
     );
+  }
+
+  if (rslibConfig.dts !== undefined && rslibConfig.dts !== false) {
+    const enabledDtsLibCount = libConfigsArray.filter((libConfig) => {
+      const dts = libConfig.dts ?? rslibConfig.dts;
+      return dts !== undefined && dts !== false;
+    }).length;
+
+    if (enabledDtsLibCount > 1) {
+      logger.warn(
+        'When multiple lib items are present, using top-level "dts" may cause conflicting file writes or deletions during declaration generation, so configure "dts" on a specific lib item instead.',
+      );
+    }
   }
 
   const libConfigPromises = libConfigsArray.map(async (libConfig, index) => {

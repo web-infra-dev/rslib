@@ -24,18 +24,13 @@ defineConfig({
   footer: {
     js: '/* footer */',
   },
+  dts: true,
   shims: {
     esm: {
       require: true,
     },
   },
   outBase: 'src',
-});
-
-defineConfig({
-  lib: [{}],
-  // @ts-expect-error dts is only supported in lib items.
-  dts: true,
 });
 
 defineConfig({

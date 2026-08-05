@@ -1,5 +1,5 @@
 ---
-description: '查看 Rslib 的 lib 配置，了解每份库产物可用的 lib 配置和 Rsbuild 配置，以及共享与非共享 lib 配置项。'
+description: '查看 Rslib 的 lib 配置，了解每份库产物可用的 lib 配置和 Rsbuild 配置，以及顶层与非顶层 lib 配置项。'
 ---
 
 # 总览
@@ -29,13 +29,14 @@ export default {
 };
 ```
 
-## 共享 lib 配置
+## 顶层 lib 配置
 
-以下 lib 配置可以写在 `lib` 字段外，作为所有产物的共享配置，也可以写在 `lib` 项中，用于单独配置对应产物：
+以下 lib 配置可以写在 `lib` 字段外作为顶层配置，在各个 `lib` 产物之间共享；也可以写在 `lib` 项中，用于单独配置对应产物：
 
 - [`autoExtension`](/config/lib/auto-extension)
 - [`banner`](/config/lib/banner)
 - [`bundle`](/config/lib/bundle)
+- [`dts`](/config/lib/dts)
 - [`externalHelpers`](/config/lib/external-helpers)
 - [`footer`](/config/lib/footer)
 - [`format`](/config/lib/format)
@@ -45,11 +46,10 @@ export default {
 - [`syntax`](/config/lib/syntax)
 - [`wasm`](/config/lib/wasm)
 
-## 非共享 lib 配置
+## 非顶层 lib 配置
 
-以下 lib 配置不支持共享配置，只能写在 `lib` 项中，用于单独配置对应产物：
+以下 lib 配置不支持顶层配置，只能写在 `lib` 项中，用于单独配置对应产物：
 
-- [`dts`](/config/lib/dts)
 - [`experiments`](/config/lib/experiments)
 - [`id`](/config/lib/id)
 - [`umdName`](/config/lib/umd-name)
