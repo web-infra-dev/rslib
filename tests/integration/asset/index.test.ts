@@ -473,6 +473,7 @@ test('use Node.js addons', async () => {
   const { content: bundleEsm } = queryContent(contents.esm0!, /index\.js/);
   const { content: bundleCjs } = queryContent(contents.cjs0!, /index\.cjs/);
   expect(bundleEsm).toContain('createRequire');
+  expect(bundleEsm).toContain('fileURLToPath');
   expect(bundleEsm).toContain('test.darwin.node');
   expect(bundleCjs).not.toContain('createRequire');
   expect(bundleCjs).toMatch(/require\(["']node:path["']\)/);
@@ -489,6 +490,7 @@ test('use Node.js addons', async () => {
   );
   expect(bundlelessEsmIndex).toMatch(/from ["']\.\/test\.darwin\.js["']/);
   expect(bundlelessEsmAddon).toContain('createRequire');
+  expect(bundlelessEsmAddon).toContain('fileURLToPath');
   expect(bundlelessEsmAddon).toContain('test.darwin.node');
 
   const { content: bundlelessCjsIndex } = queryContent(
@@ -517,10 +519,17 @@ test('use Node.js addons', async () => {
     expect(await readFile(join(fixturePath, addonPath))).toEqual(sourceAddon);
   }
 
-  // TODO: Also load the ESM outputs after Rsbuild #8203 is available in the
-  // pinned @rsbuild/core version.
   // The native fixture is only compatible with Darwin arm64.
   if (process.platform === 'darwin' && process.arch === 'arm64') {
+    const esmEntries = [
+      'dist/esm/bundle/index.js',
+      'dist/esm/bundleless/index.js',
+    ];
+    for (const entry of esmEntries) {
+      const { addon } = await import(join(fixturePath, entry));
+      expect(typeof addon.readLength).toBe('function');
+    }
+
     const cjsEntries = [
       'dist/cjs/bundle/index.cjs',
       'dist/cjs/bundleless/index.cjs',
