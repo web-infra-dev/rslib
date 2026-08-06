@@ -164,7 +164,7 @@ const bar = require('./bar.js');
 
 Rslib v1 instead resolves relative paths at build time from the source file's directory. In this example, Rslib resolves `./bar.js` from the directory containing `src/index.ts` instead of loading `dist/bar.js` at runtime. When upgrading, adjust the behavior based on your needs:
 
-- If the module should be bundled, reference the source file directly:
+- If the module should be bundled, reference its source file directly:
 
   ```diff title="src/index.ts"
   -const bar = require('./bar.js');
