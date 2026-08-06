@@ -264,7 +264,7 @@ If the project previously configured the Worker source as a separate entry and r
 +new Worker(new URL('./worker.ts', import.meta.url));
 ```
 
-For more details, see [Web Workers - Use the worker constructor](/guide/advanced/web-workers#use-the-worker-constructor).
+For more details, see [Web Workers](/guide/advanced/web-workers).
 
 ### Wasm
 
@@ -273,9 +273,7 @@ Rslib v1 provides two output modes for Wasm modules in ESM output:
 - [`compile` mode](/guide/advanced/wasm#compile-mode): Rslib generates the JavaScript code required to load and instantiate Wasm modules and emits hashed `.wasm` files.
 - [`preserve` mode](/guide/advanced/wasm#preserve-mode): JavaScript retains its `.wasm` imports, while `.wasm` files keep their original filenames and source-relative directory structure. These imports must be processed by a downstream bundler or target runtime that supports [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration).
 
-In [bundleless mode](/config/lib/bundle), Rslib v0.x generated the JavaScript code required to load and instantiate Wasm modules. Rslib v1 uses `preserve` mode by default and no longer generates this code. Wasm handling in [bundle mode](/config/lib/bundle) remains unchanged.
-
-If you do not want to preserve `.wasm` imports in a bundleless build, set [`wasm.mode`](/config/lib/wasm#wasmmode) to `'compile'`:
+In [bundleless mode](/config/lib/bundle), Rslib v0.x generated the JavaScript code required to load and instantiate Wasm modules. Rslib v1 uses `preserve` mode by default and no longer generates this code. If you do not want to preserve `.wasm` imports, set [`wasm.mode`](/config/lib/wasm#wasmmode) to `'compile'`:
 
 ```ts title="rslib.config.ts"
 export default {
@@ -290,6 +288,8 @@ export default {
   ],
 };
 ```
+
+Wasm handling in [bundle mode](/config/lib/bundle) remains unchanged.
 
 For more details, see [Wasm - Output modes](/guide/advanced/wasm#output-modes).
 
