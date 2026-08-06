@@ -273,7 +273,7 @@ Rslib v1 provides two output modes for Wasm modules in ESM output:
 - [`compile` mode](/guide/advanced/wasm#compile-mode): Rslib generates the JavaScript code required to load and instantiate Wasm modules and emits hashed `.wasm` files.
 - [`preserve` mode](/guide/advanced/wasm#preserve-mode): JavaScript retains its `.wasm` imports, while `.wasm` files keep their original filenames and source-relative directory structure. These imports must be processed by a downstream bundler or target runtime that supports [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration).
 
-In [bundleless mode](/config/lib/bundle), Rslib v0.x generated the JavaScript code required to load and instantiate Wasm modules. Rslib v1 uses `preserve` mode by default and no longer generates this code. If you do not want to preserve `.wasm` imports, set [`wasm.mode`](/config/lib/wasm#wasmmode) to `'compile'`:
+In [bundleless mode](/config/lib/bundle), Rslib v0.x generated the JavaScript code required to load and instantiate Wasm modules. Rslib v1 uses `preserve` mode by default and keeps `.wasm` imports in JavaScript. To use `compile` mode instead, configure [`wasm.mode`](/config/lib/wasm#wasmmode):
 
 ```ts title="rslib.config.ts"
 export default {

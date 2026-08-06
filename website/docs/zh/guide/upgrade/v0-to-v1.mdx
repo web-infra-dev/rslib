@@ -273,7 +273,7 @@ Rslib v1 为 ESM 产物中的 Wasm 模块提供了两种输出模式：
 - [`compile` 模式](/guide/advanced/wasm#compile-模式)：Rslib 会生成加载和实例化 Wasm 模块所需的 JavaScript 代码，并输出带 hash 的 `.wasm` 文件。
 - [`preserve` 模式](/guide/advanced/wasm#preserve-模式)：JavaScript 中的 `.wasm` import 会被保留，`.wasm` 文件则沿用原文件名和相对目录输出，交由支持 [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 的下游构建工具或目标运行时处理。
 
-在 [bundleless 模式](/config/lib/bundle)下，Rslib v0.x 会生成加载和实例化 Wasm 模块所需的 JavaScript 代码，Rslib v1 则默认使用 `preserve` 模式，不再生成这些代码。如果不希望保留 `.wasm` import，可以将 [`wasm.mode`](/config/lib/wasm#wasmmode) 设置为 `'compile'`：
+在 [bundleless 模式](/config/lib/bundle)下，Rslib v0.x 会生成加载和实例化 Wasm 模块所需的 JavaScript 代码，Rslib v1 则默认使用 `preserve` 模式，在 JavaScript 中保留 `.wasm` import。如需改用 `compile` 模式，可以配置 [`wasm.mode`](/config/lib/wasm#wasmmode)：
 
 ```ts title="rslib.config.ts"
 export default {
