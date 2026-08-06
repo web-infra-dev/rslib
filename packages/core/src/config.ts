@@ -16,6 +16,7 @@ import { composeAssetConfig } from './asset/assetConfig';
 import {
   DTS_EXTENSIONS_PATTERN,
   JS_EXTENSIONS_PATTERN,
+  NODE_MODULES_PATTERN,
   SWC_HELPERS,
 } from './constant';
 import {
@@ -318,6 +319,19 @@ const composeFormatConfig = ({
     },
   };
 
+  // Rsbuild's built-in JavaScript rule carries the URL parser mode set by
+  // `modifyRsbuildDefaultPlugin`, but it does not match third-party packages.
+  // Apply the same mode to them, otherwise their `new URL()` references fall
+  // back to Rspack's default handling, which pulls the auto public path
+  // runtime into the output.
+  const thirdPartyUrlParserRule: Rspack.RuleSetRule = {
+    test: JS_EXTENSIONS_PATTERN,
+    include: NODE_MODULES_PATTERN,
+    parser: {
+      url: format === 'esm' ? 'new-url-relative' : false,
+    },
+  };
+
   // The built-in Rslib plugin will apply to all formats except the `mf` format.
   // The `mf` format functions more like an application than a library and requires additional webpack runtime.
   const rspackPlugins = [
@@ -354,6 +368,7 @@ const composeFormatConfig = ({
                   ...jsParserOptions.others,
                 },
               },
+              rules: [thirdPartyUrlParserRule],
             },
             optimization: {
               concatenateModules: false,
@@ -399,6 +414,7 @@ const composeFormatConfig = ({
                   ...jsParserOptions.others,
                 },
               },
+              rules: [thirdPartyUrlParserRule],
             },
             optimization: {
               splitChunks: {
