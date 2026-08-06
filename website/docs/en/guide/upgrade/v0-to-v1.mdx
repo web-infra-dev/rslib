@@ -104,7 +104,7 @@ No changes are needed if the new baselines are suitable. To preserve the syntax 
 
 ## Default `externalsType` update
 
-For `format: 'esm'` output, Rslib v1 changes Rspack's default [`externalsType: 'module-import'`](https://rspack.rs/config/externals#externalstypemodule-import) to [`externalsType: 'modern-module'`](https://rspack.rs/config/externals#externalstypemodern-module):
+For ESM output ([`format: 'esm'`](/config/lib/format)), Rslib v1 changes Rspack's default [`externalsType: 'module-import'`](https://rspack.rs/config/externals#externalstypemodule-import) to [`externalsType: 'modern-module'`](https://rspack.rs/config/externals#externalstypemodern-module):
 
 | Source syntax                           | Rslib v0.x               | Rslib v1                 |
 | --------------------------------------- | ------------------------ | ------------------------ |
@@ -149,32 +149,31 @@ export default {
 };
 ```
 
-## Parse `createRequire()` by default
+## Enable `createRequire()` parsing by default
 
-Rslib v1 enables Rspack's [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire) by default. Dependencies loaded through a `require` created by `createRequire()` are now included in the bundle.
+Rslib v1 enables Rspack's [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire). Statically analyzable dependencies loaded through the `require` function returned by `createRequire()` are included in the bundle unless externalized.
 
-In Rslib v0.x, Rslib did not analyze `createRequire()` calls. A `require()` call created by `createRequire()` was treated as an ordinary function call and preserved in the output.
+Rslib v0.x did not analyze these `require` calls and preserved them in the output. When using `createRequire(import.meta.url)`, relative paths were resolved at runtime from the generated file. For example, a project might compile `src/foo/bar.ts` to `dist/bar.js` in a separate build and load it from `src/index.ts` using the path the file will have in the output:
 
-Some projects use this behavior to reference a file by its relative path in the generated output:
+```ts title="src/index.ts"
+import { createRequire } from 'node:module';
 
-```ts
 const require = createRequire(import.meta.url);
-
-// Resolved relative to the generated file at runtime
-const runtime = require('./runtime.js');
+const bar = require('./bar.js');
 ```
 
-In Rslib v1, statically analyzable `require()` calls created by `createRequire()` are treated as dependencies and resolved from the source file during the build. As a result, paths that refer to files in the generated output may no longer work. The build may fail if the path does not exist in the source directory, or the referenced source file may be bundled unexpectedly.
+Rslib v1 instead resolves relative paths at build time from the source file's directory. In this example, Rslib resolves `./bar.js` from the directory containing `src/index.ts` instead of loading `dist/bar.js` at runtime. When upgrading, adjust the behavior based on your needs:
 
-Choose one of the following migration strategies:
+- If the module should be bundled, reference the source file directly:
 
-- If the file should be bundled, reference the source file directly:
-
-  ```ts
-  const runtime = require('./runtime.ts');
+  ```diff title="src/index.ts"
+  -const bar = require('./bar.js');
+  +const bar = require('./foo/bar.ts');
   ```
 
-- If the path should be resolved at runtime relative to the generated file, disable `createRequire` parsing to preserve the Rslib v0.x behavior:
+- If a specific dependency should not be bundled, declare it as external with [output.externals](/config/rsbuild/output#outputexternals).
+
+- To preserve all such calls as-is, disable the `createRequire` parser:
 
   ```ts title="rslib.config.ts"
   export default {
@@ -192,38 +191,62 @@ Choose one of the following migration strategies:
   };
   ```
 
-- If only specific requests should remain external, configure [output.externals](/config/rsbuild/output#outputexternals) for those requests and explicitly specify the required external type.
-
 ## Resource module handling updates
 
-Rslib v1 supports handling static assets referenced through `new URL()`, Web Workers, and WebAssembly modules in ESM output.
+Rslib v1 changes how ESM output ([`format: 'esm'`](/config/lib/format)) handles static assets referenced by `new URL()`, Web Workers, and Wasm modules.
 
-### Static assets referenced by `new URL()`
+### Static assets with `new URL()`
 
-For ESM output, Rslib v1 treats statically analyzable local references such as `new URL('./assets/logo.svg', import.meta.url)` as asset dependencies. It emits the referenced asset automatically and rewrites the URL in the generated code to a relative path pointing to that file.
+When building ESM output, Rslib v1 treats statically analyzable local `new URL()` references as static assets. Consider a source file that references `logo.svg`:
 
-Rslib v0.x preserved the `new URL()` expression without emitting the referenced file. After upgrading, remove any configuration or scripts that copied these assets manually.
-
-In bundleless mode, exclude assets referenced by `new URL()` from [source.entry](/config/rsbuild/source#sourceentry) to avoid generating an additional JavaScript entry for them. See the [Static assets guide](/guide/advanced/static-assets) for details.
-
-:::warning
-
-Due to a current Rspack limitation, patterns such as `new URL('.', import.meta.url)` that obtain the current file's directory cannot be handled correctly. In Node.js, use `dirname(fileURLToPath(import.meta.url))` instead:
-
-```ts
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const packageDirectory = dirname(fileURLToPath(import.meta.url));
+```ts title="src/index.ts"
+const logo = new URL('./assets/logo.svg', import.meta.url);
 ```
 
-:::
+Rslib v0.x preserved this expression and did not emit `logo.svg`. Rslib v1 emits the file and rewrites the URL to a relative path that points to it:
+
+```js title="dist/index.js"
+const logo = new URL('./static/svg/logo.svg', import.meta.url);
+```
+
+If the project previously copied these assets through [output.copy](/config/rsbuild/output#outputcopy) or a script, remove the corresponding configuration after upgrading to avoid duplicate outputs. In bundleless mode ([`bundle: false`](/config/lib/bundle)), also exclude assets referenced through `new URL()` from [source.entry](/config/rsbuild/source#sourceentry) to avoid generating an additional JavaScript entry for the same file.
+
+To restore the Rslib v0.x behavior—preserving all `new URL()` expressions without having Rslib emit the assets—disable the URL parser:
+
+```ts title="rslib.config.ts"
+export default {
+  tools: {
+    bundlerChain(chain, { CHAIN_ID }) {
+      chain.module
+        .rule(CHAIN_ID.RULE.JS)
+        .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
+        .parser({
+          url: false,
+        });
+    },
+  },
+};
+```
+
+For more details, see [Static assets - `new URL` imports](/guide/advanced/static-assets#new-url-imports).
 
 ### Web Workers
 
-Rslib v1 parses `new Worker(new URL('./worker.ts', import.meta.url))` in ESM output, builds the Worker and its dependencies, and rewrites the URL to the corresponding output path.
+When building ESM output, Rslib v1 parses `new Worker(new URL(...))` and treats the referenced local script as a Worker entry. Consider a Worker defined in `worker.ts`:
 
-If the project previously configured the Worker source as a separate entry and referenced the expected `.js` output from the source code, remove this workaround and reference the Worker source file directly:
+```ts title="src/index.ts"
+new Worker(new URL('./worker.ts', import.meta.url));
+```
+
+Rslib v0.x preserved this expression and did not build `worker.ts` from the reference. Rslib v1 builds the Worker and its dependencies, rewrites the URL to the corresponding output path, and adds `type: 'module'`:
+
+```js title="dist/index.js"
+new Worker(new URL('./worker.js', import.meta.url), {
+  type: 'module',
+});
+```
+
+If the project previously configured the Worker source as a separate entry and referenced the expected `.js` output in the source code, remove the entry after upgrading and reference the Worker source file directly:
 
 ```diff title="rslib.config.ts"
  export default {
@@ -241,20 +264,24 @@ If the project previously configured the Worker source as a separate entry and r
 +new Worker(new URL('./worker.ts', import.meta.url));
 ```
 
-The Worker URL must be passed as an inline `new URL()` expression. See the [Web Workers guide](/guide/advanced/web-workers) for details.
+For more details, see [Web Workers - Use the worker constructor](/guide/advanced/web-workers#use-the-worker-constructor).
 
-### WebAssembly
+### Wasm
 
-Rslib v1 adds support for [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) when `bundle: false`. The behavior with `bundle: true` remains unchanged.
+Rslib v1 provides two output modes for Wasm modules in ESM output:
 
-With `bundle: false`, the generated JavaScript preserves `.wasm` imports, while `.wasm` files retain their original filenames and source directory structure in the output. This requires the downstream bundler or target runtime to support WebAssembly ESM Integration.
+- [`compile` mode](/guide/advanced/wasm#compile-mode): Rslib generates the JavaScript code required to load and instantiate Wasm modules and emits hashed `.wasm` files.
+- [`preserve` mode](/guide/advanced/wasm#preserve-mode): JavaScript retains its `.wasm` imports, while `.wasm` files keep their original filenames and source-relative directory structure. These imports must be processed by a downstream bundler or target runtime that supports [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration).
 
-If you do not want to preserve `.wasm` imports, set [`wasm.mode`](/config/lib/wasm#wasmmode) to `'compile'`. Rslib will generate the JavaScript glue code required to load and instantiate the WASM modules, and emit the WASM files:
+In [bundleless mode](/config/lib/bundle), Rslib v0.x generated the JavaScript code required to load and instantiate Wasm modules. Rslib v1 uses `preserve` mode by default and no longer generates this code. Wasm handling in [bundle mode](/config/lib/bundle) remains unchanged.
+
+If you do not want to preserve `.wasm` imports in a bundleless build, set [`wasm.mode`](/config/lib/wasm#wasmmode) to `'compile'`:
 
 ```ts title="rslib.config.ts"
 export default {
   lib: [
     {
+      format: 'esm',
       bundle: false,
       wasm: {
         mode: 'compile',
@@ -264,7 +291,7 @@ export default {
 };
 ```
 
-See the [WASM guide](/guide/advanced/wasm) for details about the two output modes.
+For more details, see [Wasm - Output modes](/guide/advanced/wasm#output-modes).
 
 ## `@typescript/native-preview` support update
 
