@@ -668,7 +668,7 @@ const composeShimsConfig = (
           },
   };
 
-  let rsbuildConfig: EnvironmentConfig = {};
+  let rsbuildConfig: EnvironmentConfig;
   switch (format) {
     case 'esm': {
       rsbuildConfig = {
@@ -1000,7 +1000,7 @@ const traverseEntryQuery = (
   const newEntry: Record<string, RsbuildConfigEntryItem> = {};
 
   for (const [key, value] of Object.entries(entry)) {
-    let result: RsbuildConfigEntryItem = value;
+    let result: RsbuildConfigEntryItem;
 
     if (typeof value === 'string') {
       result = callback(value);

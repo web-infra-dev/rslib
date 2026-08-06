@@ -162,7 +162,6 @@ export async function getResults(
     iife: 0,
   };
   let mfExposeEntry: string | undefined;
-  let key = '';
 
   const formatCount: Record<Format, number> = rslibConfig.lib!.reduce(
     (acc, { format = 'esm' }) => {
@@ -177,7 +176,8 @@ export async function getResults(
     const currentFormatCount = formatCount[format];
     const currentFormatIndex = formatIndex[format]++;
 
-    key = currentFormatCount === 1 ? format : `${format}${currentFormatIndex}`;
+    const key =
+      currentFormatCount === 1 ? format : `${format}${currentFormatIndex}`;
 
     let globFolder = '';
     const distPath: string =
