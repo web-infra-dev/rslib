@@ -39,12 +39,9 @@ export class LibSvgrPatchPlugin implements Rspack.RspackPluginInstance {
               const match = matches[i]!;
               const filename = match[1];
               const requirePath = `${undoPath}${filename}`;
-              let replaced = '';
-              if (isEsm) {
-                replaced = `__rslib_svgr_url__${i}__`;
-              } else {
-                replaced = `require("${requirePath}")`;
-              }
+              const replaced = isEsm
+                ? `__rslib_svgr_url__${i}__`
+                : `require("${requirePath}")`;
               newSource.replace(
                 match.index,
                 match.index + match[0].length - 1,
