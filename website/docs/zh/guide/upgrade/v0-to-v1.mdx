@@ -104,7 +104,7 @@ export default {
 
 ## 默认 `externalsType` 更新
 
-对于 `format: 'esm'` 的产物，Rslib v1 将 Rspack 的默认 [`externalsType: 'module-import'`](https://rspack.rs/zh/config/externals#externalstypemodule-import) 调整为 [`externalsType: 'modern-module'`](https://rspack.rs/zh/config/externals#externalstypemodern-module)：
+对于 ESM 产物（[`format: 'esm'`](/config/lib/format)），Rslib v1 将 Rspack 的默认 [`externalsType: 'module-import'`](https://rspack.rs/zh/config/externals#externalstypemodule-import) 调整为 [`externalsType: 'modern-module'`](https://rspack.rs/zh/config/externals#externalstypemodern-module)：
 
 | 源码中的引用方式                         | Rslib v0.x        | Rslib v1                    |
 | ---------------------------------------- | ----------------- | --------------------------- |
@@ -148,6 +148,150 @@ export default {
   ],
 };
 ```
+
+## 默认解析 `createRequire()`
+
+Rslib v1 默认启用 Rspack 的 [`module.parser.javascript.createRequire`](https://rspack.rs/zh/config/module-parser#javascriptcreaterequire)，用于解析由 `createRequire()` 创建的 `require` 调用。通过这类调用加载的依赖若可被静态分析且未被 external，则会被打包到产物中。
+
+Rslib v0.x 不会解析这类 `require` 调用，而是将其原样保留在产物中。使用 `createRequire(import.meta.url)` 时，相对路径会在运行时以产物文件所在目录为基准解析。例如，项目通过单独的构建流程将 `src/foo/bar.ts` 编译为 `dist/bar.js`，并在 `src/index.ts` 中按照该文件在产物中的相对路径进行加载：
+
+```ts title="src/index.ts"
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const bar = require('./bar.js');
+```
+
+Rslib v1 则会在构建时以源码文件所在目录为基准解析相对路径。在上述示例中，`./bar.js` 会从 `src/index.ts` 所在目录解析，而不会在运行时加载 `dist/bar.js`。升级时，可以根据实际需求进行调整：
+
+- 如果模块需要被打包，改为引用实际的源码文件：
+
+  ```diff title="src/index.ts"
+  -const bar = require('./bar.js');
+  +const bar = require('./foo/bar.ts');
+  ```
+
+- 如果特定依赖不需要被打包，可以通过 [output.externals](/config/rsbuild/output#outputexternals) 将其声明为 external。
+
+- 如果希望所有这类调用都原样保留，可以关闭 `createRequire` 解析：
+
+  ```ts title="rslib.config.ts"
+  export default {
+    tools: {
+      rspack: {
+        module: {
+          parser: {
+            javascript: {
+              createRequire: false,
+            },
+          },
+        },
+      },
+    },
+  };
+  ```
+
+## 资源模块处理更新
+
+Rslib v1 调整了 ESM 产物（[`format: 'esm'`](/config/lib/format)）中通过 `new URL()` 引用的静态资源、Web Workers 和 Wasm 模块的处理方式。
+
+### `new URL()` 静态资源
+
+构建 ESM 产物时，Rslib v1 会将可静态分析的本地 `new URL()` 引用作为静态资源处理。以引用 `logo.svg` 为例：
+
+```ts title="src/index.ts"
+const logo = new URL('./assets/logo.svg', import.meta.url);
+```
+
+Rslib v0.x 会原样保留该表达式，且不会输出 `logo.svg`。Rslib v1 则会输出该文件，并将 URL 重写为指向该文件的相对路径：
+
+```js title="dist/index.js"
+const logo = new URL('./static/svg/logo.svg', import.meta.url);
+```
+
+如果项目此前通过 [output.copy](/config/rsbuild/output#outputcopy) 或脚本复制这类资源，升级后应移除相应配置，避免重复输出。在 bundleless 模式（[`bundle: false`](/config/lib/bundle)）下，还需要在 [source.entry](/config/rsbuild/source#sourceentry) 中排除已通过 `new URL()` 引用的资源，避免为同一文件额外生成 JavaScript 入口。
+
+如果希望恢复 Rslib v0.x 的行为，原样保留所有 `new URL()` 且不由 Rslib 输出资源，可以关闭 URL parser：
+
+```ts title="rslib.config.ts"
+export default {
+  tools: {
+    bundlerChain(chain, { CHAIN_ID }) {
+      chain.module
+        .rule(CHAIN_ID.RULE.JS)
+        .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
+        .parser({
+          url: false,
+        });
+    },
+  },
+};
+```
+
+更多详情请参考 [静态资源 - `new URL` 引用](/guide/advanced/static-assets#new-url-引用)。
+
+### Web Workers
+
+构建 ESM 产物时，Rslib v1 会解析 `new Worker(new URL(...))`，并将其中引用的本地脚本作为 Worker 入口处理。以 `worker.ts` 为例：
+
+```ts title="src/index.ts"
+new Worker(new URL('./worker.ts', import.meta.url));
+```
+
+Rslib v0.x 会原样保留该表达式，不会根据这条引用构建 `worker.ts`。Rslib v1 则会构建 Worker 及其依赖，将 URL 重写为对应的产物路径，并自动添加 `type: 'module'`：
+
+```js title="dist/index.js"
+new Worker(new URL('./worker.js', import.meta.url), {
+  type: 'module',
+});
+```
+
+如果项目此前将 Worker 源文件配置为独立入口，并在源码中引用预期生成的 `.js` 文件，升级后可以移除相应入口，改为直接引用 Worker 源文件：
+
+```diff title="rslib.config.ts"
+ export default {
+   source: {
+     entry: {
+       index: './src/index.ts',
+-      worker: './src/worker.ts',
+     },
+   },
+ };
+```
+
+```diff title="src/index.ts"
+-new Worker(new URL('./worker.js', import.meta.url));
++new Worker(new URL('./worker.ts', import.meta.url));
+```
+
+更多详情请参考 [Web Workers](/guide/advanced/web-workers)。
+
+### Wasm
+
+Rslib v1 为 ESM 产物中的 Wasm 模块提供了两种输出模式：
+
+- [`compile` 模式](/guide/advanced/wasm#compile-模式)：Rslib 会生成加载和实例化 Wasm 模块所需的 JavaScript 代码，并输出带 hash 的 `.wasm` 文件。
+- [`preserve` 模式](/guide/advanced/wasm#preserve-模式)：JavaScript 中的 `.wasm` import 会被保留，`.wasm` 文件则沿用原文件名和相对目录输出，交由支持 [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 的下游构建工具或目标运行时处理。
+
+在 [bundleless 模式](/config/lib/bundle) 下，Rslib v0.x 会生成加载和实例化 Wasm 模块所需的 JavaScript 代码，Rslib v1 则默认使用 `preserve` 模式，在 JavaScript 中保留 `.wasm` import。如需改用 `compile` 模式，可以配置 [`wasm.mode`](/config/lib/wasm#wasmmode)：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      format: 'esm',
+      bundle: false,
+      wasm: {
+        mode: 'compile',
+      },
+    },
+  ],
+};
+```
+
+[bundle 模式](/config/lib/bundle) 下的 Wasm 处理行为保持不变。
+
+更多详情请参考 [Wasm - 输出模式](/guide/advanced/wasm#输出模式)。
 
 ## `@typescript/native-preview` 支持调整
 
