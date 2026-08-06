@@ -1075,6 +1075,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             }
           }
         ]
+      },
+      {
+        test: /\\.(js|mjs|jsx|(?<!\\.d\\.)ts|(?<!\\.d\\.)mts|(?<!\\.d\\.)cts|tsx|cjs|cjsx|mjsx|mtsx|ctsx)$/,
+        include: /[\\\\/]node_modules[\\\\/]/,
+        parser: {
+          url: 'new-url-relative'
+        }
       }
     ]
   },
@@ -1941,6 +1948,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             }
           }
         ]
+      },
+      {
+        test: /\\.(js|mjs|jsx|(?<!\\.d\\.)ts|(?<!\\.d\\.)mts|(?<!\\.d\\.)cts|tsx|cjs|cjsx|mjsx|mtsx|ctsx)$/,
+        include: /[\\\\/]node_modules[\\\\/]/,
+        parser: {
+          url: false
+        }
       }
     ]
   },
@@ -4480,6 +4494,15 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 },
               },
             },
+            "rules": [
+              {
+                "include": /\\[\\\\\\\\/\\]node_modules\\[\\\\\\\\/\\]/,
+                "parser": {
+                  "url": "new-url-relative",
+                },
+                "test": /\\\\\\.\\(js\\|mjs\\|jsx\\|\\(\\?<!\\\\\\.d\\\\\\.\\)ts\\|\\(\\?<!\\\\\\.d\\\\\\.\\)mts\\|\\(\\?<!\\\\\\.d\\\\\\.\\)cts\\|tsx\\|cjs\\|cjsx\\|mjsx\\|mtsx\\|ctsx\\)\\$/,
+              },
+            ],
           },
           "node": {
             "__dirname": false,
@@ -4760,6 +4783,15 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
                 "worker": false,
               },
             },
+            "rules": [
+              {
+                "include": /\\[\\\\\\\\/\\]node_modules\\[\\\\\\\\/\\]/,
+                "parser": {
+                  "url": false,
+                },
+                "test": /\\\\\\.\\(js\\|mjs\\|jsx\\|\\(\\?<!\\\\\\.d\\\\\\.\\)ts\\|\\(\\?<!\\\\\\.d\\\\\\.\\)mts\\|\\(\\?<!\\\\\\.d\\\\\\.\\)cts\\|tsx\\|cjs\\|cjsx\\|mjsx\\|mtsx\\|ctsx\\)\\$/,
+              },
+            ],
           },
           "optimization": {
             "moduleIds": "named",

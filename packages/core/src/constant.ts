@@ -33,3 +33,5 @@ export const CSS_EXTENSIONS_PATTERN: RegExp = new RegExp(
 );
 
 export const DTS_EXTENSIONS_PATTERN: RegExp = /\.d\.(?:[cm]?ts|[^/\\]+\.ts)$/;
+
+export const NODE_MODULES_PATTERN: RegExp = /[\\/]node_modules[\\/]/;
