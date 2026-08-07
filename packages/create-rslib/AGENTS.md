@@ -6,7 +6,7 @@ This guide extends the repository instructions in `../../AGENTS.md`. Refer there
 
 - `create-rslib` provides the `pnpm create rslib` scaffolding CLI shipped from `dist/`.
 - Author source changes under `src/`; treat `dist/` as build output regenerated via `pnpm -C packages/create-rslib build`.
-- Template inputs are the checked-in `template-*` directories. They are copied directly by `create-rstack` and published with this package.
+- Template inputs are the checked-in `template-*` directories. They are copied directly by `@rstackjs/create-toolkit` and published with this package.
 - Tests in `test/` use `@rstest/core` to exercise CLI flows and validate generated projects.
 
 ## Common commands

@@ -11,7 +11,7 @@ import {
   type ESLintTemplateName,
   type RslintTemplateName,
   select,
-} from 'create-rstack';
+} from '@rstackjs/create-toolkit';
 import { parseTemplateName } from './parseTemplateName';
 
 export type Lang = 'ts' | 'js';
