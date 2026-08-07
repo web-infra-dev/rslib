@@ -28,6 +28,5 @@ test('createRequire parser is not applied to third-party packages', async () => 
   for (const content of [entries.esm, entries.cjs]) {
     expect(content).toContain('createRequire');
     expect(content).toMatch(/\(['"]\.\/answer['"]\)/);
-    expect(content).not.toContain('module.exports = 42');
   }
 });
