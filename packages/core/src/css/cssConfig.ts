@@ -6,12 +6,20 @@ import {
   isCssFile,
   isCssModulesFile,
 } from './utils';
+import { parsePathQueryFragment, replacePathExtension } from '../utils/path';
 
 const require = createRequire(import.meta.url);
 
 export const RSLIB_CSS_ENTRY_FLAG = '__rslib_css__';
 
 type ExternalCallback = (arg0?: undefined, arg1?: string) => void;
+
+const CSS_MODULE_EXTENSION_PATTERN = /\.module\.[^.]+$/i;
+
+function replaceCssModulesCssExtension(filepath: string): string {
+  const { path, query, fragment } = parsePathQueryFragment(filepath);
+  return `${path.replace(CSS_MODULE_EXTENSION_PATTERN, '_module.css')}${query}${fragment}`;
+}
 
 export async function cssExternalHandler(
   request: string,
@@ -53,10 +61,16 @@ export async function cssExternalHandler(
   if (styleRedirectExtension) {
     const isCssModulesRequest = isCssModulesFile(resolvedRequest, auto);
     if (isCssModulesRequest) {
-      callback(undefined, resolvedRequest.replace(/\.[^.]+$/, jsExtension));
+      const { query, fragment } = parsePathQueryFragment(resolvedRequest);
+      callback(
+        undefined,
+        query || fragment
+          ? replaceCssModulesCssExtension(resolvedRequest)
+          : replacePathExtension(resolvedRequest, jsExtension),
+      );
       return;
     }
-    callback(undefined, resolvedRequest.replace(/\.[^.]+$/, '.css'));
+    callback(undefined, replacePathExtension(resolvedRequest, '.css'));
     return;
   }
 
