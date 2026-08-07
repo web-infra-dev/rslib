@@ -20,3 +20,14 @@ test('createRequire parser', async () => {
     expect(entries[format]).not.toContain('module.exports = 42');
   }
 });
+
+test('createRequire parser is not applied to third-party packages', async () => {
+  const fixturePath = join(__dirname, 'third-party');
+  const { entries } = await buildAndGetResults({ fixturePath });
+
+  for (const content of [entries.esm, entries.cjs]) {
+    expect(content).toContain('createRequire');
+    expect(content).toMatch(/\(['"]\.\/answer['"]\)/);
+    expect(content).not.toContain('module.exports = 42');
+  }
+});

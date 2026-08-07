@@ -471,6 +471,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       }
     },
     rules: [
+      /* config.module.rule('rslib-third-party-parser') */
+      {
+        test: /[\\\\/]node_modules[\\\\/]/,
+        parser: {
+          createRequire: false
+        }
+      },
       /* config.module.rule('mjs') */
       {
         test: /\\.m?js/,
@@ -1337,6 +1344,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       }
     },
     rules: [
+      /* config.module.rule('rslib-third-party-parser') */
+      {
+        test: /[\\\\/]node_modules[\\\\/]/,
+        parser: {
+          createRequire: false
+        }
+      },
       /* config.module.rule('mjs') */
       {
         test: /\\.m?js/,
@@ -2190,6 +2204,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       }
     },
     rules: [
+      /* config.module.rule('rslib-third-party-parser') */
+      {
+        test: /[\\\\/]node_modules[\\\\/]/,
+        parser: {
+          createRequire: false
+        }
+      },
       /* config.module.rule('mjs') */
       {
         test: /\\.m?js/,
@@ -2967,6 +2988,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       }
     },
     rules: [
+      /* config.module.rule('rslib-third-party-parser') */
+      {
+        test: /[\\\\/]node_modules[\\\\/]/,
+        parser: {
+          createRequire: false
+        }
+      },
       /* config.module.rule('mjs') */
       {
         test: /\\.m?js/,
@@ -3679,6 +3707,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       }
     },
     rules: [
+      /* config.module.rule('rslib-third-party-parser') */
+      {
+        test: /[\\\\/]node_modules[\\\\/]/,
+        parser: {
+          createRequire: false
+        }
+      },
       /* config.module.rule('mjs') */
       {
         test: /\\.m?js/,

@@ -16,6 +16,7 @@ import { composeAssetConfig } from './asset/assetConfig';
 import {
   DTS_EXTENSIONS_PATTERN,
   JS_EXTENSIONS_PATTERN,
+  NODE_MODULES_PATTERN,
   SWC_HELPERS,
 } from './constant';
 import {
@@ -556,7 +557,18 @@ const modifyRsbuildDefaultPlugin = ({
   name: 'rslib:modify-rsbuild-default',
   setup(api) {
     api.modifyBundlerChain((chain, { CHAIN_ID, target }) => {
-      // Part 1: configure URL parsing for library output.
+      // Part 1: preserve runtime `createRequire()` calls in third-party code.
+      // Keep this rule before Rsbuild's typed rules so their parser options
+      // take precedence for assets, styles, and other non-JavaScript modules.
+      chain.module
+        .rule('rslib-third-party-parser')
+        .test(NODE_MODULES_PATTERN)
+        .parser({
+          createRequire: false,
+        })
+        .before(CHAIN_ID.RULE.MJS);
+
+      // Part 2: configure URL parsing for library output.
       // Fix for https://github.com/web-infra-dev/rslib/issues/499.
       if (urlParserMode !== undefined) {
         chain.module
@@ -567,7 +579,7 @@ const modifyRsbuildDefaultPlugin = ({
           });
       }
 
-      // Part 2: remove Rsbuild's `type: 'javascript/auto'` override.
+      // Part 3: remove Rsbuild's `type: 'javascript/auto'` override.
       // Rslib follows Rspack's original module type inference, so ESM-like
       // modules are treated as strict ESM (`javascript/esm`).
       chain.module
@@ -575,7 +587,7 @@ const modifyRsbuildDefaultPlugin = ({
         .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
         .delete('type');
 
-      // Part 3: reset Rsbuild's const environment override.
+      // Part 4: reset Rsbuild's const environment override.
       // Rsbuild disables `const` for web-like app runtimes. Rslib should
       // leave this to Rspack's target inference for library output.
       if (target !== 'web' && target !== 'web-worker') {
