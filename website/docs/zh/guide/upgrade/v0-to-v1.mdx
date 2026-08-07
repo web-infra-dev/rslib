@@ -149,48 +149,6 @@ export default {
 };
 ```
 
-## 默认解析 `createRequire()`
-
-Rslib v1 默认启用 Rspack 的 [`module.parser.javascript.createRequire`](https://rspack.rs/zh/config/module-parser#javascriptcreaterequire)，用于解析由 `createRequire()` 创建的 `require` 调用。通过这类调用加载的依赖若可被静态分析且未被 external，则会被打包到产物中。
-
-Rslib v0.x 不会解析这类 `require` 调用，而是将其原样保留在产物中。使用 `createRequire(import.meta.url)` 时，相对路径会在运行时以产物文件所在目录为基准解析。例如，项目通过单独的构建流程将 `src/foo/bar.ts` 编译为 `dist/bar.js`，并在 `src/index.ts` 中按照该文件在产物中的相对路径进行加载：
-
-```ts title="src/index.ts"
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-const bar = require('./bar.js');
-```
-
-Rslib v1 则会在构建时以源码文件所在目录为基准解析相对路径。在上述示例中，`./bar.js` 会从 `src/index.ts` 所在目录解析，而不会在运行时加载 `dist/bar.js`。升级时，可以根据实际需求进行调整：
-
-- 如果模块需要被打包，改为引用实际的源码文件：
-
-  ```diff title="src/index.ts"
-  -const bar = require('./bar.js');
-  +const bar = require('./foo/bar.ts');
-  ```
-
-- 如果特定依赖不需要被打包，可以通过 [output.externals](/config/rsbuild/output#outputexternals) 将其声明为 external。
-
-- 如果希望所有这类调用都原样保留，可以关闭 `createRequire` 解析：
-
-  ```ts title="rslib.config.ts"
-  export default {
-    tools: {
-      rspack: {
-        module: {
-          parser: {
-            javascript: {
-              createRequire: false,
-            },
-          },
-        },
-      },
-    },
-  };
-  ```
-
 ## 资源模块处理更新
 
 Rslib v1 调整了 ESM 产物（[`format: 'esm'`](/config/lib/format)）中通过 `new URL()` 引用的静态资源、Web Workers 和 Wasm 模块的处理方式。
