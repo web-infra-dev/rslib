@@ -3,6 +3,9 @@ import { createRequire } from 'node:module';
 const importMetaUrl = import.meta.url;
 const require = createRequire(import.meta.url);
 const requiredModule = require('./ok.cjs');
+const esmModuleIsStrict = (function (this: unknown) {
+  return this === undefined;
+})();
 
 const dynamicImportMetaUrl = async () => {
   const { dynamic } = await import('./dynamic');
@@ -28,4 +31,5 @@ export {
   __filename,
   importMetaDirname,
   importMetaFilename,
+  esmModuleIsStrict,
 };

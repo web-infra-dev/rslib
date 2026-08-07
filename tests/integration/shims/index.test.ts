@@ -106,12 +106,13 @@ describe('ESM shims disabled', async () => {
   });
 });
 
-describe('CJS shims', () => {
+describe('CJS shims', async () => {
+  const fixturePath = join(__dirname, 'cjs');
+  const { entryFiles, entries, contents } = await buildAndGetResults({
+    fixturePath,
+  });
+
   test('import.meta.url', async () => {
-    const fixturePath = join(__dirname, 'cjs');
-    const { entryFiles, entries, contents } = await buildAndGetResults({
-      fixturePath,
-    });
     // `module.require` is not available in Rstest runner context. Manually create a context to run the CJS code.
     // As a temporary solution, we use `module.require` to avoid potential collision with module scope variable `require`.
     const cjsCode = entries.cjs;
@@ -129,6 +130,7 @@ describe('CJS shims', () => {
       requiredModule,
       importMetaDirname,
       importMetaFilename,
+      esmModuleIsStrict,
     } = vm.runInContext(cjsCode, context);
     const fileUrl = pathToFileURL(entryFiles.cjs).href;
     const dynamicUrl = await dynamicImportMetaUrl();
@@ -141,7 +143,9 @@ describe('CJS shims', () => {
     expect(dynamicUrl).toBe(
       fileUrl.replace('index.cjs', path.basename(dynamicPath)),
     );
-    expect(requiredModule).toBe('ok');
+    expect(requiredModule.value).toBe('ok');
+    expect(requiredModule.isStrict).toBe(false);
+    expect(esmModuleIsStrict).toBe(true);
     expect(importMetaDirname).toBe(path.dirname(entryFiles.cjs));
     expect(importMetaFilename).toBe(entryFiles.cjs);
 
@@ -155,9 +159,6 @@ describe('CJS shims', () => {
   });
 
   test('ESM should not be affected by CJS shims configuration', async () => {
-    const fixturePath = join(__dirname, 'cjs');
-    const { entries } = await buildAndGetResults({ fixturePath });
-
     for (const code of [
       'const importMetaUrl = import.meta.url;',
       'const src_require = createRequire(import.meta.url);',
@@ -165,6 +166,14 @@ describe('CJS shims', () => {
     ]) {
       expect(entries.esm).toContain(code);
     }
+
+    const esmResult = await import(entryFiles.esm!);
+    expect(esmResult.importMetaUrl).toBe(pathToFileURL(entryFiles.esm!).href);
+    expect(esmResult.requiredModule.value).toBe('ok');
+    expect(esmResult.esmModuleIsStrict).toBe(true);
+    expect(esmResult.__filename).toBe(entryFiles.esm);
+    expect(esmResult.importMetaDirname).toBe(path.dirname(entryFiles.esm!));
+    expect(esmResult.importMetaFilename).toBe(entryFiles.esm);
   });
 });
 
