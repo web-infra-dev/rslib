@@ -12,6 +12,13 @@ export default defineConfig({
       },
     }),
   ],
+  output: {
+    copy: [
+      {
+        from: 'src/ok.cjs',
+      },
+    ],
+  },
   source: {
     entry: {
       index: './src/index.ts',
