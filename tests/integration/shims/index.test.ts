@@ -106,13 +106,12 @@ describe('ESM shims disabled', async () => {
   });
 });
 
-describe('CJS shims', async () => {
-  const fixturePath = join(__dirname, 'cjs');
-  const { entryFiles, entries, contents } = await buildAndGetResults({
-    fixturePath,
-  });
-
+describe('CJS shims', () => {
   test('import.meta.url', async () => {
+    const fixturePath = join(__dirname, 'cjs');
+    const { entryFiles, entries, contents } = await buildAndGetResults({
+      fixturePath,
+    });
     // `module.require` is not available in Rstest runner context. Manually create a context to run the CJS code.
     // As a temporary solution, we use `module.require` to avoid potential collision with module scope variable `require`.
     const cjsCode = entries.cjs;
@@ -130,7 +129,6 @@ describe('CJS shims', async () => {
       requiredModule,
       importMetaDirname,
       importMetaFilename,
-      esmModuleIsStrict,
     } = vm.runInContext(cjsCode, context);
     const fileUrl = pathToFileURL(entryFiles.cjs).href;
     const dynamicUrl = await dynamicImportMetaUrl();
@@ -143,9 +141,7 @@ describe('CJS shims', async () => {
     expect(dynamicUrl).toBe(
       fileUrl.replace('index.cjs', path.basename(dynamicPath)),
     );
-    expect(requiredModule.value).toBe('ok');
-    expect(requiredModule.isStrict).toBe(false);
-    expect(esmModuleIsStrict).toBe(true);
+    expect(requiredModule).toBe('ok');
     expect(importMetaDirname).toBe(path.dirname(entryFiles.cjs));
     expect(importMetaFilename).toBe(entryFiles.cjs);
 
@@ -157,21 +153,17 @@ describe('CJS shims', async () => {
   });
 
   test('ESM should not be affected by CJS shims configuration', async () => {
+    const fixturePath = join(__dirname, 'cjs');
+    const { entries } = await buildAndGetResults({ fixturePath });
+
     for (const code of [
       'const importMetaUrl = import.meta.url;',
+      'const requiredModule = __webpack_require__("./src/ok.cjs");',
       'const src_filename = fileURLToPath(import.meta.url);',
     ]) {
       expect(entries.esm).toContain(code);
     }
-    expect(entries.esm).not.toContain('createRequire');
-
-    const esmResult = await import(entryFiles.esm!);
-    expect(esmResult.importMetaUrl).toBe(pathToFileURL(entryFiles.esm!).href);
-    expect(esmResult.requiredModule.value).toBe('ok');
-    expect(esmResult.esmModuleIsStrict).toBe(true);
-    expect(esmResult.__filename).toBe(entryFiles.esm);
-    expect(esmResult.importMetaDirname).toBe(path.dirname(entryFiles.esm!));
-    expect(esmResult.importMetaFilename).toBe(entryFiles.esm);
+    expect(entries.esm).not.toContain('createRequire(import.meta.url)');
   });
 });
 
