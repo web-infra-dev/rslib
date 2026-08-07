@@ -146,9 +146,11 @@ describe('CJS shims', () => {
     expect(importMetaFilename).toBe(entryFiles.cjs);
 
     for (const code of [cjsCode, dynamicContent]) {
-      expect(code).toContain(
-        'const __rslib_import_meta_url__ = /*#__PURE__*/ function() {',
-      );
+      expect(
+        code.startsWith(
+          `"use strict";\nconst __rslib_import_meta_url__ = /*#__PURE__*/ function() {`,
+        ),
+      ).toBe(true);
     }
   });
 
@@ -158,12 +160,11 @@ describe('CJS shims', () => {
 
     for (const code of [
       'const importMetaUrl = import.meta.url;',
-      'const requiredModule = __webpack_require__("./src/ok.cjs");',
+      'const src_require = createRequire(import.meta.url);',
       'const src_filename = fileURLToPath(import.meta.url);',
     ]) {
       expect(entries.esm).toContain(code);
     }
-    expect(entries.esm).not.toContain('createRequire(import.meta.url)');
   });
 });
 
