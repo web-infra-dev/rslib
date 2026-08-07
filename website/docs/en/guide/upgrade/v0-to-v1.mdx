@@ -149,48 +149,6 @@ export default {
 };
 ```
 
-## Enable `createRequire()` parsing by default
-
-Rslib v1 enables Rspack's [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire). Statically analyzable dependencies loaded through the `require` function returned by `createRequire()` are included in the bundle unless externalized.
-
-Rslib v0.x did not analyze these `require` calls and preserved them in the output. When using `createRequire(import.meta.url)`, relative paths were resolved at runtime from the generated file. For example, a project might compile `src/foo/bar.ts` to `dist/bar.js` in a separate build and load it from `src/index.ts` using the path the file will have in the output:
-
-```ts title="src/index.ts"
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-const bar = require('./bar.js');
-```
-
-Rslib v1 instead resolves relative paths at build time from the source file's directory. In this example, Rslib resolves `./bar.js` from the directory containing `src/index.ts` instead of loading `dist/bar.js` at runtime. When upgrading, adjust the behavior based on your needs:
-
-- If the module should be bundled, reference its source file directly:
-
-  ```diff title="src/index.ts"
-  -const bar = require('./bar.js');
-  +const bar = require('./foo/bar.ts');
-  ```
-
-- If a specific dependency should not be bundled, declare it as external with [output.externals](/config/rsbuild/output#outputexternals).
-
-- To preserve all such calls as-is, disable the `createRequire` parser:
-
-  ```ts title="rslib.config.ts"
-  export default {
-    tools: {
-      rspack: {
-        module: {
-          parser: {
-            javascript: {
-              createRequire: false,
-            },
-          },
-        },
-      },
-    },
-  };
-  ```
-
 ## Resource module handling updates
 
 Rslib v1 changes how ESM output ([`format: 'esm'`](/config/lib/format)) handles static assets referenced by `new URL()`, Web Workers, and Wasm modules.
