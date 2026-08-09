@@ -1,16 +1,18 @@
 import { expect, test } from '@rstest/core';
-import { render, screen } from '@testing-library/vue';
+import { mount } from '@vue/test-utils';
 import Button from '../src/Button.vue';
 
-test('The button should have correct background color', async () => {
-  render(Button, {
+test('The button should have correct background color', () => {
+  const wrapper = mount(Button, {
+    attachTo: document.body,
     props: {
       backgroundColor: '#ccc',
       label: 'Demo Button',
     },
   });
-  const button = screen.getByText('Demo Button');
-  expect(button).toHaveStyle({
+  const button = wrapper.get('button');
+  expect(button.text()).toBe('Demo Button');
+  expect(button.element).toHaveStyle({
     backgroundColor: '#ccc',
   });
 });
