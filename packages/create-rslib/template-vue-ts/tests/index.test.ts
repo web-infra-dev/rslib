@@ -15,5 +15,4 @@ test('The button should have correct background color', () => {
   expect(button.element).toHaveStyle({
     backgroundColor: '#ccc',
   });
-  wrapper.unmount();
 });
