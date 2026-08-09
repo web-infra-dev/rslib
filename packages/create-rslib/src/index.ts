@@ -119,7 +119,6 @@ create({
   root: path.resolve(__dirname, '..'),
   name: 'rslib',
   templates: TEMPLATES,
-  git: !process.argv.includes('--no-git'),
   getTemplateName,
   mapESLintTemplate,
   mapRslintTemplate,
