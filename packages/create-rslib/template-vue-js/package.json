@@ -12,9 +12,6 @@
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "build": "rslib",
     "dev": "rslib --watch",
@@ -27,12 +24,14 @@
     "@rstest/adapter-rslib": "^0.11.6",
     "@rstest/core": "^0.11.6",
     "@testing-library/jest-dom": "^7.0.0",
-    "@testing-library/vue": "^8.1.0",
     "@vue/test-utils": "^2.4.11",
     "happy-dom": "^20.11.1",
     "vue": "^3.5.40"
   },
   "peerDependencies": {
     "vue": "^3.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
