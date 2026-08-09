@@ -40,9 +40,10 @@ import { PackageManagerTabs } from '@theme';
 
 创建的 Rslib 项目默认使用 [Rstest](https://rstest.rs/zh/) 作为测试框架，阅读 [使用 Rstest](/guide/advanced/rstest) 了解更多信息。
 
+脚手架默认会在生成的项目中初始化 Git 仓库。如需跳过 Git 初始化，请在创建命令中添加 `--no-git`。
+
 在创建完成后，你可以执行以下步骤：
 
-- 执行 `git init` 来初始化 Git 仓库。
 - 执行 `npm install`（或其他包管理器的 install 命令）安装 npm 依赖。
 - 执行 `npm run dev` 启动监听模式开始开发。
 
@@ -136,6 +137,7 @@ Options:
   -h, --help            display help for command
   -d, --dir <dir>       create project in specified directory
   -t, --template <tpl>  specify the template to use
+  --no-git              skip Git repository initialization
   --tools <tool>        add additional tools, comma separated
   --skill <skill>       add optional skills, comma separated
   --override            override files in target directory
