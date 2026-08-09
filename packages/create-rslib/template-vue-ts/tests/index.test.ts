@@ -10,7 +10,9 @@ test('The button should have correct background color', () => {
       label: 'Demo Button',
     },
   });
-  expect(wrapper.get('button').element).toHaveStyle({
+  const button = wrapper.get('button');
+  expect(button.text()).toBe('Demo Button');
+  expect(button.element).toHaveStyle({
     backgroundColor: '#ccc',
   });
   wrapper.unmount();
