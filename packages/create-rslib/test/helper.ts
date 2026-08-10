@@ -84,7 +84,7 @@ export const createAndValidate = (
 
   if (templateCase.template === 'node') {
     expect(pkgJson.type).toBe('module');
-    expect(pkgJson.engines.node).toBe('>=22.12.0');
+    expect(pkgJson.engines.node).toBe('^20.19.0 || >=22.12.0');
     expect(
       templateCase.lang === 'ts'
         ? pkgJson.exports['.'].default

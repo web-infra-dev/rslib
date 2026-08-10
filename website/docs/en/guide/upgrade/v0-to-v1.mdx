@@ -317,6 +317,40 @@ export default {
 };
 ```
 
+## Node.js template update
+
+Rslib v1 no longer provides a dual ESM/CJS Node.js template and only provides a pure ESM template. When creating a project, update the `--template` argument as follows:
+
+| v0.x `--template` argument | v1 `--template` argument |
+| -------------------------- | ------------------------ |
+| `node-esm`                 | `node`                   |
+| `node-esm-js`              | `node-js`                |
+| `node-esm-ts`              | `node-ts`                |
+| `node-dual`                | Not supported            |
+| `node-dual-js`             | Not supported            |
+| `node-dual-ts`             | Not supported            |
+
+For example, update a command that uses the previous pure ESM template as follows:
+
+```diff
+-npx create-rslib my-project --template node-esm
++npx create-rslib my-project --template node
+```
+
+Additionally, the new template sets `engines.node` to `^20.19.0 || >=22.12.0` by default and no longer configures `lib.syntax` explicitly. Rslib automatically infers `lib.syntax` from `engines.node`; see [Default syntax target update](#default-syntax-target-update) for details.
+
+Every Node.js version covered by `engines.node` supports `require(ESM)`, so existing CommonJS consumers can now load the pure ESM package directly with `require()`, provided that neither the entry nor its dependencies use top-level `await`:
+
+```js
+const packageExports = require('pure-esm-package');
+```
+
+If you still need a dual ESM/CJS template, use the following command to create one with the previous generator:
+
+```bash
+npx -y create-rslib@0.23.2 my-project --template node-dual
+```
+
 ## Configuration
 
 ### Enable `redirect.dts.extension` by default

@@ -317,6 +317,40 @@ export default {
 };
 ```
 
+## Node.js 模板更新
+
+Rslib v1 不再提供 ESM/CJS 双格式的 Node.js 模板，仅提供纯 ESM 模板。创建项目时，`--template` 参数需要按下表更新：
+
+| v0.x `--template` 参数 | v1 `--template` 参数 |
+| ---------------------- | -------------------- |
+| `node-esm`             | `node`               |
+| `node-esm-js`          | `node-js`            |
+| `node-esm-ts`          | `node-ts`            |
+| `node-dual`            | 不再支持             |
+| `node-dual-js`         | 不再支持             |
+| `node-dual-ts`         | 不再支持             |
+
+例如，使用原纯 ESM 模板的命令需要按如下方式更新：
+
+```diff
+-npx create-rslib my-project --template node-esm
++npx create-rslib my-project --template node
+```
+
+此外，新模板默认将 `engines.node` 设置为 `^20.19.0 || >=22.12.0`，并且不再显式配置 `lib.syntax`。Rslib 会根据 `engines.node` 自动推断 `lib.syntax`，详情请参考[默认语法目标更新](#默认语法目标更新)。
+
+`engines.node` 覆盖的 Node.js 版本均支持 `require(ESM)`，因此原有的 CommonJS 消费者现在可以直接通过 `require()` 加载纯 ESM 包，前提是入口及其依赖不使用顶层 `await`：
+
+```js
+const packageExports = require('pure-esm-package');
+```
+
+如果仍需要 ESM/CJS 双格式模板，可以通过以下命令使用旧版生成器创建：
+
+```bash
+npx -y create-rslib@0.23.2 my-project --template node-dual
+```
+
 ## 配置
 
 ### 默认开启 `redirect.dts.extension`
