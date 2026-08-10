@@ -82,6 +82,21 @@ export const createAndValidate = (
     expect(existsSync(path.join(dir, 'tsconfig.json'))).toBeTruthy();
   }
 
+  if (templateCase.template === 'node') {
+    expect(pkgJson.type).toBe('module');
+    expect(pkgJson.engines.node).toBe('>=22.12.0');
+    expect(
+      templateCase.lang === 'ts'
+        ? pkgJson.exports['.'].default
+        : pkgJson.exports,
+    ).toBe('./dist/index.js');
+    if (templateCase.lang === 'ts') {
+      expect(pkgJson.exports['.'].types).toBe('./dist/index.d.ts');
+      expect(pkgJson.types).toBe('./dist/index.d.ts');
+    }
+    expect(JSON.stringify(pkgJson.exports)).not.toContain('.cjs');
+  }
+
   expect(
     existsSync(path.join(dir, `rstest.config.${templateCase.lang}`)),
   ).toBeTruthy();

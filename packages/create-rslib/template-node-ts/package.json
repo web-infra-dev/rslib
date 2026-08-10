@@ -1,20 +1,17 @@
 {
-  "name": "rslib-node-esm-ts",
+  "name": "rslib-node-ts",
   "version": "0.0.0",
   "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "default": "./dist/index.js"
     }
   },
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "build": "rslib",
     "dev": "rslib --watch",
@@ -27,5 +24,11 @@
     "@rstest/core": "^0.11.6",
     "@types/node": "^24.13.3",
     "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,6 +1,8 @@
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
+import { execFileSync } from 'node:child_process';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { createRslib, loadConfig } from 'rslib';
 import type { Lang } from '../src/index';
 import { parseTemplateName } from '../src/parseTemplateName';
 import { createAndValidate, type TemplateCase } from './helper';
@@ -16,14 +18,9 @@ const createCase = (
   label: `${template}-${lang}${tools.length ? `-${tools.sort().join('-')}` : ''}`,
 });
 
-const CASES_NODE_DUAL: TemplateCase[] = [
-  createCase('node-dual', 'js'),
-  createCase('node-dual', 'ts'),
-];
-
-const CASES_NODE_ESM: TemplateCase[] = [
-  createCase('node-esm', 'js'),
-  createCase('node-esm', 'ts'),
+const CASES_NODE: TemplateCase[] = [
+  createCase('node', 'js'),
+  createCase('node', 'ts'),
 ];
 
 const CASES_REACT: TemplateCase[] = [
@@ -58,10 +55,12 @@ const CASES_SOLID: TemplateCase[] = [
   createCase('solid', 'ts'),
 ];
 
-const BASE_NODE_ESM_JS = createCase('node-esm', 'js');
+const BASE_NODE_JS = createCase('node', 'js');
 
 describe('parseTemplateName', () => {
   test('should handle template with language suffix', () => {
+    expect(parseTemplateName('node-js')).toBe('node-js');
+    expect(parseTemplateName('node-ts')).toBe('node-ts');
     expect(parseTemplateName('react-ts')).toBe('react-ts');
     expect(parseTemplateName('react-js')).toBe('react-js');
     expect(parseTemplateName('vue-ts')).toBe('vue-ts');
@@ -73,6 +72,7 @@ describe('parseTemplateName', () => {
   });
 
   test('should handle template without language suffix and default to ts', () => {
+    expect(parseTemplateName('node')).toBe('node-ts');
     expect(parseTemplateName('react')).toBe('react-ts');
     expect(parseTemplateName('vue')).toBe('vue-ts');
     expect(parseTemplateName('svelte')).toBe('svelte-ts');
@@ -80,15 +80,12 @@ describe('parseTemplateName', () => {
   });
 
   test('should handle multi-segment template with language suffix', () => {
-    expect(parseTemplateName('node-dual-ts')).toBe('node-dual-ts');
-    expect(parseTemplateName('node-dual-js')).toBe('node-dual-js');
-    expect(parseTemplateName('node-esm-ts')).toBe('node-esm-ts');
-    expect(parseTemplateName('node-esm-js')).toBe('node-esm-js');
+    expect(parseTemplateName('custom-template-ts')).toBe('custom-template-ts');
+    expect(parseTemplateName('custom-template-js')).toBe('custom-template-js');
   });
 
   test('should handle multi-segment template without language suffix and default to ts', () => {
-    expect(parseTemplateName('node-dual')).toBe('node-dual-ts');
-    expect(parseTemplateName('node-esm')).toBe('node-esm-ts');
+    expect(parseTemplateName('custom-template')).toBe('custom-template-ts');
   });
 
   test('should throw error when input is just a language suffix', () => {
@@ -101,18 +98,63 @@ describe('parseTemplateName', () => {
   });
 });
 
-describe('node-dual', () => {
-  for (const c of CASES_NODE_DUAL) {
-    test(`should create ${c.label} project as expected`, async () => {
-      createAndValidate(__dirname, c);
-    });
-  }
-});
+describe('node', () => {
+  for (const c of CASES_NODE) {
+    test(`should create and consume ${c.label} project`, async () => {
+      const { dir, pkgJson, clean } = createAndValidate(__dirname, c, {
+        clean: false,
+      });
 
-describe('node-esm', () => {
-  for (const c of CASES_NODE_ESM) {
-    test(`should create ${c.label} project as expected`, async () => {
-      createAndValidate(__dirname, c);
+      try {
+        // The generated project has not installed its dependencies, so provide
+        // the identity helper that its config imports from @rslib/core.
+        const coreProxyPath = join(dir, 'node_modules/@rslib/core');
+        mkdirSync(coreProxyPath, { recursive: true });
+        writeFileSync(
+          join(coreProxyPath, 'package.json'),
+          JSON.stringify({ type: 'module', exports: './index.js' }),
+        );
+        writeFileSync(
+          join(coreProxyPath, 'index.js'),
+          'export const defineConfig = (config) => config;\n',
+        );
+
+        const { content, filePath } = await loadConfig({ cwd: dir });
+        expect(filePath).toBe(join(dir, `rslib.config.${c.lang}`));
+
+        const rslib = await createRslib({ cwd: dir, config: content });
+        await rslib.build();
+
+        const distPath = join(dir, 'dist');
+        expect(existsSync(join(distPath, 'index.js'))).toBe(true);
+        expect(existsSync(join(distPath, 'index.cjs'))).toBe(false);
+        expect(existsSync(join(distPath, 'index.d.ts'))).toBe(c.lang === 'ts');
+
+        const packageName = JSON.stringify(pkgJson.name);
+        const imported = execFileSync(
+          process.execPath,
+          [
+            '--input-type=module',
+            '--eval',
+            `import { squared } from ${packageName}; process.stdout.write(String(squared(2)));`,
+          ],
+          { cwd: dir, encoding: 'utf8' },
+        );
+        const required = execFileSync(
+          process.execPath,
+          [
+            '--input-type=commonjs',
+            '--eval',
+            `const { squared } = require(${packageName}); process.stdout.write(String(squared(2)));`,
+          ],
+          { cwd: dir, encoding: 'utf8' },
+        );
+
+        expect(imported).toBe('4');
+        expect(required).toBe('4');
+      } finally {
+        clean();
+      }
     });
   }
 });
@@ -151,13 +193,13 @@ describe('solid', () => {
 
 describe('custom path to create', () => {
   test('should allow to create project in sub dir', async () => {
-    createAndValidate(__dirname, BASE_NODE_ESM_JS, {
+    createAndValidate(__dirname, BASE_NODE_JS, {
       name: 'test-temp-dir/rslib-project',
     });
   });
 
   test('should allow to create project in relative dir', async () => {
-    createAndValidate(__dirname, BASE_NODE_ESM_JS, {
+    createAndValidate(__dirname, BASE_NODE_JS, {
       name: './test-temp-relative-dir',
     });
   });
@@ -165,15 +207,11 @@ describe('custom path to create', () => {
 
 describe('linter and formatter', () => {
   test('should create project with eslint as expected', async () => {
-    const { dir, pkgJson, clean } = createAndValidate(
-      __dirname,
-      BASE_NODE_ESM_JS,
-      {
-        name: 'test-temp-eslint',
-        tools: ['eslint'],
-        clean: false,
-      },
-    );
+    const { dir, pkgJson, clean } = createAndValidate(__dirname, BASE_NODE_JS, {
+      name: 'test-temp-eslint',
+      tools: ['eslint'],
+      clean: false,
+    });
     expect(pkgJson.devDependencies.eslint).toBeTruthy();
     expect(existsSync(join(dir, 'eslint.config.mjs'))).toBeTruthy();
     clean();
@@ -261,30 +299,22 @@ describe('linter and formatter', () => {
   });
 
   test('should create project with prettier as expected', async () => {
-    const { dir, pkgJson, clean } = createAndValidate(
-      __dirname,
-      BASE_NODE_ESM_JS,
-      {
-        name: 'test-temp-prettier',
-        tools: ['prettier'],
-        clean: false,
-      },
-    );
+    const { dir, pkgJson, clean } = createAndValidate(__dirname, BASE_NODE_JS, {
+      name: 'test-temp-prettier',
+      tools: ['prettier'],
+      clean: false,
+    });
     expect(pkgJson.devDependencies.prettier).toBeTruthy();
     expect(existsSync(join(dir, '.prettierrc'))).toBeTruthy();
     clean();
   });
 
   test('should create project with eslint and prettier as expected', async () => {
-    const { dir, pkgJson, clean } = createAndValidate(
-      __dirname,
-      BASE_NODE_ESM_JS,
-      {
-        name: 'test-temp-eslint-prettier',
-        tools: ['eslint', 'prettier'],
-        clean: false,
-      },
-    );
+    const { dir, pkgJson, clean } = createAndValidate(__dirname, BASE_NODE_JS, {
+      name: 'test-temp-eslint-prettier',
+      tools: ['eslint', 'prettier'],
+      clean: false,
+    });
     expect(pkgJson.devDependencies.eslint).toBeTruthy();
     expect(pkgJson.devDependencies.prettier).toBeTruthy();
     expect(existsSync(join(dir, '.prettierrc'))).toBeTruthy();
@@ -293,15 +323,11 @@ describe('linter and formatter', () => {
   });
 
   test('should create project with biome as expected', async () => {
-    const { dir, pkgJson, clean } = createAndValidate(
-      __dirname,
-      BASE_NODE_ESM_JS,
-      {
-        name: 'test-temp-eslint',
-        tools: ['biome'],
-        clean: false,
-      },
-    );
+    const { dir, pkgJson, clean } = createAndValidate(__dirname, BASE_NODE_JS, {
+      name: 'test-temp-eslint',
+      tools: ['biome'],
+      clean: false,
+    });
     expect(pkgJson.devDependencies['@biomejs/biome']).toBeTruthy();
     expect(existsSync(join(dir, 'biome.json'))).toBeTruthy();
     clean();
