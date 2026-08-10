@@ -25,7 +25,7 @@ Then select `Node.js` when prompted to "Select template".
 
 ## Use Rslib in an existing project
 
-Rslib offers seamless support for Node.js projects, allowing you to build Node.js project effortlessly with minimal configuration.
+Rslib offers seamless support for Node.js projects, allowing you to build them effortlessly with minimal configuration.
 
 For example, in `rslib.config.ts`:
 
@@ -33,20 +33,7 @@ For example, in `rslib.config.ts`:
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  lib: [
-    {
-      format: 'esm',
-      output: {
-        distPath: './dist/esm',
-      },
-    },
-    {
-      format: 'cjs',
-      output: {
-        distPath: './dist/cjs',
-      },
-    },
-  ],
+  dts: true,
 });
 ```
 

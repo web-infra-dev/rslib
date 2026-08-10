@@ -29,35 +29,26 @@ Read the [Node.js Package Configuration Guide](https://nodejs.github.io/package-
 
 ### Choose module formats
 
-For different shapes of libraries, the choice of module format may vary. Here are two common scenarios:
+The choice of module format usually depends on how the package will be consumed. For new packages, prefer pure ESM and add a dual ESM/CJS build only when there is a clear compatibility requirement.
 
-#### ship [pure ESM](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) package
+#### Prefer pure ESM
 
-Shipping only ESM is the best choice for libraries intended for modern environments, such as browser applications or Node.js applications that support ESM. [Node.js 20.19+ and 22.12+](https://nodejs.org/api/modules.html#loading-ecmascript-modules-using-require) can load ESM using `require()` when its module graph does not contain top-level `await`. CommonJS consumers on older Node.js versions, or those loading ESM with top-level `await`, should use dynamic import, such as `const pureEsmLib = await import('pure-esm-lib')`.
+ESM is the standard JavaScript module format. It is supported by modern browsers, Node.js, and mainstream build tools, and enables static analysis and tree shaking. Compared with CommonJS, `import` and `export` statements are more concise and easier to read. Additionally, maintaining one format reduces build configuration, package exports, and test combinations.
 
-- **Pros:**
-  - ESM is the official JavaScript standard, making it more future-proof and widely supported across environments.
-  - ESM enables static analysis, which facilitates optimizations like tree-shaking to remove unused code.
-  - The syntax is cleaner and more intuitive, with import and export statements that are easier to read compared to CommonJS.
-  - ESM allows for better compatibility across both browser and server environments, making it ideal for isomorphic or universal JavaScript applications.
-- **Cons:**
-  - ESM modules are loaded asynchronously, which can complicate conditional imports and lazy loading in some cases.
-  - Some Node.js tools and libraries still have limited or incomplete support for ESM, requiring workarounds or additional configuration.
-  - You must explicitly include file extensions in import paths, which can be cumbersome, especially when working with TypeScript or other transpiled languages.
+If consumers still use CommonJS and `package.json#exports` allows `require()` to resolve the ESM entry, they can load a pure ESM package directly with `require()` on [Node.js `^20.19.0` or `>=22.12.0`](https://nodejs.org/api/modules.html#loading-ecmascript-modules-using-require), provided that neither the entry nor its dependencies use top-level `await`. Library authors do not need to publish a separate CJS output only for these consumers:
 
-#### ship [ESM & CJS (dual)](https://antfu.me/posts/publish-esm-and-cjs#compatibility) package
+```js
+const packageExports = require('pure-esm-package');
+```
 
-The community is migrating to ESM, but some projects still need to support older Node.js versions or tools that cannot load ESM using `require()`. If you need to support those environments, you can publish a dual package. Read Anthony Fu's blog post [Publish ESM and CJS packages](https://antfu.me/posts/publish-esm-and-cjs) for more details.
+#### Publish dual ESM/CJS for compatibility
 
-- **Pros:**
-  - Wider compatibility: Dual packages support both modern ESM environments and legacy CJS environments, ensuring broader usage across different ecosystems.
-  - Gradual migration: Developers can gradually transition from CJS to ESM without breaking existing projects, allowing for smoother adoption of the new standard.
-  - Flexibility for consumers: Users of the package can choose which module system best fits their project, providing flexibility in different build tools and environments.
-  - Cross-runtime support: Dual packages can work in multiple runtimes, such as Node.js and browsers, without requiring additional bundling or transpilation.
+Consider publishing both ESM and CJS when:
 
-- **Cons:**
-  - Increased complexity: Maintaining two module formats adds complexity to the build process, requiring additional configuration and testing to ensure both versions work correctly.
-  - Dual package hazard: Mixing ESM and CJS can lead to issues such as broken instanceof checks or unexpected behavior when dependencies are loaded in different formats.
+- CommonJS consumers use Node.js versions, tools, or runtimes that cannot load ESM synchronously with `require()`.
+- Consumers explicitly require a separate CJS file.
+
+Dual formats provide broader compatibility and help consumers migrate gradually to ESM, but require separate builds, export mappings, and tests. Loading both formats can also create separate instances of the same package, leading to inconsistent state or identity checks. Confirm that target consumers need CJS before adding it.
 
 ## UMD
 
