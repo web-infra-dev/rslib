@@ -18,10 +18,8 @@ export type Lang = 'ts' | 'js';
 
 // Base templates list (without tools combinations)
 export const TEMPLATES: string[] = [
-  'node-dual-js',
-  'node-dual-ts',
-  'node-esm-js',
-  'node-esm-ts',
+  'node-js',
+  'node-ts',
   'react-js',
   'react-ts',
   'vue-js',
@@ -43,8 +41,7 @@ async function getTemplateName({ template }: Argv) {
     await select({
       message: 'Select template',
       options: [
-        { value: 'node-esm', label: 'Node.js pure ESM package' },
-        { value: 'node-dual', label: 'Node.js dual ESM/CJS package' },
+        { value: 'node', label: 'Node.js package' },
         { value: 'react', label: 'React' },
         { value: 'vue', label: 'Vue' },
         { value: 'svelte', label: 'Svelte' },
