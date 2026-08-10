@@ -150,20 +150,22 @@ describe('CJS shims', async () => {
     expect(importMetaFilename).toBe(entryFiles.cjs);
 
     for (const code of [cjsCode, dynamicContent]) {
-      expect(code).toContain(
-        'const __rslib_import_meta_url__ = /*#__PURE__*/ function() {',
-      );
+      expect(
+        code.startsWith(
+          `"use strict";\nconst __rslib_import_meta_url__ = /*#__PURE__*/ function() {`,
+        ),
+      ).toBe(true);
     }
   });
 
   test('ESM should not be affected by CJS shims configuration', async () => {
     for (const code of [
       'const importMetaUrl = import.meta.url;',
+      'const src_require = createRequire(import.meta.url);',
       'const src_filename = fileURLToPath(import.meta.url);',
     ]) {
       expect(entries.esm).toContain(code);
     }
-    expect(entries.esm).not.toContain('createRequire');
 
     const esmResult = await import(entryFiles.esm!);
     expect(esmResult.importMetaUrl).toBe(pathToFileURL(entryFiles.esm!).href);
