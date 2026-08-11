@@ -161,26 +161,25 @@ Rslib v1 调整了 ESM 产物（[`format: 'esm'`](/config/lib/format)）中通�
 const logo = new URL('./assets/logo.svg', import.meta.url);
 ```
 
-Rslib v0.x 会原样保留该表达式，且不会输出 `logo.svg`。Rslib v1 则会输出该文件，并将 URL 重写为指向该文件的相对路径：
+对于项目源码，Rslib v0.x 会原样保留该表达式，且不会输出 `logo.svg`。Rslib v1 则会输出该文件，并将 URL 重写为指向该文件的相对路径：
 
 ```js title="dist/index.js"
 const logo = new URL('./static/svg/logo.svg', import.meta.url);
 ```
 
+此外，对于被打包到产物中的三方依赖，Rslib v0.x 会回退到 Rspack 默认的 URL 处理并引入额外 runtime，Rslib v1 则会统一生成指向输出资源的静态相对 URL。
+
 如果项目此前通过 [output.copy](/config/rsbuild/output#outputcopy) 或脚本复制这类资源，升级后应移除相应配置，避免重复输出。在 bundleless 模式（[`bundle: false`](/config/lib/bundle)）下，还需要在 [source.entry](/config/rsbuild/source#sourceentry) 中排除已通过 `new URL()` 引用的资源，避免为同一文件额外生成 JavaScript 入口。
 
-如果希望恢复 Rslib v0.x 的行为，原样保留所有 `new URL()` 且不由 Rslib 输出资源，可以关闭 URL parser：
+如果希望保留 Rslib v0.x 的行为，原样保留所有 `new URL()` 且不由 Rslib 输出资源，可以[关闭 URL parser](/guide/advanced/static-assets#关闭-url-parser)：
 
 ```ts title="rslib.config.ts"
 export default {
   tools: {
-    bundlerChain(chain, { CHAIN_ID }) {
-      chain.module
-        .rule(CHAIN_ID.RULE.JS)
-        .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
-        .parser({
-          url: false,
-        });
+    bundlerChain(chain) {
+      chain.module.rule('rslib:new-url').parser({
+        url: false,
+      });
     },
   },
 };

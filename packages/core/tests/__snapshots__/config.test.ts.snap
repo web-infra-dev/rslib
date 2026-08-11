@@ -659,9 +659,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           /* config.module.rule('js').oneOf('js') */
           {
-            parser: {
-              url: 'new-url-relative'
-            },
             use: [
               /* config.module.rule('js').oneOf('js').use('swc') */
               {
@@ -1074,6 +1071,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             }
           }
         ]
+      },
+      /* config.module.rule('rslib:new-url') */
+      {
+        test: /\\.(js|mjs|jsx|(?<!\\.d\\.)ts|(?<!\\.d\\.)mts|(?<!\\.d\\.)cts|tsx|cjs|cjsx|mjsx|mtsx|ctsx)$/,
+        parser: {
+          url: 'new-url-relative'
+        }
       }
     ]
   },
@@ -1524,9 +1528,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           },
           /* config.module.rule('js').oneOf('js') */
           {
-            parser: {
-              url: false
-            },
             use: [
               /* config.module.rule('js').oneOf('js').use('swc') */
               {
@@ -1939,6 +1940,13 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             }
           }
         ]
+      },
+      /* config.module.rule('rslib:new-url') */
+      {
+        test: /\\.(js|mjs|jsx|(?<!\\.d\\.)ts|(?<!\\.d\\.)mts|(?<!\\.d\\.)cts|tsx|cjs|cjsx|mjsx|mtsx|ctsx)$/,
+        parser: {
+          url: false
+        }
       }
     ]
   },
