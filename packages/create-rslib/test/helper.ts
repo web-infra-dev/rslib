@@ -164,6 +164,7 @@ export const createAndValidate = (
     expect(pkgJson.peerDependencies['@solidjs/web']).toBeFalsy();
 
     if (templateCase.lang === 'ts') {
+      expect(Object.keys(pkgJson.exports['.'])[0]).toBe('types');
       expect(pkgJson.exports['.'].types).toBe('./dist/index.d.ts');
       expect(pkgJson.types).toBe('./dist/index.d.ts');
     } else {

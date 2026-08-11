@@ -30,10 +30,6 @@ const config = {
     name: getAbsolutePath('storybook-react-rsbuild'),
     options: {},
   },
-  typescript: {
-    reactDocgen: 'react-docgen-typescript',
-    check: true,
-  },
 };
 
 export default config;

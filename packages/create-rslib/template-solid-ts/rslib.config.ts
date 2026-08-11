@@ -6,7 +6,6 @@ export default defineConfig({
   lib: [
     {
       id: 'compiled',
-      bundle: false,
       dts: true,
       plugins: [
         pluginBabel({
@@ -17,7 +16,6 @@ export default defineConfig({
     },
     {
       id: 'source',
-      bundle: false,
       output: {
         filename: {
           js: '[name].jsx',
@@ -46,6 +44,7 @@ export default defineConfig({
       },
     },
   ],
+  bundle: false,
   output: {
     target: 'web',
   },
