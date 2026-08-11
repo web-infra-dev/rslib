@@ -195,9 +195,9 @@ export default defineConfig({
 
 For more details, see the Rspack [Externals](https://rspack.rs/config/externals) documentation.
 
-## Bundle dependencies loaded with createRequire
+## Bundle dependencies loaded via `createRequire()`
 
-There is no `require` function in ESM. If you need to load a third-party dependency that only ships CommonJS, you can create one with Node.js [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename):
+The Node.js ES module environment does not provide the CommonJS `require()` function. If you need to use CommonJS loading semantics in an ES module, you can create a `require` function with Node.js [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename):
 
 ```ts title="src/index.ts"
 import { createRequire } from 'node:module';
@@ -208,7 +208,7 @@ const foo = require('foo');
 export const bar = foo.bar;
 ```
 
-Rslib preserves `createRequire()` calls by default. To let Rspack analyze these calls and bundle dependencies that can be statically analyzed, enable [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire).
+Rslib keeps `createRequire()` calls in the output by default. To let Rspack analyze the `require()` calls created by it and bundle dependencies loaded by statically analyzable calls such as `require('foo')`, enable [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire).
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
@@ -228,7 +228,7 @@ export default defineConfig({
 });
 ```
 
-If some third-party dependencies rely on `createRequire()` being kept at runtime, use a module rule that excludes `node_modules` to enable `createRequire` parsing only for your own source code:
+If bundled dependencies contain `createRequire()` calls that need to be kept at runtime, use `module.rules` to enable this capability only for JavaScript/TypeScript modules outside `node_modules`:
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
