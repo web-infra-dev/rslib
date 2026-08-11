@@ -197,7 +197,7 @@ For more details, see the Rspack [Externals](https://rspack.rs/config/externals)
 
 ## Bundle dependencies loaded via `createRequire()`
 
-The Node.js ES module environment does not provide the CommonJS `require()` function. If you need to use CommonJS loading semantics in an ES module, you can create a `require` function with Node.js [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename):
+The Node.js ES module environment does not provide the CommonJS `require` function. If you need to use CommonJS loading semantics in an ES module, you can create a `require` function with Node.js [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename):
 
 ```ts title="src/index.ts"
 import { createRequire } from 'node:module';

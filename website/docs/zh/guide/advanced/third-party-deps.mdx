@@ -192,7 +192,7 @@ export default defineConfig({
 
 ## 打包通过 `createRequire()` 加载的依赖
 
-Node.js 的 ES 模块环境不提供 CommonJS 的 require() 函数。若需要在 ES 模块中使用 CommonJS 的加载语义，可以通过 Node.js 的 [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename) 创建一个 `require` 函数：
+Node.js 的 ES 模块环境不提供 CommonJS 的 `require` 函数。若需要在 ES 模块中使用 CommonJS 的加载语义，可以通过 Node.js 的 [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename) 创建一个 `require` 函数：
 
 ```ts title="src/index.ts"
 import { createRequire } from 'node:module';
