@@ -173,7 +173,7 @@ export default {
 
 ##### 关闭 URL parser
 
-Rslib 默认会注册一条名为 `'new-url'` 的 module rule，将其 [URL parser](https://rspack.rs/zh/config/module-parser#javascripturl) 设置为 `'new-url-relative'`。你可以通过 [tools.bundlerChain](/config/rsbuild/tools#toolsbundlerchain) 将该 rule 的 URL parser 设置为 `false`，来跳过对 `new URL()` 的资源解析：
+Rslib 默认会注册一条名为 `'rslib:new-url'` 的 module rule，将其 [URL parser](https://rspack.rs/zh/config/module-parser#javascripturl) 设置为 `'new-url-relative'`。你可以通过 [tools.bundlerChain](/config/rsbuild/tools#toolsbundlerchain) 将该 rule 的 URL parser 设置为 `false`，来跳过对 `new URL()` 的资源解析：
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
@@ -181,7 +181,7 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   tools: {
     bundlerChain(chain) {
-      chain.module.rule('new-url').parser({
+      chain.module.rule('rslib:new-url').parser({
         url: false,
       });
     },

@@ -38,4 +38,4 @@ export const DTS_EXTENSIONS_PATTERN: RegExp = /\.d\.(?:[cm]?ts|[^/\\]+\.ts)$/;
  * Chain id of the `new URL()` parser rule. Public: users can override it
  * through `tools.bundlerChain`.
  */
-export const NEW_URL_RULE = 'new-url';
+export const NEW_URL_RULE = 'rslib:new-url';

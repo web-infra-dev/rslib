@@ -177,7 +177,7 @@ To restore the Rslib v0.x behavior—preserving all `new URL()` expressions with
 export default {
   tools: {
     bundlerChain(chain) {
-      chain.module.rule('new-url').parser({
+      chain.module.rule('rslib:new-url').parser({
         url: false,
       });
     },
