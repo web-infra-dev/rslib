@@ -555,7 +555,9 @@ const modifyRsbuildDefaultPlugin = ({
         chain.module
           .rule(NEW_URL_RULE)
           .test(JS_EXTENSIONS_PATTERN)
-          .parser({ url: urlParserMode });
+          .parser({ 
+          	url: urlParserMode 
+          });
       }
 
       // Part 2: remove Rsbuild's `type: 'javascript/auto'` override.
