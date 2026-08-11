@@ -229,24 +229,20 @@ export default defineConfig({
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  lib: [
-    {
-      tools: {
-        rspack: {
-          module: {
-            rules: [
-              {
-                test: /\.[cm]?[jt]sx?$/,
-                exclude: /node_modules/,
-                parser: {
-                  createRequire: true,
-                },
-              },
-            ],
+  tools: {
+    rspack: {
+      module: {
+        rules: [
+          {
+            test: /\.[cm]?[jt]sx?$/,
+            exclude: /node_modules/,
+            parser: {
+              createRequire: true,
+            },
           },
-        },
+        ],
       },
     },
-  ],
+  },
 });
 ```
