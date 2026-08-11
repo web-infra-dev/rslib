@@ -169,7 +169,7 @@ const logo = new URL('./static/svg/logo.svg', import.meta.url);
 
 如果项目此前通过 [output.copy](/config/rsbuild/output#outputcopy) 或脚本复制这类资源，升级后应移除相应配置，避免重复输出。在 bundleless 模式（[`bundle: false`](/config/lib/bundle)）下，还需要在 [source.entry](/config/rsbuild/source#sourceentry) 中排除已通过 `new URL()` 引用的资源，避免为同一文件额外生成 JavaScript 入口。
 
-如果希望恢复 Rslib v0.x 的行为，原样保留所有 `new URL()` 且不由 Rslib 输出资源，可以[关闭 URL parser](/guide/advanced/static-assets#关闭-url-parser)：
+如果希望保留 Rslib v0.x 的行为，原样保留所有 `new URL()` 且不由 Rslib 输出资源，可以[关闭 URL parser](/guide/advanced/static-assets#关闭-url-parser)：
 
 ```ts title="rslib.config.ts"
 export default {
