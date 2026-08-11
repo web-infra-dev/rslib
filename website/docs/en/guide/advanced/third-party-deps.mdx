@@ -208,27 +208,23 @@ const foo = require('foo');
 export const bar = foo.bar;
 ```
 
-Rslib preserves `createRequire()` calls by default. To let Rspack analyze these calls and bundle their static dependencies, enable [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire).
+Rslib preserves `createRequire()` calls by default. To let Rspack analyze these calls and bundle dependencies that can be statically analyzed, enable [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire).
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  lib: [
-    {
-      tools: {
-        rspack: {
-          module: {
-            parser: {
-              javascript: {
-                createRequire: true,
-              },
-            },
+  tools: {
+    rspack: {
+      module: {
+        parser: {
+          javascript: {
+            createRequire: true,
           },
         },
       },
     },
-  ],
+  },
 });
 ```
 

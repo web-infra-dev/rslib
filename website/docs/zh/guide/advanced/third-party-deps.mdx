@@ -203,27 +203,23 @@ const foo = require('foo');
 export const bar = foo.bar;
 ```
 
-Rslib 默认保留 `createRequire()` 调用。如果希望 Rspack 分析这些调用并打包其中的静态依赖，可以开启 [`module.parser.javascript.createRequire`](https://rspack.rs/zh/config/module-parser#javascriptcreaterequire)。
+Rslib 默认保留 `createRequire()` 调用。如果希望 Rspack 分析这些调用并打包其中可被静态分析的依赖，可以开启 [`module.parser.javascript.createRequire`](https://rspack.rs/zh/config/module-parser#javascriptcreaterequire)。
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  lib: [
-    {
-      tools: {
-        rspack: {
-          module: {
-            parser: {
-              javascript: {
-                createRequire: true,
-              },
-            },
+  tools: {
+    rspack: {
+      module: {
+        parser: {
+          javascript: {
+            createRequire: true,
           },
         },
       },
     },
-  ],
+  },
 });
 ```
 
