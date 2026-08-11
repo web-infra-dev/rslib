@@ -1,73 +1,73 @@
 import {
-  defineConfig as defineRsbuildConfig,
-  type EnvironmentConfig,
-  mergeRsbuildConfig,
-  type RsbuildConfig,
-  type RsbuildEntry,
-  type RsbuildPlugin,
-  type RsbuildPlugins,
-  type Rspack,
-  rspack,
-  type ToolsConfig,
+    defineConfig as defineRsbuildConfig,
+    type EnvironmentConfig,
+    mergeRsbuildConfig,
+    type RsbuildConfig,
+    type RsbuildEntry,
+    type RsbuildPlugin,
+    type RsbuildPlugins,
+    type Rspack,
+    rspack,
+    type ToolsConfig,
 } from '@rsbuild/core';
 import fs from 'node:fs';
 import path, { dirname, extname, join } from 'node:path';
 import { composeAssetConfig } from './asset/assetConfig';
 import {
-  DTS_EXTENSIONS_PATTERN,
-  JS_EXTENSIONS_PATTERN,
-  NEW_URL_RULE,
-  SWC_HELPERS,
+    DTS_EXTENSIONS_PATTERN,
+    JS_EXTENSIONS_PATTERN,
+    NEW_URL_RULE,
+    SWC_HELPERS,
 } from './constant';
 import {
-  composeCssConfig,
-  cssExternalHandler,
-  RSLIB_CSS_ENTRY_FLAG,
+    composeCssConfig,
+    cssExternalHandler,
+    RSLIB_CSS_ENTRY_FLAG,
 } from './css/cssConfig';
 import { type CssLoaderOptionsAuto, isCssGlobalFile } from './css/utils';
 import { composeExeConfig } from './exe';
 import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
 import { pluginCjsShims, pluginEsmRequireShim } from './plugins/shims';
 import type {
-  BannerAndFooter,
-  DeepRequired,
-  ExcludesFalse,
-  Format,
-  JsRedirect,
-  LibConfig,
-  LibOnlyConfig,
-  PkgJson,
-  Redirect,
-  RequireKey,
-  RsbuildConfigEntry,
-  RsbuildConfigEntryItem,
-  RsbuildConfigOutputTarget,
-  RsbuildConfigWithLibInfo,
-  RslibConfig,
-  RspackResolver,
-  Shims,
-  Syntax,
+    BannerAndFooter,
+    DeepRequired,
+    ExcludesFalse,
+    Format,
+    JsRedirect,
+    LibConfig,
+    LibOnlyConfig,
+    PkgJson,
+    Redirect,
+    RequireKey,
+    RsbuildConfigEntry,
+    RsbuildConfigEntryItem,
+    RsbuildConfigOutputTarget,
+    RsbuildConfigWithLibInfo,
+    RslibConfig,
+    RspackResolver,
+    Shims,
+    Syntax,
 } from './types';
 import { color } from './utils/color';
 import { getDefaultExtension } from './utils/extension';
 import {
-  calcLongestCommonPath,
-  checkMFPlugin,
-  isDirectory,
-  isEmptyObject,
-  isIntermediateOutputFormat,
-  nodeBuiltInModules,
-  normalizeSlash,
-  omit,
-  pick,
-  readPackageJson,
+    calcLongestCommonPath,
+    checkMFPlugin,
+    isDirectory,
+    isEmptyObject,
+    isIntermediateOutputFormat,
+    nodeBuiltInModules,
+    normalizeSlash,
+    omit,
+    pick,
+    readPackageJson,
 } from './utils/helper';
 import { isDebug, logger } from './utils/logger';
 import {
-  ESX_TO_BROWSERSLIST,
-  resolveMinNodeVersion,
-  transformSyntaxToBrowserslist,
-  transformSyntaxToRspackTarget,
+    ESX_TO_BROWSERSLIST,
+    resolveMinNodeVersion,
+    transformSyntaxToBrowserslist,
+    transformSyntaxToRspackTarget,
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
 import { composeWasmConfig, resolveWasmMode } from './wasm/compose';
@@ -555,8 +555,8 @@ const modifyRsbuildDefaultPlugin = ({
         chain.module
           .rule(NEW_URL_RULE)
           .test(JS_EXTENSIONS_PATTERN)
-          .parser({ 
-          	url: urlParserMode 
+          .parser({
+            url: urlParserMode
           });
       }
 
