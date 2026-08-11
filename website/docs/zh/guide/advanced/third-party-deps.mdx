@@ -189,3 +189,60 @@ export default defineConfig({
 ```
 
 更多用法可参考 Rspack 的 [Externals](https://rspack.rs/zh/config/externals) 文档。
+
+## 打包通过 `createRequire()` 加载的依赖
+
+Node.js 的 ES 模块环境不提供 CommonJS 的 `require` 函数。若需要在 ES 模块中使用 CommonJS 的加载语义，可以通过 Node.js 的 [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename) 创建一个 `require` 函数：
+
+```ts title="src/index.ts"
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const foo = require('foo');
+
+export const bar = foo.bar;
+```
+
+Rslib 默认会在产物中保留 `createRequire()` 调用。如果希望 Rspack 分析由它创建的 `require()` 调用，并打包由 `require('foo')` 这类可静态分析的调用所加载的依赖，可以启用 [`module.parser.javascript.createRequire`](https://rspack.rs/zh/config/module-parser#javascriptcreaterequire)。
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  tools: {
+    rspack: {
+      module: {
+        parser: {
+          javascript: {
+            createRequire: true,
+          },
+        },
+      },
+    },
+  },
+});
+```
+
+如果被打包的依赖中存在需要保留到运行时的 `createRequire()` 调用，可以改用 `module.rules`，仅对 node_modules 之外的 JavaScript/TypeScript 模块启用该能力：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  tools: {
+    rspack: {
+      module: {
+        rules: [
+          {
+            test: /\.[cm]?[jt]sx?$/,
+            exclude: /node_modules/,
+            parser: {
+              createRequire: true,
+            },
+          },
+        ],
+      },
+    },
+  },
+});
+```

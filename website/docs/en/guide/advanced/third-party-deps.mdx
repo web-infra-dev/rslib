@@ -194,3 +194,60 @@ export default defineConfig({
 ```
 
 For more details, see the Rspack [Externals](https://rspack.rs/config/externals) documentation.
+
+## Bundle dependencies loaded via `createRequire()`
+
+The Node.js ES module environment does not provide the CommonJS `require` function. If you need to use CommonJS loading semantics in an ES module, you can create a `require` function with Node.js [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename):
+
+```ts title="src/index.ts"
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const foo = require('foo');
+
+export const bar = foo.bar;
+```
+
+Rslib keeps `createRequire()` calls in the output by default. To let Rspack analyze the `require()` calls created by it and bundle dependencies loaded by statically analyzable calls such as `require('foo')`, enable [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire).
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  tools: {
+    rspack: {
+      module: {
+        parser: {
+          javascript: {
+            createRequire: true,
+          },
+        },
+      },
+    },
+  },
+});
+```
+
+If bundled dependencies contain `createRequire()` calls that need to be kept at runtime, use `module.rules` to enable this capability only for JavaScript/TypeScript modules outside `node_modules`:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  tools: {
+    rspack: {
+      module: {
+        rules: [
+          {
+            test: /\.[cm]?[jt]sx?$/,
+            exclude: /node_modules/,
+            parser: {
+              createRequire: true,
+            },
+          },
+        ],
+      },
+    },
+  },
+});
+```
