@@ -167,8 +167,6 @@ Rslib v0.x preserved this expression and did not emit `logo.svg`. Rslib v1 emits
 const logo = new URL('./static/svg/logo.svg', import.meta.url);
 ```
 
-This applies to `new URL()` references in packages under `node_modules` as well, so a bundled dependency that ships assets this way has them emitted alongside the output.
-
 If the project previously copied these assets through [output.copy](/config/rsbuild/output#outputcopy) or a script, remove the corresponding configuration after upgrading to avoid duplicate outputs. In bundleless mode ([`bundle: false`](/config/lib/bundle)), also exclude assets referenced through `new URL()` from [source.entry](/config/rsbuild/source#sourceentry) to avoid generating an additional JavaScript entry for the same file.
 
 To restore the Rslib v0.x behavior—preserving all `new URL()` expressions without having Rslib emit the assets—[disable the URL parser](/guide/advanced/static-assets#disable-the-url-parser):

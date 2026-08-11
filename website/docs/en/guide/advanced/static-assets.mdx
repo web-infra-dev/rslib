@@ -173,7 +173,7 @@ If you do not want `new URL()` expressions to be parsed as URL assets, choose on
 
 ##### Disable the URL parser
 
-By default, Rslib registers a module rule named `'rslib:new-url'` whose [URL parser](https://rspack.rs/config/module-parser#javascripturl) is set to `'new-url-relative'`. The rule applies to project source files and to packages under `node_modules` alike. You can set its URL parser to `false` through [tools.bundlerChain](/config/rsbuild/tools#toolsbundlerchain) to skip asset parsing for all `new URL()` expressions:
+By default, Rslib registers a module rule named `'rslib:new-url'` whose [URL parser](https://rspack.rs/config/module-parser#javascripturl) is set to `'new-url-relative'`. You can set its URL parser to `false` through [tools.bundlerChain](/config/rsbuild/tools#toolsbundlerchain) to skip asset parsing for all `new URL()` expressions:
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
