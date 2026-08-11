@@ -579,3 +579,31 @@ test('preserve `new URL` file asset as relative URL', async () => {
   // The asset is emitted as a file, without an extra `assets/logo.*` JS chunk.
   expect(files.esm1!.some((f) => /assets\/logo\.js$/.test(f))).toBe(false);
 });
+
+test('preserve `new URL` file asset as relative URL in node_modules', async () => {
+  // A package under `node_modules` is handled the same way as the source: the
+  // asset is emitted and the URL is kept relative, without any Rspack runtime.
+  const { contents } = await buildAndGetResults({
+    fixturePath: join(__dirname, 'new-url-node-modules'),
+  });
+
+  const { content } = queryContent(contents.esm!, /index\.js/);
+  expect(content).not.toContain('__webpack_require__');
+
+  // From the source.
+  await expectUrlResolves(
+    contents,
+    'esm',
+    /index\.js/,
+    'logo',
+    'static/svg/logo.svg',
+  );
+  // From `node_modules/dep`.
+  await expectUrlResolves(
+    contents,
+    'esm',
+    /index\.js/,
+    'depLogo',
+    'static/svg/dep-logo.svg',
+  );
+});

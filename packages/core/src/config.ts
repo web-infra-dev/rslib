@@ -16,6 +16,7 @@ import { composeAssetConfig } from './asset/assetConfig';
 import {
   DTS_EXTENSIONS_PATTERN,
   JS_EXTENSIONS_PATTERN,
+  NEW_URL_RULE,
   SWC_HELPERS,
 } from './constant';
 import {
@@ -550,14 +551,10 @@ const modifyRsbuildDefaultPlugin = ({
   setup(api) {
     api.modifyBundlerChain((chain, { CHAIN_ID, target }) => {
       // Part 1: configure URL parsing for library output.
-      // Fix for https://github.com/web-infra-dev/rslib/issues/499.
       if (urlParserMode !== undefined) {
-        chain.module
-          .rule(CHAIN_ID.RULE.JS)
-          .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
-          .parser({
-            url: urlParserMode,
-          });
+        chain.module.rule(NEW_URL_RULE).test(JS_EXTENSIONS_PATTERN).parser({
+          url: urlParserMode,
+        });
       }
 
       // Part 2: remove Rsbuild's `type: 'javascript/auto'` override.
