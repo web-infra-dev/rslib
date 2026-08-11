@@ -169,24 +169,21 @@ export default {
 
 #### 跳过 `new URL()` 处理
 
-如果不希望将项目源码中的 `new URL()` 解析为 URL asset，可以根据作用范围选择以下方式。
+如果不希望将 `new URL()` 解析为 URL asset，可以根据作用范围选择以下方式。
 
 ##### 关闭 URL parser
 
-Rslib 默认会将内置 JavaScript rule 的 [URL parser](https://rspack.rs/zh/config/module-parser#javascripturl) 设置为 `'new-url-relative'`。你可以通过 [tools.bundlerChain](/config/rsbuild/tools#toolsbundlerchain) 将该 rule 的 URL parser 设置为 `false`，来跳过项目源码中所有 `new URL()` 的资源解析：
+Rslib 默认会注册一条名为 `'new-url'` 的 module rule，将其 [URL parser](https://rspack.rs/zh/config/module-parser#javascripturl) 设置为 `'new-url-relative'`。你可以通过 [tools.bundlerChain](/config/rsbuild/tools#toolsbundlerchain) 将该 rule 的 URL parser 设置为 `false`，来跳过对 `new URL()` 的资源解析：
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   tools: {
-    bundlerChain(chain, { CHAIN_ID }) {
-      chain.module
-        .rule(CHAIN_ID.RULE.JS)
-        .oneOf(CHAIN_ID.ONE_OF.JS_MAIN)
-        .parser({
-          url: false,
-        });
+    bundlerChain(chain) {
+      chain.module.rule('new-url').parser({
+        url: false,
+      });
     },
   },
 });
