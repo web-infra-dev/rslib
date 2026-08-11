@@ -3,17 +3,12 @@
   "version": "0.0.0",
   "type": "module",
   "exports": {
-    ".": {
-      "import": "./dist/index.js"
-    },
+    ".": "./dist/index.js",
     "./style.css": "./dist/index.css"
   },
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "build": "rslib",
     "dev": "rslib --watch",
@@ -30,5 +25,8 @@
   },
   "peerDependencies": {
     "svelte": "^5.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -75,7 +75,7 @@ Solid 组件库通常会同时发布两类产物：
 - **预编译产物**：JSX 已经通过 `babel-preset-solid` 转换为 Solid 的运行时调用（例如 `template()`、`insert()` 等）。使用该组件库的应用项目可以直接引入这类产物，无需额外配置 Solid JSX 编译能力。
 - **保留 JSX 的源码产物**：库构建阶段不进行 Solid 编译，而是保留原始 JSX 语法，并通过 `package.json` 中的 `"solid"` condition name（条件名称）暴露给应用侧工具链。
 
-当使用该组件库的应用项目具备 Solid JSX 编译能力时（例如安装了 `@rsbuild/plugin-solid` 的 Rsbuild 项目），模块解析会命中 `"solid"` condition name，从而读取保留 JSX 的源码产物，并根据应用自身的运行目标重新编译：浏览器端应用会编译为客户端 DOM 渲染代码（`generate: 'dom'`），SSR 框架则会编译为服务端渲染代码（`generate: 'ssr'`）。未配置 Solid JSX 编译能力的应用项目会回退到预编译的 `"import"` 入口。
+当使用该组件库的应用项目具备 Solid JSX 编译能力时（例如安装了 `@rsbuild/plugin-solid` 的 Rsbuild 项目），模块解析会命中 `"solid"` condition name，从而读取保留 JSX 的源码产物，并根据应用自身的运行目标重新编译：浏览器端应用会编译为客户端 DOM 渲染代码（`generate: 'dom'`），SSR 框架则会编译为服务端渲染代码（`generate: 'ssr'`）。未配置 Solid JSX 编译能力的应用项目会回退到预编译的 `"default"` 入口。
 
 ```ts title="rslib.config.ts"
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -86,7 +86,6 @@ export default defineConfig({
   lib: [
     {
       // 将 JSX 编译为 Solid 运行时调用，例如 template()、insert() 和 delegateEvents()。
-      bundle: false,
       dts: true,
       plugins: [
         pluginBabel({
@@ -97,7 +96,6 @@ export default defineConfig({
     },
     {
       // 为 "solid" condition name 保留 JSX 语法。
-      bundle: false,
       output: {
         filename: {
           js: '[name].jsx',
@@ -128,6 +126,7 @@ export default defineConfig({
       },
     },
   ],
+  bundle: false,
   output: {
     target: 'web',
   },
@@ -141,9 +140,9 @@ export default defineConfig({
   // [!code highlight:7]
   "exports": {
     ".": {
-      "solid": "./dist/index.jsx",
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "solid": "./dist/index.jsx",
+      "default": "./dist/index.js"
     }
   }
 }
