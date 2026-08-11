@@ -161,11 +161,13 @@ When building ESM output, Rslib v1 treats statically analyzable local `new URL()
 const logo = new URL('./assets/logo.svg', import.meta.url);
 ```
 
-Rslib v0.x preserved this expression and did not emit `logo.svg`. Rslib v1 emits the file and rewrites the URL to a relative path that points to it:
+For project source files, Rslib v0.x preserved this expression and did not emit `logo.svg`. Rslib v1 emits the file and rewrites the URL to a relative path that points to it:
 
 ```js title="dist/index.js"
 const logo = new URL('./static/svg/logo.svg', import.meta.url);
 ```
+
+In addition, for third-party dependencies bundled into the output, Rslib v0.x fell back to Rspack's default URL handling and pulled in extra runtime code, while Rslib v1 consistently emits a static relative URL that points to the emitted asset.
 
 If the project previously copied these assets through [output.copy](/config/rsbuild/output#outputcopy) or a script, remove the corresponding configuration after upgrading to avoid duplicate outputs. In bundleless mode ([`bundle: false`](/config/lib/bundle)), also exclude assets referenced through `new URL()` from [source.entry](/config/rsbuild/source#sourceentry) to avoid generating an additional JavaScript entry for the same file.
 
