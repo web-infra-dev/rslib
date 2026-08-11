@@ -197,13 +197,15 @@ For more details, see the Rspack [Externals](https://rspack.rs/config/externals)
 
 ## Bundle dependencies loaded with createRequire
 
-In ESM source code, you can use Node.js [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename) to load CommonJS modules:
+There is no `require` function in ESM. If you need to load a third-party dependency that only ships CommonJS, you can create one with Node.js [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename):
 
 ```ts title="src/index.ts"
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-export const value = require('./value.cjs');
+const foo = require('foo');
+
+export const bar = foo.bar;
 ```
 
 Rslib preserves `createRequire()` calls by default. To let Rspack analyze these calls and bundle their static dependencies, enable [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire).
@@ -230,9 +232,7 @@ export default defineConfig({
 });
 ```
 
-### Enable only for user source code
-
-If some third-party dependencies require runtime behavior, use a module rule that excludes `node_modules` to enable `createRequire` parsing only for your source code:
+If some third-party dependencies rely on `createRequire()` being kept at runtime, use a module rule that excludes `node_modules` to enable `createRequire` parsing only for your own source code:
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';

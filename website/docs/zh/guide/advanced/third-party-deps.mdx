@@ -192,13 +192,15 @@ export default defineConfig({
 
 ## 打包 createRequire 加载的依赖
 
-在 ESM 源码中，你可以使用 Node.js 的 [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename) 加载 CommonJS 模块：
+ESM 中没有 `require` 函数，如果需要加载仅提供 CommonJS 产物的三方依赖，你可以使用 Node.js 的 [`createRequire()`](https://nodejs.org/api/module.html#modulecreaterequirefilename) 创建 `require`：
 
 ```ts title="src/index.ts"
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-export const value = require('./value.cjs');
+const foo = require('foo');
+
+export const bar = foo.bar;
 ```
 
 Rslib 默认保留 `createRequire()` 调用。如果希望 Rspack 分析这些调用并打包其中的静态依赖，可以开启 [`module.parser.javascript.createRequire`](https://rspack.rs/zh/config/module-parser#javascriptcreaterequire)。
@@ -225,9 +227,7 @@ export default defineConfig({
 });
 ```
 
-### 仅为用户源码开启
-
-如果某些三方依赖需要运行时行为，则可以使用排除 `node_modules` 的 module rule，仅对用户源码开启 `createRequire` 解析：
+如果某些三方依赖依赖于 `createRequire()` 在运行时被保留，则可以使用排除 `node_modules` 的 module rule，仅对用户源码开启 `createRequire` 解析：
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
