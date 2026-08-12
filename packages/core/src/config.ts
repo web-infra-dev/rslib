@@ -296,7 +296,7 @@ const composeFormatConfig = ({
       requireAsExpression: false,
     },
     esm: {
-      importMeta: false,
+      importMeta: format === 'cjs',
       importDynamic: false,
       commonjs: {
         exports: 'skipInEsm',
@@ -397,7 +397,6 @@ const composeFormatConfig = ({
                   ...jsParserOptions.esm,
                   ...jsParserOptions.cjs,
                   ...jsParserOptions.others,
-                  importMeta: true,
                 },
               },
             },
