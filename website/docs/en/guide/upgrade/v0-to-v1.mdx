@@ -102,23 +102,6 @@ No changes are needed if the new baselines are suitable. To preserve the syntax 
   };
   ```
 
-## Environment variable preset handling
-
-Rslib v1 no longer inlines Rsbuild's default environment variable presets into ESM and CJS library output. For ESM output, `import.meta.env` and `process.env.*` references are preserved so that they can be replaced by the downstream bundler or resolved by the target runtime. For CJS output, `process.env.*` references are preserved, while `import.meta.env.*` references are replaced with `undefined` because `import.meta` is not available in CommonJS. Other formats, such as UMD, keep their existing behavior.
-
-If a value must be fixed when building the library, define it explicitly with [source.define](/config/rsbuild/source#sourcedefine):
-
-```ts title="rslib.config.ts"
-export default {
-  source: {
-    define: {
-      'import.meta.env.MODE': JSON.stringify('production'),
-      'process.env.BASE_URL': JSON.stringify('/'),
-    },
-  },
-};
-```
-
 ## Default `externalsType` update
 
 For ESM output ([`format: 'esm'`](/config/lib/format)), Rslib v1 changes Rspack's default [`externalsType: 'module-import'`](https://rspack.rs/config/externals#externalstypemodule-import) to [`externalsType: 'modern-module'`](https://rspack.rs/config/externals#externalstypemodern-module):
@@ -266,6 +249,23 @@ export default {
 Wasm handling in [bundle mode](/config/lib/bundle) remains unchanged.
 
 For more details, see [Wasm - Output modes](/guide/advanced/wasm#output-modes).
+
+## Environment variable preset handling
+
+Rslib v1 no longer inlines Rsbuild's default environment variable presets into ESM and CJS library output. For ESM output, `import.meta.env` and `process.env.*` references are preserved so that they can be replaced by the downstream bundler or resolved by the target runtime. For CJS output, `process.env.*` references are preserved, while `import.meta.env.*` references are replaced with `undefined` because `import.meta` is not available in CommonJS. Other formats, such as UMD, keep their existing behavior.
+
+If a value must be fixed when building the library, define it explicitly with [source.define](/config/rsbuild/source#sourcedefine):
+
+```ts title="rslib.config.ts"
+export default {
+  source: {
+    define: {
+      'import.meta.env.MODE': JSON.stringify('production'),
+      'process.env.BASE_URL': JSON.stringify('/'),
+    },
+  },
+};
+```
 
 ## `@typescript/native-preview` support update
 
