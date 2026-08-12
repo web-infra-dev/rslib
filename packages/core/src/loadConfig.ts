@@ -44,15 +44,17 @@ export function defineConfig<
     | ((env: ConfigParams) => Promise<Config>),
 >(
   config: Definition &
-    (Definition extends (...args: never[]) => unknown
-      ? unknown
+    (Definition extends (...args: never[]) => infer CallbackResult
+      ? [Awaited<CallbackResult>] extends [RslibConfig]
+        ? unknown
+        : never
       : RslibConfig &
           Record<Exclude<keyof Definition, keyof RslibConfig>, never>),
-): Definition extends RslibConfigSyncFn
-  ? RslibConfigSyncFn
-  : Definition extends RslibConfigAsyncFn
-    ? RslibConfigAsyncFn
-    : RslibConfig;
+): Definition extends (...args: never[]) => infer CallbackResult
+  ? [CallbackResult] extends [RslibConfig]
+    ? RslibConfigSyncFn
+    : RslibConfigAsyncFn
+  : RslibConfig;
 export function defineConfig<const Config extends RslibConfig>(
   config: (env: ConfigParams) => Config,
 ): RslibConfigSyncFn;

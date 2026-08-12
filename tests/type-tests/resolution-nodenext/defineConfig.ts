@@ -31,6 +31,9 @@ export const syncConfig: RslibConfigSyncFn = defineConfig((env) => {
   };
 });
 
+declare const configParams: ConfigParams;
+void defineConfig(() => ({ lib: [] }))(configParams).output;
+
 export const asyncConfig: RslibConfigAsyncFn = defineConfig(async () => ({
   lib: [{ syntax: 'es2017' }],
 }));
@@ -44,6 +47,21 @@ export const explicitConfig: RslibConfigSyncFn = defineConfig<RslibConfig>(
 export const anyConfig: RslibConfigSyncFn = defineConfig(() =>
   JSON.parse('{}'),
 );
+
+export function forwardSyncConfig<Config extends RslibConfig>(
+  config: (env: ConfigParams) => Config,
+): RslibConfigSyncFn {
+  return defineConfig(config);
+}
+
+export function forwardAsyncConfig<Config extends RslibConfig>(
+  config: (env: ConfigParams) => Promise<Config>,
+): RslibConfigAsyncFn {
+  return defineConfig(config);
+}
+
+// @ts-expect-error invalid syntax
+defineConfig({ lib: [{ syntax: 'invalid' }] });
 
 // @ts-expect-error invalid syntax
 defineConfig(async () => ({
