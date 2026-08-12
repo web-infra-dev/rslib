@@ -102,6 +102,25 @@ export default {
   };
   ```
 
+## 环境变量预设处理
+
+Rslib v1 不再将 Rsbuild 默认的环境变量预设内联到 ESM 和 CJS 库产物中。对于依赖 `import.meta.env` 或 `process.env.BASE_URL` / `process.env.ASSET_PREFIX` 在构建库时被替换为固定值的使用场景，这是一项破坏性变更。
+
+对于 ESM 产物，这些预设变量的引用会被保留，交由下游打包器替换或目标运行时解析。对于 CJS 产物，`process.env.*` 引用会被保留，而 `import.meta.env.*` 引用会被替换为 `undefined`，因为 CommonJS 中不存在 `import.meta`。UMD 等其他格式的行为保持不变。
+
+如果需要在构建库时固定某个值，可以通过 [source.define](/config/rsbuild/source#sourcedefine) 显式定义：
+
+```ts title="rslib.config.ts"
+export default {
+  source: {
+    define: {
+      'import.meta.env.MODE': JSON.stringify('production'),
+      'process.env.BASE_URL': JSON.stringify('/'),
+    },
+  },
+};
+```
+
 ## 默认 `externalsType` 更新
 
 对于 ESM 产物（[`format: 'esm'`](/config/lib/format)），Rslib v1 将 Rspack 的默认 [`externalsType: 'module-import'`](https://rspack.rs/zh/config/externals#externalstypemodule-import) 调整为 [`externalsType: 'modern-module'`](https://rspack.rs/zh/config/externals#externalstypemodern-module)：
