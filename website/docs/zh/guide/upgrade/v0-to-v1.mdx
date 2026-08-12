@@ -250,9 +250,17 @@ export default {
 
 更多详情请参考 [Wasm - 输出模式](/guide/advanced/wasm#输出模式)。
 
-## 环境变量预设处理
+## 默认环境变量处理更新
 
-Rslib v1 不再将 Rsbuild 默认的环境变量预设内联到 ESM 和 CJS 库产物中。对于 ESM 产物，`import.meta.env` 和 `process.env.*` 引用会被保留，交由下游打包器替换或目标运行时解析。对于 CJS 产物，`process.env.*` 引用会被保留，而 `import.meta.env.*` 引用会被替换为 `undefined`，因为 CommonJS 中不存在 `import.meta`。UMD 等其他格式的行为保持不变。
+Rslib v1 调整了 Rsbuild 默认环境变量预设的处理方式：
+
+| 产物格式        | `import.meta.env`             | `process.env.*`                            |
+| --------------- | ----------------------------- | ------------------------------------------ |
+| ESM             | 保留                          | 保留                                       |
+| CJS             | 替换为 `undefined` 并产生警告 | 保留                                       |
+| UMD / IIFE / MF | 内联 Rsbuild 的默认预设值     | 内联 `BASE_URL` 和 `ASSET_PREFIX` 的预设值 |
+
+保留的引用可以交由下游构建工具替换或目标运行时解析。
 
 如果需要在构建库时固定某个值，可以通过 [source.define](/config/rsbuild/source#sourcedefine) 显式定义：
 

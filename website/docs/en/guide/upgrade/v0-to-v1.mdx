@@ -250,9 +250,17 @@ Wasm handling in [bundle mode](/config/lib/bundle) remains unchanged.
 
 For more details, see [Wasm - Output modes](/guide/advanced/wasm#output-modes).
 
-## Environment variable preset handling
+## Default environment variable handling update
 
-Rslib v1 no longer inlines Rsbuild's default environment variable presets into ESM and CJS library output. For ESM output, `import.meta.env` and `process.env.*` references are preserved so that they can be replaced by the downstream bundler or resolved by the target runtime. For CJS output, `process.env.*` references are preserved, while `import.meta.env.*` references are replaced with `undefined` because `import.meta` is not available in CommonJS. Other formats, such as UMD, keep their existing behavior.
+Rslib v1 changes how Rsbuild's default environment variable presets are handled:
+
+| Output format   | `import.meta.env`                           | `process.env.*`                                             |
+| --------------- | ------------------------------------------- | ----------------------------------------------------------- |
+| ESM             | Preserved                                   | Preserved                                                   |
+| CJS             | Replaced with `undefined` with a warning    | Preserved                                                   |
+| UMD / IIFE / MF | Rsbuild's default preset values are inlined | The `BASE_URL` and `ASSET_PREFIX` preset values are inlined |
+
+Preserved references can be replaced by a downstream build tool or resolved by the target runtime.
 
 If a value must be fixed when building the library, define it explicitly with [source.define](/config/rsbuild/source#sourcedefine):
 
