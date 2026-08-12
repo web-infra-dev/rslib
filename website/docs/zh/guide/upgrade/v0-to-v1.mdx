@@ -376,6 +376,32 @@ export default {
  };
 ```
 
+## 使用 `new URL()` 引用目录
+
+由于 Rslib v1 对 `new URL()` 引用的解析存在实现上的限制，使用 `new URL()` 引用目录时无法正确工作。例如：
+
+```ts
+const currentDirectory = new URL('.', import.meta.url);
+const parentDirectory = new URL('..', import.meta.url);
+```
+
+你可以添加 magic comment 跳过对 `new URL()` 表达式的处理，以保留预期的运行时行为：
+
+```ts
+const currentDirectory = new URL(/* rspackIgnore: true */ '.', import.meta.url);
+const parentDirectory = new URL(/* rspackIgnore: true */ '..', import.meta.url);
+```
+
+你也可以改用 `fileURLToPath()` 和 `path.dirname()` 获取目录路径：
+
+```ts
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
+const parentDirectory = path.dirname(currentDirectory);
+```
+
 ## JavaScript API
 
 - [RslibConfig](/api/javascript-api/types#rslibconfig) 中 `lib` 的类型从 `LibConfig[]` 变为 `LibConfig[] | undefined`。省略 `lib` 时，行为等同于配置 `lib: [{}]`。

@@ -376,6 +376,32 @@ This option was originally used to generate ESM output that was more suitable fo
  };
 ```
 
+## Directory references with `new URL()`
+
+Due to a limitation in Rslib v1's implementation for parsing `new URL()` references, using `new URL()` to reference a directory does not work correctly. For example:
+
+```ts
+const currentDirectory = new URL('.', import.meta.url);
+const parentDirectory = new URL('..', import.meta.url);
+```
+
+You can add the [`rspackIgnore`](https://rspack.rs/api/runtime-api/module-methods#rspackignore) magic comment to skip processing the `new URL()` expression and preserve the expected runtime behavior:
+
+```ts
+const currentDirectory = new URL(/* rspackIgnore: true */ '.', import.meta.url);
+const parentDirectory = new URL(/* rspackIgnore: true */ '..', import.meta.url);
+```
+
+You can also use `fileURLToPath()` and `path.dirname()` to get the directory paths:
+
+```ts
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
+const parentDirectory = path.dirname(currentDirectory);
+```
+
 ## JavaScript API
 
 - The type of `lib` in [RslibConfig](/api/javascript-api/types#rslibconfig) has changed from `LibConfig[]` to `LibConfig[] | undefined`. Omitting `lib` is equivalent to configuring `lib: [{}]`.
