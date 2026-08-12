@@ -104,9 +104,7 @@ No changes are needed if the new baselines are suitable. To preserve the syntax 
 
 ## Environment variable preset handling
 
-Rslib v1 no longer inlines Rsbuild's default environment variable presets into ESM and CJS library output. This is a breaking change for consumers that relied on `import.meta.env` or `process.env.BASE_URL` / `process.env.ASSET_PREFIX` being replaced with fixed values during the library build.
-
-For ESM output, these preset references are preserved so that they can be replaced by the downstream bundler or resolved by the target runtime. For CJS output, `process.env.*` references are preserved, while `import.meta.env.*` references are replaced with `undefined` because `import.meta` is not available in CommonJS. Other formats, such as UMD, keep their existing behavior.
+Rslib v1 no longer inlines Rsbuild's default environment variable presets into ESM and CJS library output. For ESM output, `import.meta.env` and `process.env.*` references are preserved so that they can be replaced by the downstream bundler or resolved by the target runtime. For CJS output, `process.env.*` references are preserved, while `import.meta.env.*` references are replaced with `undefined` because `import.meta` is not available in CommonJS. Other formats, such as UMD, keep their existing behavior.
 
 If a value must be fixed when building the library, define it explicitly with [source.define](/config/rsbuild/source#sourcedefine):
 
