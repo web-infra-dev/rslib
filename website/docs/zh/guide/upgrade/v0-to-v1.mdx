@@ -392,7 +392,7 @@ const currentDirectory = new URL(/* rspackIgnore: true */ '.', import.meta.url);
 const parentDirectory = new URL(/* rspackIgnore: true */ '..', import.meta.url);
 ```
 
-你也可以改用 `fileURLToPath()` 和 `path.dirname()` 获取目录路径：
+如果目标平台为 Node.js，你也可以改用 `fileURLToPath()` 和 `path.dirname()` 获取目录路径：
 
 ```ts
 import path from 'node:path';

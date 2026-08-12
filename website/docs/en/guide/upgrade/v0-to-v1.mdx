@@ -392,7 +392,7 @@ const currentDirectory = new URL(/* rspackIgnore: true */ '.', import.meta.url);
 const parentDirectory = new URL(/* rspackIgnore: true */ '..', import.meta.url);
 ```
 
-You can also use `fileURLToPath()` and `path.dirname()` to get the directory paths:
+If the target platform is Node.js, you can also use `fileURLToPath()` and `path.dirname()` to get the directory paths:
 
 ```ts
 import path from 'node:path';
