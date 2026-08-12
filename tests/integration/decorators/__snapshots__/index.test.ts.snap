@@ -249,7 +249,7 @@ export { _Person as Person };
 `;
 
 exports[`decorators support 2022-03 config 1`] = `
-"function applyDecs2203RFactory() {
+"function _apply_decs_2203_r(targetClass, memberDecs, classDecs, parentClass) {
     function createAddInitializerMethod(initializers, decoratorFinishedRef) {
         return function(initializer) {
             assertNotFinished(decoratorFinishedRef, "addInitializer");
@@ -555,7 +555,7 @@ exports[`decorators support 2022-03 config 1`] = `
             value: metadata
         });
     }
-    return function(targetClass, memberDecs, classDecs, parentClass) {
+    _apply_decs_2203_r = function(targetClass, memberDecs, classDecs, parentClass) {
         if (void 0 !== parentClass) var parentMetadata = parentClass[Symbol.metadata || Symbol.for("Symbol.metadata")];
         var metadata = Object.create(void 0 === parentMetadata ? null : parentMetadata);
         var e = applyMemberDecs(targetClass, memberDecs, metadata);
@@ -567,9 +567,7 @@ exports[`decorators support 2022-03 config 1`] = `
             }
         };
     };
-}
-function _apply_decs_2203_r(targetClass, memberDecs, classDecs, parentClass) {
-    return (_apply_decs_2203_r = applyDecs2203RFactory())(targetClass, memberDecs, classDecs, parentClass);
+    return _apply_decs_2203_r(targetClass, memberDecs, classDecs, parentClass);
 }
 var _dec, _initClass;
 function src_enhancer(name) {
@@ -604,8 +602,8 @@ exports[`decorators with experimentalDecorators in tsconfig 1`] = `
     else for(var i = decorators.length - 1; i >= 0; i--)if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
-function _ts_metadata(k, v) {
-    if ("object" == typeof Reflect && "function" == typeof Reflect.metadata) return Reflect.metadata(k, v);
+function _ts_metadata(metadataKey, metadataValue) {
+    if ("object" == typeof Reflect && "function" == typeof Reflect.metadata) return Reflect.metadata(metadataKey, metadataValue);
 }
 function src_enhancer(name) {
     return function(target) {
@@ -627,7 +625,7 @@ export { Person };
 `;
 
 exports[`decorators with experimentalDecorators in tsconfig 2`] = `
-"function applyDecs2203RFactory() {
+"function _apply_decs_2203_r(targetClass, memberDecs, classDecs, parentClass) {
     function createAddInitializerMethod(initializers, decoratorFinishedRef) {
         return function(initializer) {
             assertNotFinished(decoratorFinishedRef, "addInitializer");
@@ -933,7 +931,7 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
             value: metadata
         });
     }
-    return function(targetClass, memberDecs, classDecs, parentClass) {
+    _apply_decs_2203_r = function(targetClass, memberDecs, classDecs, parentClass) {
         if (void 0 !== parentClass) var parentMetadata = parentClass[Symbol.metadata || Symbol.for("Symbol.metadata")];
         var metadata = Object.create(void 0 === parentMetadata ? null : parentMetadata);
         var e = applyMemberDecs(targetClass, memberDecs, metadata);
@@ -945,9 +943,7 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
             }
         };
     };
-}
-function _apply_decs_2203_r(targetClass, memberDecs, classDecs, parentClass) {
-    return (_apply_decs_2203_r = applyDecs2203RFactory())(targetClass, memberDecs, classDecs, parentClass);
+    return _apply_decs_2203_r(targetClass, memberDecs, classDecs, parentClass);
 }
 var _dec, _initClass;
 function src_enhancer(name) {
