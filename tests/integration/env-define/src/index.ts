@@ -1,7 +1,11 @@
 export const mode = import.meta.env.MODE;
 export const env = import.meta.env;
 export const dev = import.meta.env.DEV;
+export const prod = import.meta.env.PROD;
+export const ssr = import.meta.env.SSR;
 export const base = import.meta.env.BASE_URL;
+export const assetPrefix = import.meta.env.ASSET_PREFIX;
+export const custom = import.meta.env.MY_CUSTOM;
 export const processBase = process.env.BASE_URL;
 export const processAssetPrefix = process.env.ASSET_PREFIX;
 export const processCustom = process.env.MY_CUSTOM;
