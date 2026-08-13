@@ -177,7 +177,7 @@ When using Node.js's native loader, please note the following limitations:
 
 > See [Node.js - Running TypeScript Natively](https://nodejs.org/en/learn/typescript/run-natively#running-typescript-natively) for more details.
 
-## Using environment variables at build time
+## Using environment variables
 
 In the configuration file, you can use Node.js environment variables to dynamically set different configurations:
 
@@ -196,33 +196,6 @@ export default defineConfig({
         process.env.LANGUAGE === 'en'
           ? './src/language/en.js'
           : './src/language/zh.js',
-    },
-  },
-});
-```
-
-## Using environment variables in source code
-
-Rslib handles environment variable references differently for each output format:
-
-| Output format   | `import.meta.env`                           | `process.env.*`                                             |
-| --------------- | ------------------------------------------- | ----------------------------------------------------------- |
-| ESM             | Preserved                                   | Preserved                                                   |
-| CJS             | Replaced with `undefined` with a warning    | Preserved                                                   |
-| UMD / IIFE / MF | Rsbuild's default preset values are inlined | The `BASE_URL` and `ASSET_PREFIX` preset values are inlined |
-
-Preserved references can be replaced by a downstream build tool or resolved by the target runtime.
-
-To replace an environment variable with a fixed value when building the library, define it explicitly with [source.define](/config/rsbuild/source#sourcedefine):
-
-```ts title="rslib.config.ts"
-import { defineConfig } from '@rslib/core';
-
-export default defineConfig({
-  source: {
-    define: {
-      'import.meta.env.MODE': JSON.stringify('production'),
-      'process.env.BASE_URL': JSON.stringify('/'),
     },
   },
 });

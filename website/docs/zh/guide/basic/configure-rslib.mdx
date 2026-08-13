@@ -177,7 +177,7 @@ Rslib 提供了三种配置文件加载方式：
 
 > 详见 [Node.js - Running TypeScript Natively](https://nodejs.org/en/learn/typescript/run-natively#running-typescript-natively)。
 
-## 构建时使用环境变量
+## 使用环境变量
 
 在配置文件中，你可以使用 Node.js 环境变量，来动态写入不同的配置：
 
@@ -196,33 +196,6 @@ export default defineConfig({
         process.env.LANGUAGE === 'en'
           ? './src/language/en.js'
           : './src/language/zh.js',
-    },
-  },
-});
-```
-
-## 在源代码中使用环境变量
-
-Rslib 对不同产物格式中的环境变量引用采用不同的处理方式：
-
-| 产物格式        | `import.meta.env`             | `process.env.*`                            |
-| --------------- | ----------------------------- | ------------------------------------------ |
-| ESM             | 保留                          | 保留                                       |
-| CJS             | 替换为 `undefined` 并产生警告 | 保留                                       |
-| UMD / IIFE / MF | 内联 Rsbuild 的默认预设值     | 内联 `BASE_URL` 和 `ASSET_PREFIX` 的预设值 |
-
-保留的引用可以交由下游构建工具替换或目标运行时解析。
-
-如果需要在构建库时将环境变量替换为固定值，可以通过 [source.define](/config/rsbuild/source#sourcedefine) 显式定义：
-
-```ts title="rslib.config.ts"
-import { defineConfig } from '@rslib/core';
-
-export default defineConfig({
-  source: {
-    define: {
-      'import.meta.env.MODE': JSON.stringify('production'),
-      'process.env.BASE_URL': JSON.stringify('/'),
     },
   },
 });
