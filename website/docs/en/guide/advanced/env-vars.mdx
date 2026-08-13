@@ -1,0 +1,88 @@
+---
+description: 'Rslib environment variables across output formats: default behavior, .env loading, PUBLIC_ variables, and source.define replacements.'
+---
+
+# Environment variables
+
+Rslib supports injecting environment variables or expressions into code during the build. This is useful for distinguishing runtime environments, replacing constants, and similar scenarios.
+
+This page explains how to use environment variables in Rslib.
+
+## Default environment variables
+
+Depending on the [output format](/guide/basic/output-format) specified by [format](/config/lib/format), Rslib either preserves source environment variables in the build output or replaces them with specific values at build time. The behavior is as follows:
+
+| format     | import.meta.env.\*                             | process.env.\*                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ---------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| esm        | Preserved                                      | Preserved                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| cjs        | `import.meta.env` is replaced with `undefined` | Preserved                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| umd / iife | Replaced                                       | <ul><li>`process.env.NODE_ENV`: replaced with `'production'` by default</li><li>[process.env.BASE_URL](https://rsbuild.rs/guide/advanced/env-vars#processenvbase_url) and [process.env.ASSET_PREFIX](https://rsbuild.rs/guide/advanced/env-vars#processenvasset_prefix): replaced</li><li>Other variables: preserved</li></ul>                                                                                                |
+| mf         | Replaced                                       | <ul><li>`process.env.NODE_ENV`: replaced with `'production'` during [build](/guide/basic/cli#rslib) and `'development'` during [mf-dev](/guide/basic/cli#rslib-mf-dev)</li><li>[process.env.BASE_URL](https://rsbuild.rs/guide/advanced/env-vars#processenvbase_url) and [process.env.ASSET_PREFIX](https://rsbuild.rs/guide/advanced/env-vars#processenvasset_prefix): replaced</li><li>Other variables: preserved</li></ul> |
+
+:::note
+Environment variables preserved in the build output are typically replaced by a downstream build tool or resolved by the target runtime; variables replaced at build time use [Rsbuild's default values](https://rsbuild.rs/guide/advanced/env-vars#default-variables).
+:::
+
+### process.env.NODE_ENV
+
+By default, Rslib automatically sets the `process.env.NODE_ENV` environment variable:
+
+- It is set to `'production'` when running [build](/guide/basic/cli#rslib) or calling [rslib.build()](/api/javascript-api/instance#rslibbuild), including in watch mode.
+- It is set to `'development'` when running [mf-dev](/guide/basic/cli#rslib-mf-dev) or calling [rslib.startMFDevServer()](/api/javascript-api/instance#rslibstartmfdevserver).
+
+These defaults are set in the current Node.js process, but `process.env.NODE_ENV` is not replaced in every output format. As shown in the table above, it is preserved in ESM and CJS output and replaced at build time in the other formats.
+
+To override the default handling in the build output, such as disabling replacement or specifying a custom replacement value, use [tools.rspack](/config/rsbuild/tools#toolsrspack) to configure Rspack's [optimization.nodeEnv](https://rspack.rs/config/optimization#optimizationnodeenv):
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  tools: {
+    rspack: {
+      optimization: {
+        nodeEnv: false,
+      },
+    },
+  },
+});
+```
+
+## `.env` files
+
+The Rslib CLI loads `.env` files from the project root by default. You can adjust this behavior with the following CLI options:
+
+- `--env-mode <mode>`: Load the corresponding `.env.[mode]` file.
+- `--env-dir <dir>`: Specify the directory containing the `.env` files.
+- `--no-env`: Disable loading `.env` files.
+
+After loading, all environment variables are added to the current Node.js process, so they can be accessed through `process.env` in `rslib.config.*`. By default, only variables prefixed with `PUBLIC_` are used to replace matching environment variable expressions at build time.
+
+For supported `.env` file types, loading order, and override rules, see [Rsbuild - `.env` files](https://rsbuild.rs/guide/advanced/env-vars#env-file). For Public variable handling rules, see [Rsbuild - Public variables](https://rsbuild.rs/guide/advanced/env-vars#public-variables).
+
+## Using define
+
+To replace a global identifier in your code with another value or expression at build time, use [source.define](/config/rsbuild/source#sourcedefine). For example:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  source: {
+    define: {
+      'import.meta.env.FOO': JSON.stringify('foo'),
+      'process.env.BAR': JSON.stringify('bar'),
+    },
+  },
+});
+```
+
+:::tip
+
+- Explicit definitions take precedence over Rslib's default handling and are replaced in every output format.
+- Values passed to `source.define` are code fragments, so string values must be converted with `JSON.stringify()`.
+- Define only the properties you need instead of replacing the entire `process.env` object.
+
+:::
+
+For environment variable type declarations, see [Rsbuild - Type declarations](https://rsbuild.rs/guide/advanced/env-vars#type-declarations).

@@ -71,21 +71,18 @@ Options:
 If the [Rslib configuration file](/guide/basic/configure-rslib#configuration-file) is not present in your project, the CLI will automatically use the default configuration containing only a single [lib](/config/lib/) and apply all build options from the command line. You can add a configuration file once you need a more complex configuration or want to build outputs in multiple formats.
 :::
 
-### Detecting watch mode
+### Watch mode
 
-The `rslib --watch` command builds in watch mode. If you need to use different configuration in watch mode, check whether `--watch` is present in `process.argv`:
+Use `rslib --watch` or `rslib -w` to enable watch mode. Rslib watches for source file changes and automatically rebuilds when they change.
+
+If you need to adjust the configuration based on whether watch mode is enabled, check `process.argv`:
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
 
-const isWatch = process.argv.includes('--watch');
+const isWatch = process.argv.some((arg) => arg === '--watch' || arg === '-w');
 
 export default defineConfig({
-  lib: [
-    {
-      format: 'esm',
-    },
-  ],
   source: {
     alias: {
       '@request': isWatch ? './src/request.dev.js' : './src/request.prod.js',
