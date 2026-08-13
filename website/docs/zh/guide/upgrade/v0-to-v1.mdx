@@ -250,6 +250,31 @@ export default {
 
 更多详情请参考 [Wasm - 输出模式](/guide/advanced/wasm#输出模式)。
 
+## 默认环境变量处理更新
+
+Rslib v1 调整了 Rsbuild 默认环境变量预设的处理方式：
+
+| 产物格式        | `import.meta.env`         | `process.env.BASE_URL` / `process.env.ASSET_PREFIX` | 其他 `process.env.*` |
+| --------------- | ------------------------- | --------------------------------------------------- | -------------------- |
+| ESM             | 保留                      | 保留                                                | 保留                 |
+| CJS             | 替换为 `undefined`        | 保留                                                | 保留                 |
+| UMD / IIFE / MF | 内联 Rsbuild 的预设值     | 内联 Rsbuild 的预设值                               | 保留                 |
+
+保留的引用可以交由下游构建工具替换或目标运行时解析。
+
+如果需要在构建库时固定某个值，可以通过 [source.define](https://rsbuild.rs/zh/guide/advanced/env-vars#using-define) 显式定义：
+
+```ts title="rslib.config.ts"
+export default {
+  source: {
+    define: {
+      'import.meta.env.MODE': JSON.stringify('production'),
+      'process.env.BASE_URL': JSON.stringify('/'),
+    },
+  },
+};
+```
+
 ## `@typescript/native-preview` 支持调整
 
 在 Rslib v0.x 中，开启 [dts.tsgo](/config/lib/dts#dtstsgo) 后，Rslib 会自动加载 `@typescript/native-preview` 来生成类型声明文件。
