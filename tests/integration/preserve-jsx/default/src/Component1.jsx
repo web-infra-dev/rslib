@@ -27,6 +27,7 @@ const spreadChildren = [
 ];
 
 export default function Root() {
+  /* rslint-disable no-undef -- fixture intentionally preserves unresolved JSX references */
   return (
     <>
       <React.Fragment>
@@ -104,4 +105,5 @@ export default function Root() {
       </div>
     </>
   );
+  /* rslint-enable no-undef */
 }

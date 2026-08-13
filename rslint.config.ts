@@ -1,4 +1,5 @@
 import { defineConfig, js, ts } from '@rslint/core';
+import globals from 'globals';
 
 export default defineConfig([
   {
@@ -27,6 +28,15 @@ export default defineConfig([
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       'preserve-caught-error': 'off',
+    },
+  },
+  {
+    files: ['**/*.js', '**/*.jsx', '**/*.mjs', '**/*.cjs'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
     },
   },
 ]);
