@@ -71,11 +71,9 @@ Options:
 如果项目中不存在 Rslib [配置文件](/guide/basic/configure-rslib#配置文件)，CLI 将自动使用仅包含单个 [lib](/config/lib/) 的默认配置，并根据命令行参数完成构建。当需要更复杂的配置或构建多种格式的产物时，再补充配置文件即可。
 :::
 
-### 环境变量
+### 判断 watch 模式
 
-Rslib 支持在构建过程中向代码中注入环境变量或表达式，这对于区分运行环境、替换常量值等场景很有帮助。你可以查看 [Rsbuild - 环境变量](https://rsbuild.rs/zh/guide/advanced/env-vars) 了解更多详细信息。
-
-默认情况下，Rslib 会自动设置 `process.env.NODE_ENV` 环境变量，在 build 时始终为 `'production'`。如果你需要区分 watch 模式来动态写入不同的配置，可以如下：
+`rslib --watch` 命令会以 watch 模式进行构建。如果你需要在 watch 模式下使用不同的配置，可以检查 `process.argv` 中是否包含 `--watch`：
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
@@ -95,13 +93,6 @@ export default defineConfig({
   },
 });
 ```
-
-::: note
-
-- 当 [format](/config/lib/format) 设置为 `esm` 或 `cjs` 时，源代码中的 `process.env.NODE_ENV` 会在构建产物中被保留。
-- 当 [format](/config/lib/format) 设置为 `mf` 或 `umd` 时，源代码中的 `process.env.NODE_ENV` 将被替换，以确保构建产物可以在浏览器中运行。
-
-:::
 
 ## rslib inspect
 
