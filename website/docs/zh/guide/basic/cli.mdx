@@ -71,21 +71,18 @@ Options:
 如果项目中不存在 Rslib [配置文件](/guide/basic/configure-rslib#配置文件)，CLI 将自动使用仅包含单个 [lib](/config/lib/) 的默认配置，并根据命令行参数完成构建。当需要更复杂的配置或构建多种格式的产物时，再补充配置文件即可。
 :::
 
-### 判断 watch 模式
+### Watch 模式
 
-`rslib --watch` 命令会以 watch 模式进行构建。如果你需要在 watch 模式下使用不同的配置，可以检查 `process.argv` 中是否包含 `--watch`：
+使用 `rslib --watch` 或 `rslib -w` 可以开启 watch 模式。Rslib 会监听源文件变化，并在文件发生变化时自动重新构建。
+
+如果需要根据是否开启 watch 模式来调整配置，可以检查 `process.argv`：
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
 
-const isWatch = process.argv.includes('--watch');
+const isWatch = process.argv.some((arg) => arg === '--watch' || arg === '-w');
 
 export default defineConfig({
-  lib: [
-    {
-      format: 'esm',
-    },
-  ],
   source: {
     alias: {
       '@request': isWatch ? './src/request.dev.js' : './src/request.prod.js',

@@ -1,0 +1,88 @@
+---
+description: 'Rslib 环境变量指南：不同产物格式的默认行为、.env 文件加载、PUBLIC_ 变量与 source.define 构建时替换。'
+---
+
+# 环境变量
+
+Rslib 支持在构建过程中向代码中注入环境变量或表达式，这对于区分运行环境、替换常量值等场景很有帮助。
+
+本章节将介绍如何在 Rslib 中使用环境变量。
+
+## 默认环境变量
+
+Rslib 会根据 [format](/config/lib/format) 配置指定的 [产物格式](/guide/basic/output-format)，将源码中的环境变量保留在构建产物中，或在构建时将其替换为指定的值。具体行为如下：
+
+| 产物格式   | import.meta.env.\*                     | process.env.\*                                                                                                                                                                                                                                                                                                                                                                                              |
+| ---------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| esm        | 保留                                   | 保留                                                                                                                                                                                                                                                                                                                                                                                                        |
+| cjs        | `import.meta.env` 被替换为 `undefined` | 保留                                                                                                                                                                                                                                                                                                                                                                                                        |
+| umd / iife | 替换                                   | <ul><li>`process.env.NODE_ENV`：默认替换为 `'production'`</li><li>[process.env.BASE_URL](https://rsbuild.rs/zh/guide/advanced/env-vars#processenvbase_url) 和 [process.env.ASSET_PREFIX](https://rsbuild.rs/zh/guide/advanced/env-vars#processenvasset_prefix)：替换</li><li>其他变量：保留</li></ul>                                                                                                       |
+| mf         | 替换                                   | <ul><li>`process.env.NODE_ENV`：在 [build](/guide/basic/cli#rslib) 时替换为 `'production'`，在 [mf-dev](/guide/basic/cli#rslib-mf-dev) 时替换为 `'development'`</li><li>[process.env.BASE_URL](https://rsbuild.rs/zh/guide/advanced/env-vars#processenvbase_url) 和 [process.env.ASSET_PREFIX](https://rsbuild.rs/zh/guide/advanced/env-vars#processenvasset_prefix)：替换</li><li>其他变量：保留</li></ul> |
+
+:::note
+保留在构建产物中的环境变量通常由下游构建工具替换，或由目标运行时解析；构建时被替换的环境变量则使用 [Rsbuild 定义的默认值](https://rsbuild.rs/zh/guide/advanced/env-vars#默认环境变量)。
+:::
+
+### process.env.NODE_ENV
+
+默认情况下，Rslib 会自动设置 `process.env.NODE_ENV` 环境变量：
+
+- 执行 [build](/guide/basic/cli#rslib) 或调用 [rslib.build()](/api/javascript-api/instance#rslibbuild) 时（包括 watch 模式），设置为 `'production'`。
+- 执行 [mf-dev](/guide/basic/cli#rslib-mf-dev) 或调用 [rslib.startMFDevServer()](/api/javascript-api/instance#rslibstartmfdevserver) 时，设置为 `'development'`。
+
+上述默认值会设置到当前 Node.js 进程，但不会在所有产物中替换 `process.env.NODE_ENV`。如上表所示，ESM 和 CJS 产物会保留 `process.env.NODE_ENV`，其他格式则会在构建时进行替换。
+
+如果需要覆盖产物中的默认处理方式，例如关闭替换或自定义替换值，可以通过 [tools.rspack](/config/rsbuild/tools#toolsrspack) 配置 Rspack 的 [optimization.nodeEnv](https://rspack.rs/zh/config/optimization#optimizationnodeenv)：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  tools: {
+    rspack: {
+      optimization: {
+        nodeEnv: false,
+      },
+    },
+  },
+});
+```
+
+## `.env` 文件
+
+Rslib CLI 默认加载项目根目录下的 `.env` 文件。你可以使用以下 CLI 选项调整加载行为：
+
+- `--env-mode <mode>`：加载对应的 `.env.[mode]` 文件。
+- `--env-dir <dir>`：指定 `.env` 文件所在的目录。
+- `--no-env`：禁用 `.env` 文件加载。
+
+加载后，所有环境变量都会添加到当前 Node.js 进程，因此可以在 `rslib.config.*` 中通过 `process.env` 访问。其中，默认只有以 `PUBLIC_` 开头的变量会在构建时替换代码中的同名环境变量。
+
+有关 `.env` 文件支持的类型、加载顺序和覆盖规则，请参考 [Rsbuild - `.env` 文件](https://rsbuild.rs/zh/guide/advanced/env-vars#env-file)；有关 Public 变量的处理规则，请参考 [Rsbuild - Public 变量](https://rsbuild.rs/zh/guide/advanced/env-vars#public-variables)。
+
+## 使用 define
+
+如果需要在构建时将代码中的全局标识符替换为其他值或表达式，可以通过 [source.define](/config/rsbuild/source#sourcedefine) 显式定义。例如：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  source: {
+    define: {
+      'import.meta.env.FOO': JSON.stringify('foo'),
+      'process.env.BAR': JSON.stringify('bar'),
+    },
+  },
+});
+```
+
+:::tip
+
+- 显式定义的值优先于 Rslib 的默认处理，并会在所有产物格式中被替换。
+- `source.define` 的值是代码片段，因此字符串需要通过 `JSON.stringify()` 转换。
+- 请按需定义具体属性，避免替换整个 `process.env` 对象。
+
+:::
+
+关于环境变量的类型声明，请参考 [Rsbuild - 类型声明](https://rsbuild.rs/zh/guide/advanced/env-vars#类型声明)。
