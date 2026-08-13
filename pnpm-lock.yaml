@@ -248,8 +248,8 @@ catalogs:
       specifier: ^1.0.0
       version: 1.0.0
     rslib:
-      specifier: npm:@rslib/core@1.0.0-beta.2
-      version: 1.0.0-beta.2
+      specifier: npm:@rslib/core@1.0.0-beta.3
+      version: 1.0.0-beta.3
     rslog:
       specifier: ^2.3.0
       version: 2.3.0
@@ -322,7 +322,7 @@ importers:
         version: 0.7.3(jiti@2.7.0)
       '@rstest/adapter-rslib':
         specifier: 'catalog:'
-        version: 0.11.6(@rslib/core@1.0.0-beta.2)(@rstest/core@0.11.6)(typescript@7.0.2)
+        version: 0.11.6(@rslib/core@1.0.0-beta.3)(@rstest/core@0.11.6)(typescript@7.0.2)
       '@rstest/core':
         specifier: 'catalog:'
         version: 0.11.6
@@ -672,7 +672,7 @@ importers:
         version: 1.0.0(@rsbuild/core@2.1.12)
       rslib:
         specifier: 'catalog:'
-        version: '@rslib/core@1.0.0-beta.2(@microsoft/api-extractor@7.58.12)(@module-federation/runtime-tools@2.8.2)(typescript@7.0.2)'
+        version: '@rslib/core@1.0.0-beta.3(@microsoft/api-extractor@7.58.12)(@module-federation/runtime-tools@2.8.2)(typescript@7.0.2)'
       rslog:
         specifier: 'catalog:'
         version: 2.3.0
@@ -709,7 +709,7 @@ importers:
         version: 1.0.0(@rsbuild/core@2.1.12)
       rslib:
         specifier: 'catalog:'
-        version: '@rslib/core@1.0.0-beta.2(@microsoft/api-extractor@7.58.12)(@module-federation/runtime-tools@2.8.2)(typescript@7.0.2)'
+        version: '@rslib/core@1.0.0-beta.3(@microsoft/api-extractor@7.58.12)(@module-federation/runtime-tools@2.8.2)(typescript@7.0.2)'
       tsx:
         specifier: 'catalog:'
         version: 4.23.11
@@ -743,7 +743,7 @@ importers:
         version: 1.0.0(@rsbuild/core@2.1.12)
       rslib:
         specifier: 'catalog:'
-        version: '@rslib/core@1.0.0-beta.2(@microsoft/api-extractor@7.58.12)(@module-federation/runtime-tools@2.8.2)(typescript@7.0.2)'
+        version: '@rslib/core@1.0.0-beta.3(@microsoft/api-extractor@7.58.12)(@module-federation/runtime-tools@2.8.2)(typescript@7.0.2)'
       tinyglobby:
         specifier: 'catalog:'
         version: 0.2.17
@@ -3108,8 +3108,8 @@ packages:
       '@rsbuild/core':
         optional: true
 
-  '@rslib/core@1.0.0-beta.2':
-    resolution: {integrity: sha512-A0j3MBP8Kga8Qrh7znO2UKf00Sga37PJCiTGUqVVBHb+u58fNoGXZtFAgeH6qKjf5eU1wYt4WptXX/1blOAfRw==}
+  '@rslib/core@1.0.0-beta.3':
+    resolution: {integrity: sha512-OtfmaBoGlHo1KYvQ3+B0ZLy3zUsAdoRZfWieaxoJMJ9uKAws2//afFgvUqeSDkkSJDlp8TDdgt4hib+QaFOaGQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -6761,8 +6761,8 @@ packages:
     resolution: {integrity: sha512-nLTrUKm2UyiL7rlhapu/Zl45FwNgkZGaCpZbIHajDYgwlJCOzLSk+cIPAnsEqV955GjILJnKbdQC1nVPz+gAYQ==}
     engines: {node: '>= 18'}
 
-  rsbuild-plugin-dts@1.0.0-beta.2:
-    resolution: {integrity: sha512-xOYa/kw/y29kKFFNjd+CIemlq+CB8E7LhqNkIzg7HT9dYNBVBpZvnnL6OEsOgjeuqzKpGSCRgZN/dDoVOk4VhQ==}
+  rsbuild-plugin-dts@1.0.0-beta.3:
+    resolution: {integrity: sha512-Q8x/yyOsy8sNR8sHn0xuZsul7ErT5kXkTmDwCIxQ8esiMCW7QKjfyXDa4kvTxWn7oSQ5NP/O6qZM2vEA07thKw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@microsoft/api-extractor': ^7
@@ -9433,10 +9433,10 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.1.12(@module-federation/runtime-tools@2.8.2)
 
-  '@rslib/core@1.0.0-beta.2(@microsoft/api-extractor@7.58.12)(@module-federation/runtime-tools@2.8.2)(typescript@7.0.2)':
+  '@rslib/core@1.0.0-beta.3(@microsoft/api-extractor@7.58.12)(@module-federation/runtime-tools@2.8.2)(typescript@7.0.2)':
     dependencies:
       '@rsbuild/core': 2.1.12(@module-federation/runtime-tools@2.8.2)
-      rsbuild-plugin-dts: 1.0.0-beta.2(@microsoft/api-extractor@7.58.12)(@rsbuild/core@2.1.12)(typescript@7.0.2)
+      rsbuild-plugin-dts: 1.0.0-beta.3(@microsoft/api-extractor@7.58.12)(@rsbuild/core@2.1.12)(typescript@7.0.2)
     optionalDependencies:
       '@microsoft/api-extractor': 7.58.12(@types/node@24.13.3)
       typescript: 7.0.2
@@ -9681,9 +9681,9 @@ snapshots:
 
   '@rstackjs/create-toolkit@2.2.1': {}
 
-  '@rstest/adapter-rslib@0.11.6(@rslib/core@1.0.0-beta.2)(@rstest/core@0.11.6)(typescript@7.0.2)':
+  '@rstest/adapter-rslib@0.11.6(@rslib/core@1.0.0-beta.3)(@rstest/core@0.11.6)(typescript@7.0.2)':
     dependencies:
-      '@rslib/core': 1.0.0-beta.2(@microsoft/api-extractor@7.58.12)(@module-federation/runtime-tools@2.8.2)(typescript@7.0.2)
+      '@rslib/core': 1.0.0-beta.3(@microsoft/api-extractor@7.58.12)(@module-federation/runtime-tools@2.8.2)(typescript@7.0.2)
       '@rstest/core': 0.11.6
     optionalDependencies:
       typescript: 7.0.2
@@ -13646,7 +13646,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@1.0.0-beta.2(@microsoft/api-extractor@7.58.12)(@rsbuild/core@2.1.12)(typescript@7.0.2):
+  rsbuild-plugin-dts@1.0.0-beta.3(@microsoft/api-extractor@7.58.12)(@rsbuild/core@2.1.12)(typescript@7.0.2):
     dependencies:
       '@ast-grep/napi': 0.37.0
       '@rsbuild/core': 2.1.12(@module-federation/runtime-tools@2.8.2)

@@ -3,15 +3,4 @@ import { defineConfig } from 'rslib';
 
 export default defineConfig({
   plugins: [pluginPublint()],
-  tools: {
-    rspack: {
-      module: {
-        parser: {
-          javascript: {
-            createRequire: false,
-          },
-        },
-      },
-    },
-  },
 });

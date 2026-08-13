@@ -22,13 +22,6 @@ export default defineConfig({
   },
   tools: {
     rspack: {
-      module: {
-        parser: {
-          javascript: {
-            createRequire: false,
-          },
-        },
-      },
       resolve: {
         alias: {
           // Ensure tsconfig-paths resolves json5 to its CommonJS entry.

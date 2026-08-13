@@ -23,13 +23,6 @@ export default defineConfig({
   },
   tools: {
     rspack: {
-      module: {
-        parser: {
-          javascript: {
-            createRequire: false,
-          },
-        },
-      },
       plugins: [new rspack.CircularCheckRspackPlugin()],
     },
   },
