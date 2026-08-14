@@ -201,7 +201,7 @@ The output retains the standard `new URL(path, import.meta.url)` form. If the re
 
 ##### Ignore a specific reference
 
-To skip processing for a specific `new URL()`, add the [rspackIgnore](https://rspack.rs/api/runtime-api/module-methods#rspackignore) comment before its first argument:
+To skip processing for a specific `new URL()` expression, add the [rspackIgnore](https://rspack.rs/api/runtime-api/module-methods#rspackignore) comment before its first argument. The output then preserves the standard `new URL(path, import.meta.url)` expression:
 
 ```ts title="src/index.ts"
 const logo = new URL(
@@ -209,8 +209,6 @@ const logo = new URL(
   import.meta.url,
 );
 ```
-
-At this point, Rslib uses a runtime variable as the base URL for `new URL()`, and the emitted expression no longer retains `import.meta.url`. This limits downstream bundlers' ability to statically analyze the asset reference when consuming the output.
 
 ## Import assets in CSS file
 

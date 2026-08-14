@@ -191,65 +191,64 @@ Rslib v1 调整了 ESM 产物（[`format: 'esm'`](/config/lib/format)）中通�
 
 ### `new URL()` 静态资源
 
-构建 ESM 产物时，Rslib v1 会将可静态分析的本地 `new URL()` 引用作为静态资源处理。以引用 `logo.svg` 为例：
+Rslib v1 会在构建 ESM 产物时将可静态分析的 `new URL()` 引用作为静态资源处理。以引用 `logo.svg` 为例：
 
 ```ts title="src/index.ts"
 const logo = new URL('./assets/logo.svg', import.meta.url);
 ```
 
-对于项目源码，Rslib v0.x 会原样保留该表达式，且不会输出 `logo.svg`。Rslib v1 则会输出该文件，并将 URL 重写为指向该文件的相对路径：
+对于项目源码，Rslib v0.x 会原样保留该表达式，且不会输出 `logo.svg`。Rslib v1 则会输出该文件，并使 `new URL()` 中的路径指向产物中的资源文件。
 
 ```js title="dist/index.js"
 const logo = new URL('./static/svg/logo.svg', import.meta.url);
 ```
 
-此外，对于被打包到产物中的三方依赖，Rslib v0.x 会回退到 Rspack 默认的 URL 处理并引入额外 runtime，Rslib v1 则会统一生成指向输出资源的静态相对 URL。
+对于被打包到产物中的三方依赖，Rslib v0.x 会将 `new URL()` 中的资源路径改写为模块引用，并在产物中注入用于加载该模块和计算基准 URL 的运行时代码。Rslib v1 则会采用与项目源码相同的处理方式，输出引用的资源，并使 `new URL()` 中的路径指向该资源文件。
 
-如果项目此前通过 [output.copy](/config/rsbuild/output#outputcopy) 或脚本复制这类资源，升级后应移除相应配置，避免重复输出。在 bundleless 模式（[`bundle: false`](/config/lib/bundle)）下，还需要在 [source.entry](/config/rsbuild/source#sourceentry) 中排除已通过 `new URL()` 引用的资源，避免为同一文件额外生成 JavaScript 入口。
+如果项目原先通过 [output.copy](/config/rsbuild/output#outputcopy) 配置或脚本复制这些资源，且升级后这些资源会由 Rslib 根据 `new URL()` 引用输出，应移除相应配置或脚本，避免重复输出。在 bundleless 模式（[`bundle: false`](/config/lib/bundle)）下，如果 [source.entry](/config/rsbuild/source#sourceentry) 也会匹配这些资源，还应将它们排除，避免为同一文件额外生成 JavaScript 入口。
 
-:::note
+如果需要跳过 Rslib 对 `new URL()` 引用的静态资源处理，可以根据作用范围选择以下方式，详情可以参考 [跳过 `new URL()` 处理](/guide/advanced/static-assets#跳过-new-url-处理)。
 
-由于 Rslib v1 默认会对 `new URL()` 引用的资源进行打包，因此引用目标需要是现有的源文件。对于目录或预期仅存在于构建产物中的文件等引用：
+- **跳过单个引用**：在 `new URL()` 的第一个参数前添加 [rspackIgnore](https://rspack.rs/zh/api/runtime-api/module-methods#rspackignore) 注释。
 
-```ts
+  ```ts title="src/index.ts"
+  const logo = new URL(
+    /* rspackIgnore: true */ './assets/logo.svg',
+    import.meta.url,
+  );
+  ```
+
+- **跳过所有引用**：通过 [tools.bundlerChain](/config/rsbuild/tools#toolsbundlerchain) 将 `rslib:new-url` 规则中的 `url` parser 选项设置为 `false`。
+
+  ```ts title="rslib.config.ts"
+  import { defineConfig } from '@rslib/core';
+
+  export default defineConfig({
+    tools: {
+      bundlerChain(chain) {
+        chain.module.rule('rslib:new-url').parser({
+          url: false,
+        });
+      },
+    },
+  });
+  ```
+
+此外，Rslib 的默认处理要求 `new URL()` 的引用目标在构建时能够解析为现有文件，目录或仅在构建产物中存在的文件无法作为静态资源处理。例如：
+
+```ts title="src/index.ts"
 const currentDirectory = new URL('.', import.meta.url);
 const generatedFile = new URL('./generated.js', import.meta.url);
 ```
 
-你可以添加 [`rspackIgnore`](https://rspack.rs/zh/api/runtime-api/module-methods#rspackignore) magic comment 跳过对 `new URL()` 表达式的处理，以保留预期的运行时行为：
+对于这类引用，可以使用上述方式跳过 `new URL()` 处理。如果它们仅用于构造 Node.js 文件系统路径，也可以通过修改源码，改用 Node.js 的 `path` 和 `url` API：
 
-```ts
-const currentDirectory = new URL(/* rspackIgnore: true */ '.', import.meta.url);
-const generatedFile = new URL(
-  /* rspackIgnore: true */ './generated.js',
-  import.meta.url,
-);
-```
-
-如果目标平台为 Node.js，你也可以改用 Node.js path API：
-
-```ts
+```ts title="src/index.ts"
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
 const generatedFile = path.join(currentDirectory, 'generated.js');
-```
-
-:::
-
-如果希望保留 Rslib v0.x 的行为，原样保留所有 `new URL()` 且不由 Rslib 输出资源，可以[关闭 URL parser](/guide/advanced/static-assets#关闭-url-parser)：
-
-```ts title="rslib.config.ts"
-export default {
-  tools: {
-    bundlerChain(chain) {
-      chain.module.rule('rslib:new-url').parser({
-        url: false,
-      });
-    },
-  },
-};
 ```
 
 更多详情请参考 [静态资源 - `new URL` 引用](/guide/advanced/static-assets#new-url-引用)。

@@ -201,7 +201,7 @@ const logo = new URL('./assets/logo.svg', import.meta.url);
 
 ##### 忽略特定引用
 
-如果只需要跳过某个 `new URL()` 的处理，可以在第一个参数前添加 [rspackIgnore](https://rspack.rs/zh/api/runtime-api/module-methods#rspackignore) 注释：
+如果只需要跳过某个 `new URL()` 表达式的处理，可以在第一个参数前添加 [rspackIgnore](https://rspack.rs/zh/api/runtime-api/module-methods#rspackignore) 注释。此时，产物中会保留标准的 `new URL(path, import.meta.url)` 表达式：
 
 ```ts title="src/index.ts"
 const logo = new URL(
@@ -209,8 +209,6 @@ const logo = new URL(
   import.meta.url,
 );
 ```
-
-此时，Rslib 会使用运行时变量作为 `new URL()` 的基准 URL，产物中的表达式将不再保留 `import.meta.url`，这会限制后续打包工具在二次消费产物时对该资源引用的静态分析。
 
 ## 在 CSS 文件中引用
 
