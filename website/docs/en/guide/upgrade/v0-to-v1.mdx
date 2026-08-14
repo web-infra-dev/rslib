@@ -234,14 +234,14 @@ To skip Rslib's static asset processing for `new URL()` references, choose an ap
   });
   ```
 
-Additionally, Rslib's default handling requires the target of a `new URL()` reference to resolve to an existing file at build time, while directories and files that exist only in the build output cannot be processed as static assets. For example:
+Additionally, Rslib's default handling requires the target of a `new URL()` reference to resolve to an existing source file at build time, while directories and files that exist only in the build output cannot be processed as static assets. For example:
 
 ```ts title="src/index.ts"
 const currentDirectory = new URL('.', import.meta.url);
 const generatedFile = new URL('./generated.js', import.meta.url);
 ```
 
-For these references, use one of the approaches above to skip `new URL()` processing. If they are used only to construct Node.js file system paths, you can also modify the source to use Node.js `path` and `url` APIs:
+For these references, use one of the approaches above to skip `new URL()` processing. If these references are only used to obtain file system paths in Node.js, you can also modify the source to use Node.js `path` and `url` APIs:
 
 ```ts title="src/index.ts"
 import path from 'node:path';

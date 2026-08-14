@@ -234,14 +234,14 @@ const logo = new URL('./static/svg/logo.svg', import.meta.url);
   });
   ```
 
-此外，Rslib 的默认处理要求 `new URL()` 的引用目标在构建时能够解析为现有文件，目录或仅在构建产物中存在的文件无法作为静态资源处理。例如：
+此外，Rslib 的默认处理要求 `new URL()` 的引用目标在构建时能够解析为现有源文件，目录或仅在构建产物中存在的文件无法作为静态资源处理。例如：
 
 ```ts title="src/index.ts"
 const currentDirectory = new URL('.', import.meta.url);
 const generatedFile = new URL('./generated.js', import.meta.url);
 ```
 
-对于这类引用，可以使用上述方式跳过 `new URL()` 处理。如果它们仅用于构造 Node.js 文件系统路径，也可以通过修改源码，改用 Node.js 的 `path` 和 `url` API：
+对于这类引用，可以使用上述方式跳过 `new URL()` 处理。如果这些引用只是为了在 Node.js 中获取文件系统路径，也可以通过修改源码，改用 Node.js 的 `path` 和 `url` API：
 
 ```ts title="src/index.ts"
 import path from 'node:path';
