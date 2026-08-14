@@ -207,6 +207,37 @@ const logo = new URL('./static/svg/logo.svg', import.meta.url);
 
 如果项目此前通过 [output.copy](/config/rsbuild/output#outputcopy) 或脚本复制这类资源，升级后应移除相应配置，避免重复输出。在 bundleless 模式（[`bundle: false`](/config/lib/bundle)）下，还需要在 [source.entry](/config/rsbuild/source#sourceentry) 中排除已通过 `new URL()` 引用的资源，避免为同一文件额外生成 JavaScript 入口。
 
+:::note
+
+由于 Rslib v1 默认会对 `new URL()` 引用的资源进行打包，因此引用目标需要是现有的源文件。对于目录或预期仅存在于构建产物中的文件等引用：
+
+```ts
+const currentDirectory = new URL('.', import.meta.url);
+const generatedFile = new URL('./generated.js', import.meta.url);
+```
+
+你可以添加 [`rspackIgnore`](https://rspack.rs/zh/api/runtime-api/module-methods#rspackignore) magic comment 跳过对 `new URL()` 表达式的处理，以保留预期的运行时行为：
+
+```ts
+const currentDirectory = new URL(/* rspackIgnore: true */ '.', import.meta.url);
+const generatedFile = new URL(
+  /* rspackIgnore: true */ './generated.js',
+  import.meta.url,
+);
+```
+
+如果目标平台为 Node.js，你也可以改用 Node.js path API：
+
+```ts
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
+const generatedFile = path.join(currentDirectory, 'generated.js');
+```
+
+:::
+
 如果希望保留 Rslib v0.x 的行为，原样保留所有 `new URL()` 且不由 Rslib 输出资源，可以[关闭 URL parser](/guide/advanced/static-assets#关闭-url-parser)：
 
 ```ts title="rslib.config.ts"
