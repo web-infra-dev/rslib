@@ -5,6 +5,7 @@ export { value };
 export function foo() {
   console.log(module);
   if (module.children) {
+    // rslint-disable-next-line no-undef -- fixture intentionally uses an unresolved path
     module.children = module.children.filter((item) => item.filename !== path);
   }
 }
