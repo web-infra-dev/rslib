@@ -173,7 +173,7 @@ If the project previously copied these assets through [output.copy](/config/rsbu
 
 :::note
 
-Due to a limitation in Rslib v1's implementation for parsing `new URL()` references, references that do not point to an existing source file cannot be processed correctly. This includes references to directories and files that are expected to exist in the build output. For example:
+Because Rslib v1 bundles assets referenced through `new URL()` by default, the referenced target must be an existing source file. For references to directories or files that are expected to exist only in the build output:
 
 ```ts
 const currentDirectory = new URL('.', import.meta.url);

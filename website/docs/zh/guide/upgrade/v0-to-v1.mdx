@@ -173,7 +173,7 @@ const logo = new URL('./static/svg/logo.svg', import.meta.url);
 
 :::note
 
-由于 Rslib v1 对 `new URL()` 引用的解析存在实现上的限制，无法正确处理未指向现有源文件的引用，例如目录或预期存在于构建产物中的文件：
+由于 Rslib v1 默认会对 `new URL()` 引用的资源进行打包，因此引用目标需要是现有的源文件。对于目录或预期仅存在于构建产物中的文件等引用：
 
 ```ts
 const currentDirectory = new URL('.', import.meta.url);
