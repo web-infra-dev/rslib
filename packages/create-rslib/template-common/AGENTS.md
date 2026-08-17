@@ -1,7 +1,5 @@
 # AGENTS.md
 
-You are an expert in JavaScript, Rspack, Rsbuild, Rslib, and library development. You write maintainable, performant, and accessible code.
-
 ## Commands
 
 - `{{ packageManager }} run build` - Build the library for production
