@@ -54,6 +54,51 @@ test('new Worker(new URL(...)) should emit analyzable ESM worker URLs', async ()
   expect(outputs).toEqual(['42', '42']);
 });
 
+test('new URL(...) should emit analyzable ESM worker module URLs', async () => {
+  process.env.NODE_ENV = 'production';
+  const fixturePath = join(__dirname, 'new-url-entry');
+  const { contents, entryFiles, files } = await buildAndGetResults({
+    fixturePath,
+  });
+
+  expect(contents).toMatchSnapshot();
+  expect(
+    Object.values(files)
+      .flat()
+      .some((file) => file.endsWith('/static/assets/renderPageWorker.ts')),
+  ).toBe(false);
+
+  const bundleEntry = (await import(pathToFileURL(entryFiles.esm0!).href)) as {
+    workerFilename: string;
+  };
+  const bundlelessEntry = Object.keys(contents.esm1!).find((file) =>
+    file.endsWith('/index.js'),
+  );
+  if (!bundlelessEntry) {
+    throw new Error('Cannot find bundleless ESM entry');
+  }
+  const bundleless = (await import(pathToFileURL(bundlelessEntry).href)) as {
+    workerFilename: string;
+  };
+
+  const outputs = await Promise.all(
+    [bundleEntry.workerFilename, bundleless.workerFilename].map(
+      async (workerFilename) => {
+        const { default: renderPage } = (await import(workerFilename)) as {
+          default: (pathname: string) => Promise<string>;
+        };
+
+        return renderPage('/docs');
+      },
+    ),
+  );
+
+  expect(outputs).toEqual([
+    '<html><body>/docs</body></html>',
+    '<html><body>/docs</body></html>',
+  ]);
+});
+
 test('importing with ?worker should emit a working Worker constructor', async () => {
   process.env.NODE_ENV = 'production';
   const fixturePath = join(__dirname, 'query');

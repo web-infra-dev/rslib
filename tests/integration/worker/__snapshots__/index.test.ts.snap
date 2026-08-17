@@ -62,6 +62,36 @@ export { src_worker as worker };
 }
 `;
 
+exports[`new URL(...) should emit analyzable ESM worker module URLs 1`] = `
+{
+  "esm0": {
+    "<ROOT>/tests/integration/worker/new-url-entry/dist/esm-bundle/index.js": "const workerFilename = new URL("./renderPageWorker.js", import.meta.url).href;
+export { workerFilename };
+",
+    "<ROOT>/tests/integration/worker/new-url-entry/dist/esm-bundle/renderPageWorker.js": "const render = (pathname)=>\`<html><body>\${pathname}</body></html>\`;
+async function renderPage(pathname) {
+    return render(pathname);
+}
+export default renderPage;
+",
+  },
+  "esm1": {
+    "<ROOT>/tests/integration/worker/new-url-entry/dist/esm-bundleless/index.js": "const workerFilename = new URL("./renderPageWorker.js", import.meta.url).href;
+export { workerFilename };
+",
+    "<ROOT>/tests/integration/worker/new-url-entry/dist/esm-bundleless/render.js": "const render = (pathname)=>\`<html><body>\${pathname}</body></html>\`;
+export { render };
+",
+    "<ROOT>/tests/integration/worker/new-url-entry/dist/esm-bundleless/renderPageWorker.js": "import { render } from "./render.js";
+async function renderPage(pathname) {
+    return render(pathname);
+}
+export default renderPage;
+",
+  },
+}
+`;
+
 exports[`new Worker(new URL(...)) should emit analyzable ESM worker URLs 1`] = `
 {
   "esm0": {

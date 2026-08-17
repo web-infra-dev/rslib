@@ -585,12 +585,9 @@ const modifyRsbuildDefaultPlugin = ({
 
       // Part 2: configure URL parsing for library output.
       if (urlParserMode !== undefined) {
-        chain.module
-          .rule(NEW_URL_RULE)
-          .test(JS_EXTENSIONS_PATTERN)
-          .parser({
-            url: urlParserMode
-          });
+        chain.module.rule(NEW_URL_RULE).test(JS_EXTENSIONS_PATTERN).parser({
+          url: urlParserMode,
+        });
       }
 
       // Part 3: remove Rsbuild's `type: 'javascript/auto'` override.
@@ -1048,6 +1045,208 @@ const traverseEntryQuery = (
   return newEntry;
 };
 
+const NEW_URL_ENTRY_REGEXP =
+  /new\s+URL\s*\(\s*(['"])([^'"]+)\1\s*,\s*import\.meta\.url\s*,?\s*\)/g;
+
+const DEFAULT_ENTRY_CANDIDATES = [
+  'src/index.ts',
+  'src/index.tsx',
+  'src/index.mts',
+  'src/index.mjs',
+  'src/index.js',
+  'src/index.jsx',
+];
+
+const isJavaScriptOutputFile = (file: string): boolean =>
+  /\.(cjs|mjs|js|jsx)$/.test(file);
+
+const getRelativeOutputPath = (from: string, to: string): string => {
+  let relativePath = normalizeSlash(path.relative(path.dirname(from), to));
+
+  if (!relativePath.startsWith('./') && !relativePath.startsWith('../')) {
+    relativePath = `./${relativePath}`;
+  }
+
+  return relativePath;
+};
+
+const escapeRegExp = (value: string): string =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const resolveStaticNewUrlEntry = (
+  issuer: string,
+  request: string,
+): string | null => {
+  if (
+    request.includes('?') ||
+    request.includes('#') ||
+    !request.startsWith('.')
+  ) {
+    return null;
+  }
+
+  const resolved = path.resolve(path.dirname(issuer), request);
+
+  if (
+    DTS_EXTENSIONS_PATTERN.test(resolved) ||
+    !JS_EXTENSIONS_PATTERN.test(resolved) ||
+    !fs.existsSync(resolved) ||
+    !fs.statSync(resolved).isFile()
+  ) {
+    return null;
+  }
+
+  return resolved;
+};
+
+const collectStaticNewUrlEntries = (files: string[]): Map<string, string> => {
+  const entries = new Map<string, string>();
+
+  for (const file of files) {
+    if (!JS_EXTENSIONS_PATTERN.test(file) || !fs.existsSync(file)) {
+      continue;
+    }
+
+    const content = fs.readFileSync(file, 'utf-8');
+    for (const match of content.matchAll(NEW_URL_ENTRY_REGEXP)) {
+      const beforeMatch = content.slice(0, match.index).trimEnd();
+      if (/new\s+(?:Shared)?Worker\s*\($/.test(beforeMatch)) {
+        continue;
+      }
+
+      const request = match[2];
+      if (!request) {
+        continue;
+      }
+
+      const resolved = resolveStaticNewUrlEntry(file, request);
+      if (resolved) {
+        entries.set(resolved, file);
+      }
+    }
+  }
+
+  return entries;
+};
+
+const getEntryNameFromOutBase = (file: string, outBase: string): string => {
+  const { dir, name } = path.parse(path.relative(outBase, file));
+  return normalizeSlash(path.join(dir, name));
+};
+
+class NewUrlEntryPlugin {
+  private readonly entries: Record<string, string>;
+
+  constructor({ entries }: { entries: Record<string, string> }) {
+    this.entries = entries;
+  }
+
+  apply(compiler: Rspack.Compiler) {
+    compiler.hooks.make.tap('rslib:new-url-entry', (compilation) => {
+      compilation.hooks.processAssets.tap('rslib:new-url-entry', () => {
+        const basenameCounts = new Map<string, number>();
+        for (const sourcePath of Object.values(this.entries)) {
+          const basename = path.basename(sourcePath);
+          basenameCounts.set(basename, (basenameCounts.get(basename) ?? 0) + 1);
+        }
+
+        const entries = Object.entries(this.entries)
+          .map(([entryName, sourcePath]) => {
+            const basename = path.basename(sourcePath);
+            if (basenameCounts.get(basename) !== 1) {
+              return null;
+            }
+
+            const entrypoint = compilation.entrypoints.get(entryName);
+            const entryFile = entrypoint
+              ?.getFiles()
+              .find(isJavaScriptOutputFile);
+
+            if (!entryFile) {
+              return null;
+            }
+
+            return {
+              basename,
+              entryFile,
+              sourcePath,
+            };
+          })
+          .filter(<T>(entry: T | null): entry is T => entry !== null);
+
+        if (entries.length === 0) {
+          return;
+        }
+
+        for (const assetName of Object.keys(compilation.assets)) {
+          if (!isJavaScriptOutputFile(assetName)) {
+            continue;
+          }
+
+          const oldSource = compilation.assets[assetName]!;
+          let code = oldSource.source().toString();
+          let changed = false;
+
+          for (const { basename, entryFile } of entries) {
+            const basenamePattern = escapeRegExp(basename);
+            const regexp = new RegExp(
+              `new URL\\((['"])([^'"]*${basenamePattern})\\1,\\s*import\\.meta\\.url\\)`,
+              'g',
+            );
+            code = code.replace(regexp, (_matched, quote: string) => {
+              changed = true;
+              const replacement = getRelativeOutputPath(assetName, entryFile);
+              return `new URL(${quote}${replacement}${quote}, import.meta.url)`;
+            });
+          }
+
+          if (changed) {
+            compilation.updateAsset(
+              assetName,
+              () => new rspack.sources.RawSource(code),
+            );
+          }
+        }
+
+        for (const { basename, entryFile, sourcePath } of entries) {
+          const sourceContent = fs.readFileSync(sourcePath, 'utf-8');
+          for (const asset of compilation.getAssets()) {
+            if (
+              asset.name !== entryFile &&
+              path.basename(asset.name) === basename &&
+              asset.source.source().toString() === sourceContent
+            ) {
+              compilation.deleteAsset(asset.name);
+            }
+          }
+        }
+      });
+    });
+  }
+}
+
+const composeNewUrlEntryConfig = ({
+  entries,
+}: {
+  entries: Record<string, string>;
+}): EnvironmentConfig => {
+  if (Object.keys(entries).length === 0) {
+    return {};
+  }
+
+  return {
+    tools: {
+      rspack: {
+        plugins: [
+          new NewUrlEntryPlugin({
+            entries,
+          }),
+        ],
+      },
+    },
+  };
+};
+
 export const resolveEntryPath = (
   entries: RsbuildConfigEntry,
   root: string,
@@ -1060,19 +1259,35 @@ const composeEntryConfig = async (
   root: string,
   cssModulesAuto: CssLoaderOptionsAuto,
   userOutBase?: string,
-): Promise<{ entryConfig: EnvironmentConfig; outBase: string | null }> => {
+): Promise<{
+  entryConfig: EnvironmentConfig;
+  outBase: string | null;
+  newUrlEntries: Record<string, string>;
+}> => {
   let entries = rawEntry;
+  let usedImplicitDefaultEntry = false;
 
   if (!entries) {
-    // In bundle mode, return directly to let Rsbuild apply default entry to './src/index.ts'
     if (bundle !== false) {
-      return { entryConfig: {}, outBase: null };
-    }
+      const defaultEntry = DEFAULT_ENTRY_CANDIDATES.find((entry) =>
+        fs.existsSync(path.resolve(root, entry)),
+      );
 
-    // In bundleless mode, set default entry to './src/**'
-    entries = {
-      index: 'src/**',
-    };
+      // In bundle mode, return directly to let Rsbuild apply default entry.
+      if (!defaultEntry) {
+        return { entryConfig: {}, outBase: null, newUrlEntries: {} };
+      }
+
+      entries = {
+        index: defaultEntry,
+      };
+      usedImplicitDefaultEntry = true;
+    } else {
+      // In bundleless mode, set default entry to './src/**'
+      entries = {
+        index: 'src/**',
+      };
+    }
   }
 
   // Type check to ensure entries is of the expected type
@@ -1086,6 +1301,7 @@ const composeEntryConfig = async (
 
   if (bundle !== false) {
     const entryErrorReasons: string[] = [];
+    const entryFiles: string[] = [];
     traverseEntryQuery(entries, (entry) => {
       const entryAbsPath = path.isAbsolute(entry)
         ? entry
@@ -1100,6 +1316,7 @@ const composeEntryConfig = async (
           entryErrorReasons.push(dirError);
         } else {
           // Existed file.
+          entryFiles.push(entryAbsPath);
         }
       } else {
         const isGlobLike = entry.startsWith('!') || /[*?[{\]}]/.test(entry);
@@ -1124,13 +1341,52 @@ const composeEntryConfig = async (
       );
     }
 
+    const newUrlEntrySources = collectStaticNewUrlEntries(entryFiles);
+    if (usedImplicitDefaultEntry && newUrlEntrySources.size === 0) {
+      return { entryConfig: {}, outBase: null, newUrlEntries: {} };
+    }
+
+    const newUrlEntries: Record<string, string> = {};
+    const outBase =
+      (await calcLongestCommonPath([
+        ...entryFiles,
+        ...newUrlEntrySources.keys(),
+      ])) ?? root;
+    const resolvedEntries = resolveEntryPath(entries, root);
+
+    for (const sourcePath of newUrlEntrySources.keys()) {
+      const entryName = getEntryNameFromOutBase(sourcePath, outBase);
+      const existingEntry = Object.entries(resolvedEntries).find(
+        ([, entry]) => entry === sourcePath,
+      );
+      if (existingEntry) {
+        newUrlEntries[existingEntry[0]] = sourcePath;
+        continue;
+      }
+
+      if (resolvedEntries[entryName]) {
+        if (resolvedEntries[entryName] !== sourcePath) {
+          logger.warn(
+            `Duplicate entry ${color.cyan(entryName)} from ${color.cyan(
+              path.relative(root, sourcePath),
+            )} is referenced by ${color.cyan('new URL()')} and already exists in ${color.cyan('source.entry')}.`,
+          );
+        }
+        continue;
+      }
+
+      resolvedEntries[entryName] = sourcePath;
+      newUrlEntries[entryName] = sourcePath;
+    }
+
     return {
       entryConfig: {
         source: {
-          entry: resolveEntryPath(entries, root),
+          entry: resolvedEntries,
         },
       },
       outBase: null,
+      newUrlEntries,
     };
   }
 
@@ -1238,14 +1494,31 @@ const composeEntryConfig = async (
 
     if (tryResolveOutBase) {
       const outBase = await resolveOutBase(resolvedOutBaseFiles);
-      return { resolvedEntries, outBase };
+      const newUrlEntries: Record<string, string> = {};
+      const entryNameByFile = new Map(
+        Object.entries(resolvedEntries).map(([entryName, file]) => [
+          file,
+          entryName,
+        ]),
+      );
+
+      for (const sourcePath of collectStaticNewUrlEntries(
+        Object.values(resolvedEntries),
+      ).keys()) {
+        const entryName = entryNameByFile.get(sourcePath);
+        if (entryName) {
+          newUrlEntries[entryName] = sourcePath;
+        }
+      }
+
+      return { resolvedEntries, outBase, newUrlEntries };
     }
 
-    return { resolvedEntries, outBase: null };
+    return { resolvedEntries, outBase: null, newUrlEntries: {} };
   };
 
   // OutBase could only be determined at the first time of glob scan.
-  const { outBase } = await scanGlobEntries(true);
+  const { outBase, newUrlEntries } = await scanGlobEntries(true);
   const entryConfig: EnvironmentConfig = {
     tools: {
       rspack: {
@@ -1260,6 +1533,7 @@ const composeEntryConfig = async (
   return {
     entryConfig,
     outBase,
+    newUrlEntries,
   };
 };
 
@@ -1750,7 +2024,7 @@ async function composeLibRsbuildConfig(
     format,
     wasmConfig: config.wasm,
   });
-  const { entryConfig, outBase } = await composeEntryConfig(
+  const { entryConfig, outBase, newUrlEntries } = await composeEntryConfig(
     config.source?.entry,
     config.bundle,
     root,
@@ -1801,6 +2075,10 @@ async function composeLibRsbuildConfig(
     enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
     contextToWatch: outBase,
   });
+  const newUrlEntryConfig =
+    format === 'esm'
+      ? composeNewUrlEntryConfig({ entries: newUrlEntries })
+      : {};
   const dtsConfig = await composeDtsConfig(config, format, dtsExtension);
   const minifyConfig = composeMinifyConfig(config);
   const bannerFooterConfig = composeBannerFooterConfig(banner, footer);
@@ -1836,6 +2114,7 @@ async function composeLibRsbuildConfig(
     cssConfig,
     assetConfig,
     wasmConfig,
+    newUrlEntryConfig,
     entryChunkConfig,
     minifyConfig,
     dtsConfig,
