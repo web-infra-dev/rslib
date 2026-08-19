@@ -1,17 +1,26 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2022",
     "lib": ["DOM", "ES2022"],
+    "target": "ES2022",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "skipLibCheck": true,
+    "types": ["@rslib/core/types", "svelte"],
+    "useDefineForClassFields": true,
+    "rootDir": "src",
+
+    /* modules */
     "module": "preserve",
+    "isolatedModules": true,
     "moduleDetection": "force",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "types": ["node"],
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "isolatedModules": true,
-    "noUnusedLocals": true
+    "allowImportingTsExtensions": true,
+
+    /* type checking */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
-  "include": ["src", "scripts", "*.config.ts"]
+  "include": ["src"]
 }

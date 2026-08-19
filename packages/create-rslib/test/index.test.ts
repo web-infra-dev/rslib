@@ -350,8 +350,8 @@ describe('rspress template', () => {
     expect(buttonMdxContent).not.toContain('{{ packageName }}');
     expect(buttonMdxContent).toContain(`from '${projectName}'`);
 
-    // Verify tsconfig.json has the actual package name in paths
-    const tsconfigPath = join(dir, 'tsconfig.json');
+    // Verify docs/tsconfig.json has the actual package name in paths
+    const tsconfigPath = join(dir, 'docs/tsconfig.json');
     expect(existsSync(tsconfigPath)).toBeTruthy();
     const tsconfigContent = readFileSync(tsconfigPath, 'utf-8');
     expect(tsconfigContent).not.toContain('{{ packageName }}');

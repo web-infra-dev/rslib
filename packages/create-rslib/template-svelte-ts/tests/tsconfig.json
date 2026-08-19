@@ -1,8 +1,9 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "noEmit": true,
     "rootDir": "..",
-    "types": ["@rslib/core/types", "node", "@testing-library/jest-dom"]
+    "types": ["@rslib/core/types", "node", "svelte"]
   },
   "include": ["./"]
 }
