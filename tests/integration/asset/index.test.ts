@@ -520,24 +520,26 @@ test('use Node.js addons', async () => {
   }
 
   // The native fixture is only compatible with Darwin arm64.
-  if (process.platform === 'darwin' && process.arch === 'arm64') {
-    const esmEntries = [
-      'dist/esm/bundle/index.js',
-      'dist/esm/bundleless/index.js',
-    ];
-    for (const entry of esmEntries) {
-      const { addon } = await import(join(fixturePath, entry));
-      expect(typeof addon.readLength).toBe('function');
-    }
+  if (process.platform !== 'darwin' || process.arch !== 'arm64') {
+    return;
+  }
 
-    const cjsEntries = [
-      'dist/cjs/bundle/index.cjs',
-      'dist/cjs/bundleless/index.cjs',
-    ];
-    for (const entry of cjsEntries) {
-      const { addon } = require(join(fixturePath, entry));
-      expect(typeof addon.readLength).toBe('function');
-    }
+  const esmEntries = [
+    'dist/esm/bundle/index.js',
+    'dist/esm/bundleless/index.js',
+  ];
+  for (const entry of esmEntries) {
+    const { addon } = await import(join(fixturePath, entry));
+    expect(typeof addon.readLength).toBe('function');
+  }
+
+  const cjsEntries = [
+    'dist/cjs/bundle/index.cjs',
+    'dist/cjs/bundleless/index.cjs',
+  ];
+  for (const entry of cjsEntries) {
+    const { addon } = require(join(fixturePath, entry));
+    expect(typeof addon.readLength).toBe('function');
   }
 });
 

@@ -182,13 +182,15 @@ describe('dts when bundle: false', () => {
     const fixturePath = join(__dirname, 'tsconfig-path');
     await createTempFiles(fixturePath, false);
 
-    try {
-      await buildAndGetResults({ fixturePath, type: 'dts' });
-    } catch (err: any) {
-      expect(stripAnsi(err.message)).toMatchInlineSnapshot(
-        `"Failed to resolve tsconfig file "<ROOT>/tests/integration/dts/bundle-false/tsconfig-path/path_not_exist/tsconfig.json" from <ROOT>/tests/integration/dts/bundle-false/tsconfig-path. Please ensure that the file exists."`,
-      );
-    }
+    const err = await buildAndGetResults({ fixturePath, type: 'dts' }).then(
+      () => {
+        throw new Error('Expected build to throw.');
+      },
+      (err: any) => err,
+    );
+    expect(stripAnsi(err.message)).toMatchInlineSnapshot(
+      `"Failed to resolve tsconfig file "<ROOT>/tests/integration/dts/bundle-false/tsconfig-path/path_not_exist/tsconfig.json" from <ROOT>/tests/integration/dts/bundle-false/tsconfig-path. Please ensure that the file exists."`,
+    );
   });
 
   test('alias', async () => {

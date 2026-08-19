@@ -229,13 +229,15 @@ describe('dts when bundle: true', () => {
     const fixturePath = join(__dirname, 'no-entry');
     const { restore } = proxyConsole();
 
-    try {
-      await buildAndGetResults({ fixturePath, type: 'dts' });
-    } catch (err: any) {
-      expect(stripAnsi(err.message)).toMatchInlineSnapshot(
-        `"Can not find a valid entry for dts.bundle option, please check your entry config."`,
-      );
-    }
+    const err = await buildAndGetResults({ fixturePath, type: 'dts' }).then(
+      () => {
+        throw new Error('Expected build to throw.');
+      },
+      (err: any) => err,
+    );
+    expect(stripAnsi(err.message)).toMatchInlineSnapshot(
+      `"Can not find a valid entry for dts.bundle option, please check your entry config."`,
+    );
 
     restore();
   });

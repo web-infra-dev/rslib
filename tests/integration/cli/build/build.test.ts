@@ -69,16 +69,14 @@ describe('build command', async () => {
 
   test('--lib should throw error if not found', async () => {
     await fse.remove(path.join(__dirname, 'dist'));
-    try {
-      await buildAndGetResults({
+    await expect(
+      buildAndGetResults({
         fixturePath: __dirname,
         lib: ['not-exist'],
-      });
-    } catch (error) {
-      expect((error as Error).message).toMatchInlineSnapshot(
-        `"The following libs are not found: "not-exist"."`,
-      );
-    }
+      }),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The following libs are not found: "not-exist".]`,
+    );
     expect(fse.existsSync(path.join(__dirname, 'dist'))).toBe(false);
   });
 

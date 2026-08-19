@@ -49,14 +49,16 @@ test('throw error when preserve JSX with bundle mode', async () => {
   try {
     await buildAndGetResults({ fixturePath });
   } catch {
-    expect(logs.map((l) => stripAnsi(l))).toMatchInlineSnapshot(`
-      [
-        "error   Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to \`automatic\` or \`classic\`. Check out https://rslib.rs/guide/solution/react#jsx-transform for more details.",
-      ]
-    `);
+    // The build error is expected; its log is asserted below.
   } finally {
     restore();
   }
+
+  expect(logs.map((l) => stripAnsi(l))).toMatchInlineSnapshot(`
+    [
+      "error   Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to \`automatic\` or \`classic\`. Check out https://rslib.rs/guide/solution/react#jsx-transform for more details.",
+    ]
+  `);
 });
 
 test('preserve JSX in bundleless mode should not throw error when coexisting with bundle mode', async () => {

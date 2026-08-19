@@ -20,57 +20,68 @@ describe('LCP calculate correctly', () => {
   it('correct 1', async () => {
     vol.fromJSON({ '/Users/Someone/project-a/src': null });
 
-    if (os.platform() !== 'win32') {
-      const result = await calcLongestCommonPath([
-        '/Users/Someone/project-a/src/helpers',
-        '/Users/Someone/project-a/src',
-        '/Users/Someone/project-a/src/utils',
-      ]);
-      expect(result).toEqual('/Users/Someone/project-a/src');
-    } else {
-      const result = await calcLongestCommonPath([
-        'D:/Users/Someone/project-a/src/helpers',
-        'D:/Users/Someone/project-a/src',
-        'D:/Users/Someone/project-a/src/utils',
-      ]);
-      expect(result).toEqual('D:/Users/Someone/project-a/src');
-    }
+    const [paths, expected] =
+      os.platform() !== 'win32'
+        ? [
+            [
+              '/Users/Someone/project-a/src/helpers',
+              '/Users/Someone/project-a/src',
+              '/Users/Someone/project-a/src/utils',
+            ],
+            '/Users/Someone/project-a/src',
+          ]
+        : [
+            [
+              'D:/Users/Someone/project-a/src/helpers',
+              'D:/Users/Someone/project-a/src',
+              'D:/Users/Someone/project-a/src/utils',
+            ],
+            'D:/Users/Someone/project-a/src',
+          ];
+    const result = await calcLongestCommonPath(paths);
+    expect(result).toEqual(expected);
   });
 
   it('correct 2', async () => {
     vol.fromJSON({ '/Users/Someone/project-monorepo': null });
 
-    if (os.platform() !== 'win32') {
-      const result = await calcLongestCommonPath([
-        '/Users/Someone/project-monorepo/packages-a/src/index.ts',
-        '/Users/Someone/project-monorepo/packages-util/src/index.js',
-        '/Users/Someone/project-monorepo/script.js',
-      ]);
-      expect(result).toEqual('/Users/Someone/project-monorepo');
-    } else {
-      const result = await calcLongestCommonPath([
-        'D:/Users/Someone/project-monorepo/packages-a/src/index.ts',
-        'D:/Users/Someone/project-monorepo/packages-util/src/index.js',
-        'D:/Users/Someone/project-monorepo/script.js',
-      ]);
-      expect(result).toEqual('D:/Users/Someone/project-monorepo');
-    }
+    const [paths, expected] =
+      os.platform() !== 'win32'
+        ? [
+            [
+              '/Users/Someone/project-monorepo/packages-a/src/index.ts',
+              '/Users/Someone/project-monorepo/packages-util/src/index.js',
+              '/Users/Someone/project-monorepo/script.js',
+            ],
+            '/Users/Someone/project-monorepo',
+          ]
+        : [
+            [
+              'D:/Users/Someone/project-monorepo/packages-a/src/index.ts',
+              'D:/Users/Someone/project-monorepo/packages-util/src/index.js',
+              'D:/Users/Someone/project-monorepo/script.js',
+            ],
+            'D:/Users/Someone/project-monorepo',
+          ];
+    const result = await calcLongestCommonPath(paths);
+    expect(result).toEqual(expected);
   });
 
   it('correct 3', async () => {
     vol.fromJSON({
       '/Users/Someone/project/src/index.js': '',
     });
-    if (os.platform() !== 'win32') {
-      const result = await calcLongestCommonPath([
-        '/Users/Someone/project/src/index.js',
-      ]);
-      expect(result).toEqual('/Users/Someone/project/src');
-    } else {
-      const result = await calcLongestCommonPath([
-        'D:/Users/Someone/project/src/index.js',
-      ]);
-      expect(result).toEqual('D:/Users/Someone/project/src');
-    }
+    const [paths, expected] =
+      os.platform() !== 'win32'
+        ? [
+            ['/Users/Someone/project/src/index.js'],
+            '/Users/Someone/project/src',
+          ]
+        : [
+            ['D:/Users/Someone/project/src/index.js'],
+            'D:/Users/Someone/project/src',
+          ];
+    const result = await calcLongestCommonPath(paths);
+    expect(result).toEqual(expected);
   });
 });
