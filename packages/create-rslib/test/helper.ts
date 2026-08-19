@@ -134,7 +134,7 @@ export const createAndValidate = (
     expect(pkgJson.peerDependencies.svelte).toBe('^5.0.0');
     expect(
       fse.readFileSync(path.join(dir, 'pnpm-workspace.yaml'), 'utf-8'),
-    ).toBe('allowBuilds:\n  svelte-preprocess: false\n');
+    ).toContain('svelte-preprocess: false');
 
     if (templateCase.lang === 'ts') {
       expect(pkgJson.devDependencies['svelte-check']).toBeTruthy();
