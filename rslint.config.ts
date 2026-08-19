@@ -1,5 +1,4 @@
-import { defineConfig, js, rstestPlugin, ts } from '@rslint/core';
-import globals from 'globals';
+import { defineConfig, globals, js, rstestPlugin, ts } from '@rslint/core';
 
 export default defineConfig([
   {
