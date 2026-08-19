@@ -1,7 +1,12 @@
 import { join } from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { expect, test } from '@rstest/core';
-import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
+import {
+  buildAndGetResults,
+  expectBuildToFail,
+  proxyConsole,
+  queryContent,
+} from 'test-helper';
 
 test('JSX syntax should be preserved', async () => {
   const fixturePath = join(__dirname, 'default');
@@ -46,13 +51,7 @@ test('throw error when preserve JSX with bundle mode', async () => {
   const fixturePath = join(__dirname, 'forbid-bundle');
   const { logs, restore } = proxyConsole();
 
-  try {
-    await buildAndGetResults({ fixturePath });
-  } catch {
-    // The build error is expected; its log is asserted below.
-  } finally {
-    restore();
-  }
+  await expectBuildToFail(buildAndGetResults({ fixturePath })).finally(restore);
 
   expect(logs.map((l) => stripAnsi(l))).toMatchInlineSnapshot(`
     [

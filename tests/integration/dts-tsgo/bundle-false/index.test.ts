@@ -5,6 +5,7 @@ import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import {
   buildAndGetResults,
   createTempFiles,
+  expectBuildToFail,
   globContentJSON,
   queryContent,
   runCliSync,
@@ -143,11 +144,8 @@ describe('dts with tsgo when bundle: false', () => {
     const fixturePath = join(__dirname, 'tsconfig-path');
     await createTempFiles(fixturePath, false);
 
-    const err = await buildAndGetResults({ fixturePath, type: 'dts' }).then(
-      () => {
-        throw new Error('Expected build to throw.');
-      },
-      (err: any) => err,
+    const err = await expectBuildToFail(
+      buildAndGetResults({ fixturePath, type: 'dts' }),
     );
     expect(stripAnsi(err.message)).toMatchInlineSnapshot(
       `"Failed to resolve tsconfig file "<ROOT>/tests/integration/dts-tsgo/bundle-false/tsconfig-path/path_not_exist/tsconfig.json" from <ROOT>/tests/integration/dts-tsgo/bundle-false/tsconfig-path. Please ensure that the file exists."`,
