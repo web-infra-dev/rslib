@@ -2,24 +2,26 @@
   "compilerOptions": {
     "lib": ["DOM", "ES2022"],
     "jsx": "preserve",
-    "skipLibCheck": true,
     "jsxImportSource": "vue",
-    "useDefineForClassFields": true,
+    "target": "ES2022",
     "declaration": true,
-    "outDir": "dist",
     "emitDeclarationOnly": true,
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "types": ["@rslib/core/types"],
+    "useDefineForClassFields": true,
+    "rootDir": "src",
 
     /* modules */
     "isolatedModules": true,
-    "resolveJsonModule": true,
+    "moduleDetection": "force",
     "moduleResolution": "bundler",
-    "types": ["@rslib/core/types"],
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
 
     /* type checking */
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-
-    "rootDir": "src"
+    "noUnusedParameters": true
   },
   "include": ["src"]
 }

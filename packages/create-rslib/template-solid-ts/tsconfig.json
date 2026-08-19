@@ -3,13 +3,23 @@
     "lib": ["DOM", "ES2022"],
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
+    "target": "ES2022",
+    "noEmit": true,
     "skipLibCheck": true,
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "moduleResolution": "bundler",
-    "useDefineForClassFields": true,
     "types": ["@rslib/core/types"],
-    "rootDir": "src"
+    "useDefineForClassFields": true,
+    "rootDir": "src",
+
+    /* modules */
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+
+    /* type checking */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "include": ["src"]
 }

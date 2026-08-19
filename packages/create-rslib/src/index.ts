@@ -159,7 +159,7 @@ create({
         const packageName = getPackageName(distFolder);
         replacePackageNamePlaceholder(
           distFolder,
-          ['docs/Button.mdx', 'tsconfig.json'],
+          ['docs/Button.mdx', 'docs/tsconfig.json'],
           packageName,
         );
 
