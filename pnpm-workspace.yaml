@@ -123,9 +123,11 @@ catalogs:
     'typescript6-api': 'npm:@typescript/typescript6@^6.0.2'
 
 allowBuilds:
+  '@parcel/watcher': true
   core-js-pure: false
   esbuild: true
   simple-git-hooks: false
+  svelte-preprocess: true
 
 autoInstallPeers: false
 dedupePeers: true
