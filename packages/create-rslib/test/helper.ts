@@ -152,7 +152,9 @@ export const createAndValidate = (
       expect(
         existsSync(path.join(dir, 'scripts/rslib-plugin-svelte-dts.ts')),
       ).toBeFalsy();
-      expect(pkgJson.exports['.'].types).toBeFalsy();
+      const exportEntry =
+        typeof pkgJson.exports === 'object' ? pkgJson.exports['.'] : undefined;
+      expect(exportEntry?.types).toBeFalsy();
       expect(pkgJson.types).toBeFalsy();
     }
   }
