@@ -1394,9 +1394,10 @@ describe('wasm', () => {
 });
 
 describe('bundleless loader request detection', () => {
-  test('matches Rspack scheme handling', () => {
+  test('matches Rspack scheme handling case-insensitively', () => {
     expect(isInlineLoaderRequest('builtin:swc-loader!./value.js')).toBe(true);
     expect(isInlineLoaderRequest('BUILTIN:swc-loader!./value.js')).toBe(true);
+    expect(isInlineLoaderRequest('BuIlTiN:swc-loader!./value.js')).toBe(true);
     expect(isInlineLoaderRequest('./value.js!loader')).toBe(true);
     expect(isInlineLoaderRequest('data:text/javascript!value')).toBe(false);
     expect(isInlineLoaderRequest('foo-bar:payload!text')).toBe(false);
