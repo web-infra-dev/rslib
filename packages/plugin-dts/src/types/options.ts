@@ -4,6 +4,7 @@ export type DtsRedirect = {
 };
 
 export type ApiExtractorOptions = {
+  tsconfigPath?: string;
   bundledPackages?: string[];
 };
 

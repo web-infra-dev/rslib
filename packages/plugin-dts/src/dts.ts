@@ -9,13 +9,13 @@ import {
   relative,
   resolve,
 } from 'node:path';
-import type { DtsRedirect } from './types/options';
 import type {
   CompilerApiTsconfigResultForApi,
   DtsEntry,
   DtsGenOptions,
   GetTsconfigTsconfigResultForExecutable,
 } from './types/internal';
+import type { DtsRedirect } from './types/options';
 import {
   calcLongestCommonPath,
   color,
@@ -271,7 +271,8 @@ export async function bundleDtsIfNeeded(
     name,
     cwd,
     dtsEmitPath,
-    tsconfigPath,
+    tsconfigPath: emitTsconfigPath,
+    bundleTsconfigPath,
     dtsExtension = '.d.ts',
     autoExternal = true,
     userExternals,
@@ -285,6 +286,17 @@ export async function bundleDtsIfNeeded(
   }
 
   const { bundledDtsEntries } = context;
+  const missingEntry = bundledDtsEntries.find(
+    (entry) => !fs.existsSync(entry.path),
+  );
+  if (missingEntry) {
+    const error = new Error(
+      `Declaration entry file ${color.underline(missingEntry.path)} not found.\nPlease ensure that your tsconfig file ${color.underline(emitTsconfigPath)} is correctly configured to generate declaration files. If needed, a custom tsconfig can be specified using the ${color.cyan('source.tsconfigPath')} option.`,
+    );
+    // do not log the stack trace, it is not helpful for users
+    error.stack = '';
+    throw error;
+  }
 
   const { bundleDts } = await import('./apiExtractor');
   await bundleDts({
@@ -292,7 +304,7 @@ export async function bundleDtsIfNeeded(
     cwd,
     distPath: dtsEmitPath,
     dtsEntry: bundledDtsEntries,
-    tsconfigPath,
+    tsconfigPath: bundleTsconfigPath,
     dtsExtension,
     banner,
     footer,

@@ -60,6 +60,12 @@ export type Dts =
         | boolean
         | {
             /**
+             * Configure a custom tsconfig.json file path for API Extractor to bundle declaration files.
+             * @defaultValue `source.tsconfigPath`
+             * @see {@link https://rslib.rs/config/lib/dts#dtsbundletsconfigpath}
+             */
+            tsconfigPath?: string;
+            /**
              * Specifies the dependencies whose declaration files should be bundled.
              * @defaultValue {@link https://rslib.rs/config/lib/dts#dtsbundlebundledpackages}
              * @see {@link https://rslib.rs/config/lib/dts#dtsbundlebundledpackages}

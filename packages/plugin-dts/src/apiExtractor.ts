@@ -1,5 +1,4 @@
-import fs from 'node:fs';
-import { join, relative } from 'node:path';
+import { join, normalize, relative, resolve } from 'node:path';
 import type * as ApiExtractor from '@microsoft/api-extractor';
 import { logger } from '@rsbuild/core';
 import type { DtsEntry } from './types/internal';
@@ -15,7 +14,7 @@ export type BundleOptions = {
   banner?: string;
   footer?: string;
   dtsEntry: DtsEntry[];
-  tsconfigPath?: string;
+  tsconfigPath: string;
   bundledPackages?: string[];
 };
 
@@ -41,9 +40,11 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     banner,
     footer,
     dtsEntry,
-    tsconfigPath = 'tsconfig.json',
+    tsconfigPath,
     bundledPackages = [],
   } = options;
+
+  const resolvedTsconfigPath = normalize(resolve(cwd, tsconfigPath));
   try {
     await Promise.all(
       dtsEntry.map(async (entry) => {
@@ -56,12 +57,6 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
 
         const mainEntryPointFilePath = entry.path;
 
-        if (!fs.existsSync(mainEntryPointFilePath)) {
-          throw new Error(
-            `Declaration entry file ${color.underline(entry.path)} not found.\nPlease ensure that your tsconfig file ${color.underline(tsconfigPath)} is correctly configured to generate declaration files. If needed, a custom tsconfig can be specified using the ${color.cyan('source.tsconfigPath')} option.`,
-          );
-        }
-
         const internalConfig = {
           mainEntryPointFilePath,
           bundledPackages,
@@ -70,7 +65,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
             untrimmedFilePath,
           },
           compiler: {
-            tsconfigFilePath: tsconfigPath,
+            tsconfigFilePath: resolvedTsconfigPath,
           },
           projectFolder: cwd,
         };

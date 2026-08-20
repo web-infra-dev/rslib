@@ -37,6 +37,19 @@ describe('dts when bundle: true', () => {
     expect(entries).toMatchSnapshot();
   });
 
+  test('uses a separate tsconfig for API Extractor', async () => {
+    const fixturePath = join(__dirname, 'tsconfig-path');
+    const { entries } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+
+    expect(entries.esm).toContain('fromSourceEmit');
+    expect(entries.esm).not.toContain('fromBundleEmit');
+    expect(entries.esm).toContain('fromBundleAnalysis');
+    expect(entries.esm).not.toContain('fromSourceAnalysis');
+  });
+
   test('dts false', async () => {
     const fixturePath = join(__dirname, 'false');
     const { files } = await buildAndGetResults({

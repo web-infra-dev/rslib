@@ -30,6 +30,7 @@ export type DtsGenOptions = Omit<
   dtsEmitPath: string;
   build?: boolean;
   tsconfigPath: string;
+  bundleTsconfigPath: string;
   tsConfigResult: DtsTsconfigResult;
   userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
   apiExtractorOptions?: ApiExtractorOptions;
