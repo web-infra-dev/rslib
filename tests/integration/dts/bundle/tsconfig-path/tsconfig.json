@@ -1,0 +1,10 @@
+{
+  "extends": "@rslib/tsconfig/base",
+  "compilerOptions": {
+    "rootDir": ".",
+    "paths": {
+      "@scope/foo": ["./workspace/foo/src/index.ts"]
+    }
+  },
+  "include": ["src", "workspace/foo/src"]
+}

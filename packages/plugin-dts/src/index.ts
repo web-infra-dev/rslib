@@ -1,6 +1,6 @@
 import { logger, type LogLevel, type RsbuildPlugin } from '@rsbuild/core';
 import { type ChildProcess, fork } from 'node:child_process';
-import { extname, join } from 'node:path';
+import { extname, join, normalize, resolve } from 'node:path';
 
 import {
   readTypescriptVersion,
@@ -13,7 +13,7 @@ import {
   processIsolatedDts,
 } from './isolated';
 import type { DtsGenOptions, DtsTsconfigResult } from './types/internal';
-import type { PluginDtsOptions } from './types/options';
+import type { ApiExtractorOptions, PluginDtsOptions } from './types/options';
 import {
   cleanDtsFiles,
   cleanTsBuildInfoFile,
@@ -51,12 +51,20 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     const loggerLevel = api.logger.level;
     logger.level = loggerLevel;
 
-    let apiExtractorOptions = {};
+    let apiExtractorOptions: ApiExtractorOptions = {};
+    let resolvedBundleTsconfigPath: string | undefined;
 
     if (options.bundle && typeof options.bundle === 'object') {
       apiExtractorOptions = {
         ...options.bundle,
       };
+
+      const configuredBundleTsconfigPath = options.bundle.tsconfigPath;
+      if (configuredBundleTsconfigPath !== undefined) {
+        resolvedBundleTsconfigPath = normalize(
+          resolve(api.context.rootPath, configuredBundleTsconfigPath),
+        );
+      }
     }
 
     const bundle = !!options.bundle;
@@ -206,6 +214,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           userExternals: config.output.externals,
           apiExtractorOptions,
           tsconfigPath,
+          bundleTsconfigPath: resolvedBundleTsconfigPath ?? tsconfigPath,
           tsConfigResult,
           name: environment.name,
           cwd,

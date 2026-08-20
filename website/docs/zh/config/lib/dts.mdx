@@ -10,7 +10,7 @@ overviewHeaders: [2, 3]
 ```ts
 type Dts =
   | {
-      bundle?: boolean | { bundledPackages?: string[] };
+      bundle?: boolean | { tsconfigPath?: string; bundledPackages?: string[] };
       distPath?: string;
       build?: boolean;
       abortOnError?: boolean;
@@ -69,7 +69,7 @@ export default {
 
 ### dts.bundle
 
-- **类型：** `boolean | { bundledPackages?: string[] }`
+- **类型：** `boolean | { tsconfigPath?: string; bundledPackages?: string[] }`
 - **默认值：** `false`
 
 是否打包类型声明文件。
@@ -103,6 +103,34 @@ export default {
 Rslib 基于 API Extractor 对类型声明文件进行打包，可能会存在一些由 API Extractor 静态分析能力带来的限制，例如遇到复杂 re-export、特定解构语法、依赖生成的特殊声明文件或无法解析的导出时，可能会出现 `Internal Error: Unable to analyze the export ...` 等报错，此时建议关闭 `dts.bundle` 使用 bundleless 类型输出。
 
 :::
+
+#### dts.bundle.tsconfigPath
+
+- **类型：** `string`
+- **默认值：** [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath)
+
+配置 API Extractor 打包类型声明文件时使用的自定义 tsconfig.json 文件路径，相对路径基于项目根目录解析。
+
+开启类型声明文件打包后，Rslib 会在两个阶段使用 TypeScript 配置：
+
+- [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath) 用于在 `.rslib/declarations` 目录中生成临时类型声明文件。
+- `dts.bundle.tsconfigPath` 由 API Extractor 用于分析并打包上述生成的临时类型声明文件。
+
+默认情况下，两个阶段都使用 `source.tsconfigPath`。如果希望 API Extractor 使用独立的 TypeScript 配置，例如单独调整 `paths` 等模块解析选项，可以按如下方式配置：
+
+```ts title="rslib.config.ts"
+export default {
+  lib: [
+    {
+      dts: {
+        bundle: {
+          tsconfigPath: './tsconfig.dts-bundle.json',
+        },
+      },
+    },
+  ],
+};
+```
 
 #### dts.bundle.bundledPackages
 

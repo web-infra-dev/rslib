@@ -33,7 +33,7 @@ export default {
 
 ### bundle
 
-- **Type:** `boolean`
+- **Type:** `boolean | { tsconfigPath?: string; bundledPackages?: string[] }`
 - **Default:** `false`
 
 Whether to bundle the declaration files.
@@ -51,6 +51,28 @@ npm add @microsoft/api-extractor -D
 ```js
 pluginDts({
   bundle: true,
+});
+```
+
+#### bundle.tsconfigPath
+
+- **Type:** `string`
+- **Default:** `source.tsconfigPath`
+
+Configure a custom tsconfig.json file path for API Extractor to bundle declaration files. Relative paths are resolved from the project root.
+
+When declaration bundling is enabled, TypeScript configuration is used in two stages:
+
+- `source.tsconfigPath` is used to generate temporary declaration files in `.rslib/declarations`.
+- `bundle.tsconfigPath` is used by API Extractor to analyze and bundle the temporary declaration files generated above.
+
+By default, both stages use `source.tsconfigPath`. If you want API Extractor to use a separate TypeScript configuration, for example to adjust module resolution options such as `paths`, use the following configuration:
+
+```js
+pluginDts({
+  bundle: {
+    tsconfigPath: './tsconfig.dts-bundle.json',
+  },
 });
 ```
 
