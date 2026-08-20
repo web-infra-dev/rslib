@@ -47,7 +47,7 @@ exports[`Svelte > bundleless 1`] = `
   "<ROOT>/tests/integration/svelte/dist/bundleless/Button/Button.js": "import "svelte/internal/disclose-version";
 import "svelte/internal/flags/legacy";
 import "./style.css";
-import "<ROOT>/tests/integration/svelte/src/Button/Button.svelte.1.css!=!svelte-loader?cssPath=<ROOT>/tests/integration/svelte/src/Button/Button.svelte.1.css!<ROOT>/tests/integration/svelte/src/Button/Button.svelte";
+import "./Button.css";
 import * as __rspack_external_svelte_internal_client_f8ec82ce from "svelte/internal/client";
 var root = __rspack_external_svelte_internal_client_f8ec82ce.from_html('<p class="component button svelte-k8fa9w"></p>');
 function Button($$anchor) {
@@ -61,7 +61,7 @@ export default Button;
 ",
   "<ROOT>/tests/integration/svelte/dist/bundleless/Card.js": "import "svelte/internal/disclose-version";
 import "svelte/internal/flags/legacy";
-import "<ROOT>/tests/integration/svelte/src/Card.svelte.0.css!=!svelte-loader?cssPath=<ROOT>/tests/integration/svelte/src/Card.svelte.0.css!<ROOT>/tests/integration/svelte/src/Card.svelte";
+import "./Card.css";
 import * as __rspack_external_svelte_internal_client_f8ec82ce from "svelte/internal/client";
 var root = __rspack_external_svelte_internal_client_f8ec82ce.from_html('<p class="component card svelte-lv9s7p"></p>');
 function Card($$anchor) {
@@ -79,9 +79,20 @@ export { default as Card } from "./Card.js";
 
 exports[`Svelte > bundleless 2`] = `
 {
+  "<ROOT>/tests/integration/svelte/dist/bundleless/Button/Button.css": ".button.svelte-k8fa9w {
+  font-weight: bold;
+}
+
+",
   "<ROOT>/tests/integration/svelte/dist/bundleless/Button/style.css": ".button.component {
   color: #428bca;
   border-radius: .5rem;
+}
+
+",
+  "<ROOT>/tests/integration/svelte/dist/bundleless/Card.css": ".card.svelte-lv9s7p {
+  color: red;
+  font-weight: bold;
 }
 
 ",
