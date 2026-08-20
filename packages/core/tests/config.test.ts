@@ -9,6 +9,7 @@ import { init, initCliAction } from '../src/cli/init';
 import {
   composeCreateRsbuildConfig,
   composeRsbuildEnvironments,
+  isInlineLoaderRequest,
 } from '../src/config';
 import { createRslib } from '../src/createRslib';
 import { loadConfig } from '../src/loadConfig';
@@ -18,6 +19,17 @@ import { normalizeSlash } from '../src/utils/helper';
 import { logger } from '../src/utils/logger';
 
 rs.mock('rslog');
+
+describe('bundleless loader request detection', () => {
+  test('matches Rspack scheme handling', () => {
+    expect(isInlineLoaderRequest('builtin:swc-loader!./value.js')).toBe(true);
+    expect(isInlineLoaderRequest('BUILTIN:swc-loader!./value.js')).toBe(true);
+    expect(isInlineLoaderRequest('./value.js!loader')).toBe(true);
+    expect(isInlineLoaderRequest('data:text/javascript!value')).toBe(false);
+    expect(isInlineLoaderRequest('foo-bar:payload!text')).toBe(false);
+    expect(isInlineLoaderRequest('C:/value.js!text')).toBe(true);
+  });
+});
 
 describe('Should load config file correctly', () => {
   test('Load config.js in cjs project', async () => {
