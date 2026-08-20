@@ -1263,6 +1263,19 @@ const composeEntryConfig = async (
   };
 };
 
+// Mirrors get_scheme() in Rspack's loader runner:
+// https://github.com/web-infra-dev/rspack/blob/main/crates/rspack_loader_runner/src/scheme.rs#L38-L42
+// `builtin:` is intentionally treated as scheme-less because Rspack uses it
+// for inline builtin loaders.
+const hasScheme = (request: string) =>
+  /^[A-Za-z][A-Za-z0-9+-]*:/.test(request) &&
+  !/^builtin:/i.test(request) &&
+  !/^[A-Za-z]:[\\/#?]/.test(request);
+
+export function isInlineLoaderRequest(request: string): boolean {
+  return request.includes('!') && !hasScheme(request);
+}
+
 const composeBundlelessExternalConfig = (
   jsExtension: string,
   redirect: Redirect,
@@ -1408,12 +1421,11 @@ const composeBundlelessExternalConfig = (
                 return;
               }
 
-              // Keep vue-loader generated virtual block requests and helper
-              // modules bundled so they don't leak loader internals into
-              // bundleless output.
+              // Keep loader requests and vue-loader helper modules bundled so
+              // they don't leak loader internals into bundleless output.
               if (
-                isRspackVueLoaderRequest(request, 'dist/exportHelper.js') ||
-                isRspackVueLoaderRequest(request, '?vue&type=')
+                isInlineLoaderRequest(request) ||
+                isRspackVueLoaderRequest(request, 'dist/exportHelper.js')
               ) {
                 callback();
                 return;
