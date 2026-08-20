@@ -1283,6 +1283,15 @@ const composeBundlelessExternalConfig = (
     request.includes('rspack-vue-loader') &&
     (suffix ? request.includes(suffix) : true);
 
+  // Mirrors get_scheme() in rspack's loader runner. Requests without a URI
+  // scheme are split on every `!` by NormalModuleFactory, so any `!` in such
+  // a request identifies an inline loader request and must not be externalized.
+  const hasScheme = (request: string) =>
+    /^[A-Za-z][A-Za-z0-9+-]*:/.test(request) &&
+    !/^[A-Za-z]:[\\/#?]/.test(request);
+  const isInlineLoaderRequest = (request: string) =>
+    request.includes('!') && !hasScheme(request);
+
   const isPathInOutBase = (resourcePath: string, outBase: string) => {
     const normalizedOutBase = normalizeSlash(outBase).replace(/\/+$/, '');
     const normalizedResourcePath = normalizeSlash(resourcePath);
@@ -1408,12 +1417,11 @@ const composeBundlelessExternalConfig = (
                 return;
               }
 
-              // Keep vue-loader generated virtual block requests and helper
-              // modules bundled so they don't leak loader internals into
-              // bundleless output.
+              // Keep loader requests and vue-loader helper modules bundled so
+              // they don't leak loader internals into bundleless output.
               if (
-                isRspackVueLoaderRequest(request, 'dist/exportHelper.js') ||
-                isRspackVueLoaderRequest(request, '?vue&type=')
+                isInlineLoaderRequest(request) ||
+                isRspackVueLoaderRequest(request, 'dist/exportHelper.js')
               ) {
                 callback();
                 return;
