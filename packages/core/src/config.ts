@@ -1263,8 +1263,10 @@ const composeEntryConfig = async (
   };
 };
 
-// Mirrors get_scheme() in rspack's loader runner. `builtin:` is intentionally
-// treated as scheme-less because Rspack uses it for inline builtin loaders.
+// Mirrors get_scheme() in Rspack's loader runner:
+// https://github.com/web-infra-dev/rspack/blob/main/crates/rspack_loader_runner/src/scheme.rs#L38-L42
+// `builtin:` is intentionally treated as scheme-less because Rspack uses it
+// for inline builtin loaders.
 const hasScheme = (request: string) =>
   /^[A-Za-z][A-Za-z0-9+-]*:/.test(request) &&
   !/^builtin:/i.test(request) &&
