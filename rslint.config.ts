@@ -1,5 +1,4 @@
-import { defineConfig, js, ts } from '@rslint/core';
-import globals from 'globals';
+import { defineConfig, globals, js, rstestPlugin, ts } from '@rslint/core';
 
 export default defineConfig([
   {
@@ -43,6 +42,24 @@ export default defineConfig([
     files: ['**/*.cjs'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+  {
+    files: ['**/*.test.{ts,tsx}'],
+    ...rstestPlugin.configs.recommended,
+    rules: {
+      ...rstestPlugin.configs.recommended.rules,
+      'rstest/expect-expect': [
+        'warn',
+        {
+          assertFunctionNames: [
+            'expect',
+            'assert',
+            'expect*',
+            'createAndValidate',
+          ],
+        },
+      ],
     },
   },
 ]);

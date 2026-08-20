@@ -89,9 +89,10 @@ describe('ESX_TO_BROWSERSLIST', () => {
         const currQuery = (
           ESX_TO_BROWSERSLIST[current] as Record<string, string>
         )[query];
-        if (prevQuery && currQuery) {
-          expect(compareSemver(currQuery, prevQuery)).toBeGreaterThanOrEqual(0);
+        if (!prevQuery || !currQuery) {
+          continue;
         }
+        expect(compareSemver(currQuery, prevQuery)).toBeGreaterThanOrEqual(0);
       }
     }
   });

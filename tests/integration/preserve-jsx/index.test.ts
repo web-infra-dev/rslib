@@ -1,7 +1,12 @@
 import { join } from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { expect, test } from '@rstest/core';
-import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
+import {
+  buildAndGetResults,
+  expectBuildToFail,
+  proxyConsole,
+  queryContent,
+} from 'test-helper';
 
 test('JSX syntax should be preserved', async () => {
   const fixturePath = join(__dirname, 'default');
@@ -46,17 +51,13 @@ test('throw error when preserve JSX with bundle mode', async () => {
   const fixturePath = join(__dirname, 'forbid-bundle');
   const { logs, restore } = proxyConsole();
 
-  try {
-    await buildAndGetResults({ fixturePath });
-  } catch {
-    expect(logs.map((l) => stripAnsi(l))).toMatchInlineSnapshot(`
-      [
-        "error   Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to \`automatic\` or \`classic\`. Check out https://rslib.rs/guide/solution/react#jsx-transform for more details.",
-      ]
-    `);
-  } finally {
-    restore();
-  }
+  await expectBuildToFail(buildAndGetResults({ fixturePath })).finally(restore);
+
+  expect(logs.map((l) => stripAnsi(l))).toMatchInlineSnapshot(`
+    [
+      "error   Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to \`automatic\` or \`classic\`. Check out https://rslib.rs/guide/solution/react#jsx-transform for more details.",
+    ]
+  `);
 });
 
 test('preserve JSX in bundleless mode should not throw error when coexisting with bundle mode', async () => {

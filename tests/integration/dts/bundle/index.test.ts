@@ -5,6 +5,7 @@ import { describe, expect, test } from '@rstest/core';
 import {
   buildAndGetResults,
   createTempFiles,
+  expectBuildToFail,
   proxyConsole,
   queryContent,
   runCliSync,
@@ -229,13 +230,12 @@ describe('dts when bundle: true', () => {
     const fixturePath = join(__dirname, 'no-entry');
     const { restore } = proxyConsole();
 
-    try {
-      await buildAndGetResults({ fixturePath, type: 'dts' });
-    } catch (err: any) {
-      expect(stripAnsi(err.message)).toMatchInlineSnapshot(
-        `"Can not find a valid entry for dts.bundle option, please check your entry config."`,
-      );
-    }
+    const err = await expectBuildToFail(
+      buildAndGetResults({ fixturePath, type: 'dts' }),
+    );
+    expect(stripAnsi(err.message)).toMatchInlineSnapshot(
+      `"Can not find a valid entry for dts.bundle option, please check your entry config."`,
+    );
 
     restore();
   });

@@ -32,24 +32,25 @@ test('banner and footer should work in js, css and dts', async () => {
     type: 'js' | 'css' | 'dts',
   ) => {
     for (const content of Object.values(contents)) {
-      if (content) {
-        const expectedBanner =
-          type === 'js'
-            ? BannerFooter.JS_BANNER
-            : type === 'css'
-              ? BannerFooter.CSS_BANNER
-              : BannerFooter.DTS_BANNER;
-        const expectedFooter =
-          type === 'js'
-            ? BannerFooter.JS_FOOTER
-            : type === 'css'
-              ? BannerFooter.CSS_FOOTER
-              : BannerFooter.DTS_FOOTER;
+      if (!content) {
+        continue;
+      }
+      const expectedBanner =
+        type === 'js'
+          ? BannerFooter.JS_BANNER
+          : type === 'css'
+            ? BannerFooter.CSS_BANNER
+            : BannerFooter.DTS_BANNER;
+      const expectedFooter =
+        type === 'js'
+          ? BannerFooter.JS_FOOTER
+          : type === 'css'
+            ? BannerFooter.CSS_FOOTER
+            : BannerFooter.DTS_FOOTER;
 
-        for (const value of Object.values(content)) {
-          expect(value).toContain(expectedBanner);
-          expect(value).toContain(expectedFooter);
-        }
+      for (const value of Object.values(content)) {
+        expect(value).toContain(expectedBanner);
+        expect(value).toContain(expectedFooter);
       }
     }
   };

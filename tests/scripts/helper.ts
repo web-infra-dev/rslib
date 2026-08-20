@@ -133,3 +133,18 @@ export const expectLog = (child: ChildProcess, log: string) =>
 
 export const expectBuildEnd = (child: ChildProcess) =>
   expectLog(child, 'built in');
+
+/**
+ * Expect a build promise to reject and return its error.
+ */
+export const expectBuildToFail = async (
+  buildPromise: Promise<unknown>,
+): Promise<Error> => {
+  const error = await buildPromise.then(
+    () => undefined,
+    (error: unknown) => error,
+  );
+
+  expect(error).toBeInstanceOf(Error);
+  return error as Error;
+};

@@ -49,6 +49,7 @@ test('cjs preserves `process.env.*` and replaces `import.meta.env.*` with undefi
 // Rspack has temporarily reverted the warning emitted when an unknown
 // `import.meta` property is replaced with `undefined`. Re-enable once that
 // warning is reinstated upstream.
+// rslint-disable-next-line rstest/no-disabled-tests
 test.skip('cjs warns about unknown `import.meta` properties', async () => {
   const fixturePath = __dirname;
   const { logs, restore } = proxyConsole('warn');

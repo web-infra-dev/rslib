@@ -5,6 +5,7 @@ import { describe, expect, test } from '@rstest/core';
 import {
   buildAndGetResults,
   createTempFiles,
+  expectBuildToFail,
   globContentJSON,
   queryContent,
   runCliSync,
@@ -182,13 +183,12 @@ describe('dts when bundle: false', () => {
     const fixturePath = join(__dirname, 'tsconfig-path');
     await createTempFiles(fixturePath, false);
 
-    try {
-      await buildAndGetResults({ fixturePath, type: 'dts' });
-    } catch (err: any) {
-      expect(stripAnsi(err.message)).toMatchInlineSnapshot(
-        `"Failed to resolve tsconfig file "<ROOT>/tests/integration/dts/bundle-false/tsconfig-path/path_not_exist/tsconfig.json" from <ROOT>/tests/integration/dts/bundle-false/tsconfig-path. Please ensure that the file exists."`,
-      );
-    }
+    const err = await expectBuildToFail(
+      buildAndGetResults({ fixturePath, type: 'dts' }),
+    );
+    expect(stripAnsi(err.message)).toMatchInlineSnapshot(
+      `"Failed to resolve tsconfig file "<ROOT>/tests/integration/dts/bundle-false/tsconfig-path/path_not_exist/tsconfig.json" from <ROOT>/tests/integration/dts/bundle-false/tsconfig-path. Please ensure that the file exists."`,
+    );
   });
 
   test('alias', async () => {
