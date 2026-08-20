@@ -72,17 +72,6 @@ import {
 import { loadTsconfig } from './utils/tsconfig';
 import { composeWasmConfig, resolveWasmMode } from './wasm/compose';
 
-// Mirrors get_scheme() in rspack's loader runner. `builtin:` is intentionally
-// treated as scheme-less because Rspack uses it for inline builtin loaders.
-const hasScheme = (request: string) =>
-  /^[A-Za-z][A-Za-z0-9+-]*:/.test(request) &&
-  !/^builtin:/i.test(request) &&
-  !/^[A-Za-z]:[\\/#?]/.test(request);
-
-export function isInlineLoaderRequest(request: string): boolean {
-  return request.includes('!') && !hasScheme(request);
-}
-
 export function composeMinifyConfig(config: LibConfig): EnvironmentConfig {
   const minify = config.output?.minify;
   const format = config.format;
@@ -1273,6 +1262,17 @@ const composeEntryConfig = async (
     outBase,
   };
 };
+
+// Mirrors get_scheme() in rspack's loader runner. `builtin:` is intentionally
+// treated as scheme-less because Rspack uses it for inline builtin loaders.
+const hasScheme = (request: string) =>
+  /^[A-Za-z][A-Za-z0-9+-]*:/.test(request) &&
+  !/^builtin:/i.test(request) &&
+  !/^[A-Za-z]:[\\/#?]/.test(request);
+
+export function isInlineLoaderRequest(request: string): boolean {
+  return request.includes('!') && !hasScheme(request);
+}
 
 const composeBundlelessExternalConfig = (
   jsExtension: string,

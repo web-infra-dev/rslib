@@ -20,17 +20,6 @@ import { logger } from '../src/utils/logger';
 
 rs.mock('rslog');
 
-describe('bundleless loader request detection', () => {
-  test('matches Rspack scheme handling', () => {
-    expect(isInlineLoaderRequest('builtin:swc-loader!./value.js')).toBe(true);
-    expect(isInlineLoaderRequest('BUILTIN:swc-loader!./value.js')).toBe(true);
-    expect(isInlineLoaderRequest('./value.js!loader')).toBe(true);
-    expect(isInlineLoaderRequest('data:text/javascript!value')).toBe(false);
-    expect(isInlineLoaderRequest('foo-bar:payload!text')).toBe(false);
-    expect(isInlineLoaderRequest('C:/value.js!text')).toBe(true);
-  });
-});
-
 describe('Should load config file correctly', () => {
   test('Load config.js in cjs project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/cjs');
@@ -1402,4 +1391,15 @@ describe('wasm', () => {
       );
     },
   );
+});
+
+describe('bundleless loader request detection', () => {
+  test('matches Rspack scheme handling', () => {
+    expect(isInlineLoaderRequest('builtin:swc-loader!./value.js')).toBe(true);
+    expect(isInlineLoaderRequest('BUILTIN:swc-loader!./value.js')).toBe(true);
+    expect(isInlineLoaderRequest('./value.js!loader')).toBe(true);
+    expect(isInlineLoaderRequest('data:text/javascript!value')).toBe(false);
+    expect(isInlineLoaderRequest('foo-bar:payload!text')).toBe(false);
+    expect(isInlineLoaderRequest('C:/value.js!text')).toBe(true);
+  });
 });
