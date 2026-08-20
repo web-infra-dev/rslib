@@ -1,47 +1,5 @@
 // Rstest Snapshot v1
 
-exports[`Svelte > bundle 1`] = `
-{
-  "<ROOT>/tests/integration/svelte/dist/bundle/index.js": "import "svelte/internal/disclose-version";
-import "svelte/internal/flags/legacy";
-import * as __rspack_external_svelte_internal_client_f8ec82ce from "svelte/internal/client";
-var root = __rspack_external_svelte_internal_client_f8ec82ce.from_html('<p class="component button svelte-k8fa9w"></p>');
-function Button($$anchor) {
-    var p = root();
-    p.textContent = 'Button!';
-    __rspack_external_svelte_internal_client_f8ec82ce.append($$anchor, p);
-}
-var Card_svelte_root = __rspack_external_svelte_internal_client_f8ec82ce.from_html('<p class="component card svelte-lv9s7p"></p>');
-function Card($$anchor) {
-    var p = Card_svelte_root();
-    p.textContent = 'Card!';
-    __rspack_external_svelte_internal_client_f8ec82ce.append($$anchor, p);
-}
-export { Button, Card };
-",
-}
-`;
-
-exports[`Svelte > bundle 2`] = `
-{
-  "<ROOT>/tests/integration/svelte/dist/bundle/index.css": ".button.component {
-  color: #428bca;
-  border-radius: .5rem;
-}
-
-.button.svelte-k8fa9w {
-  font-weight: bold;
-}
-
-.card.svelte-lv9s7p {
-  color: red;
-  font-weight: bold;
-}
-
-",
-}
-`;
-
 exports[`Svelte > bundleless 1`] = `
 {
   "<ROOT>/tests/integration/svelte/dist/bundleless/Button/Button.js": "import "svelte/internal/disclose-version";

@@ -4,23 +4,16 @@ import { defineConfig } from '@rslib/core';
 import { generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
-  plugins: [pluginLess()],
+  plugins: [pluginLess(), pluginSvelte()],
+  output: {
+    target: 'web',
+  },
   lib: [
     // bundleless, ESM
     generateBundleEsmConfig({
-      plugins: [pluginSvelte()],
       bundle: false,
       output: {
-        target: 'web',
         distPath: 'dist/bundleless',
-      },
-    }),
-    // bundle, ESM
-    generateBundleEsmConfig({
-      plugins: [pluginSvelte()],
-      output: {
-        target: 'web',
-        distPath: 'dist/bundle',
       },
     }),
   ],

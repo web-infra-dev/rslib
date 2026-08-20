@@ -16,13 +16,8 @@ describe('Svelte', () => {
     cssResult = css;
   });
 
-  test('bundle', () => {
-    expect(jsResult.contents.esm1).toMatchSnapshot();
-    expect(cssResult.contents.esm1).toMatchSnapshot();
-  });
-
   test('bundleless', () => {
-    expect(jsResult.contents.esm0).toMatchSnapshot();
-    expect(cssResult.contents.esm0).toMatchSnapshot();
+    expect(jsResult.contents.esm).toMatchSnapshot();
+    expect(cssResult.contents.esm).toMatchSnapshot();
   });
 });
