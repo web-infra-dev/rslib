@@ -34,6 +34,7 @@ catalog:
   '@rsbuild/plugin-solid': '^1.2.2'
   '@rsbuild/plugin-stylus': '^2.0.1'
   '@rsbuild/plugin-svgr': '^2.0.5'
+  '@rsbuild/plugin-svelte': '^2.0.1'
   '@rsbuild/plugin-tailwindcss': '^2.0.3'
   '@rsbuild/plugin-toml': '^2.1.0'
   '@rsbuild/plugin-typed-css-modules': '^1.2.4'
@@ -105,6 +106,7 @@ catalog:
   'storybook-addon-rslib': '^3.4.2'
   'storybook-react-rsbuild': '^3.4.2'
   'storybook-vue3-rsbuild': '^3.4.2'
+  'svelte': '^5.56.9'
   'tailwindcss': '^4.3.3'
   'tinyglobby': '^0.2.17'
   'tsconfig-paths': '^4.2.0'
@@ -121,9 +123,11 @@ catalogs:
     'typescript6-api': 'npm:@typescript/typescript6@^6.0.2'
 
 allowBuilds:
+  '@parcel/watcher': false
   core-js-pure: false
   esbuild: true
   simple-git-hooks: false
+  svelte-preprocess: false
 
 autoInstallPeers: false
 dedupePeers: true
