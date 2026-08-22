@@ -238,10 +238,10 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
   // When the default configuration is inconsistent with rsbuild, remember to modify the type hints
   // see https://github.com/web-infra-dev/rslib/discussions/856
   return defineRsbuildConfig({
+    splitChunks: {
+      preset: 'none',
+    },
     performance: {
-      chunkSplit: {
-        strategy: 'custom',
-      },
       buildCache: true,
     },
     tools: {
