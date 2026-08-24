@@ -308,7 +308,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    nativeWatcher: true,
     sourceImport: true
   },
   devtool: false,
@@ -1084,6 +1083,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   optimization: {
     minimize: true,
+    splitChunks: {
+      chunks: 'async'
+    },
     minimizer: [
       /* config.optimization.minimizer('js') */
       new SwcJsMinimizerRspackPlugin(
@@ -1113,9 +1115,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     concatenateModules: false,
     sideEffects: true,
     avoidEntryIife: true,
-    splitChunks: {
-      chunks: 'async'
-    },
     moduleIds: 'named'
   },
   plugins: [
@@ -1173,7 +1172,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    nativeWatcher: true,
     sourceImport: true
   },
   devtool: false,
@@ -1943,6 +1941,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   optimization: {
     minimize: true,
+    splitChunks: {
+      chunks: 'async'
+    },
     minimizer: [
       /* config.optimization.minimizer('js') */
       new SwcJsMinimizerRspackPlugin(
@@ -1969,9 +1970,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       )
     ],
     nodeEnv: false,
-    splitChunks: {
-      chunks: 'async'
-    },
     moduleIds: 'named'
   },
   plugins: [
@@ -2035,7 +2033,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    nativeWatcher: true,
     sourceImport: true
   },
   devtool: false,
@@ -2713,6 +2710,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   optimization: {
     minimize: true,
+    splitChunks: false,
     minimizer: [
       /* config.optimization.minimizer('js') */
       new SwcJsMinimizerRspackPlugin(
@@ -2739,7 +2737,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       )
     ],
     nodeEnv: 'production',
-    splitChunks: false,
     moduleIds: 'named'
   },
   plugins: [
@@ -2808,7 +2805,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    nativeWatcher: true,
     sourceImport: true
   },
   devtool: false,
@@ -3490,6 +3486,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   },
   optimization: {
     minimize: true,
+    splitChunks: false,
     minimizer: [
       /* config.optimization.minimizer('js') */
       new SwcJsMinimizerRspackPlugin(
@@ -3517,7 +3514,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       )
     ],
     nodeEnv: 'production',
-    splitChunks: false,
     moduleIds: 'named'
   },
   plugins: [
@@ -3586,7 +3582,6 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    nativeWatcher: true,
     sourceImport: true
   },
   devtool: false,
