@@ -240,6 +240,7 @@ const extractArchive = async ({
     archivePath,
     '-C',
     path.dirname(extractDir),
+    `${path.basename(extractDir)}/bin/node`,
   ]);
 };
 
