@@ -3,8 +3,9 @@ import {
   Search as PluginAlgoliaSearch,
   ZH_LOCALES,
 } from '@rspress/plugin-algolia/runtime';
-import { NavIcon } from '@rstack-dev/doc-ui/nav-icon';
+import { NavIcon } from '@rstackjs/doc-ui/nav-icon';
 import { HomeLayout } from './pages';
+import '@rstackjs/doc-ui/theme.css';
 import './index.scss';
 import { useLang } from '@rspress/core/runtime';
 
