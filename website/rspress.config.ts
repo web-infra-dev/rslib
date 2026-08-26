@@ -92,6 +92,9 @@ export default defineConfig({
     },
   ],
   themeConfig: {
+    llmsUI: {
+      placement: 'outline',
+    },
     socialLinks: [
       {
         icon: 'github',
