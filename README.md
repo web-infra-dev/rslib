@@ -30,7 +30,7 @@ It gives developers a simple way to create JavaScript libraries and UI component
 
 Rslib has the following features:
 
-- **Easy to configure**: Rslib provides out-of-the-box build capabilities, allowing developers to develop libraries with zero configuration. It also provides a set of semantic build configurations that can be extended as project needs grow.
+- **Easy to configure**: Rslib provides out-of-the-box tooling that enables developers to build libraries with zero configuration. It also provides a set of semantic build configurations that can be extended as project needs grow.
 
 - **Performance-focused**: Rslib is powered by [Rspack](https://rspack.rs) and integrates high-performance Rust-based tools from the community, including [SWC](https://swc.rs/) and [Lightning CSS](https://lightningcss.dev/), delivering first-class build speed and development experience.
 
