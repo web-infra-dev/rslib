@@ -15,23 +15,23 @@
 
 [English](./README.md) | 简体中文
 
-Rslib 是一个库开发工具，它基于 [Rsbuild](https://rsbuild.rs/zh) 精心设计的配置和插件，使库开发者得以复用 webpack 和 Rspack 繁荣的知识和生态系统。
+Rslib 是一个基于 [Rsbuild](https://rsbuild.rs/zh/) 的库开发工具。
 
-Rslib 旨在为库开发者提供：
+它帮助开发者以简单的方式创建 JavaScript 库和 UI 组件库，并为库开发中的构建、调试、文档编写和测试等环节提供工具集成与最佳实践。
 
-- **便捷的库创建**：以简单直观的方式，轻松创建高质量的 JavaScript 和 TypeScript 库。
-- **简洁的构建配置**：提供开箱即用的构建能力，以简洁的配置，满足库开发场景的多样化需求。
-- **完善的开发流程**：包含库开发过程中构建、调试、文档和测试等环节的最佳实践，帮助提升开发效率与体验。
+## 🔥 特性
 
-## 🔥 功能
+Rslib 具备以下特性：
 
-Rslib 提供了以下功能：
+- **易于配置**：Rslib 为库开发提供开箱即用的构建能力，使开发者能够在零配置的情况下开发库项目。同时，Rslib 提供一套语义化的构建配置，可随着项目需求灵活扩展。
 
-- **多种语言的编译**: TypeScript、JSX、Sass、Less、CSS Modules、Wasm 等。
-- **灵活的构建模式**: Bundle 和 bundleless 模式以满足不同的需求。
-- **多种输出格式**: ESM、CJS 和 UMD 以实现最大兼容性。
-- **类型声明文件生成**: 包括 isolated declarations。
-- **进阶功能**: 模块联邦、资源压缩、PostCSS、Lightning CSS 等。
+- **性能优先**：Rslib 由 [Rspack](https://rspack.rs/zh/) 驱动，集成了社区中基于 Rust 的高性能工具，包括 [SWC](https://swc.rs/) 和 [Lightning CSS](https://lightningcss.dev/)，以提供一流的构建速度和开发体验。
+
+- **插件生态**：Rslib 可以使用 [Rsbuild 的官方插件](https://rsbuild.rs/zh/plugins/list/)，也兼容大部分 webpack 插件和所有 Rspack 插件，这意味着开发者可以在 Rslib 中使用社区或公司内现有的插件，并沿用在 webpack 和 Rspack 生态中积累的知识与工程经验。
+
+- **产物灵活**：Rslib 设计时充分考虑了库发布与消费场景的多样性，支持根据不同的运行环境、分发方式和下游构建工具灵活配置产物输出，满足不同类型库的交付需求。
+
+- **框架无关**：Rslib 不与前端 UI 框架耦合，并通过插件支持 React、Vue、Svelte、Solid 等框架，让开发者能够以一致的配置和开发方式构建不同框架的组件库。
 
 ## 📚 文档
 
