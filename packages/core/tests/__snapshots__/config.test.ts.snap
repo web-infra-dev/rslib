@@ -1084,7 +1084,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   optimization: {
     minimize: true,
     splitChunks: {
-      chunks: 'async'
+      chunks: 'async',
+      minSize: 0
     },
     minimizer: [
       /* config.optimization.minimizer('js') */
@@ -1942,7 +1943,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   optimization: {
     minimize: true,
     splitChunks: {
-      chunks: 'async'
+      chunks: 'async',
+      minSize: 0
     },
     minimizer: [
       /* config.optimization.minimizer('js') */
