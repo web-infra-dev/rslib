@@ -1,4 +1,3 @@
-import path from 'node:path';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { defineConfig } from '@rspress/core';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
@@ -9,6 +8,7 @@ import {
   transformerNotationDiff,
   transformerNotationHighlight,
 } from '@shikijs/transformers';
+import path from 'node:path';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import pluginFileTree from 'rspress-plugin-file-tree';
@@ -134,7 +134,7 @@ export default defineConfig({
   builderConfig: {
     resolve: {
       alias: {
-        '@components': path.join(__dirname, '@components'),
+        '@components': path.join(__dirname, 'theme/components'),
         '@en': path.join(__dirname, 'docs/en'),
         '@zh': path.join(__dirname, 'docs/zh'),
       },
