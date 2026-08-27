@@ -1,5 +1,5 @@
 ---
-description: '了解 Rslib 的核心特性、与 Rsbuild 和 Rspack 的关系、支持的输出格式与更完整的 Rstack 生态。'
+description: 'Rslib 入门指南，介绍核心特性、Rstack 工具链、社区资源与在线示例。'
 ---
 
 # 介绍
@@ -8,7 +8,7 @@ Rslib 是一个基于 [Rsbuild](https://rsbuild.rs/zh/) 的库开发工具。
 
 它帮助开发者以简单的方式创建 JavaScript 库和 UI 组件库，并为库开发中的构建、调试、文档编写和测试等环节提供工具集成与最佳实践。
 
-## ✨ 为什么选择 Rslib
+## 为什么选择 Rslib
 
 在开发组件库或工具库时，开发者不仅需要关注项目逻辑的实现，还需考虑项目的构建、调试、文档和测试等与代码逻辑无关的工作。现有许多社区工具与方案通常能较好地满足其中部分需求，但对于不熟悉这些工具与方案的开发者来说，往往需要繁琐的配置工作或多种工具配合使用，以满足这些需求。
 
@@ -18,7 +18,7 @@ Rslib 基于 Rspack 与 Rsbuild 实现，针对库开发场景的多样化需求
 
 未来，Rslib 将基于 Rspack 的新特性，探索更多的可能性。
 
-## 🔥 特性
+## 特性
 
 Rslib 具备以下特性：
 
@@ -32,17 +32,17 @@ Rslib 具备以下特性：
 
 - **框架无关**：Rslib 不与前端 UI 框架耦合，并通过插件支持 React、Vue、Svelte、Solid 等框架，让开发者能够以一致的配置和开发方式构建不同框架的组件库。
 
-## 🎯 生态
-
-Rslib 基于 Rsbuild 实现，并完全复用 Rsbuild 的能力和生态系统。
-
-下图说明了 Rsbuild 与生态中其他工具之间的关系：
-
-![Rspack stack layers](https://assets.rspack.rs/rsbuild/assets/rspack-stack-layers.png)
-
-## 🦀 Rstack
+## Rstack
 
 Rslib 是 Rstack 的一员。Rstack 是为开发者与 Agent 打造的高性能、一体化 JavaScript 工具链。
+
+<img
+  src="https://assets.rspack.rs/rstack/rstack-overview.png"
+  alt="Rstack"
+  width="820"
+/>
+
+Rstack 包含以下工具：
 
 | 名称                                                  | 描述           | 版本                                                                                                                                                                             |
 | ----------------------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -54,16 +54,25 @@ Rslib 是 Rstack 的一员。Rstack 是为开发者与 Agent 打造的高性能�
 | [Rstest](https://github.com/web-infra-dev/rstest)     | 测试框架       | <a href="https://npmjs.com/package/@rstest/core"><img src="https://img.shields.io/npm/v/@rstest/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>     |
 | [Rslint](https://github.com/web-infra-dev/rslint)     | 代码检查工具   | <a href="https://npmjs.com/package/@rslint/core"><img src="https://img.shields.io/npm/v/@rslint/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>     |
 
-## 🔗 链接
+## 链接
 
-- [awesome-rstack](https://github.com/rstackjs/awesome-rstack): 与 Rstack 相关的精彩内容列表。
-- [rstack-examples](https://github.com/rstackjs/rstack-examples): Rstack 的示例项目。
-- [storybook-rsbuild](https://github.com/rstackjs/storybook-rsbuild): 基于 Rsbuild 构建的 Storybook。
-- [rsbuild-plugin-template](https://github.com/rstackjs/rsbuild-plugin-template): 使用此模板创建你的 Rsbuild 插件。
-- [rstack-design-resources](https://github.com/rstackjs/rstack-design-resources): Rstack 的设计资源。
+- [awesome-rstack](https://github.com/rstackjs/awesome-rstack)：与 Rstack 相关的精彩内容列表。
+- [agent-skills](https://github.com/rstackjs/agent-skills)：Rstack 的 Agent Skills 合集。
+- [rstack-examples](https://github.com/rstackjs/rstack-examples)：Rstack 的示例项目。
+- [storybook-rsbuild](https://github.com/rstackjs/storybook-rsbuild)：基于 Rsbuild 构建的 Storybook。
+- [rsbuild-plugin-template](https://github.com/rstackjs/rsbuild-plugin-template)：使用此模板创建你的 Rsbuild 插件。
+- [rstack-design-resources](https://github.com/rstackjs/rstack-design-resources)：Rstack 的设计资源。
 
-## 🧑‍💻 社区
+## 社区
 
 欢迎加入我们的 [Discord](https://discord.gg/XsaKEEk4mW) 交流频道！Rstack 团队和用户都在那里活跃，并且我们一直期待着各种贡献。
 
 你也可以加入 [飞书群](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=3c3vca77-bfc0-4ef5-b62b-9c5c9c92f1b4) 与大家一起交流。
+
+## 在线示例
+
+通过 [StackBlitz 示例](https://stackblitz.com/~/github.com/rstackjs/rslib-stackblitz-example) 在线体验 Rslib。
+
+## 下一步
+
+请阅读 [快速上手](/guide/start/quick-start) 来开始使用 Rslib。

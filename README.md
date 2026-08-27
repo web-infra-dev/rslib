@@ -19,8 +19,6 @@ English | [简体中文](./README.zh-CN.md)
 > The `main` branch is under active development for **Rslib 1.0**.
 >
 > The stable **0.x** releases are maintained in the [v0.x](https://github.com/web-infra-dev/rslib/tree/v0.x) branch.
->
-> The documentation for Rslib v1 is available at [v1.rslib.rs](https://v1.rslib.rs).
 
 Rslib is a library development tool based on [Rsbuild](https://rsbuild.rs).
 
@@ -42,19 +40,8 @@ Rslib has the following features:
 
 ## 📚 Documentation
 
-- [Rslib docs](https://rslib.rs)
-
-## 🎯 Ecosystem
-
-Rslib is implemented based on Rsbuild and fully reuses the capabilities and ecosystem of Rsbuild.
-
-The following diagram illustrates the relationship between Rslib and other tools in the ecosystem:
-
-<img src="https://assets.rspack.rs/rsbuild/assets/rspack-stack-layers.png" alt="Rspack stack layers" width="760" />
-
-## 📚 Getting started
-
-To get started with Rslib, see the [Quick start](https://rslib.rs/guide/start/quick-start).
+- [Rslib v1 docs](https://v1.rslib.rs)
+- [Rslib v0 docs](https://rslib.rs)
 
 ## 🦀 Rstack
 
@@ -74,7 +61,7 @@ Rslib is part of Rstack, the fast, unified JavaScript toolchain for developers a
 
 - [awesome-rstack](https://github.com/rstackjs/awesome-rstack): A curated list of awesome things related to Rstack.
 - [agent-skills](https://github.com/rstackjs/agent-skills): A collection of Agent Skills for Rstack.
-- [rstack-examples](https://github.com/rstackjs/rstack-examples): Examples for Rstack.
+- [rstack-examples](https://github.com/rstackjs/rstack-examples): Examples showcasing Rstack.
 - [storybook-rsbuild](https://github.com/rstackjs/storybook-rsbuild): Storybook builder powered by Rsbuild.
 - [rsbuild-plugin-template](https://github.com/rstackjs/rsbuild-plugin-template): Use this template to create your own Rsbuild plugin.
 - [rstack-design-resources](https://github.com/rstackjs/rstack-design-resources): Design resources for Rstack.
