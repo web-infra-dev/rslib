@@ -1,5 +1,5 @@
 ---
-description: 'Discover Rslib features, its integration with Rsbuild and Rspack, supported output formats, and the wider Rstack ecosystem.'
+description: 'Introduction to Rslib, including its core features, the Rstack toolchain, community resources, and online examples.'
 ---
 
 # Introduction
@@ -8,7 +8,7 @@ Rslib is a library development tool based on [Rsbuild](https://rsbuild.rs).
 
 It gives developers a simple way to create JavaScript libraries and UI component libraries, and provides tool integrations and best practices for building, debugging, documentation, and testing throughout library development.
 
-## ✨ Why Rslib
+## Why Rslib
 
 During the development of component or utility libraries, developers need to focus not only on implementing project logic, but also on handling tasks that are separate from the code itself, such as building, debugging, documentation, and testing. Although many community tools and solutions can address some of these needs, developers who are not familiar with them often face cumbersome configuration requirements or need to coordinate multiple tools to meet these demands.
 
@@ -18,7 +18,7 @@ Furthermore, Rslib utilizes Rsbuild's out-of-the-box configuration to facilitate
 
 In the future, Rslib will explore additional possibilities by leveraging the new features of Rspack.
 
-## 🔥 Features
+## Features
 
 Rslib has the following features:
 
@@ -32,17 +32,17 @@ Rslib has the following features:
 
 - **Framework agnostic**: Rslib is not coupled to frontend UI frameworks. It supports React, Vue, Svelte, Solid, and other frameworks through plugins, allowing developers to build component libraries for different frameworks with a consistent configuration and development workflow.
 
-## 🎯 Ecosystem
-
-Rslib is implemented based on Rsbuild and fully reuses the capabilities and ecosystem of Rsbuild.
-
-The following diagram illustrates the relationship between Rslib and other tools in the ecosystem:
-
-![Rspack stack layers](https://assets.rspack.rs/rsbuild/assets/rspack-stack-layers.png)
-
-## 🦀 Rstack
+## Rstack
 
 Rslib is part of Rstack, the fast, unified JavaScript toolchain for developers and agents.
+
+<img
+  src="https://assets.rspack.rs/rstack/rstack-overview.png"
+  alt="Rstack"
+  width="820"
+/>
+
+Rstack includes the following tools:
 
 | Name                                                  | Description              | Version                                                                                                                                                                          |
 | ----------------------------------------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -54,14 +54,23 @@ Rslib is part of Rstack, the fast, unified JavaScript toolchain for developers a
 | [Rstest](https://github.com/web-infra-dev/rstest)     | Testing framework        | <a href="https://npmjs.com/package/@rstest/core"><img src="https://img.shields.io/npm/v/@rstest/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>     |
 | [Rslint](https://github.com/web-infra-dev/rslint)     | Linter                   | <a href="https://npmjs.com/package/@rslint/core"><img src="https://img.shields.io/npm/v/@rslint/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>     |
 
-## 🔗 Links
+## Links
 
 - [awesome-rstack](https://github.com/rstackjs/awesome-rstack): A curated list of awesome things related to Rstack.
-- [rstack-examples](https://github.com/rstackjs/rstack-examples): Examples for Rstack.
+- [agent-skills](https://github.com/rstackjs/agent-skills): A collection of Agent Skills for Rstack.
+- [rstack-examples](https://github.com/rstackjs/rstack-examples): Examples showcasing Rstack tools.
 - [storybook-rsbuild](https://github.com/rstackjs/storybook-rsbuild): Storybook builder powered by Rsbuild.
 - [rsbuild-plugin-template](https://github.com/rstackjs/rsbuild-plugin-template): Use this template to create your own Rsbuild plugin.
 - [rstack-design-resources](https://github.com/rstackjs/rstack-design-resources): Design resources for Rstack.
 
-## 🧑‍💻 Community
+## Community
 
 Come and chat with us on [Discord](https://discord.gg/XsaKEEk4mW)! The Rstack team and users are active there, and we're always looking for contributions.
+
+## Online example
+
+Try Rslib online with the [StackBlitz example](https://stackblitz.com/~/github.com/rstackjs/rslib-stackblitz-example).
+
+## Next steps
+
+Please read [Quick start](/guide/start/quick-start) to start using Rslib.

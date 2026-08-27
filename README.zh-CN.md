@@ -35,19 +35,8 @@ Rslib 具备以下特性：
 
 ## 📚 文档
 
-- [Rslib 文档](https://rslib.rs/zh)
-
-## 🎯 生态
-
-Rslib 基于 Rsbuild 实现，并完全复用 Rsbuild 的能力和生态系统。
-
-下图说明了 Rsbuild 与生态中其他工具之间的关系：
-
-<img src="https://assets.rspack.rs/rsbuild/assets/rspack-stack-layers.png" alt="Rspack stack layers" width="760" />
-
-## 📚 快速上手
-
-你可以参考 [快速上手](https://rslib.rs/zh/guide/start/quick-start) 来开始体验 Rslib。
+- [Rslib v1 文档](https://v1.rslib.rs/zh/)
+- [Rslib v0 文档](https://rslib.rs/zh/)
 
 ## 🦀 Rstack
 
@@ -65,12 +54,12 @@ Rslib 是 Rstack 的一员。Rstack 是为开发者与 Agent 打造的高性能�
 
 ## 🔗 链接
 
-- [awesome-rstack](https://github.com/rstackjs/awesome-rstack): 与 Rstack 相关的精彩内容列表。
-- [agent-skills](https://github.com/rstackjs/agent-skills): Rstack 的 Agent Skills 集合。
-- [rstack-examples](https://github.com/rstackjs/rstack-examples): Rstack 的示例项目。
-- [storybook-rsbuild](https://github.com/rstackjs/storybook-rsbuild): 基于 Rsbuild 构建的 Storybook。
-- [rsbuild-plugin-template](https://github.com/rstackjs/rsbuild-plugin-template): 使用此模板创建你的 Rsbuild 插件。
-- [rstack-design-resources](https://github.com/rstackjs/rstack-design-resources): Rstack 的设计资源。
+- [awesome-rstack](https://github.com/rstackjs/awesome-rstack)：与 Rstack 相关的精彩内容列表。
+- [agent-skills](https://github.com/rstackjs/agent-skills)：Rstack 的 Agent Skills 合集。
+- [rstack-examples](https://github.com/rstackjs/rstack-examples)：Rstack 的示例项目。
+- [storybook-rsbuild](https://github.com/rstackjs/storybook-rsbuild)：基于 Rsbuild 构建的 Storybook。
+- [rsbuild-plugin-template](https://github.com/rstackjs/rsbuild-plugin-template)：使用此模板创建你的 Rsbuild 插件。
+- [rstack-design-resources](https://github.com/rstackjs/rstack-design-resources)：Rstack 的设计资源。
 
 ## 🤝 参与贡献
 
