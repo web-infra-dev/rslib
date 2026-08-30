@@ -68,3 +68,11 @@ define.fmt({
   singleQuote: true,
   sortPackageJson: true,
 });
+
+define.staged({
+  '*.{md,mdx,css,less,scss,json,jsonc,json5}': 'rs fmt',
+  '*.{js,jsx,ts,tsx,mjs,mjsx,cjs,cjsx,mts,mtsx,cts,ctsx}': [
+    'rs lint --type-check',
+    'rs fmt',
+  ],
+});
