@@ -13,7 +13,7 @@
 - `packages/plugin-dts` (`rsbuild-plugin-dts`): provides the `dts` configuration hook (e.g., `{ dts: { bundle: true } }`).
 - `packages/create-rslib` (`create-rslib`): scaffolds new projects via `pnpm dlx create-rslib` or `npx create-rslib`.
 - Tests live in `packages/*/tests` (unit) and `tests/` (`integration`, `e2e`, `benchmark`); examples in `examples/`.
-- Key configuration files: `.prettierrc.json`, `rslint.config.ts`, `pnpm-workspace.yaml`.
+- Key configuration files: `rstack.config.ts`, `pnpm-workspace.yaml`.
 
 ## Build, test, and development commands
 
@@ -31,7 +31,7 @@
 ## Coding style & naming conventions
 
 - TypeScript + ESM; spaces; single quotes.
-- Rslint is the canonical linter; Prettier is the canonical formatter.
+- Rstack CLI is the canonical linting and formatting tool.
 - Run `pnpm lint` for linting and `pnpm format` for formatting.
 - Filenames should use `camelCase` or `PascalCase`.
 

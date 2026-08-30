@@ -113,7 +113,7 @@ pnpm test:integration -t dts
 
 ## Linting and formatting
 
-To help maintain consistency and readability of the codebase, we use [Rslint](https://rslint.rs/) to lint the code and [Prettier](https://prettier.io/) to format it.
+To help maintain consistency and readability of the codebase, we use [Rstack CLI](https://rstack.rs/) to lint and format the code.
 
 You can run the linter by executing the following command:
 
@@ -127,7 +127,7 @@ You can format files by executing the following command:
 pnpm run format
 ```
 
-For VS Code users, you can install the [Rslint VS Code extension](https://marketplace.visualstudio.com/items?itemName=rstack.rslint) to see lints while typing and the [Prettier VS Code extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to format files.
+For VS Code users, you can install the [Rstack VS Code extension](https://marketplace.visualstudio.com/items?itemName=rstack.rstack) to see lints while typing and format files.
 
 ## Releasing
 

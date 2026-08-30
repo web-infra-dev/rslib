@@ -1,6 +1,6 @@
-import { defineConfig, globals, js, rstestPlugin, ts } from '@rslint/core';
+import { define } from 'rstack';
 
-export default defineConfig([
+define.lint(({ globals, js, rstestPlugin, ts }) => [
   {
     ignores: [
       // TypeScript does not support source phase imports syntax
@@ -63,3 +63,8 @@ export default defineConfig([
     },
   },
 ]);
+
+define.fmt({
+  singleQuote: true,
+  sortPackageJson: true,
+});
