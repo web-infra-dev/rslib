@@ -5,11 +5,11 @@
   "scripts": {
     "build": "pnpm --filter \"./packages/*\" run build",
     "build:examples": "pnpm --filter \"@examples/*\" run build",
+    "check": "rs check --type-check",
     "check-spell": "pnpx cspell && heading-case",
     "format": "rs fmt && heading-case --write",
     "lint": "rs lint --type-check",
     "prepare": "rs hooks",
-    "sort-package-json": "rs fmt \"packages/*/package.json\"",
     "test": "pnpm run test:unit && pnpm run test:integration && pnpm run test:e2e",
     "test:benchmark": "cd ./tests && pnpm run test:benchmark",
     "test:e2e": "pnpm run build:examples && cd tests && pnpm run test:e2e",

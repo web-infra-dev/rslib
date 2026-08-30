@@ -585,12 +585,9 @@ const modifyRsbuildDefaultPlugin = ({
 
       // Part 2: configure URL parsing for library output.
       if (urlParserMode !== undefined) {
-        chain.module
-          .rule(NEW_URL_RULE)
-          .test(JS_EXTENSIONS_PATTERN)
-          .parser({
-            url: urlParserMode
-          });
+        chain.module.rule(NEW_URL_RULE).test(JS_EXTENSIONS_PATTERN).parser({
+          url: urlParserMode,
+        });
       }
 
       // Part 3: remove Rsbuild's `type: 'javascript/auto'` override.

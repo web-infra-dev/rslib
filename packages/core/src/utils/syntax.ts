@@ -235,7 +235,7 @@ export async function resolveMinNodeVersion(
   try {
     const { default: minVersion } = await import('semver/ranges/min-version');
     const minVer = minVersion(range);
-    return minVer?.version === '0.0.0' ? null : minVer?.version ?? null;
+    return minVer?.version === '0.0.0' ? null : (minVer?.version ?? null);
   } catch {
     return null;
   }
