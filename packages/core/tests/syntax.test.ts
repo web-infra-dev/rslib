@@ -281,7 +281,10 @@ describe('transformSyntaxToRspackTarget', () => {
 });
 
 describe('resolveMinNodeVersion', () => {
-  const expectMinNodeVersion = async (range: string, expected: string | null) => {
+  const expectMinNodeVersion = async (
+    range: string,
+    expected: string | null,
+  ) => {
     await expect(resolveMinNodeVersion(range)).resolves.toBe(expected);
   };
   test('extracts minimum versions from common range operators', async () => {
@@ -298,10 +301,7 @@ describe('resolveMinNodeVersion', () => {
     await expectMinNodeVersion('18', '18.0.0');
     await expectMinNodeVersion('18.12', '18.12.0');
     await expectMinNodeVersion('v20.19.0', '20.19.0');
-    await expectMinNodeVersion(
-      '>=20.19.0-alpha.1',
-      '20.19.0-alpha.1',
-    );
+    await expectMinNodeVersion('>=20.19.0-alpha.1', '20.19.0-alpha.1');
     await expectMinNodeVersion('^20.19.0-alpha.1', '20.19.0-alpha.1');
   });
 
@@ -335,10 +335,7 @@ describe('resolveMinNodeVersion', () => {
   test('uses the lowest satisfiable set from OR ranges', async () => {
     await expectMinNodeVersion('^20.19.0 || >=22.12.0', '20.19.0');
     await expectMinNodeVersion('>=22.12.0 || >=20.19.0', '20.19.0');
-    await expectMinNodeVersion(
-      '>=18.12.0 <19 || >=20.0.0',
-      '18.12.0',
-    );
+    await expectMinNodeVersion('>=18.12.0 <19 || >=20.0.0', '18.12.0');
   });
 
   test('returns null for impractical lower bounds', async () => {

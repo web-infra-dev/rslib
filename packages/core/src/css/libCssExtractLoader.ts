@@ -123,8 +123,7 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
 
   const handleExports = (
     originalExports:
-      | { default: Record<string, any>; __esModule: true }
-      | Record<string, any>,
+      { default: Record<string, any>; __esModule: true } | Record<string, any>,
   ) => {
     let locals: Record<string, string> | undefined;
     let namedExport: boolean;
