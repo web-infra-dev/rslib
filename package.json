@@ -6,10 +6,10 @@
     "build": "pnpm --filter \"./packages/*\" run build",
     "build:examples": "pnpm --filter \"@examples/*\" run build",
     "check-spell": "pnpx cspell && heading-case",
-    "format": "prettier --experimental-cli --write . && heading-case --write",
-    "lint": "rslint --type-check",
+    "format": "rs fmt && heading-case --write",
+    "lint": "rs lint --type-check",
     "prepare": "simple-git-hooks",
-    "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
+    "sort-package-json": "rs fmt \"packages/*/package.json\"",
     "test": "pnpm run test:unit && pnpm run test:integration && pnpm run test:e2e",
     "test:benchmark": "cd ./tests && pnpm run test:benchmark",
     "test:e2e": "pnpm run build:examples && cd tests && pnpm run test:e2e",
@@ -24,14 +24,13 @@
     "pre-commit": "pnpm exec nano-staged"
   },
   "nano-staged": {
-    "*.{md,mdx,css,less,scss,json,jsonc,json5}": "prettier --experimental-cli --write",
+    "*.{md,mdx,css,less,scss,json,jsonc,json5}": "rs fmt",
     "*.{js,jsx,ts,tsx,mjs,mjsx,cjs,cjsx,mts,mtsx,cts,ctsx}": [
-      "rslint --type-check",
-      "prettier --experimental-cli --write"
+      "rs lint --type-check",
+      "rs fmt"
     ]
   },
   "devDependencies": {
-    "@rslint/core": "catalog:",
     "@rstest/adapter-rslib": "catalog:",
     "@rstest/core": "catalog:",
     "@types/fs-extra": "catalog:",
@@ -41,7 +40,7 @@
     "heading-case": "catalog:",
     "nano-staged": "catalog:",
     "prettier": "catalog:",
-    "prettier-plugin-packagejson": "catalog:",
+    "rstack": "catalog:",
     "simple-git-hooks": "catalog:",
     "typescript": "catalog:"
   },
