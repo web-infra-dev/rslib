@@ -1,6 +1,6 @@
 ## Summary
 
-## Related Links
+## Related links
 
 <!--- Provide links of related issues or pages -->
 

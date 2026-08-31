@@ -1,23 +1,23 @@
-# Copilot Code Review Instructions
+# Copilot code review instructions
 
 ## Purpose
 
 Use these instructions for pull request review in this repository.
 Focus on recurring, reusable review logic that prevents regressions.
 
-## Instruction Style
+## Instruction style
 
 - Write short, imperative feedback.
 - Explain the underlying rule, not a one-off line edit.
 - Suggest an actionable fix when you flag an issue.
 
-## General Review Rules
+## General review rules
 
 - Keep suggestions aligned with the stated user goal; do not optimize for a different objective.
 - Require rationale for non-obvious design or behavior decisions.
 - Prefer fixes with limited blast radius over broad changes that can affect unrelated behavior.
 
-## Documentation Review Rules
+## Documentation review rules
 
 Apply these rules when reviewing Markdown, MDX, comments, examples, and user-facing guides.
 

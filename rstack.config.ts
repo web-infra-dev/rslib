@@ -1,4 +1,5 @@
 import { define } from 'rstack';
+import skillsLock from './skills-lock.json' with { type: 'json' };
 
 define.lint(({ globals, js, rstestPlugin, ts }) => [
   {
@@ -65,6 +66,11 @@ define.lint(({ globals, js, rstestPlugin, ts }) => [
 ]);
 
 define.fmt({
+  ignorePatterns: [
+    // Ignore installed Skills because their formatting may differ from this repository.
+    ...Object.keys(skillsLock.skills).map((name) => `.agents/skills/${name}`),
+  ],
+  plugins: ['heading-case'],
   singleQuote: true,
   sortPackageJson: true,
 });
