@@ -188,8 +188,8 @@ catalogs:
       specifier: 5.0.0-beta.6
       version: 5.0.0-beta.6
     heading-case:
-      specifier: ^1.1.8
-      version: 1.1.8
+      specifier: ^2.0.0
+      version: 2.0.0
     http-server:
       specifier: ^14.1.1
       version: 14.1.1
@@ -334,7 +334,7 @@ importers:
         version: 11.4.0
       heading-case:
         specifier: 'catalog:'
-        version: 1.1.8
+        version: 2.0.0(prettier@3.9.6)
       prettier:
         specifier: 'catalog:'
         version: 3.9.6
@@ -5505,9 +5505,11 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
 
-  heading-case@1.1.8:
-    resolution: {integrity: sha512-zGhfkYlKqTbkXyu6RluO4DFyD3fEGHOMl/16UZcXX315drkUa/sg8vlvQXm3trqpnoj8LhPsYCrg5R6oP9mtyQ==}
+  heading-case@2.0.0:
+    resolution: {integrity: sha512-yznMB5NlBOlCqGL68oRa9gvA8vINQB56D1rTQwCRNoh2aLjtEAK4UKYD5mZ4rXJ0GCuyRmzGCgP1/3To1Mj/vA==}
     hasBin: true
+    peerDependencies:
+      prettier: ^3.0.0
 
   hmac-drbg@1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
@@ -12145,7 +12147,9 @@ snapshots:
 
   he@1.2.0: {}
 
-  heading-case@1.1.8: {}
+  heading-case@2.0.0(prettier@3.9.6):
+    dependencies:
+      prettier: 3.9.6
 
   hmac-drbg@1.0.1:
     dependencies:
