@@ -35,13 +35,34 @@ The ecosystem already offers many library build tools that compile JavaScript an
 
 ## From 0.x to 1.0 \{#from-v0-to-v1}
 
-Since the [public launch of Rslib](/blog/introducing-rslib), we have shipped 16 minor releases with the following major features and improvements:
+Since the [public launch of Rslib 0.7](/blog/introducing-rslib), we have shipped 16 minor releases. Through continuous iteration and validation across numerous production projects, Rslib's library build capabilities have continued to improve, and its configuration model and JavaScript API have stabilized.
 
-- **Output quality and build performance**: We further optimized ESM output for static analysis and tree shaking and added support for code splitting. In a benchmark project containing 10,000 React components, build time **fell by 25%** and output size **fell by 32%**.
-- **Declaration generation**: Rslib supports generating declaration files with TypeScript 7, making the process **5–10 times faster**, and provides a fast declaration generation method based on isolated declarations.
+Following the 1.0 release, Rslib will continue to evolve on a stable API foundation in line with Semantic Versioning (SemVer). Upgrading from a 0.x release to 1.0 provides more sensible defaults, faster builds, smaller output sizes, and more comprehensive build support, while integrating more smoothly with library development workflows such as testing, documentation, and output validation.
+
+Major features and improvements during this period include:
+
+- **Output quality and build performance**: We further optimized ESM output for static analysis and tree shaking and added support for code splitting.
+
+  In a benchmark project containing 10,000 React components, uncached build time **decreased by approximately 24.3%**, cached build time **decreased by approximately 56.7%**, output size before Gzip compression **decreased by approximately 32.2%**, and output size after compression **decreased by approximately 4.1%**.
+
+  | Rslib version | Production build (without cache) | Production build (with cache) | Output size (before/after Gzip) |
+  | ------------- | -------------------------------- | ----------------------------- | ------------------------------- |
+  | 0.7.0         | **1.212 s**                      | **1.125 s**                   | **7.64 MiB / 1.40 MiB**         |
+  | 1.0.0         | **0.918 s**                      | **0.487 s**                   | **5.19 MiB / 1.35 MiB**         |
+
+- **Declaration generation**: Rslib supports faster declaration generation with [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) and [Isolated Declarations](/config/lib/dts#dtsisolated), though actual improvements vary by project. In the Rsbuild repository, the following times were measured for each approach:
+
+  | Approach              | Time      |
+  | --------------------- | --------- |
+  | TypeScript 6          | **9.7 s** |
+  | TypeScript 7          | **4.1 s** |
+  | Isolated Declarations | **2.3 s** |
+
 - **Component libraries and assets**: Rslib supports building component libraries with frameworks such as React, Vue, Svelte, and Solid, while improving style and asset handling for scenarios including `new URL()`, Web Workers, and Wasm.
 - **Configuration and usage**: Simple projects can be built without a configuration file. For more complex use cases, developers can extend the configuration as needed or invoke Rslib programmatically through its JavaScript API.
 - **Developer experience**: Rslib works with tools such as [Rstest](https://rstest.rs/), [Rspress](https://rspress.rs/), and [Rsdoctor](https://rsdoctor.rs/) for testing, documentation, and output analysis. It also provides Agent Skills with Rslib best practices for AI-assisted development.
+
+The following sections take a closer look at these capabilities and how to use them across different library development scenarios.
 
 ### Output formats for different use cases \{#output-formats}
 
@@ -55,7 +76,47 @@ Output requirements vary by runtime environment and by how a library is consumed
 
 A single configuration file can define multiple outputs, each with its own [format](/config/lib/format) and build strategy, so you do not need separate build scripts for different outputs.
 
-Rslib places particular emphasis on ESM output. It generates ESM output that is designed for static analysis and supports code splitting, making it easier for downstream build tools to perform tree shaking and further processing. Rslib also optimizes the default handling of external dependencies in ESM output, preserving module-loading semantics from the source code more accurately and reducing behavioral differences introduced by build transformations.
+Rslib places particular emphasis on ESM output. It generates ESM output that is designed for static analysis and supports code splitting, making it easier for downstream build tools to perform tree shaking and further processing.
+
+<div
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+    gap: '16px',
+    margin: '20px 0',
+  }}
+>
+  <div>
+    <strong>Before optimization</strong>
+    <img
+      src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-esm-output-old.png"
+      alt="ESM output before Rslib's output optimizations"
+      style={{
+        display: 'block',
+        width: '100%',
+        aspectRatio: '1 / 1',
+        objectFit: 'cover',
+        marginTop: '8px',
+      }}
+    />
+  </div>
+  <div>
+    <strong>After optimization</strong>
+    <img
+      src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-esm-output-new.png"
+      alt="ESM output after Rslib's output optimizations"
+      style={{
+        display: 'block',
+        width: '100%',
+        aspectRatio: '1 / 1',
+        objectFit: 'cover',
+        marginTop: '8px',
+      }}
+    />
+  </div>
+</div>
+
+Rslib also optimizes the default handling of external dependencies in ESM output, preserving module-loading semantics from the source code more accurately and reducing behavioral differences introduced by build transformations.
 
 In addition to common module formats, Rslib offers an experimental [executable generation](/config/lib/experiments#experimentsexe) capability. This feature is based on [Node.js SEA](https://nodejs.org/api/single-executable-applications.html) and currently supports a single bundled entry targeting Node.js. The generated executable can run on target systems where Node.js is not installed, making it suitable for distributing CLIs and other Node.js programs.
 
@@ -68,9 +129,12 @@ After choosing an output format, you also need to decide whether to bundle the l
 
 For a simple single-entry library, the output structures of the two modes look like this:
 
-| Source                                                  | Bundle mode output | Bundleless mode output                                     |
-| ------------------------------------------------------- | ------------------ | ---------------------------------------------------------- |
-| `src/index.ts`<br />`src/button.ts`<br />`src/utils.ts` | `dist/index.js`    | `dist/index.js`<br />`dist/button.js`<br />`dist/utils.js` |
+<img
+  src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-bundle-modes.png"
+  alt="Comparison of output structures in bundle and bundleless modes"
+  width="680"
+  style={{ display: 'block', margin: '0 auto' }}
+/>
 
 You can choose the appropriate mode based on how the library is delivered and consumed, or use both bundle and bundleless modes in the same project.
 
@@ -204,6 +268,13 @@ await result.close();
 ### Testing, documentation, and checks in library development \{#testing-docs-and-checks}
 
 During library development, you typically also need to verify functionality, maintain documentation, and run checks before release. Rslib works with Rstest, Rspress, Rsdoctor, and related plugins to support these tasks.
+
+<img
+  src="https://assets.rspack.rs/rstack/rstack-overview.png"
+  alt="Overview of the Rstack toolchain"
+  width="680"
+  style={{ display: 'block', margin: '0 auto' }}
+/>
 
 **Testing**
 
