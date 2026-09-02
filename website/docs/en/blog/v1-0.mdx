@@ -54,7 +54,7 @@ Since the [public launch of Rslib 0.7](/blog/introducing-rslib), we have shipped
 
 - **More comprehensive component library support**: Rslib supports building component libraries with React, Vue, Svelte, or Solid, and further improves style and asset handling for scenarios including `new URL()`, Web Workers, and Wasm.
 - **Simpler and more flexible usage**: Simple projects can be built without a configuration file, while configuration can be added as needed. Rslib can be used directly through the CLI or integrated into scripts and other tools through its JavaScript API.
-- **A more cohesive library development workflow**: Rslib works with [Rstest](https://rstest.rs/), [Rspress](https://rspress.rs/), and [Rsdoctor](https://rsdoctor.rs/) for testing, documentation, and output diagnostics. It also provides Agent Skills to help Coding Agents with configuration, migration, and troubleshooting.
+- **A more integrated library development workflow**: Rslib works with [Rstest](https://rstest.rs/), [Rspress](https://rspress.rs/), and [Rsdoctor](https://rsdoctor.rs/) for testing, documentation, and output diagnostics. It also provides Agent Skills to help Coding Agents with configuration, migration, and troubleshooting.
 
 As these capabilities have continued to improve and been validated across numerous production projects, Rslib's configuration model and JavaScript API have also stabilized. Starting with 1.0, Rslib will continue to evolve on the foundation of a stable public API and in accordance with Semantic Versioning (SemVer).
 
@@ -217,7 +217,7 @@ const result = await rslib.build();
 await result.close();
 ```
 
-## A cohesive library development workflow \{#library-development-workflow}
+## An integrated library development workflow \{#library-development-workflow}
 
 Rslib works with tools and plugins across the Rstack ecosystem to connect key stages of library development, including functional testing, documentation development, build analysis, and pre-release checks.
 
