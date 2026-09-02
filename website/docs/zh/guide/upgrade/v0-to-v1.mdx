@@ -2,11 +2,22 @@
 description: '当前文档列出了从 Rslib 0.23 到 1.0 的所有不兼容更新，你可以参考此文档来迁移。'
 ---
 
+import { Prompt } from '@theme';
+
 # 从 0.x 升级到 v1
 
 当前文档列出了从 Rslib 0.23 到 1.0 的所有不兼容更新，你可以参考此文档来迁移。
 
-{/* TODO: ## 使用 Agent Skills */}
+## Agent prompt
+
+如果你正在使用 Coding Agent，可以复制以下 prompt 并发送给它：
+
+<Prompt
+  title="从 0.x 升级到 v1"
+  description="复制这个 prompt 并发送给你的 Coding Agent。"
+  prompt={`请阅读并遵循以下迁移指南，将当前项目从 Rslib 0.x 升级到 1.0：
+https://rslib.rs/zh/guide/upgrade/v0-to-v1.md`}
+/>
 
 ## 升级 Rslib 到 v1
 
