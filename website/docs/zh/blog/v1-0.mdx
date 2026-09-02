@@ -85,9 +85,12 @@ Rslib 面向不同的库发布与消费场景，让库开发也能受益于应�
 
 以一个包含三个源码文件的单入口库为例，两种模式的产物结构如下：
 
-| 源码                                                    | bundle 模式产物 | bundleless 模式产物                                        |
-| ------------------------------------------------------- | --------------- | ---------------------------------------------------------- |
-| `src/index.ts`<br />`src/button.ts`<br />`src/utils.ts` | `dist/index.js` | `dist/index.js`<br />`dist/button.js`<br />`dist/utils.js` |
+<img
+  src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-bundle-modes.png"
+  alt="bundle 与 bundleless 模式的产物结构对比"
+  width="550"
+  style={{ display: 'block', margin: '0 auto' }}
+/>
 
 可以根据库的交付方式和使用场景选择合适的模式。需要兼顾不同消费场景时，也可以在同一个项目中分别生成 bundle 和 bundleless 产物。
 

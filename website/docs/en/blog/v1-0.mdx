@@ -85,9 +85,12 @@ Output formats determine how a library is loaded, while build modes determine ho
 
 For a single-entry library with three source files, the two modes produce the following output structures:
 
-| Source                                                  | Bundle mode output | Bundleless mode output                                     |
-| ------------------------------------------------------- | ------------------ | ---------------------------------------------------------- |
-| `src/index.ts`<br />`src/button.ts`<br />`src/utils.ts` | `dist/index.js`    | `dist/index.js`<br />`dist/button.js`<br />`dist/utils.js` |
+<img
+  src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-bundle-modes.png"
+  alt="Comparison of output structures in bundle and bundleless modes"
+  width="550"
+  style={{ display: 'block', margin: '0 auto' }}
+/>
 
 You can choose the appropriate mode based on how the library is delivered and consumed. When you need to support different consumption scenarios, you can also generate both bundle and bundleless outputs in the same project.
 
