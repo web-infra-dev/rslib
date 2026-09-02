@@ -60,7 +60,7 @@ Rslib 面向不同的库发布与消费场景，让库开发也能受益于应�
 
 ## 面向不同场景的产物输出 \{#output-formats}
 
-一个库既可以作为 npm 包发布，也可以作为远程模块供多个应用在运行时加载。常见的库构建工具通常专注于 npm 包交付，而 Rslib 还支持构建模块联邦产物，并提供支持 HMR 的开发模式，便于与宿主应用或 Storybook 联调。
+一个库既可以作为 npm 包发布，也可以基于模块联邦构建为远程模块，供多个应用在运行时加载，从而实现独立部署和更新。常见的库构建工具主要面向 npm 包交付，而 Rslib 还支持构建模块联邦产物，并提供支持 HMR 的开发模式，便于与宿主应用或 Storybook 联调。
 
 针对不同的运行环境和消费方式，Rslib 提供以下输出格式：
 
@@ -176,9 +176,15 @@ const worker = new Worker(new URL('./worker.ts', import.meta.url));
 
 > 查看 [CSS](/guide/advanced/css)、[静态资源](/guide/advanced/static-assets)、[Web Workers](/guide/advanced/web-workers) 和 [Wasm](/guide/advanced/wasm) 了解更多。
 
-## 简洁的配置与多种使用方式 \{#configuration-and-usage}
+## 按需扩展的使用方式 \{#usage-options}
 
-Rslib 1.0 简化了配置结构。只需生成一份默认的 ESM 产物时，可以省略 `lib` 字段，直接在顶层编写配置；需要输出多份产物时，再通过 `lib` 数组分别设置每份产物的格式和构建方式。
+对于简单项目，Rslib 支持通过 [命令行参数](/guide/basic/cli#rslib) 直接构建，无需创建配置文件：
+
+```bash
+npx rslib build --entry src/index.ts --format esm --dts
+```
+
+随着构建需求增加，可以再通过配置文件控制更多构建行为。Rslib 1.0 简化了配置结构：如果只需生成一份默认的 ESM 产物，可以省略 `lib` 字段，直接在顶层编写配置；需要输出多份产物时，则通过 `lib` 数组分别设置每份产物的格式和构建方式。
 
 多个产物共用的 `syntax`、`plugins` 等配置可以放在顶层，各个 `lib` 只需配置不同的部分，也可以按需覆盖顶层配置，减少重复。
 
@@ -200,13 +206,7 @@ export default defineConfig({
 });
 ```
 
-Rslib 也支持通过 [命令行参数](/guide/basic/cli#rslib) 直接构建。对于简单项目，可以不创建 `rslib.config.ts`，直接指定入口、产物格式和是否生成类型声明等：
-
-```bash
-npx rslib build --entry src/index.ts --format esm --dts
-```
-
-需要在脚本或其他工具中使用 Rslib 时，可以通过 [JavaScript API](/api/start/) 创建实例并执行构建，例如批量构建工作区中的多个包、封装内部构建命令或接入发布流水线。JavaScript API 可以在 Node.js、Deno 和 Bun 中使用：
+如果需要在脚本或其他工具中使用 Rslib，可以通过 [JavaScript API](/api/start/) 创建实例并执行构建，例如批量构建工作区中的多个包、封装内部构建命令或接入发布流水线。JavaScript API 可以在 Node.js、Deno 和 Bun 中使用：
 
 ```ts
 import { createRslib } from '@rslib/core';
@@ -217,7 +217,7 @@ const result = await rslib.build();
 await result.close();
 ```
 
-## 库开发中的测试、文档与检查 \{#testing-docs-and-checks}
+## 连贯的库开发流程 \{#library-development-workflow}
 
 Rslib 可以与 Rstack 生态中的工具和插件配合，串联功能测试、文档开发、构建分析和发布前检查等库项目开发过程中的环节。
 

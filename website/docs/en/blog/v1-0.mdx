@@ -60,7 +60,7 @@ As these capabilities have continued to improve and been validated across numero
 
 ## Output formats for different use cases \{#output-formats}
 
-A library can be published as an npm package or loaded by multiple applications as a remote module at runtime. Conventional library build tools typically focus on npm package distribution, while Rslib also supports building Module Federation output and provides an HMR-enabled development mode for integration with host applications or Storybook.
+A library can be published as an npm package or built as a remote module with Module Federation for multiple applications to load at runtime, enabling independent deployment and updates. Conventional library build tools primarily focus on npm package distribution, while Rslib also supports building Module Federation output and provides an HMR-enabled development mode for integration with host applications or Storybook.
 
 For different runtime environments and consumption patterns, Rslib provides the following output formats:
 
@@ -176,9 +176,15 @@ const worker = new Worker(new URL('./worker.ts', import.meta.url));
 
 > See [CSS](/guide/advanced/css), [Static assets](/guide/advanced/static-assets), [Web Workers](/guide/advanced/web-workers), and [Wasm](/guide/advanced/wasm) to learn more.
 
-## Simpler configuration and flexible usage \{#configuration-and-usage}
+## Usage that adapts to your needs \{#usage-options}
 
-Rslib 1.0 simplifies the configuration structure. When you only need to generate a single default ESM output, you can omit the `lib` field and write the configuration directly at the top level. When you need multiple outputs, use the `lib` array to set the format and build mode for each one.
+For simple projects, Rslib supports building directly with [command-line options](/guide/basic/cli#rslib), without requiring a configuration file:
+
+```bash
+npx rslib build --entry src/index.ts --format esm --dts
+```
+
+As your build requirements grow, you can use a configuration file to gain more control over the build. Rslib 1.0 simplifies the configuration structure: if you only need a single default ESM output, you can omit the `lib` field and define the configuration directly at the top level. When you need multiple outputs, use the `lib` array to configure the format and build mode of each output.
 
 Shared settings such as `syntax` and `plugins` can be placed at the top level. Each `lib` entry only needs to specify the settings that differ and can override top-level settings as needed, reducing duplication.
 
@@ -195,18 +201,12 @@ export default defineConfig({
       syntax: 'es2020',
     },
   ],
-  // Applied to all outputs and can be overridden in each lib
+  // Applied to all outputs; can be overridden in individual lib entries
   syntax: 'es2023',
 });
 ```
 
-Rslib also supports building directly with [command-line options](/guide/basic/cli#rslib). For simple projects, you can skip creating `rslib.config.ts` and specify the entry, output format, and declaration generation on the command line:
-
-```bash
-npx rslib build --entry src/index.ts --format esm --dts
-```
-
-When you need to use Rslib in scripts or other tools, you can create an instance and run a build through the [JavaScript API](/api/start/). This is useful for tasks such as building multiple packages in a workspace, wrapping internal build commands, or integrating with release pipelines. The JavaScript API works in Node.js, Deno, and Bun:
+If you need to use Rslib in scripts or other tools, you can create an instance and run a build through the [JavaScript API](/api/start/). This is useful for tasks such as building multiple packages in a workspace, wrapping internal build commands, or integrating Rslib into a release pipeline. The JavaScript API works in Node.js, Deno, and Bun:
 
 ```ts
 import { createRslib } from '@rslib/core';
@@ -217,7 +217,7 @@ const result = await rslib.build();
 await result.close();
 ```
 
-## Testing, documentation, and checks in library development \{#testing-docs-and-checks}
+## A cohesive library development workflow \{#library-development-workflow}
 
 Rslib works with tools and plugins across the Rstack ecosystem to connect key stages of library development, including functional testing, documentation development, build analysis, and pre-release checks.
 
