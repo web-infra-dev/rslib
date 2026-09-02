@@ -60,7 +60,9 @@ As these capabilities have continued to improve and been validated across numero
 
 ## Output formats for different use cases \{#output-formats}
 
-Output requirements vary by runtime environment and by how a library is consumed. Rslib supports multiple output formats so you can choose the right one for each use case:
+A library can be published as an npm package or loaded by multiple applications as a remote module at runtime. Conventional library build tools typically focus on npm package distribution, while Rslib also supports building Module Federation output and provides an HMR-enabled development mode for integration with host applications or Storybook.
+
+For different runtime environments and consumption patterns, Rslib provides the following output formats:
 
 | Output format                                                                          | Use case                          | How it is used                                                         |
 | -------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------------------------------- |
