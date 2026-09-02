@@ -27,11 +27,11 @@ Rslib is a library development tool based on [Rsbuild](https://rsbuild.rs/), des
 
 ## Why Rslib \{#why-rslib}
 
-The ecosystem already offers many library build tools that compile JavaScript and TypeScript and produce common output formats. Rslib builds on this foundation by bringing mature application build capabilities and ecosystem support to library development. Its key advantages include:
+Rslib supports a wide range of library publishing and consumption scenarios, enabling library developers to benefit from the mature capabilities and ecosystem of application build tooling. Its core strengths are:
 
-- **Supports multiple distribution options, including Module Federation**: Rslib can produce ESM and CJS output that is loaded directly by Node.js or processed further by downstream build tools. It can also generate UMD and IIFE output that browsers load directly through `<script>` tags. For cross-application runtime module loading, Rslib can also generate Module Federation output and provide support for local development and integration workflows.
-- **Keeps pace with evolving languages, frameworks, and standards**: Rslib actively follows advances in TypeScript, framework ecosystems, TC39 proposals, and web standards. For example, Rslib supports generating declaration files with TypeScript 7, enabling React Compiler, and importing non-JavaScript modules and assets using [Import Attributes](https://github.com/tc39/proposal-import-attributes), [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration), and [Source Phase Imports](https://github.com/tc39/proposal-source-phase-imports).
-- **Builds on the [Rspack](https://rspack.rs/) and [webpack](https://webpack.js.org/) ecosystems**: Rslib can use Rsbuild plugins as well as many plugins and loaders from the Rspack and webpack ecosystems. Developers can continue applying the knowledge and experience they have gained from these ecosystems to library development. When applications also use Rsbuild or Rspack, they can share common configurations and plugins with library projects, reducing duplicate maintenance.
+- **Builds on the Rspack and webpack ecosystems**: Rslib supports Rsbuild plugins, as well as many plugins and loaders from the [Rspack](https://rspack.rs/) and [webpack](https://webpack.js.org/) ecosystems. If an application also uses Rsbuild or Rspack, developers can share configurations and plugins between the application and library, reuse their existing engineering experience, and reduce tool switching and duplicate maintenance.
+- **Supports building Module Federation output**: In addition to common formats such as ESM and CJS, Rslib can produce [Module Federation output](/guide/advanced/module-federation), allowing libraries to be loaded by multiple applications as remote modules at runtime. It also provides support for local development and integration workflows.
+- **Keeps pace with evolving technologies**: Rslib keeps pace with TypeScript, framework ecosystems, TC39 proposals, and web standards, helping developers adopt new capabilities in library projects sooner while reducing the cost of integrating and maintaining additional tooling themselves.
 
 ## From 0.x to 1.0 \{#from-v0-to-v1}
 
@@ -158,9 +158,10 @@ import styles from './button.module.css';
 
 **Static assets**
 
-Files such as images, fonts, audio, and video can be imported in JavaScript with `import` or referenced in CSS with `url()`. You can also reference local assets with `new URL()`; Rslib emits the corresponding files and updates references to them in the generated output.
+Files such as images, fonts, audio, and video can be imported in JavaScript with `import` or referenced in CSS with `url()`. Rslib supports importing JSON files as JSON modules with [Import Attributes](https://github.com/tc39/proposal-import-attributes). You can also import local assets with `new URL()`; Rslib emits the corresponding files and updates references to them in the generated output.
 
 ```js
+import data from './data.json' with { type: 'json' };
 import logo from './logo.svg';
 
 const dataFile = new URL('./data.txt', import.meta.url);
@@ -168,7 +169,7 @@ const dataFile = new URL('./data.txt', import.meta.url);
 
 **Web Workers and Wasm**
 
-Rslib recognizes standard Web Worker syntax and builds Worker entries and their dependencies, without requiring separate entry points or copy scripts. For Wasm, Rslib supports syntax such as WebAssembly ESM Integration and Source Phase Imports. It can generate the code required for loading and instantiation or preserve Wasm imports for downstream build tools or target runtimes that support the corresponding capabilities.
+Rslib recognizes standard Web Worker syntax and builds Worker entries and their dependencies, without requiring separate entry points or copy scripts. For Wasm, Rslib supports syntax such as [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) and [Source Phase Imports](https://github.com/tc39/proposal-source-phase-imports). It can generate the code required for loading and instantiation or preserve Wasm imports for downstream build tools or target runtimes that support the corresponding capabilities.
 
 ```js
 import { add } from './add.wasm';

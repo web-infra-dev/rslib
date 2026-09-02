@@ -27,11 +27,11 @@ Rslib 是一款基于 [Rsbuild](https://rsbuild.rs/zh) 的库开发工具，目�
 
 ## 为什么需要 Rslib \{#why-rslib}
 
-社区中有不同类型的库构建工具，能够完成 JavaScript 和 TypeScript 代码的编译与常见产物输出。Rslib 在此基础上，将应用构建中成熟的能力与生态带到库构建，主要优势体现在以下方面：
+Rslib 面向不同的库发布与消费场景，让库开发也能受益于应用构建中成熟的能力与生态。其核心优势体现在以下三个方面：
 
-- **支持包括 Module Federation 在内的多种交付方式**：Rslib 可以输出由 Node.js 直接加载或交给下游构建工具继续处理的 ESM、CJS 产物，也可以生成通过 `<script>` 标签在浏览器中直接加载的 UMD 和 IIFE 产物。对于跨应用运行时加载的场景，Rslib 还可以生成 Module Federation 产物，并提供配套的本地开发与联调能力。
-- **持续跟进语言、框架与标准的演进**：Rslib 积极跟进 TypeScript、框架生态以及 TC39 提案和 Web 标准的演进。例如，Rslib 已支持使用 TypeScript 7 生成类型声明、启用 React Compiler，以及通过 [Import Attributes](https://github.com/tc39/proposal-import-attributes)、[WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 和 [Source Phase Imports](https://github.com/tc39/proposal-source-phase-imports) 等方式引用非 JavaScript 模块与资源。
-- **复用 [Rspack](https://rspack.rs/zh) 与 [webpack](https://webpack.js.org/) 生态的能力和工程经验**：Rslib 可以使用 Rsbuild 插件，以及 Rspack 和 webpack 生态中的许多插件与 loader。开发者在这套生态中积累的知识和经验可以继续用于库构建。如果应用项目也使用 Rsbuild 或 Rspack，还可以共享通用配置和插件，减少重复维护。
+- **复用 Rspack 与 webpack 生态**：Rslib 可以使用 Rsbuild 插件，以及 [Rspack](https://rspack.rs/zh) 和 [webpack](https://webpack.js.org/) 生态中的许多插件与 loader。如果应用项目同样使用 Rsbuild 或 Rspack，开发者可以在应用与库之间共享配置和插件，并延续已有的工程经验，减少工具切换和重复维护。
+- **支持构建模块联邦产物**：除了 ESM、CJS 等常见格式，Rslib 还可以输出[模块联邦产物](/guide/advanced/module-federation)，使库能够作为远程模块被多个应用在运行时加载，并提供配套的本地开发与联调能力。
+- **快速跟进技术演进**：Rslib 持续跟进 TypeScript、框架生态、TC39 提案和 Web 标准，让开发者能够更快地在库项目中使用相关新能力，并减少自行集成和维护额外工具的成本。
 
 ## 从 0.x 到 1.0 \{#from-v0-to-v1}
 
@@ -158,9 +158,10 @@ import styles from './button.module.css';
 
 **静态资源**
 
-图片、字体和音视频等文件可以在 JavaScript 中通过 `import` 引用，也可以在 CSS 中通过 `url()` 使用。此外，还可以使用 `new URL()` 引用本地资源，Rslib 会输出相应文件并更新产物中的引用路径。
+图片、字体和音视频等文件可以在 JavaScript 中通过 `import` 引用，也可以在 CSS 中通过 `url()` 使用。对于 JSON 文件，Rslib 支持使用 [Import Attributes](https://github.com/tc39/proposal-import-attributes) 将其作为 JSON 模块导入。此外，还可以使用 `new URL()` 引用本地资源，Rslib 会输出相应文件并更新产物中的引用路径。
 
 ```js
+import data from './data.json' with { type: 'json' };
 import logo from './logo.svg';
 
 const dataFile = new URL('./data.txt', import.meta.url);
@@ -168,7 +169,7 @@ const dataFile = new URL('./data.txt', import.meta.url);
 
 **Web Worker 与 Wasm**
 
-Rslib 可以识别标准的 Web Worker 声明，构建 Worker 入口及其依赖，无需额外维护入口和复制脚本。对于 Wasm，Rslib 支持 WebAssembly ESM Integration 和 Source Phase Imports 等语法，既可以生成加载和实例化所需的代码，也可以保留 Wasm import，交给支持相应能力的下游构建工具或目标运行时继续处理。
+Rslib 可以识别标准的 Web Worker 声明，构建 Worker 入口及其依赖，无需额外维护入口和复制脚本。对于 Wasm，Rslib 支持 [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 和 [Source Phase Imports](https://github.com/tc39/proposal-source-phase-imports) 等语法，既可以生成加载和实例化所需的代码，也可以保留 Wasm import，交给支持相应能力的下游构建工具或目标运行时继续处理。
 
 ```js
 import { add } from './add.wasm';
