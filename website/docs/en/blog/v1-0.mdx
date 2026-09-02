@@ -23,7 +23,7 @@ _September 3, 2026_
 
 We're excited to announce that Rslib 1.0 is now available!
 
-Rslib is a library development tool based on [Rsbuild](https://rsbuild.rs/) and [Rspack](https://rspack.rs/). It supports a wide range of JavaScript and TypeScript projects, including utility libraries, SDKs, UI component libraries, CLIs, and agent applications.
+Rslib is a library development tool based on [Rsbuild](https://rsbuild.rs/), designed to help developers build different types of JavaScript libraries in a simple and straightforward way, including utility libraries, UI component libraries, CLIs, and agent applications.
 
 ## Why Rslib \{#why-rslib}
 
@@ -31,7 +31,7 @@ The ecosystem already offers many library build tools that compile JavaScript an
 
 - **Supports multiple distribution options, including Module Federation**: Rslib can produce ESM and CJS output that is loaded directly by Node.js or processed further by downstream build tools. It can also generate UMD and IIFE output that browsers load directly through `<script>` tags. For cross-application runtime module loading, Rslib can also generate Module Federation output and provide support for local development and integration workflows.
 - **Keeps pace with evolving languages, frameworks, and standards**: Rslib actively follows advances in TypeScript, framework ecosystems, TC39 proposals, and web standards. For example, Rslib supports generating declaration files with TypeScript 7, enabling React Compiler, and importing non-JavaScript modules and assets using [Import Attributes](https://github.com/tc39/proposal-import-attributes), [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration), and [Source Phase Imports](https://github.com/tc39/proposal-source-phase-imports).
-- **Builds on the Rspack and webpack ecosystems**: Rslib can use Rsbuild plugins as well as many plugins and loaders from the Rspack and webpack ecosystems. Developers can continue applying the knowledge and experience they have gained from these ecosystems to library development. When applications also use Rsbuild or Rspack, they can share common configurations and plugins with library projects, reducing duplicate maintenance.
+- **Builds on the [Rspack](https://rspack.rs/) and [webpack](https://webpack.js.org/) ecosystems**: Rslib can use Rsbuild plugins as well as many plugins and loaders from the Rspack and webpack ecosystems. Developers can continue applying the knowledge and experience they have gained from these ecosystems to library development. When applications also use Rsbuild or Rspack, they can share common configurations and plugins with library projects, reducing duplicate maintenance.
 
 ## From 0.x to 1.0 \{#from-v0-to-v1}
 
@@ -52,11 +52,11 @@ Major features and improvements during this period include:
 
 - **Declaration generation**: Rslib supports faster declaration generation with [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) and [Isolated Declarations](/config/lib/dts#dtsisolated), though actual improvements vary by project. In the Rsbuild repository, the following times were measured for each approach:
 
-  | Approach              | Time      |
-  | --------------------- | --------- |
-  | TypeScript 6          | **9.7 s** |
-  | TypeScript 7          | **4.1 s** |
-  | Isolated Declarations | **2.3 s** |
+  | Approach              | Time      | Performance improvement |
+  | --------------------- | --------- | ----------------------- |
+  | TypeScript 6          | **9.7 s** | Baseline                |
+  | TypeScript 7          | **4.1 s** | **~2.4×**               |
+  | Isolated Declarations | **2.3 s** | **~4.2×**               |
 
 - **Component libraries and assets**: Rslib supports building component libraries with frameworks such as React, Vue, Svelte, and Solid, while improving style and asset handling for scenarios including `new URL()`, Web Workers, and Wasm.
 - **Configuration and usage**: Simple projects can be built without a configuration file. For more complex use cases, developers can extend the configuration as needed or invoke Rslib programmatically through its JavaScript API.
@@ -76,47 +76,7 @@ Output requirements vary by runtime environment and by how a library is consumed
 
 A single configuration file can define multiple outputs, each with its own [format](/config/lib/format) and build strategy, so you do not need separate build scripts for different outputs.
 
-Rslib places particular emphasis on ESM output. It generates ESM output that is designed for static analysis and supports code splitting, making it easier for downstream build tools to perform tree shaking and further processing.
-
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-    gap: '16px',
-    margin: '20px 0',
-  }}
->
-  <div>
-    <strong>Before optimization</strong>
-    <img
-      src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-esm-output-old.png"
-      alt="ESM output before Rslib's output optimizations"
-      style={{
-        display: 'block',
-        width: '100%',
-        aspectRatio: '1 / 1',
-        objectFit: 'cover',
-        marginTop: '8px',
-      }}
-    />
-  </div>
-  <div>
-    <strong>After optimization</strong>
-    <img
-      src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-esm-output-new.png"
-      alt="ESM output after Rslib's output optimizations"
-      style={{
-        display: 'block',
-        width: '100%',
-        aspectRatio: '1 / 1',
-        objectFit: 'cover',
-        marginTop: '8px',
-      }}
-    />
-  </div>
-</div>
-
-Rslib also optimizes the default handling of external dependencies in ESM output, preserving module-loading semantics from the source code more accurately and reducing behavioral differences introduced by build transformations.
+Rslib places particular emphasis on ESM output. It generates ESM output that is designed for static analysis and supports code splitting, making it easier for downstream build tools to perform tree shaking and further processing. Rslib also optimizes the default handling of external dependencies in ESM output, preserving module-loading semantics from the source code more accurately and reducing behavioral differences introduced by build transformations.
 
 In addition to common module formats, Rslib offers an experimental [executable generation](/config/lib/experiments#experimentsexe) capability. This feature is based on [Node.js SEA](https://nodejs.org/api/single-executable-applications.html) and currently supports a single bundled entry targeting Node.js. The generated executable can run on target systems where Node.js is not installed, making it suitable for distributing CLIs and other Node.js programs.
 
@@ -129,12 +89,9 @@ After choosing an output format, you also need to decide whether to bundle the l
 
 For a simple single-entry library, the output structures of the two modes look like this:
 
-<img
-  src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-bundle-modes.png"
-  alt="Comparison of output structures in bundle and bundleless modes"
-  width="680"
-  style={{ display: 'block', margin: '0 auto' }}
-/>
+| Source                                                  | Bundle mode output | Bundleless mode output                                     |
+| ------------------------------------------------------- | ------------------ | ---------------------------------------------------------- |
+| `src/index.ts`<br />`src/button.ts`<br />`src/utils.ts` | `dist/index.js`    | `dist/index.js`<br />`dist/button.js`<br />`dist/utils.js` |
 
 You can choose the appropriate mode based on how the library is delivered and consumed, or use both bundle and bundleless modes in the same project.
 
@@ -269,13 +226,6 @@ await result.close();
 
 During library development, you typically also need to verify functionality, maintain documentation, and run checks before release. Rslib works with Rstest, Rspress, Rsdoctor, and related plugins to support these tasks.
 
-<img
-  src="https://assets.rspack.rs/rstack/rstack-overview.png"
-  alt="Overview of the Rstack toolchain"
-  width="680"
-  style={{ display: 'block', margin: '0 auto' }}
-/>
-
 **Testing**
 
 New projects created with `create-rslib` are preconfigured with Rstest. With [@rstest/adapter-rslib](/guide/advanced/rstest#reusing-rslib-configuration), Rstest can reuse the relevant Rslib configuration, reducing duplicate configuration while making module resolution and source processing during tests more closely match the actual build.
@@ -362,6 +312,8 @@ Rslib 1.0 is a stable starting point, not the finish line. Next, we will continu
 
 ## Acknowledgments \{#acknowledgments}
 
-Thank you to everyone who has contributed code or documentation to Rslib, opened issues, joined discussions, or shared feedback—and to everyone who uses Rslib.
+Parts of Rslib's implementation and API design are derived from or inspired by excellent open source projects—including [**esbuild**](https://github.com/evanw/esbuild), [**tsup**](https://github.com/egoist/tsup), [**webpack**](https://github.com/webpack/webpack), [**mini-css-extract-plugin**](https://github.com/webpack/mini-css-extract-plugin), and [**tsdown**](https://github.com/rolldown/tsdown)—and we sincerely appreciate their work and the ideas they have shared with the community.
+
+Rslib's growth also depends on every contribution from the community, and we thank everyone who has contributed code or documentation, opened issues, joined discussions, or shared feedback—as well as everyone who uses Rslib.
 
 If you encounter any problems or have suggestions while using Rslib, please reach out through [GitHub Issues](https://github.com/web-infra-dev/rslib/issues), [GitHub Discussions](https://github.com/web-infra-dev/rslib/discussions), or our community channels.

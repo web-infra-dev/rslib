@@ -23,7 +23,7 @@ _2026 年 9 月 3 日_
 
 我们很高兴地宣布 Rslib 1.0 已经正式发布！
 
-Rslib 是一款基于 [Rsbuild](https://rsbuild.rs/zh) 和 [Rspack](https://rspack.rs/zh) 的库开发工具，适用于工具库、SDK、UI 组件库，以及 CLI、Agent 应用等不同类型的 JavaScript / TypeScript 项目。
+Rslib 是一款基于 [Rsbuild](https://rsbuild.rs/zh) 的库开发工具，目标是帮助开发者用简单直接的方式开发各种类型的 JavaScript 库，包括工具库、UI 组件库、CLI 以及 Agent 应用等。
 
 ## 为什么需要 Rslib \{#why-rslib}
 
@@ -31,7 +31,7 @@ Rslib 是一款基于 [Rsbuild](https://rsbuild.rs/zh) 和 [Rspack](https://rspa
 
 - **支持包括 Module Federation 在内的多种交付方式**：Rslib 可以输出由 Node.js 直接加载或交给下游构建工具继续处理的 ESM、CJS 产物，也可以生成通过 `<script>` 标签在浏览器中直接加载的 UMD 和 IIFE 产物。对于跨应用运行时加载的场景，Rslib 还可以生成 Module Federation 产物，并提供配套的本地开发与联调能力。
 - **持续跟进语言、框架与标准的演进**：Rslib 积极跟进 TypeScript、框架生态以及 TC39 提案和 Web 标准的演进。例如，Rslib 已支持使用 TypeScript 7 生成类型声明、启用 React Compiler，以及通过 [Import Attributes](https://github.com/tc39/proposal-import-attributes)、[WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 和 [Source Phase Imports](https://github.com/tc39/proposal-source-phase-imports) 等方式引用非 JavaScript 模块与资源。
-- **复用 Rspack 与 webpack 生态的能力和工程经验**：Rslib 可以使用 Rsbuild 插件，以及 Rspack 和 webpack 生态中的许多插件与 loader。开发者在这套生态中积累的知识和经验可以继续用于库构建。如果应用项目也使用 Rsbuild 或 Rspack，还可以共享通用配置和插件，减少重复维护。
+- **复用 [Rspack](https://rspack.rs/zh) 与 [webpack](https://webpack.js.org/) 生态的能力和工程经验**：Rslib 可以使用 Rsbuild 插件，以及 Rspack 和 webpack 生态中的许多插件与 loader。开发者在这套生态中积累的知识和经验可以继续用于库构建。如果应用项目也使用 Rsbuild 或 Rspack，还可以共享通用配置和插件，减少重复维护。
 
 ## 从 0.x 到 1.0 \{#from-v0-to-v1}
 
@@ -52,11 +52,11 @@ Rslib 是一款基于 [Rsbuild](https://rsbuild.rs/zh) 和 [Rspack](https://rspa
 
 - **类型生成**：支持使用 [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) 和 [Isolated Declarations](/config/lib/dts#dtsisolated) 加速类型声明文件生成，实际收益会因项目而异。以 Rsbuild 仓库为例，不同方案的耗时如下：
 
-  | 方案                  | 耗时      |
-  | --------------------- | --------- |
-  | TypeScript 6          | **9.7 s** |
-  | TypeScript 7          | **4.1 s** |
-  | Isolated Declarations | **2.3 s** |
+  | 方案                  | 耗时      | 性能提升      |
+  | --------------------- | --------- | ------------- |
+  | TypeScript 6          | **9.7 s** | 基准          |
+  | TypeScript 7          | **4.1 s** | **约 2.4 倍** |
+  | Isolated Declarations | **2.3 s** | **约 4.2 倍** |
 
 - **组件库与资源支持**：支持 React、Vue、Svelte 和 Solid 等框架的组件库构建，并进一步完善样式与资源处理，覆盖 `new URL()`、Web Worker、Wasm 等场景。
 - **配置与使用方式**：简单项目无需配置文件即可构建，复杂场景可以按需扩展配置，也能通过 JavaScript API 进行编程式调用。
@@ -76,47 +76,7 @@ Rslib 是一款基于 [Rsbuild](https://rsbuild.rs/zh) 和 [Rspack](https://rspa
 
 通过 [format](/config/lib/format) 配置，可以在一份配置文件中按需定义多份产物，并分别设置产物格式和构建策略，无需为不同产物维护多套构建脚本。
 
-在 ESM 输出方面，Rslib 进行了重点优化，能够生成对静态分析友好并支持代码分割的 ESM 产物，方便下游构建工具进行 tree shaking 和二次构建。
-
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-    gap: '16px',
-    margin: '20px 0',
-  }}
->
-  <div>
-    <strong>优化前</strong>
-    <img
-      src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-esm-output-old.png"
-      alt="Rslib 优化前的 ESM 产物"
-      style={{
-        display: 'block',
-        width: '100%',
-        aspectRatio: '1 / 1',
-        objectFit: 'cover',
-        marginTop: '8px',
-      }}
-    />
-  </div>
-  <div>
-    <strong>优化后</strong>
-    <img
-      src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-esm-output-new.png"
-      alt="Rslib 优化后的 ESM 产物"
-      style={{
-        display: 'block',
-        width: '100%',
-        aspectRatio: '1 / 1',
-        objectFit: 'cover',
-        marginTop: '8px',
-      }}
-    />
-  </div>
-</div>
-
-对于 ESM 产物中的 external 依赖，Rslib 也优化了默认处理方式，能够更准确地保留源码中的模块加载语义，减少构建转换带来的行为差异。
+在 ESM 输出方面，Rslib 进行了重点优化，能够生成对静态分析友好并支持代码分割的 ESM 产物，方便下游构建工具进行 tree shaking 和二次构建。对于 ESM 产物中的 external 依赖，Rslib 也优化了默认处理方式，能够更准确地保留源码中的模块加载语义，减少构建转换带来的行为差异。
 
 除了常见的模块产物，Rslib 还提供了实验性的 [可执行文件生成](/config/lib/experiments#experimentsexe) 能力。该能力基于 [Node.js SEA](https://nodejs.org/api/single-executable-applications.html)，目前适用于 bundle 模式下的单入口 Node.js 产物。生成的可执行文件可以在未安装 Node.js 的目标系统中运行，适合分发 CLI 等 Node.js 程序。
 
@@ -129,12 +89,9 @@ Rslib 是一款基于 [Rsbuild](https://rsbuild.rs/zh) 和 [Rspack](https://rspa
 
 以一个简单的单入口库为例，两种模式的产物结构如下：
 
-<img
-  src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-bundle-modes.png"
-  alt="bundle 和 bundleless 模式的产物结构对比"
-  width="680"
-  style={{ display: 'block', margin: '0 auto' }}
-/>
+| 源码                                                    | bundle 模式产物 | bundleless 模式产物                                        |
+| ------------------------------------------------------- | --------------- | ---------------------------------------------------------- |
+| `src/index.ts`<br />`src/button.ts`<br />`src/utils.ts` | `dist/index.js` | `dist/index.js`<br />`dist/button.js`<br />`dist/utils.js` |
 
 可以根据库的交付方式和使用场景选择合适的模式，也可以在同一个项目中分别输出 bundle 和 bundleless 产物。
 
@@ -269,13 +226,6 @@ await result.close();
 
 在库项目的开发过程中，通常还需要验证功能、维护文档，并在发布前进行检查。针对这些工作，Rslib 可以与 Rstest、Rspress、Rsdoctor 以及相关插件配合使用。
 
-<img
-  src="https://assets.rspack.rs/rstack/rstack-overview.png"
-  alt="Rstack 工具链概览"
-  width="680"
-  style={{ display: 'block', margin: '0 auto' }}
-/>
-
 **测试**
 
 使用 `create-rslib` 创建的新项目默认配置了 Rstest。通过 [@rstest/adapter-rslib](/guide/advanced/rstest#%E5%A4%8D%E7%94%A8-rslib-%E9%85%8D%E7%BD%AE)，Rstest 可以复用 Rslib 的相关配置，减少重复维护，也让测试时的模块解析和源码处理更接近实际构建。
@@ -362,6 +312,8 @@ Rslib 1.0 是一个稳定起点，而不是终点。接下来，我们会继续�
 
 ## 致谢 \{#acknowledgments}
 
-感谢所有为 Rslib 贡献代码和文档、提交 Issue、参与讨论和分享反馈的开发者，也感谢每一位选择和使用 Rslib 的用户。
+Rslib 的部分实现和 API 设计参考或改编自 [**esbuild**](https://github.com/evanw/esbuild)、[**tsup**](https://github.com/egoist/tsup)、[**webpack**](https://github.com/webpack/webpack)、[**mini-css-extract-plugin**](https://github.com/webpack/mini-css-extract-plugin) 和 [**tsdown**](https://github.com/rolldown/tsdown) 等优秀开源项目，感谢这些项目为开源社区沉淀的经验、思路与实现。
+
+Rslib 的成长也离不开社区中的每一份参与，感谢所有为 Rslib 贡献代码和文档、提交 Issue、参与讨论和分享反馈的开发者，以及每一位选择和使用 Rslib 的用户。
 
 在使用 Rslib 的过程中如果遇到问题或有任何建议，欢迎通过 [GitHub Issues](https://github.com/web-infra-dev/rslib/issues)、[GitHub Discussions](https://github.com/web-infra-dev/rslib/discussions) 或社区渠道与我们交流。
