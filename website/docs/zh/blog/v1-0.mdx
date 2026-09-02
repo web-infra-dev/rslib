@@ -68,35 +68,35 @@ Rslib 面向不同的库发布与消费场景，让库开发也能受益于应�
 | [UMD](/guide/basic/output-format#umd)、[IIFE](/guide/basic/output-format#iife)         | 浏览器直接加载     | 通过 `<script>` 标签在浏览器中直接使用                  |
 | [Module Federation](/guide/advanced/module-federation)                                 | 跨应用运行时加载   | 作为远程模块在运行时加载                                |
 
-通过 [format](/config/lib/format) 配置，可以在一份配置文件中按需定义多份产物，并分别设置产物格式和构建策略，无需为不同产物维护多套构建脚本。
+需要同时生成多种格式时，可以通过 [format](/config/lib/format) 配置分别指定每份产物的格式，并在同一份配置中按需设置各自的构建方式，无需维护多套构建脚本。
 
-在 ESM 输出方面，Rslib 进行了重点优化，能够生成对静态分析友好并支持代码分割的 ESM 产物，方便下游构建工具进行 tree shaking 和二次构建。对于 ESM 产物中的 external 依赖，Rslib 也优化了默认处理方式，能够更准确地保留源码中的模块加载语义，减少构建转换带来的行为差异。
+Rslib 对 ESM 产物进行了重点优化，使其对静态分析更友好并支持代码分割，方便下游构建工具进行 tree shaking 和二次构建。对于 ESM 产物中的 external 依赖，Rslib 也优化了默认处理方式，能够更准确地保留源码中的模块加载语义，减少构建转换带来的行为差异。
 
-除了常见的模块产物，Rslib 还提供了实验性的 [可执行文件生成](/config/lib/experiments#experimentsexe) 能力。该能力基于 [Node.js SEA](https://nodejs.org/api/single-executable-applications.html)，目前适用于 bundle 模式下的单入口 Node.js 产物。生成的可执行文件可以在未安装 Node.js 的目标系统中运行，适合分发 CLI 等 Node.js 程序。
+除了常见的模块产物，Rslib 还提供了实验性的 [可执行文件生成](/config/lib/experiments#experimentsexe) 能力。该能力基于 [Node.js SEA](https://nodejs.org/api/single-executable-applications.html)，适用于 bundle 模式下的单入口 Node.js 产物。生成的可执行文件可以在未安装 Node.js 的目标系统中运行，适合分发 CLI 等 Node.js 程序。
 
 ## 灵活的构建模式 \{#build-modes}
 
-选择产物格式后，还需要决定是否将库的内部模块打包到一起。Rslib 同时支持 bundle 和 bundleless [两种构建模式](/guide/basic/output-structure)：
+产物格式对应不同的加载方式，构建模式则决定库内部模块的组织方式。Rslib 支持 [bundle 和 bundleless 两种构建模式](/guide/basic/output-structure#bundle--bundleless)，以适应不同的交付需求：
 
-- **bundle 模式**（`bundle: true`）：Rslib 会从入口出发，将内部模块打包为数量更少的文件，结合代码分割时，也可以按需输出多个 chunk，适合 SDK、CLI 以及希望简化产物结构、便于分发的 Node.js 库。
-- **bundleless 模式**（`bundle: false`）：Rslib 会逐个编译源文件，保留对应的目录和模块结构，并处理模块引用、文件扩展名、样式与静态资源，适合组件库、工具函数库和 monorepo 内部包，便于按需加载、调试和下游二次构建。
+- **bundle 模式**（`bundle: true`）：Rslib 从入口出发，将内部模块打包为较少的文件，也可以结合代码分割按需输出多个 chunk，适合 SDK、CLI 和 Node.js 工具库等希望简化产物结构、便于分发的场景。
+- **bundleless 模式**（`bundle: false`）：Rslib 逐个编译源文件，保留与源码对应的目录和模块结构，并处理模块引用、文件扩展名、样式与静态资源等，适合组件库、工具函数库和 monorepo 内部包，便于调试，也有利于下游进行按需加载和二次构建。
 
-以一个简单的单入口库为例，两种模式的产物结构如下：
+以一个包含三个源码文件的单入口库为例，两种模式的产物结构如下：
 
 | 源码                                                    | bundle 模式产物 | bundleless 模式产物                                        |
 | ------------------------------------------------------- | --------------- | ---------------------------------------------------------- |
 | `src/index.ts`<br />`src/button.ts`<br />`src/utils.ts` | `dist/index.js` | `dist/index.js`<br />`dist/button.js`<br />`dist/utils.js` |
 
-可以根据库的交付方式和使用场景选择合适的模式，也可以在同一个项目中分别输出 bundle 和 bundleless 产物。
+可以根据库的交付方式和使用场景选择合适的模式。需要兼顾不同消费场景时，也可以在同一个项目中分别生成 bundle 和 bundleless 产物。
 
 ## 快速的类型生成 \{#declaration-generation}
 
-对于 TypeScript 库，类型声明直接影响下游项目的类型提示和模块解析。Rslib 支持通过 [dts](/config/lib/dts) 配置，在构建 JavaScript 产物的同时生成类型声明文件，并根据实际产物自动补全或替换声明文件导入路径中的扩展名，避免 NodeNext 等模块解析方式导致的类型解析问题。
+对于 TypeScript 库，类型声明文件不仅影响编辑器中的类型提示，也关系到下游项目能否正确解析库的类型。通过 [dts](/config/lib/dts) 配置，Rslib 可以在构建 JavaScript 产物的同时生成类型声明文件。在 bundleless 模式下，Rslib 还会根据实际产物处理声明文件中的路径别名和导入扩展名，使类型声明与 JavaScript 产物保持一致，并适配 NodeNext 等模块解析方式。
 
 随着项目规模扩大，类型生成可能逐渐成为构建中的耗时环节。Rslib 提供了两种提速方式：
 
-- **使用 TypeScript 7**：当项目使用 TypeScript 7 及以上版本时，Rslib 会自动使用 [native TypeScript (tsgo)](/config/lib/dts#dtstsgo) 生成声明文件，在保留类型检查的同时显著缩短类型生成时间。
-- **使用 Isolated Declarations**：对于更关注构建速度的项目和 monorepo，可以使用实验性的 [Isolated Declarations](/config/lib/dts#dtsisolated) 类型生成方式。Rslib 会在 Rspack 构建过程中，为构建依赖图中的模块快速生成声明文件，进一步减少类型生成的开销。
+- **使用 TypeScript 7**：当项目使用 TypeScript 7 及以上版本时，Rslib 会自动使用 [native TypeScript (tsgo)](/config/lib/dts#dtstsgo) 生成声明文件，在保留类型检查的同时加快类型生成。
+- **使用 Isolated Declarations**：对于希望进一步缩短构建时间的项目，可以使用实验性的 [Isolated Declarations](/config/lib/dts#dtsisolated) 类型生成方式。Rslib 会在 Rspack 构建过程中，为构建依赖图中的模块快速生成声明文件，进一步减少类型生成的开销。
 
 ```ts title="rslib.config.ts"
 export default {
@@ -110,11 +110,11 @@ export default {
 
 ## 开箱即用的多框架支持 \{#framework-support}
 
-组件库是 Rslib 重点支持的场景之一。React、Vue、Svelte 和 Solid 在组件文件、编译方式和运行时约定上各有不同。Rslib 通过对应的 [Rsbuild 插件](/config/rsbuild/plugins) 接入这些框架的编译能力，产物格式和构建模式等通用能力仍由 Rslib 配置，框架语法则由相应的插件和编译器处理，使不同框架组件库可以沿用相近的配置方式和构建流程。
+组件库是 Rslib 重点支持的场景之一。React、Vue、Svelte 和 Solid 在组件文件、编译方式和运行时约定上各有不同。Rslib 通过对应的 [Rsbuild 插件](/config/rsbuild/plugins) 接入这些框架的编译能力，产物格式、构建模式等库构建能力统一通过 Rslib 配置，框架语法则由相应的插件和编译器处理，使不同框架组件库可以沿用相近的配置方式和构建流程。
 
-新项目可以通过 `create-rslib` 直接选择对应的框架模板，已有项目也可以按需注册相关插件。
+创建新项目时，可以通过 `create-rslib` 选择对应的框架模板，直接获得所需插件和基础配置；已有项目则可以按需注册相关插件。
 
-以 React 组件库为例，注册 [@rsbuild/plugin-react](https://rsbuild.rs/zh/plugins/list/plugin-react) 后即可编译 JSX 和 TSX。开发者还可以启用集成在 SWC 中的 Rust 版 [React Compiler](/guide/solution/react#react-compiler)，在构建阶段自动优化组件代码，无需额外接入 Babel。
+以 React 组件库为例，注册 [@rsbuild/plugin-react](https://rsbuild.rs/zh/plugins/list/plugin-react) 后即可编译 JSX 和 TSX。通过该插件，还可以启用集成在 SWC 中的 Rust 版 [React Compiler](/guide/solution/react#react-compiler)，在构建阶段自动优化组件代码，无需额外接入 Babel：
 
 ```ts title="rslib.config.ts"
 import { pluginReact } from '@rsbuild/plugin-react';
@@ -133,17 +133,17 @@ export default defineConfig({
 });
 ```
 
-对于需要由应用侧继续编译 JSX 的场景，Rslib 也支持在 bundleless 模式下 [保留 JSX](/guide/solution/react#jsx-transform)，并输出 `.jsx` 文件，再由下游应用构建工具根据自身配置完成转换。
+对于希望将 JSX 交给应用侧继续编译的组件库，Rslib 也支持在 bundleless 模式下 [保留 JSX](/guide/solution/react#jsx-transform) 并输出 `.jsx` 文件，由下游应用根据自身的目标环境和构建配置完成转换。
 
 > 查看 [React 方案](/guide/solution/react)、[Vue 方案](/guide/solution/vue)、[Svelte 方案](/guide/solution/svelte)、[Solid 方案](/guide/solution/solid) 了解更多。
 
 ## 丰富的样式与资源处理 \{#styles-and-assets}
 
-组件库中通常会使用样式、图片和字体等资源，部分项目还会使用 Web Worker 和 Wasm。Rslib 对这些内容都提供了相应的构建支持。
+Rslib 可以在构建 JavaScript 产物的同时处理样式、静态资源、Web Worker 和 Wasm，并根据产物格式和构建配置处理文件之间的引用关系，使产物适配直接使用和下游继续构建等不同消费方式，减少单独维护资源处理脚本和配置的成本。
 
 **样式**
 
-Rslib 支持 CSS Modules、PostCSS、样式内联和压缩等能力。Sass、Less、Stylus 和 Tailwind CSS 等方案可以通过插件接入，并根据构建方式选择合适的输出形式。
+Rslib 开箱支持 CSS Modules、PostCSS、样式提取、内联和压缩等能力，并根据构建模式选择合适的样式输出方式；Sass、Less、Stylus 和 Tailwind CSS 则可通过 Rsbuild 插件接入。
 
 ```js
 import './style.scss';
@@ -152,7 +152,7 @@ import styles from './button.module.css';
 
 **静态资源**
 
-图片、字体和音视频等文件可以在 JavaScript 中通过 `import` 引用，也可以在 CSS 中通过 `url()` 使用。对于 JSON 文件，Rslib 支持使用 [Import Attributes](https://github.com/tc39/proposal-import-attributes) 将其作为 JSON 模块导入。此外，还可以使用 `new URL()` 引用本地资源，Rslib 会输出相应文件并更新产物中的引用路径。
+图片、字体和音视频等静态资源可以在 JavaScript 中通过 `import` 引用，也可以在 CSS 中通过 `url()` 使用。对于 JSON 文件，Rslib 支持使用 [Import Attributes](https://github.com/tc39/proposal-import-attributes) 将其作为 JSON 模块导入。此外，还可以使用 `new URL()` 引用本地资源，Rslib 会输出相应文件并更新产物中的引用路径。
 
 ```js
 import data from './data.json' with { type: 'json' };
@@ -171,8 +171,6 @@ import source addModule from './add.wasm';
 
 const worker = new Worker(new URL('./worker.ts', import.meta.url));
 ```
-
-Rslib 会根据产物格式和构建配置处理这些内容，使产物适配直接使用和下游继续构建等不同消费方式，减少单独维护资源处理脚本和配置的成本。
 
 > 查看 [CSS](/guide/advanced/css)、[静态资源](/guide/advanced/static-assets)、[Web Workers](/guide/advanced/web-workers) 和 [Wasm](/guide/advanced/wasm) 了解更多。
 
@@ -219,7 +217,7 @@ await result.close();
 
 ## 库开发中的测试、文档与检查 \{#testing-docs-and-checks}
 
-在库项目的开发过程中，通常还需要验证功能、维护文档，并在发布前进行检查。针对这些工作，Rslib 可以与 Rstest、Rspress、Rsdoctor 以及相关插件配合使用。
+Rslib 可以与 Rstack 生态中的工具和插件配合，串联功能测试、文档开发、构建分析和发布前检查等库项目开发过程中的环节。
 
 **测试**
 
