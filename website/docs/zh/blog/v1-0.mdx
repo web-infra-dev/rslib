@@ -53,8 +53,8 @@ Rslib 面向不同的库发布与消费场景，让库开发也能受益于应�
   | Isolated Declarations | **2.3 s** | **约 4.2 倍** |
 
 - **更完整的组件库支持**：支持基于 React、Vue、Svelte 或 Solid 构建组件库，并进一步完善样式与资源处理能力，覆盖 `new URL()`、Web Worker 和 Wasm 等场景。
-- **更简单、灵活的使用方式**：简单项目无需配置文件即可构建，也可以根据需要编写配置；既可以通过 CLI 直接使用，也可以通过 JavaScript API 集成到脚本和其他工具中。
-- **更协同的库开发流程**：可与 [Rstest](https://rstest.rs/zh/)、[Rspress](https://rspress.rs/zh/) 和 [Rsdoctor](https://rsdoctor.rs/zh/) 配合完成测试、文档和产物诊断，并提供 Agent Skills，帮助 Coding Agent 完成配置、迁移和问题排查。
+- **更灵活的使用方式**：简单项目无需配置文件即可构建，也可以根据需要编写配置；既可以通过 CLI 直接使用，也可以通过 JavaScript API 集成到脚本和其他工具中。
+- **更流畅的开发体验**：可与 [Rstest](https://rstest.rs/zh/)、[Rspress](https://rspress.rs/zh/) 和 [Rsdoctor](https://rsdoctor.rs/zh/) 配合完成测试、文档和产物诊断，并提供 Agent Skills，帮助 Coding Agent 完成配置、迁移和问题排查。
 
 随着这些能力不断完善并经过大量生产项目的验证，Rslib 的配置结构与 JavaScript API 也逐步稳定。从 1.0 开始，Rslib 将以稳定的公开 API 为基础，遵循语义化版本（SemVer）规范持续演进。
 
@@ -219,7 +219,7 @@ await result.close();
 
 ## 协同的库开发流程 \{#library-development-workflow}
 
-Rslib 可以与 Rstack 生态中的工具和插件配合，串联功能测试、文档开发、构建分析和发布前检查等库项目开发过程中的环节。
+Rslib 可以与 Rstack 生态中的工具和插件配合，覆盖库开发流程中的功能测试、文档开发、构建分析和发布前检查等环节。
 
 **测试**
 
