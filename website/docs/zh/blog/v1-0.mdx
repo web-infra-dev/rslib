@@ -29,9 +29,9 @@ Rslib 是一款基于 [Rsbuild](https://rsbuild.rs/zh) 的库开发工具，目�
 
 Rslib 面向不同的库发布与消费场景，让库开发也能受益于应用构建中成熟的能力与生态。其核心优势体现在以下三个方面：
 
-- **复用 Rspack 与 webpack 生态**：Rslib 可以使用 Rsbuild 插件，以及 [Rspack](https://rspack.rs/zh) 和 [webpack](https://webpack.js.org/) 生态中的许多插件与 loader。如果应用项目同样使用 Rsbuild 或 Rspack，开发者可以在应用与库之间共享配置和插件，并延续已有的工程经验，减少工具切换和重复维护。
+- **复用 Rspack 与 webpack 生态**：Rslib 可以使用 Rsbuild 插件，以及 [Rspack](https://rspack.rs/zh) 和 [webpack](https://webpack.js.org/) 生态中的许多插件与 loader。如果应用项目同样使用 Rsbuild 或 Rspack，开发者可以在应用与库之间共享配置和插件，并延续已有的工程经验，减少重复配置与维护成本。
 - **支持构建模块联邦产物**：除了 ESM、CJS 等常见格式，Rslib 还可以输出[模块联邦产物](/guide/advanced/module-federation)，使库能够作为远程模块被多个应用在运行时加载，并提供配套的本地开发与联调能力。
-- **快速跟进技术演进**：Rslib 持续跟进 TypeScript、框架生态、TC39 提案和 Web 标准，让开发者能够更快地在库项目中使用相关新能力，并减少自行集成和维护额外工具的成本。
+- **统一的库构建流程**：Rslib 可以在一次构建中完成 JavaScript 编译、框架语法转换、类型生成和静态资源处理，从而减少工具切换与流程拼接，并随 TypeScript 与框架生态持续演进，支持 TypeScript 7 类型生成和 React Compiler 等新能力。
 
 ## 从 0.x 到 1.0 \{#from-v0-to-v1}
 

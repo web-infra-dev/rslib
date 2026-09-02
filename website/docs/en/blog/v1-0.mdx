@@ -29,9 +29,9 @@ Rslib is a library development tool based on [Rsbuild](https://rsbuild.rs/), des
 
 Rslib supports a wide range of library publishing and consumption scenarios, enabling library developers to benefit from the mature capabilities and ecosystem of application build tooling. Its core strengths are:
 
-- **Builds on the Rspack and webpack ecosystems**: Rslib supports Rsbuild plugins, as well as many plugins and loaders from the [Rspack](https://rspack.rs/) and [webpack](https://webpack.js.org/) ecosystems. If an application also uses Rsbuild or Rspack, developers can share configurations and plugins between the application and library, reuse their existing engineering experience, and reduce tool switching and duplicate maintenance.
+- **Builds on the Rspack and webpack ecosystems**: Rslib supports Rsbuild plugins, as well as many plugins and loaders from the [Rspack](https://rspack.rs/) and [webpack](https://webpack.js.org/) ecosystems. If an application also uses Rsbuild or Rspack, developers can share configurations and plugins between the application and library, reuse their existing engineering experience, and reduce duplicate configuration and maintenance.
 - **Supports building Module Federation output**: In addition to common formats such as ESM and CJS, Rslib can produce [Module Federation output](/guide/advanced/module-federation), allowing libraries to be loaded by multiple applications as remote modules at runtime. It also provides support for local development and integration workflows.
-- **Keeps pace with evolving technologies**: Rslib keeps pace with TypeScript, framework ecosystems, TC39 proposals, and web standards, helping developers adopt new capabilities in library projects sooner while reducing the cost of integrating and maintaining additional tooling themselves.
+- **A unified library build pipeline**: Rslib can compile JavaScript, transform framework syntax, generate declarations, and process static assets in a single build, reducing tool switching and the need to stitch together separate build steps. Rslib continues to evolve alongside TypeScript and framework ecosystems, supporting new capabilities such as TypeScript 7 declaration generation and React Compiler.
 
 ## From 0.x to 1.0 \{#from-v0-to-v1}
 
