@@ -35,22 +35,16 @@ Rslib 面向不同的库发布与消费场景，让库开发也能受益于应�
 
 ## 从 0.x 到 1.0 \{#from-v0-to-v1}
 
-自 [Rslib 0.7 正式对外发布](/blog/introducing-rslib) 以来，我们先后发布了 16 个 minor 版本。经过持续迭代和大量生产项目的验证，Rslib 的库构建能力更加完善，配置结构与 JavaScript API 也逐步稳定。
+自 [Rslib 0.7 正式对外发布](/blog/introducing-rslib) 以来，我们先后发布了 16 个 minor 版本。在此期间，Rslib 推出了多项重要功能和优化，包括：
 
-1\.0 发布后，Rslib 将以稳定的 API 为基础，遵循语义化版本（SemVer）规范持续演进。从 Rslib 0.x 版本升级到 1.0，可以获得更合理的默认行为、更快的构建速度、更小的产物体积，以及更完善的构建支持，并能更好地衔接测试、文档和产物检查等库开发流程。
-
-主要功能和优化包括：
-
-- **产物质量与构建性能**：进一步优化 ESM 产物，使其更利于静态分析和 tree shaking，并支持代码分割。
-
-  在包含 1 万个 React 组件的基准项目中，无缓存构建耗时**减少约 24.3%**，有缓存构建耗时**减少约 56.7%**，产物体积在 Gzip 前**减少约 32.2%**，在 Gzip 后**减少约 4.1%**。
+- **更快的构建与更小的产物**：在包含 1 万个 React 组件的基准项目中，相较 Rslib 0.7.0，Rslib 1.0 的无缓存构建耗时**减少约 24.3%**，有缓存构建耗时**减少约 56.7%**，产物体积在 Gzip 前**减少约 32.2%**，在 Gzip 后**减少约 4.1%**。
 
   | Rslib 版本 | 生产构建（无缓存） | 生产构建（有缓存） | 产物体积（Gzip 前/后）  |
   | ---------- | ------------------ | ------------------ | ----------------------- |
   | 0.7.0      | **1.212 s**        | **1.125 s**        | **7.64 MiB / 1.40 MiB** |
   | 1.0.0      | **0.918 s**        | **0.487 s**        | **5.19 MiB / 1.35 MiB** |
 
-- **类型生成**：支持使用 [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) 和 [Isolated Declarations](/config/lib/dts#dtsisolated) 加速类型声明文件生成，实际收益会因项目而异。以 Rsbuild 仓库为例，不同方案的耗时如下：
+- **更快的类型生成**：可以使用 [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) 或 [Isolated Declarations](/config/lib/dts#dtsisolated) 加快类型声明文件生成，实际收益会因项目而异。以 Rsbuild 仓库为例，不同方案的耗时如下：
 
   | 方案                  | 耗时      | 性能提升      |
   | --------------------- | --------- | ------------- |
@@ -58,13 +52,13 @@ Rslib 面向不同的库发布与消费场景，让库开发也能受益于应�
   | TypeScript 7          | **4.1 s** | **约 2.4 倍** |
   | Isolated Declarations | **2.3 s** | **约 4.2 倍** |
 
-- **组件库与资源支持**：支持 React、Vue、Svelte 和 Solid 等框架的组件库构建，并进一步完善样式与资源处理，覆盖 `new URL()`、Web Worker、Wasm 等场景。
-- **配置与使用方式**：简单项目无需配置文件即可构建，复杂场景可以按需扩展配置，也能通过 JavaScript API 进行编程式调用。
-- **开发体验**：可以与 [Rstest](https://rstest.rs/zh/)、[Rspress](https://rspress.rs/zh/)、[Rsdoctor](https://rsdoctor.rs/zh/) 等工具配合完成测试、文档和产物诊断，并提供 Agent Skills，为 AI 辅助开发提供 Rslib 最佳实践。
+- **更完整的组件库支持**：支持基于 React、Vue、Svelte 或 Solid 构建组件库，并进一步完善样式与资源处理能力，覆盖 `new URL()`、Web Worker 和 Wasm 等场景。
+- **更简单、灵活的使用方式**：简单项目无需配置文件即可构建，也可以根据需要编写配置；既可以通过 CLI 直接使用，也可以通过 JavaScript API 集成到脚本和其他工具中。
+- **更连贯的库开发流程**：可与 [Rstest](https://rstest.rs/zh/)、[Rspress](https://rspress.rs/zh/) 和 [Rsdoctor](https://rsdoctor.rs/zh/) 配合完成测试、文档和产物诊断，并提供 Agent Skills，帮助 Coding Agent 完成配置、迁移和问题排查。
 
-下面将结合不同的库开发场景，进一步介绍这些能力及其使用方式。
+随着这些能力不断完善并经过大量生产项目的验证，Rslib 的配置结构与 JavaScript API 也逐步稳定。从 1.0 开始，Rslib 将以稳定的公开 API 为基础，遵循语义化版本（SemVer）规范持续演进。
 
-### 面向不同场景的产物输出 \{#output-formats}
+## 面向不同场景的产物输出 \{#output-formats}
 
 不同的运行环境和消费方式对库产物有不同要求。Rslib 支持多种输出格式，可以根据实际场景进行选择：
 
@@ -80,7 +74,7 @@ Rslib 面向不同的库发布与消费场景，让库开发也能受益于应�
 
 除了常见的模块产物，Rslib 还提供了实验性的 [可执行文件生成](/config/lib/experiments#experimentsexe) 能力。该能力基于 [Node.js SEA](https://nodejs.org/api/single-executable-applications.html)，目前适用于 bundle 模式下的单入口 Node.js 产物。生成的可执行文件可以在未安装 Node.js 的目标系统中运行，适合分发 CLI 等 Node.js 程序。
 
-### 灵活的构建模式 \{#build-modes}
+## 灵活的构建模式 \{#build-modes}
 
 选择产物格式后，还需要决定是否将库的内部模块打包到一起。Rslib 同时支持 bundle 和 bundleless [两种构建模式](/guide/basic/output-structure)：
 
@@ -95,7 +89,7 @@ Rslib 面向不同的库发布与消费场景，让库开发也能受益于应�
 
 可以根据库的交付方式和使用场景选择合适的模式，也可以在同一个项目中分别输出 bundle 和 bundleless 产物。
 
-### 快速的类型生成 \{#declaration-generation}
+## 快速的类型生成 \{#declaration-generation}
 
 对于 TypeScript 库，类型声明直接影响下游项目的类型提示和模块解析。Rslib 支持通过 [dts](/config/lib/dts) 配置，在构建 JavaScript 产物的同时生成类型声明文件，并根据实际产物自动补全或替换声明文件导入路径中的扩展名，避免 NodeNext 等模块解析方式导致的类型解析问题。
 
@@ -114,7 +108,7 @@ export default {
 
 需要注意的是，该模式不会执行类型检查，因此适合与独立的高性能类型检查流程配合使用。例如在 monorepo 中，日常构建由 Rslib 快速生成各个包的类型声明文件，并在 CI 或 `pre-commit` hook 中通过 [rslint --type-check](https://rslint.rs/guide/type-checking) 统一执行完整的类型检查。
 
-### 开箱即用的多框架支持 \{#framework-support}
+## 开箱即用的多框架支持 \{#framework-support}
 
 组件库是 Rslib 重点支持的场景之一。React、Vue、Svelte 和 Solid 在组件文件、编译方式和运行时约定上各有不同。Rslib 通过对应的 [Rsbuild 插件](/config/rsbuild/plugins) 接入这些框架的编译能力，产物格式和构建模式等通用能力仍由 Rslib 配置，框架语法则由相应的插件和编译器处理，使不同框架组件库可以沿用相近的配置方式和构建流程。
 
@@ -143,7 +137,7 @@ export default defineConfig({
 
 > 查看 [React 方案](/guide/solution/react)、[Vue 方案](/guide/solution/vue)、[Svelte 方案](/guide/solution/svelte)、[Solid 方案](/guide/solution/solid) 了解更多。
 
-### 丰富的样式与资源处理 \{#styles-and-assets}
+## 丰富的样式与资源处理 \{#styles-and-assets}
 
 组件库中通常会使用样式、图片和字体等资源，部分项目还会使用 Web Worker 和 Wasm。Rslib 对这些内容都提供了相应的构建支持。
 
@@ -182,7 +176,7 @@ Rslib 会根据产物格式和构建配置处理这些内容，使产物适配�
 
 > 查看 [CSS](/guide/advanced/css)、[静态资源](/guide/advanced/static-assets)、[Web Workers](/guide/advanced/web-workers) 和 [Wasm](/guide/advanced/wasm) 了解更多。
 
-### 简洁的配置与多种使用方式 \{#configuration-and-usage}
+## 简洁的配置与多种使用方式 \{#configuration-and-usage}
 
 Rslib 1.0 简化了配置结构。只需生成一份默认的 ESM 产物时，可以省略 `lib` 字段，直接在顶层编写配置；需要输出多份产物时，再通过 `lib` 数组分别设置每份产物的格式和构建方式。
 
@@ -223,7 +217,7 @@ const result = await rslib.build();
 await result.close();
 ```
 
-### 库开发中的测试、文档与检查 \{#testing-docs-and-checks}
+## 库开发中的测试、文档与检查 \{#testing-docs-and-checks}
 
 在库项目的开发过程中，通常还需要验证功能、维护文档，并在发布前进行检查。针对这些工作，Rslib 可以与 Rstest、Rspress、Rsdoctor 以及相关插件配合使用。
 
@@ -272,7 +266,7 @@ export default defineConfig({
 
 > 查看 [使用 Rstest](/guide/advanced/rstest)、[使用 Rspress](/guide/advanced/rspress)、[使用 Rsdoctor](/guide/advanced/rsdoctor) 了解更多。
 
-### Agent 友好的开发体验 \{#agent-friendly-development}
+## Agent 友好的开发体验 \{#agent-friendly-development}
 
 随着 Coding Agent 越来越多地参与到日常开发流程中，为其提供准确的工具知识和项目上下文也变得更加重要。
 

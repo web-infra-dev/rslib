@@ -35,22 +35,16 @@ Rslib supports a wide range of library publishing and consumption scenarios, ena
 
 ## From 0.x to 1.0 \{#from-v0-to-v1}
 
-Since the [public launch of Rslib 0.7](/blog/introducing-rslib), we have shipped 16 minor releases. Through continuous iteration and validation across numerous production projects, Rslib's library build capabilities have continued to improve, and its configuration model and JavaScript API have stabilized.
+Since the [public launch of Rslib 0.7](/blog/introducing-rslib), we have shipped 16 minor releases. During this period, Rslib introduced several important features and improvements, including:
 
-Following the 1.0 release, Rslib will continue to evolve on a stable API foundation in line with Semantic Versioning (SemVer). Upgrading from a 0.x release to 1.0 provides more sensible defaults, faster builds, smaller output sizes, and more comprehensive build support, while integrating more smoothly with library development workflows such as testing, documentation, and output validation.
-
-Major features and improvements during this period include:
-
-- **Output quality and build performance**: We further optimized ESM output for static analysis and tree shaking and added support for code splitting.
-
-  In a benchmark project containing 10,000 React components, uncached build time **decreased by approximately 24.3%**, cached build time **decreased by approximately 56.7%**, output size before Gzip compression **decreased by approximately 32.2%**, and output size after compression **decreased by approximately 4.1%**.
+- **Faster builds and smaller output**: In a benchmark project containing 10,000 React components, Rslib 1.0 reduced uncached build time by **approximately 24.3%**, cached build time by **approximately 56.7%**, output size before Gzip compression by **approximately 32.2%**, and output size after compression by **approximately 4.1%**, compared with Rslib 0.7.0.
 
   | Rslib version | Production build (without cache) | Production build (with cache) | Output size (before/after Gzip) |
   | ------------- | -------------------------------- | ----------------------------- | ------------------------------- |
   | 0.7.0         | **1.212 s**                      | **1.125 s**                   | **7.64 MiB / 1.40 MiB**         |
   | 1.0.0         | **0.918 s**                      | **0.487 s**                   | **5.19 MiB / 1.35 MiB**         |
 
-- **Declaration generation**: Rslib supports faster declaration generation with [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) and [Isolated Declarations](/config/lib/dts#dtsisolated), though actual improvements vary by project. In the Rsbuild repository, the following times were measured for each approach:
+- **Faster declaration generation**: Rslib supports faster declaration generation with [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) or [Isolated Declarations](/config/lib/dts#dtsisolated), though actual gains vary by project. The following table compares the different approaches using the Rsbuild repository:
 
   | Approach              | Time      | Performance improvement |
   | --------------------- | --------- | ----------------------- |
@@ -58,13 +52,13 @@ Major features and improvements during this period include:
   | TypeScript 7          | **4.1 s** | **~2.4×**               |
   | Isolated Declarations | **2.3 s** | **~4.2×**               |
 
-- **Component libraries and assets**: Rslib supports building component libraries with frameworks such as React, Vue, Svelte, and Solid, while improving style and asset handling for scenarios including `new URL()`, Web Workers, and Wasm.
-- **Configuration and usage**: Simple projects can be built without a configuration file. For more complex use cases, developers can extend the configuration as needed or invoke Rslib programmatically through its JavaScript API.
-- **Developer experience**: Rslib works with tools such as [Rstest](https://rstest.rs/), [Rspress](https://rspress.rs/), and [Rsdoctor](https://rsdoctor.rs/) for testing, documentation, and output analysis. It also provides Agent Skills with Rslib best practices for AI-assisted development.
+- **More comprehensive component library support**: Rslib supports building component libraries with React, Vue, Svelte, or Solid, and further improves style and asset handling for scenarios including `new URL()`, Web Workers, and Wasm.
+- **Simpler and more flexible usage**: Simple projects can be built without a configuration file, while configuration can be added as needed. Rslib can be used directly through the CLI or integrated into scripts and other tools through its JavaScript API.
+- **A more cohesive library development workflow**: Rslib works with [Rstest](https://rstest.rs/), [Rspress](https://rspress.rs/), and [Rsdoctor](https://rsdoctor.rs/) for testing, documentation, and output diagnostics. It also provides Agent Skills to help Coding Agents with configuration, migration, and troubleshooting.
 
-The following sections take a closer look at these capabilities and how to use them across different library development scenarios.
+As these capabilities have continued to improve and been validated across numerous production projects, Rslib's configuration model and JavaScript API have also stabilized. Starting with 1.0, Rslib will continue to evolve on the foundation of a stable public API and in accordance with Semantic Versioning (SemVer).
 
-### Output formats for different use cases \{#output-formats}
+## Output formats for different use cases \{#output-formats}
 
 Output requirements vary by runtime environment and by how a library is consumed. Rslib supports multiple output formats so you can choose the right one for each use case:
 
@@ -80,7 +74,7 @@ Rslib places particular emphasis on ESM output. It generates ESM output that is 
 
 In addition to common module formats, Rslib offers an experimental [executable generation](/config/lib/experiments#experimentsexe) capability. This feature is based on [Node.js SEA](https://nodejs.org/api/single-executable-applications.html) and currently supports a single bundled entry targeting Node.js. The generated executable can run on target systems where Node.js is not installed, making it suitable for distributing CLIs and other Node.js programs.
 
-### Flexible build modes \{#build-modes}
+## Flexible build modes \{#build-modes}
 
 After choosing an output format, you also need to decide whether to bundle the library's internal modules together. Rslib supports [bundle and bundleless modes](/guide/basic/output-structure):
 
@@ -95,7 +89,7 @@ For a simple single-entry library, the output structures of the two modes look l
 
 You can choose the appropriate mode based on how the library is delivered and consumed, or use both bundle and bundleless modes in the same project.
 
-### Fast declaration generation \{#declaration-generation}
+## Fast declaration generation \{#declaration-generation}
 
 For TypeScript libraries, declaration files directly affect type hints and module resolution in downstream projects. With the [dts](/config/lib/dts) configuration, Rslib can generate declaration files alongside JavaScript output. Based on the actual output, it automatically adds or replaces file extensions in import paths within declaration files, avoiding type resolution issues caused by module resolution modes such as NodeNext.
 
@@ -114,7 +108,7 @@ export default {
 
 Note that this mode does not perform type checking, so it is best used with a separate high-performance type-checking process. For example, in a monorepo, regular builds can use Rslib to generate declaration files quickly for each package, while CI or a `pre-commit` hook runs full type checking centrally through [rslint --type-check](https://rslint.rs/guide/type-checking).
 
-### Out-of-the-box multi-framework support \{#framework-support}
+## Out-of-the-box multi-framework support \{#framework-support}
 
 Component libraries are one of Rslib's primary use cases. React, Vue, Svelte, and Solid each have different component files, compilation methods, and runtime conventions. Rslib integrates their compilers through the corresponding [Rsbuild plugins](/config/rsbuild/plugins). Rslib handles shared concerns such as output formats and bundle modes, while plugins and compilers handle framework syntax. This gives component libraries across different frameworks similar configurations and build workflows.
 
@@ -143,7 +137,7 @@ When an application needs to compile JSX itself, Rslib can [preserve JSX](/guide
 
 > See the [React guide](/guide/solution/react), [Vue guide](/guide/solution/vue), [Svelte guide](/guide/solution/svelte), and [Solid guide](/guide/solution/solid) to learn more.
 
-### Comprehensive style and asset support \{#styles-and-assets}
+## Comprehensive style and asset support \{#styles-and-assets}
 
 Component libraries often use styles, images, and fonts, while some projects also use Web Workers and Wasm. Rslib provides build support for all of them.
 
@@ -182,7 +176,7 @@ Rslib processes these resources according to the output format and build configu
 
 > See [CSS](/guide/advanced/css), [Static assets](/guide/advanced/static-assets), [Web Workers](/guide/advanced/web-workers), and [Wasm](/guide/advanced/wasm) to learn more.
 
-### Simpler configuration and flexible usage \{#configuration-and-usage}
+## Simpler configuration and flexible usage \{#configuration-and-usage}
 
 Rslib 1.0 simplifies the configuration structure. When you only need to generate a single default ESM output, you can omit the `lib` field and write the configuration directly at the top level. When you need multiple outputs, use the `lib` array to set the format and build mode for each one.
 
@@ -223,7 +217,7 @@ const result = await rslib.build();
 await result.close();
 ```
 
-### Testing, documentation, and checks in library development \{#testing-docs-and-checks}
+## Testing, documentation, and checks in library development \{#testing-docs-and-checks}
 
 During library development, you typically also need to verify functionality, maintain documentation, and run checks before release. Rslib works with Rstest, Rspress, Rsdoctor, and related plugins to support these tasks.
 
@@ -272,7 +266,7 @@ When you need a deeper analysis of the build process and output, you can use Rsd
 
 > See [Using Rstest](/guide/advanced/rstest), [Using Rspress](/guide/advanced/rspress), and [Using Rsdoctor](/guide/advanced/rsdoctor) to learn more.
 
-### Agent-friendly development experience \{#agent-friendly-development}
+## Agent-friendly development experience \{#agent-friendly-development}
 
 As coding agents become more involved in daily development workflows, providing them with accurate tool knowledge and project context becomes increasingly important.
 
