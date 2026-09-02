@@ -60,9 +60,9 @@ Rslib 面向不同的库发布与消费场景，让库开发也能受益于应�
 
 ## 面向不同场景的产物输出 \{#output-formats}
 
-一个库既可以作为 npm 包发布，也可以基于模块联邦构建为远程模块，供多个应用在运行时加载，从而实现独立部署和更新。常见的库构建工具主要面向 npm 包交付，而 Rslib 还支持构建模块联邦产物，并提供支持 HMR 的开发模式，便于与宿主应用或 Storybook 联调。
+一个库既可以作为 npm 包发布，也可以基于 [模块联邦](https://module-federation.io/zh/) 构建为远程模块，供多个应用在运行时加载，从而实现独立部署和更新。常见的库构建工具主要面向 npm 包交付，而 Rslib 还支持构建模块联邦产物，并提供支持 HMR 的开发模式，便于与宿主应用或 Storybook 联调。
 
-针对不同的运行环境和消费方式，Rslib 提供以下输出格式：
+针对上述不同的运行环境和消费方式，Rslib 提供的产物格式如下：
 
 | 产物格式                                                                               | 使用场景           | 使用方式                                                |
 | -------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------- |
@@ -72,9 +72,9 @@ Rslib 面向不同的库发布与消费场景，让库开发也能受益于应�
 
 需要同时生成多种格式时，可以通过 [format](/config/lib/format) 配置分别指定每份产物的格式，并在同一份配置中按需设置各自的构建方式，无需维护多套构建脚本。
 
-Rslib 对 ESM 产物进行了重点优化，使其对静态分析更友好并支持代码分割，方便下游构建工具进行 tree shaking 和二次构建。对于 ESM 产物中的 external 依赖，Rslib 也优化了默认处理方式，能够更准确地保留源码中的模块加载语义，减少构建转换带来的行为差异。
+在这些产物格式中，Rslib 对 ESM 产物进行了重点优化，使其对静态分析更友好并支持代码分割，方便下游构建工具进行 tree shaking 和二次构建。对于 ESM 产物中的 external 依赖，Rslib 也优化了默认处理方式，能够更准确地保留源码中的模块加载语义，减少构建转换带来的行为差异。
 
-除了常见的模块产物，Rslib 还提供了实验性的 [可执行文件生成](/config/lib/experiments#experimentsexe) 能力。该能力基于 [Node.js SEA](https://nodejs.org/api/single-executable-applications.html)，适用于 bundle 模式下的单入口 Node.js 产物。生成的可执行文件可以在未安装 Node.js 的目标系统中运行，适合分发 CLI 等 Node.js 程序。
+此外，除了常见的模块产物，Rslib 还提供了实验性的 [可执行文件生成](/config/lib/experiments#experimentsexe) 能力。该能力基于 [Node.js SEA](https://nodejs.org/api/single-executable-applications.html)，适用于 bundle 模式下的单入口 Node.js 产物。生成的可执行文件可以在未安装 Node.js 的目标系统中运行，适合分发 CLI 等 Node.js 程序。
 
 ## 灵活的构建模式 \{#build-modes}
 

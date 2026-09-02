@@ -60,9 +60,9 @@ As these capabilities have continued to improve and been validated across numero
 
 ## Output formats for different use cases \{#output-formats}
 
-A library can be published as an npm package or built as a remote module with Module Federation for multiple applications to load at runtime, enabling independent deployment and updates. Conventional library build tools primarily focus on npm package distribution, while Rslib also supports building Module Federation output and provides an HMR-enabled development mode for integration with host applications or Storybook.
+A library can be published as an npm package or built as a remote module with [Module Federation](https://module-federation.io/) for multiple applications to load at runtime, enabling independent deployment and updates. Conventional library build tools primarily focus on npm package distribution, while Rslib also supports building Module Federation output and provides an HMR-enabled development mode for integration with host applications or Storybook.
 
-For different runtime environments and consumption patterns, Rslib provides the following output formats:
+For the runtime environments and consumption patterns described above, Rslib provides the following output formats:
 
 | Output format                                                                          | Use case                          | How it is used                                                         |
 | -------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------------------------------- |
@@ -72,7 +72,7 @@ For different runtime environments and consumption patterns, Rslib provides the 
 
 When you need to generate multiple output formats, you can use the [format](/config/lib/format) configuration to specify each output's format and configure its build settings as needed in the same file, without maintaining multiple build scripts.
 
-Rslib has focused on optimizing ESM output, making it more amenable to static analysis and enabling code splitting. This makes it easier for downstream build tools to perform tree shaking and further processing. Rslib also optimizes the default handling of external dependencies in ESM output, preserving module-loading semantics from the source code more accurately and reducing behavioral differences introduced by build transformations.
+Among these formats, Rslib has focused on optimizing ESM output, making it more amenable to static analysis and enabling code splitting. This makes it easier for downstream build tools to perform tree shaking and further processing. Rslib also optimizes the default handling of external dependencies in ESM output, preserving module-loading semantics from the source code more accurately and reducing behavioral differences introduced by build transformations.
 
 In addition to common module formats, Rslib offers an experimental [executable generation](/config/lib/experiments#experimentsexe) capability. This feature is based on [Node.js SEA](https://nodejs.org/api/single-executable-applications.html) and supports a single bundled entry targeting Node.js. The generated executable can run on target systems where Node.js is not installed, making it suitable for distributing CLIs and other Node.js programs.
 
