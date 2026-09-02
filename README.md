@@ -40,8 +40,8 @@ Rslib has the following features:
 
 ## 📚 Documentation
 
-- [Rslib v1 docs](https://v1.rslib.rs)
-- [Rslib v0 docs](https://rslib.rs)
+- [Rslib v1 docs](https://rslib.rs)
+- [Rslib v0 docs](https://v0.rslib.rs)
 
 ## 🦀 Rstack
 

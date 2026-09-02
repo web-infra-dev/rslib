@@ -35,8 +35,8 @@ Rslib 具备以下特性：
 
 ## 📚 文档
 
-- [Rslib v1 文档](https://v1.rslib.rs/zh/)
-- [Rslib v0 文档](https://rslib.rs/zh/)
+- [Rslib v1 文档](https://rslib.rs/zh/)
+- [Rslib v0 文档](https://v0.rslib.rs/zh/)
 
 ## 🦀 Rstack
 
