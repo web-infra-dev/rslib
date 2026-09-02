@@ -2,11 +2,22 @@
 description: 'This document lists all breaking changes from Rslib 0.23 to 1.0. You can use it as a migration reference.'
 ---
 
+import { Prompt } from '@theme';
+
 # Upgrading from 0.x to v1
 
 This document lists all breaking changes from Rslib 0.23 to 1.0. You can use it as a migration reference.
 
-{/* TODO: ## Using Agent Skills */}
+## Agent prompt
+
+If you are using a Coding Agent, copy the prompt below and send it to the Agent:
+
+<Prompt
+  title="Upgrade from 0.x to v1"
+  description="Copy this prompt and send it to your Coding Agent."
+  prompt={`Upgrade this project from Rslib 0.x to 1.0. Read and follow the migration guide:
+https://rslib.rs/guide/upgrade/v0-to-v1.md`}
+/>
 
 ## Upgrade Rslib to v1
 
