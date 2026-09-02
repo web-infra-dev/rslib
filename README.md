@@ -15,11 +15,6 @@
 
 English | [简体中文](./README.zh-CN.md)
 
-> [!NOTE]
-> The `main` branch is under active development for **Rslib 1.0**.
->
-> The stable **0.x** releases are maintained in the [v0.x](https://github.com/web-infra-dev/rslib/tree/v0.x) branch.
-
 Rslib is a library development tool based on [Rsbuild](https://rsbuild.rs).
 
 It gives developers a simple way to create JavaScript libraries and UI component libraries, and provides tool integrations and best practices for building, debugging, documentation, and testing throughout library development.
