@@ -8,7 +8,7 @@ Rslib is a library development tool powered by [Rsbuild](https://rsbuild.rs). It
 
 ## Documentation
 
-https://rslib.rs/
+https://v0.rslib.rs/
 
 ## Contributing
 

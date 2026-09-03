@@ -25,7 +25,7 @@ export async function bundleDts(options: BundleOptions): Promise<void> {
     apiExtractor = await import('@microsoft/api-extractor');
   } catch {
     const error = new Error(
-      `${color.cyan('@microsoft/api-extractor')} is required when ${color.cyan('dts.bundle')} is set to ${color.cyan('true')}, please make sure it is installed. You could check https://rslib.rs/guide/advanced/dts#how-to-generate-declaration-files-in-rslib for more details.`,
+      `${color.cyan('@microsoft/api-extractor')} is required when ${color.cyan('dts.bundle')} is set to ${color.cyan('true')}, please make sure it is installed. You could check https://v0.rslib.rs/guide/advanced/dts#how-to-generate-declaration-files-in-rslib for more details.`,
     );
     // do not log the stack trace, it is not helpful for users
     error.stack = '';

@@ -826,7 +826,7 @@ const BundlePlugin = (): RsbuildPlugin => ({
           logger.error(
             'Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to `automatic` or `classic`. Check out ' +
               color.green(
-                'https://rslib.rs/guide/solution/react#jsx-transform',
+                'https://v0.rslib.rs/guide/solution/react#jsx-transform',
               ) +
               ' for more details.',
           );
@@ -1207,7 +1207,7 @@ const composeEntryConfig = async (
     throw new Error(
       `The ${color.cyan('source.entry')} configuration should be an object, but received ${typeof entries}: ${color.cyan(
         entries,
-      )}. Checkout ${color.green('https://rslib.rs/config/rsbuild/source#sourceentry')} for more details.`,
+      )}. Checkout ${color.green('https://v0.rslib.rs/config/rsbuild/source#sourceentry')} for more details.`,
     );
   }
 
@@ -1218,7 +1218,7 @@ const composeEntryConfig = async (
         ? entry
         : path.resolve(root, entry);
       const isDirLike = path.extname(entryAbsPath) === '';
-      const dirError = `Glob pattern ${color.cyan(`"${entry}"`)} is not supported when "bundle" is "true", considering "bundle" to "false" to use bundleless mode, or specify a file entry to bundle. See ${color.green('https://rslib.rs/guide/basic/output-structure')} for more details.`;
+      const dirError = `Glob pattern ${color.cyan(`"${entry}"`)} is not supported when "bundle" is "true", considering "bundle" to "false" to use bundleless mode, or specify a file entry to bundle. See ${color.green('https://v0.rslib.rs/guide/basic/output-structure')} for more details.`;
 
       if (fs.existsSync(entryAbsPath)) {
         const stats = fs.statSync(entryAbsPath);

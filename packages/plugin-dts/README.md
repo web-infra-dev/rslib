@@ -8,7 +8,7 @@ An [Rsbuild plugin](https://www.npmjs.com/package/rsbuild-plugin-dts) to emit de
 
 ## Using in Rslib
 
-Read [Declaration files](https://rslib.rs/guide/advanced/dts) and [lib.dts](https://rslib.rs/config/lib/dts) for more details.
+Read [Declaration files](https://v0.rslib.rs/guide/advanced/dts) and [lib.dts](https://v0.rslib.rs/config/lib/dts) for more details.
 
 ## Using in Rsbuild
 
@@ -38,7 +38,7 @@ export default {
 
 Whether to bundle the declaration files.
 
-If you want to [bundle declaration files](https://rslib.rs/guide/advanced/dts#bundle-declaration-files) files, you should:
+If you want to [bundle declaration files](https://v0.rslib.rs/guide/advanced/dts#bundle-declaration-files) files, you should:
 
 1. Install `@microsoft/api-extractor` as a development dependency, which is the underlying tool used for bundling declaration files.
 
@@ -366,7 +366,7 @@ This preserves full type checking while reducing the cost of repeatedly running 
 
 #### Output scope
 
-`isolated` generates declaration files based on the module dependency graph during the Rspack build. Only entry modules and modules referenced by entry modules will generate corresponding declaration files. If a file is not included in the build dependency graph, it will not automatically generate declaration files like TypeScript does. If you want declaration files to be generated for these files as well, add them to [source.entry](https://rslib.rs/config/rsbuild/source#sourceentry), or make sure they are referenced by an existing entry.
+`isolated` generates declaration files based on the module dependency graph during the Rspack build. Only entry modules and modules referenced by entry modules will generate corresponding declaration files. If a file is not included in the build dependency graph, it will not automatically generate declaration files like TypeScript does. If you want declaration files to be generated for these files as well, add them to [source.entry](https://v0.rslib.rs/config/rsbuild/source#sourceentry), or make sure they are referenced by an existing entry.
 
 #### Usage constraints
 
