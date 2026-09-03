@@ -185,7 +185,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           await cleanDtsFiles(cwd, dtsEmitPath);
         }
 
-        // clean .rslib temp folder
+        // clean temporary declaration files
         if (bundle) {
           await clearTempDeclarationDir(cwd);
         }

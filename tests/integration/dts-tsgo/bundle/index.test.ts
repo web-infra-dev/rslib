@@ -133,7 +133,7 @@ describe('dts with tsgo when bundle: true', () => {
     expect(entries).toMatchSnapshot();
   });
 
-  test('should clean dts dist files and .rslib folder', async () => {
+  test('should clean dts dist files and temporary declaration files', async () => {
     const fixturePath = join(__dirname, 'clean');
 
     const checkFiles = await createTempFiles(fixturePath, true);

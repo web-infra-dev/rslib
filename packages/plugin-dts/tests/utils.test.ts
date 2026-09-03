@@ -3,11 +3,60 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { CompilerOptions } from 'typescript6-api';
 import {
+  clearTempDeclarationDir,
   cleanTsBuildInfoFile,
+  ensureTempDeclarationDir,
   loadTsconfigResultForExecutable,
   mergeAliasWithTsConfigPaths,
   prettyTime,
 } from '../src/utils';
+
+describe('temporary declaration directory', () => {
+  test('should manage declarations under .rstack without affecting sibling contents', async () => {
+    const tempDir = await fs.mkdtemp(
+      path.join(__dirname, 'temp-declarations-'),
+    );
+
+    try {
+      const hookPath = path.join(tempDir, '.rstack/hooks/pre-commit');
+      const cachePath = path.join(tempDir, '.rstack/cache/fmt/cache.json');
+      await fs.mkdir(path.dirname(hookPath), { recursive: true });
+      await fs.mkdir(path.dirname(cachePath), { recursive: true });
+      await fs.writeFile(hookPath, 'pnpm lint\n');
+      await fs.writeFile(cachePath, '{}\n');
+
+      const esmDir = ensureTempDeclarationDir(tempDir, 'esm');
+      const cjsDir = ensureTempDeclarationDir(tempDir, 'cjs');
+
+      expect(esmDir).toBe(path.join(tempDir, '.rstack/declarations/esm'));
+      await fs.writeFile(path.join(esmDir, 'index.d.ts'), 'export {};\n');
+      await fs.writeFile(path.join(cjsDir, 'index.d.cts'), 'export {};\n');
+
+      const gitIgnorePath = path.join(
+        tempDir,
+        '.rstack/declarations/.gitignore',
+      );
+      expect(await fs.readFile(gitIgnorePath, 'utf8')).toBe('**/*\n');
+      await expect(
+        fs.access(path.join(tempDir, '.rstack/.gitignore')),
+      ).rejects.toThrow();
+      await expect(fs.access(path.join(tempDir, '.rslib'))).rejects.toThrow();
+
+      await clearTempDeclarationDir(tempDir);
+
+      expect(
+        await fs.readdir(path.join(tempDir, '.rstack/declarations')),
+      ).toEqual([]);
+      expect(await fs.readFile(hookPath, 'utf8')).toBe('pnpm lint\n');
+      expect(await fs.readFile(cachePath, 'utf8')).toBe('{}\n');
+
+      ensureTempDeclarationDir(tempDir, 'esm');
+      expect(await fs.readFile(gitIgnorePath, 'utf8')).toBe('**/*\n');
+    } finally {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    }
+  });
+});
 
 describe('prettyTime', () => {
   test('should pretty time correctly', () => {

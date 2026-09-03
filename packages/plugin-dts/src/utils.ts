@@ -203,8 +203,7 @@ export function mergeAliasWithTsConfigPaths(
   return Object.keys(mergedPaths).length > 0 ? mergedPaths : {};
 }
 
-export const TEMP_FOLDER = '.rslib';
-export const TEMP_DTS_DIR: string = `${TEMP_FOLDER}/declarations`;
+export const TEMP_DTS_DIR = '.rstack/declarations';
 
 export function ensureTempDeclarationDir(cwd: string, name: string): string {
   const dirPath = path.join(cwd, TEMP_DTS_DIR, name);
@@ -215,7 +214,7 @@ export function ensureTempDeclarationDir(cwd: string, name: string): string {
 
   fs.mkdirSync(dirPath, { recursive: true });
 
-  const gitIgnorePath = path.join(cwd, TEMP_FOLDER, '.gitignore');
+  const gitIgnorePath = path.join(cwd, TEMP_DTS_DIR, '.gitignore');
   fs.writeFileSync(gitIgnorePath, '**/*\n');
 
   return dirPath;

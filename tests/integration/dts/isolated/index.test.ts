@@ -101,8 +101,8 @@ describe('isolated dts', () => {
       join(fixturePath, 'dist-types/cjs/stale.d.cts'),
       join(fixturePath, 'dist-bundle/esm/stale.d.ts'),
       join(fixturePath, 'dist-bundle/cjs/stale.d.cts'),
-      join(fixturePath, '.rslib/declarations/esm/stale.d.ts'),
-      join(fixturePath, '.rslib/declarations/cjs/stale.d.ts'),
+      join(fixturePath, '.rstack/declarations/esm/stale.d.ts'),
+      join(fixturePath, '.rstack/declarations/cjs/stale.d.ts'),
     ];
 
     await Promise.all(

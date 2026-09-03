@@ -351,6 +351,10 @@ export default {
 };
 ```
 
+## Temporary declaration directory update
+
+Rslib generates temporary declaration files during declaration bundling. Rslib v1 changes the directory where these files are stored from `.rslib/declarations` to `.rstack/declarations`. After upgrading, you can safely remove the old `.rslib` directory.
+
 ## Node.js template update
 
 Rslib v1 no longer provides a dual ESM/CJS Node.js template and only provides a pure ESM template. When creating a project, update the `--template` argument as follows:

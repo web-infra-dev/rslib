@@ -113,7 +113,7 @@ Rslib 基于 API Extractor 对类型声明文件进行打包，可能会存在�
 
 开启类型声明文件打包后，Rslib 会在两个阶段使用 TypeScript 配置：
 
-- [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath) 用于在 `.rslib/declarations` 目录中生成临时类型声明文件。
+- [source.tsconfigPath](/config/rsbuild/source#sourcetsconfigpath) 用于在 `.rstack/declarations` 目录中生成临时类型声明文件。
 - `dts.bundle.tsconfigPath` 由 API Extractor 用于分析并打包上述生成的临时类型声明文件。
 
 默认情况下，两个阶段都使用 `source.tsconfigPath`。如果希望 API Extractor 使用独立的 TypeScript 配置，例如单独调整 `paths` 等模块解析选项，可以按如下方式配置：
