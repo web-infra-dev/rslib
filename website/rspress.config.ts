@@ -14,7 +14,7 @@ import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import pluginFileTree from 'rspress-plugin-file-tree';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 
-const siteUrl = 'https://rslib.rs';
+const siteUrl = 'https://v0.rslib.rs';
 const description = 'The Rsbuild-based library development tool';
 const descriptionZh = '基于 Rsbuild 的库构建工具';
 
