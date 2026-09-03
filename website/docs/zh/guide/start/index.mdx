@@ -22,15 +22,15 @@ Rslib 基于 Rspack 与 Rsbuild 实现，针对库开发场景的多样化需求
 
 Rslib 具备以下特性：
 
-- **易于配置**：Rslib 为库开发提供开箱即用的构建能力，使开发者能够在零配置的情况下开发库项目。同时，Rslib 提供一套语义化的构建配置，可随着项目需求灵活扩展。
+- **易于配置**：为库开发提供开箱即用的构建能力，使开发者能够在零配置的情况下开发库项目。同时，Rslib 提供一套语义化的构建配置，可随着项目需求灵活扩展。
 
-- **性能优先**：Rslib 由 [Rspack](https://rspack.rs/zh/) 驱动，集成了社区中基于 Rust 的高性能工具，包括 [SWC](https://swc.rs/) 和 [Lightning CSS](https://lightningcss.dev/)，以提供一流的构建速度和开发体验。
+- **性能优先**：由 [Rspack](https://rspack.rs/zh/) 驱动，集成了社区中基于 Rust 的高性能工具，包括 [SWC](https://swc.rs/) 和 [Lightning CSS](https://lightningcss.dev/)，以提供一流的构建速度和开发体验。
 
-- **插件生态**：Rslib 可以使用 [Rsbuild 的官方插件](https://rsbuild.rs/zh/plugins/list/)，也兼容大部分 webpack 插件和所有 Rspack 插件，这意味着开发者可以在 Rslib 中使用社区或公司内现有的插件，并沿用在 webpack 和 Rspack 生态中积累的知识与工程经验。
+- **插件生态**：支持使用 [Rsbuild 插件](https://rsbuild.rs/zh/plugins/list/)、Rspack 插件和 webpack 插件，开发者可复用现有插件生态，沿用熟悉的开发经验与工程实践。
 
-- **产物灵活**：Rslib 设计时充分考虑了库发布与消费场景的多样性，支持根据不同的运行环境、分发方式和下游构建工具灵活配置产物输出，满足不同类型库的交付需求。
+- **产物灵活**：设计时充分考虑了库发布与消费场景的多样性，支持根据不同的运行环境、分发方式和下游构建工具灵活配置产物输出，满足不同类型库的交付需求。
 
-- **框架无关**：Rslib 不与前端 UI 框架耦合，并通过插件支持 React、Vue、Svelte、Solid 等框架，让开发者能够以一致的配置和开发方式构建不同框架的组件库。
+- **框架无关**：不与前端 UI 框架耦合，并通过插件支持 React、Vue、Svelte、Solid 等框架，让开发者能够以一致的配置和开发方式构建不同框架的组件库。
 
 ## Rstack
 
