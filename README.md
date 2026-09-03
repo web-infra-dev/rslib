@@ -103,10 +103,10 @@ Come and chat with us on [Discord](https://discord.gg/7uHaPXcVyV)! The Rstack te
 Parts of Rslib are derived from or inspired by many excellent open source projects. We sincerely appreciate the work of these projects and the ideas they have shared with the community:
 
 - [esbuild](https://github.com/evanw/esbuild)
-- [tsup](https://github.com/egoist/tsup)
-- [webpack](https://github.com/webpack/webpack)
 - [mini-css-extract-plugin](https://github.com/webpack/mini-css-extract-plugin)
 - [tsdown](https://github.com/rolldown/tsdown)
+- [tsup](https://github.com/egoist/tsup)
+- [webpack](https://github.com/webpack/webpack)
 
 ## 📖 License
 
