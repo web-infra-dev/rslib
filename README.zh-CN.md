@@ -89,10 +89,10 @@ Rslib 是 Rstack 的一员。Rstack 是为开发者与 Agent 打造的高性能�
 Rslib 的部分实现和 API 设计参考或改编自社区中的优秀开源项目。我们真诚感谢这些项目为开源社区沉淀的经验、思路与实现：
 
 - [esbuild](https://github.com/evanw/esbuild)
-- [tsup](https://github.com/egoist/tsup)
-- [webpack](https://github.com/webpack/webpack)
 - [mini-css-extract-plugin](https://github.com/webpack/mini-css-extract-plugin)
 - [tsdown](https://github.com/rolldown/tsdown)
+- [tsup](https://github.com/egoist/tsup)
+- [webpack](https://github.com/webpack/webpack)
 
 ## 📖 License
 
