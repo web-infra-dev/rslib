@@ -23,15 +23,15 @@ It gives developers a simple way to create JavaScript libraries and UI component
 
 Rslib has the following features:
 
-- **Easy to configure**: Rslib provides out-of-the-box tooling that enables developers to build libraries with zero configuration. It also provides a set of semantic build configurations that can be extended as project needs grow.
+- **Easy to configure**: Out-of-the-box tooling enables developers to build libraries with zero configuration. Rslib also provides a set of semantic build configurations that can be extended as project needs grow.
 
-- **Performance-focused**: Rslib is powered by [Rspack](https://rspack.rs) and integrates high-performance Rust-based tools from the community, including [SWC](https://swc.rs/) and [Lightning CSS](https://lightningcss.dev/), delivering first-class build speed and development experience.
+- **Performance-focused**: Powered by [Rspack](https://rspack.rs), it integrates high-performance Rust-based tools from the community, including [SWC](https://swc.rs/) and [Lightning CSS](https://lightningcss.dev/), delivering first-class build speed and development experience.
 
-- **Plugin ecosystem**: Rslib supports [Rsbuild's official plugins](https://rsbuild.rs/plugins/list/) and is compatible with most webpack plugins and all Rspack plugins, allowing developers to use existing community or in-house plugins in Rslib and carry over the knowledge and engineering experience they have gained in the webpack and Rspack ecosystems.
+- **Plugin ecosystem**: Supports [Rsbuild plugins](https://rsbuild.rs/plugins/list/), Rspack plugins, and webpack plugins, allowing developers to reuse existing plugin ecosystems and continue using familiar development workflows and engineering practices.
 
-- **Flexible outputs**: Rslib is designed around the diverse ways libraries are published and consumed. It supports flexibly configuring build outputs for different runtimes, distribution methods, and downstream build tools to meet the delivery needs of different types of libraries.
+- **Flexible outputs**: Designed around the diverse ways libraries are published and consumed, it supports flexible build output configuration for different runtimes, distribution methods, and downstream build tools to meet the delivery needs of different types of libraries.
 
-- **Framework agnostic**: Rslib is not coupled to frontend UI frameworks. It supports React, Vue, Svelte, Solid, and other frameworks through plugins, allowing developers to build component libraries for different frameworks with a consistent configuration and development workflow.
+- **Framework agnostic**: Decoupled from frontend UI frameworks, it supports React, Vue, Svelte, Solid, and other frameworks through plugins, allowing developers to build component libraries for different frameworks with a consistent configuration and development workflow.
 
 ## 📚 Documentation
 
