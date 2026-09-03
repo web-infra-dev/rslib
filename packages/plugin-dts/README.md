@@ -63,7 +63,7 @@ Configure a custom tsconfig.json file path for API Extractor to bundle declarati
 
 When declaration bundling is enabled, TypeScript configuration is used in two stages:
 
-- `source.tsconfigPath` is used to generate temporary declaration files in `.rslib/declarations`.
+- `source.tsconfigPath` is used to generate temporary declaration files in `.rstack/declarations`.
 - `bundle.tsconfigPath` is used by API Extractor to analyze and bundle the temporary declaration files generated above.
 
 By default, both stages use `source.tsconfigPath`. If you want API Extractor to use a separate TypeScript configuration, for example to adjust module resolution options such as `paths`, use the following configuration:

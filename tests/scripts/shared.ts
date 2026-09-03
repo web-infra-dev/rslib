@@ -471,24 +471,34 @@ export async function createTempFiles(
   checkFile.push(tempFileCjs, tempFileEsm, tempFileMapCjs, tempFileMapEsm);
 
   if (bundle) {
-    const tempDirRslib = join(fixturePath, '.rslib', 'declarations', 'cjs');
-    const tempDirRslibEsm = join(fixturePath, '.rslib', 'declarations', 'esm');
-    const tempFileRslibCjs = join(tempDirRslib, 'tempFile.d.ts');
-    const tempFileRslibEsm = join(tempDirRslibEsm, 'tempFile.d.ts');
+    const tempDeclarationDirCjs = join(
+      fixturePath,
+      '.rstack',
+      'declarations',
+      'cjs',
+    );
+    const tempDeclarationDirEsm = join(
+      fixturePath,
+      '.rstack',
+      'declarations',
+      'esm',
+    );
+    const tempDeclarationFileCjs = join(tempDeclarationDirCjs, 'tempFile.d.ts');
+    const tempDeclarationFileEsm = join(tempDeclarationDirEsm, 'tempFile.d.ts');
 
-    await fs.promises.mkdir(tempDirRslib, { recursive: true });
-    await fs.promises.mkdir(tempDirRslibEsm, { recursive: true });
+    await fs.promises.mkdir(tempDeclarationDirCjs, { recursive: true });
+    await fs.promises.mkdir(tempDeclarationDirEsm, { recursive: true });
 
     await fs.promises.writeFile(
-      tempFileRslibCjs,
+      tempDeclarationFileCjs,
       'console.log("temp file for cjs");',
     );
     await fs.promises.writeFile(
-      tempFileRslibEsm,
+      tempDeclarationFileEsm,
       'console.log("temp file for esm");',
     );
 
-    checkFile.push(tempFileRslibCjs, tempFileRslibEsm);
+    checkFile.push(tempDeclarationFileCjs, tempDeclarationFileEsm);
   }
 
   return checkFile;
