@@ -40,7 +40,7 @@ Rslib has the following features:
 
 ## 📚 Documentation
 
-- [Rslib docs](https://rslib.rs)
+- [Rslib docs](https://v0.rslib.rs)
 
 ## 🎯 Ecosystem
 
@@ -52,7 +52,7 @@ The following diagram illustrates the relationship between Rslib and other tools
 
 ## 📚 Getting started
 
-To get started with Rslib, see the [Quick start](https://rslib.rs/guide/start/quick-start).
+To get started with Rslib, see the [Quick start](https://v0.rslib.rs/guide/start/quick-start).
 
 ## 🦀 Rstack
 
