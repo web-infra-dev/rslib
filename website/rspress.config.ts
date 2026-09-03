@@ -86,6 +86,9 @@ export default defineConfig({
         if (routePath.endsWith('blog/introducing-rslib')) {
           return 'assets/rslib-og-image-introducing.png';
         }
+        if (routePath.endsWith('blog/v1-0')) {
+          return 'rslib-og-1-0.png';
+        }
         return 'rslib-og-image.png';
       };
       return `<meta property="og:image" content="https://assets.rspack.rs/rslib/${getOgImage()}">`;

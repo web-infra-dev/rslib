@@ -1,0 +1,317 @@
+---
+description: 'Rslib 1.0 正式发布，围绕面向不同场景的库构建能力和开发者体验展开，并介绍升级指南与后续规划。'
+date: 2026-09-03 15:00:00
+sidebar: false
+authors:
+  - name: Chenwei Dai
+    avatar: 'https://github.com/Timeless0911.png'
+    github: 'Timeless0911'
+  - name: Elecmonkey
+    avatar: 'https://github.com/elecmonkey.png'
+    github: 'elecmonkey'
+---
+
+import { BlogAuthors } from '@rstackjs/doc-ui/blog-authors';
+
+# Rslib 1.0 正式发布
+
+_2026 年 9 月 3 日_
+
+<BlogAuthors />
+
+![Rslib 1.0，2026 年 9 月发布的基于 Rsbuild 的库开发工具](https://assets.rspack.rs/rslib/rslib-og-1-0.png)
+
+我们很高兴地宣布 Rslib 1.0 已经正式发布！
+
+Rslib 是一款基于 [Rsbuild](https://rsbuild.rs/zh) 的库开发工具，目标是帮助开发者用简单直接的方式开发各种类型的 JavaScript 库，包括工具库、UI 组件库、CLI 以及 Agent 应用等。
+
+## 为什么需要 Rslib \{#why-rslib}
+
+Rslib 面向不同的库发布与消费场景，让库开发也能受益于应用构建中成熟的能力与生态。其核心优势体现在以下三个方面：
+
+- **复用 Rspack 与 webpack 生态**：Rslib 可以使用 Rsbuild 插件，以及 [Rspack](https://rspack.rs/zh) 和 [webpack](https://webpack.js.org/) 生态中的许多插件与 loader。如果应用项目同样使用 Rsbuild 或 Rspack，开发者可以在应用与库之间共享配置和插件，并延续已有的工程经验，减少重复配置与维护成本。
+- **支持构建模块联邦产物**：除了 ESM、CJS 等常见格式，Rslib 还可以输出 [模块联邦产物](/guide/advanced/module-federation)，使库能够作为远程模块被多个应用在运行时加载，并提供配套的本地开发与联调能力。
+- **统一的库构建流程**：Rslib 可以在一次构建中完成 JavaScript 编译、框架语法转换、类型生成和静态资源处理，无需在多个工具之间切换或自行拼接构建流程。同时，Rslib 持续跟进 TypeScript 和框架生态的发展，支持 TypeScript 7 类型生成、React Compiler 等新能力。
+
+## 从 0.x 到 1.0 \{#from-v0-to-v1}
+
+自 [Rslib 0.7 正式对外发布](/blog/introducing-rslib) 以来，我们先后发布了 16 个 minor 版本。在此期间，Rslib 推出了多项功能和优化，包括：
+
+- **更快的构建与更小的产物**：在包含 1 万个 React 组件的基准项目中，相较 Rslib 0.7.0，Rslib 1.0 的无缓存构建耗时**减少约 24.3%**，有缓存构建耗时**减少约 56.7%**，产物体积在 Gzip 前**减少约 32.2%**，在 Gzip 后**减少约 4.1%**。
+
+  | Rslib 版本 | 生产构建（无缓存） | 生产构建（有缓存） | 产物体积（Gzip 前/后）  |
+  | ---------- | ------------------ | ------------------ | ----------------------- |
+  | 0.7.0      | **1.212 s**        | **1.125 s**        | **7.64 MiB / 1.40 MiB** |
+  | 1.0.0      | **0.918 s**        | **0.487 s**        | **5.19 MiB / 1.35 MiB** |
+
+- **更快的类型生成**：支持使用 [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) 或 [Isolated Declarations](/config/lib/dts#dtsisolated) 加快类型声明文件生成，实际收益会因项目而异。以 Rsbuild 仓库为例，不同方案的耗时如下：
+
+  | 方案                  | 耗时      | 性能提升      |
+  | --------------------- | --------- | ------------- |
+  | TypeScript 6          | **9.7 s** | 基准          |
+  | TypeScript 7          | **4.1 s** | **约 2.4 倍** |
+  | Isolated Declarations | **2.3 s** | **约 4.2 倍** |
+
+- **更完整的组件库支持**：支持构建 React、Vue、Svelte 或 Solid 组件库，并进一步完善样式与资源处理能力，覆盖 `new URL()`、Web Worker 和 Wasm 等场景。
+- **更灵活的使用方式**：简单项目无需配置文件即可构建，也可以根据需要编写配置；既可以通过 CLI 直接使用，也可以通过 JavaScript API 集成到脚本和其他工具中。
+- **更流畅的开发体验**：可以与 [Rstest](https://rstest.rs/zh/)、[Rspress](https://rspress.rs/zh/) 和 [Rsdoctor](https://rsdoctor.rs/zh/) 配合完成测试、文档和产物诊断，并通过 Agent Skills 为 Coding Agent 提供 Rslib 相关最佳实践。
+
+随着这些能力不断完善并经过大量生产项目的验证，Rslib 的配置结构与 JavaScript API 也逐步稳定。从 1.0 开始，Rslib 将以稳定的公开 API 为基础，遵循语义化版本（SemVer）规范持续演进。
+
+## 面向不同场景的产物输出 \{#output-formats}
+
+一个库既可以作为 npm 包发布，也可以基于 [模块联邦](https://module-federation.io/zh/) 构建为远程模块，供多个应用在运行时加载，从而实现独立部署和更新。常见的库构建工具主要面向 npm 包交付，而 Rslib 还支持构建模块联邦产物，并提供支持 HMR 的开发模式，便于与宿主应用或 Storybook 联调。
+
+针对上述不同的运行环境和消费方式，Rslib 提供的产物格式如下：
+
+| 产物格式                                                                               | 使用场景           | 使用方式                                                |
+| -------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------- |
+| [ESM](/guide/basic/output-format#esm--cjs)、[CJS](/guide/basic/output-format#esm--cjs) | Node.js 与下游构建 | 由 Node.js 直接加载，或作为依赖交给应用构建工具继续处理 |
+| [UMD](/guide/basic/output-format#umd)、[IIFE](/guide/basic/output-format#iife)         | 浏览器直接加载     | 通过 `<script>` 标签在浏览器中直接使用                  |
+| [Module Federation](/guide/advanced/module-federation)                                 | 跨应用运行时加载   | 作为远程模块在运行时加载                                |
+
+需要同时生成多种格式的产物时，可以通过 [format](/config/lib/format) 配置分别指定，并在同一份配置中按需设置各自的构建方式，无需维护多套构建脚本。
+
+在这些产物格式中，Rslib 对 ESM 产物进行了重点优化，使其对静态分析更友好并支持代码分割，方便下游构建工具进行 tree shaking 和二次构建。对于 ESM 产物中的 external 依赖，Rslib 也优化了默认处理方式，能够更准确地保留源码中的模块加载语义，减少构建转换带来的行为差异。
+
+此外，除了常见的模块产物，Rslib 还提供了实验性的 [可执行文件生成](/config/lib/experiments#experimentsexe) 能力。该能力基于 [Node.js SEA](https://nodejs.org/api/single-executable-applications.html)，适用于 bundle 模式下的单入口 Node.js 产物。生成的可执行文件可以在未安装 Node.js 的目标系统中运行，适合分发 CLI 等 Node.js 程序。
+
+## 灵活的构建模式 \{#build-modes}
+
+产物格式对应不同的加载方式，构建模式则决定库内部模块的组织方式。Rslib 支持 [bundle 和 bundleless](/guide/basic/output-structure#bundle--bundleless) 两种构建模式，以适应不同的交付需求：
+
+- **bundle 模式**（`bundle: true`）：Rslib 从入口出发，将内部模块打包为较少的文件，也可以结合代码分割按需输出多个 chunk，适合 SDK、CLI 和 Node.js 工具库等希望简化产物结构、便于分发的场景。
+- **bundleless 模式**（`bundle: false`）：Rslib 逐个编译源文件，保留与源码对应的目录和模块结构，并处理模块引用、文件扩展名、样式与静态资源等，适合组件库、工具函数库和 monorepo 内部包，便于调试，也有利于下游进行按需加载和二次构建。
+
+以一个包含三个源码文件的单入口库为例，两种模式的产物结构如下：
+
+<img
+  src="https://assets.rspack.rs/rslib/assets/rslib-v1-0-bundle-mode.png"
+  alt="bundle 与 bundleless 模式的产物结构对比"
+  width="550"
+  style={{ display: 'block', margin: '0 auto' }}
+/>
+
+可以根据库的交付方式和使用场景选择合适的构建模式。需要兼顾不同消费场景时，也可以在同一个项目中分别生成 bundle 和 bundleless 产物。
+
+## 快速的类型生成 \{#declaration-generation}
+
+对于 TypeScript 库，类型声明文件不仅影响编辑器中的类型提示，也关系到下游项目能否正确解析库的类型。通过 [dts](/config/lib/dts) 配置，Rslib 可以在构建 JavaScript 产物的同时生成类型声明文件。在 bundleless 模式下，Rslib 还会根据实际产物处理声明文件中的路径别名和导入扩展名，使类型声明与 JavaScript 产物保持一致，并适配 NodeNext 等模块解析方式。
+
+随着项目规模扩大，类型生成可能逐渐成为构建中的耗时环节。Rslib 提供了两种提速方式：
+
+- **使用 TypeScript 7**：当项目使用 TypeScript 7 及以上版本时，Rslib 会自动使用 [native TypeScript (tsgo)](/config/lib/dts#dtstsgo) 生成声明文件，在保留类型检查的同时加快类型生成。
+- **使用 Isolated Declarations**：对于希望进一步缩短构建时间的项目，可以使用实验性的 [Isolated Declarations](/config/lib/dts#dtsisolated) 类型生成方式。Rslib 会在 Rspack 构建过程中，为构建依赖图中的模块快速生成声明文件，进一步减少类型生成的开销。
+
+```ts title="rslib.config.ts"
+export default {
+  dts: {
+    isolated: true,
+  },
+};
+```
+
+需要注意的是，该模式不会执行类型检查，因此适合与独立的高性能类型检查流程配合使用。例如在 monorepo 中，日常构建由 Rslib 快速生成各个包的类型声明文件，并在 CI 或 `pre-commit` hook 中通过 [rslint --type-check](https://rslint.rs/guide/type-checking) 统一执行完整的类型检查。
+
+## 开箱即用的多框架支持 \{#framework-support}
+
+组件库是 Rslib 重点支持的场景之一。React、Vue、Svelte 和 Solid 在组件文件、编译方式和运行时约定上各有不同。Rslib 通过对应的 [Rsbuild 插件](/config/rsbuild/plugins) 接入这些框架的编译能力，产物格式、构建模式等库构建能力统一通过 Rslib 配置，框架语法则由相应的插件和编译器处理，使不同框架组件库可以沿用相近的配置方式和构建流程。
+
+创建新项目时，可以通过 `create-rslib` 选择对应的框架模板，直接获得所需插件和基础配置；已有项目则可以按需注册相关插件。
+
+以 React 组件库为例，注册 [@rsbuild/plugin-react](https://rsbuild.rs/zh/plugins/list/plugin-react) 后即可编译 JSX 和 TSX。通过该插件，还可以启用集成在 SWC 中的 Rust 版 [React Compiler](/guide/solution/react#react-compiler)，在构建阶段自动优化组件代码，无需额外接入 Babel：
+
+```ts title="rslib.config.ts"
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  bundle: false,
+  output: {
+    target: 'web',
+  },
+  plugins: [
+    pluginReact({
+      reactCompiler: true,
+    }),
+  ],
+});
+```
+
+对于希望将 JSX 交给应用侧继续编译的组件库，Rslib 也支持在 bundleless 模式下 [保留 JSX](/guide/solution/react#jsx-transform) 并输出 `.jsx` 文件，由下游应用根据自身的目标环境和构建配置完成转换。
+
+> 查看 [React 方案](/guide/solution/react)、[Vue 方案](/guide/solution/vue)、[Svelte 方案](/guide/solution/svelte)、[Solid 方案](/guide/solution/solid) 了解更多。
+
+## 丰富的样式与资源处理 \{#styles-and-assets}
+
+Rslib 可以在构建 JavaScript 产物的同时处理样式、静态资源、Web Worker 和 Wasm，并根据产物格式和构建配置处理文件之间的引用关系，使生成的产物既可以被直接使用，也可以交由下游构建工具继续处理。
+
+**样式**
+
+Rslib 开箱支持 CSS Modules、PostCSS、样式提取、内联和压缩等能力，并会根据构建模式选择合适的样式输出方式；Sass、Less、Stylus 和 Tailwind CSS 则可通过 Rsbuild 插件接入。
+
+```js
+import './style.scss';
+import styles from './button.module.css';
+```
+
+**静态资源**
+
+图片、字体和音视频等静态资源可以在 JavaScript 中通过 `import` 引用，也可以在 CSS 中通过 `url()` 使用。对于 JSON 文件，Rslib 支持使用 [Import Attributes](https://github.com/tc39/proposal-import-attributes) 将其作为 JSON 模块导入。此外，还可以使用 `new URL()` 引用本地资源，Rslib 会输出相应文件并更新产物中的引用路径。
+
+```js
+import data from './data.json' with { type: 'json' };
+import logo from './logo.svg';
+
+const dataFile = new URL('./data.txt', import.meta.url);
+```
+
+**Web Worker 与 Wasm**
+
+Rslib 可以识别标准的 Web Worker 声明，构建 Worker 入口及其依赖，无需额外维护入口和复制脚本。对于 Wasm，Rslib 支持 [WebAssembly ESM Integration](https://github.com/WebAssembly/esm-integration) 和 [Source Phase Imports](https://github.com/tc39/proposal-source-phase-imports) 等语法，既可以生成加载和实例化所需的代码，也可以保留 Wasm import，交给支持相应能力的下游构建工具或目标运行时继续处理。
+
+```js
+import { add } from './add.wasm';
+import source addModule from './add.wasm';
+
+const worker = new Worker(new URL('./worker.ts', import.meta.url));
+```
+
+> 查看 [CSS](/guide/advanced/css)、[静态资源](/guide/advanced/static-assets)、[Web Workers](/guide/advanced/web-workers) 和 [Wasm](/guide/advanced/wasm) 了解更多。
+
+## 按需扩展的使用方式 \{#usage-options}
+
+对于简单项目，Rslib 支持通过 [命令行参数](/guide/basic/cli#rslib) 直接构建，无需创建配置文件：
+
+```bash
+npx rslib build --entry src/index.ts --format esm --dts
+```
+
+随着构建需求增加，可以再通过配置文件控制更多构建行为。Rslib 1.0 简化了配置结构：如果只需生成一份默认的 ESM 产物，可以省略 `lib` 字段，直接在顶层编写配置；需要输出多份产物时，则通过 `lib` 数组分别设置每份产物的格式和构建方式。
+
+多个产物共用的 `syntax`、`plugins` 等配置可以放在顶层，各个 `lib` 只需配置不同的部分，也可以按需覆盖顶层配置，减少重复。
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      format: 'esm',
+    },
+    {
+      format: 'cjs',
+      syntax: 'es2020',
+    },
+  ],
+  // 应用于所有产物，可在 lib 中单独覆盖
+  syntax: 'es2023',
+});
+```
+
+如果需要在脚本或其他工具中使用 Rslib，可以通过 [JavaScript API](/api/start/) 创建实例并执行构建，例如批量构建工作区中的多个包、封装内部构建命令或接入发布流水线。JavaScript API 可以在 Node.js、Deno 和 Bun 中使用：
+
+```ts
+import { createRslib } from '@rslib/core';
+
+const rslib = await createRslib();
+const result = await rslib.build();
+
+await result.close();
+```
+
+## 协同的库开发流程 \{#library-development-workflow}
+
+Rslib 可以与 Rstack 生态中的工具和插件配合，覆盖库开发流程中的功能测试、文档开发、构建分析和发布前检查等环节。
+
+**测试**
+
+使用 `create-rslib` 创建的新项目默认配置了 Rstest。通过 [@rstest/adapter-rslib](/guide/advanced/rstest#%E5%A4%8D%E7%94%A8-rslib-%E9%85%8D%E7%BD%AE)，Rstest 可以复用 Rslib 的相关配置，减少重复维护，也让测试时的模块解析和源码处理更接近实际构建。
+
+```ts title="rstest.config.ts"
+import { withRslibConfig } from '@rstest/adapter-rslib';
+import { defineConfig } from '@rstest/core';
+
+export default defineConfig({
+  extends: withRslibConfig(),
+});
+```
+
+**文档**
+
+Rslib 项目可以使用 Rspress 搭建文档站点。对于组件库，可以使用 [@rspress/plugin-preview](https://rspress.rs/zh/plugin/official-plugins/preview) 在 MDX 中编写可运行的组件示例，并通过 [@rspress/plugin-api-docgen](https://rspress.rs/zh/plugin/official-plugins/api-docgen) 从源码生成组件 API 文档，方便在同一站点中维护使用说明、组件示例和 API 信息。
+
+**产物检查**
+
+发布前，可以通过 [rsbuild-plugin-publint](https://github.com/rstackjs/rsbuild-plugin-publint) 检查 `package.json`、包结构和导出配置等常见问题，并通过 [rsbuild-plugin-arethetypeswrong](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong) 检查类型声明能否在不同的模块解析方式下正确使用。这些检查可以只在 CI 环境中启用：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginAreTheTypesWrong } from 'rsbuild-plugin-arethetypeswrong';
+import { pluginPublint } from 'rsbuild-plugin-publint';
+
+export default defineConfig({
+  dts: true,
+  plugins: [
+    pluginPublint({
+      enable: Boolean(process.env.CI),
+    }),
+    pluginAreTheTypesWrong({
+      enable: Boolean(process.env.CI),
+    }),
+  ],
+});
+```
+
+**构建分析**
+
+需要进一步分析构建过程和产物时，可以使用 Rsdoctor 查看构建耗时、依赖关系和产物体积，帮助定位构建性能、依赖体积和产物结构方面的问题。
+
+> 查看 [使用 Rstest](/guide/advanced/rstest)、[使用 Rspress](/guide/advanced/rspress)、[使用 Rsdoctor](/guide/advanced/rsdoctor) 了解更多。
+
+## Agent 友好的开发体验 \{#agent-friendly-development}
+
+随着 Coding Agent 越来越多地参与到日常开发流程中，为其提供准确的工具知识和项目上下文也变得更加重要。
+
+为此，Rslib 提供了面向 Agent 的 Skills：
+
+- [rslib-best-practices](https://github.com/rstackjs/agent-skills#rslib-best-practices)：提供 Rslib 项目配置与构建的最佳实践。
+- [rslib-modern-package](https://github.com/rstackjs/agent-skills#rslib-modern-package)：提供现代 JavaScript 包的设计和发布建议。
+- [migrate-to-rslib](https://github.com/rstackjs/agent-skills#migrate-to-rslib)：辅助将使用 tsc 或 tsup 构建的项目迁移到 Rslib。
+
+在支持 Skills 的 Coding Agent 中，可以为已有项目安装指定的 Skill，也可以在使用 `create-rslib` 创建新项目时直接完成安装：
+
+```bash
+# 为已有项目安装
+npx skills add rstackjs/agent-skills --skill rslib-best-practices
+
+# 创建新项目时安装
+npx -y create-rslib@latest my-project -t react --skill rslib-best-practices
+```
+
+除了 Skills，Rslib 官网文档还提供了 [llms.txt](https://rslib.rs/llms.txt) 和 [llms-full.txt](https://rslib.rs/llms-full.txt)，分别用于按需查找文档和获取完整的文档上下文。每个文档页面也提供对应的 Markdown 版本，方便将特定内容提供给 Agent。
+
+通过 `create-rslib` 创建的新项目还会包含 `AGENTS.md`，其中记录了常用命令和相关文档入口。开发者可以在此基础上继续补充项目结构、开发流程和工程约定，让 Agent 同时了解 Rslib 的通用实践和当前项目的具体上下文。
+
+> 查看 [AI](/guide/start/ai) 了解更多。
+
+## 如何使用 Rslib 1.0 \{#using-rslib-v1}
+
+- 如果你还未使用过 Rslib，可以通过 [StackBlitz 示例](https://stackblitz.com/~/github.com/rstackjs/rslib-stackblitz-example) 来体验，也可以参考 [快速上手](/guide/start/quick-start) 创建一个新的 Rslib 项目。
+- 如果你正在使用 Rslib 0.x，请留意 1.0 版本包含一些不兼容更新，可以参考 [从 0.x 升级到 v1](/guide/upgrade/v0-to-v1) 文档进行升级。
+- 如果你计划从 tsc、tsup 等工具迁移到 Rslib，可以参考 [从现有项目迁移](/guide/start/quick-start#从现有项目迁移)。
+
+## 下一步 \{#whats-next}
+
+Rslib 1.0 是一个稳定起点，而不是终点。接下来，我们会继续围绕两个方向推进：
+
+1. **持续提升构建与产物能力**，包括优化 ESM 和 CJS 产物、探索更完整的 Node.js 打包能力与更灵活的模块结构保留方式，并持续提升类型生成和打包的效率与体验。
+2. **完善库开发工作流**，加强 Rslib 与测试、文档、质量检查和发布流程的协同，减少不同环节之间的重复配置与维护工作。
+
+## 致谢 \{#acknowledgments}
+
+Rslib 的部分实现和 API 设计参考或改编自 [esbuild](https://github.com/evanw/esbuild)、[tsup](https://github.com/egoist/tsup)、[webpack](https://github.com/webpack/webpack)、[mini-css-extract-plugin](https://github.com/webpack/mini-css-extract-plugin) 和 [tsdown](https://github.com/rolldown/tsdown) 等优秀开源项目，感谢这些项目及其贡献者所提供的经验、思路与实现。
+
+Rslib 的成长也离不开社区中的每一份参与，感谢所有为 Rslib 贡献代码和文档、提交 Issue、参与讨论和分享反馈的开发者，以及每一位选择和使用 Rslib 的用户。
+
+在使用 Rslib 的过程中如果遇到问题或有任何建议，欢迎通过 [GitHub Issues](https://github.com/web-infra-dev/rslib/issues)、[GitHub Discussions](https://github.com/web-infra-dev/rslib/discussions) 或社区渠道与我们交流。
