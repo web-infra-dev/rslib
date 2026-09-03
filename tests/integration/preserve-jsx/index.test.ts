@@ -51,7 +51,7 @@ test('throw error when preserve JSX with bundle mode', async () => {
   } catch {
     expect(logs.map((l) => stripAnsi(l))).toMatchInlineSnapshot(`
       [
-        "error   Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to \`automatic\` or \`classic\`. Check out https://v0.rslib.rs/guide/solution/react#jsx-transform for more details.",
+        "error   Bundle mode does not support preserving JSX syntax. Set "bundle" to "false" or change the JSX runtime to \`automatic\` or \`classic\`. Check out https://rslib.rs/guide/solution/react#jsx-transform for more details.",
       ]
     `);
   } finally {

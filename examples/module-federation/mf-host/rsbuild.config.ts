@@ -20,7 +20,7 @@ export default defineConfig({
           },
         },
         // Enable this when the output of Rslib is build under 'production' mode, while the host app is 'development'.
-        // Reference: https://v0.rslib.rs/guide/advanced/module-federation#faqs
+        // Reference: https://rslib.rs/guide/advanced/module-federation#faqs
         shareStrategy: 'loaded-first',
       },
       {},
