@@ -1859,6 +1859,7 @@ export async function composeCreateRsbuildConfig(
   rslibConfig: RslibConfig,
 ): Promise<RsbuildConfigWithLibInfo[]> {
   const constantRsbuildConfig = await createConstantRsbuildConfig();
+  // `output.exports` is a top-level Rslib option and must not be merged into each lib.
   const {
     lib: rawLibConfigsArray,
     mode: _mode,
@@ -1867,6 +1868,7 @@ export async function composeCreateRsbuildConfig(
     dev: _dev,
     server: _server,
     logLevel,
+    output: { exports: _exports, ...sharedOutput } = {},
     ...sharedRsbuildConfig
   } = rslibConfig;
   // debug mode should always verbose logs
@@ -1906,7 +1908,7 @@ export async function composeCreateRsbuildConfig(
     }
 
     const userConfig = mergeRsbuildConfig<LibConfig>(
-      sharedRsbuildConfig,
+      { ...sharedRsbuildConfig, output: sharedOutput },
       libConfig,
     );
 
