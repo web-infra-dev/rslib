@@ -41,10 +41,12 @@ export const createAndValidate = (
     name = `test-temp-${templateCase.label}`,
     tools: additionalTools = [],
     clean = true,
+    packageManager = 'pnpm',
   }: {
     name?: string;
     tools?: string[];
     clean?: boolean;
+    packageManager?: 'npm' | 'pnpm';
   } = {},
 ) => {
   const dir = path.join(cwd, name);
@@ -66,7 +68,13 @@ export const createAndValidate = (
     command += ` ${toolsCmd}`;
   }
 
-  execSync(command, { cwd });
+  execSync(command, {
+    cwd,
+    env: {
+      ...process.env,
+      npm_config_user_agent: `${packageManager}/0.0.0`,
+    },
+  });
 
   const pkgJson = fse.readJSONSync(path.join(dir, 'package.json'));
   expectPackageJson(
@@ -126,15 +134,29 @@ export const createAndValidate = (
     for (const dep of storybookDeps) {
       expect(pkgJson.devDependencies[dep]).toBeTruthy();
     }
+
+    const pnpmWorkspacePath = path.join(dir, 'pnpm-workspace.yaml');
+    if (packageManager === 'pnpm') {
+      expect(fse.readFileSync(pnpmWorkspacePath, 'utf-8')).toContain(
+        'esbuild: true',
+      );
+    } else {
+      expect(existsSync(pnpmWorkspacePath)).toBe(false);
+    }
   }
 
   if (templateCase.template === 'svelte') {
     expect(pkgJson.devDependencies['@rsbuild/plugin-svelte']).toBeTruthy();
     expect(pkgJson.devDependencies.svelte).toBeTruthy();
     expect(pkgJson.peerDependencies.svelte).toBe('^5.0.0');
-    expect(
-      fse.readFileSync(path.join(dir, 'pnpm-workspace.yaml'), 'utf-8'),
-    ).toContain('svelte-preprocess: false');
+    const pnpmWorkspacePath = path.join(dir, 'pnpm-workspace.yaml');
+    if (packageManager === 'pnpm') {
+      expect(fse.readFileSync(pnpmWorkspacePath, 'utf-8')).toContain(
+        'svelte-preprocess: false',
+      );
+    } else {
+      expect(existsSync(pnpmWorkspacePath)).toBe(false);
+    }
 
     if (templateCase.lang === 'ts') {
       expect(pkgJson.devDependencies['svelte-check']).toBeTruthy();

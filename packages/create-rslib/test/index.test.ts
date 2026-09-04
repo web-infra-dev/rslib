@@ -165,6 +165,13 @@ describe('react', () => {
       createAndValidate(__dirname, c);
     });
   }
+
+  test('should omit pnpm config from npm Storybook projects', () => {
+    createAndValidate(__dirname, createCase('react', 'ts', ['storybook']), {
+      name: 'test-temp-react-ts-storybook-npm',
+      packageManager: 'npm',
+    });
+  });
 });
 
 describe('vue', () => {

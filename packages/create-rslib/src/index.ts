@@ -171,7 +171,12 @@ create({
       label: 'Storybook - component development',
       when: ({ templateName }) =>
         templateName.startsWith('react') || templateName.startsWith('vue'),
-      action: ({ templateName, distFolder, addAgentsMdSearchDirs }) => {
+      action: ({
+        templateName,
+        distFolder,
+        skipFiles,
+        addAgentsMdSearchDirs,
+      }) => {
         const toolFolder = path.join(__dirname, '..', 'template-storybook');
         const subFolder = path.join(toolFolder, templateName);
 
@@ -179,6 +184,7 @@ create({
           from: subFolder,
           to: distFolder,
           isMergePackageJson: true,
+          skipFiles,
         });
         addAgentsMdSearchDirs(toolFolder);
       },
