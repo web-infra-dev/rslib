@@ -1,5 +1,5 @@
 ---
-description: 'Configure lib.wasm to select the output mode for WASM modules.'
+description: 'Configure lib.wasm to select the output mode for WASM modules, or disable the handling of WASM modules.'
 ---
 
 # lib.wasm
@@ -7,9 +7,11 @@ description: 'Configure lib.wasm to select the output mode for WASM modules.'
 - **Type:**
 
 ```ts
-type Wasm = {
-  mode?: 'compile' | 'preserve';
-};
+type Wasm =
+  | {
+      mode?: 'compile' | 'preserve';
+    }
+  | false;
 ```
 
 - **Default:**

@@ -25,6 +25,20 @@ export default defineConfig({
       },
     }),
     generateBundleEsmConfig({
+      bundle: true,
+      wasm: false,
+      output: {
+        distPath: './dist/static/raw-bundle',
+      },
+    }),
+    generateBundleEsmConfig({
+      bundle: false,
+      wasm: false,
+      output: {
+        distPath: './dist/static/raw-bundleless',
+      },
+    }),
+    generateBundleEsmConfig({
       bundle: false,
       wasm: { mode: 'preserve' },
       output: {

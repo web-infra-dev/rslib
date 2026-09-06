@@ -1,6 +1,10 @@
 import type { EnvironmentConfig, Rspack } from '@rsbuild/core';
 import type { Format, Wasm, WasmMode } from '../types';
-import { createWasmPreserveExternal, WasmPreservePlugin } from './preserve';
+import {
+  createWasmPreserveExternal,
+  wasmUntouchedExternal,
+  WasmPreservePlugin,
+} from './preserve';
 
 export const resolveWasmMode = ({
   bundle,
@@ -10,11 +14,15 @@ export const resolveWasmMode = ({
   bundle: boolean;
   format: Format;
   wasmConfig?: Wasm;
-}): WasmMode => {
+}): WasmMode | false => {
   if (wasmConfig !== undefined && format !== 'esm') {
     throw new Error(
       '"wasm" only supports the "esm" format. Set "format" to "esm" or omit it.',
     );
+  }
+
+  if (wasmConfig === false) {
+    return false;
   }
 
   const mode = wasmConfig?.mode ?? (bundle ? 'compile' : 'preserve');
@@ -38,7 +46,7 @@ export const composeWasmConfig = ({
   format: Format;
   jsDistPath: string;
   jsFilename: Rspack.Filename;
-  mode: WasmMode;
+  mode: WasmMode | false;
   outBase: string | null;
 }): {
   externalConfig: EnvironmentConfig;
@@ -46,6 +54,17 @@ export const composeWasmConfig = ({
 } => {
   if (format !== 'esm' || mode === 'compile') {
     return { externalConfig: {}, config: {} };
+  }
+
+  if (mode === false) {
+    return {
+      externalConfig: {
+        output: {
+          externals: [wasmUntouchedExternal],
+        },
+      },
+      config: {},
+    };
   }
 
   const preserveOptions = {

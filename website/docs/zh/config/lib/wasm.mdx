@@ -1,5 +1,5 @@
 ---
-description: '配置 lib.wasm，选择 WASM 模块的输出模式。'
+description: '配置 lib.wasm，选择 WASM 模块的输出模式，或禁用对 WASM 模块的处理。'
 ---
 
 # lib.wasm
@@ -7,9 +7,11 @@ description: '配置 lib.wasm，选择 WASM 模块的输出模式。'
 - **类型：**
 
 ```ts
-type Wasm = {
-  mode?: 'compile' | 'preserve';
-};
+type Wasm =
+  | {
+      mode?: 'compile' | 'preserve';
+    }
+  | false;
 ```
 
 - **默认值：**
