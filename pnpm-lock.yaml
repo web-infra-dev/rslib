@@ -1,3 +1,104 @@
+---
+lockfileVersion: '9.0'
+
+importers:
+
+  .:
+    configDependencies: {}
+    packageManagerDependencies:
+      pnpm:
+        specifier: 12.3.4
+        version: 12.3.4
+
+packages:
+
+  '@pnpm/exe.darwin-arm64@12.3.4':
+    resolution: {integrity: sha512-PAyUol8T1+/+ViOiXAt51ECA+QnfXCqz6foL4bW+LsoX0NcVd5XVEM2mRQu+LV4oc7uRz9zf9U0P+XFfuQeDAw==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@pnpm/exe.darwin-x64@12.3.4':
+    resolution: {integrity: sha512-fxP9JCk0Cdye+ePuj+GJJLMUMTqHGWRdb1dtv4How876uQ2ehxvenpgiYAir/ceO9PsYUZkFTtyZdx+rRu5QOA==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@pnpm/exe.linux-arm64-musl@12.3.4':
+    resolution: {integrity: sha512-FBOt0/7ye6O6q4AllVV5QMviB6qE6fqkeczV/+MDWQsmo+QJrlfsh6X7CpH/tClVpBZEyIbjpUoT8bNhCYBxEg==}
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
+
+  '@pnpm/exe.linux-arm64@12.3.4':
+    resolution: {integrity: sha512-t71AVA7LRqiKTyZ5xMYaZc2n5DfdpMbfokZuiIOXHBOM03ECnF0t4iYwaBDqJgVjlKYUOwaF/bRQajGNA4cJ4w==}
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
+  '@pnpm/exe.linux-x64-musl@12.3.4':
+    resolution: {integrity: sha512-RPmk7Jb/aYaFvL2iyDN/AtMY+hUEsue732WmXpcuQ9tBpMnGyA5py7Z3+e+qmQaJ0zY/4ni9jJiyPBQHujmv6w==}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
+  '@pnpm/exe.linux-x64@12.3.4':
+    resolution: {integrity: sha512-2ZqOlSPkfwX1h5cR+FPiWf8+F+2hZT/3TvhUK5sigHqwaQCIiq8R7CGxhndKs63JtcLi2a1Qpo+wX/EoyfjyJQ==}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@pnpm/exe.win32-arm64@12.3.4':
+    resolution: {integrity: sha512-ANyrHqyqco6SXBysUTRF74itDyyraea7IbFsKFdNXTjcFnfycTDx37EwuhdpPYFNSIh2JhUG4fByclsRfiHX7w==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@pnpm/exe.win32-x64@12.3.4':
+    resolution: {integrity: sha512-WH/KqBPY/hq2Tb7SgQltEZytimcjgKRaCRL/aM9CI0c67iKc5TVmHUhIiL3Ux9FB4bWn36i6XewUcScQI+zG8w==}
+    cpu: [x64]
+    os: [win32]
+
+  pnpm@12.3.4:
+    resolution: {integrity: sha512-lhqkH7B32joEpEHZ+OFevAyW2o73ELLrZ7+e58sGEOq9SPH9hfUc/+c4RnhfoPh8VqOocqHYk/hEZ0G1zORUVw==}
+    engines: {node: '>=18.*'}
+    hasBin: true
+
+snapshots:
+
+  '@pnpm/exe.darwin-arm64@12.3.4':
+    optional: true
+
+  '@pnpm/exe.darwin-x64@12.3.4':
+    optional: true
+
+  '@pnpm/exe.linux-arm64-musl@12.3.4':
+    optional: true
+
+  '@pnpm/exe.linux-arm64@12.3.4':
+    optional: true
+
+  '@pnpm/exe.linux-x64-musl@12.3.4':
+    optional: true
+
+  '@pnpm/exe.linux-x64@12.3.4':
+    optional: true
+
+  '@pnpm/exe.win32-arm64@12.3.4':
+    optional: true
+
+  '@pnpm/exe.win32-x64@12.3.4':
+    optional: true
+
+  pnpm@12.3.4:
+    optionalDependencies:
+      '@pnpm/exe.darwin-arm64': 12.3.4
+      '@pnpm/exe.darwin-x64': 12.3.4
+      '@pnpm/exe.linux-arm64': 12.3.4
+      '@pnpm/exe.linux-arm64-musl': 12.3.4
+      '@pnpm/exe.linux-x64': 12.3.4
+      '@pnpm/exe.linux-x64-musl': 12.3.4
+      '@pnpm/exe.win32-arm64': 12.3.4
+      '@pnpm/exe.win32-x64': 12.3.4
+
+---
 lockfileVersion: '9.0'
 
 settings:
@@ -319,7 +420,7 @@ importers:
         version: 0.11.12(@rslib/core@1.0.0)(@rstest/core@0.11.12)(typescript@7.0.2)
       '@rstest/core':
         specifier: 'catalog:'
-        version: 0.11.12
+        version: 0.11.12(@module-federation/runtime-tools@2.9.0)
       '@types/fs-extra':
         specifier: 'catalog:'
         version: 11.0.4
@@ -340,7 +441,7 @@ importers:
         version: 3.9.6
       rstack:
         specifier: 'catalog:'
-        version: 0.7.3(@microsoft/api-extractor@7.59.0)(@rspress/core@2.0.21)(jiti@2.7.0)(typescript@7.0.2)
+        version: 0.7.3(@microsoft/api-extractor@7.59.0)(@module-federation/runtime-tools@2.9.0)(@rspress/core@2.0.21)(jiti@2.7.0)(typescript@7.0.2)
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -10014,11 +10115,11 @@ snapshots:
   '@rstest/adapter-rslib@0.11.12(@rslib/core@1.0.0)(@rstest/core@0.11.12)(typescript@7.0.2)':
     dependencies:
       '@rslib/core': 1.0.0(@microsoft/api-extractor@7.59.0)(@module-federation/runtime-tools@2.9.0)(typescript@7.0.2)
-      '@rstest/core': 0.11.12
+      '@rstest/core': 0.11.12(@module-federation/runtime-tools@2.9.0)
     optionalDependencies:
       typescript: 7.0.2
 
-  '@rstest/core@0.11.12':
+  '@rstest/core@0.11.12(@module-federation/runtime-tools@2.9.0)':
     dependencies:
       '@rsbuild/core': 2.2.3(@module-federation/runtime-tools@2.9.0)
       '@types/chai': 5.2.3
@@ -14086,12 +14187,12 @@ snapshots:
     dependencies:
       '@rspress/core': 2.0.21(@module-federation/runtime-tools@2.9.0)(@rspack/core@2.2.2)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@9.4.0)
 
-  rstack@0.7.3(@microsoft/api-extractor@7.59.0)(@rspress/core@2.0.21)(jiti@2.7.0)(typescript@7.0.2):
+  rstack@0.7.3(@microsoft/api-extractor@7.59.0)(@module-federation/runtime-tools@2.9.0)(@rspress/core@2.0.21)(jiti@2.7.0)(typescript@7.0.2):
     dependencies:
       '@rsbuild/core': 2.2.3(@module-federation/runtime-tools@2.9.0)
       '@rslib/core': 1.0.0(@microsoft/api-extractor@7.59.0)(@module-federation/runtime-tools@2.9.0)(typescript@7.0.2)
       '@rslint/core': 0.9.1(jiti@2.7.0)
-      '@rstest/core': 0.11.12
+      '@rstest/core': 0.11.12(@module-federation/runtime-tools@2.9.0)
       prettier: 3.9.6
       tinypool: 2.1.2
       yuku-parser: 0.9.3
