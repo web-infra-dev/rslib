@@ -1078,6 +1078,21 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         parser: {
           url: 'new-url-relative'
         }
+      },
+      /* config.module.rule('rslib-wasm-inline') */
+      {
+        test: /\\.wasm$/,
+        resourceQuery: /[?&]inline(?:&|=|$)/,
+        type: 'javascript/auto',
+        use: [
+          /* config.module.rule('rslib-wasm-inline').use('rslib-wasm-inline') */
+          {
+            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+            options: {
+              format: 'esm'
+            }
+          }
+        ]
       }
     ]
   },
@@ -1937,6 +1952,21 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         parser: {
           url: false
         }
+      },
+      /* config.module.rule('rslib-wasm-inline') */
+      {
+        test: /\\.wasm$/,
+        resourceQuery: /[?&]inline(?:&|=|$)/,
+        type: 'javascript/auto',
+        use: [
+          /* config.module.rule('rslib-wasm-inline').use('rslib-wasm-inline') */
+          {
+            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+            options: {
+              format: 'cjs'
+            }
+          }
+        ]
       }
     ]
   },
@@ -2704,6 +2734,21 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             options: {
               id: 'rsbuild-transform-0',
               getEnvironment: ()=>environmentContext
+            }
+          }
+        ]
+      },
+      /* config.module.rule('rslib-wasm-inline') */
+      {
+        test: /\\.wasm$/,
+        resourceQuery: /[?&]inline(?:&|=|$)/,
+        type: 'javascript/auto',
+        use: [
+          /* config.module.rule('rslib-wasm-inline').use('rslib-wasm-inline') */
+          {
+            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+            options: {
+              format: 'umd'
             }
           }
         ]
@@ -3483,6 +3528,21 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
             }
           }
         ]
+      },
+      /* config.module.rule('rslib-wasm-inline') */
+      {
+        test: /\\.wasm$/,
+        resourceQuery: /[?&]inline(?:&|=|$)/,
+        type: 'javascript/auto',
+        use: [
+          /* config.module.rule('rslib-wasm-inline').use('rslib-wasm-inline') */
+          {
+            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+            options: {
+              format: 'iife'
+            }
+          }
+        ]
       }
     ]
   },
@@ -4194,6 +4254,21 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         generator: {
           filename: 'static/wasm/[contenthash:10].module.wasm'
         }
+      },
+      /* config.module.rule('rslib-wasm-inline') */
+      {
+        test: /\\.wasm$/,
+        resourceQuery: /[?&]inline(?:&|=|$)/,
+        type: 'javascript/auto',
+        use: [
+          /* config.module.rule('rslib-wasm-inline').use('rslib-wasm-inline') */
+          {
+            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+            options: {
+              format: 'mf'
+            }
+          }
+        ]
       }
     ]
   },
@@ -4410,6 +4485,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "preset": "none",
     },
     "tools": {
+      "bundlerChain": [Function],
       "htmlPlugin": false,
       "rspack": [
         {
@@ -4685,6 +4761,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "preset": "none",
     },
     "tools": {
+      "bundlerChain": [Function],
       "htmlPlugin": false,
       "rspack": [
         {
@@ -4933,6 +5010,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "preset": "none",
     },
     "tools": {
+      "bundlerChain": [Function],
       "htmlPlugin": false,
       "rspack": [
         {
@@ -5170,6 +5248,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "preset": "none",
     },
     "tools": {
+      "bundlerChain": [Function],
       "htmlPlugin": false,
       "rspack": [
         {
@@ -5362,6 +5441,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "preset": "none",
     },
     "tools": {
+      "bundlerChain": [Function],
       "htmlPlugin": false,
       "rspack": [
         {
