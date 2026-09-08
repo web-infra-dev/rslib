@@ -499,7 +499,7 @@ export interface LibConfig extends EnvironmentConfig {
   outBase?: string;
   /**
    * Configure how Rslib handles `.wasm` modules. Set to `false` to leave
-   * `.wasm` imports exactly as written in the source.
+   * ESM `.wasm` imports exactly as written in the source.
    *
    * This option can only be configured when `format` is `'esm'`.
    *
