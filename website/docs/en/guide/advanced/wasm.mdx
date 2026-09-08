@@ -288,7 +288,7 @@ If any of these module names resolve to JavaScript output, avoid changing its re
 
 ## Disable wasm handling
 
-When [lib.wasm](/config/lib/wasm) is set to `false`, Rslib does not process `.wasm` modules imported with ESM syntax. The imports are kept as written in the output, and you need to make sure the `.wasm` files are correctly located in the output.
+When [lib.wasm](/config/lib/wasm) is set to `false`, Rslib preserves the original import specifiers for `.wasm` modules imported using ESM syntax, without resolving the modules or emitting the corresponding `.wasm` files. You are responsible for managing these files and ensuring that the imports resolve correctly from the emitted JavaScript files.
 
 `.wasm` files referenced with `new URL('./add.wasm', import.meta.url)` go through the static asset pipeline and are not affected by [lib.wasm](/config/lib/wasm).
 
