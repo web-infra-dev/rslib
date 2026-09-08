@@ -1777,6 +1777,7 @@ async function composeLibRsbuildConfig(
 
   const { externalConfig: wasmExternalConfig, config: wasmConfig } =
     composeWasmConfig({
+      bundle,
       format,
       jsDistPath,
       jsFilename,

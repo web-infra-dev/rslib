@@ -17,6 +17,12 @@ const replaceLoaderUrlPlugin: RsbuildPlugin = {
         );
       },
     );
+    api.transform(
+      { test: /wasm[\\/]compose.ts$/ },
+      async ({ code }: { code: string }) => {
+        return code.replace(/.\/wasmInlineLoader.js/g, './inlineLoader.ts');
+      },
+    );
   },
 };
 

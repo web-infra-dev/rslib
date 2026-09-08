@@ -16,6 +16,8 @@ export default defineConfig({
     entry: {
       index: './src/index.ts',
       libCssExtractLoader: './src/css/libCssExtractLoader.ts',
+      wasmInlineLoader: './src/wasm/inlineLoader.ts',
+      wasmInlineRuntime: './src/wasm/inlineRuntime.ts',
     },
     define: {
       RSLIB_VERSION: JSON.stringify(packageJson.version),
