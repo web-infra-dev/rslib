@@ -9,9 +9,9 @@ import { createWasmPreserveExternal, WasmPreservePlugin } from './preserve';
 
 const require = createRequire(import.meta.url);
 
-// The loader returns JavaScript, so the rule has to override the module type
-// `.wasm` would otherwise get, whether that is `webassembly/async` or an asset.
-// Rules are applied in order, so appending this one lets its type win.
+// The loader returns JavaScript, so the rule overrides the module type `.wasm`
+// would otherwise get. Installed for every format: without it the query is
+// silently ignored and the import emits a separate `.wasm` asset.
 const applyWasmInlineRule =
   (format: Format) =>
   (chain: RspackChain): void => {
@@ -71,47 +71,25 @@ export const composeWasmConfig = ({
 } => {
   const externals: Rspack.ExternalItem[] = [];
   const plugins: Rspack.RspackPluginInstance[] = [];
-
-  // `?inline` is driven by the import specifier alone, so its handling is never
-  // gated behind a config option. The rule is installed for every format: in
-  // bundle mode the loader is what rejects an unsupported one, and without the
-  // rule the query is silently ignored and the import emits a separate `.wasm`
-  // asset instead.
-  const bundlerChain = applyWasmInlineRule(format);
-
-  if (format !== 'esm') {
-    // Bundleless never reaches the loader, so the same rejection needs its own
-    // external there.
-    return {
-      externalConfig: bundle
-        ? {}
-        : {
-            output: {
-              externals: [createWasmInlineFormatGuardExternal(format)],
-            },
-          },
-      config: { tools: { bundlerChain } },
-    };
-  }
+  const emitOptions = { jsDistPath, jsFilename, outBase: outBase! };
 
   if (!bundle) {
-    const bundlelessInline = createWasmInlineBundleless({
-      jsDistPath,
-      jsFilename,
-      outBase: outBase!,
-    });
-    externals.push(bundlelessInline.external);
-    plugins.push(bundlelessInline.plugin);
+    // Bundleless externalizes the request before it can reach the loader, so
+    // both inlining and the format rejection need their own external here.
+    if (format === 'esm') {
+      const inline = createWasmInlineBundleless(emitOptions);
+      externals.push(inline.external);
+      plugins.push(inline.plugin);
+    } else {
+      externals.push(createWasmInlineFormatGuardExternal(format));
+    }
   }
 
-  if (mode === 'preserve') {
-    const preserveOptions = {
-      jsDistPath,
-      jsFilename,
-      outBase: outBase!,
-    };
-    externals.push(createWasmPreserveExternal(preserveOptions));
-    plugins.push(new WasmPreservePlugin(preserveOptions.outBase));
+  // `mode` falls back to "preserve" for every bundleless build, including
+  // formats that cannot carry wasm at all.
+  if (mode === 'preserve' && format === 'esm') {
+    externals.push(createWasmPreserveExternal(emitOptions));
+    plugins.push(new WasmPreservePlugin(outBase!));
   }
 
   return {
@@ -125,7 +103,7 @@ export const composeWasmConfig = ({
         : {},
     config: {
       tools: {
-        bundlerChain,
+        bundlerChain: applyWasmInlineRule(format),
         ...(plugins.length > 0 ? { rspack: { plugins } } : {}),
       },
     },
