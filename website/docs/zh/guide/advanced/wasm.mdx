@@ -286,6 +286,12 @@ Rslib 会更新 JavaScript 产物中对 `.wasm` 文件的 import，使其指向�
 
 :::
 
+## 禁用 wasm 处理
+
+将 [lib.wasm](/config/lib/wasm) 设置为 `false` 时，Rslib 会保留通过 ESM 语法导入的 `.wasm` 模块的原始导入路径，不解析这些模块，也不输出对应的 `.wasm` 文件。你需要自行管理这些文件，并确保导入路径能够从产物中的 JavaScript 文件正确解析。
+
+通过 `new URL('./add.wasm', import.meta.url)` 引用的 `.wasm` 文件由静态资源流程处理，不受 [lib.wasm](/config/lib/wasm) 影响。
+
 ## 与 wasm-bindgen 配合使用
 
 [`wasm-bindgen`](https://wasm-bindgen.github.io/wasm-bindgen/) 是使用 Rust 构建 WebAssembly 库的工具，可通过 `--target` 选项生成面向不同运行环境的产物。

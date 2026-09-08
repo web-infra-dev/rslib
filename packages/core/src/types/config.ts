@@ -368,18 +368,20 @@ export type Redirect = {
 
 export type WasmMode = 'compile' | 'preserve';
 
-export type Wasm = {
-  /**
-   * Controls how `.wasm` modules are emitted.
-   *
-   * - `'compile'`: Generates JavaScript loading code and emits `.wasm` files as static assets.
-   * - `'preserve'`: Preserves `.wasm` imports and files for the consumer to handle. Requires `bundle` to be `false`.
-   *
-   * @defaultValue `'compile'` when `bundle` is `true`; `'preserve'` when `bundle` is `false`.
-   * @see {@link https://rslib.rs/config/lib/wasm#wasmmode}
-   */
-  mode?: WasmMode;
-};
+export type Wasm =
+  | {
+      /**
+       * Controls how `.wasm` modules are emitted.
+       *
+       * - `'compile'`: Generates JavaScript loading code and emits `.wasm` files as static assets.
+       * - `'preserve'`: Preserves `.wasm` imports and files for the consumer to handle. Requires `bundle` to be `false`.
+       *
+       * @defaultValue `'compile'` when `bundle` is `true`; `'preserve'` when `bundle` is `false`.
+       * @see {@link https://rslib.rs/config/lib/wasm#wasmmode}
+       */
+      mode?: WasmMode;
+    }
+  | false;
 
 export type LibExperiments = {
   /**
@@ -496,7 +498,8 @@ export interface LibConfig extends EnvironmentConfig {
    */
   outBase?: string;
   /**
-   * Configure how Rslib handles `.wasm` modules.
+   * Configure how Rslib handles `.wasm` modules. Set to `false` to leave
+   * ESM `.wasm` imports exactly as written in the source.
    *
    * This option can only be configured when `format` is `'esm'`.
    *

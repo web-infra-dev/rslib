@@ -17,6 +17,33 @@ type WasmPreserveOptions = {
   outBase: string;
 };
 
+/**
+ * Whether an external request is a `.wasm` module imported through ESM syntax.
+ *
+ * `.wasm` files referenced in other ways, such as `new URL('./add.wasm',
+ * import.meta.url)`, are left to the asset pipeline.
+ */
+const isWasmEsmRequest = (
+  data: Rspack.ExternalItemFunctionData,
+): data is Rspack.ExternalItemFunctionData & { request: string } =>
+  Boolean(data.request?.endsWith('.wasm')) && data.dependencyType === 'esm';
+
+/**
+ * An external that keeps `.wasm` imports exactly as written in the source,
+ * without rewriting the request or emitting the `.wasm` file.
+ */
+export const wasmUntouchedExternal = ((
+  data: Rspack.ExternalItemFunctionData,
+  callback: (err?: Error, result?: Rspack.ExternalItemValue) => void,
+): void => {
+  if (!isWasmEsmRequest(data)) {
+    callback();
+    return;
+  }
+
+  callback(undefined, data.request);
+}) as Rspack.ExternalItem;
+
 export const createWasmPreserveExternal = (
   options: WasmPreserveOptions,
 ): Rspack.ExternalItem => {
@@ -30,12 +57,12 @@ export const createWasmPreserveExternal = (
       type?: Rspack.ExternalsType,
     ) => void,
   ): Promise<void> => {
-    const { request, getResolve, context, contextInfo, dependencyType } = data;
-
-    if (!request?.endsWith('.wasm') || dependencyType !== 'esm') {
+    if (!isWasmEsmRequest(data)) {
       callback();
       return;
     }
+
+    const { request, getResolve, context, contextInfo } = data;
 
     if (!getResolve || !context || !contextInfo) {
       callback();

@@ -86,6 +86,20 @@ describe('wasm static', () => {
     expect(existsSync(join(preserveBundlelessDir, 'add.wasm'))).toBe(true);
   });
 
+  test('keeps wasm imports untouched when wasm is disabled', async () => {
+    const rawBundleDir = join(fixturePath, 'dist/static/raw-bundle');
+    expect(readFileSync(join(rawBundleDir, 'index.js'), 'utf8')).toContain(
+      'from "./add.wasm"',
+    );
+    expect(wasmFiles(rawBundleDir)).toEqual([]);
+
+    const rawBundlelessDir = join(fixturePath, 'dist/static/raw-bundleless');
+    expect(readFileSync(join(rawBundlelessDir, 'utils.js'), 'utf8')).toContain(
+      'from "./add.wasm"',
+    );
+    expect(wasmFiles(rawBundlelessDir)).toEqual([]);
+  });
+
   test('handles a nested bundleless JS filename', async () => {
     const distDir = join(
       fixturePath,
