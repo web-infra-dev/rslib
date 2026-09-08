@@ -1,3 +1,13 @@
+import type { Format } from '../types';
+
+// Shared by the loader (bundle mode) and by the bundleless format guard, which
+// reject the query on different code paths but must say the same thing.
+export const unsupportedInlineFormatMessage = (
+  format: Format,
+  source: string,
+): string =>
+  `Importing wasm with the "?inline" query only supports the "esm" format, but the current format is "${format}". Set "format" to "esm", or import ${source} without the "?inline" query.`;
+
 type WasmExportDescriptor = {
   name: string;
 };

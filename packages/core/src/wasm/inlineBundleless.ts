@@ -2,8 +2,11 @@ import { type Rspack, rspack } from '@rsbuild/core';
 import { promises as fs } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import type { RspackResolver } from '../types';
-import { generateWasmInlineModule } from './inline';
+import type { Format, RspackResolver } from '../types';
+import {
+  generateWasmInlineModule,
+  unsupportedInlineFormatMessage,
+} from './inline';
 import {
   computeBundlelessJsEmitPath,
   computeWasmRequest,
@@ -80,11 +83,57 @@ const collectInlineWasmSources = (
     const issuerContext = compilation.moduleGraph.getIssuer(module)?.context;
     if (!issuerContext) continue;
 
-    const sourcePath = resolver.resolveSync({}, issuerContext, resourceRequest);
-    if (sourcePath) sources.add(sourcePath);
+    let sourcePath: string | false;
+    try {
+      sourcePath = resolver.resolveSync({}, issuerContext, resourceRequest);
+    } catch {
+      sourcePath = false;
+    }
+
+    if (!sourcePath) {
+      // `preserve.ts` skips what it cannot resolve, because a wasm file it does
+      // not copy leaves a self-consistent bundle. Skipping here would not: the
+      // importer already carries the rewritten request, so the missing wrapper
+      // becomes a dangling import that only fails at runtime.
+      compilation.errors.push(
+        new rspack.WebpackError(
+          `Failed to inline ${resourceRequest}: could not resolve it from ${issuerContext}.`,
+        ),
+      );
+      continue;
+    }
+
+    sources.add(sourcePath);
   }
 
   return sources;
+};
+
+/**
+ * Rejects `?inline` imports under a format that cannot support them.
+ *
+ * In bundle mode the loader rule reports this, but in bundleless mode the
+ * request never reaches the loader: the generic bundleless externalizer in
+ * `config.ts` externalizes it first, leaving the query in the output as an
+ * import that only fails at runtime.
+ */
+export const createWasmInlineFormatGuardExternal = (
+  format: Format,
+): Rspack.ExternalItem => {
+  const external = (
+    data: Rspack.ExternalItemFunctionData,
+    callback: (err?: Error, result?: Rspack.ExternalItemValue) => void,
+  ): void => {
+    const { request } = data;
+    if (!request || !parseInlineWasmRequest(request)) {
+      callback();
+      return;
+    }
+
+    callback(new Error(unsupportedInlineFormatMessage(format, request)));
+  };
+
+  return external as Rspack.ExternalItem;
 };
 
 export const createWasmInlineBundleless = (
@@ -142,7 +191,7 @@ export const createWasmInlineBundleless = (
     if (!isPathInDirectory(sourcePath, options.outBase)) {
       callback(
         new Error(
-          `Bundleless wasm inline imports must resolve inside outBase: ${data.request}`,
+          `Importing wasm with the "?inline" query in bundleless mode requires the wasm file to be inside the source directory, but ${data.request} resolved to ${sourcePath}. Move the file into the source directory, or set "bundle" to true.`,
         ),
       );
       return;

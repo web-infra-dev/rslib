@@ -1,7 +1,10 @@
 import { createRequire } from 'node:module';
 import type { Rspack } from '@rsbuild/core';
 import type { Format } from '../types';
-import { generateWasmInlineModule } from './inline.js';
+import {
+  generateWasmInlineModule,
+  unsupportedInlineFormatMessage,
+} from './inline.js';
 
 const require = createRequire(import.meta.url);
 
@@ -21,9 +24,7 @@ function wasmInlineLoader(
   // `?inline` is driven by the import specifier rather than by config, so an
   // unsupported format can only be reported once such an import is seen.
   if (format !== 'esm') {
-    throw new Error(
-      `Importing wasm with the "?inline" query only supports the "esm" format, but the current format is "${format}". Set "format" to "esm", or import ${this.resourcePath} without the "?inline" query.`,
-    );
+    throw new Error(unsupportedInlineFormatMessage(format, this.resourcePath));
   }
 
   try {

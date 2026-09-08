@@ -73,14 +73,21 @@ describe('wasm inline', () => {
     expect(output.useAdd(20, 22)).toBe(42);
   });
 
-  test('fails with a dedicated error when the format is not "esm"', async () => {
-    const { logs, restore } = proxyConsole();
-    const build = buildAndGetResults({ fixturePath: join(__dirname, 'cjs') });
+  // Bundle mode is rejected by the loader, bundleless by its own external: the
+  // request is externalized before it ever reaches a loader there.
+  test.each(['cjs', 'cjs-bundleless'])(
+    'fails with a dedicated error when the format is not "esm" (%s)',
+    async (fixture) => {
+      const { logs, restore } = proxyConsole();
+      const build = buildAndGetResults({
+        fixturePath: join(__dirname, fixture),
+      });
 
-    await expect(build).rejects.toThrowError('Rspack build failed.');
-    expect(logs.map((log) => stripAnsi(log)).join('\n')).toContain(
-      'Importing wasm with the "?inline" query only supports the "esm" format',
-    );
-    restore();
-  });
+      await expect(build).rejects.toThrow('Rspack build failed.');
+      expect(logs.map((log) => stripAnsi(log)).join('\n')).toContain(
+        'Importing wasm with the "?inline" query only supports the "esm" format',
+      );
+      restore();
+    },
+  );
 });

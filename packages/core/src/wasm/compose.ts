@@ -1,7 +1,10 @@
 import { createRequire } from 'node:module';
 import type { EnvironmentConfig, Rspack, RspackChain } from '@rsbuild/core';
 import type { Format, Wasm, WasmMode } from '../types';
-import { createWasmInlineBundleless } from './inlineBundleless';
+import {
+  createWasmInlineBundleless,
+  createWasmInlineFormatGuardExternal,
+} from './inlineBundleless';
 import { createWasmPreserveExternal, WasmPreservePlugin } from './preserve';
 
 const require = createRequire(import.meta.url);
@@ -70,13 +73,25 @@ export const composeWasmConfig = ({
   const plugins: Rspack.RspackPluginInstance[] = [];
 
   // `?inline` is driven by the import specifier alone, so its handling is never
-  // gated behind a config option. The rule is installed for every format so
-  // that an unsupported one fails with a dedicated error; without it the query
-  // is silently ignored and the import emits a separate `.wasm` asset instead.
+  // gated behind a config option. The rule is installed for every format: in
+  // bundle mode the loader is what rejects an unsupported one, and without the
+  // rule the query is silently ignored and the import emits a separate `.wasm`
+  // asset instead.
   const bundlerChain = applyWasmInlineRule(format);
 
   if (format !== 'esm') {
-    return { externalConfig: {}, config: { tools: { bundlerChain } } };
+    // Bundleless never reaches the loader, so the same rejection needs its own
+    // external there.
+    return {
+      externalConfig: bundle
+        ? {}
+        : {
+            output: {
+              externals: [createWasmInlineFormatGuardExternal(format)],
+            },
+          },
+      config: { tools: { bundlerChain } },
+    };
   }
 
   if (!bundle) {
