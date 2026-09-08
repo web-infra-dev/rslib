@@ -1,4 +1,20 @@
-import { defineConfig, type RstestConfig } from '@rstest/core';
+import {
+  defineConfig,
+  type RsbuildPlugin,
+  type RstestConfig,
+} from '@rstest/core';
+
+const replaceLoaderUrlPlugin: RsbuildPlugin = {
+  name: 'replace-loader-url',
+  setup(api) {
+    api.transform(
+      { test: /wasm[\\/]compose.ts$/ },
+      async ({ code }: { code: string }) => {
+        return code.replace(/.\/wasmInlineLoader.js/g, './inlineLoader.ts');
+      },
+    );
+  },
+};
 
 export const shared: RstestConfig = {
   globals: true,
@@ -9,6 +25,7 @@ export const shared: RstestConfig = {
   output: {
     module: true,
   },
+  plugins: [replaceLoaderUrlPlugin],
 };
 
 export default defineConfig({

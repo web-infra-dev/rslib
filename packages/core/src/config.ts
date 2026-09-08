@@ -71,6 +71,7 @@ import {
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
 import { composeWasmConfig, resolveWasmMode } from './wasm/compose';
+import { isWasmInlineRequest, WASM_INLINE_ISSUER_QUERY } from './wasm/inline';
 
 export function composeMinifyConfig(config: LibConfig): EnvironmentConfig {
   const minify = config.output?.minify;
@@ -1321,14 +1322,14 @@ const composeBundlelessExternalConfig = (
       output: {
         externals: [
           async (data, callback) => {
-            const { request, getResolve, context, contextInfo } = data;
+            const { getResolve, context, contextInfo } = data;
+            let { request } = data;
             if (!request || !getResolve || !context || !contextInfo) {
               callback();
               return;
             }
 
-            // for bundleless + compile mode
-            if (request.endsWith('.wasm')) {
+            if (request.endsWith('.wasm') || isWasmInlineRequest(request)) {
               callback();
               return;
             }
@@ -1339,7 +1340,14 @@ const composeBundlelessExternalConfig = (
               return;
             }
 
-            const { issuer } = contextInfo;
+            const issuer =
+              new URLSearchParams(request.split('?')[1]?.split('#')[0]).get(
+                WASM_INLINE_ISSUER_QUERY,
+              ) ?? contextInfo.issuer;
+            request = request.replace(
+              new RegExp(`[?&]${WASM_INLINE_ISSUER_QUERY}=[^&#]*`),
+              '',
+            );
             const originExtension = extname(request);
 
             if (!resolver) {
@@ -1777,6 +1785,7 @@ async function composeLibRsbuildConfig(
 
   const { externalConfig: wasmExternalConfig, config: wasmConfig } =
     composeWasmConfig({
+      bundle,
       format,
       jsDistPath,
       jsFilename,
