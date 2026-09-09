@@ -191,6 +191,14 @@ export const createAndValidate = (
     }
   }
 
+  if (templateCase.template === 'reactlynx') {
+    expect(pkgJson.devDependencies['@lynx-js/react']).toBeTruthy();
+    expect(
+      pkgJson.devDependencies['@lynx-js/react-rsbuild-plugin'],
+    ).toBeTruthy();
+    expect(pkgJson.peerDependencies['@lynx-js/react']).toBeTruthy();
+  }
+
   if (templateCase.template === 'react') {
     const configFile = path.join(
       dir,

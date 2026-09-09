@@ -38,6 +38,11 @@ const CASES_REACT: TemplateCase[] = [
   createCase('react', 'ts', ['react-compiler', 'rspress', 'storybook']),
 ];
 
+const CASES_REACTLYNX: TemplateCase[] = [
+  createCase('reactlynx', 'js'),
+  createCase('reactlynx', 'ts'),
+];
+
 const CASES_VUE: TemplateCase[] = [
   createCase('vue', 'js'),
   createCase('vue', 'ts'),
@@ -63,6 +68,8 @@ describe('parseTemplateName', () => {
     expect(parseTemplateName('node-ts')).toBe('node-ts');
     expect(parseTemplateName('react-ts')).toBe('react-ts');
     expect(parseTemplateName('react-js')).toBe('react-js');
+    expect(parseTemplateName('reactlynx-ts')).toBe('reactlynx-ts');
+    expect(parseTemplateName('reactlynx-js')).toBe('reactlynx-js');
     expect(parseTemplateName('vue-ts')).toBe('vue-ts');
     expect(parseTemplateName('vue-js')).toBe('vue-js');
     expect(parseTemplateName('svelte-js')).toBe('svelte-js');
@@ -74,6 +81,7 @@ describe('parseTemplateName', () => {
   test('should handle template without language suffix and default to ts', () => {
     expect(parseTemplateName('node')).toBe('node-ts');
     expect(parseTemplateName('react')).toBe('react-ts');
+    expect(parseTemplateName('reactlynx')).toBe('reactlynx-ts');
     expect(parseTemplateName('vue')).toBe('vue-ts');
     expect(parseTemplateName('svelte')).toBe('svelte-ts');
     expect(parseTemplateName('solid')).toBe('solid-ts');
@@ -177,6 +185,14 @@ describe('react', () => {
 describe('vue', () => {
   for (const c of CASES_VUE) {
     test(`should create ${c.label} project as expected`, async () => {
+      createAndValidate(__dirname, c);
+    });
+  }
+});
+
+describe('reactlynx', () => {
+  for (const c of CASES_REACTLYNX) {
+    test(`should create ${c.label} project as expected`, () => {
       createAndValidate(__dirname, c);
     });
   }
