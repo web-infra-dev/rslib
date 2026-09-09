@@ -1,5 +1,5 @@
 ---
-description: 'Build ReactLynx component libraries with Rslib, preserve JSX, generate types, test components, and publish packages for Lynx applications.'
+description: 'Build ReactLynx component libraries with Rslib, preserve JSX, generate types, test components, and extract External Bundles from Lynx apps.'
 ---
 
 # ReactLynx
@@ -129,7 +129,7 @@ See the [ReactLynx testing guide](https://lynxjs.org/react/reactlynx-testing-lib
 
 ### Use in an application
 
-In a ReactLynx application, you can import and use the library directly after installing it. The application compiles its JSX. For example, use the `ScrollList` exported by the library:
+Component libraries built and published with the configuration above preserve JSX. After installing the library in a ReactLynx application, you can import and use its components directly. The application's ReactLynx compiler processes their JSX. For example, use the `ScrollList` exported by the library:
 
 ```tsx title="src/App.tsx"
 import { ScrollList } from 'reactlynx-components';
@@ -138,6 +138,8 @@ export function App() {
   return <ScrollList />;
 }
 ```
+
+Lynx applications can also load an External Bundle on demand at runtime. Its JSX has already been compiled during the bundle build. You can read the [Lynx External Bundle guide](https://lynxjs.org/rspeedy/external-bundle.html) to learn how to build these bundles with Rslib and load them in an application.
 
 ### Use in a component library
 

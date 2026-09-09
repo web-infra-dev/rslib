@@ -1,5 +1,5 @@
 ---
-description: '使用 Rslib 构建 ReactLynx 组件库，涵盖项目创建、JSX 保留、类型声明、组件测试，以及在 Lynx 应用和其他组件库中的使用方式。'
+description: '使用 Rslib 构建 ReactLynx 组件库，涵盖项目创建、JSX 保留、类型声明、组件测试、组件库使用及 External Bundle 构建。'
 ---
 
 # ReactLynx
@@ -129,7 +129,7 @@ export default defineConfig({
 
 ### 在应用中使用
 
-在 ReactLynx 应用中，安装组件库后可以直接导入使用，由应用侧编译其中的 JSX。例如，使用组件库导出的 `ScrollList`：
+通过前面的配置构建并发布的组件库会保留 JSX。在 ReactLynx 应用中安装后，可以直接导入使用，由应用侧的 ReactLynx 编译器处理其中的 JSX。例如，使用组件库导出的 `ScrollList`：
 
 ```tsx title="src/App.tsx"
 import { ScrollList } from 'reactlynx-components';
@@ -138,6 +138,8 @@ export function App() {
   return <ScrollList />;
 }
 ```
+
+Lynx 应用也可以在运行时按需加载 External Bundle，其中的 JSX 已在 bundle 构建阶段完成编译。你可以查看 [Lynx External Bundle 文档](https://lynxjs.org/zh/rspeedy/external-bundle.html)，了解如何使用 Rslib 构建这类产物并在应用中加载。
 
 ### 在组件库中使用
 
