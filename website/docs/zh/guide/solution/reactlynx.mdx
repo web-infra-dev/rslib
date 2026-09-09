@@ -1,0 +1,214 @@
+---
+description: '使用 Rslib 构建 ReactLynx 组件库，涵盖项目创建、JSX 保留、类型声明、组件测试，以及在 Lynx 应用和其他组件库中的使用方式。'
+---
+
+# ReactLynx
+
+在本文档中，你将学习如何使用 Rslib 构建用于 Lynx 应用的 [ReactLynx](https://lynxjs.org/react/introduction) 组件库，你可在 [示例](https://github.com/rstackjs/rstack-examples/tree/main/rslib/reactlynx-basic) 中查看 ReactLynx 相关演示项目。
+
+## 创建 ReactLynx 项目
+
+你可以使用 `create-rslib` 创建 Rslib + ReactLynx 项目。只需执行以下命令：
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm create rslib@latest',
+    yarn: 'yarn create rslib',
+    pnpm: 'pnpm create rslib@latest',
+    bun: 'bun create rslib@latest',
+  }}
+/>
+
+然后，当提示 "Select template" 时选择 `ReactLynx`。
+
+## 在现有 Rslib 项目中使用
+
+开发 ReactLynx 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。
+
+此外，ReactLynx 组件库通常需要在产物中保留 JSX 语法，交给应用侧的 ReactLynx 编译器根据目标环境和构建配置进行处理。你可以注册 Rsbuild [React 插件](https://rsbuild.rs/zh/plugins/list/plugin-react)，并通过 [swcReactOptions](https://rsbuild.rs/zh/plugins/list/plugin-react#swcreactoptionsruntime) 将 `runtime` 设置为 `'preserve'`。同时，将 [output.filename](/config/rsbuild/output#outputfilename) 中的 `js` 设置为 `'[name].jsx'`，输出 `.jsx` 后缀的文件。
+
+例如，在 `rslib.config.ts` 中配置：
+
+```ts title="rslib.config.ts" twoslash
+import { defineConfig } from '@rslib/core';
+import { pluginReact } from '@rsbuild/plugin-react'; // [!code highlight]
+
+export default defineConfig({
+  lib: [
+    // ...
+  ],
+  bundle: false, // [!code highlight]
+  // [!code highlight:6]
+  output: {
+    target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
+  },
+  plugins: [
+    pluginReact({
+      // [!code highlight:3]
+      swcReactOptions: {
+        runtime: 'preserve',
+      },
+    }),
+  ],
+});
+```
+
+## TypeScript
+
+对于使用 TypeScript 的 ReactLynx 项目，在 `tsconfig.json` 中设置 `"jsx": "preserve"` 和 `"jsxImportSource": "@lynx-js/react"`，并在 `types` 中添加 `@lynx-js/types`：
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // [!code highlight:3]
+    "jsx": "preserve",
+    "jsxImportSource": "@lynx-js/react",
+    "types": ["@lynx-js/types", "@rslib/core/types"]
+  }
+}
+```
+
+在 `rslib.config.ts` 中设置 [dts](/config/lib/dts) 为 `true`，可以生成组件库的类型声明。
+
+## 输出产物
+
+在 `package.json` 中配置 `.jsx` 入口和类型声明入口，并将 ReactLynx 及其类型依赖声明为 peer 依赖：
+
+```json title="package.json"
+{
+  "name": "reactlynx-components",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts", // [!code ++]
+      "default": "./dist/index.jsx" // [!code ++]
+    }
+  },
+  "types": "./dist/index.d.ts", // [!code ++]
+  "files": ["dist"],
+  "peerDependencies": {
+    "@lynx-js/react": ">=0.100.0", // [!code ++]
+    "@lynx-js/types": ">=4", // [!code ++]
+    "@types/react": ">=19" // [!code ++]
+  }
+}
+```
+
+## 测试组件
+
+你可以使用 Rstest 测试 ReactLynx 组件。首先，安装测试所需的依赖：
+
+<PackageManagerTabs command="add @rstest/core @rstest/adapter-rslib @lynx-js/react-rsbuild-plugin happy-dom -D" />
+
+通过 `@rstest/adapter-rslib` 的 `withRslibConfig` 函数复用 Rslib 配置，详见 [使用 Rstest](/guide/advanced/rstest)。
+
+同时，使用 `@lynx-js/react` 提供的 `withDefaultConfig` 函数加载 [ReactLynx 测试预设](https://lynxjs.org/zh/api/reactlynx-testing-library/#rstest)，并注册 `@lynx-js/react-rsbuild-plugin` 的 `pluginReactLynx` 插件来编译 JSX：
+
+```ts title="rstest.config.ts"
+import { pluginReactLynx } from '@lynx-js/react-rsbuild-plugin'; // [!code ++]
+import { withDefaultConfig } from '@lynx-js/react/testing-library/rstest-config'; // [!code ++]
+import { withRslibConfig } from '@rstest/adapter-rslib';
+import { defineConfig } from '@rstest/core';
+
+export default defineConfig({
+  extends: [withDefaultConfig(), withRslibConfig()], // [!code ++]
+  plugins: [pluginReactLynx()], // [!code ++]
+});
+```
+
+配置完成后，可以从 `@lynx-js/react/testing-library` 导入 `render`、`screen`、`fireEvent` 等 API，测试组件的渲染与交互。
+
+具体用法参考 [ReactLynx 测试指南](https://lynxjs.org/zh/react/reactlynx-testing-library.html)，你可在 [示例](https://github.com/rstackjs/rstack-examples/tree/main/rslib/reactlynx-rstest) 中查看完整的组件测试项目。
+
+## 使用组件库
+
+### 在应用中使用
+
+在 ReactLynx 应用中，安装组件库后可以直接导入使用，由应用侧编译其中的 JSX。例如，使用组件库导出的 `ScrollList`：
+
+```tsx title="src/App.tsx"
+import { ScrollList } from 'reactlynx-components';
+
+export function App() {
+  return <ScrollList />;
+}
+```
+
+### 在组件库中使用
+
+你可以基于已有组件库中的公共小组件，组合出更复杂的组件，再将它们作为新的组件库发布。构建时仍需保留 JSX，供应用侧统一编译。根据是否需要将依赖的组件库代码一起打包，可以选择以下两种方式。
+
+#### 作为依赖分发（推荐）
+
+将公共组件所在的库声明在 `dependencies` 或 `peerDependencies` 中。Rslib 默认会将这类依赖标记为 [external](/guide/advanced/third-party-deps#三方依赖的默认处理)，保留包名导入。
+
+使用方安装组件库时，包管理器会按声明的依赖关系安装或复用相关包，应用构建时再通过包名导入加载这些组件库，并统一编译其中的 JSX。
+
+#### 随包分发依赖代码
+
+如果需要将公共组件的代码一起打包发布，同时保留其中的 JSX 语法，你可以将依赖单独输出到指定目录（例如 `vendor`），并在构建时改写导入路径：
+
+```diff
+-import { ScrollList } from 'reactlynx-components';
++import { ScrollList } from './vendor/reactlynx-components/index.jsx';
+```
+
+以下配置以 `src/index.ts` 为入口，将你编写的组件和 `reactlynx-components` 的代码分别输出为保留 JSX 的文件。示例中的依赖产物目录 `node_modules/reactlynx-components/dist` 需按实际路径调整，`externals` 中的路径则相对于生成的 `dist/index.jsx`：
+
+```ts title="rslib.config.ts"
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  bundle: false,
+  lib: [
+    {
+      id: 'main',
+      dts: true,
+      source: {
+        entry: { index: './src/index.ts' },
+      },
+      output: {
+        distPath: './dist',
+        externals: {
+          'reactlynx-components': './vendor/reactlynx-components/index.jsx', // [!code ++]
+        },
+      },
+    },
+    {
+      id: 'vendor',
+      outBase: './node_modules/reactlynx-components/dist', // [!code ++]
+      source: {
+        entry: {
+          index: './node_modules/reactlynx-components/dist/**/*.{js,jsx}', // [!code ++]
+        },
+      },
+      output: {
+        distPath: './dist/vendor/reactlynx-components', // [!code ++]
+      },
+    },
+  ],
+  output: {
+    target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
+  },
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'preserve',
+      },
+    }),
+  ],
+});
+```
+
+构建后，`dist/index.jsx` 引用 `dist/vendor/reactlynx-components/index.jsx`。发布时将整个 `dist` 目录包含在包中。
+
+如果 `.d.ts` 文件中保留了对 `reactlynx-components` 的类型引用，使用方仍需安装该依赖。将 [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) 设置为 `['reactlynx-components']`，可以将引用到的类型声明一并打包。

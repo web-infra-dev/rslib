@@ -1,0 +1,214 @@
+---
+description: 'Build ReactLynx component libraries with Rslib, preserve JSX, generate types, test components, and publish packages for Lynx applications.'
+---
+
+# ReactLynx
+
+In this document, you will learn how to build a [ReactLynx](https://lynxjs.org/react/introduction) component library for Lynx applications with Rslib. You can check out ReactLynx related example projects in [Examples](https://github.com/rstackjs/rstack-examples/tree/main/rslib/reactlynx-basic).
+
+## Create ReactLynx project
+
+You can use `create-rslib` to create a project with Rslib + ReactLynx. Just execute the following command:
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm create rslib@latest',
+    yarn: 'yarn create rslib',
+    pnpm: 'pnpm create rslib@latest',
+    bun: 'bun create rslib@latest',
+  }}
+/>
+
+Then select `ReactLynx` when prompted to "Select template".
+
+## Use Rslib in an existing project
+
+To develop a ReactLynx library, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default, which differs from the default target of Rsbuild.
+
+Additionally, ReactLynx component libraries typically need to preserve JSX syntax in the build output so that the application's ReactLynx compiler can process it according to the target environment and build configuration. You can register the Rsbuild [React Plugin](https://rsbuild.rs/plugins/list/plugin-react) and set `runtime` to `'preserve'` through [swcReactOptions](https://rsbuild.rs/plugins/list/plugin-react#swcreactoptionsruntime). Also, set `js` to `'[name].jsx'` in [output.filename](/config/rsbuild/output#outputfilename) to emit `.jsx` files.
+
+For example, configure `rslib.config.ts` as follows:
+
+```ts title="rslib.config.ts" twoslash
+import { defineConfig } from '@rslib/core';
+import { pluginReact } from '@rsbuild/plugin-react'; // [!code highlight]
+
+export default defineConfig({
+  lib: [
+    // ...
+  ],
+  bundle: false, // [!code highlight]
+  // [!code highlight:6]
+  output: {
+    target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
+  },
+  plugins: [
+    pluginReact({
+      // [!code highlight:3]
+      swcReactOptions: {
+        runtime: 'preserve',
+      },
+    }),
+  ],
+});
+```
+
+## TypeScript
+
+For ReactLynx projects using TypeScript, set `"jsx": "preserve"` and `"jsxImportSource": "@lynx-js/react"` in your `tsconfig.json`, and add `@lynx-js/types` to `types`:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // [!code highlight:3]
+    "jsx": "preserve",
+    "jsxImportSource": "@lynx-js/react",
+    "types": ["@lynx-js/types", "@rslib/core/types"]
+  }
+}
+```
+
+Set [dts](/config/lib/dts) to `true` in `rslib.config.ts` to generate the library's type declarations.
+
+## Output
+
+Configure the `.jsx` entry and type declaration entry in `package.json`, and declare ReactLynx and its type dependencies as peer dependencies:
+
+```json title="package.json"
+{
+  "name": "reactlynx-components",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts", // [!code ++]
+      "default": "./dist/index.jsx" // [!code ++]
+    }
+  },
+  "types": "./dist/index.d.ts", // [!code ++]
+  "files": ["dist"],
+  "peerDependencies": {
+    "@lynx-js/react": ">=0.100.0", // [!code ++]
+    "@lynx-js/types": ">=4", // [!code ++]
+    "@types/react": ">=19" // [!code ++]
+  }
+}
+```
+
+## Testing
+
+You can use Rstest to test ReactLynx components. First, install the dependencies needed for testing:
+
+<PackageManagerTabs command="add @rstest/core @rstest/adapter-rslib @lynx-js/react-rsbuild-plugin happy-dom -D" />
+
+Use the `withRslibConfig` function from `@rstest/adapter-rslib` to reuse your Rslib configuration. See [Use Rstest](/guide/advanced/rstest) for details.
+
+Also, use the `withDefaultConfig` function provided by `@lynx-js/react` to load the [ReactLynx test preset](https://lynxjs.org/api/reactlynx-testing-library/#rstest), and register the `pluginReactLynx` plugin from `@lynx-js/react-rsbuild-plugin` to compile JSX:
+
+```ts title="rstest.config.ts"
+import { pluginReactLynx } from '@lynx-js/react-rsbuild-plugin'; // [!code ++]
+import { withDefaultConfig } from '@lynx-js/react/testing-library/rstest-config'; // [!code ++]
+import { withRslibConfig } from '@rstest/adapter-rslib';
+import { defineConfig } from '@rstest/core';
+
+export default defineConfig({
+  extends: [withDefaultConfig(), withRslibConfig()], // [!code ++]
+  plugins: [pluginReactLynx()], // [!code ++]
+});
+```
+
+Once configured, import APIs such as `render`, `screen`, and `fireEvent` from `@lynx-js/react/testing-library` to test component rendering and interactions.
+
+See the [ReactLynx testing guide](https://lynxjs.org/react/reactlynx-testing-library.html) for usage details. You can find a complete component testing project in [Examples](https://github.com/rstackjs/rstack-examples/tree/main/rslib/reactlynx-rstest).
+
+## Use the component library
+
+### Use in an application
+
+In a ReactLynx application, you can import and use the library directly after installing it. The application compiles its JSX. For example, use the `ScrollList` exported by the library:
+
+```tsx title="src/App.tsx"
+import { ScrollList } from 'reactlynx-components';
+
+export function App() {
+  return <ScrollList />;
+}
+```
+
+### Use in a component library
+
+You can combine smaller shared components from an existing library into more complex components and publish them as a new library. Preserve JSX during the build so the application can compile it. Choose one of the following approaches based on whether you need to bundle the dependency's code with your own.
+
+#### Distribute as a dependency (recommended)
+
+Declare the library that provides the shared components in `dependencies` or `peerDependencies`. Rslib marks these dependencies as [external](/guide/advanced/third-party-deps#default-handling-of-third-party-dependencies) by default, preserving their package imports.
+
+When consumers install your library, their package manager installs or reuses packages according to the declared dependencies. The application build then loads these libraries through their package imports and compiles their JSX together.
+
+#### Distribute dependency code with your library
+
+If you need to bundle and publish the shared component code alongside your own while preserving its JSX syntax, you can emit the dependency into a separate directory, such as `vendor`, and rewrite imports during the build:
+
+```diff
+-import { ScrollList } from 'reactlynx-components';
++import { ScrollList } from './vendor/reactlynx-components/index.jsx';
+```
+
+The following configuration uses `src/index.ts` as the entry and emits your components and the code from `reactlynx-components` as separate files with JSX preserved. Adjust the example dependency output directory, `node_modules/reactlynx-components/dist`, to match its actual location; paths in `externals` are relative to the generated `dist/index.jsx` file:
+
+```ts title="rslib.config.ts"
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  bundle: false,
+  lib: [
+    {
+      id: 'main',
+      dts: true,
+      source: {
+        entry: { index: './src/index.ts' },
+      },
+      output: {
+        distPath: './dist',
+        externals: {
+          'reactlynx-components': './vendor/reactlynx-components/index.jsx', // [!code ++]
+        },
+      },
+    },
+    {
+      id: 'vendor',
+      outBase: './node_modules/reactlynx-components/dist', // [!code ++]
+      source: {
+        entry: {
+          index: './node_modules/reactlynx-components/dist/**/*.{js,jsx}', // [!code ++]
+        },
+      },
+      output: {
+        distPath: './dist/vendor/reactlynx-components', // [!code ++]
+      },
+    },
+  ],
+  output: {
+    target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
+  },
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'preserve',
+      },
+    }),
+  ],
+});
+```
+
+After building, `dist/index.jsx` imports `dist/vendor/reactlynx-components/index.jsx`. Include the entire `dist` directory when publishing your package.
+
+If the `.d.ts` files retain type references to `reactlynx-components`, consumers still need to install that dependency. Set [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) to `['reactlynx-components']` to bundle the referenced type declarations as well.
