@@ -24,9 +24,7 @@ If the version is missing, ask for it before making changes.
 4. Review the diff and confirm the change is limited to the three version bumps.
 5. Create a commit with this exact message: `release: v<version>`
 6. Push the branch, then create a GitHub PR with `gh pr create`. Use the same text for the PR title as the commit message: `release: v<version>`
-7. If `.github/PULL_REQUEST_TEMPLATE.md` exists, keep its structure. Fill it with:
-   - `Summary`: `Release @rslib/core, rsbuild-plugin-dts, and create-rslib <version>.`
-   - `Related Links`: `https://github.com/web-infra-dev/rslib/releases/tag/v<version>`
+7. Read the repository's PR template when available and follow its current headings and guidance. Explain that the PR prepares the release of `@rslib/core`, `rsbuild-plugin-dts`, and `create-rslib` at `<version>` by updating their package versions. Include the release link: `https://github.com/web-infra-dev/rslib/releases/tag/v<version>`.
 
 ## Notes
 
