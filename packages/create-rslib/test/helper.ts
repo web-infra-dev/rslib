@@ -197,6 +197,15 @@ export const createAndValidate = (
       pkgJson.devDependencies['@lynx-js/react-rsbuild-plugin'],
     ).toBeTruthy();
     expect(pkgJson.peerDependencies['@lynx-js/react']).toBeTruthy();
+    expect(
+      templateCase.lang === 'ts'
+        ? pkgJson.exports['.'].default
+        : pkgJson.exports,
+    ).toBe('./dist/index.jsx');
+    if (templateCase.lang === 'ts') {
+      expect(pkgJson.exports['.'].types).toBe('./dist/index.d.ts');
+      expect(pkgJson.types).toBe('./dist/index.d.ts');
+    }
   }
 
   if (templateCase.template === 'react') {
