@@ -7,6 +7,7 @@ import {
 } from '@rsbuild/core';
 import util from 'node:util';
 import { composeRsbuildEnvironments, pruneEnvironments } from './config';
+import { ExportsPlugin } from './exports/plugin';
 import type { Format, RslibConfig } from './types';
 import type {
   BuildOptions,
@@ -212,13 +213,27 @@ export async function createRslib(
       } satisfies RsbuildPlugin);
     }
 
-    const { environments } = await composeRsbuildEnvironments(config);
+    const { environments, environmentWithInfos } =
+      await composeRsbuildEnvironments(config);
 
     const rsbuildInstance = await createRsbuildInstance(
       options,
       'production',
       pruneEnvironments(environments, buildOptions.lib),
     );
+
+    if (config.output?.exports) {
+      if (buildOptions.watch) {
+        logger.warn(
+          'The "output.exports" option is ignored in watch mode because writing package.json can trigger another rebuild.',
+        );
+      } else {
+        const root = config.root ? ensureAbsolutePath(cwd, config.root) : cwd;
+        rsbuildInstance.addPlugins([
+          ExportsPlugin({ root, libInfos: environmentWithInfos }),
+        ]);
+      }
+    }
 
     const buildResult = await rsbuildInstance.build({
       watch: buildOptions.watch,

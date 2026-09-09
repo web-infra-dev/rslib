@@ -90,6 +90,36 @@ const defaultDistPath = {
 
 是否将 CSS 输出到产物中。
 
+## output.exports
+
+是否在构建结束后，根据构建入口生成 `package.json` 中的 `exports` 字段。
+
+在 Rslib 中，该选项的默认值为 `false`。
+
+设置为 `true` 时，Rslib 会在构建成功后将 `exports` 字段写入 `package.json`：
+
+- 始终会暴露 `./package.json` 子路径。
+- 名为 `index` 的入口会作为主子路径（`.`）暴露，其他入口会以相同的名称作为子路径暴露，例如 `./utils/numbers`。
+- 当 `esm` 和 `cjs` 产物包含同一个入口时，子路径的值为带有 `import` 和 `require` 条件的对象，否则为产物文件路径。
+
+例如，构建包含 `index` 入口的 `esm` 和 `cjs` 产物时会生成：
+
+```json
+{
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js"
+    }
+  }
+}
+```
+
+:::note
+`output.exports` 仅对 `esm` 和 `cjs` 格式生效，`umd`、`mf`、`iife` 等其他格式的产物会被跳过。该选项在 watch 模式下会被忽略，并且会覆盖 `package.json` 中已有的 `exports` 字段。
+:::
+
 ## output.externals <RsbuildDocBadge path="/config/output/externals" text="output.externals" />
 
 - **命令行：** `--externals <pkg>`（可重复，例如 `--externals react --externals react-dom`）
