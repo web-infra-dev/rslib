@@ -1,7 +1,6 @@
 import {
   loadConfig as loadRsbuildConfig,
   type LoadConfigOptions,
-  type RsbuildConfig,
   type LoadConfigResult as RsbuildLoadConfigResult,
 } from '@rsbuild/core';
 import type { RslibConfig } from './types';
@@ -80,9 +79,6 @@ export async function loadConfig<Config = RslibConfig>(
     ...options,
     configFileNames: options.configFileNames ?? RSLIB_CONFIG_FILE_NAMES,
   });
-
-  // Metadata is passed through the load result instead of the config object.
-  delete (result.content as RsbuildConfig)._privateMeta;
 
   return result;
 }

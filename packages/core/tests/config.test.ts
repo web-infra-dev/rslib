@@ -49,6 +49,10 @@ describe('Should load config file correctly', () => {
           index: './foo/index.js',
         },
       },
+      _privateMeta: {
+        configFileDependencies: [],
+        configFilePath,
+      },
     });
   });
 
@@ -62,6 +66,10 @@ describe('Should load config file correctly', () => {
         entry: {
           index: './foo/index.js',
         },
+      },
+      _privateMeta: {
+        configFileDependencies: [],
+        configFilePath,
       },
     });
   });
@@ -77,6 +85,10 @@ describe('Should load config file correctly', () => {
           index: './foo/index.ts',
         },
       },
+      _privateMeta: {
+        configFileDependencies: [],
+        configFilePath,
+      },
     });
   });
 
@@ -90,6 +102,10 @@ describe('Should load config file correctly', () => {
         entry: {
           index: './foo/index.js',
         },
+      },
+      _privateMeta: {
+        configFileDependencies: [],
+        configFilePath,
       },
     });
   });
@@ -105,6 +121,10 @@ describe('Should load config file correctly', () => {
           index: './foo/index.js',
         },
       },
+      _privateMeta: {
+        configFileDependencies: [],
+        configFilePath,
+      },
     });
   });
 
@@ -118,6 +138,10 @@ describe('Should load config file correctly', () => {
         entry: {
           index: './foo/index.js',
         },
+      },
+      _privateMeta: {
+        configFileDependencies: [],
+        configFilePath,
       },
     });
   });
@@ -133,6 +157,10 @@ describe('Should load config file correctly', () => {
           index: './foo/index.ts',
         },
       },
+      _privateMeta: {
+        configFileDependencies: [],
+        configFilePath,
+      },
     });
   });
 
@@ -146,6 +174,9 @@ describe('Should load config file correctly', () => {
         entry: {
           index: './foo/index.js',
         },
+      },
+      _privateMeta: {
+        configFilePath,
       },
     });
   });
@@ -400,6 +431,10 @@ describe('CLI options', () => {
       const config = rslib.getRslibConfig();
       expect(config).toMatchInlineSnapshot(`
       {
+        "_privateMeta": {
+          "configFileDependencies": [],
+          "configFilePath": "<WORKSPACE>/tests/fixtures/config/cli-options/rslib.config.ts",
+        },
         "lib": [
           {
             "autoExtension": false,
