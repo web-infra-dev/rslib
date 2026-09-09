@@ -280,15 +280,16 @@ export async function rslibBuild({
   modifyConfig?: (config: RslibConfig) => void;
   lib?: string[];
 }) {
-  const { content: rslibConfig } = await loadConfig({
+  const result = await loadConfig({
     cwd,
     path,
   });
+  const rslibConfig = result.content;
   modifyConfig?.(rslibConfig);
   process.chdir(cwd);
   const rslib = await createRslib({
     cwd,
-    config: rslibConfig,
+    config: result,
   });
   const buildResult = await rslib.build({
     lib,

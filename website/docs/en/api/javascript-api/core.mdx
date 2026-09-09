@@ -35,14 +35,19 @@ The first parameter of `createRslib` is an `options` object with the following p
 ```ts
 type CreateRslibOptions = {
   cwd?: string;
-  config?: RslibConfig | (() => Promise<RslibConfig>);
+  config?:
+    | RslibConfig
+    | LoadConfigResult
+    | (() => Promise<RslibConfig | LoadConfigResult>);
   loadEnv?: boolean | LoadEnvOptions;
 };
 ```
 
 - `cwd`: The root path of the current build, defaults to `process.cwd()`.
-- `config`: Rslib configuration object. Refer to [Configuration overview](/config/) for all available configuration options.
+- `config`: Rslib configuration object or the complete result returned by [loadConfig](#loadconfig). Refer to [Configuration overview](/config/) for all available configuration options.
 - `loadEnv`: Whether to call the [loadEnv](/api/javascript-api/core#loadenv) method to load environment variables and define them as global variables via [source.define](/config/rsbuild/source#sourcedefine).
+
+Pass the complete `loadConfig` result to preserve configuration file paths and imported dependencies for file watching and persistent cache invalidation. Passing only `result.content` does not preserve this metadata.
 
 ### Load configuration async
 
@@ -53,9 +58,9 @@ import { createRslib, loadConfig } from '@rslib/core';
 
 const rslib = await createRslib({
   config: async () => {
-    const { content } = await loadConfig();
-    someFunctionToUpdateConfig(content);
-    return content;
+    const result = await loadConfig();
+    someFunctionToUpdateConfig(result.content);
+    return result;
   },
 });
 ```
@@ -126,25 +131,26 @@ function loadConfig(params?: {
 }): Promise<{
   content: RslibConfig;
   filePath: string | null;
+  dependencies: string[];
 }>;
 ```
 
 - **Example:**
 
 ```ts
-import { loadConfig } from '@rslib/core';
+import { createRslib, loadConfig } from '@rslib/core';
 
 // load `rslib.config.*` file by default
-const { content } = await loadConfig();
+const result = await loadConfig();
 
-console.log(content); // -> Rslib config object
+console.log(result.content); // -> Rslib config object
 
 const rslib = await createRslib({
-  config: content,
+  config: result,
 });
 ```
 
-If the Rslib config file does not exist in the cwd directory, the return value of the loadConfig method is `{ content: {}, filePath: null }`.
+If the Rslib config file does not exist in the cwd directory, the return value of the loadConfig method is `{ content: {}, filePath: null, dependencies: [] }`.
 
 When `path` is not specified, `loadConfig` searches for config files in the following order:
 

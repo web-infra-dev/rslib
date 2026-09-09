@@ -2,11 +2,13 @@ import {
   createRsbuild,
   type EnvironmentConfig,
   loadEnv,
+  type RsbuildConfig,
   type RsbuildInstance,
   type RsbuildPlugin,
 } from '@rsbuild/core';
 import util from 'node:util';
 import { composeRsbuildEnvironments, pruneEnvironments } from './config';
+import type { LoadConfigResult } from './loadConfig';
 import type { Format, RslibConfig } from './types';
 import type {
   BuildOptions,
@@ -96,6 +98,16 @@ const applyDebugInspectConfigPlugin = (
   });
 };
 
+function isLoadConfigResult(result: unknown): result is LoadConfigResult {
+  return (
+    typeof result === 'object' &&
+    result !== null &&
+    'content' in result &&
+    'filePath' in result &&
+    'dependencies' in result
+  );
+}
+
 /**
  * Create an Rslib instance.
  */
@@ -110,9 +122,15 @@ export async function createRslib(
     : null;
 
   const configOrFactory = options.config;
-  const config = isFunction(configOrFactory)
+  const configInput = isFunction(configOrFactory)
     ? await configOrFactory()
-    : configOrFactory || ({} as RslibConfig);
+    : configOrFactory;
+  const loadConfigResult = isLoadConfigResult(configInput)
+    ? configInput
+    : undefined;
+  const config: RslibConfig = loadConfigResult
+    ? loadConfigResult.content
+    : (configInput as RslibConfig | undefined) || {};
 
   if (envs) {
     // define the public environment variables
@@ -155,19 +173,21 @@ export async function createRslib(
     mode: 'development' | 'production',
     environments: Record<string, EnvironmentConfig>,
   ): Promise<RsbuildInstance> => {
+    const rsbuildConfig: RsbuildConfig = {
+      mode,
+      root: config.root,
+      plugins: config.plugins,
+      dev: config.dev,
+      server: config.server,
+      logLevel: isDebug() ? 'info' : config.logLevel,
+      environments,
+    };
     const rsbuildInstance = await createRsbuild({
       cwd: options.cwd,
       callerName: 'rslib',
-      config: {
-        ...(config._privateMeta ? { _privateMeta: config._privateMeta } : {}),
-        mode,
-        root: config.root,
-        plugins: config.plugins,
-        dev: config.dev,
-        server: config.server,
-        logLevel: isDebug() ? 'info' : config.logLevel,
-        environments,
-      },
+      config: loadConfigResult
+        ? { ...loadConfigResult, content: rsbuildConfig }
+        : rsbuildConfig,
       restart: options.restart,
     });
 

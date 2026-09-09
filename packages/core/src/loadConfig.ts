@@ -1,6 +1,8 @@
 import {
   loadConfig as loadRsbuildConfig,
   type LoadConfigOptions,
+  type RsbuildConfig,
+  type LoadConfigResult as RsbuildLoadConfigResult,
 } from '@rsbuild/core';
 import type { RslibConfig } from './types';
 
@@ -20,17 +22,8 @@ export type RslibConfigDefinition =
 
 export type ConfigLoader = LoadConfigOptions['loader'];
 
-export type LoadConfigResult<Config = RslibConfig> = {
-  /**
-   * The loaded configuration object.
-   */
-  content: Config;
-  /**
-   * The path to the loaded configuration file.
-   * Return `null` if the configuration file is not found.
-   */
-  filePath: string | null;
-};
+export type LoadConfigResult<Config = RslibConfig> =
+  RsbuildLoadConfigResult<Config>;
 
 /**
  * This function helps you to autocomplete configuration types.
@@ -83,17 +76,17 @@ const RSLIB_CONFIG_FILE_NAMES = [
 export async function loadConfig<Config = RslibConfig>(
   options: LoadConfigOptions = {},
 ): Promise<LoadConfigResult<Config>> {
-  const { content, filePath } = await loadRsbuildConfig<Config>({
+  const result = await loadRsbuildConfig<Config>({
     ...options,
     configFileNames: options.configFileNames ?? RSLIB_CONFIG_FILE_NAMES,
   });
 
-  return { content, filePath };
+  return result;
 }
 
 export {
+  loadEnv,
   type LoadConfigOptions,
   type LoadEnvOptions,
   type LoadEnvResult,
-  loadEnv,
 } from '@rsbuild/core';

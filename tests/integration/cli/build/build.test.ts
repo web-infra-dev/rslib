@@ -243,10 +243,6 @@ describe('build command', async () => {
             autoExtension: 'false'
           }
         ],
-        _privateMeta: {
-          configFilePath: '<ROOT>/tests/integration/cli/build/options/rslib.config.ts',
-          configFileDependencies: []
-        },
         source: {
           define: {}
         },
