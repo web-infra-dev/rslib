@@ -81,6 +81,9 @@ export async function loadConfig<Config = RslibConfig>(
     configFileNames: options.configFileNames ?? RSLIB_CONFIG_FILE_NAMES,
   });
 
+  // Metadata is passed through the load result instead of the config object.
+  delete (result.content as RsbuildConfig)._privateMeta;
+
   return result;
 }
 
