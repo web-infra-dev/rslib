@@ -158,7 +158,7 @@ When consumers install your library, their package manager installs or reuses pa
 
 If you need to compile the dependency's code or styles, or change its internal imports, use Rslib to build your library and the dependency separately, and use [output.externals](/config/rsbuild/output#outputexternals) to rewrite imports.
 
-The following example builds a component library based on `reactlynx-components`, using `src/index.ts` as the entry and emitting the dependency to `dist/vendor/reactlynx-components`. Adjust [outBase](/config/lib/out-base) and the entry to match the dependency's actual output, including the code, styles, and static assets to process:
+The following example builds a component library based on `reactlynx-components`, where `src/index.ts` only re-exports upstream components and contains no JSX. This entry uses a bundle build, while the dependency uses a bundleless build to preserve JSX and emit files to `dist/vendor/reactlynx-components`. Adjust [outBase](/config/lib/out-base) and the entry to match the dependency's actual output, including the code, styles, and static assets to process:
 
 ```ts title="rslib.config.ts"
 import { dirname } from 'node:path';
@@ -171,7 +171,6 @@ const componentsDir = dirname(
 );
 
 export default defineConfig({
-  bundle: false,
   lib: [
     {
       id: 'main',
@@ -188,6 +187,7 @@ export default defineConfig({
     },
     {
       id: 'vendor',
+      bundle: false, // [!code ++]
       outBase: componentsDir, // [!code ++]
       source: {
         entry: {
@@ -196,26 +196,26 @@ export default defineConfig({
       },
       output: {
         distPath: './dist/vendor/reactlynx-components', // [!code ++]
+        filename: {
+          js: '[name].jsx',
+        },
       },
+      plugins: [
+        pluginReact({
+          swcReactOptions: {
+            runtime: 'preserve',
+          },
+        }),
+      ],
     },
   ],
   output: {
     target: 'web',
-    filename: {
-      js: '[name].jsx',
-    },
   },
-  plugins: [
-    pluginReact({
-      swcReactOptions: {
-        runtime: 'preserve',
-      },
-    }),
-  ],
 });
 ```
 
-After building, `dist/index.jsx` imports `dist/vendor/reactlynx-components/index.jsx`. Include the entire `dist` directory when publishing your package. If the dependency imports other component libraries that also need to be distributed with your package, add builds for them and use `output.externals` to adjust imports between packages.
+After building, `dist/index.js` imports `dist/vendor/reactlynx-components/index.jsx`. Include the entire `dist` directory when publishing your package. If the dependency imports other component libraries that also need to be distributed with your package, add builds for them and use `output.externals` to adjust imports between packages.
 
 #### Copy build output directly
 

@@ -158,7 +158,7 @@ Lynx 应用也可以在运行时按需加载 External Bundle，其中的 JSX 已
 
 需要编译依赖的代码、样式或调整内部导入时，可以使用 Rslib 分别构建当前库和依赖，并通过 [output.externals](/config/rsbuild/output#outputexternals) 改写导入路径。
 
-以下以基于 `reactlynx-components` 开发的组件库为例，使用 `src/index.ts` 作为入口，将依赖输出到 `dist/vendor/reactlynx-components`。[outBase](/config/lib/out-base) 和入口需按依赖的实际产物调整，包含需要处理的代码、样式和静态资源：
+以下以基于 `reactlynx-components` 开发的组件库为例，`src/index.ts` 仅重新导出上游组件，不包含 JSX，使用 bundle 构建；依赖使用 bundleless 构建，保留 JSX 并输出到 `dist/vendor/reactlynx-components`。[outBase](/config/lib/out-base) 和入口需按依赖的实际产物调整，包含需要处理的代码、样式和静态资源：
 
 ```ts title="rslib.config.ts"
 import { dirname } from 'node:path';
@@ -171,7 +171,6 @@ const componentsDir = dirname(
 );
 
 export default defineConfig({
-  bundle: false,
   lib: [
     {
       id: 'main',
@@ -188,6 +187,7 @@ export default defineConfig({
     },
     {
       id: 'vendor',
+      bundle: false, // [!code ++]
       outBase: componentsDir, // [!code ++]
       source: {
         entry: {
@@ -196,26 +196,26 @@ export default defineConfig({
       },
       output: {
         distPath: './dist/vendor/reactlynx-components', // [!code ++]
+        filename: {
+          js: '[name].jsx',
+        },
       },
+      plugins: [
+        pluginReact({
+          swcReactOptions: {
+            runtime: 'preserve',
+          },
+        }),
+      ],
     },
   ],
   output: {
     target: 'web',
-    filename: {
-      js: '[name].jsx',
-    },
   },
-  plugins: [
-    pluginReact({
-      swcReactOptions: {
-        runtime: 'preserve',
-      },
-    }),
-  ],
 });
 ```
 
-构建后，`dist/index.jsx` 引用 `dist/vendor/reactlynx-components/index.jsx`。发布时将整个 `dist` 目录包含在包中。如果依赖还引用了其他需要随包发布的组件库，可同样添加构建，并通过 `output.externals` 调整包之间的导入路径。
+构建后，`dist/index.js` 引用 `dist/vendor/reactlynx-components/index.jsx`。发布时将整个 `dist` 目录包含在包中。如果依赖还引用了其他需要随包发布的组件库，可同样添加构建，并通过 `output.externals` 调整包之间的导入路径。
 
 #### 直接复制产物
 
