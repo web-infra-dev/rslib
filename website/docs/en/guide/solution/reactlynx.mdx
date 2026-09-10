@@ -227,20 +227,20 @@ export default defineConfig({
       },
       output: {
         distPath: './dist/vendor/reactlynx-scroll-list', // [!code ++]
-        filename: {
-          js: '[name].jsx',
-        },
       },
       plugins: [reactPlugin],
     },
   ],
   output: {
     target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
   },
 });
 ```
 
-The library source is emitted as `.js` files with JSX preserved, and `dist/scroll-list/index.js` imports `dist/vendor/reactlynx-scroll-list/index.jsx`, so include the entire `dist` directory when publishing your package.
+The top-level `output.filename` setting gives all builds a consistent `.jsx` extension for their code output. The generated `dist/scroll-list/index.jsx` imports `dist/vendor/reactlynx-scroll-list/index.jsx`, so include the entire `dist` directory when publishing your package.
 
 If `reactlynx-scroll-list` imports other component libraries that also need to be distributed with your package, add builds for those packages. In the `vendor` build, use `output.externals` to rewrite their package imports to the paths of their output files.
 
@@ -248,7 +248,7 @@ If `reactlynx-scroll-list` imports other component libraries that also need to b
 
 If the dependency's output is ready to use and its internal imports need no changes, copy the complete output with [output.copy](/config/rsbuild/output#outputcopy).
 
-The following configuration builds the library source in bundleless mode to preserve JSX and copies the dependency's output. As above, only `src/scroll-list/index.ts` imports the dependency, and the path in `output.externals` is relative to the generated `dist/scroll-list/index.js`:
+The following configuration builds the library source in bundleless mode to preserve JSX and copies the dependency's output. As above, only `src/scroll-list/index.ts` imports the dependency, and the path in `output.externals` is relative to the generated `dist/scroll-list/index.jsx`:
 
 ```ts title="rslib.config.ts"
 import { dirname } from 'node:path';
@@ -265,6 +265,9 @@ export default defineConfig({
   dts: true,
   output: {
     target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
     externals: {
       'reactlynx-scroll-list': '../vendor/reactlynx-scroll-list/index.jsx', // [!code ++]
     },

@@ -227,20 +227,20 @@ export default defineConfig({
       },
       output: {
         distPath: './dist/vendor/reactlynx-scroll-list', // [!code ++]
-        filename: {
-          js: '[name].jsx',
-        },
       },
       plugins: [reactPlugin],
     },
   ],
   output: {
     target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
   },
 });
 ```
 
-组件库源码输出为 `.js` 文件，其中的 JSX 保持不变，`dist/scroll-list/index.js` 引用 `dist/vendor/reactlynx-scroll-list/index.jsx`，发布时将整个 `dist` 目录包含在包中。
+通过顶层 `output.filename` 将各构建项的代码产物统一输出为 `.jsx` 文件，`dist/scroll-list/index.jsx` 引用 `dist/vendor/reactlynx-scroll-list/index.jsx`，发布时将整个 `dist` 目录包含在包中。
 
 如果 `reactlynx-scroll-list` 还引用了其他需要随包发布的组件库，需要为这些包添加构建，并在 `vendor` 构建的 `output.externals` 中将对应包名改写为它们的产物路径。
 
@@ -248,7 +248,7 @@ export default defineConfig({
 
 如果依赖产物可以直接使用，且无需修改内部导入，可以通过 [output.copy](/config/rsbuild/output#outputcopy) 复制完整产物。
 
-以下配置以 bundleless 方式构建组件库源码并保留 JSX，同时复制依赖产物。示例同样仅在 `src/scroll-list/index.ts` 中导入该依赖，`output.externals` 中的路径相对于生成的 `dist/scroll-list/index.js`：
+以下配置以 bundleless 方式构建组件库源码并保留 JSX，同时复制依赖产物。示例同样仅在 `src/scroll-list/index.ts` 中导入该依赖，`output.externals` 中的路径相对于生成的 `dist/scroll-list/index.jsx`：
 
 ```ts title="rslib.config.ts"
 import { dirname } from 'node:path';
@@ -265,6 +265,9 @@ export default defineConfig({
   dts: true,
   output: {
     target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
     externals: {
       'reactlynx-scroll-list': '../vendor/reactlynx-scroll-list/index.jsx', // [!code ++]
     },
