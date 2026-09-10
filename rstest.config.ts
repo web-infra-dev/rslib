@@ -1,24 +1,4 @@
-// import type { ProjectConfig } from '@rstest/core';
-import {
-  defineConfig,
-  type RsbuildPlugin,
-  type RstestConfig,
-} from '@rstest/core';
-
-const replaceLoaderUrlPlugin: RsbuildPlugin = {
-  name: 'replace-loader-url',
-  setup(api) {
-    api.transform(
-      { test: /EntryChunkPlugin.ts$/ },
-      async ({ code }: { code: string }) => {
-        return code.replace(
-          /.\/entryModuleLoader.js/g,
-          './entryModuleLoader.ts',
-        );
-      },
-    );
-  },
-};
+import { defineConfig, type RstestConfig } from '@rstest/core';
 
 export const shared: RstestConfig = {
   globals: true,
@@ -29,7 +9,6 @@ export const shared: RstestConfig = {
   output: {
     module: true,
   },
-  plugins: [replaceLoaderUrlPlugin],
 };
 
 export default defineConfig({

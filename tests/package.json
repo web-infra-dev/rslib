@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "test": "rstest",
-    "test:benchmark": "rstest bench",
     "test:e2e": "playwright test --pass-with-no-tests"
   },
   "dependencies": {
@@ -12,7 +11,6 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@codspeed/vitest-plugin": "catalog:",
     "@module-federation/rsbuild-plugin": "catalog:",
     "@playwright/test": "catalog:",
     "@rsbuild/core": "catalog:",
