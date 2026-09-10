@@ -21,12 +21,7 @@ import type {
   StartDevServerResult,
   StartMFDevServerOptions,
 } from './types/rslib';
-import {
-  ensureAbsolutePath,
-  getNodeEnv,
-  isFunction,
-  setNodeEnv,
-} from './utils/helper';
+import { ensureAbsolutePath, getNodeEnv, setNodeEnv } from './utils/helper';
 import { isDebug, isDebugKey, logger } from './utils/logger';
 
 const pruneMFEnvironments = (
@@ -121,16 +116,18 @@ export async function createRslib(
       })
     : null;
 
-  const configOrFactory = options.config;
-  const configInput = isFunction(configOrFactory)
-    ? await configOrFactory()
-    : configOrFactory;
-  const loadConfigResult = isLoadConfigResult(configInput)
-    ? configInput
-    : undefined;
-  const config: RslibConfig = loadConfigResult
-    ? loadConfigResult.content
-    : (configInput as RslibConfig | undefined) || {};
+  let config =
+    typeof options.config === 'function'
+      ? await options.config()
+      : options.config;
+  let loadConfigResult: LoadConfigResult | undefined;
+
+  if (isLoadConfigResult(config)) {
+    loadConfigResult = config;
+    config = config.content;
+  }
+
+  config ||= {};
 
   if (envs) {
     // define the public environment variables

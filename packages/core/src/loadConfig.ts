@@ -75,12 +75,10 @@ const RSLIB_CONFIG_FILE_NAMES = [
 export async function loadConfig<Config = RslibConfig>(
   options: LoadConfigOptions = {},
 ): Promise<LoadConfigResult<Config>> {
-  const result = await loadRsbuildConfig<Config>({
+  return loadRsbuildConfig<Config>({
     ...options,
     configFileNames: options.configFileNames ?? RSLIB_CONFIG_FILE_NAMES,
   });
-
-  return result;
 }
 
 export {
