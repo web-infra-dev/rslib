@@ -164,9 +164,9 @@ Consider a component library that includes a scroll list adapted from `reactlynx
 - `bundled-components`: bundles the scroll list entry and the local TS/JS modules it imports, which can adjust exports or include other TS/JS logic. It uses `output.externals` to reference the dependency output.
 - `vendor`: rebuilds the output of `reactlynx-scroll-list`, preserving JSX and emitting files to `dist/vendor/reactlynx-scroll-list`.
 
-In this example, only `src/scrollist/index.ts` imports `reactlynx-scroll-list`. Other components reference this entry through local imports:
+In this example, only `src/scroll-list/index.ts` imports `reactlynx-scroll-list`. Other components reference this entry through local imports:
 
-```ts title="src/scrollist/index.ts"
+```ts title="src/scroll-list/index.ts"
 export { ScrollList } from 'reactlynx-scroll-list';
 ```
 
@@ -197,7 +197,7 @@ export default defineConfig({
         entry: {
           index: [
             './src/**/*',
-            '!./src/scrollist/**', // [!code ++]
+            '!./src/scroll-list/**', // [!code ++]
           ],
         },
       },
@@ -207,7 +207,7 @@ export default defineConfig({
       id: 'bundled-components',
       source: {
         entry: {
-          'scrollist/index': './src/scrollist/index.ts', // [!code ++]
+          'scroll-list/index': './src/scroll-list/index.ts', // [!code ++]
         },
       },
       output: {
@@ -240,7 +240,7 @@ export default defineConfig({
 });
 ```
 
-The library source is emitted as `.js` files with JSX preserved, and `dist/scrollist/index.js` imports `dist/vendor/reactlynx-scroll-list/index.jsx`, so include the entire `dist` directory when publishing your package.
+The library source is emitted as `.js` files with JSX preserved, and `dist/scroll-list/index.js` imports `dist/vendor/reactlynx-scroll-list/index.jsx`, so include the entire `dist` directory when publishing your package.
 
 If `reactlynx-scroll-list` imports other component libraries that also need to be distributed with your package, add builds for those packages. In the `vendor` build, use `output.externals` to rewrite their package imports to the paths of their output files.
 
@@ -248,7 +248,7 @@ If `reactlynx-scroll-list` imports other component libraries that also need to b
 
 If the dependency's output is ready to use and its internal imports need no changes, copy the complete output with [output.copy](/config/rsbuild/output#outputcopy).
 
-The following configuration builds the library source in bundleless mode to preserve JSX and copies the dependency's output. As above, only `src/scrollist/index.ts` imports the dependency, and the path in `output.externals` is relative to the generated `dist/scrollist/index.js`:
+The following configuration builds the library source in bundleless mode to preserve JSX and copies the dependency's output. As above, only `src/scroll-list/index.ts` imports the dependency, and the path in `output.externals` is relative to the generated `dist/scroll-list/index.js`:
 
 ```ts title="rslib.config.ts"
 import { dirname } from 'node:path';

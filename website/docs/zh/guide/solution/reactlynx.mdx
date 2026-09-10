@@ -164,9 +164,9 @@ Lynx 应用也可以在运行时按需加载 External Bundle，其中的 JSX 已
 - `bundled-components`：使用 bundle 构建滚动列表入口及其引用的本地 TS/JS 模块，可包含导出调整或其他 TS/JS 逻辑，并通过 `output.externals` 引用依赖产物。
 - `vendor`：重新构建 `reactlynx-scroll-list` 的产物，保留 JSX，并输出到 `dist/vendor/reactlynx-scroll-list`。
 
-示例仅在 `src/scrollist/index.ts` 中导入 `reactlynx-scroll-list`，其他组件通过本地路径引用该入口：
+示例仅在 `src/scroll-list/index.ts` 中导入 `reactlynx-scroll-list`，其他组件通过本地路径引用该入口：
 
-```ts title="src/scrollist/index.ts"
+```ts title="src/scroll-list/index.ts"
 export { ScrollList } from 'reactlynx-scroll-list';
 ```
 
@@ -197,7 +197,7 @@ export default defineConfig({
         entry: {
           index: [
             './src/**/*',
-            '!./src/scrollist/**', // [!code ++]
+            '!./src/scroll-list/**', // [!code ++]
           ],
         },
       },
@@ -207,7 +207,7 @@ export default defineConfig({
       id: 'bundled-components',
       source: {
         entry: {
-          'scrollist/index': './src/scrollist/index.ts', // [!code ++]
+          'scroll-list/index': './src/scroll-list/index.ts', // [!code ++]
         },
       },
       output: {
@@ -240,7 +240,7 @@ export default defineConfig({
 });
 ```
 
-组件库源码输出为 `.js` 文件，其中的 JSX 保持不变，`dist/scrollist/index.js` 引用 `dist/vendor/reactlynx-scroll-list/index.jsx`，发布时将整个 `dist` 目录包含在包中。
+组件库源码输出为 `.js` 文件，其中的 JSX 保持不变，`dist/scroll-list/index.js` 引用 `dist/vendor/reactlynx-scroll-list/index.jsx`，发布时将整个 `dist` 目录包含在包中。
 
 如果 `reactlynx-scroll-list` 还引用了其他需要随包发布的组件库，需要为这些包添加构建，并在 `vendor` 构建的 `output.externals` 中将对应包名改写为它们的产物路径。
 
@@ -248,7 +248,7 @@ export default defineConfig({
 
 如果依赖产物可以直接使用，且无需修改内部导入，可以通过 [output.copy](/config/rsbuild/output#outputcopy) 复制完整产物。
 
-以下配置以 bundleless 方式构建组件库源码并保留 JSX，同时复制依赖产物。示例同样仅在 `src/scrollist/index.ts` 中导入该依赖，`output.externals` 中的路径相对于生成的 `dist/scrollist/index.js`：
+以下配置以 bundleless 方式构建组件库源码并保留 JSX，同时复制依赖产物。示例同样仅在 `src/scroll-list/index.ts` 中导入该依赖，`output.externals` 中的路径相对于生成的 `dist/scroll-list/index.js`：
 
 ```ts title="rslib.config.ts"
 import { dirname } from 'node:path';
