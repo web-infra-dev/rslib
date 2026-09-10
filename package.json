@@ -11,7 +11,6 @@
     "lint": "rs lint --type-check",
     "prepare": "rs hooks",
     "test": "pnpm run test:unit && pnpm run test:integration && pnpm run test:e2e",
-    "test:benchmark": "cd ./tests && pnpm run test:benchmark",
     "test:e2e": "pnpm run build:examples && cd tests && pnpm run test:e2e",
     "test:integration": "rstest --project integration",
     "test:integration:exe": "rstest --project integration-exe",

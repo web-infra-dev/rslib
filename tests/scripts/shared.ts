@@ -68,10 +68,6 @@ export function runCli(command: string, options?: ExecOptions) {
   };
 }
 
-export function getCwdByExample(exampleName: string) {
-  return join(__dirname, '../../examples', exampleName);
-}
-
 export function generateBundleEsmConfig(config: LibConfig = {}): LibConfig {
   const esmBasicConfig: LibConfig = {
     output: {
