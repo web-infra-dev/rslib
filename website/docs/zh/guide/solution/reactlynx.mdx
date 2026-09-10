@@ -27,7 +27,7 @@ import { PackageManagerTabs } from '@theme';
 
 开发 ReactLynx 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。
 
-此外，ReactLynx 组件库通常需要在产物中保留 JSX 语法，交给应用侧的 ReactLynx 编译器根据目标环境和构建配置进行处理。你可以注册 Rsbuild [React 插件](https://rsbuild.rs/zh/plugins/list/plugin-react)，并通过 [swcReactOptions](https://rsbuild.rs/zh/plugins/list/plugin-react#swcreactoptionsruntime) 将 `runtime` 设置为 `'preserve'`。同时，将 [output.filename](/config/rsbuild/output#outputfilename) 中的 `js` 设置为 `'[name].jsx'`，输出 `.jsx` 后缀的文件。
+此外，ReactLynx 组件库通常需要在产物中保留 JSX 语法，交给应用侧的 ReactLynx 编译器根据目标环境和构建配置进行处理。你可以注册 Rsbuild [React 插件](https://rsbuild.rs/zh/plugins/list/plugin-react)，通过 [swcReactOptions](https://rsbuild.rs/zh/plugins/list/plugin-react#swcreactoptionsruntime) 将 `runtime` 设置为 `'preserve'`，并将 [bundle](/config/lib/bundle) 设置为 `false`，启用 bundleless 构建。同时，将 [output.filename](/config/rsbuild/output#outputfilename) 中的 `js` 设置为 `'[name].jsx'`，输出 `.jsx` 后缀的文件。
 
 例如，在 `rslib.config.ts` 中配置：
 
@@ -36,9 +36,6 @@ import { defineConfig } from '@rslib/core';
 import { pluginReact } from '@rsbuild/plugin-react'; // [!code highlight]
 
 export default defineConfig({
-  lib: [
-    // ...
-  ],
   bundle: false, // [!code highlight]
   // [!code highlight:6]
   output: {
@@ -143,7 +140,13 @@ Lynx 应用也可以在运行时按需加载 External Bundle，其中的 JSX 已
 
 ### 在组件库中使用
 
-你可以基于已有组件库中的公共小组件，组合出更复杂的组件，再将它们作为新的组件库发布。构建时仍需保留 JSX，供应用侧统一编译。根据是否需要将依赖的组件库代码一起打包，可以选择以下两种方式。
+你可以基于已有组件库中的公共小组件，组合出更复杂的组件，再将它们作为新的组件库发布。构建时仍需保留 JSX，供应用侧统一编译。推荐将公共组件库作为依赖分发；如果需要将依赖代码一起发布，可以根据产物是否需要重新处理，选择通过 Rslib 构建或直接复制产物。
+
+::: tip 类型声明
+
+通过构建或复制将依赖代码随包发布时，若 `.d.ts` 文件仍引用该依赖的类型，使用方仍需安装该依赖。可以通过 [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) 将引用到的类型声明一并打包，例如设置为 `['reactlynx-components']`。
+
+:::
 
 #### 作为依赖分发（推荐）
 
@@ -151,20 +154,21 @@ Lynx 应用也可以在运行时按需加载 External Bundle，其中的 JSX 已
 
 使用方安装组件库时，包管理器会按声明的依赖关系安装或复用相关包，应用构建时再通过包名导入加载这些组件库，并统一编译其中的 JSX。
 
-#### 随包分发依赖代码
+#### 通过 Rslib 构建
 
-如果需要将公共组件的代码一起打包发布，同时保留其中的 JSX 语法，你可以将依赖单独输出到指定目录（例如 `vendor`），并在构建时改写导入路径：
+需要编译依赖的代码、样式或调整内部导入时，可以使用 Rslib 分别构建当前库和依赖，并通过 [output.externals](/config/rsbuild/output#outputexternals) 改写导入路径。
 
-```diff
--import { ScrollList } from 'reactlynx-components';
-+import { ScrollList } from './vendor/reactlynx-components/index.jsx';
-```
-
-以下配置以 `src/index.ts` 为入口，将你编写的组件和 `reactlynx-components` 的代码分别输出为保留 JSX 的文件。示例中的依赖产物目录 `node_modules/reactlynx-components/dist` 需按实际路径调整，`externals` 中的路径则相对于生成的 `dist/index.jsx`：
+以下以基于 `reactlynx-components` 开发的组件库为例，使用 `src/index.ts` 作为入口，将依赖输出到 `dist/vendor/reactlynx-components`。[outBase](/config/lib/out-base) 和入口需按依赖的实际产物调整，包含需要处理的代码、样式和静态资源：
 
 ```ts title="rslib.config.ts"
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
+
+const componentsDir = dirname(
+  fileURLToPath(import.meta.resolve('reactlynx-components')),
+);
 
 export default defineConfig({
   bundle: false,
@@ -184,10 +188,10 @@ export default defineConfig({
     },
     {
       id: 'vendor',
-      outBase: './node_modules/reactlynx-components/dist', // [!code ++]
+      outBase: componentsDir, // [!code ++]
       source: {
         entry: {
-          index: './node_modules/reactlynx-components/dist/**/*.{js,jsx}', // [!code ++]
+          index: `${componentsDir}/**/*.{js,jsx,css,svg}`, // [!code ++]
         },
       },
       output: {
@@ -211,6 +215,27 @@ export default defineConfig({
 });
 ```
 
-构建后，`dist/index.jsx` 引用 `dist/vendor/reactlynx-components/index.jsx`。发布时将整个 `dist` 目录包含在包中。
+构建后，`dist/index.jsx` 引用 `dist/vendor/reactlynx-components/index.jsx`。发布时将整个 `dist` 目录包含在包中。如果依赖还引用了其他需要随包发布的组件库，可同样添加构建，并通过 `output.externals` 调整包之间的导入路径。
 
-如果 `.d.ts` 文件中保留了对 `reactlynx-components` 的类型引用，使用方仍需安装该依赖。将 [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) 设置为 `['reactlynx-components']`，可以将引用到的类型声明一并打包。
+#### 直接复制产物
+
+如果依赖产物可以直接使用，且无需修改内部导入，可以通过 [output.copy](/config/rsbuild/output#outputcopy) 复制完整产物，并通过 `output.externals` 让构建产物从复制后的路径导入组件：
+
+```ts title="rslib.config.ts"
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from '@rslib/core';
+
+const componentsDir = dirname(
+  fileURLToPath(import.meta.resolve('reactlynx-components')),
+);
+
+export default defineConfig({
+  output: {
+    externals: {
+      'reactlynx-components': './vendor/reactlynx-components/index.jsx', // [!code ++]
+    },
+    copy: [{ from: componentsDir, to: 'vendor/reactlynx-components' }], // [!code ++]
+  },
+});
+```

@@ -27,7 +27,7 @@ Then select `ReactLynx` when prompted to "Select template".
 
 To develop a ReactLynx library, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default, which differs from the default target of Rsbuild.
 
-Additionally, ReactLynx component libraries typically need to preserve JSX syntax in the build output so that the application's ReactLynx compiler can process it according to the target environment and build configuration. You can register the Rsbuild [React Plugin](https://rsbuild.rs/plugins/list/plugin-react) and set `runtime` to `'preserve'` through [swcReactOptions](https://rsbuild.rs/plugins/list/plugin-react#swcreactoptionsruntime). Also, set `js` to `'[name].jsx'` in [output.filename](/config/rsbuild/output#outputfilename) to emit `.jsx` files.
+Additionally, ReactLynx component libraries typically need to preserve JSX syntax in the build output so that the application's ReactLynx compiler can process it according to the target environment and build configuration. You can register the Rsbuild [React Plugin](https://rsbuild.rs/plugins/list/plugin-react), set `runtime` to `'preserve'` through [swcReactOptions](https://rsbuild.rs/plugins/list/plugin-react#swcreactoptionsruntime), and set [bundle](/config/lib/bundle) to `false` to enable bundleless builds. Also, set `js` to `'[name].jsx'` in [output.filename](/config/rsbuild/output#outputfilename) to emit `.jsx` files.
 
 For example, configure `rslib.config.ts` as follows:
 
@@ -36,9 +36,6 @@ import { defineConfig } from '@rslib/core';
 import { pluginReact } from '@rsbuild/plugin-react'; // [!code highlight]
 
 export default defineConfig({
-  lib: [
-    // ...
-  ],
   bundle: false, // [!code highlight]
   // [!code highlight:6]
   output: {
@@ -143,7 +140,13 @@ Lynx applications can also load an External Bundle on demand at runtime. Its JSX
 
 ### Use in a component library
 
-You can combine smaller shared components from an existing library into more complex components and publish them as a new library. Preserve JSX during the build so the application can compile it. Choose one of the following approaches based on whether you need to bundle the dependency's code with your own.
+You can combine smaller shared components from an existing library into more complex components and publish them as a new library. Preserve JSX during the build so the application can compile it. Distributing the shared component library as a dependency is recommended; if you need to publish its code with your own, choose between building it with Rslib and copying its output directly, depending on whether further processing is needed.
+
+::: tip Type declarations
+
+When publishing dependency code with your library by building or copying it, consumers still need to install the dependency if your `.d.ts` files reference its types. Use [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) to bundle those type declarations as well, for example by setting it to `['reactlynx-components']`.
+
+:::
 
 #### Distribute as a dependency (recommended)
 
@@ -151,20 +154,21 @@ Declare the library that provides the shared components in `dependencies` or `pe
 
 When consumers install your library, their package manager installs or reuses packages according to the declared dependencies. The application build then loads these libraries through their package imports and compiles their JSX together.
 
-#### Distribute dependency code with your library
+#### Build with Rslib
 
-If you need to bundle and publish the shared component code alongside your own while preserving its JSX syntax, you can emit the dependency into a separate directory, such as `vendor`, and rewrite imports during the build:
+If you need to compile the dependency's code or styles, or change its internal imports, use Rslib to build your library and the dependency separately, and use [output.externals](/config/rsbuild/output#outputexternals) to rewrite imports.
 
-```diff
--import { ScrollList } from 'reactlynx-components';
-+import { ScrollList } from './vendor/reactlynx-components/index.jsx';
-```
-
-The following configuration uses `src/index.ts` as the entry and emits your components and the code from `reactlynx-components` as separate files with JSX preserved. Adjust the example dependency output directory, `node_modules/reactlynx-components/dist`, to match its actual location; paths in `externals` are relative to the generated `dist/index.jsx` file:
+The following example builds a component library based on `reactlynx-components`, using `src/index.ts` as the entry and emitting the dependency to `dist/vendor/reactlynx-components`. Adjust [outBase](/config/lib/out-base) and the entry to match the dependency's actual output, including the code, styles, and static assets to process:
 
 ```ts title="rslib.config.ts"
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
+
+const componentsDir = dirname(
+  fileURLToPath(import.meta.resolve('reactlynx-components')),
+);
 
 export default defineConfig({
   bundle: false,
@@ -184,10 +188,10 @@ export default defineConfig({
     },
     {
       id: 'vendor',
-      outBase: './node_modules/reactlynx-components/dist', // [!code ++]
+      outBase: componentsDir, // [!code ++]
       source: {
         entry: {
-          index: './node_modules/reactlynx-components/dist/**/*.{js,jsx}', // [!code ++]
+          index: `${componentsDir}/**/*.{js,jsx,css,svg}`, // [!code ++]
         },
       },
       output: {
@@ -211,6 +215,27 @@ export default defineConfig({
 });
 ```
 
-After building, `dist/index.jsx` imports `dist/vendor/reactlynx-components/index.jsx`. Include the entire `dist` directory when publishing your package.
+After building, `dist/index.jsx` imports `dist/vendor/reactlynx-components/index.jsx`. Include the entire `dist` directory when publishing your package. If the dependency imports other component libraries that also need to be distributed with your package, add builds for them and use `output.externals` to adjust imports between packages.
 
-If the `.d.ts` files retain type references to `reactlynx-components`, consumers still need to install that dependency. Set [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) to `['reactlynx-components']` to bundle the referenced type declarations as well.
+#### Copy build output directly
+
+If the dependency's output is ready to use and its internal imports need no changes, copy the complete output with [output.copy](/config/rsbuild/output#outputcopy). Use `output.externals` so the generated code imports components from the copied files:
+
+```ts title="rslib.config.ts"
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from '@rslib/core';
+
+const componentsDir = dirname(
+  fileURLToPath(import.meta.resolve('reactlynx-components')),
+);
+
+export default defineConfig({
+  output: {
+    externals: {
+      'reactlynx-components': './vendor/reactlynx-components/index.jsx', // [!code ++]
+    },
+    copy: [{ from: componentsDir, to: 'vendor/reactlynx-components' }], // [!code ++]
+  },
+});
+```
