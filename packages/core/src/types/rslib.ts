@@ -6,6 +6,7 @@ import type {
   RsbuildInstance,
   StartDevServerResult,
 } from '@rsbuild/core';
+import type { LoadConfigResult } from '../loadConfig';
 import type { RslibConfig } from './config';
 
 export type CommonOptions = {
@@ -100,6 +101,8 @@ export type OnAfterCreateRsbuildFn = (params: {
   rsbuild: RsbuildInstance;
 }) => void | Promise<void>;
 
+type RslibConfigInput = RslibConfig | LoadConfigResult;
+
 export type CreateRslibOptions = {
   /**
    * The root path of current project.
@@ -107,10 +110,10 @@ export type CreateRslibOptions = {
    */
   cwd?: string;
   /**
-   * Rslib configurations.
+   * Rslib configuration or the result returned by `loadConfig`.
    * Passing a function to load the config asynchronously with custom logic.
    */
-  config?: RslibConfig | (() => Promise<RslibConfig>);
+  config?: RslibConfigInput | (() => Promise<RslibConfigInput>);
   /**
    * Whether to call `loadEnv` to load environment variables and define them
    * as global variables via `source.define`.

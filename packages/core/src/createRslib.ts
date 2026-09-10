@@ -2,11 +2,13 @@ import {
   createRsbuild,
   type EnvironmentConfig,
   loadEnv,
+  type RsbuildConfig,
   type RsbuildInstance,
   type RsbuildPlugin,
 } from '@rsbuild/core';
 import util from 'node:util';
 import { composeRsbuildEnvironments, pruneEnvironments } from './config';
+import type { LoadConfigResult } from './loadConfig';
 import type { Format, RslibConfig } from './types';
 import type {
   BuildOptions,
@@ -19,12 +21,7 @@ import type {
   StartDevServerResult,
   StartMFDevServerOptions,
 } from './types/rslib';
-import {
-  ensureAbsolutePath,
-  getNodeEnv,
-  isFunction,
-  setNodeEnv,
-} from './utils/helper';
+import { ensureAbsolutePath, getNodeEnv, setNodeEnv } from './utils/helper';
 import { isDebug, isDebugKey, logger } from './utils/logger';
 
 const pruneMFEnvironments = (
@@ -96,6 +93,16 @@ const applyDebugInspectConfigPlugin = (
   });
 };
 
+function isLoadConfigResult(result: unknown): result is LoadConfigResult {
+  return (
+    typeof result === 'object' &&
+    result !== null &&
+    'content' in result &&
+    'filePath' in result &&
+    'dependencies' in result
+  );
+}
+
 /**
  * Create an Rslib instance.
  */
@@ -109,10 +116,18 @@ export async function createRslib(
       })
     : null;
 
-  const configOrFactory = options.config;
-  const config = isFunction(configOrFactory)
-    ? await configOrFactory()
-    : configOrFactory || ({} as RslibConfig);
+  let config =
+    typeof options.config === 'function'
+      ? await options.config()
+      : options.config;
+  let loadConfigResult: LoadConfigResult | undefined;
+
+  if (isLoadConfigResult(config)) {
+    loadConfigResult = config;
+    config = config.content;
+  }
+
+  config ||= {};
 
   if (envs) {
     // define the public environment variables
@@ -155,19 +170,21 @@ export async function createRslib(
     mode: 'development' | 'production',
     environments: Record<string, EnvironmentConfig>,
   ): Promise<RsbuildInstance> => {
+    const rsbuildConfig: RsbuildConfig = {
+      mode,
+      root: config.root,
+      plugins: config.plugins,
+      dev: config.dev,
+      server: config.server,
+      logLevel: isDebug() ? 'info' : config.logLevel,
+      environments,
+    };
     const rsbuildInstance = await createRsbuild({
       cwd: options.cwd,
       callerName: 'rslib',
-      config: {
-        ...(config._privateMeta ? { _privateMeta: config._privateMeta } : {}),
-        mode,
-        root: config.root,
-        plugins: config.plugins,
-        dev: config.dev,
-        server: config.server,
-        logLevel: isDebug() ? 'info' : config.logLevel,
-        environments,
-      },
+      config: loadConfigResult
+        ? { ...loadConfigResult, content: rsbuildConfig }
+        : rsbuildConfig,
       restart: options.restart,
     });
 

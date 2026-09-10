@@ -21,6 +21,23 @@ import { logger } from '../src/utils/logger';
 rs.mock('rslog');
 
 describe('Should load config file correctly', () => {
+  test('accepts the complete loadConfig result', async () => {
+    const result = await loadConfig({
+      path: join(__dirname, 'fixtures/config/cli-options/rslib.config.ts'),
+    });
+    const cwd = join(__dirname, '..');
+    const rslib = await createRslib({ cwd, config: result });
+
+    rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+      expect(rsbuild.context.configFile).toBe(result.filePath);
+      expect(rsbuild.context.configFileDependencies).toEqual(
+        result.dependencies,
+      );
+    });
+
+    await rslib.inspectConfig();
+  });
+
   test('Load config.js in cjs project', async () => {
     const fixtureDir = join(__dirname, 'fixtures/config/cjs');
     const configFilePath = join(fixtureDir, 'rslib.config.js');

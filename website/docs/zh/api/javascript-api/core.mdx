@@ -35,14 +35,19 @@ const rslib = await createRslib({
 ```ts
 type CreateRslibOptions = {
   cwd?: string;
-  config?: RslibConfig | (() => Promise<RslibConfig>);
+  config?:
+    | RslibConfig
+    | LoadConfigResult
+    | (() => Promise<RslibConfig | LoadConfigResult>);
   loadEnv?: boolean | LoadEnvOptions;
 };
 ```
 
 - `cwd`：当前执行构建的根路径，默认值为 `process.cwd()`
-- `config`：Rslib 配置对象。参考 [配置总览](/config/) 查看所有可用的配置项。
+- `config`：Rslib 配置对象或 [loadConfig](#loadconfig) 的完整返回结果。参考 [配置总览](/config/) 查看所有可用的配置项。
 - `loadEnv`：是否调用 [loadEnv](/api/javascript-api/core#loadenv) 方法来加载环境变量，并通过 [source.define](/config/rsbuild/source#sourcedefine) 定义为全局变量。
+
+传入完整的 `loadConfig` 返回结果，可以保留配置文件路径和导入依赖，用于文件监听和持久化缓存失效。仅传入 `result.content` 不会保留这些元数据。
 
 ### 异步加载配置
 
@@ -53,9 +58,9 @@ import { createRslib, loadConfig } from '@rslib/core';
 
 const rslib = await createRslib({
   config: async () => {
-    const { content } = await loadConfig();
-    someFunctionToUpdateConfig(content);
-    return content;
+    const result = await loadConfig();
+    someFunctionToUpdateConfig(result.content);
+    return result;
   },
 });
 ```
@@ -126,25 +131,26 @@ function loadConfig(params?: {
 }): Promise<{
   content: RslibConfig;
   filePath: string | null;
+  dependencies: string[];
 }>;
 ```
 
 - **示例：**
 
 ```ts
-import { loadConfig } from '@rslib/core';
+import { createRslib, loadConfig } from '@rslib/core';
 
 // 默认加载 `rslib.config.*` 配置文件
-const { content } = await loadConfig();
+const result = await loadConfig();
 
-console.log(content); // -> Rslib 配置对象
+console.log(result.content); // -> Rslib 配置对象
 
 const rslib = await createRslib({
-  config: content,
+  config: result,
 });
 ```
 
-如果 cwd 目录下不存在 Rslib 配置文件，loadConfig 方法的返回值为 `{ content: {}, filePath: null }`。
+如果 cwd 目录下不存在 Rslib 配置文件，loadConfig 方法的返回值为 `{ content: {}, filePath: null, dependencies: [] }`。
 
 未指定 `path` 时，`loadConfig` 会按照以下顺序查找配置文件：
 

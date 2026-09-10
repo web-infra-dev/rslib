@@ -140,13 +140,14 @@ const loadConfig = async (
   root: string,
   command?: CommandName,
 ) => {
-  const { content: config, filePath: configFilePath } = await baseLoadConfig({
+  const result = await baseLoadConfig({
     cwd: root,
     path: options.config,
     envMode: options.envMode,
     loader: options.configLoader,
     command,
   });
+  const { content: config, filePath: configFilePath } = result;
 
   if (configFilePath === null) {
     config.lib = [{} satisfies LibConfig];
@@ -155,7 +156,7 @@ const loadConfig = async (
 
   applyCliOptions(config, options, root);
 
-  return config;
+  return result;
 };
 
 const restart: RestartFn = async ({ action }) => {
