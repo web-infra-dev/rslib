@@ -30,7 +30,7 @@ Rslib 会根据 [format](/config/lib/format) 配置指定的 [产物格式](/gui
 - 执行 [build](/guide/basic/cli#rslib) 或调用 [rslib.build()](/api/javascript-api/instance#rslibbuild) 时（包括 watch 模式），设置为 `'production'`。
 - 执行 [mf-dev](/guide/basic/cli#rslib-mf-dev) 或调用 [rslib.startMFDevServer()](/api/javascript-api/instance#rslibstartmfdevserver) 时，设置为 `'development'`。
 
-上述默认值会设置到当前 Node.js 进程，你也可以在运行 Rslib 前设置 `NODE_ENV` 来覆盖这些默认值。该值供配置文件、插件及其依赖判断环境。设置环境变量本身不会直接替换产物中的 `process.env.NODE_ENV`，具体替换规则见上表；也不会改变内部 `mode` 所决定的构建和优化策略，详情见 [优化和分包](/config/default-behavior#优化和分包)。
+上述默认值会设置到当前 Node.js 进程，你也可以在运行 Rslib 前设置 `NODE_ENV` 来覆盖。配置文件、插件及其依赖可以读取该环境变量，并据此调整行为。产物中的 `process.env.NODE_ENV` 是否替换，取决于上表中的规则；构建和优化策略则由内部 `mode` 决定，不随该环境变量改变，详情见 [优化和分包](/config/default-behavior#优化和分包)。
 
 如果需要覆盖产物中的默认处理方式，例如关闭替换或自定义替换值，可以通过 [tools.rspack](/config/rsbuild/tools#toolsrspack) 配置 Rspack 的 [optimization.nodeEnv](https://rspack.rs/zh/config/optimization#optimizationnodeenv)：
 
