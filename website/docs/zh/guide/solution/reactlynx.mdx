@@ -78,7 +78,7 @@ export default defineConfig({
 
 ```json title="package.json"
 {
-  "name": "reactlynx-components",
+  "name": "reactlynx-scroll-list",
   "type": "module",
   "exports": {
     ".": {
@@ -129,7 +129,7 @@ export default defineConfig({
 通过上述配置构建并发布的组件库会保留 JSX，在 Lynx 应用中安装后，可以直接导入使用，由应用侧的 ReactLynx 编译器处理其中的 JSX。例如，使用组件库导出的 `ScrollList`：
 
 ```tsx title="src/App.tsx"
-import { ScrollList } from 'reactlynx-components';
+import { ScrollList } from 'reactlynx-scroll-list';
 
 export function App() {
   return <ScrollList />;
@@ -140,11 +140,11 @@ Lynx 应用也可以在运行时按需加载 External Bundle，其中的 JSX 已
 
 ### 在组件库中使用
 
-你可以基于已有组件库中的公共小组件，组合出更复杂的组件，再将它们作为新的组件库发布。构建时仍需保留 JSX，供应用侧统一编译。推荐将公共组件库作为依赖分发；如果需要将依赖代码一起发布，可以根据产物是否需要重新处理，选择通过 Rslib 构建或直接复制产物。
+你可以在组件库中使用已有的公共组件，构建时保留 JSX，供应用侧统一编译。推荐将公共组件所在的包作为依赖分发；如果需要将依赖代码随包发布，产物可直接使用时可以复制，需要编译代码、样式或调整内部导入时则重新构建。
 
 ::: tip 类型声明
 
-通过构建或复制将依赖代码随包发布时，若 `.d.ts` 文件仍引用该依赖的类型，使用方仍需安装该依赖。可以通过 [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) 将引用到的类型声明一并打包，例如设置为 `['reactlynx-components']`。
+通过构建或复制将依赖代码随包发布时，若 `.d.ts` 文件仍引用该依赖的类型，使用方仍需安装该依赖。可以通过 [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) 将引用到的类型声明一并打包，例如设置为 `['reactlynx-scroll-list']`。
 
 :::
 
@@ -154,11 +154,23 @@ Lynx 应用也可以在运行时按需加载 External Bundle，其中的 JSX 已
 
 使用方安装组件库时，包管理器会按声明的依赖关系安装或复用相关包，应用构建时再通过包名导入加载这些组件库，并统一编译其中的 JSX。
 
-#### 通过 Rslib 构建
+#### 重新构建依赖产物
 
 需要编译依赖的代码、样式或调整内部导入时，可以使用 Rslib 分别构建当前库和依赖，并通过 [output.externals](/config/rsbuild/output#outputexternals) 改写导入路径。
 
-以下以基于 `reactlynx-components` 开发的组件库为例，`src/index.ts` 仅重新导出上游组件，不包含 JSX，使用 bundle 构建；依赖使用 bundleless 构建，保留 JSX 并输出到 `dist/vendor/reactlynx-components`。[outBase](/config/lib/out-base) 和入口需按依赖的实际产物调整，包含需要处理的代码、样式和静态资源：
+以一个包含滚动列表和其他组件的组件库为例，滚动列表基于 `reactlynx-scroll-list` 进行调整，其他组件由你编写。配置分为三个构建项，通过 [id](/config/lib/id) 区分：
+
+- `components`：以 bundleless 方式构建你编写的其他组件，处理需要保留 JSX 的组件代码。
+- `bundled-components`：使用 bundle 构建滚动列表入口及其引用的本地 TS/JS 模块，可包含导出调整或其他 TS/JS 逻辑，并通过 `output.externals` 引用依赖产物。
+- `vendor`：重新构建 `reactlynx-scroll-list` 的产物，保留 JSX，并输出到 `dist/vendor/reactlynx-scroll-list`。
+
+示例仅在 `src/scrollist/index.ts` 中导入 `reactlynx-scroll-list`，其他组件通过本地路径引用该入口：
+
+```ts title="src/scrollist/index.ts"
+export { ScrollList } from 'reactlynx-scroll-list';
+```
+
+[outBase](/config/lib/out-base) 和入口需按依赖的实际产物调整，包含需要处理的代码、样式和静态资源：
 
 ```ts title="rslib.config.ts"
 import { dirname } from 'node:path';
@@ -166,47 +178,60 @@ import { fileURLToPath } from 'node:url';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
-const componentsDir = dirname(
-  fileURLToPath(import.meta.resolve('reactlynx-components')),
+const scrollListDir = dirname(
+  fileURLToPath(import.meta.resolve('reactlynx-scroll-list')),
 );
+const reactPlugin = pluginReact({
+  swcReactOptions: {
+    runtime: 'preserve',
+  },
+});
 
 export default defineConfig({
   lib: [
     {
-      id: 'main',
+      id: 'components',
+      bundle: false, // [!code ++]
       dts: true,
       source: {
-        entry: { index: './src/index.ts' },
+        entry: {
+          index: [
+            './src/**/*',
+            '!./src/scrollist/**', // [!code ++]
+          ],
+        },
+      },
+      plugins: [reactPlugin],
+    },
+    {
+      id: 'bundled-components',
+      source: {
+        entry: {
+          'scrollist/index': './src/scrollist/index.ts', // [!code ++]
+        },
       },
       output: {
-        distPath: './dist',
         externals: {
-          'reactlynx-components': './vendor/reactlynx-components/index.jsx', // [!code ++]
+          'reactlynx-scroll-list': '../vendor/reactlynx-scroll-list/index.jsx', // [!code ++]
         },
       },
     },
     {
       id: 'vendor',
       bundle: false, // [!code ++]
-      outBase: componentsDir, // [!code ++]
+      outBase: scrollListDir, // [!code ++]
       source: {
         entry: {
-          index: `${componentsDir}/**/*.{js,jsx,css,svg}`, // [!code ++]
+          index: `${scrollListDir}/**/*.{js,jsx,css,svg}`, // [!code ++]
         },
       },
       output: {
-        distPath: './dist/vendor/reactlynx-components', // [!code ++]
+        distPath: './dist/vendor/reactlynx-scroll-list', // [!code ++]
         filename: {
           js: '[name].jsx',
         },
       },
-      plugins: [
-        pluginReact({
-          swcReactOptions: {
-            runtime: 'preserve',
-          },
-        }),
-      ],
+      plugins: [reactPlugin],
     },
   ],
   output: {
@@ -215,27 +240,47 @@ export default defineConfig({
 });
 ```
 
-构建后，`dist/index.js` 引用 `dist/vendor/reactlynx-components/index.jsx`。发布时将整个 `dist` 目录包含在包中。如果依赖还引用了其他需要随包发布的组件库，可同样添加构建，并通过 `output.externals` 调整包之间的导入路径。
+组件库源码输出为 `.js` 文件，其中的 JSX 保持不变，`dist/scrollist/index.js` 引用 `dist/vendor/reactlynx-scroll-list/index.jsx`，发布时将整个 `dist` 目录包含在包中。
 
-#### 直接复制产物
+如果 `reactlynx-scroll-list` 还引用了其他需要随包发布的组件库，需要为这些包添加构建，并在 `vendor` 构建的 `output.externals` 中将对应包名改写为它们的产物路径。
 
-如果依赖产物可以直接使用，且无需修改内部导入，可以通过 [output.copy](/config/rsbuild/output#outputcopy) 复制完整产物，并通过 `output.externals` 让构建产物从复制后的路径导入组件：
+#### 直接复制依赖产物
+
+如果依赖产物可以直接使用，且无需修改内部导入，可以通过 [output.copy](/config/rsbuild/output#outputcopy) 复制完整产物。
+
+以下配置以 bundleless 方式构建组件库源码并保留 JSX，同时复制依赖产物。示例同样仅在 `src/scrollist/index.ts` 中导入该依赖，`output.externals` 中的路径相对于生成的 `dist/scrollist/index.js`：
 
 ```ts title="rslib.config.ts"
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
-const componentsDir = dirname(
-  fileURLToPath(import.meta.resolve('reactlynx-components')),
+const scrollListDir = dirname(
+  fileURLToPath(import.meta.resolve('reactlynx-scroll-list')),
 );
 
 export default defineConfig({
+  bundle: false,
+  dts: true,
   output: {
+    target: 'web',
     externals: {
-      'reactlynx-components': './vendor/reactlynx-components/index.jsx', // [!code ++]
+      'reactlynx-scroll-list': '../vendor/reactlynx-scroll-list/index.jsx', // [!code ++]
     },
-    copy: [{ from: componentsDir, to: 'vendor/reactlynx-components' }], // [!code ++]
+    copy: [
+      {
+        from: scrollListDir, // [!code ++]
+        to: 'vendor/reactlynx-scroll-list', // [!code ++]
+      },
+    ],
   },
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'preserve',
+      },
+    }),
+  ],
 });
 ```
