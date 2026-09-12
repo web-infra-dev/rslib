@@ -3,11 +3,11 @@ name: rspress-description-generator
 description: Generate missing description frontmatter for Rspress Markdown/MDX pages, including new docs pages and site-wide SEO metadata updates.
 ---
 
-# Rspress Description Generator
+# Rspress description generator
 
 The `description` field in Rspress frontmatter generates `<meta name="description" content="...">` tags, which are used for search engine snippets, social media previews, and AI-oriented formats like llms.txt.
 
-## Step 1 — Locate the docs root
+## Step 1 — locate the docs root
 
 1. Find the Rspress config file. Search for `rspress.config.ts`, `.js`, `.mjs`, or `.cjs`. It may be at the project root or inside a subdirectory like `website/`.
 2. Read the config and extract the `root` option.
@@ -16,7 +16,7 @@ The `description` field in Rspress frontmatter generates `<meta name="descriptio
    - If `root` is not set, default to `docs` relative to the config file's directory.
 3. Confirm the directory exists. If neither `docs` nor the configured root exists, check for `doc` as a fallback.
 
-## Step 2 — Detect i18n structure
+## Step 2 — detect i18n structure
 
 Rspress i18n projects place language subdirectories (e.g., `en/`, `zh/`) directly under the docs root:
 
@@ -34,7 +34,7 @@ Check if the docs root contains language subdirectories (two-letter codes like `
 
 If there are no language subdirectories, treat the entire docs root as a single-language site.
 
-## Step 3 — Scan and process files
+## Step 3 — scan and process files
 
 Glob for `**/*.md` and `**/*.mdx` under the docs root. Exclude:
 
@@ -73,13 +73,13 @@ If the description contains colons, quotes, or other special YAML characters, wr
 description: 'API reference for Rspress configuration: plugins, themes, and build options'
 ```
 
-## Step 4 — Batch processing
+## Step 4 — batch processing
 
 For sites with many files, use parallel agent calls to process independent files simultaneously. Group by directory (e.g., all files in `guide/`, then all in `api/`) to maintain focus and consistency within each section.
 
 After processing all files, do a quick scan to ensure no files were missed — re-glob and check for any remaining files without `description`.
 
-## Description Writing Guidelines
+## Description writing guidelines
 
 The description serves three audiences: search engines (Google snippet), AI systems (llms.txt, summarization), and humans (scanning search results). A good description helps all three.
 
