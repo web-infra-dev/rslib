@@ -1,0 +1,289 @@
+---
+description: '使用 Rslib 构建和发布保留 JSX 的 ReactLynx 组件库，配置类型声明与组件测试，并在 Lynx 应用或其他组件库中使用。'
+---
+
+# ReactLynx
+
+在本文档中，你将学习如何使用 Rslib 构建用于 Lynx 应用的 [ReactLynx](https://lynxjs.org/zh/react/introduction) 组件库，你可在 [示例](https://github.com/rstackjs/rstack-examples/tree/main/rslib/reactlynx-basic) 中查看 ReactLynx 相关演示项目。
+
+## 创建 ReactLynx 项目
+
+你可以使用 `create-rslib` 创建 Rslib + ReactLynx 项目。只需执行以下命令：
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm create rslib@latest',
+    yarn: 'yarn create rslib',
+    pnpm: 'pnpm create rslib@latest',
+    bun: 'bun create rslib@latest',
+  }}
+/>
+
+然后，当提示 "Select template" 时选择 `ReactLynx`。
+
+## 在现有 Rslib 项目中使用
+
+开发 ReactLynx 组件，需要在 `rslib.config.ts` 中设置 [target](/config/rsbuild/output#outputtarget) 为 `"web"`。这一点至关重要，因为 Rslib 默认将 `target` 设置为 `"node"`，这与 Rsbuild 的 target 默认值不同。
+
+此外，ReactLynx 组件库通常需要在产物中保留 JSX 语法，交给应用侧的 ReactLynx 编译器根据目标环境和构建配置进行处理。你可以注册 Rsbuild [React 插件](https://rsbuild.rs/zh/plugins/list/plugin-react)，通过 [swcReactOptions](https://rsbuild.rs/zh/plugins/list/plugin-react#swcreactoptionsruntime) 将 `runtime` 设置为 `'preserve'`，并将 [bundle](/config/lib/bundle) 设置为 `false`，启用 bundleless 构建。同时，将 [output.filename](/config/rsbuild/output#outputfilename) 中的 `js` 设置为 `'[name].jsx'`，输出 `.jsx` 后缀的文件。
+
+例如，在 `rslib.config.ts` 中配置：
+
+```ts title="rslib.config.ts" twoslash
+import { defineConfig } from '@rslib/core';
+import { pluginReact } from '@rsbuild/plugin-react'; // [!code highlight]
+
+export default defineConfig({
+  bundle: false, // [!code highlight]
+  // [!code highlight:6]
+  output: {
+    target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
+  },
+  plugins: [
+    pluginReact({
+      // [!code highlight:3]
+      swcReactOptions: {
+        runtime: 'preserve',
+      },
+    }),
+  ],
+});
+```
+
+## TypeScript
+
+对于使用 TypeScript 的 ReactLynx 项目，在 `tsconfig.json` 中设置 `"jsx": "preserve"` 和 `"jsxImportSource": "@lynx-js/react"`，并在 `types` 中添加 `@lynx-js/types`：
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // [!code highlight:3]
+    "jsx": "preserve",
+    "jsxImportSource": "@lynx-js/react",
+    "types": ["@lynx-js/types", "@rslib/core/types"]
+  }
+}
+```
+
+在 `rslib.config.ts` 中设置 [dts](/config/lib/dts) 为 `true`，可以生成组件库的类型声明。
+
+## 输出产物
+
+在 `package.json` 中配置 `.jsx` 入口和类型声明入口，并将 ReactLynx 及其类型依赖声明为 peer 依赖：
+
+```json title="package.json"
+{
+  "name": "reactlynx-scroll-list",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts", // [!code ++]
+      "default": "./dist/index.jsx" // [!code ++]
+    }
+  },
+  "types": "./dist/index.d.ts", // [!code ++]
+  "files": ["dist"],
+  "peerDependencies": {
+    "@lynx-js/react": ">=0.100.0", // [!code ++]
+    "@lynx-js/types": ">=4", // [!code ++]
+    "@types/react": ">=19" // [!code ++]
+  }
+}
+```
+
+## 测试组件
+
+你可以使用 Rstest 测试 ReactLynx 组件。首先，安装测试所需的依赖：
+
+<PackageManagerTabs command="add @rstest/core @rstest/adapter-rslib @lynx-js/react-rsbuild-plugin happy-dom -D" />
+
+通过 `@rstest/adapter-rslib` 的 `withRslibConfig` 函数复用 Rslib 配置，详见 [使用 Rstest](/guide/advanced/rstest)。
+
+同时，使用 `@lynx-js/react` 提供的 `withDefaultConfig` 函数加载 [ReactLynx 测试预设](https://lynxjs.org/zh/api/reactlynx-testing-library/#rstest)，并注册 `@lynx-js/react-rsbuild-plugin` 的 `pluginReactLynx` 插件来编译 JSX：
+
+```ts title="rstest.config.ts"
+import { pluginReactLynx } from '@lynx-js/react-rsbuild-plugin'; // [!code ++]
+import { withDefaultConfig } from '@lynx-js/react/testing-library/rstest-config'; // [!code ++]
+import { withRslibConfig } from '@rstest/adapter-rslib';
+import { defineConfig } from '@rstest/core';
+
+export default defineConfig({
+  extends: [withDefaultConfig(), withRslibConfig()], // [!code ++]
+  plugins: [pluginReactLynx()], // [!code ++]
+});
+```
+
+配置完成后，可以从 `@lynx-js/react/testing-library` 导入 `render`、`screen`、`fireEvent` 等 API，测试组件的渲染与交互。
+
+具体用法参考 [ReactLynx 测试指南](https://lynxjs.org/zh/react/reactlynx-testing-library.html)，你可在 [示例](https://github.com/rstackjs/rstack-examples/tree/main/rslib/reactlynx-rstest) 中查看完整的组件测试项目。
+
+## 使用组件库
+
+### 在应用中使用
+
+通过上述配置构建并发布的组件库会保留 JSX，在 Lynx 应用中安装后，可以直接导入使用，由应用侧的 ReactLynx 编译器处理其中的 JSX。例如，使用组件库导出的 `ScrollList`：
+
+```tsx title="src/App.tsx"
+import { ScrollList } from 'reactlynx-scroll-list';
+
+export function App() {
+  return <ScrollList />;
+}
+```
+
+Lynx 应用也可以在运行时按需加载 External Bundle，其中的 JSX 已在 bundle 构建阶段完成编译。你可以查看 [Lynx External Bundle 文档](https://lynxjs.org/zh/rspeedy/external-bundle.html)，了解如何使用 Rslib 构建这类产物并在应用中加载。
+
+### 在组件库中使用
+
+你可以在组件库中使用已有的公共组件，构建时保留 JSX，供应用侧统一编译。推荐将公共组件所在的包作为依赖分发；如果需要将依赖代码随包发布，产物可直接使用时可以复制，需要编译代码、样式或调整内部导入时则重新构建。
+
+::: tip 类型声明
+
+通过构建或复制将依赖代码随包发布时，若 `.d.ts` 文件仍引用该依赖的类型，使用方仍需安装该依赖。可以通过 [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) 将引用到的类型声明一并打包，例如设置为 `['reactlynx-scroll-list']`。
+
+:::
+
+#### 作为依赖分发（推荐）
+
+将公共组件所在的库声明在 `dependencies` 或 `peerDependencies` 中。Rslib 默认会将这类依赖标记为 [external](/guide/advanced/third-party-deps#三方依赖的默认处理)，保留包名导入。
+
+使用方安装组件库时，包管理器会按声明的依赖关系安装或复用相关包，应用构建时再通过包名导入加载这些组件库，并统一编译其中的 JSX。
+
+#### 重新构建依赖产物
+
+需要编译依赖的代码、样式或调整内部导入时，可以使用 Rslib 分别构建当前库和依赖，并通过 [output.externals](/config/rsbuild/output#outputexternals) 改写导入路径。
+
+以一个包含滚动列表和其他组件的组件库为例，滚动列表基于 `reactlynx-scroll-list` 进行调整，其他组件由你编写。配置分为三个构建项，通过 [id](/config/lib/id) 区分：
+
+- `components`：以 bundleless 方式构建你编写的其他组件，处理需要保留 JSX 的组件代码。
+- `bundled-components`：使用 bundle 构建滚动列表入口及其引用的本地 TS/JS 模块，可包含导出调整或其他 TS/JS 逻辑，并通过 `output.externals` 引用依赖产物。
+- `vendor`：重新构建 `reactlynx-scroll-list` 的产物，保留 JSX，并输出到 `dist/vendor/reactlynx-scroll-list`。
+
+示例仅在 `src/scroll-list/index.ts` 中导入 `reactlynx-scroll-list`，其他组件通过本地路径引用该入口：
+
+```ts title="src/scroll-list/index.ts"
+export { ScrollList } from 'reactlynx-scroll-list';
+```
+
+[outBase](/config/lib/out-base) 和入口需按依赖的实际产物调整，包含需要处理的代码、样式和静态资源：
+
+```ts title="rslib.config.ts"
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+const scrollListDir = dirname(
+  fileURLToPath(import.meta.resolve('reactlynx-scroll-list')),
+);
+const reactPlugin = pluginReact({
+  swcReactOptions: {
+    runtime: 'preserve',
+  },
+});
+
+export default defineConfig({
+  lib: [
+    {
+      id: 'components',
+      bundle: false, // [!code ++]
+      dts: true,
+      source: {
+        entry: {
+          index: [
+            './src/**/*',
+            '!./src/scroll-list/**', // [!code ++]
+          ],
+        },
+      },
+      plugins: [reactPlugin],
+    },
+    {
+      id: 'bundled-components',
+      source: {
+        entry: {
+          'scroll-list/index': './src/scroll-list/index.ts', // [!code ++]
+        },
+      },
+      output: {
+        externals: {
+          'reactlynx-scroll-list': '../vendor/reactlynx-scroll-list/index.jsx', // [!code ++]
+        },
+      },
+    },
+    {
+      id: 'vendor',
+      bundle: false, // [!code ++]
+      outBase: scrollListDir, // [!code ++]
+      source: {
+        entry: {
+          index: `${scrollListDir}/**/*.{js,jsx,css,svg}`, // [!code ++]
+        },
+      },
+      output: {
+        distPath: './dist/vendor/reactlynx-scroll-list', // [!code ++]
+      },
+      plugins: [reactPlugin],
+    },
+  ],
+  output: {
+    target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
+  },
+});
+```
+
+通过顶层 `output.filename` 将各构建项的代码产物统一输出为 `.jsx` 文件，`dist/scroll-list/index.jsx` 引用 `dist/vendor/reactlynx-scroll-list/index.jsx`，发布时将整个 `dist` 目录包含在包中。
+
+如果 `reactlynx-scroll-list` 还引用了其他需要随包发布的组件库，需要为这些包添加构建，并在 `vendor` 构建的 `output.externals` 中将对应包名改写为它们的产物路径。
+
+#### 直接复制依赖产物
+
+如果依赖产物可以直接使用，且无需修改内部导入，可以通过 [output.copy](/config/rsbuild/output#outputcopy) 复制完整产物。
+
+以下配置以 bundleless 方式构建组件库源码并保留 JSX，同时复制依赖产物。示例同样仅在 `src/scroll-list/index.ts` 中导入该依赖，`output.externals` 中的路径相对于生成的 `dist/scroll-list/index.jsx`：
+
+```ts title="rslib.config.ts"
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+const scrollListDir = dirname(
+  fileURLToPath(import.meta.resolve('reactlynx-scroll-list')),
+);
+
+export default defineConfig({
+  bundle: false,
+  dts: true,
+  output: {
+    target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
+    externals: {
+      'reactlynx-scroll-list': '../vendor/reactlynx-scroll-list/index.jsx', // [!code ++]
+    },
+    copy: [
+      {
+        from: scrollListDir, // [!code ++]
+        to: 'vendor/reactlynx-scroll-list', // [!code ++]
+      },
+    ],
+  },
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'preserve',
+      },
+    }),
+  ],
+});
+```

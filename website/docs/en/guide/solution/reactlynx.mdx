@@ -1,0 +1,289 @@
+---
+description: 'Build and publish ReactLynx component libraries with Rslib, preserve JSX, generate types, test components, and use them in Lynx apps or other libraries.'
+---
+
+# ReactLynx
+
+In this document, you will learn how to build a [ReactLynx](https://lynxjs.org/react/introduction) component library for Lynx applications with Rslib. You can check out ReactLynx related example projects in [Examples](https://github.com/rstackjs/rstack-examples/tree/main/rslib/reactlynx-basic).
+
+## Create ReactLynx project
+
+You can use `create-rslib` to create a project with Rslib + ReactLynx. Just execute the following command:
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm create rslib@latest',
+    yarn: 'yarn create rslib',
+    pnpm: 'pnpm create rslib@latest',
+    bun: 'bun create rslib@latest',
+  }}
+/>
+
+Then select `ReactLynx` when prompted to "Select template".
+
+## Use Rslib in an existing project
+
+To develop a ReactLynx library, you need to set the [target](/config/rsbuild/output#outputtarget) to `"web"` in `rslib.config.ts`. This is crucial because Rslib sets the `target` to `"node"` by default, which differs from the default target of Rsbuild.
+
+Additionally, ReactLynx component libraries typically need to preserve JSX syntax in the build output so that the application's ReactLynx compiler can process it according to the target environment and build configuration. You can register the Rsbuild [React Plugin](https://rsbuild.rs/plugins/list/plugin-react), set `runtime` to `'preserve'` through [swcReactOptions](https://rsbuild.rs/plugins/list/plugin-react#swcreactoptionsruntime), and set [bundle](/config/lib/bundle) to `false` to enable bundleless builds. Also, set `js` to `'[name].jsx'` in [output.filename](/config/rsbuild/output#outputfilename) to emit `.jsx` files.
+
+For example, configure `rslib.config.ts` as follows:
+
+```ts title="rslib.config.ts" twoslash
+import { defineConfig } from '@rslib/core';
+import { pluginReact } from '@rsbuild/plugin-react'; // [!code highlight]
+
+export default defineConfig({
+  bundle: false, // [!code highlight]
+  // [!code highlight:6]
+  output: {
+    target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
+  },
+  plugins: [
+    pluginReact({
+      // [!code highlight:3]
+      swcReactOptions: {
+        runtime: 'preserve',
+      },
+    }),
+  ],
+});
+```
+
+## TypeScript
+
+For ReactLynx projects using TypeScript, set `"jsx": "preserve"` and `"jsxImportSource": "@lynx-js/react"` in your `tsconfig.json`, and add `@lynx-js/types` to `types`:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // [!code highlight:3]
+    "jsx": "preserve",
+    "jsxImportSource": "@lynx-js/react",
+    "types": ["@lynx-js/types", "@rslib/core/types"]
+  }
+}
+```
+
+Set [dts](/config/lib/dts) to `true` in `rslib.config.ts` to generate the library's type declarations.
+
+## Output
+
+Configure the `.jsx` entry and type declaration entry in `package.json`, and declare ReactLynx and its type dependencies as peer dependencies:
+
+```json title="package.json"
+{
+  "name": "reactlynx-scroll-list",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts", // [!code ++]
+      "default": "./dist/index.jsx" // [!code ++]
+    }
+  },
+  "types": "./dist/index.d.ts", // [!code ++]
+  "files": ["dist"],
+  "peerDependencies": {
+    "@lynx-js/react": ">=0.100.0", // [!code ++]
+    "@lynx-js/types": ">=4", // [!code ++]
+    "@types/react": ">=19" // [!code ++]
+  }
+}
+```
+
+## Testing
+
+You can use Rstest to test ReactLynx components. First, install the dependencies needed for testing:
+
+<PackageManagerTabs command="add @rstest/core @rstest/adapter-rslib @lynx-js/react-rsbuild-plugin happy-dom -D" />
+
+Use the `withRslibConfig` function from `@rstest/adapter-rslib` to reuse your Rslib configuration. See [Use Rstest](/guide/advanced/rstest) for details.
+
+Also, use the `withDefaultConfig` function provided by `@lynx-js/react` to load the [ReactLynx test preset](https://lynxjs.org/api/reactlynx-testing-library/#rstest), and register the `pluginReactLynx` plugin from `@lynx-js/react-rsbuild-plugin` to compile JSX:
+
+```ts title="rstest.config.ts"
+import { pluginReactLynx } from '@lynx-js/react-rsbuild-plugin'; // [!code ++]
+import { withDefaultConfig } from '@lynx-js/react/testing-library/rstest-config'; // [!code ++]
+import { withRslibConfig } from '@rstest/adapter-rslib';
+import { defineConfig } from '@rstest/core';
+
+export default defineConfig({
+  extends: [withDefaultConfig(), withRslibConfig()], // [!code ++]
+  plugins: [pluginReactLynx()], // [!code ++]
+});
+```
+
+Once configured, import APIs such as `render`, `screen`, and `fireEvent` from `@lynx-js/react/testing-library` to test component rendering and interactions.
+
+See the [ReactLynx testing guide](https://lynxjs.org/react/reactlynx-testing-library.html) for usage details. You can find a complete component testing project in [Examples](https://github.com/rstackjs/rstack-examples/tree/main/rslib/reactlynx-rstest).
+
+## Use the component library
+
+### Use in an application
+
+The component library built and published with the configuration above preserves JSX. After installing it in a Lynx application, you can import and use its components directly, with their JSX processed by the application's ReactLynx compiler. For example, use the `ScrollList` exported by the library:
+
+```tsx title="src/App.tsx"
+import { ScrollList } from 'reactlynx-scroll-list';
+
+export function App() {
+  return <ScrollList />;
+}
+```
+
+Lynx applications can also load an External Bundle on demand at runtime. Its JSX has already been compiled during the bundle build. You can read the [Lynx External Bundle guide](https://lynxjs.org/rspeedy/external-bundle.html) to learn how to build these bundles with Rslib and load them in an application.
+
+### Use in a component library
+
+You can use existing shared components in your library and preserve JSX for the application to compile. Distributing the package that provides those components as a dependency is recommended. If you need to publish its code with your library, copy output that is ready to use, or rebuild it when its code, styles, or internal imports need processing.
+
+::: tip Type declarations
+
+When publishing dependency code with your library by building or copying it, consumers still need to install the dependency if your `.d.ts` files reference its types. Use [dts.bundle.bundledPackages](/config/lib/dts#dtsbundlebundledpackages) to bundle those type declarations as well, for example by setting it to `['reactlynx-scroll-list']`.
+
+:::
+
+#### Distribute as a dependency (recommended)
+
+Declare the library that provides the shared components in `dependencies` or `peerDependencies`. Rslib marks these dependencies as [external](/guide/advanced/third-party-deps#default-handling-of-third-party-dependencies) by default, preserving their package imports.
+
+When consumers install your library, their package manager installs or reuses packages according to the declared dependencies. The application build then loads these libraries through their package imports and compiles their JSX together.
+
+#### Rebuild dependency output
+
+If you need to compile the dependency's code or styles, or change its internal imports, use Rslib to build your library and the dependency separately, and use [output.externals](/config/rsbuild/output#outputexternals) to rewrite imports.
+
+Consider a component library that includes a scroll list adapted from `reactlynx-scroll-list` and other components you write. The configuration has three builds, each identified by an [id](/config/lib/id):
+
+- `components`: builds the other components you write in bundleless mode, handling component code that needs to preserve JSX.
+- `bundled-components`: bundles the scroll list entry and the local TS/JS modules it imports, which can adjust exports or include other TS/JS logic. It uses `output.externals` to reference the dependency output.
+- `vendor`: rebuilds the output of `reactlynx-scroll-list`, preserving JSX and emitting files to `dist/vendor/reactlynx-scroll-list`.
+
+In this example, only `src/scroll-list/index.ts` imports `reactlynx-scroll-list`. Other components reference this entry through local imports:
+
+```ts title="src/scroll-list/index.ts"
+export { ScrollList } from 'reactlynx-scroll-list';
+```
+
+Adjust [outBase](/config/lib/out-base) and the entry to match the dependency's actual output, including the code, styles, and static assets to process:
+
+```ts title="rslib.config.ts"
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+const scrollListDir = dirname(
+  fileURLToPath(import.meta.resolve('reactlynx-scroll-list')),
+);
+const reactPlugin = pluginReact({
+  swcReactOptions: {
+    runtime: 'preserve',
+  },
+});
+
+export default defineConfig({
+  lib: [
+    {
+      id: 'components',
+      bundle: false, // [!code ++]
+      dts: true,
+      source: {
+        entry: {
+          index: [
+            './src/**/*',
+            '!./src/scroll-list/**', // [!code ++]
+          ],
+        },
+      },
+      plugins: [reactPlugin],
+    },
+    {
+      id: 'bundled-components',
+      source: {
+        entry: {
+          'scroll-list/index': './src/scroll-list/index.ts', // [!code ++]
+        },
+      },
+      output: {
+        externals: {
+          'reactlynx-scroll-list': '../vendor/reactlynx-scroll-list/index.jsx', // [!code ++]
+        },
+      },
+    },
+    {
+      id: 'vendor',
+      bundle: false, // [!code ++]
+      outBase: scrollListDir, // [!code ++]
+      source: {
+        entry: {
+          index: `${scrollListDir}/**/*.{js,jsx,css,svg}`, // [!code ++]
+        },
+      },
+      output: {
+        distPath: './dist/vendor/reactlynx-scroll-list', // [!code ++]
+      },
+      plugins: [reactPlugin],
+    },
+  ],
+  output: {
+    target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
+  },
+});
+```
+
+The top-level `output.filename` setting gives all builds a consistent `.jsx` extension for their code output. The generated `dist/scroll-list/index.jsx` imports `dist/vendor/reactlynx-scroll-list/index.jsx`, so include the entire `dist` directory when publishing your package.
+
+If `reactlynx-scroll-list` imports other component libraries that also need to be distributed with your package, add builds for those packages. In the `vendor` build, use `output.externals` to rewrite their package imports to the paths of their output files.
+
+#### Copy dependency output directly
+
+If the dependency's output is ready to use and its internal imports need no changes, copy the complete output with [output.copy](/config/rsbuild/output#outputcopy).
+
+The following configuration builds the library source in bundleless mode to preserve JSX and copies the dependency's output. As above, only `src/scroll-list/index.ts` imports the dependency, and the path in `output.externals` is relative to the generated `dist/scroll-list/index.jsx`:
+
+```ts title="rslib.config.ts"
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { defineConfig } from '@rslib/core';
+
+const scrollListDir = dirname(
+  fileURLToPath(import.meta.resolve('reactlynx-scroll-list')),
+);
+
+export default defineConfig({
+  bundle: false,
+  dts: true,
+  output: {
+    target: 'web',
+    filename: {
+      js: '[name].jsx',
+    },
+    externals: {
+      'reactlynx-scroll-list': '../vendor/reactlynx-scroll-list/index.jsx', // [!code ++]
+    },
+    copy: [
+      {
+        from: scrollListDir, // [!code ++]
+        to: 'vendor/reactlynx-scroll-list', // [!code ++]
+      },
+    ],
+  },
+  plugins: [
+    pluginReact({
+      swcReactOptions: {
+        runtime: 'preserve',
+      },
+    }),
+  ],
+});
+```
