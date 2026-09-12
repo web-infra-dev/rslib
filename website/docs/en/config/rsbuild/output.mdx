@@ -15,7 +15,7 @@ Use this option to set the URL prefix for static assets, such as setting it to a
 In Rslib, the default value for this option depends on [format](/config/lib/format):
 
 - When `format` is `cjs` or `esm`, the default value is `"auto"`.
-- When `format` is `mf` or `umd`, the default value is `"/"`.
+- When `format` is `mf`, `umd`, or `iife`, the default value is `"/"`.
 
 When `output.assetPrefix` is set to `"auto"`, Rslib defaults to setting [importMode](https://rspack.rs/config/module-generator#assetimportmode) to `"preserve"`, which preserves the `import` or `require` statements for static assets in JavaScript files. Additionally, the static asset references in CSS files remain as relative paths, see [Static assets](/guide/advanced/static-assets) for more details.
 
@@ -122,13 +122,11 @@ It is important to note that `output.externals` differs from [resolve.alias](/co
 
 Whether to add a hash value to the filename after the production build.
 
-Rslib sets `output.filenameHash` to `false` by default.
+Rslib sets `output.filenameHash` to `false` for `esm`, `cjs`, `umd`, and `iife` formats. For `mf`, Rslib retains Rsbuild's default, which adds hash values to output filenames in production mode.
 
 ::: info Filename hash
 
-By default, Rslib does not add a hash value in the middle of filenames.
-
-To enable this behavior, you can set `output.filenameHash` to `true`.
+Set `output.filenameHash` to `true` to add hash values to output filenames, or `false` to disable this behavior.
 
 You can also specify different filenames for different types of files by configuring `output.filename`.
 
@@ -208,6 +206,8 @@ export default defineConfig({
 });
 ```
 
+- When format is `iife`, Rslib also only performs dead code elimination and unused code elimination by default, with `minimizerOptions.module` set to `true`.
+
 - When format is `mf`, since MF assets are loaded over the network, which means they will not be compressed by the application project. Therefore, they need to be minified in Rslib. The default value is:
 
 ```ts
@@ -270,7 +270,7 @@ Used to set whether to generate source map files, and which format of source map
 
 Setting the build target of Rsbuild.
 
-Rslib sets `output.target` to `node` by default.
+Rslib sets `output.target` to `node` by default for `esm`, `cjs`, `umd`, and `iife` formats, and to `web` for `mf`.
 
 :::info
 Check out the [Solution](/guide/solution/) to learn more about the build target.

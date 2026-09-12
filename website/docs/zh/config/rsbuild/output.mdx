@@ -15,7 +15,7 @@ import { RsbuildDocBadge } from '@components/RsbuildDocBadge';
 在 Rslib 中，该选项的默认值由 [format](/config/lib/format) 决定：
 
 - 当 `format` 为 `cjs` 或 `esm` 时，默认值为 `"auto"`。
-- 当 `format` 为 `mf` 或 `umd` 时，默认值为 `"/"`。
+- 当 `format` 为 `mf`、`umd` 或 `iife` 时，默认值为 `"/"`。
 
 当 `output.assetPrefix` 设置为 `"auto"` 时，Rslib 会自动将 [importMode](https://rspack.rs/zh/config/module-generator#assetimportmode) 设置为 `"preserve"`，以保留 JavaScript 文件中引用静态资源的 `import` 或 `require` 语句。同时，CSS 文件中的静态资源会保留相对引用路径，详情可以查看 [静态资源](/guide/advanced/static-assets)。
 
@@ -118,13 +118,11 @@ const defaultDistPath = {
 
 在生产模式构建后，是否在产物的文件名中添加 hash 值。
 
-Rslib 默认将 `output.filenameHash` 设置为 `false`。
+对于 `esm`、`cjs`、`umd` 和 `iife` 格式，Rslib 默认将 `output.filenameHash` 设置为 `false`。对于 `mf` 格式，Rslib 保留 Rsbuild 的默认值，在生产模式下为产物的文件名添加 hash 值。
 
 ::: info 文件名中的 hash 值
 
-默认情况下，Rslib 不会在文件名中间添加 hash 值。
-
-要开启这个行为，你可以将 `output.filenameHash` 设置为 `true`。
+可以将 `output.filenameHash` 设置为 `true`，在产物的文件名中添加 hash 值，或设置为 `false` 来禁用。
 
 你也可以通过设置 `output.filename` 为不同类型的文件指定不同的名称。
 
@@ -204,6 +202,8 @@ export default defineConfig({
 });
 ```
 
+- 当 format 为 `iife` 时，Rslib 默认也仅执行死代码消除和未使用代码消除，并将 `minimizerOptions.module` 设置为 `true`。
+
 - 当 format 为 `mf` 时，由于 MF 资源通过网络加载，这意味着它们不会被应用项目压缩。因此，需要在 Rslib 中对它们进行压缩。默认值为：
 
 ```ts
@@ -266,7 +266,7 @@ Rsbuild 的 `output.polyfill` 会将 polyfills 注入到全局作用域中，这
 
 用于设置 Rsbuild 的构建产物类型。
 
-Rslib 默认将 `output.target` 设置为 `node`。
+对于 `esm`、`cjs`、`umd` 和 `iife` 格式，Rslib 默认将 `output.target` 设置为 `node`；对于 `mf` 格式，默认值为 `web`。
 
 :::info
 请查看 [解决方案](/guide/solution/) 了解更多关于构建产物的信息。
