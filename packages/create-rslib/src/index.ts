@@ -22,6 +22,8 @@ export const TEMPLATES: string[] = [
   'node-ts',
   'react-js',
   'react-ts',
+  'reactlynx-js',
+  'reactlynx-ts',
   'vue-js',
   'vue-ts',
   'svelte-js',
@@ -41,8 +43,9 @@ async function getTemplateName({ template }: Argv) {
     await select({
       message: 'Select template',
       options: [
-        { value: 'node', label: 'Node.js package' },
+        { value: 'node', label: 'Node.js' },
         { value: 'react', label: 'React' },
+        { value: 'reactlynx', label: 'ReactLynx' },
         { value: 'vue', label: 'Vue' },
         { value: 'svelte', label: 'Svelte' },
         { value: 'solid', label: 'Solid' },
@@ -72,6 +75,10 @@ function mapESLintTemplate(templateName: string): ESLintTemplateName {
     case 'svelte-js':
     case 'svelte-ts':
       return templateName;
+    case 'reactlynx-js':
+      return 'react-js';
+    case 'reactlynx-ts':
+      return 'react-ts';
     default: {
       const language = templateName.split('-').pop();
       return `vanilla-${language}` as ESLintTemplateName;
@@ -84,6 +91,10 @@ function mapRslintTemplate(templateName: string): RslintTemplateName {
     case 'react-js':
     case 'react-ts':
       return templateName;
+    case 'reactlynx-js':
+      return 'react-js';
+    case 'reactlynx-ts':
+      return 'react-ts';
     default: {
       const language = templateName.split('-').pop();
       return `vanilla-${language}` as RslintTemplateName;
@@ -170,7 +181,7 @@ create({
       value: 'storybook',
       label: 'Storybook - component development',
       when: ({ templateName }) =>
-        templateName.startsWith('react') || templateName.startsWith('vue'),
+        templateName.startsWith('react-') || templateName.startsWith('vue-'),
       action: ({
         templateName,
         distFolder,
