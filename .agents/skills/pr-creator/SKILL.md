@@ -5,7 +5,7 @@ metadata:
   internal: true
 ---
 
-# Pull Request Creator
+# Pull request creator
 
 ## Steps
 
