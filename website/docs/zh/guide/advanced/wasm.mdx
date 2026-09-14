@@ -3,6 +3,7 @@ description: '在 Rslib 库中导入 WebAssembly 模块，通过 compile 或 pre
 ---
 
 import { Tabs, Tab } from '@theme';
+import { ApiMeta } from '@components/ApiMeta';
 
 # Wasm
 
@@ -287,6 +288,8 @@ Rslib 会更新 JavaScript 产物中对 `.wasm` 文件的 import，使其指向�
 :::
 
 ## 禁用 wasm 处理
+
+<ApiMeta addedVersion="1.0.1" />
 
 将 [lib.wasm](/config/lib/wasm) 设置为 `false` 时，Rslib 会保留通过 ESM 语法导入的 `.wasm` 模块的原始导入路径，不解析这些模块，也不输出对应的 `.wasm` 文件。你需要自行管理这些文件，并确保导入路径能够从产物中的 JavaScript 文件正确解析。
 
