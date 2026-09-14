@@ -137,6 +137,10 @@ See the [ReactLynx testing guide](https://lynxjs.org/react/reactlynx-testing-lib
 
 ### Use in an application
 
+In a Lynx application, you can use a ReactLynx component library by importing it as a package or loading it as an External Bundle.
+
+#### Import from a package
+
 The component library built and published with the configuration above preserves JSX. After installing it in a Lynx application, you can import and use its components directly, with their JSX processed by the application's ReactLynx compiler. For example, use the `ScrollList` exported by the library:
 
 ```tsx title="src/App.tsx"
@@ -146,6 +150,8 @@ export function App() {
   return <ScrollList />;
 }
 ```
+
+#### Load an external bundle
 
 Lynx applications can also load an External Bundle on demand at runtime. Its JSX has already been compiled during the bundle build. When creating the library, you can select the optional `External Bundle` tool or enable it with `--tools external-bundle` in the initialization command:
 

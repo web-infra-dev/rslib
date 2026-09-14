@@ -137,6 +137,10 @@ export default defineConfig({
 
 ### 在应用中使用
 
+在 Lynx 应用中，你可以通过包导入 ReactLynx 组件库，也可以将其作为 External Bundle 加载。
+
+#### 通过包导入
+
 通过上述配置构建并发布的组件库会保留 JSX，在 Lynx 应用中安装后，可以直接导入使用，由应用侧的 ReactLynx 编译器处理其中的 JSX。例如，使用组件库导出的 `ScrollList`：
 
 ```tsx title="src/App.tsx"
@@ -146,6 +150,8 @@ export function App() {
   return <ScrollList />;
 }
 ```
+
+#### 加载 External bundle
 
 Lynx 应用也可以在运行时按需加载 External Bundle，其中的 JSX 已在 bundle 构建阶段完成编译。创建组件库时，你可以选择可选工具 `External Bundle`，也可以在初始化命令中通过 `--tools external-bundle` 启用：
 
