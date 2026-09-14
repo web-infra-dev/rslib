@@ -109,10 +109,11 @@ const pluginLibAsset = ({ bundle }: { bundle: boolean }): RsbuildPlugin => ({
           .oneOf(CHAIN_ID.ONE_OF.SVG)
           .use(CHAIN_ID.USE.URL);
 
-        const originalOptions = urlLoaderRule.get('options');
+        const originalOptions = urlLoaderRule.get('options') as
+          Record<string, unknown> | undefined;
 
         urlLoaderRule.options({
-          ...originalOptions,
+          ...(originalOptions ?? {}),
           publicPath: (url: string) => `${PUBLIC_PATH_PLACEHOLDER}${url}`,
         });
         config.plugin(LibSvgrPatchPlugin.name).use(LibSvgrPatchPlugin, []);
