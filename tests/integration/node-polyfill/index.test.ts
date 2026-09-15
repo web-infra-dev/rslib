@@ -1,5 +1,5 @@
-import { basename, join } from 'node:path';
 import { expect, test } from '@rstest/core';
+import { basename, join } from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 
 test('`Buffer` should be imported from polyfill when bundled', async () => {
@@ -31,7 +31,7 @@ test('`Buffer` should be aliased to polyfill packages when bundle is disabled', 
     import { createRequire as __rspack_createRequire } from "node:module";
     const __rspack_createRequire_require = __rspack_createRequire(import.meta.url);
     __webpack_require__.add({
-        181 (module) {
+        u (module) {
             module.exports = __rspack_createRequire_require("buffer");
         }
     });

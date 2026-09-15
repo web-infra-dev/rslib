@@ -1,5 +1,5 @@
-import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
+import { join } from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 
 const normalizeMfExposeEntry = (content: string) =>
@@ -9,7 +9,7 @@ const normalizeMfExposeEntry = (content: string) =>
       '__federation_expose_default_export.<HASH>.js.LICENSE.txt',
     )
     .replace(
-      /(\[\[[^\]]+\],\s*\{\s*)(?:"[^"\n]+"|[\w$]+)(?=\(__unused_rspack_module,)/g,
+      /(\[\[[^\]]+\],\s*\{\s*)[^()\s]+(?=\(__unused_rspack_module,)/g,
       '$1<MODULE_ID>',
     );
 
