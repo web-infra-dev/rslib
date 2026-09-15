@@ -75,7 +75,7 @@ export const composeWasmConfig = ({
   const plugins: Rspack.RspackPluginInstance[] = [];
   const emitOptions = { jsDistPath, jsFilename, outBase: outBase! };
 
-  if (!bundle) {
+  if (!bundle && mode !== false) {
     plugins.push({
       apply(compiler) {
         compiler.hooks.normalModuleFactory.tap(
@@ -119,7 +119,9 @@ export const composeWasmConfig = ({
         : {},
     config: {
       tools: {
-        bundlerChain: applyWasmInlineRule(format),
+        ...(mode === false
+          ? {}
+          : { bundlerChain: applyWasmInlineRule(format) }),
         ...(plugins.length > 0 ? { rspack: { plugins } } : {}),
       },
     },

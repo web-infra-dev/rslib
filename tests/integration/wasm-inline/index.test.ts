@@ -17,25 +17,22 @@ describe('wasm inline', () => {
     await buildAndGetResults({ fixturePath });
   });
 
-  test.each([
-    'bundle',
-    'bundle-disabled',
-    'bundleless',
-    'bundleless-compile',
-    'bundleless-disabled',
-  ])('runs the %s output without a wasm asset', async (variant) => {
-    const output = await loadOutput(fixturePath, variant);
-    expect(output.useAdd(20, 22)).toBe(42);
-    expect(output.otherAdd(20, 22)).toBe(42);
-    expect(output.useNamedAdd(20, 22)).toBe(42);
-    expect(output.read()).toBe(42);
-    expect(
-      readdirSync(join(fixturePath, 'dist', variant), {
-        recursive: true,
-        encoding: 'utf8',
-      }).some((file) => file.endsWith('.wasm')),
-    ).toBe(false);
-  });
+  test.each(['bundle', 'bundleless', 'bundleless-compile'])(
+    'runs the %s output without a wasm asset',
+    async (variant) => {
+      const output = await loadOutput(fixturePath, variant);
+      expect(output.useAdd(20, 22)).toBe(42);
+      expect(output.otherAdd(20, 22)).toBe(42);
+      expect(output.useNamedAdd(20, 22)).toBe(42);
+      expect(output.read()).toBe(42);
+      expect(
+        readdirSync(join(fixturePath, 'dist', variant), {
+          recursive: true,
+          encoding: 'utf8',
+        }).some((file) => file.endsWith('.wasm')),
+      ).toBe(false);
+    },
+  );
 
   test('inlines as a UTF-8 binary string in bundle mode', () => {
     const dist = join(fixturePath, 'dist/bundle');
@@ -49,7 +46,7 @@ describe('wasm inline', () => {
     expect(code).not.toContain('atob(');
   });
 
-  test.each(['bundleless', 'bundleless-compile', 'bundleless-disabled'])(
+  test.each(['bundleless', 'bundleless-compile'])(
     'inlines wasm and its decoder into each importing file (%s)',
     async (variant) => {
       const dist = join(fixturePath, 'dist', variant);
@@ -80,6 +77,21 @@ describe('wasm inline', () => {
       const named = await import(pathToFileURL(join(dist, 'named.js')).href);
       expect(named.useNamedAdd(20, 22)).toBe(42);
       expect(output.add).not.toBe(named.add);
+    },
+  );
+
+  test.each(['bundle-disabled', 'bundleless-disabled'])(
+    'keeps inline imports untouched when wasm is disabled (%s)',
+    (variant) => {
+      const dist = join(fixturePath, 'dist', variant);
+      const files = readdirSync(dist, { recursive: true, encoding: 'utf8' });
+      expect(files.some((file) => file.endsWith('.wasm'))).toBe(false);
+
+      const code = readFileSync(join(dist, 'index.js'), 'utf8');
+      expect(code).toContain('./add.wasm?inline');
+      expect(code).toContain('./nested/read.wasm?inline');
+      expect(code).not.toContain('WebAssembly.instantiate');
+      expect(code).not.toContain('__rslib_wasm_inline_issuer');
     },
   );
 

@@ -2,6 +2,7 @@ import { type Rspack, rspack } from '@rsbuild/core';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import type { RspackResolver } from '../types';
+import { isWasmInlineRequest } from './inline';
 import {
   computeBundlelessJsEmitPath,
   computeWasmEmitPath,
@@ -29,6 +30,17 @@ const isWasmEsmRequest = (
   Boolean(data.request?.endsWith('.wasm')) && data.dependencyType === 'esm';
 
 /**
+ * Whether an external request is a `.wasm` module imported through ESM syntax,
+ * with or without the `?inline` query.
+ */
+const isUntouchedWasmRequest = (
+  data: Rspack.ExternalItemFunctionData,
+): data is Rspack.ExternalItemFunctionData & { request: string } =>
+  isWasmEsmRequest(data) ||
+  (Boolean(data.request && isWasmInlineRequest(data.request)) &&
+    data.dependencyType === 'esm');
+
+/**
  * An external that keeps `.wasm` imports exactly as written in the source,
  * without rewriting the request or emitting the `.wasm` file.
  */
@@ -36,7 +48,7 @@ export const wasmUntouchedExternal = ((
   data: Rspack.ExternalItemFunctionData,
   callback: (err?: Error, result?: Rspack.ExternalItemValue) => void,
 ): void => {
-  if (!isWasmEsmRequest(data)) {
+  if (!isUntouchedWasmRequest(data)) {
     callback();
     return;
   }
