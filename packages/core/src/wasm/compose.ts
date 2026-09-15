@@ -1,6 +1,8 @@
 import { createRequire } from 'node:module';
+import path from 'node:path';
 import type { EnvironmentConfig, Rspack, RspackChain } from '@rsbuild/core';
 import type { Format, Wasm, WasmMode } from '../types';
+import { normalizeSlash } from '../utils/helper';
 import { isWasmInlineRequest, WASM_INLINE_ISSUER_QUERY } from './inline';
 import {
   createWasmPreserveExternal,
@@ -87,7 +89,9 @@ export const composeWasmConfig = ({
               }
 
               // Modern-module output extracts shared modules, so scope inline modules to their importer.
-              const { issuer } = data.contextInfo;
+              const issuer = normalizeSlash(
+                path.relative(outBase!, data.contextInfo.issuer),
+              );
               data.request = data.request.replace(
                 /(?=#|$)/,
                 `&${WASM_INLINE_ISSUER_QUERY}=${encodeURIComponent(issuer)}`,

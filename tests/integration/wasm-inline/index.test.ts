@@ -64,6 +64,7 @@ describe('wasm inline', () => {
         );
         expect(code.match(/charCodeAt/g)).toHaveLength(binaryCount);
         expect(code).not.toContain('?inline');
+        expect(code).not.toContain(fixturePath);
         expect(code).not.toContain('wasmInlineRuntime');
         expect(code).not.toContain('rslib-wasm-runtime');
         expect(code).not.toContain('Buffer.from');

@@ -1340,10 +1340,13 @@ const composeBundlelessExternalConfig = (
               return;
             }
 
+            const inlineIssuer = new URLSearchParams(
+              request.split('?')[1]?.split('#')[0],
+            ).get(WASM_INLINE_ISSUER_QUERY);
             const issuer =
-              new URLSearchParams(request.split('?')[1]?.split('#')[0]).get(
-                WASM_INLINE_ISSUER_QUERY,
-              ) ?? contextInfo.issuer;
+              inlineIssuer !== null && typeof outBase === 'string'
+                ? path.resolve(outBase, inlineIssuer)
+                : contextInfo.issuer;
             request = request.replace(
               new RegExp(`[?&]${WASM_INLINE_ISSUER_QUERY}=[^&#]*`),
               '',
