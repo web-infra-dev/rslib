@@ -1082,6 +1082,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
+    chunkIds: 'compact-hashed',
+    moduleIds: 'named',
     minimize: true,
     splitChunks: {
       chunks: 'async',
@@ -1115,8 +1117,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     nodeEnv: false,
     concatenateModules: false,
     sideEffects: true,
-    avoidEntryIife: true,
-    moduleIds: 'named'
+    avoidEntryIife: true
   },
   plugins: [
     /* config.plugin('RsbuildCorePlugin') */
@@ -1941,6 +1942,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
+    chunkIds: 'compact-hashed',
+    moduleIds: 'named',
     minimize: true,
     splitChunks: {
       chunks: 'async',
@@ -1971,8 +1974,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         }
       )
     ],
-    nodeEnv: false,
-    moduleIds: 'named'
+    nodeEnv: false
   },
   plugins: [
     /* config.plugin('RsbuildCorePlugin') */
@@ -2711,6 +2713,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
+    chunkIds: 'compact-hashed',
+    moduleIds: 'named',
     minimize: true,
     splitChunks: false,
     minimizer: [
@@ -2738,8 +2742,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         }
       )
     ],
-    nodeEnv: 'production',
-    moduleIds: 'named'
+    nodeEnv: 'production'
   },
   plugins: [
     /* config.plugin('RsbuildCorePlugin') */
@@ -3487,6 +3490,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
+    chunkIds: 'compact-hashed',
+    moduleIds: 'named',
     minimize: true,
     splitChunks: false,
     minimizer: [
@@ -3515,8 +3520,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         }
       )
     ],
-    nodeEnv: 'production',
-    moduleIds: 'named'
+    nodeEnv: 'production'
   },
   plugins: [
     /* config.plugin('RsbuildCorePlugin') */
@@ -4198,6 +4202,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     ]
   },
   optimization: {
+    chunkIds: 'compact-hashed',
+    moduleIds: 'compact-hashed',
     minimize: true,
     splitChunks: {
       chunks: 'all'

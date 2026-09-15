@@ -136,7 +136,7 @@ describe('CJS shims', async () => {
     const dynamicUrl = await dynamicImportMetaUrl();
     const { path: dynamicPath, content: dynamicContent } = queryContent(
       contents.cjs!,
-      /\d+~1\.cjs/,
+      /[\w$-]+~1\.cjs$/,
     );
 
     expect(importMetaUrl).toBe(fileUrl);

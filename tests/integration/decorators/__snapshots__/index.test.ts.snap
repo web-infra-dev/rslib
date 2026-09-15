@@ -503,7 +503,7 @@ exports[`decorators support 2022-03 config 1`] = `
                     var existingNonFields = isStatic ? existingStaticNonFields : existingProtoNonFields;
                     var existingKind = existingNonFields.get(name) || 0;
                     if (true === existingKind || 3 === existingKind && 4 !== kind || 4 === existingKind && 3 !== kind) throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + name);
-                    if (!existingKind && kind > 2) existingNonFields.set(name, kind);
+                    else if (!existingKind && kind > 2) existingNonFields.set(name, kind);
                     else existingNonFields.set(name, true);
                 }
                 applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, initializers, metadata);
@@ -879,7 +879,7 @@ exports[`decorators with experimentalDecorators in tsconfig 2`] = `
                     var existingNonFields = isStatic ? existingStaticNonFields : existingProtoNonFields;
                     var existingKind = existingNonFields.get(name) || 0;
                     if (true === existingKind || 3 === existingKind && 4 !== kind || 4 === existingKind && 3 !== kind) throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + name);
-                    if (!existingKind && kind > 2) existingNonFields.set(name, kind);
+                    else if (!existingKind && kind > 2) existingNonFields.set(name, kind);
                     else existingNonFields.set(name, true);
                 }
                 applyMemberDec(ret, base, decInfo, name, kind, isStatic, isPrivate, initializers, metadata);

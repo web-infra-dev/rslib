@@ -22,12 +22,12 @@ describe('output config', () => {
 
       expect(esm0BaseNames).toContain('lib1.js');
       expect(esm1BaseNames).toContain('lib2.js');
-      expect(esm0BaseNames.some((name) => /^\d+~0\.js$/.test(name))).toBe(
-        false,
-      );
-      expect(esm1BaseNames.some((name) => /^\d+~1\.js$/.test(name))).toBe(
-        false,
-      );
+      expect(
+        esm0BaseNames.some((name) => /^(?!shared~)[\w$-]+~0\.js$/.test(name)),
+      ).toBe(false);
+      expect(
+        esm1BaseNames.some((name) => /^(?!shared~)[\w$-]+~1\.js$/.test(name)),
+      ).toBe(false);
       expect(esm0BaseNames.some((n) => n === 'shared~0.js')).toBeTruthy();
       expect(esm1BaseNames.some((n) => n === 'shared~1.js')).toBeTruthy();
     });
@@ -124,8 +124,12 @@ describe('output config', () => {
       expect(esm0BaseNames).toContain('runtime1.js');
       expect(esm1BaseNames).toContain('runtime2.js');
       expect(esm3BaseNames).toContain('manual.js');
-      expect(esm0BaseNames.some((name) => /^\d+~0\.js$/.test(name))).toBe(true);
-      expect(esm1BaseNames.some((name) => /^\d+~1\.js$/.test(name))).toBe(true);
+      expect(
+        esm0BaseNames.some((name) => /^(?!shared~)[\w$-]+~0\.js$/.test(name)),
+      ).toBe(true);
+      expect(
+        esm1BaseNames.some((name) => /^(?!shared~)[\w$-]+~1\.js$/.test(name)),
+      ).toBe(true);
       expect(esm0BaseNames).toContain('shared~0.js');
       expect(esm3BaseNames).toContain('manual-runtime~3.js');
       expect(esm3BaseNames).toContain('shared~3.js');
@@ -145,11 +149,7 @@ describe('output config', () => {
 
       const esmBaseNames = (files.esm ?? []).map((p) => basename(p));
       expect(esmBaseNames.some((n) => /~\d+\.js$/.test(n))).toBeFalsy();
-      expect(
-        esmBaseNames.some(
-          (n) => /^\d+\.js$/.test(n) || /shared.*\.js$/.test(n),
-        ),
-      ).toBeTruthy();
+      expect(esmBaseNames).toContain('shared.js');
     });
   });
 });
