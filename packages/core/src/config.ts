@@ -1641,7 +1641,7 @@ const composeModuleIdsConfig = (
     tools: {
       rspack: {
         optimization: {
-          moduleIds: target === 'web' ? 'deterministic' : 'named',
+          moduleIds: target === 'web' ? 'compact-hashed' : 'named',
         },
       },
     },

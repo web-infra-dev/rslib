@@ -1,9 +1,9 @@
+import { expect, test } from '@rstest/core';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent } from 'test-helper';
 
 const require = createRequire(import.meta.url);
@@ -63,7 +63,7 @@ test('set the size threshold to inline static assets', async () => {
   expect(logoCjs2).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        334 (module) {
+        V (module) {
             module.exports = require("../static/svg/logo.svg");
         }
     };
@@ -77,7 +77,7 @@ test('set the size threshold to inline static assets', async () => {
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__(334);
+    var __webpack_exports__ = __webpack_require__("V");
     exports["default"] = __webpack_exports__["default"];
     for(var __rspack_i in __webpack_exports__)if (-1 === [
         "default"
@@ -123,7 +123,7 @@ test('set the assets filename with hash', async () => {
   expect(imageCjs1).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        369 (module) {
+        r (module) {
             module.exports = require("../static/image/image.c74653c171.png");
         }
     };
@@ -137,7 +137,7 @@ test('set the assets filename with hash', async () => {
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__(369);
+    var __webpack_exports__ = __webpack_require__("r");
     exports["default"] = __webpack_exports__["default"];
     for(var __rspack_i in __webpack_exports__)if (-1 === [
         "default"
@@ -183,7 +183,7 @@ test('set the assets output path', async () => {
   expect(imageCjs1).toMatchInlineSnapshot(`
     ""use strict";
     var __webpack_modules__ = {
-        369 (module) {
+        r (module) {
             module.exports = require("../assets/bundleless/image.png");
         }
     };
@@ -197,7 +197,7 @@ test('set the assets output path', async () => {
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__(369);
+    var __webpack_exports__ = __webpack_require__("r");
     exports["default"] = __webpack_exports__["default"];
     for(var __rspack_i in __webpack_exports__)if (-1 === [
         "default"

@@ -1033,7 +1033,7 @@ describe('module ids', () => {
 
     expect(origin.bundlerConfigs[0]!.optimization?.moduleIds).toBe('named');
     expect(origin.bundlerConfigs[1]!.optimization?.moduleIds).toBe(
-      'deterministic',
+      'compact-hashed',
     );
   });
 
