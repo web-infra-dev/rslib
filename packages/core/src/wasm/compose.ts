@@ -82,17 +82,16 @@ export const composeWasmConfig = ({
           'rslib-wasm-inline',
           (factory) => {
             factory.hooks.resolve.tap('rslib-wasm-inline', (data) => {
-              if (isWasmInlineRequest(data.request)) {
-                // Modern-module output extracts shared modules, so scope inline modules to their importer.
-                const issuer =
-                  new URLSearchParams(
-                    data.request.split('?')[1]?.split('#')[0],
-                  ).get(WASM_INLINE_ISSUER_QUERY) ?? data.contextInfo.issuer;
-                data.request = data.request.replace(
-                  /(?=#|$)/,
-                  `&${WASM_INLINE_ISSUER_QUERY}=${encodeURIComponent(issuer)}`,
-                );
+              if (!isWasmInlineRequest(data.request)) {
+                return;
               }
+
+              // Modern-module output extracts shared modules, so scope inline modules to their importer.
+              const { issuer } = data.contextInfo;
+              data.request = data.request.replace(
+                /(?=#|$)/,
+                `&${WASM_INLINE_ISSUER_QUERY}=${encodeURIComponent(issuer)}`,
+              );
             });
           },
         );
