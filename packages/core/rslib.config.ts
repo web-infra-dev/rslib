@@ -23,6 +23,9 @@ export default defineConfig({
   },
   tools: {
     rspack: {
+      experiments: {
+        runtimeMode: 'rspack',
+      },
       plugins: [new rspack.CircularCheckRspackPlugin()],
     },
   },
