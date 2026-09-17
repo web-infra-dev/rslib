@@ -1,6 +1,6 @@
+import { describe, expect, test } from '@rstest/core';
 import { join, normalize } from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
-import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults, proxyConsole } from 'test-helper';
 
 describe('check tsconfig.json field', async () => {

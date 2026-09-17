@@ -1,6 +1,6 @@
+import { beforeEach, describe, expect, test } from '@rstest/core';
 import fs from 'node:fs';
 import path from 'node:path';
-import { beforeEach, describe, expect, test } from '@rstest/core';
 import { runCliSync } from 'test-helper';
 
 const localFile = path.join(__dirname, '.env.local');

@@ -1,5 +1,5 @@
-import path from 'node:path';
 import { beforeAll, expect, test } from '@rstest/core';
+import path from 'node:path';
 import { buildAndGetResults, queryContent } from 'test-helper';
 
 let contents: Awaited<ReturnType<typeof buildAndGetResults>>['contents'];

@@ -1,6 +1,6 @@
-import os from 'node:os';
 import { beforeEach, describe, expect, it, rs } from '@rstest/core';
 import { vol } from 'memfs';
+import os from 'node:os';
 import { calcLongestCommonPath } from '../src/utils/helper';
 
 rs.mock('node:fs');

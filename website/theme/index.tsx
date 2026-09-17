@@ -1,20 +1,20 @@
+import { NoSSR, useLang, usePage } from '@rspress/core/runtime';
 import {
   Layout as BaseLayout,
   DocLayout as BasicDocLayout,
   Link,
   type DocLayoutProps,
 } from '@rspress/core/theme-original';
-import { Announcement } from '@rstackjs/doc-ui/announcement';
-import { BlogBackButton } from '@rstackjs/doc-ui/blog-back-button';
-import { NavIcon } from '@rstackjs/doc-ui/nav-icon';
-import { HomeLayout } from './pages';
-import '@rstackjs/doc-ui/theme.css';
-import './index.scss';
-import { NoSSR, useLang, usePage } from '@rspress/core/runtime';
 import {
   Search as PluginAlgoliaSearch,
   ZH_LOCALES,
 } from '@rspress/plugin-algolia/runtime';
+import { Announcement } from '@rstackjs/doc-ui/announcement';
+import { BlogBackButton } from '@rstackjs/doc-ui/blog-back-button';
+import { NavIcon } from '@rstackjs/doc-ui/nav-icon';
+import '@rstackjs/doc-ui/theme.css';
+import './index.scss';
+import { HomeLayout } from './pages';
 
 const ANNOUNCEMENT_URL = '/blog/v1-0';
 
@@ -83,6 +83,6 @@ const Search = () => {
   );
 };
 
-export { DocLayout, Layout, HomeLayout, Search };
+export { DocLayout, HomeLayout, Layout, Search };
 
 export * from '@rspress/core/theme-original';

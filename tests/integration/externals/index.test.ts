@@ -1,7 +1,7 @@
+import { expect, test } from '@rstest/core';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
-import { expect, test } from '@rstest/core';
 import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
 
 test('should fail to build when `output.target` is not "node"', async () => {

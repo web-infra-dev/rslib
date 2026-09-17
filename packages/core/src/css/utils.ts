@@ -1,5 +1,5 @@
-import path from 'node:path';
 import type { CSSLoaderOptions } from '@rsbuild/core';
+import path from 'node:path';
 import { CSS_EXTENSIONS_PATTERN } from '../constant';
 
 // https://rsbuild.rs/config/output/css-modules#cssmodulesauto

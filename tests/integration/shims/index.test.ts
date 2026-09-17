@@ -1,9 +1,9 @@
+import { describe, expect, test } from '@rstest/core';
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path, { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import vm from 'node:vm';
-import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent } from 'test-helper';
 
 describe('ESM shims', async () => {

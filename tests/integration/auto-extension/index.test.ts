@@ -1,5 +1,5 @@
-import { extname, join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
+import { extname, join } from 'node:path';
 import {
   buildAndGetResults,
   generateFileTree,

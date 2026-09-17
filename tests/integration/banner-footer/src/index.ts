@@ -1,4 +1,4 @@
-import './index.css';
 import { foo } from './foo';
+import './index.css';
 
 export const text = foo;

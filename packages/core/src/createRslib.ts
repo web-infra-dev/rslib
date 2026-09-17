@@ -1,7 +1,7 @@
 import {
   createRsbuild,
-  type EnvironmentConfig,
   loadEnv,
+  type EnvironmentConfig,
   type RsbuildConfig,
   type RsbuildInstance,
   type RsbuildPlugin,

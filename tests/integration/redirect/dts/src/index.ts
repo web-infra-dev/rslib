@@ -1,29 +1,29 @@
 import { logRequest } from '@src/logger';
 import { logger } from 'prebundle-pkg';
-import { fooMjs } from './foo.mjs';
 import type { Baz } from 'self-entry';
+import { fooMjs } from './foo.mjs';
 import type { LoggerOptions } from './types';
 import { defaultOptions } from './types.js';
 
 type sources = typeof import('@src/logger');
 
 export {
-  sources,
-  type Baz as self,
+  defaultOptions,
+  fooMjs,
   logRequest,
   logger,
-  fooMjs,
+  sources,
   type LoggerOptions,
-  defaultOptions,
+  type Baz as self,
 };
 
 export * from '@src/foo';
 export * from '@src/logger';
 export type { Foo } from '@src/types';
-export type { TypesValue } from 'types-pkg';
 export { Router } from 'express';
 export * from 'prebundle-pkg';
 export type { Bar } from 'types';
+export type { TypesValue } from 'types-pkg';
 export * from './.hidden';
 export * from './.hidden-folder';
 export * from './a.b';

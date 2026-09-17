@@ -1,6 +1,6 @@
+import { describe, expect, test } from '@rstest/core';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, test } from '@rstest/core';
 import {
   buildAndGetResults,
   createTempFiles,

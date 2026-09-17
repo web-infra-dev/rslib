@@ -1,7 +1,7 @@
-import path from 'node:path';
-import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { describe, expect, onTestFinished, test } from '@rstest/core';
 import fse from 'fs-extra';
+import path from 'node:path';
+import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import {
   expectBuildEnd,
   expectFile,

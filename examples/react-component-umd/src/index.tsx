@@ -1,7 +1,7 @@
 import React from 'react';
 import { CounterButton } from './components/CounterButton';
-import { useCounter } from './useCounter';
 import './index.scss';
+import { useCounter } from './useCounter';
 
 export const Counter: React.FC = () => {
   const { count, increment, decrement } = useCounter();

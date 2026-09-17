@@ -1,7 +1,7 @@
-import * as path from 'node:path';
 import { defineConfig } from '@rspress/core';
 import { pluginApiDocgen } from '@rspress/plugin-api-docgen';
 import { pluginPreview } from '@rspress/plugin-preview';
+import * as path from 'node:path';
 import { pluginWorkspaceDev } from 'rsbuild-plugin-workspace-dev';
 
 export default defineConfig({

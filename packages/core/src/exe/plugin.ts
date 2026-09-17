@@ -1,10 +1,10 @@
+import type { RsbuildPlugin } from '@rsbuild/core';
 import fs from 'node:fs';
 import path from 'node:path';
-import type { RsbuildPlugin } from '@rsbuild/core';
-import { resolveTargetBinaries } from './download';
 import { color } from '../utils/color';
 import { logger } from '../utils/logger';
 import { buildExecutable } from './build';
+import { resolveTargetBinaries } from './download';
 import type { ExePluginOptions } from './types';
 import {
   ensureBinaryVersion,

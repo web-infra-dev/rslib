@@ -1,5 +1,5 @@
-import path from 'node:path';
 import { expect, test } from '@rstest/core';
+import path from 'node:path';
 import { buildAndGetResults, queryContent } from 'test-helper';
 
 test('`module` variable should be preserved as-is by `javascript.commonjs.exports = "false"`', async () => {

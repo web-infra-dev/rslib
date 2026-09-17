@@ -3,13 +3,13 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import type { EmitDtsOptions } from './dts';
+import type { GetTsconfigTsconfigResultForExecutable } from './types/internal';
 import {
   color,
   getTimeCost,
   processDtsFiles,
   rewriteDtsExtensions,
 } from './utils';
-import type { GetTsconfigTsconfigResultForExecutable } from './types/internal';
 
 const logPrefixTsgo = color.dim('[tsgo]');
 type EmitDtsExecutableOptions =

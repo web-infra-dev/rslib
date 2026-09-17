@@ -1,6 +1,6 @@
-import path from 'node:path';
 import { onTestFinished, test } from '@rstest/core';
 import fse from 'fs-extra';
+import path from 'node:path';
 import { expectLog, runCli } from 'test-helper';
 
 test('dev.watchFiles with restart type should restart build --watch', async () => {

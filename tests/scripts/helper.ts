@@ -1,11 +1,11 @@
+import { expect } from '@playwright/test';
+import fse from 'fs-extra';
 import type { ChildProcess } from 'node:child_process';
 import fs from 'node:fs';
 import { platform } from 'node:os';
 import { join } from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
-import { expect } from '@playwright/test';
-import fse from 'fs-extra';
-import { convertPathToPattern, type GlobOptions, glob } from 'tinyglobby';
+import { convertPathToPattern, glob, type GlobOptions } from 'tinyglobby';
 
 // tinyglobby only accepts posix path
 // https://github.com/SuperchupuDev/tinyglobby?tab=readme-ov-file#api

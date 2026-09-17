@@ -2,13 +2,13 @@
  * The following code is modified based on
  * https://github.com/web-infra-dev/rsbuild/blob/c21e2130a285177b890fca543f70377b66d1ad73/e2e/scripts/shared.ts
  */
-import net from 'node:net';
 import type { Page } from '@playwright/test';
 import type {
   CreateRsbuildOptions,
   RsbuildConfig,
   RsbuildPlugins,
 } from '@rsbuild/core';
+import net from 'node:net';
 
 const getHrefByEntryName = (entryName: string, port: number) => {
   const htmlRoot = new URL(`http://localhost:${port}`);

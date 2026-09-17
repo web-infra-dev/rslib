@@ -1,6 +1,6 @@
+import { describe, expect, test } from '@rstest/core';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent } from 'test-helper';
 
 describe('JSON', async () => {

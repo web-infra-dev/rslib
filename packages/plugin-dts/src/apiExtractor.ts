@@ -1,6 +1,6 @@
-import { join, normalize, relative, resolve } from 'node:path';
 import type * as ApiExtractor from '@microsoft/api-extractor';
 import { logger } from '@rsbuild/core';
+import { join, normalize, relative, resolve } from 'node:path';
 import type { DtsEntry } from './types/internal';
 import { addBannerAndFooter, color, getTimeCost } from './utils';
 

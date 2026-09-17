@@ -1,6 +1,6 @@
-import { join } from 'node:path';
 import { createRslib } from '@rslib/core';
 import { describe, expect, test } from '@rstest/core';
+import { join } from 'node:path';
 import { expectFile } from 'test-helper';
 
 describe('rslib.build', async () => {

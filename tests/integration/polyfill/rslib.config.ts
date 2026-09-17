@@ -1,7 +1,7 @@
 import { type BabelTransformOptions, pluginBabel } from '@rsbuild/plugin-babel';
 import { defineConfig } from '@rslib/core';
-import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 import { createRequire } from 'node:module';
+import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 const require = createRequire(import.meta.url);
 

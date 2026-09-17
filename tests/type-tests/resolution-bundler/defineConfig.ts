@@ -1,6 +1,6 @@
 import {
-  type ConfigParams,
   defineConfig,
+  type ConfigParams,
   type RslibConfig,
   type RslibConfigAsyncFn,
   type RslibConfigDefinition,
