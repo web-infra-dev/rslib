@@ -1,6 +1,6 @@
-import path from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
+import path from 'node:path';
 import { globContentJSON, runCliSync } from 'test-helper';
 
 describe('inspect command', async () => {

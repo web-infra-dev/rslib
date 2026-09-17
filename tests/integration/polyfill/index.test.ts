@@ -1,5 +1,5 @@
-import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
+import { join } from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 
 const globalPolyfillResult = `const value = [

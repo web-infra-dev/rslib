@@ -1,5 +1,5 @@
-import { join } from 'node:path';
 import { defineConfig } from '@rslib/core';
+import { join } from 'node:path';
 import { generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({

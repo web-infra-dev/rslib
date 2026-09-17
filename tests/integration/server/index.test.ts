@@ -1,7 +1,7 @@
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { buildAndGetResults, expectFile, runCli } from 'test-helper';
 
 describe('server config', async () => {

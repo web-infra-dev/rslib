@@ -1,5 +1,5 @@
-import { join } from 'node:path';
 import { expect, it, rs } from '@rstest/core';
+import { join } from 'node:path';
 import { checkMFPlugin, readPackageJson } from '../src/utils/helper';
 
 rs.mock('rslog');

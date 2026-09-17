@@ -1,5 +1,5 @@
-import { join } from 'node:path';
 import { describe, expect, it } from '@rstest/core';
+import { join } from 'node:path';
 import { loadTsconfig } from '../src/utils/tsconfig';
 
 describe('loadTsconfig', () => {

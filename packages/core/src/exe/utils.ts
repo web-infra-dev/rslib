@@ -1,6 +1,6 @@
+import type { EnvironmentContext, Rspack } from '@rsbuild/core';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
-import type { EnvironmentContext, Rspack } from '@rsbuild/core';
 import { color } from '../utils/color';
 import type { CommandResult, NormalizedExeTarget } from './types';
 

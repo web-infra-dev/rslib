@@ -5,8 +5,8 @@
  * 2. add `this.emitFile` to emit css files
  * 3. add `import './[name].css';` to js module
  */
-import path, { extname } from 'node:path';
 import type { Rspack } from '@rsbuild/core';
+import path, { extname } from 'node:path';
 import {
   ABSOLUTE_PUBLIC_PATH,
   AUTO_PUBLIC_PATH,

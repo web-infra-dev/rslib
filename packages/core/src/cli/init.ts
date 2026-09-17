@@ -1,5 +1,5 @@
-import path from 'node:path';
 import type { RestartFn, RsbuildEntry } from '@rsbuild/core';
+import path from 'node:path';
 import { createRslib } from '../createRslib';
 import { loadConfig as baseLoadConfig } from '../loadConfig';
 import type {

@@ -1,8 +1,8 @@
 import type {
   BuildResult,
-  InspectConfigResult as RsbuildInspectConfigResult,
   LoadEnvOptions,
   RestartFn,
+  InspectConfigResult as RsbuildInspectConfigResult,
   RsbuildInstance,
   StartDevServerResult,
 } from '@rsbuild/core';

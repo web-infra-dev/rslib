@@ -1,5 +1,5 @@
-import path from 'node:path';
 import type { EnvironmentConfig } from '@rsbuild/core';
+import path from 'node:path';
 import type { ExeOptions, Format } from '../types';
 import { ExePlugin } from './plugin';
 import type {

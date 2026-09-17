@@ -1,5 +1,5 @@
-import { createRequire } from 'node:module';
 import type { EnvironmentConfig, RsbuildPlugin } from '@rsbuild/core';
+import { createRequire } from 'node:module';
 import { LibCssExtractPlugin } from './LibCssExtractPlugin';
 import {
   type CssLoaderOptionsAuto,

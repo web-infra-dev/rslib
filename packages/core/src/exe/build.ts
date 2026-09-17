@@ -1,8 +1,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path, { dirname, join } from 'node:path';
-import type { Format, SeaOptions } from '../types';
-import type { ExePlatform } from '../types';
+import type { ExePlatform, Format, SeaOptions } from '../types';
 import { maybeSignMacBinary, runCommand } from './utils';
 
 export const buildExecutable = async ({

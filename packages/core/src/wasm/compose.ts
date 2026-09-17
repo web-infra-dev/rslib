@@ -1,9 +1,9 @@
 import type { EnvironmentConfig, Rspack } from '@rsbuild/core';
 import type { Format, Wasm, WasmMode } from '../types';
 import {
+  WasmPreservePlugin,
   createWasmPreserveExternal,
   wasmUntouchedExternal,
-  WasmPreservePlugin,
 } from './preserve';
 
 export const resolveWasmMode = ({

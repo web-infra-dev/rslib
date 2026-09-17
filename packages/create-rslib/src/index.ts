@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import {
   type Argv,
+  type ESLintTemplateName,
+  type RslintTemplateName,
   checkCancel,
   copyFolder,
   create,
-  type ESLintTemplateName,
-  type RslintTemplateName,
   select,
 } from '@rstackjs/create-toolkit';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parseTemplateName } from './parseTemplateName';
 
 export type Lang = 'ts' | 'js';

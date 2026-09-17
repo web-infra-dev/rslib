@@ -1,6 +1,6 @@
-import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
+import { join } from 'node:path';
 import { expectFile, runCli, runCliSync } from 'test-helper';
 
 const { existsSync } = fse;
