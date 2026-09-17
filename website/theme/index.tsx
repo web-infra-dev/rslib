@@ -12,9 +12,10 @@ import {
 import { Announcement } from '@rstackjs/doc-ui/announcement';
 import { BlogBackButton } from '@rstackjs/doc-ui/blog-back-button';
 import { NavIcon } from '@rstackjs/doc-ui/nav-icon';
+import { HomeLayout } from './pages';
+
 import '@rstackjs/doc-ui/theme.css';
 import './index.scss';
-import { HomeLayout } from './pages';
 
 const ANNOUNCEMENT_URL = '/blog/v1-0';
 
