@@ -133,7 +133,7 @@ test('modern-module externals should handle CommonJS requests by target', async 
   expect(nodeOutput).toContain('module.exports = __rspack_external_e8;');
   expect(nodeOutput).toContain('"./src/local-false.ts"');
   expect(nodeOutput).toContain(
-    'const localFalse = __webpack_require__("./src/local-false.ts");',
+    'const localFalse = rspackRequire("./src/local-false.ts");',
   );
   expect(nodeOutput).not.toContain('require("./local-false")');
 
