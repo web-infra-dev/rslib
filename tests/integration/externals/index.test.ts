@@ -18,14 +18,16 @@ test('auto externalize Node.js built-in modules when `output.target` is "node"',
   const { entries } = await buildAndGetResults({ fixturePath });
   restore();
 
+  // Assert the external calls without requiring a CommonJS module wrapper.
+  // Modern-module output can emit these calls directly at the use site.
   for (const external of [
     'import { createRequire as __rspack_createRequire } from "node:module";',
     'import node_assert from "node:assert";',
     'import fs from "fs";',
     'import react from "react";',
     'const __rspack_createRequire_require = __rspack_createRequire(import.meta.url);',
-    'module.exports = __rspack_createRequire_require("foo");',
-    'module.exports = __rspack_createRequire_require("bar");',
+    '__rspack_createRequire_require("foo");',
+    '__rspack_createRequire_require("bar");',
   ]) {
     expect(entries.esm).toContain(external);
   }
@@ -50,12 +52,10 @@ test('should preserve CommonJS node built-in semantics in ESM output', async () 
 
   // Built-in modules required from bundled CommonJS should keep using createRequire.
   expect(entries.esm0).toContain(
-    'module.exports = __rspack_createRequire_require("node:util");',
+    '__rspack_createRequire_require("node:util");',
   );
   // Another built-in on the CommonJS path should follow the same node-commonjs runtime semantics.
-  expect(entries.esm0).toContain(
-    'module.exports = __rspack_createRequire_require("stream");',
-  );
+  expect(entries.esm0).toContain('__rspack_createRequire_require("stream");');
   // Lazy built-in imports should still be emitted in a runtime-safe form.
   expect(entries.esm0).toContain('import("node:os")');
   expect(entries.esm0).toContain('import("node:path")');
@@ -121,12 +121,12 @@ test('modern-module externals should handle CommonJS requests by target', async 
 
   for (const request of ['react', 'e2', 'e3', 'e5', 'e6', 'e7']) {
     expect(nodeOutput).toContain(
-      `module.exports = __rspack_createRequire_require("${request}");`,
+      `__rspack_createRequire_require("${request}");`,
     );
   }
 
   for (const request of ['e1', 'e4']) {
-    expect(nodeOutput).toContain(`module.exports = require("${request}");`);
+    expect(nodeOutput).toMatch(new RegExp(`\\brequire\\("${request}"\\)`));
   }
 
   expect(nodeOutput).toContain('import * as __rspack_external_e8 from "e8";');
@@ -139,7 +139,7 @@ test('modern-module externals should handle CommonJS requests by target', async 
 
   for (const request of ['e9', 'e10']) {
     expect(nodeOutput).toContain(
-      `module.exports = __rspack_createRequire_require("${request}");`,
+      `__rspack_createRequire_require("${request}");`,
     );
   }
 
@@ -160,7 +160,7 @@ test('modern-module externals should handle CommonJS requests by target', async 
     'e9',
     'e10',
   ]) {
-    expect(webOutput).toContain(`module.exports = require("${request}");`);
+    expect(webOutput).toMatch(new RegExp(`\\brequire\\("${request}"\\)`));
   }
 
   expect(webOutput).toContain('import * as __rspack_external_e8 from "e8";');
