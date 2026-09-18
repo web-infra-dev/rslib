@@ -118,6 +118,8 @@ Before preparing a release, view pending change records and their corresponding 
 pnpm change status
 ```
 
+Single-package repositories can skip this step when change intents are not needed and specify the version type directly when updating versions.
+
 ### Update versions
 
 Run [pnpm version](https://pnpm.io/cli/version) to update versions when preparing a release:
@@ -221,7 +223,11 @@ pnpm build
 Before publishing, run [pnpm publish --dry-run](https://pnpm.io/cli/publish) to check the files and package information that will be published:
 
 ```bash
+# Single-package repository
 pnpm publish --dry-run
+
+# monorepo
+pnpm --filter './packages/*' -r publish --dry-run
 ```
 
 You can also check the package structure, exports, and type declarations to ensure that the final npm package can be resolved and installed correctly. Rslib supports the following Rsbuild plugins for these checks:
@@ -283,6 +289,8 @@ There are two ways to publish npm packages:
   pnpm --filter './packages/*' -r publish --tag latest --no-git-checks
   ```
 
+For prereleases, replace `latest` with the corresponding `alpha`, `beta`, or `rc` dist-tag.
+
 ## GitHub integration
 
 You can use GitHub Actions to build and publish the npm package. We recommend using npm [Trusted publishing](https://docs.npmjs.com/trusted-publishers/) for OIDC authentication to avoid storing long-lived npm tokens in CI.
@@ -312,15 +320,15 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         with:
           run_install: true
 
@@ -328,8 +336,14 @@ jobs:
         run: pnpm run build
 
       - name: Publish to npm
-        run: pnpm stage publish --no-git-checks
+        run: pnpm stage publish --tag latest --no-git-checks
 ```
+
+:::note
+
+To publish an `alpha`, `beta`, or other prerelease version, replace `latest` with the corresponding npm dist-tag.
+
+:::
 
 ### Publish from a release branch
 
@@ -367,18 +381,18 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 1
           ref: ${{ github.event.inputs.branch }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         with:
           run_install: true
 

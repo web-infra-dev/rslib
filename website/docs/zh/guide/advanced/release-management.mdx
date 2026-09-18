@@ -6,7 +6,7 @@ description: '介绍 Rslib 项目的 npm 包版本管理与发布实践，包括
 
 本章介绍 Rslib 项目的 npm 包版本管理与发布实践。
 
-## 配置 package.json \{#configure-packagejson}
+## 配置 package.json \{#configure-package-json}
 
 要将一个包发布到 npm，需要先在 `package.json` 中完成基础配置，包括确认 `name` 和初始 `version`，并明确导出配置、运行环境和发布范围等信息。例如，一个使用 Rslib 构建的 ESM 包可以配置为：
 
@@ -118,6 +118,8 @@ pnpm change --bump patch --summary "Example change" @example/core
 pnpm change status
 ```
 
+单包仓库如果不需要记录变更意图，可以跳过此步骤，直接在版本更新时指定版本类型。
+
 ### 版本更新 \{#update-versions}
 
 准备发布时，可以运行 [pnpm version](https://pnpm.io/cli/version) 更新版本：
@@ -221,7 +223,11 @@ pnpm build
 发布前，可以先运行 [pnpm publish --dry-run](https://pnpm.io/cli/publish)，检查将要发布的文件和包信息：
 
 ```bash
+# 单包仓库
 pnpm publish --dry-run
+
+# monorepo
+pnpm --filter './packages/*' -r publish --dry-run
 ```
 
 我们还可以进一步对包结构、导出配置和类型声明进行检查，确保最终的 npm 包能够被正确解析和安装。Rslib 支持使用以下 Rsbuild 插件完成检查：
@@ -283,6 +289,8 @@ export default defineConfig({
   pnpm --filter './packages/*' -r publish --tag latest --no-git-checks
   ```
 
+发布 prerelease 时，将 `latest` 替换为对应的 `alpha`、`beta` 或 `rc` dist-tag。
+
 ## GitHub 集成 \{#github-integration}
 
 你可以通过 GitHub Actions 构建和发布 npm 包。发布时，建议使用 npm [Trusted publishing](https://docs.npmjs.com/trusted-publishers/) 进行 OIDC 身份验证，避免在 CI 中保存长期有效的 npm token。
@@ -312,15 +320,15 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         with:
           run_install: true
 
@@ -328,8 +336,14 @@ jobs:
         run: pnpm run build
 
       - name: Publish to npm
-        run: pnpm stage publish --no-git-checks
+        run: pnpm stage publish --tag latest --no-git-checks
 ```
+
+:::note
+
+发布 `alpha`、`beta` 等 prerelease 版本时，请将 `latest` 替换为对应的 npm dist-tag。
+
+:::
 
 ### 通过发布分支发布 \{#publish-from-a-release-branch}
 
@@ -367,18 +381,18 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 1
           ref: ${{ github.event.inputs.branch }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         with:
           run_install: true
 
