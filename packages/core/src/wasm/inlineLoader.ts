@@ -12,7 +12,7 @@ function wasmInlineLoader(
   const { format } = this.getOptions();
   if (format !== 'esm') {
     throw new Error(
-      `Importing wasm with the "?inline" query only supports the "esm" format, but the current format is "${format}".`,
+      `WASM imports with "?inline" require the "esm" format, but the current format is "${format}".`,
     );
   }
 

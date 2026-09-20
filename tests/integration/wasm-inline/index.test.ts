@@ -130,7 +130,7 @@ describe('wasm inline', () => {
 
       await expect(build).rejects.toThrow('Rspack build failed.');
       expect(logs.map((log) => stripAnsi(log)).join('\n')).toContain(
-        'Importing wasm with the "?inline" query only supports the "esm" format',
+        'WASM imports with "?inline" require the "esm" format',
       );
       restore();
     },
