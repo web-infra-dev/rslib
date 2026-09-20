@@ -1,5 +1,5 @@
 ---
-description: 'Import WebAssembly modules in Rslib libraries and choose how they are emitted with compile or preserve mode.'
+description: 'Import WebAssembly modules in Rslib libraries, configure compile or preserve output, or inline binaries into JavaScript with the ?inline query.'
 ---
 
 import { Tabs, Tab } from '@theme';
@@ -286,6 +286,19 @@ If any of these module names resolve to JavaScript output, avoid changing its re
 
 :::
 
+## Inline WASM modules
+
+Add the `?inline` query to an import of a `.wasm` module to embed its binary into the JavaScript output. Rslib does not emit a `.wasm` file for these imports:
+
+```ts
+import wasm from './add.wasm?inline';
+import { add } from './add.wasm?inline';
+```
+
+`?inline` imports are not affected by [lib.wasm.mode](/config/lib/wasm#wasmmode). Setting [lib.wasm](/config/lib/wasm) to `false` prevents Rslib from processing `.wasm` modules with the `?inline` query, preserving `?inline` in the output.
+
+[Source phase imports](#source-phase-import) do not currently support the `?inline` query.
+
 ## Disable wasm handling
 
 When [lib.wasm](/config/lib/wasm) is set to `false`, Rslib preserves the original import specifiers for `.wasm` modules imported using ESM syntax, without resolving the modules or emitting the corresponding `.wasm` files. You are responsible for managing these files and ensuring that the imports resolve correctly from the emitted JavaScript files.
@@ -309,3 +322,19 @@ TypeScript does not provide built-in module declarations for `.wasm` files. If y
 ```ts title="src/add.d.wasm.ts"
 export function add(a: number, b: number): number;
 ```
+
+### Inline imports
+
+When using TypeScript, declare the exports of each `?inline` WASM module in an ambient module:
+
+```ts title="src/wasm.d.ts"
+declare module '*add.wasm?inline' {
+  const wasmExports: {
+    add: (a: number, b: number) => number;
+  };
+  export default wasmExports;
+  export const add: (a: number, b: number) => number;
+}
+```
+
+You should keep imports with resource queries as an internal implementation detail of your package. Do not re-export the WASM module directly, as this keeps the `?inline` specifier in the generated declaration file.
