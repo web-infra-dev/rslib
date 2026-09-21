@@ -340,4 +340,4 @@ The `export {}` at the top marks the declaration file as a module, allowing Type
 import { add } from './add.wasm?inline';
 ```
 
-You should keep imports with resource queries as an internal implementation detail of your package. Do not re-export the WASM module directly, as this keeps the `?inline` specifier in the generated declaration file.
+Re-exporting the WASM module directly preserves `?inline` in the generated declaration file. To avoid this, keep the WASM import in an internal module and export wrapped functions or values instead.

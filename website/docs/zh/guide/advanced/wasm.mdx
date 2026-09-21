@@ -340,4 +340,4 @@ declare module './add.wasm?inline' {
 import { add } from './add.wasm?inline';
 ```
 
-你应该将带有 resource query 的导入保留为包的内部实现。不要直接重新导出 WASM 模块，否则生成的声明文件会保留 `?inline`。
+直接重新导出 WASM 模块时，生成的类型声明文件会保留 `?inline`。若希望避免这种情况，可以将 WASM 导入保留在内部模块中，并导出封装后的函数或值。
