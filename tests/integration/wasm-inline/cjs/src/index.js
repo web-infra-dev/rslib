@@ -1,3 +1,3 @@
-import wasm from './add.wasm?inline';
+import { add } from './add.wasm?inline';
 
-export const useAdd = (a, b) => wasm.add(a, b);
+export const useAdd = (a, b) => add(a, b);

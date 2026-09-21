@@ -13,6 +13,13 @@ const ADD_WASM = Uint8Array.from([
   0x6a, 0x0b,
 ]);
 
+const DEFAULT_WASM = Uint8Array.from([
+  0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00, 0x01, 0x07, 0x01, 0x60, 0x02,
+  0x7f, 0x7f, 0x01, 0x7f, 0x03, 0x02, 0x01, 0x00, 0x07, 0x0b, 0x01, 0x07, 0x64,
+  0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x00, 0x00, 0x0a, 0x09, 0x01, 0x07, 0x00,
+  0x20, 0x00, 0x20, 0x01, 0x6a, 0x0b,
+]);
+
 const IMPORTING_WASM = Uint8Array.from([
   0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,
   // (type (func (result i32)))
@@ -78,7 +85,7 @@ describe('wasm inline code generation', () => {
 
     expect(code).toContain('await WebAssembly.instantiate');
     expect(code).toContain('Uint8Array.from(');
-    expect(code).toContain('export default __wasm_exports');
+    expect(code).not.toContain('export default');
     expect(code).toContain('as add');
   });
 
@@ -88,7 +95,16 @@ describe('wasm inline code generation', () => {
       `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`
     );
     expect(output.add(20, 22)).toBe(42);
-    expect(output.default.add).toBe(output.add);
+    expect(output).not.toHaveProperty('default');
+  });
+
+  test('preserves a default export declared by the WebAssembly module', async () => {
+    const code = generateWasmInlineModule(DEFAULT_WASM);
+    const output = await import(
+      `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`
+    );
+
+    expect(output.default(20, 22)).toBe(42);
   });
 
   test('rejects an invalid binary during code generation', () => {

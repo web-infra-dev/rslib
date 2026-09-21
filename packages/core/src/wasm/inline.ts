@@ -58,11 +58,9 @@ export const generateWasmInlineModule = (
     `const __wasm_bytes = Uint8Array.from(${encodeWasmBinaryString(bytes)}, c => (c = c.charCodeAt(0), ~c >> 8 & c));`,
     `const { instance: __wasm_instance } = await WebAssembly.instantiate(__wasm_bytes, {${importObject}});`,
     'const __wasm_exports = __wasm_instance.exports;',
-    'export default __wasm_exports;',
   );
 
   WebAssembly.Module.exports(module).forEach(({ name }, index) => {
-    if (name === 'default') return;
     const exportName = /^[$A-Z_a-z][$\w]*$/.test(name)
       ? name
       : JSON.stringify(name);

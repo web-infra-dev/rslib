@@ -290,8 +290,7 @@ If any of these module names resolve to JavaScript output, avoid changing its re
 
 Add the `?inline` query to an import of a `.wasm` module to embed its binary into the JavaScript output. Rslib does not emit a `.wasm` file for these imports:
 
-```ts
-import wasm from './add.wasm?inline';
+```js
 import { add } from './add.wasm?inline';
 ```
 
@@ -325,16 +324,22 @@ export function add(a: number, b: number): number;
 
 ### Inline imports
 
-When using TypeScript, declare the exports of each `?inline` WASM module in an ambient module:
+When using TypeScript, create a declaration file next to the `.wasm` file and declare the named exports for the exact `?inline` import path:
 
 ```ts title="src/wasm.d.ts"
-declare module '*add.wasm?inline' {
-  const wasmExports: {
-    add: (a: number, b: number) => number;
-  };
-  export default wasmExports;
+export {};
+
+declare module './add.wasm?inline' {
   export const add: (a: number, b: number) => number;
 }
 ```
+
+The `export {}` at the top marks the declaration file as a module, allowing TypeScript to recognize the relative module declaration below. You can then use a named import:
+
+```ts title="src/index.ts"
+import { add } from './add.wasm?inline';
+```
+
+Use the named exports declared by the WebAssembly binary. For example, the declaration above provides the `add` export.
 
 You should keep imports with resource queries as an internal implementation detail of your package. Do not re-export the WASM module directly, as this keeps the `?inline` specifier in the generated declaration file.
