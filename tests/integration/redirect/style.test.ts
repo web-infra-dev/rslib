@@ -20,9 +20,11 @@ test('0. default', async () => {
   );
   expect(cssIndexJs).toMatchInlineSnapshot(`
     "import "./index.css";
+    import "./index.css?inline";
     "
   `);
   expect(cssIndexCjs).toContain('require("./index.css");');
+  expect(cssIndexCjs).toContain('require("./index.css?inline");');
 
   const { content: cssModuleIndexJs } = queryContent(
     contents.esm0!,
@@ -35,8 +37,14 @@ test('0. default', async () => {
   expect(cssModuleIndexJs).toContain(
     'import index_module from "./index.module.js";',
   );
+  expect(cssModuleIndexJs).toContain(
+    'import index_moduleinline from "./index_module.css?inline";',
+  );
   expect(cssModuleIndexCjs).toContain(
     'const external_index_module_cjs_namespaceObject = require("./index.module.cjs");',
+  );
+  expect(cssModuleIndexCjs).toContain(
+    'const external_index_moduleinline_namespaceObject = require("./index_module.css?inline");',
   );
 });
 
@@ -51,9 +59,11 @@ test('1. style.path: false', () => {
   );
   expect(cssIndexJs).toMatchInlineSnapshot(`
     "import "@/less/index.css";
+    import "@/less/index.css?inline";
     "
   `);
   expect(cssIndexCjs).toContain('require("@/less/index.css");');
+  expect(cssIndexCjs).toContain('require("@/less/index.css?inline");');
 
   const { content: cssModuleIndexJs } = queryContent(
     contents.esm1!,
@@ -66,8 +76,14 @@ test('1. style.path: false', () => {
   expect(cssModuleIndexJs).toContain(
     'import index_module from "@/module/index.module.js";',
   );
+  expect(cssModuleIndexJs).toContain(
+    'import index_moduleinline from "@/module/index_module.css?inline";',
+  );
   expect(cssModuleIndexCjs).toContain(
     'const index_module_cjs_namespaceObject = require("@/module/index.module.cjs");',
+  );
+  expect(cssModuleIndexCjs).toContain(
+    'const index_moduleinline_namespaceObject = require("@/module/index_module.css?inline");',
   );
 });
 
@@ -82,9 +98,11 @@ test('2. style.extension: false', async () => {
   );
   expect(cssIndexJs).toMatchInlineSnapshot(`
     "import "./index.less";
+    import "./index.less?inline";
     "
   `);
   expect(cssIndexCjs).toContain('require("./index.less");');
+  expect(cssIndexCjs).toContain('require("./index.less?inline");');
 
   const { content: cssModuleIndexJs } = queryContent(
     contents.esm2!,
@@ -97,8 +115,14 @@ test('2. style.extension: false', async () => {
   expect(cssModuleIndexJs).toContain(
     'import index_module from "./index.module.less";',
   );
+  expect(cssModuleIndexJs).toContain(
+    'import index_moduleinline from "./index.module.less?inline";',
+  );
   expect(cssModuleIndexCjs).toContain(
     'const external_index_module_less_namespaceObject = require("./index.module.less");',
+  );
+  expect(cssModuleIndexCjs).toContain(
+    'const external_index_moduleinline_namespaceObject = require("./index.module.less?inline");',
   );
 });
 
@@ -113,9 +137,11 @@ test('3. style.path: false, style.extension: false', async () => {
   );
   expect(cssIndexJs).toMatchInlineSnapshot(`
     "import "@/less/index.less";
+    import "@/less/index.less?inline";
     "
   `);
   expect(cssIndexCjs).toContain('require("@/less/index.css");');
+  expect(cssIndexCjs).toContain('require("@/less/index.css?inline");');
 
   const { content: cssModuleIndexJs } = queryContent(
     contents.esm3!,
@@ -128,8 +154,14 @@ test('3. style.path: false, style.extension: false', async () => {
   expect(cssModuleIndexJs).toContain(
     'import index_module from "@/module/index.module.less";',
   );
+  expect(cssModuleIndexJs).toContain(
+    'import index_moduleinline from "@/module/index.module.less?inline";',
+  );
   expect(cssModuleIndexCjs).toContain(
     'const index_module_cjs_namespaceObject = require("@/module/index.module.cjs");',
+  );
+  expect(cssModuleIndexCjs).toContain(
+    'const index_moduleinline_namespaceObject = require("@/module/index_module.css?inline");',
   );
 });
 
@@ -144,9 +176,11 @@ test('should external 3rd packages CSS', async () => {
   );
   expect(cssIndexJs).toMatchInlineSnapshot(`
     "import "./index.css";
+    import "./index.css?inline";
     "
   `);
   expect(cssIndexCjs).toContain('require("./index.css");');
+  expect(cssIndexCjs).toContain('require("./index.css?inline");');
 
   const { content: pkgIndexJs } = queryContent(
     contents.esm0!,

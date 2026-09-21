@@ -43,6 +43,13 @@ test('redirect.js default', async () => {
 
   expect(esmResult.default).toEqual(cjsResult.default);
   expect(esmResult.default).toMatchInlineSnapshot(`"FOOBAR1FOOBAR1BAZSTRING"`); // cspell:disable-line
+
+  const { content: queryJs } = queryContent(contents.esm0!, /esm\/query\.js/);
+  const { content: queryCjs } = queryContent(contents.cjs0!, /cjs\/query\.cjs/);
+  expect(queryJs).toContain(
+    'import { queryTarget } from "./query-target.js?query";',
+  );
+  expect(queryCjs).toContain('require("./query-target.cjs?query")');
 });
 
 test('redirect.js.path false', async () => {
@@ -71,6 +78,13 @@ test('redirect.js.path false', async () => {
     export default src;
     "
   `);
+
+  const { content: queryJs } = queryContent(contents.esm1!, /esm\/query\.js/);
+  const { content: queryCjs } = queryContent(contents.cjs1!, /cjs\/query\.cjs/);
+  expect(queryJs).toContain(
+    'import { queryTarget } from "./query-target.js?query";',
+  );
+  expect(queryCjs).toContain('require("./query-target.cjs?query")');
 });
 
 test('redirect.js.path with user override externals', async () => {
@@ -177,4 +191,13 @@ test('redirect.js.extension: false', async () => {
     export default src;
     "
   `);
+
+  const { content: queryJs } = queryContent(contents.esm4!, /esm\/query\.js/);
+  const { content: queryCjs } = queryContent(contents.cjs4!, /cjs\/query\.cjs/);
+  expect(queryJs).toContain(
+    'import { queryTarget } from "./query-target?query";',
+  );
+  expect(queryJs).toContain('from "./query-target.ts?query"');
+  expect(queryCjs).toContain('require("./query-target?query")');
+  expect(queryCjs).toContain('require("./query-target.ts?query")');
 });
