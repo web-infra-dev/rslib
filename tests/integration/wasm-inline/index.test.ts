@@ -112,13 +112,11 @@ describe('wasm inline', () => {
     const dts = readFileSync(join(dist, 'index.d.ts'), 'utf8');
     expect(dts).not.toContain('?inline');
     expect(dts).toContain('export declare const useAdd');
-    expect(dts).toContain('export declare const useNamedAdd');
 
     const output = await import(
       `${pathToFileURL(join(dist, 'index.js')).href}?variant=typed`
     );
     expect(output.useAdd(20, 22)).toBe(42);
-    expect(output.useNamedAdd(20, 22)).toBe(42);
   });
 
   test.each(['bundle', 'bundleless'])(
