@@ -340,6 +340,4 @@ The `export {}` at the top marks the declaration file as a module, allowing Type
 import { add } from './add.wasm?inline';
 ```
 
-Use the named exports declared by the WebAssembly binary. For example, the declaration above provides the `add` export.
-
 You should keep imports with resource queries as an internal implementation detail of your package. Do not re-export the WASM module directly, as this keeps the `?inline` specifier in the generated declaration file.

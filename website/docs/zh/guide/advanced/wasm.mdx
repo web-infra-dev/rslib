@@ -340,6 +340,4 @@ declare module './add.wasm?inline' {
 import { add } from './add.wasm?inline';
 ```
 
-请使用 WebAssembly 二进制中声明的命名导出。例如，上面的声明提供了 `add` 导出。
-
 你应该将带有 resource query 的导入保留为包的内部实现。不要直接重新导出 WASM 模块，否则生成的声明文件会保留 `?inline`。
