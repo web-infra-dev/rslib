@@ -95,7 +95,7 @@ catalog:
   'rslog': '^2.3.0'
   'rspress-plugin-file-tree': '^1.0.5'
   'rspress-plugin-font-open-sans': '^1.0.4'
-  'rstack': '^0.7.4'
+  'rstack': '^0.8.0'
   'semver': '^7.8.5'
   'solid-js': '^1.9.15'
   'storybook': '^10.6.0'
@@ -131,6 +131,8 @@ hoistPattern: []
 # Reduce the risk of installing compromised packages
 minimumReleaseAge: 1440
 minimumReleaseAgeExclude:
+  - 'rstack'
+  - '@rstackjs/*'
   - '@rspack/*'
   - '@rsbuild/*'
   - '@rslib/*'
@@ -139,8 +141,6 @@ minimumReleaseAgeExclude:
   - '@rsdoctor/*'
   - '@rslint/*'
   - reduce-configs
-  - '@rstackjs/doc-ui'
-  - '@rstackjs/create-toolkit'
   - 'rsbuild-plugin-*'
   - storybook-addon-rslib
   - 'storybook-*-rsbuild'
