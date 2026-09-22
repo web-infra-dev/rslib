@@ -131,8 +131,8 @@ hoistPattern: []
 # Reduce the risk of installing compromised packages
 minimumReleaseAge: 1440
 minimumReleaseAgeExclude:
-  - 'rstack@0.8.0'
-  - '@rstackjs/cli-*'
+  - 'rstack'
+  - '@rstackjs/*'
   - '@rspack/*'
   - '@rsbuild/*'
   - '@rslib/*'
@@ -141,8 +141,6 @@ minimumReleaseAgeExclude:
   - '@rsdoctor/*'
   - '@rslint/*'
   - reduce-configs
-  - '@rstackjs/doc-ui'
-  - '@rstackjs/create-toolkit'
   - 'rsbuild-plugin-*'
   - storybook-addon-rslib
   - 'storybook-*-rsbuild'
