@@ -1,6 +1,6 @@
+import { beforeEach, expect } from '@rstest/core';
 import path from 'node:path';
 import process from 'node:process';
-import { beforeEach, expect } from '@rstest/core';
 import { createSnapshotSerializer } from 'path-serializer';
 
 beforeEach(() => {

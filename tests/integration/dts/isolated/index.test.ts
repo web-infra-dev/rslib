@@ -1,7 +1,7 @@
+import { describe, expect, test } from '@rstest/core';
 import fs from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
-import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent, runCliSync } from 'test-helper';
 
 describe('isolated dts', () => {

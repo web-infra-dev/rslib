@@ -1,7 +1,7 @@
+import { describe, expect, test } from '@rstest/core';
 import fs from 'node:fs';
 import os from 'node:os';
 import { join } from 'node:path';
-import { describe, expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent } from 'test-helper';
 
 const onlyStartsWith = (str: string, target: string) => {

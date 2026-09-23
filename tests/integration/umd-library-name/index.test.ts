@@ -1,5 +1,5 @@
-import vm from 'node:vm';
 import { expect, test } from '@rstest/core';
+import vm from 'node:vm';
 import { buildAndGetResults } from 'test-helper';
 
 test('correct read UMD name from CommonJS', async () => {

@@ -1,7 +1,7 @@
 import { useI18n, useNavigate } from '@rspress/core/runtime';
 import { Hero as BaseHero } from '@rstackjs/doc-ui/hero';
-import { useI18nUrl } from './utils';
 import './Hero.module.scss';
+import { useI18nUrl } from './utils';
 
 export function Hero() {
   const navigate = useNavigate();

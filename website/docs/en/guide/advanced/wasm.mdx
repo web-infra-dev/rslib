@@ -3,6 +3,7 @@ description: 'Import WebAssembly modules in Rslib libraries, configure compile o
 ---
 
 import { Tabs, Tab } from '@theme';
+import { ApiMeta } from '@components/ApiMeta';
 
 # Wasm
 
@@ -299,6 +300,8 @@ import { add } from './add.wasm?inline';
 [Source phase imports](#source-phase-import) do not currently support the `?inline` query.
 
 ## Disable wasm handling
+
+<ApiMeta addedVersion="1.0.1" />
 
 When [lib.wasm](/config/lib/wasm) is set to `false`, Rslib preserves the original import specifiers for `.wasm` modules imported using ESM syntax, without resolving the modules or emitting the corresponding `.wasm` files. You are responsible for managing these files and ensuring that the imports resolve correctly from the emitted JavaScript files.
 

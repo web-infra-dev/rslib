@@ -1,6 +1,6 @@
+import { expect, test } from '@rstest/core';
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
 
 test('format default to esm', async () => {

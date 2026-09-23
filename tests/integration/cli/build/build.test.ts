@@ -1,6 +1,6 @@
-import path, { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
+import path, { join } from 'node:path';
 import { buildAndGetResults, globContentJSON, runCliSync } from 'test-helper';
 
 describe('build command', async () => {

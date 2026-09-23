@@ -1,5 +1,5 @@
 import { logger, type LogLevel, type RsbuildPlugin } from '@rsbuild/core';
-import { type ChildProcess, fork } from 'node:child_process';
+import { fork, type ChildProcess } from 'node:child_process';
 import { extname, join, normalize, resolve } from 'node:path';
 
 import {
@@ -9,8 +9,8 @@ import {
 } from './backend';
 import {
   createIsolatedDtsContext,
-  type IsolatedDtsContext,
   processIsolatedDts,
+  type IsolatedDtsContext,
 } from './isolated';
 import type { DtsGenOptions, DtsTsconfigResult } from './types/internal';
 import type { ApiExtractorOptions, PluginDtsOptions } from './types/options';

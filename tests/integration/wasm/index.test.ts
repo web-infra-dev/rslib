@@ -1,7 +1,7 @@
+import { beforeAll, describe, expect, test } from '@rstest/core';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { beforeAll, describe, expect, test } from '@rstest/core';
 import { buildAndGetResults } from 'test-helper';
 
 const normalizePath = (p: string): string => p.split('\\').join('/');

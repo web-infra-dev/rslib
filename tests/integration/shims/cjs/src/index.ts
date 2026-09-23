@@ -25,11 +25,11 @@ const importMetaFilename = import.meta.filename;
 export const module = null;
 
 export {
-  importMetaUrl,
-  requiredModule,
-  dynamicImportMetaUrl,
   __filename,
+  dynamicImportMetaUrl,
+  esmModuleIsStrict,
   importMetaDirname,
   importMetaFilename,
-  esmModuleIsStrict,
+  importMetaUrl,
+  requiredModule,
 };

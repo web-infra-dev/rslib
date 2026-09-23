@@ -1,9 +1,9 @@
-import { join } from 'node:path';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { createRslib } from '@rslib/core';
 import { afterEach, describe, expect, test } from '@rstest/core';
 import fse from 'fs-extra';
+import { join } from 'node:path';
 import { expectFile } from 'test-helper';
 
 describe('rslib.inspectConfig', async () => {

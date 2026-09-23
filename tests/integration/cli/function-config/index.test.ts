@@ -1,6 +1,6 @@
-import { join } from 'node:path';
 import { expect, test } from '@rstest/core';
 import fse from 'fs-extra';
+import { join } from 'node:path';
 import { globContentJSON, runCliSync } from 'test-helper';
 
 test('should parse build command after global option values', async () => {

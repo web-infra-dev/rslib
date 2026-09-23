@@ -1,0 +1,413 @@
+---
+description: '介绍 Rslib 项目的 npm 包版本管理与发布实践，包括发布准备、版本管理、构建验证、npm 发布和 GitHub Actions 集成。'
+---
+
+# 版本管理与发布
+
+本章介绍 Rslib 项目的 npm 包版本管理与发布实践。
+
+## 配置 package.json \{#configure-package-json}
+
+要将一个包发布到 npm，需要先在 `package.json` 中完成基础配置，包括确认 `name` 和初始 `version`，并明确导出配置、运行环境和发布范围等信息。例如，一个使用 Rslib 构建的 ESM 包可以配置为：
+
+```json title="package.json"
+{
+  "name": "@example/lib",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
+```
+
+配置时需要重点关注以下字段：
+
+| 字段                                                                            | 说明                                                                                                                                                                                     |
+| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `exports`、`types`                                                              | 导出配置和类型声明应指向 Rslib 的实际构建产物。                                                                                                                                          |
+| `files`                                                                         | 明确需要发布的文件，避免将测试、配置等内容意外发布。                                                                                                                                     |
+| `engines.node`                                                                  | 声明包最低支持的 Node.js 版本。                                                                                                                                                          |
+| `publishConfig`                                                                 | 带 scope 的包可以设置 `access: "public"` 公开发布，还可以通过该字段覆盖发布时使用的 registry 等配置。                                                                                    |
+| `dependencies`、`optionalDependencies`、`peerDependencies` 和 `devDependencies` | Rslib 会根据这些字段对三方依赖应用默认的 external 规则，因此需要按照依赖的实际用途正确声明，具体规则可以参考 [三方依赖的默认处理](/guide/advanced/third-party-deps#三方依赖的默认处理)。 |
+| `sideEffects`                                                                   | 声明包中的副作用，需要正确包含 CSS、polyfill 和全局注册等存在导入副作用的文件。                                                                                                          |
+
+此外，需要确保包没有设置 `private: true`，并建议补充 `description`、`license`、`repository` 等信息，方便用户在 npm 上了解和定位项目。
+
+## pnpm 版本管理 \{#pnpm-version-management}
+
+pnpm 提供了 [发布管理功能](https://pnpm.io/versioning)，支持记录变更、更新包版本、生成 changelog、同步更新 workspace 包之间的依赖版本，以及发布 npm 包。
+
+:::tip pnpm 版本要求
+
+相关版本管理功能需要 pnpm v11.13.0 或更高版本。建议通过 `packageManager` 固定使用的 pnpm 版本，并通过 `engines.pnpm` 声明最低版本：
+
+```json title="package.json"
+{
+  "packageManager": "pnpm@12.4.1",
+  "engines": {
+    "pnpm": ">=11.13.0"
+  }
+}
+```
+
+:::
+
+常用的版本管理与发布命令既可以在本地运行，也可以集成到 GitHub Actions 或其他 CI 平台中：
+
+| 命令                                             | 阶段     | 用途                                                  |
+| ------------------------------------------------ | -------- | ----------------------------------------------------- |
+| [pnpm change](https://pnpm.io/cli/change)        | 开发     | 记录受影响的包、版本变更级别和 changelog 内容。       |
+| [pnpm change status](https://pnpm.io/cli/change) | 发布准备 | 查看尚未应用的变更记录及其版本变化。                  |
+| [pnpm version](https://pnpm.io/cli/version)      | 发布准备 | 更新包版本，支持通过 `-r` 更新 workspace 中的多个包。 |
+| [pnpm lane](https://pnpm.io/cli/lane)            | 发布准备 | 管理 Alpha、Beta 或 RC 等预发布通道。                 |
+| [pnpm publish](https://pnpm.io/cli/publish)      | 发布     | 将包直接发布到 npm。                                  |
+| [pnpm stage publish](https://pnpm.io/cli/stage)  | 发布     | 将包暂存到 npm，审核并批准后再正式上线。              |
+
+pnpm 的版本管理行为可以通过 `pnpm-workspace.yaml` 进行配置。例如，可以配置固定版本组，让多个包始终保持相同版本：
+
+```yaml title="pnpm-workspace.yaml"
+versioning:
+  fixed:
+    - ['@example/*']
+```
+
+完整选项可以参考 [pnpm 版本管理配置](https://pnpm.io/settings/versioning)。
+
+## 发布流程 \{#release-workflow}
+
+基于 pnpm 的完整发布流程包括以下步骤：
+
+1. [记录变更](#record-changes)
+2. [版本更新](#update-versions)
+3. [维护变更记录](#maintain-changelog)
+4. [构建和验证](#build-and-validate)
+5. [发布 npm 包](#publish-to-npm)
+
+### 记录变更 \{#record-changes}
+
+完成需要发布的改动后，可以运行 [pnpm change](https://pnpm.io/cli/change) 记录受影响的包、版本变更级别和变更摘要：
+
+```bash
+pnpm change
+```
+
+pnpm 会根据交互式提示在 `.changeset/` 目录中生成变更记录。变更摘要会在发布时用于生成 changelog，因此应清晰描述面向用户的行为变化。生成的变更记录文件需要与代码一起提交。
+
+你也可以通过包名以及 `--bump`、`--summary` 等参数，以非交互方式记录变更，例如：
+
+```bash
+pnpm change --bump patch --summary "Example change" @example/core
+```
+
+准备发布前，可以查看尚未应用的变更记录及其对应的版本变化：
+
+```bash
+pnpm change status
+```
+
+单包仓库如果不需要记录变更意图，可以跳过此步骤，直接在版本更新时指定版本类型。
+
+### 版本更新 \{#update-versions}
+
+准备发布时，可以运行 [pnpm version](https://pnpm.io/cli/version) 更新版本：
+
+```bash
+# 单包仓库
+pnpm version patch
+
+# monorepo
+pnpm version -r
+```
+
+在 Git 仓库中运行普通的 `pnpm version` 时，pnpm 会为版本变更创建 Git 提交和带有说明信息的版本标签（annotated tag）。单包仓库可以检查生成的提交和标签后，将它们推送到主分支进行发布。
+
+如果希望将单包仓库的版本更新封装为脚本，可以在 `package.json` 中添加：
+
+```json title="package.json"
+{
+  "scripts": {
+    "bump": "pnpm version -m \"release: v%s\""
+  }
+}
+```
+
+在 monorepo 项目中，需要运行 `pnpm version -r`。递归模式会应用变更记录、更新各个包的版本、workspace 依赖和 changelog，但不会创建提交和版本标签，因为一次运行可能会生成多个不同的包版本。检查生成的文件后，通常可以将这些变更提交并推送到约定的发布分支（例如 `release/v1.2.3`），创建 PR，先从该分支发布，确认无误后再合并 PR。
+
+在版本更新过程中，可以根据需要选择合适的版本类型。
+
+#### 正式版本和预发布版本 \{#stable-and-prerelease-versions}
+
+正式版本面向所有用户，版本号不包含预发布标识，通常使用 `latest` dist-tag。
+
+Alpha、Beta 和 RC 用于在正式版之前发布可安装的测试版本。发布时应使用与版本后缀对应的 npm dist-tag，避免影响默认安装：
+
+| 版本            | npm dist-tag |
+| --------------- | ------------ |
+| `1.0.0-alpha.0` | `alpha`      |
+| `1.0.0-beta.0`  | `beta`       |
+| `1.0.0-rc.0`    | `rc`         |
+| `1.0.0`         | `latest`     |
+
+可以通过 [pnpm version](https://pnpm.io/cli/version) 创建 prerelease：
+
+```bash
+pnpm version prerelease --preid beta
+```
+
+如果需要为一组 workspace 包持续发布预发布版本，可以使用 [pnpm lane](https://pnpm.io/cli/lane) 维护独立的预发布通道：
+
+```bash
+pnpm lane beta --filter '@example/*'
+pnpm version -r
+
+# 发布正式版前移回 main lane
+pnpm lane main --filter '@example/*'
+pnpm version -r
+```
+
+:::note
+
+不要将 prerelease 发布到 `latest`，否则用户正常安装包时可能获取到尚未稳定的版本。
+
+:::
+
+#### Snapshot 包 \{#snapshot-packages}
+
+Snapshot 包用于验证某个 PR、分支或提交，不需要修改正式版本或 changelog。如果只需要在本地验证，可以构建并打包，再到消费项目中安装生成的压缩包：
+
+```bash
+# 在库项目中执行
+pnpm build
+pnpm pack
+
+# 在消费项目中执行
+pnpm add /path/to/package.tgz
+```
+
+如果需要在 PR 中向协作者提供可安装的 Snapshot 包，可以使用 [pkg-pr-new](https://github.com/stackblitz-labs/pkg.pr.new#readme)。它会将包发布到 npm 兼容的独立服务，而不是 npm registry，因此不会增加 npm 包的版本数量，也不会修改 dist-tag 等包元数据。
+
+### 维护变更记录 \{#maintain-changelog}
+
+运行 `pnpm version -r` 时，pnpm 会根据 `pnpm change` 记录的变更摘要生成 changelog。如果希望在仓库中维护每个包的 `CHANGELOG.md`，可以将 [versioning.changelog.storage](https://pnpm.io/settings/versioning#versioningchangelogstorage) 设置为 `repository`：
+
+```yaml title="pnpm-workspace.yaml"
+versioning:
+  changelog:
+    storage: repository
+```
+
+如果项目使用 GitHub release notes 作为面向用户的版本记录，则不必在仓库中额外维护 `CHANGELOG.md`。GitHub 支持 [自动生成 release notes](https://docs.github.com/repositories/releasing-projects-on-github/automatically-generated-release-notes)，也可以在自动生成的内容中补充版本亮点、迁移说明和重要注意事项。
+
+### 构建和验证 \{#build-and-validate}
+
+确定要发布的版本后，在本地或 CI 中使用对应的提交，安装依赖并构建：
+
+```bash
+pnpm install --frozen-lockfile
+pnpm build
+```
+
+发布前，可以先运行 [pnpm publish --dry-run](https://pnpm.io/cli/publish)，检查将要发布的文件和包信息：
+
+```bash
+# 单包仓库
+pnpm publish --dry-run
+
+# monorepo
+pnpm --filter './packages/*' -r publish --dry-run
+```
+
+我们还可以进一步对包结构、导出配置和类型声明进行检查，确保最终的 npm 包能够被正确解析和安装。Rslib 支持使用以下 Rsbuild 插件完成检查：
+
+- [rsbuild-plugin-publint](https://github.com/rstackjs/rsbuild-plugin-publint)：检查 `package.json`、包结构和导出配置等常见问题。
+- [rsbuild-plugin-arethetypeswrong](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong)：检查类型声明能否在不同的模块解析方式下正确使用。
+
+使用时，先安装插件，再将它们添加到 `plugins` 配置中。插件会在构建完成后检查发布产物。
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs command="add rsbuild-plugin-publint rsbuild-plugin-arethetypeswrong -D" />
+
+下面的配置通过大多数 CI 平台默认设置的 `CI` 环境变量启用检查，避免影响本地构建流程。在发布流程中构建包时会自动执行这些检查：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+import { pluginAreTheTypesWrong } from 'rsbuild-plugin-arethetypeswrong';
+import { pluginPublint } from 'rsbuild-plugin-publint';
+
+export default defineConfig({
+  dts: true,
+  plugins: [
+    pluginPublint({
+      enable: Boolean(process.env.CI),
+    }),
+    pluginAreTheTypesWrong({
+      enable: Boolean(process.env.CI),
+    }),
+  ],
+});
+```
+
+此外，项目还可以根据产物类型增加语法兼容性、体积或实际安装测试。
+
+### 发布 npm 包 \{#publish-to-npm}
+
+发布 npm 包有以下两种方式：
+
+- **暂存发布（推荐）：** [pnpm stage publish](https://pnpm.io/cli/stage) 将上传包与正式上线拆分为两个步骤。暂存版本不会被包管理器解析或安装，维护者可以先检查包内容，再在 npm 网站或通过 [pnpm stage approve](https://pnpm.io/cli/stage) 二次确认后正式上线。这种方式可以降低 npm token 被窃取或 CI 环境遭到入侵后，恶意版本被直接发布的供应链风险。
+
+  ```bash
+  # 单包仓库
+  pnpm stage publish --tag latest --no-git-checks
+
+  # monorepo
+  pnpm --filter './packages/*' -r stage publish --tag latest --no-git-checks
+  ```
+
+  检查无误后，在 npm 网站批准暂存版本。
+
+- **直接发布：** 如果不需要人工确认，可以直接使用 [pnpm publish](https://pnpm.io/cli/publish)：
+
+  ```bash
+  # 单包仓库
+  pnpm publish --tag latest --no-git-checks
+
+  # monorepo
+  pnpm --filter './packages/*' -r publish --tag latest --no-git-checks
+  ```
+
+发布 prerelease 时，将 `latest` 替换为对应的 `alpha`、`beta` 或 `rc` dist-tag。
+
+## GitHub 集成 \{#github-integration}
+
+你可以通过 GitHub Actions 构建和发布 npm 包。发布时，建议使用 npm [Trusted publishing](https://docs.npmjs.com/trusted-publishers/) 进行 OIDC 身份验证，避免在 CI 中保存长期有效的 npm token。
+
+### 通过 tag 发布 \{#publish-from-a-tag}
+
+对于简单的单包仓库，完成版本更新后，将包含版本变更的提交推送到主分支，并推送对应的 Git tag。发布工作流会根据 `v*` tag 触发，也支持手动运行：
+
+```yaml title=".github/workflows/release.yml"
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          run_install: true
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Publish to npm
+        run: pnpm stage publish --tag latest --no-git-checks
+```
+
+:::note
+
+发布 `alpha`、`beta` 等 prerelease 版本时，请将 `latest` 替换为对应的 npm dist-tag。
+
+:::
+
+### 通过发布分支发布 \{#publish-from-a-release-branch}
+
+对于需要同时发布多个包的 monorepo，可以通过发布工作流选择约定的发布分支。使用 **Run workflow** 选择要发布的分支和 npm dist-tag 后，工作流会构建该分支的代码，并对需要发布的包递归执行暂存发布：
+
+```yaml title=".github/workflows/release.yml"
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      npm_tag:
+        type: choice
+        description: 'Specify npm tag'
+        required: true
+        default: 'alpha'
+        options:
+          - alpha
+          - beta
+          - rc
+          - latest
+      branch:
+        description: 'Branch to release'
+        required: true
+        default: 'main'
+
+permissions: {}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          run_install: true
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Publish to npm
+        run: |
+          pnpm --filter './packages/*' -r stage publish --tag ${{ github.event.inputs.npm_tag }} --no-git-checks
+```
+
+> 顶层的 `permissions: {}` 会关闭 `GITHUB_TOKEN` 的默认权限。发布任务仅授予 `contents: read` 用于检出源码，以及 `id-token: write` 用于通过 OIDC 向 npm 证明身份。
+
+:::note
+
+在 npm 配置 Trusted publishing 时，仓库和工作流文件名必须与工作流一致。上面的示例使用名为 `npm` 的 GitHub Environment，如果在 Trusted publishing 中也配置了 Environment，需要使用相同的名称。
+
+:::

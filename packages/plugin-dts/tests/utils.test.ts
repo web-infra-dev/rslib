@@ -3,8 +3,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { CompilerOptions } from 'typescript6-api';
 import {
-  clearTempDeclarationDir,
   cleanTsBuildInfoFile,
+  clearTempDeclarationDir,
   ensureTempDeclarationDir,
   loadTsconfigResultForExecutable,
   mergeAliasWithTsConfigPaths,

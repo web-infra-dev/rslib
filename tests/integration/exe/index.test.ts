@@ -1,8 +1,8 @@
+import { describe, expect, onTestFinished, test } from '@rstest/core';
+import fse from 'fs-extra';
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { describe, expect, onTestFinished, test } from '@rstest/core';
-import fse from 'fs-extra';
 import {
   buildAndGetResults,
   expectFile,

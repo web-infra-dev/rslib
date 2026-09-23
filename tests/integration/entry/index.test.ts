@@ -1,6 +1,6 @@
+import { expect, test } from '@rstest/core';
 import path, { join } from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
-import { expect, test } from '@rstest/core';
 import { buildAndGetResults, proxyConsole, queryContent } from 'test-helper';
 
 test('default entry', async () => {

@@ -1,10 +1,10 @@
-import { normalize, resolve } from 'node:path';
 import type { Rspack } from '@rsbuild/core';
 import { logger, rspack } from '@rsbuild/core';
+import { normalize, resolve } from 'node:path';
 import {
   bundleDtsIfNeeded,
-  type PreparedDtsContext,
   prepareDtsContext,
+  type PreparedDtsContext,
 } from './dts';
 import type { DtsGenOptions } from './types/internal';
 import { color, processDtsFiles, rewriteDtsExtensions } from './utils';

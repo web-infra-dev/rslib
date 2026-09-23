@@ -1,5 +1,5 @@
-import path from 'node:path';
 import { defineConfig } from '@rslib/core';
+import path from 'node:path';
 import { generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({

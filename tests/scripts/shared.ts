@@ -1,14 +1,3 @@
-import assert from 'node:assert';
-import {
-  type ExecOptions,
-  exec,
-  type SpawnSyncOptions,
-  spawnSync,
-} from 'node:child_process';
-import fs from 'node:fs';
-import { basename, dirname, join, normalize } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import {
   type InspectConfigResult,
@@ -17,6 +6,17 @@ import {
 } from '@rsbuild/core';
 import type { Format, LibConfig, RslibConfig } from '@rslib/core';
 import { createRslib, loadConfig } from '@rslib/core';
+import assert from 'node:assert';
+import {
+  type ExecOptions,
+  type SpawnSyncOptions,
+  exec,
+  spawnSync,
+} from 'node:child_process';
+import fs from 'node:fs';
+import { basename, dirname, join, normalize } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { globContentJSON } from './helper.ts';
 
 const __filename = fileURLToPath(import.meta.url);

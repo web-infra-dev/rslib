@@ -5,9 +5,9 @@ import type { Format, Wasm, WasmMode } from '../types';
 import { normalizeSlash } from '../utils/helper';
 import { isWasmInlineRequest, WASM_INLINE_ISSUER_QUERY } from './inline';
 import {
+  WasmPreservePlugin,
   createWasmPreserveExternal,
   wasmUntouchedExternal,
-  WasmPreservePlugin,
 } from './preserve';
 
 const require = createRequire(import.meta.url);

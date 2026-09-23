@@ -1,6 +1,6 @@
+import { expect, test } from '@rstest/core';
 import fs from 'node:fs';
 import { join } from 'node:path';
-import { expect, test } from '@rstest/core';
 import { buildAndGetResults, expectFile, runCli } from 'test-helper';
 
 import { distIndex } from './basic/rslib.config';

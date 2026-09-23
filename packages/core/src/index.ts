@@ -3,11 +3,16 @@
  * the public API of @rslib/core.
  */
 
-export { type RunCLIOptions, runCLI } from './cli';
+import type { RsbuildPlugin, Rspack } from '@rsbuild/core';
+import { rspack } from '@rsbuild/core';
+
+export { runCLI, type RunCLIOptions } from './cli';
 export { createRslib } from './createRslib';
 export {
-  type ConfigParams,
   defineConfig,
+  loadConfig,
+  loadEnv,
+  type ConfigParams,
   type LoadConfigOptions,
   type LoadConfigResult,
   type LoadEnvOptions,
@@ -15,8 +20,6 @@ export {
   type RslibConfigAsyncFn,
   type RslibConfigDefinition,
   type RslibConfigSyncFn,
-  loadConfig,
-  loadEnv,
 } from './loadConfig';
 export { mergeRslibConfig } from './mergeConfig';
 
@@ -38,14 +41,15 @@ export type {
   RslibConfig,
   RslibInstance,
   Shims,
-  StartMFDevServerOptions,
   StartDevServerResult,
+  StartMFDevServerOptions,
   Syntax,
   Wasm,
 } from './types';
 
 export const version: string = RSLIB_VERSION;
 
-export type * as Rsbuild from '@rsbuild/core';
 export * as rsbuild from '@rsbuild/core';
-export { type RsbuildPlugin, type Rspack, rspack } from '@rsbuild/core';
+export type * as Rsbuild from '@rsbuild/core';
+export { rspack };
+export type { RsbuildPlugin, Rspack };

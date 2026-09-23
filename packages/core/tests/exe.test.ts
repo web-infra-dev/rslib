@@ -1,5 +1,5 @@
-import path from 'node:path';
 import { describe, expect, test } from '@rstest/core';
+import path from 'node:path';
 import { composeCreateRsbuildConfig } from '../src/config';
 import { resolveExeTargets } from '../src/exe';
 import { resolveTargetBinaries } from '../src/exe/download';
@@ -9,8 +9,8 @@ import {
   resolveExecutableOutputPath,
 } from '../src/exe/utils';
 import {
-  assertSupportedExeRuntime,
   assertSupportedExeNodeVersion,
+  assertSupportedExeRuntime,
   isExeSupportedNodeVersion,
 } from '../src/exe/version';
 

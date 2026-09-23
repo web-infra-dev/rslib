@@ -1,7 +1,7 @@
 import type { FunctionComponent } from 'preact';
 import { CounterButton } from './components/CounterButton';
-import { useCounter } from './useCounter';
 import './index.scss';
+import { useCounter } from './useCounter';
 
 export const Counter: FunctionComponent = () => {
   const { count, increment, decrement } = useCounter();

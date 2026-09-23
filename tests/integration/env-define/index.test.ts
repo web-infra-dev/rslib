@@ -1,5 +1,5 @@
-import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { expect, test } from '@rstest/core';
+import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { buildAndGetResults, proxyConsole } from 'test-helper';
 
 test('esm preserves `import.meta.env.*` / `process.env.*` presets instead of inlining', async () => {

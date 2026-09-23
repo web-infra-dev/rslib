@@ -1,5 +1,5 @@
-import { join } from 'node:path';
 import { expect, test } from '@rstest/core';
+import { join } from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 
 test('should not generate js sourcemap by default', async () => {

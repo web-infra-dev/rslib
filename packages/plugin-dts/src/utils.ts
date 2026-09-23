@@ -20,12 +20,12 @@ import { styleText } from 'node:util';
 import { convertPathToPattern, glob } from 'tinyglobby';
 import type { MatchPath } from 'tsconfig-paths';
 import type { CompilerOptions } from 'typescript6-api';
-import type { DtsRedirect } from './types/options';
 import type {
   CompilerApiTsconfigResultForApi,
   DtsEntry,
   GetTsconfigTsconfigResultForExecutable,
 } from './types/internal';
+import type { DtsRedirect } from './types/options';
 
 const require = createRequire(import.meta.url);
 

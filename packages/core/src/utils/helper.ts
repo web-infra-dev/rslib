@@ -1,7 +1,7 @@
+import type { RsbuildPlugins } from '@rsbuild/core';
 import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import path, { isAbsolute, join } from 'node:path';
-import type { RsbuildPlugins } from '@rsbuild/core';
 
 import type { Format, LibConfig, PkgJson } from '../types';
 import { color } from './color';

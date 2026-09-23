@@ -1,13 +1,13 @@
 import {
   defineConfig as defineRsbuildConfig,
-  type EnvironmentConfig,
   mergeRsbuildConfig,
+  rspack,
+  type EnvironmentConfig,
   type RsbuildConfig,
   type RsbuildEntry,
   type RsbuildPlugin,
   type RsbuildPlugins,
   type Rspack,
-  rspack,
   type ToolsConfig,
 } from '@rsbuild/core';
 import fs from 'node:fs';
@@ -20,11 +20,11 @@ import {
   SWC_HELPERS,
 } from './constant';
 import {
+  RSLIB_CSS_ENTRY_FLAG,
   composeCssConfig,
   cssExternalHandler,
-  RSLIB_CSS_ENTRY_FLAG,
 } from './css/cssConfig';
-import { type CssLoaderOptionsAuto, isCssGlobalFile } from './css/utils';
+import { isCssGlobalFile, type CssLoaderOptionsAuto } from './css/utils';
 import { composeExeConfig } from './exe';
 import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
 import { pluginCjsShims, pluginEsmRequireShim } from './plugins/shims';
@@ -1652,7 +1652,7 @@ const composeModuleIdsConfig = (
     tools: {
       rspack: {
         optimization: {
-          moduleIds: target === 'web' ? 'deterministic' : 'named',
+          moduleIds: target === 'web' ? 'compact-hashed' : 'named',
         },
       },
     },

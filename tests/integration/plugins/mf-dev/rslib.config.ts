@@ -1,7 +1,7 @@
-import fs from 'node:fs';
-import path from 'node:path';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { defineConfig } from '@rslib/core';
+import fs from 'node:fs';
+import path from 'node:path';
 import { generateBundleMFConfig } from 'test-helper';
 
 let count = 0;

@@ -1,5 +1,5 @@
-import path from 'node:path';
 import { beforeAll, describe, expect, test } from '@rstest/core';
+import path from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 
 // Isolated dts emits declarations from the bundler graph, not every file in
@@ -40,19 +40,19 @@ describe('dts redirect with isolated', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-isolated/default/esm/index.d.ts": "import { logRequest } from './logger.js';
       import { logger } from '../../../compile/prebundle-pkg/index.js';
-      import { fooMjs } from './foo.mjs';
       import type { Baz } from './index.js';
+      import { fooMjs } from './foo.mjs';
       import type { LoggerOptions } from './types.js';
       import { defaultOptions } from './types.js';
       type sources = typeof import('./logger.js');
-      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions };
+      export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from './foo/index.js';
       export * from './logger.js';
       export type { Foo } from './types.js';
-      export type { TypesValue } from '../../../compile/types-pkg/types.js';
       export { Router } from 'express';
       export * from '../../../compile/prebundle-pkg/index.js';
       export type { Bar } from './types.js';
+      export type { TypesValue } from '../../../compile/types-pkg/types.js';
       export * from './.hidden.js';
       export * from './.hidden-folder/index.js';
       export * from './a.b/index.js';
@@ -105,19 +105,19 @@ describe('dts redirect with isolated', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-isolated/path-false/esm/index.d.ts": "import { logRequest } from '@src/logger';
       import { logger } from 'prebundle-pkg';
-      import { fooMjs } from './foo.mjs';
       import type { Baz } from 'self-entry';
+      import { fooMjs } from './foo.mjs';
       import type { LoggerOptions } from './types';
       import { defaultOptions } from './types.js';
       type sources = typeof import('@src/logger');
-      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions };
+      export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from '@src/foo';
       export * from '@src/logger';
       export type { Foo } from '@src/types';
-      export type { TypesValue } from 'types-pkg';
       export { Router } from 'express';
       export * from 'prebundle-pkg';
       export type { Bar } from 'types';
+      export type { TypesValue } from 'types-pkg';
       export * from './.hidden';
       export * from './.hidden-folder';
       export * from './a.b';
@@ -170,19 +170,19 @@ describe('dts redirect with isolated', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-isolated/extension-false/esm/index.d.ts": "import { logRequest } from './logger';
       import { logger } from '../../../compile/prebundle-pkg';
-      import { fooMjs } from './foo.mjs';
       import type { Baz } from './';
+      import { fooMjs } from './foo.mjs';
       import type { LoggerOptions } from './types';
       import { defaultOptions } from './types.js';
       type sources = typeof import('./logger');
-      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions };
+      export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from './foo';
       export * from './logger';
       export type { Foo } from './types';
-      export type { TypesValue } from '../../../compile/types-pkg/types';
       export { Router } from 'express';
       export * from '../../../compile/prebundle-pkg';
       export type { Bar } from './types';
+      export type { TypesValue } from '../../../compile/types-pkg/types';
       export * from './.hidden';
       export * from './.hidden-folder';
       export * from './a.b';
@@ -235,19 +235,19 @@ describe('dts redirect with isolated', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-isolated/path-false-extension-true/esm/index.d.ts": "import { logRequest } from '@src/logger';
       import { logger } from 'prebundle-pkg';
-      import { fooMjs } from './foo.mjs';
       import type { Baz } from 'self-entry';
+      import { fooMjs } from './foo.mjs';
       import type { LoggerOptions } from './types.js';
       import { defaultOptions } from './types.js';
       type sources = typeof import('@src/logger');
-      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions };
+      export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from '@src/foo';
       export * from '@src/logger';
       export type { Foo } from '@src/types';
-      export type { TypesValue } from 'types-pkg';
       export { Router } from 'express';
       export * from 'prebundle-pkg';
       export type { Bar } from 'types';
+      export type { TypesValue } from 'types-pkg';
       export * from './.hidden.js';
       export * from './.hidden-folder/index.js';
       export * from './a.b/index.js';
@@ -300,19 +300,19 @@ describe('dts redirect with isolated', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-isolated/auto-extension-true/esm/index.d.mts": "import { logRequest } from './logger.mjs';
       import { logger } from '../../../compile/prebundle-pkg/index.js';
-      import { fooMjs } from './foo.mjs';
       import type { Baz } from './index.mjs';
+      import { fooMjs } from './foo.mjs';
       import type { LoggerOptions } from './types.mjs';
       import { defaultOptions } from './types.mjs';
       type sources = typeof import('./logger.mjs');
-      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions };
+      export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from './foo/index.mjs';
       export * from './logger.mjs';
       export type { Foo } from './types.mjs';
-      export type { TypesValue } from '../../../compile/types-pkg/types.js';
       export { Router } from 'express';
       export * from '../../../compile/prebundle-pkg/index.js';
       export type { Bar } from './types.mjs';
+      export type { TypesValue } from '../../../compile/types-pkg/types.js';
       export * from './.hidden.mjs';
       export * from './.hidden-folder/index.mjs';
       export * from './a.b/index.mjs';
@@ -362,19 +362,19 @@ describe('dts redirect with isolated', () => {
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-isolated/auto-extension-true/cjs/index.d.ts": "import { logRequest } from './logger.js';
       import { logger } from '../../../compile/prebundle-pkg/index.js';
-      import { fooMjs } from './foo.mjs';
       import type { Baz } from './index.js';
+      import { fooMjs } from './foo.mjs';
       import type { LoggerOptions } from './types.js';
       import { defaultOptions } from './types.js';
       type sources = typeof import('./logger.js');
-      export { sources, type Baz as self, logRequest, logger, fooMjs, type LoggerOptions, defaultOptions };
+      export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from './foo/index.js';
       export * from './logger.js';
       export type { Foo } from './types.js';
-      export type { TypesValue } from '../../../compile/types-pkg/types.js';
       export { Router } from 'express';
       export * from '../../../compile/prebundle-pkg/index.js';
       export type { Bar } from './types.js';
+      export type { TypesValue } from '../../../compile/types-pkg/types.js';
       export * from './.hidden.js';
       export * from './.hidden-folder/index.js';
       export * from './a.b/index.js';

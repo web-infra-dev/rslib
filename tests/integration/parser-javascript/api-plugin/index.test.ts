@@ -1,5 +1,5 @@
-import path from 'node:path';
 import { expect, test } from '@rstest/core';
+import path from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 
 test("API plugin's api should be skipped in parser", async () => {

@@ -1,6 +1,6 @@
-import { resolve } from 'node:path';
 import { pluginLess } from '@rsbuild/plugin-less';
 import { defineConfig } from '@rslib/core';
+import { resolve } from 'node:path';
 import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({

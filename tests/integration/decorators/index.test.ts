@@ -1,5 +1,5 @@
-import { join } from 'node:path';
 import { expect, test } from '@rstest/core';
+import { join } from 'node:path';
 import { buildAndGetResults } from 'test-helper';
 
 test('decorators default to 2023-11', async () => {

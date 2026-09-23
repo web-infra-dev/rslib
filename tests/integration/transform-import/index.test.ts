@@ -1,5 +1,5 @@
-import { join } from 'node:path';
 import { expect, test } from '@rstest/core';
+import { join } from 'node:path';
 import { buildAndGetResults, type FormatType } from 'test-helper';
 
 test('transformImport with arco-design', async () => {

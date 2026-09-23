@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js';
 import { CounterButton } from './components/CounterButton';
-import { useCounter } from './useCounter';
 import './index.scss';
+import { useCounter } from './useCounter';
 
 export const Counter: Component = () => {
   const { count, increment, decrement } = useCounter();

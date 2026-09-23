@@ -1,7 +1,7 @@
+import { describe, expect, test } from '@rstest/core';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
-import { describe, expect, test } from '@rstest/core';
 import {
   buildAndGetResults,
   createTempFiles,
