@@ -344,7 +344,7 @@ declare module './add.wasm?inline' {
 }
 ```
 
-This declaration extends the `*?inline` module declared in the preset types. Without the preset types, TypeScript ignores it. The `export {}` at the top marks the declaration file as a module, allowing TypeScript to recognize the relative module declaration below. You can then use a named import:
+The `export {}` at the top marks the declaration file as a module, allowing TypeScript to recognize the relative module declaration below. You can then use a named import:
 
 ```ts title="src/index.ts"
 import { add } from './add.wasm?inline';

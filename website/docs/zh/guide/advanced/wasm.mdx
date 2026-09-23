@@ -344,7 +344,7 @@ declare module './add.wasm?inline' {
 }
 ```
 
-该声明扩展的是预设类型中声明的 `*?inline` 模块，未引入预设类型时 TypeScript 会忽略它。文件开头的 `export {}` 用于将声明文件标记为一个模块，让 TypeScript 能够识别下面的相对路径模块声明。声明后即可使用命名导入：
+文件开头的 `export {}` 用于将声明文件标记为一个模块，让 TypeScript 能够识别下面的相对路径模块声明。声明后即可使用命名导入：
 
 ```ts title="src/index.ts"
 import { add } from './add.wasm?inline';
