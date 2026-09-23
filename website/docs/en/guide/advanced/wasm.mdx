@@ -15,7 +15,7 @@ When importing `.wasm` modules using WebAssembly ESM Integration, only ESM outpu
 
 :::
 
-## Use WASM modules
+## Use Wasm modules
 
 Rslib supports the following ways to use `.wasm` modules.
 
@@ -287,7 +287,9 @@ If any of these module names resolve to JavaScript output, avoid changing its re
 
 :::
 
-## Inline WASM modules
+## Inline Wasm modules
+
+<ApiMeta addedVersion="1.0.2" />
 
 Add the `?inline` query to an import of a `.wasm` module to embed its binary into the JavaScript output. Rslib does not emit a `.wasm` file for these imports:
 
@@ -295,17 +297,20 @@ Add the `?inline` query to an import of a `.wasm` module to embed its binary int
 import { add } from './add.wasm?inline';
 ```
 
-`?inline` imports are not affected by [lib.wasm.mode](/config/lib/wasm#wasmmode). Setting [lib.wasm](/config/lib/wasm) to `false` prevents Rslib from processing `.wasm` modules with the `?inline` query, preserving `?inline` in the output.
-
 [Source phase imports](#source-phase-import) do not currently support the `?inline` query.
 
-## Disable wasm handling
+## Disable Wasm handling
 
 <ApiMeta addedVersion="1.0.1" />
 
 When [lib.wasm](/config/lib/wasm) is set to `false`, Rslib preserves the original import specifiers for `.wasm` modules imported using ESM syntax, without resolving the modules or emitting the corresponding `.wasm` files. You are responsible for managing these files and ensuring that the imports resolve correctly from the emitted JavaScript files.
 
-`.wasm` files referenced with `new URL('./add.wasm', import.meta.url)` go through the static asset pipeline and are not affected by [lib.wasm](/config/lib/wasm).
+:::note
+
+- When using `?inline`, [lib.wasm.mode](/config/lib/wasm#wasmmode) does not affect inlining. When [lib.wasm](/config/lib/wasm) is set to `false`, Rslib does not process the module and preserves the import with `?inline` in the output.
+- `.wasm` files referenced with `new URL('./add.wasm', import.meta.url)` go through the static asset pipeline and are not affected by [lib.wasm](/config/lib/wasm).
+
+:::
 
 ## Use with wasm-bindgen
 
@@ -327,7 +332,7 @@ export function add(a: number, b: number): number;
 
 ### Inline imports
 
-When using TypeScript, first add the [preset types](/guide/basic/typescript#preset-types) provided by `@rslib/core` to `tsconfig.json`:
+When using TypeScript, add the [preset types](/guide/basic/typescript#preset-types) provided by `@rslib/core` to `compilerOptions.types` in `tsconfig.json`. If this option already lists other type packages, append it to the existing array:
 
 ```json title="tsconfig.json"
 {
@@ -353,4 +358,4 @@ The `export {}` at the top marks the declaration file as a module, allowing Type
 import { add } from './add.wasm?inline';
 ```
 
-Re-exporting the WASM module directly preserves `?inline` in the generated declaration file. To avoid this, keep the WASM import in an internal module and export wrapped functions or values instead.
+Re-exporting the `.wasm` module directly preserves `?inline` in the generated declaration file. To avoid this, keep the `.wasm` import in an internal module and export wrapped functions or values instead.

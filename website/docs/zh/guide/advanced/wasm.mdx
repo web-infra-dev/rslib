@@ -15,7 +15,7 @@ Rslib 原生支持 WebAssembly（WASM）模块，允许你在项目中通过 [We
 
 :::
 
-## 使用 WASM 模块
+## 使用 Wasm 模块
 
 Rslib 支持通过以下方式使用 `.wasm` 模块。
 
@@ -287,25 +287,30 @@ Rslib 会更新 JavaScript 产物中对 `.wasm` 文件的 import，使其指向�
 
 :::
 
-## 内联 WASM 模块 \{#inline-wasm-modules}
+## 内联 Wasm 模块 \{#inline-wasm-modules}
 
-在导入 `.wasm` 模块时添加 `?inline` query，即可将其二进制内容内联进 JavaScript 产物。Rslib 不会为这些导入输出 `.wasm` 文件：
+<ApiMeta addedVersion="1.0.2" />
+
+在导入 `.wasm` 模块时添加 `?inline` query，即可将其二进制内容内联进 JavaScript 产物，Rslib 不会为这些导入输出 `.wasm` 文件：
 
 ```js
 import { add } from './add.wasm?inline';
 ```
 
-`?inline` 导入不受 [lib.wasm.mode](/config/lib/wasm#wasmmode) 影响。将 [lib.wasm](/config/lib/wasm) 设置为 `false` 可阻止 Rslib 处理带有 `?inline` query 的 `.wasm` 模块，`?inline` 将会被保留至产物中。
-
 [Source phase 导入](#source-phase-导入) 暂不支持 `?inline` query。
 
-## 禁用 wasm 处理
+## 禁用 Wasm 处理
 
 <ApiMeta addedVersion="1.0.1" />
 
 将 [lib.wasm](/config/lib/wasm) 设置为 `false` 时，Rslib 会保留通过 ESM 语法导入的 `.wasm` 模块的原始导入路径，不解析这些模块，也不输出对应的 `.wasm` 文件。你需要自行管理这些文件，并确保导入路径能够从产物中的 JavaScript 文件正确解析。
 
-通过 `new URL('./add.wasm', import.meta.url)` 引用的 `.wasm` 文件由静态资源流程处理，不受 [lib.wasm](/config/lib/wasm) 影响。
+:::note
+
+- 使用 `?inline` 时，[lib.wasm.mode](/config/lib/wasm#wasmmode) 不影响内联行为。当 [lib.wasm](/config/lib/wasm) 设置为 `false` 时，Rslib 不会处理该模块，而是将带有 `?inline` 的导入原样保留在产物中。
+- 使用 `new URL('./add.wasm', import.meta.url)` 引用 `.wasm` 文件时，该文件由静态资源流程处理，不受 [lib.wasm](/config/lib/wasm) 影响。
+
+:::
 
 ## 与 wasm-bindgen 配合使用
 
@@ -327,7 +332,7 @@ export function add(a: number, b: number): number;
 
 ### 内联导入 \{#inline-imports}
 
-使用 TypeScript 时，请先在 `tsconfig.json` 中添加 `@rslib/core` 提供的 [预设类型](/guide/basic/typescript#预设类型)：
+使用 TypeScript 时，请先在 `tsconfig.json` 的 `compilerOptions.types` 中添加 `@rslib/core` 提供的 [预设类型](/guide/basic/typescript#预设类型)。如果该配置已有其他类型包，请将它追加到现有数组中：
 
 ```json title="tsconfig.json"
 {
@@ -353,4 +358,4 @@ declare module './add.wasm?inline' {
 import { add } from './add.wasm?inline';
 ```
 
-直接重新导出 WASM 模块时，生成的类型声明文件会保留 `?inline`。若希望避免这种情况，可以将 WASM 导入保留在内部模块中，并导出封装后的函数或值。
+直接重新导出 `.wasm` 模块时，生成的类型声明文件会保留 `?inline`。若希望避免这种情况，可以将 `.wasm` 导入保留在内部模块中，并导出封装后的函数或值。
