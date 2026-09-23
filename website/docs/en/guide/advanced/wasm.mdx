@@ -324,7 +324,17 @@ export function add(a: number, b: number): number;
 
 ### Inline imports
 
-When using TypeScript, create a declaration file next to the `.wasm` file and declare the named exports for the exact `?inline` import path:
+When using TypeScript, first add the [preset types](/guide/basic/typescript#preset-types) provided by `@rslib/core` to `tsconfig.json`:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "types": ["@rslib/core/types"]
+  }
+}
+```
+
+Then create a declaration file next to the `.wasm` file and declare the named exports for the exact `?inline` import path:
 
 ```ts title="src/wasm.d.ts"
 export {};
@@ -334,7 +344,7 @@ declare module './add.wasm?inline' {
 }
 ```
 
-The `export {}` at the top marks the declaration file as a module, allowing TypeScript to recognize the relative module declaration below. You can then use a named import:
+This declaration extends the `*?inline` module declared in the preset types. Without the preset types, TypeScript ignores it. The `export {}` at the top marks the declaration file as a module, allowing TypeScript to recognize the relative module declaration below. You can then use a named import:
 
 ```ts title="src/index.ts"
 import { add } from './add.wasm?inline';
