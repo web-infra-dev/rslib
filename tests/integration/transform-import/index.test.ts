@@ -29,7 +29,7 @@ test('transformImport with lodash', async () => {
   for (const format of formats) {
     expect(Object.values(contents[format]!)[0]).toContain(
       format.startsWith('esm')
-        ? 'import get from "lodash/get"'
+        ? 'import lodash_get from "lodash/get"'
         : 'const get_namespaceObject = require("lodash/get")',
     );
     expect(Object.values(contents[format]!)[0]).toContain(
