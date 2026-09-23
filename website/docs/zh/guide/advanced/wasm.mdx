@@ -1,5 +1,5 @@
 ---
-description: '在 Rslib 库中导入 WebAssembly 模块，通过 compile 或 preserve 模式选择产物形态。'
+description: '在 Rslib 库中导入 WebAssembly 模块，配置 compile 或 preserve 输出模式，或通过 ?inline query 将二进制内联到 JavaScript 中。'
 ---
 
 import { Tabs, Tab } from '@theme';
@@ -15,7 +15,7 @@ Rslib 原生支持 WebAssembly（WASM）模块，允许你在项目中通过 [We
 
 :::
 
-## 使用 WASM 模块
+## 使用 Wasm 模块
 
 Rslib 支持通过以下方式使用 `.wasm` 模块。
 
@@ -287,13 +287,30 @@ Rslib 会更新 JavaScript 产物中对 `.wasm` 文件的 import，使其指向�
 
 :::
 
-## 禁用 wasm 处理
+## 内联 Wasm 模块 \{#inline-wasm-modules}
+
+<ApiMeta addedVersion="1.0.2" />
+
+在导入 `.wasm` 模块时添加 `?inline` query，即可将其二进制内容内联进 JavaScript 产物，Rslib 不会为这些导入输出 `.wasm` 文件：
+
+```js
+import { add } from './add.wasm?inline';
+```
+
+[Source phase 导入](#source-phase-导入) 暂不支持 `?inline` query。
+
+## 禁用 Wasm 处理
 
 <ApiMeta addedVersion="1.0.1" />
 
 将 [lib.wasm](/config/lib/wasm) 设置为 `false` 时，Rslib 会保留通过 ESM 语法导入的 `.wasm` 模块的原始导入路径，不解析这些模块，也不输出对应的 `.wasm` 文件。你需要自行管理这些文件，并确保导入路径能够从产物中的 JavaScript 文件正确解析。
 
-通过 `new URL('./add.wasm', import.meta.url)` 引用的 `.wasm` 文件由静态资源流程处理，不受 [lib.wasm](/config/lib/wasm) 影响。
+:::note
+
+- 使用 `?inline` 时，[lib.wasm.mode](/config/lib/wasm#wasmmode) 不影响内联行为。当 [lib.wasm](/config/lib/wasm) 设置为 `false` 时，Rslib 不会处理该模块，而是将带有 `?inline` 的导入原样保留在产物中。
+- 使用 `new URL('./add.wasm', import.meta.url)` 引用 `.wasm` 文件时，该文件由静态资源流程处理，不受 [lib.wasm](/config/lib/wasm) 影响。
+
+:::
 
 ## 与 wasm-bindgen 配合使用
 
@@ -312,3 +329,33 @@ TypeScript 未内置 `.wasm` 文件的模块声明。使用 TypeScript 时，你
 ```ts title="src/add.d.wasm.ts"
 export function add(a: number, b: number): number;
 ```
+
+### 内联导入 \{#inline-imports}
+
+使用 TypeScript 时，请先在 `tsconfig.json` 的 `compilerOptions.types` 中添加 `@rslib/core` 提供的 [预设类型](/guide/basic/typescript#预设类型)。如果该配置已有其他类型包，请将它追加到现有数组中：
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "types": ["@rslib/core/types"]
+  }
+}
+```
+
+然后在 `.wasm` 文件旁创建一个声明文件，并为具体的 `?inline` 导入路径声明命名导出的类型：
+
+```ts title="src/wasm.d.ts"
+export {};
+
+declare module './add.wasm?inline' {
+  export const add: (a: number, b: number) => number;
+}
+```
+
+文件开头的 `export {}` 用于将声明文件标记为一个模块，让 TypeScript 能够识别下面的相对路径模块声明。声明后即可使用命名导入：
+
+```ts title="src/index.ts"
+import { add } from './add.wasm?inline';
+```
+
+直接重新导出 `.wasm` 模块时，生成的类型声明文件会保留 `?inline`。若希望避免这种情况，可以将 `.wasm` 导入保留在内部模块中，并导出封装后的函数或值。
