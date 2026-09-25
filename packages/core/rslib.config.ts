@@ -3,14 +3,10 @@ import { defineConfig, rspack } from 'rslib';
 import packageJson from './package.json' with { type: 'json' };
 
 export default defineConfig({
-  lib: [
-    {
-      dts: {
-        isolated: true,
-        distPath: './dist-types',
-      },
-    },
-  ],
+  dts: {
+    isolated: true,
+    distPath: './dist-types',
+  },
   plugins: [pluginPublint()],
   source: {
     entry: {
