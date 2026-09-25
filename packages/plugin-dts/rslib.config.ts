@@ -2,18 +2,14 @@ import { pluginPublint } from 'rsbuild-plugin-publint';
 import { defineConfig } from 'rslib';
 
 export default defineConfig({
-  lib: [
-    {
-      dts: {
-        isolated: true,
-      },
-      shims: {
-        esm: {
-          require: true,
-        },
-      },
+  dts: {
+    isolated: true,
+  },
+  shims: {
+    esm: {
+      require: true,
     },
-  ],
+  },
   source: {
     entry: {
       index: './src/index.ts',
