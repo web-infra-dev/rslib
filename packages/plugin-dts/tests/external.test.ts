@@ -104,6 +104,14 @@ describe('should calcBundledPackages correctly', () => {
         },
       }),
     ).toEqual(['baz', 'bar']);
+
+    expect(
+      calcBundledPackages({
+        autoExternal: true,
+        cwd: 'pkg/to/root',
+        userExternals: [{ react: 'react' }, 'baz'],
+      }),
+    ).toEqual(['bar']);
   });
 
   it('read package.json failed', () => {

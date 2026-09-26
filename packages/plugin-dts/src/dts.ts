@@ -98,8 +98,8 @@ export const calcBundledPackages = (
       return value.flatMap((v) => getUserExternalsKeys(v));
     }
 
-    if (isObject(userExternals)) {
-      return Object.keys(userExternals);
+    if (isObject(value)) {
+      return Object.keys(value);
     }
     return [];
   };
