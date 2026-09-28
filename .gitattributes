@@ -1,2 +1,5 @@
 # Let GitHub languages ignores MDX files
 *.mdx linguist-documentation
+
+# Keep CLI shebangs executable on Unix when packaging from Windows.
+packages/core/bin/*.js text eol=lf
