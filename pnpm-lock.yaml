@@ -265,11 +265,11 @@ catalogs:
       specifier: 1.14.11
       version: 1.14.11
     '@rstest/adapter-rslib':
-      specifier: ^0.12.0
-      version: 0.12.0
+      specifier: ^0.12.2
+      version: 0.12.2
     '@rstest/core':
-      specifier: ^0.12.0
-      version: 0.12.0
+      specifier: ^0.12.2
+      version: 0.12.2
     '@shikijs/transformers':
       specifier: ^4.4.3
       version: 4.4.3
@@ -471,10 +471,10 @@ importers:
     devDependencies:
       '@rstest/adapter-rslib':
         specifier: 'catalog:'
-        version: 0.12.0(@rslib/core@1.0.2)(@rstest/core@0.12.0)(typescript@7.0.2)
+        version: 0.12.2(@rslib/core@1.0.2)(@rstest/core@0.12.2)(typescript@7.0.2)
       '@rstest/core':
         specifier: 'catalog:'
-        version: 0.12.0(@module-federation/runtime-tools@2.9.0)
+        version: 0.12.2(@module-federation/runtime-tools@2.9.0)
       '@types/fs-extra':
         specifier: 'catalog:'
         version: 11.0.4
@@ -3734,8 +3734,8 @@ packages:
       '@rspress/core':
         optional: true
 
-  '@rstest/adapter-rslib@0.12.0':
-    resolution: {integrity: sha512-Yj/4UxhksyMMZWnfIevqcFlii1S9l8lhGcpflZ27HvrnFIOwGqcadw5ee9t04gBqT50b05R5YRWMfWnMQ//buA==}
+  '@rstest/adapter-rslib@0.12.2':
+    resolution: {integrity: sha512-SuEwwBBIALMDPqGMoUL62qObREgA2Cwil3lkBnG4+LdVZpM3jr8dOMKiwIdm9Wxw9/ENZ7hdu7WbKDwyZfcfig==}
     peerDependencies:
       '@rslib/core': '>=0.18.6 || ^1.0.0-0'
       '@rstest/core': ^0.12.0
@@ -3744,8 +3744,8 @@ packages:
       typescript:
         optional: true
 
-  '@rstest/core@0.12.0':
-    resolution: {integrity: sha512-jawxfkm97gUroI/KNgNwvEOQ7Ty6gIdWK8U7pbs9MSSDQQxR8I8tMs3SoIRKtaxVLy5n8eDJpWWvffMPF43YZg==}
+  '@rstest/core@0.12.2':
+    resolution: {integrity: sha512-vDn3fCWnfv1UnjG0ZBUyDyQstRNEuceBFMLKuvPvsSm+8vTRj3ad0O2izRdj0MuPj4AqzgYVlDMv+cGBYHTUlw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -10493,14 +10493,14 @@ snapshots:
     optionalDependencies:
       '@rspress/core': 2.0.22(@module-federation/runtime-tools@2.9.0)(@rspack/core@2.2.7)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@9.4.0)
 
-  '@rstest/adapter-rslib@0.12.0(@rslib/core@1.0.2)(@rstest/core@0.12.0)(typescript@7.0.2)':
+  '@rstest/adapter-rslib@0.12.2(@rslib/core@1.0.2)(@rstest/core@0.12.2)(typescript@7.0.2)':
     dependencies:
       '@rslib/core': 1.0.2(@microsoft/api-extractor@7.59.0)(@module-federation/runtime-tools@2.9.0)(typescript@7.0.2)
-      '@rstest/core': 0.12.0(@module-federation/runtime-tools@2.9.0)
+      '@rstest/core': 0.12.2(@module-federation/runtime-tools@2.9.0)
     optionalDependencies:
       typescript: 7.0.2
 
-  '@rstest/core@0.12.0(@module-federation/runtime-tools@2.9.0)':
+  '@rstest/core@0.12.2(@module-federation/runtime-tools@2.9.0)':
     dependencies:
       '@rsbuild/core': 2.2.9(@module-federation/runtime-tools@2.9.0)
       '@types/chai': 5.2.3
@@ -14639,7 +14639,7 @@ snapshots:
       '@rsbuild/core': 2.2.9(@module-federation/runtime-tools@2.9.0)
       '@rslib/core': 1.0.2(@microsoft/api-extractor@7.59.0)(@module-federation/runtime-tools@2.9.0)(typescript@7.0.2)
       '@rslint/core': 0.9.3(jiti@2.7.0)
-      '@rstest/core': 0.12.0(@module-federation/runtime-tools@2.9.0)
+      '@rstest/core': 0.12.2(@module-federation/runtime-tools@2.9.0)
       '@swc-next/parser': 0.2.2
       prettier: 3.9.8
       tinypool: 2.2.0
