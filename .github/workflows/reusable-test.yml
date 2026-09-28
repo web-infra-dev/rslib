@@ -50,6 +50,15 @@ jobs:
           node-version: ${{ inputs.node-version }}
           package-manager-cache: false
 
+      # Work around https://github.com/pnpm/pnpm/issues/16239 until a fixed pnpm release.
+      - name: Keep pnpm directories on the workspace drive
+        if: ${{ steps.changes.outputs.changed == 'true' && runner.os == 'Windows' }}
+        shell: pwsh
+        run: |
+          "PNPM_CONFIG_CACHE_DIR=$env:RUNNER_TEMP\pnpm-cache" >> $env:GITHUB_ENV
+          "PNPM_CONFIG_STATE_DIR=$env:RUNNER_TEMP\pnpm-state" >> $env:GITHUB_ENV
+          "PNPM_CONFIG_STORE_DIR=$env:RUNNER_TEMP\pnpm-store" >> $env:GITHUB_ENV
+
       - name: Install pnpm
         if: ${{ steps.changes.outputs.changed == 'true' }}
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
