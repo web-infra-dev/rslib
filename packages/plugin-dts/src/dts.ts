@@ -83,6 +83,7 @@ export const calcBundledPackages = (
 
   // User externals should not bundled
   // Only handle the case where the externals type is string / (string | RegExp)[] / plain object, function type is too complex.
+  const forcedBundledPackages = new Set<string>();
   const getUserExternalsKeys = (
     value: typeof userExternals,
   ): (string | RegExp)[] => {
@@ -99,7 +100,15 @@ export const calcBundledPackages = (
     }
 
     if (isObject(value)) {
-      return Object.keys(value);
+      const keys: string[] = [];
+      for (const [key, external] of Object.entries(value)) {
+        if (external === false) {
+          forcedBundledPackages.add(key);
+        } else {
+          keys.push(key);
+        }
+      }
+      return keys;
     }
     return [];
   };
@@ -117,7 +126,9 @@ export const calcBundledPackages = (
     const deps = pkgJson[type] && Object.keys(pkgJson[type]);
     if (deps) {
       if (externalOptions[type]) {
-        externals.push(...deps);
+        externals.push(
+          ...deps.filter((dep) => !forcedBundledPackages.has(dep)),
+        );
       }
       allDeps.push(...deps);
     }

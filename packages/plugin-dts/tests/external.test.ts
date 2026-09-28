@@ -70,6 +70,9 @@ describe('should calcBundledPackages correctly', () => {
   it('autoExternal with user externals', () => {
     rs.spyOn(fs, 'readFileSync').mockImplementation(() =>
       JSON.stringify({
+        dependencies: {
+          foo: '1.0.0',
+        },
         devDependencies: {
           baz: '1.0.0',
           bar: '1.0.0',
@@ -112,6 +115,19 @@ describe('should calcBundledPackages correctly', () => {
         userExternals: [{ react: 'react' }, 'baz'],
       }),
     ).toEqual(['bar']);
+
+    for (const userExternals of [
+      { react: 'react', baz: false, foo: false },
+      [{ react: 'react', baz: false, foo: false }],
+    ]) {
+      expect(
+        calcBundledPackages({
+          autoExternal: true,
+          cwd: 'pkg/to/root',
+          userExternals,
+        }),
+      ).toEqual(['foo', 'baz', 'bar']);
+    }
   });
 
   it('read package.json failed', () => {
