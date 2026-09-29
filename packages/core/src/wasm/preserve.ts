@@ -83,9 +83,12 @@ export const createWasmPreserveExternal = (
 
     resolver ??= getResolve() as RspackResolver;
 
-    let sourcePath: string;
+    let sourcePath: string | undefined;
     try {
       sourcePath = await resolver(context, request);
+      if (sourcePath === undefined) {
+        throw new Error(`Failed to resolve ${request}`);
+      }
     } catch (err) {
       if (!request.startsWith('.') && !path.isAbsolute(request)) {
         callback(undefined, request);
