@@ -1361,9 +1361,12 @@ const composeBundlelessExternalConfig = (
               request: string,
             ): Promise<{ path?: string; isResolved: boolean }> {
               try {
-                let resolvedRequest = request;
+                let resolvedRequest: string | undefined = request;
                 // use resolver to resolve the request
                 resolvedRequest = await resolver!(context!, resolvedRequest);
+                if (resolvedRequest === undefined) {
+                  throw new Error(`Failed to resolve ${request}`);
+                }
                 if (typeof outBase !== 'string') {
                   throw new Error(
                     `outBase expect to be a string in bundleless mode, but got ${outBase}`,
