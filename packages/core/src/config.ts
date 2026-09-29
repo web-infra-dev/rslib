@@ -612,7 +612,7 @@ const modifyRsbuildDefaultPlugin = ({
       // bundler's default `dependency: 'url'` handling.
       if (promoteUrlTargetsToEntries) {
         // Rsbuild keeps its own loaders away from `new URL()` targets, which
-        // would leave the promoted module untranspiled.
+        // would leave the promoted module without transpilation.
         chain.module.rule(CHAIN_ID.RULE.JS).delete('dependency');
         chain.module
           .rule(NEW_URL_ENTRY_RULE)
