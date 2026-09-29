@@ -1,0 +1,46 @@
+---
+description: '配置 Rslib 如何处理 new URL() 引用，可将目标输出为静态资源、编译为独立模块，或完全关闭处理。'
+---
+
+# lib.newUrl
+
+- **类型：**
+
+```ts
+type NewUrl =
+  | {
+      mode?: 'asset' | 'entry';
+    }
+  | false;
+```
+
+- **默认值：** `{ mode: 'asset' }`
+- **顶层配置：** 支持
+
+配置 Rslib 如何处理 `new URL(path, import.meta.url)`。该选项仅支持 [ESM 产物](/config/lib/format)。设置为 `false` 时，Rslib 会保留 `new URL()` 表达式，且不产出其引用的文件。
+
+## newUrl.mode
+
+- **类型：** `'asset' | 'entry'`
+- **默认值：** `'asset'`
+
+- `'asset'`：将引用的文件作为静态资源产出，包括 JavaScript、TypeScript 和 CSS 文件。
+- `'entry'`：编译引用的 JavaScript 和 TypeScript 模块，其他类型仍作为静态资源产出。
+
+启用 [bundle](/config/lib/bundle) 时，每个目标模块会作为独立入口产出。使用 bundleless 构建时，目标模块必须被 [source.entry](/config/rsbuild/source#sourceentry) 匹配，URL 会指向对应产物。
+
+```ts title="rslib.config.ts"
+export default {
+  lib: {
+    newUrl: { mode: 'entry' },
+  },
+};
+```
+
+用法示例请参考[静态资源 - `new URL` 引用](/guide/advanced/static-assets#new-url-引用)。
+
+## 版本历史
+
+| 版本   | 变更                |
+| ------ | ------------------- |
+| v1.0.2 | 新增 `lib.newUrl`。 |
