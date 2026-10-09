@@ -84,7 +84,11 @@ export const composeWasmConfig = ({
           'rslib-wasm-inline',
           (factory) => {
             factory.hooks.resolve.tap('rslib-wasm-inline', (data) => {
-              if (!isWasmInlineRequest(data.request)) {
+              // Dependencies of inlined WebAssembly already carry the JS importer.
+              if (
+                !isWasmInlineRequest(data.request) ||
+                data.request.includes(`${WASM_INLINE_ISSUER_QUERY}=`)
+              ) {
                 return;
               }
 

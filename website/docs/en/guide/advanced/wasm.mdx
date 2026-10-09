@@ -297,6 +297,8 @@ Add the `?inline` query to an import of a `.wasm` module to embed its binary int
 import { add } from './add.wasm?inline';
 ```
 
+If an inlined module imports other `.wasm` modules by relative or absolute paths, Rslib inlines them as well. These inlined dependencies are separate instances from imports of the same `.wasm` files without `?inline`.
+
 [Source phase imports](#source-phase-import) do not currently support the `?inline` query.
 
 ## Disable Wasm handling
