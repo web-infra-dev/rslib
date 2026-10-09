@@ -297,6 +297,8 @@ Rslib 会更新 JavaScript 产物中对 `.wasm` 文件的 import，使其指向�
 import { add } from './add.wasm?inline';
 ```
 
+如果被内联的模块又通过相对路径或绝对路径导入了其他 `.wasm` 模块，Rslib 也会将它们一并内联。这些被内联的依赖与不带 `?inline` 导入的同一 `.wasm` 文件是相互独立的实例。
+
 [Source phase 导入](#source-phase-导入) 暂不支持 `?inline` query。
 
 ## 禁用 Wasm 处理

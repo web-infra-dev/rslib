@@ -3,6 +3,12 @@ export const WASM_INLINE_ISSUER_QUERY = '__rslib_wasm_inline_issuer';
 export const isWasmInlineRequest = (request: string): boolean =>
   /^[^?#]*\.wasm\?(?:[^#]*&)?inline(?:&|=|#|$)/.test(request);
 
+const isLocalWasmRequest = (request: string): boolean =>
+  /^\.{0,2}\/[^?#]*\.wasm(?:[?#]|$)/.test(request);
+
+const appendQuery = (request: string, query: string): string =>
+  request.replace(/(?=#|$)/, `${request.includes('?') ? '&' : '?'}${query}`);
+
 export const encodeWasmBinaryString = (bytes: Uint8Array): string => {
   let singleQuoteCount = 0;
   let doubleQuoteCount = 0;
@@ -38,13 +44,17 @@ export const generateWasmInlineModule = (
     ...new Set(WebAssembly.Module.imports(module).map(({ module }) => module)),
   ];
   const statements = imports.map((request, index) => {
-    const dependency =
-      importer === undefined
-        ? request
-        : request.replace(
-            /(?=#|$)/,
-            `${request.includes('?') ? '&' : '?'}${WASM_INLINE_ISSUER_QUERY}=${encodeURIComponent(importer)}`,
-          );
+    let dependency = request;
+    // Local WebAssembly dependencies of an inlined module are inlined as well.
+    if (isLocalWasmRequest(dependency) && !isWasmInlineRequest(dependency)) {
+      dependency = appendQuery(dependency, 'inline');
+    }
+    if (importer !== undefined) {
+      dependency = appendQuery(
+        dependency,
+        `${WASM_INLINE_ISSUER_QUERY}=${encodeURIComponent(importer)}`,
+      );
+    }
     return `import * as __wasm_import_${index} from ${JSON.stringify(dependency)};`;
   });
   const importObject = imports
