@@ -35,6 +35,23 @@ const IMPORTING_WASM = Uint8Array.from([
   0x0a, 0x06, 0x01, 0x04, 0x00, 0x10, 0x00, 0x0b,
 ]);
 
+const WASM_IMPORTING_WASM = Uint8Array.from([
+  0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,
+  // (type (func))
+  0x01, 0x04, 0x01, 0x60, 0x00, 0x00,
+  // import section with 3 entries
+  0x02, 0x43, 0x03,
+  // (import "./dep.wasm" "f" (func (type 0)))
+  0x0a, 0x2e, 0x2f, 0x64, 0x65, 0x70, 0x2e, 0x77, 0x61, 0x73, 0x6d, 0x01, 0x66,
+  0x00, 0x00,
+  // (import "./inline.wasm?inline" "f" (func (type 0)))
+  0x14, 0x2e, 0x2f, 0x69, 0x6e, 0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x77, 0x61, 0x73,
+  0x6d, 0x3f, 0x69, 0x6e, 0x6c, 0x69, 0x6e, 0x65, 0x01, 0x66, 0x00, 0x00,
+  // (import "./query.wasm?v=1#hash" "f" (func (type 0)))
+  0x15, 0x2e, 0x2f, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x77, 0x61, 0x73, 0x6d,
+  0x3f, 0x76, 0x3d, 0x31, 0x23, 0x68, 0x61, 0x73, 0x68, 0x01, 0x66, 0x00, 0x00,
+]);
+
 describe('wasm inline requests', () => {
   test.each([
     './add.wasm?inline',
@@ -117,5 +134,33 @@ describe('wasm inline code generation', () => {
     expect(code).toContain('import * as __wasm_import_0 from "./meta.js";');
     expect(code).toContain('["./meta.js"]: __wasm_import_0');
     expect(code).toContain('as read');
+  });
+
+  test('inlines WebAssembly dependencies of an inlined module', () => {
+    const code = generateWasmInlineModule(WASM_IMPORTING_WASM);
+
+    expect(code).toContain(
+      'import * as __wasm_import_0 from "./dep.wasm?inline";',
+    );
+    expect(code).toContain(
+      'import * as __wasm_import_1 from "./inline.wasm?inline";',
+    );
+    expect(code).toContain(
+      'import * as __wasm_import_2 from "./query.wasm?v=1&inline#hash";',
+    );
+    expect(code).toContain('["./dep.wasm"]: __wasm_import_0');
+    expect(code).toContain('["./inline.wasm?inline"]: __wasm_import_1');
+    expect(code).toContain('["./query.wasm?v=1#hash"]: __wasm_import_2');
+  });
+
+  test('scopes WebAssembly dependencies to the JS importer', () => {
+    const code = generateWasmInlineModule(WASM_IMPORTING_WASM, 'src/index.js');
+
+    expect(code).toContain(
+      'from "./dep.wasm?inline&__rslib_wasm_inline_issuer=src%2Findex.js";',
+    );
+    expect(code).toContain(
+      'from "./query.wasm?v=1&inline&__rslib_wasm_inline_issuer=src%2Findex.js#hash";',
+    );
   });
 });
