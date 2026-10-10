@@ -1,9 +1,9 @@
-import { expect, test } from '@rstest/core';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { expect, test } from '@rstest/core';
 import { buildAndGetResults, queryContent } from 'test-helper';
 
 const require = createRequire(import.meta.url);
@@ -62,26 +62,28 @@ test('set the size threshold to inline static assets', async () => {
   );
   expect(logoCjs2).toMatchInlineSnapshot(`
     ""use strict";
-    var __webpack_modules__ = {
+    var __rspack_modules = {
         V (module) {
             module.exports = require("../static/svg/logo.svg");
         }
     };
-    var __webpack_module_cache__ = {};
-    function __webpack_require__(moduleId) {
-        var cachedModule = __webpack_module_cache__[moduleId];
+    var __rspack_module_cache = {};
+    var __rspack_context = {};
+    function __rspack_require(moduleId) {
+        var cachedModule = __rspack_module_cache[moduleId];
         if (void 0 !== cachedModule) return cachedModule.exports;
-        var module = __webpack_module_cache__[moduleId] = {
+        var module = __rspack_module_cache[moduleId] = {
             exports: {}
         };
-        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        __rspack_modules[moduleId](module, module.exports, __rspack_context);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("V");
-    exports["default"] = __webpack_exports__["default"];
-    for(var __rspack_i in __webpack_exports__)if (-1 === [
+    __rspack_context.r = __rspack_require;
+    var __rspack_exports = __rspack_context.r("V");
+    exports["default"] = __rspack_exports["default"];
+    for(var __rspack_i in __rspack_exports)if (-1 === [
         "default"
-    ].indexOf(__rspack_i)) exports[__rspack_i] = __webpack_exports__[__rspack_i];
+    ].indexOf(__rspack_i)) exports[__rspack_i] = __rspack_exports[__rspack_i];
     Object.defineProperty(exports, '__esModule', {
         value: true
     });
@@ -122,26 +124,28 @@ test('set the assets filename with hash', async () => {
   );
   expect(imageCjs1).toMatchInlineSnapshot(`
     ""use strict";
-    var __webpack_modules__ = {
+    var __rspack_modules = {
         r (module) {
             module.exports = require("../static/image/image.c74653c171.png");
         }
     };
-    var __webpack_module_cache__ = {};
-    function __webpack_require__(moduleId) {
-        var cachedModule = __webpack_module_cache__[moduleId];
+    var __rspack_module_cache = {};
+    var __rspack_context = {};
+    function __rspack_require(moduleId) {
+        var cachedModule = __rspack_module_cache[moduleId];
         if (void 0 !== cachedModule) return cachedModule.exports;
-        var module = __webpack_module_cache__[moduleId] = {
+        var module = __rspack_module_cache[moduleId] = {
             exports: {}
         };
-        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        __rspack_modules[moduleId](module, module.exports, __rspack_context);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("r");
-    exports["default"] = __webpack_exports__["default"];
-    for(var __rspack_i in __webpack_exports__)if (-1 === [
+    __rspack_context.r = __rspack_require;
+    var __rspack_exports = __rspack_context.r("r");
+    exports["default"] = __rspack_exports["default"];
+    for(var __rspack_i in __rspack_exports)if (-1 === [
         "default"
-    ].indexOf(__rspack_i)) exports[__rspack_i] = __webpack_exports__[__rspack_i];
+    ].indexOf(__rspack_i)) exports[__rspack_i] = __rspack_exports[__rspack_i];
     Object.defineProperty(exports, '__esModule', {
         value: true
     });
@@ -182,26 +186,28 @@ test('set the assets output path', async () => {
   );
   expect(imageCjs1).toMatchInlineSnapshot(`
     ""use strict";
-    var __webpack_modules__ = {
+    var __rspack_modules = {
         r (module) {
             module.exports = require("../assets/bundleless/image.png");
         }
     };
-    var __webpack_module_cache__ = {};
-    function __webpack_require__(moduleId) {
-        var cachedModule = __webpack_module_cache__[moduleId];
+    var __rspack_module_cache = {};
+    var __rspack_context = {};
+    function __rspack_require(moduleId) {
+        var cachedModule = __rspack_module_cache[moduleId];
         if (void 0 !== cachedModule) return cachedModule.exports;
-        var module = __webpack_module_cache__[moduleId] = {
+        var module = __rspack_module_cache[moduleId] = {
             exports: {}
         };
-        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        __rspack_modules[moduleId](module, module.exports, __rspack_context);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("r");
-    exports["default"] = __webpack_exports__["default"];
-    for(var __rspack_i in __webpack_exports__)if (-1 === [
+    __rspack_context.r = __rspack_require;
+    var __rspack_exports = __rspack_context.r("r");
+    exports["default"] = __rspack_exports["default"];
+    for(var __rspack_i in __rspack_exports)if (-1 === [
         "default"
-    ].indexOf(__rspack_i)) exports[__rspack_i] = __webpack_exports__[__rspack_i];
+    ].indexOf(__rspack_i)) exports[__rspack_i] = __rspack_exports[__rspack_i];
     Object.defineProperty(exports, '__esModule', {
         value: true
     });
@@ -213,23 +219,20 @@ test('set the assets public path', async () => {
   const fixturePath = join(__dirname, 'public-path');
   const { contents } = await buildAndGetResults({ fixturePath });
 
-  // 1. umd should preserve '__webpack_require__.p'
+  // 1. umd should preserve the runtime public path
   const { content: indexUmdJs } = queryContent(contents.umd!, /index\.js/);
 
-  expect(indexUmdJs).toContain('__webpack_require__.p = "/public/path/";');
+  expect(indexUmdJs).toContain('__rspack_context.p = publicPath;');
   expect(indexUmdJs).toContain(
-    'const image_namespaceObject = __webpack_require__.p + "static/image/image.png";',
+    'const image_namespaceObject = __rspack_context.p + "static/image/image.png";',
   );
 
   // 2. bundle
   // esm
   const { content: indexJs } = queryContent(contents.esm0!, /index\.js/);
   expect(indexJs).toMatchInlineSnapshot(`
-    "var __webpack_require__ = {};
-    (()=>{
-        __webpack_require__.p = "/public/path/";
-    })();
-    const image_namespaceObject = __webpack_require__.p + "static/image/image.png";
+    "var publicPath = "/public/path/";
+    const image_namespaceObject = publicPath + "static/image/image.png";
     const src = image_namespaceObject;
     export default src;
     "
@@ -242,8 +245,8 @@ test('set the assets public path', async () => {
     /assets\/image\.js/,
   );
   expect(imageJs).toMatchInlineSnapshot(`
-    "import { __webpack_require__ } from "../rslib-runtime~2.js";
-    const image_namespaceObject = __webpack_require__.p + "static/image/image.png";
+    "import { publicPath } from "../rslib-runtime~2.js";
+    const image_namespaceObject = publicPath + "static/image/image.png";
     export default image_namespaceObject;
     "
   `);

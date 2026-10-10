@@ -9,12 +9,12 @@ const normalizeVueModuleIds = (contents: Record<string, string>) =>
       file,
       content
         .replace(
-          /(\n\s*)(?:\d+|[A-Za-z_$][\w$]*)(?= \(__unused_rspack_module, exports\) \{)/g,
+          /(\n\s*)\d+(?= \(__unused_rspack_module, exports\) \{)/g,
           '$1<MODULE_ID>',
         )
         .replace(
-          /__webpack_require__\((?:\d+|"[^"]*"|'[^']*')\)/g,
-          '__webpack_require__("<MODULE_ID>")',
+          /(rspackRequire|__webpack_require__)\("?\d+"?\)/g,
+          '$1("<MODULE_ID>")',
         ),
     ]),
   );
@@ -39,25 +39,23 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
       .toMatchInlineSnapshot(`
         {
           "<ROOT>/tests/integration/vue/dist/bundle/index.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
-        var __webpack_modules__ = {};
-        var __webpack_module_cache__ = {};
-        function __webpack_require__(moduleId) {
-            var cachedModule = __webpack_module_cache__[moduleId];
+        var modules = {};
+        var moduleCache = {};
+        function rspackRequire(moduleId) {
+            var cachedModule = moduleCache[moduleId];
             if (void 0 !== cachedModule) return cachedModule.exports;
-            var module = __webpack_module_cache__[moduleId] = {
+            var module = moduleCache[moduleId] = {
                 exports: {}
             };
-            __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+            modules[moduleId](module, module.exports, rspackRequire);
             return module.exports;
         }
-        __webpack_require__.m = __webpack_modules__;
-        (()=>{
-            __webpack_require__.add = function(modules) {
-                Object.assign(__webpack_require__.m, modules);
-            };
-        })();
-        __webpack_require__.add({
-            <MODULE_ID> (__unused_rspack_module, exports) {
+        var moduleFactories = modules;
+        moduleFactories.add = function(modules) {
+            Object.assign(moduleFactories, modules);
+        };
+        moduleFactories.add({
+            T (__unused_rspack_module, exports) {
                 exports.A = (sfc, props)=>{
                     const target = sfc.__vccOpts || sfc;
                     for (const [key, val] of props)target[key] = val;
@@ -75,7 +73,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
                 return (_ctx, _cache)=>(openBlock(), createElementBlock("p", _hoisted_1, toDisplayString(button.value), 1));
             }
         };
-        const exportHelper = __webpack_require__("<MODULE_ID>");
+        const exportHelper = rspackRequire("T");
         const __exports__ = /*#__PURE__*/ (0, exportHelper.A)(Buttonvue_type_script_setup_true_lang_js, [
             [
                 '__scopeId',
@@ -125,12 +123,12 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
     expect(normalizeVueModuleIds(jsResult.contents.esm0!))
       .toMatchInlineSnapshot(`
         {
-          "<ROOT>/tests/integration/vue/dist/bundleless/Button/Button.js": "import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
+          "<ROOT>/tests/integration/vue/dist/bundleless/Button/Button.js": "import { rspackRequire, moduleFactories } from "../rslib-runtime~0.js";
+        import { createElementBlock, openBlock, ref, toDisplayString } from "vue";
         import "./style.css";
         import "./Button.css";
-        import { __webpack_require__ } from "../rslib-runtime~0.js";
-        __webpack_require__.add({
-            <MODULE_ID> (__unused_rspack_module, exports) {
+        moduleFactories.add({
+            T (__unused_rspack_module, exports) {
                 exports.A = (sfc, props)=>{
                     const target = sfc.__vccOpts || sfc;
                     for (const [key, val] of props)target[key] = val;
@@ -148,7 +146,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
                 return (_ctx, _cache)=>(openBlock(), createElementBlock("p", _hoisted_1, toDisplayString(button.value), 1));
             }
         };
-        const exportHelper = __webpack_require__("<MODULE_ID>");
+        const exportHelper = rspackRequire("T");
         const __exports__ = /*#__PURE__*/ (0, exportHelper.A)(Buttonvue_type_script_setup_true_lang_js, [
             [
                 '__scopeId',
@@ -179,24 +177,22 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
           "<ROOT>/tests/integration/vue/dist/bundleless/index.js": "export { default as Button } from "./Button/index.js";
         export { default as Card } from "./Card.js";
         ",
-          "<ROOT>/tests/integration/vue/dist/bundleless/rslib-runtime~0.js": "var __webpack_modules__ = {};
-        var __webpack_module_cache__ = {};
-        function __webpack_require__(moduleId) {
-            var cachedModule = __webpack_module_cache__[moduleId];
+          "<ROOT>/tests/integration/vue/dist/bundleless/rslib-runtime~0.js": "var modules = {};
+        var moduleCache = {};
+        function rspackRequire(moduleId) {
+            var cachedModule = moduleCache[moduleId];
             if (void 0 !== cachedModule) return cachedModule.exports;
-            var module = __webpack_module_cache__[moduleId] = {
+            var module = moduleCache[moduleId] = {
                 exports: {}
             };
-            __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+            modules[moduleId](module, module.exports, rspackRequire);
             return module.exports;
         }
-        __webpack_require__.m = __webpack_modules__;
-        (()=>{
-            __webpack_require__.add = function(modules) {
-                Object.assign(__webpack_require__.m, modules);
-            };
-        })();
-        export { __webpack_require__ };
+        var moduleFactories = modules;
+        moduleFactories.add = function(modules) {
+            Object.assign(moduleFactories, modules);
+        };
+        export { rspackRequire, moduleFactories };
         ",
         }
       `);
