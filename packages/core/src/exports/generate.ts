@@ -105,9 +105,7 @@ export function generateExports(
   }
   if (entrySlotsByName.size === 0) return;
 
-  const exportsField: ExportsField = {
-    './package.json': './package.json',
-  };
+  const exportsField: ExportsField = {};
   // Keep the main entry before other entry subpaths, then sort the rest for stable output.
   const sortedEntries = [...entrySlotsByName].sort(([a], [b]) => {
     if (a === 'index') return -1;

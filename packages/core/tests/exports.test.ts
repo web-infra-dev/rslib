@@ -38,7 +38,6 @@ describe('generateExports', () => {
     };
 
     expect(generateExports(options)).toEqual({
-      './package.json': './package.json',
       '.': {
         import: './dist/esm/index.mjs',
         require: './dist/cjs/index.js',
@@ -55,7 +54,6 @@ describe('generateExports', () => {
     };
 
     expect(generateExports(options)).toEqual({
-      './package.json': './package.json',
       '.': './dist/esm/index.mjs',
     });
   });
@@ -69,7 +67,6 @@ describe('generateExports', () => {
     };
 
     expect(generateExports(options)).toEqual({
-      './package.json': './package.json',
       './foo': './dist/esm/foo.mjs',
     });
   });
@@ -90,14 +87,12 @@ describe('generateExports', () => {
     const exportsField = generateExports(options);
 
     expect(Object.keys(exportsField!)).toEqual([
-      './package.json',
       '.',
       './bar',
       './foo',
       './utils/numbers',
     ]);
     expect(exportsField).toEqual({
-      './package.json': './package.json',
       '.': './dist/esm/index.mjs',
       './bar': './dist/esm/bar.mjs',
       './foo': './dist/esm/foo.mjs',
@@ -120,7 +115,6 @@ describe('generateExports', () => {
     };
 
     expect(generateExports(options)).toEqual({
-      './package.json': './package.json',
       '.': './dist/esm/index.mjs',
     });
   });
@@ -156,7 +150,6 @@ describe('generateExports', () => {
     };
 
     expect(generateExports(options)).toEqual({
-      './package.json': './package.json',
       '.': './dist/esm/index.mjs',
     });
   });
@@ -203,7 +196,6 @@ describe('generateExports', () => {
     };
 
     expect(generateExports(options)).toEqual({
-      './package.json': './package.json',
       '.': './dist/esm/index.mjs',
     });
   });

@@ -37,7 +37,6 @@ describe('output.exports', () => {
     await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('dual-format')).toEqual({
-      './package.json': './package.json',
       '.': {
         import: './dist/esm/index.mjs',
         require: './dist/cjs/index.js',
@@ -50,7 +49,6 @@ describe('output.exports', () => {
     await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('esm-only')).toEqual({
-      './package.json': './package.json',
       '.': './dist/esm/index.mjs',
     });
   });
@@ -92,7 +90,6 @@ describe('output.exports', () => {
     await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('multiple-entries')).toEqual({
-      './package.json': './package.json',
       '.': './dist/esm/index.mjs',
       './utils/numbers': './dist/esm/utils/numbers.mjs',
     });

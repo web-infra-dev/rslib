@@ -102,7 +102,6 @@ In Rslib, the default value for this option is `false`.
 
 When set to `true`, Rslib writes the `exports` field to `package.json` after a successful build:
 
-- The `./package.json` subpath is always exposed.
 - The entry named `index` is exposed as the main subpath (`.`), and other entries are exposed as subpaths with the same name, such as `./utils/numbers`.
 - When both `esm` and `cjs` libs produce the same entry, the subpath value is an object with `import` and `require` conditions, otherwise it is the output file path.
 
@@ -111,7 +110,6 @@ For example, building `esm` and `cjs` libs with an `index` entry generates:
 ```json
 {
   "exports": {
-    "./package.json": "./package.json",
     ".": {
       "import": "./dist/esm/index.mjs",
       "require": "./dist/cjs/index.js"
