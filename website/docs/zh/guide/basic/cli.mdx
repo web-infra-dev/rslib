@@ -65,6 +65,7 @@ Options:
   --auto-extension       控制自动补全扩展名重定向（使用 --no-auto-extension 禁用）
   --auto-external        控制自动外部化依赖（使用 --no-auto-external 禁用）
   --tsconfig <path>      使用指定的 tsconfig（相对于项目根目录）
+  --exports              根据构建入口生成 package.json 中的 exports 字段
 ```
 
 :::note
@@ -90,6 +91,30 @@ export default defineConfig({
   },
 });
 ```
+
+### 生成 exports
+
+使用 `rslib --exports` 可以在构建成功后，根据构建入口将 `exports` 字段写入 `package.json`：
+
+- 名为 `index` 的入口会作为主子路径（`.`）暴露，其他入口会以相同的名称作为子路径暴露，例如 `./utils/numbers`。
+- 当 `esm` 和 `cjs` 产物包含同一个入口时，子路径的值为带有 `import` 和 `require` 条件的对象，否则为产物文件路径。
+
+例如，构建包含 `index` 入口的 `esm` 和 `cjs` 产物时会生成：
+
+```json title="package.json"
+{
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js"
+    }
+  }
+}
+```
+
+:::note
+`--exports` 仅对 `esm` 和 `cjs` 格式生效，`umd`、`mf`、`iife` 等其他格式的产物会被跳过。该选项不能与 watch 模式同时使用，并且会覆盖 `package.json` 中已有的 `exports` 字段。
+:::
 
 ## rslib inspect
 

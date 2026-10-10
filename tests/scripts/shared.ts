@@ -270,11 +270,13 @@ export async function rslibBuild({
   path,
   modifyConfig,
   lib,
+  exports,
 }: {
   cwd: string;
   path?: string;
   modifyConfig?: (config: RslibConfig) => void;
   lib?: string[];
+  exports?: boolean;
 }) {
   const result = await loadConfig({
     cwd,
@@ -289,6 +291,7 @@ export async function rslibBuild({
   });
   const buildResult = await rslib.build({
     lib,
+    exports,
   });
   return { rslib, buildResult, rslibConfig };
 }
@@ -299,6 +302,7 @@ export async function buildAndGetResults(options: {
   type: 'all';
   lib?: string[];
   logLevel?: LogLevel;
+  exports?: boolean;
 }): Promise<{
   js: BuildResult;
   dts: BuildResult;
@@ -310,6 +314,7 @@ export async function buildAndGetResults(options: {
   type?: 'js' | 'dts' | 'css';
   lib?: string[];
   logLevel?: LogLevel;
+  exports?: boolean;
 }): Promise<BuildResult>;
 export async function buildAndGetResults({
   fixturePath,
@@ -317,18 +322,21 @@ export async function buildAndGetResults({
   type = 'js',
   lib,
   logLevel = 'warn',
+  exports,
 }: {
   fixturePath: string;
   configPath?: string;
   type?: 'js' | 'dts' | 'css' | 'all';
   lib?: string[];
   logLevel?: LogLevel;
+  exports?: boolean;
 }) {
   const { rslib, buildResult, rslibConfig } = await rslibBuild({
     cwd: fixturePath,
     path: configPath,
     modifyConfig: updateConfigForTest(logLevel),
     lib,
+    exports,
   });
   const {
     origin: { bundlerConfigs, rsbuildConfig },

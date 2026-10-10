@@ -8,7 +8,4 @@ export default defineConfig({
       index: './src/index.ts',
     },
   },
-  output: {
-    exports: true,
-  },
 });

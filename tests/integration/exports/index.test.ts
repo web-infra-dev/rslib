@@ -1,7 +1,7 @@
 import { createRslib } from '@rslib/core';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { afterAll, describe, expect, onTestFinished, test } from '@rstest/core';
+import { afterAll, describe, expect, test } from '@rstest/core';
 import { buildAndGetResults, expectBuildToFail } from 'test-helper';
 
 const fixtures = [
@@ -31,10 +31,10 @@ const readFixtureExports = (fixture: string) =>
   JSON.parse(readFileSync(join(__dirname, fixture, 'package.json'), 'utf8'))
     .exports;
 
-describe('output.exports', () => {
+describe('exports', () => {
   test('should generate import and require conditions when building esm and cjs formats', async () => {
     const fixturePath = join(__dirname, 'dual-format');
-    await buildAndGetResults({ fixturePath });
+    await buildAndGetResults({ fixturePath, exports: true });
 
     expect(readFixtureExports('dual-format')).toEqual({
       '.': {
@@ -46,14 +46,14 @@ describe('output.exports', () => {
 
   test('should generate a string value when building a single format', async () => {
     const fixturePath = join(__dirname, 'esm-only');
-    await buildAndGetResults({ fixturePath });
+    await buildAndGetResults({ fixturePath, exports: true });
 
     expect(readFixtureExports('esm-only')).toEqual({
       '.': './dist/esm/index.mjs',
     });
   });
 
-  test('should not write exports in watch mode', async () => {
+  test('should throw in watch mode', async () => {
     const fixture = 'esm-only';
     const fixturePath = join(__dirname, fixture);
     const packageJsonPath = join(fixturePath, 'package.json');
@@ -64,30 +64,20 @@ describe('output.exports', () => {
       cwd: fixturePath,
       config: {
         lib: [{ format: 'esm' }],
-        output: {
-          exports: true,
-        },
         logLevel: 'silent',
       },
     });
-    const buildDone = new Promise<void>((resolve) => {
-      rslib.onAfterCreateRsbuild(({ rsbuild }) => {
-        rsbuild.onAfterBuild({
-          order: 'post',
-          handler: () => resolve(),
-        });
-      });
-    });
-    const buildResult = await rslib.build({ watch: true });
-    onTestFinished(() => buildResult.close());
+    const error = await expectBuildToFail(
+      rslib.build({ watch: true, exports: true }),
+    );
 
-    await buildDone;
+    expect(error.message).toContain('cannot be used in watch mode');
     expect(readFileSync(packageJsonPath, 'utf8')).toBe(originalPackageJson);
   });
 
   test('should expose each bundleless entry as a subpath', async () => {
     const fixturePath = join(__dirname, 'multiple-entries');
-    await buildAndGetResults({ fixturePath });
+    await buildAndGetResults({ fixturePath, exports: true });
 
     expect(readFixtureExports('multiple-entries')).toEqual({
       '.': './dist/esm/index.mjs',
@@ -97,14 +87,14 @@ describe('output.exports', () => {
 
   test('should not generate exports when building the umd format', async () => {
     const fixturePath = join(__dirname, 'umd');
-    await buildAndGetResults({ fixturePath });
+    await buildAndGetResults({ fixturePath, exports: true });
 
     expect(readFixtureExports('umd')).toBeUndefined();
   });
 
   test('should not generate exports when the build fails', async () => {
     const fixturePath = join(__dirname, 'build-error');
-    await expectBuildToFail(buildAndGetResults({ fixturePath }));
+    await expectBuildToFail(buildAndGetResults({ fixturePath, exports: true }));
 
     expect(readFixtureExports('build-error')).toBeUndefined();
   });

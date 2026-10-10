@@ -510,7 +510,7 @@ export interface LibConfig extends EnvironmentConfig {
   /**
    * @inheritdoc
    */
-  output?: Omit<RslibOutputConfig, 'exports'>;
+  output?: RslibOutputConfig;
   /**
    * Options for experimental features.
    * @defaultValue `{}`
@@ -561,14 +561,6 @@ interface RslibOutputConfig extends OutputConfig {
    * @default `true` for ESM/CJS, `false` for UMD/MF/IIFE
    */
   autoExternal?: OutputConfig['autoExternal'];
-  /**
-   * Whether to generate the `exports` field in `package.json` from the build entries.
-   * When multiple entries are configured, each entry will be exposed as a subpath in the `exports` field.
-   *
-   * @defaultValue `false`
-   * @see {@link https://rslib.rs/config/rsbuild/output#outputexports}
-   */
-  exports?: boolean;
 }
 
 export interface RslibConfig extends RsbuildConfig, SharedLibConfig {

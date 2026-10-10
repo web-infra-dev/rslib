@@ -210,6 +210,12 @@ export async function createRslib(
       setNodeEnv('production');
     }
 
+    if (buildOptions.exports && buildOptions.watch) {
+      throw new Error(
+        'The "exports" option cannot be used in watch mode because writing package.json can trigger another rebuild.',
+      );
+    }
+
     if (buildOptions.watch) {
       config.plugins = config.plugins || [];
       config.plugins.push({
@@ -239,17 +245,11 @@ export async function createRslib(
       pruneEnvironments(environments, buildOptions.lib),
     );
 
-    if (config.output?.exports) {
-      if (buildOptions.watch) {
-        logger.warn(
-          'The "output.exports" option is ignored in watch mode because writing package.json can trigger another rebuild.',
-        );
-      } else {
-        const root = config.root ? ensureAbsolutePath(cwd, config.root) : cwd;
-        rsbuildInstance.addPlugins([
-          ExportsPlugin({ root, libInfos: environmentWithInfos }),
-        ]);
-      }
+    if (buildOptions.exports) {
+      const root = config.root ? ensureAbsolutePath(cwd, config.root) : cwd;
+      rsbuildInstance.addPlugins([
+        ExportsPlugin({ root, libInfos: environmentWithInfos }),
+      ]);
     }
 
     const buildResult = await rsbuildInstance.build({
