@@ -40,6 +40,12 @@ export const ExportsPlugin = ({
             failedEnvironments.add(environment.name);
             continue;
           }
+          // Rsbuild names each compiler after its environment.
+          if (environmentStats.compilation.name !== environment.name) {
+            throw new Error(
+              `Failed to generate the "exports" field because the stats of the "${environment.name}" environment cannot be matched.`,
+            );
+          }
 
           const entries: CollectedEntry[] = [];
           const outputPath = environmentStats.compilation.outputOptions.path;
