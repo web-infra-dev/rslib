@@ -42,9 +42,12 @@ export const ExportsPlugin = ({
           }
 
           const entries: CollectedEntry[] = [];
-          const outputPath =
-            environmentStats.compilation.outputOptions.path ??
-            environment.distPath;
+          const outputPath = environmentStats.compilation.outputOptions.path;
+          if (!outputPath) {
+            throw new Error(
+              `Failed to generate the "exports" field because the output path of the "${environment.name}" environment is unavailable.`,
+            );
+          }
           outputPaths.push(outputPath);
 
           for (const [entryName, entrypoint] of environmentStats.compilation
