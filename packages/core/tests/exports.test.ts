@@ -71,6 +71,33 @@ describe('generateExports', () => {
     });
   });
 
+  it('should normalize leading "./" and trailing "/" in entry names', () => {
+    const options: GenerateExportsOptions = {
+      libInfos: [createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')],
+      collected: createCollected({
+        esm: [
+          ['./index', 'dist/esm/index.mjs'],
+          ['./foo/', 'dist/esm/foo.mjs'],
+        ],
+        cjs: [
+          ['index', 'dist/cjs/index.js'],
+          ['foo', 'dist/cjs/foo.js'],
+        ],
+      }),
+    };
+
+    expect(generateExports(options)).toEqual({
+      '.': {
+        import: './dist/esm/index.mjs',
+        require: './dist/cjs/index.js',
+      },
+      './foo': {
+        import: './dist/esm/foo.mjs',
+        require: './dist/cjs/foo.js',
+      },
+    });
+  });
+
   it('should keep the index entry first and sort other entries', () => {
     const options: GenerateExportsOptions = {
       libInfos: [createLibInfo('esm', 'esm')],

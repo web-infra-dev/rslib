@@ -1,5 +1,6 @@
 import path from 'node:path';
 import type { RequireKey, RsbuildConfigWithLibInfo } from '../types';
+import { normalizeSlash } from '../utils/helper';
 import { logger } from '../utils/logger';
 
 export type CollectedEntry = {
@@ -28,6 +29,13 @@ type EntrySlots = {
   esm?: string;
   cjs?: string;
 };
+
+/** Normalize entry names such as `./foo/` to `foo` before using them as subpaths. */
+function normalizeEntryName(entryName: string): string {
+  return normalizeSlash(entryName)
+    .replace(/^(\.\/)+/, '')
+    .replace(/\/+$/, '');
+}
 
 function isOutsidePackageRoot(filePath: string): boolean {
   return path.isAbsolute(filePath) || filePath.startsWith('../');
@@ -90,7 +98,8 @@ export function generateExports(
         return;
       }
 
-      const slots = entrySlotsByName.get(entry.entryName) ?? {};
+      const entryName = normalizeEntryName(entry.entryName);
+      const slots = entrySlotsByName.get(entryName) ?? {};
       const target = `./${entry.jsFile}`;
       const existingTarget = slots[lib.format];
       if (existingTarget && existingTarget !== target) {
@@ -100,7 +109,7 @@ export function generateExports(
         return;
       }
       slots[lib.format] = target;
-      entrySlotsByName.set(entry.entryName, slots);
+      entrySlotsByName.set(entryName, slots);
     }
   }
   if (entrySlotsByName.size === 0) return;
