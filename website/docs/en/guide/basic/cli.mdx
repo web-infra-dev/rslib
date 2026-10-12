@@ -98,6 +98,8 @@ Use `rslib --exports` to write the `exports` field to `package.json` from the bu
 
 - The entry named `index` is exposed as the main subpath (`.`), and other entries are exposed as subpaths with the same name, such as `./utils/numbers`.
 - When both `esm` and `cjs` libs produce the same entry, the subpath value is an object with `import` and `require` conditions, otherwise it is the output file path.
+- Generated subpaths are merged into the existing `exports` field. Subpaths that already exist are overwritten, and other existing subpaths are kept. A warning is shown when an existing subpath is overwritten with a different value, or when an existing subpath points to a file that no longer exists in the output directories.
+- The indentation and line endings of `package.json` are preserved, and the file is not written when nothing changes.
 
 For example, building `esm` and `cjs` libs with an `index` entry generates:
 
@@ -113,7 +115,7 @@ For example, building `esm` and `cjs` libs with an `index` entry generates:
 ```
 
 :::note
-`--exports` only applies to the `esm` and `cjs` formats, and entries from other formats such as `umd`, `mf`, and `iife` are skipped. It cannot be used together with watch mode, and the existing `exports` field in `package.json` will be overwritten.
+`--exports` only applies to the `esm` and `cjs` formats, and entries from other formats such as `umd`, `mf`, and `iife` are skipped. It cannot be used together with watch mode. If the existing `exports` field is not a subpath map, such as a string or an object of conditions, the build fails and you need to convert it to the subpath form first.
 :::
 
 ## rslib inspect

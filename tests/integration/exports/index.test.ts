@@ -75,6 +75,59 @@ describe('exports', () => {
     expect(readFileSync(packageJsonPath, 'utf8')).toBe(originalPackageJson);
   });
 
+  test('should merge into existing exports and preserve the formatting', async () => {
+    const fixture = 'esm-only';
+    const fixturePath = join(__dirname, fixture);
+    const packageJsonPath = join(fixturePath, 'package.json');
+    writeFileSync(
+      packageJsonPath,
+      [
+        '{',
+        '\t"name": "exports-esm-only-test",',
+        '\t"exports": {',
+        '\t\t"./package.json": "./package.json",',
+        '\t\t".": "./dist/esm/old.mjs"',
+        '\t}',
+        '}',
+        '',
+      ].join('\n'),
+    );
+
+    await buildAndGetResults({ fixturePath, exports: true });
+
+    expect(readFileSync(packageJsonPath, 'utf8')).toBe(
+      [
+        '{',
+        '\t"name": "exports-esm-only-test",',
+        '\t"exports": {',
+        '\t\t"./package.json": "./package.json",',
+        '\t\t".": "./dist/esm/index.mjs"',
+        '\t}',
+        '}',
+        '',
+      ].join('\n'),
+    );
+  });
+
+  test('should fail when the existing exports is not a subpath map', async () => {
+    const fixture = 'esm-only';
+    const fixturePath = join(__dirname, fixture);
+    const packageJsonPath = join(fixturePath, 'package.json');
+    const packageJson = `${JSON.stringify(
+      { name: 'exports-esm-only-test', exports: './index.js' },
+      null,
+      2,
+    )}\n`;
+    writeFileSync(packageJsonPath, packageJson);
+
+    const error = await expectBuildToFail(
+      buildAndGetResults({ fixturePath, exports: true }),
+    );
+
+    expect(error.message).toContain('is not a subpath map');
+    expect(readFileSync(packageJsonPath, 'utf8')).toBe(packageJson);
+  });
+
   test('should expose each bundleless entry as a subpath', async () => {
     const fixturePath = join(__dirname, 'multiple-entries');
     await buildAndGetResults({ fixturePath, exports: true });
