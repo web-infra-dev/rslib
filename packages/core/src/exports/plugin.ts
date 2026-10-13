@@ -3,9 +3,9 @@ import path from 'node:path';
 import type { RsbuildPlugin } from '@rsbuild/core';
 import { RSLIB_CSS_ENTRY_FLAG } from '../css/cssConfig';
 import { isJavaScriptOutputFile } from '../exe/utils';
-import type { RequireKey, RsbuildConfigWithLibInfo } from '../types';
+import type { PkgJson, RequireKey, RsbuildConfigWithLibInfo } from '../types';
 import { logger } from '../utils/logger';
-import { normalizeSlash, readPackageJson } from '../utils/helper';
+import { normalizeSlash } from '../utils/helper';
 import { findDeclarationFile } from './dts';
 import { generateExports, type CollectedEntry } from './generate';
 import {
@@ -76,8 +76,9 @@ export const ExportsPlugin = ({
           collected.set(libId, entries);
         }
 
-        const pkgJson = readPackageJson(root);
-        if (!pkgJson) return;
+        const pkgJsonPath = path.join(root, 'package.json');
+        const originalText = fs.readFileSync(pkgJsonPath, 'utf8');
+        const pkgJson: PkgJson = JSON.parse(originalText);
 
         const generated = generateExports({ libInfos, collected });
         if (!generated) return;
@@ -105,8 +106,6 @@ export const ExportsPlugin = ({
           );
         }
 
-        const pkgJsonPath = path.join(root, 'package.json');
-        const originalText = fs.readFileSync(pkgJsonPath, 'utf8');
         const text = stringifyPackageJson(
           { ...pkgJson, exports: exportsField },
           originalText,
