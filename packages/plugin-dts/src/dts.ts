@@ -10,10 +10,10 @@ import {
   resolve,
 } from 'node:path';
 import type {
-  CompilerApiTsconfigResultForApi,
+  OldApiTsconfigResult,
   DtsEntry,
   DtsGenOptions,
-  GetTsconfigTsconfigResultForExecutable,
+  TsconfigOptionsResult,
 } from './types/internal';
 import type { DtsRedirect } from './types/options';
 import {
@@ -27,10 +27,6 @@ const isObject = (obj: unknown): obj is Record<string, any> =>
   Object.prototype.toString.call(obj) === '[object Object]';
 
 export const DEFAULT_EXCLUDED_PACKAGES: string[] = ['@types/react'];
-
-const isExecutableBackend = (
-  dtsBackend: DtsGenOptions['dtsBackend'],
-): boolean => dtsBackend === 'ts7-executable';
 
 type CalculateBundledPackagesOptions = {
   cwd: string;
@@ -154,8 +150,7 @@ export type PreparedDtsContext = {
 };
 
 export type EmitDtsOptions<
-  Tsconfig extends
-    CompilerApiTsconfigResultForApi | GetTsconfigTsconfigResultForExecutable,
+  Tsconfig extends OldApiTsconfigResult | TsconfigOptionsResult,
 > = {
   name: string;
   cwd: string;
@@ -381,42 +376,57 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
   };
 
   const dtsBackend = data.dtsBackend;
-  const useExecutable = isExecutableBackend(dtsBackend);
-  const hasError = useExecutable
-    ? await import('./tsgo').then((mod) =>
-        mod.emitDtsTsgo(
-          {
-            ...emitOptions,
-            tsConfigResult:
-              tsConfigResult as GetTsconfigTsconfigResultForExecutable,
-          },
-          onComplete,
-          bundle,
-          isWatch,
-          build,
-        ),
-      )
-    : await import('./tsc').then((mod) =>
-        mod.emitDtsTsc(
-          {
-            ...emitOptions,
-            tsConfigResult: tsConfigResult as CompilerApiTsconfigResultForApi,
-          },
-          onComplete,
-          bundle,
-          isWatch,
-          build,
-        ),
-      );
+  let hasError: boolean | void;
 
-  if (useExecutable) {
-    if (!hasError) {
-      await bundleDtsIfNeeded(data, preparedDtsContext);
+  switch (dtsBackend) {
+    case 'ts7-executable': {
+      const { emitDtsWithTs7Executable } = await import('./ts7Executable');
+      hasError = await emitDtsWithTs7Executable(
+        {
+          ...emitOptions,
+          tsConfigResult: tsConfigResult as TsconfigOptionsResult,
+        },
+        onComplete,
+        bundle,
+        isWatch,
+        build,
+      );
+      break;
     }
-  } else {
-    if (!isWatch) {
-      await bundleDtsIfNeeded(data, preparedDtsContext);
+    case 'api-new': {
+      const { emitDtsWithNewApi } = await import('./apiNew');
+      hasError = await emitDtsWithNewApi(
+        {
+          ...emitOptions,
+          tsConfigResult: tsConfigResult as TsconfigOptionsResult,
+        },
+        bundle,
+        isWatch,
+      );
+      break;
     }
+    case 'api-old': {
+      const { emitDtsWithOldApi } = await import('./apiOld');
+      hasError = await emitDtsWithOldApi(
+        {
+          ...emitOptions,
+          tsConfigResult: tsConfigResult as OldApiTsconfigResult,
+        },
+        onComplete,
+        bundle,
+        isWatch,
+        build,
+      );
+      break;
+    }
+    default:
+      throw new Error(
+        `Unsupported declaration generation backend: ${dtsBackend}.`,
+      );
+  }
+
+  if (!hasError && (dtsBackend !== 'api-old' || !isWatch)) {
+    await bundleDtsIfNeeded(data, preparedDtsContext);
   }
 }
 
@@ -426,7 +436,7 @@ process.on('disconnect', () => {
 });
 
 const shouldExitAfterGenerate = (data: DtsGenOptions): boolean =>
-  !data.isWatch || isExecutableBackend(data.dtsBackend);
+  !data.isWatch || data.dtsBackend !== 'api-old';
 
 process.on('message', async (data: DtsGenOptions) => {
   if (!data.cwd) {

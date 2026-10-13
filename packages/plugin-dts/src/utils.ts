@@ -21,9 +21,9 @@ import { convertPathToPattern, glob } from 'tinyglobby';
 import type { MatchPath } from 'tsconfig-paths';
 import type { CompilerOptions } from 'typescript6-api';
 import type {
-  CompilerApiTsconfigResultForApi,
+  OldApiTsconfigResult,
   DtsEntry,
-  GetTsconfigTsconfigResultForExecutable,
+  TsconfigOptionsResult,
 } from './types/internal';
 import type { DtsRedirect } from './types/options';
 
@@ -118,7 +118,7 @@ const resolveTsconfigPath = (
 export function loadTsconfig(
   tsconfigPath: string,
   ts: typeof import('typescript6-api') = loadTypescript(),
-): CompilerApiTsconfigResultForApi {
+): OldApiTsconfigResult {
   const configFile = ts.readConfigFile(
     tsconfigPath,
     ts.sys.readFile.bind(ts.sys),
@@ -132,11 +132,10 @@ export function loadTsconfig(
   return configFileContent;
 }
 
-export function loadTsconfigResultForExecutable(
+export function loadResolvedTsconfig(
   cwd: string,
   configName: string,
-):
-  { path: string; config: GetTsconfigTsconfigResultForExecutable } | undefined {
+): { path: string; config: TsconfigOptionsResult } | undefined {
   if (isAbsolute(configName) && !fs.existsSync(configName)) {
     return undefined;
   }
@@ -166,7 +165,7 @@ export function loadTsconfigResultForExecutable(
       tsconfigDir,
       compilerOptions.tsBuildInfoFile,
     ),
-  } as GetTsconfigTsconfigResultForExecutable['options'];
+  } as TsconfigOptionsResult['options'];
 
   return {
     path: tsconfig.path,

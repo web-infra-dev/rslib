@@ -49,8 +49,8 @@ Bundleless 类型为库中的每个模块生成单独的声明文件，就像 `t
 Rslib 的类型生成流程可以分为两步：
 
 1. 类型生成，即生成 bundleless 类型。支持以下三种方式：
-   - [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)
-   - [tsgo](https://github.com/microsoft/typescript-go)
+   - [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)：用于 TypeScript 5/6。
+   - [native TypeScript（tsgo）](https://github.com/microsoft/typescript-go)：用于 TypeScript 7+，7.0 使用可执行文件，7.1 及以上版本使用稳定的 JavaScript API。
    - [isolatedDeclarations](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations)
 2. 类型打包，即生成 bundle 类型（可选）。开启 [dts.bundle](/config/lib/dts#dtsbundle) 时会将生成的类型声明文件通过 [API Extractor](https://api-extractor.com/) 进行打包。
 
@@ -58,15 +58,15 @@ Rslib 的类型生成流程可以分为两步：
 
 类型声明文件可以通过以下三种方式生成：
 
-| 方式                            | 配置                                          | 类型检查 | 输出范围                | 速度 |
-| ------------------------------- | --------------------------------------------- | -------- | ----------------------- | ---- |
-| TypeScript Compiler API（默认） | `dts: true` 或 `dts: { bundle: false }`       | 有       | 由 `tsconfig.json` 决定 | 较慢 |
-| tsgo                            | [`dts.tsgo`](/config/lib/dts#dtstsgo)         | 有       | 由 `tsconfig.json` 决定 | 快   |
-| isolatedDeclarations            | [`dts.isolated`](/config/lib/dts#dtsisolated) | 无       | 构建依赖图中的模块      | 最快 |
+| 方式                      | TypeScript 版本 | 配置                                                        | 类型检查 | 输出范围                | 速度 |
+| ------------------------- | --------------- | ----------------------------------------------------------- | -------- | ----------------------- | ---- |
+| TypeScript Compiler API   | 5/6             | `dts: true` 或 `dts: { bundle: false }`                     | 有       | 由 `tsconfig.json` 决定 | 较慢 |
+| native TypeScript（tsgo） | 7+              | `dts: true`，自动启用 [`dts.tsgo`](/config/lib/dts#dtstsgo) | 有       | 由 `tsconfig.json` 决定 | 快   |
+| isolatedDeclarations      | 不限            | [`dts.isolated`](/config/lib/dts#dtsisolated)               | 无       | 构建依赖图中的模块      | 最快 |
 
 #### TypeScript compiler API
 
-默认行为，与执行 `tsc` 的效果基本相同，会生成类型声明文件并执行类型检查，但是速度相对较慢。
+使用 TypeScript 5/6 时的默认方式，与执行 `tsc` 的效果基本相同，会生成类型声明文件并执行类型检查，但是速度相对较慢。
 
 ```ts title="rslib.config.ts"
 export default {
@@ -88,6 +88,8 @@ export default {
 使用 [native TypeScript](https://github.com/microsoft/typescript-go) 生成类型声明文件，可以在保留类型检查的同时显著提升生成速度。
 
 如果没有显式设置 [dts.tsgo](/config/lib/dts#dtstsgo)，Rslib 会在检测到 TypeScript 7+ 时自动开启该选项。
+
+TypeScript 7.0 通过 native 可执行文件生成声明，7.1 及以上版本通过稳定的 JavaScript API 生成声明。
 
 <PackageManagerTabs command="add typescript@latest -D" />
 

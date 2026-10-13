@@ -49,8 +49,8 @@ Bundleless declaration files involves generating a separate declaration file for
 Rslib's declaration generation flow can be split into two steps:
 
 1. Type generation, that is, generate bundleless declaration files. Rslib supports the following three methods:
-   - [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)
-   - [tsgo](https://github.com/microsoft/typescript-go)
+   - [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API): used with TypeScript 5/6.
+   - [native TypeScript (tsgo)](https://github.com/microsoft/typescript-go): used with TypeScript 7+. Version 7.0 uses the executable, while 7.1 and later use the stable JavaScript API.
    - [isolatedDeclarations](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations)
 2. Type bundling, that is, generate bundled declaration files (optional). When [dts.bundle](/config/lib/dts#dtsbundle) is enabled, Rslib bundles the generated declaration files with [API Extractor](https://api-extractor.com/).
 
@@ -58,15 +58,15 @@ Rslib's declaration generation flow can be split into two steps:
 
 Bundleless declaration files can be generated in the following three ways:
 
-| Method                            | Configuration                                 | Type checking | Output scope                                   | Speed   |
-| --------------------------------- | --------------------------------------------- | ------------- | ---------------------------------------------- | ------- |
-| TypeScript Compiler API (default) | `dts: true` or `dts: { bundle: false }`       | Yes           | Determined by `tsconfig.json`                  | Slower  |
-| tsgo                              | [`dts.tsgo`](/config/lib/dts#dtstsgo)         | Yes           | Determined by `tsconfig.json`                  | Fast    |
-| isolatedDeclarations              | [`dts.isolated`](/config/lib/dts#dtsisolated) | No            | Modules included in the build dependency graph | Fastest |
+| Method                   | TypeScript version | Configuration                                                            | Type checking | Output scope                                   | Speed   |
+| ------------------------ | ------------------ | ------------------------------------------------------------------------ | ------------- | ---------------------------------------------- | ------- |
+| TypeScript Compiler API  | 5/6                | `dts: true` or `dts: { bundle: false }`                                  | Yes           | Determined by `tsconfig.json`                  | Slower  |
+| native TypeScript (tsgo) | 7+                 | `dts: true`, automatically enables [`dts.tsgo`](/config/lib/dts#dtstsgo) | Yes           | Determined by `tsconfig.json`                  | Fast    |
+| isolatedDeclarations     | Any                | [`dts.isolated`](/config/lib/dts#dtsisolated)                            | No            | Modules included in the build dependency graph | Fastest |
 
 #### TypeScript compiler API
 
-This is the default behavior. It is mostly the same as running `tsc`: it generates declaration files and performs type checking, but it is relatively slower.
+This is the default method when using TypeScript 5/6. It is mostly the same as running `tsc`: it generates declaration files and performs type checking, but it is relatively slower.
 
 ```ts title="rslib.config.ts"
 export default {
@@ -88,6 +88,8 @@ export default {
 Using [native TypeScript](https://github.com/microsoft/typescript-go) to generate declaration files keeps type checking enabled while significantly speeding up declaration generation.
 
 When [dts.tsgo](/config/lib/dts#dtstsgo) is unset, Rslib enables it automatically when TypeScript 7+ is detected.
+
+TypeScript 7.0 generates declarations through the native executable, while 7.1 and later use the stable JavaScript API.
 
 <PackageManagerTabs command="add typescript@latest -D" />
 

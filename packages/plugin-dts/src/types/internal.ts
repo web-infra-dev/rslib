@@ -2,21 +2,18 @@ import type { LogLevel, RsbuildConfig } from '@rsbuild/core';
 import type { ParsedCommandLine } from 'typescript6-api';
 import type { ApiExtractorOptions, PluginDtsOptions } from './options';
 
-export type DtsGenerationBackend = 'api-old' | 'ts7-executable' | 'isolated';
+export type DtsGenerationBackend =
+  'api-old' | 'api-new' | 'ts7-executable' | 'isolated';
 
 export type DtsEntry = {
   name: string;
   path: string;
 };
 
-export type CompilerApiTsconfigResultForApi = ParsedCommandLine;
-export type GetTsconfigTsconfigResultForExecutable = Pick<
-  CompilerApiTsconfigResultForApi,
-  'options'
->;
+export type OldApiTsconfigResult = ParsedCommandLine;
+export type TsconfigOptionsResult = Pick<OldApiTsconfigResult, 'options'>;
 
-export type DtsTsconfigResult =
-  CompilerApiTsconfigResultForApi | GetTsconfigTsconfigResultForExecutable;
+export type DtsTsconfigResult = OldApiTsconfigResult | TsconfigOptionsResult;
 
 export type DtsGenOptions = Omit<
   PluginDtsOptions,
