@@ -32,7 +32,6 @@ type PreparedLib = {
 
 type FormatSlot = {
   target: string;
-  dts: boolean;
   declaration?: DeclarationFile;
 };
 
@@ -103,20 +102,17 @@ function buildEntryValue(slots: EntrySlots): string | ExportsField {
     return types ? { types, default: target } : target;
   };
 
-  if (
-    !formatSlots.some((slot) => slot.dts) ||
-    formatSlots.every((slot) => slot.declaration?.matched)
-  ) {
+  // Declaration files are only collected for libs that emit them.
+  const declarations = formatSlots.map((slot) => slot.declaration);
+  if (declarations.every((declaration) => declaration?.matched)) {
     return value();
   }
 
-  const declarations = formatSlots
-    .map((slot) => slot.declaration)
-    .filter((declaration) => declaration !== undefined);
   // Prefer the declaration file whose module format matches its own output.
   // Outputs from non-TypeScript sources, such as assets, have no declaration file.
   const declaration =
-    declarations.find(({ matched }) => matched) ?? declarations[0];
+    declarations.find((declaration) => declaration?.matched) ??
+    declarations.find((declaration) => declaration !== undefined);
   return value(declaration && `./${declaration.file}`);
 }
 
@@ -176,11 +172,7 @@ export function generateExports(
         );
         return;
       }
-      slots[lib.format] = {
-        target,
-        dts: lib.dts,
-        declaration: entry.declaration,
-      };
+      slots[lib.format] = { target, declaration: entry.declaration };
       entrySlotsByName.set(entryName, slots);
     }
   }
