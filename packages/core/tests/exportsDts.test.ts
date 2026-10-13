@@ -1,10 +1,8 @@
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it, rs } from '@rstest/core';
-import {
-  type DeclarationFile,
-  findDeclarationFile,
-  formatMissingDeclarations,
-} from '../src/exports/dts';
+import { type DeclarationFile, findDeclarationFile } from '../src/exports/dts';
 import { type CollectedEntry, generateExports } from '../src/exports/generate';
 import type { RequireKey, RsbuildConfigWithLibInfo } from '../src/types';
 
@@ -12,11 +10,17 @@ rs.mock('rslog');
 
 type LibInfo = RequireKey<RsbuildConfigWithLibInfo, 'id'>;
 
-const root = path.join(path.sep, 'pkg');
-
-const createExists = (files: string[]) => {
-  const set = new Set(files.map((file) => path.join(root, file)));
-  return (file: string) => set.has(file);
+const findWithFiles = async (jsFile: string, files: string[]) => {
+  const root = await mkdtemp(path.join(tmpdir(), 'rslib-exports-dts-'));
+  try {
+    await mkdir(path.join(root, 'dist'));
+    for (const file of files) {
+      await writeFile(path.join(root, file), '');
+    }
+    return findDeclarationFile(jsFile, root);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 };
 
 describe('findDeclarationFile', () => {
@@ -25,46 +29,31 @@ describe('findDeclarationFile', () => {
     ['dist/index.jsx', 'dist/index.d.ts'],
     ['dist/index.mjs', 'dist/index.d.mts'],
     ['dist/index.cjs', 'dist/index.d.cts'],
-  ])('should find the matched declaration file of %s', (jsFile, file) => {
-    expect(findDeclarationFile(jsFile, root, createExists([file]))).toEqual({
+  ])('should find the matched declaration file of %s', async (jsFile, file) => {
+    expect(await findWithFiles(jsFile, [file])).toEqual({
       file,
       matched: true,
     });
   });
 
-  it('should prefer the matched declaration file', () => {
+  it('should prefer the matched declaration file', async () => {
     expect(
-      findDeclarationFile(
-        'dist/index.mjs',
-        root,
-        createExists(['dist/index.d.ts', 'dist/index.d.mts']),
-      ),
+      await findWithFiles('dist/index.mjs', [
+        'dist/index.d.ts',
+        'dist/index.d.mts',
+      ]),
     ).toEqual({ file: 'dist/index.d.mts', matched: true });
   });
 
-  it('should fall back to a declaration file with another extension', () => {
-    expect(
-      findDeclarationFile(
-        'dist/index.cjs',
-        root,
-        createExists(['dist/index.d.ts']),
-      ),
-    ).toEqual({ file: 'dist/index.d.ts', matched: false });
+  it('should fall back to a declaration file with another extension', async () => {
+    expect(await findWithFiles('dist/index.cjs', ['dist/index.d.ts'])).toEqual({
+      file: 'dist/index.d.ts',
+      matched: false,
+    });
   });
 
-  it('should return undefined when no declaration file exists', () => {
-    expect(
-      findDeclarationFile('dist/index.js', root, createExists([])),
-    ).toBeUndefined();
-  });
-});
-
-describe('formatMissingDeclarations', () => {
-  it('should list the libs and the hint', () => {
-    const message = formatMissingDeclarations(['esm', 'cjs']);
-
-    expect(message).toContain('"esm", "cjs"');
-    expect(message).toContain('check "dts.distPath"');
+  it('should return undefined when no declaration file exists', async () => {
+    expect(await findWithFiles('dist/index.js', [])).toBeUndefined();
   });
 });
 
@@ -216,7 +205,9 @@ describe('generateExports with declaration files', () => {
         libInfos: [createLibInfo('esm', 'esm', { distPath: './dist/types' })],
         collected: new Map([['esm', [entry('dist/index.js')]]]),
       }),
-    ).toThrow('"esm"');
+    ).toThrow(
+      'no declaration files were found next to the outputs of the following libs that emit declaration files: "esm"',
+    );
   });
 
   it('should not add a types condition to subpaths without declaration files', () => {

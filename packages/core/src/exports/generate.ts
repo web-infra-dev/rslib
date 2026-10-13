@@ -2,7 +2,7 @@ import path from 'node:path';
 import type { RequireKey, RsbuildConfigWithLibInfo } from '../types';
 import { normalizeSlash } from '../utils/helper';
 import { logger } from '../utils/logger';
-import { type DeclarationFile, formatMissingDeclarations } from './dts';
+import type { DeclarationFile } from './dts';
 
 export type CollectedEntry = {
   entryName: string;
@@ -151,7 +151,12 @@ export function generateExports(
     )
     .map((lib) => lib.id);
   if (libsWithoutDeclarations.length > 0) {
-    throw new Error(formatMissingDeclarations(libsWithoutDeclarations));
+    throw new Error(
+      [
+        `Failed to generate the "exports" field because no declaration files were found next to the outputs of the following libs that emit declaration files: ${libsWithoutDeclarations.map((id) => `"${id}"`).join(', ')}.`,
+        'Emit declaration files to the same directory as the JavaScript outputs, check "dts.distPath", and the "declarationDir" and "rootDir" options in tsconfig.',
+      ].join('\n'),
+    );
   }
 
   const entrySlotsByName = new Map<string, EntrySlots>();
