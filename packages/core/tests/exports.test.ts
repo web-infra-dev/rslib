@@ -98,6 +98,23 @@ describe('generateExports', () => {
     });
   });
 
+  it('should only expose the index entry in bundleless mode', () => {
+    const options: GenerateExportsOptions = {
+      libInfos: [{ ...createLibInfo('esm', 'esm'), bundle: false }],
+      collected: createCollected({
+        esm: [
+          ['index', 'dist/esm/index.mjs'],
+          ['utils/numbers', 'dist/esm/utils/numbers.mjs'],
+          ['assets/logo', 'dist/esm/assets/logo.mjs'],
+        ],
+      }),
+    };
+
+    expect(generateExports(options)).toEqual({
+      '.': './dist/esm/index.mjs',
+    });
+  });
+
   it('should keep the index entry first and sort other entries', () => {
     const options: GenerateExportsOptions = {
       libInfos: [createLibInfo('esm', 'esm')],

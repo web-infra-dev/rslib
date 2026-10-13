@@ -2,14 +2,11 @@ import { defineConfig } from '@rslib/core';
 import { generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
-  lib: [
-    generateBundleEsmConfig({
-      bundle: false,
-    }),
-  ],
+  lib: [generateBundleEsmConfig()],
   source: {
     entry: {
-      index: ['./src/**'],
+      index: './src/index.ts',
+      'utils/numbers': './src/utils/numbers.ts',
     },
   },
 });

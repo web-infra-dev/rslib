@@ -63,7 +63,19 @@ function prepareLib(
     );
     return;
   }
-  return { id: libInfo.id, format, dts: Boolean(libInfo.dts), entries };
+  return {
+    id: libInfo.id,
+    format,
+    dts: Boolean(libInfo.dts),
+    // In bundleless mode, every source file is an entry, so only the main entry
+    // is treated as public API.
+    entries:
+      libInfo.bundle === false
+        ? entries.filter(
+            (entry) => normalizeEntryName(entry.entryName) === 'index',
+          )
+        : entries,
+  };
 }
 
 function getFormatSlots(slots: EntrySlots): FormatSlot[] {
@@ -134,7 +146,10 @@ export function generateExports(
   // Declaration files emitted to a separate directory cannot be resolved from the outputs.
   const libsWithoutDeclarations = preparedLibs
     .filter(
-      (lib) => lib.dts && lib.entries.every((entry) => !entry.declaration),
+      (lib) =>
+        lib.dts &&
+        lib.entries.length > 0 &&
+        lib.entries.every((entry) => !entry.declaration),
     )
     .map((lib) => lib.id);
   if (libsWithoutDeclarations.length > 0) {

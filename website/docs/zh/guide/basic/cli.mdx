@@ -96,7 +96,8 @@ export default defineConfig({
 
 使用 `rslib --exports` 可以在构建成功后，根据构建入口将 `exports` 字段写入 `package.json`：
 
-- 名为 `index` 的入口会作为主子路径（`.`）暴露，其他入口会以相同的名称作为子路径暴露，例如 `./utils/numbers`。因此主入口必须命名为 `index` 才会暴露为主子路径；在 bundleless 模式下，入口名称是相对于 [lib.outBase](/config/lib/out-base) 的路径，因此主入口是 `outBase` 根目录下的 `index` 文件。
+- 名为 `index` 的入口会作为主子路径（`.`）暴露，其他入口会以相同的名称作为子路径暴露，例如 `./utils/numbers`。因此主入口必须命名为 `index` 才会暴露为主子路径。
+- 在 bundleless 模式下，每个源文件都会作为入口构建，因此只会暴露主入口，即 [lib.outBase](/config/lib/out-base) 根目录下的 `index` 文件。如需暴露其他文件，可以手动将其子路径添加到 `exports` 字段中，后续构建会保留这些子路径。
 - 当 `esm` 和 `cjs` 产物包含同一个入口时，子路径的值为带有 `import` 和 `require` 条件的对象，否则为产物文件路径。
 - 生成的子路径会合并到已有的 `exports` 字段中：已存在的同名子路径会被覆盖，其他已有子路径会被保留。当已有子路径被覆盖为不同的值，或已有子路径指向的文件在输出目录中已不存在时，会输出警告。
 - 会保留 `package.json` 原有的缩进和换行符，内容没有变化时不会写入文件。

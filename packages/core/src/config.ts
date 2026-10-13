@@ -2003,6 +2003,10 @@ export async function composeCreateRsbuildConfig(
       config.dts = userConfig.dts;
     }
 
+    if (userConfig.bundle === false) {
+      config.bundle = false;
+    }
+
     return config;
   });
 
@@ -2047,7 +2051,7 @@ export async function composeRsbuildEnvironments(
     return candidateId;
   };
 
-  for (const { format, id, config, dts } of rsbuildConfigWithLibInfo) {
+  for (const { format, id, config, dts, bundle } of rsbuildConfigWithLibInfo) {
     const libId = typeof id === 'string' ? id : composeDefaultId(format);
     environments[libId] = config;
     environmentWithInfos.push({
@@ -2055,6 +2059,7 @@ export async function composeRsbuildEnvironments(
       format,
       config,
       ...(dts === undefined ? {} : { dts }),
+      ...(bundle === undefined ? {} : { bundle }),
     });
   }
 

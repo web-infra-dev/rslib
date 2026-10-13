@@ -8,6 +8,7 @@ const fixtures = [
   'dual-format',
   'esm-only',
   'multiple-entries',
+  'bundleless',
   'umd',
   'build-error',
   'dts-matched',
@@ -131,13 +132,22 @@ describe('exports', () => {
     expect(readFileSync(packageJsonPath, 'utf8')).toBe(packageJson);
   });
 
-  test('should expose each bundleless entry as a subpath', async () => {
+  test('should expose each entry as a subpath', async () => {
     const fixturePath = join(__dirname, 'multiple-entries');
     await buildAndGetResults({ fixturePath, exports: true });
 
     expect(readFixtureExports('multiple-entries')).toEqual({
       '.': './dist/esm/index.mjs',
       './utils/numbers': './dist/esm/utils/numbers.mjs',
+    });
+  });
+
+  test('should only expose the main entry in bundleless mode', async () => {
+    const fixturePath = join(__dirname, 'bundleless');
+    await buildAndGetResults({ fixturePath, exports: true });
+
+    expect(readFixtureExports('bundleless')).toEqual({
+      '.': './dist/esm/index.mjs',
     });
   });
 

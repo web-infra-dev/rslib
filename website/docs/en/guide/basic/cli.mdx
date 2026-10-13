@@ -96,7 +96,8 @@ export default defineConfig({
 
 Use `rslib --exports` to write the `exports` field to `package.json` from the build entries after a successful build:
 
-- The entry named `index` is exposed as the main subpath (`.`), and other entries are exposed as subpaths with the same name, such as `./utils/numbers`. To expose the main subpath, the main entry must be named `index`. In bundleless mode, entry names are paths relative to [lib.outBase](/config/lib/out-base), so the main entry is the `index` file in the root of `outBase`.
+- The entry named `index` is exposed as the main subpath (`.`), and other entries are exposed as subpaths with the same name, such as `./utils/numbers`. To expose the main subpath, the main entry must be named `index`.
+- In bundleless mode, every source file is built as an entry, so only the main entry is exposed, which is the `index` file in the root of [lib.outBase](/config/lib/out-base). To expose other files, add their subpaths to the `exports` field manually, and they are kept in later builds.
 - When both `esm` and `cjs` libs produce the same entry, the subpath value is an object with `import` and `require` conditions, otherwise it is the output file path.
 - Generated subpaths are merged into the existing `exports` field. Subpaths that already exist are overwritten, and other existing subpaths are kept. A warning is shown when an existing subpath is overwritten with a different value, or when an existing subpath points to a file that no longer exists in the output directories.
 - The indentation and line endings of `package.json` are preserved, and the file is not written when nothing changes.

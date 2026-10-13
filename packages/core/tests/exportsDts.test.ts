@@ -242,6 +242,20 @@ describe('generateExports with declaration files', () => {
     });
   });
 
+  it('should not throw for a bundleless lib without the index entry', () => {
+    expect(
+      generateExports({
+        libInfos: [{ ...createLibInfo('esm', 'esm', true), bundle: false }],
+        collected: new Map([
+          [
+            'esm',
+            [{ entryName: 'utils/numbers', jsFile: 'dist/utils/numbers.js' }],
+          ],
+        ]),
+      }),
+    ).toBeUndefined();
+  });
+
   it('should not check libs without declaration files', () => {
     expect(
       generateExports({
