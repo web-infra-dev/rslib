@@ -62,6 +62,10 @@ function prepareLib(
     );
     return;
   }
+  const normalizedEntries = entries.map((entry) => ({
+    ...entry,
+    entryName: normalizeEntryName(entry.entryName),
+  }));
   return {
     id: libInfo.id,
     format,
@@ -70,10 +74,8 @@ function prepareLib(
     // is treated as public API.
     entries:
       libInfo.bundle === false
-        ? entries.filter(
-            (entry) => normalizeEntryName(entry.entryName) === 'index',
-          )
-        : entries,
+        ? normalizedEntries.filter((entry) => entry.entryName === 'index')
+        : normalizedEntries,
   };
 }
 
@@ -162,7 +164,7 @@ export function generateExports(
         return;
       }
 
-      const entryName = normalizeEntryName(entry.entryName);
+      const { entryName } = entry;
       const slots = entrySlotsByName.get(entryName) ?? {};
       const target = `./${entry.jsFile}`;
       const existingTarget = slots[lib.format]?.target;
