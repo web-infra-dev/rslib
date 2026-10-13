@@ -28,29 +28,26 @@ export function mergeExports(
     );
   }
 
-  const merged: MergedExportsField = {};
-  // Keep the main subpath first when it is newly added.
-  if (!Object.hasOwn(existing, '.') && Object.hasOwn(generated, '.')) {
-    merged['.'] = generated['.'];
-  }
-  for (const [key, value] of Object.entries(existing)) {
-    if (!Object.hasOwn(generated, key)) {
-      merged[key] = value;
-      continue;
-    }
-    if (!isDeepStrictEqual(value, generated[key])) {
+  for (const [key, value] of Object.entries(generated)) {
+    if (
+      Object.hasOwn(existing, key) &&
+      !isDeepStrictEqual(existing[key], value)
+    ) {
       logger.warn(
-        `Overwrote the "${key}" subpath in the "exports" field of package.json with ${JSON.stringify(generated[key])}.`,
+        `Overwrote the "${key}" subpath in the "exports" field of package.json with ${JSON.stringify(value)}.`,
       );
     }
-    merged[key] = generated[key];
   }
-  for (const [key, value] of Object.entries(generated)) {
-    if (!Object.hasOwn(merged, key)) {
-      merged[key] = value;
-    }
-  }
-  return merged;
+
+  // Existing subpaths keep their order, and new subpaths are appended, except
+  // that a newly added main subpath goes first.
+  return {
+    ...(Object.hasOwn(generated, '.') && !Object.hasOwn(existing, '.')
+      ? { '.': generated['.'] }
+      : {}),
+    ...existing,
+    ...generated,
+  };
 }
 
 function collectTargets(value: unknown, targets: string[]): void {

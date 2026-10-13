@@ -48,6 +48,15 @@ describe('mergeExports', () => {
     expect(Object.keys(merged)).toEqual(['.', './package.json']);
   });
 
+  it('should not add a main subpath when none is generated', () => {
+    const merged = mergeExports(
+      { './style.css': './dist/style.css' },
+      { './utils': './dist/utils.mjs' },
+    );
+
+    expect(Object.keys(merged)).toEqual(['./style.css', './utils']);
+  });
+
   it('should warn only when an existing subpath is overwritten with a different value', () => {
     const warn = rs.spyOn(logger, 'warn').mockImplementation(() => {});
 
