@@ -114,6 +114,30 @@ export default defineConfig({
 }
 ```
 
+#### 类型声明文件
+
+对于开启了 [dts](/config/lib/dts) 的 lib，Rslib 还会检查每个子路径的产物旁的类型声明文件：
+
+- 如果每个产物旁都有扩展名对应的类型声明文件（`.js` 对应 `.d.ts`，`.mjs` 对应 `.d.mts`，`.cjs` 对应 `.d.cts`），则不会添加 `types` 条件，因为 TypeScript 可以直接根据产物找到这些类型声明文件。
+- 否则，会在最前面添加一个指向其中某个类型声明文件的 `types` 条件，由所有格式共用。没有类型声明文件的子路径（例如由静态资源构建出的子路径）不会添加 `types` 条件。
+- 如果某个 lib 的所有产物旁都没有类型声明文件，例如类型声明文件输出到了单独的 [dts.distPath](/config/lib/dts#dtsdistpath)，构建会失败。
+
+例如，在设置了 `"type": "module"` 的包中，构建开启 `dts: true` 的 `esm` 和 `cjs` 产物时会生成：
+
+```json title="package.json"
+{
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
+    }
+  }
+}
+```
+
+如果需要为每种格式生成扩展名对应的类型声明文件，可以开启 [dts.autoExtension](/config/lib/dts#dtsautoextension)，并将各格式输出到不同的目录。
+
 :::note
 `--exports` 仅对 `esm` 和 `cjs` 格式生效，`umd`、`mf`、`iife` 等其他格式的产物会被跳过。该选项不能与 watch 模式同时使用。如果已有的 `exports` 字段不是子路径映射（例如字符串或条件对象），构建会失败，需要先将其改写为子路径形式。
 :::

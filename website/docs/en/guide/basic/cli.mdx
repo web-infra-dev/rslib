@@ -114,6 +114,30 @@ For example, building `esm` and `cjs` libs with an `index` entry generates:
 }
 ```
 
+#### Declaration files
+
+For libs with [dts](/config/lib/dts) enabled, Rslib also checks the declaration files next to the outputs of each subpath:
+
+- If every output has a declaration file with the matching extension next to it (`.d.ts` for `.js`, `.d.mts` for `.mjs`, and `.d.cts` for `.cjs`), no `types` condition is added, since TypeScript resolves these declaration files from the outputs directly.
+- Otherwise, a `types` condition pointing to one of the declaration files is added first, and is shared by all formats. Subpaths without declaration files, such as those built from static assets, have no `types` condition.
+- If a lib has no declaration file next to any of its outputs, for example when declaration files are emitted to a separate [dts.distPath](/config/lib/dts#dtsdistpath), the build fails.
+
+For example, building `esm` and `cjs` libs with `dts: true` in a package with `"type": "module"` generates:
+
+```json title="package.json"
+{
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
+    }
+  }
+}
+```
+
+To emit a declaration file with the matching extension for each format, enable [dts.autoExtension](/config/lib/dts#dtsautoextension) and output each format to a separate directory.
+
 :::note
 `--exports` only applies to the `esm` and `cjs` formats, and entries from other formats such as `umd`, `mf`, and `iife` are skipped. It cannot be used together with watch mode. If the existing `exports` field is not a subpath map, such as a string or an object of conditions, the build fails and you need to convert it to the subpath form first.
 :::

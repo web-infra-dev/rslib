@@ -2,11 +2,14 @@ import path from 'node:path';
 import type { RequireKey, RsbuildConfigWithLibInfo } from '../types';
 import { normalizeSlash } from '../utils/helper';
 import { logger } from '../utils/logger';
+import { type DeclarationFile, formatMissingDeclarations } from './dts';
 
 export type CollectedEntry = {
   entryName: string;
   /** Path relative to the package root, or absolute for different Windows drives, using forward slashes. */
   jsFile: string;
+  /** The declaration file next to `jsFile`, only collected for libs that emit declaration files. */
+  declaration?: DeclarationFile;
 };
 
 export type ExportsField = {
@@ -21,13 +24,21 @@ export type GenerateExportsOptions = {
 };
 
 type PreparedLib = {
+  id: string;
   format: 'esm' | 'cjs';
+  dts: boolean;
   entries: CollectedEntry[];
 };
 
+type FormatSlot = {
+  target: string;
+  dts: boolean;
+  declaration?: DeclarationFile;
+};
+
 type EntrySlots = {
-  esm?: string;
-  cjs?: string;
+  esm?: FormatSlot;
+  cjs?: FormatSlot;
 };
 
 /** Normalize entry names such as `./foo/` to `foo` before using them as subpaths. */
@@ -52,17 +63,49 @@ function prepareLib(
     );
     return;
   }
-  return { format, entries };
+  return { id: libInfo.id, format, dts: Boolean(libInfo.dts), entries };
 }
 
-function buildEntryValue(slots: EntrySlots): string | ExportsField | undefined {
-  if (slots.esm && slots.cjs) {
-    return {
-      import: slots.esm,
-      require: slots.cjs,
-    };
+function getFormatSlots(slots: EntrySlots): FormatSlot[] {
+  return [slots.esm, slots.cjs].filter(
+    (slot): slot is FormatSlot => slot !== undefined,
+  );
+}
+
+/**
+ * Build the value of a subpath. A `types` condition is only added when
+ * TypeScript cannot resolve a declaration file with the matching extension
+ * next to every output, and then all formats share one declaration file.
+ */
+function buildEntryValue(slots: EntrySlots): string | ExportsField {
+  const formatSlots = getFormatSlots(slots);
+  const value = (types?: string): string | ExportsField => {
+    if (slots.esm && slots.cjs) {
+      return {
+        ...(types ? { types } : {}),
+        import: slots.esm.target,
+        require: slots.cjs.target,
+      };
+    }
+    const target = formatSlots[0]!.target;
+    return types ? { types, default: target } : target;
+  };
+
+  if (
+    !formatSlots.some((slot) => slot.dts) ||
+    formatSlots.every((slot) => slot.declaration?.matched)
+  ) {
+    return value();
   }
-  return slots.esm ?? slots.cjs;
+
+  const declarations = formatSlots
+    .map((slot) => slot.declaration)
+    .filter((declaration) => declaration !== undefined);
+  // Prefer the declaration file whose module format matches its own output.
+  // Outputs from non-TypeScript sources, such as assets, have no declaration file.
+  const declaration =
+    declarations.find(({ matched }) => matched) ?? declarations[0];
+  return value(declaration && `./${declaration.file}`);
 }
 
 export function generateExports(
@@ -88,6 +131,16 @@ export function generateExports(
     if (lib) preparedLibs.push(lib);
   }
 
+  // Declaration files emitted to a separate directory cannot be resolved from the outputs.
+  const libsWithoutDeclarations = preparedLibs
+    .filter(
+      (lib) => lib.dts && lib.entries.every((entry) => !entry.declaration),
+    )
+    .map((lib) => lib.id);
+  if (libsWithoutDeclarations.length > 0) {
+    throw new Error(formatMissingDeclarations(libsWithoutDeclarations));
+  }
+
   const entrySlotsByName = new Map<string, EntrySlots>();
   for (const lib of preparedLibs) {
     for (const entry of lib.entries) {
@@ -101,14 +154,18 @@ export function generateExports(
       const entryName = normalizeEntryName(entry.entryName);
       const slots = entrySlotsByName.get(entryName) ?? {};
       const target = `./${entry.jsFile}`;
-      const existingTarget = slots[lib.format];
+      const existingTarget = slots[lib.format]?.target;
       if (existingTarget && existingTarget !== target) {
         logger.warn(
           `Skip generating the "exports" field because the "${entry.entryName}" entry has multiple "${lib.format}" output files: "${existingTarget}" and "${target}".`,
         );
         return;
       }
-      slots[lib.format] = target;
+      slots[lib.format] = {
+        target,
+        dts: lib.dts,
+        declaration: entry.declaration,
+      };
       entrySlotsByName.set(entryName, slots);
     }
   }
@@ -122,10 +179,8 @@ export function generateExports(
     return a.localeCompare(b);
   });
   for (const [entryName, slots] of sortedEntries) {
-    const value = buildEntryValue(slots);
-    if (value) {
-      exportsField[entryName === 'index' ? '.' : `./${entryName}`] = value;
-    }
+    exportsField[entryName === 'index' ? '.' : `./${entryName}`] =
+      buildEntryValue(slots);
   }
   return exportsField;
 }

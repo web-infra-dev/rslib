@@ -1999,6 +1999,10 @@ export async function composeCreateRsbuildConfig(
       config.id = libConfig.id;
     }
 
+    if (userConfig.dts !== undefined && userConfig.dts !== false) {
+      config.dts = userConfig.dts;
+    }
+
     return config;
   });
 
@@ -2043,10 +2047,15 @@ export async function composeRsbuildEnvironments(
     return candidateId;
   };
 
-  for (const { format, id, config } of rsbuildConfigWithLibInfo) {
+  for (const { format, id, config, dts } of rsbuildConfigWithLibInfo) {
     const libId = typeof id === 'string' ? id : composeDefaultId(format);
     environments[libId] = config;
-    environmentWithInfos.push({ id: libId, format, config });
+    environmentWithInfos.push({
+      id: libId,
+      format,
+      config,
+      ...(dts === undefined ? {} : { dts }),
+    });
   }
 
   const conflictIds = usedIds.filter(

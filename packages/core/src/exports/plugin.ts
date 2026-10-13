@@ -6,6 +6,7 @@ import { isJavaScriptOutputFile } from '../exe/utils';
 import type { RequireKey, RsbuildConfigWithLibInfo } from '../types';
 import { logger } from '../utils/logger';
 import { normalizeSlash, readPackageJson } from '../utils/helper';
+import { findDeclarationFile } from './dts';
 import { generateExports, type CollectedEntry } from './generate';
 import {
   findStaleSubpaths,
@@ -55,6 +56,9 @@ export const ExportsPlugin = ({
             );
           }
           outputPaths.push(outputPath);
+          const emitsDeclarations = Boolean(
+            libInfos.find(({ id }) => id === environment.name)?.dts,
+          );
 
           for (const [entryName, entrypoint] of environmentStats.compilation
             .entrypoints) {
@@ -70,11 +74,15 @@ export const ExportsPlugin = ({
                 `Failed to generate the "exports" field because the "${environment.name}" environment emitted ${entryFiles.length} JavaScript files for the "${entryName}" entry: ${entryFiles.join(', ')}.`,
               );
             }
+            const jsFile = normalizeSlash(
+              path.relative(root, path.join(outputPath, entryFiles[0]!)),
+            );
             entries.push({
               entryName,
-              jsFile: normalizeSlash(
-                path.relative(root, path.join(outputPath, entryFiles[0]!)),
-              ),
+              jsFile,
+              declaration: emitsDeclarations
+                ? findDeclarationFile(jsFile, root)
+                : undefined,
             });
           }
           collected.set(environment.name, entries);
