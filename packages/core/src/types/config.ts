@@ -29,9 +29,7 @@ export type RsbuildConfigWithLibInfo = {
   id?: string;
   format: Format;
   config: EnvironmentConfig;
-  /** The resolved `dts` option of the lib, only set when declaration files are emitted. */
   dts?: Dts;
-  /** Only set to `false` in bundleless mode. */
   bundle?: false;
 };
 
