@@ -26,42 +26,30 @@ export const ExportsPlugin = ({
   return {
     name: 'rslib:exports',
     setup(api) {
-      api.onAfterBuild(({ environments, stats }) => {
-        if (!stats) return;
+      api.onAfterBuild(({ stats }) => {
+        // Failed builds already exit with errors, so there is nothing to export.
+        if (!stats || stats.hasErrors()) return;
 
         const statsList = 'stats' in stats ? stats.stats : [stats];
-        // Environment names correspond to lib IDs, allowing entries to be matched with their output formats.
         const collected = new Map<string, CollectedEntry[]>();
         const outputPaths: string[] = [];
-        const failedEnvironments = new Set<string>();
 
-        for (const environment of Object.values(environments)) {
-          const environmentStats = statsList[environment.index];
-          if (!environmentStats || environmentStats.hasErrors()) {
-            failedEnvironments.add(environment.name);
-            continue;
-          }
-          // Rsbuild names each compiler after its environment.
-          if (environmentStats.compilation.name !== environment.name) {
-            throw new Error(
-              `Failed to generate the "exports" field because the stats of the "${environment.name}" environment cannot be matched.`,
-            );
-          }
-
-          const entries: CollectedEntry[] = [];
-          const outputPath = environmentStats.compilation.outputOptions.path;
+        for (const { compilation } of statsList) {
+          // Rsbuild names each compiler after its environment, which is the lib ID.
+          const libId = compilation.name!;
+          const outputPath = compilation.outputOptions.path;
           if (!outputPath) {
             throw new Error(
-              `Failed to generate the "exports" field because the output path of the "${environment.name}" environment is unavailable.`,
+              `Failed to generate the "exports" field because the output path of the "${libId}" environment is unavailable.`,
             );
           }
           outputPaths.push(outputPath);
           const emitsDeclarations = Boolean(
-            libInfos.find(({ id }) => id === environment.name)?.dts,
+            libInfos.find(({ id }) => id === libId)?.dts,
           );
 
-          for (const [entryName, entrypoint] of environmentStats.compilation
-            .entrypoints) {
+          const entries: CollectedEntry[] = [];
+          for (const [entryName, entrypoint] of compilation.entrypoints) {
             // Global CSS uses placeholder entries that should not be exposed by the package.
             if (entryName.startsWith(RSLIB_CSS_ENTRY_FLAG)) continue;
             const entryFiles = [
@@ -71,7 +59,7 @@ export const ExportsPlugin = ({
             if (entryFiles.length === 0) continue;
             if (entryFiles.length > 1) {
               throw new Error(
-                `Failed to generate the "exports" field because the "${environment.name}" environment emitted ${entryFiles.length} JavaScript files for the "${entryName}" entry: ${entryFiles.join(', ')}.`,
+                `Failed to generate the "exports" field because the "${libId}" environment emitted ${entryFiles.length} JavaScript files for the "${entryName}" entry: ${entryFiles.join(', ')}.`,
               );
             }
             const jsFile = normalizeSlash(
@@ -85,17 +73,7 @@ export const ExportsPlugin = ({
                 : undefined,
             });
           }
-          collected.set(environment.name, entries);
-        }
-
-        if (failedEnvironments.size > 0) {
-          const failedEnvironmentNames = [...failedEnvironments]
-            .map((name) => `"${name}"`)
-            .join(', ');
-          logger.warn(
-            `Skip generating the "exports" field because the following environments failed to compile: ${failedEnvironmentNames}.`,
-          );
-          return;
+          collected.set(libId, entries);
         }
 
         const pkgJson = readPackageJson(root);
