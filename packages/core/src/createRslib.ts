@@ -246,9 +246,8 @@ export async function createRslib(
     );
 
     if (buildOptions.exports) {
-      const root = config.root ? ensureAbsolutePath(cwd, config.root) : cwd;
       rsbuildInstance.addPlugins([
-        ExportsPlugin({ root, libInfos: environmentWithInfos }),
+        ExportsPlugin({ root: config.root!, libInfos: environmentWithInfos }),
       ]);
     }
 
