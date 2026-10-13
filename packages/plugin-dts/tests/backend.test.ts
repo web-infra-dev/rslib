@@ -60,8 +60,21 @@ describe('resolveDtsGenerationBackend', () => {
     );
   });
 
-  test('should use the TypeScript 7 executable backend for TypeScript 7.1 or higher', () => {
-    expect(resolveDtsGenerationBackend({}, '7.1.0')).toBe('ts7-executable');
+  test('should use the stable JavaScript API for TypeScript 7.1 or higher', () => {
+    for (const version of ['7.1.0', '7.1.0-dev.20261013.1', '7.2.0', '8.0.0']) {
+      expect(resolveDtsGenerationBackend({}, version)).toBe('api-new');
+      expect(resolveDtsGenerationBackend({ tsgo: true }, version)).toBe(
+        'api-new',
+      );
+      expect(resolveDtsGenerationBackend({ build: true }, version)).toBe(
+        'ts7-executable',
+      );
+      expect(() =>
+        resolveDtsGenerationBackend({ tsgo: false }, version),
+      ).toThrow(
+        'Can not set "dts.tsgo: false" when using `typescript` >= 7.0.0.',
+      );
+    }
   });
 
   test('should resolve TypeScript from cwd and read its version', async () => {

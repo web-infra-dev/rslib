@@ -1,0 +1,10 @@
+{
+  "extends": "@rslib/tsconfig/base",
+  "compilerOptions": {
+    "rootDir": "src",
+    "declarationMap": true,
+    "noEmit": true,
+    "paths": { "@utils": ["./src/utils.ts"] }
+  },
+  "include": ["src"]
+}

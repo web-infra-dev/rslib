@@ -355,6 +355,8 @@ Whether to generate declaration files using [native TypeScript](https://github.c
 
 When unset, Rslib enables this option automatically when TypeScript 7+ is detected.
 
+TypeScript 7.0 generates declarations through the native executable, while 7.1 and later use the stable JavaScript API.
+
 ```bash
 npm add typescript@latest -D
 ```
@@ -396,7 +398,7 @@ When enabling this option, we recommend also enabling `isolatedDeclarations` in 
 
 #### Use cases
 
-By default, `rsbuild-plugin-dts` generates declaration files through the TypeScript Compiler API, and it can also generate declaration files by enabling [tsgo](#tsgo). Unlike these two approaches, `isolated` is the fastest option and is suitable for scenarios that prioritize build performance.
+`rsbuild-plugin-dts` uses the TypeScript Compiler API for TypeScript 5/6 and automatically enables [tsgo](#tsgo) for TypeScript 7+. Unlike these two approaches, `isolated` is the fastest option and is suitable for scenarios that prioritize build performance.
 
 Since `isolated` does not perform type checking during declaration generation, it is usually used together with another independent, high-performance type checking workflow. For example, in a monorepo project, you can use this option together with [`rslint --type-check`](https://rslint.rs/guide/type-checking):
 

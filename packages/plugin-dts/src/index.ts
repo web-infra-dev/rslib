@@ -21,7 +21,7 @@ import {
   color,
   getDtsEmitPath,
   loadTsconfig,
-  loadTsconfigResultForExecutable,
+  loadResolvedTsconfig,
   loadTypescript,
   processSourceEntry,
   warnIfOutside,
@@ -145,7 +145,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
             tsConfigResult = loadTsconfig(tsconfigPath, tsApi);
           }
         } else {
-          const loadedTsconfig = loadTsconfigResultForExecutable(
+          const loadedTsconfig = loadResolvedTsconfig(
             cwd,
             configuredTsconfigPath,
           );
