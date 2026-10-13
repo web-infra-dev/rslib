@@ -1,2 +1,5 @@
 # Let GitHub languages ignores MDX files
 *.mdx linguist-documentation
+
+# Keep the CLI shebang LF on Windows; pnpm pack rejects CRLF shebangs.
+packages/core/bin/rslib.js text eol=lf
