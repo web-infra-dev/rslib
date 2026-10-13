@@ -1,3 +1,6 @@
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { describe, expect, it, rs } from '@rstest/core';
 import {
   findStaleSubpaths,
@@ -89,26 +92,40 @@ describe('mergeExports', () => {
 });
 
 describe('findStaleSubpaths', () => {
-  const missing = new Set(['./dist/old.mjs', './dist/old.js']);
-  const isStaleTarget = (target: string) => missing.has(target);
+  it('should find existing subpaths that point to missing files in the output directories', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'rslib-exports-stale-'));
 
-  it('should find existing subpaths that point to missing targets', () => {
-    expect(
-      findStaleSubpaths(
-        {
-          '.': './dist/old.mjs',
-          './old': { import: './dist/old.mjs', require: './dist/old.js' },
-          './style.css': './dist/style.css',
-        },
-        { '.': './dist/index.mjs' },
-        isStaleTarget,
-      ),
-    ).toEqual(['./old']);
+    try {
+      await mkdir(join(root, 'dist'));
+      await writeFile(join(root, 'dist/style.css'), '');
+
+      expect(
+        findStaleSubpaths({
+          existing: {
+            '.': './dist/old.mjs',
+            './old': { import: './dist/old.mjs', require: './dist/old.js' },
+            './style.css': './dist/style.css',
+            './src': './src/missing.ts',
+            './*': './dist/*.mjs',
+          },
+          generated: { '.': './dist/index.mjs' },
+          root,
+          outputPaths: [join(root, 'dist')],
+        }),
+      ).toEqual(['./old']);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 
-  it('should return an empty list when there is no existing subpath map', () => {
+  it('should return an empty list when there is no existing field', () => {
     expect(
-      findStaleSubpaths(undefined, { '.': './dist/index.mjs' }, isStaleTarget),
+      findStaleSubpaths({
+        existing: undefined,
+        generated: { '.': './dist/index.mjs' },
+        root: '/pkg',
+        outputPaths: ['/pkg/dist'],
+      }),
     ).toEqual([]);
   });
 });

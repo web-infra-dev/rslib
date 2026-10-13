@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { isObject } from '../utils/helper';
 import { logger } from '../utils/logger';
@@ -50,35 +52,56 @@ export function mergeExports(
   };
 }
 
-function collectTargets(value: unknown, targets: string[]): void {
-  if (typeof value === 'string') {
-    targets.push(value);
-  } else if (Array.isArray(value)) {
-    for (const item of value) collectTargets(item, targets);
-  } else if (isObject(value)) {
-    for (const item of Object.values(value)) collectTargets(item, targets);
-  }
+function collectTargets(value: unknown): string[] {
+  if (typeof value === 'string') return [value];
+  if (Array.isArray(value)) return value.flatMap(collectTargets);
+  if (isObject(value)) return Object.values(value).flatMap(collectTargets);
+  return [];
+}
+
+function isPathInside(dir: string, file: string): boolean {
+  const relative = path.relative(dir, file);
+  return (
+    relative !== '' &&
+    relative !== '..' &&
+    !relative.startsWith(`..${path.sep}`) &&
+    !path.isAbsolute(relative)
+  );
 }
 
 /**
- * Find the existing subpaths that were not generated in this build and point
- * to files rejected by `isStaleTarget`, which are likely left over from a
+ * Find the existing subpaths that were not generated in this build, but point
+ * to missing files in the output directories. They are likely left over from a
  * previous build.
  */
-export function findStaleSubpaths(
-  existing: unknown,
-  generated: ExportsField,
-  isStaleTarget: (target: string) => boolean,
-): string[] {
-  if (!isSubpathMap(existing)) return [];
+export function findStaleSubpaths({
+  existing,
+  generated,
+  root,
+  outputPaths,
+}: {
+  existing: unknown;
+  generated: ExportsField;
+  root: string;
+  outputPaths: string[];
+}): string[] {
+  if (!isObject(existing)) return [];
+
+  const isStaleTarget = (target: string) => {
+    if (!target.startsWith('./') || target.includes('*')) return false;
+    const file = path.join(root, target);
+    return (
+      outputPaths.some((outputPath) => isPathInside(outputPath, file)) &&
+      !fs.existsSync(file)
+    );
+  };
 
   return Object.entries(existing)
-    .filter(([key, value]) => {
-      if (Object.hasOwn(generated, key)) return false;
-      const targets: string[] = [];
-      collectTargets(value, targets);
-      return targets.some(isStaleTarget);
-    })
+    .filter(
+      ([key, value]) =>
+        !Object.hasOwn(generated, key) &&
+        collectTargets(value).some(isStaleTarget),
+    )
     .map(([key]) => key);
 }
 
