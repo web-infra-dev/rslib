@@ -115,6 +115,16 @@ export default defineConfig({
 }
 ```
 
+:::note
+`--exports` 仅对 `esm` 和 `cjs` 格式生效，`umd`、`mf`、`iife` 等其他格式的产物会被跳过。该选项不能与 watch 模式同时使用。
+:::
+
+当无法正确生成 `exports` 字段时，构建会失败且不会修改 `package.json`，例如：
+
+- 没有可以导出的入口，例如只构建了 `umd` 格式。
+- 产物位于包根目录之外，或同一个入口在同一种格式下有多个产物。
+- 已有的 `exports` 字段不是子路径映射（例如字符串或条件对象），需要先将其改写为子路径形式。
+
 #### 类型声明文件
 
 对于开启了 [dts](/config/lib/dts) 的 lib，Rslib 还会检查每个子路径的产物旁的类型声明文件：
@@ -138,10 +148,6 @@ export default defineConfig({
 ```
 
 如果需要为每种格式生成扩展名对应的类型声明文件，可以开启 [dts.autoExtension](/config/lib/dts#dtsautoextension)，并将各格式输出到不同的目录。
-
-:::note
-`--exports` 仅对 `esm` 和 `cjs` 格式生效，`umd`、`mf`、`iife` 等其他格式的产物会被跳过。该选项不能与 watch 模式同时使用。如果已有的 `exports` 字段不是子路径映射（例如字符串或条件对象），构建会失败，需要先将其改写为子路径形式。
-:::
 
 ## rslib inspect
 

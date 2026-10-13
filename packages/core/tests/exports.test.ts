@@ -163,7 +163,7 @@ describe('generateExports', () => {
     });
   });
 
-  it('should return undefined when all formats are unsupported', () => {
+  it('should throw when all formats are unsupported', () => {
     const options: GenerateExportsOptions = {
       libInfos: [createLibInfo('umd', 'umd')],
       collected: createCollected({
@@ -171,10 +171,12 @@ describe('generateExports', () => {
       }),
     };
 
-    expect(generateExports(options)).toBeUndefined();
+    expect(() => generateExports(options)).toThrow(
+      'no entries can be exported',
+    );
   });
 
-  it('should return undefined when no JavaScript entries are generated', () => {
+  it('should throw when no JavaScript entries are generated', () => {
     const options: GenerateExportsOptions = {
       libInfos: [createLibInfo('esm', 'esm')],
       collected: createCollected({
@@ -182,7 +184,9 @@ describe('generateExports', () => {
       }),
     };
 
-    expect(generateExports(options)).toBeUndefined();
+    expect(() => generateExports(options)).toThrow(
+      'no entries can be exported',
+    );
   });
 
   it('should skip libs without collected entries', () => {
@@ -198,7 +202,7 @@ describe('generateExports', () => {
     });
   });
 
-  it('should return undefined when an entry is outside the package root', () => {
+  it('should throw when an entry is outside the package root', () => {
     const options: GenerateExportsOptions = {
       libInfos: [createLibInfo('esm', 'esm')],
       collected: createCollected({
@@ -206,7 +210,9 @@ describe('generateExports', () => {
       }),
     };
 
-    expect(generateExports(options)).toBeUndefined();
+    expect(() => generateExports(options)).toThrow(
+      'which is outside the package root',
+    );
 
     const absoluteOptions: GenerateExportsOptions = {
       libInfos: [createLibInfo('esm', 'esm')],
@@ -215,10 +221,12 @@ describe('generateExports', () => {
       }),
     };
 
-    expect(generateExports(absoluteOptions)).toBeUndefined();
+    expect(() => generateExports(absoluteOptions)).toThrow(
+      'which is outside the package root',
+    );
   });
 
-  it('should return undefined when an entry has multiple outputs of the same format', () => {
+  it('should throw when an entry has multiple outputs of the same format', () => {
     const options: GenerateExportsOptions = {
       libInfos: [createLibInfo('esm', 'esm'), createLibInfo('esm2', 'esm')],
       collected: createCollected({
@@ -227,7 +235,9 @@ describe('generateExports', () => {
       }),
     };
 
-    expect(generateExports(options)).toBeUndefined();
+    expect(() => generateExports(options)).toThrow(
+      'the "index" entry has multiple "esm" outputs',
+    );
   });
 
   it('should allow duplicate identical outputs of the same format', () => {

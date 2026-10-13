@@ -1,7 +1,6 @@
 import path from 'node:path';
 import type { RequireKey, RsbuildConfigWithLibInfo } from '../types';
 import { normalizeSlash } from '../utils/helper';
-import { logger } from '../utils/logger';
 import type { DeclarationFile } from './dts';
 
 export type CollectedEntry = {
@@ -56,12 +55,8 @@ function prepareLib(
   entries: CollectedEntry[],
 ): PreparedLib | undefined {
   const format = libInfo.format;
-  if (format !== 'esm' && format !== 'cjs') {
-    logger.warn(
-      `Skip generating the "exports" field for the "${libInfo.id}" environment because the "${format}" format is not supported.`,
-    );
-    return;
-  }
+  // Other formats, such as UMD, are not referenced by the `exports` field.
+  if (format !== 'esm' && format !== 'cjs') return;
   const normalizedEntries = entries.map((entry) => ({
     ...entry,
     entryName: normalizeEntryName(entry.entryName),
@@ -118,20 +113,8 @@ function buildEntryValue(slots: EntrySlots): string | ExportsField {
   return value(declaration && `./${declaration.file}`);
 }
 
-export function generateExports(
-  options: GenerateExportsOptions,
-): ExportsField | undefined {
+export function generateExports(options: GenerateExportsOptions): ExportsField {
   const { libInfos, collected } = options;
-
-  const hasJavaScriptEntries = [...collected.values()].some(
-    (entries) => entries.length > 0,
-  );
-  if (!hasJavaScriptEntries) {
-    logger.warn(
-      'Skip generating the "exports" field because no JavaScript entry files were generated.',
-    );
-    return;
-  }
 
   const preparedLibs: PreparedLib[] = [];
   for (const libInfo of libInfos) {
@@ -163,10 +146,9 @@ export function generateExports(
   for (const lib of preparedLibs) {
     for (const entry of lib.entries) {
       if (isOutsidePackageRoot(entry.jsFile)) {
-        logger.warn(
-          `Skip generating the "exports" field because the "${entry.entryName}" entry points to an output file outside the package root: "${entry.jsFile}".`,
+        throw new Error(
+          `Failed to generate the "exports" field because the "${entry.entryName}" entry of the "${lib.id}" environment emits "${entry.jsFile}", which is outside the package root.`,
         );
-        return;
       }
 
       const { entryName } = entry;
@@ -174,16 +156,19 @@ export function generateExports(
       const target = `./${entry.jsFile}`;
       const existingTarget = slots[lib.format]?.target;
       if (existingTarget && existingTarget !== target) {
-        logger.warn(
-          `Skip generating the "exports" field because the "${entry.entryName}" entry has multiple "${lib.format}" output files: "${existingTarget}" and "${target}".`,
+        throw new Error(
+          `Failed to generate the "exports" field because the "${entryName}" entry has multiple "${lib.format}" outputs: "${existingTarget}" and "${target}".`,
         );
-        return;
       }
       slots[lib.format] = { target, declaration: entry.declaration };
       entrySlotsByName.set(entryName, slots);
     }
   }
-  if (entrySlotsByName.size === 0) return;
+  if (entrySlotsByName.size === 0) {
+    throw new Error(
+      'Failed to generate the "exports" field because no entries can be exported. Only the "esm" and "cjs" formats are supported, and only the "index" entry is exported in bundleless mode.',
+    );
+  }
 
   const exportsField: ExportsField = {};
   // Keep the main entry before other entry subpaths, then sort the rest for stable output.

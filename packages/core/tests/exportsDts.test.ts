@@ -233,8 +233,8 @@ describe('generateExports with declaration files', () => {
     });
   });
 
-  it('should not throw for a bundleless lib without the index entry', () => {
-    expect(
+  it('should throw for a bundleless lib without the index entry', () => {
+    expect(() =>
       generateExports({
         libInfos: [{ ...createLibInfo('esm', 'esm', true), bundle: false }],
         collected: new Map([
@@ -244,7 +244,7 @@ describe('generateExports with declaration files', () => {
           ],
         ]),
       }),
-    ).toBeUndefined();
+    ).toThrow('no entries can be exported');
   });
 
   it('should not check libs without declaration files', () => {

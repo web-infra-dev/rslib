@@ -115,6 +115,16 @@ For example, building `esm` and `cjs` libs with an `index` entry generates:
 }
 ```
 
+:::note
+`--exports` only applies to the `esm` and `cjs` formats, and entries from other formats such as `umd`, `mf`, and `iife` are skipped. It cannot be used together with watch mode.
+:::
+
+The build fails without updating `package.json` when the `exports` field cannot be generated correctly, for example:
+
+- No entries can be exported, such as when only the `umd` format is built.
+- An output is outside the package root, or an entry has multiple outputs of the same format.
+- The existing `exports` field is not a subpath map, such as a string or an object of conditions. Convert it to the subpath form first.
+
 #### Declaration files
 
 For libs with [dts](/config/lib/dts) enabled, Rslib also checks the declaration files next to the outputs of each subpath:
@@ -138,10 +148,6 @@ For example, building `esm` and `cjs` libs with `dts: true` in a package with `"
 ```
 
 To emit a declaration file with the matching extension for each format, enable [dts.autoExtension](/config/lib/dts#dtsautoextension) and output each format to a separate directory.
-
-:::note
-`--exports` only applies to the `esm` and `cjs` formats, and entries from other formats such as `umd`, `mf`, and `iife` are skipped. It cannot be used together with watch mode. If the existing `exports` field is not a subpath map, such as a string or an object of conditions, the build fails and you need to convert it to the subpath form first.
-:::
 
 ## rslib inspect
 

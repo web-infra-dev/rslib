@@ -81,7 +81,6 @@ export const ExportsPlugin = ({
         const pkgJson: PkgJson = JSON.parse(originalText);
 
         const generated = generateExports({ libInfos, collected });
-        if (!generated) return;
 
         const exportsField = mergeExports(pkgJson.exports, generated);
 

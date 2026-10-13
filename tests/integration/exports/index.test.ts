@@ -151,11 +151,17 @@ describe('exports', () => {
     });
   });
 
-  test('should not generate exports when building the umd format', async () => {
-    const fixturePath = join(__dirname, 'umd');
-    await buildAndGetResults({ fixturePath, exports: true });
+  test('should fail when building only the umd format', async () => {
+    const fixture = 'umd';
+    const fixturePath = join(__dirname, fixture);
+    const error = await expectBuildToFail(
+      buildAndGetResults({ fixturePath, exports: true }),
+    );
 
-    expect(readFixtureExports('umd')).toBeUndefined();
+    expect(error.message).toContain('no entries can be exported');
+    expect(readFileSync(join(fixturePath, 'package.json'), 'utf8')).toBe(
+      packageJsonContents.get(fixture),
+    );
   });
 
   test('should not generate exports when the build fails', async () => {
