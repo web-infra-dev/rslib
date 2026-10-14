@@ -18,9 +18,32 @@ In an Rslib project, enable Rsdoctor as follows:
 
 1. Install the Rsdoctor plugin:
 
-<PackageManagerTabs command="add @rsdoctor/rspack-plugin -D" />
+<PackageManagerTabs command="add @rsdoctor/core@latest -D" />
 
-2. Set the `RSDOCTOR=true` environment variable before running the CLI command:
+2. Register the plugin in `rslib.config.ts`:
+
+```ts title="rslib.config.ts"
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    // ...lib configuration
+  ],
+  tools: {
+    rspack: {
+      plugins: [
+        process.env.RSDOCTOR === 'true' &&
+          new RsdoctorRspackPlugin({
+            output: { mode: 'brief' },
+          }),
+      ],
+    },
+  },
+});
+```
+
+3. Set the `RSDOCTOR=true` environment variable before running the CLI command:
 
 ```json title="package.json"
 {
@@ -43,29 +66,8 @@ Because Windows does not support this syntax, you can use [cross-env](https://np
 }
 ```
 
-After running these scripts, Rslib automatically registers the Rsdoctor plugin and opens the build analysis page when the build finishes. See the [Rsdoctor documentation](https://rsdoctor.rs/) for all features.
+After running the script, Rsdoctor generates a build analysis report. See the [Rsdoctor documentation](https://rsdoctor.rs/) for all features.
 
 ## Options
 
-To configure the [options](https://rsdoctor.rs/config/options/options) exposed by the Rsdoctor plugin, manually register the plugin:
-
-```ts title="rslib.config.ts"
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
-import { defineConfig } from '@rslib/core';
-
-export default defineConfig({
-  lib: [
-    // ...lib configuration
-  ],
-  tools: {
-    rspack: {
-      plugins: [
-        process.env.RSDOCTOR === 'true' &&
-          new RsdoctorRspackPlugin({
-            // plugin options
-          }),
-      ],
-    },
-  },
-});
-```
+The example uses `output.mode: 'brief'` to produce a standalone HTML report. You can adjust the [plugin options](https://rsdoctor.rs/config/options/options) in `rslib.config.ts`.
