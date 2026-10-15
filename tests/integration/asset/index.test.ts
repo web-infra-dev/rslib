@@ -582,6 +582,54 @@ test('preserve `new URL` file asset as relative URL', async () => {
   expect(files.esm1!.some((f) => /assets\/logo\.js$/.test(f))).toBe(false);
 });
 
+test('build `new URL` module target as its own output in entry mode', async () => {
+  // With `newUrl: { mode: 'entry' }` a `new URL()` target that is itself a
+  // JavaScript or TypeScript module is compiled and the URL points at that
+  // output. A target of any other type keeps the default asset behavior.
+  // Matrix (lib array order): esm0 = bundle, esm1 = bundleless.
+  const { contents, files } = await buildAndGetResults({
+    fixturePath: join(__dirname, 'new-url-entry'),
+  });
+
+  const asset = 'static/svg/logo.svg';
+
+  // esm × bundle: the target becomes its own entry chunk next to the entry.
+  const { path: bundlePath } = queryContent(contents.esm0!, /index\.js/);
+  const bundleMod = await import(bundlePath);
+  expect(bundleMod.modUrl.href).toMatch(/\/mod~\d+\.js$/);
+  expect(existsSync(bundleMod.modUrl)).toBe(true);
+  // The target is compiled, not copied: its dependency is bundled into it and
+  // no `.ts` file reaches the output.
+  expect(await readFile(bundleMod.modUrl, 'utf8')).toContain('helper:');
+  expect(files.esm0!.some((file) => file.endsWith('.ts'))).toBe(false);
+  // A non-module target still resolves to an emitted asset.
+  await expectUrlResolves(contents, 'esm0', /index\.js/, 'logo', asset);
+
+  // esm × bundleless: the target is externalized to the file the entry glob
+  // already emits, so the URL mirrors the source layout and nothing is
+  // duplicated into an extra chunk.
+  await expectUrlResolves(contents, 'esm1', /index\.js/, 'modUrl', 'mod.js');
+  await expectUrlResolves(contents, 'esm1', /index\.js/, 'logo', asset);
+  const { content: bundlelessMod } = queryContent(contents.esm1!, /mod\.js/);
+  expect(bundlelessMod).toContain('import { helper } from "./helper.js"');
+  expect(files.esm1!.filter((file) => /helper\.js$/.test(file))).toHaveLength(
+    1,
+  );
+
+  // The entry keeps the standard `new URL(path, import.meta.url)` form in both
+  // cells, so the output stays analyzable by downstream bundlers.
+  for (const key of ['esm0', 'esm1'] as const) {
+    const { content } = queryContent(contents[key]!, /index\.js/);
+    expect(content).not.toContain('__webpack_require__');
+    expect(content).toContain('import.meta.url');
+  }
+
+  // Constructing the URL must not execute the referenced module.
+  expect(
+    (globalThis as Record<string, unknown>).rslibNewUrlEntry,
+  ).toBeUndefined();
+});
+
 test('preserve `new URL` file asset as relative URL in node_modules', async () => {
   // A package under `node_modules` is handled the same way as the source: the
   // asset is emitted and the URL is kept relative, without any Rspack runtime.

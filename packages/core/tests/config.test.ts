@@ -15,6 +15,10 @@ import { createRslib } from '../src/createRslib';
 import { loadConfig } from '../src/loadConfig';
 import { mergeRslibConfig } from '../src/mergeConfig';
 import type { RslibConfig } from '../src/types/config';
+import {
+  resolveNewUrlMode,
+  shouldExternalizeUrlDependency,
+} from '../src/newUrl/compose';
 import { normalizeSlash } from '../src/utils/helper';
 import { logger } from '../src/utils/logger';
 
@@ -1405,6 +1409,72 @@ describe('wasm', () => {
         composeRsbuildEnvironments(rslibConfig),
       ).rejects.toThrowError(
         '"wasm" only supports the "esm" format. Set "format" to "esm" or omit it.',
+      );
+    },
+  );
+});
+
+describe('newUrl', () => {
+  // Unlike `lib.wasm`, the default does not depend on `bundle`: `asset` is the
+  // pre-existing behavior everywhere, so enabling the option is never breaking.
+  test('defaults to asset mode', () => {
+    expect(resolveNewUrlMode({ format: 'esm', newUrlConfig: undefined })).toBe(
+      'asset',
+    );
+    expect(resolveNewUrlMode({ format: 'esm', newUrlConfig: {} })).toBe(
+      'asset',
+    );
+  });
+
+  test('allows entry mode', () => {
+    expect(
+      resolveNewUrlMode({ format: 'esm', newUrlConfig: { mode: 'entry' } }),
+    ).toBe('entry');
+  });
+
+  test('disables handling entirely when set to false', () => {
+    expect(resolveNewUrlMode({ format: 'esm', newUrlConfig: false })).toBe(
+      false,
+    );
+  });
+
+  test('externalizes only JavaScript and TypeScript targets in entry mode', () => {
+    for (const request of ['./mod.ts', './mod.js', './a/b.tsx', './mod.mjs']) {
+      expect(shouldExternalizeUrlDependency({ mode: 'entry', request })).toBe(
+        true,
+      );
+    }
+    for (const request of ['./logo.svg', './data.json', './mod.wasm']) {
+      expect(shouldExternalizeUrlDependency({ mode: 'entry', request })).toBe(
+        false,
+      );
+    }
+    // Asset mode never externalizes, whatever the target is.
+    expect(
+      shouldExternalizeUrlDependency({ mode: 'asset', request: './mod.ts' }),
+    ).toBe(false);
+  });
+
+  test.each(['cjs', 'umd', 'iife', 'mf'] as const)(
+    'does not allow newUrl config with %s format',
+    async (format) => {
+      const rslibConfig: RslibConfig = {
+        lib: [
+          {
+            format,
+            plugins:
+              format === 'mf'
+                ? [pluginModuleFederation({ name: 'test-mf' }, {})]
+                : undefined,
+            newUrl: {},
+          },
+        ],
+      };
+
+      await expect(() =>
+        composeRsbuildEnvironments(rslibConfig),
+      ).rejects.toThrowError(
+        '"newUrl" only supports the "esm" format. Set "format" to "esm" or omit it.',
       );
     },
   );
