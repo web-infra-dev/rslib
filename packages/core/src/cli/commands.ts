@@ -139,7 +139,7 @@ export function setupCommands(argv: string[]): void {
     )
     .option(
       '--exports',
-      'generate the exports field in package.json from build entries',
+      'generate the exports field in package.json from build outputs',
     )
     .action(async (options: BuildOptions) => {
       initCliAction('build', options);
