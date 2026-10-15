@@ -11,9 +11,11 @@ const fixtures = [
   'bundleless',
   'umd',
   'build-error',
-  'dts-matched',
-  'dts-shared',
-  'dts-dist-path',
+  'dts/matched',
+  'dts/shared',
+  'dts/dist-path',
+  'dts/module',
+  'dts/bundleless',
 ];
 
 // The "exports" field is written back to the fixture package.json after
@@ -172,10 +174,10 @@ describe('exports', () => {
   });
 
   test('should generate exports when declaration files match the outputs', async () => {
-    const fixturePath = join(__dirname, 'dts-matched');
+    const fixturePath = join(__dirname, 'dts/matched');
     await buildAndGetResults({ fixturePath, exports: true });
 
-    expect(readFixtureExports('dts-matched')).toEqual({
+    expect(readFixtureExports('dts/matched')).toEqual({
       '.': {
         import: './dist/esm/index.mjs',
         require: './dist/cjs/index.js',
@@ -183,11 +185,33 @@ describe('exports', () => {
     });
   });
 
-  test('should share one declaration file when the extensions do not match', async () => {
-    const fixturePath = join(__dirname, 'dts-shared');
+  test('should not add types conditions when the declaration file matches a single format output', async () => {
+    const fixturePath = join(__dirname, 'dts/module');
     await buildAndGetResults({ fixturePath, exports: true });
 
-    expect(readFixtureExports('dts-shared')).toEqual({
+    expect(readFixtureExports('dts/module')).toEqual({
+      '.': './dist/esm/index.js',
+    });
+  });
+
+  test('should share one declaration file when the extensions do not match', async () => {
+    const fixturePath = join(__dirname, 'dts/shared');
+    await buildAndGetResults({ fixturePath, exports: true });
+
+    expect(readFixtureExports('dts/shared')).toEqual({
+      '.': {
+        types: './dist/esm/index.d.ts',
+        import: './dist/esm/index.js',
+        require: './dist/cjs/index.cjs',
+      },
+    });
+  });
+
+  test('should share one declaration file for the main entry in bundleless mode', async () => {
+    const fixturePath = join(__dirname, 'dts/bundleless');
+    await buildAndGetResults({ fixturePath, exports: true });
+
+    expect(readFixtureExports('dts/bundleless')).toEqual({
       '.': {
         types: './dist/esm/index.d.ts',
         import: './dist/esm/index.js',
@@ -197,7 +221,7 @@ describe('exports', () => {
   });
 
   test('should fail when declaration files are not emitted next to the outputs', async () => {
-    const fixture = 'dts-dist-path';
+    const fixture = 'dts/dist-path';
     const fixturePath = join(__dirname, fixture);
     const error = await expectBuildToFail(
       buildAndGetResults({ fixturePath, exports: true }),

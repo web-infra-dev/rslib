@@ -3,12 +3,13 @@ import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
-    generateBundleEsmConfig({ dts: { autoExtension: true } }),
-    generateBundleCjsConfig({ dts: { autoExtension: true } }),
+    generateBundleEsmConfig({ dts: true }),
+    generateBundleCjsConfig({ dts: true }),
   ],
   source: {
     entry: {
-      index: './src/index.ts',
+      index: '../../__fixtures__/src/index.ts',
     },
+    tsconfigPath: '../../__fixtures__/tsconfig.json',
   },
 });

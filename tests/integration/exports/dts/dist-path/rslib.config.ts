@@ -5,7 +5,8 @@ export default defineConfig({
   lib: [generateBundleEsmConfig({ dts: { distPath: './dist/types' } })],
   source: {
     entry: {
-      index: './src/index.ts',
+      index: '../../__fixtures__/src/index.ts',
     },
+    tsconfigPath: '../../__fixtures__/tsconfig.json',
   },
 });

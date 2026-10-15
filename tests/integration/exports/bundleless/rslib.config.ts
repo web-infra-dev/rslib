@@ -9,7 +9,7 @@ export default defineConfig({
   ],
   source: {
     entry: {
-      index: ['./src/**'],
+      index: ['../__fixtures__/src/**'],
     },
   },
 });
