@@ -2,7 +2,6 @@ import { pluginSass } from '@rsbuild/plugin-sass';
 import { defineConfig } from '@rspress/core';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import { pluginRss } from '@rspress/plugin-rss';
-import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { pluginTwoslash } from '@rspress/plugin-twoslash';
 import {
   transformerNotationDiff,
@@ -19,6 +18,7 @@ const description = 'The Rsbuild-based library development tool';
 const descriptionZh = '基于 Rsbuild 的库构建工具';
 
 export default defineConfig({
+  siteOrigin: siteUrl,
   title: 'Rslib',
   description:
     'Rslib is a library development tool that leverages the well-designed configurations and plugins of Rsbuild.',
@@ -38,7 +38,6 @@ export default defineConfig({
   search: {
     codeBlocks: true,
   },
-  llms: true,
   plugins: [
     pluginAlgolia(),
     pluginFontOpenSans(),
@@ -70,9 +69,6 @@ export default defineConfig({
           },
         },
       ],
-    }),
-    pluginSitemap({
-      siteUrl,
     }),
   ],
   route: {
