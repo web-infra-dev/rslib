@@ -50,30 +50,6 @@ function isOutsidePackageRoot(filePath: string): boolean {
   return path.isAbsolute(filePath) || filePath.startsWith('../');
 }
 
-function prepareLib(
-  libInfo: LibInfo,
-  entries: CollectedEntry[],
-): PreparedLib | undefined {
-  const format = libInfo.format;
-  // Other formats, such as UMD, are not referenced by the `exports` field.
-  if (format !== 'esm' && format !== 'cjs') return;
-  const normalizedEntries = entries.map((entry) => ({
-    ...entry,
-    entryName: normalizeEntryName(entry.entryName),
-  }));
-  return {
-    id: libInfo.id,
-    format,
-    dts: Boolean(libInfo.dts),
-    // In bundleless mode, every source file is an entry, so only the main entry
-    // is treated as public API.
-    entries:
-      libInfo.bundle === false
-        ? normalizedEntries.filter((entry) => entry.entryName === 'index')
-        : normalizedEntries,
-  };
-}
-
 function getFormatSlots(slots: EntrySlots): FormatSlot[] {
   return [slots.esm, slots.cjs].filter(
     (slot): slot is FormatSlot => slot !== undefined,
@@ -116,13 +92,29 @@ function buildEntryValue(slots: EntrySlots): string | ExportsField {
 export function generateExports(options: GenerateExportsOptions): ExportsField {
   const { libInfos, collected } = options;
 
-  const preparedLibs: PreparedLib[] = [];
-  for (const libInfo of libInfos) {
-    const entries = collected.get(libInfo.id) ?? [];
-    if (entries.length === 0) continue;
-    const lib = prepareLib(libInfo, entries);
-    if (lib) preparedLibs.push(lib);
-  }
+  const preparedLibs = libInfos.flatMap(
+    ({ id, format, dts, bundle }): PreparedLib[] => {
+      // Other formats, such as UMD, are not referenced by the `exports` field.
+      if (format !== 'esm' && format !== 'cjs') return [];
+      const entries = (collected.get(id) ?? []).map((entry) => ({
+        ...entry,
+        entryName: normalizeEntryName(entry.entryName),
+      }));
+      return [
+        {
+          id,
+          format,
+          dts: Boolean(dts),
+          // In bundleless mode, every source file is an entry, so only the main
+          // entry is treated as public API.
+          entries:
+            bundle === false
+              ? entries.filter((entry) => entry.entryName === 'index')
+              : entries,
+        },
+      ];
+    },
+  );
 
   // Declaration files emitted to a separate directory cannot be resolved from the outputs.
   const libsWithoutDeclarations = preparedLibs
