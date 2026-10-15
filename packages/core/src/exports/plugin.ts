@@ -65,7 +65,14 @@ export const ExportsPlugin = ({
         }
 
         const pkgJsonPath = path.join(root, 'package.json');
+        if (!fs.existsSync(pkgJsonPath)) {
+          throw new Error(
+            `Failed to generate the "exports" field because "${pkgJsonPath}" does not exist.`,
+          );
+        }
         const originalText = fs.readFileSync(pkgJsonPath, 'utf8');
+        // An invalid package.json already fails the build before this hook, as
+        // Rsbuild parses it when loading the PostCSS config.
         const pkgJson: PkgJson = JSON.parse(originalText);
 
         const generated = generateExports({ libInfos, collected });
