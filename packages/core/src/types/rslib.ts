@@ -23,7 +23,7 @@ export type BuildOptions = CommonOptions & {
    */
   watch?: boolean;
   /**
-   * Whether to generate the `exports` field in `package.json` from the build entries.
+   * Whether to generate the `exports` field in `package.json` from the build outputs.
    * Not supported in watch mode.
    * @default false
    */
