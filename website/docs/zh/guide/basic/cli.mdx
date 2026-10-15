@@ -65,7 +65,7 @@ Options:
   --auto-extension       控制自动补全扩展名重定向（使用 --no-auto-extension 禁用）
   --auto-external        控制自动外部化依赖（使用 --no-auto-external 禁用）
   --tsconfig <path>      使用指定的 tsconfig（相对于项目根目录）
-  --exports              根据构建入口生成 package.json 中的 exports 字段
+  --exports              根据构建产物生成 package.json 中的 exports 字段
 ```
 
 :::note
@@ -91,63 +91,6 @@ export default defineConfig({
   },
 });
 ```
-
-### 生成 exports
-
-使用 `rslib --exports` 可以在构建成功后，根据构建入口将 `exports` 字段写入 `package.json`：
-
-- 名为 `index` 的入口会作为主子路径（`.`）暴露，其他入口会以相同的名称作为子路径暴露，例如 `./utils/numbers`。因此主入口必须命名为 `index` 才会暴露为主子路径。
-- 在 bundleless 模式下，每个源文件都会作为入口构建，因此只会暴露主入口，即 [lib.outBase](/config/lib/out-base) 根目录下的 `index` 文件。如需暴露其他文件，可以手动将其子路径添加到 `exports` 字段中，后续构建会保留这些子路径。
-- 当 `esm` 和 `cjs` 产物包含同一个入口时，子路径的值为带有 `import` 和 `require` 条件的对象，否则为产物文件路径。
-- 生成的子路径会合并到已有的 `exports` 字段中：已存在的同名子路径会被覆盖，其他已有子路径会被保留。当已有子路径被覆盖为不同的值，或已有子路径指向的文件在输出目录中已不存在时，会输出警告。
-- 会保留 `package.json` 原有的缩进和换行符，内容没有变化时不会写入文件。
-
-例如，构建包含 `index` 入口的 `esm` 和 `cjs` 产物时会生成：
-
-```json title="package.json"
-{
-  "exports": {
-    ".": {
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js"
-    }
-  }
-}
-```
-
-:::note
-`--exports` 仅对 `esm` 和 `cjs` 格式生效，`umd`、`mf`、`iife` 等其他格式的产物会被跳过。该选项不能与 watch 模式同时使用。
-:::
-
-当无法正确生成 `exports` 字段时，构建会失败且不会修改 `package.json`，例如：
-
-- 没有可以导出的入口，例如只构建了 `umd` 格式。
-- 产物位于包根目录之外，或同一个入口在同一种格式下有多个产物。
-- 已有的 `exports` 字段不是子路径映射（例如字符串或条件对象），需要先将其改写为子路径形式。
-
-#### 类型声明文件
-
-对于开启了 [dts](/config/lib/dts) 的 lib，Rslib 还会检查每个子路径的产物旁的类型声明文件：
-
-- 如果每个产物旁都有扩展名对应的类型声明文件（`.js` 对应 `.d.ts`，`.mjs` 对应 `.d.mts`，`.cjs` 对应 `.d.cts`），则不会添加 `types` 条件，因为 TypeScript 可以直接根据产物找到这些类型声明文件。
-- 否则，会在最前面添加一个指向其中某个类型声明文件的 `types` 条件，由所有格式共用。没有类型声明文件的子路径（例如由静态资源构建出的子路径）不会添加 `types` 条件。
-- 如果某个 lib 的所有产物旁都没有类型声明文件，例如类型声明文件输出到了单独的 [dts.distPath](/config/lib/dts#dtsdistpath)，构建会失败。
-
-例如，在设置了 `"type": "module"` 的包中，构建开启 `dts: true` 的 `esm` 和 `cjs` 产物时会生成：
-
-```json title="package.json"
-{
-  "exports": {
-    ".": {
-      "types": "./dist/esm/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.cjs"
-    }
-  }
-}
-```
-
-如果需要为每种格式生成扩展名对应的类型声明文件，可以开启 [dts.autoExtension](/config/lib/dts#dtsautoextension)，并将各格式输出到不同的目录。
 
 ## rslib inspect
 

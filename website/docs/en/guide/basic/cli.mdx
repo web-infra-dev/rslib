@@ -65,7 +65,7 @@ Options:
   --auto-extension       control automatic extension redirect (use --no-auto-extension to disable)
   --auto-external        control automatic dependency externalization (use --no-auto-external to disable)
   --tsconfig <path>      use specific tsconfig (relative to project root)
-  --exports              generate the exports field in package.json from build entries
+  --exports              generate the exports field in package.json from build outputs
 ```
 
 :::note
@@ -91,63 +91,6 @@ export default defineConfig({
   },
 });
 ```
-
-### Generate exports
-
-Use `rslib --exports` to write the `exports` field to `package.json` from the build entries after a successful build:
-
-- The entry named `index` is exposed as the main subpath (`.`), and other entries are exposed as subpaths with the same name, such as `./utils/numbers`. To expose the main subpath, the main entry must be named `index`.
-- In bundleless mode, every source file is built as an entry, so only the main entry is exposed, which is the `index` file in the root of [lib.outBase](/config/lib/out-base). To expose other files, add their subpaths to the `exports` field manually, and they are kept in later builds.
-- When both `esm` and `cjs` libs produce the same entry, the subpath value is an object with `import` and `require` conditions, otherwise it is the output file path.
-- Generated subpaths are merged into the existing `exports` field. Subpaths that already exist are overwritten, and other existing subpaths are kept. A warning is shown when an existing subpath is overwritten with a different value, or when an existing subpath points to a file that no longer exists in the output directories.
-- The indentation and line endings of `package.json` are preserved, and the file is not written when nothing changes.
-
-For example, building `esm` and `cjs` libs with an `index` entry generates:
-
-```json title="package.json"
-{
-  "exports": {
-    ".": {
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js"
-    }
-  }
-}
-```
-
-:::note
-`--exports` only applies to the `esm` and `cjs` formats, and entries from other formats such as `umd`, `mf`, and `iife` are skipped. It cannot be used together with watch mode.
-:::
-
-The build fails without updating `package.json` when the `exports` field cannot be generated correctly, for example:
-
-- No entries can be exported, such as when only the `umd` format is built.
-- An output is outside the package root, or an entry has multiple outputs of the same format.
-- The existing `exports` field is not a subpath map, such as a string or an object of conditions. Convert it to the subpath form first.
-
-#### Declaration files
-
-For libs with [dts](/config/lib/dts) enabled, Rslib also checks the declaration files next to the outputs of each subpath:
-
-- If every output has a declaration file with the matching extension next to it (`.d.ts` for `.js`, `.d.mts` for `.mjs`, and `.d.cts` for `.cjs`), no `types` condition is added, since TypeScript resolves these declaration files from the outputs directly.
-- Otherwise, a `types` condition pointing to one of the declaration files is added first, and is shared by all formats. Subpaths without declaration files, such as those built from static assets, have no `types` condition.
-- If a lib has no declaration file next to any of its outputs, for example when declaration files are emitted to a separate [dts.distPath](/config/lib/dts#dtsdistpath), the build fails.
-
-For example, building `esm` and `cjs` libs with `dts: true` in a package with `"type": "module"` generates:
-
-```json title="package.json"
-{
-  "exports": {
-    ".": {
-      "types": "./dist/esm/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.cjs"
-    }
-  }
-}
-```
-
-To emit a declaration file with the matching extension for each format, enable [dts.autoExtension](/config/lib/dts#dtsautoextension) and output each format to a separate directory.
 
 ## rslib inspect
 
