@@ -1,7 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { RsbuildPlugin } from '@rsbuild/core';
-import { RSLIB_CSS_ENTRY_FLAG } from '../css/cssConfig';
 import { isJavaScriptOutputFile } from '../exe/utils';
 import type { PkgJson, RequireKey, RsbuildConfigWithLibInfo } from '../types';
 import { logger } from '../utils/logger';
@@ -37,12 +36,7 @@ export const ExportsPlugin = ({
         for (const { compilation } of statsList) {
           // Rsbuild names each compiler after its environment, which is the lib ID.
           const libId = compilation.name!;
-          const outputPath = compilation.outputOptions.path;
-          if (!outputPath) {
-            throw new Error(
-              `Failed to generate the "exports" field because the output path of the "${libId}" environment is unavailable.`,
-            );
-          }
+          const outputPath = compilation.outputOptions.path!;
           outputPaths.push(outputPath);
           const emitsDeclarations = Boolean(
             libInfos.find(({ id }) => id === libId)?.dts,
@@ -50,13 +44,11 @@ export const ExportsPlugin = ({
 
           const entries: CollectedEntry[] = [];
           for (const [entryName, entrypoint] of compilation.entrypoints) {
-            // Global CSS uses placeholder entries that should not be exposed by the package.
-            if (entryName.startsWith(RSLIB_CSS_ENTRY_FLAG)) continue;
-            // Each entry chunk emits at most one JavaScript file.
+            // An entry chunk emits at most one JavaScript file. Entries without one,
+            // such as global CSS entries in bundleless mode, are not exported.
             const entryFile = [...entrypoint.getEntrypointChunk().files].find(
               isJavaScriptOutputFile,
             );
-            // Entries without JavaScript output, such as CSS-only entries, are not exported.
             if (!entryFile) continue;
             const jsFile = normalizeSlash(
               path.relative(root, path.join(outputPath, entryFile)),
