@@ -52,18 +52,14 @@ export const ExportsPlugin = ({
           for (const [entryName, entrypoint] of compilation.entrypoints) {
             // Global CSS uses placeholder entries that should not be exposed by the package.
             if (entryName.startsWith(RSLIB_CSS_ENTRY_FLAG)) continue;
-            const entryFiles = [
-              ...entrypoint.getEntrypointChunk().files,
-            ].filter(isJavaScriptOutputFile);
+            // Each entry chunk emits at most one JavaScript file.
+            const entryFile = [...entrypoint.getEntrypointChunk().files].find(
+              isJavaScriptOutputFile,
+            );
             // Entries without JavaScript output, such as CSS-only entries, are not exported.
-            if (entryFiles.length === 0) continue;
-            if (entryFiles.length > 1) {
-              throw new Error(
-                `Failed to generate the "exports" field because the "${libId}" environment emitted ${entryFiles.length} JavaScript files for the "${entryName}" entry: ${entryFiles.join(', ')}.`,
-              );
-            }
+            if (!entryFile) continue;
             const jsFile = normalizeSlash(
-              path.relative(root, path.join(outputPath, entryFiles[0]!)),
+              path.relative(root, path.join(outputPath, entryFile)),
             );
             entries.push({
               entryName,
