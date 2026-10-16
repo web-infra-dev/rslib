@@ -328,7 +328,15 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           const onMessage = (message: 'success' | 'error' | DtsWatchResult) => {
             if (typeof message === 'object') {
               if (watchState && message.status === 'success') {
-                watchState.dependencies = message;
+                // Match Rspack's native paths when registering dependencies and
+                // distinguishing changed files from newly created files.
+                watchState.dependencies = {
+                  ...message,
+                  dependencies: message.dependencies.map((file) =>
+                    normalize(file),
+                  ),
+                  directories: message.directories.map((dir) => normalize(dir)),
+                };
               }
               finish(message.status);
             } else {
