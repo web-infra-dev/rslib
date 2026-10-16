@@ -2,6 +2,7 @@ import { createRslib, loadConfig } from '@rslib/core';
 import { describe, expect, test } from '@rstest/core';
 import fs from 'node:fs/promises';
 import { join } from 'node:path';
+import { setImmediate } from 'node:timers/promises';
 import { buildAndGetResults, rslibBuild } from 'test-helper';
 
 describe('TypeScript 7.1 stable JavaScript API', () => {
@@ -77,7 +78,16 @@ describe('TypeScript 7.1 stable JavaScript API', () => {
 
   test('rebuilds declarations in watch mode', async () => {
     const loadedConfig = await loadConfig({ cwd: fixturePath });
+    loadedConfig.content.performance = {
+      ...loadedConfig.content.performance,
+      buildCache: false,
+    };
     const rslib = await createRslib({ cwd: fixturePath, config: loadedConfig });
+    const firstBuild = new Promise<void>((resolve) => {
+      rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+        rsbuild.onAfterBuild(() => resolve());
+      });
+    });
     const sourceFile = join(fixturePath, 'src/utils.ts');
     const original = await fs.readFile(sourceFile, 'utf8');
     const declarationFile = join(fixturePath, 'dist/esm/utils.d.ts');
@@ -87,6 +97,9 @@ describe('TypeScript 7.1 stable JavaScript API', () => {
     });
     const result = await rslib.build({ watch: true, lib: ['esm'] });
     try {
+      await firstBuild;
+      // Rspack installs its watcher on the next tick after the done hooks.
+      await setImmediate();
       await expect
         .poll(() => fs.readFile(declarationFile, 'utf8').catch(() => ''))
         .toContain('=> number');
