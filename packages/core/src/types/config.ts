@@ -29,6 +29,8 @@ export type RsbuildConfigWithLibInfo = {
   id?: string;
   format: Format;
   config: EnvironmentConfig;
+  dts?: Dts;
+  bundle?: false;
 };
 
 export type RsbuildConfigEntry = NonNullable<

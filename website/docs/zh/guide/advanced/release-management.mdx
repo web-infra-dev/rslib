@@ -46,6 +46,56 @@ description: '介绍 Rslib 项目的 npm 包版本管理与发布实践，包括
 
 此外，需要确保包没有设置 `private: true`，并建议补充 `description`、`license`、`repository` 等信息，方便用户在 npm 上了解和定位项目。
 
+### 生成 exports \{#generate-exports}
+
+除了手动维护 `exports` 字段，也可以执行 `rslib build --exports`，在构建成功后根据产物自动生成。生成规则如下：
+
+- 只导出 `esm` 和 `cjs` 格式的产物。
+- 入口 `index` 导出为 `.`，其他入口以入口名导出，例如 `./utils/numbers`。
+- bundleless 模式下只导出 [lib.outBase](/config/lib/out-base) 根目录下的 `index` 入口。
+- 同一入口同时有 `esm` 和 `cjs` 产物时，值为 `import` 和 `require` 条件；只有一种格式时，值为产物路径。
+
+例如，构建包含 `index` 入口的 `esm` 和 `cjs` 产物时会生成：
+
+```json title="package.json"
+{
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
+    }
+  }
+}
+```
+
+生成结果会合并到已有的 `exports` 字段中：同名子路径会被覆盖，其他子路径（包括手动添加的）保持不变。同名子路径的值发生变化，或已有子路径指向的产物已不存在时，会输出警告。写入时会保留文件原有的缩进和换行符，内容没有变化时不会写入。
+
+`--exports` 不能与 watch 模式同时使用。
+
+#### 类型声明文件 \{#declaration-files}
+
+对于开启了 [dts](/config/lib/dts) 的 lib，Rslib 会检查产物旁的类型声明文件：
+
+- 每种格式的产物旁都有扩展名对应的类型声明文件时（`.js` 对应 `.d.ts`，`.mjs` 对应 `.d.mts`，`.cjs` 对应 `.d.cts`），不添加 `types` 条件，TypeScript 会自行找到它们。
+- 否则添加一个所有格式共用的 `types` 条件，优先指向扩展名对应的类型声明文件。
+- 某个 lib 的所有产物旁都没有类型声明文件时，构建失败，例如类型声明文件输出到了单独的 [dts.distPath](/config/lib/dts#dtsdistpath)。
+
+例如，在设置了 `"type": "module"` 的包中，`esm` 和 `cjs` 都开启 `dts: true` 时，`cjs` 产物 `index.cjs` 旁只有 `index.d.ts`，不是扩展名对应的 `index.d.cts`，因此会生成：
+
+```json title="package.json"
+{
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
+    }
+  }
+}
+```
+
+如需每种格式都有扩展名对应的类型声明文件，可以开启 [dts.autoExtension](/config/lib/dts#dtsautoextension)，并将各格式输出到不同的目录。
+
 ## pnpm 版本管理 \{#pnpm-version-management}
 
 pnpm 提供了 [发布管理功能](https://pnpm.io/versioning)，支持记录变更、更新包版本、生成 changelog、同步更新 workspace 包之间的依赖版本，以及发布 npm 包。
