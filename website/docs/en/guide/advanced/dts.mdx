@@ -1,5 +1,5 @@
 ---
-description: 'Choose declaration generation methods in Rslib, and use TypeScript Compiler API, tsgo, isolatedDeclarations, and API Extractor to generate and bundle declaration files.'
+description: 'Choose declaration generation methods in Rslib, and use TypeScript Compiler API, native TypeScript, isolatedDeclarations, and API Extractor to generate and bundle declaration files.'
 ---
 
 import { PackageManagerTabs } from '@theme';
@@ -49,24 +49,26 @@ Bundleless declaration files involves generating a separate declaration file for
 Rslib's declaration generation flow can be split into two steps:
 
 1. Type generation, that is, generate bundleless declaration files. Rslib supports the following three methods:
-   - [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)
-   - [tsgo](https://github.com/microsoft/typescript-go)
-   - [isolatedDeclarations](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations)
+   - [JavaScript API](#javascript-api)
+   - [native TypeScript executable](#tsgo-executable)
+   - [isolatedDeclarations](#isolateddeclarations)
 2. Type bundling, that is, generate bundled declaration files (optional). When [dts.bundle](/config/lib/dts#dtsbundle) is enabled, Rslib bundles the generated declaration files with [API Extractor](https://api-extractor.com/).
 
 ### Generate bundleless declaration files
 
 Bundleless declaration files can be generated in the following three ways:
 
-| Method                            | Configuration                                 | Type checking | Output scope                                   | Speed   |
-| --------------------------------- | --------------------------------------------- | ------------- | ---------------------------------------------- | ------- |
-| TypeScript Compiler API (default) | `dts: true` or `dts: { bundle: false }`       | Yes           | Determined by `tsconfig.json`                  | Slower  |
-| tsgo                              | [`dts.tsgo`](/config/lib/dts#dtstsgo)         | Yes           | Determined by `tsconfig.json`                  | Fast    |
-| isolatedDeclarations              | [`dts.isolated`](/config/lib/dts#dtsisolated) | No            | Modules included in the build dependency graph | Fastest |
+| Method                       | TypeScript version | Type checking | Output scope                                   | Speed                       |
+| ---------------------------- | ------------------ | ------------- | ---------------------------------------------- | --------------------------- |
+| JavaScript API               | 5/6, 7.1+          | Yes           | Determined by `tsconfig.json`                  | Slower on 5/6, fast on 7.1+ |
+| native TypeScript executable | 7.0                | Yes           | Determined by `tsconfig.json`                  | Fast                        |
+| isolatedDeclarations         | Any                | No            | Modules included in the build dependency graph | Fastest                     |
 
-#### TypeScript compiler API
+#### JavaScript API
 
-This is the default behavior. It is mostly the same as running `tsc`: it generates declaration files and performs type checking, but it is relatively slower.
+TypeScript 5/6 use the [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API). Like running `tsc`, it generates declaration files and performs type checking, but is relatively slower.
+
+TypeScript 7.1 and later use the JavaScript API of native TypeScript for faster declaration generation.
 
 ```ts title="rslib.config.ts"
 export default {
@@ -83,11 +85,7 @@ export default {
 };
 ```
 
-#### tsgo
-
-Using [native TypeScript](https://github.com/microsoft/typescript-go) to generate declaration files keeps type checking enabled while significantly speeding up declaration generation.
-
-When [dts.tsgo](/config/lib/dts#dtstsgo) is unset, Rslib enables it automatically when TypeScript 7+ is detected.
+Install the latest TypeScript to use native TypeScript for faster declaration generation. When [dts.tsgo](/config/lib/dts#dtstsgo) is unset, Rslib enables it automatically when TypeScript 7+ is detected:
 
 <PackageManagerTabs command="add typescript@latest -D" />
 
@@ -98,6 +96,10 @@ To ensure consistency during local development, you need to install the correspo
   "typescript.experimental.useTsgo": true
 }
 ```
+
+#### native TypeScript executable \{#tsgo-executable}
+
+With TypeScript 7.0, Rslib uses the native TypeScript executable to generate declaration files.
 
 #### isolatedDeclarations
 
@@ -148,7 +150,7 @@ export default {
 
 ### Notes
 
-During the generation of declaration files, Rslib will automatically enforce some configuration options in `tsconfig.json` to ensure that the [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) or [tsgo](https://github.com/microsoft/typescript-go) generates only declaration files.
+During the generation of declaration files, Rslib will automatically enforce some configuration options in `tsconfig.json` to ensure that TypeScript generates only declaration files.
 
 ```json
 {
@@ -177,7 +179,7 @@ The priority from highest to lowest of final output directory of declaration fil
 | [dts.autoExtension](/config/lib/dts#dtsautoextension)               | Whether to automatically set the declaration file extension based on the [format](/config/lib/format) option.          |
 | [dts.alias](/config/lib/dts#dtsalias)                               | The path alias of the declaration files.                                                                               |
 | [dts.isolated](/config/lib/dts#dtsisolated)                         | Whether to generate declaration files with `isolatedDeclarations`.                                                     |
-| [dts.tsgo](/config/lib/dts#dtstsgo)                                 | Whether to generate declaration files with [tsgo](https://github.com/microsoft/typescript-go).                         |
+| [dts.tsgo](/config/lib/dts#dtstsgo)                                 | Whether to generate declaration files with native TypeScript.                                                          |
 | [banner.dts](/config/lib/banner#bannerdts)                          | Inject content into the top of each declaration output file.                                                           |
 | [footer.dts](/config/lib/footer#footerdts)                          | Inject content into the bottom of each declaration file.                                                               |
 | [redirect.dts.path](/config/lib/redirect#redirectdtspath)           | Whether to automatically redirect the import paths of TypeScript declaration output files.                             |

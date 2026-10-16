@@ -351,9 +351,11 @@ export default {
 - **Type:** `boolean`
 - **Default:** `true` when TypeScript 7+ is detected, otherwise `false`
 
-Whether to generate declaration files using [native TypeScript](https://github.com/microsoft/typescript-go).
+Whether to generate declaration files using native TypeScript.
 
-When unset, Rslib enables this option automatically when TypeScript 7+ is detected.
+TypeScript 7.0 generates declarations through the native executable, while 7.1 and later use the JavaScript API.
+
+Install the latest TypeScript to use native TypeScript for faster declaration generation. When `tsgo` is unset, Rslib enables it automatically when TypeScript 7+ is detected:
 
 ```bash
 npm add typescript@latest -D
@@ -396,14 +398,14 @@ When enabling this option, we recommend also enabling `isolatedDeclarations` in 
 
 #### Use cases
 
-By default, `rsbuild-plugin-dts` generates declaration files through the TypeScript Compiler API, and it can also generate declaration files by enabling [tsgo](#tsgo). Unlike these two approaches, `isolated` is the fastest option and is suitable for scenarios that prioritize build performance.
+`isolated` is suitable for projects that prioritize build performance and run type checking separately.
 
 Since `isolated` does not perform type checking during declaration generation, it is usually used together with another independent, high-performance type checking workflow. For example, in a monorepo project, you can use this option together with [`rslint --type-check`](https://rslint.rs/guide/type-checking):
 
 - Daily builds: use `isolated` to quickly output declaration files when building each package.
 - Global checks: run `rslint --type-check` in CI or pre-commit hooks to perform unified type checking when needed.
 
-This preserves full type checking while reducing the cost of repeatedly running TypeScript type analysis, loading TypeScript or `tsgo` related packages, and loading native bindings during each package build, making the overall build pipeline lighter.
+This preserves full type checking while reducing the cost of repeatedly running TypeScript type analysis, loading TypeScript related packages, and loading native bindings during each package build, making the overall build pipeline lighter.
 
 #### Output scope
 

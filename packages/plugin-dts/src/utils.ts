@@ -21,9 +21,9 @@ import { convertPathToPattern, glob } from 'tinyglobby';
 import type { MatchPath } from 'tsconfig-paths';
 import type { CompilerOptions } from 'typescript6-api';
 import type {
-  CompilerApiTsconfigResultForApi,
   DtsEntry,
-  GetTsconfigTsconfigResultForExecutable,
+  OldApiTsconfigResult,
+  TsconfigOptionsResult,
 } from './types/internal';
 import type { DtsRedirect } from './types/options';
 
@@ -118,7 +118,7 @@ const resolveTsconfigPath = (
 export function loadTsconfig(
   tsconfigPath: string,
   ts: typeof import('typescript6-api') = loadTypescript(),
-): CompilerApiTsconfigResultForApi {
+): OldApiTsconfigResult {
   const configFile = ts.readConfigFile(
     tsconfigPath,
     ts.sys.readFile.bind(ts.sys),
@@ -132,11 +132,10 @@ export function loadTsconfig(
   return configFileContent;
 }
 
-export function loadTsconfigResultForExecutable(
+export function loadResolvedTsconfig(
   cwd: string,
   configName: string,
-):
-  { path: string; config: GetTsconfigTsconfigResultForExecutable } | undefined {
+): { path: string; config: TsconfigOptionsResult } | undefined {
   if (isAbsolute(configName) && !fs.existsSync(configName)) {
     return undefined;
   }
@@ -166,7 +165,7 @@ export function loadTsconfigResultForExecutable(
       tsconfigDir,
       compilerOptions.tsBuildInfoFile,
     ),
-  } as GetTsconfigTsconfigResultForExecutable['options'];
+  } as TsconfigOptionsResult['options'];
 
   return {
     path: tsconfig.path,
@@ -307,20 +306,34 @@ export async function addBannerAndFooter(
   footer?: string,
 ): Promise<void> {
   const content = await fsP.readFile(dtsFile, 'utf-8');
-  const code = new MagicString(content);
+  const updated = addBannerAndFooterToContent(content, banner, footer);
+  if (updated !== content) {
+    await fsP.writeFile(dtsFile, updated);
+  }
+}
 
+function addBannerAndFooterToContent(
+  content: string,
+  banner?: string,
+  footer?: string,
+): string {
+  const code = new MagicString(content);
   if (banner && !content.trimStart().startsWith(banner.trim())) {
     code.prepend(`${banner}\n`);
   }
-
   if (footer && !content.trimEnd().endsWith(footer.trim())) {
     code.append(`\n${footer}\n`);
   }
-
-  if (code.hasChanged()) {
-    await fsP.writeFile(dtsFile, code.toString());
-  }
+  return code.toString();
 }
+
+type DtsFileSystem = {
+  readFile: (file: string) => Promise<string>;
+  writeFile: (file: string, content: string) => Promise<void>;
+  getFiles: (cwd: string, dir: string, extension: string) => Promise<string[]>;
+  fileExists: typeof pathExists;
+  isDirectory: typeof isDirectory;
+};
 
 async function addExtension(
   redirect: DtsRedirect,
@@ -328,6 +341,7 @@ async function addExtension(
   path: string,
   jsExtension: string,
   dtsExtension: string,
+  fileSystem: DtsFileSystem,
 ): Promise<string> {
   if (!redirect.extension) {
     return path;
@@ -341,7 +355,7 @@ async function addExtension(
   const candidatePaths: string[] = [];
 
   // If the import path refers to a directory, it most likely actually refers to a `index.*` file due to Node's module resolution
-  if (await isDirectory(join(dirname(dtsFile), path))) {
+  if (await fileSystem.isDirectory(join(dirname(dtsFile), path))) {
     // This uses `/` instead of `path.join` here because `join` removes potential "./" prefixes
     candidatePaths.push(`${path.replace(/\/+$/, '')}/index`);
   }
@@ -371,7 +385,7 @@ async function addExtension(
   for (const candidatePath of candidatePaths) {
     for (const candidate of dtsCandidates) {
       if (
-        await pathExists(
+        await fileSystem.fileExists(
           join(dirname(dtsFile), `${candidatePath}${candidate.dtsExtension}`),
         )
       ) {
@@ -390,8 +404,9 @@ export async function redirectDtsImports(
   matchPath: MatchPath,
   outDir: string,
   rootDir: string,
-): Promise<void> {
-  const content = await fsP.readFile(dtsFile, 'utf-8');
+  content: string,
+  fileSystem: DtsFileSystem,
+): Promise<string> {
   const code = new MagicString(content);
   const { parseAsync } = loadAstGrepNapi();
   const sgNode = (await parseAsync('typescript', content)).root();
@@ -550,7 +565,7 @@ export async function redirectDtsImports(
 
             if (
               importDtsExtension &&
-              (await pathExists(
+              (await fileSystem.fileExists(
                 join(
                   dirname(dtsFile),
                   `${pathWithoutExtension}${importDtsExtension}`,
@@ -574,6 +589,7 @@ export async function redirectDtsImports(
             redirectImportPath,
             jsExtension,
             dtsExtension,
+            fileSystem,
           );
         }
       } else if (shouldAddExtension) {
@@ -583,6 +599,7 @@ export async function redirectDtsImports(
           redirectImportPath,
           jsExtension,
           dtsExtension,
+          fileSystem,
         );
       }
 
@@ -596,9 +613,7 @@ export async function redirectDtsImports(
     }
   }
 
-  if (code.hasChanged()) {
-    await fsP.writeFile(dtsFile, code.toString());
-  }
+  return code.toString();
 }
 
 export async function processDtsFiles(
@@ -612,6 +627,14 @@ export async function processDtsFiles(
   paths: Record<string, string[]>,
   banner?: string,
   footer?: string,
+  fileSystem: DtsFileSystem = {
+    readFile: (file) => fsP.readFile(file, 'utf8'),
+    writeFile: (file, content) => fsP.writeFile(file, content),
+    getFiles: (cwd, dir, extension) =>
+      globDtsFiles(cwd, dir, [`/**/*${extension}`]),
+    fileExists: pathExists,
+    isDirectory,
+  },
 ): Promise<void> {
   if (bundle) {
     return;
@@ -642,24 +665,37 @@ export async function processDtsFiles(
     );
   }
 
-  const dtsFiles = await globDtsFiles(cwd, dir, [`/**/*${dtsExtension}`]);
+  if (!banner && !footer && !matchPath) {
+    return;
+  }
+
+  const dtsFiles = await fileSystem.getFiles(cwd, dir, dtsExtension);
 
   await Promise.all(
     dtsFiles.map(async (file) => {
       try {
-        if (banner || footer) {
-          await addBannerAndFooter(file, banner, footer);
+        const original = await fileSystem.readFile(file);
+        let content = addBannerAndFooterToContent(original, banner, footer);
+        if (matchPath) {
+          try {
+            content = await redirectDtsImports(
+              file,
+              dtsExtension,
+              redirect,
+              matchPath,
+              dir,
+              rootDir,
+              content,
+              fileSystem,
+            );
+          } catch (error) {
+            // Preserve banner/footer even when redirect fails.
+            logger.error(`Failed to rename declaration file ${file}: ${error}`);
+          }
         }
 
-        if ((redirect.path || redirect.extension) && matchPath) {
-          await redirectDtsImports(
-            file,
-            dtsExtension,
-            redirect,
-            matchPath,
-            dir,
-            rootDir,
-          );
+        if (content !== original) {
+          await fileSystem.writeFile(file, content);
         }
       } catch (error) {
         logger.error(`Failed to rename declaration file ${file}: ${error}`);
