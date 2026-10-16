@@ -6,6 +6,7 @@ define.lint(({ globals, js, rstestPlugin, ts }) => [
     ignores: [
       // TypeScript does not support source phase imports syntax
       'tests/integration/wasm/static-source/src/utils.js',
+      'tests/integration/wasm-inline/basic/src/source.js',
     ],
   },
   js.configs.recommended,

@@ -3,6 +3,7 @@ import { add as otherAdd } from './add.wasm?other=1&inline=true#fragment';
 import { read } from './nested/read.wasm?inline';
 
 export { useNamedAdd } from './named.js';
+export { useDynamicSourceAdd, useSourceAdd } from './source.js';
 
 export { add, otherAdd, read };
 export const useAdd = (a, b) => add(a, b);
