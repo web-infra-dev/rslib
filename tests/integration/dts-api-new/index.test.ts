@@ -81,6 +81,10 @@ describe('TypeScript 7.1 stable JavaScript API', () => {
     const sourceFile = join(fixturePath, 'src/utils.ts');
     const original = await fs.readFile(sourceFile, 'utf8');
     const declarationFile = join(fixturePath, 'dist/esm/utils.d.ts');
+    await fs.rm(join(fixturePath, 'dist/esm'), {
+      recursive: true,
+      force: true,
+    });
     const result = await rslib.build({ watch: true, lib: ['esm'] });
     try {
       await expect

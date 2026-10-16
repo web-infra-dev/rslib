@@ -323,6 +323,8 @@ export async function bundleDtsIfNeeded(
   });
 }
 
+let newApi: typeof import('./apiNew') | undefined;
+
 export async function generateDts(data: DtsGenOptions): Promise<void> {
   const {
     bundle,
@@ -394,14 +396,15 @@ export async function generateDts(data: DtsGenOptions): Promise<void> {
       break;
     }
     case 'api-new': {
-      const { emitDtsWithNewApi } = await import('./apiNew');
-      hasError = await emitDtsWithNewApi(
+      newApi = await import('./apiNew');
+      hasError = await newApi.emitDtsWithNewApi(
         {
           ...emitOptions,
           tsConfigResult: tsConfigResult as TsconfigOptionsResult,
         },
         bundle,
         isWatch,
+        data.fileChanges,
       );
       break;
     }
@@ -436,23 +439,39 @@ process.on('disconnect', () => {
 });
 
 const shouldExitAfterGenerate = (data: DtsGenOptions): boolean =>
-  !data.isWatch || data.dtsBackend !== 'api-old';
+  !data.isWatch ||
+  (data.dtsBackend !== 'api-old' && data.dtsBackend !== 'api-new');
 
-process.on('message', async (data: DtsGenOptions) => {
+process.on('message', async (data: DtsGenOptions | 'close') => {
+  if (data === 'close') {
+    newApi?.watchSession?.api.close();
+    process.exit();
+  }
   if (!data.cwd) {
     return;
   }
-
+  const persistentNewApi = data.isWatch && data.dtsBackend === 'api-new';
+  let status: 'success' | 'error' = 'success';
   try {
     await generateDts(data);
   } catch (e) {
     logger.error(e);
-    process.send!('error');
+    status = 'error';
+  }
+  process.send!(
+    persistentNewApi
+      ? {
+          status,
+          ...(newApi?.watchSession?.watchDependencies ?? {
+            dependencies: [],
+            directories: [],
+          }),
+        }
+      : status,
+  );
+  if (status === 'error' && !persistentNewApi) {
     process.exit(1);
   }
-
-  process.send!('success');
-
   if (shouldExitAfterGenerate(data)) {
     process.exit();
   }
