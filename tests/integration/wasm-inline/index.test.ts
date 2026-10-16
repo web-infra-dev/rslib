@@ -136,3 +136,48 @@ describe('wasm inline', () => {
     },
   );
 });
+
+describe('wasm inline with WebAssembly dependencies', () => {
+  const nestedFixture = join(__dirname, 'nested');
+  const mixedFixture = join(__dirname, 'mixed');
+
+  beforeAll(async () => {
+    await buildAndGetResults({ fixturePath: nestedFixture });
+    await buildAndGetResults({ fixturePath: mixedFixture });
+  });
+
+  const wasmFiles = (dist: string) =>
+    readdirSync(dist, { recursive: true, encoding: 'utf8' }).filter((file) =>
+      file.endsWith('.wasm'),
+    );
+
+  test.each(['bundle', 'bundleless', 'bundleless-compile'])(
+    'inlines dependencies of an inlined module (%s)',
+    async (variant) => {
+      const dist = join(nestedFixture, 'dist', variant);
+      const output = await loadOutput(nestedFixture, variant);
+      expect(output.calc(10, 10)).toBe(42);
+
+      const code = readFileSync(join(dist, 'index.js'), 'utf8');
+      // calc.wasm, math/twice.wasm and math/add.wasm are inlined.
+      expect(code.match(/charCodeAt/g)).toHaveLength(3);
+      expect(code).not.toContain('?inline');
+      expect(code).not.toContain('__rslib_wasm_inline_issuer');
+      expect(wasmFiles(dist)).toEqual([]);
+    },
+  );
+
+  test.each(['bundle', 'bundleless', 'bundleless-compile'])(
+    'keeps plain imports of an inlined dependency as files (%s)',
+    async (variant) => {
+      const dist = join(mixedFixture, 'dist', variant);
+      const output = await loadOutput(mixedFixture, variant);
+      expect(output.calc(10, 10)).toBe(42);
+      expect(output.add(20, 22)).toBe(42);
+
+      const code = readFileSync(join(dist, 'index.js'), 'utf8');
+      expect(code.match(/charCodeAt/g)).toHaveLength(3);
+      expect(wasmFiles(dist)).toHaveLength(1);
+    },
+  );
+});
