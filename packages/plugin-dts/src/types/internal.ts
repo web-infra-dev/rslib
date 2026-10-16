@@ -23,6 +23,7 @@ export type DtsGenOptions = Omit<
   name: string;
   cwd: string;
   isWatch: boolean;
+  fileChanges?: { changed: string[]; created: string[]; deleted: string[] };
   dtsEntry: DtsEntry[];
   dtsEmitPath: string;
   build?: boolean;
@@ -33,4 +34,13 @@ export type DtsGenOptions = Omit<
   apiExtractorOptions?: ApiExtractorOptions;
   loggerLevel: LogLevel;
   dtsBackend: DtsGenerationBackend;
+};
+
+export type DtsWatchDependencies = {
+  dependencies: string[];
+  directories: string[];
+};
+
+export type DtsWatchResult = DtsWatchDependencies & {
+  status: 'success' | 'error';
 };
