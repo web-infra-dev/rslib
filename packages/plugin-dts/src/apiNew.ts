@@ -12,6 +12,8 @@ import type {
 import {
   color,
   getTimeCost,
+  isDirectory,
+  pathExists,
   processDtsFiles,
   renameDtsFile,
   updateDeclarationMapContent,
@@ -106,7 +108,9 @@ export async function emitDtsWithNewApi(
       });
       session.snapshot = snapshot;
       session.program = snapshot.getProgram(session.program.id) as Program;
-      previousSnapshot.dispose();
+      if (snapshot !== previousSnapshot) {
+        previousSnapshot.dispose();
+      }
     } else {
       const snapshot = api.createSnapshot({
         ...(isWatch ? { openProjects: [configPath] } : {}),
@@ -161,10 +165,12 @@ export async function emitDtsWithNewApi(
     diagnostics.push(...result.diagnostics);
     hasErrors = diagnostics.length > 0 || result.emitSkipped;
 
-    // TODO: Apply redirects and banner/footer in memory before writing files,
-    // using outputFiles for declaration file and directory existence checks.
+    const outputFiles = new Map<string, string>();
+    const outputDirectories = new Set<string>();
     for (const [fileName, file] of result.outputFiles) {
-      const outputPath = renameDtsFile(fileName, dtsExtension, bundle);
+      const outputPath = path.normalize(
+        renameDtsFile(fileName, dtsExtension, bundle),
+      );
       const contents = updateDeclarationMapContent(
         fileName,
         file.text,
@@ -172,8 +178,40 @@ export async function emitDtsWithNewApi(
         bundle,
         config.options.declarationMap,
       );
-      fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-      fs.writeFileSync(outputPath, contents);
+      outputFiles.set(outputPath, contents);
+      let directory = path.dirname(outputPath);
+      while (!outputDirectories.has(directory)) {
+        outputDirectories.add(directory);
+        directory = path.dirname(directory);
+      }
+    }
+
+    await processDtsFiles(
+      bundle,
+      cwd,
+      declarationDir,
+      dtsExtension,
+      redirect,
+      configPath,
+      rootDir,
+      paths,
+      banner,
+      footer,
+      {
+        readFile: async (file) => outputFiles.get(file)!,
+        writeFile: async (file, content) => {
+          outputFiles.set(file, content);
+        },
+        getFiles: async () =>
+          [...outputFiles.keys()].filter((file) => file.endsWith(dtsExtension)),
+        fileExists: async (file) => outputFiles.has(file) || pathExists(file),
+        isDirectory: async (directory) =>
+          outputDirectories.has(directory) || isDirectory(directory),
+      },
+    );
+    for (const [fileName, contents] of outputFiles) {
+      fs.mkdirSync(path.dirname(fileName), { recursive: true });
+      fs.writeFileSync(fileName, contents);
     }
 
     const messages = new Set(
@@ -193,19 +231,6 @@ export async function emitDtsWithNewApi(
       api.close();
     }
   }
-
-  await processDtsFiles(
-    bundle,
-    cwd,
-    declarationDir,
-    dtsExtension,
-    redirect,
-    configPath,
-    rootDir,
-    paths,
-    banner,
-    footer,
-  );
 
   if (hasErrors && !isWatch) {
     const error = new Error(
