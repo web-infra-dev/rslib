@@ -12,17 +12,24 @@ import {
 
 const require = createRequire(import.meta.url);
 
+// Source phase imports get the compiled module as their default export.
 const applyWasmInlineRule =
   (format: Format) =>
   (chain: RspackChain): void => {
-    chain.module
+    const rule = chain.module
       .rule('rslib-wasm-inline')
       .test(/\.wasm$/)
       .resourceQuery(/[?&]inline(?:&|=|$)/)
-      .type('javascript/auto')
-      .use('rslib-wasm-inline')
-      .loader(require.resolve('./wasmInlineLoader.js'))
-      .options({ format });
+      .type('javascript/auto');
+
+    for (const phase of ['evaluation', 'source'] as const) {
+      rule
+        .oneOf(phase)
+        .phase(phase === 'source' ? 'source' : { not: 'source' })
+        .use('rslib-wasm-inline')
+        .loader(require.resolve('./wasmInlineLoader.js'))
+        .options({ format, phase });
+    }
   };
 
 export const resolveWasmMode = ({

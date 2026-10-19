@@ -25,6 +25,8 @@ describe('wasm inline', () => {
       expect(output.otherAdd(20, 22)).toBe(42);
       expect(output.useNamedAdd(20, 22)).toBe(42);
       expect(output.read()).toBe(42);
+      expect(await output.useSourceAdd(20, 22)).toBe(42);
+      expect(await output.useDynamicSourceAdd(20, 22)).toBe(42);
       expect(
         readdirSync(join(fixturePath, 'dist', variant), {
           recursive: true,
@@ -50,11 +52,11 @@ describe('wasm inline', () => {
     'inlines wasm and its decoder into each importing file (%s)',
     async (variant) => {
       const dist = join(fixturePath, 'dist', variant);
-      expect(readdirSync(dist).sort()).toEqual([
-        'index.js',
-        'named.js',
-        'nested',
-      ]);
+      expect(
+        readdirSync(dist)
+          .filter((file) => !/^rslib-runtime~\d+\.js$/.test(file))
+          .sort(),
+      ).toEqual(['index.js', 'named.js', 'nested', 'source.js']);
       expect(readdirSync(join(dist, 'nested'))).toEqual(['meta.js']);
       for (const file of ['index.js', 'named.js']) {
         const code = readFileSync(join(dist, file), 'utf8');
@@ -78,6 +80,18 @@ describe('wasm inline', () => {
       const named = await import(pathToFileURL(join(dist, 'named.js')).href);
       expect(named.useNamedAdd(20, 22)).toBe(42);
       expect(output.add).not.toBe(named.add);
+    },
+  );
+
+  test.each(['bundleless', 'bundleless-compile'])(
+    'compiles source phase imports without instantiating them (%s)',
+    (variant) => {
+      const code = readFileSync(
+        join(fixturePath, 'dist', variant, 'source.js'),
+        'utf8',
+      );
+      expect(code).toContain('WebAssembly.compile(');
+      expect(code).not.toContain('WebAssembly.instantiate(');
     },
   );
 

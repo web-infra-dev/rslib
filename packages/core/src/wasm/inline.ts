@@ -29,6 +29,23 @@ export const encodeWasmBinaryString = (bytes: Uint8Array): string => {
   return `${encoded}${quote}`;
 };
 
+const generateWasmBytesStatement = (bytes: Uint8Array): string =>
+  `const __wasm_bytes = Uint8Array.from(${encodeWasmBinaryString(bytes)}, c => (c = c.charCodeAt(0), ~c >> 8 & c));`;
+
+// Source phase imports expose the compiled module as the default export and do not instantiate it.
+export const generateWasmSourceModule = (bytes: Uint8Array): string => {
+  if (!WebAssembly.validate(bytes as Uint8Array<ArrayBuffer>)) {
+    throw new Error('Invalid WebAssembly module imported with "?inline".');
+  }
+
+  return (
+    [
+      generateWasmBytesStatement(bytes),
+      'export default await WebAssembly.compile(__wasm_bytes);',
+    ].join('\n') + '\n'
+  );
+};
+
 export const generateWasmInlineModule = (
   bytes: Uint8Array,
   importer?: string,
@@ -55,7 +72,7 @@ export const generateWasmInlineModule = (
     .join(', ');
 
   statements.push(
-    `const __wasm_bytes = Uint8Array.from(${encodeWasmBinaryString(bytes)}, c => (c = c.charCodeAt(0), ~c >> 8 & c));`,
+    generateWasmBytesStatement(bytes),
     `const { instance: __wasm_instance } = await WebAssembly.instantiate(__wasm_bytes, {${importObject}});`,
     'const __wasm_exports = __wasm_instance.exports;',
   );
