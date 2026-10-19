@@ -383,6 +383,27 @@ export type Wasm =
     }
   | false;
 
+export type NewUrlMode = 'asset' | 'entry';
+
+export type NewUrl =
+  | {
+      /**
+       * Controls how `new URL(path, import.meta.url)` references are emitted.
+       *
+       * - `'asset'`: Emits the referenced file as a static asset and rewrites the
+       *   path to point at it.
+       * - `'entry'`: Builds a referenced JavaScript or TypeScript module and rewrites
+       *   the path to point at that output. In bundle mode the module becomes its own
+       *   entry; in bundleless mode it is externalized to the file the entry glob
+       *   already emits. Files of other types are still emitted as assets.
+       *
+       * @defaultValue `'asset'`
+       * @see {@link https://rslib.rs/config/lib/new-url#newurlmode}
+       */
+      mode?: NewUrlMode;
+    }
+  | false;
+
 export type LibExperiments = {
   /**
    * Generate a Node.js single executable application alongside the JavaScript output.
@@ -507,6 +528,16 @@ export interface LibConfig extends EnvironmentConfig {
    * @see {@link https://rslib.rs/config/lib/wasm}
    */
   wasm?: Wasm;
+  /**
+   * Configure how Rslib handles `new URL(path, import.meta.url)` references.
+   * Set to `false` to leave them exactly as written in the source.
+   *
+   * This option can only be configured when `format` is `'esm'`.
+   *
+   * @defaultValue `{ mode: 'asset' }`
+   * @see {@link https://rslib.rs/config/lib/new-url}
+   */
+  newUrl?: NewUrl;
   /**
    * @inheritdoc
    */
