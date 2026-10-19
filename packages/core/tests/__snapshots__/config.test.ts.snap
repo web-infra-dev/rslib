@@ -1081,39 +1081,41 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           url: 'new-url-relative'
         }
       },
-      /* config.module.rule('rslib-wasm-inline-evaluation') */
+      /* config.module.rule('rslib-wasm-inline') */
       {
         test: /\\.wasm$/,
         resourceQuery: /[?&]inline(?:&|=|$)/,
-        phase: {
-          not: 'source'
-        },
         type: 'javascript/auto',
-        use: [
-          /* config.module.rule('rslib-wasm-inline-evaluation').use('rslib-wasm-inline') */
+        oneOf: [
+          /* config.module.rule('rslib-wasm-inline').oneOf('evaluation') */
           {
-            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
-            options: {
-              format: 'esm',
-              phase: 'evaluation'
-            }
-          }
-        ]
-      },
-      /* config.module.rule('rslib-wasm-inline-source') */
-      {
-        test: /\\.wasm$/,
-        resourceQuery: /[?&]inline(?:&|=|$)/,
-        phase: 'source',
-        type: 'javascript/auto',
-        use: [
-          /* config.module.rule('rslib-wasm-inline-source').use('rslib-wasm-inline') */
+            phase: {
+              not: 'source'
+            },
+            use: [
+              /* config.module.rule('rslib-wasm-inline').oneOf('evaluation').use('rslib-wasm-inline') */
+              {
+                loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+                options: {
+                  format: 'esm',
+                  phase: 'evaluation'
+                }
+              }
+            ]
+          },
+          /* config.module.rule('rslib-wasm-inline').oneOf('source') */
           {
-            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
-            options: {
-              format: 'esm',
-              phase: 'source'
-            }
+            phase: 'source',
+            use: [
+              /* config.module.rule('rslib-wasm-inline').oneOf('source').use('rslib-wasm-inline') */
+              {
+                loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+                options: {
+                  format: 'esm',
+                  phase: 'source'
+                }
+              }
+            ]
           }
         ]
       }
@@ -1978,39 +1980,41 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           url: false
         }
       },
-      /* config.module.rule('rslib-wasm-inline-evaluation') */
+      /* config.module.rule('rslib-wasm-inline') */
       {
         test: /\\.wasm$/,
         resourceQuery: /[?&]inline(?:&|=|$)/,
-        phase: {
-          not: 'source'
-        },
         type: 'javascript/auto',
-        use: [
-          /* config.module.rule('rslib-wasm-inline-evaluation').use('rslib-wasm-inline') */
+        oneOf: [
+          /* config.module.rule('rslib-wasm-inline').oneOf('evaluation') */
           {
-            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
-            options: {
-              format: 'cjs',
-              phase: 'evaluation'
-            }
-          }
-        ]
-      },
-      /* config.module.rule('rslib-wasm-inline-source') */
-      {
-        test: /\\.wasm$/,
-        resourceQuery: /[?&]inline(?:&|=|$)/,
-        phase: 'source',
-        type: 'javascript/auto',
-        use: [
-          /* config.module.rule('rslib-wasm-inline-source').use('rslib-wasm-inline') */
+            phase: {
+              not: 'source'
+            },
+            use: [
+              /* config.module.rule('rslib-wasm-inline').oneOf('evaluation').use('rslib-wasm-inline') */
+              {
+                loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+                options: {
+                  format: 'cjs',
+                  phase: 'evaluation'
+                }
+              }
+            ]
+          },
+          /* config.module.rule('rslib-wasm-inline').oneOf('source') */
           {
-            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
-            options: {
-              format: 'cjs',
-              phase: 'source'
-            }
+            phase: 'source',
+            use: [
+              /* config.module.rule('rslib-wasm-inline').oneOf('source').use('rslib-wasm-inline') */
+              {
+                loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+                options: {
+                  format: 'cjs',
+                  phase: 'source'
+                }
+              }
+            ]
           }
         ]
       }
@@ -2786,39 +2790,41 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           }
         ]
       },
-      /* config.module.rule('rslib-wasm-inline-evaluation') */
+      /* config.module.rule('rslib-wasm-inline') */
       {
         test: /\\.wasm$/,
         resourceQuery: /[?&]inline(?:&|=|$)/,
-        phase: {
-          not: 'source'
-        },
         type: 'javascript/auto',
-        use: [
-          /* config.module.rule('rslib-wasm-inline-evaluation').use('rslib-wasm-inline') */
+        oneOf: [
+          /* config.module.rule('rslib-wasm-inline').oneOf('evaluation') */
           {
-            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
-            options: {
-              format: 'umd',
-              phase: 'evaluation'
-            }
-          }
-        ]
-      },
-      /* config.module.rule('rslib-wasm-inline-source') */
-      {
-        test: /\\.wasm$/,
-        resourceQuery: /[?&]inline(?:&|=|$)/,
-        phase: 'source',
-        type: 'javascript/auto',
-        use: [
-          /* config.module.rule('rslib-wasm-inline-source').use('rslib-wasm-inline') */
+            phase: {
+              not: 'source'
+            },
+            use: [
+              /* config.module.rule('rslib-wasm-inline').oneOf('evaluation').use('rslib-wasm-inline') */
+              {
+                loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+                options: {
+                  format: 'umd',
+                  phase: 'evaluation'
+                }
+              }
+            ]
+          },
+          /* config.module.rule('rslib-wasm-inline').oneOf('source') */
           {
-            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
-            options: {
-              format: 'umd',
-              phase: 'source'
-            }
+            phase: 'source',
+            use: [
+              /* config.module.rule('rslib-wasm-inline').oneOf('source').use('rslib-wasm-inline') */
+              {
+                loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+                options: {
+                  format: 'umd',
+                  phase: 'source'
+                }
+              }
+            ]
           }
         ]
       }
@@ -3600,39 +3606,41 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           }
         ]
       },
-      /* config.module.rule('rslib-wasm-inline-evaluation') */
+      /* config.module.rule('rslib-wasm-inline') */
       {
         test: /\\.wasm$/,
         resourceQuery: /[?&]inline(?:&|=|$)/,
-        phase: {
-          not: 'source'
-        },
         type: 'javascript/auto',
-        use: [
-          /* config.module.rule('rslib-wasm-inline-evaluation').use('rslib-wasm-inline') */
+        oneOf: [
+          /* config.module.rule('rslib-wasm-inline').oneOf('evaluation') */
           {
-            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
-            options: {
-              format: 'iife',
-              phase: 'evaluation'
-            }
-          }
-        ]
-      },
-      /* config.module.rule('rslib-wasm-inline-source') */
-      {
-        test: /\\.wasm$/,
-        resourceQuery: /[?&]inline(?:&|=|$)/,
-        phase: 'source',
-        type: 'javascript/auto',
-        use: [
-          /* config.module.rule('rslib-wasm-inline-source').use('rslib-wasm-inline') */
+            phase: {
+              not: 'source'
+            },
+            use: [
+              /* config.module.rule('rslib-wasm-inline').oneOf('evaluation').use('rslib-wasm-inline') */
+              {
+                loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+                options: {
+                  format: 'iife',
+                  phase: 'evaluation'
+                }
+              }
+            ]
+          },
+          /* config.module.rule('rslib-wasm-inline').oneOf('source') */
           {
-            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
-            options: {
-              format: 'iife',
-              phase: 'source'
-            }
+            phase: 'source',
+            use: [
+              /* config.module.rule('rslib-wasm-inline').oneOf('source').use('rslib-wasm-inline') */
+              {
+                loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+                options: {
+                  format: 'iife',
+                  phase: 'source'
+                }
+              }
+            ]
           }
         ]
       }
@@ -4349,39 +4357,41 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
           filename: 'static/wasm/[contenthash:10].module.wasm'
         }
       },
-      /* config.module.rule('rslib-wasm-inline-evaluation') */
+      /* config.module.rule('rslib-wasm-inline') */
       {
         test: /\\.wasm$/,
         resourceQuery: /[?&]inline(?:&|=|$)/,
-        phase: {
-          not: 'source'
-        },
         type: 'javascript/auto',
-        use: [
-          /* config.module.rule('rslib-wasm-inline-evaluation').use('rslib-wasm-inline') */
+        oneOf: [
+          /* config.module.rule('rslib-wasm-inline').oneOf('evaluation') */
           {
-            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
-            options: {
-              format: 'mf',
-              phase: 'evaluation'
-            }
-          }
-        ]
-      },
-      /* config.module.rule('rslib-wasm-inline-source') */
-      {
-        test: /\\.wasm$/,
-        resourceQuery: /[?&]inline(?:&|=|$)/,
-        phase: 'source',
-        type: 'javascript/auto',
-        use: [
-          /* config.module.rule('rslib-wasm-inline-source').use('rslib-wasm-inline') */
+            phase: {
+              not: 'source'
+            },
+            use: [
+              /* config.module.rule('rslib-wasm-inline').oneOf('evaluation').use('rslib-wasm-inline') */
+              {
+                loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+                options: {
+                  format: 'mf',
+                  phase: 'evaluation'
+                }
+              }
+            ]
+          },
+          /* config.module.rule('rslib-wasm-inline').oneOf('source') */
           {
-            loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
-            options: {
-              format: 'mf',
-              phase: 'source'
-            }
+            phase: 'source',
+            use: [
+              /* config.module.rule('rslib-wasm-inline').oneOf('source').use('rslib-wasm-inline') */
+              {
+                loader: '<WORKSPACE>/src/wasm/inlineLoader.ts',
+                options: {
+                  format: 'mf',
+                  phase: 'source'
+                }
+              }
+            ]
           }
         ]
       }
