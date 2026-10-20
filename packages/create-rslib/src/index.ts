@@ -112,9 +112,15 @@ function replacePackageNamePlaceholder(
   }
 }
 
+const root = path.resolve(__dirname, '..');
+const { version } = JSON.parse(
+  fs.readFileSync(path.join(root, 'package.json'), 'utf-8'),
+) as { version: string };
+
 create({
-  root: path.resolve(__dirname, '..'),
+  root,
   name: 'rslib',
+  banner: `create-rslib v${version}`,
   templates: TEMPLATES,
   getTemplateName,
   mapESLintTemplate,
