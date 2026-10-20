@@ -3,5 +3,5 @@ import { defineConfig } from '@rstest/core';
 
 export default defineConfig({
   extends: withRslibConfig(),
-  setupFiles: ['./rstest.setup.js'],
+  setupFiles: ['./tests/rstest.setup.js'],
 });

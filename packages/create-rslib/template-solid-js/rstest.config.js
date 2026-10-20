@@ -5,5 +5,5 @@ export default defineConfig({
   extends: withRslibConfig({
     libId: 'compiled',
   }),
-  setupFiles: ['./rstest.setup.js'],
+  setupFiles: ['./tests/rstest.setup.js'],
 });

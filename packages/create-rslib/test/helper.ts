@@ -115,6 +115,18 @@ export const createAndValidate = (
       .some((file) => file.startsWith('index.test.')),
   ).toBe(true);
 
+  if (['react', 'vue', 'solid'].includes(templateCase.template)) {
+    const setupFile = `rstest.setup.${templateCase.lang}`;
+    expect(existsSync(path.join(dir, 'tests', setupFile))).toBe(true);
+    expect(existsSync(path.join(dir, setupFile))).toBe(false);
+    expect(
+      fse.readFileSync(
+        path.join(dir, `rstest.config.${templateCase.lang}`),
+        'utf-8',
+      ),
+    ).toContain(`setupFiles: ['./tests/${setupFile}']`);
+  }
+
   // tool - Storybook
   if (templateCase.tools.includes('storybook')) {
     for (const file of [
