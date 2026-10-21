@@ -361,11 +361,11 @@ Install the latest TypeScript to use native TypeScript for faster declaration ge
 npm add typescript@latest -D
 ```
 
-To ensure consistency during local development, you need to install the corresponding [VS Code Preview Extension](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) and add the following setting to VS Code:
+To use native TypeScript in VS Code, install the [TypeScript 7 extension](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) and enable the following setting:
 
 ```json
 {
-  "typescript.experimental.useTsgo": true
+  "js/ts.experimental.useTsgo": true
 }
 ```
 

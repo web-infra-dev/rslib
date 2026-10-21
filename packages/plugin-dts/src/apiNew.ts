@@ -31,6 +31,7 @@ type NewApiSession = {
   hasContentMappers: boolean;
   sourceFiles?: string;
   dependencies?: string[];
+  directories?: string[];
   watchDependencies?: DtsWatchDependencies;
 };
 
@@ -170,10 +171,16 @@ export async function emitDtsWithNewApi(
         const metadata = fileNames.map((file) =>
           program.getSourceFileMetadata(file),
         );
-        session.dependencies = fileNames.filter((_file, index) => {
+        const directories = new Set<string>();
+        session.dependencies = fileNames.filter((fileName, index) => {
           const file = metadata[index];
-          return file && !file.isDefaultLibrary && !file.isFromExternalLibrary;
+          if (!file || file.isDefaultLibrary) return false;
+          if (!file.isFromExternalLibrary) {
+            directories.add(path.dirname(fileName));
+          }
+          return true;
         });
+        session.directories = [...directories];
         session.sourceFiles = sourceFiles;
       }
       session.watchDependencies = {
@@ -184,9 +191,7 @@ export async function emitDtsWithNewApi(
             .snapshot!.getConfiguredProject(configPath)
             ?.program.getConfigFileNames() ?? []),
         ],
-        directories: [
-          ...new Set(session.dependencies!.map((file) => path.dirname(file))),
-        ],
+        directories: session.directories!,
       };
     }
 
