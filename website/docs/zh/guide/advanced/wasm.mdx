@@ -48,7 +48,7 @@ const wasm = await import('./add.wasm');
 ```ts
 import source addModule from './add.wasm';
 
-const { instance } = await WebAssembly.instantiate(addModule, {
+const instance = await WebAssembly.instantiate(addModule, {
   env: { now: Date.now },
 });
 ```
@@ -61,7 +61,7 @@ const addModule = await import.source('./add.wasm');
 
 :::note
 
-TypeScript 目前无法解析 `import source` 和 `import.source()`。如果你需要生成类型声明文件，请在 JavaScript 文件中使用这些语法。
+TypeScript 从 7.1 版本开始支持 [Source Phase Imports](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/#source-phase-imports)。如果你使用的 TypeScript 版本低于 7.1，且需要生成类型声明文件，请将使用这些语法的代码放在 JavaScript 文件中。
 
 :::
 
