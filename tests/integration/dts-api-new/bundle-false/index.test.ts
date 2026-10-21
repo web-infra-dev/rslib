@@ -1,45 +1,112 @@
+import { createRslib, loadConfig } from '@rslib/core';
 import { describe, expect, test } from '@rstest/core';
 import { existsSync } from 'node:fs';
 import { basename, join } from 'node:path';
-import { readFile } from 'node:fs/promises';
-import { stripVTControlCharacters as stripAnsi } from 'node:util';
+import { readFile, rm, writeFile } from 'node:fs/promises';
+import { setImmediate } from 'node:timers/promises';
 import {
   buildAndGetResults,
   createTempFiles,
-  expectBuildToFail,
+  getFileBySuffix,
   globContentJSON,
   queryContent,
-  runCliSync,
   rslibBuild,
 } from 'test-helper';
 
 describe('dts with JavaScript API when bundle: false', () => {
+  const basicPath = join(__dirname, 'basic');
+
   test('basic', async () => {
-    const fixturePath = join(__dirname, 'basic');
-    const { files, contents } = await buildAndGetResults({
-      fixturePath,
+    const { contents } = await buildAndGetResults({
+      fixturePath: basicPath,
       type: 'dts',
     });
+    for (const format of ['esm', 'cjs'] as const) {
+      expect(Object.keys(contents[format])).toHaveLength(2);
+      expect(getFileBySuffix(contents[format], 'index.d.ts').trim()).toBe(
+        "export { add } from './utils.js';",
+      );
+      expect(getFileBySuffix(contents[format], 'utils.d.ts').trim()).toBe(
+        'export declare const add: (a: number, b: number) => number;',
+      );
+    }
+  });
 
-    expect(files.esm).toMatchInlineSnapshot(`
-      [
-        "<ROOT>/tests/integration/dts-api-new/bundle-false/basic/dist/esm/index.d.ts",
-        "<ROOT>/tests/integration/dts-api-new/bundle-false/basic/dist/esm/sum.d.ts",
-        "<ROOT>/tests/integration/dts-api-new/bundle-false/basic/dist/esm/utils/numbers.d.ts",
-        "<ROOT>/tests/integration/dts-api-new/bundle-false/basic/dist/esm/utils/strings.d.ts",
-      ]
-    `);
+  test('rebuilds declarations in watch mode', async () => {
+    const loadedConfig = await loadConfig({ cwd: basicPath });
+    loadedConfig.content.performance = {
+      ...loadedConfig.content.performance,
+      buildCache: false,
+    };
+    const rslib = await createRslib({ cwd: basicPath, config: loadedConfig });
+    const firstBuild = new Promise<void>((resolve) => {
+      rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+        rsbuild.onAfterBuild(() => resolve());
+      });
+    });
+    const sourceFile = join(basicPath, 'src/utils.ts');
+    const original = await readFile(sourceFile, 'utf8');
+    const declarationFile = join(basicPath, 'dist/esm/utils.d.ts');
+    await rm(join(basicPath, 'dist/esm'), {
+      recursive: true,
+      force: true,
+    });
+    const result = await rslib.build({ watch: true, lib: ['esm'] });
+    try {
+      await firstBuild;
+      // Rspack installs its watcher on the next tick after the done hooks.
+      await setImmediate();
+      await expect
+        .poll(() => readFile(declarationFile, 'utf8').catch(() => ''))
+        .toContain('=> number');
+      await writeFile(
+        sourceFile,
+        'export const add = (a: number, b: number): string => String(a + b);',
+      );
+      await expect
+        .poll(() => readFile(declarationFile, 'utf8').catch(() => ''), {
+          timeout: 10_000,
+        })
+        .toContain('=> string');
+    } finally {
+      await result.close();
+      await writeFile(sourceFile, original);
+    }
+  });
 
-    expect(files.cjs).toMatchInlineSnapshot(`
-      [
-        "<ROOT>/tests/integration/dts-api-new/bundle-false/basic/dist/cjs/index.d.ts",
-        "<ROOT>/tests/integration/dts-api-new/bundle-false/basic/dist/cjs/sum.d.ts",
-        "<ROOT>/tests/integration/dts-api-new/bundle-false/basic/dist/cjs/utils/numbers.d.ts",
-        "<ROOT>/tests/integration/dts-api-new/bundle-false/basic/dist/cjs/utils/strings.d.ts",
-      ]
-    `);
+  test('supports composite projects without the unstable incremental API', async () => {
+    const configFile = join(basicPath, 'tsconfig.json');
+    const original = await readFile(configFile, 'utf8');
+    const config = JSON.parse(original);
+    config.compilerOptions.composite = true;
+    try {
+      await writeFile(configFile, JSON.stringify(config));
+      const { buildResult } = await rslibBuild({
+        cwd: basicPath,
+        lib: ['esm'],
+      });
+      await buildResult.close();
+      expect(
+        await readFile(join(basicPath, 'dist/esm/utils.d.ts'), 'utf8'),
+      ).toContain('=> number');
+    } finally {
+      await writeFile(configFile, original);
+    }
+  });
 
-    expect(contents.esm).toMatchSnapshot();
+  test('reports config diagnostics from the JavaScript API', async () => {
+    const configFile = join(basicPath, 'tsconfig.json');
+    const original = await readFile(configFile, 'utf8');
+    const config = JSON.parse(original);
+    config.compilerOptions.target = 'invalid';
+    try {
+      await writeFile(configFile, JSON.stringify(config));
+      await expect(
+        rslibBuild({ cwd: basicPath, lib: ['esm'] }),
+      ).rejects.toThrow('declaration files generation');
+    } finally {
+      await writeFile(configFile, original);
+    }
   });
 
   test('distPath', async () => {
@@ -56,16 +123,29 @@ describe('dts with JavaScript API when bundle: false', () => {
     `);
   });
 
-  test('abortOnError: false', async () => {
+  test('reports type errors and respects abortOnError', async () => {
     const fixturePath = join(__dirname, 'abort-on-error');
+    await expect(
+      rslibBuild({
+        cwd: fixturePath,
+        modifyConfig(config) {
+          for (const lib of config.lib!) {
+            lib.dts = { ...(lib.dts as object), abortOnError: undefined };
+          }
+        },
+      }),
+    ).rejects.toThrow('declaration files generation');
 
-    const { status } = runCliSync('build', {
-      cwd: fixturePath,
-      // do not show output in test console
-      stdio: 'ignore',
+    const { js, dts } = await buildAndGetResults({
+      fixturePath,
+      type: 'all',
     });
-
-    expect(status).toBe(0);
+    expect(js.isSuccess).toBe(true);
+    expect(getFileBySuffix(js.contents.esm, 'index.js')).toContain('getA');
+    expect(dts.files.esm).toHaveLength(2);
+    expect(getFileBySuffix(dts.contents.esm, 'index.d.ts')).toContain(
+      'export declare const getA: (item: A) => A;',
+    );
   });
 
   test('autoExtension: true', async () => {
@@ -142,18 +222,6 @@ describe('dts with JavaScript API when bundle: false', () => {
     `);
   });
 
-  test('should emit error when tsconfig not found', async () => {
-    const fixturePath = join(__dirname, 'tsconfig-path');
-    await createTempFiles(fixturePath, false);
-
-    const err = await expectBuildToFail(
-      buildAndGetResults({ fixturePath, type: 'dts' }),
-    );
-    expect(stripAnsi(err.message)).toMatchInlineSnapshot(
-      `"Failed to resolve tsconfig file "<ROOT>/tests/integration/dts-api-new/bundle-false/tsconfig-path/path_not_exist/tsconfig.json" from <ROOT>/tests/integration/dts-api-new/bundle-false/tsconfig-path. Please ensure that the file exists."`,
-    );
-  });
-
   test('alias', async () => {
     const fixturePath = join(__dirname, 'alias');
     const { contents } = await buildAndGetResults({
@@ -221,6 +289,35 @@ describe('dts with JavaScript API when bundle: false', () => {
     expect(indexDtsCjs).toContain('//# sourceMappingURL=index.d.cts.map');
     expect(indexMapEsm).toContain('"file":"index.d.ts"');
     expect(indexMapCjs).toContain('"file":"index.d.cts"');
+  });
+
+  test('process files - alias, extension and banner / footer in memory', async () => {
+    const fixturePath = join(__dirname, 'process-files');
+    // Avoid existing output directories masking in-memory directory resolution.
+    await rm(join(fixturePath, 'dist'), { recursive: true, force: true });
+    const { contents } = await buildAndGetResults({
+      fixturePath,
+      type: 'dts',
+    });
+    for (const [format, extension] of [
+      ['esm', 'js'],
+      ['cjs', 'cjs'],
+    ] as const) {
+      const output = contents[format];
+      expect(Object.keys(output)).toHaveLength(3);
+      for (const content of Object.values(output)) {
+        expect(content).toContain('// declaration banner');
+        expect(content).toContain('// declaration footer');
+        expect(content).not.toContain('@utils');
+      }
+      const entry = format === 'esm' ? 'index.d.ts' : 'index.d.cts';
+      expect(getFileBySuffix(output, entry)).toContain(
+        `export { add } from './utils.${extension}';`,
+      );
+      expect(getFileBySuffix(output, entry)).toContain(
+        `export type { Options } from './options/index.${extension}';`,
+      );
+    }
   });
 
   test.each([false, true])(

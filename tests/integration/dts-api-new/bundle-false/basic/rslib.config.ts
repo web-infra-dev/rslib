@@ -1,30 +1,25 @@
-import { fileURLToPath } from 'node:url';
 import { defineConfig } from '@rslib/core';
-import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
+import { fileURLToPath } from 'node:url';
+
+const dts = {
+  typescriptPath: fileURLToPath(import.meta.resolve('typescript7-api')),
+};
 
 export default defineConfig({
   lib: [
-    generateBundleEsmConfig({
+    {
+      id: 'esm',
+      format: 'esm',
       bundle: false,
-      dts: {
-        bundle: false,
-        tsgo: true,
-        typescriptPath: fileURLToPath(import.meta.resolve('typescript7-api')),
-      },
-    }),
-    generateBundleCjsConfig({
-      bundle: false,
-      dts: {
-        bundle: false,
-        tsgo: true,
-        typescriptPath: fileURLToPath(import.meta.resolve('typescript7-api')),
-      },
-    }),
-  ],
-  source: {
-    entry: {
-      index: ['../__fixtures__/src/**'],
+      dts,
+      output: { distPath: './dist/esm' },
     },
-    tsconfigPath: '../__fixtures__/tsconfig.json',
-  },
+    {
+      id: 'cjs',
+      format: 'cjs',
+      bundle: false,
+      dts,
+      output: { distPath: './dist/cjs' },
+    },
+  ],
 });

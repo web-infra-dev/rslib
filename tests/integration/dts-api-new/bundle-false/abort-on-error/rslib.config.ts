@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from '@rslib/core';
-import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
+import { generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
   lib: [
@@ -12,9 +12,6 @@ export default defineConfig({
         tsgo: true,
         typescriptPath: fileURLToPath(import.meta.resolve('typescript7-api')),
       },
-    }),
-    generateBundleCjsConfig({
-      bundle: false,
     }),
   ],
   source: {

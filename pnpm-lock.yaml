@@ -1196,25 +1196,7 @@ importers:
         specifier: 'catalog:'
         version: typescript@7.1.0-beta
 
-  tests/integration/dts-api-new/basic: {}
-
   tests/integration/dts-api-new/build: {}
-
-  tests/integration/dts-api-new/build/__references__: {}
-
-  tests/integration/dts-api-new/build/abort-on-error: {}
-
-  tests/integration/dts-api-new/build/auto-extension: {}
-
-  tests/integration/dts-api-new/build/basic: {}
-
-  tests/integration/dts-api-new/build/clean: {}
-
-  tests/integration/dts-api-new/build/declaration-map: {}
-
-  tests/integration/dts-api-new/build/dist-path: {}
-
-  tests/integration/dts-api-new/build/process-files: {}
 
   tests/integration/dts-api-new/bundle-false/abort-on-error: {}
 
@@ -1234,9 +1216,9 @@ importers:
 
   tests/integration/dts-api-new/bundle-false/no-emit-on-error: {}
 
-  tests/integration/dts-api-new/bundle-false/transitive-dependency: {}
+  tests/integration/dts-api-new/bundle-false/process-files: {}
 
-  tests/integration/dts-api-new/bundle-false/tsconfig-path: {}
+  tests/integration/dts-api-new/bundle-false/transitive-dependency: {}
 
   tests/integration/dts-api-new/bundle/abort-on-error: {}
 
@@ -1635,6 +1617,21 @@ importers:
       typescript:
         specifier: catalog:typescript-6-fixed
         version: '@typescript/typescript6@6.0.2'
+
+  tests/integration/redirect/dts-api-new:
+    devDependencies:
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../../../packages/core
+      '@types/express':
+        specifier: 'catalog:'
+        version: 5.0.6
+      express:
+        specifier: 'catalog:'
+        version: 5.3.0(supports-color@8.1.1)
+      typescript7-api:
+        specifier: 'catalog:'
+        version: typescript@7.1.0-beta
 
   tests/integration/redirect/dts-ts7-executable:
     devDependencies:

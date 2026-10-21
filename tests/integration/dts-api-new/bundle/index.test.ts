@@ -1,12 +1,7 @@
 import { describe, expect, test } from '@rstest/core';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import {
-  buildAndGetResults,
-  createTempFiles,
-  queryContent,
-  runCliSync,
-} from 'test-helper';
+import { buildAndGetResults, createTempFiles, queryContent } from 'test-helper';
 
 describe('dts with JavaScript API when bundle: true', () => {
   test('basic', async () => {
@@ -51,16 +46,16 @@ describe('dts with JavaScript API when bundle: true', () => {
     );
   });
 
-  test('abortOnError: false', async () => {
-    const fixturePath = join(__dirname, 'abort-on-error');
-
-    const { status } = runCliSync('build', {
-      cwd: fixturePath,
-      // do not show output in test console
-      stdio: 'ignore',
+  test('abortOnError: false preserves JavaScript output but skips declaration bundling', async () => {
+    const { js, dts } = await buildAndGetResults({
+      fixturePath: join(__dirname, 'abort-on-error'),
+      type: 'all',
     });
 
-    expect(status).toBe(0);
+    expect(js.isSuccess).toBe(true);
+    expect(js.files.esm).toHaveLength(1);
+    expect(js.entries.esm).toContain('getA');
+    expect(dts.files).toEqual({});
   });
 
   test('autoExtension: true', async () => {
@@ -111,7 +106,7 @@ describe('dts with JavaScript API when bundle: true', () => {
     );
   });
 
-  test('rootdir calculation should ignore declaration files', async () => {
+  test('resolves declaration entries with a custom rootDir', async () => {
     const fixturePath = join(__dirname, 'rootdir');
     const { files, entries } = await buildAndGetResults({
       fixturePath,
