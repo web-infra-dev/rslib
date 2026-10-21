@@ -213,6 +213,12 @@ describe('custom path to create', () => {
 });
 
 describe('linter and formatter', () => {
+  for (const template of ['node', 'solid']) {
+    test(`should use TypeScript 6 for ${template} with eslint`, () => {
+      createAndValidate(__dirname, createCase(template, 'ts', ['eslint']));
+    });
+  }
+
   test('should create project with eslint as expected', async () => {
     const { dir, pkgJson, clean } = createAndValidate(__dirname, BASE_NODE_JS, {
       name: 'test-temp-eslint',

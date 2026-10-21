@@ -86,7 +86,13 @@ export const createAndValidate = (
 
   // tsconfig
   if (templateCase.lang === 'ts') {
-    expect(pkgJson.devDependencies.typescript).toBeTruthy();
+    const tools = [...templateCase.tools, ...additionalTools];
+    const requiresTypeScript6 =
+      ['vue', 'svelte'].includes(templateCase.template) ||
+      tools.some((tool) => ['eslint', 'storybook', 'rspress'].includes(tool));
+    expect(pkgJson.devDependencies.typescript).toMatch(
+      requiresTypeScript6 ? /^\^6\./ : /^\^7\./,
+    );
     expect(existsSync(path.join(dir, 'tsconfig.json'))).toBeTruthy();
   }
 
