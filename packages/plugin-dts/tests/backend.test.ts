@@ -61,7 +61,13 @@ describe('resolveDtsGenerationBackend', () => {
   });
 
   test('should use the stable JavaScript API for TypeScript 7.1 or higher', () => {
-    for (const version of ['7.1.0', '7.1.0-dev.20261013.1', '7.2.0', '8.0.0']) {
+    for (const version of [
+      '7.1.0',
+      '7.1.0-beta',
+      '7.1.0-dev.20261013.1',
+      '7.2.0',
+      '8.0.0',
+    ]) {
       expect(resolveDtsGenerationBackend({}, version)).toBe('api-new');
       expect(resolveDtsGenerationBackend({ tsgo: true }, version)).toBe(
         'api-new',
