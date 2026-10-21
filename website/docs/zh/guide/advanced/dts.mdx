@@ -49,8 +49,8 @@ Bundleless 类型为库中的每个模块生成单独的声明文件，就像 `t
 Rslib 的类型生成流程可以分为两步：
 
 1. 类型生成，即生成 bundleless 类型。支持以下三种方式：
-   - [JavaScript API](#javascript-api)
-   - [native TypeScript 可执行文件](#tsgo-executable)
+   - [TypeScript API](#typescript-api)
+   - [TypeScript 可执行文件](#tsgo-executable)
    - [isolatedDeclarations](#isolateddeclarations)
 2. 类型打包，即生成 bundle 类型（可选）。开启 [dts.bundle](/config/lib/dts#dtsbundle) 时会将生成的类型声明文件通过 [API Extractor](https://api-extractor.com/) 进行打包。
 
@@ -58,34 +58,32 @@ Rslib 的类型生成流程可以分为两步：
 
 类型声明文件可以通过以下三种方式生成：
 
-| 方式                         | TypeScript 版本 | 类型检查 | 输出范围                | 速度              |
-| ---------------------------- | --------------- | -------- | ----------------------- | ----------------- |
-| JavaScript API               | 5/6、7.1+       | 有       | 由 `tsconfig.json` 决定 | 5/6 较慢，7.1+ 快 |
-| native TypeScript 可执行文件 | 7.0             | 有       | 由 `tsconfig.json` 决定 | 快                |
-| isolatedDeclarations         | 不限            | 无       | 构建依赖图中的模块      | 最快              |
+| 方式                  | TypeScript 版本 | 类型检查 | 输出范围                | 速度              |
+| --------------------- | --------------- | -------- | ----------------------- | ----------------- |
+| TypeScript API        | 5/6、7.1+       | 有       | 由 `tsconfig.json` 决定 | 5/6 较慢，7.1+ 快 |
+| TypeScript 可执行文件 | 7.0             | 有       | 由 `tsconfig.json` 决定 | 快                |
+| isolatedDeclarations  | 不限            | 无       | 构建依赖图中的模块      | 最快              |
 
-#### JavaScript API
+#### TypeScript API
 
 TypeScript 5/6 使用 [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)，与执行 `tsc` 的效果基本相同，会生成类型声明文件并执行类型检查，但速度相对较慢。
 
 TypeScript 7.1 及以上版本使用 native TypeScript 的 JavaScript API，生成速度更快。
 
+在 `rslib.config.ts` 中开启 `dts` 即可生成类型声明文件：
+
 ```ts title="rslib.config.ts"
 export default {
   lib: [
     {
-      dts: true; // [!code highlight]
-      // 或者
-      // [!code highlight:3]
-      dts: {
-        bundle: false;
-      }
+      dts: true, // [!code highlight]
+      // 或者：dts: { bundle: false }
     },
   ],
 };
 ```
 
-可以安装最新的 TypeScript，使用 native TypeScript 提升类型声明文件的生成速度。如果没有显式设置 [dts.tsgo](/config/lib/dts#dtstsgo)，Rslib 会在检测到 TypeScript 7+ 时自动启用该选项：
+安装 TypeScript 7 及以上版本，可以使用 native TypeScript 加快类型声明生成。
 
 <PackageManagerTabs command="add typescript@latest -D" />
 
@@ -97,7 +95,7 @@ export default {
 }
 ```
 
-#### native TypeScript 可执行文件 \{#tsgo-executable}
+#### TypeScript 可执行文件 \{#tsgo-executable}
 
 使用 TypeScript 7.0 时，Rslib 通过 native TypeScript 可执行文件生成类型声明文件。
 

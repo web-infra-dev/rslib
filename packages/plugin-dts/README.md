@@ -355,11 +355,13 @@ Whether to generate declaration files using native TypeScript.
 
 TypeScript 7.0 generates declarations through the native executable, while 7.1 and later use the JavaScript API.
 
-Install the latest TypeScript to use native TypeScript for faster declaration generation. When `tsgo` is unset, Rslib enables it automatically when TypeScript 7+ is detected:
+When unset, Rslib enables this option automatically when TypeScript 7+ is detected.
 
 ```bash
 npm add typescript@latest -D
 ```
+
+When [typescriptPath](#typescriptpath) is configured, Rslib determines whether to enable this option automatically based on the resolved TypeScript version.
 
 To use native TypeScript in VS Code, install the [TypeScript 7 extension](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) and enable the following setting:
 

@@ -350,11 +350,13 @@ export default defineConfig({
 
 是否通过 native TypeScript 生成类型声明文件。
 
-如果没有显式设置该选项，Rslib 会在检测到 TypeScript 7+ 时自动开启。配置 [dts.typescriptPath](#dtstypescriptpath) 后，Rslib 会根据解析到的 TypeScript 版本决定是否自动启用 `tsgo`。
-
 TypeScript 7.0 通过 native 可执行文件生成声明，7.1 及以上版本通过 JavaScript API 生成声明。
 
+如果没有显式设置该选项，Rslib 会在检测到 TypeScript 7+ 时自动启用该选项。
+
 <PackageManagerTabs command="add typescript@latest -D" />
+
+配置 [dts.typescriptPath](#dtstypescriptpath) 后，Rslib 会根据解析到的 TypeScript 版本决定是否自动启用该选项。
 
 在 VS Code 中使用 native TypeScript，可以安装 [TypeScript 7 扩展](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview)，并启用以下设置：
 
