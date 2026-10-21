@@ -316,7 +316,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           const finish = (status: TaskResult['status']) => {
             childProcess.off('message', onMessage);
             childProcess.off('error', onFailure);
-            childProcess.off('exit', onFailure);
+            childProcess.off('close', onFailure);
             resolve({
               status,
               ...(status === 'error' && {
@@ -345,7 +345,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           };
           childProcess.once('message', onMessage);
           childProcess.once('error', onFailure);
-          childProcess.once('exit', onFailure);
+          childProcess.once('close', onFailure);
           childProcess.send(data, (error) => {
             if (error) onFailure();
           });
