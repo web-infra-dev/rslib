@@ -3,10 +3,11 @@ import { describe, expect, test } from '@rstest/core';
 import fs from 'node:fs/promises';
 import { join } from 'node:path';
 import { setImmediate } from 'node:timers/promises';
-import { buildAndGetResults, rslibBuild } from 'test-helper';
+import { buildAndGetResults, getFileBySuffix, rslibBuild } from 'test-helper';
 
 describe('TypeScript 7.1 stable JavaScript API', () => {
   const fixturePath = join(__dirname, 'basic');
+  const mapperPath = join(__dirname, 'content-mapper');
 
   test('emits declarations, maps, aliases, extensions, banners and bundles', async () => {
     const { contents } = await buildAndGetResults({ fixturePath, type: 'dts' });
@@ -167,6 +168,24 @@ describe('TypeScript 7.1 stable JavaScript API', () => {
       ).rejects.toThrow('declaration files generation');
     } finally {
       await fs.writeFile(configFile, original);
+    }
+  });
+
+  test('emits content-mapped declarations with API, bundle and executable', async () => {
+    const { contents } = await buildAndGetResults({
+      fixturePath: mapperPath,
+      type: 'dts',
+    });
+    const output = Object.assign({}, ...Object.values(contents));
+    for (const file of [
+      'api/message.d.txt.ts',
+      'bundle/index.d.ts',
+      'executable/message.d.txt.ts',
+    ]) {
+      const declaration = getFileBySuffix(output, file);
+      expect(declaration).toContain('"Hello from content mapper"');
+      expect(declaration).toContain('// mapper banner');
+      expect(declaration).toContain('// mapper footer');
     }
   });
 });

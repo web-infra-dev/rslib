@@ -11,7 +11,9 @@ export type DtsEntry = {
 };
 
 export type OldApiTsconfigResult = ParsedCommandLine;
-export type TsconfigOptionsResult = Pick<OldApiTsconfigResult, 'options'>;
+export type TsconfigOptionsResult = Pick<OldApiTsconfigResult, 'options'> & {
+  contentMappers?: unknown[];
+};
 
 export type DtsTsconfigResult = OldApiTsconfigResult | TsconfigOptionsResult;
 

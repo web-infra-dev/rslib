@@ -194,7 +194,7 @@ export async function getResults(
 
     const regex =
       type === 'dts'
-        ? /\.d.(ts|cts|mts)(\.map)?$/
+        ? /\.d\.(ts|cts|mts|[^/\\]+\.ts)(\.map)?$/
         : type === 'css'
           ? /\.css(\.map)?$/
           : /\.(js|cjs|mjs|jsx)(\.map)?$/;

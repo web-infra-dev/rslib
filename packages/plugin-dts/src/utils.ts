@@ -171,6 +171,10 @@ export function loadResolvedTsconfig(
     path: tsconfig.path,
     config: {
       options,
+      ...('contentMappers' in tsconfig.config &&
+      Array.isArray(tsconfig.config.contentMappers)
+        ? { contentMappers: tsconfig.config.contentMappers }
+        : {}),
     },
   };
 }
@@ -631,7 +635,7 @@ export async function processDtsFiles(
     readFile: (file) => fsP.readFile(file, 'utf8'),
     writeFile: (file, content) => fsP.writeFile(file, content),
     getFiles: (cwd, dir, extension) =>
-      globDtsFiles(cwd, dir, [`/**/*${extension}`]),
+      globDtsFiles(cwd, dir, [`/**/*{${extension},.d.*.ts}`]),
     fileExists: pathExists,
     isDirectory,
   },
@@ -800,7 +804,7 @@ export const globDtsFiles = async (
 
 export async function cleanDtsFiles(cwd: string, dir: string): Promise<void> {
   const patterns = [
-    '/**/*.d.ts',
+    '/**/*{.d.ts,.d.*.ts}',
     '/**/*.d.cts',
     '/**/*.d.mts',
     '/**/*.d.ts.map',

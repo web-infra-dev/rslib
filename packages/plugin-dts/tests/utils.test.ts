@@ -179,6 +179,9 @@ describe('loadResolvedTsconfig', () => {
               rootDir: 'src',
               tsBuildInfoFile: '.cache/build.tsbuildinfo',
             },
+            contentMappers: [
+              { package: 'test-mapper', extensions: ['.custom'] },
+            ],
           },
           null,
           2,
@@ -191,6 +194,7 @@ describe('loadResolvedTsconfig', () => {
         path.normalize(tsconfigPath),
       );
       expect(loaded?.config).toEqual({
+        contentMappers: [{ package: 'test-mapper', extensions: ['.custom'] }],
         options: {
           declarationDir: path.join(tempDir, 'types'),
           outDir: path.join(tempDir, 'dist'),

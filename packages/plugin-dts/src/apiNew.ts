@@ -21,12 +21,14 @@ import {
 
 type NewApiModule = typeof import('typescript7-api/sync');
 type Snapshot = import('typescript7-api/sync').Snapshot;
-type Program = NonNullable<Snapshot['operation']['createdPrograms']>[number];
+type SyntheticProjectId = import('typescript7-api/sync').SyntheticProjectId;
+type Program = import('typescript7-api/sync').Program;
 type NewApiSession = {
   api: InstanceType<NewApiModule['API']>;
   formatDiagnostics: NewApiModule['formatDiagnosticsWithColorAndContext'];
   snapshot?: Snapshot;
   program?: Program;
+  hasContentMappers: boolean;
   sourceFiles?: string;
   dependencies?: string[];
   watchDependencies?: DtsWatchDependencies;
@@ -56,7 +58,13 @@ export async function emitDtsWithNewApi(
     footer,
     name,
   } = options;
+  const hasContentMappers = !!options.tsConfigResult.contentMappers?.length;
   let session = isWatch ? watchSession : undefined;
+  if (session && session.hasContentMappers !== hasContentMappers) {
+    session.api.close();
+    watchSession = undefined;
+    session = undefined;
+  }
   if (!session) {
     const require = createRequire(typescriptPath!);
     const apiPath = require.resolve('typescript/sync');
@@ -64,8 +72,9 @@ export async function emitDtsWithNewApi(
       pathToFileURL(apiPath).href
     )) as NewApiModule;
     session = {
-      api: new API({ cwd }),
+      api: new API({ cwd, runExternalCode: hasContentMappers }),
       formatDiagnostics: formatDiagnosticsWithColorAndContext,
+      hasContentMappers,
     };
   }
   if (isWatch) {
@@ -76,38 +85,68 @@ export async function emitDtsWithNewApi(
 
   try {
     const config = api.parseConfigFile(configPath);
+    const compilerOptionsOverrides = {
+      paths,
+      noEmit: false,
+      declaration: true,
+      declarationDir: path.resolve(cwd, declarationDir),
+      emitDeclarationOnly: true,
+    };
     const programOptions = {
       rootFiles: config.fileNames,
-      compilerOptions: {
-        ...config.options,
-        paths,
-        noEmit: false,
-        declaration: true,
-        declarationDir: path.resolve(cwd, declarationDir),
-        emitDeclarationOnly: true,
-      },
+      compilerOptions: { ...config.options, ...compilerOptionsOverrides },
       options: {
         projectReferences: config.projectReferences,
         configFileParsingDiagnostics: config.errors,
       },
     };
     const previousSnapshot = session.snapshot;
-    if (previousSnapshot && session.program) {
+    if (hasContentMappers) {
+      const rawConfig = (config.raw ?? {}) as {
+        compilerOptions?: Record<string, unknown>;
+      };
+      // Configured projects retain content mapper registrations. Override only
+      // declaration options in memory, leaving the user's tsconfig untouched.
+      const changes = {
+        openProjects: [configPath],
+        ensurePrograms: true as const,
+        fileNotifications: fileChanges ?? { invalidateAll: true },
+        fileSystem: {
+          kind: 'layer' as const,
+          files: {
+            [configPath]: JSON.stringify({
+              ...rawConfig,
+              compilerOptions: {
+                ...rawConfig.compilerOptions,
+                ...compilerOptionsOverrides,
+              },
+            }),
+          },
+        },
+      };
+      const snapshot = previousSnapshot
+        ? previousSnapshot.update(changes)
+        : api.createSnapshot(changes);
+      session.snapshot = snapshot;
+      session.program = snapshot.getConfiguredProject(configPath)?.program;
+      if (previousSnapshot && snapshot !== previousSnapshot) {
+        previousSnapshot.dispose();
+      }
+    } else if (previousSnapshot && session.program) {
       const snapshot = previousSnapshot.update({
-        fileNotifications: fileChanges
-          ? {
-              changed: fileChanges.changed,
-              created: fileChanges.created,
-              deleted: fileChanges.deleted,
-            }
-          : { invalidateAll: true },
+        fileNotifications: fileChanges ?? { invalidateAll: true },
         // Synthetic programs do not refresh automatically from file changes.
         // Reconfigure their inputs while retaining the snapshot's filesystem
         // and the API server across rebuilds.
-        reconfigurePrograms: [{ id: session.program.id, ...programOptions }],
+        reconfigurePrograms: [
+          {
+            id: session.program.id as SyntheticProjectId,
+            ...programOptions,
+          },
+        ],
       });
       session.snapshot = snapshot;
-      session.program = snapshot.getProgram(session.program.id) as Program;
+      session.program = snapshot.getProgram(session.program.id);
       if (snapshot !== previousSnapshot) {
         previousSnapshot.dispose();
       }
@@ -203,7 +242,10 @@ export async function emitDtsWithNewApi(
           outputFiles.set(file, content);
         },
         getFiles: async () =>
-          [...outputFiles.keys()].filter((file) => file.endsWith(dtsExtension)),
+          [...outputFiles.keys()].filter(
+            (file) =>
+              file.endsWith(dtsExtension) || /\.d\.[^/\\]+\.ts$/.test(file),
+          ),
         fileExists: async (file) => outputFiles.has(file) || pathExists(file),
         isDirectory: async (directory) =>
           outputDirectories.has(directory) || isDirectory(directory),

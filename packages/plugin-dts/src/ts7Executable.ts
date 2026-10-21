@@ -2,6 +2,7 @@ import { logger } from '@rsbuild/core';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { readTypescriptVersion } from './backend';
 import type { EmitDtsOptions } from './dts';
 import type { TsconfigOptionsResult } from './types/internal';
 import {
@@ -155,6 +156,15 @@ export async function emitDtsWithTs7Executable(
   } = options;
 
   const args = generateTsgoArgs(configPath, declarationDir, build, isWatch);
+  const [major = 0, minor = 0] = (readTypescriptVersion(typescriptPath) ?? '')
+    .split('.')
+    .map(Number);
+  if (
+    tsConfigResult.contentMappers?.length &&
+    (major > 7 || (major === 7 && minor >= 1))
+  ) {
+    args.push('--runExternalCode');
+  }
   const dtsExecutableCommand = await resolveDtsExecutableCommand(
     args,
     typescriptPath!,
