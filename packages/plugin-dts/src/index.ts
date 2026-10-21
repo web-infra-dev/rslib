@@ -327,7 +327,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           const onFailure = () => finish('error');
           const onMessage = (message: 'success' | 'error' | DtsWatchResult) => {
             if (typeof message === 'object') {
-              if (watchState && message.status === 'success') {
+              if (watchState && message.dependencies.length) {
                 // Match Rspack's native paths when registering dependencies and
                 // distinguishing changed files from newly created files.
                 watchState.dependencies = {
