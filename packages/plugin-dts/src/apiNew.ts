@@ -209,8 +209,13 @@ export async function emitDtsWithNewApi(
           outputDirectories.has(directory) || isDirectory(directory),
       },
     );
+    const createdDirectories = new Set<string>();
     for (const [fileName, contents] of outputFiles) {
-      fs.mkdirSync(path.dirname(fileName), { recursive: true });
+      const directory = path.dirname(fileName);
+      if (!createdDirectories.has(directory)) {
+        fs.mkdirSync(directory, { recursive: true });
+        createdDirectories.add(directory);
+      }
       fs.writeFileSync(fileName, contents);
     }
 
