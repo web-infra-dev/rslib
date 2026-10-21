@@ -48,7 +48,7 @@ You can use [Source Phase Imports](https://github.com/tc39/proposal-source-phase
 ```ts
 import source addModule from './add.wasm';
 
-const { instance } = await WebAssembly.instantiate(addModule, {
+const instance = await WebAssembly.instantiate(addModule, {
   env: { now: Date.now },
 });
 ```
@@ -61,7 +61,7 @@ const addModule = await import.source('./add.wasm');
 
 :::note
 
-TypeScript cannot currently parse `import source` or `import.source()`. If you need to generate declaration files, use these forms in JavaScript files.
+TypeScript supports [Source Phase Imports](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/#source-phase-imports) starting in 7.1. If you use TypeScript earlier than 7.1 and need to generate declaration files, place code using this syntax in JavaScript files.
 
 :::
 
