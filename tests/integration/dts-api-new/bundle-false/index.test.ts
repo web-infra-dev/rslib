@@ -46,6 +46,8 @@ describe('dts with JavaScript API when bundle: false', () => {
     });
     const sourceFile = join(basicPath, 'src/utils.ts');
     const original = await readFile(sourceFile, 'utf8');
+    const configFile = join(basicPath, 'tsconfig.json');
+    const originalConfig = await readFile(configFile, 'utf8');
     const declarationFile = join(basicPath, 'dist/esm/utils.d.ts');
     await rm(join(basicPath, 'dist/esm'), {
       recursive: true,
@@ -68,9 +70,23 @@ describe('dts with JavaScript API when bundle: false', () => {
           timeout: 10_000,
         })
         .toContain('=> string');
+      const config = JSON.parse(originalConfig);
+      config.compilerOptions.declarationMap = true;
+      await writeFile(configFile, JSON.stringify(config));
+      await expect
+        .poll(() => readFile(declarationFile, 'utf8').catch(() => ''), {
+          timeout: 10_000,
+        })
+        .toContain('sourceMappingURL=utils.d.ts.map');
+      expect(
+        JSON.parse(await readFile(`${declarationFile}.map`, 'utf8')),
+      ).toMatchObject({
+        file: 'utils.d.ts',
+      });
     } finally {
       await result.close();
       await writeFile(sourceFile, original);
+      await writeFile(configFile, originalConfig);
     }
   });
 

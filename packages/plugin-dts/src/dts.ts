@@ -444,7 +444,7 @@ const shouldExitAfterGenerate = (data: DtsGenOptions): boolean =>
 
 process.on('message', async (data: DtsGenOptions | 'close') => {
   if (data === 'close') {
-    newApi?.watchSession?.api.close();
+    newApi?.watchSession?.close();
     process.exit();
   }
   if (!data.cwd) {

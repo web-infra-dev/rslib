@@ -21,13 +21,13 @@ import {
 
 type NewApiModule = typeof import('typescript7-api/sync');
 type Snapshot = import('typescript7-api/sync').Snapshot;
-type SyntheticProjectId = import('typescript7-api/sync').SyntheticProjectId;
-type Program = import('typescript7-api/sync').Program;
 type NewApiSession = {
   api: InstanceType<NewApiModule['API']>;
   formatDiagnostics: NewApiModule['formatDiagnosticsWithColorAndContext'];
   snapshot?: Snapshot;
-  program?: Program;
+  createFileSystemLayer: typeof import('typescript7-api/fs').createFileSystemLayer;
+  close(): void;
+  configContents?: string;
   hasContentMappers: boolean;
   sourceFiles?: string;
   dependencies?: string[];
@@ -62,7 +62,7 @@ export async function emitDtsWithNewApi(
   const hasContentMappers = !!options.tsConfigResult.contentMappers?.length;
   let session = isWatch ? watchSession : undefined;
   if (session && session.hasContentMappers !== hasContentMappers) {
-    session.api.close();
+    session.close();
     watchSession = undefined;
     session = undefined;
   }
@@ -72,8 +72,21 @@ export async function emitDtsWithNewApi(
     const { API, formatDiagnosticsWithColorAndContext } = (await import(
       pathToFileURL(apiPath).href
     )) as NewApiModule;
+    const { createFileSystemLayer } = (await import(
+      pathToFileURL(require.resolve('typescript/fs')).href
+    )) as typeof import('typescript7-api/fs');
+    const api = new API({ cwd, runExternalCode: hasContentMappers });
     session = {
-      api: new API({ cwd, runExternalCode: hasContentMappers }),
+      api,
+      createFileSystemLayer,
+      close() {
+        try {
+          api.close();
+        } catch (error) {
+          // Cleanup must not mask a compilation error if the server has exited.
+          logger.debug('Failed to close the TypeScript API:', error);
+        }
+      },
       formatDiagnostics: formatDiagnosticsWithColorAndContext,
       hasContentMappers,
     };
@@ -86,80 +99,43 @@ export async function emitDtsWithNewApi(
 
   try {
     const config = api.parseConfigFile(configPath);
-    const compilerOptionsOverrides = {
-      paths,
-      noEmit: false,
-      declaration: true,
-      declarationDir: path.resolve(cwd, declarationDir),
-      emitDeclarationOnly: true,
+    const rawConfig = (config.raw ?? {}) as {
+      compilerOptions?: Record<string, unknown>;
     };
-    const programOptions = {
-      rootFiles: config.fileNames,
-      compilerOptions: { ...config.options, ...compilerOptionsOverrides },
-      options: {
-        projectReferences: config.projectReferences,
-        configFileParsingDiagnostics: config.errors,
+    // Override declaration options in memory without changing the user's config.
+    const configContents = JSON.stringify({
+      ...rawConfig,
+      compilerOptions: {
+        ...rawConfig.compilerOptions,
+        paths,
+        noEmit: false,
+        declaration: true,
+        declarationDir: path.resolve(cwd, declarationDir),
+        emitDeclarationOnly: true,
       },
-    };
+    });
     const previousSnapshot = session.snapshot;
-    if (hasContentMappers) {
-      const rawConfig = (config.raw ?? {}) as {
-        compilerOptions?: Record<string, unknown>;
-      };
-      // Configured projects retain content mapper registrations. Override only
-      // declaration options in memory, leaving the user's tsconfig untouched.
-      const changes = {
-        openProjects: [configPath],
-        ensurePrograms: true as const,
-        fileNotifications: fileChanges ?? { invalidateAll: true },
-        fileSystem: {
-          kind: 'layer' as const,
-          files: {
-            [configPath]: JSON.stringify({
-              ...rawConfig,
-              compilerOptions: {
-                ...rawConfig.compilerOptions,
-                ...compilerOptionsOverrides,
-              },
-            }),
-          },
-        },
-      };
-      const snapshot = previousSnapshot
-        ? previousSnapshot.update(changes)
-        : api.createSnapshot(changes);
-      session.snapshot = snapshot;
-      session.program = snapshot.getConfiguredProject(configPath)?.program;
-      if (previousSnapshot && snapshot !== previousSnapshot) {
-        previousSnapshot.dispose();
-      }
-    } else if (previousSnapshot && session.program) {
-      const snapshot = previousSnapshot.update({
-        fileNotifications: fileChanges ?? { invalidateAll: true },
-        // Synthetic programs do not refresh automatically from file changes.
-        // Reconfigure their inputs while retaining the snapshot's filesystem
-        // and the API server across rebuilds.
-        reconfigurePrograms: [
-          {
-            id: session.program.id as SyntheticProjectId,
-            ...programOptions,
-          },
-        ],
-      });
-      session.snapshot = snapshot;
-      session.program = snapshot.getProgram(session.program.id);
-      if (snapshot !== previousSnapshot) {
-        previousSnapshot.dispose();
-      }
-    } else {
-      const snapshot = api.createSnapshot({
-        ...(isWatch ? { openProjects: [configPath] } : {}),
-        createPrograms: [programOptions],
-      });
-      session.snapshot = snapshot;
-      session.program = snapshot.operation.createdPrograms[0];
+    const changes = {
+      openProjects: [configPath],
+      ensurePrograms: true as const,
+      fileNotifications: fileChanges ?? { invalidateAll: true },
+      ...(configContents !== session.configContents
+        ? {
+            fileSystem: session.createFileSystemLayer([
+              [configPath, configContents],
+            ]),
+          }
+        : {}),
+    };
+    const snapshot = previousSnapshot
+      ? previousSnapshot.update(changes)
+      : api.createSnapshot(changes);
+    session.snapshot = snapshot;
+    session.configContents = configContents;
+    if (previousSnapshot && snapshot !== previousSnapshot) {
+      previousSnapshot.dispose();
     }
-    const program = session.program;
+    const program = snapshot.getConfiguredProject(configPath)?.program;
     if (!program) {
       throw new Error('Failed to create the TypeScript declaration program.');
     }
@@ -187,9 +163,7 @@ export async function emitDtsWithNewApi(
         dependencies: [
           ...session.dependencies!,
           configPath,
-          ...(session
-            .snapshot!.getConfiguredProject(configPath)
-            ?.program.getConfigFileNames() ?? []),
+          ...program.getConfigFileNames(),
         ],
         directories: session.directories!,
       };
@@ -275,12 +249,12 @@ export async function emitDtsWithNewApi(
   } catch (error) {
     if (isWatch) {
       watchSession = undefined;
-      api.close();
+      session.close();
     }
     throw error;
   } finally {
     if (!isWatch) {
-      api.close();
+      session.close();
     }
   }
 
