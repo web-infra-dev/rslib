@@ -1,4 +1,9 @@
-import { logger, type LogLevel, type RsbuildPlugin } from '@rsbuild/core';
+import {
+  logger,
+  type LogLevel,
+  type RsbuildPlugin,
+  type Rspack,
+} from '@rsbuild/core';
 import { fork, type ChildProcess } from 'node:child_process';
 import { extname, join, normalize, resolve } from 'node:path';
 
@@ -12,7 +17,11 @@ import {
   processIsolatedDts,
   type IsolatedDtsContext,
 } from './isolated';
-import type { DtsGenOptions, DtsTsconfigResult } from './types/internal';
+import type {
+  DtsGenOptions,
+  DtsTsconfigResult,
+  DtsWatchResult,
+} from './types/internal';
 import type { ApiExtractorOptions, PluginDtsOptions } from './types/options';
 import {
   cleanDtsFiles,
@@ -21,7 +30,7 @@ import {
   color,
   getDtsEmitPath,
   loadTsconfig,
-  loadTsconfigResultForExecutable,
+  loadResolvedTsconfig,
   loadTypescript,
   processSourceEntry,
   warnIfOutside,
@@ -37,6 +46,13 @@ interface TaskResult {
   status: 'success' | 'error';
   errorMessage?: string;
 }
+
+type NewApiWatchState = {
+  compiler?: Rspack.Compiler;
+  process?: ChildProcess;
+  task?: Promise<TaskResult>;
+  dependencies?: DtsWatchResult;
+};
 
 export const PLUGIN_DTS_NAME = 'rsbuild:dts';
 
@@ -80,6 +96,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
     });
     let promiseResult: TaskResult;
     let childProcesses: ChildProcess[] = [];
+    const newApiWatchStates = new Map<string, NewApiWatchState>();
     const resolvedTypescriptPath =
       options.isolated === true
         ? undefined
@@ -97,6 +114,31 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
         : undefined;
     let dtsGenOptions: DtsGenOptions | undefined;
     let isolatedDtsContext: IsolatedDtsContext | undefined;
+
+    if (dtsBackend === 'api-new') {
+      api.modifyRspackConfig((config, { environment }) => {
+        const state: NewApiWatchState = {};
+        newApiWatchStates.set(environment.name, state);
+        config.plugins ??= [];
+        config.plugins.push({
+          apply(compiler: Rspack.Compiler) {
+            state.compiler = compiler;
+            compiler.hooks.afterCompile.tapPromise(
+              PLUGIN_DTS_NAME,
+              async (compilation) => {
+                await state.task;
+                for (const file of state.dependencies?.dependencies ?? []) {
+                  compilation.fileDependencies.add(file);
+                }
+                for (const dir of state.dependencies?.directories ?? []) {
+                  compilation.contextDependencies.add(dir);
+                }
+              },
+            );
+          },
+        });
+      });
+    }
 
     api.modifyEnvironmentConfig((config, { mergeEnvironmentConfig }) => {
       if (options.isolated !== true) {
@@ -145,7 +187,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
             tsConfigResult = loadTsconfig(tsconfigPath, tsApi);
           }
         } else {
-          const loadedTsconfig = loadTsconfigResultForExecutable(
+          const loadedTsconfig = loadResolvedTsconfig(
             cwd,
             configuredTsconfigPath,
           );
@@ -235,37 +277,80 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           return;
         }
 
+        const watchState = isWatch
+          ? newApiWatchStates.get(environment.name)
+          : undefined;
+        if (watchState) {
+          const { compiler } = watchState;
+          const files = [...(compiler?.modifiedFiles ?? [])];
+          const knownFiles = new Set(watchState.dependencies?.dependencies);
+          dtsGenOptions.fileChanges =
+            compiler?.modifiedFiles || compiler?.removedFiles
+              ? {
+                  changed: files.filter((file) => knownFiles.has(file)),
+                  created: files.filter((file) => !knownFiles.has(file)),
+                  deleted: [...(compiler.removedFiles ?? [])],
+                }
+              : undefined;
+        }
+
         const jsExtension = extname(import.meta.filename);
-        const childProcess = fork(
-          join(import.meta.dirname, `./dts${jsExtension}`),
-          [],
-          {
-            stdio: 'inherit',
-          },
-        );
+        const childProcess = watchState?.process?.connected
+          ? watchState.process
+          : fork(join(import.meta.dirname, `./dts${jsExtension}`), [], {
+              stdio: 'inherit',
+            });
 
-        childProcesses.push(childProcess);
-        childProcess.once('close', () => {
-          childProcesses = childProcesses.filter(
-            (item) => item !== childProcess,
-          );
-        });
-        childProcess.send(dtsGenOptions);
+        if (childProcess !== watchState?.process) {
+          childProcesses.push(childProcess);
+          childProcess.once('close', () => {
+            childProcesses = childProcesses.filter(
+              (item) => item !== childProcess,
+            );
+          });
+          if (watchState) watchState.process = childProcess;
+        }
 
+        const data = dtsGenOptions;
         dtsPromise = new Promise<TaskResult>((resolve) => {
-          childProcess.on('message', (message) => {
-            if (message === 'success') {
-              resolve({
-                status: 'success',
-              });
-            } else if (message === 'error') {
-              resolve({
-                status: 'error',
+          const finish = (status: TaskResult['status']) => {
+            childProcess.off('message', onMessage);
+            childProcess.off('error', onFailure);
+            childProcess.off('close', onFailure);
+            resolve({
+              status,
+              ...(status === 'error' && {
                 errorMessage: `Error occurred in ${environment.name} declaration files generation.`,
-              });
+              }),
+            });
+          };
+          const onFailure = () => finish('error');
+          const onMessage = (message: 'success' | 'error' | DtsWatchResult) => {
+            if (typeof message === 'object') {
+              if (watchState && message.dependencies.length) {
+                // Match Rspack's native paths when registering dependencies and
+                // distinguishing changed files from newly created files.
+                watchState.dependencies = {
+                  ...message,
+                  dependencies: message.dependencies.map((file) =>
+                    normalize(file),
+                  ),
+                  directories: message.directories.map((dir) => normalize(dir)),
+                };
+              }
+              finish(message.status);
+            } else {
+              finish(message);
             }
+          };
+          childProcess.once('message', onMessage);
+          childProcess.once('error', onFailure);
+          childProcess.once('close', onFailure);
+          childProcess.send(data, (error) => {
+            if (error) onFailure();
           });
         });
+        if (watchState) watchState.task = dtsPromise;
       },
     );
 
@@ -323,7 +408,21 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
       }
     });
 
-    const killProcesses = () => {
+    const killProcesses = async () => {
+      await Promise.all(
+        [...newApiWatchStates.values()].map(async (state) => {
+          await state.task;
+          const child = state.process;
+          if (!child?.connected) return;
+          await new Promise<void>((resolve) => {
+            child.once('close', resolve);
+            child.send('close', (error) => {
+              if (error) resolve();
+            });
+          });
+        }),
+      );
+      newApiWatchStates.clear();
       for (const childProcess of childProcesses) {
         if (!childProcess.killed) {
           try {

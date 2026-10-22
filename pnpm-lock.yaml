@@ -441,6 +441,9 @@ catalogs:
     typescript:
       specifier: ^7.0.2
       version: 7.0.2
+    typescript7-api:
+      specifier: npm:typescript@7.1.0-beta
+      version: 7.1.0-beta
     vue:
       specifier: ^3.5.44
       version: 3.5.44
@@ -892,7 +895,7 @@ importers:
         version: 1.0.0(@rsbuild/core@2.3.0-beta.0)
       rslib:
         specifier: 'catalog:'
-        version: '@rslib/core@1.0.3(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.0.2)'
+        version: '@rslib/core@1.0.3(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.1.0-beta)'
       tinyglobby:
         specifier: 'catalog:'
         version: 0.2.17
@@ -902,6 +905,9 @@ importers:
       typescript6-api:
         specifier: catalog:typescript-6-fixed
         version: '@typescript/typescript6@6.0.2'
+      typescript7-api:
+        specifier: 'catalog:'
+        version: typescript@7.1.0-beta
 
   scripts/tsconfig: {}
 
@@ -977,6 +983,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
+      typescript7-api:
+        specifier: 'catalog:'
+        version: typescript@7.1.0-beta
 
   tests/e2e/react-component:
     dependencies:
@@ -1181,69 +1190,129 @@ importers:
         specifier: catalog:typescript-6-fixed
         version: '@typescript/typescript6@6.0.2'
 
-  tests/integration/dts-tsgo:
+  tests/integration/dts-api-new:
     devDependencies:
-      typescript:
+      typescript7-api:
         specifier: 'catalog:'
-        version: 7.0.2
+        version: typescript@7.1.0-beta
 
-  tests/integration/dts-tsgo/build/__references__: {}
+  tests/integration/dts-api-new/build: {}
 
-  tests/integration/dts-tsgo/build/abort-on-error: {}
+  tests/integration/dts-api-new/bundle-false/abort-on-error: {}
 
-  tests/integration/dts-tsgo/build/auto-extension: {}
+  tests/integration/dts-api-new/bundle-false/alias: {}
 
-  tests/integration/dts-tsgo/build/basic: {}
+  tests/integration/dts-api-new/bundle-false/auto-extension: {}
 
-  tests/integration/dts-tsgo/build/clean: {}
+  tests/integration/dts-api-new/bundle-false/basic: {}
 
-  tests/integration/dts-tsgo/build/declaration-map: {}
+  tests/integration/dts-api-new/bundle-false/clean: {}
 
-  tests/integration/dts-tsgo/build/dist-path: {}
+  tests/integration/dts-api-new/bundle-false/declaration-dir: {}
 
-  tests/integration/dts-tsgo/build/process-files: {}
+  tests/integration/dts-api-new/bundle-false/declaration-map: {}
 
-  tests/integration/dts-tsgo/bundle-false/abort-on-error: {}
+  tests/integration/dts-api-new/bundle-false/dist-path: {}
 
-  tests/integration/dts-tsgo/bundle-false/alias: {}
+  tests/integration/dts-api-new/bundle-false/no-emit-on-error: {}
 
-  tests/integration/dts-tsgo/bundle-false/auto-extension: {}
+  tests/integration/dts-api-new/bundle-false/process-files: {}
 
-  tests/integration/dts-tsgo/bundle-false/basic: {}
+  tests/integration/dts-api-new/bundle-false/transitive-dependency: {}
 
-  tests/integration/dts-tsgo/bundle-false/clean: {}
+  tests/integration/dts-api-new/bundle/abort-on-error: {}
 
-  tests/integration/dts-tsgo/bundle-false/declaration-dir: {}
+  tests/integration/dts-api-new/bundle/absolute-entry: {}
 
-  tests/integration/dts-tsgo/bundle-false/declaration-map: {}
+  tests/integration/dts-api-new/bundle/auto-extension: {}
 
-  tests/integration/dts-tsgo/bundle-false/dist-path: {}
+  tests/integration/dts-api-new/bundle/basic: {}
 
-  tests/integration/dts-tsgo/bundle-false/tsconfig-path: {}
+  tests/integration/dts-api-new/bundle/bundle-name: {}
 
-  tests/integration/dts-tsgo/bundle/abort-on-error: {}
-
-  tests/integration/dts-tsgo/bundle/absolute-entry: {}
-
-  tests/integration/dts-tsgo/bundle/auto-extension: {}
-
-  tests/integration/dts-tsgo/bundle/basic: {}
-
-  tests/integration/dts-tsgo/bundle/bundle-name: {}
-
-  tests/integration/dts-tsgo/bundle/bundled-packages:
+  tests/integration/dts-api-new/bundle/bundled-packages:
     devDependencies:
       '@reduxjs/toolkit':
         specifier: 'catalog:'
         version: 2.13.0(react@19.3.1)
 
-  tests/integration/dts-tsgo/bundle/clean: {}
+  tests/integration/dts-api-new/bundle/clean: {}
 
-  tests/integration/dts-tsgo/bundle/dist-path: {}
+  tests/integration/dts-api-new/bundle/dist-path: {}
 
-  tests/integration/dts-tsgo/bundle/multiple-entries: {}
+  tests/integration/dts-api-new/bundle/multiple-entries: {}
 
-  tests/integration/dts-tsgo/bundle/rootdir:
+  tests/integration/dts-api-new/bundle/rootdir:
+    devDependencies:
+      '@types/chromecast-caf-sender':
+        specifier: 'catalog:'
+        version: 1.0.11
+
+  tests/integration/dts-api-new/content-mapper: {}
+
+  tests/integration/dts-ts7-executable:
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+
+  tests/integration/dts-ts7-executable/build/__references__: {}
+
+  tests/integration/dts-ts7-executable/build/abort-on-error: {}
+
+  tests/integration/dts-ts7-executable/build/auto-extension: {}
+
+  tests/integration/dts-ts7-executable/build/basic: {}
+
+  tests/integration/dts-ts7-executable/build/clean: {}
+
+  tests/integration/dts-ts7-executable/build/declaration-map: {}
+
+  tests/integration/dts-ts7-executable/build/dist-path: {}
+
+  tests/integration/dts-ts7-executable/build/process-files: {}
+
+  tests/integration/dts-ts7-executable/bundle-false/abort-on-error: {}
+
+  tests/integration/dts-ts7-executable/bundle-false/alias: {}
+
+  tests/integration/dts-ts7-executable/bundle-false/auto-extension: {}
+
+  tests/integration/dts-ts7-executable/bundle-false/basic: {}
+
+  tests/integration/dts-ts7-executable/bundle-false/clean: {}
+
+  tests/integration/dts-ts7-executable/bundle-false/declaration-dir: {}
+
+  tests/integration/dts-ts7-executable/bundle-false/declaration-map: {}
+
+  tests/integration/dts-ts7-executable/bundle-false/dist-path: {}
+
+  tests/integration/dts-ts7-executable/bundle-false/tsconfig-path: {}
+
+  tests/integration/dts-ts7-executable/bundle/abort-on-error: {}
+
+  tests/integration/dts-ts7-executable/bundle/absolute-entry: {}
+
+  tests/integration/dts-ts7-executable/bundle/auto-extension: {}
+
+  tests/integration/dts-ts7-executable/bundle/basic: {}
+
+  tests/integration/dts-ts7-executable/bundle/bundle-name: {}
+
+  tests/integration/dts-ts7-executable/bundle/bundled-packages:
+    devDependencies:
+      '@reduxjs/toolkit':
+        specifier: 'catalog:'
+        version: 2.13.0(react@19.3.1)
+
+  tests/integration/dts-ts7-executable/bundle/clean: {}
+
+  tests/integration/dts-ts7-executable/bundle/dist-path: {}
+
+  tests/integration/dts-ts7-executable/bundle/multiple-entries: {}
+
+  tests/integration/dts-ts7-executable/bundle/rootdir:
     devDependencies:
       '@types/chromecast-caf-sender':
         specifier: 'catalog:'
@@ -1549,7 +1618,22 @@ importers:
         specifier: catalog:typescript-6-fixed
         version: '@typescript/typescript6@6.0.2'
 
-  tests/integration/redirect/dts-tsgo:
+  tests/integration/redirect/dts-api-new:
+    devDependencies:
+      '@rslib/core':
+        specifier: workspace:*
+        version: link:../../../../packages/core
+      '@types/express':
+        specifier: 'catalog:'
+        version: 5.0.6
+      express:
+        specifier: 'catalog:'
+        version: 5.3.0(supports-color@8.1.1)
+      typescript7-api:
+        specifier: 'catalog:'
+        version: typescript@7.1.0-beta
+
+  tests/integration/redirect/dts-ts7-executable:
     devDependencies:
       '@rslib/core':
         specifier: workspace:*
@@ -4385,8 +4469,26 @@ packages:
     cpu: [ppc64]
     os: [aix]
 
+  '@typescript/typescript-aix-ppc64@7.1.0-beta':
+    resolution: {integrity: sha512-DXDG+jIWxBHGdoO70tcHON33rCnSzsEZj9P13oyf/r/KEGIo6awsdSNVNjAw0uMwEpqRu75IrgCcW58YcVkZHg==}
+    engines: {node: '>=16.20.0'}
+    cpu: [ppc64]
+    os: [aix]
+
+  '@typescript/typescript-android-arm64@7.1.0-beta':
+    resolution: {integrity: sha512-UZx6PxoQavuvaVTrSf3aw0Oy/J/uJpRylipA0kzc038jMvZXh0UtE8vnQp20FqtdgD5bhXZ0aJrRJyoTSUO58Q==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [android]
+
   '@typescript/typescript-darwin-arm64@7.0.2':
     resolution: {integrity: sha512-gowzar9MwS/aRWp6f3a4KUqzRjAZjOsmGNCM6LcTgXum+dBfgsBVMN+AgvOCCbguXyick6LJhpBszxMebJ8syA==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@typescript/typescript-darwin-arm64@7.1.0-beta':
+    resolution: {integrity: sha512-q7mxblcyX0E7hXsY4k+Q6KWKK5mGmfVq+BDesdTgRVgjodk27aIxER77Zyj9+TgSTlCje8F7+JM6f6hl2BuNdw==}
     engines: {node: '>=16.20.0'}
     cpu: [arm64]
     os: [darwin]
@@ -4397,8 +4499,20 @@ packages:
     cpu: [x64]
     os: [darwin]
 
+  '@typescript/typescript-darwin-x64@7.1.0-beta':
+    resolution: {integrity: sha512-D5EYqG5Wm/guw9+0j8+Mn1Jbr/gfS/VtFTuoH8PJtFbcqeDaQGMulc7SW8q51QG6Y3wGOGX3nbsTOw6fIKWWAA==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [darwin]
+
   '@typescript/typescript-freebsd-arm64@7.0.2':
     resolution: {integrity: sha512-W5NH4y/J0plIIS5b2xvTEkU7JFxyqdMAOgf+Ilhl0vHQXKO5dZoxd+C/jEtq56c4F3wk71RB4BMRQ2XdI+bwYQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [freebsd]
+
+  '@typescript/typescript-freebsd-arm64@7.1.0-beta':
+    resolution: {integrity: sha512-9A0XX0tcnH9qPdolSKKzSjTb93dlB0UEcAJbHYEsrFX2fkFNSum9+dvkQQJ9vLc+7vxHetDPujq9Qe6wx+Xhow==}
     engines: {node: '>=16.20.0'}
     cpu: [arm64]
     os: [freebsd]
@@ -4409,8 +4523,20 @@ packages:
     cpu: [x64]
     os: [freebsd]
 
+  '@typescript/typescript-freebsd-x64@7.1.0-beta':
+    resolution: {integrity: sha512-EDf/dBHfY0TxX3NmUTek0hbffeyZlh3+ls6WQW3ICB8vYxwYLFnzg7wkgEUvl9eRlpiJ/nmc2S8arPMzINJ7rg==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [freebsd]
+
   '@typescript/typescript-linux-arm64@7.0.2':
     resolution: {integrity: sha512-Qh4eU4/y3yDjnfjjyPYihMj5/ODIlmt+Bzu17OI+fiSRDW57QmU5SiN63exPRNJPKUzcc1INa1NXdrJ+MqHjUQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@typescript/typescript-linux-arm64@7.1.0-beta':
+    resolution: {integrity: sha512-hNqQBgQ5b5oGqN76QqbAU6CwYhJZ6iOcWc2kPTUs2OentgpxZktETziH6KIyRFJPaiBncognwn2ZLu3DNhHiWw==}
     engines: {node: '>=16.20.0'}
     cpu: [arm64]
     os: [linux]
@@ -4421,8 +4547,20 @@ packages:
     cpu: [arm]
     os: [linux]
 
+  '@typescript/typescript-linux-arm@7.1.0-beta':
+    resolution: {integrity: sha512-AvN9HmzOQh46G4312ooSgMHhbB7DtnLwg8D9mo324X49B7weMwtJrBG1MxT9IyI8kzDd7YRtW+1hWGun7WG7Qw==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm]
+    os: [linux]
+
   '@typescript/typescript-linux-loong64@7.0.2':
     resolution: {integrity: sha512-uEHck9i8hoAzXPiYRib1O7miOnz23SxIeVl6F4LXox+qov1K35jHcEW6VHKvZI+pyvl7fZEP4MCU5LYvIq1GuQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [loong64]
+    os: [linux]
+
+  '@typescript/typescript-linux-loong64@7.1.0-beta':
+    resolution: {integrity: sha512-xbUustlBrFflt2pNEyG5ye+d4WGPc/rfr2xK29MXeobPSw297JqwuKRrvbKM5o3fE/eUM/c+urVm6jQ3IaMVTw==}
     engines: {node: '>=16.20.0'}
     cpu: [loong64]
     os: [linux]
@@ -4433,8 +4571,20 @@ packages:
     cpu: [mips64el]
     os: [linux]
 
+  '@typescript/typescript-linux-mips64el@7.1.0-beta':
+    resolution: {integrity: sha512-fS4/G7/0bXZ3NSq3nBMAXyg65I3tO4S7j08VNQ2g1aNC/qq79gE7Qne1BNjVsjMFfHBVBFjQYoTQCjmVU2iFlg==}
+    engines: {node: '>=16.20.0'}
+    cpu: [mips64el]
+    os: [linux]
+
   '@typescript/typescript-linux-ppc64@7.0.2':
     resolution: {integrity: sha512-DORx5b3sd/4S7eayxm4FQv+A7CrkUIGRaHiwI8oiHTAI1fAPWhF4J0vAlkC8biAlHSVVwxMQ3tjZ2/DVbnQiiA==}
+    engines: {node: '>=16.20.0'}
+    cpu: [ppc64]
+    os: [linux]
+
+  '@typescript/typescript-linux-ppc64@7.1.0-beta':
+    resolution: {integrity: sha512-0upCCxYPX8X6gOwkvfv+Ee7/ufyy7k97mTrGE0e5BxLlnUEa+w+rtgnv2dsKcxFdwdeZYVlZKCqgN/xCBV08+A==}
     engines: {node: '>=16.20.0'}
     cpu: [ppc64]
     os: [linux]
@@ -4445,8 +4595,20 @@ packages:
     cpu: [riscv64]
     os: [linux]
 
+  '@typescript/typescript-linux-riscv64@7.1.0-beta':
+    resolution: {integrity: sha512-0jKU9YRgOPRgiy5V/UWv37kB53PaTpIbwGCbbOMUPPAkrjVRNOIAJaz7Wa7s3H7mdDebX1LopUEPEJR+7Xa7zg==}
+    engines: {node: '>=16.20.0'}
+    cpu: [riscv64]
+    os: [linux]
+
   '@typescript/typescript-linux-s390x@7.0.2':
     resolution: {integrity: sha512-IkwJc3L7yhytWd/ewjyxNDfOmswCm9GWMJT/ue/dU4aZNbwZeYAetq42VyLmsmSjvoX7z74X6ZaYCtzAr0EuGw==}
+    engines: {node: '>=16.20.0'}
+    cpu: [s390x]
+    os: [linux]
+
+  '@typescript/typescript-linux-s390x@7.1.0-beta':
+    resolution: {integrity: sha512-j+d04s2kxaPQh6DLPb01sknAQfzsrdSZy15jBRHyLEZoaaQ19dVjbFRlkNVvYwUG7ZdP8+y5b/7RmPxdtHUKdQ==}
     engines: {node: '>=16.20.0'}
     cpu: [s390x]
     os: [linux]
@@ -4457,8 +4619,20 @@ packages:
     cpu: [x64]
     os: [linux]
 
+  '@typescript/typescript-linux-x64@7.1.0-beta':
+    resolution: {integrity: sha512-kcD51ihf+pnI5KT4uQQYG04OpwznaZYBlIQhDhl8fflFd27NktxXsUeguxZyvUMyWfum7IF2bBS6Jv7ox0AgFQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [linux]
+
   '@typescript/typescript-netbsd-arm64@7.0.2':
     resolution: {integrity: sha512-+polYF4MF04aPpO5FTkHran9yUQDSXqy5GiSDKpsll5jy3l3+g9QLhpf39T+ePtefhXLOGrLl0QIjkQP6VnelA==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [netbsd]
+
+  '@typescript/typescript-netbsd-arm64@7.1.0-beta':
+    resolution: {integrity: sha512-8W85YyoGK+rgGoSU9jJQUpELbrKcZcbdJk2jPNQ6UKDKI7ryPlPFTrV2jCE5RQuv4Tt96hMDTc33s4YfRrLFBA==}
     engines: {node: '>=16.20.0'}
     cpu: [arm64]
     os: [netbsd]
@@ -4469,8 +4643,20 @@ packages:
     cpu: [x64]
     os: [netbsd]
 
+  '@typescript/typescript-netbsd-x64@7.1.0-beta':
+    resolution: {integrity: sha512-iGsTE0ve2PG0AcyZinwAR0LnGEZhu/y4dceS0hZsYCaKdYETvQtvtlNWlmYKempsBr6C7Il7dMXHVk+VFm9u0g==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [netbsd]
+
   '@typescript/typescript-openbsd-arm64@7.0.2':
     resolution: {integrity: sha512-APT8+ClYnuYm1u9+kgGXoMj2VzWzcymwh2gNSQVySHfkRDGOTVkoWLjCmOQSaO+PoqQ57B0flRp9SA+7GnnkzQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [openbsd]
+
+  '@typescript/typescript-openbsd-arm64@7.1.0-beta':
+    resolution: {integrity: sha512-Z2FERdHB9fAKI+KGqdWn04O7uNlnB+VYiEm6INE1aZuzzLNd3KBqQ6IpKUJF2ny4GigGU6nVu75XD9tAUODPng==}
     engines: {node: '>=16.20.0'}
     cpu: [arm64]
     os: [openbsd]
@@ -4481,8 +4667,20 @@ packages:
     cpu: [x64]
     os: [openbsd]
 
+  '@typescript/typescript-openbsd-x64@7.1.0-beta':
+    resolution: {integrity: sha512-NVG3qeyCq/rJEOhaRjR3LsWgjrjo5vJW25omVLeHAVnpKIG4pE4cenwwKGR06DiJ1s0QTOymcJeKXMEpsiNBVg==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [openbsd]
+
   '@typescript/typescript-sunos-x64@7.0.2':
     resolution: {integrity: sha512-dLJDGaLZ1D4HPQn62u1n8mBDkJREwMsAkCdkwd4Ieqw+x3TUyTsqY0YiBCtE6H6OzzgGk3iuZ3vFWRS+E8/d1g==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [sunos]
+
+  '@typescript/typescript-sunos-x64@7.1.0-beta':
+    resolution: {integrity: sha512-ovAdoWXEn2B5/fyWG69pLU3FWmQwPWOjQV5TFbcxtpnOv+R3g8ySGHl1NYRq7Lb/GYdFDvaGcZ+SiU7iKuiMsA==}
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [sunos]
@@ -4493,8 +4691,20 @@ packages:
     cpu: [arm64]
     os: [win32]
 
+  '@typescript/typescript-win32-arm64@7.1.0-beta':
+    resolution: {integrity: sha512-lJbo71IEOfL7ZZIZnArRaOLqjn9BAfoSzyUQn0aSjfSpDZL4ru0afUsdBfo6PQEjD6ssdmi0n/RwaPADX6bsvQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [win32]
+
   '@typescript/typescript-win32-x64@7.0.2':
     resolution: {integrity: sha512-0BQ3HkAHHlKLSp1qRvf3SUhGpGsDuhB/jgFw75guyqbxJqEaS0Cw/VFO8i2nHglJUzQCRtMMR/IBAKE3ETMC4g==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [win32]
+
+  '@typescript/typescript-win32-x64@7.1.0-beta':
+    resolution: {integrity: sha512-UKcHvbybY2tDTvFW2b1vwiAvDlIRooo69lh8CXWVhOQejcvpM5+IgbiFW9EIwR5Wi5X/v+BdN7gdWbigBuJ3rw==}
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [win32]
@@ -7971,6 +8181,11 @@ packages:
     engines: {node: '>=16.20.0'}
     hasBin: true
 
+  typescript@7.1.0-beta:
+    resolution: {integrity: sha512-cjWjZAJDsmZzsNC5GwHNlW0YPM65jZa5oR0KyQcYX3KSVIfTvtBq//vewISyatKk4OLi5grZjHhIVE9fdrw1UQ==}
+    engines: {node: '>=16.20.0'}
+    hasBin: true
+
   undici-types@7.24.6:
     resolution: {integrity: sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==}
 
@@ -9944,6 +10159,17 @@ snapshots:
       - '@module-federation/runtime-tools'
       - core-js
 
+  '@rslib/core@1.0.3(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.1.0-beta)':
+    dependencies:
+      '@rsbuild/core': 2.2.13(@module-federation/runtime-tools@2.9.2)
+      rsbuild-plugin-dts: 1.0.3(@microsoft/api-extractor@7.59.4)(@rsbuild/core@2.2.13)(typescript@7.1.0-beta)
+    optionalDependencies:
+      '@microsoft/api-extractor': 7.59.4(@types/node@24.19.2)
+      typescript: 7.1.0-beta
+    transitivePeerDependencies:
+      - '@module-federation/runtime-tools'
+      - core-js
+
   '@rslint/core@0.9.5(jiti@2.7.0)':
     dependencies:
       picomatch: 4.0.5
@@ -10978,61 +11204,124 @@ snapshots:
   '@typescript/typescript-aix-ppc64@7.0.2':
     optional: true
 
+  '@typescript/typescript-aix-ppc64@7.1.0-beta':
+    optional: true
+
+  '@typescript/typescript-android-arm64@7.1.0-beta':
+    optional: true
+
   '@typescript/typescript-darwin-arm64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-darwin-arm64@7.1.0-beta':
     optional: true
 
   '@typescript/typescript-darwin-x64@7.0.2':
     optional: true
 
+  '@typescript/typescript-darwin-x64@7.1.0-beta':
+    optional: true
+
   '@typescript/typescript-freebsd-arm64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-freebsd-arm64@7.1.0-beta':
     optional: true
 
   '@typescript/typescript-freebsd-x64@7.0.2':
     optional: true
 
+  '@typescript/typescript-freebsd-x64@7.1.0-beta':
+    optional: true
+
   '@typescript/typescript-linux-arm64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-arm64@7.1.0-beta':
     optional: true
 
   '@typescript/typescript-linux-arm@7.0.2':
     optional: true
 
+  '@typescript/typescript-linux-arm@7.1.0-beta':
+    optional: true
+
   '@typescript/typescript-linux-loong64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-loong64@7.1.0-beta':
     optional: true
 
   '@typescript/typescript-linux-mips64el@7.0.2':
     optional: true
 
+  '@typescript/typescript-linux-mips64el@7.1.0-beta':
+    optional: true
+
   '@typescript/typescript-linux-ppc64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-ppc64@7.1.0-beta':
     optional: true
 
   '@typescript/typescript-linux-riscv64@7.0.2':
     optional: true
 
+  '@typescript/typescript-linux-riscv64@7.1.0-beta':
+    optional: true
+
   '@typescript/typescript-linux-s390x@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-s390x@7.1.0-beta':
     optional: true
 
   '@typescript/typescript-linux-x64@7.0.2':
     optional: true
 
+  '@typescript/typescript-linux-x64@7.1.0-beta':
+    optional: true
+
   '@typescript/typescript-netbsd-arm64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-netbsd-arm64@7.1.0-beta':
     optional: true
 
   '@typescript/typescript-netbsd-x64@7.0.2':
     optional: true
 
+  '@typescript/typescript-netbsd-x64@7.1.0-beta':
+    optional: true
+
   '@typescript/typescript-openbsd-arm64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-openbsd-arm64@7.1.0-beta':
     optional: true
 
   '@typescript/typescript-openbsd-x64@7.0.2':
     optional: true
 
+  '@typescript/typescript-openbsd-x64@7.1.0-beta':
+    optional: true
+
   '@typescript/typescript-sunos-x64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-sunos-x64@7.1.0-beta':
     optional: true
 
   '@typescript/typescript-win32-arm64@7.0.2':
     optional: true
 
+  '@typescript/typescript-win32-arm64@7.1.0-beta':
+    optional: true
+
   '@typescript/typescript-win32-x64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-win32-x64@7.1.0-beta':
     optional: true
 
   '@typescript/typescript6@6.0.2':
@@ -14288,6 +14577,14 @@ snapshots:
       '@microsoft/api-extractor': 7.59.4(@types/node@24.19.2)
       typescript: 7.0.2
 
+  rsbuild-plugin-dts@1.0.3(@microsoft/api-extractor@7.59.4)(@rsbuild/core@2.2.13)(typescript@7.1.0-beta):
+    dependencies:
+      '@ast-grep/napi': 0.45.3
+      '@rsbuild/core': 2.2.13(@module-federation/runtime-tools@2.9.2)
+    optionalDependencies:
+      '@microsoft/api-extractor': 7.59.4(@types/node@24.19.2)
+      typescript: 7.1.0-beta
+
   rsbuild-plugin-google-analytics@1.0.6(@rsbuild/core@2.3.0-beta.0):
     optionalDependencies:
       '@rsbuild/core': 2.3.0-beta.0(@module-federation/runtime-tools@2.9.2)
@@ -15189,6 +15486,30 @@ snapshots:
       '@typescript/typescript-sunos-x64': 7.0.2
       '@typescript/typescript-win32-arm64': 7.0.2
       '@typescript/typescript-win32-x64': 7.0.2
+
+  typescript@7.1.0-beta:
+    optionalDependencies:
+      '@typescript/typescript-aix-ppc64': 7.1.0-beta
+      '@typescript/typescript-android-arm64': 7.1.0-beta
+      '@typescript/typescript-darwin-arm64': 7.1.0-beta
+      '@typescript/typescript-darwin-x64': 7.1.0-beta
+      '@typescript/typescript-freebsd-arm64': 7.1.0-beta
+      '@typescript/typescript-freebsd-x64': 7.1.0-beta
+      '@typescript/typescript-linux-arm': 7.1.0-beta
+      '@typescript/typescript-linux-arm64': 7.1.0-beta
+      '@typescript/typescript-linux-loong64': 7.1.0-beta
+      '@typescript/typescript-linux-mips64el': 7.1.0-beta
+      '@typescript/typescript-linux-ppc64': 7.1.0-beta
+      '@typescript/typescript-linux-riscv64': 7.1.0-beta
+      '@typescript/typescript-linux-s390x': 7.1.0-beta
+      '@typescript/typescript-linux-x64': 7.1.0-beta
+      '@typescript/typescript-netbsd-arm64': 7.1.0-beta
+      '@typescript/typescript-netbsd-x64': 7.1.0-beta
+      '@typescript/typescript-openbsd-arm64': 7.1.0-beta
+      '@typescript/typescript-openbsd-x64': 7.1.0-beta
+      '@typescript/typescript-sunos-x64': 7.1.0-beta
+      '@typescript/typescript-win32-arm64': 7.1.0-beta
+      '@typescript/typescript-win32-x64': 7.1.0-beta
 
   undici-types@7.24.6: {}
 

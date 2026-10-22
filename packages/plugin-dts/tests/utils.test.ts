@@ -6,7 +6,7 @@ import {
   cleanTsBuildInfoFile,
   clearTempDeclarationDir,
   ensureTempDeclarationDir,
-  loadTsconfigResultForExecutable,
+  loadResolvedTsconfig,
   mergeAliasWithTsConfigPaths,
   prettyTime,
 } from '../src/utils';
@@ -161,7 +161,7 @@ describe('mergeAliasWithTsConfigPaths', () => {
   });
 });
 
-describe('loadTsconfigResultForExecutable', () => {
+describe('loadResolvedTsconfig', () => {
   test('should load the options needed by the executable backend', async () => {
     const tempDir = await fs.mkdtemp(
       path.join(__dirname, 'executable-tsconfig-'),
@@ -179,18 +179,22 @@ describe('loadTsconfigResultForExecutable', () => {
               rootDir: 'src',
               tsBuildInfoFile: '.cache/build.tsbuildinfo',
             },
+            contentMappers: [
+              { package: 'test-mapper', extensions: ['.custom'] },
+            ],
           },
           null,
           2,
         ),
       );
 
-      const loaded = loadTsconfigResultForExecutable(tempDir, 'tsconfig.json');
+      const loaded = loadResolvedTsconfig(tempDir, 'tsconfig.json');
 
       expect(path.normalize(loaded?.path ?? '')).toBe(
         path.normalize(tsconfigPath),
       );
       expect(loaded?.config).toEqual({
+        contentMappers: [{ package: 'test-mapper', extensions: ['.custom'] }],
         options: {
           declarationDir: path.join(tempDir, 'types'),
           outDir: path.join(tempDir, 'dist'),

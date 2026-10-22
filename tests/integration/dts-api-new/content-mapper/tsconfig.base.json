@@ -1,0 +1,13 @@
+{
+  "extends": "@rslib/tsconfig/base",
+  "compilerOptions": {
+    "rootDir": "src",
+    "declarationDir": "dist/executable",
+    "allowArbitraryExtensions": true,
+    "noEmit": true
+  },
+  "contentMappers": [
+    { "package": "test-content-mapper", "extensions": [".txt"] }
+  ],
+  "include": ["src"]
+}

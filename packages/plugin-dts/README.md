@@ -351,7 +351,9 @@ export default {
 - **Type:** `boolean`
 - **Default:** `true` when TypeScript 7+ is detected, otherwise `false`
 
-Whether to generate declaration files using [native TypeScript](https://github.com/microsoft/typescript-go).
+Whether to generate declaration files using native TypeScript.
+
+TypeScript 7.0 generates declarations through the native executable, while 7.1 and later use the JavaScript API.
 
 When unset, Rslib enables this option automatically when TypeScript 7+ is detected.
 
@@ -359,11 +361,13 @@ When unset, Rslib enables this option automatically when TypeScript 7+ is detect
 npm add typescript@latest -D
 ```
 
-To ensure consistency during local development, you need to install the corresponding [VS Code Preview Extension](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) and add the following setting to VS Code:
+When [typescriptPath](#typescriptpath) is configured, Rslib determines whether to enable this option automatically based on the resolved TypeScript version.
+
+To use native TypeScript in VS Code, install the [TypeScript 7 extension](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) and enable the following setting:
 
 ```json
 {
-  "typescript.experimental.useTsgo": true
+  "js/ts.experimental.useTsgo": true
 }
 ```
 
@@ -396,14 +400,14 @@ When enabling this option, we recommend also enabling `isolatedDeclarations` in 
 
 #### Use cases
 
-By default, `rsbuild-plugin-dts` generates declaration files through the TypeScript Compiler API, and it can also generate declaration files by enabling [tsgo](#tsgo). Unlike these two approaches, `isolated` is the fastest option and is suitable for scenarios that prioritize build performance.
+`isolated` is suitable for projects that prioritize build performance and run type checking separately.
 
 Since `isolated` does not perform type checking during declaration generation, it is usually used together with another independent, high-performance type checking workflow. For example, in a monorepo project, you can use this option together with [`rslint --type-check`](https://rslint.rs/guide/type-checking):
 
 - Daily builds: use `isolated` to quickly output declaration files when building each package.
 - Global checks: run `rslint --type-check` in CI or pre-commit hooks to perform unified type checking when needed.
 
-This preserves full type checking while reducing the cost of repeatedly running TypeScript type analysis, loading TypeScript or `tsgo` related packages, and loading native bindings during each package build, making the overall build pipeline lighter.
+This preserves full type checking while reducing the cost of repeatedly running TypeScript type analysis, loading TypeScript related packages, and loading native bindings during each package build, making the overall build pipeline lighter.
 
 #### Output scope
 

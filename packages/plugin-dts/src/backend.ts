@@ -131,6 +131,13 @@ export function resolveDtsGenerationBackend(
       );
     }
 
+    const version = parseTypescriptVersion(typescriptVersion)!;
+    // The stable JavaScript API does not yet include a solution builder, so build
+    // mode still needs the executable to build project references.
+    if ((version.major > 7 || version.minor >= 1) && !options.build) {
+      return 'api-new';
+    }
+
     return 'ts7-executable';
   }
 
