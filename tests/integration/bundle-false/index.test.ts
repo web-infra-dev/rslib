@@ -205,26 +205,28 @@ test('asset in bundleless', async () => {
   `);
   expect(Object.values(contents.cjs)[0]).toMatchInlineSnapshot(`
     ""use strict";
-    var __webpack_modules__ = {
+    var __rspack_modules = {
         "./src/assets/image.png" (module) {
             module.exports = require("../static/image/image.png");
         }
     };
-    var __webpack_module_cache__ = {};
-    function __webpack_require__(moduleId) {
-        var cachedModule = __webpack_module_cache__[moduleId];
+    var __rspack_module_cache = {};
+    var __rspack_context = {};
+    function __rspack_require(moduleId) {
+        var cachedModule = __rspack_module_cache[moduleId];
         if (void 0 !== cachedModule) return cachedModule.exports;
-        var module = __webpack_module_cache__[moduleId] = {
+        var module = __rspack_module_cache[moduleId] = {
             exports: {}
         };
-        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        __rspack_modules[moduleId](module, module.exports, __rspack_context);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("./src/assets/image.png");
-    exports["default"] = __webpack_exports__["default"];
-    for(var __rspack_i in __webpack_exports__)if (-1 === [
+    __rspack_context.r = __rspack_require;
+    var __rspack_exports = __rspack_context.r("./src/assets/image.png");
+    exports["default"] = __rspack_exports["default"];
+    for(var __rspack_i in __rspack_exports)if (-1 === [
         "default"
-    ].indexOf(__rspack_i)) exports[__rspack_i] = __webpack_exports__[__rspack_i];
+    ].indexOf(__rspack_i)) exports[__rspack_i] = __rspack_exports[__rspack_i];
     Object.defineProperty(exports, '__esModule', {
         value: true
     });
@@ -232,26 +234,28 @@ test('asset in bundleless', async () => {
   `);
   expect(Object.values(contents.cjs)[1]).toMatchInlineSnapshot(`
     ""use strict";
-    var __webpack_modules__ = {
+    var __rspack_modules = {
         "./src/assets/logo.svg" (module) {
             module.exports = require("../static/svg/logo.svg");
         }
     };
-    var __webpack_module_cache__ = {};
-    function __webpack_require__(moduleId) {
-        var cachedModule = __webpack_module_cache__[moduleId];
+    var __rspack_module_cache = {};
+    var __rspack_context = {};
+    function __rspack_require(moduleId) {
+        var cachedModule = __rspack_module_cache[moduleId];
         if (void 0 !== cachedModule) return cachedModule.exports;
-        var module = __webpack_module_cache__[moduleId] = {
+        var module = __rspack_module_cache[moduleId] = {
             exports: {}
         };
-        __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        __rspack_modules[moduleId](module, module.exports, __rspack_context);
         return module.exports;
     }
-    var __webpack_exports__ = __webpack_require__("./src/assets/logo.svg");
-    exports["default"] = __webpack_exports__["default"];
-    for(var __rspack_i in __webpack_exports__)if (-1 === [
+    __rspack_context.r = __rspack_require;
+    var __rspack_exports = __rspack_context.r("./src/assets/logo.svg");
+    exports["default"] = __rspack_exports["default"];
+    for(var __rspack_i in __rspack_exports)if (-1 === [
         "default"
-    ].indexOf(__rspack_i)) exports[__rspack_i] = __webpack_exports__[__rspack_i];
+    ].indexOf(__rspack_i)) exports[__rspack_i] = __rspack_exports[__rspack_i];
     Object.defineProperty(exports, '__esModule', {
         value: true
     });

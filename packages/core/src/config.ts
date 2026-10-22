@@ -250,6 +250,9 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
     tools: {
       htmlPlugin: false,
       rspack: {
+        experiments: {
+          runtimeMode: 'rspack',
+        },
         optimization: {
           nodeEnv: false,
         },
