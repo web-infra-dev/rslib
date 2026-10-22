@@ -8,6 +8,7 @@ import {
 } from '@rsbuild/core';
 import util from 'node:util';
 import { composeRsbuildEnvironments, pruneEnvironments } from './config';
+import { ExportsPlugin } from './exports/plugin';
 import type { LoadConfigResult } from './loadConfig';
 import type { Format, RslibConfig } from './types';
 import type {
@@ -209,6 +210,12 @@ export async function createRslib(
       setNodeEnv('production');
     }
 
+    if (buildOptions.exports && buildOptions.watch) {
+      throw new Error(
+        'The "exports" option cannot be used in watch mode because writing package.json can trigger another rebuild.',
+      );
+    }
+
     if (buildOptions.watch) {
       config.plugins = config.plugins || [];
       config.plugins.push({
@@ -229,13 +236,20 @@ export async function createRslib(
       } satisfies RsbuildPlugin);
     }
 
-    const { environments } = await composeRsbuildEnvironments(config);
+    const { environments, environmentWithInfos } =
+      await composeRsbuildEnvironments(config);
 
     const rsbuildInstance = await createRsbuildInstance(
       options,
       'production',
       pruneEnvironments(environments, buildOptions.lib),
     );
+
+    if (buildOptions.exports) {
+      rsbuildInstance.addPlugins([
+        ExportsPlugin({ root: config.root!, libInfos: environmentWithInfos }),
+      ]);
+    }
 
     const buildResult = await rsbuildInstance.build({
       watch: buildOptions.watch,

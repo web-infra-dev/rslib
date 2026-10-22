@@ -24,6 +24,12 @@ type BuildOptions = {
    * @default false
    */
   watch?: boolean;
+  /**
+   * 是否根据构建产物生成 package.json 中的 exports 字段，不支持 watch 模式
+   *
+   * @default false
+   */
+  exports?: boolean;
 };
 
 function Build(options?: BuildOptions): Promise<{
@@ -82,6 +88,16 @@ await rslib.build({
 ```ts
 await rslib.build({
   watch: true,
+});
+```
+
+### 生成 exports \{#generate-exports}
+
+如果需要在构建后生成 `package.json` 中的 `exports` 字段，可以将 `exports` 参数设置为 `true`，生成规则可以参考 [生成 exports](/guide/advanced/release-management#generate-exports)。
+
+```ts
+await rslib.build({
+  exports: true,
 });
 ```
 

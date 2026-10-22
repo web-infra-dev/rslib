@@ -24,6 +24,13 @@ type BuildOptions = {
    * @default false
    */
   watch?: boolean;
+  /**
+   * Whether to generate the `exports` field in `package.json` from the build outputs.
+   * Not supported in watch mode.
+   *
+   * @default false
+   */
+  exports?: boolean;
 };
 
 function Build(options?: BuildOptions): Promise<{
@@ -82,6 +89,16 @@ To watch file changes and re-build, set the `watch` option to `true`.
 ```ts
 await rslib.build({
   watch: true,
+});
+```
+
+### Generate exports
+
+To generate the `exports` field in `package.json` after the build, set the `exports` option to `true`. See [Generate exports](/guide/advanced/release-management#generate-exports) for the rules.
+
+```ts
+await rslib.build({
+  exports: true,
 });
 ```
 
