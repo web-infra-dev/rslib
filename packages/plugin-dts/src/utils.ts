@@ -809,6 +809,7 @@ export async function cleanDtsFiles(cwd: string, dir: string): Promise<void> {
     '/**/*.d.cts',
     '/**/*.d.mts',
     '/**/*.d.ts.map',
+    '/**/*.d.*.ts.map',
     '/**/*.d.cts.map',
     '/**/*.d.mts.map',
   ];

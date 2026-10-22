@@ -39,45 +39,47 @@ describe('dts with JavaScript API when bundle: false', () => {
       buildCache: false,
     };
     const rslib = await createRslib({ cwd: basicPath, config: loadedConfig });
-    const firstBuild = new Promise<void>((resolve) => {
-      rslib.onAfterCreateRsbuild(({ rsbuild }) => {
-        rsbuild.onAfterBuild(() => resolve());
-      });
-    });
     const sourceFile = join(basicPath, 'src/utils.ts');
     const original = await readFile(sourceFile, 'utf8');
     const configFile = join(basicPath, 'tsconfig.json');
     const originalConfig = await readFile(configFile, 'utf8');
     const declarationFile = join(basicPath, 'dist/esm/utils.d.ts');
+    let declaration = '<no completed build>';
+    rslib.onAfterCreateRsbuild(({ rsbuild }) => {
+      rsbuild.onAfterBuild(async () => {
+        declaration = await readFile(declarationFile, 'utf8').catch(String);
+      });
+    });
+    const waitForDeclaration = async (expected: string) => {
+      try {
+        await expect
+          .poll(() => declaration, { timeout: 10_000 })
+          .toContain(expected);
+      } catch (cause) {
+        throw new Error(
+          `Expected a completed DTS build containing ${JSON.stringify(expected)}. Last output: ${declaration}`,
+          { cause },
+        );
+      }
+      // Rspack installs its watcher on the next tick after the done hooks.
+      await setImmediate();
+    };
     await rm(join(basicPath, 'dist/esm'), {
       recursive: true,
       force: true,
     });
     const result = await rslib.build({ watch: true, lib: ['esm'] });
     try {
-      await firstBuild;
-      // Rspack installs its watcher on the next tick after the done hooks.
-      await setImmediate();
-      await expect
-        .poll(() => readFile(declarationFile, 'utf8').catch(() => ''))
-        .toContain('=> number');
+      await waitForDeclaration('=> number');
       await writeFile(
         sourceFile,
         'export const add = (a: number, b: number): string => String(a + b);',
       );
-      await expect
-        .poll(() => readFile(declarationFile, 'utf8').catch(() => ''), {
-          timeout: 10_000,
-        })
-        .toContain('=> string');
+      await waitForDeclaration('=> string');
       const config = JSON.parse(originalConfig);
       config.compilerOptions.declarationMap = true;
       await writeFile(configFile, JSON.stringify(config));
-      await expect
-        .poll(() => readFile(declarationFile, 'utf8').catch(() => ''), {
-          timeout: 10_000,
-        })
-        .toContain('sourceMappingURL=utils.d.ts.map');
+      await waitForDeclaration('sourceMappingURL=utils.d.ts.map');
       expect(
         JSON.parse(await readFile(`${declarationFile}.map`, 'utf8')),
       ).toMatchObject({
