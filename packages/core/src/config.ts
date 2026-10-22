@@ -205,7 +205,6 @@ export function composeDecoratorsConfig(
 
 export function composePrintFileSizeConfig(
   bundle: LibConfig['bundle'],
-  target: RsbuildConfigOutputTarget,
 ): EnvironmentConfig {
   if (bundle) {
     return {};
@@ -221,10 +220,13 @@ export function composePrintFileSizeConfig(
           assets,
           totalSize,
           totalGzipSize,
+          totalBrotliSize,
         }) => {
           let log = `${color.yellow(assets.length)} files generated in ${color.cyan(distPath)}, ${color.magenta('total:')} ${(totalSize / 1000).toFixed(1)} kB`;
-          if (target === 'web') {
-            log += ` ${color.green(`(${(totalGzipSize / 1000).toFixed(1)} kB gzipped)`)}`;
+          const compressedSize = totalBrotliSize ?? totalGzipSize;
+          if (compressedSize > 0) {
+            const label = totalBrotliSize === undefined ? 'gzipped' : 'brotli';
+            log += ` ${color.green(`(${(compressedSize / 1000).toFixed(1)} kB ${label})`)}`;
           }
           log += ` ${color.dim(`(${environmentName})`)}`;
           return log;
@@ -1832,7 +1834,7 @@ async function composeLibRsbuildConfig(
     compilerOptions,
     config.source?.decorators?.version,
   );
-  const printFileSizeConfig = composePrintFileSizeConfig(bundle, target);
+  const printFileSizeConfig = composePrintFileSizeConfig(bundle);
 
   return mergeRsbuildConfig(
     bundleConfig,
