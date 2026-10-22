@@ -439,8 +439,8 @@ catalogs:
       specifier: ^4.23.15
       version: 4.23.15
     typescript:
-      specifier: 7.1.0-beta
-      version: 7.1.0-beta
+      specifier: ^7.0.2
+      version: 7.0.2
     typescript7-api:
       specifier: npm:typescript@7.1.0-beta
       version: 7.1.0-beta
@@ -454,7 +454,7 @@ catalogs:
     typescript:
       specifier: ^6.0.3
       version: 6.0.3
-  typescript-6-alias:
+  typescript-6-fixed:
     typescript:
       specifier: npm:@typescript/typescript6@^6.0.2
       version: 6.0.2
@@ -472,7 +472,7 @@ importers:
     devDependencies:
       '@rstest/adapter-rslib':
         specifier: 'catalog:'
-        version: 0.12.3(@rslib/core@1.0.4)(@rstest/core@0.12.3)(typescript@7.1.0-beta)
+        version: 0.12.3(@rslib/core@1.0.4)(@rstest/core@0.12.3)(typescript@7.0.2)
       '@rstest/core':
         specifier: 'catalog:'
         version: 0.12.3(@module-federation/runtime-tools@2.9.2)
@@ -496,10 +496,10 @@ importers:
         version: 3.9.10
       rstack:
         specifier: 'catalog:'
-        version: 0.8.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(@rspress/core@2.0.23)(jiti@2.7.0)(typescript@7.1.0-beta)
+        version: 0.8.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(@rspress/core@2.0.23)(jiti@2.7.0)(typescript@7.0.2)
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
 
   examples/express-plugin:
     devDependencies:
@@ -514,7 +514,7 @@ importers:
         version: 5.3.0(supports-color@8.1.1)
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
 
   examples/module-federation: {}
 
@@ -529,7 +529,7 @@ importers:
     devDependencies:
       '@module-federation/rsbuild-plugin':
         specifier: 'catalog:'
-        version: 2.9.2(@rsbuild/core@2.3.0-beta.0)(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+        version: 2.9.2(@rsbuild/core@2.3.0-beta.0)(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)
       '@rsbuild/core':
         specifier: 'catalog:'
         version: 2.3.0-beta.0(@module-federation/runtime-tools@2.9.2)
@@ -544,7 +544,7 @@ importers:
         version: 19.3.0(@types/react@19.3.0)
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
 
   examples/module-federation/mf-react-component:
     devDependencies:
@@ -611,7 +611,7 @@ importers:
     devDependencies:
       '@module-federation/rsbuild-plugin':
         specifier: 'catalog:'
-        version: 2.9.2(@rsbuild/core@2.3.0-beta.0)(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+        version: 2.9.2(@rsbuild/core@2.3.0-beta.0)(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)
       '@rsbuild/core':
         specifier: 'catalog:'
         version: 2.3.0-beta.0(@module-federation/runtime-tools@2.9.2)
@@ -626,7 +626,7 @@ importers:
         version: 19.3.0(@types/react@19.3.0)
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
 
   examples/preact-component-bundle-false:
     devDependencies:
@@ -644,7 +644,7 @@ importers:
         version: 11.0.1
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
 
   examples/react-component-bundle:
     devDependencies:
@@ -665,7 +665,7 @@ importers:
         version: 19.3.1
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
 
   examples/react-component-bundle-false:
     devDependencies:
@@ -686,7 +686,7 @@ importers:
         version: 19.3.1
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
 
   examples/react-component-umd:
     devDependencies:
@@ -707,7 +707,7 @@ importers:
         version: 19.3.1
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
 
   examples/solid-component-bundle:
     devDependencies:
@@ -728,7 +728,7 @@ importers:
         version: 1.9.17
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
 
   examples/vue-component-bundle:
     devDependencies:
@@ -798,7 +798,7 @@ importers:
     devDependencies:
       '@module-federation/rsbuild-plugin':
         specifier: 'catalog:'
-        version: 2.9.2(@rsbuild/core@2.3.0-beta.0)(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+        version: 2.9.2(@rsbuild/core@2.3.0-beta.0)(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)
       '@rslib/tsconfig':
         specifier: workspace:*
         version: link:../../scripts/tsconfig
@@ -828,7 +828,7 @@ importers:
         version: 1.0.0(@rsbuild/core@2.3.0-beta.0)
       rslib:
         specifier: 'catalog:'
-        version: '@rslib/core@1.0.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.1.0-beta)'
+        version: '@rslib/core@1.0.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.0.2)'
       rslog:
         specifier: 'catalog:'
         version: 2.3.0
@@ -840,7 +840,7 @@ importers:
         version: 0.2.17
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
 
   packages/create-rslib:
     dependencies:
@@ -865,13 +865,13 @@ importers:
         version: 1.0.0(@rsbuild/core@2.2.13)
       rslib:
         specifier: 'catalog:'
-        version: '@rslib/core@1.0.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.1.0-beta)'
+        version: '@rslib/core@1.0.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.0.2)'
       tsx:
         specifier: 'catalog:'
         version: 4.23.15
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
 
   packages/plugin-dts:
     dependencies:
@@ -907,7 +907,7 @@ importers:
         specifier: 'catalog:'
         version: 4.2.0
       typescript6-api:
-        specifier: catalog:typescript-6-alias
+        specifier: catalog:typescript-6-fixed
         version: '@typescript/typescript6@6.0.2'
       typescript7-api:
         specifier: 'catalog:'
@@ -926,7 +926,7 @@ importers:
     devDependencies:
       '@module-federation/rsbuild-plugin':
         specifier: 'catalog:'
-        version: 2.9.2(@rsbuild/core@2.3.0-beta.0)(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+        version: 2.9.2(@rsbuild/core@2.3.0-beta.0)(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)
       '@playwright/test':
         specifier: 'catalog:'
         version: 1.64.1
@@ -986,7 +986,7 @@ importers:
         version: 0.2.17
       typescript:
         specifier: 'catalog:'
-        version: 7.1.0-beta
+        version: 7.0.2
       typescript7-api:
         specifier: 'catalog:'
         version: typescript@7.1.0-beta
@@ -1019,7 +1019,7 @@ importers:
         version: link:../../../examples/vue-component-bundleless
       vue:
         specifier: 'catalog:'
-        version: 3.5.44(typescript@7.1.0-beta)
+        version: 3.5.44(typescript@7.0.2)
 
   tests/integration/alias: {}
 
@@ -1058,7 +1058,7 @@ importers:
         version: 2.1.1(@rsbuild/core@2.2.13)(@rspack/core@2.2.9)
       '@rsbuild/plugin-svgr':
         specifier: 'catalog:'
-        version: 2.0.5(@rsbuild/core@2.2.13)(@rspack/core@2.2.9)(supports-color@8.1.1)(typescript@7.1.0-beta)
+        version: 2.0.5(@rsbuild/core@2.2.13)(@rspack/core@2.2.9)(supports-color@8.1.1)(typescript@7.0.2)
 
   tests/integration/async-chunks/default: {}
 
@@ -1146,7 +1146,7 @@ importers:
         version: 2.1.1(@rsbuild/core@2.2.13)(@rspack/core@2.2.9)
       '@rsbuild/plugin-svgr':
         specifier: 'catalog:'
-        version: 2.0.5(@rsbuild/core@2.2.13)(@rspack/core@2.2.9)(supports-color@8.1.1)(typescript@7.1.0-beta)
+        version: 2.0.5(@rsbuild/core@2.2.13)(@rspack/core@2.2.9)(supports-color@8.1.1)(typescript@7.0.2)
 
   tests/integration/cli/build: {}
 
@@ -1191,7 +1191,7 @@ importers:
   tests/integration/dts:
     devDependencies:
       typescript:
-        specifier: catalog:typescript-6-alias
+        specifier: catalog:typescript-6-fixed
         version: '@typescript/typescript6@6.0.2'
 
   tests/integration/dts-api-new:
@@ -1368,7 +1368,7 @@ importers:
         specifier: 'catalog:'
         version: typescript@7.0.2
       typescript:
-        specifier: catalog:typescript-6-alias
+        specifier: catalog:typescript-6-fixed
         version: '@typescript/typescript6@6.0.2'
 
   tests/integration/dts/bundle/abort-on-error: {}
@@ -1619,7 +1619,7 @@ importers:
         specifier: 'catalog:'
         version: 5.3.0(supports-color@8.1.1)
       typescript:
-        specifier: catalog:typescript-6-alias
+        specifier: catalog:typescript-6-fixed
         version: '@typescript/typescript6@6.0.2'
 
   tests/integration/redirect/dts-api-new:
@@ -1842,7 +1842,7 @@ importers:
         version: 2.0.1(@rsbuild/core@2.2.13)(@rspack/core@2.2.9)(@vue/compiler-sfc@3.5.44)(vue@3.5.44)
       vue:
         specifier: 'catalog:'
-        version: 3.5.44(typescript@7.1.0-beta)
+        version: 3.5.44(typescript@7.0.2)
 
   tests/integration/wasm-inline/basic: {}
 
@@ -9246,9 +9246,9 @@ snapshots:
       - utf-8-validate
       - vue-tsc
 
-  '@module-federation/cli@2.9.2(typescript@7.1.0-beta)(vue-tsc@3.3.13)':
+  '@module-federation/cli@2.9.2(typescript@7.0.2)(vue-tsc@3.3.13)':
     dependencies:
-      '@module-federation/dts-plugin': 2.9.2(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+      '@module-federation/dts-plugin': 2.9.2(typescript@7.0.2)(vue-tsc@3.3.13)
       '@module-federation/sdk': 2.9.2
       commander: 11.1.0
       jiti: 2.4.2
@@ -9275,7 +9275,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@module-federation/dts-plugin@2.9.2(typescript@7.1.0-beta)(vue-tsc@3.3.13)':
+  '@module-federation/dts-plugin@2.9.2(typescript@7.0.2)(vue-tsc@3.3.13)':
     dependencies:
       '@module-federation/error-codes': 2.9.2
       '@module-federation/managers': 2.9.2
@@ -9283,11 +9283,11 @@ snapshots:
       '@module-federation/third-party-dts-extractor': 2.9.2
       adm-zip: 0.6.1
       isomorphic-ws: 5.0.0(ws@8.21.3)
-      typescript: 7.1.0-beta
+      typescript: 7.0.2
       undici: 7.29.1
       ws: 8.21.3
     optionalDependencies:
-      vue-tsc: 3.3.13(typescript@7.1.0-beta)
+      vue-tsc: 3.3.13(typescript@7.0.2)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -9315,24 +9315,24 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@module-federation/enhanced@2.9.2(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)':
+  '@module-federation/enhanced@2.9.2(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)':
     dependencies:
       '@module-federation/bridge-react-webpack-plugin': 2.9.2
-      '@module-federation/cli': 2.9.2(typescript@7.1.0-beta)(vue-tsc@3.3.13)
-      '@module-federation/dts-plugin': 2.9.2(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+      '@module-federation/cli': 2.9.2(typescript@7.0.2)(vue-tsc@3.3.13)
+      '@module-federation/dts-plugin': 2.9.2(typescript@7.0.2)(vue-tsc@3.3.13)
       '@module-federation/error-codes': 2.9.2
       '@module-federation/inject-external-runtime-core-plugin': 2.9.2(@module-federation/runtime-tools@2.9.2)
       '@module-federation/managers': 2.9.2
-      '@module-federation/manifest': 2.9.2(typescript@7.1.0-beta)(vue-tsc@3.3.13)
-      '@module-federation/rspack': 2.9.2(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+      '@module-federation/manifest': 2.9.2(typescript@7.0.2)(vue-tsc@3.3.13)
+      '@module-federation/rspack': 2.9.2(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)
       '@module-federation/runtime-tools': 2.9.2
       '@module-federation/sdk': 2.9.2
       '@module-federation/webpack-bundler-runtime': 2.9.2
       schema-utils: 4.3.0
       tapable: 2.3.0
     optionalDependencies:
-      typescript: 7.1.0-beta
-      vue-tsc: 3.3.13(typescript@7.1.0-beta)
+      typescript: 7.0.2
+      vue-tsc: 3.3.13(typescript@7.0.2)
     transitivePeerDependencies:
       - '@rspack/core'
       - bufferutil
@@ -9359,9 +9359,9 @@ snapshots:
       - utf-8-validate
       - vue-tsc
 
-  '@module-federation/manifest@2.9.2(typescript@7.1.0-beta)(vue-tsc@3.3.13)':
+  '@module-federation/manifest@2.9.2(typescript@7.0.2)(vue-tsc@3.3.13)':
     dependencies:
-      '@module-federation/dts-plugin': 2.9.2(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+      '@module-federation/dts-plugin': 2.9.2(typescript@7.0.2)(vue-tsc@3.3.13)
       '@module-federation/managers': 2.9.2
       '@module-federation/sdk': 2.9.2
     transitivePeerDependencies:
@@ -9385,9 +9385,9 @@ snapshots:
       - utf-8-validate
       - vue-tsc
 
-  '@module-federation/node@2.7.52(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)':
+  '@module-federation/node@2.7.52(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)':
     dependencies:
-      '@module-federation/enhanced': 2.9.2(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+      '@module-federation/enhanced': 2.9.2(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)
       '@module-federation/runtime': 2.9.2
       '@module-federation/sdk': 2.9.2
       encoding: 0.1.13
@@ -9415,10 +9415,10 @@ snapshots:
       - vue-tsc
       - webpack
 
-  '@module-federation/rsbuild-plugin@2.9.2(@rsbuild/core@2.3.0-beta.0)(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)':
+  '@module-federation/rsbuild-plugin@2.9.2(@rsbuild/core@2.3.0-beta.0)(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)':
     dependencies:
-      '@module-federation/enhanced': 2.9.2(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)
-      '@module-federation/node': 2.7.52(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+      '@module-federation/enhanced': 2.9.2(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)
+      '@module-federation/node': 2.7.52(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)
       '@module-federation/sdk': 2.9.2
     optionalDependencies:
       '@rsbuild/core': 2.3.0-beta.0(@module-federation/runtime-tools@2.9.2)
@@ -9447,19 +9447,19 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@module-federation/rspack@2.9.2(@rspack/core@2.3.0-beta.0)(typescript@7.1.0-beta)(vue-tsc@3.3.13)':
+  '@module-federation/rspack@2.9.2(@rspack/core@2.3.0-beta.0)(typescript@7.0.2)(vue-tsc@3.3.13)':
     dependencies:
       '@module-federation/bridge-react-webpack-plugin': 2.9.2
-      '@module-federation/dts-plugin': 2.9.2(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+      '@module-federation/dts-plugin': 2.9.2(typescript@7.0.2)(vue-tsc@3.3.13)
       '@module-federation/inject-external-runtime-core-plugin': 2.9.2(@module-federation/runtime-tools@2.9.2)
       '@module-federation/managers': 2.9.2
-      '@module-federation/manifest': 2.9.2(typescript@7.1.0-beta)(vue-tsc@3.3.13)
+      '@module-federation/manifest': 2.9.2(typescript@7.0.2)(vue-tsc@3.3.13)
       '@module-federation/runtime-tools': 2.9.2
       '@module-federation/sdk': 2.9.2
       '@rspack/core': 2.3.0-beta.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)
     optionalDependencies:
-      typescript: 7.1.0-beta
-      vue-tsc: 3.3.13(typescript@7.1.0-beta)
+      typescript: 7.0.2
+      vue-tsc: 3.3.13(typescript@7.0.2)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -9957,12 +9957,12 @@ snapshots:
       - sugarss
       - typescript
 
-  '@rsbuild/plugin-svgr@2.0.5(@rsbuild/core@2.2.13)(@rspack/core@2.2.9)(supports-color@8.1.1)(typescript@7.1.0-beta)':
+  '@rsbuild/plugin-svgr@2.0.5(@rsbuild/core@2.2.13)(@rspack/core@2.2.9)(supports-color@8.1.1)(typescript@7.0.2)':
     dependencies:
       '@rsbuild/plugin-react': 2.1.1(@rsbuild/core@2.2.13)(@rspack/core@2.2.9)
-      '@svgr/core': 8.1.0(supports-color@8.1.1)(typescript@7.1.0-beta)
+      '@svgr/core': 8.1.0(supports-color@8.1.1)(typescript@7.0.2)
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0)(supports-color@8.1.1)
-      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0)(typescript@7.1.0-beta)
+      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0)(typescript@7.0.2)
       deepmerge: 4.3.1
       loader-utils: 3.3.1
     optionalDependencies:
@@ -10050,6 +10050,17 @@ snapshots:
       yaml: 2.9.0
     optionalDependencies:
       '@rsbuild/core': 2.3.0-beta.0(@module-federation/runtime-tools@2.9.2)
+
+  '@rslib/core@1.0.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.0.2)':
+    dependencies:
+      '@rsbuild/core': 2.3.0-beta.0(@module-federation/runtime-tools@2.9.2)
+      rsbuild-plugin-dts: 1.0.4(@microsoft/api-extractor@7.59.4)(@rsbuild/core@2.3.0-beta.0)(typescript@7.0.2)
+    optionalDependencies:
+      '@microsoft/api-extractor': 7.59.4(@types/node@24.19.2)
+      typescript: 7.0.2
+    transitivePeerDependencies:
+      - '@module-federation/runtime-tools'
+      - core-js
 
   '@rslib/core@1.0.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.1.0-beta)':
     dependencies:
@@ -10461,12 +10472,12 @@ snapshots:
     optionalDependencies:
       '@rspress/core': 2.1.0-beta.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.0-beta.0)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
 
-  '@rstest/adapter-rslib@0.12.3(@rslib/core@1.0.4)(@rstest/core@0.12.3)(typescript@7.1.0-beta)':
+  '@rstest/adapter-rslib@0.12.3(@rslib/core@1.0.4)(@rstest/core@0.12.3)(typescript@7.0.2)':
     dependencies:
-      '@rslib/core': 1.0.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.1.0-beta)
+      '@rslib/core': 1.0.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.0.2)
       '@rstest/core': 0.12.3(@module-federation/runtime-tools@2.9.2)
     optionalDependencies:
-      typescript: 7.1.0-beta
+      typescript: 7.0.2
 
   '@rstest/core@0.12.3(@module-federation/runtime-tools@2.9.2)':
     dependencies:
@@ -10728,12 +10739,12 @@ snapshots:
       '@svgr/babel-plugin-transform-react-native-svg': 8.1.0(@babel/core@7.29.7)
       '@svgr/babel-plugin-transform-svg-component': 8.0.0(@babel/core@7.29.7)
 
-  '@svgr/core@8.1.0(supports-color@8.1.1)(typescript@7.1.0-beta)':
+  '@svgr/core@8.1.0(supports-color@8.1.1)(typescript@7.0.2)':
     dependencies:
       '@babel/core': 7.29.7(supports-color@8.1.1)
       '@svgr/babel-preset': 8.1.0(@babel/core@7.29.7)
       camelcase: 6.3.0
-      cosmiconfig: 8.3.6(typescript@7.1.0-beta)
+      cosmiconfig: 8.3.6(typescript@7.0.2)
       snake-case: 3.0.4
     transitivePeerDependencies:
       - supports-color
@@ -10748,16 +10759,16 @@ snapshots:
     dependencies:
       '@babel/core': 7.29.7(supports-color@8.1.1)
       '@svgr/babel-preset': 8.1.0(@babel/core@7.29.7)
-      '@svgr/core': 8.1.0(supports-color@8.1.1)(typescript@7.1.0-beta)
+      '@svgr/core': 8.1.0(supports-color@8.1.1)(typescript@7.0.2)
       '@svgr/hast-util-to-babel-ast': 8.0.0
       svg-parser: 2.0.4
     transitivePeerDependencies:
       - supports-color
 
-  '@svgr/plugin-svgo@8.1.0(@svgr/core@8.1.0)(typescript@7.1.0-beta)':
+  '@svgr/plugin-svgo@8.1.0(@svgr/core@8.1.0)(typescript@7.0.2)':
     dependencies:
-      '@svgr/core': 8.1.0(supports-color@8.1.1)(typescript@7.1.0-beta)
-      cosmiconfig: 8.3.6(typescript@7.1.0-beta)
+      '@svgr/core': 8.1.0(supports-color@8.1.1)(typescript@7.0.2)
+      cosmiconfig: 8.3.6(typescript@7.0.2)
       deepmerge: 4.3.1
       svgo: 3.3.4
     transitivePeerDependencies:
@@ -11270,13 +11281,13 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.3
 
-  '@volar/typescript@2.4.28(typescript@7.1.0-beta)':
+  '@volar/typescript@2.4.28(typescript@7.0.2)':
     dependencies:
       '@volar/language-core': 2.4.28
       path-browserify: 1.0.1
       vscode-uri: 3.1.0
     optionalDependencies:
-      typescript: 7.1.0-beta
+      typescript: 7.0.2
     optional: true
 
   '@vue/compiler-core@3.5.44':
@@ -11851,14 +11862,14 @@ snapshots:
 
   corser@2.0.1: {}
 
-  cosmiconfig@8.3.6(typescript@7.1.0-beta):
+  cosmiconfig@8.3.6(typescript@7.0.2):
     dependencies:
       import-fresh: 3.3.1
       js-yaml: 4.3.0
       parse-json: 5.2.0
       path-type: 4.0.0
     optionalDependencies:
-      typescript: 7.1.0-beta
+      typescript: 7.0.2
 
   create-ecdh@4.0.4:
     dependencies:
@@ -14461,6 +14472,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  rsbuild-plugin-dts@1.0.4(@microsoft/api-extractor@7.59.4)(@rsbuild/core@2.3.0-beta.0)(typescript@7.0.2):
+    dependencies:
+      '@ast-grep/napi': 0.51.0
+      '@rsbuild/core': 2.3.0-beta.0(@module-federation/runtime-tools@2.9.2)
+    optionalDependencies:
+      '@microsoft/api-extractor': 7.59.4(@types/node@24.19.2)
+      typescript: 7.0.2
+
   rsbuild-plugin-dts@1.0.4(@microsoft/api-extractor@7.59.4)(@rsbuild/core@2.3.0-beta.0)(typescript@7.1.0-beta):
     dependencies:
       '@ast-grep/napi': 0.51.0
@@ -14514,7 +14533,7 @@ snapshots:
     optionalDependencies:
       '@rspack/core': 2.3.0-beta.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)
       '@vue/compiler-sfc': 3.5.44
-      vue: 3.5.44(typescript@7.1.0-beta)
+      vue: 3.5.44(typescript@7.0.2)
 
   rspress-plugin-devkit@1.0.1(@rspress/core@2.1.0-beta.1)(supports-color@8.1.1):
     dependencies:
@@ -14547,10 +14566,10 @@ snapshots:
     dependencies:
       '@rspress/core': 2.1.0-beta.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.0-beta.0)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
 
-  rstack@0.8.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(@rspress/core@2.0.23)(jiti@2.7.0)(typescript@7.1.0-beta):
+  rstack@0.8.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(@rspress/core@2.0.23)(jiti@2.7.0)(typescript@7.0.2):
     dependencies:
       '@rsbuild/core': 2.2.13(@module-federation/runtime-tools@2.9.2)
-      '@rslib/core': 1.0.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.1.0-beta)
+      '@rslib/core': 1.0.4(@microsoft/api-extractor@7.59.4)(@module-federation/runtime-tools@2.9.2)(typescript@7.0.2)
       '@rslint/core': 0.9.5(jiti@2.7.0)
       '@rstest/core': 0.12.3(@module-federation/runtime-tools@2.9.2)
       '@swc-next/parser': 0.2.4
@@ -15572,11 +15591,11 @@ snapshots:
       '@vue/language-core': 3.3.13
       typescript: 6.0.3
 
-  vue-tsc@3.3.13(typescript@7.1.0-beta):
+  vue-tsc@3.3.13(typescript@7.0.2):
     dependencies:
-      '@volar/typescript': 2.4.28(typescript@7.1.0-beta)
+      '@volar/typescript': 2.4.28(typescript@7.0.2)
       '@vue/language-core': 3.3.13
-      typescript: 7.1.0-beta
+      typescript: 7.0.2
     optional: true
 
   vue@3.5.44(typescript@6.0.3):
@@ -15589,7 +15608,7 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.3
 
-  vue@3.5.44(typescript@7.1.0-beta):
+  vue@3.5.44(typescript@7.0.2):
     dependencies:
       '@vue/compiler-dom': 3.5.44
       '@vue/compiler-sfc': 3.5.44
@@ -15597,7 +15616,7 @@ snapshots:
       '@vue/server-renderer': 3.5.44
       '@vue/shared': 3.5.44
     optionalDependencies:
-      typescript: 7.1.0-beta
+      typescript: 7.0.2
 
   web-namespaces@2.0.1: {}
 
