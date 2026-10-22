@@ -45,9 +45,13 @@ describe('dts with JavaScript API when bundle: false', () => {
     const originalConfig = await readFile(configFile, 'utf8');
     const declarationFile = join(basicPath, 'dist/esm/utils.d.ts');
     let declaration = '<no completed build>';
+    let declarationMap = '<no completed build>';
     rslib.onAfterCreateRsbuild(({ rsbuild }) => {
       rsbuild.onAfterBuild(async () => {
-        declaration = await readFile(declarationFile, 'utf8').catch(String);
+        [declaration, declarationMap] = await Promise.all([
+          readFile(declarationFile, 'utf8').catch(String),
+          readFile(`${declarationFile}.map`, 'utf8').catch(String),
+        ]);
       });
     });
     const waitForDeclaration = async (expected: string) => {
@@ -80,9 +84,7 @@ describe('dts with JavaScript API when bundle: false', () => {
       config.compilerOptions.declarationMap = true;
       await writeFile(configFile, JSON.stringify(config));
       await waitForDeclaration('sourceMappingURL=utils.d.ts.map');
-      expect(
-        JSON.parse(await readFile(`${declarationFile}.map`, 'utf8')),
-      ).toMatchObject({
+      expect(JSON.parse(declarationMap)).toMatchObject({
         file: 'utils.d.ts',
       });
     } finally {
