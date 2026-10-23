@@ -10,6 +10,10 @@ const IMPORT_META_URL_SHIM = `const __rslib_import_meta_url__ = /*#__PURE__*/ (f
 })();
 `;
 
+// Matches a leading shebang and directives like `"use strict";` and
+// `"use client"`, which must stay above the shim to take effect.
+const PROLOGUE_REGEX = /^(?:#!.*\n)?(?:(["'])use [^"'\n]+\1(?:;\n?|\n))*/;
+
 class EntryChunkPlugin {
   private readonly shimsInjectedAssets: Set<string> = new Set();
 
@@ -63,22 +67,9 @@ class EntryChunkPlugin {
           compilation.updateAsset(name, (old) => {
             const oldSource = old.source().toString();
             const replaceSource = new rspack.sources.ReplaceSource(old);
+            const prologue = PROLOGUE_REGEX.exec(oldSource)![0];
 
-            if (oldSource.startsWith('#!')) {
-              const firstLineEnd = oldSource.indexOf('\n');
-              replaceSource.insert(firstLineEnd + 1, IMPORT_META_URL_SHIM);
-            } else if (
-              oldSource.startsWith("'use strict'") ||
-              oldSource.startsWith('"use strict"')
-            ) {
-              replaceSource.replace(
-                0,
-                11,
-                `"use strict";\n${IMPORT_META_URL_SHIM}`,
-              );
-            } else {
-              replaceSource.insert(0, IMPORT_META_URL_SHIM);
-            }
+            replaceSource.insert(prologue.length, IMPORT_META_URL_SHIM);
 
             return replaceSource;
           });

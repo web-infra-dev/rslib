@@ -22,6 +22,12 @@ describe('shebang', async () => {
     test('shebang at the beginning even if minified', async () => {
       expect(onlyStartsWith(entries.esm1!, '#!/usr/bin/env node')).toBe(true);
     });
+
+    test('"use strict" right after shebang in CJS', async () => {
+      const [shebang, directive] = entries.cjs!.split(/\r?\n/);
+      expect(shebang).toBe('#!/usr/bin/env node');
+      expect(directive).toBe('"use strict";');
+    });
   });
 
   describe('bundle-false', async () => {
