@@ -29,6 +29,8 @@ export type RsbuildConfigWithLibInfo = {
   id?: string;
   format: Format;
   config: EnvironmentConfig;
+  dts?: Dts;
+  bundle?: false;
 };
 
 export type RsbuildConfigEntry = NonNullable<
@@ -569,4 +571,10 @@ export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
    * @inheritdoc
    */
   output?: RslibOutputConfig;
+  /**
+   * Whether to generate the `exports` field in `package.json` from the build outputs.
+   * Can be overridden by the `exports` option of `build`.
+   * @default false
+   */
+  exports?: boolean;
 }

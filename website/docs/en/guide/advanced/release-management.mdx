@@ -46,6 +46,56 @@ Pay particular attention to the following fields:
 
 Also make sure that the package does not set `private: true`. It is also recommended to add `description`, `license`, and `repository` so users can understand and locate the project on npm.
 
+### Generate exports
+
+Instead of maintaining the `exports` field by hand, you can run `rslib build --exports`, or set `exports: true` in the configuration file, to generate it from the build outputs after a successful build. `--no-exports` disables it for a single build. The rules are as follows:
+
+- Only outputs in the `esm` and `cjs` formats are exported.
+- The `index` entry is exported as `.`, and other entries are exported by their entry names, such as `./utils/numbers`.
+- In bundleless mode, only the `index` entry in the root of [lib.outBase](/config/lib/out-base) is exported.
+- When an entry has both `esm` and `cjs` outputs, the value uses the `import` and `require` conditions. When it has only one format, the value is the output path.
+
+For example, building `esm` and `cjs` libs with an `index` entry generates:
+
+```json title="package.json"
+{
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
+    }
+  }
+}
+```
+
+The result is merged into the existing `exports` field. For matching subpaths, generated `import` and `require` conditions replace the previous format conditions. Existing `types` and `default` targets are kept unless this build generates replacements. Other conditions, such as `browser` or a custom source condition, and other subpaths are kept. A warning is shown when an existing subpath changes or points to a missing output. The original indentation and line endings are preserved, and the file is not written when nothing changes.
+
+In watch mode, the `exports` field is generated again after each successful build. Writing `package.json` triggers one more build, which stops once the field no longer changes.
+
+#### Declaration files
+
+For libs with [dts](/config/lib/dts) enabled, Rslib checks the declaration files next to the outputs:
+
+- When the outputs of every format have declaration files with the matching extension next to them (`.d.ts` for `.js`, `.d.mts` for `.mjs`, and `.d.cts` for `.cjs`), no `types` condition is added, as TypeScript finds them on its own.
+- Otherwise, a `types` condition shared by all formats is added, preferring the declaration file with the matching extension.
+- When none of the outputs of a lib have declaration files next to them, the build fails, such as when declaration files are emitted to a separate [dts.distPath](/config/lib/dts#dtsdistpath).
+
+For example, in a package with `"type": "module"`, when both the `esm` and `cjs` libs enable `dts: true`, the `cjs` output `index.cjs` only has `index.d.ts` next to it instead of the matching `index.d.cts`, so the following is generated:
+
+```json title="package.json"
+{
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
+    }
+  }
+}
+```
+
+To emit declaration files with the matching extension for every format, enable [dts.autoExtension](/config/lib/dts#dtsautoextension) and output each format to a separate directory.
+
 ## pnpm version management
 
 pnpm provides [versioning and publishing features](https://pnpm.io/versioning) for recording changes, updating package versions, generating changelogs, synchronizing dependency versions between workspace packages, and publishing npm packages.

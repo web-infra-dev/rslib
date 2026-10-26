@@ -8,6 +8,7 @@ import {
 } from '@rsbuild/core';
 import util from 'node:util';
 import { composeRsbuildEnvironments, pruneEnvironments } from './config';
+import { ExportsPlugin } from './exports/plugin';
 import type { LoadConfigResult } from './loadConfig';
 import type { Format, RslibConfig } from './types';
 import type {
@@ -229,13 +230,24 @@ export async function createRslib(
       } satisfies RsbuildPlugin);
     }
 
-    const { environments } = await composeRsbuildEnvironments(config);
+    const { environments, environmentWithInfos } =
+      await composeRsbuildEnvironments(config);
 
     const rsbuildInstance = await createRsbuildInstance(
       options,
       'production',
       pruneEnvironments(environments, buildOptions.lib),
     );
+
+    if (buildOptions.exports ?? config.exports) {
+      rsbuildInstance.addPlugins([
+        ExportsPlugin({
+          root: config.root!,
+          libInfos: environmentWithInfos,
+          watch: Boolean(buildOptions.watch),
+        }),
+      ]);
+    }
 
     const buildResult = await rsbuildInstance.build({
       watch: buildOptions.watch,

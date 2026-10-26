@@ -22,6 +22,12 @@ export type BuildOptions = CommonOptions & {
    * @default false
    */
   watch?: boolean;
+  /**
+   * Whether to generate the `exports` field in `package.json` from the build outputs.
+   * Overrides the `exports` config when specified.
+   * @default the value of the `exports` config
+   */
+  exports?: boolean;
 };
 
 export type InspectConfigOptions = CommonOptions & {
