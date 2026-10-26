@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+'use client';
 
 import path from 'path';
 import { bar } from './bar';
