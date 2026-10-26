@@ -9,7 +9,7 @@ const esmShared = {
   },
 };
 
-const esmSharedBundleFalse = {
+const bundlelessShared = {
   bundle: false,
   source: {
     entry: {
@@ -23,6 +23,87 @@ export default defineConfig({
     generateBundleCjsConfig({
       output: {
         distPath: './dist/bundle/cjs0',
+      },
+    }),
+    generateBundleCjsConfig({
+      output: {
+        minify: false,
+        distPath: './dist/bundle/cjs1',
+      },
+    }),
+    generateBundleCjsConfig({
+      output: {
+        minify: {
+          jsOptions: {
+            minimizerOptions: {
+              compress: {
+                directives: false,
+                join_vars: false,
+              },
+            },
+          },
+        },
+        distPath: './dist/bundle/cjs2',
+      },
+    }),
+    generateBundleCjsConfig({
+      ...bundlelessShared,
+      output: {
+        distPath: './dist/bundle-false/cjs0',
+      },
+    }),
+    generateBundleCjsConfig({
+      ...bundlelessShared,
+      output: {
+        minify: false,
+        distPath: './dist/bundle-false/cjs1',
+      },
+    }),
+    generateBundleCjsConfig({
+      ...bundlelessShared,
+      output: {
+        minify: {
+          jsOptions: {
+            minimizerOptions: {
+              compress: {
+                directives: false,
+                join_vars: false,
+              },
+            },
+          },
+        },
+        distPath: './dist/bundle-false/cjs2',
+      },
+    }),
+    generateBundleCjsConfig({
+      output: {
+        minify: {
+          jsOptions: {
+            minimizerOptions: {
+              compress: {
+                directives: false,
+                join_vars: true,
+              },
+            },
+          },
+        },
+        distPath: './dist/bundle/cjs-join-vars',
+      },
+    }),
+    generateBundleCjsConfig({
+      ...bundlelessShared,
+      output: {
+        minify: {
+          jsOptions: {
+            minimizerOptions: {
+              compress: {
+                directives: false,
+                join_vars: true,
+              },
+            },
+          },
+        },
+        distPath: './dist/bundle-false/cjs-join-vars',
       },
     }),
     generateBundleEsmConfig({
@@ -41,14 +122,14 @@ export default defineConfig({
       },
     }),
     generateBundleEsmConfig({
-      ...esmSharedBundleFalse,
+      ...bundlelessShared,
       shims: { esm: { __dirname: true, __filename: true } },
       output: {
         distPath: './dist/bundle-false/esm0',
       },
     }),
     generateBundleEsmConfig({
-      ...esmSharedBundleFalse,
+      ...bundlelessShared,
       shims: { esm: { __dirname: true, __filename: true } },
       output: {
         minify: true,
