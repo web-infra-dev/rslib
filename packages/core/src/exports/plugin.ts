@@ -16,19 +16,13 @@ import {
 export type ExportsPluginOptions = {
   root: string;
   libInfos: RequireKey<RsbuildConfigWithLibInfo, 'id'>[];
-  watch: boolean;
 };
 
 export const ExportsPlugin = ({
   root,
   libInfos,
-  watch,
 }: ExportsPluginOptions): RsbuildPlugin => {
-  // Tracks the last failure so that a recovery is reported even when
-  // package.json does not change.
-  let failed = false;
-
-  const writeExports = (stats: Rspack.Stats | Rspack.MultiStats): boolean => {
+  const writeExports = (stats: Rspack.Stats | Rspack.MultiStats) => {
     const statsList = 'stats' in stats ? stats.stats : [stats];
     const collected = new Map<string, CollectedEntry[]>();
     const outputPaths: string[] = [];
@@ -96,11 +90,10 @@ export const ExportsPlugin = ({
       { ...pkgJson, exports: exportsField },
       originalText,
     );
-    if (text === originalText) return false;
+    if (text === originalText) return;
 
     fs.writeFileSync(pkgJsonPath, text);
     logger.info('generated "exports" field in package.json.');
-    return true;
   };
 
   return {
@@ -108,25 +101,8 @@ export const ExportsPlugin = ({
     setup(api) {
       api.onAfterBuild(({ stats }) => {
         // Failed builds already report errors, so there is nothing to export.
-        // In watch mode, the next successful build generates it again.
         if (!stats || stats.hasErrors()) return;
-
-        try {
-          const written = writeExports(stats);
-          if (failed && !written) {
-            logger.info('"exports" field in package.json is up to date.');
-          }
-          failed = false;
-        } catch (error) {
-          if (!watch) throw error;
-          // The build output is unaffected, so keep watching and retry on the
-          // next rebuild.
-          failed = true;
-          logger.error(
-            'Failed to update "exports" field in package.json, will retry on the next rebuild.',
-          );
-          logger.error(error);
-        }
+        writeExports(stats);
       });
     },
   };

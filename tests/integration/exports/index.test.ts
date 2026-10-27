@@ -5,7 +5,6 @@ import { afterAll, describe, expect, test } from '@rstest/core';
 import {
   buildAndGetResults,
   expectBuildToFail,
-  expectPoll,
   rslibBuild,
 } from 'test-helper';
 
@@ -64,12 +63,17 @@ describe('exports', () => {
     });
   });
 
-  test('should generate exports in watch mode', async () => {
+  test('should not generate exports in watch mode', async () => {
     const fixture = 'esm-only';
     const fixturePath = join(__dirname, fixture);
     const packageJsonPath = join(fixturePath, 'package.json');
-    writeFileSync(packageJsonPath, packageJsonContents.get(fixture)!);
+    const original = packageJsonContents.get(fixture)!;
+    writeFileSync(packageJsonPath, original);
 
+    let onFirstBuild!: () => void;
+    const firstBuild = new Promise<void>((resolve) => {
+      onFirstBuild = resolve;
+    });
     const rslib = await createRslib({
       cwd: fixturePath,
       config: {
@@ -77,17 +81,21 @@ describe('exports', () => {
         source: { entry: { index: '../__fixtures__/src/index.ts' } },
         exports: true,
         logLevel: 'silent',
+        plugins: [
+          {
+            name: 'test:first-build',
+            setup(api) {
+              api.onAfterBuild(() => onFirstBuild());
+            },
+          },
+        ],
       },
     });
     const buildResult = await rslib.build({ watch: true });
 
     try {
-      await expectPoll(() =>
-        readFileSync(packageJsonPath, 'utf8').includes('"exports"'),
-      ).toBeTruthy();
-      expect(readFixtureExports(fixture)).toEqual({
-        '.': './dist/esm/index.mjs',
-      });
+      await firstBuild;
+      expect(readFileSync(packageJsonPath, 'utf8')).toBe(original);
     } finally {
       await buildResult.close();
     }
