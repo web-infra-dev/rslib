@@ -2003,7 +2003,7 @@ export async function composeCreateRsbuildConfig(
       config.id = libConfig.id;
     }
 
-    if (userConfig.dts !== undefined && userConfig.dts !== false) {
+    if (userConfig.dts) {
       config.dts = userConfig.dts;
     }
 
@@ -2058,13 +2058,7 @@ export async function composeRsbuildEnvironments(
   for (const { format, id, config, dts, bundle } of rsbuildConfigWithLibInfo) {
     const libId = typeof id === 'string' ? id : composeDefaultId(format);
     environments[libId] = config;
-    environmentWithInfos.push({
-      id: libId,
-      format,
-      config,
-      ...(dts === undefined ? {} : { dts }),
-      ...(bundle === undefined ? {} : { bundle }),
-    });
+    environmentWithInfos.push({ id: libId, format, config, dts, bundle });
   }
 
   const conflictIds = usedIds.filter(

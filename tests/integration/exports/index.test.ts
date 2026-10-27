@@ -101,6 +101,31 @@ describe('exports', () => {
     }
   });
 
+  test('should not generate exports when building some libs', async () => {
+    const fixture = 'esm-only';
+    const fixturePath = join(__dirname, fixture);
+    const packageJsonPath = join(fixturePath, 'package.json');
+    const original = packageJsonContents.get(fixture)!;
+    writeFileSync(packageJsonPath, original);
+
+    const rslib = await createRslib({
+      cwd: fixturePath,
+      config: {
+        lib: [
+          { id: 'esm', format: 'esm', output: { distPath: 'dist/esm' } },
+          { id: 'cjs', format: 'cjs', output: { distPath: 'dist/cjs' } },
+        ],
+        source: { entry: { index: '../__fixtures__/src/index.ts' } },
+        exports: true,
+        logLevel: 'silent',
+      },
+    });
+    const buildResult = await rslib.build({ lib: ['esm'] });
+    await buildResult.close();
+
+    expect(readFileSync(packageJsonPath, 'utf8')).toBe(original);
+  });
+
   test('should read the exports option from the config file', async () => {
     const fixture = 'esm-only';
     const fixturePath = join(__dirname, fixture);

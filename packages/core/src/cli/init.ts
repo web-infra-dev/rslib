@@ -100,10 +100,6 @@ export const applyCliOptions = (
     config.logLevel = options.logLevel;
   }
 
-  if (options.exports !== undefined) {
-    config.exports = options.exports;
-  }
-
   for (const lib of config.lib) {
     if (options.format !== undefined) lib.format = options.format;
     if (options.bundle !== undefined) lib.bundle = options.bundle;
