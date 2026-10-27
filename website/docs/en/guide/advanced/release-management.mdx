@@ -70,7 +70,7 @@ For example, building `esm` and `cjs` libs with an `index` entry generates:
 
 The result is merged into the existing `exports` field. For matching subpaths, generated `import` and `require` conditions replace the previous format conditions. Existing `types` and `default` targets are kept unless this build generates replacements. Other conditions, such as `browser` or a custom source condition, and other subpaths are kept. A warning is shown when an existing subpath changes or points to a missing output. The original indentation and line endings are preserved, and the file is not written when nothing changes.
 
-In watch mode, the `exports` field is generated again after each successful build. Writing `package.json` triggers one more build, which stops once the field no longer changes.
+The `exports` field is not generated in watch mode. Run `rslib build` to update it after the entries change.
 
 #### Declaration files
 

@@ -109,7 +109,7 @@ async function handleDiagnosticsAndProcessFiles(
 
 export async function emitDtsWithOldApi(
   options: EmitDtsOptions<OldApiTsconfigResult>,
-  onComplete: (isSuccess: boolean) => void | Promise<void>,
+  onComplete: (isSuccess: boolean) => void,
   bundle = false,
   isWatch = false,
   build = false,
@@ -155,17 +155,7 @@ export async function emitDtsWithOldApi(
     );
   };
 
-  let resolveFirstBuild!: () => void;
-  let rejectFirstBuild!: (error: unknown) => void;
-  const firstBuild = isWatch
-    ? new Promise<void>((resolve, reject) => {
-        resolveFirstBuild = resolve;
-        rejectFirstBuild = reject;
-      })
-    : undefined;
-  let watchTask = Promise.resolve();
-
-  const reportWatchStatusChanged: WatchStatusReporter = (
+  const reportWatchStatusChanged: WatchStatusReporter = async (
     diagnostic: Diagnostic,
     _newLine: string,
     _options: CompilerOptions,
@@ -182,35 +172,43 @@ export async function emitDtsWithOldApi(
       logger.info(logPrefixTsc, message);
     }
 
-    // TypeScript does not await status reporters. Track post-processing ourselves
-    // so the initial IPC success is sent after the final declarations are ready.
-    if (diagnostic.code === 6194 || diagnostic.code === 6193) {
-      const success = diagnostic.code === 6194 && !errorCount;
-      watchTask = watchTask
-        .then(async () => {
-          await processDtsFiles(
-            bundle,
-            cwd,
-            declarationDir,
-            dtsExtension,
-            redirect,
-            configPath,
-            rootDir,
-            paths,
-            banner,
-            footer,
-          );
-          await onComplete(success);
-          if (!success) {
-            throw new Error(message);
-          }
-          logger.info(logPrefixTsc, message);
-          resolveFirstBuild();
-        })
-        .catch((error: unknown) => {
-          rejectFirstBuild(error);
-          logger.error(error);
-        });
+    // 6194: 0 errors or 2+ errors!
+    if (diagnostic.code === 6194) {
+      if (errorCount === 0 || !errorCount) {
+        logger.info(logPrefixTsc, message);
+        onComplete(true);
+      } else {
+        logger.error(logPrefixTsc, message);
+      }
+      await processDtsFiles(
+        bundle,
+        cwd,
+        declarationDir,
+        dtsExtension,
+        redirect,
+        configPath,
+        rootDir,
+        paths,
+        banner,
+        footer,
+      );
+    }
+
+    // 6193: 1 error
+    if (diagnostic.code === 6193) {
+      logger.error(logPrefixTsc, message);
+      await processDtsFiles(
+        bundle,
+        cwd,
+        declarationDir,
+        dtsExtension,
+        redirect,
+        configPath,
+        rootDir,
+        paths,
+        banner,
+        footer,
+      );
     }
   };
 
@@ -453,7 +451,5 @@ export async function emitDtsWithOldApi(
 
       solutionBuilder.build();
     }
-
-    await firstBuild;
   }
 }

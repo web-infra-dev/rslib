@@ -70,7 +70,7 @@ description: '介绍 Rslib 项目的 npm 包版本管理与发布实践，包括
 
 生成结果会合并到已有的 `exports` 字段中。同名子路径中的 `import`、`require` 条件按本轮格式更新；已有的 `types` 和 `default` 目标在本轮生成替代值时更新，否则保留。其他条件（如 `browser` 或自定义源码条件）和其他子路径保持不变。已有子路径发生变化或指向缺失产物时，会输出警告。写入时保留原有缩进和换行符，内容没有变化时跳过写入。
 
-在 watch 模式下，每次构建成功后都会重新生成 `exports` 字段。写入 `package.json` 会再触发一次构建，字段不再变化后即停止。
+watch 模式下不会生成 `exports` 字段。入口变化后，执行 `rslib build` 即可更新。
 
 #### 类型声明文件 \{#declaration-files}
 
