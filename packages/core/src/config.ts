@@ -26,8 +26,8 @@ import {
 } from './css/cssConfig';
 import { isCssGlobalFile, type CssLoaderOptionsAuto } from './css/utils';
 import { composeExeConfig } from './exe';
-import { composeEntryChunkConfig } from './plugins/EntryChunkPlugin';
-import { pluginCjsShims, pluginEsmRequireShim } from './plugins/shims';
+import { composeChunkAssetConfig } from './plugins/ChunkAssetPlugin';
+import { pluginCjsShims } from './plugins/shims';
 import type {
   BannerAndFooter,
   DeepRequired,
@@ -707,9 +707,6 @@ const composeShimsConfig = (
             },
           },
         },
-        plugins: [resolvedShims.esm.require && pluginEsmRequireShim()].filter(
-          Boolean,
-        ),
       };
       break;
     }
@@ -1823,8 +1820,9 @@ async function composeLibRsbuildConfig(
   );
   const assetConfig = composeAssetConfig(bundle, format);
 
-  const entryChunkConfig = composeEntryChunkConfig({
-    enabledImportMetaUrlShim: enabledShims.cjs['import.meta.url'],
+  const chunkAssetConfig = composeChunkAssetConfig({
+    format,
+    enabledShims,
     contextToWatch: outBase,
   });
   const dtsConfig = await composeDtsConfig(config, format, dtsExtension);
@@ -1862,7 +1860,7 @@ async function composeLibRsbuildConfig(
     cssConfig,
     assetConfig,
     wasmConfig,
-    entryChunkConfig,
+    chunkAssetConfig,
     minifyConfig,
     dtsConfig,
     bannerFooterConfig,

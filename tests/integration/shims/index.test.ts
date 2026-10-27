@@ -8,7 +8,9 @@ import { buildAndGetResults, queryContent } from 'test-helper';
 
 describe('ESM shims', async () => {
   const fixturePath = join(__dirname, 'esm');
-  const { entries, entryFiles } = await buildAndGetResults({ fixturePath });
+  const { entries, entryFiles, contents } = await buildAndGetResults({
+    fixturePath,
+  });
   const entry0Result = (await import(entryFiles.esm0!)).default();
 
   test('__dirname', async () => {
@@ -58,6 +60,14 @@ describe('ESM shims', async () => {
       export { randomFile };
       "
     `);
+  });
+
+  test('removes unused require initialization during default minification', () => {
+    const { content } = queryContent(contents.esm2!, 'unused.js', {
+      basename: true,
+    });
+    expect(content).toContain('node:module');
+    expect(content).not.toContain('createRequire');
   });
 
   test('Node.js shims in mjs file', async () => {
@@ -178,7 +188,7 @@ describe('CJS shims', async () => {
 });
 
 describe('shims with copy', () => {
-  test('the CJS shims should not affect files in `output.copy`', async () => {
+  test('shims should not affect files in `output.copy`', async () => {
     const fixturePath = join(__dirname, 'copy');
     await buildAndGetResults({ fixturePath });
     const copiedFile = path.resolve(fixturePath, 'dist/cjs/index.ts');
@@ -189,5 +199,10 @@ describe('shims with copy', () => {
       export default 'ok';
       "
     `);
+    const copiedEsm = fs.readFileSync(
+      path.resolve(fixturePath, 'dist/esm/copied.js'),
+      'utf-8',
+    );
+    expect(copiedEsm).toBe(copiedContent);
   });
 });

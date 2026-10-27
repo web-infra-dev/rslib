@@ -46,6 +46,7 @@ export default defineConfig({
       source: {
         entry: {
           index: './src/require.ts',
+          unused: './src/ok.cjs',
         },
       },
       output: {
