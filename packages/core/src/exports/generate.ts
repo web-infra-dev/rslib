@@ -11,12 +11,13 @@ import { normalizeSlash } from '../utils/helper';
 import { logger } from '../utils/logger';
 import type { DeclarationFile } from './dts';
 
+/**
+ * Paths are relative to the package root, or absolute for different Windows
+ * drives, using forward slashes.
+ */
 export type CollectedEntry = {
   entryName: string;
   /**
-   * Paths below are relative to the package root, or absolute for different
-   * Windows drives, using forward slashes.
-   *
    * The JavaScript output, absent for entries whose modules are all CSS files,
    * as their JavaScript output is empty.
    */
@@ -94,9 +95,9 @@ function getFormatSlots(slots: EntrySlots): FormatSlot[] {
  * when TypeScript cannot resolve a declaration file with the matching extension
  * next to every output, and then all formats share one declaration file.
  */
-function buildJsValue(slots: EntrySlots): ExportsValue {
+function buildJsValue(slots: EntrySlots): string | Record<string, string> {
   const formatSlots = getFormatSlots(slots);
-  const value = (types?: string): ExportsValue => {
+  const value = (types?: string): string | Record<string, string> => {
     if (slots.esm && slots.cjs) {
       return {
         ...(types ? { types } : {}),
@@ -151,16 +152,18 @@ function getSourceFile(subpath: string, slots: EntrySlots): string {
 }
 
 function addSourceCondition(
-  value: ExportsValue,
+  value: string | Record<string, string>,
   condition: string,
   sourceFile: string,
-): ExportsValue {
+): Record<string, string> {
   return typeof value === 'string'
     ? { [condition]: sourceFile, default: value }
-    : { [condition]: sourceFile, ...(value as Record<string, ExportsValue>) };
+    : { [condition]: sourceFile, ...value };
 }
 
-function sortSubpaths<T>(entries: [string, T][]): [string, T][] {
+function sortSubpaths(
+  entries: [string, ExportsValue][],
+): [string, ExportsValue][] {
   // Keep the main subpath first, then sort the rest by code units, as
   // locale-aware comparison may differ between machines.
   return entries.sort(([a], [b]) => {
@@ -175,9 +178,7 @@ export function generateExports({
   collected,
   options,
 }: GenerateExportsOptions): GeneratedExports {
-  const exclude = options.exclude?.length
-    ? picomatch(options.exclude)
-    : () => false;
+  const exclude = picomatch(options.exclude ?? []);
 
   const preparedLibs = libInfos.flatMap(
     ({ id, format, dts, bundle }): PreparedLib[] => {
@@ -324,7 +325,7 @@ export function generateExports({
     withCss: boolean,
   ): ExportsField =>
     Object.fromEntries(
-      sortSubpaths<ExportsValue>([
+      sortSubpaths([
         ...jsSubpaths.map(([subpath, slots]): [string, ExportsValue] => [
           subpath,
           jsValue(subpath, slots),

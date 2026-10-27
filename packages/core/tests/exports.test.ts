@@ -356,6 +356,14 @@ describe('generateExports with source', () => {
   });
 
   it('should add a source condition to JavaScript subpaths', () => {
+    const { exports } = generate(libInfos, collected, {
+      source: '@acme/source',
+    });
+    expect(Object.keys(exports['.']!)).toEqual([
+      '@acme/source',
+      'import',
+      'require',
+    ]);
     expect(generate(libInfos, collected, { source: '@acme/source' })).toEqual({
       exports: {
         '.': {

@@ -6,6 +6,7 @@ import { isJavaScriptOutputFile } from '../exe/utils';
 import type {
   ExportsField,
   ExportsOptions,
+  ExportsTransformContext,
   PkgJson,
   RequireKey,
   RsbuildConfigWithLibInfo,
@@ -25,7 +26,7 @@ export type ExportsPluginOptions = {
 async function customizeExports(
   exports: ExportsField,
   { extra, transform }: ExportsOptions,
-  context: { pkg: PkgJson; isPublish: boolean },
+  context: ExportsTransformContext,
 ): Promise<ExportsField> {
   let result: ExportsField = { ...exports, ...extra };
   for (const fn of [transform ?? []].flat()) {
@@ -56,9 +57,12 @@ export const ExportsPlugin = ({
       const sourceFiles = compilation.entries
         .get(entryName)!
         .dependencies.flatMap((dependency) => {
+          // The module of a dependency may be a concatenated module without a
+          // resource, while the resolved module is the original one.
           const resource = (
-            compilation.moduleGraph.getModule(dependency) as
-              { resource?: string } | undefined
+            compilation.moduleGraph.getResolvedModule(dependency) as {
+              resource?: string;
+            } | null
           )?.resource;
           return resource ? [toRelative(resource.split('?')[0]!)] : [];
         });

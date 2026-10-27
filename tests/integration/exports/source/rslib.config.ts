@@ -8,4 +8,8 @@ export default defineConfig({
       index: './src/index.ts',
     },
   },
+  output: {
+    // The web target concatenates the imported module into the CJS entry.
+    target: 'web',
+  },
 });

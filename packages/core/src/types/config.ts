@@ -4,7 +4,7 @@ import type {
   RsbuildConfig,
   Rspack,
 } from '@rsbuild/core';
-import type { GetAsyncFunctionFromUnion, PkgJson } from './utils';
+import type { GetAsyncFunctionFromUnion } from './utils';
 
 export type Format = 'esm' | 'cjs' | 'umd' | 'mf' | 'iife';
 
@@ -586,7 +586,7 @@ export type ExportsField = Record<string, ExportsValue>;
 
 export type ExportsTransformContext = {
   /** The content of package.json before writing. */
-  pkg: PkgJson;
+  pkg: Record<string, unknown>;
   /** Whether the result is written to `publishConfig.exports`. */
   isPublish: boolean;
 };

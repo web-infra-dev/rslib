@@ -1,5 +1,5 @@
 import { mergeRsbuildConfig } from '@rsbuild/core';
-import type { LibConfig, RslibConfig } from './types';
+import type { ExportsOptions, LibConfig, RslibConfig } from './types';
 
 /**
  * Merge multiple lib arrays, merging items with the same id.
@@ -51,7 +51,13 @@ function mergeExportsConfigs(
     if (config === true) return typeof merged === 'object' ? merged : true;
     if (config === false || typeof merged !== 'object') return config;
 
-    const result = { ...merged, ...config };
+    // Like `mergeRsbuildConfig`, `undefined` values do not override others.
+    const result: ExportsOptions = {
+      ...merged,
+      ...Object.fromEntries(
+        Object.entries(config).filter(([, value]) => value !== undefined),
+      ),
+    };
     if (merged.extra && config.extra) {
       result.extra = { ...merged.extra, ...config.extra };
     }
