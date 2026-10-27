@@ -28,8 +28,8 @@ export function findDeclarationFile(
   root: string,
 ): DeclarationFile | undefined {
   const ext = path.extname(jsFile);
-  const matchedExt = MATCHED_DECLARATION_EXTENSIONS[ext];
-  if (!matchedExt) return;
+  // Callers only pass JavaScript outputs, whose extensions are all listed.
+  const matchedExt = MATCHED_DECLARATION_EXTENSIONS[ext]!;
 
   const base = jsFile.slice(0, -ext.length);
   const declarationExt = [

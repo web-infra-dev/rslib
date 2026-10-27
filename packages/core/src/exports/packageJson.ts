@@ -50,10 +50,8 @@ function mergeSubpath(
   );
   if (userKeys.length === 0) return generated;
 
-  const { default: generatedDefault, ...generatedConditions } = generatedValue;
-  const defaultTarget = Object.hasOwn(generatedValue, 'default')
-    ? generatedDefault
-    : existing.default;
+  const { default: defaultTarget = existing.default, ...generatedConditions } =
+    generatedValue;
 
   // Generated conditions take the place of the first generated condition in the
   // existing value, or go after the user conditions when there is none.
