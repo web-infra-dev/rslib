@@ -15,7 +15,7 @@ const getOpeningStatements = (content: string, count: number) =>
     .split(/;\s*|\r?\n\s*/, count)
     .map((statement) => statement.trim());
 
-describe('shebang and directives', async () => {
+describe('shebang', async () => {
   const fixturePath = join(__dirname, 'shebang');
   const { entries, contents, entryFiles } = await buildAndGetResults({
     fixturePath,
@@ -29,44 +29,26 @@ describe('shebang and directives', async () => {
       expect(onlyStartsWith(content, '#!/usr/bin/env node')).toBe(true);
     });
 
-    test.each([
-      { minify: 'default', content: entries.cjs0! },
-      { minify: 'disabled', content: entries.cjs1! },
-      { minify: 'enabled, join_vars disabled', content: entries.cjs2! },
-      { minify: 'enabled, join_vars enabled', content: entries.cjs6! },
-    ])(
-      'keeps the shebang and directives before the CJS shim (minify: $minify)',
-      ({ content }) => {
-        expect(onlyStartsWith(content, '#!/usr/bin/env node')).toBe(true);
-        expect(getOpeningStatements(content, 3)).toEqual([
-          '#!/usr/bin/env node',
-          '"use strict"',
-          '"use client"',
-        ]);
-      },
-    );
+    test('keeps the shebang before CJS strict mode', () => {
+      expect(onlyStartsWith(entries.cjs0!, '#!/usr/bin/env node')).toBe(true);
+      expect(getOpeningStatements(entries.cjs0!, 2)).toEqual([
+        '#!/usr/bin/env node',
+        '"use strict"',
+      ]);
+    });
   });
 
   describe('bundleless', async () => {
-    test.each([
-      { minify: 'default', files: contents.cjs3! },
-      { minify: 'disabled', files: contents.cjs4! },
-      { minify: 'enabled, join_vars disabled', files: contents.cjs5! },
-      { minify: 'enabled, join_vars enabled', files: contents.cjs7! },
-    ])(
-      'keeps the shebang and directives before the CJS shim (minify: $minify)',
-      ({ files }) => {
-        const { content } = queryContent(files, 'index.cjs', {
-          basename: true,
-        });
-        expect(onlyStartsWith(content!, '#!/usr/bin/env node')).toBe(true);
-        expect(getOpeningStatements(content!, 3)).toEqual([
-          '#!/usr/bin/env node',
-          '"use strict"',
-          '"use client"',
-        ]);
-      },
-    );
+    test('keeps the shebang before CJS strict mode without minification', () => {
+      const { content } = queryContent(contents.cjs1!, 'index.cjs', {
+        basename: true,
+      });
+      expect(onlyStartsWith(content!, '#!/usr/bin/env node')).toBe(true);
+      expect(getOpeningStatements(content!, 2)).toEqual([
+        '#!/usr/bin/env node',
+        '"use strict"',
+      ]);
+    });
 
     test.each([
       { minify: 'default', files: contents.esm2! },
@@ -115,48 +97,103 @@ describe('shebang and directives', async () => {
 });
 
 describe('React directives', async () => {
-  const fixturePath = join(__dirname, 'react/bundleless');
+  const fixturePath = join(__dirname, 'react');
   const { contents } = await buildAndGetResults({ fixturePath });
 
-  describe('bundleless', async () => {
-    test('preserves React directives at the beginning of ESM files', async () => {
-      const { content: foo } = queryContent(contents.esm!, 'foo.js', {
-        basename: true,
-      });
-      expect(onlyStartsWith(foo!, `"use client";`)).toBe(true);
-
-      const { content: bar } = queryContent(contents.esm!, 'bar.js', {
-        basename: true,
-      });
-      expect(onlyStartsWith(bar!, `"use server";`)).toBe(true);
-    });
-
-    test.each([
-      { minify: 'default', files: contents.cjs1! },
-      { minify: 'disabled', files: contents.cjs2! },
-      { minify: 'enabled, join_vars disabled', files: contents.cjs0! },
-      { minify: 'enabled, join_vars enabled', files: contents.cjs3! },
-    ])(
-      'keeps strict mode and React directives before the CJS shim (minify: $minify)',
-      ({ files }) => {
-        const { content: foo } = queryContent(files, 'foo.cjs', {
+  test.each([
+    {
+      mode: 'bundle',
+      format: 'esm',
+      files: contents.esm0!,
+      extension: 'js',
+      prefix: [],
+    },
+    {
+      mode: 'bundle',
+      format: 'cjs',
+      files: contents.cjs0!,
+      extension: 'cjs',
+      prefix: ['"use strict"'],
+    },
+    {
+      mode: 'bundleless',
+      format: 'esm',
+      files: contents.esm1!,
+      extension: 'js',
+      prefix: [],
+    },
+    {
+      mode: 'bundleless',
+      format: 'cjs',
+      files: contents.cjs1!,
+      extension: 'cjs',
+      prefix: ['"use strict"'],
+    },
+  ])(
+    'preserves React directives at the top of $format files ($mode)',
+    ({ files, extension, prefix }) => {
+      for (const [name, directive] of [
+        ['foo', '"use client"'],
+        ['bar', '"use server"'],
+      ] as const) {
+        const { content } = queryContent(files, `${name}.${extension}`, {
           basename: true,
         });
-        expect(getOpeningStatements(foo!, 2)).toEqual([
-          '"use strict"',
-          '"use client"',
+        expect(getOpeningStatements(content!, prefix.length + 1)).toEqual([
+          ...prefix,
+          directive,
         ]);
-        expect(foo!.split('"use client"')).toHaveLength(2);
+        expect(content!.split(directive)).toHaveLength(2);
+      }
+    },
+  );
+});
 
-        const { content: bar } = queryContent(files, 'bar.cjs', {
+describe('shims with shebang and directives', async () => {
+  const fixturePath = join(__dirname, 'shims');
+  const { contents } = await buildAndGetResults({ fixturePath });
+
+  test.each([
+    {
+      format: 'esm',
+      scenario: 'bundle, default minify',
+      files: contents.esm0!,
+    },
+    { format: 'esm', scenario: 'bundleless, no minify', files: contents.esm1! },
+    {
+      format: 'cjs',
+      scenario: 'bundle, default minify',
+      files: contents.cjs0!,
+    },
+    { format: 'cjs', scenario: 'bundleless, no minify', files: contents.cjs1! },
+  ])(
+    'keeps the prologue before shims ($format, $scenario)',
+    ({ format, files }) => {
+      const extension = format === 'esm' ? 'js' : 'cjs';
+      const strict = format === 'cjs' ? ['"use strict"'] : [];
+      for (const [name, directive] of [
+        ['shebang', '"use client"'],
+        ['directive', '"use server"'],
+      ] as const) {
+        const { content } = queryContent(files, `${name}.${extension}`, {
           basename: true,
         });
-        expect(getOpeningStatements(bar!, 2)).toEqual([
-          '"use strict"',
-          '"use server"',
-        ]);
-        expect(bar!.split('"use server"')).toHaveLength(2);
-      },
-    );
-  });
+        const prologue = [...strict, directive];
+        if (name === 'shebang') {
+          prologue.unshift('#!/usr/bin/env node');
+        }
+        expect(onlyStartsWith(content!, '#!/usr/bin/env node')).toBe(
+          name === 'shebang',
+        );
+        expect(getOpeningStatements(content!, prologue.length)).toEqual(
+          prologue,
+        );
+        expect(content!.split(directive)).toHaveLength(2);
+        // Ensure the shim is present so the ordering regression is exercised.
+        expect(content).toContain(
+          format === 'esm' ? 'createRequire' : '__rslib_import_meta_url__',
+        );
+      }
+    },
+  );
 });

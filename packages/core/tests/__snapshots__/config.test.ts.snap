@@ -1177,8 +1177,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       ]
     },
     {
-      shimsInjectedAssets: new Set([]),
-      enabledImportMetaUrlShim: false,
+      shims: undefined,
       contextToWatch: null
     }
   ],
@@ -2077,8 +2076,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       ]
     },
     {
-      shimsInjectedAssets: new Set([]),
-      enabledImportMetaUrlShim: true,
+      shims: 'import.meta.url',
       contextToWatch: null
     }
   ],
@@ -2891,8 +2889,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       ]
     },
     {
-      shimsInjectedAssets: new Set([]),
-      enabledImportMetaUrlShim: false,
+      shims: undefined,
       contextToWatch: null
     }
   ],
@@ -3708,8 +3705,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       ]
     },
     {
-      shimsInjectedAssets: new Set([]),
-      enabledImportMetaUrlShim: false,
+      shims: undefined,
       contextToWatch: null
     }
   ],
@@ -4458,8 +4454,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       }
     ),
     {
-      shimsInjectedAssets: new Set([]),
-      enabledImportMetaUrlShim: false,
+      shims: undefined,
       contextToWatch: null
     }
   ],
@@ -4714,10 +4709,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
         {
           "plugins": [
-            EntryChunkPlugin {
+            ChunkAssetPlugin {
               "contextToWatch": null,
-              "enabledImportMetaUrlShim": false,
-              "shimsInjectedAssets": Set {},
+              "shims": undefined,
             },
           ],
         },
@@ -4981,10 +4975,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
         {
           "plugins": [
-            EntryChunkPlugin {
+            ChunkAssetPlugin {
               "contextToWatch": null,
-              "enabledImportMetaUrlShim": true,
-              "shimsInjectedAssets": Set {},
+              "shims": "import.meta.url",
             },
           ],
         },
@@ -5218,10 +5211,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
         {
           "plugins": [
-            EntryChunkPlugin {
+            ChunkAssetPlugin {
               "contextToWatch": null,
-              "enabledImportMetaUrlShim": false,
-              "shimsInjectedAssets": Set {},
+              "shims": undefined,
             },
           ],
         },
@@ -5462,10 +5454,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
         {
           "plugins": [
-            EntryChunkPlugin {
+            ChunkAssetPlugin {
               "contextToWatch": null,
-              "enabledImportMetaUrlShim": false,
-              "shimsInjectedAssets": Set {},
+              "shims": undefined,
             },
           ],
         },
@@ -5610,10 +5601,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
         },
         {
           "plugins": [
-            EntryChunkPlugin {
+            ChunkAssetPlugin {
               "contextToWatch": null,
-              "enabledImportMetaUrlShim": false,
-              "shimsInjectedAssets": Set {},
+              "shims": undefined,
             },
           ],
         },

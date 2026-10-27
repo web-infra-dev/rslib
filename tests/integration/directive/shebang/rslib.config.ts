@@ -1,139 +1,42 @@
 import { defineConfig } from '@rslib/core';
 import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
-const esmShared = {
-  source: {
-    entry: {
-      index: './src/index.ts',
-    },
-  },
-};
-
-const bundlelessShared = {
-  bundle: false,
-  source: {
-    entry: {
-      index: './src/*',
-    },
-  },
-};
-
 export default defineConfig({
   lib: [
     generateBundleCjsConfig({
       output: {
-        distPath: './dist/bundle/cjs0',
+        distPath: './dist/bundle/cjs-default',
       },
     }),
     generateBundleCjsConfig({
+      bundle: false,
       output: {
         minify: false,
-        distPath: './dist/bundle/cjs1',
-      },
-    }),
-    generateBundleCjsConfig({
-      output: {
-        minify: {
-          jsOptions: {
-            minimizerOptions: {
-              compress: {
-                directives: false,
-                join_vars: false,
-              },
-            },
-          },
-        },
-        distPath: './dist/bundle/cjs2',
-      },
-    }),
-    generateBundleCjsConfig({
-      ...bundlelessShared,
-      output: {
-        distPath: './dist/bundle-false/cjs0',
-      },
-    }),
-    generateBundleCjsConfig({
-      ...bundlelessShared,
-      output: {
-        minify: false,
-        distPath: './dist/bundle-false/cjs1',
-      },
-    }),
-    generateBundleCjsConfig({
-      ...bundlelessShared,
-      output: {
-        minify: {
-          jsOptions: {
-            minimizerOptions: {
-              compress: {
-                directives: false,
-                join_vars: false,
-              },
-            },
-          },
-        },
-        distPath: './dist/bundle-false/cjs2',
-      },
-    }),
-    generateBundleCjsConfig({
-      output: {
-        minify: {
-          jsOptions: {
-            minimizerOptions: {
-              compress: {
-                directives: false,
-                join_vars: true,
-              },
-            },
-          },
-        },
-        distPath: './dist/bundle/cjs-join-vars',
-      },
-    }),
-    generateBundleCjsConfig({
-      ...bundlelessShared,
-      output: {
-        minify: {
-          jsOptions: {
-            minimizerOptions: {
-              compress: {
-                directives: false,
-                join_vars: true,
-              },
-            },
-          },
-        },
-        distPath: './dist/bundle-false/cjs-join-vars',
+        distPath: './dist/bundleless/cjs-no-minify',
       },
     }),
     generateBundleEsmConfig({
-      ...esmShared,
-      shims: { esm: { __dirname: true, __filename: true } },
       output: {
-        distPath: './dist/bundle/esm0',
+        distPath: './dist/bundle/esm-default',
       },
     }),
     generateBundleEsmConfig({
-      ...esmShared,
-      shims: { esm: { __dirname: true, __filename: true } },
       output: {
         minify: true,
-        distPath: './dist/bundle/esm1',
+        distPath: './dist/bundle/esm-minify',
       },
     }),
     generateBundleEsmConfig({
-      ...bundlelessShared,
-      shims: { esm: { __dirname: true, __filename: true } },
+      bundle: false,
       output: {
-        distPath: './dist/bundle-false/esm0',
+        distPath: './dist/bundleless/esm-default',
       },
     }),
     generateBundleEsmConfig({
-      ...bundlelessShared,
-      shims: { esm: { __dirname: true, __filename: true } },
+      bundle: false,
       output: {
         minify: true,
-        distPath: './dist/bundle-false/esm1',
+        distPath: './dist/bundleless/esm-minify',
       },
     }),
   ],
