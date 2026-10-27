@@ -84,7 +84,8 @@ describe('exports', () => {
           {
             name: 'test:first-build',
             setup(api) {
-              api.onAfterBuild(() => onFirstBuild());
+              // Run after the exports plugin to observe its writes.
+              api.onAfterBuild({ order: 'post', handler: onFirstBuild });
             },
           },
         ],
@@ -125,7 +126,7 @@ describe('exports', () => {
     expect(readFileSync(packageJsonPath, 'utf8')).toBe(original);
   });
 
-  test('should read the exports option from the config file', async () => {
+  test('should enable exports with the exports option in the config', async () => {
     const fixture = 'esm-only';
     const fixturePath = join(__dirname, fixture);
     writeFileSync(
@@ -246,7 +247,9 @@ describe('exports', () => {
       },
     });
 
-    expect(readFixtureExports(fixture)).toEqual({
+    const exports = readFixtureExports(fixture);
+    expect(Object.keys(exports)).toEqual(['.', './package.json', './worker']);
+    expect(exports).toEqual({
       '.': {
         browser: './dist/browser.js',
         default: './dist/esm/replaced.mjs',
@@ -411,6 +414,7 @@ describe('exports', () => {
     );
     expect(pkg.exports).toEqual({ '.': './src/index.ts' });
     expect(pkg.publishConfig).toEqual({
+      access: 'public',
       exports: {
         '.': {
           import: './dist/esm/index.mjs',
@@ -436,7 +440,13 @@ describe('exports', () => {
       },
     });
 
-    expect(readFixtureExports(fixture)).toEqual({
+    const exports = readFixtureExports(fixture);
+    expect(Object.keys(exports['.'])).toEqual([
+      '@acme/source',
+      'import',
+      'require',
+    ]);
+    expect(exports).toEqual({
       '.': {
         '@acme/source': './src/index.ts',
         import: './dist/esm/index.mjs',

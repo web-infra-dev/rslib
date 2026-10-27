@@ -442,6 +442,36 @@ describe('Should merge Rslib config correctly', () => {
       },
     });
   });
+
+  test('merge exports options with booleans and partial options', () => {
+    const transform = (exports: ExportsField) => exports;
+    const extra = { './package.json': './package.json' };
+
+    expect(
+      mergeRslibConfig({ exports: false }, { exports: { extra } }),
+    ).toEqual({ exports: { extra } });
+    expect(mergeRslibConfig({ exports: false }, { exports: true })).toEqual({
+      exports: true,
+    });
+    expect(
+      mergeRslibConfig(
+        { exports: { extra } },
+        { exports: { transform, include: ['index'] } },
+      ),
+    ).toEqual({ exports: { extra, transform, include: ['index'] } });
+    expect(
+      mergeRslibConfig(
+        { exports: { extra, transform, include: ['index'] } },
+        {
+          exports: {
+            extra: undefined,
+            transform: undefined,
+            include: undefined,
+          },
+        },
+      ),
+    ).toEqual({ exports: { extra, transform, include: ['index'] } });
+  });
 });
 
 describe('CLI options', () => {
