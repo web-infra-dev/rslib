@@ -4,7 +4,7 @@ import type {
   RsbuildConfig,
   Rspack,
 } from '@rsbuild/core';
-import type { GetAsyncFunctionFromUnion } from './utils';
+import type { GetAsyncFunctionFromUnion, PkgJson } from './utils';
 
 export type Format = 'esm' | 'cjs' | 'umd' | 'mf' | 'iife';
 
@@ -576,5 +576,52 @@ export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
    * Can be overridden by the `exports` option of `build`.
    * @default false
    */
-  exports?: boolean;
+  exports?: boolean | ExportsOptions;
 }
+
+export type ExportsValue =
+  string | null | ExportsValue[] | { [condition: string]: ExportsValue };
+
+export type ExportsField = Record<string, ExportsValue>;
+
+export type ExportsTransformContext = {
+  /** The content of package.json before writing. */
+  pkg: PkgJson;
+  /** Whether the result is written to `publishConfig.exports`. */
+  isPublish: boolean;
+};
+
+export type ExportsTransform = (
+  exports: ExportsField,
+  context: ExportsTransformContext,
+) => ExportsField | Promise<ExportsField>;
+
+export type ExportsOptions = {
+  /**
+   * Glob patterns of entry names to export.
+   * @default `['**']` in bundle mode, `['index']` in bundleless mode
+   */
+  include?: string[];
+  /**
+   * Glob patterns of entry names to exclude from `include`.
+   */
+  exclude?: string[];
+  /**
+   * - `true`: point the top-level exports to source files, and write the
+   *   exports of the build outputs to `publishConfig.exports`.
+   * - string: add a condition with this name pointing to the source file to
+   *   each JavaScript subpath.
+   * @default false
+   */
+  source?: boolean | string;
+  /**
+   * Subpaths added to the generated exports. A subpath with the same key as a
+   * generated one replaces it as a whole.
+   */
+  extra?: ExportsField;
+  /**
+   * Receives the generated exports with `extra` applied, and returns the final
+   * exports. An array of functions is called in order.
+   */
+  transform?: ExportsTransform | ExportsTransform[];
+};

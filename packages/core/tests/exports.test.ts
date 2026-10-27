@@ -11,246 +11,427 @@ rs.mock('rslog');
 
 type LibInfo = RequireKey<RsbuildConfigWithLibInfo, 'id'>;
 
-const createLibInfo = (id: string, format: LibInfo['format']): LibInfo => ({
+const createLibInfo = (
+  id: string,
+  format: LibInfo['format'],
+  info: Partial<LibInfo> = {},
+): LibInfo => ({
   id,
   format,
   config: {} as unknown as LibInfo['config'],
+  ...info,
 });
 
-const createCollected = (
-  entries: Record<string, [entryName: string, jsFile: string][]>,
-): Map<string, CollectedEntry[]> =>
-  new Map(
-    Object.entries(entries).map(([id, list]) => [
-      id,
-      list.map(([entryName, jsFile]) => ({ entryName, jsFile })),
-    ]),
-  );
+const entry = (
+  entryName: string,
+  jsFile?: string,
+  info: Partial<CollectedEntry> = {},
+): CollectedEntry => ({ entryName, jsFile, sourceFiles: [], ...info });
+
+/** A CSS output named by its path relative to an output directory under `dist`. */
+const css = (
+  file: string,
+  name = file.replace(/^dist\/(esm\/|cjs\/)?/, ''),
+) => ({
+  file,
+  name,
+});
+
+const generate = (
+  libInfos: LibInfo[],
+  collected: Record<string, CollectedEntry[]>,
+  options: GenerateExportsOptions['options'] = {},
+) =>
+  generateExports({
+    libInfos,
+    collected: new Map(Object.entries(collected)),
+    options,
+  });
 
 describe('generateExports', () => {
   it('should generate import and require conditions for esm and cjs entries', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')],
-      collected: createCollected({
-        esm: [['index', 'dist/esm/index.mjs']],
-        cjs: [['index', 'dist/cjs/index.js']],
+    expect(
+      generate([createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')], {
+        esm: [entry('index', 'dist/esm/index.mjs')],
+        cjs: [entry('index', 'dist/cjs/index.js')],
       }),
-    };
-
-    expect(generateExports(options)).toEqual({
-      '.': {
-        import: './dist/esm/index.mjs',
-        require: './dist/cjs/index.js',
+    ).toEqual({
+      exports: {
+        '.': {
+          import: './dist/esm/index.mjs',
+          require: './dist/cjs/index.js',
+        },
       },
     });
   });
 
   it('should generate a string value when only one format exists', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [createLibInfo('esm', 'esm')],
-      collected: createCollected({
-        esm: [['index', 'dist/esm/index.mjs']],
-      }),
-    };
-
-    expect(generateExports(options)).toEqual({
-      '.': './dist/esm/index.mjs',
-    });
+    expect(
+      generate([createLibInfo('esm', 'esm')], {
+        esm: [entry('index', 'dist/esm/index.mjs')],
+      }).exports,
+    ).toEqual({ '.': './dist/esm/index.mjs' });
   });
 
-  it('should expose non-index entries as subpaths', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [createLibInfo('esm', 'esm')],
-      collected: createCollected({
-        esm: [['foo', 'dist/esm/foo.mjs']],
-      }),
-    };
-
-    expect(generateExports(options)).toEqual({
-      './foo': './dist/esm/foo.mjs',
-    });
-  });
-
-  it('should normalize leading "./" and trailing "/" in entry names', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')],
-      collected: createCollected({
+  it('should name subpaths after entries and strip trailing "/index"', () => {
+    expect(
+      generate([createLibInfo('esm', 'esm')], {
         esm: [
-          ['./index', 'dist/esm/index.mjs'],
-          ['./foo/', 'dist/esm/foo.mjs'],
+          entry('index', 'dist/index.mjs'),
+          entry('foo', 'dist/foo.mjs'),
+          entry('button/index', 'dist/button/index.mjs'),
+          entry('utils/numbers', 'dist/utils/numbers.mjs'),
+        ],
+      }).exports,
+    ).toEqual({
+      '.': './dist/index.mjs',
+      './button': './dist/button/index.mjs',
+      './foo': './dist/foo.mjs',
+      './utils/numbers': './dist/utils/numbers.mjs',
+    });
+  });
+
+  it('should normalize leading "./" in entry names', () => {
+    expect(
+      generate([createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')], {
+        esm: [
+          entry('./index', 'dist/esm/index.mjs'),
+          entry('./foo/index', 'dist/esm/foo/index.mjs'),
         ],
         cjs: [
-          ['index', 'dist/cjs/index.js'],
-          ['foo', 'dist/cjs/foo.js'],
+          entry('index', 'dist/cjs/index.js'),
+          entry('foo/index', 'dist/cjs/foo/index.js'),
         ],
-      }),
-    };
-
-    expect(generateExports(options)).toEqual({
+      }).exports,
+    ).toEqual({
       '.': {
         import: './dist/esm/index.mjs',
         require: './dist/cjs/index.js',
       },
       './foo': {
-        import: './dist/esm/foo.mjs',
-        require: './dist/cjs/foo.js',
+        import: './dist/esm/foo/index.mjs',
+        require: './dist/cjs/foo/index.js',
       },
     });
   });
 
-  it('should only expose the index entry in bundleless mode', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [{ ...createLibInfo('esm', 'esm'), bundle: false }],
-      collected: createCollected({
+  it('should throw when entries are exported as the same subpath', () => {
+    expect(() =>
+      generate([createLibInfo('esm', 'esm')], {
         esm: [
-          ['index', 'dist/esm/index.mjs'],
-          ['utils/numbers', 'dist/esm/utils/numbers.mjs'],
-          ['assets/logo', 'dist/esm/assets/logo.mjs'],
+          entry('foo', 'dist/foo.mjs'),
+          entry('foo/index', 'dist/foo/index.mjs'),
         ],
       }),
-    };
-
-    expect(generateExports(options)).toEqual({
-      '.': './dist/esm/index.mjs',
-    });
+    ).toThrow(
+      'the "foo" and "foo/index" entries are both exported as the "./foo" subpath',
+    );
   });
 
-  it('should keep the index entry first and sort other entries', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [createLibInfo('esm', 'esm')],
-      collected: createCollected({
-        esm: [
-          ['foo', 'dist/esm/foo.mjs'],
-          ['utils/numbers', 'dist/esm/utils/numbers.mjs'],
-          ['index', 'dist/esm/index.mjs'],
-          ['bar', 'dist/esm/bar.mjs'],
-        ],
-      }),
-    };
-
-    const exportsField = generateExports(options);
-
-    expect(Object.keys(exportsField!)).toEqual([
-      '.',
-      './bar',
-      './foo',
-      './utils/numbers',
-    ]);
-    expect(exportsField).toEqual({
-      '.': './dist/esm/index.mjs',
-      './bar': './dist/esm/bar.mjs',
-      './foo': './dist/esm/foo.mjs',
-      './utils/numbers': './dist/esm/utils/numbers.mjs',
+  it('should keep the main subpath first and sort others by code units', () => {
+    const { exports } = generate([createLibInfo('esm', 'esm')], {
+      esm: [
+        entry('foo', 'dist/foo.mjs'),
+        entry('Bar', 'dist/Bar.mjs'),
+        entry('index', 'dist/index.mjs'),
+        entry('bar', 'dist/bar.mjs'),
+      ],
     });
+
+    expect(Object.keys(exports)).toEqual(['.', './Bar', './bar', './foo']);
   });
 
   it('should skip unsupported formats and keep supported ones', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [
-        createLibInfo('esm', 'esm'),
-        createLibInfo('umd', 'umd'),
-        createLibInfo('mf', 'mf'),
-      ],
-      collected: createCollected({
-        esm: [['index', 'dist/esm/index.mjs']],
-        umd: [['index', 'dist/umd/index.js']],
-        mf: [['index', 'dist/mf/index.js']],
-      }),
-    };
-
-    expect(generateExports(options)).toEqual({
-      '.': './dist/esm/index.mjs',
-    });
+    expect(
+      generate(
+        [
+          createLibInfo('esm', 'esm'),
+          createLibInfo('umd', 'umd'),
+          createLibInfo('mf', 'mf'),
+        ],
+        {
+          esm: [entry('index', 'dist/esm/index.mjs')],
+          umd: [entry('index', 'dist/umd/index.js')],
+          mf: [entry('index', 'dist/mf/index.js')],
+        },
+      ).exports,
+    ).toEqual({ '.': './dist/esm/index.mjs' });
   });
 
-  it('should throw when all formats are unsupported', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [createLibInfo('umd', 'umd')],
-      collected: createCollected({
-        umd: [['index', 'dist/umd/index.js']],
+  it('should throw when no entries can be exported', () => {
+    expect(() =>
+      generate([createLibInfo('umd', 'umd')], {
+        umd: [entry('index', 'dist/umd/index.js')],
       }),
-    };
+    ).toThrow('no entries can be exported');
 
-    expect(() => generateExports(options)).toThrow(
+    expect(() => generate([createLibInfo('esm', 'esm')], { esm: [] })).toThrow(
       'no entries can be exported',
     );
   });
 
-  it('should throw when no JavaScript entries are generated', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [createLibInfo('esm', 'esm')],
-      collected: createCollected({
-        esm: [],
+  it('should throw when an output is outside the package root', () => {
+    expect(() =>
+      generate([createLibInfo('esm', 'esm')], {
+        esm: [entry('index', '../outside/index.mjs')],
       }),
-    };
+    ).toThrow('which is outside the package root');
 
-    expect(() => generateExports(options)).toThrow(
-      'no entries can be exported',
-    );
-  });
-
-  it('should skip libs without collected entries', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')],
-      collected: createCollected({
-        esm: [['index', 'dist/esm/index.mjs']],
+    expect(() =>
+      generate([createLibInfo('esm', 'esm')], {
+        esm: [entry('index', path.resolve(__dirname, 'outside/index.mjs'))],
       }),
-    };
-
-    expect(generateExports(options)).toEqual({
-      '.': './dist/esm/index.mjs',
-    });
-  });
-
-  it('should throw when an entry is outside the package root', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [createLibInfo('esm', 'esm')],
-      collected: createCollected({
-        esm: [['index', '../outside/index.mjs']],
-      }),
-    };
-
-    expect(() => generateExports(options)).toThrow(
-      'which is outside the package root',
-    );
-
-    const absoluteOptions: GenerateExportsOptions = {
-      libInfos: [createLibInfo('esm', 'esm')],
-      collected: createCollected({
-        esm: [['index', path.resolve(__dirname, 'outside/index.mjs')]],
-      }),
-    };
-
-    expect(() => generateExports(absoluteOptions)).toThrow(
-      'which is outside the package root',
-    );
+    ).toThrow('which is outside the package root');
   });
 
   it('should throw when an entry has multiple outputs of the same format', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [createLibInfo('esm', 'esm'), createLibInfo('esm2', 'esm')],
-      collected: createCollected({
-        esm: [['index', 'dist/esm/index.mjs']],
-        esm2: [['index', 'dist/esm2/index.mjs']],
+    expect(() =>
+      generate([createLibInfo('esm', 'esm'), createLibInfo('esm2', 'esm')], {
+        esm: [entry('index', 'dist/esm/index.mjs')],
+        esm2: [entry('index', 'dist/esm2/index.mjs')],
       }),
-    };
-
-    expect(() => generateExports(options)).toThrow(
-      'the "index" entry has multiple "esm" outputs',
-    );
+    ).toThrow('the "index" entry has multiple "esm" outputs');
   });
 
   it('should allow duplicate identical outputs of the same format', () => {
-    const options: GenerateExportsOptions = {
-      libInfos: [createLibInfo('esm', 'esm'), createLibInfo('esm2', 'esm')],
-      collected: createCollected({
-        esm: [['index', 'dist/esm/index.mjs']],
-        esm2: [['index', 'dist/esm/index.mjs']],
-      }),
-    };
+    expect(
+      generate([createLibInfo('esm', 'esm'), createLibInfo('esm2', 'esm')], {
+        esm: [entry('index', 'dist/esm/index.mjs')],
+        esm2: [entry('index', 'dist/esm/index.mjs')],
+      }).exports,
+    ).toEqual({ '.': './dist/esm/index.mjs' });
+  });
+});
 
-    expect(generateExports(options)).toEqual({
-      '.': './dist/esm/index.mjs',
+describe('generateExports with include and exclude', () => {
+  const bundleless = createLibInfo('esm', 'esm', { bundle: false });
+  const entries = [
+    entry('index', 'dist/index.js'),
+    entry('button/index', 'dist/button/index.js'),
+    entry('button/utils', 'dist/button/utils.js'),
+    entry('internal/index', 'dist/internal/index.js'),
+  ];
+
+  it('should only export the index entry in bundleless mode by default', () => {
+    expect(generate([bundleless], { esm: entries }).exports).toEqual({
+      '.': './dist/index.js',
     });
+  });
+
+  it('should export all entries in bundle mode by default', () => {
+    expect(
+      Object.keys(
+        generate([createLibInfo('esm', 'esm')], { esm: entries }).exports,
+      ),
+    ).toEqual(['.', './button', './button/utils', './internal']);
+  });
+
+  it('should select entries with glob patterns', () => {
+    expect(
+      generate(
+        [bundleless],
+        { esm: entries },
+        { include: ['index', '*/index'], exclude: ['internal/**'] },
+      ).exports,
+    ).toEqual({
+      '.': './dist/index.js',
+      './button': './dist/button/index.js',
+    });
+  });
+
+  it('should throw when no entries match', () => {
+    expect(() =>
+      generate([bundleless], { esm: entries }, { include: ['missing'] }),
+    ).toThrow('no entries can be exported');
+  });
+});
+
+describe('generateExports with CSS', () => {
+  it('should export the CSS of entries and prefer the esm output', () => {
+    expect(
+      generate([createLibInfo('cjs', 'cjs'), createLibInfo('esm', 'esm')], {
+        cjs: [
+          entry('index', 'dist/cjs/index.cjs', {
+            css: css('dist/cjs/index.css'),
+          }),
+        ],
+        esm: [
+          entry('index', 'dist/esm/index.js', {
+            css: css('dist/esm/index.css'),
+          }),
+          entry('button/index', 'dist/esm/button/index.js', {
+            css: css('dist/esm/button/index.css'),
+          }),
+        ],
+      }).exports,
+    ).toEqual({
+      '.': {
+        import: './dist/esm/index.js',
+        require: './dist/cjs/index.cjs',
+      },
+      './button': './dist/esm/button/index.js',
+      './button/index.css': './dist/esm/button/index.css',
+      './index.css': './dist/esm/index.css',
+    });
+  });
+
+  it('should name CSS subpaths after the output files', () => {
+    expect(
+      generate([createLibInfo('cjs', 'cjs'), createLibInfo('esm', 'esm')], {
+        cjs: [
+          entry('index', 'dist/cjs/index.cjs', {
+            css: css('dist/cjs/static/index.css', 'static/index.css'),
+          }),
+        ],
+        esm: [
+          entry('index', 'dist/esm/index.js', {
+            css: css(
+              'dist/esm/css/style.a1b2c3d4.css',
+              'css/style.a1b2c3d4.css',
+            ),
+          }),
+        ],
+      }).exports,
+    ).toEqual({
+      '.': {
+        import: './dist/esm/index.js',
+        require: './dist/cjs/index.cjs',
+      },
+      './css/style.a1b2c3d4.css': './dist/esm/css/style.a1b2c3d4.css',
+    });
+  });
+
+  it('should only export the CSS of CSS-only entries', () => {
+    expect(
+      generate([createLibInfo('esm', 'esm')], {
+        esm: [
+          entry('index', 'dist/index.js'),
+          entry('theme', undefined, { css: css('dist/theme.css') }),
+        ],
+      }).exports,
+    ).toEqual({
+      '.': './dist/index.js',
+      './theme.css': './dist/theme.css',
+    });
+  });
+
+  it('should throw when a CSS subpath is taken by another entry', () => {
+    expect(() =>
+      generate([createLibInfo('esm', 'esm')], {
+        esm: [
+          entry('theme', 'dist/theme.js', { css: css('dist/theme.css') }),
+          entry('theme.css', 'dist/theme.css.js'),
+        ],
+      }),
+    ).toThrow('are both exported as the "./theme.css" subpath');
+  });
+});
+
+describe('generateExports with source', () => {
+  const libInfos = [createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')];
+  const collected = {
+    esm: [
+      entry('index', 'dist/esm/index.js', {
+        css: css('dist/esm/index.css'),
+        sourceFiles: ['src/index.ts'],
+      }),
+    ],
+    cjs: [
+      entry('index', 'dist/cjs/index.cjs', { sourceFiles: ['src/index.ts'] }),
+    ],
+  };
+  const outputExports = {
+    '.': {
+      import: './dist/esm/index.js',
+      require: './dist/cjs/index.cjs',
+    },
+    './index.css': './dist/esm/index.css',
+  };
+
+  it('should point to source files and publish the outputs', () => {
+    expect(generate(libInfos, collected, { source: true })).toEqual({
+      exports: { '.': './src/index.ts' },
+      publishExports: outputExports,
+    });
+  });
+
+  it('should add a source condition to JavaScript subpaths', () => {
+    expect(generate(libInfos, collected, { source: '@acme/source' })).toEqual({
+      exports: {
+        '.': {
+          '@acme/source': './src/index.ts',
+          import: './dist/esm/index.js',
+          require: './dist/cjs/index.cjs',
+        },
+        './index.css': './dist/esm/index.css',
+      },
+    });
+
+    expect(
+      generate(
+        [createLibInfo('esm', 'esm')],
+        {
+          esm: [
+            entry('index', 'dist/index.js', { sourceFiles: ['src/index.ts'] }),
+          ],
+        },
+        { source: '@acme/source' },
+      ).exports,
+    ).toEqual({
+      '.': { '@acme/source': './src/index.ts', default: './dist/index.js' },
+    });
+  });
+
+  it('should throw when an entry is built from multiple modules', () => {
+    expect(() =>
+      generate(
+        [createLibInfo('esm', 'esm')],
+        {
+          esm: [
+            entry('index', 'dist/index.js', {
+              sourceFiles: ['src/index.ts', 'src/polyfill.ts'],
+            }),
+          ],
+        },
+        { source: true },
+      ),
+    ).toThrow('is built from 2 modules');
+  });
+
+  it('should throw when a source file is outside the package root', () => {
+    expect(() =>
+      generate(
+        [createLibInfo('esm', 'esm')],
+        {
+          esm: [
+            entry('index', 'dist/index.js', {
+              sourceFiles: ['../src/index.ts'],
+            }),
+          ],
+        },
+        { source: true },
+      ),
+    ).toThrow('is outside the package root');
+  });
+
+  it('should throw when formats have different source files', () => {
+    expect(() =>
+      generate(
+        libInfos,
+        {
+          esm: [
+            entry('index', 'dist/esm/index.js', {
+              sourceFiles: ['src/index.ts'],
+            }),
+          ],
+          cjs: [
+            entry('index', 'dist/cjs/index.cjs', {
+              sourceFiles: ['src/index.cjs.ts'],
+            }),
+          ],
+        },
+        { source: true },
+      ),
+    ).toThrow('has different source files in different formats');
   });
 });

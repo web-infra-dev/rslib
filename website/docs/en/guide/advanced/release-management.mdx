@@ -48,12 +48,24 @@ Also make sure that the package does not set `private: true`. It is also recomme
 
 ### Generate exports
 
-Instead of maintaining the `exports` field by hand, you can run `rslib build --exports`, or set `exports: true` in the configuration file, to generate it from the build outputs after a successful build. `--no-exports` disables it for a single build. The rules are as follows:
+Instead of maintaining the `exports` field by hand, you can run `rslib build --exports`, or set `exports` in the configuration file, to generate it from the build outputs after a successful build. `--no-exports` disables it for a single build.
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  exports: true,
+});
+```
+
+Rslib owns the `exports` field: the generated result replaces the existing value as a whole. Add subpaths and conditions that are not generated with [extra and transform](#customize-exports). The original indentation and line endings are preserved, and the file is not written when nothing changes.
+
+The `exports` field is not generated in watch mode, or when only some libs are built with `--lib`. Run `rslib build` to update it after the entries change.
+
+The rules are as follows:
 
 - Only outputs in the `esm` and `cjs` formats are exported.
-- The `index` entry is exported as `.`, and other entries are exported by their entry names, such as `./utils/numbers`.
-- In bundleless mode, only the `index` entry in the root of [lib.outBase](/config/lib/out-base) is exported.
-- When an entry has both `esm` and `cjs` outputs, the value uses the `import` and `require` conditions. When it has only one format, the value is the output path.
+- The `index` entry is exported as `.`, an entry such as `button/index` is exported as `./button`, and other entries are exported by their names, such as `./utils/numbers`.
+- When an entry has both `esm` and `cjs` outputs, the value uses the `import` and `require` conditions. When it has only one format, the value is the output path, which applies to every condition, so an ESM-only package can also be loaded by `require(esm)`.
+- The `.` subpath comes first, and the other subpaths are sorted.
 
 For example, building `esm` and `cjs` libs with an `index` entry generates:
 
@@ -68,17 +80,39 @@ For example, building `esm` and `cjs` libs with an `index` entry generates:
 }
 ```
 
-The result is merged into the existing `exports` field. For matching subpaths, generated `import` and `require` conditions replace the previous format conditions. Existing `types` and `default` targets are kept unless this build generates replacements. Other conditions, such as `browser` or a custom source condition, and other subpaths are kept. A warning is shown when an existing subpath changes or points to a missing output. The original indentation and line endings are preserved, and the file is not written when nothing changes.
+#### Select entries
 
-The `exports` field is not generated in watch mode, or when only some libs are built with `--lib`. Run `rslib build` to update it after the entries change.
+`exports.include` and `exports.exclude` select the exported entries with glob patterns matched against entry names. By default, all entries are exported in bundle mode, and only the `index` entry in the root of [lib.outBase](/config/lib/out-base) is exported in bundleless mode, where every source file is an entry.
+
+For example, to export the main entry and the `index` entry of each component directory in a bundleless component library:
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  lib: [{ format: 'esm', bundle: false }],
+  exports: {
+    include: ['index', '*/index'],
+    exclude: ['internal/**'],
+  },
+});
+```
+
+```json title="package.json"
+{
+  "exports": {
+    ".": "./dist/index.js",
+    "./button": "./dist/button/index.js",
+    "./input": "./dist/input/index.js"
+  }
+}
+```
 
 #### Declaration files
 
-For libs with [dts](/config/lib/dts) enabled, Rslib checks the declaration files next to the outputs:
+For libs with [dts](/config/lib/dts) enabled, Rslib looks up the declaration file of each output, next to the output, or under [dts.distPath](/config/lib/dts#dtsdistpath) when it is set:
 
 - When the outputs of every format have declaration files with the matching extension next to them (`.d.ts` for `.js`, `.d.mts` for `.mjs`, and `.d.cts` for `.cjs`), no `types` condition is added, as TypeScript finds them on its own.
-- Otherwise, a `types` condition shared by all formats is added, preferring the declaration file with the matching extension.
-- When none of the outputs of a lib have declaration files next to them, the build fails, such as when declaration files are emitted to a separate [dts.distPath](/config/lib/dts#dtsdistpath).
+- Otherwise, a `types` condition shared by all formats is added, preferring the declaration file with the matching extension. Declaration files under a separate `dts.distPath` always need it.
+- When no declaration files are found for the outputs of a lib, the build fails.
 
 For example, in a package with `"type": "module"`, when both the `esm` and `cjs` libs enable `dts: true`, the `cjs` output `index.cjs` only has `index.d.ts` next to it instead of the matching `index.d.cts`, so the following is generated:
 
@@ -95,6 +129,62 @@ For example, in a package with `"type": "module"`, when both the `esm` and `cjs`
 ```
 
 To emit declaration files with the matching extension for every format, enable [dts.autoExtension](/config/lib/dts#dtsautoextension) and output each format to a separate directory.
+
+#### CSS
+
+In bundle mode, the CSS emitted for an entry is exported, because the JavaScript output does not import it. The subpath is the path of the CSS file relative to the output directory, such as `./index.css` by default. When both the `esm` and `cjs` libs emit it, the `esm` one is used. An entry built only from CSS files only exports its CSS.
+
+```json title="package.json"
+{
+  "exports": {
+    ".": "./dist/index.js",
+    "./index.css": "./dist/index.css"
+  }
+}
+```
+
+In bundleless mode, CSS is not exported, as the JavaScript outputs import their own styles.
+
+#### Source files
+
+`exports.source` exports the source files of the entries for development:
+
+- `true`: the top-level `exports` points to the source files, and the exports of the build outputs are written to `publishConfig.exports`, which replaces `exports` when packing and publishing with pnpm or Yarn. npm does not support `publishConfig.exports`.
+- A string: a condition with this name pointing to the source file is added to each JavaScript subpath, which can be used with the [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) option of TypeScript, or `@rsbuild/plugin-source-build`.
+
+For example, `source: '@acme/source'` generates:
+
+```json title="package.json"
+{
+  "exports": {
+    ".": {
+      "@acme/source": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  }
+}
+```
+
+The source file of an entry must be a single module inside the package root.
+
+#### Customize exports
+
+- `exports.extra` adds subpaths to the generated exports. A subpath with the same key as a generated one replaces it as a whole.
+- `exports.transform` receives the exports with `extra` applied, and returns the final exports. It can be async, or an array of functions called in order. Its second argument provides the content of `package.json` as `pkg`, and `isPublish`, which is `true` when the result is written to `publishConfig.exports`.
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  exports: {
+    extra: {
+      './package.json': './package.json',
+    },
+    transform: (exports) => ({
+      ...exports,
+      '.': { browser: './dist/browser.js', default: exports['.'] },
+    }),
+  },
+});
+```
 
 ## pnpm version management
 
