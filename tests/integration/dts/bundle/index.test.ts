@@ -274,5 +274,8 @@ describe('dts when bundle: true', () => {
 
     // override with bundledPackages
     expect(entries.esm2).not.toContain(`import { Action } from 'redux';`);
+
+    // RegExp externals
+    expect(entries.esm3).toContain(`export * from "@reduxjs/toolkit";`);
   });
 });

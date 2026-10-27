@@ -12,6 +12,7 @@ import {
   resolveDtsGenerationBackend,
   resolveTypescriptPath,
 } from './backend';
+import { calcBundledPackages } from './dts';
 import {
   createIsolatedDtsContext,
   processIsolatedDts,
@@ -254,7 +255,19 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           dtsEntry,
           dtsEmitPath,
           userExternals: config.output.externals,
-          apiExtractorOptions,
+          // RegExp externals are lost when the options are sent to the
+          // declaration process, so resolve the bundled packages here.
+          apiExtractorOptions: bundle
+            ? {
+                ...apiExtractorOptions,
+                bundledPackages: calcBundledPackages({
+                  cwd,
+                  autoExternal: options.autoExternal ?? true,
+                  userExternals: config.output.externals,
+                  overrideBundledPackages: apiExtractorOptions.bundledPackages,
+                }),
+              }
+            : apiExtractorOptions,
           tsconfigPath,
           bundleTsconfigPath: resolvedBundleTsconfigPath ?? tsconfigPath,
           tsConfigResult,
