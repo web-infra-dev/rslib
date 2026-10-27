@@ -2,11 +2,7 @@ import { createRslib } from '@rslib/core';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterAll, describe, expect, test } from '@rstest/core';
-import {
-  buildAndGetResults,
-  expectBuildToFail,
-  rslibBuild,
-} from 'test-helper';
+import { buildAndGetResults, expectBuildToFail, rslibBuild } from 'test-helper';
 
 const fixtures = [
   'dual-format',
@@ -20,6 +16,9 @@ const fixtures = [
   'dts/dist-path',
   'dts/module',
   'dts/bundleless',
+  'include',
+  'css',
+  'source',
 ];
 
 // The "exports" field is written back to the fixture package.json after
@@ -165,45 +164,7 @@ describe('exports', () => {
     expect(readFixtureExports(fixture)).toBeUndefined();
   });
 
-  test('should keep user conditions of an existing subpath', async () => {
-    const fixture = 'dual-format';
-    const fixturePath = join(__dirname, fixture);
-    writeFileSync(
-      join(fixturePath, 'package.json'),
-      `${JSON.stringify(
-        {
-          name: 'exports-dual-format-test',
-          exports: {
-            '.': {
-              '@acme/source': './src/index.ts',
-              import: './dist/esm/old.mjs',
-              require: './dist/cjs/old.js',
-            },
-          },
-        },
-        null,
-        2,
-      )}\n`,
-    );
-
-    await buildAndGetResults({ fixturePath, exports: true });
-
-    const exports = readFixtureExports(fixture);
-    expect(Object.keys(exports['.'])).toEqual([
-      '@acme/source',
-      'import',
-      'require',
-    ]);
-    expect(exports).toEqual({
-      '.': {
-        '@acme/source': './src/index.ts',
-        import: './dist/esm/index.mjs',
-        require: './dist/cjs/index.js',
-      },
-    });
-  });
-
-  test('should merge into existing exports and preserve the formatting', async () => {
+  test('should overwrite existing exports and preserve the formatting', async () => {
     const fixture = 'esm-only';
     const fixturePath = join(__dirname, fixture);
     const packageJsonPath = join(fixturePath, 'package.json');
@@ -214,7 +175,10 @@ describe('exports', () => {
         '\t"name": "exports-esm-only-test",',
         '\t"exports": {',
         '\t\t"./package.json": "./package.json",',
-        '\t\t".": "./dist/esm/old.mjs"',
+        '\t\t".": {',
+        '\t\t\t"@acme/source": "./src/index.ts",',
+        '\t\t\t"default": "./dist/esm/old.mjs"',
+        '\t\t}',
         '\t}',
         '}',
         '',
@@ -228,7 +192,6 @@ describe('exports', () => {
         '{',
         '\t"name": "exports-esm-only-test",',
         '\t"exports": {',
-        '\t\t"./package.json": "./package.json",',
         '\t\t".": "./dist/esm/index.mjs"',
         '\t}',
         '}',
@@ -237,23 +200,66 @@ describe('exports', () => {
     );
   });
 
-  test('should fail when the existing exports is not a subpath map', async () => {
+  test('should overwrite existing exports in any form', async () => {
     const fixture = 'esm-only';
     const fixturePath = join(__dirname, fixture);
-    const packageJsonPath = join(fixturePath, 'package.json');
-    const packageJson = `${JSON.stringify(
-      { name: 'exports-esm-only-test', exports: './index.js' },
-      null,
-      2,
-    )}\n`;
-    writeFileSync(packageJsonPath, packageJson);
-
-    const error = await expectBuildToFail(
-      buildAndGetResults({ fixturePath, exports: true }),
+    writeFileSync(
+      join(fixturePath, 'package.json'),
+      JSON.stringify({ name: 'exports-esm-only-test', exports: './index.js' }),
     );
 
-    expect(error.message).toContain('is not a subpath map');
-    expect(readFileSync(packageJsonPath, 'utf8')).toBe(packageJson);
+    await buildAndGetResults({ fixturePath, exports: true });
+
+    expect(readFixtureExports(fixture)).toEqual({
+      '.': './dist/esm/index.mjs',
+    });
+  });
+
+  test('should apply extra and transform to the generated exports', async () => {
+    const fixture = 'esm-only';
+    const fixturePath = join(__dirname, fixture);
+    writeFileSync(
+      join(fixturePath, 'package.json'),
+      packageJsonContents.get(fixture)!,
+    );
+
+    const contexts: unknown[] = [];
+    await rslibBuild({
+      cwd: fixturePath,
+      modifyConfig: (config) => {
+        config.exports = {
+          extra: {
+            '.': './dist/esm/replaced.mjs',
+            './package.json': './package.json',
+          },
+          transform: [
+            async (exports, context) => {
+              contexts.push(context);
+              return { ...exports, './worker': './dist/esm/worker.mjs' };
+            },
+            (exports) => ({
+              ...exports,
+              '.': { browser: './dist/browser.js', default: exports['.']! },
+            }),
+          ],
+        };
+      },
+    });
+
+    expect(readFixtureExports(fixture)).toEqual({
+      '.': {
+        browser: './dist/browser.js',
+        default: './dist/esm/replaced.mjs',
+      },
+      './package.json': './package.json',
+      './worker': './dist/esm/worker.mjs',
+    });
+    expect(contexts).toEqual([
+      {
+        pkg: JSON.parse(packageJsonContents.get(fixture)!),
+        isPublish: false,
+      },
+    ]);
   });
 
   test('should expose each entry as a subpath', async () => {
@@ -342,18 +348,100 @@ describe('exports', () => {
     });
   });
 
-  test('should fail when declaration files are not emitted next to the outputs', async () => {
-    const fixture = 'dts/dist-path';
+  test('should add a types condition for declaration files in dts.distPath', async () => {
+    const fixturePath = join(__dirname, 'dts/dist-path');
+    await buildAndGetResults({ fixturePath, exports: true });
+
+    expect(readFixtureExports('dts/dist-path')).toEqual({
+      '.': {
+        types: './dist/types/index.d.ts',
+        default: './dist/esm/index.js',
+      },
+    });
+  });
+
+  test('should select bundleless entries with include', async () => {
+    const fixturePath = join(__dirname, 'include');
+    await buildAndGetResults({ fixturePath });
+
+    expect(readFixtureExports('include')).toEqual({
+      '.': './dist/esm/index.mjs',
+      './utils/numbers': './dist/esm/utils/numbers.mjs',
+    });
+  });
+
+  test('should export the CSS of entries in bundle mode', async () => {
+    const fixturePath = join(__dirname, 'css');
+    await buildAndGetResults({ fixturePath, exports: true });
+
+    expect(readFixtureExports('css')).toEqual({
+      '.': {
+        import: './dist/esm/index.mjs',
+        require: './dist/cjs/index.js',
+      },
+      './index.css': './dist/esm/index.css',
+      './theme.css': './dist/esm/theme.css',
+    });
+  });
+
+  test('should point exports to source files and publish the outputs', async () => {
+    const fixture = 'source';
     const fixturePath = join(__dirname, fixture);
-    const error = await expectBuildToFail(
-      buildAndGetResults({ fixturePath, exports: true }),
+    writeFileSync(
+      join(fixturePath, 'package.json'),
+      packageJsonContents.get(fixture)!,
     );
 
-    expect(error.message).toContain(
-      'no declaration files were found next to the outputs of the following libs that emit declaration files: "esm"',
+    const contexts: unknown[] = [];
+    await rslibBuild({
+      cwd: fixturePath,
+      modifyConfig: (config) => {
+        config.exports = {
+          source: true,
+          transform: (exports, { isPublish }) => {
+            contexts.push(isPublish);
+            return exports;
+          },
+        };
+      },
+    });
+
+    const pkg = JSON.parse(
+      readFileSync(join(fixturePath, 'package.json'), 'utf8'),
     );
-    expect(readFileSync(join(fixturePath, 'package.json'), 'utf8')).toBe(
-      packageJsonContents.get(fixture),
+    expect(pkg.exports).toEqual({ '.': './src/index.ts' });
+    expect(pkg.publishConfig).toEqual({
+      exports: {
+        '.': {
+          import: './dist/esm/index.mjs',
+          require: './dist/cjs/index.js',
+        },
+      },
+    });
+    expect(contexts).toEqual([false, true]);
+  });
+
+  test('should add a source condition', async () => {
+    const fixture = 'source';
+    const fixturePath = join(__dirname, fixture);
+    writeFileSync(
+      join(fixturePath, 'package.json'),
+      packageJsonContents.get(fixture)!,
     );
+
+    await rslibBuild({
+      cwd: fixturePath,
+      modifyConfig: (config) => {
+        config.exports = { source: '@acme/source' };
+      },
+    });
+
+    expect(readFixtureExports(fixture)).toEqual({
+      '.': {
+        '@acme/source': './src/index.ts',
+        import: './dist/esm/index.mjs',
+        require: './dist/cjs/index.js',
+      },
+    });
   });
 });

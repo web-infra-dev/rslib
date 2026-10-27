@@ -1,18 +1,36 @@
 import path from 'node:path';
-import type { RequireKey, RsbuildConfigWithLibInfo } from '../types';
+import picomatch from 'picomatch';
+import type {
+  ExportsField,
+  ExportsOptions,
+  ExportsValue,
+  RequireKey,
+  RsbuildConfigWithLibInfo,
+} from '../types';
 import { normalizeSlash } from '../utils/helper';
+import { logger } from '../utils/logger';
 import type { DeclarationFile } from './dts';
 
 export type CollectedEntry = {
   entryName: string;
-  /** Path relative to the package root, or absolute for different Windows drives, using forward slashes. */
-  jsFile: string;
-  /** The declaration file next to `jsFile`, only collected for libs that emit declaration files. */
+  /**
+   * Paths below are relative to the package root, or absolute for different
+   * Windows drives, using forward slashes.
+   *
+   * The JavaScript output, absent for entries whose modules are all CSS files,
+   * as their JavaScript output is empty.
+   */
+  jsFile?: string;
+  /** The CSS output, only collected in bundle mode. */
+  css?: {
+    file: string;
+    /** Path relative to the output directory, which names the CSS subpath. */
+    name: string;
+  };
+  /** The declaration file of `jsFile`, only collected for libs that emit declaration files. */
   declaration?: DeclarationFile;
-};
-
-export type ExportsField = {
-  [key: string]: string | ExportsField;
+  /** The modules of the entry. */
+  sourceFiles: string[];
 };
 
 type LibInfo = RequireKey<RsbuildConfigWithLibInfo, 'id'>;
@@ -20,34 +38,49 @@ type LibInfo = RequireKey<RsbuildConfigWithLibInfo, 'id'>;
 export type GenerateExportsOptions = {
   libInfos: LibInfo[];
   collected: Map<string, CollectedEntry[]>;
+  options: Pick<ExportsOptions, 'include' | 'exclude' | 'source'>;
 };
+
+export type GeneratedExports = {
+  exports: ExportsField;
+  /** The exports of the build outputs when `source` is `true`. */
+  publishExports?: ExportsField;
+};
+
+type Format = 'esm' | 'cjs';
 
 type PreparedLib = {
   id: string;
-  format: 'esm' | 'cjs';
+  format: Format;
   dts: boolean;
+  /** Whether declaration errors fail the build, see `dts.abortOnError`. */
+  abortOnError: boolean;
   entries: CollectedEntry[];
 };
 
 type FormatSlot = {
+  libId: string;
   target: string;
   declaration?: DeclarationFile;
+  sourceFiles: string[];
 };
 
-type EntrySlots = {
-  esm?: FormatSlot;
-  cjs?: FormatSlot;
+type EntrySlots = Partial<Record<Format, FormatSlot>> & {
+  css?: { format: Format; target: string; subpath: string };
 };
 
-/** Normalize entry names such as `./foo/` to `foo` before using them as subpaths. */
+/** Normalize entry names such as `./foo` to `foo` before matching and naming. */
 function normalizeEntryName(entryName: string): string {
-  return normalizeSlash(entryName)
-    .replace(/^(\.\/)+/, '')
-    .replace(/\/+$/, '');
+  return normalizeSlash(entryName).replace(/^(\.\/)+/, '');
 }
 
 function isOutsidePackageRoot(filePath: string): boolean {
   return path.isAbsolute(filePath) || filePath.startsWith('../');
+}
+
+function getJsSubpath(entryName: string): string {
+  if (entryName === 'index') return '.';
+  return `./${entryName.replace(/\/index$/, '')}`;
 }
 
 function getFormatSlots(slots: EntrySlots): FormatSlot[] {
@@ -57,13 +90,13 @@ function getFormatSlots(slots: EntrySlots): FormatSlot[] {
 }
 
 /**
- * Build the value of a subpath. A `types` condition is only added when
- * TypeScript cannot resolve a declaration file with the matching extension
+ * Build the value of a JavaScript subpath. A `types` condition is only added
+ * when TypeScript cannot resolve a declaration file with the matching extension
  * next to every output, and then all formats share one declaration file.
  */
-function buildEntryValue(slots: EntrySlots): string | ExportsField {
+function buildJsValue(slots: EntrySlots): ExportsValue {
   const formatSlots = getFormatSlots(slots);
-  const value = (types?: string): string | ExportsField => {
+  const value = (types?: string): ExportsValue => {
     if (slots.esm && slots.cjs) {
       return {
         ...(types ? { types } : {}),
@@ -89,47 +122,117 @@ function buildEntryValue(slots: EntrySlots): string | ExportsField {
   return value(declaration && `./${declaration.file}`);
 }
 
-export function generateExports(options: GenerateExportsOptions): ExportsField {
-  const { libInfos, collected } = options;
+function getSourceFile(subpath: string, slots: EntrySlots): string {
+  const sourceFiles = new Set<string>();
+  for (const slot of getFormatSlots(slots)) {
+    if (slot.sourceFiles.length !== 1) {
+      throw new Error(
+        `Failed to generate the "exports" field because the "${subpath}" subpath of the "${slot.libId}" lib is built from ${slot.sourceFiles.length} modules, while "exports.source" requires an entry with a single module.`,
+      );
+    }
+    const sourceFile = slot.sourceFiles[0]!;
+    if (isOutsidePackageRoot(sourceFile)) {
+      throw new Error(
+        `Failed to generate the "exports" field because the source file "${sourceFile}" of the "${subpath}" subpath is outside the package root.`,
+      );
+    }
+    sourceFiles.add(`./${sourceFile}`);
+  }
+  if (sourceFiles.size > 1) {
+    throw new Error(
+      `Failed to generate the "exports" field because the "${subpath}" subpath has different source files in different formats: ${[
+        ...sourceFiles,
+      ]
+        .map((file) => `"${file}"`)
+        .join(', ')}.`,
+    );
+  }
+  return [...sourceFiles][0]!;
+}
+
+function addSourceCondition(
+  value: ExportsValue,
+  condition: string,
+  sourceFile: string,
+): ExportsValue {
+  return typeof value === 'string'
+    ? { [condition]: sourceFile, default: value }
+    : { [condition]: sourceFile, ...(value as Record<string, ExportsValue>) };
+}
+
+function sortSubpaths<T>(entries: [string, T][]): [string, T][] {
+  // Keep the main subpath first, then sort the rest by code units, as
+  // locale-aware comparison may differ between machines.
+  return entries.sort(([a], [b]) => {
+    if (a === '.') return -1;
+    if (b === '.') return 1;
+    return a < b ? -1 : a > b ? 1 : 0;
+  });
+}
+
+export function generateExports({
+  libInfos,
+  collected,
+  options,
+}: GenerateExportsOptions): GeneratedExports {
+  const exclude = options.exclude?.length
+    ? picomatch(options.exclude)
+    : () => false;
 
   const preparedLibs = libInfos.flatMap(
     ({ id, format, dts, bundle }): PreparedLib[] => {
       // Other formats, such as UMD, are not referenced by the `exports` field.
       if (format !== 'esm' && format !== 'cjs') return [];
-      const entries = (collected.get(id) ?? []).map((entry) => ({
-        ...entry,
-        entryName: normalizeEntryName(entry.entryName),
-      }));
+      // In bundleless mode, every source file is an entry, so only the main
+      // entry is treated as public API by default.
+      const include = picomatch(
+        options.include ?? (bundle === false ? ['index'] : ['**']),
+      );
+      const entries = collected
+        .get(id)!
+        .map((entry) => ({
+          ...entry,
+          entryName: normalizeEntryName(entry.entryName),
+        }))
+        .filter(({ entryName }) => include(entryName) && !exclude(entryName));
       return [
         {
           id,
           format,
           dts: Boolean(dts),
-          // In bundleless mode, every source file is an entry, so only the main
-          // entry is treated as public API.
-          entries:
-            bundle === false
-              ? entries.filter((entry) => entry.entryName === 'index')
-              : entries,
+          abortOnError: typeof dts !== 'object' || dts.abortOnError !== false,
+          entries,
         },
       ];
     },
   );
 
-  // Declaration files emitted to a separate directory cannot be resolved from the outputs.
-  const libsWithoutDeclarations = preparedLibs
-    .filter(
-      (lib) =>
-        lib.dts &&
-        lib.entries.length > 0 &&
-        lib.entries.every((entry) => !entry.declaration),
-    )
-    .map((lib) => lib.id);
-  if (libsWithoutDeclarations.length > 0) {
+  const libsWithoutDeclarations = preparedLibs.filter((lib) => {
+    const jsEntries = lib.entries.filter((entry) => entry.jsFile);
+    return (
+      lib.dts &&
+      jsEntries.length > 0 &&
+      jsEntries.every((entry) => !entry.declaration)
+    );
+  });
+  // With `abortOnError: false`, declaration generation may fail without failing
+  // the build, so the exports are generated without `types` instead.
+  const skippedLibs = libsWithoutDeclarations
+    .filter((lib) => !lib.abortOnError)
+    .map((lib) => `"${lib.id}"`);
+  if (skippedLibs.length > 0) {
+    logger.warn(
+      `No declaration files were found for the outputs of the following libs, so no "types" condition is generated for them: ${skippedLibs.join(', ')}.`,
+    );
+  }
+  const failedLibs = libsWithoutDeclarations
+    .filter((lib) => lib.abortOnError)
+    .map((lib) => `"${lib.id}"`);
+  if (failedLibs.length > 0) {
     throw new Error(
       [
-        `Failed to generate the "exports" field because no declaration files were found next to the outputs of the following libs that emit declaration files: ${libsWithoutDeclarations.map((id) => `"${id}"`).join(', ')}.`,
-        'Emit declaration files to the same directory as the JavaScript outputs, check "dts.distPath", and the "declarationDir" and "rootDir" options in tsconfig.',
+        `Failed to generate the "exports" field because no declaration files were found for the outputs of the following libs that emit declaration files: ${failedLibs.join(', ')}.`,
+        'Emit declaration files next to the JavaScript outputs or to "dts.distPath", and check the "declarationDir" and "rootDir" options in tsconfig.',
       ].join('\n'),
     );
   }
@@ -137,41 +240,121 @@ export function generateExports(options: GenerateExportsOptions): ExportsField {
   const entrySlotsByName = new Map<string, EntrySlots>();
   for (const lib of preparedLibs) {
     for (const entry of lib.entries) {
-      if (isOutsidePackageRoot(entry.jsFile)) {
-        throw new Error(
-          `Failed to generate the "exports" field because the "${entry.entryName}" entry of the "${lib.id}" environment emits "${entry.jsFile}", which is outside the package root.`,
-        );
+      const { entryName } = entry;
+      for (const file of [entry.jsFile, entry.css?.file]) {
+        if (file && isOutsidePackageRoot(file)) {
+          throw new Error(
+            `Failed to generate the "exports" field because the "${entryName}" entry of the "${lib.id}" lib emits "${file}", which is outside the package root.`,
+          );
+        }
       }
 
-      const { entryName } = entry;
       const slots = entrySlotsByName.get(entryName) ?? {};
-      const target = `./${entry.jsFile}`;
-      const existingTarget = slots[lib.format]?.target;
-      if (existingTarget && existingTarget !== target) {
-        throw new Error(
-          `Failed to generate the "exports" field because the "${entryName}" entry has multiple "${lib.format}" outputs: "${existingTarget}" and "${target}".`,
-        );
+      if (entry.jsFile) {
+        const target = `./${entry.jsFile}`;
+        const existingTarget = slots[lib.format]?.target;
+        if (existingTarget && existingTarget !== target) {
+          throw new Error(
+            `Failed to generate the "exports" field because the "${entryName}" entry has multiple "${lib.format}" outputs: "${existingTarget}" and "${target}".`,
+          );
+        }
+        slots[lib.format] = {
+          libId: lib.id,
+          target,
+          declaration: entry.declaration,
+          sourceFiles: entry.sourceFiles,
+        };
       }
-      slots[lib.format] = { target, declaration: entry.declaration };
+      if (entry.css) {
+        const target = `./${entry.css.file}`;
+        // ESM and CJS outputs share the same styles, prefer the ESM one.
+        if (
+          !slots.css ||
+          (slots.css.format === 'cjs' && lib.format === 'esm')
+        ) {
+          slots.css = {
+            format: lib.format,
+            target,
+            subpath: `./${entry.css.name}`,
+          };
+        } else if (
+          slots.css.format === lib.format &&
+          slots.css.target !== target
+        ) {
+          throw new Error(
+            `Failed to generate the "exports" field because the "${entryName}" entry has multiple "${lib.format}" CSS outputs: "${slots.css.target}" and "${target}".`,
+          );
+        }
+      }
       entrySlotsByName.set(entryName, slots);
     }
   }
-  if (entrySlotsByName.size === 0) {
+
+  const jsSubpaths: [string, EntrySlots][] = [];
+  const cssSubpaths: [string, string][] = [];
+  const entryNameBySubpath = new Map<string, string>();
+  const addSubpath = (subpath: string, entryName: string) => {
+    const existing = entryNameBySubpath.get(subpath);
+    if (existing !== undefined) {
+      throw new Error(
+        `Failed to generate the "exports" field because the "${existing}" and "${entryName}" entries are both exported as the "${subpath}" subpath.`,
+      );
+    }
+    entryNameBySubpath.set(subpath, entryName);
+  };
+  for (const [entryName, slots] of entrySlotsByName) {
+    if (getFormatSlots(slots).length > 0) {
+      const subpath = getJsSubpath(entryName);
+      addSubpath(subpath, entryName);
+      jsSubpaths.push([subpath, slots]);
+    }
+    if (slots.css) {
+      addSubpath(slots.css.subpath, entryName);
+      cssSubpaths.push([slots.css.subpath, slots.css.target]);
+    }
+  }
+  if (entryNameBySubpath.size === 0) {
     throw new Error(
-      'Failed to generate the "exports" field because no entries can be exported. Only the "esm" and "cjs" formats are supported, and only the "index" entry is exported in bundleless mode.',
+      'Failed to generate the "exports" field because no entries can be exported. Only entries of the "esm" and "cjs" formats that match "exports.include" and do not match "exports.exclude" are exported, and only the "index" entry is included by default in bundleless mode.',
     );
   }
 
-  const exportsField: ExportsField = {};
-  // Keep the main entry before other entry subpaths, then sort the rest for stable output.
-  const sortedEntries = [...entrySlotsByName].sort(([a], [b]) => {
-    if (a === 'index') return -1;
-    if (b === 'index') return 1;
-    return a.localeCompare(b);
-  });
-  for (const [entryName, slots] of sortedEntries) {
-    exportsField[entryName === 'index' ? '.' : `./${entryName}`] =
-      buildEntryValue(slots);
+  const buildExports = (
+    jsValue: (subpath: string, slots: EntrySlots) => ExportsValue,
+    withCss: boolean,
+  ): ExportsField =>
+    Object.fromEntries(
+      sortSubpaths<ExportsValue>([
+        ...jsSubpaths.map(([subpath, slots]): [string, ExportsValue] => [
+          subpath,
+          jsValue(subpath, slots),
+        ]),
+        ...(withCss ? cssSubpaths : []),
+      ]),
+    );
+
+  const { source } = options;
+  const outputExports = buildExports((_, slots) => buildJsValue(slots), true);
+  if (source === true) {
+    // Source files import their own styles, so only JavaScript subpaths point
+    // to source files, and the outputs are published instead.
+    return {
+      exports: buildExports(getSourceFile, false),
+      publishExports: outputExports,
+    };
   }
-  return exportsField;
+  if (typeof source === 'string') {
+    return {
+      exports: buildExports(
+        (subpath, slots) =>
+          addSourceCondition(
+            buildJsValue(slots),
+            source,
+            getSourceFile(subpath, slots),
+          ),
+        true,
+      ),
+    };
+  }
+  return { exports: outputExports };
 }

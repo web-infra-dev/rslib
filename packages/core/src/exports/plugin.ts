@@ -1,62 +1,111 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { RsbuildPlugin, Rspack } from '@rsbuild/core';
+import { isCssFile } from '../css/utils';
 import { isJavaScriptOutputFile } from '../exe/utils';
-import type { PkgJson, RequireKey, RsbuildConfigWithLibInfo } from '../types';
+import type {
+  ExportsField,
+  ExportsOptions,
+  PkgJson,
+  RequireKey,
+  RsbuildConfigWithLibInfo,
+} from '../types';
 import { logger } from '../utils/logger';
 import { normalizeSlash } from '../utils/helper';
 import { findDeclarationFile } from './dts';
-import { generateExports, type CollectedEntry } from './generate';
-import {
-  findStaleSubpaths,
-  mergeExports,
-  stringifyPackageJson,
-} from './packageJson';
+import { type CollectedEntry, generateExports } from './generate';
+import { stringifyPackageJson } from './packageJson';
 
 export type ExportsPluginOptions = {
   root: string;
   libInfos: RequireKey<RsbuildConfigWithLibInfo, 'id'>[];
+  options: ExportsOptions;
 };
+
+async function customizeExports(
+  exports: ExportsField,
+  { extra, transform }: ExportsOptions,
+  context: { pkg: PkgJson; isPublish: boolean },
+): Promise<ExportsField> {
+  let result: ExportsField = { ...exports, ...extra };
+  for (const fn of [transform ?? []].flat()) {
+    result = await fn(result, context);
+  }
+  return result;
+}
 
 export const ExportsPlugin = ({
   root,
   libInfos,
+  options,
 }: ExportsPluginOptions): RsbuildPlugin => {
-  const writeExports = (stats: Rspack.Stats | Rspack.MultiStats) => {
+  const toRelative = (file: string) =>
+    normalizeSlash(path.relative(root, file));
+
+  const collect = (compilation: Rspack.Compilation): CollectedEntry[] => {
+    const libInfo = libInfos.find(({ id }) => id === compilation.name)!;
+    const outputPath = compilation.outputOptions.path!;
+    const { dts } = libInfo;
+    const dtsDistPath =
+      typeof dts === 'object' && dts.distPath
+        ? path.resolve(root, dts.distPath)
+        : undefined;
+
+    const entries: CollectedEntry[] = [];
+    for (const [entryName, entrypoint] of compilation.entrypoints) {
+      const sourceFiles = compilation.entries
+        .get(entryName)!
+        .dependencies.flatMap((dependency) => {
+          const resource = (
+            compilation.moduleGraph.getModule(dependency) as
+              { resource?: string } | undefined
+          )?.resource;
+          return resource ? [toRelative(resource.split('?')[0]!)] : [];
+        });
+      // The JavaScript output of an entry built only from CSS files is empty.
+      const cssOnly = sourceFiles.length > 0 && sourceFiles.every(isCssFile);
+      // An entry chunk emits at most one JavaScript file and one CSS file.
+      // Reading them from the entry chunk skips the separate runtime chunk.
+      const files = [...entrypoint.getEntrypointChunk().files];
+      const jsOutput = cssOnly ? undefined : files.find(isJavaScriptOutputFile);
+      // Bundleless outputs import their own styles, so CSS is only exported in
+      // bundle mode.
+      const cssOutput =
+        libInfo.bundle === false ? undefined : files.find(isCssFile);
+
+      const jsFile = jsOutput && toRelative(path.join(outputPath, jsOutput));
+      entries.push({
+        entryName,
+        jsFile,
+        css: cssOutput
+          ? {
+              file: toRelative(path.join(outputPath, cssOutput)),
+              name: normalizeSlash(cssOutput),
+            }
+          : undefined,
+        declaration:
+          jsFile && dts
+            ? findDeclarationFile({ jsFile, root, outputPath, dtsDistPath })
+            : undefined,
+        sourceFiles,
+      });
+    }
+    return entries;
+  };
+
+  const writeExports = async (stats: Rspack.Stats | Rspack.MultiStats) => {
     const statsList = 'stats' in stats ? stats.stats : [stats];
     const collected = new Map<string, CollectedEntry[]>();
-    const outputPaths: string[] = [];
-
     for (const { compilation } of statsList) {
       // Rsbuild names each compiler after its environment, which is the lib ID.
-      const libId = compilation.name!;
-      const outputPath = compilation.outputOptions.path!;
-      outputPaths.push(outputPath);
-      const emitsDeclarations = Boolean(
-        libInfos.find(({ id }) => id === libId)?.dts,
-      );
-
-      const entries: CollectedEntry[] = [];
-      for (const [entryName, entrypoint] of compilation.entrypoints) {
-        // An entry chunk emits at most one JavaScript file. Entries without one,
-        // such as global CSS entries in bundleless mode, are not exported.
-        const entryFile = [...entrypoint.getEntrypointChunk().files].find(
-          isJavaScriptOutputFile,
-        );
-        if (!entryFile) continue;
-        const jsFile = normalizeSlash(
-          path.relative(root, path.join(outputPath, entryFile)),
-        );
-        entries.push({
-          entryName,
-          jsFile,
-          declaration: emitsDeclarations
-            ? findDeclarationFile(jsFile, root)
-            : undefined,
-        });
-      }
-      collected.set(libId, entries);
+      collected.set(compilation.name!, collect(compilation));
     }
+
+    const { exports, publishExports } = generateExports({
+      libInfos,
+      collected,
+      options,
+    });
 
     const pkgJsonPath = path.join(root, 'package.json');
     if (!fs.existsSync(pkgJsonPath)) {
@@ -67,29 +116,26 @@ export const ExportsPlugin = ({
     const originalText = fs.readFileSync(pkgJsonPath, 'utf8');
     // An invalid package.json already fails the build before this hook, as
     // Rsbuild parses it when loading the PostCSS config.
-    const pkgJson: PkgJson = JSON.parse(originalText);
+    const pkg: PkgJson = JSON.parse(originalText);
 
-    const generated = generateExports({ libInfos, collected });
-
-    const exportsField = mergeExports(pkgJson.exports, generated);
-
-    // Warn about subpaths that are likely left over instead of removing them.
-    const staleSubpaths = findStaleSubpaths({
-      existing: pkgJson.exports,
-      generated,
-      root,
-      outputPaths,
-    });
-    if (staleSubpaths.length > 0) {
-      logger.warn(
-        `The following subpaths in the "exports" field of package.json point to files that do not exist in the output directories: ${staleSubpaths.map((key) => `"${key}"`).join(', ')}.`,
-      );
+    const content: PkgJson = {
+      ...pkg,
+      exports: await customizeExports(exports, options, {
+        pkg,
+        isPublish: false,
+      }),
+    };
+    if (publishExports) {
+      content.publishConfig = {
+        ...pkg.publishConfig,
+        exports: await customizeExports(publishExports, options, {
+          pkg,
+          isPublish: true,
+        }),
+      };
     }
 
-    const text = stringifyPackageJson(
-      { ...pkgJson, exports: exportsField },
-      originalText,
-    );
+    const text = stringifyPackageJson(content, originalText);
     if (text === originalText) return;
 
     fs.writeFileSync(pkgJsonPath, text);
@@ -99,10 +145,10 @@ export const ExportsPlugin = ({
   return {
     name: 'rslib:exports',
     setup(api) {
-      api.onAfterBuild(({ stats }) => {
+      api.onAfterBuild(async ({ stats }) => {
         // Failed builds already report errors, so there is nothing to export.
         if (!stats || stats.hasErrors()) return;
-        writeExports(stats);
+        await writeExports(stats);
       });
     },
   };

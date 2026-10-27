@@ -39,6 +39,30 @@ function mergeLibConfigs(
 }
 
 /**
+ * Merge multiple `exports` options. `true` and an options object enable it with
+ * the options, `extra` is merged by subpath, as each subpath is replaced as a
+ * whole, and `transform` functions are called in order.
+ */
+function mergeExportsConfigs(
+  ...exportsConfigs: RslibConfig['exports'][]
+): RslibConfig['exports'] {
+  return exportsConfigs.reduce((merged, config) => {
+    if (config === undefined) return merged;
+    if (config === true) return typeof merged === 'object' ? merged : true;
+    if (config === false || typeof merged !== 'object') return config;
+
+    const result = { ...merged, ...config };
+    if (merged.extra && config.extra) {
+      result.extra = { ...merged.extra, ...config.extra };
+    }
+    if (merged.transform && config.transform) {
+      result.transform = [merged.transform, config.transform].flat();
+    }
+    return result;
+  }, undefined);
+}
+
+/**
  * Merge multiple Rslib configurations into a single configuration.
  *
  * For the `lib` array, items are merged based on their `id` field:
@@ -46,7 +70,8 @@ function mergeLibConfigs(
  * - Items without `id` are appended to the result array
  * - The order of items with `id` is preserved based on their first occurrence
  *
- * Other configuration fields are merged using `mergeRsbuildConfig`.
+ * The `exports` field is merged by `mergeExportsConfigs`, and other
+ * configuration fields are merged using `mergeRsbuildConfig`.
  */
 export function mergeRslibConfig(
   ...originalConfigs: (RslibConfig | undefined)[]
@@ -62,9 +87,9 @@ export function mergeRslibConfig(
   // Extract lib arrays from all configs
   const libArrays = definedConfigs.map((config) => config.lib);
 
-  // Create configs without lib for merging with mergeRsbuildConfig
+  // Create configs without lib and exports for merging with mergeRsbuildConfig
   const configsWithoutLib = definedConfigs.map((config) => {
-    const { lib: _, ...rest } = config;
+    const { lib: _lib, exports: _exports, ...rest } = config;
     return rest;
   });
 
@@ -75,6 +100,13 @@ export function mergeRslibConfig(
   const mergedLib = mergeLibConfigs(...libArrays);
   if (mergedLib !== undefined) {
     mergedConfig.lib = mergedLib;
+  }
+
+  const mergedExports = mergeExportsConfigs(
+    ...definedConfigs.map((config) => config.exports),
+  );
+  if (mergedExports !== undefined) {
+    mergedConfig.exports = mergedExports;
   }
 
   return mergedConfig;

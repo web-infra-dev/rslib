@@ -14,7 +14,11 @@ import {
 import { createRslib } from '../src/createRslib';
 import { loadConfig } from '../src/loadConfig';
 import { mergeRslibConfig } from '../src/mergeConfig';
-import type { RslibConfig } from '../src/types/config';
+import type {
+  ExportsField,
+  ExportsOptions,
+  RslibConfig,
+} from '../src/types/config';
 import { normalizeSlash } from '../src/utils/helper';
 import { logger } from '../src/utils/logger';
 
@@ -399,6 +403,44 @@ describe('Should merge Rslib config correctly', () => {
         ],
       }
     `);
+  });
+
+  test('merge exports options', () => {
+    const transform1 = (exports: ExportsField) => exports;
+    const transform2 = (exports: ExportsField) => exports;
+    const options: ExportsOptions = {
+      include: ['index'],
+      extra: { './a': { browser: './a.js', default: './a.cjs' } },
+      transform: transform1,
+    };
+
+    expect(mergeRslibConfig({ exports: options }, { exports: true })).toEqual({
+      exports: options,
+    });
+    expect(mergeRslibConfig({ exports: true }, { exports: options })).toEqual({
+      exports: options,
+    });
+    expect(mergeRslibConfig({ exports: options }, { exports: false })).toEqual({
+      exports: false,
+    });
+    expect(
+      mergeRslibConfig(
+        { exports: options },
+        {
+          exports: {
+            include: ['*/index'],
+            extra: { './a': './a.js', './b': './b.js' },
+            transform: transform2,
+          },
+        },
+      ),
+    ).toEqual({
+      exports: {
+        include: ['*/index'],
+        extra: { './a': './a.js', './b': './b.js' },
+        transform: [transform1, transform2],
+      },
+    });
   });
 });
 
