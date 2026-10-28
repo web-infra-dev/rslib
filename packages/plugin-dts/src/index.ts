@@ -12,7 +12,7 @@ import {
   resolveDtsGenerationBackend,
   resolveTypescriptPath,
 } from './backend';
-import { calcBundledPackages } from './dts';
+import { calcBundledPackages } from './bundledPackages';
 import {
   createIsolatedDtsContext,
   processIsolatedDts,
@@ -246,6 +246,7 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           isolated: _isolated,
           tsgo: _tsgo,
           typescriptPath: _typescriptPath,
+          autoExternal = true,
           ...rest
         } = options;
 
@@ -254,20 +255,16 @@ export const pluginDts: (options?: PluginDtsOptions) => RsbuildPlugin = (
           bundle,
           dtsEntry,
           dtsEmitPath,
-          userExternals: config.output.externals,
           // RegExp externals are lost when the options are sent to the
           // declaration process, so resolve the bundled packages here.
-          apiExtractorOptions: bundle
-            ? {
-                ...apiExtractorOptions,
-                bundledPackages: calcBundledPackages({
-                  cwd,
-                  autoExternal: options.autoExternal ?? true,
-                  userExternals: config.output.externals,
-                  overrideBundledPackages: apiExtractorOptions.bundledPackages,
-                }),
-              }
-            : apiExtractorOptions,
+          bundledPackages: bundle
+            ? calcBundledPackages({
+                cwd,
+                autoExternal,
+                userExternals: config.output.externals,
+                overrideBundledPackages: apiExtractorOptions.bundledPackages,
+              })
+            : [],
           tsconfigPath,
           bundleTsconfigPath: resolvedBundleTsconfigPath ?? tsconfigPath,
           tsConfigResult,
