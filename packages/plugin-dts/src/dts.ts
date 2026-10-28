@@ -253,7 +253,9 @@ export async function prepareDtsContext(
             basename(entrySourcePath),
           ).replace(
             /\.(js|mjs|jsx|ts|mts|tsx|cjs|cts|cjsx|ctsx|mjsx|mtsx)$/,
-            '.d.ts',
+            // TypeScript emits `.d.mts` for `.mts` and `.d.cts` for `.cts` sources.
+            (_, ext: string) =>
+              ext[0] === 'm' ? '.d.mts' : ext[0] === 'c' ? '.d.cts' : '.d.ts',
           );
           return { name: entryName, path: newPath };
         })
