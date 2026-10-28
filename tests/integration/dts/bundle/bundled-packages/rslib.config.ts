@@ -39,5 +39,14 @@ export default defineConfig({
         distPath: './dist/esm/override-array-string',
       },
     }),
+    generateBundleEsmConfig({
+      dts: {
+        bundle: true,
+      },
+      output: {
+        externals: [/^@reduxjs\/toolkit$/],
+        distPath: './dist/esm/regexp-externals',
+      },
+    }),
   ],
 });
