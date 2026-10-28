@@ -40,8 +40,7 @@ function mergeLibConfigs(
 
 /**
  * Merge multiple `exports` options. `true` and an options object enable it with
- * the options, `extra` is merged by subpath, as each subpath is replaced as a
- * whole, and `transform` functions are called in order.
+ * the options, and each option is overridden by the later one.
  */
 function mergeExportsConfigs(
   ...exportsConfigs: RslibConfig['exports'][]
@@ -52,19 +51,12 @@ function mergeExportsConfigs(
     if (config === false || typeof merged !== 'object') return config;
 
     // Like `mergeRsbuildConfig`, `undefined` values do not override others.
-    const result: ExportsOptions = {
+    return {
       ...merged,
       ...Object.fromEntries(
         Object.entries(config).filter(([, value]) => value !== undefined),
       ),
-    };
-    if (merged.extra && config.extra) {
-      result.extra = { ...merged.extra, ...config.extra };
-    }
-    if (merged.transform && config.transform) {
-      result.transform = [merged.transform, config.transform].flat();
-    }
-    return result;
+    } as ExportsOptions;
   }, undefined);
 }
 

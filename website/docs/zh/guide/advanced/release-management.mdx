@@ -56,7 +56,7 @@ export default defineConfig({
 });
 ```
 
-Rslib 会接管 `exports` 字段：生成结果整体替换已有的值。不在生成结果中的子路径和条件，可以通过 [extra 和 transform](#customize-exports) 添加。写入时保留原有缩进和换行符，内容没有变化时跳过写入。
+Rslib 会接管 `exports` 字段：生成结果整体替换已有的值。不在生成结果中的子路径和条件，可以通过 [custom](#customize-exports) 添加。写入时保留原有缩进和换行符，内容没有变化时跳过写入。
 
 watch 模式下，或通过 `--lib` 只构建部分 lib 时，不会生成 `exports` 字段。入口变化后，执行 `rslib build` 即可更新。
 
@@ -169,18 +169,18 @@ bundleless 模式下不导出 CSS，JS 产物会自行导入对应的样式。
 
 #### 自定义 exports \{#customize-exports}
 
-- `exports.extra` 向生成结果添加子路径。与生成的子路径同名时，整体替换该子路径。
-- `exports.transform` 接收应用 `extra` 后的结果，返回最终的 exports。它可以是异步函数，也可以是按顺序调用的函数数组。第二个参数提供 `package.json` 的内容 `pkg`，以及 `isPublish`，结果写入 `publishConfig.exports` 时为 `true`。
+`exports.custom` 用于自定义生成的 exports，可以是对象或函数。
+
+- 对象向生成结果添加子路径。与生成的子路径同名时，整体替换该子路径。
+- 函数接收生成结果，返回最终的 exports，可以是异步函数。第二个参数提供 `package.json` 的内容 `pkg`，以及 `isPublish`，结果写入 `publishConfig.exports` 时为 `true`。
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
   exports: {
-    extra: {
-      './package.json': './package.json',
-    },
-    transform: (exports) => ({
+    custom: (exports) => ({
       ...exports,
       '.': { browser: './dist/browser.js', default: exports['.'] },
+      './package.json': './package.json',
     }),
   },
 });
