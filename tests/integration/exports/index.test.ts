@@ -216,7 +216,33 @@ describe('exports', () => {
     });
   });
 
-  test('should apply extra and transform to the generated exports', async () => {
+  test('should apply an object custom to the generated exports', async () => {
+    const fixture = 'esm-only';
+    const fixturePath = join(__dirname, fixture);
+    writeFileSync(
+      join(fixturePath, 'package.json'),
+      packageJsonContents.get(fixture)!,
+    );
+
+    await rslibBuild({
+      cwd: fixturePath,
+      modifyConfig: (config) => {
+        config.exports = {
+          custom: {
+            '.': './dist/esm/replaced.mjs',
+            './package.json': './package.json',
+          },
+        };
+      },
+    });
+
+    expect(readFixtureExports(fixture)).toEqual({
+      '.': './dist/esm/replaced.mjs',
+      './package.json': './package.json',
+    });
+  });
+
+  test('should apply an async function custom to the generated exports', async () => {
     const fixture = 'esm-only';
     const fixturePath = join(__dirname, fixture);
     writeFileSync(
@@ -229,32 +255,23 @@ describe('exports', () => {
       cwd: fixturePath,
       modifyConfig: (config) => {
         config.exports = {
-          extra: {
-            '.': './dist/esm/replaced.mjs',
-            './package.json': './package.json',
-          },
-          transform: [
-            async (exports, context) => {
-              contexts.push(context);
-              return { ...exports, './worker': './dist/esm/worker.mjs' };
-            },
-            (exports) => ({
+          custom: async (exports, context) => {
+            contexts.push(context);
+            return {
               ...exports,
               '.': { browser: './dist/browser.js', default: exports['.']! },
-            }),
-          ],
+              './worker': './dist/esm/worker.mjs',
+            };
+          },
         };
       },
     });
 
-    const exports = readFixtureExports(fixture);
-    expect(Object.keys(exports)).toEqual(['.', './package.json', './worker']);
-    expect(exports).toEqual({
+    expect(readFixtureExports(fixture)).toEqual({
       '.': {
         browser: './dist/browser.js',
-        default: './dist/esm/replaced.mjs',
+        default: './dist/esm/index.mjs',
       },
-      './package.json': './package.json',
       './worker': './dist/esm/worker.mjs',
     });
     expect(contexts).toEqual([
@@ -401,7 +418,7 @@ describe('exports', () => {
       modifyConfig: (config) => {
         config.exports = {
           source: true,
-          transform: (exports, { isPublish }) => {
+          custom: (exports, { isPublish }) => {
             contexts.push(isPublish);
             return exports;
           },

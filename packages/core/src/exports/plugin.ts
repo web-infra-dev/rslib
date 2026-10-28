@@ -6,7 +6,7 @@ import { isJavaScriptOutputFile } from '../exe/utils';
 import type {
   ExportsField,
   ExportsOptions,
-  ExportsTransformContext,
+  ExportsCustomContext,
   PkgJson,
   RequireKey,
   RsbuildConfigWithLibInfo,
@@ -25,14 +25,13 @@ export type ExportsPluginOptions = {
 
 async function customizeExports(
   exports: ExportsField,
-  { extra, transform }: ExportsOptions,
-  context: ExportsTransformContext,
+  { custom }: ExportsOptions,
+  context: ExportsCustomContext,
 ): Promise<ExportsField> {
-  let result: ExportsField = { ...exports, ...extra };
-  for (const fn of [transform ?? []].flat()) {
-    result = await fn(result, context);
+  if (typeof custom === 'function') {
+    return custom(exports, context);
   }
-  return result;
+  return { ...exports, ...custom };
 }
 
 export const ExportsPlugin = ({

@@ -406,12 +406,11 @@ describe('Should merge Rslib config correctly', () => {
   });
 
   test('merge exports options', () => {
-    const transform1 = (exports: ExportsField) => exports;
-    const transform2 = (exports: ExportsField) => exports;
+    const fn = (exports: ExportsField) => exports;
+    const extra = { './a': { browser: './a.js', default: './a.cjs' } };
     const options: ExportsOptions = {
       include: ['index'],
-      extra: { './a': { browser: './a.js', default: './a.cjs' } },
-      transform: transform1,
+      custom: extra,
     };
 
     expect(mergeRslibConfig({ exports: options }, { exports: true })).toEqual({
@@ -429,48 +428,39 @@ describe('Should merge Rslib config correctly', () => {
         {
           exports: {
             include: ['*/index'],
-            extra: { './a': './a.js', './b': './b.js' },
-            transform: transform2,
+            custom: fn,
           },
         },
       ),
     ).toEqual({
       exports: {
         include: ['*/index'],
-        extra: { './a': './a.js', './b': './b.js' },
-        transform: [transform1, transform2],
+        custom: fn,
       },
     });
   });
 
   test('merge exports options with booleans and partial options', () => {
-    const transform = (exports: ExportsField) => exports;
-    const extra = { './package.json': './package.json' };
+    const custom = { './package.json': './package.json' };
 
     expect(
-      mergeRslibConfig({ exports: false }, { exports: { extra } }),
-    ).toEqual({ exports: { extra } });
+      mergeRslibConfig({ exports: false }, { exports: { custom } }),
+    ).toEqual({ exports: { custom } });
     expect(mergeRslibConfig({ exports: false }, { exports: true })).toEqual({
       exports: true,
     });
     expect(
       mergeRslibConfig(
-        { exports: { extra } },
-        { exports: { transform, include: ['index'] } },
+        { exports: { custom } },
+        { exports: { include: ['index'] } },
       ),
-    ).toEqual({ exports: { extra, transform, include: ['index'] } });
+    ).toEqual({ exports: { custom, include: ['index'] } });
     expect(
       mergeRslibConfig(
-        { exports: { extra, transform, include: ['index'] } },
-        {
-          exports: {
-            extra: undefined,
-            transform: undefined,
-            include: undefined,
-          },
-        },
+        { exports: { custom, include: ['index'] } },
+        { exports: { custom: undefined, include: undefined } },
       ),
-    ).toEqual({ exports: { extra, transform, include: ['index'] } });
+    ).toEqual({ exports: { custom, include: ['index'] } });
   });
 });
 

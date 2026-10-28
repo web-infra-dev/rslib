@@ -584,17 +584,19 @@ export type ExportsValue =
 
 export type ExportsField = Record<string, ExportsValue>;
 
-export type ExportsTransformContext = {
+export type ExportsCustomContext = {
   /** The content of package.json before writing. */
   pkg: Record<string, unknown>;
   /** Whether the result is written to `publishConfig.exports`. */
   isPublish: boolean;
 };
 
-export type ExportsTransform = (
+export type ExportsCustomFunction = (
   exports: ExportsField,
-  context: ExportsTransformContext,
+  context: ExportsCustomContext,
 ) => ExportsField | Promise<ExportsField>;
+
+export type ExportsCustom = ExportsField | ExportsCustomFunction;
 
 export type ExportsOptions = {
   /**
@@ -615,13 +617,10 @@ export type ExportsOptions = {
    */
   source?: boolean | string;
   /**
-   * Subpaths added to the generated exports. A subpath with the same key as a
-   * generated one replaces it as a whole.
+   * Customize the generated exports.
+   * - object: subpaths added to the exports. A subpath with the same key as a
+   *   generated one replaces it as a whole.
+   * - function: receives the exports and returns the final exports.
    */
-  extra?: ExportsField;
-  /**
-   * Receives the generated exports with `extra` applied, and returns the final
-   * exports. An array of functions is called in order.
-   */
-  transform?: ExportsTransform | ExportsTransform[];
+  custom?: ExportsCustom;
 };

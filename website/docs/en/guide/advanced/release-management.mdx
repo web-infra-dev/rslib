@@ -56,7 +56,7 @@ export default defineConfig({
 });
 ```
 
-Rslib owns the `exports` field: the generated result replaces the existing value as a whole. Add subpaths and conditions that are not generated with [extra and transform](#customize-exports). The original indentation and line endings are preserved, and the file is not written when nothing changes.
+Rslib owns the `exports` field: the generated result replaces the existing value as a whole. Add subpaths and conditions that are not generated with [custom](#customize-exports). The original indentation and line endings are preserved, and the file is not written when nothing changes.
 
 The `exports` field is not generated in watch mode, or when only some libs are built with `--lib`. Run `rslib build` to update it after the entries change.
 
@@ -169,18 +169,18 @@ The source file of an entry must be a single module inside the package root.
 
 #### Customize exports
 
-- `exports.extra` adds subpaths to the generated exports. A subpath with the same key as a generated one replaces it as a whole.
-- `exports.transform` receives the exports with `extra` applied, and returns the final exports. It can be async, or an array of functions called in order. Its second argument provides the content of `package.json` as `pkg`, and `isPublish`, which is `true` when the result is written to `publishConfig.exports`.
+`exports.custom` customizes the generated exports. It can be an object or a function.
+
+- An object adds subpaths to the exports. A subpath with the same key as a generated one replaces it as a whole.
+- A function receives the exports and returns the final exports. It can be async. Its second argument provides the content of `package.json` as `pkg`, and `isPublish`, which is `true` when the result is written to `publishConfig.exports`.
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
   exports: {
-    extra: {
-      './package.json': './package.json',
-    },
-    transform: (exports) => ({
+    custom: (exports) => ({
       ...exports,
       '.': { browser: './dist/browser.js', default: exports['.'] },
+      './package.json': './package.json',
     }),
   },
 });
