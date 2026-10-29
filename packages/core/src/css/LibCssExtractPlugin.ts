@@ -1,4 +1,5 @@
 import { type Rspack, rspack } from '@rsbuild/core';
+import { getAssetNames } from '../utils/compilation';
 import {
   ABSOLUTE_PUBLIC_PATH,
   AUTO_PUBLIC_PATH,
@@ -26,8 +27,8 @@ class LibCssExtractPlugin implements Rspack.RspackPluginInstance {
      * replace publicPath placeholders of miniCssExtractLoader
      */
     compiler.hooks.make.tap(pluginName, (compilation) => {
-      compilation.hooks.processAssets.tap(pluginName, (assets) => {
-        const chunkAsset = Object.keys(assets).filter((name) =>
+      compilation.hooks.processAssets.tap(pluginName, () => {
+        const chunkAsset = getAssetNames(compilation).filter((name) =>
           name.includes('.css'),
         );
         for (const name of chunkAsset) {

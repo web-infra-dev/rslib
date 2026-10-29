@@ -1,5 +1,6 @@
 import { type Rspack, rspack } from '@rsbuild/core';
 import { getUndoPath } from '../css/utils';
+import { getAssetNames } from '../utils/compilation';
 
 const pluginName = 'LIB_SVGR_PATCH_PLUGIN';
 
@@ -9,9 +10,9 @@ export class LibSvgrPatchPlugin implements Rspack.RspackPluginInstance {
   readonly name: string = pluginName;
   apply(compiler: Rspack.Compiler): void {
     compiler.hooks.make.tap(this.name, (compilation) => {
-      compilation.hooks.processAssets.tap(this.name, (assets) => {
+      compilation.hooks.processAssets.tap(this.name, () => {
         const isEsm = Boolean(compilation.options.output.module);
-        const chunkAsset = Object.keys(assets).filter((name) =>
+        const chunkAsset = getAssetNames(compilation).filter((name) =>
           name.endsWith('js'),
         );
         for (const name of chunkAsset) {
