@@ -313,7 +313,84 @@ export default {
 
 在 [format](/config/lib/format) 为 `cjs` 或 `esm` 时，Rslib 将产物视为会被其他打包工具再次消费的中间产物，默认会将 [output.dataUriLimit](/config/rsbuild/output#outputdataurilimit) 设置为 `0` 以不内联任何静态资源。
 
-## 构建产物目录
+## 导入为字符串 \{#importing-as-string}
+
+::: info
+
+字符串导入仅在 [bundle](/config/lib/bundle) 设置为 `true` 时生效。
+
+:::
+
+### 通过导入属性 \{#with-import-attributes}
+
+Rslib 支持通过 `type: 'text'` 导入属性将文件原始内容作为字符串导入到 JavaScript 中。
+
+```ts
+import svgText from './static/logo.svg' with { type: 'text' };
+import imageText from './static/image.png' with { type: 'text' };
+import jsonText from './data.json' with { type: 'text' };
+import componentText from './component.tsx' with { type: 'text' };
+import styleText from './style.css' with { type: 'text' };
+
+console.log(svgText); // 输出 SVG 文件的原始内容
+```
+
+`type: 'text'` 导入属性支持将资源的原始内容作为字符串导入，不会经过默认的资源、脚本或样式处理流程。
+
+导入属性只影响当前导入，普通导入仍会保持默认行为：
+
+```ts
+import { foo } from './foo.js';
+import fooText from './foo.js' with { type: 'text' };
+
+console.log(foo); // foo.js 导出的内容
+console.log(fooText); // foo.js 的原始内容
+```
+
+动态导入也可以通过第二个参数传入导入属性：
+
+```ts
+const { default: fooText } = await import('./foo.js', {
+  with: { type: 'text' },
+});
+
+console.log(fooText); // foo.js 的原始内容
+```
+
+:::tip
+推荐优先使用 `type: 'text'` 导入属性，而不是 `?raw` 查询参数。
+:::
+
+#### TypeScript 支持 \{#typescript-support}
+
+使用 TypeScript 7.1 及以上版本时，在 `src/env.d.ts` 中添加以下声明，即可为 `type: 'text'` 导入提供 `string` 类型提示：
+
+```ts title="src/env.d.ts"
+/// <reference types="@rslib/core/types" />
+
+declare module '*' with { type: 'text' } {
+  const content: string;
+  export default content;
+}
+```
+
+使用较早的 TypeScript 版本时，请改用 `?raw`，`@rslib/core/types` 已提供对应的类型声明。
+
+### 通过查询参数 \{#with-query-parameters}
+
+Rslib 也支持通过 `?raw` 查询参数将文件内容作为字符串导入：
+
+```ts
+import rawSvg from './static/logo.svg?raw';
+import rawImage from './static/image.png?raw';
+import rawJson from './data.json?raw';
+import rawComponent from './component.tsx?raw';
+import rawStyle from './style.css?raw';
+
+console.log(rawSvg); // 输出 SVG 文件的原始内容
+```
+
+## 构建产物 \{#build-output}
 
 当静态资源被引用后，会自动被输出到构建产物的目录下，你可以：
 

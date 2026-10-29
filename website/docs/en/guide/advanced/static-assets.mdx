@@ -313,7 +313,84 @@ export default {
 
 When the [format](/config/lib/format) is set to `cjs` or `esm`, Rslib treats the output as an mid-level artifact that will be consumed by other build tools again and sets [output.dataUriLimit](/config/rsbuild/output#outputdataurilimit) to `0` by default to not inline any static assets.
 
-## Build output directory
+## Importing as string
+
+::: info
+
+Importing files as strings only takes effect when [bundle](/config/lib/bundle) is set to `true`.
+
+:::
+
+### With import attributes
+
+Rslib supports using import attributes with `type: 'text'` to import the original content of files as strings in JavaScript.
+
+```ts
+import svgText from './static/logo.svg' with { type: 'text' };
+import imageText from './static/image.png' with { type: 'text' };
+import jsonText from './data.json' with { type: 'text' };
+import componentText from './component.tsx' with { type: 'text' };
+import styleText from './style.css' with { type: 'text' };
+
+console.log(svgText); // The original content of the SVG file
+```
+
+The `type: 'text'` import attribute imports the original resource content as a string, without running the default asset, script, or style processing pipeline.
+
+The import attribute only affects the current import. Normal imports keep their default behavior:
+
+```ts
+import { foo } from './foo.js';
+import fooText from './foo.js' with { type: 'text' };
+
+console.log(foo); // The export from foo.js
+console.log(fooText); // The original content of foo.js
+```
+
+Dynamic imports can pass import attributes through the second argument:
+
+```ts
+const { default: fooText } = await import('./foo.js', {
+  with: { type: 'text' },
+});
+
+console.log(fooText); // The original content of foo.js
+```
+
+:::tip
+The `type: 'text'` import attribute is recommended over the `?raw` query parameter.
+:::
+
+#### TypeScript support
+
+With TypeScript 7.1 or later, add the following declaration to `src/env.d.ts` to type imports using `type: 'text'` as `string`:
+
+```ts title="src/env.d.ts"
+/// <reference types="@rslib/core/types" />
+
+declare module '*' with { type: 'text' } {
+  const content: string;
+  export default content;
+}
+```
+
+For earlier TypeScript versions, use `?raw` instead. Its types are included in `@rslib/core/types`.
+
+### With query parameters
+
+Rslib also supports using the `?raw` query parameter to import file content as a string:
+
+```ts
+import rawSvg from './static/logo.svg?raw';
+import rawImage from './static/image.png?raw';
+import rawJson from './data.json?raw';
+import rawComponent from './component.tsx?raw';
+import rawStyle from './style.css?raw';
+
+console.log(rawSvg); // The original content of the SVG file
+```
+
+## Build output
 
 Once static assets are imported, they will automatically be output to the build output directory. You can:
 

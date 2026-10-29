@@ -1,5 +1,5 @@
 ---
-description: '在 Rslib 中处理 CSS，涵盖 CSS Modules、预处理器、PostCSS、Lightning CSS 与输出配置。'
+description: 'Rslib 对 CSS 提供开箱即用的支持，包括 CSS Modules、CSS 预处理器、PostCSS、CSS 内联、文本导入、Lightning CSS 和 CSS 压缩。'
 ---
 
 import { Tabs, Tab, PackageManagerTabs } from '@theme';
@@ -431,6 +431,30 @@ body {
 ```scss title="src/index.scss"
 @import '~normalize.css';
 ```
+
+## 导入属性 \{#import-attributes}
+
+::: info
+
+导入属性仅在 [bundle](/config/lib/bundle) 设置为 `true` 时生效。
+
+:::
+
+Rslib 支持通过 `type: 'text'` 导入属性引用 CSS 文件的原始内容，并将其作为字符串导入到 JavaScript 中。
+
+```js title="src/index.js"
+import rawCss from './style.css' with { type: 'text' };
+
+console.log(rawCss); // 输出 CSS 文件的原始内容
+```
+
+使用 `import "*.css" with { type: 'text' }` 的行为如下：
+
+- 获取 CSS 文件的原始文本内容，不经过任何预处理或编译
+- 内容会作为字符串内联到 JavaScript 产物中
+- 不会生成单独的 CSS 文件
+
+类型声明的配置方式请参阅 [文本导入的 TypeScript 支持](/guide/advanced/static-assets#typescript-support)。
 
 ## 查询参数
 
