@@ -146,6 +146,25 @@ export default {
 };
 ```
 
+### Content mappers
+
+Rslib supports [Content Mappers](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/#content-mappers), introduced in TypeScript 7.1, for declaration generation.
+
+Install a content mapper and register the file extensions it handles in `tsconfig.json`. For example, assuming you have installed a CSS Modules mapper named `example-css-modules-mapper` (an illustrative package name):
+
+```json title="tsconfig.json"
+{
+  "contentMappers": [
+    {
+      "package": "example-css-modules-mapper",
+      "extensions": [".module.css"]
+    }
+  ]
+}
+```
+
+During declaration generation, Rslib automatically loads the mapper to generate types from CSS Modules class names.
+
 ### Notes
 
 During the generation of declaration files, Rslib will automatically enforce some configuration options in `tsconfig.json` to ensure that TypeScript generates only declaration files.

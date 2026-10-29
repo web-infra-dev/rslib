@@ -146,6 +146,25 @@ export default {
 };
 ```
 
+### Content mappers
+
+Rslib 支持使用 TypeScript 7.1 中新增的 [Content Mappers](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/#content-mappers) 生成类型声明。
+
+安装 content mapper 后，在 `tsconfig.json` 中注册它处理的文件扩展名。例如，假设已安装名为 `example-css-modules-mapper` 的 CSS Modules mapper（仅为示例包名）：
+
+```json title="tsconfig.json"
+{
+  "contentMappers": [
+    {
+      "package": "example-css-modules-mapper",
+      "extensions": [".module.css"]
+    }
+  ]
+}
+```
+
+生成类型声明时，Rslib 会自动加载该 mapper，根据 CSS Modules 的类名生成类型。
+
 ### 注意事项
 
 Rslib 在生成类型声明文件的过程中，默认会强制设置 `tsconfig.json` 中的一些配置项以保证 TypeScript 能够仅生成类型声明文件。
