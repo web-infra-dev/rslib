@@ -1,5 +1,5 @@
 ---
-description: 'Use CSS in Rslib with CSS Modules, preprocessors, PostCSS, Lightning CSS, and output configuration.'
+description: 'Rslib provides out-of-the-box CSS support, including CSS Modules, preprocessors, PostCSS, inlining, text imports, Lightning CSS, and minification.'
 ---
 
 import { Tabs, Tab, PackageManagerTabs } from '@theme';
@@ -431,6 +431,30 @@ body {
 ```scss title="src/index.scss"
 @import '~normalize.css';
 ```
+
+## Import attributes
+
+::: info
+
+Import attributes only take effect when [bundle](/config/lib/bundle) is set to `true`.
+
+:::
+
+Rslib supports importing raw CSS source as a string in JavaScript by using import attributes with `type: 'text'`.
+
+```js title="src/index.js"
+import rawCss from './style.css' with { type: 'text' };
+
+console.log(rawCss); // Output the raw content of the CSS file
+```
+
+Using `import "*.css" with { type: 'text' }` has the following behaviors:
+
+- Get the raw text content of the CSS file, without any preprocessing or compilation
+- The content of the CSS file will be inlined into the JavaScript output
+- No separate CSS file will be generated
+
+For type declarations, see [TypeScript support for text imports](/guide/advanced/static-assets#typescript-support).
 
 ## Query parameters
 
