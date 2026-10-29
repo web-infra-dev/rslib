@@ -1,5 +1,6 @@
 import type { EnvironmentConfig, RsbuildPlugin } from '@rsbuild/core';
 import { createRequire } from 'node:module';
+import { getAssetNames } from '../utils/compilation';
 import { LibCssExtractPlugin } from './LibCssExtractPlugin';
 import {
   type CssLoaderOptionsAuto,
@@ -97,8 +98,8 @@ const pluginLibCss = (
     // 2. preserve CSS Modules asset
     api.processAssets(
       { stage: 'additional' }, // deleteAsset as soon as possible for small perf
-      ({ assets, compilation }) => {
-        for (const key of Object.keys(assets)) {
+      ({ compilation }) => {
+        for (const key of getAssetNames(compilation)) {
           if (RegExp(RSLIB_CSS_ENTRY_FLAG).exec(key)) {
             compilation.deleteAsset(key);
           }

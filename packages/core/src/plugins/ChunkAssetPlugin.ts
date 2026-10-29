@@ -1,6 +1,7 @@
 import { type EnvironmentConfig, type Rspack, rspack } from '@rsbuild/core';
 import { JS_EXTENSIONS_PATTERN } from '../constant';
 import type { DeepRequired, Format, Shims } from '../types';
+import { getAssetNames } from '../utils/compilation';
 
 const PLUGIN_NAME = 'rsbuild:lib-chunk-asset';
 const IMPORT_META_URL_SHIM = `const __rslib_import_meta_url__ = /*#__PURE__*/ (function () {
@@ -68,8 +69,8 @@ class ChunkAssetPlugin {
       });
 
       // The default stage runs before minification, which can remove unused shims.
-      compilation.hooks.processAssets.tap(PLUGIN_NAME, (assets) => {
-        const chunkAsset = Object.keys(assets).filter((name) => {
+      compilation.hooks.processAssets.tap(PLUGIN_NAME, () => {
+        const chunkAsset = getAssetNames(compilation).filter((name) => {
           return (
             JS_EXTENSIONS_PATTERN.test(name) && jsChunkAssetNames.has(name)
           );
