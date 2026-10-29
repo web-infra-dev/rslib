@@ -253,7 +253,7 @@ describe('dts when bundle: true', () => {
     restore();
   });
 
-  test('override with bundledPackages', async () => {
+  test('respects bundledPackages and externals', async () => {
     const fixturePath = join(__dirname, 'bundled-packages');
     const { entries } = await buildAndGetResults({
       fixturePath,
@@ -277,5 +277,12 @@ describe('dts when bundle: true', () => {
 
     // RegExp externals
     expect(entries.esm3).toContain(`export * from "@reduxjs/toolkit";`);
+    expect(entries.esm3).not.toContain(
+      'export declare function configureStore',
+    );
+
+    // Explicit bundledPackages takes precedence over RegExp externals.
+    expect(entries.esm4).toContain('export declare function configureStore');
+    expect(entries.esm4).not.toContain(`export * from "@reduxjs/toolkit";`);
   });
 });

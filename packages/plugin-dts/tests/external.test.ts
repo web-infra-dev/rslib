@@ -1,7 +1,10 @@
 import { logger } from '@rsbuild/core';
 import { describe, expect, it, rs } from '@rstest/core';
 import fs from 'node:fs';
-import { DEFAULT_EXCLUDED_PACKAGES, calcBundledPackages } from '../src/dts';
+import {
+  DEFAULT_EXCLUDED_PACKAGES,
+  calcBundledPackages,
+} from '../src/bundledPackages';
 
 const defaultExcludePackages = DEFAULT_EXCLUDED_PACKAGES.reduce(
   (acc: Record<string, string>, cur: string) => {

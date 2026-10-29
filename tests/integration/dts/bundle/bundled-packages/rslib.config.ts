@@ -48,5 +48,16 @@ export default defineConfig({
         distPath: './dist/esm/regexp-externals',
       },
     }),
+    generateBundleEsmConfig({
+      dts: {
+        bundle: {
+          bundledPackages: ['@reduxjs/toolkit'],
+        },
+      },
+      output: {
+        externals: [/^@reduxjs\/toolkit$/],
+        distPath: './dist/esm/bundled-packages-priority',
+      },
+    }),
   ],
 });

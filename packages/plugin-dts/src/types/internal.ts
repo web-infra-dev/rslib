@@ -1,6 +1,6 @@
-import type { LogLevel, RsbuildConfig } from '@rsbuild/core';
+import type { LogLevel } from '@rsbuild/core';
 import type { ParsedCommandLine } from 'typescript6-api';
-import type { ApiExtractorOptions, PluginDtsOptions } from './options';
+import type { PluginDtsOptions } from './options';
 
 export type DtsGenerationBackend =
   'api-old' | 'api-new' | 'ts7-executable' | 'isolated';
@@ -19,7 +19,7 @@ export type DtsTsconfigResult = OldApiTsconfigResult | TsconfigOptionsResult;
 
 export type DtsGenOptions = Omit<
   PluginDtsOptions,
-  'bundle' | 'isolated' | 'tsgo'
+  'bundle' | 'isolated' | 'tsgo' | 'autoExternal'
 > & {
   bundle: boolean;
   name: string;
@@ -32,8 +32,7 @@ export type DtsGenOptions = Omit<
   tsconfigPath: string;
   bundleTsconfigPath: string;
   tsConfigResult: DtsTsconfigResult;
-  userExternals?: NonNullable<RsbuildConfig['output']>['externals'];
-  apiExtractorOptions?: ApiExtractorOptions;
+  bundledPackages: string[];
   loggerLevel: LogLevel;
   dtsBackend: DtsGenerationBackend;
 };
