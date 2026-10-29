@@ -131,7 +131,7 @@ export default {
 
 <PackageManagerTabs command="add @microsoft/api-extractor -D" />
 
-2. 在 Rslib 配置文件中设置：
+2. 在 Rslib 配置文件中将 [dts.bundle](/config/lib/dts#dtsbundle) 设置为 `true`：
 
 ```ts title="rslib.config.ts"
 export default {
@@ -139,31 +139,28 @@ export default {
     {
       // [!code highlight:3]
       dts: {
-        bundle: true;
-      }
+        bundle: true,
+      },
     },
   ],
 };
 ```
 
-### Content mappers
+:::note
 
-Rslib 支持使用 TypeScript 7.1 中新增的 [Content Mappers](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/#content-mappers) 生成类型声明。
+从 `@microsoft/api-extractor` 7.60.0 开始，其内置的用于解析类型声明的 TypeScript 升级到了 v6 版本。请参考 [TypeScript 6.0 升级说明](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-6-0.html#breaking-changes-and-deprecations-in-typescript-60)，确保项目配置符合 TypeScript 6 的要求。
 
-安装 content mapper 后，在 `tsconfig.json` 中注册它处理的文件扩展名。例如，假设已安装名为 `example-css-modules-mapper` 的 CSS Modules mapper（仅为示例包名）：
+例如，TypeScript 6.0 不再默认自动加载所有 `@types` 包。如果待打包的声明使用了 `NodeJS` 类型，需要在 `tsconfig.json` 中显式添加 `"node"`：
 
 ```json title="tsconfig.json"
 {
-  "contentMappers": [
-    {
-      "package": "example-css-modules-mapper",
-      "extensions": [".module.css"]
-    }
-  ]
+  "compilerOptions": {
+    "types": ["node"]
+  }
 }
 ```
 
-生成类型声明时，Rslib 会自动加载该 mapper，根据 CSS Modules 的类名生成类型。
+:::
 
 ### 注意事项
 
@@ -184,6 +181,25 @@ Rslib 在生成类型声明文件的过程中，默认会强制设置 `tsconfig.
 - [dts.distPath](/config/lib/dts#dtsdistpath) 配置项
 - `tsconfig.json` 中的 `declarationDir` 配置项
 - [output.distPath](/config/rsbuild/output#outputdistpath) 或 [output.distPath.root](/config/rsbuild/output#outputdistpath) 配置项
+
+## Content mappers
+
+Rslib 支持使用 TypeScript 7.1 中新增的 [Content Mappers](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/#content-mappers) 生成类型声明。
+
+安装 content mapper 后，在 `tsconfig.json` 中注册它处理的文件扩展名。例如，假设已安装名为 `example-css-modules-mapper` 的 CSS Modules mapper（仅为示例包名）：
+
+```json title="tsconfig.json"
+{
+  "contentMappers": [
+    {
+      "package": "example-css-modules-mapper",
+      "extensions": [".module.css"]
+    }
+  ]
+}
+```
+
+生成类型声明时，Rslib 会自动加载该 mapper，根据 CSS Modules 的类名生成类型。
 
 ## 相关配置
 

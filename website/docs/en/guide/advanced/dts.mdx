@@ -131,7 +131,7 @@ When enabling this option, we recommend also enabling [isolatedDeclarations](htt
 
 <PackageManagerTabs command="add @microsoft/api-extractor -D" />
 
-2. Configure in the Rslib config file:
+2. Set [dts.bundle](/config/lib/dts#dtsbundle) to `true` in the Rslib config file:
 
 ```ts title="rslib.config.ts"
 export default {
@@ -139,31 +139,28 @@ export default {
     {
       // [!code highlight:3]
       dts: {
-        bundle: true;
-      }
+        bundle: true,
+      },
     },
   ],
 };
 ```
 
-### Content mappers
+:::note
 
-Rslib supports [Content Mappers](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/#content-mappers), introduced in TypeScript 7.1, for declaration generation.
+Starting with `@microsoft/api-extractor` 7.60.0, its bundled TypeScript used to analyze declarations is upgraded to v6. Refer to the [TypeScript 6.0 migration notes](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-6-0.html#breaking-changes-and-deprecations-in-typescript-60) to ensure your project configuration meets TypeScript 6 requirements.
 
-Install a content mapper and register the file extensions it handles in `tsconfig.json`. For example, assuming you have installed a CSS Modules mapper named `example-css-modules-mapper` (an illustrative package name):
+For example, TypeScript 6.0 no longer automatically includes all `@types` packages by default. If the declarations being bundled use `NodeJS` types, explicitly add `"node"` in `tsconfig.json`:
 
 ```json title="tsconfig.json"
 {
-  "contentMappers": [
-    {
-      "package": "example-css-modules-mapper",
-      "extensions": [".module.css"]
-    }
-  ]
+  "compilerOptions": {
+    "types": ["node"]
+  }
 }
 ```
 
-During declaration generation, Rslib automatically loads the mapper to generate types from CSS Modules class names.
+:::
 
 ### Notes
 
@@ -184,6 +181,25 @@ The priority from highest to lowest of final output directory of declaration fil
 - The configuration option [dts.distPath](/config/lib/dts#dtsdistpath)
 - The configuration option `declarationDir` in `tsconfig.json`
 - The configuration option [output.distPath](/config/rsbuild/output#outputdistpath) or [output.distPath.root](/config/rsbuild/output#outputdistpath)
+
+## Content mappers
+
+Rslib supports [Content Mappers](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/#content-mappers), introduced in TypeScript 7.1, for declaration generation.
+
+Install a content mapper and register the file extensions it handles in `tsconfig.json`. For example, assuming you have installed a CSS Modules mapper named `example-css-modules-mapper` (an illustrative package name):
+
+```json title="tsconfig.json"
+{
+  "contentMappers": [
+    {
+      "package": "example-css-modules-mapper",
+      "extensions": [".module.css"]
+    }
+  ]
+}
+```
+
+During declaration generation, Rslib automatically loads the mapper to generate types from CSS Modules class names.
 
 ## Related configuration
 
