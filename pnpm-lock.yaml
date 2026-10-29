@@ -300,6 +300,9 @@ catalogs:
     '@types/node':
       specifier: ^24.19.2
       version: 24.19.2
+    '@types/picomatch':
+      specifier: ^4.0.3
+      version: 4.0.3
     '@types/react':
       specifier: ^19.3.0
       version: 19.3.0
@@ -360,6 +363,9 @@ catalogs:
     path-serializer:
       specifier: 0.7.0
       version: 0.7.0
+    picomatch:
+      specifier: ^4.0.5
+      version: 4.0.5
     postcss-alias:
       specifier: 2.0.0
       version: 2.0.0
@@ -805,6 +811,9 @@ importers:
       '@types/fs-extra':
         specifier: 'catalog:'
         version: 11.0.4
+      '@types/picomatch':
+        specifier: 'catalog:'
+        version: 4.0.3
       '@types/semver':
         specifier: 'catalog:'
         version: 7.8.0
@@ -823,6 +832,9 @@ importers:
       path-serializer:
         specifier: 'catalog:'
         version: 0.7.0
+      picomatch:
+        specifier: 'catalog:'
+        version: 4.0.5
       rsbuild-plugin-publint:
         specifier: 'catalog:'
         version: 1.0.0(@rsbuild/core@2.3.0)
@@ -1460,6 +1472,28 @@ importers:
   tests/integration/exe/esm: {}
 
   tests/integration/exe/multi-target: {}
+
+  tests/integration/exports/build-error: {}
+
+  tests/integration/exports/bundleless: {}
+
+  tests/integration/exports/dts/bundleless: {}
+
+  tests/integration/exports/dts/dist-path: {}
+
+  tests/integration/exports/dts/matched: {}
+
+  tests/integration/exports/dts/module: {}
+
+  tests/integration/exports/dts/shared: {}
+
+  tests/integration/exports/dual-format: {}
+
+  tests/integration/exports/esm-only: {}
+
+  tests/integration/exports/multiple-entries: {}
+
+  tests/integration/exports/umd: {}
 
   tests/integration/extension-alias: {}
 
@@ -4378,6 +4412,9 @@ packages:
 
   '@types/node@24.19.2':
     resolution: {integrity: sha512-93d49wCWJkCyN87MxLpNN6KXPCwFw7bVUg79mGUV1OS40JGWwVCr8n61DXCSqz7CV6/VfPkb7xec7uP2M+QHWQ==}
+
+  '@types/picomatch@4.0.3':
+    resolution: {integrity: sha512-iG0T6+nYJ9FAPmx9SsUlnwcq1ZVRuCXcVEvWnntoPlrOpwtSTKNDC9uVAxTsC3PUvJ+99n4RpAcNgBbHX3JSnQ==}
 
   '@types/qs@6.9.15':
     resolution: {integrity: sha512-uXHQKES6DQKKCLh441Xv/dwxOq1TVS3JPUMlEqoEglvlhR6Mxnlew/Xq/LRVHpLyk7iK3zODe1qYHIMltO7XGg==}
@@ -10934,6 +10971,8 @@ snapshots:
   '@types/node@24.19.2':
     dependencies:
       undici-types: 7.24.6
+
+  '@types/picomatch@4.0.3': {}
 
   '@types/qs@6.9.15': {}
 

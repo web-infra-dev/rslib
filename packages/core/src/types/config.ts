@@ -29,6 +29,8 @@ export type RsbuildConfigWithLibInfo = {
   id?: string;
   format: Format;
   config: EnvironmentConfig;
+  dts?: Dts;
+  bundle?: false;
 };
 
 export type RsbuildConfigEntry = NonNullable<
@@ -569,4 +571,59 @@ export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
    * @inheritdoc
    */
   output?: RslibOutputConfig;
+  /**
+   * Whether to generate the `exports` field in `package.json` from the build outputs.
+   * Can be overridden by the `exports` option of `build`.
+   * @default false
+   */
+  exports?: boolean | ExportsOptions;
 }
+
+export type ExportsValue =
+  string | null | ExportsValue[] | { [condition: string]: ExportsValue };
+
+export type ExportsField = Record<string, ExportsValue>;
+
+export type ExportsCustomContext = {
+  /** The content of package.json before writing. */
+  pkg: Record<string, unknown>;
+  /** Whether the result is written to `publishConfig.exports`. */
+  isPublish: boolean;
+};
+
+export type ExportsCustomFunction = (
+  exports: ExportsField,
+  context: ExportsCustomContext,
+) => ExportsField | Promise<ExportsField>;
+
+export type ExportsCustom = ExportsField | ExportsCustomFunction;
+
+export type ExportsOptions = {
+  /**
+   * Glob patterns of the outputs to export, matched against the paths of the
+   * JavaScript and CSS outputs relative to the output directory of each lib,
+   * with or without their extensions.
+   * @default all entries in bundle mode, the `index` entry in bundleless mode
+   */
+  include?: string[];
+  /**
+   * Glob patterns of the outputs to exclude from `include`, matched in the same
+   * way.
+   */
+  exclude?: string[];
+  /**
+   * - `true`: point the top-level exports to source files, and write the
+   *   exports of the build outputs to `publishConfig.exports`.
+   * - string: add a condition with this name pointing to the source file to
+   *   each JavaScript subpath.
+   * @default false
+   */
+  source?: boolean | string;
+  /**
+   * Customize the generated exports.
+   * - object: subpaths added to the exports. A subpath with the same key as a
+   *   generated one replaces it as a whole.
+   * - function: receives the exports and returns the final exports.
+   */
+  custom?: ExportsCustom;
+};

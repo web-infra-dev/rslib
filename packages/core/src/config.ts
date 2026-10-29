@@ -1882,6 +1882,7 @@ export async function composeCreateRsbuildConfig(
     dev: _dev,
     server: _server,
     logLevel,
+    exports: _exports,
     ...sharedRsbuildConfig
   } = rslibConfig;
   // debug mode should always verbose logs
@@ -1999,6 +2000,14 @@ export async function composeCreateRsbuildConfig(
       config.id = libConfig.id;
     }
 
+    if (userConfig.dts) {
+      config.dts = userConfig.dts;
+    }
+
+    if (userConfig.bundle === false) {
+      config.bundle = false;
+    }
+
     return config;
   });
 
@@ -2043,10 +2052,10 @@ export async function composeRsbuildEnvironments(
     return candidateId;
   };
 
-  for (const { format, id, config } of rsbuildConfigWithLibInfo) {
+  for (const { format, id, config, dts, bundle } of rsbuildConfigWithLibInfo) {
     const libId = typeof id === 'string' ? id : composeDefaultId(format);
     environments[libId] = config;
-    environmentWithInfos.push({ id: libId, format, config });
+    environmentWithInfos.push({ id: libId, format, config, dts, bundle });
   }
 
   const conflictIds = usedIds.filter(

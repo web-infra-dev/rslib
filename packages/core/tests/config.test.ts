@@ -14,7 +14,11 @@ import {
 import { createRslib } from '../src/createRslib';
 import { loadConfig } from '../src/loadConfig';
 import { mergeRslibConfig } from '../src/mergeConfig';
-import type { RslibConfig } from '../src/types/config';
+import type {
+  ExportsField,
+  ExportsOptions,
+  RslibConfig,
+} from '../src/types/config';
 import { normalizeSlash } from '../src/utils/helper';
 import { logger } from '../src/utils/logger';
 
@@ -399,6 +403,64 @@ describe('Should merge Rslib config correctly', () => {
         ],
       }
     `);
+  });
+
+  test('merge exports options', () => {
+    const fn = (exports: ExportsField) => exports;
+    const extra = { './a': { browser: './a.js', default: './a.cjs' } };
+    const options: ExportsOptions = {
+      include: ['index'],
+      custom: extra,
+    };
+
+    expect(mergeRslibConfig({ exports: options }, { exports: true })).toEqual({
+      exports: options,
+    });
+    expect(mergeRslibConfig({ exports: true }, { exports: options })).toEqual({
+      exports: options,
+    });
+    expect(mergeRslibConfig({ exports: options }, { exports: false })).toEqual({
+      exports: false,
+    });
+    expect(
+      mergeRslibConfig(
+        { exports: options },
+        {
+          exports: {
+            include: ['*/index'],
+            custom: fn,
+          },
+        },
+      ),
+    ).toEqual({
+      exports: {
+        include: ['*/index'],
+        custom: fn,
+      },
+    });
+  });
+
+  test('merge exports options with booleans and partial options', () => {
+    const custom = { './package.json': './package.json' };
+
+    expect(
+      mergeRslibConfig({ exports: false }, { exports: { custom } }),
+    ).toEqual({ exports: { custom } });
+    expect(mergeRslibConfig({ exports: false }, { exports: true })).toEqual({
+      exports: true,
+    });
+    expect(
+      mergeRslibConfig(
+        { exports: { custom } },
+        { exports: { include: ['index'] } },
+      ),
+    ).toEqual({ exports: { custom, include: ['index'] } });
+    expect(
+      mergeRslibConfig(
+        { exports: { custom, include: ['index'] } },
+        { exports: { custom: undefined, include: undefined } },
+      ),
+    ).toEqual({ exports: { custom, include: ['index'] } });
   });
 });
 
