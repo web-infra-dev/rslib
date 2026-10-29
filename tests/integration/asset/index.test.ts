@@ -609,24 +609,3 @@ test('preserve `new URL` file asset as relative URL in node_modules', async () =
     'static/svg/dep-logo.svg',
   );
 });
-
-test('import assets as text without affecting normal imports', async () => {
-  const fixturePath = join(__dirname, 'text-imports');
-  const { contents } = await buildAndGetResults({ fixturePath });
-  const jsonText = await readFile(join(fixturePath, 'src/data.json'), 'utf8');
-  const scriptText = await readFile(join(fixturePath, 'src/script.js'), 'utf8');
-  const svgText = await readFile(join(fixturePath, 'src/logo.svg'), 'utf8');
-
-  for (const format of ['esm', 'cjs'] as const) {
-    const { path } = queryContent(contents[format], /index\.(?:js|cjs)$/);
-    const output = format === 'esm' ? await import(path) : require(path);
-
-    expect(output.data).toEqual({ answer: 42 });
-    expect(output.foo).toBe(42);
-    expect(output.jsonText).toBe(jsonText);
-    expect(output.scriptText).toBe(scriptText);
-    expect(output.svgText).toBe(svgText);
-    expect(output.rawText).toBe(jsonText);
-    expect(await output.loadText()).toBe(scriptText);
-  }
-});

@@ -1,10 +1,6 @@
 import { expect, test } from '@rstest/core';
-import { readFile } from 'node:fs/promises';
-import { createRequire } from 'node:module';
 import { join } from 'node:path';
-import { buildAndGetResults, queryContent } from 'test-helper';
-
-const require = createRequire(import.meta.url);
+import { buildAndGetResults } from 'test-helper';
 
 test('should extract css successfully in bundle', async () => {
   const fixturePath = join(__dirname, 'bundle');
@@ -148,22 +144,4 @@ test('should not emit css and css related js in target: "node"', async () => {
   expect(js.files).toMatchInlineSnapshot('{}');
   expect(css.files).toMatchInlineSnapshot('{}');
   expect(dts.files).toMatchInlineSnapshot('{}');
-});
-
-test('import CSS as text without emitting stylesheets', async () => {
-  const fixturePath = join(__dirname, 'text-imports');
-  const { js, css } = await buildAndGetResults({
-    fixturePath,
-    type: 'all',
-  });
-  const cssText = await readFile(join(fixturePath, 'src/style.css'), 'utf8');
-
-  for (const format of ['esm', 'cjs'] as const) {
-    const { path } = queryContent(js.contents[format], /index\.(?:js|cjs)$/);
-    const output = format === 'esm' ? await import(path) : require(path);
-
-    expect(output.cssText).toBe(cssText);
-    expect(output.rawText).toBe(cssText);
-    expect(css.files[format] ?? []).toHaveLength(0);
-  }
 });

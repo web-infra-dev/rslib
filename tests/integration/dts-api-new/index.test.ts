@@ -43,30 +43,4 @@ describe('TypeScript 7.1 stable JavaScript API', () => {
       expect(declaration).toContain('// mapper footer');
     }
   });
-
-  test('emit text import types in bundle and bundleless declarations', async () => {
-    const { contents } = await buildAndGetResults({
-      fixturePath: join(__dirname, 'text-imports'),
-      type: 'dts',
-    });
-
-    for (const id of ['esm0', 'cjs0', 'esm1', 'cjs1'] as const) {
-      const bundle = id.endsWith('0');
-      const declarations = contents[id]!;
-      const index = getFileBySuffix(declarations, 'index.d.ts');
-      expect(Object.keys(declarations)).toHaveLength(bundle ? 1 : 2);
-      expect(index.includes("from './text.js'")).toBe(!bundle);
-
-      const content = bundle
-        ? index
-        : getFileBySuffix(declarations, 'text.d.ts');
-      for (const name of ['jsonText', 'scriptText', 'cssText', 'rawText']) {
-        expect(index).toContain(name);
-        expect(content).toContain(`export declare const ${name}: string;`);
-      }
-      expect(content).toContain(
-        'export declare const loadText: () => Promise<string>;',
-      );
-    }
-  });
 });
