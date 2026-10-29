@@ -99,7 +99,7 @@ describe('generateExports with declaration files', () => {
     declaration?: DeclarationFile,
   ): CollectedEntry => ({
     entryName: 'index',
-    jsFile,
+    js: { file: jsFile, name: jsFile.replace(/^dist\/(esm\/|cjs\/)?/, '') },
     declaration,
     sourceFiles: [],
   });
@@ -255,7 +255,7 @@ describe('generateExports with declaration files', () => {
           }),
           {
             entryName: 'assets/logo',
-            jsFile: 'dist/assets/logo.js',
+            js: { file: 'dist/assets/logo.js', name: 'assets/logo.js' },
             sourceFiles: [],
           },
         ],

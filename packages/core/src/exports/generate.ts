@@ -15,20 +15,22 @@ import type { DeclarationFile } from './dts';
  * Paths are relative to the package root, or absolute for different Windows
  * drives, using forward slashes.
  */
+export type CollectedOutput = {
+  file: string;
+  /** Path relative to the output directory, matched by `include` and `exclude`. */
+  name: string;
+};
+
 export type CollectedEntry = {
   entryName: string;
   /**
    * The JavaScript output, absent for entries whose modules are all CSS files,
    * as their JavaScript output is empty.
    */
-  jsFile?: string;
+  js?: CollectedOutput;
   /** The CSS output, only collected in bundle mode. */
-  css?: {
-    file: string;
-    /** Path relative to the output directory, which names the CSS subpath. */
-    name: string;
-  };
-  /** The declaration file of `jsFile`, only collected for libs that emit declaration files. */
+  css?: CollectedOutput;
+  /** The declaration file of `js`, only collected for libs that emit declaration files. */
   declaration?: DeclarationFile;
   /** The modules of the entry. */
   sourceFiles: string[];
@@ -69,6 +71,18 @@ type FormatSlot = {
 type EntrySlots = Partial<Record<Format, FormatSlot>> & {
   css?: { format: Format; target: string; subpath: string };
 };
+
+// Extensions of the outputs that `include` and `exclude` match without them.
+const OUTPUT_EXTENSION = /\.(?:js|mjs|cjs|css)$/;
+
+/**
+ * Match an output path relative to the output directory, either as it is or
+ * without its extension.
+ */
+function createOutputMatcher(patterns: string[]): (name: string) => boolean {
+  const isMatch = picomatch(patterns);
+  return (name) => isMatch(name) || isMatch(name.replace(OUTPUT_EXTENSION, ''));
+}
 
 /** Normalize entry names such as `./foo` to `foo` before matching and naming. */
 function normalizeEntryName(entryName: string): string {
@@ -178,24 +192,35 @@ export function generateExports({
   collected,
   options,
 }: GenerateExportsOptions): GeneratedExports {
-  const exclude = picomatch(options.exclude ?? []);
+  const exclude = createOutputMatcher(options.exclude ?? []);
 
   const preparedLibs = libInfos.flatMap(
     ({ id, format, dts, bundle }): PreparedLib[] => {
       // Other formats, such as UMD, are not referenced by the `exports` field.
       if (format !== 'esm' && format !== 'cjs') return [];
-      // In bundleless mode, every source file is an entry, so only the main
-      // entry is treated as public API by default.
-      const include = picomatch(
-        options.include ?? (bundle === false ? ['index'] : ['**']),
-      );
-      const entries = collected
-        .get(id)!
-        .map((entry) => ({
-          ...entry,
-          entryName: normalizeEntryName(entry.entryName),
-        }))
-        .filter(({ entryName }) => include(entryName) && !exclude(entryName));
+      const include = options.include && createOutputMatcher(options.include);
+      // Outputs are selected one by one, so an entry can export its JavaScript
+      // without its CSS. In bundleless mode, every source file is an entry, so
+      // only the main entry is treated as public API by default.
+      const isSelected = (entryName: string, name: string) =>
+        (include ? include(name) : bundle !== false || entryName === 'index') &&
+        !exclude(name);
+      const entries = collected.get(id)!.flatMap((collectedEntry) => {
+        const entryName = normalizeEntryName(collectedEntry.entryName);
+        const { js, css } = collectedEntry;
+        const hasJs = js !== undefined && isSelected(entryName, js.name);
+        const hasCss = css !== undefined && isSelected(entryName, css.name);
+        if (!hasJs && !hasCss) return [];
+        return [
+          {
+            ...collectedEntry,
+            entryName,
+            js: hasJs ? js : undefined,
+            declaration: hasJs ? collectedEntry.declaration : undefined,
+            css: hasCss ? css : undefined,
+          },
+        ];
+      });
       return [
         {
           id,
@@ -209,7 +234,7 @@ export function generateExports({
   );
 
   const libsWithoutDeclarations = preparedLibs.filter((lib) => {
-    const jsEntries = lib.entries.filter((entry) => entry.jsFile);
+    const jsEntries = lib.entries.filter((entry) => entry.js);
     return (
       lib.dts &&
       jsEntries.length > 0 &&
@@ -242,7 +267,7 @@ export function generateExports({
   for (const lib of preparedLibs) {
     for (const entry of lib.entries) {
       const { entryName } = entry;
-      for (const file of [entry.jsFile, entry.css?.file]) {
+      for (const file of [entry.js?.file, entry.css?.file]) {
         if (file && isOutsidePackageRoot(file)) {
           throw new Error(
             `Failed to generate the "exports" field because the "${entryName}" entry of the "${lib.id}" lib emits "${file}", which is outside the package root.`,
@@ -251,8 +276,8 @@ export function generateExports({
       }
 
       const slots = entrySlotsByName.get(entryName) ?? {};
-      if (entry.jsFile) {
-        const target = `./${entry.jsFile}`;
+      if (entry.js) {
+        const target = `./${entry.js.file}`;
         const existingTarget = slots[lib.format]?.target;
         if (existingTarget && existingTarget !== target) {
           throw new Error(
@@ -316,7 +341,7 @@ export function generateExports({
   }
   if (entryNameBySubpath.size === 0) {
     throw new Error(
-      'Failed to generate the "exports" field because no entries can be exported. Only entries of the "esm" and "cjs" formats that match "exports.include" and do not match "exports.exclude" are exported, and only the "index" entry is included by default in bundleless mode.',
+      'Failed to generate the "exports" field because no entries can be exported. Only outputs of the "esm" and "cjs" formats that match "exports.include" and do not match "exports.exclude" are exported, and only the "index" entry is included by default in bundleless mode.',
     );
   }
 

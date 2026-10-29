@@ -76,10 +76,15 @@ export const ExportsPlugin = ({
       const cssOutput =
         libInfo.bundle === false ? undefined : files.find(isCssFile);
 
-      const jsFile = jsOutput && toRelative(path.join(outputPath, jsOutput));
+      const js = jsOutput
+        ? {
+            file: toRelative(path.join(outputPath, jsOutput)),
+            name: normalizeSlash(jsOutput),
+          }
+        : undefined;
       entries.push({
         entryName,
-        jsFile,
+        js,
         css: cssOutput
           ? {
               file: toRelative(path.join(outputPath, cssOutput)),
@@ -87,8 +92,13 @@ export const ExportsPlugin = ({
             }
           : undefined,
         declaration:
-          jsFile && dts
-            ? findDeclarationFile({ jsFile, root, outputPath, dtsDistPath })
+          js && dts
+            ? findDeclarationFile({
+                jsFile: js.file,
+                root,
+                outputPath,
+                dtsDistPath,
+              })
             : undefined,
         sourceFiles,
       });

@@ -22,20 +22,21 @@ const createLibInfo = (
   ...info,
 });
 
+/** The path of an output relative to an output directory under `dist`. */
+const outputName = (file: string) => file.replace(/^dist\/(esm\/|cjs\/)?/, '');
+
 const entry = (
   entryName: string,
   jsFile?: string,
   info: Partial<CollectedEntry> = {},
-): CollectedEntry => ({ entryName, jsFile, sourceFiles: [], ...info });
-
-/** A CSS output named by its path relative to an output directory under `dist`. */
-const css = (
-  file: string,
-  name = file.replace(/^dist\/(esm\/|cjs\/)?/, ''),
-) => ({
-  file,
-  name,
+): CollectedEntry => ({
+  entryName,
+  js: jsFile ? { file: jsFile, name: outputName(jsFile) } : undefined,
+  sourceFiles: [],
+  ...info,
 });
+
+const css = (file: string, name = outputName(file)) => ({ file, name });
 
 const generate = (
   libInfos: LibInfo[],
@@ -237,6 +238,66 @@ describe('generateExports with include and exclude', () => {
       '.': './dist/index.js',
       './button': './dist/button/index.js',
     });
+  });
+
+  it('should match outputs with or without their extensions', () => {
+    const libs = [createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')];
+    const collected = {
+      esm: [entry('index', 'dist/esm/index.js')],
+      cjs: [entry('index', 'dist/cjs/index.cjs')],
+    };
+    expect(generate(libs, collected, { include: ['index'] }).exports).toEqual({
+      '.': { import: './dist/esm/index.js', require: './dist/cjs/index.cjs' },
+    });
+    expect(
+      generate(libs, collected, { include: ['index.js', 'index.cjs'] }).exports,
+    ).toEqual({
+      '.': { import: './dist/esm/index.js', require: './dist/cjs/index.cjs' },
+    });
+    expect(
+      generate(libs, collected, { include: ['index.js'] }).exports,
+    ).toEqual({ '.': './dist/esm/index.js' });
+    expect(
+      generate(libs, collected, { exclude: ['index.cjs'] }).exports,
+    ).toEqual({ '.': './dist/esm/index.js' });
+  });
+
+  it('should select the JavaScript and CSS of an entry separately', () => {
+    const libs = [createLibInfo('esm', 'esm')];
+    const collected = {
+      esm: [entry('index', 'dist/index.js', { css: css('dist/index.css') })],
+    };
+    expect(generate(libs, collected).exports).toEqual({
+      '.': './dist/index.js',
+      './index.css': './dist/index.css',
+    });
+    expect(
+      generate(libs, collected, { include: ['index.js'] }).exports,
+    ).toEqual({ '.': './dist/index.js' });
+    expect(
+      generate(libs, collected, { include: ['index.css'] }).exports,
+    ).toEqual({ './index.css': './dist/index.css' });
+    expect(generate(libs, collected, { exclude: ['*.css'] }).exports).toEqual({
+      '.': './dist/index.js',
+    });
+  });
+
+  it('should match hashed outputs and keep the default of bundleless mode', () => {
+    expect(
+      generate(
+        [createLibInfo('esm', 'esm')],
+        { esm: [entry('index', 'dist/index.cfdc9c6e75.js')] },
+        { include: ['index.*'] },
+      ).exports,
+    ).toEqual({ '.': './dist/index.cfdc9c6e75.js' });
+    expect(
+      generate([bundleless], {
+        esm: [
+          entry('index', 'dist/index.cfdc9c6e75.js'),
+          entry('button/index', 'dist/button/index.acf131b86e.js'),
+        ],
+      }).exports,
+    ).toEqual({ '.': './dist/index.cfdc9c6e75.js' });
   });
 
   it('should throw when no entries match', () => {
