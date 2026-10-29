@@ -82,7 +82,7 @@ For example, building `esm` and `cjs` libs with an `index` entry generates:
 
 #### Select entries
 
-`exports.include` and `exports.exclude` select the exported entries with glob patterns matched against entry names. By default, all entries are exported in bundle mode, and only the `index` entry in the root of [lib.outBase](/config/lib/out-base) is exported in bundleless mode, where every source file is an entry.
+`exports.include` and `exports.exclude` select the exported outputs with glob patterns. A pattern is matched against the path of each JavaScript or CSS output relative to the output directory of its lib, such as `utils/index.js` or `index.css`, with or without the extension. Writing `index` matches `index.js`, `index.cjs` and `index.css`, while `index.css` matches only the CSS. By default, all entries are exported in bundle mode, and only the `index` entry in the root of [lib.outBase](/config/lib/out-base) is exported in bundleless mode, where every source file is an entry.
 
 For example, to export the main entry and the `index` entry of each component directory in a bundleless component library:
 

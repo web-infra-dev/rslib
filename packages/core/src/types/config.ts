@@ -600,12 +600,15 @@ export type ExportsCustom = ExportsField | ExportsCustomFunction;
 
 export type ExportsOptions = {
   /**
-   * Glob patterns of entry names to export.
-   * @default `['**']` in bundle mode, `['index']` in bundleless mode
+   * Glob patterns of the outputs to export, matched against the paths of the
+   * JavaScript and CSS outputs relative to the output directory of each lib,
+   * with or without their extensions.
+   * @default all entries in bundle mode, the `index` entry in bundleless mode
    */
   include?: string[];
   /**
-   * Glob patterns of entry names to exclude from `include`.
+   * Glob patterns of the outputs to exclude from `include`, matched in the same
+   * way.
    */
   exclude?: string[];
   /**

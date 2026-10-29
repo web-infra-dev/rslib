@@ -82,7 +82,7 @@ watch 模式下，或通过 `--lib` 只构建部分 lib 时，不会生成 `expo
 
 #### 选择入口 \{#select-entries}
 
-`exports.include` 和 `exports.exclude` 通过匹配入口名的 glob 选择导出的入口。默认情况下，bundle 模式导出所有入口；bundleless 模式下每个源文件都是入口，只导出 [lib.outBase](/config/lib/out-base) 根目录下的 `index` 入口。
+`exports.include` 和 `exports.exclude` 通过 glob 选择导出的产物。模式匹配的是每个 JS 或 CSS 产物相对其 lib 输出目录的路径，如 `utils/index.js`、`index.css`，可以带扩展名，也可以省略。写 `index` 会匹配 `index.js`、`index.cjs` 和 `index.css`，写 `index.css` 则只匹配 CSS。默认情况下，bundle 模式导出所有入口；bundleless 模式下每个源文件都是入口，只导出 [lib.outBase](/config/lib/out-base) 根目录下的 `index` 入口。
 
 例如，在 bundleless 组件库中导出主入口和每个组件目录的 `index` 入口：
 

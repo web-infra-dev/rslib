@@ -404,6 +404,30 @@ describe('exports', () => {
     });
   });
 
+  test('should select the JavaScript and CSS outputs separately', async () => {
+    const fixture = 'css';
+    const fixturePath = join(__dirname, fixture);
+    writeFileSync(
+      join(fixturePath, 'package.json'),
+      packageJsonContents.get(fixture)!,
+    );
+
+    await rslibBuild({
+      cwd: fixturePath,
+      modifyConfig: (config) => {
+        config.exports = { include: ['index.{js,mjs}', 'theme'] };
+      },
+    });
+
+    expect(readFixtureExports(fixture)).toEqual({
+      '.': {
+        import: './dist/esm/index.mjs',
+        require: './dist/cjs/index.js',
+      },
+      './theme.css': './dist/esm/theme.css',
+    });
+  });
+
   test('should point exports to source files and publish the outputs', async () => {
     const fixture = 'source';
     const fixturePath = join(__dirname, fixture);
