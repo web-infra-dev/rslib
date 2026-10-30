@@ -16,6 +16,7 @@ import { composeAssetConfig } from './asset/assetConfig';
 import {
   DTS_EXTENSIONS_PATTERN,
   JS_EXTENSIONS_PATTERN,
+  NEW_URL_ENTRY_RULE,
   NEW_URL_RULE,
   SWC_HELPERS,
 } from './constant';
@@ -36,6 +37,7 @@ import type {
   JsRedirect,
   LibConfig,
   LibOnlyConfig,
+  NewUrlMode,
   PkgJson,
   Redirect,
   RequireKey,
@@ -70,6 +72,10 @@ import {
   transformSyntaxToRspackTarget,
 } from './utils/syntax';
 import { loadTsconfig } from './utils/tsconfig';
+import {
+  resolveNewUrlMode,
+  shouldExternalizeUrlDependency,
+} from './newUrl/compose';
 import { composeWasmConfig, resolveWasmMode } from './wasm/compose';
 import { isWasmInlineRequest, WASM_INLINE_ISSUER_QUERY } from './wasm/inline';
 
@@ -284,6 +290,7 @@ const composeFormatConfig = ({
   pkgJson,
   enabledShims,
   sourceEntry,
+  newUrlMode,
 }: {
   format: Format;
   pkgJson: PkgJson;
@@ -291,6 +298,7 @@ const composeFormatConfig = ({
   umdName?: Rspack.LibraryName;
   enabledShims: DeepRequired<Shims>;
   sourceEntry?: RsbuildConfigEntry;
+  newUrlMode: NewUrlMode | false;
 }): EnvironmentConfig => {
   const jsParserOptions: Record<string, Rspack.JavascriptParserOptions> = {
     cjs: {
@@ -334,7 +342,11 @@ const composeFormatConfig = ({
       return {
         plugins: [
           modifyRsbuildDefaultPlugin({
-            urlParserMode: 'new-url-relative',
+            urlParserMode: newUrlMode === false ? false : 'new-url-relative',
+            // Bundleless `entry` mode externalizes the target instead, so the
+            // rule that turns it into an entry is bundle-only.
+            promoteUrlTargetsToEntries:
+              bundle !== false && newUrlMode === 'entry',
             removeEnvPresetDefines: true,
           }),
         ],
@@ -560,9 +572,11 @@ const ENV_PRESET_KEYS = [
 
 const modifyRsbuildDefaultPlugin = ({
   urlParserMode,
+  promoteUrlTargetsToEntries,
   removeEnvPresetDefines,
 }: {
   urlParserMode?: false | 'new-url-relative';
+  promoteUrlTargetsToEntries?: boolean;
   removeEnvPresetDefines?: boolean;
 } = {}): RsbuildPlugin => ({
   name: 'rslib:modify-rsbuild-default',
@@ -591,6 +605,22 @@ const modifyRsbuildDefaultPlugin = ({
         chain.module.rule(NEW_URL_RULE).test(JS_EXTENSIONS_PATTERN).parser({
           url: urlParserMode,
         });
+      }
+
+      // Part 2.1: in bundle `entry` mode, a `new URL()` target that is itself a
+      // JavaScript or TypeScript module is built as its own entry instead of
+      // being copied as an asset. Targets of any other type keep the asset
+      // behavior, because they never match this rule and fall back to the
+      // bundler's default `dependency: 'url'` handling.
+      if (promoteUrlTargetsToEntries) {
+        // Rsbuild keeps its own loaders away from `new URL()` targets, which
+        // would leave the promoted module without transpilation.
+        chain.module.rule(CHAIN_ID.RULE.JS).delete('dependency');
+        chain.module
+          .rule(NEW_URL_ENTRY_RULE)
+          .test(JS_EXTENSIONS_PATTERN)
+          .dependency('url')
+          .type('javascript/auto');
       }
 
       // Part 3: remove Rsbuild's `type: 'javascript/auto'` override.
@@ -1279,6 +1309,7 @@ const composeBundlelessExternalConfig = (
   cssModulesAuto: CssLoaderOptionsAuto,
   bundle: boolean,
   outBase: string | null,
+  newUrlMode: NewUrlMode | false,
 ): {
   config: EnvironmentConfig;
   resolvedJsRedirect?: DeepRequired<JsRedirect>;
@@ -1333,8 +1364,12 @@ const composeBundlelessExternalConfig = (
               return;
             }
 
-            // Do not externalize assets referenced via `new URL()`.
-            if (data.dependencyType === 'url') {
+            // Do not externalize assets referenced via `new URL()`, except the
+            // JavaScript or TypeScript targets in `entry` mode.
+            if (
+              data.dependencyType === 'url' &&
+              !shouldExternalizeUrlDependency({ mode: newUrlMode, request })
+            ) {
               callback();
               return;
             }
@@ -1738,6 +1773,10 @@ async function composeLibRsbuildConfig(
     externalsConfig: targetExternalsConfig,
     target,
   } = composeTargetConfig(config.output?.target, format);
+  const newUrlMode = resolveNewUrlMode({
+    format,
+    newUrlConfig: config.newUrl,
+  });
   const formatConfig = composeFormatConfig({
     format,
     pkgJson: pkgJson!,
@@ -1745,6 +1784,7 @@ async function composeLibRsbuildConfig(
     umdName,
     enabledShims,
     sourceEntry: config.source?.entry,
+    newUrlMode,
   });
   const moduleIdsConfig = composeModuleIdsConfig(format, target);
   const userExternals = hasExe ? undefined : config.output?.externals;
@@ -1804,6 +1844,7 @@ async function composeLibRsbuildConfig(
     cssModulesAuto,
     bundle,
     outBase,
+    newUrlMode,
   );
   const syntaxConfig = await composeSyntaxConfig(
     target,
@@ -1990,6 +2031,7 @@ export async function composeCreateRsbuildConfig(
           umdName: true,
           outBase: true,
           wasm: true,
+          newUrl: true,
           experiments: true,
         }),
       ),
