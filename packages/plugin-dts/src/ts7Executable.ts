@@ -1,7 +1,9 @@
 import { logger } from '@rsbuild/core';
 import { spawn } from 'node:child_process';
+import fs from 'node:fs';
+import module from 'node:module';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import url from 'node:url';
 import { readTypescriptVersion } from './backend';
 import type { EmitDtsOptions } from './dts';
 import type { TsconfigOptionsResult } from './types/internal';
@@ -33,10 +35,12 @@ const getDtsExecutablePath = async (
     // handle Windows paths
     // On Windows, absolute paths must be valid file:// URLs
     const fileUrl =
-      process.platform === 'win32' ? pathToFileURL(libPath).href : libPath;
+      process.platform === 'win32' ? url.pathToFileURL(libPath).href : libPath;
 
     const mod = await import(fileUrl);
-    return mod.default();
+    // Newer TypeScript versions require Node modules; older versions ignore them.
+    // https://github.com/microsoft/TypeScript/pull/64174
+    return mod.default({ fs, module, path, url });
   } catch {
     throw new Error(
       'Failed to resolve the native TypeScript executable. `dts.tsgo` requires `typescript` >= 7.0.0.',
