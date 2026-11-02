@@ -39,6 +39,7 @@ const getDtsExecutablePath = async (
 
     const mod = await import(fileUrl);
     // Newer TypeScript versions require Node modules; older versions ignore them.
+    // https://github.com/microsoft/TypeScript/pull/64174
     return mod.default({ fs, module, path, url });
   } catch {
     throw new Error(
