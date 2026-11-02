@@ -104,7 +104,10 @@ export function composeMinifyConfig(config: LibConfig): EnvironmentConfig {
               toplevel: format !== 'mf',
             },
             format: {
-              comments: 'some',
+              // Let Rsbuild handle explicitly configured legal comments.
+              ...(config.output?.legalComments === undefined
+                ? { comments: 'some' }
+                : {}),
               preserve_annotations: true,
             },
           },

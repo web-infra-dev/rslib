@@ -105,3 +105,17 @@ describe('minify config (mf)', () => {
     `);
   });
 });
+
+describe('legalComments config', () => {
+  test('removes legal comments with none and preserves them by default', async () => {
+    const fixturePath = join(__dirname, 'legal-comments');
+    const { entries } = await buildAndGetResults({ fixturePath });
+
+    expect(entries.esm0).not.toContain(
+      'Copyright (c) 2026 Example contributors',
+    );
+    expect(entries.esm0).not.toContain('@license MIT');
+    expect(entries.esm1).toContain('Copyright (c) 2026 Example contributors');
+    expect(entries.esm1).toContain('@license MIT');
+  });
+});
