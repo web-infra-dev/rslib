@@ -1,4 +1,3 @@
-import type { NapiConfig } from '@ast-grep/napi';
 import { logger, type RsbuildConfig } from '@rsbuild/core';
 import { getTsconfig } from 'get-tsconfig';
 import MagicString from 'magic-string';
@@ -19,6 +18,7 @@ import path, {
 import { styleText } from 'node:util';
 import { convertPathToPattern, glob } from 'tinyglobby';
 import type { MatchPath } from 'tsconfig-paths';
+import type { Expression, Node } from '@swc-next/parser';
 import type { CompilerOptions } from 'typescript6-api';
 import type {
   DtsEntry,
@@ -29,19 +29,22 @@ import type { DtsRedirect } from './types/options';
 
 const require = createRequire(import.meta.url);
 
-let astGrepNapi: typeof import('@ast-grep/napi') | undefined;
 const typescriptCache = new Map<string, typeof import('typescript6-api')>();
 
 export const createRequireFromPackageJson = (cwd: string): NodeJS.Require =>
   createRequire(join(cwd, 'package.json'));
 
-const loadAstGrepNapi = (): typeof import('@ast-grep/napi') => {
-  if (!astGrepNapi) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    astGrepNapi = require('@ast-grep/napi') as typeof import('@ast-grep/napi');
-  }
+let swcNextParser: Promise<typeof import('@swc-next/parser')> | undefined;
+let swcNextWalker: Promise<typeof import('@swc-next/walker')> | undefined;
 
-  return astGrepNapi;
+const loadSwcNextParser = (): Promise<typeof import('@swc-next/parser')> => {
+  swcNextParser ??= import('@swc-next/parser');
+  return swcNextParser;
+};
+
+const loadSwcNextWalker = (): Promise<typeof import('@swc-next/walker')> => {
+  swcNextWalker ??= import('@swc-next/walker');
+  return swcNextWalker;
 };
 
 export const loadTypescript = (
@@ -412,71 +415,62 @@ export async function redirectDtsImports(
   fileSystem: DtsFileSystem,
 ): Promise<string> {
   const code = new MagicString(content);
-  const { parseAsync } = loadAstGrepNapi();
-  const sgNode = (await parseAsync('typescript', content)).root();
-  const matcher: NapiConfig = {
-    rule: {
-      any: [
-        // import foo from 'bar'
-        {
-          kind: 'import_statement',
-          has: {
-            field: 'source',
-            has: {
-              pattern: '$IMP',
-              kind: 'string_fragment',
-            },
-          },
-        },
-        // import foo = require('bar')
-        {
-          kind: 'import_statement',
-          has: {
-            kind: 'import_require_clause',
-            has: {
-              field: 'source',
-              has: {
-                pattern: '$IMP',
-                kind: 'string_fragment',
-              },
-            },
-          },
-        },
-        // export { foo } from 'bar'
-        {
-          kind: 'export_statement',
-          has: {
-            field: 'source',
-            has: {
-              pattern: '$IMP',
-              kind: 'string_fragment',
-            },
-          },
-        },
-        // require('foo') / import('foo')
-        {
-          any: [{ pattern: 'require($A)' }, { pattern: 'import($A)' }],
-          has: {
-            field: 'arguments',
-            has: {
-              has: {
-                pattern: '$IMP',
-                kind: 'string_fragment',
-              },
-            },
-          },
-        },
-      ],
-    },
+  const { parseSync } = await loadSwcNextParser();
+  const { walk } = await loadSwcNextWalker();
+  const { program, diagnostics } = parseSync(content, {
+    lang: 'dts',
+    // Return diagnostics instead of throwing. When parsing fails, the returned
+    // program is empty, so imports in that file are not redirected.
+    errorRecovery: true,
+  });
+  if (diagnostics.length) {
+    logger.warn(
+      `Failed to parse ${color.cyan(dtsFile)}, imports in this file may not be redirected: ${diagnostics[0]!.message}`,
+    );
+  }
+  const matchModule: { n: string; s: number; e: number }[] = [];
+  const addModule = (node: Expression | null | undefined): void => {
+    if (node?.type !== 'Literal' || typeof node.value !== 'string') {
+      return;
+    }
+    // A string literal's span includes its quotes. `value` is the decoded
+    // specifier, and the offsets cover the raw text inside the quotes.
+    matchModule.push({ n: node.value, s: node.start + 1, e: node.end - 1 });
   };
-  const matchModule = sgNode.findAll(matcher).map((match) => {
-    // we can guarantee $IMP is matched given the rule
-    const matchNode = match.getMatch('IMP')!;
-    return {
-      n: matchNode.text(),
-      s: matchNode.range().start.index,
-      e: matchNode.range().end.index,
-    };
+  walk<typeof program, unknown, Node>(program, {
+    // import foo from 'bar'
+    ImportDeclaration(node) {
+      addModule(node.source);
+    },
+    // export { foo } from 'bar'
+    ExportNamedDeclaration(node) {
+      addModule(node.source);
+    },
+    // export * from 'bar'
+    ExportAllDeclaration(node) {
+      addModule(node.source);
+    },
+    // import foo = require('bar')
+    TSExternalModuleReference(node) {
+      addModule(node.expression);
+    },
+    // type Foo = import('bar').Foo
+    TSImportType(node) {
+      addModule(node.source);
+    },
+    // import('foo')
+    ImportExpression(node) {
+      addModule(node.source);
+    },
+    // require('foo')
+    CallExpression(node) {
+      if (node.callee.type === 'Identifier' && node.callee.name === 'require') {
+        const [argument] = node.arguments;
+        if (argument && argument.type !== 'SpreadElement') {
+          addModule(argument);
+        }
+      }
+    },
   });
   const jsExtension = dtsExtension
     .replace(/\.d\.ts$/, '.js')
@@ -610,6 +604,9 @@ export async function redirectDtsImports(
       const normalizedRedirectImportPath = redirectImportPath
         .split(path.sep)
         .join('/');
+
+      // Leave the raw specifier untouched, including any escape sequences.
+      if (normalizedRedirectImportPath === importPath) continue;
 
       code.overwrite(start, end, normalizedRedirectImportPath);
     } catch (err) {

@@ -15,7 +15,6 @@ cleanupUnusedCatalogs: true
 
 catalog:
   '@arco-design/web-react': '^2.66.18'
-  '@ast-grep/napi': '0.51.0'
   '@babel/core': '^8.0.10'
   '@microsoft/api-extractor': '^7.60.1'
   '@module-federation/enhanced': '^2.9.2'
@@ -52,6 +51,8 @@ catalog:
   '@storybook/addon-onboarding': '^10.6.5'
   '@storybook/react': '^10.6.5'
   '@storybook/vue3': '^10.6.5'
+  '@swc-next/parser': '0.5.0'
+  '@swc-next/walker': '0.5.0'
   '@swc/helpers': '0.5.23'
   '@types/chromecast-caf-sender': '^1.0.11'
   '@types/express': '^5.0.6'
@@ -146,6 +147,7 @@ minimumReleaseAgeExclude:
   - storybook-addon-rslib
   - 'storybook-*-rsbuild'
   - '@swc/*'
+  - '@swc-next/*'
   - typescript
   - '@typescript/*'
   - heading-case
