@@ -32,7 +32,7 @@ const withSupportedNodeRuntime = async <T>(fn: () => Promise<T>) => {
   Object.defineProperty(process, 'versions', {
     value: {
       ...process.versions,
-      node: '25.8.0',
+      node: '26.13.0',
       bun: undefined,
       deno: undefined,
     },
@@ -102,7 +102,7 @@ describe('experiments.exe', () => {
     expect(targets).toHaveLength(1);
     expect(targets[0]).toMatchObject({
       arch: process.arch,
-      nodeVersion: 'v25.8.0',
+      nodeVersion: 'v26.13.0',
       platform: process.platform,
       suffix: null,
     });
@@ -119,7 +119,7 @@ describe('experiments.exe', () => {
   test('should reject Bun runtime', () => {
     expect(() =>
       assertSupportedExeRuntime({
-        node: '25.8.0',
+        node: '26.13.0',
         bun: '1.2.0',
       } as NodeJS.ProcessVersions & { bun?: string; deno?: string }),
     ).toThrowErrorMatchingInlineSnapshot(
@@ -130,7 +130,7 @@ describe('experiments.exe', () => {
   test('should reject Deno runtime', () => {
     expect(() =>
       assertSupportedExeRuntime({
-        node: '25.8.0',
+        node: '26.13.0',
         deno: '2.4.0',
       } as NodeJS.ProcessVersions & { bun?: string; deno?: string }),
     ).toThrowErrorMatchingInlineSnapshot(
@@ -215,7 +215,7 @@ describe('experiments.exe', () => {
         arch: 'arm64',
         fileName: 'my-cli',
         index: 0,
-        nodeVersion: 'v25.8.0',
+        nodeVersion: 'v26.13.0',
         outputPath: '/project/bin',
         platform: 'darwin',
         seaOptions: {},
@@ -237,7 +237,7 @@ describe('experiments.exe', () => {
           arch: 'arm64',
           fileName: 'bin/my-cli',
           index: 0,
-          nodeVersion: 'v25.8.0',
+          nodeVersion: 'v26.13.0',
           platform: 'darwin',
           seaOptions: {},
           suffix: null,
@@ -258,15 +258,15 @@ describe('experiments.exe', () => {
         arch: 'x64',
         fileName: 'hello',
         index: 1,
-        nodeVersion: 'v25.8.0',
+        nodeVersion: 'v26.13.0',
         platform: 'linux',
         seaOptions: {},
-        suffix: 'linux-x64-v25.8.0',
+        suffix: 'linux-x64-v26.13.0',
       },
     });
 
     expect(resolved).toBe(
-      path.join('/project/dist/esm', 'hello-linux-x64-v25.8.0'),
+      path.join('/project/dist/esm', 'hello-linux-x64-v26.13.0'),
     );
   });
 
@@ -280,15 +280,15 @@ describe('experiments.exe', () => {
         arch: 'x64',
         fileName: 'hello',
         index: 1,
-        nodeVersion: 'v25.8.0',
+        nodeVersion: 'v26.13.0',
         platform: 'win32',
         seaOptions: {},
-        suffix: 'win32-x64-v25.8.0',
+        suffix: 'win32-x64-v26.13.0',
       },
     });
 
     expect(resolved).toBe(
-      path.join('/project/dist/esm', 'hello-win32-x64-v25.8.0.exe'),
+      path.join('/project/dist/esm', 'hello-win32-x64-v26.13.0.exe'),
     );
   });
 
@@ -310,7 +310,7 @@ describe('experiments.exe', () => {
         arch: 'x64',
         fileName: 'hello.exe',
         index: 0,
-        nodeVersion: 'v25.8.0',
+        nodeVersion: 'v26.13.0',
         platform: 'win32',
         seaOptions: {},
         suffix: null,
@@ -329,12 +329,12 @@ describe('experiments.exe', () => {
             {
               platform: 'linux',
               arch: 'x64',
-              nodeVersion: '25.7.0',
+              nodeVersion: '26.0.0',
             },
             {
               platform: 'darwin',
               arch: 'arm64',
-              nodeVersion: '25.8.0',
+              nodeVersion: '26.13.0',
             },
           ],
         },
@@ -343,8 +343,8 @@ describe('experiments.exe', () => {
     );
 
     expect(targets.map((target) => target.suffix)).toEqual([
-      'linux-x64-v25.7.0',
-      'darwin-arm64-v25.8.0',
+      'linux-x64-v26.0.0',
+      'darwin-arm64-v26.13.0',
     ]);
   });
 
@@ -356,7 +356,7 @@ describe('experiments.exe', () => {
             {
               platform: process.platform as any,
               arch: process.arch as any,
-              nodeVersion: '25.8.0',
+              nodeVersion: '26.13.0',
             },
           ],
         },
@@ -382,7 +382,7 @@ describe('experiments.exe', () => {
 
     expect(targets[0]).toMatchObject({
       customBinaryPath: path.resolve('/project', './custom/node'),
-      nodeVersion: 'v25.8.0',
+      nodeVersion: 'v26.13.0',
       platform: process.platform,
       arch: process.arch,
     });
@@ -401,7 +401,7 @@ describe('experiments.exe', () => {
           arch: process.arch as any,
           customBinaryPath: missingBinaryPath,
           index: 0,
-          nodeVersion: 'v25.8.0',
+          nodeVersion: 'v26.13.0',
           platform: process.platform as any,
           seaOptions: {},
           suffix: null,
@@ -420,7 +420,7 @@ describe('experiments.exe', () => {
             {
               platform: 'linux',
               arch: 'x64',
-              nodeVersion: '25.7.0',
+              nodeVersion: '26.0.0',
             },
           ],
         },
@@ -428,7 +428,7 @@ describe('experiments.exe', () => {
       ),
     );
 
-    expect(targets[0]?.nodeVersion).toBe('v25.7.0');
+    expect(targets[0]?.nodeVersion).toBe('v26.0.0');
   });
 
   test('should accept nodeVersion with a leading v', async () => {
@@ -439,7 +439,7 @@ describe('experiments.exe', () => {
             {
               platform: 'linux',
               arch: 'x64',
-              nodeVersion: 'v25.7.0',
+              nodeVersion: 'v26.0.0',
             },
           ],
         },
@@ -447,7 +447,7 @@ describe('experiments.exe', () => {
       ),
     );
 
-    expect(targets[0]?.nodeVersion).toBe('v25.7.0');
+    expect(targets[0]?.nodeVersion).toBe('v26.0.0');
   });
 
   test('should reject multiple source entries', async () => {

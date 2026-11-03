@@ -4,35 +4,18 @@ Thanks for that you are interested in contributing to Rslib. Before starting you
 
 ## Install Node.js
 
-Use [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm) to run the command below. This will switch to the Node.js version specified in the project's `.nvmrc` file.
-
-```bash
-# with fnm
-fnm use
-
-# with nvm
-nvm use
-```
+Use the Node.js version specified in [`.nvmrc`](./.nvmrc). For installation instructions, see [Install Node.js](https://nodejs.org/en/download).
 
 ## Install dependencies
 
-Enable [pnpm](https://pnpm.io/) with corepack:
+Install [pnpm](https://pnpm.io/) globally, then install the project dependencies from the repository root.
 
-```bash
-corepack enable
-```
-
-Install dependencies:
-
-```bash
+```sh
+npm install -g pnpm@latest
 pnpm install
 ```
 
-What this will do:
-
-- Install all dependencies.
-- Create symlinks between packages in the monorepo
-- Run the prepare script to set up Git hooks.
+pnpm automatically uses the version specified by `packageManager` in [`package.json`](./package.json).
 
 ## Making changes and building
 

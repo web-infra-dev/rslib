@@ -178,7 +178,7 @@ export default {
 };
 ```
 
-- **Object type:** declares the target `platform`, `arch`, and `nodeVersion`. `nodeVersion` accepts both `'25.9.0'` and `'v25.9.0'`. Rslib resolves or downloads the matching official Node.js executable automatically. Omitted fields fall back to the current host environment. If `targets` is not specified, or is an empty array, it falls back to the same default behavior as the boolean form.
+- **Object type:** declares the target `platform`, `arch`, and `nodeVersion`. `nodeVersion` accepts versions in the form `X.Y.Z` or `vX.Y.Z`. Rslib resolves or downloads the matching official Node.js executable automatically. Omitted fields fall back to the current host environment. If `targets` is not specified, or is an empty array, it falls back to the same default behavior as the boolean form.
 
 Here is an example that generates executables for multiple platforms in a single build:
 

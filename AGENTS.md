@@ -2,9 +2,7 @@
 
 ## Setup environment
 
-1. Install [fnm](https://github.com/Schniz/fnm) and run `fnm install`/`fnm use` to match the Node.js version in `.nvmrc` (`v24.5.0`).
-2. Enable Corepack (`corepack enable`) and then activate pnpm via `corepack prepare` (the pnpm version is specified in `packageManager` field in `package.json`).
-3. Clone the repository and install dependencies with `pnpm install` from the repository root.
+Use Node.js from `.nvmrc` and pnpm from `package.json`. Run `pnpm install` from the repository root.
 
 ## Project structure & module organization
 
