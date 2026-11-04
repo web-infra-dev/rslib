@@ -431,13 +431,13 @@ export async function redirectDtsImports(
   const { walk } = await loadSwcNextWalker();
   const { program, diagnostics } = parseSync(content, {
     lang: 'dts',
-    // Return diagnostics instead of throwing. When parsing fails, the returned
-    // program is empty, so imports in that file are not redirected.
+    // Return diagnostics instead of throwing. Some diagnostics still come with
+    // a complete program, so only an empty program means parsing failed.
     errorRecovery: true,
   });
-  if (diagnostics.length) {
+  if (diagnostics.length && !program.body.length) {
     logger.warn(
-      `Failed to parse ${color.cyan(dtsFile)}, imports in this file may not be redirected: ${diagnostics[0]!.message}`,
+      `Failed to parse ${color.cyan(dtsFile)}, imports in this file will not be redirected: ${diagnostics[0]!.message}`,
     );
   }
   const matchModule: { n: string; s: number; e: number; q: string }[] = [];
