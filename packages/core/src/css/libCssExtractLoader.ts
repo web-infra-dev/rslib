@@ -6,16 +6,15 @@
  * 3. add `import './[name].css';` to js module
  */
 import type { Rspack } from '@rsbuild/core';
-import path, { extname } from 'node:path';
+import path from 'node:path';
 import {
   ABSOLUTE_PUBLIC_PATH,
   AUTO_PUBLIC_PATH,
   BASE_URI,
-  EXTRACTED_CSS_QUERY,
   SINGLE_DOT_PATH_SEGMENT,
 } from './const';
 
-import { type CssLoaderOptionsAuto, isCssModulesFile } from './utils';
+import { type CssLoaderOptionsAuto, getExtractedCssPath } from './utils';
 
 interface DependencyDescription {
   identifier: string;
@@ -260,14 +259,10 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
     const m = new Map<string, string>();
 
     for (const { content, filepath, sourceMap } of dependencies) {
-      let distFilepath = getRelativePath(rootDir, filepath);
-      const ext = extname(distFilepath);
-      if (ext !== 'css') {
-        distFilepath = distFilepath.replace(ext, '.css');
-      }
-      if (isCssModulesFile(filepath, auto)) {
-        distFilepath = distFilepath.replace(/\.module\.css/, '_module.css');
-      }
+      const distFilepath = getRelativePath(
+        rootDir,
+        getExtractedCssPath(filepath, auto),
+      );
       const cssFilename = path.basename(distFilepath);
       if (content.trim()) {
         const existingContent = m.get(distFilepath);
@@ -278,7 +273,7 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
         }
 
         importCssFiles += '\n';
-        importCssFiles += `import "./${cssFilename}${EXTRACTED_CSS_QUERY}"`;
+        importCssFiles += `import "./${cssFilename}"`;
       }
       if (sourceMap) {
         const sourceMapPath = `${distFilepath}.map`;

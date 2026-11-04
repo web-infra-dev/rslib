@@ -63,16 +63,20 @@ test('should extract css-modules successfully in bundle-false with output.cssMod
   const contents = result.css.contents;
   const jsContents = result.js.contents;
 
-  const esmFiles = Object.keys(contents.esm);
+  const esmFiles = Object.keys(contents.esm0!);
   expect(esmFiles).toMatchInlineSnapshot(`
     [
       "<ROOT>/tests/integration/style/css-modules/bundle-false-auto/dist/esm/button/index_module.css",
       "<ROOT>/tests/integration/style/css-modules/bundle-false-auto/dist/esm/reset.css",
     ]
   `);
-  expectFileContainContent(jsContents.esm, 'reset.js', 'import "./reset.css"');
+  expectFileContainContent(
+    jsContents.esm0!,
+    'reset.js',
+    'import "./reset.css"',
+  );
 
-  const cjsFiles = Object.keys(contents.cjs);
+  const cjsFiles = Object.keys(contents.cjs0!);
   expect(cjsFiles).toMatchInlineSnapshot(`
     [
       "<ROOT>/tests/integration/style/css-modules/bundle-false-auto/dist/cjs/button/index_module.css",
@@ -80,9 +84,30 @@ test('should extract css-modules successfully in bundle-false with output.cssMod
     ]
   `);
   expectFileContainContent(
-    jsContents.cjs,
+    jsContents.cjs0!,
     'reset.cjs',
     'require("./reset.css")',
+  );
+
+  expectFileContainContent(
+    jsContents.esm1!,
+    'reset.js',
+    'import "./theme.css"',
+  );
+  expectFileContainContent(
+    jsContents.esm1!,
+    'button/index.module.js',
+    'import "./button-theme.css"',
+  );
+  expectFileContainContent(
+    jsContents.cjs1!,
+    'reset.cjs',
+    'require("./theme.css")',
+  );
+  expectFileContainContent(
+    jsContents.cjs1!,
+    'button/index.module.cjs',
+    'require("./button-theme.css")',
   );
 });
 

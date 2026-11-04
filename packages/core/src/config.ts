@@ -19,7 +19,6 @@ import {
   NEW_URL_RULE,
   SWC_HELPERS,
 } from './constant';
-import { EXTRACTED_CSS_QUERY } from './css/const';
 import {
   RSLIB_CSS_ENTRY_FLAG,
   composeCssConfig,
@@ -1329,17 +1328,6 @@ const composeBundlelessExternalConfig = (
             let { request } = data;
             if (!request || !getResolve || !context || !contextInfo) {
               callback();
-              return;
-            }
-
-            // The extract loader generates imports pointing to emitted CSS files.
-            // Preserve these paths without redirecting or checking cssModules.auto
-            // again, which could rewrite them to JS paths and cause self-imports.
-            if (request.endsWith(EXTRACTED_CSS_QUERY)) {
-              callback(
-                undefined,
-                request.slice(0, -EXTRACTED_CSS_QUERY.length),
-              );
               return;
             }
 
