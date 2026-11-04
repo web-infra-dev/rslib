@@ -1142,6 +1142,15 @@ const composeEntryConfig = async (
     // In bundleless mode, resolve glob patterns and convert them to entry object.
     const resolvedEntries: Record<string, string> = {};
     const resolvedOutBaseFiles: string[] = [];
+    // The package's root entry, tracked by source entry key so it does not
+    // depend on the output-relative entry names derived from `outBase`.
+    const rootEntryKey =
+      'index' in entries
+        ? 'index'
+        : Object.keys(entries).length === 1
+          ? Object.keys(entries)[0]
+          : undefined;
+    let rootEntry: string | undefined;
 
     const resolveOutBase = async (resolvedEntryFiles: string[]) => {
       if (userOutBase !== undefined) {
@@ -1207,6 +1216,21 @@ const composeEntryConfig = async (
 
       const outBase = await resolveOutBase(outBaseFiles);
 
+      if (key === rootEntryKey) {
+        const scriptFiles = resolvedEntryFiles.filter(
+          (file) => !isCssGlobalFile(file, cssModulesAuto),
+        );
+        if (scriptFiles.length === 1) {
+          rootEntry = scriptFiles[0];
+        } else {
+          const keyBase = (await calcLongestCommonPath(scriptFiles)) ?? root;
+          rootEntry = scriptFiles.find((file) => {
+            const { dir, name } = path.parse(path.relative(keyBase, file));
+            return !dir && name === 'index';
+          });
+        }
+      }
+
       function getEntryName(file: string) {
         const { dir, name } = path.parse(path.relative(outBase, file));
         // Entry filename contains nested path to preserve source directory structure.
@@ -1242,14 +1266,14 @@ const composeEntryConfig = async (
 
     if (tryResolveOutBase) {
       const outBase = await resolveOutBase(resolvedOutBaseFiles);
-      return { resolvedEntries, outBase };
+      return { resolvedEntries, outBase, rootEntry };
     }
 
-    return { resolvedEntries, outBase: null };
+    return { resolvedEntries, outBase: null, rootEntry };
   };
 
   // OutBase could only be determined at the first time of glob scan.
-  const { outBase, resolvedEntries } = await scanGlobEntries(true);
+  const { outBase, resolvedEntries, rootEntry } = await scanGlobEntries(true);
   const entryConfig: EnvironmentConfig = {
     tools: {
       rspack: {
@@ -1264,7 +1288,7 @@ const composeEntryConfig = async (
   return {
     entryConfig,
     outBase,
-    resolvedEntries,
+    resolvedEntries: rootEntry ? { index: rootEntry } : resolvedEntries,
   };
 };
 

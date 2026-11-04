@@ -132,6 +132,58 @@ test.each<{
   }
 });
 
+test.each<{
+  label: string;
+  entry: NonNullable<LibConfig['source']>['entry'];
+  outBase: string | undefined;
+}>([
+  {
+    label: 'named entries with outBase .',
+    entry: { index: './src/index.ts', a: './src/a.ts' },
+    outBase: '.',
+  },
+  {
+    label: 'named entries with outBase src',
+    entry: { index: './src/index.ts', a: './src/a.ts' },
+    outBase: 'src',
+  },
+  { label: 'default glob with outBase .', entry: undefined, outBase: '.' },
+  {
+    label: 'sole glob key with outBase .',
+    entry: { main: 'src/**' },
+    outBase: '.',
+  },
+])('finds the bundleless root entry for $label', async ({ entry, outBase }) => {
+  const root = await realpath(
+    await mkdtemp(join(tmpdir(), 'rslib-self-outbase-')),
+  );
+  try {
+    await mkdir(join(root, 'src/nested'), { recursive: true });
+    await writeFile(
+      join(root, 'package.json'),
+      JSON.stringify({ name: 'self' }),
+    );
+    await writeFile(join(root, 'src/index.ts'), '');
+    await writeFile(join(root, 'src/a.ts'), '');
+    await writeFile(join(root, 'src/nested/index.ts'), '');
+    const rslib = await createRslib({
+      config: {
+        root,
+        lib: [{ bundle: false, outBase, source: { entry } }],
+      },
+    });
+    const {
+      origin: { bundlerConfigs },
+    } = await rslib.inspectConfig();
+    expect(bundlerConfigs[0]!.resolve?.alias).toHaveProperty(
+      'self$',
+      join(root, 'src/index.ts'),
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test('keeps self-reference targets local to each lib environment', async () => {
   const root = await mkdtemp(join(tmpdir(), 'rslib-self-libs-'));
   try {
