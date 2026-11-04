@@ -7,10 +7,10 @@ export default defineConfig({
     generateBundleEsmConfig({ bundle: false }),
     generateBundleCjsConfig({ bundle: false }),
     generateBundleEsmConfig({
-      id: 'esm-externals',
       bundle: false,
       output: {
         distPath: './dist/externals/esm',
+        // These requests point to emitted CSS files imported by the extract loader.
         externals: {
           './reset.css': './theme.css',
           './index_module.css': './button-theme.css',
@@ -18,10 +18,10 @@ export default defineConfig({
       },
     }),
     generateBundleCjsConfig({
-      id: 'cjs-externals',
       bundle: false,
       output: {
         distPath: './dist/externals/cjs',
+        // These requests point to emitted CSS files imported by the extract loader.
         externals: {
           './reset.css': './theme.css',
           './index_module.css': './button-theme.css',
