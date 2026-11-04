@@ -11,6 +11,7 @@ import {
   ABSOLUTE_PUBLIC_PATH,
   AUTO_PUBLIC_PATH,
   BASE_URI,
+  EXTRACTED_CSS_QUERY,
   SINGLE_DOT_PATH_SEGMENT,
 } from './const';
 
@@ -277,7 +278,7 @@ export const pitch: Rspack.LoaderDefinition['pitch'] = function (
         }
 
         importCssFiles += '\n';
-        importCssFiles += `import "./${cssFilename}"`;
+        importCssFiles += `import "./${cssFilename}${EXTRACTED_CSS_QUERY}"`;
       }
       if (sourceMap) {
         const sourceMapPath = `${distFilepath}.map`;

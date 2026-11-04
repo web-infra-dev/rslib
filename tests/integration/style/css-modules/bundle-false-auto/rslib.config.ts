@@ -22,7 +22,7 @@ export default defineConfig({
   output: {
     target: 'web',
     cssModules: {
-      auto: /\.scss/,
+      auto: /\.s?css$/,
     },
   },
 });
