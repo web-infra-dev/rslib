@@ -1,14 +1,16 @@
 import { createRslib, loadConfig } from '@rslib/core';
-import { describe, expect, test } from '@rstest/core';
-import { existsSync } from 'node:fs';
+import { describe, expect, onTestFinished, test } from '@rstest/core';
+import { existsSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { readFile, rm, writeFile } from 'node:fs/promises';
 import { setImmediate } from 'node:timers/promises';
+import { stripVTControlCharacters } from 'node:util';
 import {
   buildAndGetResults,
   createTempFiles,
   getFileBySuffix,
   globContentJSON,
+  proxyConsole,
   queryContent,
   rslibBuild,
 } from 'test-helper';
@@ -34,8 +36,10 @@ describe('dts with JavaScript API when bundle: false', () => {
 
   test('rebuilds declarations in watch mode', async () => {
     const loadedConfig = await loadConfig({ cwd: basicPath });
-    loadedConfig.content.performance = {
-      ...loadedConfig.content.performance,
+    const { content } = loadedConfig;
+    content.logLevel = 'info';
+    content.performance = {
+      ...content.performance,
       buildCache: false,
     };
     const rslib = await createRslib({ cwd: basicPath, config: loadedConfig });
@@ -44,49 +48,53 @@ describe('dts with JavaScript API when bundle: false', () => {
     const configFile = join(basicPath, 'tsconfig.json');
     const originalConfig = await readFile(configFile, 'utf8');
     const declarationFile = join(basicPath, 'dist/esm/utils.d.ts');
-    let declaration = '<no completed build>';
-    let declarationMap = '<no completed build>';
-    rslib.onAfterCreateRsbuild(({ rsbuild }) => {
-      rsbuild.onAfterBuild(async () => {
-        [declaration, declarationMap] = await Promise.all([
-          readFile(declarationFile, 'utf8').catch(String),
-          readFile(`${declarationFile}.map`, 'utf8').catch(String),
-        ]);
-      });
-    });
-    const waitForDeclaration = async (expected: string) => {
-      try {
-        await expect
-          .poll(() => declaration, { timeout: 10_000 })
-          .toContain(expected);
-      } catch (cause) {
-        throw new Error(
-          `Expected a completed DTS build containing ${JSON.stringify(expected)}. Last output: ${declaration}`,
-          { cause },
-        );
-      }
+    const { logs, restore } = proxyConsole('log');
+    onTestFinished(restore);
+    const waitForBuildEnd = async () => {
+      // The new API backend has no independent watcher. Rspack's afterCompile
+      // awaits its DTS task before the done hook prints this log.
+      await expect
+        .poll(() => stripVTControlCharacters(logs.join('\n')), {
+          timeout: 10_000,
+        })
+        .toContain('built in');
       // Rspack installs its watcher on the next tick after the done hooks.
       await setImmediate();
     };
+    const waitForDeclaration = (expected: string) =>
+      expect
+        .poll(() => readFile(declarationFile, 'utf8').catch(String), {
+          timeout: 10_000,
+        })
+        .toContain(expected);
     await rm(join(basicPath, 'dist/esm'), {
       recursive: true,
       force: true,
     });
     const result = await rslib.build({ watch: true, lib: ['esm'] });
     try {
+      await waitForBuildEnd();
       await waitForDeclaration('=> number');
-      await writeFile(
+      logs.length = 0;
+      writeFileSync(
         sourceFile,
         'export const add = (a: number, b: number): string => String(a + b);',
       );
+      await waitForBuildEnd();
       await waitForDeclaration('=> string');
+      logs.length = 0;
       const config = JSON.parse(originalConfig);
       config.compilerOptions.declarationMap = true;
-      await writeFile(configFile, JSON.stringify(config));
+      writeFileSync(configFile, JSON.stringify(config));
+      await waitForBuildEnd();
       await waitForDeclaration('sourceMappingURL=utils.d.ts.map');
-      expect(JSON.parse(declarationMap)).toMatchObject({
-        file: 'utils.d.ts',
-      });
+      await expect
+        .poll(
+          async () =>
+            JSON.parse(await readFile(`${declarationFile}.map`, 'utf8')),
+          { timeout: 10_000 },
+        )
+        .toMatchObject({ file: 'utils.d.ts' });
     } finally {
       await result.close();
       await writeFile(sourceFile, original);
