@@ -6,6 +6,28 @@ export default defineConfig({
   lib: [
     generateBundleEsmConfig({ bundle: false }),
     generateBundleCjsConfig({ bundle: false }),
+    generateBundleEsmConfig({
+      bundle: false,
+      output: {
+        distPath: './dist/externals/esm',
+        // These requests point to emitted CSS files imported by the extract loader.
+        externals: {
+          './reset.css': './theme.css',
+          './index_module.css': './button-theme.css',
+        },
+      },
+    }),
+    generateBundleCjsConfig({
+      bundle: false,
+      output: {
+        distPath: './dist/externals/cjs',
+        // These requests point to emitted CSS files imported by the extract loader.
+        externals: {
+          './reset.css': './theme.css',
+          './index_module.css': './button-theme.css',
+        },
+      },
+    }),
   ],
   source: {
     entry: {
@@ -22,7 +44,7 @@ export default defineConfig({
   output: {
     target: 'web',
     cssModules: {
-      auto: /\.scss/,
+      auto: /\.s?css$/,
     },
   },
 });

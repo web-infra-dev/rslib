@@ -1,9 +1,11 @@
 import type { EnvironmentConfig, RsbuildPlugin } from '@rsbuild/core';
 import { createRequire } from 'node:module';
+import { basename } from 'node:path';
 import { getAssetNames } from '../utils/compilation';
 import { LibCssExtractPlugin } from './LibCssExtractPlugin';
 import {
   type CssLoaderOptionsAuto,
+  getExtractedCssPath,
   isCssFile,
   isCssModulesFile,
 } from './utils';
@@ -28,6 +30,16 @@ export async function cssExternalHandler(
   // cssExtract would execute the result handled by css-loader with importModule, so we cannot external the "helper import" from css-loader
   if (request.includes('compiled/css-loader/')) {
     callback();
+    return;
+  }
+
+  // The extract loader imports its emitted CSS as `./${cssFilename}`.
+  // Preserve that path instead of redirecting it to a CSS Modules JS file.
+  if (
+    isCssFile(issuer) &&
+    request === `./${basename(getExtractedCssPath(issuer, auto))}`
+  ) {
+    callback(undefined, request);
     return;
   }
 

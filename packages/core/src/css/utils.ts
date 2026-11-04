@@ -99,6 +99,16 @@ export function isCssModulesFile(
   return false;
 }
 
+export function getExtractedCssPath(
+  filepath: string,
+  auto: CssLoaderOptionsAuto,
+): string {
+  const cssPath = filepath.replace(/\.[^.]+$/, '.css');
+  return isCssModulesFile(filepath, auto)
+    ? cssPath.replace(CSS_MODULE_REG, (match) => match.replace('.', '_'))
+    : cssPath;
+}
+
 export function isCssGlobalFile(
   filepath: string,
   auto: CssLoaderOptionsAuto,
