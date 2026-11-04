@@ -5,6 +5,7 @@ import {
   mkdtemp,
   readFile,
   realpath,
+  rename,
   rm,
   writeFile,
 } from 'node:fs/promises';
@@ -13,6 +14,7 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createRslib } from '../src/createRslib';
 import type { LibConfig } from '../src/types';
+import type { RsbuildPlugin } from '@rsbuild/core';
 
 test.each([
   { format: 'esm', bundle: true },
@@ -177,9 +179,67 @@ test.each<{
     } = await rslib.inspectConfig();
     expect(bundlerConfigs[0]!.resolve?.alias).toHaveProperty(
       'self$',
-      join(root, 'src/index.ts'),
+      join(root, 'src/index'),
     );
   } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test('follows a renamed bundleless root entry in watch mode', async () => {
+  const root = await realpath(
+    await mkdtemp(join(tmpdir(), 'rslib-self-watch-')),
+  );
+  const builds: Array<(hasErrors: boolean) => void> = [];
+  const nextBuild = () =>
+    new Promise<boolean>((resolve) => {
+      builds.push(resolve);
+    });
+  let close: (() => Promise<void>) | undefined;
+  try {
+    await mkdir(join(root, 'src'));
+    await writeFile(
+      join(root, 'package.json'),
+      JSON.stringify({ name: 'self', type: 'module' }),
+    );
+    await writeFile(join(root, 'src/index.ts'), 'export const b = 1;');
+    await writeFile(
+      join(root, 'src/a.ts'),
+      "import { b } from 'self'; export const a = () => b + 1;",
+    );
+    const rslib = await createRslib({
+      config: {
+        root,
+        lib: [{ bundle: false }],
+        plugins: [
+          {
+            name: 'test:after-build',
+            setup(api) {
+              api.onAfterBuild(({ stats }) => {
+                builds.shift()?.(Boolean(stats?.hasErrors()));
+              });
+            },
+          } satisfies RsbuildPlugin,
+        ],
+      },
+    });
+    const firstBuild = nextBuild();
+    ({ close } = await rslib.build({ watch: true }));
+    expect(await firstBuild).toBe(false);
+
+    const rebuild = nextBuild();
+    await rename(join(root, 'src/index.ts'), join(root, 'src/index.tsx'));
+    await writeFile(
+      join(root, 'src/a.ts'),
+      "import { b } from 'self'; export const a = () => b + 2;",
+    );
+    expect(await rebuild).toBe(false);
+    const code = await readFile(join(root, 'dist/a.js'), 'utf8');
+    expect(code).toContain('b + 2');
+    expect(code).toContain('./index.js');
+    expect(code).not.toMatch(/from\s*['"]self['"]/);
+  } finally {
+    await close?.();
     await rm(root, { recursive: true, force: true });
   }
 });

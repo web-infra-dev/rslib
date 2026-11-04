@@ -1288,7 +1288,16 @@ const composeEntryConfig = async (
   return {
     entryConfig,
     outBase,
-    resolvedEntries: rootEntry ? { index: rootEntry } : resolvedEntries,
+    resolvedEntries: rootEntry
+      ? {
+          // Glob entries are rescanned on every watch rebuild, but the alias
+          // is not. Drop resolvable script extensions so the alias keeps
+          // pointing at the root entry if it is renamed, e.g. `.ts` to `.tsx`.
+          index: /\.(?:[jt]sx?|mjs)$/.test(rootEntry)
+            ? rootEntry.replace(/\.[^.]+$/, '')
+            : rootEntry,
+        }
+      : resolvedEntries,
   };
 };
 
