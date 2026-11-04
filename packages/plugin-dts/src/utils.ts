@@ -404,6 +404,18 @@ async function addExtension(
   return path;
 }
 
+/**
+ * Escape a string so it can be placed between the given quote characters
+ * of a JavaScript string literal.
+ */
+function escapeStringLiteralContent(value: string, quote: string): string {
+  // JSON string escapes are valid in JavaScript string literals.
+  const escaped = JSON.stringify(value).slice(1, -1);
+  return quote === "'"
+    ? escaped.replace(/\\"/g, '"').replace(/'/g, "\\'")
+    : escaped;
+}
+
 export async function redirectDtsImports(
   dtsFile: string,
   dtsExtension: string,
@@ -428,14 +440,19 @@ export async function redirectDtsImports(
       `Failed to parse ${color.cyan(dtsFile)}, imports in this file may not be redirected: ${diagnostics[0]!.message}`,
     );
   }
-  const matchModule: { n: string; s: number; e: number }[] = [];
+  const matchModule: { n: string; s: number; e: number; q: string }[] = [];
   const addModule = (node: Expression | null | undefined): void => {
     if (node?.type !== 'Literal' || typeof node.value !== 'string') {
       return;
     }
     // A string literal's span includes its quotes. `value` is the decoded
     // specifier, and the offsets cover the raw text inside the quotes.
-    matchModule.push({ n: node.value, s: node.start + 1, e: node.end - 1 });
+    matchModule.push({
+      n: node.value,
+      s: node.start + 1,
+      e: node.end - 1,
+      q: node.raw[0]!,
+    });
   };
   walk<typeof program, unknown, Node>(program, {
     // import foo from 'bar'
@@ -478,7 +495,7 @@ export async function redirectDtsImports(
     .replace(/\.d\.mts$/, '.mjs');
 
   for (const imp of matchModule) {
-    const { n: importPath, s: start, e: end } = imp;
+    const { n: importPath, s: start, e: end, q: quote } = imp;
 
     if (!importPath) continue;
 
@@ -608,7 +625,11 @@ export async function redirectDtsImports(
       // Leave the raw specifier untouched, including any escape sequences.
       if (normalizedRedirectImportPath === importPath) continue;
 
-      code.overwrite(start, end, normalizedRedirectImportPath);
+      code.overwrite(
+        start,
+        end,
+        escapeStringLiteralContent(normalizedRedirectImportPath, quote),
+      );
     } catch (err) {
       logger.warn(err);
     }
