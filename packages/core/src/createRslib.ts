@@ -157,6 +157,22 @@ export async function createRslib(
         type: 'restart',
       },
     ];
+
+    // Add env dependencies unless caching is explicitly disabled (enabled by default).
+    const buildCache = config.performance?.buildCache;
+    if (buildCache !== false) {
+      config.performance ||= {};
+      if (buildCache === undefined || buildCache === true) {
+        config.performance.buildCache = {
+          buildDependencies: envs.filePaths,
+        };
+      } else {
+        buildCache.buildDependencies = [
+          ...(buildCache.buildDependencies ?? []),
+          ...envs.filePaths,
+        ];
+      }
+    }
   }
 
   const onAfterCreateRsbuildCallbacks: OnAfterCreateRsbuildFn[] = [];
