@@ -79,7 +79,7 @@ test('resolve node protocol', async () => {
   expect(isSuccess).toBeTruthy();
   expect(entries.esm).toMatchInlineSnapshot(`
       "import node_path from "node:path";
-      const { join: join } = node_path;
+      const { join } = node_path;
       export { join };
       "
     `);
