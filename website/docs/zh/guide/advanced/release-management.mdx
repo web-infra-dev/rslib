@@ -1,5 +1,5 @@
 ---
-description: '介绍 Rslib 项目的 npm 包版本管理与发布实践，包括发布准备、版本管理、构建验证、npm 发布和 GitHub Actions 集成。'
+description: '介绍 Rslib 项目的 npm 包版本管理与发布实践，包括发布准备、版本管理、构建验证、npm 发布、随包发布 Agent Skills 和 GitHub Actions 集成。'
 ---
 
 # 版本管理与发布
@@ -290,6 +290,62 @@ export default defineConfig({
   ```
 
 发布 prerelease 时，将 `latest` 替换为对应的 `alpha`、`beta` 或 `rc` dist-tag。
+
+## 发布 Agent Skills \{#shipping-agent-skills}
+
+你可以随 npm 包发布 skills，帮助 Coding Agent 使用你的库。用户使用 pnpm >= v12.11.0 安装包时，pnpm 会识别包内 `skills/` 目录中的 skills，并在用户批准后链接到相关 agent 的 skills 目录，详见 [pnpm Agent Skills](https://pnpm.io/agent-skills)。
+
+首先，在 `package.json` 的 `files` 中加入 `skills`，将该目录包含在发布包中：
+
+```json title="package.json"
+{
+  "files": ["dist", "skills"]
+}
+```
+
+根据 skills 的维护位置，可以选择以下方式：
+
+- **与源码一起维护（推荐）**：将 skills 与源码一起维护和发布，在包根目录的 `skills/` 下为每个 skill 创建独立目录：
+
+  ```text
+  my-library/
+  ├── src/
+  ├── skills/
+  │   └── my-skill/
+  │       ├── SKILL.md
+  │       └── references/
+  └── package.json
+  ```
+
+- **来自本地其他目录**：可以在 `prepublishOnly` 脚本中使用 `cp`，在发布前将 skills 复制到目标目录：
+
+  ```json title="package.json"
+  {
+    "scripts": {
+      "prepublishOnly": "rm -rf skills/my-skill && mkdir -p skills && cp -R .agents/skills/my-skill skills/"
+    }
+  }
+  ```
+
+  也可以通过 [output.copy](/config/rsbuild/output#outputcopy) 在构建时复制：
+
+  ```ts title="rslib.config.ts"
+  import { defineConfig } from '@rslib/core';
+  import path from 'node:path';
+
+  export default defineConfig({
+    output: {
+      copy: [
+        {
+          from: '.agents/skills/my-skill',
+          to: path.resolve(import.meta.dirname, 'skills/my-skill'),
+        },
+      ],
+    },
+  });
+  ```
+
+- **来自其他仓库**：可以提前将 skills 同步到本地，经检查后与源码一起提交和发布。
 
 ## GitHub 集成 \{#github-integration}
 
