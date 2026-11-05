@@ -9,6 +9,7 @@ import {
   loadResolvedTsconfig,
   mergeAliasWithTsConfigPaths,
   prettyTime,
+  redirectDtsImports,
 } from '../src/utils';
 
 describe('temporary declaration directory', () => {
@@ -300,5 +301,45 @@ describe('cleanTsBuildInfoFile', () => {
     } finally {
       await fs.rm(tempDir, { recursive: true, force: true });
     }
+  });
+});
+
+describe('redirectDtsImports', () => {
+  const redirect = (dtsExtension: string, content: string) =>
+    redirectDtsImports(
+      `/root/dist/index${dtsExtension}`,
+      dtsExtension,
+      { path: true, extension: true },
+      () => undefined,
+      '/root/dist',
+      '/root/src',
+      content,
+      {
+        readFile: async () => '',
+        writeFile: async () => {},
+        getFiles: async () => [],
+        fileExists: async () => false,
+        isDirectory: async () => false,
+      },
+    );
+
+  test('should keep the extension of bare package specifiers', async () => {
+    const content = [
+      "import type { Chart } from 'chart.js';",
+      "import type { OrbitControls } from 'three/addons/controls/OrbitControls.js';",
+      "export * from 'pkg/sub.mjs';",
+      "export * from 'pkg/sub.cjs';",
+      '',
+    ].join('\n');
+
+    expect(await redirect('.d.mts', content)).toBe(content);
+    expect(await redirect('.d.cts', content)).toBe(content);
+    expect(await redirect('.d.ts', content)).toBe(content);
+  });
+
+  test('should still replace the extension of relative specifiers', async () => {
+    expect(await redirect('.d.mts', "export * from './foo.js';\n")).toBe(
+      "export * from './foo.mjs';\n",
+    );
   });
 });
