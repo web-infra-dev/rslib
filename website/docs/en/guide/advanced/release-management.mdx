@@ -317,17 +317,7 @@ Choose an approach based on where you maintain your skills:
   └── package.json
   ```
 
-- **From another repository**: Run [giget](https://github.com/unjs/giget) through `pnpm dlx` in the `prepublishOnly` script to download skills before publishing:
-
-  ```json title="package.json"
-  {
-    "scripts": {
-      "prepublishOnly": "pnpm dlx giget gh:owner/repo/skills/my-skill#COMMIT_SHA skills/my-skill --force-clean"
-    }
-  }
-  ```
-
-- **From another local directory**: Use `cp` in the `prepublishOnly` script to copy skills to the target directory before publishing:
+- **From another local directory**: You can use `cp` in the `prepublishOnly` script to copy skills to the target directory before publishing:
 
   ```json title="package.json"
   {
@@ -336,6 +326,26 @@ Choose an approach based on where you maintain your skills:
     }
   }
   ```
+
+  You can also use [output.copy](/config/rsbuild/output#outputcopy) to copy skills during the build:
+
+  ```ts title="rslib.config.ts"
+  import { defineConfig } from '@rslib/core';
+  import path from 'node:path';
+
+  export default defineConfig({
+    output: {
+      copy: [
+        {
+          from: '.agents/skills/my-skill',
+          to: path.resolve(import.meta.dirname, 'skills/my-skill'),
+        },
+      ],
+    },
+  });
+  ```
+
+- **From another repository**: You can sync skills locally in advance, review them, and commit and publish them alongside source code.
 
 ## GitHub integration
 

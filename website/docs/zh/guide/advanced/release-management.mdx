@@ -317,17 +317,7 @@ export default defineConfig({
   └── package.json
   ```
 
-- **来自其他仓库**：在 `prepublishOnly` 脚本中通过 `pnpm dlx` 运行 [giget](https://github.com/unjs/giget)，在发布前下载 skills：
-
-  ```json title="package.json"
-  {
-    "scripts": {
-      "prepublishOnly": "pnpm dlx giget gh:owner/repo/skills/my-skill#COMMIT_SHA skills/my-skill --force-clean"
-    }
-  }
-  ```
-
-- **来自本地其他目录**：在 `prepublishOnly` 脚本中使用 `cp`，在发布前将 skills 复制到目标目录：
+- **来自本地其他目录**：可以在 `prepublishOnly` 脚本中使用 `cp`，在发布前将 skills 复制到目标目录：
 
   ```json title="package.json"
   {
@@ -336,6 +326,26 @@ export default defineConfig({
     }
   }
   ```
+
+  也可以通过 [output.copy](/config/rsbuild/output#outputcopy) 在构建时复制：
+
+  ```ts title="rslib.config.ts"
+  import { defineConfig } from '@rslib/core';
+  import path from 'node:path';
+
+  export default defineConfig({
+    output: {
+      copy: [
+        {
+          from: '.agents/skills/my-skill',
+          to: path.resolve(import.meta.dirname, 'skills/my-skill'),
+        },
+      ],
+    },
+  });
+  ```
+
+- **来自其他仓库**：可以提前将 skills 同步到本地，经检查后与源码一起提交和发布。
 
 ## GitHub 集成 \{#github-integration}
 
