@@ -1,5 +1,5 @@
 ---
-description: 'Learn about npm package version management and release practices for Rslib projects, including release preparation, versioning, build validation, npm publishing, and GitHub Actions integration.'
+description: 'Learn about npm package version management and release practices for Rslib projects, including versioning, build validation, npm publishing, shipping agent skills, and GitHub Actions integration.'
 ---
 
 # Release management
@@ -290,6 +290,52 @@ There are two ways to publish npm packages:
   ```
 
 For prereleases, replace `latest` with the corresponding `alpha`, `beta`, or `rc` dist-tag.
+
+## Shipping agent skills
+
+You can ship skills with your npm package to help coding agents use your library. When users install the package with pnpm >= v12.11.0, pnpm discovers skills in its `skills/` directory and links them to the relevant agents' skills directories after user approval. See [pnpm Agent Skills](https://pnpm.io/agent-skills) for details.
+
+First, add `skills` to `files` in `package.json` to include the directory in the published package:
+
+```json title="package.json"
+{
+  "files": ["dist", "skills"]
+}
+```
+
+Choose an approach based on where you maintain your skills:
+
+- **Alongside source code (recommended)**: Maintain and release skills alongside source code, with a separate directory for each skill under `skills/` at the package root:
+
+  ```text
+  my-library/
+  ├── src/
+  ├── skills/
+  │   └── my-skill/
+  │       ├── SKILL.md
+  │       └── references/
+  └── package.json
+  ```
+
+- **From another repository**: Run [giget](https://github.com/unjs/giget) through `pnpm dlx` in the `prepublishOnly` script to download skills before publishing:
+
+  ```json title="package.json"
+  {
+    "scripts": {
+      "prepublishOnly": "pnpm dlx giget gh:owner/repo/skills/my-skill#COMMIT_SHA skills/my-skill --force-clean"
+    }
+  }
+  ```
+
+- **From another local directory**: Use `cp` in the `prepublishOnly` script to copy skills to the target directory before publishing:
+
+  ```json title="package.json"
+  {
+    "scripts": {
+      "prepublishOnly": "rm -rf skills/my-skill && mkdir -p skills && cp -R .agents/skills/my-skill skills/"
+    }
+  }
+  ```
 
 ## GitHub integration
 
