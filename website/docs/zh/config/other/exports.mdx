@@ -8,11 +8,7 @@ description: '配置 exports，根据 Rslib 构建产物生成 package.json 的 
 - **默认值：** `false`
 - **命令行：** `--exports` / `--no-exports`
 
-是否在构建成功后，根据构建产物生成 `package.json` 中的 `exports` 字段。
-
-- `true`：开启生成，所有选项使用默认值。
-- `false`：关闭生成。
-- 对象：开启生成，并使用对象中的[选项](#exportsinclude)。
+构建成功后，根据构建产物生成 `package.json` 的 `exports` 字段。设置为 `true` 或对象时开启，对象用于传入下方的选项。
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
@@ -21,18 +17,15 @@ export default defineConfig({
 });
 ```
 
-`exports` 是作用于整个包的顶层配置，不能在 `lib` 项中设置。CLI 的 `--exports`、`--no-exports` 选项会将其覆盖为 `true` 或 `false`。
-
-Rslib 会接管 `exports` 字段：生成结果整体替换已有的值。不在生成结果中的子路径和条件，可以通过 [exports.custom](#exportscustom) 添加。写入时保留原有缩进和换行符，内容没有变化时跳过写入。
-
-watch 模式下，或通过 `--lib` 只构建部分 lib 时，不会生成 `exports` 字段。入口变化后，执行 `rslib build` 即可更新。
+`exports` 只能写在顶层，不能在 `lib` 项中设置。生成结果会整体替换已有的 `exports`，额外的子路径可以通过 [exports.custom](#exportscustom) 添加。watch 模式下，或通过 `--lib` 只构建部分 lib 时，不会生成。
 
 ## 生成规则
 
 - 只导出 `esm` 和 `cjs` 格式的产物。
-- `index` 入口导出为 `.`，`button/index` 这类入口导出为 `./button`，其他入口按入口名导出，如 `./utils/numbers`。
-- 同一入口同时有 `esm` 和 `cjs` 产物时，使用 `import`、`require` 条件；只有一种格式时，直接写产物路径，对所有条件生效，因此只发布 ESM 的包也能被 `require(esm)` 加载。
-- `.` 排在最前，其余子路径按顺序排列。
+- `index` 入口导出为 `.`，`button/index` 导出为 `./button`，其他入口按入口名导出。
+- 同时有 `esm` 和 `cjs` 产物时使用 `import`、`require` 条件，只有一种格式时直接使用产物路径。
+- 开启了 [dts](/config/lib/dts) 的 lib 会一并导出类型声明文件，TypeScript 无法自动找到时添加 `types` 条件。
+- bundle 模式下导出入口对应的 CSS 文件，bundleless 模式下不导出。
 
 例如，构建带有 `index` 入口的 `esm` 和 `cjs` lib 会生成：
 
@@ -47,53 +40,14 @@ watch 模式下，或通过 `--lib` 只构建部分 lib 时，不会生成 `expo
 }
 ```
 
-### 类型声明文件
-
-对开启了 [dts](/config/lib/dts) 的 lib，Rslib 会为每个产物查找类型声明文件：默认在产物旁边查找，设置了 [dts.distPath](/config/lib/dts#dtsdistpath) 时在该目录中查找。
-
-- 各格式产物旁都有扩展名对应的类型声明文件时（`.js` 对应 `.d.ts`，`.mjs` 对应 `.d.mts`，`.cjs` 对应 `.d.cts`），不添加 `types` 条件，TypeScript 可以自行找到。
-- 否则添加一个各格式共用的 `types` 条件，优先选择扩展名对应的类型声明文件。位于单独 `dts.distPath` 中的类型声明文件总是需要该条件。
-- 某个 lib 的产物都找不到类型声明文件时，构建失败。
-
-例如，在 `"type": "module"` 的包中，`esm` 和 `cjs` lib 都开启 `dts: true` 时，`cjs` 产物 `index.cjs` 旁只有 `index.d.ts`，没有对应的 `index.d.cts`，会生成：
-
-```json title="package.json"
-{
-  "exports": {
-    ".": {
-      "types": "./dist/esm/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.cjs"
-    }
-  }
-}
-```
-
-如果需要为每种格式生成扩展名对应的类型声明文件，可以开启 [dts.autoExtension](/config/lib/dts#dtsautoextension)，并将各格式输出到不同目录。
-
-### CSS
-
-bundle 模式下，入口产出的 CSS 会被导出，因为 JS 产物不会导入它。子路径为 CSS 文件相对输出目录的路径，默认如 `./index.css`。`esm` 和 `cjs` lib 都产出该 CSS 时，使用 `esm` 的产物。只由 CSS 文件构成的入口只导出 CSS。
-
-```json title="package.json"
-{
-  "exports": {
-    ".": "./dist/index.js",
-    "./index.css": "./dist/index.css"
-  }
-}
-```
-
-bundleless 模式下不导出 CSS，JS 产物会自行导入对应的样式。
-
 ## exports.include
 
 - **类型：** `string[]`
-- **默认值：** bundle 模式下为所有入口；bundleless 模式下每个源文件都是入口，只导出 [lib.outBase](/config/lib/out-base) 根目录下的 `index` 入口
+- **默认值：** bundle 模式下为所有入口，bundleless 模式下为 `index`
 
-通过 glob 选择导出的产物。模式匹配的是每个 JS 或 CSS 产物相对其 lib 输出目录的路径，如 `utils/index.js`、`index.css`，可以带扩展名，也可以省略。写 `index` 会匹配 `index.js`、`index.cjs` 和 `index.css`，写 `index.css` 则只匹配 CSS。
+要导出的产物，使用 glob 匹配产物相对输出目录的路径，扩展名可以省略。
 
-例如，在 bundleless 组件库中导出主入口和每个组件目录的 `index` 入口：
+例如，在 bundleless 模式下导出主入口和各组件目录的 `index`：
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
@@ -104,43 +58,22 @@ export default defineConfig({
 });
 ```
 
-```json title="package.json"
-{
-  "exports": {
-    ".": "./dist/index.js",
-    "./button": "./dist/button/index.js",
-    "./input": "./dist/input/index.js"
-  }
-}
-```
-
 ## exports.exclude
 
 - **类型：** `string[]`
 - **默认值：** `[]`
 
-通过 glob 从 [exports.include](#exportsinclude) 选中的产物中排除，匹配方式与 `include` 相同。
-
-```ts title="rslib.config.ts"
-export default defineConfig({
-  lib: [{ format: 'esm', bundle: false }],
-  exports: {
-    include: ['**'],
-    exclude: ['internal/**'],
-  },
-});
-```
+从 `include` 选中的产物中排除，写法与 `include` 相同。
 
 ## exports.source
 
 - **类型：** `boolean | string`
 - **默认值：** `false`
 
-是否在开发时导出入口的源文件。入口的源文件必须是包根目录下的单个模块。
+导出入口的源文件，用于在开发时直接引用源码。
 
-- `false`：只导出构建产物。
-- `true`：顶层 `exports` 指向源文件，产物的导出写入 `publishConfig.exports`。使用 pnpm 或 Yarn 打包、发布时，`publishConfig.exports` 会替换 `exports`。npm 不支持 `publishConfig.exports`。
-- 字符串：在每个 JS 子路径中添加同名条件，指向源文件，可以配合 TypeScript 的 [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) 选项或 [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build) 使用。
+- `true`：`exports` 指向源文件，产物的导出写入 `publishConfig.exports`。
+- 字符串：在每个 JS 子路径中添加以此命名的条件，指向源文件，可以配合 TypeScript 的 [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) 或 [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build) 使用。
 
 例如，`source: '@acme/source'` 会生成：
 
@@ -172,18 +105,17 @@ type ExportsCustom = ExportsCustomItem | ExportsCustomItem[];
 
 - **默认值：** `undefined`
 
-自定义生成的 exports，可以是对象、函数或由它们组成的数组。
+自定义生成结果。
 
-- 对象向生成结果添加子路径。与生成的子路径同名时，整体替换该子路径。
-- 函数接收生成结果，返回最终的 exports，可以是异步函数。第二个参数提供 `package.json` 的内容 `pkg`，以及 `isPublish`，结果写入 `publishConfig.exports` 时为 `true`。
-- 数组按顺序依次应用其中每一项，每一项接收上一项的结果。通过 [mergeRslibConfig](/api/javascript-api/core#mergerslibconfig) 合并配置时，不同时为对象的 `custom` 会被合并为数组。
+- 对象：添加子路径，与生成的子路径同名时替换。
+- 函数：接收生成结果，返回最终的 exports。`source` 为 `true` 时，还会为 `publishConfig.exports` 调用一次，此时 `isPublish` 为 `true`。
+- 数组：按顺序依次应用。
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
   exports: {
     custom: (exports) => ({
       ...exports,
-      '.': { browser: './dist/browser.js', default: exports['.'] },
       './package.json': './package.json',
     }),
   },

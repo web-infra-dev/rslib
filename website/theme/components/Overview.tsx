@@ -42,7 +42,7 @@ export default function Overview() {
       ],
     },
     {
-      name: lang === 'en' ? 'Other configurations' : '其它配置',
+      name: lang === 'en' ? 'Other configurations' : '其他配置',
       link: '/config/other/exports',
       items: [{ text: 'exports', link: '/config/other/exports' }],
     },

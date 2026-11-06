@@ -48,15 +48,13 @@ Also make sure that the package does not set `private: true`. It is also recomme
 
 ### Generate exports
 
-Instead of maintaining the `exports` field by hand, you can run `rslib build --exports`, or set [exports](/config/other/exports) in the configuration file, to generate it from the build outputs after a successful build. The generated result covers the JavaScript outputs of the `esm` and `cjs` libs, their declaration files, and the CSS in bundle mode, and replaces the existing `exports` field as a whole.
+Run `rslib build --exports`, or configure [exports](/config/other/exports), to generate the `exports` field from the build outputs:
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
   exports: true,
 });
 ```
-
-See [exports](/config/other/exports) for the generation rules and options.
 
 ## pnpm version management
 

@@ -48,15 +48,13 @@ description: '介绍 Rslib 项目的 npm 包版本管理与发布实践，包括
 
 ### 生成 exports \{#generate-exports}
 
-除了手动维护 `exports` 字段，也可以执行 `rslib build --exports`，或在配置文件中设置 [exports](/config/other/exports)，在构建成功后根据产物自动生成。生成结果包含 `esm` 和 `cjs` lib 的 JS 产物、类型声明文件以及 bundle 模式下的 CSS，并整体替换已有的 `exports` 字段。
+可以执行 `rslib build --exports`，或配置 [exports](/config/other/exports)，根据构建产物自动生成 `exports` 字段：
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
   exports: true,
 });
 ```
-
-生成规则和可用选项请参考 [exports](/config/other/exports)。
 
 ## pnpm 版本管理 \{#pnpm-version-management}
 
