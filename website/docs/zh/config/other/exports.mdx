@@ -8,7 +8,7 @@ description: '配置 exports，根据 Rslib 构建产物生成 package.json 的 
 - **默认值：** `false`
 - **命令行：** `--exports` / `--no-exports`
 
-构建成功后，根据构建产物生成 `package.json` 的 `exports` 字段。设置为 `true` 或对象时开启，对象用于传入下方的选项。
+开启后，Rslib 会在构建完成后根据产物生成 `package.json` 中的 `exports` 字段。
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
@@ -17,15 +17,17 @@ export default defineConfig({
 });
 ```
 
-`exports` 只能写在顶层，不能在 `lib` 项中设置。生成结果会整体替换已有的 `exports`，额外的子路径可以通过 [exports.custom](#exportscustom) 添加。watch 模式下，或通过 `--lib` 只构建部分 lib 时，不会生成。
+该配置只能写在顶层。生成的结果会覆盖 `package.json` 中原有的 `exports` 字段，如需保留手写的子路径，请通过 [exports.custom](#exportscustom) 添加。
+
+在 watch 模式下，或使用 `--lib` 只构建部分 lib 时，Rslib 不会生成 `exports` 字段。
 
 ## 生成规则
 
 - 只导出 `esm` 和 `cjs` 格式的产物。
 - `index` 入口导出为 `.`，`button/index` 导出为 `./button`，其他入口按入口名导出。
-- 同时有 `esm` 和 `cjs` 产物时使用 `import`、`require` 条件，只有一种格式时直接使用产物路径。
-- 开启了 [dts](/config/lib/dts) 的 lib 会一并导出类型声明文件，TypeScript 无法自动找到时添加 `types` 条件。
-- bundle 模式下导出入口对应的 CSS 文件，bundleless 模式下不导出。
+- 如果同一入口同时有 ESM 和 CJS 产物，会使用 `import` 和 `require` 条件区分；如果只有一种格式，则直接使用产物路径。
+- 对于开启了 [dts](/config/lib/dts) 的 lib，如果 TypeScript 无法根据产物路径找到类型声明文件，会添加 `types` 条件。
+- bundle 模式下，入口生成的 CSS 文件也会被导出。
 
 例如，构建带有 `index` 入口的 `esm` 和 `cjs` lib 会生成：
 
@@ -43,11 +45,11 @@ export default defineConfig({
 ## exports.include
 
 - **类型：** `string[]`
-- **默认值：** bundle 模式下为所有入口，bundleless 模式下为 `index`
+- **默认值：** bundle 模式下导出所有入口，bundleless 模式下只导出 `index`
 
-要导出的产物，使用 glob 匹配产物相对输出目录的路径，扩展名可以省略。
+用于选择要导出的产物。glob 会与产物相对于输出目录的路径进行匹配，可以省略扩展名。
 
-例如，在 bundleless 模式下导出主入口和各组件目录的 `index`：
+例如，在 bundleless 模式下导出根目录和各组件目录下的 `index`：
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
@@ -63,17 +65,17 @@ export default defineConfig({
 - **类型：** `string[]`
 - **默认值：** `[]`
 
-从 `include` 选中的产物中排除，写法与 `include` 相同。
+用于从 `include` 匹配到的产物中排除一部分，写法与 `include` 相同。
 
 ## exports.source
 
 - **类型：** `boolean | string`
 - **默认值：** `false`
 
-导出入口的源文件，用于在开发时直接引用源码。
+用于导出入口对应的源文件，以便在开发时直接引用源码。
 
-- `true`：`exports` 指向源文件，产物的导出写入 `publishConfig.exports`。
-- 字符串：在每个 JS 子路径中添加以此命名的条件，指向源文件，可以配合 TypeScript 的 [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) 或 [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build) 使用。
+- 设置为 `true` 时，`exports` 会指向源文件，指向构建产物的导出则写入 `publishConfig.exports`。
+- 设置为字符串时，会在每个 JS 子路径中添加一个以该字符串命名、指向源文件的条件，可以配合 TypeScript 的 [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) 或 [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build) 使用。
 
 例如，`source: '@acme/source'` 会生成：
 
@@ -105,11 +107,11 @@ type ExportsCustom = ExportsCustomItem | ExportsCustomItem[];
 
 - **默认值：** `undefined`
 
-自定义生成结果。
+用于自定义生成的 exports。
 
-- 对象：添加子路径，与生成的子路径同名时替换。
-- 函数：接收生成结果，返回最终的 exports。`source` 为 `true` 时，还会为 `publishConfig.exports` 调用一次，此时 `isPublish` 为 `true`。
-- 数组：按顺序依次应用。
+- 传入对象时，其中的子路径会被添加到生成结果中，同名的子路径会被替换。
+- 传入函数时，函数接收生成的 exports，并返回最终结果。当 `source` 为 `true` 时，函数还会为 `publishConfig.exports` 再调用一次，此时 `isPublish` 为 `true`。
+- 传入数组时，会按顺序依次应用其中的每一项。
 
 ```ts title="rslib.config.ts"
 export default defineConfig({

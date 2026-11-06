@@ -8,7 +8,7 @@ description: 'Configure exports to generate the package.json exports field from 
 - **Default:** `false`
 - **CLI:** `--exports` / `--no-exports`
 
-Generate the `exports` field in `package.json` from the build outputs after a successful build. Set it to `true` or an object to enable it, and use the object to pass the options below.
+When enabled, Rslib generates the `exports` field in `package.json` from the build outputs after the build completes.
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
@@ -17,15 +17,17 @@ export default defineConfig({
 });
 ```
 
-`exports` can only be set at the top level, not in a `lib` item. The generated result replaces the existing `exports` as a whole. Add extra subpaths with [exports.custom](#exportscustom). It is not generated in watch mode, or when only some libs are built with `--lib`.
+This option can only be set at the top level. The generated result overwrites the existing `exports` field in `package.json`. To keep handwritten subpaths, add them with [exports.custom](#exportscustom).
+
+Rslib does not generate the `exports` field in watch mode, or when only some libs are built with `--lib`.
 
 ## Generation rules
 
 - Only outputs in the `esm` and `cjs` formats are exported.
 - The `index` entry is exported as `.`, `button/index` as `./button`, and other entries by their names.
-- When an entry has both `esm` and `cjs` outputs, the `import` and `require` conditions are used. With a single format, the output path is used directly.
-- For libs with [dts](/config/lib/dts) enabled, declaration files are exported as well, with a `types` condition when TypeScript cannot find them on its own.
-- In bundle mode, the CSS files of the entries are exported. In bundleless mode, they are not.
+- If an entry has both ESM and CJS outputs, they are distinguished by the `import` and `require` conditions. If it has only one format, the output path is used directly.
+- For libs with [dts](/config/lib/dts) enabled, a `types` condition is added if TypeScript cannot find the declaration files from the output paths.
+- In bundle mode, the CSS files generated for the entries are also exported.
 
 For example, building `esm` and `cjs` libs with an `index` entry generates:
 
@@ -43,11 +45,11 @@ For example, building `esm` and `cjs` libs with an `index` entry generates:
 ## exports.include
 
 - **Type:** `string[]`
-- **Default:** all entries in bundle mode, `index` in bundleless mode
+- **Default:** all entries are exported in bundle mode, and only `index` is exported in bundleless mode
 
-The outputs to export, as glob patterns matched against the output paths relative to the output directory. The extension can be omitted.
+Selects the outputs to export. Each glob pattern is matched against the output paths relative to the output directory, and the extension can be omitted.
 
-For example, to export the main entry and the `index` of each component directory in bundleless mode:
+For example, to export the `index` files in the root directory and in each component directory in bundleless mode:
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
@@ -63,17 +65,17 @@ export default defineConfig({
 - **Type:** `string[]`
 - **Default:** `[]`
 
-The outputs to exclude from those selected by `include`, in the same format as `include`.
+Excludes some of the outputs matched by `include`. The patterns are written in the same way as `include`.
 
 ## exports.source
 
 - **Type:** `boolean | string`
 - **Default:** `false`
 
-Export the source files of the entries, so that the source code can be used directly during development.
+Exports the source files of the entries, so that the source code can be referenced directly during development.
 
-- `true`: `exports` points to the source files, and the exports of the build outputs are written to `publishConfig.exports`.
-- A string: a condition with this name pointing to the source file is added to each JavaScript subpath, which can be used with the [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) option of TypeScript or [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build).
+- When set to `true`, `exports` points to the source files, and the exports pointing to the build outputs are written to `publishConfig.exports`.
+- When set to a string, a condition named after the string and pointing to the source file is added to each JavaScript subpath. It can be used with the [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) option of TypeScript or [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build).
 
 For example, `source: '@acme/source'` generates:
 
@@ -105,11 +107,11 @@ type ExportsCustom = ExportsCustomItem | ExportsCustomItem[];
 
 - **Default:** `undefined`
 
-Customize the generated result.
+Customizes the generated exports.
 
-- An object: adds subpaths, replacing generated ones with the same name.
-- A function: receives the generated result and returns the final exports. When `source` is `true`, it is called again for `publishConfig.exports` with `isPublish` set to `true`.
-- An array: each item is applied in order.
+- When an object is passed, its subpaths are added to the generated result, and subpaths with the same name are replaced.
+- When a function is passed, it receives the generated exports and returns the final result. When `source` is `true`, the function is called again for `publishConfig.exports`, with `isPublish` set to `true`.
+- When an array is passed, its items are applied in order.
 
 ```ts title="rslib.config.ts"
 export default defineConfig({

@@ -48,7 +48,7 @@ description: '介绍 Rslib 项目的 npm 包版本管理与发布实践，包括
 
 ### 生成 exports \{#generate-exports}
 
-可以执行 `rslib build --exports`，或配置 [exports](/config/other/exports)，根据构建产物自动生成 `exports` 字段：
+Rslib 可以根据构建产物自动生成 `exports` 字段。执行 `rslib build --exports`，或在配置文件中开启 [exports](/config/other/exports) 即可：
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
