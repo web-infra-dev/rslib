@@ -113,12 +113,26 @@ Customizes the generated exports.
 - When a function is passed, it receives the generated exports and returns the final result. When `source` is `true`, the function is called again for `publishConfig.exports`, with `isPublish` set to `true`.
 - When an array is passed, its items are applied in order.
 
+For example, to add the `./package.json` subpath:
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  exports: {
+    custom: {
+      './package.json': './package.json',
+    },
+  },
+});
+```
+
+Use a function to modify the generated subpaths, for example, to add a `browser` condition to `.`:
+
 ```ts title="rslib.config.ts"
 export default defineConfig({
   exports: {
     custom: (exports) => ({
       ...exports,
-      './package.json': './package.json',
+      '.': { browser: './dist/browser.js', default: exports['.'] },
     }),
   },
 });

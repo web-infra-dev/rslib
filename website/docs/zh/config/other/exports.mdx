@@ -113,12 +113,26 @@ type ExportsCustom = ExportsCustomItem | ExportsCustomItem[];
 - 传入函数时，函数接收生成的 exports，并返回最终结果。当 `source` 为 `true` 时，函数还会为 `publishConfig.exports` 再调用一次，此时 `isPublish` 为 `true`。
 - 传入数组时，会按顺序依次应用其中的每一项。
 
+例如，追加 `./package.json` 子路径：
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  exports: {
+    custom: {
+      './package.json': './package.json',
+    },
+  },
+});
+```
+
+也可以通过函数修改生成的子路径，例如为 `.` 添加 `browser` 条件：
+
 ```ts title="rslib.config.ts"
 export default defineConfig({
   exports: {
     custom: (exports) => ({
       ...exports,
-      './package.json': './package.json',
+      '.': { browser: './dist/browser.js', default: exports['.'] },
     }),
   },
 });
