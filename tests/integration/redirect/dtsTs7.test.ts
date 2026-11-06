@@ -70,6 +70,11 @@ describe.each(['ts7-executable', 'api-new'])(
       export * from './config.js';
       export * from './foo/index.js';
       export * from './types.js';
+      export type { Chart } from 'chart.js';
+      export type { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+      export type { EsmValue } from 'pkg/sub.mjs';
+      export type { CjsValue } from 'pkg/sub.cjs';
+      export type { Foo as PathFoo } from './types.js';
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-ts7/default/esm/logger.d.ts": "import type { Request } from 'express';
       import type { LoggerOptions } from './types.js';
@@ -140,6 +145,11 @@ describe.each(['ts7-executable', 'api-new'])(
       export * from './config';
       export * from './foo';
       export * from './types';
+      export type { Chart } from 'chart.js';
+      export type { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+      export type { EsmValue } from 'pkg/sub.mjs';
+      export type { CjsValue } from 'pkg/sub.cjs';
+      export type { Foo as PathFoo } from 'path-types.mjs';
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-ts7/path-false/esm/logger.d.ts": "import type { Request } from 'express';
       import type { LoggerOptions } from './types';
@@ -210,6 +220,11 @@ describe.each(['ts7-executable', 'api-new'])(
       export * from './config';
       export * from './foo';
       export * from './types';
+      export type { Chart } from 'chart.js';
+      export type { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+      export type { EsmValue } from 'pkg/sub.mjs';
+      export type { CjsValue } from 'pkg/sub.cjs';
+      export type { Foo as PathFoo } from './types.ts';
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-ts7/extension-false/esm/logger.d.ts": "import type { Request } from 'express';
       import type { LoggerOptions } from './types';
@@ -280,6 +295,11 @@ describe.each(['ts7-executable', 'api-new'])(
       export * from './config.js';
       export * from './foo/index.js';
       export * from './types.js';
+      export type { Chart } from 'chart.js';
+      export type { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+      export type { EsmValue } from 'pkg/sub.mjs';
+      export type { CjsValue } from 'pkg/sub.cjs';
+      export type { Foo as PathFoo } from 'path-types.mjs';
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-ts7/path-false-extension-true/esm/logger.d.ts": "import type { Request } from 'express';
       import type { LoggerOptions } from './types.js';
@@ -350,6 +370,11 @@ describe.each(['ts7-executable', 'api-new'])(
       export * from './config.mjs';
       export * from './foo/index.mjs';
       export * from './types.mjs';
+      export type { Chart } from 'chart.js';
+      export type { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+      export type { EsmValue } from 'pkg/sub.mjs';
+      export type { CjsValue } from 'pkg/sub.cjs';
+      export type { Foo as PathFoo } from './types.mjs';
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-ts7/auto-extension-true/esm/logger.d.mts": "import type { Request } from 'express';
       import type { LoggerOptions } from './types.mjs';
@@ -417,6 +442,11 @@ describe.each(['ts7-executable', 'api-new'])(
       export * from './config.js';
       export * from './foo/index.js';
       export * from './types.js';
+      export type { Chart } from 'chart.js';
+      export type { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+      export type { EsmValue } from 'pkg/sub.mjs';
+      export type { CjsValue } from 'pkg/sub.cjs';
+      export type { Foo as PathFoo } from './types.js';
       ",
         "<ROOT>/tests/integration/redirect/dts/dist-ts7/auto-extension-true/cjs/logger.d.ts": "import type { Request } from 'express';
       import type { LoggerOptions } from './types.js';

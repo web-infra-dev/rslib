@@ -536,20 +536,20 @@ export async function redirectDtsImports(
         }
       }
 
-      const ext = extname(redirectImportPath);
-      // Add `/index` or a JS extension for:
+      // Add `/index`, or add/replace a JS extension for:
       // 1. original relative imports like `./foo`
       // 2. original absolute imports like `/root/project/foo`
       // 3. imports rewritten by `redirect.path`, e.g.
       //    `prebundle-pkg` -> `../../../compile/prebundle-pkg`
       // Do not touch untouched bare package specifiers like `react`.
-      const shouldAddExtension =
+      const shouldRedirectExtension =
         redirectImportPath !== importPath ||
         importPath.startsWith('.') ||
         isAbsolute(importPath);
 
-      if (ext && shouldAddExtension) {
-        if (JS_EXTENSIONS_PATTERN.test(redirectImportPath)) {
+      if (shouldRedirectExtension) {
+        const ext = extname(redirectImportPath);
+        if (ext && JS_EXTENSIONS_PATTERN.test(redirectImportPath)) {
           if (redirect.extension) {
             let redirectJsExtension = jsExtension;
             const pathWithoutExtension = redirectImportPath.replace(
@@ -586,7 +586,8 @@ export async function redirectDtsImports(
             );
           }
         } else {
-          // handle the case importPath is like './foo.bar', we need to check if './foo.bar.d.ts' exists
+          // For paths without extensions or with non-JS suffixes, check for a
+          // matching declaration file before adding an extension or resolving '/index'.
           redirectImportPath = await addExtension(
             redirect,
             dtsFile,
@@ -596,15 +597,6 @@ export async function redirectDtsImports(
             fileSystem,
           );
         }
-      } else if (shouldAddExtension) {
-        redirectImportPath = await addExtension(
-          redirect,
-          dtsFile,
-          redirectImportPath,
-          jsExtension,
-          dtsExtension,
-          fileSystem,
-        );
       }
 
       const normalizedRedirectImportPath = redirectImportPath

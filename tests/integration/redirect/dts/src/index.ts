@@ -31,3 +31,10 @@ export * from './bar.baz';
 export * from './config';
 export * from './foo';
 export * from './types';
+
+export type { Chart } from 'chart.js';
+export type { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+export type { EsmValue } from 'pkg/sub.mjs';
+export type { CjsValue } from 'pkg/sub.cjs';
+
+export type { Foo as PathFoo } from 'path-types.mjs';
