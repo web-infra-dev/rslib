@@ -548,7 +548,7 @@ export async function redirectDtsImports(
         importPath.startsWith('.') ||
         isAbsolute(importPath);
 
-      if (ext) {
+      if (ext && shouldAddExtension) {
         if (JS_EXTENSIONS_PATTERN.test(redirectImportPath)) {
           if (redirect.extension) {
             let redirectJsExtension = jsExtension;
