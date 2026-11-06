@@ -9,4 +9,5 @@ export default defineConfig({
       'utils/numbers': '../__fixtures__/src/utils/numbers.ts',
     },
   },
+  exports: true,
 });

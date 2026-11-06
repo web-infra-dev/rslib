@@ -12,4 +12,5 @@ export default defineConfig({
   output: {
     target: 'web',
   },
+  exports: true,
 });

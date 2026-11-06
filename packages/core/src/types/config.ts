@@ -573,7 +573,6 @@ export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
   output?: RslibOutputConfig;
   /**
    * Whether to generate the `exports` field in `package.json` from the build outputs.
-   * Can be overridden by the `exports` option of `build`.
    * @default false
    */
   exports?: boolean | ExportsOptions;
@@ -624,6 +623,7 @@ export type ExportsOptions = {
    * - object: subpaths added to the exports. A subpath with the same key as a
    *   generated one replaces it as a whole.
    * - function: receives the exports and returns the final exports.
+   * - array: each item is applied in order.
    */
-  custom?: ExportsCustom;
+  custom?: ExportsCustom | ExportsCustom[];
 };

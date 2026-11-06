@@ -25,13 +25,17 @@ export type ExportsPluginOptions = {
 
 async function customizeExports(
   exports: ExportsField,
-  { custom }: ExportsOptions,
+  { custom = [] }: ExportsOptions,
   context: ExportsCustomContext,
 ): Promise<ExportsField> {
-  if (typeof custom === 'function') {
-    return custom(exports, context);
+  let result = exports;
+  for (const item of Array.isArray(custom) ? custom : [custom]) {
+    result =
+      typeof item === 'function'
+        ? await item(result, context)
+        : { ...result, ...item };
   }
-  return { ...exports, ...custom };
+  return result;
 }
 
 export const ExportsPlugin = ({

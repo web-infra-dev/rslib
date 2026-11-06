@@ -9,4 +9,5 @@ export default defineConfig({
     },
     tsconfigPath: '../../__fixtures__/tsconfig.json',
   },
+  exports: true,
 });

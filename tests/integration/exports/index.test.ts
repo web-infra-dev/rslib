@@ -1,4 +1,4 @@
-import { createRslib } from '@rslib/core';
+import { createRslib, mergeRslibConfig } from '@rslib/core';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterAll, describe, expect, test } from '@rstest/core';
@@ -43,7 +43,7 @@ const readFixtureExports = (fixture: string) =>
 describe('exports', () => {
   test('should generate import and require conditions when building esm and cjs formats', async () => {
     const fixturePath = join(__dirname, 'dual-format');
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('dual-format')).toEqual({
       '.': {
@@ -55,7 +55,7 @@ describe('exports', () => {
 
   test('should generate a string value when building a single format', async () => {
     const fixturePath = join(__dirname, 'esm-only');
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('esm-only')).toEqual({
       '.': './dist/esm/index.mjs',
@@ -126,7 +126,7 @@ describe('exports', () => {
     expect(readFileSync(packageJsonPath, 'utf8')).toBe(original);
   });
 
-  test('should enable exports with the exports option in the config', async () => {
+  test('should not generate exports when it is disabled', async () => {
     const fixture = 'esm-only';
     const fixturePath = join(__dirname, fixture);
     writeFileSync(
@@ -137,29 +137,8 @@ describe('exports', () => {
     await rslibBuild({
       cwd: fixturePath,
       modifyConfig: (config) => {
-        config.exports = true;
+        config.exports = false;
       },
-    });
-
-    expect(readFixtureExports(fixture)).toEqual({
-      '.': './dist/esm/index.mjs',
-    });
-  });
-
-  test('should let the build option override the exports config', async () => {
-    const fixture = 'esm-only';
-    const fixturePath = join(__dirname, fixture);
-    writeFileSync(
-      join(fixturePath, 'package.json'),
-      packageJsonContents.get(fixture)!,
-    );
-
-    await rslibBuild({
-      cwd: fixturePath,
-      modifyConfig: (config) => {
-        config.exports = true;
-      },
-      exports: false,
     });
 
     expect(readFixtureExports(fixture)).toBeUndefined();
@@ -186,7 +165,7 @@ describe('exports', () => {
       ].join('\n'),
     );
 
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFileSync(packageJsonPath, 'utf8')).toBe(
       [
@@ -209,7 +188,7 @@ describe('exports', () => {
       JSON.stringify({ name: 'exports-esm-only-test', exports: './index.js' }),
     );
 
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports(fixture)).toEqual({
       '.': './dist/esm/index.mjs',
@@ -239,6 +218,38 @@ describe('exports', () => {
     expect(readFixtureExports(fixture)).toEqual({
       '.': './dist/esm/replaced.mjs',
       './package.json': './package.json',
+    });
+  });
+
+  test('should apply merged custom items in order', async () => {
+    const fixture = 'esm-only';
+    const fixturePath = join(__dirname, fixture);
+    writeFileSync(
+      join(fixturePath, 'package.json'),
+      packageJsonContents.get(fixture)!,
+    );
+
+    await rslibBuild({
+      cwd: fixturePath,
+      modifyConfig: (config) => {
+        config.exports = mergeRslibConfig(
+          { exports: { custom: { './package.json': './package.json' } } },
+          {
+            exports: {
+              custom: (exports) => ({
+                ...exports,
+                './pkg': exports['./package.json']!,
+              }),
+            },
+          },
+        ).exports;
+      },
+    });
+
+    expect(readFixtureExports(fixture)).toEqual({
+      '.': './dist/esm/index.mjs',
+      './package.json': './package.json',
+      './pkg': './package.json',
     });
   });
 
@@ -284,7 +295,7 @@ describe('exports', () => {
 
   test('should expose each entry as a subpath', async () => {
     const fixturePath = join(__dirname, 'multiple-entries');
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('multiple-entries')).toEqual({
       '.': './dist/esm/index.mjs',
@@ -294,7 +305,7 @@ describe('exports', () => {
 
   test('should only expose the main entry in bundleless mode', async () => {
     const fixturePath = join(__dirname, 'bundleless');
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('bundleless')).toEqual({
       '.': './dist/esm/index.mjs',
@@ -305,7 +316,7 @@ describe('exports', () => {
     const fixture = 'umd';
     const fixturePath = join(__dirname, fixture);
     const error = await expectBuildToFail(
-      buildAndGetResults({ fixturePath, exports: true }),
+      buildAndGetResults({ fixturePath }),
     );
 
     expect(error.message).toContain('no entries can be exported');
@@ -316,14 +327,14 @@ describe('exports', () => {
 
   test('should not generate exports when the build fails', async () => {
     const fixturePath = join(__dirname, 'build-error');
-    await expectBuildToFail(buildAndGetResults({ fixturePath, exports: true }));
+    await expectBuildToFail(buildAndGetResults({ fixturePath }));
 
     expect(readFixtureExports('build-error')).toBeUndefined();
   });
 
   test('should generate exports when declaration files match the outputs', async () => {
     const fixturePath = join(__dirname, 'dts/matched');
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('dts/matched')).toEqual({
       '.': {
@@ -335,7 +346,7 @@ describe('exports', () => {
 
   test('should not add types conditions when the declaration file matches a single format output', async () => {
     const fixturePath = join(__dirname, 'dts/module');
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('dts/module')).toEqual({
       '.': './dist/esm/index.js',
@@ -344,7 +355,7 @@ describe('exports', () => {
 
   test('should share one declaration file when the extensions do not match', async () => {
     const fixturePath = join(__dirname, 'dts/shared');
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('dts/shared')).toEqual({
       '.': {
@@ -357,7 +368,7 @@ describe('exports', () => {
 
   test('should share one declaration file for the main entry in bundleless mode', async () => {
     const fixturePath = join(__dirname, 'dts/bundleless');
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('dts/bundleless')).toEqual({
       '.': {
@@ -370,7 +381,7 @@ describe('exports', () => {
 
   test('should add a types condition for declaration files in dts.distPath', async () => {
     const fixturePath = join(__dirname, 'dts/dist-path');
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('dts/dist-path')).toEqual({
       '.': {
@@ -392,7 +403,7 @@ describe('exports', () => {
 
   test('should export the CSS of entries in bundle mode', async () => {
     const fixturePath = join(__dirname, 'css');
-    await buildAndGetResults({ fixturePath, exports: true });
+    await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('css')).toEqual({
       '.': {

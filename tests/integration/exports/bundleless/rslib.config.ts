@@ -12,4 +12,5 @@ export default defineConfig({
       index: ['../__fixtures__/src/**'],
     },
   },
+  exports: true,
 });

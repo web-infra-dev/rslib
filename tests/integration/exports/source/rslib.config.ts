@@ -12,4 +12,5 @@ export default defineConfig({
     // The web target concatenates the imported module into the CJS entry.
     target: 'web',
   },
+  exports: true,
 });
