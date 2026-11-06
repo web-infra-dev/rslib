@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test';
+import { expect } from '@rstest/core';
 import fse from 'fs-extra';
 import type { ChildProcess } from 'node:child_process';
 import fs from 'node:fs';
@@ -74,7 +74,7 @@ export const expectPoll: (
   fn: () => boolean,
 ) => ReturnType<typeof expect.poll> = (fn) => {
   return expect.poll(fn, {
-    intervals: [20, 30, 40, 50, 60, 70, 80, 90, 100],
+    interval: 20,
     timeout: process.env.CI ? 10_000 : 5_000,
   });
 };
