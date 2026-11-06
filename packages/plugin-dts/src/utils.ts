@@ -586,8 +586,8 @@ export async function redirectDtsImports(
             );
           }
         } else {
-          // Handle extensionless paths and names like './foo.bar' by checking
-          // for a matching declaration file before appending an extension.
+          // Handle paths without extensions and names like './foo.bar' by
+          // checking for a matching declaration file before adding an extension.
           redirectImportPath = await addExtension(
             redirect,
             dtsFile,
