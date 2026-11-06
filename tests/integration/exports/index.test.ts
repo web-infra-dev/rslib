@@ -315,9 +315,7 @@ describe('exports', () => {
   test('should fail when building only the umd format', async () => {
     const fixture = 'umd';
     const fixturePath = join(__dirname, fixture);
-    const error = await expectBuildToFail(
-      buildAndGetResults({ fixturePath }),
-    );
+    const error = await expectBuildToFail(buildAndGetResults({ fixturePath }));
 
     expect(error.message).toContain('no entries can be exported');
     expect(readFileSync(join(fixturePath, 'package.json'), 'utf8')).toBe(
