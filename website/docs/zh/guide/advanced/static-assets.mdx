@@ -144,7 +144,7 @@ const logo = new URL('./static/svg/logo.svg', import.meta.url);
 </Tab>
 </Tabs>
 
-通过 `new URL()` 引用的 `.js`、`.ts`、`.css` 和 `.scss` 等文件也会被视为 URL assets，不会经过相关的内置 loader 处理，其原始内容将作为资源输出。
+默认情况下，通过 `new URL()` 引用的所有文件都会作为静态资源产出，包括 JavaScript、TypeScript 和 CSS 文件。
 
 :::note
 
@@ -167,37 +167,37 @@ export default {
 
 :::
 
-#### 跳过 `new URL()` 处理
+#### 构建引用的模块
 
-如果不希望将 `new URL()` 解析为 URL asset，可以根据作用范围选择以下方式。
-
-##### 关闭 URL parser
-
-构建 ESM 产物时，Rslib 默认使用 URL parser 的 [`'new-url-relative'`](https://rspack.rs/zh/config/module-parser#javascripturl) 模式处理 JavaScript 和 TypeScript 文件中的 `new URL()` 表达式。
-
-如果希望保留原始的 `new URL()` 表达式，且不由 Rslib 输出对应资源，可以通过 [tools.bundlerChain](/config/rsbuild/tools#toolsbundlerchain) 将 URL parser 设置为 `false`：
+将 [lib.newUrl](/config/lib/new-url) 设置为 `'entry'` 模式，可编译引用的 JavaScript 和 TypeScript 模块，其他类型仍作为静态资源产出。
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  tools: {
-    bundlerChain(chain) {
-      chain.module.rule('rslib:new-url').parser({
-        url: false,
-      });
-    },
+  lib: {
+    newUrl: { mode: 'entry' },
   },
 });
 ```
 
-关闭后，`new URL()` 表达式会原样保留，引用的文件不会由 Rslib 输出：
+使用 bundleless 构建时，请确保引用的模块能被 [source.entry](/config/rsbuild/source#sourceentry) 匹配。
 
-```js title="dist/index.js"
-const logo = new URL('./assets/logo.svg', import.meta.url);
+#### 跳过 `new URL()` 处理
+
+将 [lib.newUrl](/config/lib/new-url) 设置为 `false`，可以保留所有 `new URL()` 表达式，且不产出其引用的文件：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: {
+    newUrl: false,
+  },
+});
 ```
 
-产物仍会保留标准的 `new URL(path, import.meta.url)` 形式。如果引用的资源需要随产物一起发布，建议通过 [output.copy](/config/rsbuild/output#outputcopy) 等方式将其复制到产物目录，并确保输出路径与 `new URL()` 中的相对路径一致。这样无论产物由后续的打包工具继续处理，还是直接在 Node.js 中运行，都能正确定位该资源。
+如果引用的文件仍需包含在产物中，可以使用 [output.copy](/config/rsbuild/output#outputcopy) 复制。
 
 ##### 忽略特定引用
 
