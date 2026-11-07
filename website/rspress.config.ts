@@ -3,10 +3,6 @@ import { defineConfig } from '@rspress/core';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import { pluginRss } from '@rspress/plugin-rss';
 import { pluginTwoslash } from '@rspress/plugin-twoslash';
-import {
-  transformerNotationDiff,
-  transformerNotationHighlight,
-} from '@shikijs/transformers';
 import path from 'node:path';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
@@ -30,9 +26,6 @@ export default defineConfig({
   markdown: {
     link: {
       checkAnchors: true,
-    },
-    shiki: {
-      transformers: [transformerNotationHighlight(), transformerNotationDiff()],
     },
   },
   search: {

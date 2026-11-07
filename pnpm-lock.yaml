@@ -241,17 +241,17 @@ catalogs:
       specifier: ^2.0.0
       version: 2.0.0
     '@rspress/core':
-      specifier: 2.1.0
-      version: 2.1.0
+      specifier: 2.1.1
+      version: 2.1.1
     '@rspress/plugin-algolia':
-      specifier: 2.1.0
-      version: 2.1.0
+      specifier: 2.1.1
+      version: 2.1.1
     '@rspress/plugin-rss':
-      specifier: 2.1.0
-      version: 2.1.0
+      specifier: 2.1.1
+      version: 2.1.1
     '@rspress/plugin-twoslash':
-      specifier: 2.1.0
-      version: 2.1.0
+      specifier: 2.1.1
+      version: 2.1.1
     '@rstackjs/create-toolkit':
       specifier: 2.2.11
       version: 2.2.11
@@ -264,9 +264,6 @@ catalogs:
     '@rstest/core':
       specifier: ^0.12.5
       version: 0.12.5
-    '@shikijs/transformers':
-      specifier: ^4.5.0
-      version: 4.5.0
     '@storybook/addon-docs':
       specifier: ^10.6.5
       version: 10.6.5
@@ -496,7 +493,7 @@ importers:
         version: 3.9.10
       rstack:
         specifier: 'catalog:'
-        version: 0.8.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.2)(@rspress/core@2.1.0)(jiti@2.7.0)(typescript@7.0.2)
+        version: 0.8.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.2)(@rspress/core@2.1.1)(jiti@2.7.0)(typescript@7.0.2)
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -1908,22 +1905,19 @@ importers:
         version: link:../scripts/tsconfig
       '@rspress/core':
         specifier: 'catalog:'
-        version: 2.1.0(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
+        version: 2.1.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
       '@rspress/plugin-algolia':
         specifier: 'catalog:'
-        version: 2.1.0(@rspress/core@2.1.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+        version: 2.1.1(@rspress/core@2.1.1)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@rspress/plugin-rss':
         specifier: 'catalog:'
-        version: 2.1.0(@rspress/core@2.1.0)
+        version: 2.1.1(@rspress/core@2.1.1)
       '@rspress/plugin-twoslash':
         specifier: 'catalog:'
-        version: 2.1.0(@rspress/core@2.1.0)(react@19.3.1)(supports-color@8.1.1)(typescript@6.0.3)
+        version: 2.1.1(@rspress/core@2.1.1)(react@19.3.1)(supports-color@8.1.1)(typescript@6.0.3)
       '@rstackjs/doc-ui':
         specifier: 'catalog:'
-        version: 1.14.11(@rspress/core@2.1.0)
-      '@shikijs/transformers':
-        specifier: 'catalog:'
-        version: 4.5.0
+        version: 1.14.11(@rspress/core@2.1.1)
       '@types/node':
         specifier: 'catalog:'
         version: 26.6.6
@@ -1947,10 +1941,10 @@ importers:
         version: 1.1.3(@rsbuild/core@2.3.1)
       rspress-plugin-file-tree:
         specifier: 'catalog:'
-        version: 1.0.7(@rspress/core@2.1.0)(supports-color@8.1.1)
+        version: 1.0.7(@rspress/core@2.1.1)(supports-color@8.1.1)
       rspress-plugin-font-open-sans:
         specifier: 'catalog:'
-        version: 1.0.4(@rspress/core@2.1.0)
+        version: 1.0.4(@rspress/core@2.1.1)
       typescript:
         specifier: catalog:typescript-6
         version: 6.0.3
@@ -3660,35 +3654,35 @@ packages:
       '@rspack/core':
         optional: true
 
-  '@rspress/core@2.1.0':
-    resolution: {integrity: sha512-xw5iGhzLn4O8vGUj8+y7AiVo51Pd1l1GkIBF9q5btfXTYR0xkGY984rxMFOYI43etvlRRkMM2du+IwiyqUnPGA==}
+  '@rspress/core@2.1.1':
+    resolution: {integrity: sha512-GArybZxyifQ/wC8N2SzVyFi5JCJpUXgajITV4if8ylOImjZr8j9Cgy+6o55tXEtq85r6XYYE5fbcEz2nxxCpnA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
-  '@rspress/plugin-algolia@2.1.0':
-    resolution: {integrity: sha512-5Hqn3brO6XKodgqugQfvn3ZYaD8KgDIyENZc2vMQeDA2Lr4nrlNkAPkjDVZLeXNl0UP2x/MfSnJIFMVEXDOlBA==}
+  '@rspress/plugin-algolia@2.1.1':
+    resolution: {integrity: sha512-4F50qr0LaCY+lP0tqE+zvmfDxCP/MPEL/YEekllRonGPBpO4rBBCFyG3R9O4qlazPTK06atNqpxve1SiGRXPuQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@rspress/core': ^2.1.0-beta.2
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
 
-  '@rspress/plugin-rss@2.1.0':
-    resolution: {integrity: sha512-wAhYGdQQKFrdoovarPxcqz3OHWem7op1MbxxUlfpVEZAQzi/R2LsLKZ2Pf+uFyJlZD9IVxfpnSnsinwoK4DJ9A==}
+  '@rspress/plugin-rss@2.1.1':
+    resolution: {integrity: sha512-4rnVmvp95321FbXUTRbxbQpv4EWiyL/GVvefZjuLImMBF52+SEw8UYQsrKrfmFsrBWefTNIlp87XHqPETDmyoQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@rspress/core': ^2.1.0-beta.2
 
-  '@rspress/plugin-twoslash@2.1.0':
-    resolution: {integrity: sha512-mdvpppqoGCziv6Wl+S4cqpHBe2GXwOu+4Pc8zge80v7kFjp6rd6nawl8q2L7UeowPrWh99EmVMa95sms6EJBig==}
+  '@rspress/plugin-twoslash@2.1.1':
+    resolution: {integrity: sha512-grnnRwiz/Ss8nHGeOsOGEWtYUxf2PlN8k8jzu0vdeUYEw+inp3M5TA36QKEdmJnAG1ew+Ngru/IkivAzRtu3pA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@rspress/core': ^2.1.0-beta.2
       react: '>=18.0.0'
       typescript: ^5.5.0 || ^6.0.0
 
-  '@rspress/shared@2.1.0':
-    resolution: {integrity: sha512-D2wnLO4aV1eFxNbUqQaLY4QfZZktegM+lCIDbQ9H2wxNQHKde39U1hpRdZKIA4aCuPYf/RSb6EdmJiZOkoZaWw==}
+  '@rspress/shared@2.1.1':
+    resolution: {integrity: sha512-U+OEPt/Ze+ryJdLHvpJJv9hxiRp03rknn5pvhh6v0enjib9SuUrsku/cPzneal3EsNyDZB5kncghpH1iwVKxnA==}
 
   '@rstackjs/cli-darwin-arm64@0.8.6':
     resolution: {integrity: sha512-raGaHTu2+d+ImLj1umWMVlo0CqIalYLGYZE01iqAS/3xPNK3HYtmiQJZa0qKhtujp7TZbPH+rD/pQBp870/e3Q==}
@@ -5871,6 +5865,7 @@ packages:
   image-size@0.5.5:
     resolution: {integrity: sha512-6TDAlDPZxUFCv+fuOkIoXT/V/f3Qbq8e37p+YOiYrUv3v9cc3/6x78VdfPgFVaB9dZYeLUfKgHRebpkm/oP2VQ==}
     engines: {node: '>=0.10.0'}
+    deprecated: Please migrate to image-size@2.x
     hasBin: true
 
   immer@11.0.0:
@@ -10233,14 +10228,15 @@ snapshots:
     optionalDependencies:
       '@rspack/core': 2.3.1(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)
 
-  '@rspress/core@2.1.0(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)':
+  '@rspress/core@2.1.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)':
     dependencies:
       '@mdx-js/mdx': 3.1.1(supports-color@8.1.1)
       '@mdx-js/react': 3.1.1(@types/react@19.3.0)(react@19.3.1)
       '@rsbuild/core': 2.3.1(@module-federation/runtime-tools@2.9.2)
       '@rsbuild/plugin-react': 2.1.1(@rsbuild/core@2.3.1)(@rspack/core@2.3.1)
-      '@rspress/shared': 2.1.0(@module-federation/runtime-tools@2.9.2)(supports-color@8.1.1)
+      '@rspress/shared': 2.1.1(@module-federation/runtime-tools@2.9.2)(supports-color@8.1.1)
       '@shikijs/rehype': 4.3.0
+      '@shikijs/transformers': 4.5.0
       '@types/mdast': 4.0.4
       '@types/react': 19.3.0
       '@unhead/react': 2.1.17(react@19.3.1)
@@ -10281,11 +10277,11 @@ snapshots:
       - micromark-util-types
       - supports-color
 
-  '@rspress/plugin-algolia@2.1.0(@rspress/core@2.1.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)':
+  '@rspress/plugin-algolia@2.1.1(@rspress/core@2.1.1)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)':
     dependencies:
       '@docsearch/css': 4.7.1
       '@docsearch/react': 4.7.1(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
-      '@rspress/core': 2.1.0(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
+      '@rspress/core': 2.1.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
     transitivePeerDependencies:
@@ -10294,15 +10290,15 @@ snapshots:
       - algoliasearch
       - search-insights
 
-  '@rspress/plugin-rss@2.1.0(@rspress/core@2.1.0)':
+  '@rspress/plugin-rss@2.1.1(@rspress/core@2.1.1)':
     dependencies:
-      '@rspress/core': 2.1.0(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
+      '@rspress/core': 2.1.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
       feed: 5.2.1
 
-  '@rspress/plugin-twoslash@2.1.0(@rspress/core@2.1.0)(react@19.3.1)(supports-color@8.1.1)(typescript@6.0.3)':
+  '@rspress/plugin-twoslash@2.1.1(@rspress/core@2.1.1)(react@19.3.1)(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@floating-ui/dom': 1.8.0
-      '@rspress/core': 2.1.0(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
+      '@rspress/core': 2.1.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
       '@shikijs/twoslash': 4.3.0(supports-color@8.1.1)(typescript@6.0.3)
       mdast-util-from-markdown: 2.1.0(supports-color@8.1.1)
       mdast-util-gfm: 3.1.0(supports-color@8.1.1)
@@ -10314,7 +10310,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@rspress/shared@2.1.0(@module-federation/runtime-tools@2.9.2)(supports-color@8.1.1)':
+  '@rspress/shared@2.1.1(@module-federation/runtime-tools@2.9.2)(supports-color@8.1.1)':
     dependencies:
       '@rsbuild/core': 2.3.1(@module-federation/runtime-tools@2.9.2)
       '@shikijs/rehype': 4.3.0
@@ -10367,9 +10363,9 @@ snapshots:
 
   '@rstackjs/create-toolkit@2.2.11': {}
 
-  '@rstackjs/doc-ui@1.14.11(@rspress/core@2.1.0)':
+  '@rstackjs/doc-ui@1.14.11(@rspress/core@2.1.1)':
     optionalDependencies:
-      '@rspress/core': 2.1.0(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
+      '@rspress/core': 2.1.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
 
   '@rstest/adapter-rslib@0.12.5(@rslib/core@1.0.6)(@rstest/core@0.12.5)(typescript@7.0.2)':
     dependencies:
@@ -14436,9 +14432,9 @@ snapshots:
       '@rspack/core': 2.3.1(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)
       '@vue/compiler-sfc': 3.5.44
 
-  rspress-plugin-devkit@1.0.1(@rspress/core@2.1.0)(supports-color@8.1.1):
+  rspress-plugin-devkit@1.0.1(@rspress/core@2.1.1)(supports-color@8.1.1):
     dependencies:
-      '@rspress/core': 2.1.0(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
+      '@rspress/core': 2.1.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.5
       '@types/mdast': 4.0.4
@@ -14456,18 +14452,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rspress-plugin-file-tree@1.0.7(@rspress/core@2.1.0)(supports-color@8.1.1):
+  rspress-plugin-file-tree@1.0.7(@rspress/core@2.1.1)(supports-color@8.1.1):
     dependencies:
-      '@rspress/core': 2.1.0(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
-      rspress-plugin-devkit: 1.0.1(@rspress/core@2.1.0)(supports-color@8.1.1)
+      '@rspress/core': 2.1.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
+      rspress-plugin-devkit: 1.0.1(@rspress/core@2.1.1)(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
-  rspress-plugin-font-open-sans@1.0.4(@rspress/core@2.1.0):
+  rspress-plugin-font-open-sans@1.0.4(@rspress/core@2.1.1):
     dependencies:
-      '@rspress/core': 2.1.0(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
+      '@rspress/core': 2.1.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
 
-  rstack@0.8.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.2)(@rspress/core@2.1.0)(jiti@2.7.0)(typescript@7.0.2):
+  rstack@0.8.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.2)(@rspress/core@2.1.1)(jiti@2.7.0)(typescript@7.0.2):
     dependencies:
       '@rsbuild/core': 2.2.14(@module-federation/runtime-tools@2.9.2)
       '@rslib/core': 1.0.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.2)(typescript@7.0.2)
@@ -14477,7 +14473,7 @@ snapshots:
       prettier: 3.9.10
       tinypool: 2.2.0
     optionalDependencies:
-      '@rspress/core': 2.1.0(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
+      '@rspress/core': 2.1.1(@module-federation/runtime-tools@2.9.2)(@rspack/core@2.3.1)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
       '@rstackjs/cli-darwin-arm64': 0.8.6
       '@rstackjs/cli-darwin-x64': 0.8.6
       '@rstackjs/cli-linux-arm64-gnu': 0.8.6
