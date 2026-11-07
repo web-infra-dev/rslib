@@ -41,6 +41,11 @@ export default function Overview() {
         { text: 'tools', link: '/config/rsbuild/tools' },
       ],
     },
+    {
+      name: lang === 'en' ? 'Other configurations' : '其他配置',
+      link: '/config/other/exports',
+      items: [{ text: 'exports', link: '/config/other/exports' }],
+    },
   ];
 
   const group: Group = {

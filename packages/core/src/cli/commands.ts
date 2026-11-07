@@ -34,6 +34,7 @@ export type BuildOptions = CommonOptions & {
   autoExtension?: boolean;
   autoExternal?: boolean;
   tsconfig?: string;
+  exports?: boolean;
 };
 
 export type InspectOptions = CommonOptions & {
@@ -135,6 +136,10 @@ export function setupCommands(argv: string[]): void {
     .option(
       '--tsconfig <path>',
       'use specific tsconfig (relative to project root)',
+    )
+    .option(
+      '--exports',
+      'generate the exports field in package.json from build outputs (use --no-exports to disable)',
     )
     .action(async (options: BuildOptions) => {
       initCliAction('build', options);

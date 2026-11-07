@@ -7,6 +7,8 @@ export type PkgJson = {
   devDependencies?: Record<string, string>;
   optionalDependencies?: Record<string, string>;
   engines?: Record<string, string>;
+  exports?: unknown;
+  publishConfig?: Record<string, unknown>;
 };
 
 export type DeepRequired<T> = Required<{

@@ -46,6 +46,16 @@ description: '介绍 Rslib 项目的 npm 包版本管理与发布实践，包括
 
 此外，需要确保包没有设置 `private: true`，并建议补充 `description`、`license`、`repository` 等信息，方便用户在 npm 上了解和定位项目。
 
+### 生成 exports \{#generate-exports}
+
+Rslib 可以根据构建产物自动生成 `exports` 字段。执行 `rslib build --exports`，或在配置文件中开启 [exports](/config/other/exports) 即可：
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  exports: true,
+});
+```
+
 ## pnpm 版本管理 \{#pnpm-version-management}
 
 pnpm 提供了 [发布管理功能](https://pnpm.io/versioning)，支持记录变更、更新包版本、生成 changelog、同步更新 workspace 包之间的依赖版本，以及发布 npm 包。
