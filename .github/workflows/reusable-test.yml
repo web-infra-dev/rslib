@@ -31,44 +31,41 @@ jobs:
 
       - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         id: changes
+        if: github.event_name != 'workflow_dispatch'
         with:
-          predicate-quantifier: 'every'
-          filters: |
-            changed:
-              - "!**/*.md"
-              - "!**/*.mdx"
-              - "!**/_meta.json"
-              - "!**/dictionary.txt"
+          token: ''
+          predicate-quantifier: 'some-with-excludes'
+          filters: .github/filters.yml
 
       - name: Setup Node.js
-        if: ${{ steps.changes.outputs.changed == 'true' }}
+        if: github.event_name == 'workflow_dispatch' || steps.changes.outputs.changed == 'true'
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 26
           package-manager-cache: false
 
       - name: Install pnpm
-        if: ${{ steps.changes.outputs.changed == 'true' }}
+        if: github.event_name == 'workflow_dispatch' || steps.changes.outputs.changed == 'true'
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         with:
           run_install: true
 
       - name: Build
-        if: ${{ steps.changes.outputs.changed == 'true' }}
+        if: github.event_name == 'workflow_dispatch' || steps.changes.outputs.changed == 'true'
         run: pnpm run build
 
       - name: Unit Test
-        if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'ut' }}
+        if: ${{ (github.event_name == 'workflow_dispatch' || steps.changes.outputs.changed == 'true') && inputs.task == 'ut' }}
         run: pnpm run test:unit
 
       - name: Integration Test (Rstest)
-        if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'integration' }}
+        if: ${{ (github.event_name == 'workflow_dispatch' || steps.changes.outputs.changed == 'true') && inputs.task == 'integration' }}
         run: pnpm run test:integration
 
       - name: Integration Test For Executable (Rstest)
-        if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'integration-exe' }}
+        if: ${{ (github.event_name == 'workflow_dispatch' || steps.changes.outputs.changed == 'true') && inputs.task == 'integration-exe' }}
         run: pnpm run test:integration:exe
 
       - name: E2E Test (Playwright)
-        if: ${{ steps.changes.outputs.changed == 'true' && inputs.task == 'e2e' }}
+        if: ${{ (github.event_name == 'workflow_dispatch' || steps.changes.outputs.changed == 'true') && inputs.task == 'e2e' }}
         run: pnpm run test:e2e
