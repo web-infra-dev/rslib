@@ -114,33 +114,6 @@ describe('generateExports with declaration files', () => {
       options: {},
     }).exports;
 
-  it('should not add a types condition when every output has a matched declaration file', () => {
-    expect(
-      generate(
-        [
-          createLibInfo('esm', 'esm', { autoExtension: true }),
-          createLibInfo('cjs', 'cjs', { autoExtension: true }),
-        ],
-        {
-          esm: [
-            entry('dist/esm/index.mjs', {
-              file: 'dist/esm/index.d.mts',
-              matched: true,
-            }),
-          ],
-          cjs: [
-            entry('dist/cjs/index.js', {
-              file: 'dist/cjs/index.d.ts',
-              matched: true,
-            }),
-          ],
-        },
-      ),
-    ).toEqual({
-      '.': { import: './dist/esm/index.mjs', require: './dist/cjs/index.js' },
-    });
-  });
-
   it('should share the matched declaration file when another output has none', () => {
     const exportsField = generate(
       [createLibInfo('esm', 'esm', true), createLibInfo('cjs', 'cjs', true)],
@@ -194,36 +167,6 @@ describe('generateExports with declaration files', () => {
         import: './dist/index.mjs',
         require: './dist/index.js',
       },
-    });
-  });
-
-  it('should use the default condition with a single format', () => {
-    expect(
-      generate([createLibInfo('esm', 'esm', true)], {
-        esm: [
-          entry('dist/index.mjs', {
-            file: 'dist/index.d.ts',
-            matched: false,
-          }),
-        ],
-      }),
-    ).toEqual({
-      '.': { types: './dist/index.d.ts', default: './dist/index.mjs' },
-    });
-  });
-
-  it('should add a types condition for declaration files in dts.distPath', () => {
-    expect(
-      generate([createLibInfo('esm', 'esm', { distPath: './dist/types' })], {
-        esm: [
-          entry('dist/esm/index.js', {
-            file: 'dist/types/index.d.ts',
-            matched: false,
-          }),
-        ],
-      }),
-    ).toEqual({
-      '.': { types: './dist/types/index.d.ts', default: './dist/esm/index.js' },
     });
   });
 

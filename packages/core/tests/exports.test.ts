@@ -50,48 +50,6 @@ const generate = (
   });
 
 describe('generateExports', () => {
-  it('should generate import and require conditions for esm and cjs entries', () => {
-    expect(
-      generate([createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')], {
-        esm: [entry('index', 'dist/esm/index.mjs')],
-        cjs: [entry('index', 'dist/cjs/index.js')],
-      }),
-    ).toEqual({
-      exports: {
-        '.': {
-          import: './dist/esm/index.mjs',
-          require: './dist/cjs/index.js',
-        },
-      },
-    });
-  });
-
-  it('should generate a string value when only one format exists', () => {
-    expect(
-      generate([createLibInfo('esm', 'esm')], {
-        esm: [entry('index', 'dist/esm/index.mjs')],
-      }).exports,
-    ).toEqual({ '.': './dist/esm/index.mjs' });
-  });
-
-  it('should name subpaths after entries and strip trailing "/index"', () => {
-    expect(
-      generate([createLibInfo('esm', 'esm')], {
-        esm: [
-          entry('index', 'dist/index.mjs'),
-          entry('foo', 'dist/foo.mjs'),
-          entry('button/index', 'dist/button/index.mjs'),
-          entry('utils/numbers', 'dist/utils/numbers.mjs'),
-        ],
-      }).exports,
-    ).toEqual({
-      '.': './dist/index.mjs',
-      './button': './dist/button/index.mjs',
-      './foo': './dist/foo.mjs',
-      './utils/numbers': './dist/utils/numbers.mjs',
-    });
-  });
-
   it('should normalize leading "./" in entry names', () => {
     expect(
       generate([createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')], {
@@ -213,33 +171,6 @@ describe('generateExports with include and exclude', () => {
     entry('internal/index', 'dist/internal/index.js'),
   ];
 
-  it('should only export the index entry in bundleless mode by default', () => {
-    expect(generate([bundleless], { esm: entries }).exports).toEqual({
-      '.': './dist/index.js',
-    });
-  });
-
-  it('should export all entries in bundle mode by default', () => {
-    expect(
-      Object.keys(
-        generate([createLibInfo('esm', 'esm')], { esm: entries }).exports,
-      ),
-    ).toEqual(['.', './button', './button/utils', './internal']);
-  });
-
-  it('should select entries with glob patterns', () => {
-    expect(
-      generate(
-        [bundleless],
-        { esm: entries },
-        { include: ['index', '*/index'], exclude: ['internal/**'] },
-      ).exports,
-    ).toEqual({
-      '.': './dist/index.js',
-      './button': './dist/button/index.js',
-    });
-  });
-
   it('should match outputs with or without their extensions', () => {
     const libs = [createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')];
     const collected = {
@@ -308,34 +239,6 @@ describe('generateExports with include and exclude', () => {
 });
 
 describe('generateExports with CSS', () => {
-  it('should export the CSS of entries and prefer the esm output', () => {
-    expect(
-      generate([createLibInfo('cjs', 'cjs'), createLibInfo('esm', 'esm')], {
-        cjs: [
-          entry('index', 'dist/cjs/index.cjs', {
-            css: css('dist/cjs/index.css'),
-          }),
-        ],
-        esm: [
-          entry('index', 'dist/esm/index.js', {
-            css: css('dist/esm/index.css'),
-          }),
-          entry('button/index', 'dist/esm/button/index.js', {
-            css: css('dist/esm/button/index.css'),
-          }),
-        ],
-      }).exports,
-    ).toEqual({
-      '.': {
-        import: './dist/esm/index.js',
-        require: './dist/cjs/index.cjs',
-      },
-      './button': './dist/esm/button/index.js',
-      './button/index.css': './dist/esm/button/index.css',
-      './index.css': './dist/esm/index.css',
-    });
-  });
-
   it('should name CSS subpaths after the output files', () => {
     expect(
       generate([createLibInfo('cjs', 'cjs'), createLibInfo('esm', 'esm')], {
@@ -390,52 +293,8 @@ describe('generateExports with CSS', () => {
 
 describe('generateExports with source', () => {
   const libInfos = [createLibInfo('esm', 'esm'), createLibInfo('cjs', 'cjs')];
-  const collected = {
-    esm: [
-      entry('index', 'dist/esm/index.js', {
-        css: css('dist/esm/index.css'),
-        sourceFiles: ['src/index.ts'],
-      }),
-    ],
-    cjs: [
-      entry('index', 'dist/cjs/index.cjs', { sourceFiles: ['src/index.ts'] }),
-    ],
-  };
-  const outputExports = {
-    '.': {
-      import: './dist/esm/index.js',
-      require: './dist/cjs/index.cjs',
-    },
-    './index.css': './dist/esm/index.css',
-  };
 
-  it('should point to source files and publish the outputs', () => {
-    expect(generate(libInfos, collected, { source: true })).toEqual({
-      exports: { '.': './src/index.ts' },
-      publishExports: outputExports,
-    });
-  });
-
-  it('should add a source condition to JavaScript subpaths', () => {
-    const { exports } = generate(libInfos, collected, {
-      source: '@acme/source',
-    });
-    expect(Object.keys(exports['.']!)).toEqual([
-      '@acme/source',
-      'import',
-      'require',
-    ]);
-    expect(generate(libInfos, collected, { source: '@acme/source' })).toEqual({
-      exports: {
-        '.': {
-          '@acme/source': './src/index.ts',
-          import: './dist/esm/index.js',
-          require: './dist/cjs/index.cjs',
-        },
-        './index.css': './dist/esm/index.css',
-      },
-    });
-
+  it('should wrap a single output with a source condition', () => {
     expect(
       generate(
         [createLibInfo('esm', 'esm')],

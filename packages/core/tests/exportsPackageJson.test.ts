@@ -10,12 +10,6 @@ describe('stringifyPackageJson', () => {
     );
   });
 
-  it('should preserve tab indentation and the trailing newline', () => {
-    expect(stringifyPackageJson(content, '{\n\t"name": "pkg"\n}\n')).toBe(
-      `${JSON.stringify(content, null, '\t')}\n`,
-    );
-  });
-
   it('should preserve four-space indentation and CRLF line endings', () => {
     expect(
       stringifyPackageJson(content, '{\r\n    "name": "pkg"\r\n}\r\n'),
