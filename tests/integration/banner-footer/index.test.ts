@@ -27,6 +27,8 @@ test('banner and footer should work in js, css and dts', async () => {
   // 3. bundleless esm
   // 4. bundleless cjs
   // 5. bundle esm with minify enabled
+  // and one case without a tsgo counterpart
+  // 6. bundleless esm with `.jsx` output
   const checkBannerAndFooter = (
     contents: Record<string, string>[],
     type: 'js' | 'css' | 'dts',
@@ -54,6 +56,11 @@ test('banner and footer should work in js, css and dts', async () => {
       }
     }
   };
+
+  const jsxFiles = jsContents.flatMap((content) =>
+    Object.keys(content).filter((file) => file.endsWith('.jsx')),
+  );
+  expect(jsxFiles.length).toBeGreaterThan(0);
 
   checkBannerAndFooter(jsContents, 'js');
   checkBannerAndFooter(cssContents, 'css');
