@@ -4,7 +4,19 @@ description: '配置 exports，根据 Rslib 构建产物生成 package.json 的 
 
 # exports
 
-- **类型：** `boolean | ExportsOptions`
+- **类型：**
+
+```ts
+type Exports =
+  | boolean
+  | {
+      include?: string[];
+      exclude?: string[];
+      source?: boolean | string;
+      custom?: ExportsCustom;
+    };
+```
+
 - **默认值：** `false`
 - **命令行：** `--exports` / `--no-exports`
 
