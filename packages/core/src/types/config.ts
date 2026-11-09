@@ -572,8 +572,12 @@ export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
    */
   output?: RslibOutputConfig;
   /**
-   * Whether to generate the `exports` field in `package.json` from the build outputs.
-   * @default false
+   * Whether to generate the `exports` field in `package.json` from the build
+   * outputs after the build completes. The generated result overwrites the
+   * existing `exports` field. It can only be set at the top level, and is
+   * skipped in watch mode or when only some libs are built with `--lib`.
+   * @defaultValue `false`
+   * @see {@link https://rslib.rs/config/other/exports}
    */
   exports?: boolean | ExportsOptions;
 }
@@ -599,31 +603,41 @@ export type ExportsCustom = ExportsField | ExportsCustomFunction;
 
 export type ExportsOptions = {
   /**
-   * Glob patterns of the outputs to export, matched against the paths of the
-   * JavaScript and CSS outputs relative to the output directory of each lib,
-   * with or without their extensions.
-   * @default all entries in bundle mode, the `index` entry in bundleless mode
+   * Glob patterns that select the outputs to export. Each pattern is matched
+   * against the paths of the JavaScript and CSS outputs relative to the output
+   * directory of each lib, and the extension can be omitted.
+   * @defaultValue All entries in bundle mode, and only the `index` entry in
+   * bundleless mode.
+   * @see {@link https://rslib.rs/config/other/exports#exportsinclude}
    */
   include?: string[];
   /**
-   * Glob patterns of the outputs to exclude from `include`, matched in the same
-   * way.
+   * Glob patterns that exclude some of the outputs matched by {@link include}.
+   * The patterns are matched in the same way as {@link include}.
+   * @defaultValue `[]`
+   * @see {@link https://rslib.rs/config/other/exports#exportsexclude}
    */
   exclude?: string[];
   /**
-   * - `true`: point the top-level exports to source files, and write the
-   *   exports of the build outputs to `publishConfig.exports`.
-   * - string: add a condition with this name pointing to the source file to
-   *   each JavaScript subpath.
-   * @default false
+   * Whether to export the source files of the entries.
+   * - `true`: the `exports` field points to the source files, and the exports
+   *   of the build outputs are written to `publishConfig.exports`.
+   * - `string`: a condition named after the string and pointing to the source
+   *   file is added to each JavaScript subpath.
+   * @defaultValue `false`
+   * @see {@link https://rslib.rs/config/other/exports#exportssource}
    */
   source?: boolean | string;
   /**
    * Customize the generated exports.
-   * - object: subpaths added to the exports. A subpath with the same key as a
-   *   generated one replaces it as a whole.
-   * - function: receives the exports and returns the final exports.
-   * - array: each item is applied in order.
+   * - Object: its subpaths are added to the generated exports, and a subpath
+   *   with the same name replaces the generated one as a whole.
+   * - Function: receives the generated exports and returns the final exports.
+   *   When {@link source} is `true`, it is called again for
+   *   `publishConfig.exports`, with `isPublish` set to `true`.
+   * - Array: its items are applied in order.
+   * @defaultValue `undefined`
+   * @see {@link https://rslib.rs/config/other/exports#exportscustom}
    */
   custom?: ExportsCustom | ExportsCustom[];
 };
