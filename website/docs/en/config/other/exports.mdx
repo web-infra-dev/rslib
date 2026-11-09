@@ -83,6 +83,16 @@ export default defineConfig({
 
 Excludes some of the outputs matched by `include`. The patterns are written in the same way as `include`.
 
+For example, to export all entries except those in the `internal` directory in bundle mode:
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  exports: {
+    exclude: ['internal/**'],
+  },
+});
+```
+
 ## exports.source
 
 - **Type:** `boolean | string`
