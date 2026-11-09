@@ -23,9 +23,6 @@ export default defineConfig({
   logo: 'https://assets.rspack.rs/rslib/rslib-logo-192x192.png',
   logoText: 'Rslib',
   root: path.join(__dirname, 'docs'),
-  search: {
-    codeBlocks: true,
-  },
   plugins: [
     pluginAlgolia(),
     pluginFontOpenSans(),
