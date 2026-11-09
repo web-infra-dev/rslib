@@ -6,7 +6,7 @@ import { getAssetNames } from '../utils/compilation';
 const PLUGIN_NAME = 'rsbuild:lib-chunk-asset';
 const IMPORT_META_URL_SHIM = `const __rslib_import_meta_url__ = /*#__PURE__*/ (function () {
   return typeof document === 'undefined'
-    ? new (require('url'.replace('', '')).URL)('file:' + __filename).href
+    ? require('url'.replace('', '')).pathToFileURL(__filename).href
     : (document.currentScript && document.currentScript.src) ||
       new URL('main.js', document.baseURI).href;
 })();
