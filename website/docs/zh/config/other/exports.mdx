@@ -83,11 +83,13 @@ export default defineConfig({
 
 用于从 `include` 匹配到的产物中排除一部分，写法与 `include` 相同。
 
-例如，在 bundle 模式下导出除 `internal` 目录外的所有入口：
+例如，在 bundleless 模式下导出各目录下的 `index`，但排除 `internal` 目录：
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
+  bundle: false,
   exports: {
+    include: ['**/index'],
     exclude: ['internal/**'],
   },
 });
