@@ -77,13 +77,13 @@ Exports the source files of the entries, so that the source code can be referenc
 - When set to `true`, `exports` points to the source files, and the exports pointing to the build outputs are written to `publishConfig.exports`.
 - When set to a string, a condition named after the string and pointing to the source file is added to each JavaScript subpath. It can be used with the [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) option of TypeScript or [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build).
 
-For example, `source: '@acme/source'` generates:
+For example, `source: '@scope/source'` generates:
 
 ```json title="package.json"
 {
   "exports": {
     ".": {
-      "@acme/source": "./src/index.ts",
+      "@scope/source": "./src/index.ts",
       "default": "./dist/index.js"
     }
   }
