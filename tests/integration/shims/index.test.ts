@@ -150,9 +150,7 @@ describe('CJS shims', async () => {
     );
 
     expect(importMetaUrl).toBe(fileUrl);
-    expect(dynamicUrl).toBe(
-      fileUrl.replace('index.cjs', path.basename(dynamicPath)),
-    );
+    expect(dynamicUrl).toBe(pathToFileURL(dynamicPath).href);
     expect(requiredModule.value).toBe('ok');
     expect(requiredModule.isStrict).toBe(false);
     expect(esmModuleIsStrict).toBe(true);
@@ -166,6 +164,27 @@ describe('CJS shims', async () => {
         ),
       ).toBe(true);
     }
+  });
+
+  test.each([
+    'hash#file.cjs',
+    'percent%41file.cjs',
+    'percent%file.cjs',
+    'we#ird %41 file.cjs',
+  ])('import.meta.url encodes special characters in %s', (name) => {
+    const filename = join(path.dirname(entryFiles.cjs), name);
+    const req = createRequire(filename);
+    const context = vm.createContext({
+      require: req,
+      exports: {},
+      module: { require: req },
+      __filename: filename,
+      __dirname: path.dirname(filename),
+    });
+    const result = vm.runInContext(entries.cjs, context);
+
+    expect(result.importMetaUrl).toBe(pathToFileURL(filename).href);
+    expect(result.__filename).toBe(filename);
   });
 
   test('ESM should not be affected by CJS shims configuration', async () => {
