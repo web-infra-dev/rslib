@@ -23,14 +23,6 @@ export default defineConfig({
   logo: 'https://assets.rspack.rs/rslib/rslib-logo-192x192.png',
   logoText: 'Rslib',
   root: path.join(__dirname, 'docs'),
-  markdown: {
-    link: {
-      checkAnchors: true,
-    },
-  },
-  search: {
-    codeBlocks: true,
-  },
   plugins: [
     pluginAlgolia(),
     pluginFontOpenSans(),
@@ -65,7 +57,6 @@ export default defineConfig({
     }),
   ],
   route: {
-    cleanUrls: true,
     // exclude document fragments from routes
     exclude: ['**/zh/shared/**', '**/en/shared/**'],
   },
