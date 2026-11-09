@@ -19,8 +19,9 @@ type Exports =
 
 - **Default:** `false`
 - **CLI:** `--exports` / `--no-exports`
+- **Top-level config:** Only supported at the top level
 
-When enabled, Rslib generates the `exports` field in `package.json` from the build outputs after the build completes.
+Generates the `exports` field in `package.json` from the build outputs after the build completes.
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
@@ -28,8 +29,6 @@ export default defineConfig({
   exports: true,
 });
 ```
-
-This option can only be set at the top level.
 
 :::note
 The generated result overwrites the existing `exports` field in `package.json`. To keep handwritten subpaths, add them with [exports.custom](#exportscustom).
@@ -138,7 +137,7 @@ type ExportsCustom = ExportsCustomItem | ExportsCustomItem[];
 Customizes the generated exports.
 
 - When an object is passed, its subpaths are added to the generated result, and subpaths with the same name are replaced.
-- When a function is passed, it receives the generated exports and returns the final result. When `source` is `true`, the function is called again for `publishConfig.exports`, with `isPublish` set to `true`.
+- When a function is passed, it receives the generated exports and returns the final result. When `source` is `true`, `exports` and `publishConfig.exports` are each passed through the function, and you can tell them apart by `isPublish` in the second argument, which is `true` for `publishConfig.exports`.
 - When an array is passed, its items are applied in order.
 
 For example, to add the `./package.json` subpath:
