@@ -24,7 +24,7 @@ type Exports =
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
-  lib: [{ format: 'esm', dts: true }],
+  dts: true,
   exports: true,
 });
 ```
@@ -65,7 +65,7 @@ export default defineConfig({
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
-  lib: [{ format: 'esm', bundle: false }],
+  bundle: false,
   exports: {
     include: ['index', '*/index'],
   },

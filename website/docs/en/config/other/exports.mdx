@@ -24,7 +24,7 @@ When enabled, Rslib generates the `exports` field in `package.json` from the bui
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
-  lib: [{ format: 'esm', dts: true }],
+  dts: true,
   exports: true,
 });
 ```
@@ -65,7 +65,7 @@ For example, to export the `index` files in the root directory and in each compo
 
 ```ts title="rslib.config.ts"
 export default defineConfig({
-  lib: [{ format: 'esm', bundle: false }],
+  bundle: false,
   exports: {
     include: ['index', '*/index'],
   },
