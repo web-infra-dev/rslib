@@ -29,19 +29,23 @@ export default defineConfig({
 });
 ```
 
-This option can only be set at the top level. The generated result overwrites the existing `exports` field in `package.json`. To keep handwritten subpaths, add them with [exports.custom](#exportscustom).
+This option can only be set at the top level.
+
+:::note
+The generated result overwrites the existing `exports` field in `package.json`. To keep handwritten subpaths, add them with [exports.custom](#exportscustom).
+:::
 
 Rslib does not generate the `exports` field in watch mode, or when only some libs are built with `--lib`.
 
 ## Generation rules
 
-- Only outputs in the `esm` and `cjs` formats are exported.
+- Only ESM and CJS outputs are exported.
 - The `index` entry is exported as `.`, `button/index` as `./button`, and other entries by their names.
 - If an entry has both ESM and CJS outputs, they are distinguished by the `import` and `require` conditions. If it has only one format, the output path is used directly.
 - For libs with [dts](/config/lib/dts) enabled, a `types` condition is added if TypeScript cannot find the declaration files from the output paths.
 - In bundle mode, the CSS files generated for the entries are also exported.
 
-For example, building `esm` and `cjs` libs with an `index` entry generates:
+The following example shows the result for a library that builds both ESM and CJS outputs:
 
 ```json title="package.json"
 {
