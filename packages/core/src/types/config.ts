@@ -574,8 +574,9 @@ export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
   /**
    * Whether to generate the `exports` field in `package.json` from the build
    * outputs after the build completes. The generated result overwrites the
-   * existing `exports` field. It can only be set at the top level, and is
-   * skipped in watch mode or when only some libs are built with `--lib`.
+   * existing `exports` and `publishConfig.exports` fields. It can only be set
+   * at the top level, and is skipped in watch mode or when only some libs are
+   * built with `--lib`.
    * @defaultValue `false`
    * @see {@link https://rslib.rs/config/other/exports}
    */
@@ -621,7 +622,8 @@ export type ExportsOptions = {
   /**
    * Whether to export the source files of the entries.
    * - `true`: the `exports` field points to the source files, and the exports
-   *   of the build outputs are written to `publishConfig.exports`.
+   *   of the build outputs are written to `publishConfig.exports`. Otherwise,
+   *   an existing `publishConfig.exports` is removed.
    * - `string`: a condition named after the string and pointing to the source
    *   file is added to each JavaScript subpath.
    * @defaultValue `false`

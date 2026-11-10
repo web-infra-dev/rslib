@@ -149,6 +149,15 @@ export const ExportsPlugin = ({
           isPublish: true,
         }),
       };
+    } else if (pkg.publishConfig && 'exports' in pkg.publishConfig) {
+      // `publishConfig.exports` overrides the generated `exports` when
+      // publishing, and may be left over from a previous build in source mode.
+      const { exports: _, ...publishConfig } = pkg.publishConfig;
+      if (Object.keys(publishConfig).length) {
+        content.publishConfig = publishConfig;
+      } else {
+        delete content.publishConfig;
+      }
     }
 
     const text = stringifyPackageJson(content, originalText);

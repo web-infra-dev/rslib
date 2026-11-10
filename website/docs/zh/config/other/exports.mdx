@@ -45,7 +45,7 @@ export default defineConfig({
 ```
 
 :::note
-生成的结果会覆盖 `package.json` 中原有的 `exports` 字段，如需保留手写的子路径，请通过 [exports.custom](#exportscustom) 添加。
+生成的结果会覆盖 `package.json` 中原有的 `exports` 和 `publishConfig.exports` 字段，如需保留手写的子路径，请通过 [exports.custom](#exportscustom) 添加。
 
 在 watch 模式下，或使用 `--lib` 只构建部分 lib 时，Rslib 不会生成 `exports` 字段。
 :::

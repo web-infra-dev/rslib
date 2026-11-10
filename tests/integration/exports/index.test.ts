@@ -475,6 +475,53 @@ describe('exports', () => {
     expect(contexts).toEqual([false, true]);
   });
 
+  test('should remove publishConfig.exports outside of source mode', async () => {
+    const fixture = 'source';
+    const fixturePath = join(__dirname, fixture);
+    const packageJsonPath = join(fixturePath, 'package.json');
+    writeFileSync(packageJsonPath, packageJsonContents.get(fixture)!);
+
+    await rslibBuild({
+      cwd: fixturePath,
+      modifyConfig: (config) => {
+        config.exports = { source: true };
+      },
+    });
+    expect(
+      JSON.parse(readFileSync(packageJsonPath, 'utf8')).publishConfig.exports,
+    ).toBeDefined();
+
+    await rslibBuild({ cwd: fixturePath });
+
+    const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+    expect(pkg.exports).toEqual({
+      '.': {
+        import: './dist/esm/index.mjs',
+        require: './dist/cjs/index.js',
+      },
+    });
+    expect(pkg.publishConfig).toEqual({ access: 'public' });
+  });
+
+  test('should remove publishConfig when it only contains exports', async () => {
+    const fixture = 'esm-only';
+    const fixturePath = join(__dirname, fixture);
+    const packageJsonPath = join(fixturePath, 'package.json');
+    writeFileSync(
+      packageJsonPath,
+      JSON.stringify({
+        ...JSON.parse(packageJsonContents.get(fixture)!),
+        publishConfig: { exports: './dist/stale.js' },
+      }),
+    );
+
+    await rslibBuild({ cwd: fixturePath });
+
+    expect(
+      JSON.parse(readFileSync(packageJsonPath, 'utf8')).publishConfig,
+    ).toBeUndefined();
+  });
+
   test('should add a source condition', async () => {
     const fixture = 'source';
     const fixturePath = join(__dirname, fixture);

@@ -45,7 +45,7 @@ export default defineConfig({
 ```
 
 :::note
-The generated result overwrites the existing `exports` field in `package.json`. To keep handwritten subpaths, add them with [exports.custom](#exportscustom).
+The generated result overwrites the existing `exports` and `publishConfig.exports` fields in `package.json`. To keep handwritten subpaths, add them with [exports.custom](#exportscustom).
 
 Rslib does not generate the `exports` field in watch mode, or when only some libs are built with `--lib`.
 :::
