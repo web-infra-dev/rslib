@@ -8,12 +8,13 @@ Rslib configuration lets you define library outputs and control how each output 
 
 ## Configuration structure
 
-Rslib configuration consists of two types of options:
+Rslib configuration consists of three types of options:
 
 - [Lib configurations](/config/lib) describe library outputs, including their output formats, output structures, and syntax targets.
 - [Rsbuild configurations](/config/rsbuild) control the underlying compilation and build behavior, including module resolution, source processing, and related plugins.
+- [Other configurations](/config/other/exports) are other feature options that can only be set at the top level.
 
-The `lib` field is an optional array of objects. Each object corresponds to one output and can contain both types of configuration above. Configurations inside a `lib` item apply only to that output, while configurations outside the `lib` field are top-level configurations shared across `lib` outputs.
+The `lib` field is an optional array of objects. Each object corresponds to one output and can contain both lib configurations and Rsbuild configurations. Configurations inside a `lib` item apply only to that output, while configurations outside the `lib` field are top-level configurations shared across `lib` outputs.
 
 Rslib merges the top-level configuration with each `lib` item according to the [configuration merge rules](https://rsbuild.rs/api/javascript-api/core#merge-rules).
 

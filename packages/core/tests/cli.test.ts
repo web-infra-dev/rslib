@@ -155,6 +155,7 @@ describe('applyCliOptions', () => {
       clean: false,
       externals: ['react', '', 'lodash'],
       distPath: 'dist/custom',
+      exports: true,
     } as CommonOptions;
 
     const libBefore = config.lib![0]!;
@@ -164,6 +165,7 @@ describe('applyCliOptions', () => {
 
     expect(config.root).toBe('/abs/custom');
     expect(config.logLevel).toBe('error');
+    expect(config.exports).toBe(true);
 
     const lib = config.lib![0]!;
     expect(lib.format).toBe('cjs');
