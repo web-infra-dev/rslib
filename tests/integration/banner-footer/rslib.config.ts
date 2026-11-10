@@ -79,6 +79,22 @@ export default defineConfig({
       },
       ...bannerFooterConfig,
     }),
+    // bundleless esm with `.jsx` output
+    generateBundleEsmConfig({
+      output: {
+        distPath: './dist/esm/bundleless-jsx',
+        filename: {
+          js: '[name].jsx',
+        },
+      },
+      bundle: false,
+      source: {
+        entry: {
+          index: ['./src/**'],
+        },
+      },
+      ...bannerFooterConfig,
+    }),
     // bundle esm
     generateBundleEsmConfig({
       output: {

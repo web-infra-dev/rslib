@@ -137,7 +137,7 @@ export function composeBannerFooterConfig(
           banner: bannerConfig.js,
           stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
           raw: true,
-          include: /\.(js|mjs|cjs)$/,
+          include: /\.(js|mjs|cjs|jsx)$/,
         }),
       );
     }
@@ -161,7 +161,7 @@ export function composeBannerFooterConfig(
           stage: rspack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
           raw: true,
           footer: true,
-          include: /\.(js|mjs|cjs)$/,
+          include: /\.(js|mjs|cjs|jsx)$/,
         }),
       );
     }
