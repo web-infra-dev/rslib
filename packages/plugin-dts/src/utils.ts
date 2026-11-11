@@ -1,4 +1,5 @@
 import { logger, type RsbuildConfig } from '@rsbuild/core';
+import type { Expression, Node } from '@swc-next/parser';
 import { getTsconfig } from 'get-tsconfig';
 import MagicString from 'magic-string';
 import fs from 'node:fs';
@@ -18,7 +19,6 @@ import path, {
 import { styleText } from 'node:util';
 import { convertPathToPattern, glob } from 'tinyglobby';
 import type { MatchPath } from 'tsconfig-paths';
-import type { Expression, Node } from '@swc-next/parser';
 import type { CompilerOptions } from 'typescript6-api';
 import type {
   DtsEntry,
