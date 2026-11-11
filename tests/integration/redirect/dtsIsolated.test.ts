@@ -45,6 +45,8 @@ describe('dts redirect with isolated', () => {
       import type { LoggerOptions } from './types.js';
       import { defaultOptions } from './types.js';
       type sources = typeof import('./logger.js');
+      export type InlineOptions = import('./types.js').LoggerOptions;
+      export type NestedFoo = Promise<Array<import('./types.js').Foo>>;
       export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from './foo/index.js';
       export * from './logger.js';
@@ -115,6 +117,8 @@ describe('dts redirect with isolated', () => {
       import type { LoggerOptions } from './types';
       import { defaultOptions } from './types.js';
       type sources = typeof import('@src/logger');
+      export type InlineOptions = import('./types').LoggerOptions;
+      export type NestedFoo = Promise<Array<import('@src/types').Foo>>;
       export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from '@src/foo';
       export * from '@src/logger';
@@ -185,6 +189,8 @@ describe('dts redirect with isolated', () => {
       import type { LoggerOptions } from './types';
       import { defaultOptions } from './types.js';
       type sources = typeof import('./logger');
+      export type InlineOptions = import('./types').LoggerOptions;
+      export type NestedFoo = Promise<Array<import('./types').Foo>>;
       export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from './foo';
       export * from './logger';
@@ -255,6 +261,8 @@ describe('dts redirect with isolated', () => {
       import type { LoggerOptions } from './types.js';
       import { defaultOptions } from './types.js';
       type sources = typeof import('@src/logger');
+      export type InlineOptions = import('./types.js').LoggerOptions;
+      export type NestedFoo = Promise<Array<import('@src/types').Foo>>;
       export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from '@src/foo';
       export * from '@src/logger';
@@ -325,6 +333,8 @@ describe('dts redirect with isolated', () => {
       import type { LoggerOptions } from './types.mjs';
       import { defaultOptions } from './types.mjs';
       type sources = typeof import('./logger.mjs');
+      export type InlineOptions = import('./types.mjs').LoggerOptions;
+      export type NestedFoo = Promise<Array<import('./types.mjs').Foo>>;
       export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from './foo/index.mjs';
       export * from './logger.mjs';
@@ -392,6 +402,8 @@ describe('dts redirect with isolated', () => {
       import type { LoggerOptions } from './types.js';
       import { defaultOptions } from './types.js';
       type sources = typeof import('./logger.js');
+      export type InlineOptions = import('./types.js').LoggerOptions;
+      export type NestedFoo = Promise<Array<import('./types.js').Foo>>;
       export { defaultOptions, fooMjs, logRequest, logger, sources, type LoggerOptions, type Baz as self };
       export * from './foo/index.js';
       export * from './logger.js';
