@@ -9,11 +9,11 @@ const normalizeVueModuleIds = (contents: Record<string, string>) =>
       file,
       content
         .replace(
-          /(\n\s*)\d+(?= \(__unused_rspack_module, exports\) \{)/g,
+          /(\n\s*)\w+(?= \(__unused_rspack_module, exports\) \{)/g,
           '$1<MODULE_ID>',
         )
         .replace(
-          /(rspackRequire|__webpack_require__)\("?\d+"?\)/g,
+          /(rspackRequire|__webpack_require__)\((?:"\w+"|\d+)\)/g,
           '$1("<MODULE_ID>")',
         ),
     ]),
@@ -55,7 +55,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
             Object.assign(moduleFactories, modules);
         };
         moduleFactories.add({
-            T (__unused_rspack_module, exports) {
+            <MODULE_ID> (__unused_rspack_module, exports) {
                 exports.A = (sfc, props)=>{
                     const target = sfc.__vccOpts || sfc;
                     for (const [key, val] of props)target[key] = val;
@@ -73,7 +73,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
                 return (_ctx, _cache)=>(openBlock(), createElementBlock("p", _hoisted_1, toDisplayString(button.value), 1));
             }
         };
-        const exportHelper = rspackRequire("T");
+        const exportHelper = rspackRequire("<MODULE_ID>");
         const __exports__ = /*#__PURE__*/ (0, exportHelper.A)(Buttonvue_type_script_setup_true_lang_js, [
             [
                 '__scopeId',
@@ -128,7 +128,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
         import "./style.css";
         import "./Button.css";
         moduleFactories.add({
-            T (__unused_rspack_module, exports) {
+            <MODULE_ID> (__unused_rspack_module, exports) {
                 exports.A = (sfc, props)=>{
                     const target = sfc.__vccOpts || sfc;
                     for (const [key, val] of props)target[key] = val;
@@ -146,7 +146,7 @@ describe.runIf(platform() !== 'win32')('ESM', async () => {
                 return (_ctx, _cache)=>(openBlock(), createElementBlock("p", _hoisted_1, toDisplayString(button.value), 1));
             }
         };
-        const exportHelper = rspackRequire("T");
+        const exportHelper = rspackRequire("<MODULE_ID>");
         const __exports__ = /*#__PURE__*/ (0, exportHelper.A)(Buttonvue_type_script_setup_true_lang_js, [
             [
                 '__scopeId',
