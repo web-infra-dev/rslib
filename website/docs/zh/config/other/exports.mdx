@@ -2,7 +2,11 @@
 description: '配置 exports，根据 Rslib 构建产物生成 package.json 的 exports 字段，支持类型声明文件、CSS、源码导出与自定义子路径。'
 ---
 
+import { ApiMeta } from '@components/ApiMeta';
+
 # exports
+
+<ApiMeta addedVersion="1.1.0" />
 
 - **类型：**
 
@@ -166,3 +170,9 @@ export default defineConfig({
   },
 });
 ```
+
+## 版本历史 \{#version-history}
+
+| 版本   | 变更                  |
+| ------ | --------------------- |
+| v1.1.0 | 新增 `exports` 配置。 |

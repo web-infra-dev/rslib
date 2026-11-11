@@ -2,6 +2,8 @@
 description: 'Learn about npm package version management and release practices for Rslib projects, including release preparation, versioning, build validation, npm publishing, shipping Agent Skills, and GitHub Actions integration.'
 ---
 
+import { ApiMeta } from '@components/ApiMeta';
+
 # Release management
 
 This chapter introduces npm package version management and release practices for Rslib projects.
@@ -47,6 +49,8 @@ Pay particular attention to the following fields:
 Also make sure that the package does not set `private: true`. It is also recommended to add `description`, `license`, and `repository` so users can understand and locate the project on npm.
 
 ### Generate exports
+
+<ApiMeta addedVersion="1.1.0" />
 
 Rslib supports generating the `exports` field from the build outputs. You can enable [exports](/config/other/exports) in the configuration file to use this feature:
 

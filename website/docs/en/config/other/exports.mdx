@@ -2,7 +2,11 @@
 description: 'Configure exports to generate the package.json exports field from Rslib build outputs, with declaration files, CSS, source files, and custom subpaths.'
 ---
 
+import { ApiMeta } from '@components/ApiMeta';
+
 # exports
+
+<ApiMeta addedVersion="1.1.0" />
 
 - **Type:**
 
@@ -166,3 +170,9 @@ export default defineConfig({
   },
 });
 ```
+
+## Version history
+
+| Version | Changes                     |
+| ------- | --------------------------- |
+| v1.1.0  | Added the `exports` option. |
