@@ -443,8 +443,12 @@ export async function redirectDtsImports(
     errorRecovery: true,
   });
   if (diagnostics.length && !program.body.length) {
+    const diagnostic = diagnostics[0]!;
+    const before = content.slice(0, diagnostic.start);
+    const line = before.split('\n').length;
+    const column = diagnostic.start - before.lastIndexOf('\n');
     logger.warn(
-      `Failed to parse ${color.cyan(dtsFile)}, imports in this file will not be redirected: ${diagnostics[0]!.message}`,
+      `Failed to parse ${color.cyan(`${dtsFile}:${line}:${column}`)}, imports in this file will not be redirected: ${diagnostic.message}`,
     );
   }
   const matchModule: { n: string; s: number; e: number; q: string }[] = [];
