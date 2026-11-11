@@ -11,27 +11,13 @@ import { ApiMeta } from '@components/ApiMeta';
 - **Type:**
 
 ```ts
-type ExportsValue =
-  string | null | ExportsValue[] | { [condition: string]: ExportsValue };
-
-type ExportsField = Record<string, ExportsValue>;
-
-type ExportsCustomItem =
-  | ExportsField
-  | ((
-      exports: ExportsField,
-      context: { pkg: Record<string, unknown>; isPublish: boolean },
-    ) => ExportsField | Promise<ExportsField>);
-
-type ExportsCustom = ExportsCustomItem | ExportsCustomItem[];
-
 type Exports =
   | boolean
   | {
       include?: string[];
       exclude?: string[];
       source?: boolean | string;
-      custom?: ExportsCustom;
+      custom?: object | Function | Array<object | Function>;
     };
 ```
 
@@ -56,10 +42,10 @@ Rslib does not generate the `exports` field in watch mode, or when only some lib
 
 ## Generation rules
 
-- Only ESM and CJS outputs are exported.
+- Only ESM and CJS outputs can be exported.
 - The `index` entry is exported as `.`, `button/index` as `./button`, and other entries by their names.
 - If an entry has both ESM and CJS outputs, they are distinguished by the `import` and `require` conditions. If it has only one format, the output path is used directly.
-- For libs with [dts](/config/lib/dts) enabled, a `types` condition is added if TypeScript cannot find the declaration files from the output paths.
+- When [dts](/config/lib/dts) is enabled, a `types` condition is added if TypeScript cannot find the declaration files from the output paths.
 - In bundle mode, the CSS files generated for the entries are also exported.
 
 The following example shows the result for a library that builds both ESM and CJS outputs:
@@ -68,8 +54,8 @@ The following example shows the result for a library that builds both ESM and CJ
 {
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.cjs"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   }
 }
@@ -80,7 +66,7 @@ The following example shows the result for a library that builds both ESM and CJ
 - **Type:** `string[]`
 - **Default:** all entries are exported in bundle mode, and only `index` is exported in bundleless mode
 
-Selects the outputs to export. Each glob pattern is matched against the output paths relative to the output directory, and the extension can be omitted.
+Selects the outputs to export. The glob patterns are matched against the output paths relative to the output directory, and the extension can be omitted.
 
 For example, to export the `index` files in the root directory and in each component directory in bundleless mode:
 
@@ -137,13 +123,30 @@ For example, `source: '@scope/source'` generates:
 
 ## exports.custom
 
-- **Type:** `ExportsCustom`
+- **Type:**
+
+```ts
+type ExportsValue =
+  string | null | ExportsValue[] | { [condition: string]: ExportsValue };
+
+type ExportsField = Record<string, ExportsValue>;
+
+type ExportsCustomItem =
+  | ExportsField
+  | ((
+      exports: ExportsField,
+      context: { pkg: Record<string, unknown>; isPublishConfig: boolean },
+    ) => ExportsField | Promise<ExportsField>);
+
+type ExportsCustom = ExportsCustomItem | ExportsCustomItem[];
+```
+
 - **Default:** `undefined`
 
 Customizes the generated exports.
 
 - When an object is passed, its subpaths are added to the generated result, and subpaths with the same name are replaced.
-- When a function is passed, it receives the generated exports and returns the final result. When `source` is `true`, `exports` and `publishConfig.exports` are each passed through the function, and you can tell them apart by `isPublish` in the second argument, which is `true` for `publishConfig.exports`.
+- When a function is passed, it receives the generated exports and returns the final result. When `source` is `true`, `exports` and `publishConfig.exports` are each passed through the function, and you can tell them apart by `isPublishConfig` in the second argument.
 - When an array is passed, its items are applied in order.
 
 For example, to add the `./package.json` subpath:

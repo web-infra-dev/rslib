@@ -138,7 +138,7 @@ export const ExportsPlugin = ({
       ...pkg,
       exports: await customizeExports(exports, options, {
         pkg,
-        isPublish: false,
+        isPublishConfig: false,
       }),
     };
     if (publishExports) {
@@ -146,7 +146,7 @@ export const ExportsPlugin = ({
         ...pkg.publishConfig,
         exports: await customizeExports(publishExports, options, {
           pkg,
-          isPublish: true,
+          isPublishConfig: true,
         }),
       };
     } else if (pkg.publishConfig && 'exports' in pkg.publishConfig) {

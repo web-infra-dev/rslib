@@ -288,7 +288,7 @@ describe('exports', () => {
     expect(contexts).toEqual([
       {
         pkg: JSON.parse(packageJsonContents.get(fixture)!),
-        isPublish: false,
+        isPublishConfig: false,
       },
     ]);
   });
@@ -451,8 +451,8 @@ describe('exports', () => {
       modifyConfig: (config) => {
         config.exports = {
           source: true,
-          custom: (exports, { isPublish }) => {
-            contexts.push(isPublish);
+          custom: (exports, { isPublishConfig }) => {
+            contexts.push(isPublishConfig);
             return exports;
           },
         };

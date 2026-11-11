@@ -11,27 +11,13 @@ import { ApiMeta } from '@components/ApiMeta';
 - **类型：**
 
 ```ts
-type ExportsValue =
-  string | null | ExportsValue[] | { [condition: string]: ExportsValue };
-
-type ExportsField = Record<string, ExportsValue>;
-
-type ExportsCustomItem =
-  | ExportsField
-  | ((
-      exports: ExportsField,
-      context: { pkg: Record<string, unknown>; isPublish: boolean },
-    ) => ExportsField | Promise<ExportsField>);
-
-type ExportsCustom = ExportsCustomItem | ExportsCustomItem[];
-
 type Exports =
   | boolean
   | {
       include?: string[];
       exclude?: string[];
       source?: boolean | string;
-      custom?: ExportsCustom;
+      custom?: object | Function | Array<object | Function>;
     };
 ```
 
@@ -56,10 +42,10 @@ export default defineConfig({
 
 ## 生成规则
 
-- 只导出 ESM 和 CJS 产物。
+- 仅支持导出 ESM 和 CJS 产物。
 - `index` 入口导出为 `.`，`button/index` 导出为 `./button`，其他入口按入口名导出。
 - 如果同一入口同时有 ESM 和 CJS 产物，会使用 `import` 和 `require` 条件区分；如果只有一种格式，则直接使用产物路径。
-- 对于开启了 [dts](/config/lib/dts) 的 lib，如果 TypeScript 无法根据产物路径找到类型声明文件，会添加 `types` 条件。
+- 当开启 [dts](/config/lib/dts) 时，如果 TypeScript 无法根据产物路径找到类型声明文件，会添加 `types` 条件。
 - bundle 模式下，入口生成的 CSS 文件也会被导出。
 
 以下示例展示了一个库同时构建出 ESM 和 CJS 产物的生成结果：
@@ -68,8 +54,8 @@ export default defineConfig({
 {
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.cjs"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   }
 }
@@ -80,7 +66,7 @@ export default defineConfig({
 - **类型：** `string[]`
 - **默认值：** bundle 模式下导出所有入口，bundleless 模式下只导出 `index`
 
-用于选择要导出的产物。glob 会与产物相对于输出目录的路径进行匹配，可以省略扩展名。
+用于选择要导出的产物。配置的 glob 表达式会与产物相对于输出目录的路径进行匹配，支持省略扩展名。
 
 例如，在 bundleless 模式下导出根目录和各组件目录下的 `index`：
 
@@ -137,13 +123,30 @@ export default defineConfig({
 
 ## exports.custom
 
-- **类型：** `ExportsCustom`
+- **类型：**
+
+```ts
+type ExportsValue =
+  string | null | ExportsValue[] | { [condition: string]: ExportsValue };
+
+type ExportsField = Record<string, ExportsValue>;
+
+type ExportsCustomItem =
+  | ExportsField
+  | ((
+      exports: ExportsField,
+      context: { pkg: Record<string, unknown>; isPublishConfig: boolean },
+    ) => ExportsField | Promise<ExportsField>);
+
+type ExportsCustom = ExportsCustomItem | ExportsCustomItem[];
+```
+
 - **默认值：** `undefined`
 
 用于自定义生成的 exports。
 
 - 传入对象时，其中的子路径会被添加到生成结果中，同名的子路径会被替换。
-- 传入函数时，函数接收生成的 exports，并返回最终结果。当 `source` 为 `true` 时，`exports` 和 `publishConfig.exports` 会分别经过该函数处理，可以通过第二个参数中的 `isPublish` 区分，处理 `publishConfig.exports` 时其值为 `true`。
+- 传入函数时，函数接收生成的 exports，并返回最终结果。当 `source` 为 `true` 时，`exports` 和 `publishConfig.exports` 会分别经过该函数处理，可以通过第二个参数中的 `isPublishConfig` 区分。
 - 传入数组时，会按顺序依次应用其中的每一项。
 
 例如，追加 `./package.json` 子路径：

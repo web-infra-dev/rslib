@@ -592,7 +592,7 @@ export type ExportsCustomContext = {
   /** The content of package.json before writing. */
   pkg: Record<string, unknown>;
   /** Whether the result is written to `publishConfig.exports`. */
-  isPublish: boolean;
+  isPublishConfig: boolean;
 };
 
 export type ExportsCustomFunction = (
@@ -636,7 +636,7 @@ export type ExportsOptions = {
    *   with the same name replaces the generated one as a whole.
    * - Function: receives the generated exports and returns the final exports.
    *   When {@link source} is `true`, it is called again for
-   *   `publishConfig.exports`, with `isPublish` set to `true`.
+   *   `publishConfig.exports`, with `isPublishConfig` set to `true`.
    * - Array: its items are applied in order.
    * @defaultValue `undefined`
    * @see {@link https://rslib.rs/config/other/exports#exportscustom}
