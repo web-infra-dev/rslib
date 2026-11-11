@@ -38,12 +38,19 @@ let swcNextParser: Promise<typeof import('@swc-next/parser')> | undefined;
 let swcNextWalker: Promise<typeof import('@swc-next/walker')> | undefined;
 
 const loadSwcNextParser = (): Promise<typeof import('@swc-next/parser')> => {
-  swcNextParser ??= import('@swc-next/parser');
+  swcNextParser ??= import('@swc-next/parser').catch((err: unknown) => {
+    // Do not cache a failed load, so the next call retries.
+    swcNextParser = undefined;
+    throw err;
+  });
   return swcNextParser;
 };
 
 const loadSwcNextWalker = (): Promise<typeof import('@swc-next/walker')> => {
-  swcNextWalker ??= import('@swc-next/walker');
+  swcNextWalker ??= import('@swc-next/walker').catch((err: unknown) => {
+    swcNextWalker = undefined;
+    throw err;
+  });
   return swcNextWalker;
 };
 
