@@ -73,7 +73,7 @@ type EntrySlots = Partial<Record<Format, FormatSlot>> & {
 };
 
 // Extensions of the outputs that `include` and `exclude` match without them.
-const OUTPUT_EXTENSION = /\.(?:js|mjs|cjs|css)$/;
+const OUTPUT_EXTENSION = /\.(?:js|jsx|mjs|cjs|css)$/;
 
 /**
  * Match an output path relative to the output directory, either as it is or

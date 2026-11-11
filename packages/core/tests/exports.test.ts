@@ -195,6 +195,21 @@ describe('generateExports with include and exclude', () => {
     ).toEqual({ '.': './dist/esm/index.js' });
   });
 
+  it('should match JSX outputs without their extensions', () => {
+    const collected = {
+      esm: [
+        entry('index', 'dist/index.jsx'),
+        entry('internal/index', 'dist/internal/index.jsx'),
+      ],
+    };
+    expect(
+      generate([bundleless], collected, {
+        include: ['**/index'],
+        exclude: ['internal/index'],
+      }).exports,
+    ).toEqual({ '.': './dist/index.jsx' });
+  });
+
   it('should select the JavaScript and CSS of an entry separately', () => {
     const libs = [createLibInfo('esm', 'esm')];
     const collected = {
