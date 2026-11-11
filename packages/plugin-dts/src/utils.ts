@@ -34,24 +34,23 @@ const typescriptCache = new Map<string, typeof import('typescript6-api')>();
 export const createRequireFromPackageJson = (cwd: string): NodeJS.Require =>
   createRequire(join(cwd, 'package.json'));
 
-let swcNextParser: Promise<typeof import('@swc-next/parser')> | undefined;
-let swcNextWalker: Promise<typeof import('@swc-next/walker')> | undefined;
+type SwcNext = [
+  typeof import('@swc-next/parser'),
+  typeof import('@swc-next/walker'),
+];
 
-const loadSwcNextParser = (): Promise<typeof import('@swc-next/parser')> => {
-  swcNextParser ??= import('@swc-next/parser').catch((err: unknown) => {
+let swcNext: Promise<SwcNext> | undefined;
+
+const loadSwcNext = (): Promise<SwcNext> => {
+  swcNext ??= Promise.all([
+    import('@swc-next/parser'),
+    import('@swc-next/walker'),
+  ]).catch((err: unknown) => {
     // Do not cache a failed load, so the next call retries.
-    swcNextParser = undefined;
+    swcNext = undefined;
     throw err;
   });
-  return swcNextParser;
-};
-
-const loadSwcNextWalker = (): Promise<typeof import('@swc-next/walker')> => {
-  swcNextWalker ??= import('@swc-next/walker').catch((err: unknown) => {
-    swcNextWalker = undefined;
-    throw err;
-  });
-  return swcNextWalker;
+  return swcNext;
 };
 
 export const loadTypescript = (
@@ -434,8 +433,7 @@ export async function redirectDtsImports(
   fileSystem: DtsFileSystem,
 ): Promise<string> {
   const code = new MagicString(content);
-  const { parseSync } = await loadSwcNextParser();
-  const { walk } = await loadSwcNextWalker();
+  const [{ parseSync }, { walk }] = await loadSwcNext();
   const { program, diagnostics } = parseSync(content, {
     lang: 'dts',
     // Return diagnostics instead of throwing. Some diagnostics still come with
