@@ -37,11 +37,9 @@ describe('redirectDtsImports', () => {
   test('should escape redirected specifiers for the original quote', async () => {
     expect(
       await redirect(
-        [
-          "import a from './it\\'s';",
-          'import b from "./say\\"hi";',
-          '',
-        ].join('\n'),
+        ["import a from './it\\'s';", 'import b from "./say\\"hi";', ''].join(
+          '\n',
+        ),
       ),
     ).toBe(
       [
