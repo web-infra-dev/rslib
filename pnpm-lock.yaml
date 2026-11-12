@@ -388,8 +388,8 @@ catalogs:
       specifier: ^1.0.0
       version: 1.0.0
     rslib:
-      specifier: npm:@rslib/core@1.0.6
-      version: 1.0.6
+      specifier: npm:@rslib/core@1.0.7
+      version: 1.0.7
     rslog:
       specifier: ^2.3.0
       version: 2.3.0
@@ -469,7 +469,7 @@ importers:
     devDependencies:
       '@rstest/adapter-rslib':
         specifier: 'catalog:'
-        version: 0.12.6(@rslib/core@1.0.6)(@rstest/core@0.12.6)(typescript@7.0.2)
+        version: 0.12.6(@rslib/core@1.0.7)(@rstest/core@0.12.6)(typescript@7.0.2)
       '@rstest/core':
         specifier: 'catalog:'
         version: 0.12.6(@module-federation/runtime-tools@2.9.3)
@@ -825,7 +825,7 @@ importers:
         version: 1.0.0(@rsbuild/core@2.3.2)
       rslib:
         specifier: 'catalog:'
-        version: '@rslib/core@1.0.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.0.2)'
+        version: '@rslib/core@1.0.7(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.0.2)'
       rslog:
         specifier: 'catalog:'
         version: 2.3.0
@@ -862,7 +862,7 @@ importers:
         version: 1.0.0(@rsbuild/core@2.3.2)
       rslib:
         specifier: 'catalog:'
-        version: '@rslib/core@1.0.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.0.2)'
+        version: '@rslib/core@1.0.7(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.0.2)'
       tsx:
         specifier: 'catalog:'
         version: 4.23.15
@@ -896,7 +896,7 @@ importers:
         version: 1.0.0(@rsbuild/core@2.3.2)
       rslib:
         specifier: 'catalog:'
-        version: '@rslib/core@1.0.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.1.0-dev.20261107.1)'
+        version: '@rslib/core@1.0.7(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.1.0-dev.20261107.1)'
       tinyglobby:
         specifier: 'catalog:'
         version: 0.2.17
@@ -1984,22 +1984,10 @@ packages:
       react: '>=16'
       react-dom: '>=16'
 
-  '@ast-grep/napi-darwin-arm64@0.51.0':
-    resolution: {integrity: sha512-jKzwYtHqVAY3F6Ch9sE4zRc2iDP74U2bJB2AucRDpQe3HrHUz4rCCfXS4PZpq9FL+kI6YS+qglZG3LRgnv1JsA==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [darwin]
-
   '@ast-grep/napi-darwin-arm64@0.51.1':
     resolution: {integrity: sha512-kc9phT4a0wpM2GAjqn+RySI/pS7hET78TOvsjTdFeEnZ7tdh887wyqjp6+J1ZxVw+/N66m7TauoSLIzkqdeR1Q==}
     engines: {node: '>= 10'}
     cpu: [arm64]
-    os: [darwin]
-
-  '@ast-grep/napi-darwin-x64@0.51.0':
-    resolution: {integrity: sha512-P0Vrid8pJrLuhJ23TskxsqzZYdATOY49JfC6u4295CTz2O9hPH+YkURIPYpV424AItsQ6I4LfyJieXaK+noNcQ==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
     os: [darwin]
 
   '@ast-grep/napi-darwin-x64@0.51.1':
@@ -2008,26 +1996,12 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@ast-grep/napi-linux-arm64-gnu@0.51.0':
-    resolution: {integrity: sha512-0TEQf4dydUVL2ieG8aVyxSF+JdoPJDqyHTHfXIOVpYRmuwFS5MC0Lt1kjh5mO3uFzxF1dqobqigeKB7UhklfRQ==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-    libc: [glibc]
-
   '@ast-grep/napi-linux-arm64-gnu@0.51.1':
     resolution: {integrity: sha512-oUV+9XSdBwgMOneaG4qrDgDlbKOex/nwZ/xxN/LtrxHAN3y2DvUqG5Ds952F/shXJUxjqPRqsGUnB4chTpoj4Q==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
-
-  '@ast-grep/napi-linux-arm64-musl@0.51.0':
-    resolution: {integrity: sha512-2rqfTEwNjaYsi2Db76BIfmRTF28P2fLul05G8EvX1p7YHL9y2pn+on8Ex/SuPnS2whpNn399h8GQ7hupPNugwQ==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-    libc: [musl]
 
   '@ast-grep/napi-linux-arm64-musl@0.51.1':
     resolution: {integrity: sha512-KvCR7JDFMAeEz7Ev84wkQOxCl8xJ/hZ3K2ps2Y0ZM52VrrAheT4Z7VmCTcYp8PZgO+DdocUP6WomCrYv1iEdFA==}
@@ -2036,26 +2010,12 @@ packages:
     os: [linux]
     libc: [musl]
 
-  '@ast-grep/napi-linux-x64-gnu@0.51.0':
-    resolution: {integrity: sha512-V2kuGNPF6rA5OGK6eMxEdUtzDy4lMJyPeCh0LnO3nL7gscRBaytwUBhx851mutOUqQkGbgZwAdDXv77VaeWKDg==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-    libc: [glibc]
-
   '@ast-grep/napi-linux-x64-gnu@0.51.1':
     resolution: {integrity: sha512-qjPDrnHd6mO3JfQS4VZRN5/W1as58y2jgb6sdZcSHvKvpwpYgt9Rlr37r6cwH8riA4uNpATrVH4jMnsAgZGYKg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
-
-  '@ast-grep/napi-linux-x64-musl@0.51.0':
-    resolution: {integrity: sha512-yOYdRAP6i8tEuDx8RgayAirn3fhNIA/aA3mQ4OibPIR9q4uzl0uJeGH6xjdcFhXCbCgIuTuPQKxIIO5HnPazIQ==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-    libc: [musl]
 
   '@ast-grep/napi-linux-x64-musl@0.51.1':
     resolution: {integrity: sha512-KOmiN+hwt83aldhV7YvczKZb4hBDk+cksECV7r3Mtc67MkpBHt1scrp7NsjGS8jZf8NRLTptpODVy9tyFG4znw==}
@@ -2064,22 +2024,10 @@ packages:
     os: [linux]
     libc: [musl]
 
-  '@ast-grep/napi-win32-arm64-msvc@0.51.0':
-    resolution: {integrity: sha512-/pwe01sSnKdVMyybKiJ8tvOaaM3dUVXj9JiYHEAs14xTAS0RWKMOAoqpKxB97Yg4ukssQiemUiViBby88TGy6A==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [win32]
-
   '@ast-grep/napi-win32-arm64-msvc@0.51.1':
     resolution: {integrity: sha512-cMeOau20XOTpPoiAfwdE/ZhowXuxJerqn8MweyJOVxMwSMinQwAyrixeFXC/2oBff0j/UC5/DhnLL/Vg385MFA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
-    os: [win32]
-
-  '@ast-grep/napi-win32-ia32-msvc@0.51.0':
-    resolution: {integrity: sha512-RF49CWQslYIx1DGq090a3gqBQEYxLBmg8CsVRgnEyF0KDlcGinCDeRg/EqxVyDQ+e9VT3ycKpUjby+V7aMujXg==}
-    engines: {node: '>= 10'}
-    cpu: [ia32]
     os: [win32]
 
   '@ast-grep/napi-win32-ia32-msvc@0.51.1':
@@ -2088,21 +2036,11 @@ packages:
     cpu: [ia32]
     os: [win32]
 
-  '@ast-grep/napi-win32-x64-msvc@0.51.0':
-    resolution: {integrity: sha512-OlGEtNSx1q2NdRXOSHBEGtuyZXS6Ix3bE2HdGepuYnNZJoafvX/WljkO+kzNimJGGSXTs6/t+o7XeGsB8vL/Bw==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [win32]
-
   '@ast-grep/napi-win32-x64-msvc@0.51.1':
     resolution: {integrity: sha512-MVgY2fgh/VHFLa+gpIPZLgwoXWeBIwz7gfJh79l71b9pJJm1F3c5fKzZNClnP362gV1e+svtJ0XiJXTUnCf52w==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
-
-  '@ast-grep/napi@0.51.0':
-    resolution: {integrity: sha512-thHIZoygVkwW/6yBFBgqPtmKpAnEfwsJyIFliKo6hxkXlYLLfvwReDH2le/5zk358ir/97IJdTB7xv309LYbSQ==}
-    engines: {node: '>= 10'}
 
   '@ast-grep/napi@0.51.1':
     resolution: {integrity: sha512-pdIyBOsQy9E46s8W9qcEH9ZDjx5nacxnn0cP+17qTuM6D1YoIvKlaz8n8yE1dkTAP59yjCp2t3cpMnacq2YJkw==}
@@ -3438,8 +3376,8 @@ packages:
       '@rsbuild/core':
         optional: true
 
-  '@rslib/core@1.0.6':
-    resolution: {integrity: sha512-EWBYwtq4UuONBvu0PdyH7ERfiFQkBnwkwPL38MqHIf3lB0VhsiKkU6wtLdbVxrl9wwhpaodbnaSVccM5V/y7Jw==}
+  '@rslib/core@1.0.7':
+    resolution: {integrity: sha512-ew5zQApPo/MuNgsOoE//33gNzWJZEQopLX5/wDUdSxIZ5aKcW/ZDYZxuAWiw16EI6L51bh6WEKB9im1CeQQEAA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -7213,8 +7151,8 @@ packages:
     resolution: {integrity: sha512-nLTrUKm2UyiL7rlhapu/Zl45FwNgkZGaCpZbIHajDYgwlJCOzLSk+cIPAnsEqV955GjILJnKbdQC1nVPz+gAYQ==}
     engines: {node: '>= 18'}
 
-  rsbuild-plugin-dts@1.0.6:
-    resolution: {integrity: sha512-KvSmhCfqZpNCF8F+xw40uFYZrp4SR264QvsjBLoXobMEuSVb/LffvfjAk/TqJ1LmWI9B7eGWeKMBOFIW5VIScQ==}
+  rsbuild-plugin-dts@1.0.7:
+    resolution: {integrity: sha512-r9+bGoY0EmOB5Jisxd7qFQNTTcMTtB0Ke0oDZDYEEAvrpzTCvjWH2UtsscUnOwyPeUauXR2fBME+Vny8aVD66w==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@microsoft/api-extractor': ^7
@@ -8348,71 +8286,32 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@ast-grep/napi-darwin-arm64@0.51.0':
-    optional: true
-
   '@ast-grep/napi-darwin-arm64@0.51.1':
-    optional: true
-
-  '@ast-grep/napi-darwin-x64@0.51.0':
     optional: true
 
   '@ast-grep/napi-darwin-x64@0.51.1':
     optional: true
 
-  '@ast-grep/napi-linux-arm64-gnu@0.51.0':
-    optional: true
-
   '@ast-grep/napi-linux-arm64-gnu@0.51.1':
-    optional: true
-
-  '@ast-grep/napi-linux-arm64-musl@0.51.0':
     optional: true
 
   '@ast-grep/napi-linux-arm64-musl@0.51.1':
     optional: true
 
-  '@ast-grep/napi-linux-x64-gnu@0.51.0':
-    optional: true
-
   '@ast-grep/napi-linux-x64-gnu@0.51.1':
-    optional: true
-
-  '@ast-grep/napi-linux-x64-musl@0.51.0':
     optional: true
 
   '@ast-grep/napi-linux-x64-musl@0.51.1':
     optional: true
 
-  '@ast-grep/napi-win32-arm64-msvc@0.51.0':
-    optional: true
-
   '@ast-grep/napi-win32-arm64-msvc@0.51.1':
-    optional: true
-
-  '@ast-grep/napi-win32-ia32-msvc@0.51.0':
     optional: true
 
   '@ast-grep/napi-win32-ia32-msvc@0.51.1':
     optional: true
 
-  '@ast-grep/napi-win32-x64-msvc@0.51.0':
-    optional: true
-
   '@ast-grep/napi-win32-x64-msvc@0.51.1':
     optional: true
-
-  '@ast-grep/napi@0.51.0':
-    optionalDependencies:
-      '@ast-grep/napi-darwin-arm64': 0.51.0
-      '@ast-grep/napi-darwin-x64': 0.51.0
-      '@ast-grep/napi-linux-arm64-gnu': 0.51.0
-      '@ast-grep/napi-linux-arm64-musl': 0.51.0
-      '@ast-grep/napi-linux-x64-gnu': 0.51.0
-      '@ast-grep/napi-linux-x64-musl': 0.51.0
-      '@ast-grep/napi-win32-arm64-msvc': 0.51.0
-      '@ast-grep/napi-win32-ia32-msvc': 0.51.0
-      '@ast-grep/napi-win32-x64-msvc': 0.51.0
 
   '@ast-grep/napi@0.51.1':
     optionalDependencies:
@@ -9921,10 +9820,10 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.3.2(@module-federation/runtime-tools@2.9.3)
 
-  '@rslib/core@1.0.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.0.2)':
+  '@rslib/core@1.0.7(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.0.2)':
     dependencies:
       '@rsbuild/core': 2.3.2(@module-federation/runtime-tools@2.9.3)
-      rsbuild-plugin-dts: 1.0.6(@microsoft/api-extractor@7.60.1)(@rsbuild/core@2.3.2)(typescript@7.0.2)
+      rsbuild-plugin-dts: 1.0.7(@microsoft/api-extractor@7.60.1)(@rsbuild/core@2.3.2)(typescript@7.0.2)
     optionalDependencies:
       '@microsoft/api-extractor': 7.60.1(@types/node@26.6.6)
       typescript: 7.0.2
@@ -9932,10 +9831,10 @@ snapshots:
       - '@module-federation/runtime-tools'
       - core-js
 
-  '@rslib/core@1.0.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.1.0-dev.20261107.1)':
+  '@rslib/core@1.0.7(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.1.0-dev.20261107.1)':
     dependencies:
       '@rsbuild/core': 2.3.2(@module-federation/runtime-tools@2.9.3)
-      rsbuild-plugin-dts: 1.0.6(@microsoft/api-extractor@7.60.1)(@rsbuild/core@2.3.2)(typescript@7.1.0-dev.20261107.1)
+      rsbuild-plugin-dts: 1.0.7(@microsoft/api-extractor@7.60.1)(@rsbuild/core@2.3.2)(typescript@7.1.0-dev.20261107.1)
     optionalDependencies:
       '@microsoft/api-extractor': 7.60.1(@types/node@26.6.6)
       typescript: 7.1.0-dev.20261107.1
@@ -10203,9 +10102,9 @@ snapshots:
     optionalDependencies:
       '@rspress/core': 2.1.1(@module-federation/runtime-tools@2.9.3)(@rspack/core@2.3.2)(micromark-util-types@2.0.2)(micromark@4.0.2)(supports-color@8.1.1)
 
-  '@rstest/adapter-rslib@0.12.6(@rslib/core@1.0.6)(@rstest/core@0.12.6)(typescript@7.0.2)':
+  '@rstest/adapter-rslib@0.12.6(@rslib/core@1.0.7)(@rstest/core@0.12.6)(typescript@7.0.2)':
     dependencies:
-      '@rslib/core': 1.0.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.0.2)
+      '@rslib/core': 1.0.7(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.0.2)
       '@rstest/core': 0.12.6(@module-federation/runtime-tools@2.9.3)
     optionalDependencies:
       typescript: 7.0.2
@@ -14173,17 +14072,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@1.0.6(@microsoft/api-extractor@7.60.1)(@rsbuild/core@2.3.2)(typescript@7.0.2):
+  rsbuild-plugin-dts@1.0.7(@microsoft/api-extractor@7.60.1)(@rsbuild/core@2.3.2)(typescript@7.0.2):
     dependencies:
-      '@ast-grep/napi': 0.51.0
+      '@ast-grep/napi': 0.51.1
       '@rsbuild/core': 2.3.2(@module-federation/runtime-tools@2.9.3)
     optionalDependencies:
       '@microsoft/api-extractor': 7.60.1(@types/node@26.6.6)
       typescript: 7.0.2
 
-  rsbuild-plugin-dts@1.0.6(@microsoft/api-extractor@7.60.1)(@rsbuild/core@2.3.2)(typescript@7.1.0-dev.20261107.1):
+  rsbuild-plugin-dts@1.0.7(@microsoft/api-extractor@7.60.1)(@rsbuild/core@2.3.2)(typescript@7.1.0-dev.20261107.1):
     dependencies:
-      '@ast-grep/napi': 0.51.0
+      '@ast-grep/napi': 0.51.1
       '@rsbuild/core': 2.3.2(@module-federation/runtime-tools@2.9.3)
     optionalDependencies:
       '@microsoft/api-extractor': 7.60.1(@types/node@26.6.6)
@@ -14255,7 +14154,7 @@ snapshots:
   rstack@0.9.0(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(@rspress/core@2.1.1)(jiti@2.7.0)(typescript@7.0.2):
     dependencies:
       '@rsbuild/core': 2.3.2(@module-federation/runtime-tools@2.9.3)
-      '@rslib/core': 1.0.6(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.0.2)
+      '@rslib/core': 1.0.7(@microsoft/api-extractor@7.60.1)(@module-federation/runtime-tools@2.9.3)(typescript@7.0.2)
       '@rslint/core': 0.10.0(jiti@2.7.0)
       '@rstest/core': 0.12.6(@module-federation/runtime-tools@2.9.3)
       '@swc-next/parser': 0.4.1
