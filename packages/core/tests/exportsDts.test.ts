@@ -2,7 +2,11 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it, rs } from '@rstest/core';
-import { type DeclarationFile, findDeclarationFile } from '../src/exports/dts';
+import {
+  type DeclarationFile,
+  findDeclarationFile,
+  resolveDtsDistPath,
+} from '../src/exports/dts';
 import { type CollectedEntry, generateExports } from '../src/exports/generate';
 import type { RequireKey, RsbuildConfigWithLibInfo } from '../src/types';
 
@@ -13,7 +17,7 @@ type LibInfo = RequireKey<RsbuildConfigWithLibInfo, 'id'>;
 const findWithFiles = async (
   jsFile: string,
   files: string[],
-  dtsDistPath?: string,
+  dtsDistPath = 'dist',
 ) => {
   const root = await mkdtemp(path.join(tmpdir(), 'rslib-exports-dts-'));
   try {
@@ -25,7 +29,7 @@ const findWithFiles = async (
       jsFile,
       root,
       outputPath: path.join(root, 'dist'),
-      dtsDistPath: dtsDistPath && path.join(root, dtsDistPath),
+      dtsDistPath: path.join(root, dtsDistPath),
     });
   } finally {
     await rm(root, { recursive: true, force: true });
@@ -65,7 +69,7 @@ describe('findDeclarationFile', () => {
     expect(await findWithFiles('dist/index.js', [])).toBeUndefined();
   });
 
-  it('should find the declaration file in dts.distPath as unmatched', async () => {
+  it('should find the declaration file in another directory as unmatched', async () => {
     expect(
       await findWithFiles(
         'dist/utils/numbers.js',
@@ -75,10 +79,101 @@ describe('findDeclarationFile', () => {
     ).toEqual({ file: 'dist/types/utils/numbers.d.ts', matched: false });
   });
 
-  it('should look up next to the output when dts.distPath is the output directory', async () => {
+  it('should look up next to the output when declaration files are emitted to the output directory', async () => {
     expect(
       await findWithFiles('dist/index.js', ['dist/index.d.ts'], 'dist'),
     ).toEqual({ file: 'dist/index.d.ts', matched: true });
+  });
+});
+
+describe('resolveDtsDistPath', () => {
+  const resolveWithFiles = async (
+    files: Record<string, unknown>,
+    options: { cwd?: string; distPath?: string; tsconfigPath?: string } = {},
+  ) => {
+    const root = await mkdtemp(path.join(tmpdir(), 'rslib-exports-dts-'));
+    try {
+      for (const [file, content] of Object.entries(files)) {
+        await mkdir(path.dirname(path.join(root, file)), { recursive: true });
+        await writeFile(path.join(root, file), JSON.stringify(content));
+      }
+      const cwd = path.join(root, options.cwd ?? '');
+      const tsconfigPath =
+        options.tsconfigPath && path.isAbsolute(options.tsconfigPath)
+          ? path.join(root, options.tsconfigPath)
+          : options.tsconfigPath;
+      const dtsDistPath = resolveDtsDistPath({
+        root: cwd,
+        distPath: options.distPath,
+        tsconfigPath,
+        outputPath: path.join(cwd, 'dist'),
+      });
+      return path.relative(root, dtsDistPath).replaceAll(path.sep, '/');
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  };
+
+  it('should prefer dts.distPath', async () => {
+    expect(
+      await resolveWithFiles(
+        { 'tsconfig.json': { compilerOptions: { declarationDir: 'types' } } },
+        { distPath: './dist/types' },
+      ),
+    ).toBe('dist/types');
+  });
+
+  it('should use declarationDir relative to the tsconfig that sets it', async () => {
+    expect(
+      await resolveWithFiles({
+        'tsconfig.json': { extends: './configs/tsconfig.base.json' },
+        'configs/tsconfig.base.json': {
+          compilerOptions: { declarationDir: '../dist/types' },
+        },
+      }),
+    ).toBe('dist/types');
+  });
+
+  it('should read the tsconfig from source.tsconfigPath', async () => {
+    expect(
+      await resolveWithFiles(
+        {
+          'tsconfig.json': { compilerOptions: { declarationDir: 'types' } },
+          'tsconfig.build.json': {
+            compilerOptions: { declarationDir: 'dist/types' },
+          },
+        },
+        { tsconfigPath: 'tsconfig.build.json' },
+      ),
+    ).toBe('dist/types');
+  });
+
+  it('should read the tsconfig from an absolute source.tsconfigPath', async () => {
+    expect(
+      await resolveWithFiles(
+        {
+          'configs/tsconfig.json': {
+            compilerOptions: { declarationDir: '../dist/types' },
+          },
+        },
+        { tsconfigPath: '/configs/tsconfig.json' },
+      ),
+    ).toBe('dist/types');
+  });
+
+  it('should search for the tsconfig in parent directories', async () => {
+    expect(
+      await resolveWithFiles(
+        { 'tsconfig.json': { compilerOptions: { declarationDir: 'types' } } },
+        { cwd: 'packages/foo' },
+      ),
+    ).toBe('types');
+  });
+
+  it('should fall back to the output directory', async () => {
+    expect(
+      await resolveWithFiles({ 'tsconfig.json': { compilerOptions: {} } }),
+    ).toBe('dist');
   });
 });
 

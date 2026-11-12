@@ -13,7 +13,7 @@ import type {
 } from '../types';
 import { logger } from '../utils/logger';
 import { normalizeSlash } from '../utils/helper';
-import { findDeclarationFile } from './dts';
+import { findDeclarationFile, resolveDtsDistPath } from './dts';
 import { type CollectedEntry, generateExports } from './generate';
 import { stringifyPackageJson } from './packageJson';
 
@@ -46,14 +46,21 @@ export const ExportsPlugin = ({
   const toRelative = (file: string) =>
     normalizeSlash(path.relative(root, file));
 
-  const collect = (compilation: Rspack.Compilation): CollectedEntry[] => {
+  const collect = (
+    compilation: Rspack.Compilation,
+    tsconfigPath: string | undefined,
+  ): CollectedEntry[] => {
     const libInfo = libInfos.find(({ id }) => id === compilation.name)!;
     const outputPath = compilation.outputOptions.path!;
     const { dts } = libInfo;
     const dtsDistPath =
-      typeof dts === 'object' && dts.distPath
-        ? path.resolve(root, dts.distPath)
-        : undefined;
+      dts &&
+      resolveDtsDistPath({
+        root,
+        distPath: typeof dts === 'object' ? dts.distPath : undefined,
+        tsconfigPath,
+        outputPath,
+      });
 
     const entries: CollectedEntry[] = [];
     for (const [entryName, entrypoint] of compilation.entrypoints) {
@@ -95,7 +102,7 @@ export const ExportsPlugin = ({
             }
           : undefined,
         declaration:
-          js && dts
+          js && dtsDistPath
             ? findDeclarationFile({
                 jsFile: js.file,
                 root,
@@ -109,12 +116,16 @@ export const ExportsPlugin = ({
     return entries;
   };
 
-  const writeExports = async (stats: Rspack.Stats | Rspack.MultiStats) => {
+  const writeExports = async (
+    stats: Rspack.Stats | Rspack.MultiStats,
+    getTsconfigPath: (environment: string) => string | undefined,
+  ) => {
     const statsList = 'stats' in stats ? stats.stats : [stats];
     const collected = new Map<string, CollectedEntry[]>();
     for (const { compilation } of statsList) {
       // Rsbuild names each compiler after its environment, which is the lib ID.
-      collected.set(compilation.name!, collect(compilation));
+      const name = compilation.name!;
+      collected.set(name, collect(compilation, getTsconfigPath(name)));
     }
 
     const { exports, publishExports } = generateExports({
@@ -173,7 +184,11 @@ export const ExportsPlugin = ({
       api.onAfterBuild(async ({ stats }) => {
         // Failed builds already report errors, so there is nothing to export.
         if (!stats || stats.hasErrors()) return;
-        await writeExports(stats);
+        await writeExports(
+          stats,
+          (environment) =>
+            api.getNormalizedConfig({ environment }).source.tsconfigPath,
+        );
       });
     },
   };

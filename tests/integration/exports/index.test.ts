@@ -14,6 +14,7 @@ const fixtures = [
   'dts/matched',
   'dts/shared',
   'dts/dist-path',
+  'dts/declaration-dir',
   'dts/module',
   'dts/bundleless',
   'include',
@@ -382,6 +383,18 @@ describe('exports', () => {
     await buildAndGetResults({ fixturePath });
 
     expect(readFixtureExports('dts/dist-path')).toEqual({
+      '.': {
+        types: './dist/types/index.d.ts',
+        default: './dist/esm/index.js',
+      },
+    });
+  });
+
+  test('should add a types condition for declaration files in declarationDir', async () => {
+    const fixturePath = join(__dirname, 'dts/declaration-dir');
+    await buildAndGetResults({ fixturePath });
+
+    expect(readFixtureExports('dts/declaration-dir')).toEqual({
       '.': {
         types: './dist/types/index.d.ts',
         default: './dist/esm/index.js',

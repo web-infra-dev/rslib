@@ -258,7 +258,7 @@ export function generateExports({
     throw new Error(
       [
         `Failed to generate the "exports" field because no declaration files were found for the outputs of the following libs that emit declaration files: ${failedLibs.join(', ')}.`,
-        'Emit declaration files next to the JavaScript outputs or to "dts.distPath", and check the "declarationDir" and "rootDir" options in tsconfig.',
+        'Declaration files are looked up at the same relative paths as the JavaScript outputs in the declaration output directory, so check the "rootDir" option in tsconfig.',
       ].join('\n'),
     );
   }
