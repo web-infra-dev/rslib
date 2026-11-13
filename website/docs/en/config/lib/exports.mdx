@@ -108,6 +108,30 @@ Exports the source files of the entries, so that the source code can be referenc
 - When set to `true`, `exports` points to the source files, and the exports pointing to the build outputs are written to `publishConfig.exports`.
 - When set to a string, a condition named after the string and pointing to the source file is added to each JavaScript subpath. It can be used with the [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) option of TypeScript or [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build).
 
+For example, `source: true` generates:
+
+```json title="package.json"
+{
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "import": "./dist/index.js",
+        "require": "./dist/index.cjs"
+      }
+    }
+  }
+}
+```
+
+Other existing fields in `publishConfig`, such as `access`, are kept. When `source` is not `true`, an existing `publishConfig.exports` is removed.
+
+:::note
+When publishing with pnpm or Yarn (Berry), the package manager replaces `exports` with `publishConfig.exports` when packing.
+:::
+
 For example, `source: '@scope/source'` generates:
 
 ```json title="package.json"
