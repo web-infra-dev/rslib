@@ -126,14 +126,15 @@ export default defineConfig({
 }
 ```
 
-- `publishConfig` 中已有的其他字段（如 `access`）会被保留。
-- 当 `source` 不为 `true` 时，已有的 `publishConfig.exports` 会被移除。
-
 :::note
-使用 pnpm 或 Yarn（Berry）发布时，包管理器会在打包时用 `publishConfig.exports` 替换 `exports`。
+关于 `publishConfig.exports`：
+
+- `source` 为 `true` 时，Rslib 会在每次构建时生成它，`publishConfig` 中的其他字段（如 `access`）会被保留。
+- `source` 为 `true` 时，请使用 `pnpm publish` 或 `yarn npm publish`（Yarn Berry）发布，它们会在打包时用 `publishConfig.exports` 替换 `exports`。
+- `source` 不为 `true` 时，已有的 `publishConfig.exports` 会被移除，避免之前 `source: true` 留下的内容影响发布结果。
 :::
 
-例如，`source: '@scope/source'` 会生成：
+以下是将 `source` 设置为 `'@scope/source'` 时的生成结果：
 
 ```json title="package.json"
 {

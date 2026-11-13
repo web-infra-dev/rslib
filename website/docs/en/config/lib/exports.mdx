@@ -126,14 +126,15 @@ The following is the result when `source` is set to `true`:
 }
 ```
 
-- Other existing fields in `publishConfig`, such as `access`, are kept.
-- When `source` is not `true`, an existing `publishConfig.exports` is removed.
-
 :::note
-When publishing with pnpm or Yarn (Berry), the package manager replaces `exports` with `publishConfig.exports` when packing.
+About `publishConfig.exports`:
+
+- When `source` is `true`, Rslib generates it on every build, and other fields in `publishConfig`, such as `access`, are kept.
+- When `source` is `true`, publish with `pnpm publish` or `yarn npm publish` (Yarn Berry). They replace `exports` with `publishConfig.exports` when packing.
+- When `source` is not `true`, an existing `publishConfig.exports` is removed, so that a leftover from an earlier `source: true` build does not affect what gets published.
 :::
 
-For example, `source: '@scope/source'` generates:
+The following is the result when `source` is set to `'@scope/source'`:
 
 ```json title="package.json"
 {
