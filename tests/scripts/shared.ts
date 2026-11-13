@@ -258,8 +258,6 @@ const updateConfigForTest =
         ...rslibConfig.performance,
         // Do not print file size in tests
         printFileSize: false,
-        // Do not use build cache in tests
-        buildCache: false,
       },
       logLevel,
     });

@@ -6,6 +6,11 @@ import {
 } from 'test-helper';
 
 export default defineConfig({
+  // Disable cache due to stale modules when switching configs:
+  // https://github.com/web-infra-dev/rspack/issues/16587
+  performance: {
+    buildCache: false,
+  },
   lib: [
     generateBundleEsmConfig({
       output: {
