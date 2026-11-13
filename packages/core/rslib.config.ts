@@ -3,6 +3,15 @@ import { defineConfig, rspack } from 'rslib';
 import packageJson from './package.json' with { type: 'json' };
 
 export default defineConfig({
+  exports: {
+    include: ['index'],
+    custom: {
+      './types': {
+        types: './types.d.ts',
+      },
+      './package.json': './package.json',
+    },
+  },
   dts: {
     isolated: true,
     distPath: './dist-types',
@@ -20,9 +29,6 @@ export default defineConfig({
   },
   tools: {
     rspack: {
-      experiments: {
-        runtimeMode: 'rspack',
-      },
       plugins: [new rspack.CircularCheckRspackPlugin()],
     },
   },

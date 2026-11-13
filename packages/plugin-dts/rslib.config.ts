@@ -2,6 +2,9 @@ import { pluginPublint } from 'rsbuild-plugin-publint';
 import { defineConfig } from 'rslib';
 
 export default defineConfig({
+  exports: {
+    include: ['index'],
+  },
   dts: {
     isolated: true,
   },
@@ -18,9 +21,6 @@ export default defineConfig({
   },
   tools: {
     rspack: {
-      experiments: {
-        runtimeMode: 'rspack',
-      },
       resolve: {
         alias: {
           // Ensure tsconfig-paths resolves json5 to its CommonJS entry.
