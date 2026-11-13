@@ -126,8 +126,7 @@ The following is the result when `source` is set to `true`:
 }
 ```
 
-:::note
-About `publishConfig.exports`:
+:::note About `publishConfig.exports`
 
 - When `source` is `true`, Rslib generates it on every build, and other fields in `publishConfig`, such as `access`, are kept.
 - When `source` is `true`, publish with `pnpm publish` or `yarn npm publish` (Yarn Berry). They replace `exports` with `publishConfig.exports` when packing.
