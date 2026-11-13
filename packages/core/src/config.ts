@@ -248,7 +248,9 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
       preset: 'none',
     },
     performance: {
-      buildCache: true,
+      buildCache: {
+        cacheDigest: [`rslib-${RSLIB_VERSION}`],
+      },
     },
     tools: {
       htmlPlugin: false,
@@ -1927,6 +1929,11 @@ export async function composeCreateRsbuildConfig(
       sharedRsbuildConfig,
       libConfig,
     );
+
+    // Enable caching with built-in defaults after resolving user overrides.
+    if (userConfig.performance?.buildCache === true) {
+      userConfig.performance.buildCache = {};
+    }
 
     // Deprecation shim: migrate lib.autoExternal → output.autoExternal
     if (
