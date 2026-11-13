@@ -108,7 +108,7 @@ export default defineConfig({
 - 设置为 `true` 时，`exports` 会指向源文件，指向构建产物的导出则写入 `publishConfig.exports`。
 - 设置为字符串时，会在每个 JS 子路径中添加一个以该字符串命名、指向源文件的条件，可以配合 TypeScript 的 [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) 或 [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build) 使用。
 
-例如，`source: true` 会生成：
+以下是将 `source` 设置为 `true` 时的生成结果：
 
 ```json title="package.json"
 {
@@ -126,7 +126,8 @@ export default defineConfig({
 }
 ```
 
-`publishConfig` 中已有的其他字段（如 `access`）会被保留。当 `source` 不为 `true` 时，已有的 `publishConfig.exports` 会被移除。
+- `publishConfig` 中已有的其他字段（如 `access`）会被保留。
+- 当 `source` 不为 `true` 时，已有的 `publishConfig.exports` 会被移除。
 
 :::note
 使用 pnpm 或 Yarn（Berry）发布时，包管理器会在打包时用 `publishConfig.exports` 替换 `exports`。
