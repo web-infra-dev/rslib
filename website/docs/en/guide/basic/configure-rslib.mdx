@@ -8,11 +8,10 @@ Rslib configuration lets you define library outputs and control how each output 
 
 ## Configuration structure
 
-Rslib configuration consists of three types of options:
+Rslib configuration consists of two types of options:
 
-- [Lib configurations](/config/lib) describe library outputs, including their output formats, output structures, and syntax targets.
+- [Lib configurations](/config/lib) describe library outputs, including their output formats, output structures, syntax targets, and package exports.
 - [Rsbuild configurations](/config/rsbuild) control the underlying compilation and build behavior, including module resolution, source processing, and related plugins.
-- [Other configurations](/config/other/exports) are other feature options that can only be set at the top level.
 
 The `lib` field is an optional array of objects. Each object corresponds to one output and can contain both lib configurations and Rsbuild configurations. Configurations inside a `lib` item apply only to that output, while configurations outside the `lib` field are top-level configurations shared across `lib` outputs.
 
@@ -20,7 +19,7 @@ Rslib merges the top-level configuration with each `lib` item according to the [
 
 ### Lib configurations
 
-Lib configurations can be specified in a `lib` item to configure a specific output. [Some lib configurations](/config/lib#top-level-lib-configurations) can also be placed outside the `lib` field as top-level configuration shared across `lib` outputs.
+Lib configurations can be specified in a `lib` item to configure a specific output. Some lib configurations can also be placed outside the `lib` field as top-level configuration shared across `lib` outputs. See [Lib configuration overview](/config/lib) for details.
 
 For example, set [`syntax`](/config/lib/syntax) to `es2020` for the CJS output and use top-level configuration to set `syntax` to `es2021` for the other outputs:
 

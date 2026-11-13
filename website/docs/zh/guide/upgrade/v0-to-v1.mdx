@@ -47,7 +47,7 @@ npx taze major --include "/rsbuild/" -w -r
 
 ## 默认语法目标更新
 
-当 [output.target](/config/rsbuild/output#outputtarget) 为 `'node'` 且未配置 [lib.syntax](/config/lib/syntax) 时，Rslib v1 会尝试根据 `package.json#engines.node` 推断语法目标。
+当 [output.target](/config/rsbuild/output#outputtarget) 为 `'node'` 且未配置 [syntax](/config/lib/syntax) 时，Rslib v1 会尝试根据 `package.json#engines.node` 推断语法目标。
 
 例如，以下 `engines.node`：
 
@@ -73,15 +73,15 @@ export default {
 
 如果 `engines.node` 不存在或无法推断出最低版本，Rslib 会继续使用 `'esnext'`。
 
-显式配置的 [lib.syntax](/config/lib/syntax) 优先级高于自动推断，因此已有配置不会受到影响，也可以通过它覆盖根据 `engines.node` 推断出的目标。
+显式配置的 [syntax](/config/lib/syntax) 优先级高于自动推断，因此已有配置不会受到影响，也可以通过它覆盖根据 `engines.node` 推断出的目标。
 
 此外，Rslib v1 调整了 `es2023` 和 `es2024` 的 Browserslist 基线，并新增了 `es2025`：
 
-| `lib.syntax` | Rslib v0.x                                                     | Rslib v1                                                      |
-| ------------ | -------------------------------------------------------------- | ------------------------------------------------------------- |
-| `es2023`     | Chrome / Edge 94、Firefox 93、Safari / iOS 16.4、Node.js 16.11 | Chrome / Edge 110、Firefox 115、Safari / iOS 17、Node.js 20   |
-| `es2024`     | 与 `esnext` 相同，使用动态的最新浏览器或 Node.js 版本          | Chrome / Edge 112、Firefox 116、Safari / iOS 17、Node.js 20   |
-| `es2025`     | 不支持                                                         | Chrome / Edge 126、Firefox 132、Safari / iOS 17.4、Node.js 23 |
+| `syntax` | Rslib v0.x                                                     | Rslib v1                                                      |
+| -------- | -------------------------------------------------------------- | ------------------------------------------------------------- |
+| `es2023` | Chrome / Edge 94、Firefox 93、Safari / iOS 16.4、Node.js 16.11 | Chrome / Edge 110、Firefox 115、Safari / iOS 17、Node.js 20   |
+| `es2024` | 与 `esnext` 相同，使用动态的最新浏览器或 Node.js 版本          | Chrome / Edge 112、Firefox 116、Safari / iOS 17、Node.js 20   |
+| `es2025` | 不支持                                                         | Chrome / Edge 126、Firefox 132、Safari / iOS 17.4、Node.js 23 |
 
 这些配置仅控制 JavaScript 和 CSS 的语法降级，不会为目标环境缺失的运行时 API 注入 polyfill。新基线对 JavaScript 降级的实际影响较小，主要会使 Lightning CSS 输出更现代的 CSS。
 
@@ -124,7 +124,7 @@ export default {
 | CommonJS `require()`（`target: 'node'`） | 输出为 ESM import | 使用 `createRequire()` 加载 |
 | CommonJS `require()`（`target: 'web'`）  | 输出为 ESM import | 保留 `require()`            |
 
-这项变化只影响在未显式设置 `externalsType` 时，通过 `require()` 加载的外部 CommonJS 模块，包括通过 [lib.autoExternal](/config/lib/auto-external)、[output.autoExternal](/config/rsbuild/output#outputautoexternal)、[output.externals](/config/rsbuild/output#outputexternals) 外部化的依赖，以及 `target: 'node'` 下自动外部化的 Node.js 内置模块。通过 ESM import 加载的 external 行为不变，通常不需要调整。
+这项变化只影响在未显式设置 `externalsType` 时，通过 `require()` 加载的外部 CommonJS 模块，包括通过 [autoExternal](/config/lib/auto-external)、[output.autoExternal](/config/rsbuild/output#outputautoexternal)、[output.externals](/config/rsbuild/output#outputexternals) 外部化的依赖，以及 `target: 'node'` 下自动外部化的 Node.js 内置模块。通过 ESM import 加载的 external 行为不变，通常不需要调整。
 
 需要注意的是，如果产物中包含通过 `createRequire()` 加载的 external，并且该产物还会被再次打包，消费方的打包器需要能够静态分析这种调用。Rsbuild / Rspack 项目可以开启 [`module.parser.javascript.createRequire`](https://rspack.rs/zh/config/module-parser#javascriptcreaterequire)。如果模块加载语义允许，也可以考虑将源码中的 CommonJS `require()` 改为 ESM import。
 
@@ -375,7 +375,7 @@ Rslib v1 不再提供 ESM/CJS 双格式的 Node.js 模板，仅提供纯 ESM 模
 +npx create-rslib my-project --template node
 ```
 
-此外，新模板默认将 `engines.node` 设置为 `^20.19.0 || >=22.12.0`，并且不再显式配置 `lib.syntax`。Rslib 会根据 `engines.node` 自动推断 `lib.syntax`，详情请参考[默认语法目标更新](#默认语法目标更新)。
+此外，新模板默认将 `engines.node` 设置为 `^20.19.0 || >=22.12.0`，并且不再显式配置 `syntax`。Rslib 会根据 `engines.node` 自动推断 `syntax`，详情请参考[默认语法目标更新](#默认语法目标更新)。
 
 `engines.node` 覆盖的 Node.js 版本均支持 `require(ESM)`，因此原有的 CommonJS 消费者现在可以直接通过 `require()` 加载纯 ESM 包，前提是入口及其依赖不使用顶层 `await`：
 
@@ -420,9 +420,9 @@ export default {
 
 如果你同时配置了 `compilerOptions.paths` 或 [dts.alias](/config/lib/dts#dtsalias)，请检查映射后的类型导入路径是否需要直接指向具体的类型声明入口，详情请参考 [redirect.dts.extension](/config/lib/redirect#注意事项)。
 
-### 迁移 `lib.autoExternal`
+### 迁移 `autoExternal` \{#migrate-autoexternal}
 
-[lib.autoExternal](/config/lib/auto-external) 已在 Rslib v1 中废弃，但暂未移除，仍可继续使用。
+[autoExternal](/config/lib/auto-external) 已在 Rslib v1 中废弃，但暂未移除，仍可继续使用。
 
 我们推荐使用 Rsbuild 的 [output.autoExternal](/config/rsbuild/output#outputautoexternal) 配置替代它：
 

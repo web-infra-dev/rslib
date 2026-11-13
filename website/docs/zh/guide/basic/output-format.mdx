@@ -68,16 +68,16 @@ StackOverflow 上的详细回答：[什么是通用模块定义 (UMD)？](https:
 
 ### 如何构建 UMD 库？
 
-- 在 Rslib 配置文件中将 [lib.format](/config/lib/format) 设置为 `umd`。
-- 如果库需要导出名称，请将 [lib.umdName](/config/lib/umd-name) 设置为 UMD 库的名称。
-- 使用 [output.externals](/config/rsbuild/output#outputexternals) 指定 UMD 库依赖的外部依赖，UMD 的 [lib.autoExtension](/config/lib/auto-extension) 配置默认启用。
+- 在 Rslib 配置文件中将 [format](/config/lib/format) 设置为 `umd`。
+- 如果库需要导出名称，请将 [umdName](/config/lib/umd-name) 设置为 UMD 库的名称。
+- 使用 [output.externals](/config/rsbuild/output#outputexternals) 指定 UMD 库依赖的外部依赖，UMD 的 [autoExtension](/config/lib/auto-extension) 配置默认启用。
 
 ### 示例
 
 以下是一个构建 UMD 库的 Rslib 配置示例。
 
-- `lib.format: 'umd'`: 配置 Rslib 构建 UMD 库。
-- `lib.umdName: 'RslibUmdExample'`: 设置 UMD 库的导出名称。
+- `format: 'umd'`: 配置 Rslib 构建 UMD 库。
+- `umdName: 'RslibUmdExample'`: 设置 UMD 库的导出名称。
 - `output.externals.react: 'React'`: 指定外部依赖 `react` 可以通过 `window.React` 访问。
 - `runtime: 'classic'`: 使用 React 的 classic 运行时，以支持使用 React 版本低于 18 的应用程序。
 

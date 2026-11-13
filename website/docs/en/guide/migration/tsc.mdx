@@ -65,11 +65,11 @@ Here is a mapping of common `tsc` compiler options (usually in `tsconfig.json`) 
 
 | tsc (`compilerOptions`)                                                   | Rslib                                                         |
 | ------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| [declaration](https://www.typescriptlang.org/tsconfig/#declaration)       | [lib.dts](/config/lib/dts)                                    |
-| [declarationDir](https://www.typescriptlang.org/tsconfig/#declarationDir) | [lib.dts.distPath](/config/lib/dts#dtsdistpath)               |
+| [declaration](https://www.typescriptlang.org/tsconfig/#declaration)       | [dts](/config/lib/dts)                                        |
+| [declarationDir](https://www.typescriptlang.org/tsconfig/#declarationDir) | [dts.distPath](/config/lib/dts#dtsdistpath)                   |
 | [outDir](https://www.typescriptlang.org/tsconfig/#outDir)                 | [output.distPath.root](/config/rsbuild/output#outputdistpath) |
-| [module](https://www.typescriptlang.org/tsconfig/#module)                 | [lib.format](/config/lib/format)                              |
-| [target](https://www.typescriptlang.org/tsconfig/#target)                 | [lib.syntax](/config/lib/syntax)                              |
+| [module](https://www.typescriptlang.org/tsconfig/#module)                 | [format](/config/lib/format)                                  |
+| [target](https://www.typescriptlang.org/tsconfig/#target)                 | [syntax](/config/lib/syntax)                                  |
 
 You do not need to migrate the `compilerOptions.paths` configuration. Rslib automatically recognizes the path aliases in `tsconfig.json`.
 

@@ -1,5 +1,5 @@
 ---
-description: '查看 Rslib 的 lib 配置，了解每份库产物可用的 lib 配置和 Rsbuild 配置，以及顶层与非顶层 lib 配置项。'
+description: '配置 Rslib 的 lib 数组以定义单个或多个库产物，了解默认行为，以及可在顶层共享或仅在 lib 项中设置的配置。'
 ---
 
 # 总览
@@ -31,12 +31,13 @@ export default {
 
 ## 顶层 lib 配置
 
-以下 lib 配置可以写在 `lib` 字段外作为顶层配置，在各个 `lib` 产物之间共享；也可以写在 `lib` 项中，用于单独配置对应产物：
+以下 lib 配置可以写在 `lib` 字段外作为顶层配置，在各个 `lib` 产物之间共享：
 
 - [`autoExtension`](/config/lib/auto-extension)
 - [`banner`](/config/lib/banner)
 - [`bundle`](/config/lib/bundle)
 - [`dts`](/config/lib/dts)
+- [`exports`](/config/lib/exports)
 - [`externalHelpers`](/config/lib/external-helpers)
 - [`footer`](/config/lib/footer)
 - [`format`](/config/lib/format)
@@ -45,6 +46,8 @@ export default {
 - [`shims`](/config/lib/shims)
 - [`syntax`](/config/lib/syntax)
 - [`wasm`](/config/lib/wasm)
+
+除 [`exports`](/config/lib/exports) 外，这些 lib 配置也可以写在 `lib` 项中，用于单独配置对应产物。
 
 ## 非顶层 lib 配置
 

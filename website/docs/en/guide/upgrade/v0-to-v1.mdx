@@ -47,7 +47,7 @@ If your project directly uses Rsbuild configuration or JavaScript APIs, you can 
 
 ## Default syntax target update
 
-When [output.target](/config/rsbuild/output#outputtarget) is `'node'` and [lib.syntax](/config/lib/syntax) is not configured, Rslib v1 attempts to infer the syntax target from `package.json#engines.node`.
+When [output.target](/config/rsbuild/output#outputtarget) is `'node'` and [syntax](/config/lib/syntax) is not configured, Rslib v1 attempts to infer the syntax target from `package.json#engines.node`.
 
 For example, the following `engines.node`:
 
@@ -73,15 +73,15 @@ export default {
 
 If `engines.node` is missing or no minimum version can be inferred, Rslib continues to use `'esnext'`.
 
-An explicit [lib.syntax](/config/lib/syntax) value takes precedence over automatic inference, so existing configurations are unaffected and you can set it explicitly to override the target inferred from `engines.node`.
+An explicit [syntax](/config/lib/syntax) value takes precedence over automatic inference, so existing configurations are unaffected and you can set it explicitly to override the target inferred from `engines.node`.
 
 In addition, Rslib v1 adjusts the Browserslist baselines for `es2023` and `es2024`, and adds the new `es2025` target:
 
-| `lib.syntax` | Rslib v0.x                                                     | Rslib v1                                                      |
-| ------------ | -------------------------------------------------------------- | ------------------------------------------------------------- |
-| `es2023`     | Chrome / Edge 94, Firefox 93, Safari / iOS 16.4, Node.js 16.11 | Chrome / Edge 110, Firefox 115, Safari / iOS 17, Node.js 20   |
-| `es2024`     | Same as `esnext`, using the latest browser or Node.js version  | Chrome / Edge 112, Firefox 116, Safari / iOS 17, Node.js 20   |
-| `es2025`     | Not supported                                                  | Chrome / Edge 126, Firefox 132, Safari / iOS 17.4, Node.js 23 |
+| `syntax` | Rslib v0.x                                                     | Rslib v1                                                      |
+| -------- | -------------------------------------------------------------- | ------------------------------------------------------------- |
+| `es2023` | Chrome / Edge 94, Firefox 93, Safari / iOS 16.4, Node.js 16.11 | Chrome / Edge 110, Firefox 115, Safari / iOS 17, Node.js 20   |
+| `es2024` | Same as `esnext`, using the latest browser or Node.js version  | Chrome / Edge 112, Firefox 116, Safari / iOS 17, Node.js 20   |
+| `es2025` | Not supported                                                  | Chrome / Edge 126, Firefox 132, Safari / iOS 17.4, Node.js 23 |
 
 These options only control JavaScript and CSS syntax transformations. They do not inject polyfills for runtime APIs missing from the target environment. The practical impact of the new baselines on JavaScript transformations is limited. The main difference is that Lightning CSS may emit more modern CSS.
 
@@ -124,7 +124,7 @@ For ESM output ([`format: 'esm'`](/config/lib/format)), Rslib v1 changes Rspack'
 | CommonJS `require()` (`target: 'node'`) | Emitted as an ESM import | Uses `createRequire()`   |
 | CommonJS `require()` (`target: 'web'`)  | Emitted as an ESM import | Preserves `require()`    |
 
-This change only affects external CommonJS modules loaded with `require()` when `externalsType` is not explicitly configured. This includes dependencies externalized through [lib.autoExternal](/config/lib/auto-external), [output.autoExternal](/config/rsbuild/output#outputautoexternal), or [output.externals](/config/rsbuild/output#outputexternals), as well as Node.js built-ins externalized automatically for `target: 'node'`. Externals loaded with ESM imports retain their previous behavior and generally require no changes.
+This change only affects external CommonJS modules loaded with `require()` when `externalsType` is not explicitly configured. This includes dependencies externalized through [autoExternal](/config/lib/auto-external), [output.autoExternal](/config/rsbuild/output#outputautoexternal), or [output.externals](/config/rsbuild/output#outputexternals), as well as Node.js built-ins externalized automatically for `target: 'node'`. Externals loaded with ESM imports retain their previous behavior and generally require no changes.
 
 Note that if the output contains an external loaded through `createRequire()` and is bundled again, the consuming bundler must be able to statically analyze this call. Rsbuild / Rspack projects can enable [`module.parser.javascript.createRequire`](https://rspack.rs/config/module-parser#javascriptcreaterequire). If the change in module-loading semantics is acceptable, you can also consider migrating CommonJS `require()` calls in the source to ESM imports.
 
@@ -375,7 +375,7 @@ For example, update a command that uses the previous pure ESM template as follow
 +npx create-rslib my-project --template node
 ```
 
-Additionally, the new template sets `engines.node` to `^20.19.0 || >=22.12.0` by default and no longer configures `lib.syntax` explicitly. Rslib automatically infers `lib.syntax` from `engines.node`; see [Default syntax target update](#default-syntax-target-update) for details.
+Additionally, the new template sets `engines.node` to `^20.19.0 || >=22.12.0` by default and no longer configures `syntax` explicitly. Rslib automatically infers `syntax` from `engines.node`; see [Default syntax target update](#default-syntax-target-update) for details.
 
 Every Node.js version covered by `engines.node` supports `require(ESM)`, so existing CommonJS consumers can now load the pure ESM package directly with `require()`, provided that neither the entry nor its dependencies use top-level `await`:
 
@@ -420,9 +420,9 @@ export default {
 
 If you also configure `compilerOptions.paths` or [dts.alias](/config/lib/dts#dtsalias), check whether the mapped type import paths need to point directly to a concrete declaration entry. See [redirect.dts.extension](/config/lib/redirect#notes) for details.
 
-### Migrate `lib.autoExternal`
+### Migrate `autoExternal`
 
-[lib.autoExternal](/config/lib/auto-external) is deprecated in Rslib v1, but has not yet been removed and can still be used.
+[autoExternal](/config/lib/auto-external) is deprecated in Rslib v1, but has not yet been removed and can still be used.
 
 We recommend replacing it with Rsbuild's [output.autoExternal](/config/rsbuild/output#outputautoexternal) option:
 

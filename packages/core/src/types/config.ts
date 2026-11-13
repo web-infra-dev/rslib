@@ -578,7 +578,7 @@ export interface RslibConfig extends RsbuildConfig, SharedLibConfig {
    * at the top level, and is skipped in watch mode or when only some libs are
    * built with `--lib`.
    * @defaultValue `false`
-   * @see {@link https://rslib.rs/config/other/exports}
+   * @see {@link https://rslib.rs/config/lib/exports}
    */
   exports?: boolean | ExportsOptions;
 }
@@ -609,14 +609,14 @@ export type ExportsOptions = {
    * directory of each lib, and the extension can be omitted.
    * @defaultValue All entries in bundle mode, and only the `index` entry in
    * bundleless mode.
-   * @see {@link https://rslib.rs/config/other/exports#exportsinclude}
+   * @see {@link https://rslib.rs/config/lib/exports#exportsinclude}
    */
   include?: string[];
   /**
    * Glob patterns that exclude some of the outputs matched by {@link include}.
    * The patterns are matched in the same way as {@link include}.
    * @defaultValue `[]`
-   * @see {@link https://rslib.rs/config/other/exports#exportsexclude}
+   * @see {@link https://rslib.rs/config/lib/exports#exportsexclude}
    */
   exclude?: string[];
   /**
@@ -627,7 +627,7 @@ export type ExportsOptions = {
    * - `string`: a condition named after the string and pointing to the source
    *   file is added to each JavaScript subpath.
    * @defaultValue `false`
-   * @see {@link https://rslib.rs/config/other/exports#exportssource}
+   * @see {@link https://rslib.rs/config/lib/exports#exportssource}
    */
   source?: boolean | string;
   /**
@@ -639,7 +639,7 @@ export type ExportsOptions = {
    *   `publishConfig.exports`, with `isPublishConfig` set to `true`.
    * - Array: its items are applied in order.
    * @defaultValue `undefined`
-   * @see {@link https://rslib.rs/config/other/exports#exportscustom}
+   * @see {@link https://rslib.rs/config/lib/exports#exportscustom}
    */
   custom?: ExportsCustom | ExportsCustom[];
 };

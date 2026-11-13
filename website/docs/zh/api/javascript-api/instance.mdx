@@ -67,7 +67,7 @@ if (stats) {
 
 可以通过 `lib` 参数指定需要构建的库 id。如果不指定该参数，则会构建所有库。
 
-> 查看 [lib.id](/config/lib/id) 了解如何获取或设置库的 ID。
+> 查看 [id](/config/lib/id) 了解如何获取或设置库的 ID。
 
 ```ts
 await rslib.build({
@@ -194,7 +194,7 @@ console.log(port); // 3000
 
 可以通过 `lib` 参数指定需要启动 dev server 的库 id。
 
-> 查看 [lib.id](/config/lib/id) 了解如何获取或设置库的 ID。
+> 查看 [id](/config/lib/id) 了解如何获取或设置库的 ID。
 
 ```ts
 await rslib.startMFDevServer({
@@ -309,7 +309,7 @@ Rslib 配置会在调用 `inspectConfig()` 前完成解析，因此 `mode` 不�
 
 可以通过 `lib` 参数指定需要查看配置的库 id。如果不指定该参数，则会输出所有配置。
 
-> 查看 [lib.id](/config/lib/id) 了解如何获取或设置库的 ID。
+> 查看 [id](/config/lib/id) 了解如何获取或设置库的 ID。
 
 ```ts
 await rslib.inspectConfig({
