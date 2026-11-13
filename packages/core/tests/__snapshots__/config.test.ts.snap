@@ -314,7 +314,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   devtool: false,
   cache: {
     type: 'persistent',
-    version: 'esm-production',
+    version: 'esm-production-2fa1708ececf49d5',
     storage: {
       type: 'filesystem',
       directory: '<WORKSPACE>/node_modules/.cache/rspack'
@@ -1218,7 +1218,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   devtool: false,
   cache: {
     type: 'persistent',
-    version: 'cjs-production',
+    version: 'cjs-production-2fa1708ececf49d5',
     storage: {
       type: 'filesystem',
       directory: '<WORKSPACE>/node_modules/.cache/rspack'
@@ -2119,7 +2119,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   devtool: false,
   cache: {
     type: 'persistent',
-    version: 'umd-production',
+    version: 'umd-production-2fa1708ececf49d5',
     storage: {
       type: 'filesystem',
       directory: '<WORKSPACE>/node_modules/.cache/rspack'
@@ -2930,7 +2930,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   devtool: false,
   cache: {
     type: 'persistent',
-    version: 'iife-production',
+    version: 'iife-production-2fa1708ececf49d5',
     storage: {
       type: 'filesystem',
       directory: '<WORKSPACE>/node_modules/.cache/rspack'
@@ -3746,7 +3746,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
   devtool: false,
   cache: {
     type: 'persistent',
-    version: 'mf-production',
+    version: 'mf-production-2fa1708ececf49d5',
     storage: {
       type: 'filesystem',
       directory: '<WORKSPACE>/node_modules/.cache/rspack'
@@ -4574,7 +4574,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "target": "node",
     },
     "performance": {
-      "buildCache": true,
+      "buildCache": {
+        "cacheDigest": [
+          "rslib-0.0.0",
+        ],
+      },
     },
     "plugins": [
       {
@@ -4841,7 +4845,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "target": "node",
     },
     "performance": {
-      "buildCache": true,
+      "buildCache": {
+        "cacheDigest": [
+          "rslib-0.0.0",
+        ],
+      },
     },
     "plugins": [
       {
@@ -5104,7 +5112,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "target": "node",
     },
     "performance": {
-      "buildCache": true,
+      "buildCache": {
+        "cacheDigest": [
+          "rslib-0.0.0",
+        ],
+      },
     },
     "plugins": [
       {
@@ -5341,7 +5353,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "target": "node",
     },
     "performance": {
-      "buildCache": true,
+      "buildCache": {
+        "cacheDigest": [
+          "rslib-0.0.0",
+        ],
+      },
     },
     "plugins": [
       {
@@ -5529,7 +5545,11 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "target": "web",
     },
     "performance": {
-      "buildCache": true,
+      "buildCache": {
+        "cacheDigest": [
+          "rslib-0.0.0",
+        ],
+      },
     },
     "plugins": [
       {

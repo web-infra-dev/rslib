@@ -8,5 +8,11 @@ export default defineConfig({
     cwd: import.meta.dirname,
   }),
   name: 'unit',
+  source: {
+    // Keep cache versions and configuration snapshots stable across releases.
+    define: {
+      RSLIB_VERSION: JSON.stringify('0.0.0'),
+    },
+  },
   setupFiles: ['./setupRstestTests.ts'],
 });
