@@ -115,6 +115,9 @@ export default defineConfig({
     ],
   },
   builderConfig: {
+    output: {
+      module: true,
+    },
     resolve: {
       alias: {
         '@components': path.join(__dirname, 'theme/components'),
