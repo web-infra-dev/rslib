@@ -5,8 +5,8 @@ export default defineConfig({
   lib: [generateBundleEsmConfig()],
   source: {
     entry: {
-      a: './src/a.js',
-      b: './src/b.js',
+      a: './src/a.ts',
+      b: './src/b.ts',
     },
   },
   output: {

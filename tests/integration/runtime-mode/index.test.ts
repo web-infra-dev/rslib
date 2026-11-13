@@ -1,21 +1,37 @@
-import { expect, test } from '@rstest/core';
+import { beforeAll, expect, test } from '@rstest/core';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { buildAndGetResults } from 'test-helper';
 
-test('executes shared CJS dependencies before and after bundling again', async () => {
-  // Build the library first, then consume its emitted entries in another build.
-  for (const [configPath, outputDir] of [
-    ['rslib.config.ts', 'esm'],
-    ['rslibConsumer.config.ts', 'consumer'],
-  ] as const) {
-    await buildAndGetResults({ fixturePath: __dirname, configPath });
+beforeAll(async () => {
+  await buildAndGetResults({ fixturePath: __dirname });
+});
 
-    for (const entry of ['a', 'b']) {
-      const { value } = await import(
-        pathToFileURL(join(__dirname, 'dist', outputDir, `${entry}.mjs`)).href
-      );
-      expect(value).toBe(`42:${entry}`);
-    }
-  }
+test('executes shared CJS dependencies with the default export helper', async () => {
+  const runtime = await import(
+    pathToFileURL(join(__dirname, 'dist/esm/runtime.mjs')).href
+  );
+  const a = await import(pathToFileURL(join(__dirname, 'dist/esm/a.mjs')).href);
+  const b = await import(pathToFileURL(join(__dirname, 'dist/esm/b.mjs')).href);
+
+  expect(typeof runtime.compatGetDefaultExport).toBe('function');
+  expect(a.value).toBe('42:a');
+  expect(b.value).toBe('42:b');
+});
+
+test('executes shared CJS dependencies after bundling again', async () => {
+  await buildAndGetResults({
+    fixturePath: __dirname,
+    configPath: 'rslibConsumer.config.ts',
+  });
+
+  const a = await import(
+    pathToFileURL(join(__dirname, 'dist/consumer/a.mjs')).href
+  );
+  const b = await import(
+    pathToFileURL(join(__dirname, 'dist/consumer/b.mjs')).href
+  );
+
+  expect(a.value).toBe('42:a');
+  expect(b.value).toBe('42:b');
 });

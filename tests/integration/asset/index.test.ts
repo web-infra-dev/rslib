@@ -222,6 +222,7 @@ test('set the assets public path', async () => {
   // 1. umd should preserve the runtime public path
   const { content: indexUmdJs } = queryContent(contents.umd!, /index\.js/);
 
+  expect(indexUmdJs).toContain('var publicPath = "/public/path/";');
   expect(indexUmdJs).toContain('__rspack_context.p = publicPath;');
   expect(indexUmdJs).toContain(
     'const image_namespaceObject = __rspack_context.p + "static/image/image.png";',
