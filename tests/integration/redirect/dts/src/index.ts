@@ -7,6 +7,9 @@ import { defaultOptions } from './types.js';
 
 type sources = typeof import('@src/logger');
 
+export type InlineOptions = import('./types').LoggerOptions;
+export type NestedFoo = Promise<Array<import('@src/types').Foo>>;
+
 export {
   defaultOptions,
   fooMjs,
