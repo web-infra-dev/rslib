@@ -309,7 +309,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    sourceImport: true
+    sourceImport: true,
+    runtimeMode: 'rspack'
   },
   devtool: false,
   cache: {
@@ -1213,7 +1214,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    sourceImport: true
+    sourceImport: true,
+    runtimeMode: 'rspack'
   },
   devtool: false,
   cache: {
@@ -2114,7 +2116,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    sourceImport: true
+    sourceImport: true,
+    runtimeMode: 'rspack'
   },
   devtool: false,
   cache: {
@@ -2925,7 +2928,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    sourceImport: true
+    sourceImport: true,
+    runtimeMode: 'rspack'
   },
   devtool: false,
   cache: {
@@ -3741,7 +3745,8 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
     aggregateTimeout: 0
   },
   experiments: {
-    sourceImport: true
+    sourceImport: true,
+    runtimeMode: 'rspack'
   },
   devtool: false,
   cache: {
@@ -4616,6 +4621,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "experiments": {
+            "runtimeMode": "rspack",
+          },
           "optimization": {
             "nodeEnv": false,
           },
@@ -4897,6 +4905,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "experiments": {
+            "runtimeMode": "rspack",
+          },
           "optimization": {
             "nodeEnv": false,
           },
@@ -5151,6 +5162,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "experiments": {
+            "runtimeMode": "rspack",
+          },
           "optimization": {
             "nodeEnv": false,
           },
@@ -5394,6 +5408,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "experiments": {
+            "runtimeMode": "rspack",
+          },
           "optimization": {
             "nodeEnv": false,
           },
@@ -5592,6 +5609,9 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       "htmlPlugin": false,
       "rspack": [
         {
+          "experiments": {
+            "runtimeMode": "rspack",
+          },
           "optimization": {
             "nodeEnv": false,
           },

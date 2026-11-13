@@ -129,10 +129,10 @@ test('modern-module externals should handle CommonJS requests by target', async 
 
   expect(nodeOutput).toContain('import * as __rspack_external_e8 from "e8";');
   expect(nodeOutput).toContain('module.exports = __rspack_external_e8;');
-  expect(nodeOutput).toContain('const e8 = __webpack_require__("e8");');
+  expect(nodeOutput).toContain('const e8 = rspackRequire("e8");');
   expect(nodeOutput).toContain('"./src/local-false.ts"');
   expect(nodeOutput).toContain(
-    'const localFalse = __webpack_require__("./src/local-false.ts");',
+    'const localFalse = rspackRequire("./src/local-false.ts");',
   );
   expect(nodeOutput).not.toContain('require("./local-false")');
 
@@ -158,7 +158,7 @@ test('modern-module externals should handle CommonJS requests by target', async 
 
   expect(webOutput).toContain('import * as __rspack_external_e8 from "e8";');
   expect(webOutput).toContain('module.exports = __rspack_external_e8;');
-  expect(webOutput).toMatch(/const e8 = __webpack_require__\("[^"]+"\);/);
+  expect(webOutput).toMatch(/const e8 = rspackRequire\("[^"]+"\);/);
   expect(webOutput).toContain('const e11 = await import("e11");');
 });
 
