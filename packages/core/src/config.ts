@@ -257,6 +257,7 @@ export async function createConstantRsbuildConfig(): Promise<EnvironmentConfig> 
       rspack: {
         experiments: {
           runtimeMode: 'rspack',
+          newCache: true,
         },
         optimization: {
           nodeEnv: false,

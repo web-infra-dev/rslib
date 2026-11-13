@@ -2,6 +2,11 @@ import { defineConfig } from '@rslib/core';
 import { generateBundleCjsConfig, generateBundleEsmConfig } from 'test-helper';
 
 export default defineConfig({
+  // Disable cache due to stale modules when switching configs:
+  // https://github.com/web-infra-dev/rspack/issues/16587
+  performance: {
+    buildCache: false,
+  },
   lib: [
     // 0 - default - path: true extension: true
     generateBundleEsmConfig({

@@ -98,7 +98,6 @@ export default defineConfig({
     },
   },
   performance: {
-    buildCache: false,
     printFileSize: false,
   },
 });

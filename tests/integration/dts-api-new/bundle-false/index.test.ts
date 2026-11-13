@@ -38,10 +38,6 @@ describe('dts with JavaScript API when bundle: false', () => {
     const loadedConfig = await loadConfig({ cwd: basicPath });
     const { content } = loadedConfig;
     content.logLevel = 'info';
-    content.performance = {
-      ...content.performance,
-      buildCache: false,
-    };
     const rslib = await createRslib({ cwd: basicPath, config: loadedConfig });
     const sourceFile = join(basicPath, 'src/utils.ts');
     const original = await readFile(sourceFile, 'utf8');
