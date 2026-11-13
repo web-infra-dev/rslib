@@ -56,7 +56,7 @@ export type { SomeType } from './types';
 
 在进行 TypeScript 转译时，SWC 和 Babel 等工具不会执行类型检查。
 
-Rslib 提供了 [lib.dts](/config/lib/dts) 配置项用于生成 TypeScript 声明文件，生成过程中默认会进行类型检查。
+Rslib 提供了 [dts](/config/lib/dts) 配置项用于生成 TypeScript 声明文件，生成过程中默认会进行类型检查。
 
 你可以在 `tsconfig.json` 文件中将 [noCheck](https://www.typescriptlang.org/tsconfig/#noCheck) 配置项设置为 `true` 来跳过类型检查。
 

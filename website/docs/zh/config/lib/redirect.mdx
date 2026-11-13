@@ -1,9 +1,9 @@
 ---
-description: '配置 lib.redirect，在 bundleless 模式下重写 JavaScript、样式与静态资源的导入路径。'
+description: '配置 redirect，在 bundleless 模式下重写 JavaScript、样式与静态资源的导入路径。'
 overviewHeaders: [2, 3]
 ---
 
-# lib.redirect
+# redirect
 
 :::info
 
@@ -128,7 +128,7 @@ import { foo } from '../foo'; // './dist/utils/index.js' 预期生成的代码
 当设置为 `false` 时，导入路径将保留其原始的文件扩展名。
 
 :::note
-JavaScript 产物文件的扩展名与 [autoExtension](/config/lib/auto-extension#libautoextension) 配置有关。
+JavaScript 产物文件的扩展名与 [autoExtension](/config/lib/auto-extension#autoextension) 配置有关。
 :::
 
 - **示例：**

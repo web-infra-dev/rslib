@@ -67,7 +67,7 @@ if (stats) {
 
 You can specify the library to build using the `lib` option. If this option is not specified, all libraries will be built.
 
-> See [lib.id](/config/lib/id) to learn how to get or set the ID of the library.
+> See [id](/config/lib/id) to learn how to get or set the ID of the library.
 
 ```ts
 await rslib.build({
@@ -194,7 +194,7 @@ console.log(port); // 3000
 
 You can specify the library to start dev server using the `lib` option.
 
-> See [lib.id](/config/lib/id) to learn how to get or set the ID of the library.
+> See [id](/config/lib/id) to learn how to get or set the ID of the library.
 
 ```ts
 await rslib.startMFDevServer({
@@ -310,7 +310,7 @@ The Rslib config is resolved before `inspectConfig()` is called, so `mode` does 
 
 You can specify the library to inspect configurations using the `lib` option. If this option is not specified, all libraries will be inspected.
 
-> See [lib.id](/config/lib/id) to learn how to get or set the ID of the library.
+> See [id](/config/lib/id) to learn how to get or set the ID of the library.
 
 ```ts
 await rslib.inspectConfig({

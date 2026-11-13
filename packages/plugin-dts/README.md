@@ -8,7 +8,7 @@ An [Rsbuild plugin](https://www.npmjs.com/package/rsbuild-plugin-dts) to emit de
 
 ## Using in Rslib
 
-Read [Declaration files](https://rslib.rs/guide/advanced/dts) and [lib.dts](https://rslib.rs/config/lib/dts) for more details.
+Read [Declaration files](https://rslib.rs/guide/advanced/dts) and [dts](https://rslib.rs/config/lib/dts) for more details.
 
 ## Using in Rsbuild
 

@@ -1,5 +1,5 @@
 ---
-description: "Browse Rslib's lib configuration, including the lib and Rsbuild options available to each output and the top-level and non-top-level lib options."
+description: "Configure Rslib's lib array for single or multiple outputs, including defaults, shared top-level options, and options scoped to individual lib items."
 ---
 
 # Overview
@@ -31,12 +31,13 @@ export default {
 
 ## Top-level lib configurations
 
-The following lib configurations can be placed outside the `lib` field as top-level configuration shared across `lib` outputs, or inside a `lib` item to configure a specific output:
+The following lib configurations can be placed outside the `lib` field as top-level configuration shared across `lib` outputs:
 
 - [`autoExtension`](/config/lib/auto-extension)
 - [`banner`](/config/lib/banner)
 - [`bundle`](/config/lib/bundle)
 - [`dts`](/config/lib/dts)
+- [`exports`](/config/lib/exports)
 - [`externalHelpers`](/config/lib/external-helpers)
 - [`footer`](/config/lib/footer)
 - [`format`](/config/lib/format)
@@ -45,6 +46,8 @@ The following lib configurations can be placed outside the `lib` field as top-le
 - [`shims`](/config/lib/shims)
 - [`syntax`](/config/lib/syntax)
 - [`wasm`](/config/lib/wasm)
+
+Except for [`exports`](/config/lib/exports), these lib configurations can also be specified in a `lib` item to configure a specific output.
 
 ## Non-top-level lib configurations
 

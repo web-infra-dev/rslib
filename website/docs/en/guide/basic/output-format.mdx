@@ -73,16 +73,16 @@ A detailed answer from StackOverflow: [What is the Universal Module Definition (
 
 ### How to build a UMD library?
 
-- Set the [lib.format](/config/lib/format) to `umd` in the Rslib configuration file.
-- If the library need to be exported with a name, set [lib.umdName](/config/lib/umd-name) to the name of the UMD library.
-- Use [output.externals](/config/rsbuild/output#outputexternals) to specify the external dependencies that the UMD library depends on, [lib.autoExtension](/config/lib/auto-extension) is enabled by default for UMD.
+- Set the [format](/config/lib/format) to `umd` in the Rslib configuration file.
+- If the library need to be exported with a name, set [umdName](/config/lib/umd-name) to the name of the UMD library.
+- Use [output.externals](/config/rsbuild/output#outputexternals) to specify the external dependencies that the UMD library depends on, [autoExtension](/config/lib/auto-extension) is enabled by default for UMD.
 
 ### Examples
 
 The following Rslib config is an example to build a UMD library.
 
-- `lib.format: 'umd'`: instruct Rslib to build in UMD format.
-- `lib.umdName: 'RslibUmdExample'`: set the export name of the UMD library.
+- `format: 'umd'`: instruct Rslib to build in UMD format.
+- `umdName: 'RslibUmdExample'`: set the export name of the UMD library.
 - `output.externals.react: 'React'`: specify the external dependency `react` could be accessed by `window.React`.
 - `runtime: 'classic'`: use the classic runtime of React to support applications that using React version under 18.
 

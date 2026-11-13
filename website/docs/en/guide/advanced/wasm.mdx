@@ -67,7 +67,7 @@ TypeScript supports [Source Phase Imports](https://devblogs.microsoft.com/typesc
 
 ## Output modes
 
-You can use [lib.wasm.mode](/config/lib/wasm#wasmmode) to select the output mode for `.wasm` modules:
+You can use [wasm.mode](/config/lib/wasm#wasmmode) to select the output mode for `.wasm` modules:
 
 - [bundle](/config/lib/bundle) is `true`: Only `compile` mode is available.
 - [bundle](/config/lib/bundle) is `false`: `preserve` mode is used by default when the `.wasm` modules are resolved and loaded by a downstream build tool that supports WebAssembly ESM Integration (such as Rsbuild or Rspack) or a target runtime with native support (such as [Node.js](https://nodejs.org/api/esm.html#wasm-modules) versions matching `>=24.5.0`). If the consumer does not support this feature, or you do not want to rely on it to handle the `.wasm` modules, use `compile` mode.
@@ -283,7 +283,7 @@ If any of these module names resolve to JavaScript output, avoid changing its re
 
 - [output.distPath.js](/config/rsbuild/output#outputdistpath)
 - [output.filename.js](/config/rsbuild/output#outputfilename)
-- [lib.autoExtension](/config/lib/auto-extension)
+- [autoExtension](/config/lib/auto-extension)
 
 :::
 
@@ -301,12 +301,12 @@ import { add } from './add.wasm?inline';
 
 <ApiMeta addedVersion="1.0.1" />
 
-When [lib.wasm](/config/lib/wasm) is set to `false`, Rslib preserves the original import specifiers for `.wasm` modules imported using ESM syntax, without resolving the modules or emitting the corresponding `.wasm` files. You are responsible for managing these files and ensuring that the imports resolve correctly from the emitted JavaScript files.
+When [wasm](/config/lib/wasm) is set to `false`, Rslib preserves the original import specifiers for `.wasm` modules imported using ESM syntax, without resolving the modules or emitting the corresponding `.wasm` files. You are responsible for managing these files and ensuring that the imports resolve correctly from the emitted JavaScript files.
 
 :::note
 
-- When using `?inline`, [lib.wasm.mode](/config/lib/wasm#wasmmode) does not affect inlining. When [lib.wasm](/config/lib/wasm) is set to `false`, Rslib does not process the module and preserves the import with `?inline` in the output.
-- `.wasm` files referenced with `new URL('./add.wasm', import.meta.url)` go through the static asset pipeline and are not affected by [lib.wasm](/config/lib/wasm).
+- When using `?inline`, [wasm.mode](/config/lib/wasm#wasmmode) does not affect inlining. When [wasm](/config/lib/wasm) is set to `false`, Rslib does not process the module and preserves the import with `?inline` in the output.
+- `.wasm` files referenced with `new URL('./add.wasm', import.meta.url)` go through the static asset pipeline and are not affected by [wasm](/config/lib/wasm).
 
 :::
 
@@ -318,7 +318,7 @@ Rslib currently supports the following targets:
 
 - `bundler` (recommended): The JavaScript glue imports the `.wasm` module as an ES module while providing the imports required to instantiate it. Both `compile` and `preserve` modes are supported. When using `preserve` mode, follow the [path and filename constraints described above](#preserve-mode).
 - `module`: The JavaScript glue uses a [Source Phase import](#source-phase-import) to obtain the compiled `WebAssembly.Module`, then constructs the import object and instantiates the module. Both `compile` and `preserve` modes are supported.
-- `web` / `experimental-nodejs-module`: The JavaScript glue locates and loads the `.wasm` file through `new URL('./pkg.wasm', import.meta.url)`. Rslib treats the file as a static asset, so [lib.wasm.mode](/config/lib/wasm#wasmmode) does not apply.
+- `web` / `experimental-nodejs-module`: The JavaScript glue locates and loads the `.wasm` file through `new URL('./pkg.wasm', import.meta.url)`. Rslib treats the file as a static asset, so [wasm.mode](/config/lib/wasm#wasmmode) does not apply.
 
 ## Type declaration
 
