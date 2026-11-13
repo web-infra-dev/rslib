@@ -1,0 +1,181 @@
+---
+description: 'Configure exports to generate the package.json exports field from Rslib build outputs, with declaration files, CSS, source files, and custom subpaths.'
+---
+
+import { ApiMeta } from '@components/ApiMeta';
+
+# exports
+
+<ApiMeta addedVersion="1.1.0" />
+
+- **Type:**
+
+```ts
+type Exports =
+  | boolean
+  | {
+      include?: string[];
+      exclude?: string[];
+      source?: boolean | string;
+      custom?: object | Function | Array<object | Function>;
+    };
+```
+
+- **Default:** `false`
+- **CLI:** `--exports` / `--no-exports`
+- **Top-level config:** Only supported at the top level
+
+Generates the `exports` field in `package.json` from the build outputs after the build completes.
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  dts: true,
+  exports: true,
+});
+```
+
+:::note
+The generated result overwrites the existing `exports` and `publishConfig.exports` fields in `package.json`. To keep handwritten subpaths, add them with [exports.custom](#exportscustom).
+
+Rslib does not generate the `exports` field in watch mode, or when only some libs are built with `--lib`.
+:::
+
+## Generation rules
+
+- Only ESM and CJS outputs can be exported.
+- The `index` entry is exported as `.`, `button/index` as `./button`, and other entries by their names.
+- If an entry has both ESM and CJS outputs, they are distinguished by the `import` and `require` conditions. If it has only one format, the output path is used directly.
+- When [dts](/config/lib/dts) is enabled, a `types` condition is added if TypeScript cannot find the declaration files from the output paths.
+- In bundle mode, the CSS files generated for the entries are also exported.
+
+The following example shows the result for a library that builds both ESM and CJS outputs:
+
+```json title="package.json"
+{
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  }
+}
+```
+
+## exports.include
+
+- **Type:** `string[]`
+- **Default:** all entries are exported in bundle mode, and only `index` is exported in bundleless mode
+
+Selects the outputs to export. The glob patterns are matched against the output paths relative to the output directory, and the extension can be omitted.
+
+For example, to export the `index` files in the root directory and in each component directory in bundleless mode:
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  bundle: false,
+  exports: {
+    include: ['index', '*/index'],
+  },
+});
+```
+
+## exports.exclude
+
+- **Type:** `string[]`
+- **Default:** `[]`
+
+Excludes some of the outputs matched by `include`. The patterns are written in the same way as `include`.
+
+For example, to export the `index` files in each directory except the `internal` directory in bundleless mode:
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  bundle: false,
+  exports: {
+    include: ['**/index'],
+    exclude: ['internal/**'],
+  },
+});
+```
+
+## exports.source
+
+- **Type:** `boolean | string`
+- **Default:** `false`
+
+Exports the source files of the entries, so that the source code can be referenced directly during development.
+
+- When set to `true`, `exports` points to the source files, and the exports pointing to the build outputs are written to `publishConfig.exports`.
+- When set to a string, a condition named after the string and pointing to the source file is added to each JavaScript subpath. It can be used with the [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) option of TypeScript or [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build).
+
+For example, `source: '@scope/source'` generates:
+
+```json title="package.json"
+{
+  "exports": {
+    ".": {
+      "@scope/source": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  }
+}
+```
+
+## exports.custom
+
+- **Type:**
+
+```ts
+type ExportsValue =
+  string | null | ExportsValue[] | { [condition: string]: ExportsValue };
+
+type ExportsField = Record<string, ExportsValue>;
+
+type ExportsCustomItem =
+  | ExportsField
+  | ((
+      exports: ExportsField,
+      context: { pkg: Record<string, unknown>; isPublishConfig: boolean },
+    ) => ExportsField | Promise<ExportsField>);
+
+type ExportsCustom = ExportsCustomItem | ExportsCustomItem[];
+```
+
+- **Default:** `undefined`
+
+Customizes the generated exports.
+
+- When an object is passed, its subpaths are added to the generated result, and subpaths with the same name are replaced.
+- When a function is passed, it receives the generated exports and returns the final result. When `source` is `true`, `exports` and `publishConfig.exports` are each passed through the function, and you can tell them apart by `isPublishConfig` in the second argument.
+- When an array is passed, its items are applied in order.
+
+For example, to add the `./package.json` subpath:
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  exports: {
+    custom: {
+      './package.json': './package.json',
+    },
+  },
+});
+```
+
+Use a function to modify the generated subpaths, for example, to add a `browser` condition to `.`:
+
+```ts title="rslib.config.ts"
+export default defineConfig({
+  exports: {
+    custom: (exports) => ({
+      ...exports,
+      '.': { browser: './dist/browser.js', default: exports['.'] },
+    }),
+  },
+});
+```
+
+## Version history
+
+| Version | Changes                     |
+| ------- | --------------------------- |
+| v1.1.0  | Added the `exports` option. |

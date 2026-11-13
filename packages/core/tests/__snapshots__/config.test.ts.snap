@@ -4473,6 +4473,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
 
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > rsbuild config - 0 esm 1`] = `
 {
+  "bundle": true,
   "config": {
     "output": {
       "assetPrefix": "auto",
@@ -4737,12 +4738,14 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
     },
   },
+  "dts": false,
   "format": "esm",
 }
 `;
 
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > rsbuild config - 1 cjs 1`] = `
 {
+  "bundle": true,
   "config": {
     "output": {
       "assetPrefix": "auto",
@@ -5007,12 +5010,14 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
     },
   },
+  "dts": false,
   "format": "cjs",
 }
 `;
 
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > rsbuild config - 2 umd 1`] = `
 {
+  "bundle": true,
   "config": {
     "output": {
       "distPath": {
@@ -5247,12 +5252,14 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
     },
   },
+  "dts": false,
   "format": "umd",
 }
 `;
 
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > rsbuild config - 3 iife 1`] = `
 {
+  "bundle": true,
   "config": {
     "output": {
       "distPath": {
@@ -5494,12 +5501,14 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
     },
   },
+  "dts": false,
   "format": "iife",
 }
 `;
 
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > rsbuild config - 4 mf 1`] = `
 {
+  "bundle": true,
   "config": {
     "dev": {
       "writeToDisk": true,
@@ -5645,6 +5654,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       },
     },
   },
+  "dts": false,
   "format": "mf",
 }
 `;

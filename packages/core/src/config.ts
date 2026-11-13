@@ -1887,6 +1887,7 @@ export async function composeCreateRsbuildConfig(
     dev: _dev,
     server: _server,
     logLevel,
+    exports: _exports,
     ...sharedRsbuildConfig
   } = rslibConfig;
   // debug mode should always verbose logs
@@ -1973,6 +1974,8 @@ export async function composeCreateRsbuildConfig(
     const config: RsbuildConfigWithLibInfo = {
       // Read from the merged `userConfig` so a top-level `format` is honored.
       format: userConfig.format ?? 'esm',
+      dts: userConfig.dts ?? false,
+      bundle: userConfig.bundle ?? true,
       // The merge order represents the priority of the configuration
       // The priorities from high to low are as follows:
       // 1 - userConfig: users can configure any Rsbuild and Rspack config
@@ -2053,10 +2056,10 @@ export async function composeRsbuildEnvironments(
     return candidateId;
   };
 
-  for (const { format, id, config } of rsbuildConfigWithLibInfo) {
+  for (const { id, format, dts, bundle, config } of rsbuildConfigWithLibInfo) {
     const libId = typeof id === 'string' ? id : composeDefaultId(format);
     environments[libId] = config;
-    environmentWithInfos.push({ id: libId, format, config });
+    environmentWithInfos.push({ id: libId, format, dts, bundle, config });
   }
 
   const conflictIds = usedIds.filter(
