@@ -1,2 +1,0 @@
-function rspackRequire() {}
-export { rspackRequire };
