@@ -105,10 +105,25 @@ export default defineConfig({
 
 用于导出入口对应的源文件，以便在开发时直接引用源码。
 
-- 设置为 `true` 时，`exports` 会指向源文件，指向构建产物的导出则写入 `publishConfig.exports`。
-- 设置为字符串时，会在每个 JS 子路径中添加一个以该字符串命名、指向源文件的条件，可以配合 TypeScript 的 [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) 或 [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build) 使用。
+当 `source` 设置为 `true` 时，`exports` 会指向源文件，指向构建产物的导出则写入 `publishConfig.exports`。生成结果如下：
 
-例如，`source: '@scope/source'` 会生成：
+```json title="package.json"
+{
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "import": "./dist/index.js",
+        "require": "./dist/index.cjs"
+      }
+    }
+  }
+}
+```
+
+当 `source` 设置为字符串时，会在每个 JS 子路径中添加一个以该字符串命名、指向源文件的条件，可以配合 TypeScript 的 [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) 或 [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build) 使用。例如，设置为 `'@scope/source'` 时，生成结果如下：
 
 ```json title="package.json"
 {
@@ -120,6 +135,14 @@ export default defineConfig({
   }
 }
 ```
+
+:::note 关于 `publishConfig.exports`
+
+- 当 `source` 为 `true` 时，Rslib 会在每次构建时生成 `publishConfig.exports`，并保留 `publishConfig` 中的其他字段（如 `access`）。
+- 当 `source` 为 `true` 时，请使用 `pnpm publish` 或 `yarn npm publish`（Yarn Berry）发布，它们会在打包时用 `publishConfig.exports` 替换 `exports`。
+- 当 `source` 不为 `true` 时，已有的 `publishConfig.exports` 会被移除，避免之前 `source: true` 留下的内容影响发布结果。
+
+:::
 
 ## exports.custom
 

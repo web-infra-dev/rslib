@@ -105,10 +105,25 @@ export default defineConfig({
 
 Exports the source files of the entries, so that the source code can be referenced directly during development.
 
-- When set to `true`, `exports` points to the source files, and the exports pointing to the build outputs are written to `publishConfig.exports`.
-- When set to a string, a condition named after the string and pointing to the source file is added to each JavaScript subpath. It can be used with the [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) option of TypeScript or [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build).
+When `source` is set to `true`, `exports` points to the source files, and the exports pointing to the build outputs are written to `publishConfig.exports`. The generated result is as follows:
 
-For example, `source: '@scope/source'` generates:
+```json title="package.json"
+{
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "import": "./dist/index.js",
+        "require": "./dist/index.cjs"
+      }
+    }
+  }
+}
+```
+
+When `source` is set to a string, a condition named after the string and pointing to the source file is added to each JavaScript subpath. It can be used with the [customConditions](https://www.typescriptlang.org/tsconfig/#customConditions) option of TypeScript or [@rsbuild/plugin-source-build](https://github.com/rstackjs/rsbuild-plugin-source-build). For example, setting it to `'@scope/source'` generates the following result:
 
 ```json title="package.json"
 {
@@ -120,6 +135,14 @@ For example, `source: '@scope/source'` generates:
   }
 }
 ```
+
+:::note About `publishConfig.exports`
+
+- When `source` is `true`, Rslib generates `publishConfig.exports` on every build and keeps other fields in `publishConfig`, such as `access`.
+- When `source` is `true`, publish with `pnpm publish` or `yarn npm publish` (Yarn Berry). They replace `exports` with `publishConfig.exports` when packing.
+- When `source` is not `true`, an existing `publishConfig.exports` is removed, so that a leftover from an earlier `source: true` build does not affect what gets published.
+
+:::
 
 ## exports.custom
 
