@@ -27,6 +27,8 @@ type Exports =
 
 Generates the `exports` field in `package.json` from the build outputs after the build completes.
 
+Thanks to [tsdown](https://tsdown.dev/options/package-exports) by [Kevin Deng](https://github.com/sxzz) for inspiring this feature.
+
 ```ts title="rslib.config.ts"
 export default defineConfig({
   dts: true,
