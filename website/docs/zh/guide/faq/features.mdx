@@ -132,6 +132,49 @@ export default {
 };
 ```
 
+## 使用产物
+
+### 为什么调用 CJS 产物中的函数时报 `is not a function`？
+
+如果项目的 `package.json` 设置了 `"type": "module"`，使用 `bundle: false` 构建 CJS 产物后，通过 `export { default as value } from './value.js'` 重导出的函数可能无法正常调用。
+
+这是因为 ESM 与 CJS 对默认导出的处理方式不同，在这个场景下拿到的是模块对象，而不是函数本身。
+
+例如，源码中导出的 `value` 是一个函数，但使用 CJS 产物时调用 `value()` 却报错：
+
+```js title="consumer.cjs"
+const { value } = require('./dist/index.cjs');
+
+value(); // TypeError: value is not a function
+```
+
+你可以删除 `package.json` 中的 `type` 字段，让 Rspack 使用 `javascript/auto` 模式自动识别 `.js` 文件中的模块语法，并处理默认导出的兼容。
+
+如果你同时发布 ESM 和 CJS（dual package），并且需要保留 `"type": "module"`，可以在 CJS 的 `lib` 配置中通过 [output.externals](/config/rsbuild/output#outputexternals) 为对应模块设置 `interop: 'esModule'`：
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+      format: 'cjs',
+      output: {
+        externals: {
+          './value.js': {
+            'commonjs-import': './value.cjs',
+            interop: 'esModule',
+          },
+        },
+      },
+    },
+  ],
+});
+```
+
+> `commonjs-import` 是 Rslib 在 [`format: 'cjs'`](/config/lib/format) 时默认使用的 `externalsType`。
+
 ## 类型声明文件生成
 
 ### 如何避免生成某些文件的类型声明文件？

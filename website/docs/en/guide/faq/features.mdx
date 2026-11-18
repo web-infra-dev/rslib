@@ -132,6 +132,49 @@ export default {
 };
 ```
 
+## Using the output
+
+### Why does calling a function from the CJS output throw `is not a function`?
+
+If your project's `package.json` sets `"type": "module"`, a function re-exported with `export { default as value } from './value.js'` may not be callable in the CJS output built with `bundle: false`.
+
+ESM and CJS handle default exports differently, so in this case the re-export resolves to a module object instead of the function itself.
+
+For example, `value` is a function exported from your source, but calling `value()` from the CJS output throws an error:
+
+```js title="consumer.cjs"
+const { value } = require('./dist/index.cjs');
+
+value(); // TypeError: value is not a function
+```
+
+You can remove the `type` field from `package.json`, allowing Rspack to use `javascript/auto` mode to detect the module syntax in `.js` files and handle default-export interoperability.
+
+If you publish both ESM and CJS (a dual package) and need to keep `"type": "module"`, set `interop: 'esModule'` for the affected module through [output.externals](/config/rsbuild/output#outputexternals) in the CJS `lib` configuration:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      bundle: false,
+      format: 'cjs',
+      output: {
+        externals: {
+          './value.js': {
+            'commonjs-import': './value.cjs',
+            interop: 'esModule',
+          },
+        },
+      },
+    },
+  ],
+});
+```
+
+> `commonjs-import` is the default `externalsType` Rslib uses with [`format: 'cjs'`](/config/lib/format).
+
 ## Declaration files generation
 
 ### How to avoid generating declaration files for certain files?
