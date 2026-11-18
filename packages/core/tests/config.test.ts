@@ -1,5 +1,5 @@
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
-import type { RsbuildPlugin } from '@rsbuild/core';
+import { type RsbuildPlugin, version as rsbuildVersion } from '@rsbuild/core';
 import { describe, expect, rs, test } from '@rstest/core';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -593,9 +593,12 @@ describe('Should compose create Rsbuild config correctly', () => {
     expect(rsbuildConfig).toMatchSnapshot('inspected Rsbuild configs');
 
     bundlerConfigs.forEach((bundlerConfig, index) => {
-      expect(bundlerConfig).toMatchSnapshot(
-        `inspected Rspack config - ${index} ${formats[index]}`,
-      );
+      expect(
+        bundlerConfig.replace(
+          `rsbuild-${rsbuildVersion}-`,
+          'rsbuild-<version>-',
+        ),
+      ).toMatchSnapshot(`inspected Rspack config - ${index} ${formats[index]}`);
     });
   });
 
