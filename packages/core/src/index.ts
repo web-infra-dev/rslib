@@ -37,6 +37,8 @@ export type {
   InspectConfigResult,
   LibConfig,
   LibExperiments,
+  NewUrl,
+  NewUrlMode,
   OnAfterCreateRsbuildFn,
   Redirect,
   RslibConfig,

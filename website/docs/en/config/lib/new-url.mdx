@@ -1,0 +1,46 @@
+---
+description: 'Configure how Rslib emits files referenced by new URL(), including asset, entry, and disabled modes.'
+---
+
+# lib.newUrl
+
+- **Type:**
+
+```ts
+type NewUrl =
+  | {
+      mode?: 'asset' | 'entry';
+    }
+  | false;
+```
+
+- **Default:** `{ mode: 'asset' }`
+- **Top-level config:** Supported
+
+Configures how Rslib handles `new URL(path, import.meta.url)`. This option only supports [ESM output](/config/lib/format). Set it to `false` to preserve `new URL()` expressions without emitting the referenced files.
+
+## newUrl.mode
+
+- **Type:** `'asset' | 'entry'`
+- **Default:** `'asset'`
+
+- `'asset'`: Emits the referenced file as a static asset. This includes JavaScript, TypeScript, and CSS files.
+- `'entry'`: Compiles referenced JavaScript and TypeScript modules. Other file types remain static assets.
+
+With [bundle](/config/lib/bundle) enabled, each module is emitted as a separate entry. With bundleless output, the module must be matched by [source.entry](/config/rsbuild/source#sourceentry), and the URL points to that output.
+
+```ts title="rslib.config.ts"
+export default {
+  lib: {
+    newUrl: { mode: 'entry' },
+  },
+};
+```
+
+See [Static assets - `new URL` imports](/guide/advanced/static-assets#new-url-imports) for usage examples.
+
+## Version history
+
+| Version | Changes             |
+| ------- | ------------------- |
+| v1.0.2  | Added `lib.newUrl`. |
