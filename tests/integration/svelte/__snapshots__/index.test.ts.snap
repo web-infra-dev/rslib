@@ -2,7 +2,8 @@
 
 exports[`Svelte > bundleless 1`] = `
 {
-  "<ROOT>/tests/integration/svelte/dist/bundleless/Button/Button.js": "import "svelte/internal/disclose-version";
+  "<ROOT>/tests/integration/svelte/dist/bundleless/Button/Button.js": "import "svelte/internal/init-operations";
+import "svelte/internal/disclose-version";
 import "svelte/internal/flags/legacy";
 import "./style.css";
 import "./Button.css";
@@ -17,7 +18,8 @@ export default Button;
 ",
   "<ROOT>/tests/integration/svelte/dist/bundleless/Button/index.js": "export { default } from "./Button.js";
 ",
-  "<ROOT>/tests/integration/svelte/dist/bundleless/Card.js": "import "svelte/internal/disclose-version";
+  "<ROOT>/tests/integration/svelte/dist/bundleless/Card.js": "import "svelte/internal/init-operations";
+import "svelte/internal/disclose-version";
 import "svelte/internal/flags/legacy";
 import "./Card.css";
 import * as __rspack_external_svelte_internal_client_f8ec82ce from "svelte/internal/client";
