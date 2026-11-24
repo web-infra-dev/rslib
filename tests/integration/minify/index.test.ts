@@ -82,7 +82,6 @@ describe('minify config (mf)', () => {
       <MODULE_ID>(__unused_rspack_module, __rspack_exports, __rspack_context) {
       __rspack_context.N(__rspack_exports);
       /* import */ var react_jsx_runtime__rspack_import_0 = __rspack_context.r("l");
-      /* import */ var react_jsx_runtime__rspack_import_0_default = /*#__PURE__*/__rspack_context.n(react_jsx_runtime__rspack_import_0);
       /*! Legal Comment */ 
       const foo = ()=>{};
       const bar = ()=>{};
