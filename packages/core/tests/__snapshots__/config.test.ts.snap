@@ -3,7 +3,6 @@
 exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config in each format > inspected Rsbuild configs 1`] = `
 "{
   dev: {
-    hmr: true,
     liveReload: true,
     browserLogs: {
       stackTrace: 'summary'
@@ -27,6 +26,7 @@ exports[`Should compose create Rsbuild config correctly > Merge Rsbuild config i
       reconnect: 100,
       logLevel: 'silent'
     },
+    hmr: false,
     lazyCompilation: {
       imports: true,
       entries: false
