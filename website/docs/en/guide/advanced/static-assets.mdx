@@ -144,7 +144,7 @@ const logo = new URL('./static/svg/logo.svg', import.meta.url);
 </Tab>
 </Tabs>
 
-Files such as `.js`, `.ts`, `.css`, and `.scss` referenced through `new URL()` are also treated as URL assets. They bypass the relevant built-in loaders, and their original contents are emitted as assets.
+By default, all files referenced through `new URL()`, including JavaScript, TypeScript, and CSS files, are emitted as static assets.
 
 :::note
 
@@ -167,37 +167,37 @@ export default {
 
 :::
 
-#### Skip `new URL()` processing
+#### Build referenced modules
 
-If you do not want `new URL()` expressions to be parsed as URL assets, choose one of the following approaches based on the required scope.
-
-##### Disable the URL parser
-
-When building ESM output, Rslib processes `new URL()` expressions in JavaScript and TypeScript files with the URL parser's [`'new-url-relative'`](https://rspack.rs/config/module-parser#javascripturl) mode by default.
-
-To preserve the original `new URL()` expressions without having Rslib emit the corresponding assets, set the URL parser to `false` through [tools.bundlerChain](/config/rsbuild/tools#toolsbundlerchain):
+Set [lib.newUrl](/config/lib/new-url) to `'entry'` mode to compile referenced JavaScript and TypeScript modules. Other file types remain static assets.
 
 ```ts title="rslib.config.ts"
 import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
-  tools: {
-    bundlerChain(chain) {
-      chain.module.rule('rslib:new-url').parser({
-        url: false,
-      });
-    },
+  lib: {
+    newUrl: { mode: 'entry' },
   },
 });
 ```
 
-After the parser is disabled, the `new URL()` expression is preserved unchanged, and Rslib does not emit the referenced file:
+For bundleless builds, make sure each referenced module is matched by [source.entry](/config/rsbuild/source#sourceentry).
 
-```js title="dist/index.js"
-const logo = new URL('./assets/logo.svg', import.meta.url);
+#### Skip `new URL()` processing
+
+Set [lib.newUrl](/config/lib/new-url) to `false` to preserve all `new URL()` expressions without emitting the referenced files:
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: {
+    newUrl: false,
+  },
+});
 ```
 
-The output retains the standard `new URL(path, import.meta.url)` form. If the referenced asset needs to be published with the output, we recommend copying it to the output directory through [output.copy](/config/rsbuild/output#outputcopy) or a similar method and ensuring that its output path matches the relative path in `new URL()`. This allows the asset to be located correctly whether the output is processed by a downstream bundler or run directly in Node.js.
+Use [output.copy](/config/rsbuild/output#outputcopy) if the referenced files still need to be included in the output.
 
 ##### Ignore a specific reference
 

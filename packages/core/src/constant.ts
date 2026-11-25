@@ -39,3 +39,10 @@ export const DTS_EXTENSIONS_PATTERN: RegExp = /\.d\.(?:[cm]?ts|[^/\\]+\.ts)$/;
  * Users can customize this rule through `tools.bundlerChain`.
  */
 export const NEW_URL_RULE = 'rslib:new-url';
+
+/**
+ * Chain ID for the module rule that turns a `new URL()` target into its own
+ * entry. Only applied in bundle mode when `lib.newUrl.mode` is `'entry'`.
+ * Users can customize this rule through `tools.bundlerChain`.
+ */
+export const NEW_URL_ENTRY_RULE = 'rslib:new-url-entry';
