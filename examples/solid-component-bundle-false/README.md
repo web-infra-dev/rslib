@@ -1,0 +1,3 @@
+# @examples/solid-component-bundle-false
+
+This example demonstrates how to use Rslib to build a simple Solid component.

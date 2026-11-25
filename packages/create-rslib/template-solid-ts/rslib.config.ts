@@ -1,4 +1,3 @@
-import { pluginBabel } from '@rsbuild/plugin-babel';
 import { pluginSolid } from '@rsbuild/plugin-solid';
 import { defineConfig } from '@rslib/core';
 
@@ -7,12 +6,7 @@ export default defineConfig({
     {
       id: 'compiled',
       dts: true,
-      plugins: [
-        pluginBabel({
-          include: /\.(?:jsx|tsx)$/,
-        }),
-        pluginSolid(),
-      ],
+      plugins: [pluginSolid()],
     },
     {
       id: 'source',
@@ -23,7 +17,6 @@ export default defineConfig({
       },
       tools: {
         swc: {
-          detectSyntax: 'auto',
           jsc: {
             transform: {
               react: {

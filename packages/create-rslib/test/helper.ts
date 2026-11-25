@@ -187,13 +187,13 @@ export const createAndValidate = (
   }
 
   if (templateCase.template === 'solid') {
-    expect(pkgJson.devDependencies['@rsbuild/plugin-babel']).toBeTruthy();
     expect(pkgJson.devDependencies['@rsbuild/plugin-solid']).toBeTruthy();
-    expect(pkgJson.devDependencies['solid-js']).toBeTruthy();
     expect(pkgJson.devDependencies['@solidjs/testing-library']).toBeTruthy();
+    for (const runtime of ['solid-js', '@solidjs/web']) {
+      expect(pkgJson.devDependencies[runtime]).toBeTruthy();
+      expect(pkgJson.peerDependencies[runtime]).toBeTruthy();
+    }
     expect(pkgJson.exports['.'].solid).toBe('./dist/index.jsx');
-    expect(pkgJson.peerDependencies['solid-js']).toBeTruthy();
-    expect(pkgJson.peerDependencies['@solidjs/web']).toBeFalsy();
 
     if (templateCase.lang === 'ts') {
       expect(Object.keys(pkgJson.exports['.'])).toEqual([
