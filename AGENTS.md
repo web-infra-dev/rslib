@@ -42,7 +42,7 @@ Use Node.js from `.nvmrc` and pnpm from `package.json`. Run `pnpm install` from 
 
 ## Commit & pull request guidelines
 
-See [`.agents/skills/pr-creator/SKILL.md`](.agents/skills/pr-creator/SKILL.md) for the full branching, commit message, and PR creation workflow.
+After running `pnpm install`, see `.agents/skills/pr-creator/SKILL.md` for the full branching, commit message, and PR creation workflow.
 
 ## Security & configuration tips
 

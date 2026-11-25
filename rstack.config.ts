@@ -1,5 +1,4 @@
 import { define } from 'rstack';
-import skillsLock from './skills-lock.json' with { type: 'json' };
 
 define.lint(({ globals, js, rstestPlugin, ts }) => [
   {
@@ -70,8 +69,6 @@ define.fmt({
   ignorePatterns: [
     // The formatter does not yet parse TypeScript 7.1 ambient import attributes.
     'tests/integration/dts-api-new/text-imports/src/env.d.ts',
-    // Ignore installed Skills because their formatting may differ from this repository.
-    ...Object.keys(skillsLock.skills).map((name) => `.agents/skills/${name}`),
   ],
   plugins: ['heading-case'],
   singleQuote: true,
