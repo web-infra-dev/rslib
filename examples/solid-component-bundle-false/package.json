@@ -1,23 +1,29 @@
 {
-  "name": "@examples/solid-component-bundle",
+  "name": "@examples/solid-component-bundle-false",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "solid": "./dist/index.jsx",
+      "default": "./dist/index.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rslib"
   },
   "devDependencies": {
-    "@rsbuild/plugin-babel": "catalog:",
     "@rsbuild/plugin-sass": "catalog:",
     "@rsbuild/plugin-solid": "catalog:",
     "@rslib/core": "workspace:*",
+    "@solidjs/web": "catalog:",
     "solid-js": "catalog:",
     "typescript": "catalog:"
   },
   "peerDependencies": {
-    "solid-js": "^1.0.0"
+    "@solidjs/web": "^2.0.0",
+    "solid-js": "^2.0.0"
   }
 }

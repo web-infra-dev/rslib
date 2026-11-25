@@ -1,0 +1,46 @@
+import { pluginSass } from '@rsbuild/plugin-sass';
+import { pluginSolid } from '@rsbuild/plugin-solid';
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      id: 'compiled',
+      dts: true,
+      plugins: [pluginSolid()],
+    },
+    {
+      id: 'source',
+      output: {
+        filename: {
+          js: '[name].jsx',
+        },
+      },
+      tools: {
+        swc: {
+          jsc: {
+            transform: {
+              react: {
+                runtime: 'preserve',
+              },
+            },
+          },
+        },
+        rspack: {
+          module: {
+            parser: {
+              javascript: {
+                jsx: true,
+              },
+            },
+          },
+        },
+      },
+    },
+  ],
+  bundle: false,
+  output: {
+    target: 'web',
+  },
+  plugins: [pluginSass()],
+});

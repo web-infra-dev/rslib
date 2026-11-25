@@ -10,7 +10,7 @@ export const CounterButton: Component<CounterButtonProps> = (props) => (
   <button
     type="button"
     onClick={props.onClick}
-    classList={{ 'counter-button': true, [styles.button]: true }}
+    class={`counter-button ${styles.button}`}
   >
     {props.label}
   </button>
