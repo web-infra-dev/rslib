@@ -48,6 +48,8 @@ catalog:
   '@rspress/plugin-twoslash': '2.1.4'
   '@rstackjs/doc-ui': '1.14.12'
   '@rstackjs/create-toolkit': '2.2.11'
+  '@rstackjs/maintainer-skills': '^1.0.0'
+  '@rstackjs/skills': '^1.0.0'
   '@rstest/adapter-rslib': '^0.12.6'
   '@rstest/core': '^0.12.6'
   '@solidjs/web': '^2.0.3'
@@ -100,7 +102,7 @@ catalog:
   'rslog': '^2.3.0'
   'rspress-plugin-file-tree': '^1.0.7'
   'rspress-plugin-font-open-sans': '^1.0.4'
-  'rstack': '^0.9.3'
+  'rstack': '^0.9.4'
   'semver': '^7.8.6'
   'solid-js': '^2.0.3'
   'storybook': '^10.6.8'
@@ -125,6 +127,19 @@ catalogs:
     'typescript6-api': 'npm:@typescript/typescript6@^6.0.2'
   typescript-7.0:
     'typescript': '~7.0.2'
+
+permissions:
+  '@rstackjs/maintainer-skills':
+    skills:
+      - create-draft-release-notes
+      - pr-creator
+      - rstack-docs-writer
+  '@rstackjs/skills':
+    skills:
+      - rspress-description-generator
+  rstack:
+    skills:
+      - rstack-cli-docs
 
 allowBuilds:
   '@parcel/watcher': false
