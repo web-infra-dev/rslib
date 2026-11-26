@@ -1,4 +1,5 @@
-import { NoSSR, useLang, usePage } from '@rspress/core/runtime';
+// import { NoSSR } from '@rspress/core/runtime';
+import { useLang, usePage } from '@rspress/core/runtime';
 import {
   Layout as BaseLayout,
   DocLayout as BasicDocLayout,
@@ -9,7 +10,7 @@ import {
   Search as PluginAlgoliaSearch,
   ZH_LOCALES,
 } from '@rspress/plugin-algolia/runtime';
-import { Announcement } from '@rstackjs/doc-ui/announcement';
+// import { Announcement } from '@rstackjs/doc-ui/announcement';
 import { BlogBackButton } from '@rstackjs/doc-ui/blog-back-button';
 import { NavIcon } from '@rstackjs/doc-ui/nav-icon';
 import { HomeLayout } from './pages';
@@ -17,7 +18,7 @@ import { HomeLayout } from './pages';
 import '@rstackjs/doc-ui/theme.css';
 import './index.scss';
 
-const ANNOUNCEMENT_URL = '/blog/v1-0';
+// const ANNOUNCEMENT_URL = '/blog/v1-0';
 
 const DocLayout = (props: DocLayoutProps) => {
   const { page } = usePage();
@@ -41,12 +42,13 @@ const DocLayout = (props: DocLayoutProps) => {
 };
 
 const Layout = () => {
-  const { page } = usePage();
-  const lang = useLang();
+  // const { page } = usePage();
+  // const lang = useLang();
 
   return (
     <BaseLayout
       beforeNavTitle={<NavIcon />}
+      /*
       beforeNav={
         <NoSSR>
           <Announcement
@@ -63,6 +65,7 @@ const Layout = () => {
           />
         </NoSSR>
       }
+      */
     />
   );
 };
