@@ -1,0 +1,183 @@
+---
+description: 'Rslib 1.1 is out with automatic generation of package exports, TypeScript 7.1 support, a new runtime mode and cache implementation, and faster declaration file parsing.'
+date: 2026-11-26 18:00:00
+sidebar: false
+authors:
+  - name: Chenwei Dai
+    avatar: 'https://github.com/Timeless0911.png'
+    github: 'Timeless0911'
+---
+
+import { BlogAuthors } from '@rstackjs/doc-ui/blog-authors';
+import { PackageManagerTabs, Tab, Tabs } from '@theme';
+
+# Announcing Rslib 1.1
+
+_November 26, 2026_
+
+<BlogAuthors />
+
+![Rslib 1.1 release banner](https://assets.rspack.rs/rslib/rslib-banner-v1-1.png)
+
+Rslib 1.1 is now available! This release adds support for generating package exports automatically and emitting type declarations with TypeScript 7.1. It also adopts Rspack's new runtime mode and cache implementation by default, and uses SWC Next to speed up declaration file parsing.
+
+Notable changes include:
+
+- [Generate package exports](#generate-exports)
+- [Support for TypeScript 7.1](#typescript-7-1-support)
+- [New runtime mode](#new-runtime-mode)
+- [New cache implementation](#new-cache)
+- [Faster declaration file parsing](#faster-declaration-parsing)
+- [Other improvements](#other-improvements)
+
+## Generate package exports \{#generate-exports}
+
+Rslib 1.1 can automatically generate the `exports` field in `package.json`, keeping package exports in sync with the build output.
+
+Set `exports: true` to enable this feature. The example below builds both ESM and CommonJS for a TypeScript library with two entry points.
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+const dts = { autoExtension: true };
+
+export default defineConfig({
+  lib: [
+    { format: 'esm', dts },
+    { format: 'cjs', dts },
+  ],
+  source: {
+    entry: {
+      index: './src/index.ts',
+      date: './src/date.ts',
+    },
+  },
+  exports: true,
+});
+```
+
+After the build, Rslib writes the following `exports` field to `package.json`.
+
+```json title="package.json"
+{
+  "name": "@example/lib",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./date": {
+      "import": "./dist/date.js",
+      "require": "./dist/date.cjs"
+    }
+  }
+}
+```
+
+See the [exports configuration](/config/lib/exports) for more ways to use this feature.
+
+> Thanks to [tsdown](https://tsdown.dev/options/package-exports) and its author [Kevin Deng](https://github.com/sxzz) for inspiring this feature.
+
+## Support for TypeScript 7.1 \{#typescript-7-1-support}
+
+Rslib supports generating type declarations with TypeScript 7.1 Beta and can use its new [Content Mappers](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/#content-mappers) to extend type generation to more file types.
+
+Install a mapper and register the file extensions it handles in `tsconfig.json`. This example assumes you have installed a CSS Modules mapper called `example-css-modules-mapper`, which is a placeholder package name.
+
+```json title="tsconfig.json"
+{
+  "contentMappers": [
+    {
+      "package": "example-css-modules-mapper",
+      "extensions": [".module.css"]
+    }
+  ]
+}
+```
+
+When generating declarations, Rslib automatically loads the mapper to derive types from the class names in your CSS Modules.
+
+Install TypeScript 7.1 Beta to try it:
+
+<PackageManagerTabs command="add typescript@7.1.0-beta -D" />
+
+## New runtime mode \{#new-runtime-mode}
+
+Rslib 1.1 defaults to Rspack's new [runtime mode](https://rspack.rs/config/experiments#experimentsruntimemode). In the original mode (`runtimeMode: 'webpack'`), the runtime exports a single `__webpack_require__` function with several helpers attached to it. In the new mode (`runtimeMode: 'rspack'`), the runtime exposes the module loader, module factories, and helpers as named ESM exports. Each output chunk imports only the bindings it uses, making it easier for downstream bundlers to statically analyze the runtime and remove unused code through tree shaking.
+
+The simplified code below shows how each mode organizes the generated runtime and the chunk that uses it.
+
+<Tabs>
+  <Tab label="runtimeMode: 'webpack'">
+
+```js
+// runtime.js
+var __webpack_modules__ = {};
+function __webpack_require__(moduleId) {
+  /* ... */
+}
+__webpack_require__.m = __webpack_modules__;
+__webpack_require__.n = (module) => {
+  /* ... */
+};
+
+export { __webpack_require__ };
+
+// main.js
+import { __webpack_require__ } from './runtime.js';
+
+const value = __webpack_require__(moduleId);
+const getDefault = __webpack_require__.n(value);
+```
+
+  </Tab>
+  <Tab label="runtimeMode: 'rspack'">
+
+```js
+// runtime.js
+var moduleFactories = {};
+function rspackRequire(moduleId) {
+  /* ... */
+}
+var compatGetDefaultExport = (module) => {
+  /* ... */
+};
+
+export { rspackRequire, moduleFactories, compatGetDefaultExport };
+
+// main.js
+import { rspackRequire, compatGetDefaultExport } from './runtime.js';
+
+const value = rspackRequire(moduleId);
+const getDefault = compatGetDefaultExport(value);
+```
+
+  </Tab>
+</Tabs>
+
+## New cache implementation \{#new-cache}
+
+Rslib 1.1 enables Rspack's [new cache implementation](https://rspack.rs/config/experiments#experimentsnewcache) by default. The new implementation is designed to use less disk space, reduce cache write overhead, and make cache restoration more reliable. In Rspack's benchmarks, the cache used about **79%** less disk space, and peak memory during cold builds dropped by about **16%**. See the [Rspack 2.3 announcement](https://rspack.rs/blog/announcing-2-3#cache-improvements) for details.
+
+## Faster declaration file parsing \{#faster-declaration-parsing}
+
+Rslib 1.1 integrates `@swc-next/parser` and `@swc-next/walker` from [SWC Next](https://github.com/swc-project/swc-next) to parse declaration files during import path rewriting. Compared with the previous `@ast-grep/napi` implementation, Rslib's install size is about **10%** smaller and the import path rewriting process takes about **60%–70%** less time.
+
+The table compares import path rewriting times for five published Rstack packages before and after switching parsers:
+
+| Package name      | ast-grep time | SWC Next time | Reduction |
+| :---------------- | :------------ | :------------ | :-------- |
+| `@rspack/core`    | 19.8 ms       | 5.6 ms        | **72%**   |
+| `@rsbuild/core`   | 7.9 ms        | 2.6 ms        | **67%**   |
+| `@rstest/browser` | 3.6 ms        | 1.4 ms        | **61%**   |
+| `rstack`          | 2.6 ms        | 1.0 ms        | **62%**   |
+| `@rslib/core`     | 2.5 ms        | 1.0 ms        | **60%**   |
+
+## Other improvements
+
+- **Inline Wasm modules**: Rslib supports using `?inline` to embed Wasm binaries in JavaScript output so they ship and load with the JavaScript file, as described in the [Wasm guide](https://rslib.rs/guide/advanced/wasm).
+- **Solid v2 support**: Use `create-rslib` to create Solid v2 projects. See the [Solid guide](/guide/solution/solid).
+- **Shorter module IDs**: When `output.target` is `'web'`, builds use `compact-hashed` module IDs by default, reducing output size with shorter, stable IDs.
+- **Build cache reliability**: Changes to `.env` files and Rslib upgrades now invalidate the relevant build cache, ensuring rebuilds use the latest configuration and version.
+- **Versioning and publishing**: The new [publishing guide](/guide/advanced/release-management) covers versioning, npm publishing, shipping Agent Skills, and GitHub Actions integration.

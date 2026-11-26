@@ -1,0 +1,183 @@
+---
+description: 'Rslib 1.1 正式发布，带来自动生成包导出、TypeScript 7.1 支持、新的运行时产物格式、新版缓存实现和更快的声明文件解析。'
+date: 2026-11-26 18:00:00
+sidebar: false
+authors:
+  - name: Chenwei Dai
+    avatar: 'https://github.com/Timeless0911.png'
+    github: 'Timeless0911'
+---
+
+import { BlogAuthors } from '@rstackjs/doc-ui/blog-authors';
+import { PackageManagerTabs, Tab, Tabs } from '@theme';
+
+# Rslib 1.1 发布
+
+_2026 年 11 月 26 日_
+
+<BlogAuthors />
+
+![Rslib 1.1 发布封面](https://assets.rspack.rs/rslib/rslib-banner-v1-1.png)
+
+Rslib 1.1 现已发布！本次更新新增了自动生成包导出的功能，并支持使用 TypeScript 7.1 生成类型声明。同时默认采用了 Rspack 新的运行时产物格式和新版缓存实现，并用 SWC Next 加快了声明文件解析。
+
+值得关注的变更如下：
+
+- [自动生成包导出](#generate-exports)
+- [支持 TypeScript 7.1](#typescript-7-1-support)
+- [新的运行时产物格式](#new-runtime-mode)
+- [新版缓存实现](#new-cache)
+- [更快的声明文件解析](#faster-declaration-parsing)
+- [其他改进](#other-improvements)
+
+## 自动生成包导出 \{#generate-exports}
+
+Rslib 1.1 支持自动生成 `package.json` 的 `exports` 字段，帮助你保持包导出与构建产物一致。
+
+设置 `exports: true` 即可启用，下面以同时构建 ESM 和 CommonJS 的双入口 TypeScript 库为例。
+
+```ts title="rslib.config.ts"
+import { defineConfig } from '@rslib/core';
+
+const dts = { autoExtension: true };
+
+export default defineConfig({
+  lib: [
+    { format: 'esm', dts },
+    { format: 'cjs', dts },
+  ],
+  source: {
+    entry: {
+      index: './src/index.ts',
+      date: './src/date.ts',
+    },
+  },
+  exports: true,
+});
+```
+
+构建完成后，Rslib 会在 `package.json` 中写入以下导出项。
+
+```json title="package.json"
+{
+  "name": "@example/lib",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./date": {
+      "import": "./dist/date.js",
+      "require": "./dist/date.cjs"
+    }
+  }
+}
+```
+
+更多用法可以参考 [exports 配置](/config/lib/exports)。
+
+> 感谢 [tsdown](https://tsdown.dev/zh-CN/options/package-exports) 及其作者 [Kevin Deng](https://github.com/sxzz) 为这项功能提供灵感。
+
+## 支持 TypeScript 7.1 \{#typescript-7-1-support}
+
+Rslib 支持使用 TypeScript 7.1 Beta 生成类型声明，并支持通过其新增的 [Content Mappers](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/#content-mappers) 扩展类型生成能力。
+
+使用时，只需安装对应的 mapper，并在 `tsconfig.json` 中注册它处理的文件扩展名。假设你已安装用于处理 CSS Modules 的 `example-css-modules-mapper`（示例包名），可以按下面的方式配置。
+
+```json title="tsconfig.json"
+{
+  "contentMappers": [
+    {
+      "package": "example-css-modules-mapper",
+      "extensions": [".module.css"]
+    }
+  ]
+}
+```
+
+Rslib 在进行类型生成时会自动加载该 mapper，根据 CSS Modules 中的类名生成类型声明。
+
+你可以安装 TypeScript 7.1 Beta 来体验：
+
+<PackageManagerTabs command="add typescript@7.1.0-beta -D" />
+
+## 新的运行时产物格式 \{#new-runtime-mode}
+
+Rslib 1.1 默认采用 Rspack 新的 [运行时产物格式](https://rspack.rs/zh/config/experiments#experimentsruntimemode)。在原有的产物格式（`runtimeMode: 'webpack'`）中，运行时导出的是一个挂载了多个辅助函数的 `__webpack_require__`。在新的产物格式（`runtimeMode: 'rspack'`）下，加载函数、模块工厂和辅助函数分别作为具名 ESM 绑定导出，每个产物 chunk 只需导入用到的绑定，便于下游打包工具进行静态分析和 tree shaking，移除未使用的运行时代码。
+
+下面展示了两种模式下生成的运行时代码及使用它的 chunk 的组织方式（代码经过简化）。
+
+<Tabs>
+  <Tab label="runtimeMode: 'webpack'">
+
+```js
+// runtime.js
+var __webpack_modules__ = {};
+function __webpack_require__(moduleId) {
+  /* ... */
+}
+__webpack_require__.m = __webpack_modules__;
+__webpack_require__.n = (module) => {
+  /* ... */
+};
+
+export { __webpack_require__ };
+
+// main.js
+import { __webpack_require__ } from './runtime.js';
+
+const value = __webpack_require__(moduleId);
+const getDefault = __webpack_require__.n(value);
+```
+
+  </Tab>
+  <Tab label="runtimeMode: 'rspack'">
+
+```js
+// runtime.js
+var moduleFactories = {};
+function rspackRequire(moduleId) {
+  /* ... */
+}
+var compatGetDefaultExport = (module) => {
+  /* ... */
+};
+
+export { rspackRequire, moduleFactories, compatGetDefaultExport };
+
+// main.js
+import { rspackRequire, compatGetDefaultExport } from './runtime.js';
+
+const value = rspackRequire(moduleId);
+const getDefault = compatGetDefaultExport(value);
+```
+
+  </Tab>
+</Tabs>
+
+## 新版缓存实现 \{#new-cache}
+
+Rslib 1.1 默认启用 Rspack 的 [新版缓存实现](https://rspack.rs/zh/config/experiments#experimentsnewcache)，重点减少缓存文件的磁盘占用和写入开销，并改善缓存恢复的可靠性。在 Rspack 的基准测试中，新版缓存的磁盘占用减少了约 **79%**，冷构建的峰值内存降低了约 **16%**，详情查看 [Rspack 2.3 发布公告](https://rspack.rs/zh/blog/announcing-2-3#cache-improvements)。
+
+## 更快的声明文件解析 \{#faster-declaration-parsing}
+
+Rslib 1.1 引入了 [SWC Next](https://github.com/swc-project/swc-next) 的 `@swc-next/parser` 和 `@swc-next/walker`，在导入路径重写过程中进行声明文件解析。相比原来的 `@ast-grep/napi` 实现，Rslib 的安装体积减少约 **10%**，路径重写过程的耗时缩短约 **60%–70%**。
+
+以下是 5 个已发布的 Rstack 包在切换解析器前后的路径重写耗时对比：
+
+| 包名              | ast-grep 耗时 | SWC Next 耗时 | 降低    |
+| :---------------- | :------------ | :------------ | :------ |
+| `@rspack/core`    | 19.8 ms       | 5.6 ms        | **72%** |
+| `@rsbuild/core`   | 7.9 ms        | 2.6 ms        | **67%** |
+| `@rstest/browser` | 3.6 ms        | 1.4 ms        | **61%** |
+| `rstack`          | 2.6 ms        | 1.0 ms        | **62%** |
+| `@rslib/core`     | 2.5 ms        | 1.0 ms        | **60%** |
+
+## 其他改进 \{#other-improvements}
+
+- **内联 Wasm 模块**：支持通过 `?inline` 将 Wasm 二进制内联到 JavaScript 产物，省去单独分发和加载 `.wasm` 文件的步骤，详见 [Wasm 指南](https://rslib.rs/zh/guide/advanced/wasm)。
+- **Solid v2 支持**：`create-rslib` 支持创建 Solid v2 项目，详见 [Solid 指南](/guide/solution/solid)。
+- **更短的模块 ID**：当 `output.target` 为 `'web'` 时，默认采用 `compact-hashed` 模块 ID，通过更短且稳定的 ID 减小产物体积。
+- **构建缓存可靠性**：修改 `.env` 文件或升级 Rslib 后，自动使相关构建缓存失效，确保重新构建使用最新配置和版本。
+- **版本管理与发布**：新增 [发布指南](/guide/advanced/release-management)，介绍版本管理、npm 发布、随包发布 Agent Skills 和 GitHub Actions 集成。
