@@ -327,6 +327,46 @@ describe('generateExports with source', () => {
     });
   });
 
+  it.each(['0', '1.5', '4294967294'])(
+    'should reject a numeric source condition (%s)',
+    (source) => {
+      expect(() =>
+        generate(
+          [createLibInfo('esm', 'esm')],
+          {
+            esm: [
+              entry('index', 'dist/index.js', {
+                sourceFiles: ['src/index.ts'],
+              }),
+            ],
+          },
+          { source },
+        ),
+      ).toThrow('"exports.source" cannot be a numeric condition');
+    },
+  );
+
+  it.each(['01', '4294967295'])(
+    'should allow a condition accepted by the Node.js resolver (%s)',
+    (source) => {
+      expect(
+        generate(
+          [createLibInfo('esm', 'esm')],
+          {
+            esm: [
+              entry('index', 'dist/index.js', {
+                sourceFiles: ['src/index.ts'],
+              }),
+            ],
+          },
+          { source },
+        ).exports,
+      ).toEqual({
+        '.': { [source]: './src/index.ts', default: './dist/index.js' },
+      });
+    },
+  );
+
   it('should throw when an entry is built from multiple modules', () => {
     expect(() =>
       generate(

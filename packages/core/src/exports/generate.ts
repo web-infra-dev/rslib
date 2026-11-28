@@ -370,6 +370,17 @@ export function generateExports({
     };
   }
   if (typeof source === 'string') {
+    // Match the Node.js package exports resolver's numeric key check.
+    const numericKey = Number(source);
+    if (
+      String(numericKey) === source &&
+      numericKey >= 0 &&
+      numericKey < 0xffff_ffff
+    ) {
+      throw new Error(
+        `Failed to generate the "exports" field: "exports.source" cannot be a numeric condition ("${source}"). Use a named condition instead, such as "source".`,
+      );
+    }
     return {
       exports: buildExports(
         (subpath, slots) =>
